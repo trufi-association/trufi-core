@@ -63,7 +63,9 @@ class _TrufiAppState extends State<TrufiApp> {
                       // ...
                     });
                   },
-                  mapView: mapView,
+                  onIconTap: () {
+                    showMap();
+                  },
                   staticMapProvider: staticMapProvider,
                 ),
               ),
@@ -77,7 +79,9 @@ class _TrufiAppState extends State<TrufiApp> {
                       // ...
                     });
                   },
-                  mapView: mapView,
+                  onIconTap: () {
+                    showMap();
+                  },
                   staticMapProvider: staticMapProvider,
                 ),
               ),
@@ -119,19 +123,6 @@ class _TrufiAppState extends State<TrufiApp> {
           )),
     );
   }
-}
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => new _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  MapView mapView = new MapView();
-  CameraPosition cameraPosition;
-  var compositeSubscription = new CompositeSubscription();
-  var staticMapProvider = new StaticMapProvider(API_KEY);
-  Uri staticMapUri;
 
   //Marker bubble
   List<Marker> _markers = <Marker>[
@@ -225,69 +216,6 @@ class _MyAppState extends State<MyApp> {
         strokeColor: Colors.red,
         fillColor: Color.fromARGB(75, 255, 0, 0)),
   ];
-
-  @override
-  initState() {
-    super.initState();
-    cameraPosition = new CameraPosition(Locations.portland, 2.0);
-    staticMapUri = staticMapProvider.getStaticUri(Locations.portland, 12,
-        width: 900, height: 400, mapType: StaticMapViewType.roadmap);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text('Map View Example'),
-          ),
-          body: new Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              new Container(
-                height: 250.0,
-                child: new Stack(
-                  children: <Widget>[
-                    new Center(
-                        child: new Container(
-                      child: new Text(
-                        "You are supposed to see a map here.\n\nAPI Key is not valid.\n\n"
-                            "To view maps in the example application set the "
-                            "API_KEY variable in example/lib/main.dart. "
-                            "\n\nIf you have set an API Key but you still see this text "
-                            "make sure you have enabled all of the correct APIs "
-                            "in the Google API Console. See README for more detail.",
-                        textAlign: TextAlign.center,
-                      ),
-                      padding: const EdgeInsets.all(20.0),
-                    )),
-                    new InkWell(
-                      child: new Center(
-                        child: new Image.network(staticMapUri.toString()),
-                      ),
-                      onTap: showMap,
-                    )
-                  ],
-                ),
-              ),
-              new Container(
-                padding: new EdgeInsets.only(top: 10.0),
-                child: new Text(
-                  "Tap the map to interact",
-                  style: new TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              new Container(
-                padding: new EdgeInsets.only(top: 25.0),
-                child:
-                    new Text("Camera Position: \n\nLat: ${cameraPosition.center
-                    .latitude}\n\nLng:${cameraPosition.center
-                    .longitude}\n\nZoom: ${cameraPosition.zoom}"),
-              ),
-            ],
-          )),
-    );
-  }
 
   showMap() {
     mapView.show(
