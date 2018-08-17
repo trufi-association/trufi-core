@@ -6,8 +6,6 @@ import 'package:map_view/map_view.dart';
 import 'package:map_view/polygon.dart';
 import 'package:map_view/polyline.dart';
 
-const API_KEY = "AIzaSyCwy00GIadUfbt3zFv0QyGCVynssQRGnhw";
-
 class LocationField extends StatefulWidget {
   const LocationField({
     this.fieldKey,
@@ -17,6 +15,8 @@ class LocationField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.onFieldSubmitted,
+    this.mapView,
+    this.staticMapProvider
   });
 
   final Key fieldKey;
@@ -26,6 +26,8 @@ class LocationField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
+  final MapView mapView;
+  final StaticMapProvider staticMapProvider;
 
   @override
   _LocationFieldState createState() => new _LocationFieldState();
@@ -33,17 +35,14 @@ class LocationField extends StatefulWidget {
 
 class _LocationFieldState extends State<LocationField> {
 
-  MapView mapView = new MapView();
   CameraPosition cameraPosition;
   var compositeSubscription = new CompositeSubscription();
-  var staticMapProvider = new StaticMapProvider(API_KEY);
   Uri staticMapUri;
 
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
       key: widget.fieldKey,
-      maxLength: 8,
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
@@ -64,7 +63,7 @@ class _LocationFieldState extends State<LocationField> {
   }
 
   showMap() {
-    mapView.show(
+    widget.mapView.show(
         new MapOptions(
             mapViewType: MapViewType.normal,
             showUserLocation: true,
@@ -78,52 +77,52 @@ class _LocationFieldState extends State<LocationField> {
           new ToolbarAction("❌", 1),
           new ToolbarAction("✔️", 2)
         ]);
-    StreamSubscription sub = mapView.onMapReady.listen((_) {
+    StreamSubscription sub = widget.mapView.onMapReady.listen((_) {
 //      mapView.setMarkers(_markers);
 //      mapView.setPolylines(_lines);
 //      mapView.setPolygons(_polygons);
     });
     compositeSubscription.add(sub);
-    sub = mapView.onLocationUpdated.listen((location) {
+    sub = widget.mapView.onLocationUpdated.listen((location) {
       print("Location updated $location");
     });
     compositeSubscription.add(sub);
-    sub = mapView.onTouchAnnotation
+    sub = widget.mapView.onTouchAnnotation
         .listen((annotation) => print("annotation ${annotation.id} tapped"));
     compositeSubscription.add(sub);
-    sub = mapView.onTouchPolyline
+    sub = widget.mapView.onTouchPolyline
         .listen((polyline) => print("polyline ${polyline.id} tapped"));
     compositeSubscription.add(sub);
-    sub = mapView.onTouchPolygon
+    sub = widget.mapView.onTouchPolygon
         .listen((polygon) => print("polygon ${polygon.id} tapped"));
     compositeSubscription.add(sub);
-    sub = mapView.onMapTapped
+    sub = widget.mapView.onMapTapped
         .listen((location) => print("Touched location $location"));
     compositeSubscription.add(sub);
-    sub = mapView.onCameraChanged.listen((cameraPosition) =>
+    sub = widget.mapView.onCameraChanged.listen((cameraPosition) =>
         this.setState(() => this.cameraPosition = cameraPosition));
     compositeSubscription.add(sub);
-    sub = mapView.onAnnotationDragStart.listen((markerMap) {
+    sub = widget.mapView.onAnnotationDragStart.listen((markerMap) {
       var marker = markerMap.keys.first;
       print("Annotation ${marker.id} dragging started");
     });
-    sub = mapView.onAnnotationDragEnd.listen((markerMap) {
+    sub = widget.mapView.onAnnotationDragEnd.listen((markerMap) {
       var marker = markerMap.keys.first;
       print("Annotation ${marker.id} dragging ended");
     });
-    sub = mapView.onAnnotationDrag.listen((markerMap) {
+    sub = widget.mapView.onAnnotationDrag.listen((markerMap) {
       var marker = markerMap.keys.first;
       var location = markerMap[marker];
       print("Annotation ${marker.id} moved to ${location.latitude} , ${location
           .longitude}");
     });
     compositeSubscription.add(sub);
-    sub = mapView.onToolbarAction.listen((id) {
+    sub = widget.mapView.onToolbarAction.listen((id) {
       print("Toolbar button id = $id");
       _handleDismiss(id != 1);
     });
     compositeSubscription.add(sub);
-    sub = mapView.onInfoWindowTapped.listen((marker) {
+    sub = widget.mapView.onInfoWindowTapped.listen((marker) {
       print("Info Window Tapped for ${marker.title}");
     });
     compositeSubscription.add(sub);
@@ -131,21 +130,21 @@ class _LocationFieldState extends State<LocationField> {
 
   _handleDismiss(bool submit) async {
     if (submit) {
-      double zoomLevel = await mapView.zoomLevel;
-      Location centerLocation = await mapView.centerLocation;
-      List<Marker> visibleAnnotations = await mapView.visibleAnnotations;
-      List<Polyline> visibleLines = await mapView.visiblePolyLines;
-      List<Polygon> visiblePolygons = await mapView.visiblePolygons;
+      double zoomLevel = await widget.mapView.zoomLevel;
+      Location centerLocation = await widget.mapView.centerLocation;
+      List<Marker> visibleAnnotations = await widget.mapView.visibleAnnotations;
+      List<Polyline> visibleLines = await widget.mapView.visiblePolyLines;
+      List<Polygon> visiblePolygons = await widget.mapView.visiblePolygons;
       print("Zoom Level: $zoomLevel");
       print("Center: $centerLocation");
       print("Visible Annotation Count: ${visibleAnnotations.length}");
       print("Visible Polylines Count: ${visibleLines.length}");
       print("Visible Polygons Count: ${visiblePolygons.length}");
-      var uri = await staticMapProvider.getImageUriFromMap(mapView,
+      var uri = await widget.staticMapProvider.getImageUriFromMap(widget.mapView,
           width: 900, height: 400);
       setState(() => staticMapUri = uri);
     }
-    mapView.dismiss();
+    widget.mapView.dismiss();
     compositeSubscription.cancel();
   }
 }
