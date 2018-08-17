@@ -6,6 +6,8 @@ import 'package:map_view/map_view.dart';
 import 'package:map_view/polygon.dart';
 import 'package:map_view/polyline.dart';
 
+import 'ui/location_field.dart';
+
 ///This API Key will be used for both the interactive maps as well as the static maps.
 ///Make sure that you have enabled the following APIs in the Google API Console (https://console.developers.google.com/apis)
 /// - Static Maps API
@@ -15,7 +17,115 @@ const API_KEY = "AIzaSyCwy00GIadUfbt3zFv0QyGCVynssQRGnhw";
 
 void main() {
   MapView.setApiKey(API_KEY);
-  runApp(new MyApp());
+  runApp(new TrufiApp());
+}
+
+class TrufiApp extends StatefulWidget {
+  @override
+  _TrufiAppState createState() => new _TrufiAppState();
+}
+
+class _TrufiAppState extends State<TrufiApp> {
+
+  MapView mapView = new MapView();
+  CameraPosition cameraPosition;
+  var compositeSubscription = new CompositeSubscription();
+  var staticMapProvider = new StaticMapProvider(API_KEY);
+  Uri staticMapUri;
+  final GlobalKey<FormFieldState<String>> _startLocationFieldKey = new GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> _endLocationFieldKey = new GlobalKey<FormFieldState<String>>();
+
+  @override
+  initState() {
+    super.initState();
+    cameraPosition = new CameraPosition(Locations.portland, 2.0);
+    staticMapUri = staticMapProvider.getStaticUri(Locations.portland, 12,
+        width: 900, height: 400, mapType: StaticMapViewType.roadmap);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text('Map View Example'),
+          ),
+          body: new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              new Container(
+                child: new LocationField(
+                  fieldKey: _startLocationFieldKey,
+                  helperText: 'Choose your end location.',
+                  labelText: 'Start',
+                  onFieldSubmitted: (String value) {
+                    setState(() {
+                      // ...
+                    });
+                  },
+                ),
+              ),
+              new Container(
+                child: new LocationField(
+                  fieldKey: _endLocationFieldKey,
+                  helperText: 'Choose your end location.',
+                  labelText: 'End',
+                  onFieldSubmitted: (String value) {
+                    setState(() {
+                      // ...
+                    });
+                  },
+                ),
+              ),
+              new Container(
+                child: new LocationField(
+                  helperText: 'Choose your end location.',
+                  labelText: 'Start',
+                  onFieldSubmitted: (String value) {
+                    setState(() {
+                      // ...
+                    });
+                  },
+                ),
+              ),
+              new Container(
+                height: 500.0,
+                child: new Stack(
+                  children: <Widget>[
+                    new InkWell(
+                      child: new Center(
+                        child: new Image.network(staticMapUri.toString()),
+                      ),
+                    ),
+                    new Center(
+                        child: new Container(
+                      child: new Text(
+                        "Moin.",
+                        textAlign: TextAlign.center,
+                      ),
+                      padding: const EdgeInsets.all(20.0),
+                    )),
+                  ],
+                ),
+              ),
+              new Container(
+                padding: new EdgeInsets.only(top: 10.0),
+                child: new Text(
+                  "Tap the map to interact",
+                  style: new TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              new Container(
+                padding: new EdgeInsets.only(top: 25.0),
+                child:
+                    new Text("Camera Position: \n\nLat: ${cameraPosition.center
+                    .latitude}\n\nLng:${cameraPosition.center
+                    .longitude}\n\nZoom: ${cameraPosition.zoom}"),
+              ),
+            ],
+          )),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -147,17 +257,17 @@ class _MyAppState extends State<MyApp> {
                   children: <Widget>[
                     new Center(
                         child: new Container(
-                          child: new Text(
-                            "You are supposed to see a map here.\n\nAPI Key is not valid.\n\n"
-                                "To view maps in the example application set the "
-                                "API_KEY variable in example/lib/main.dart. "
-                                "\n\nIf you have set an API Key but you still see this text "
-                                "make sure you have enabled all of the correct APIs "
-                                "in the Google API Console. See README for more detail.",
-                            textAlign: TextAlign.center,
-                          ),
-                          padding: const EdgeInsets.all(20.0),
-                        )),
+                      child: new Text(
+                        "You are supposed to see a map here.\n\nAPI Key is not valid.\n\n"
+                            "To view maps in the example application set the "
+                            "API_KEY variable in example/lib/main.dart. "
+                            "\n\nIf you have set an API Key but you still see this text "
+                            "make sure you have enabled all of the correct APIs "
+                            "in the Google API Console. See README for more detail.",
+                        textAlign: TextAlign.center,
+                      ),
+                      padding: const EdgeInsets.all(20.0),
+                    )),
                     new InkWell(
                       child: new Center(
                         child: new Image.network(staticMapUri.toString()),
@@ -177,7 +287,7 @@ class _MyAppState extends State<MyApp> {
               new Container(
                 padding: new EdgeInsets.only(top: 25.0),
                 child:
-                new Text("Camera Position: \n\nLat: ${cameraPosition.center
+                    new Text("Camera Position: \n\nLat: ${cameraPosition.center
                     .latitude}\n\nLng:${cameraPosition.center
                     .longitude}\n\nZoom: ${cameraPosition.zoom}"),
               ),
@@ -197,7 +307,10 @@ class _MyAppState extends State<MyApp> {
                 new Location(45.526607443935724, -122.66731660813093), 15.0),
             hideToolbar: false,
             title: "Recently Visited"),
-        toolbarActions: [new ToolbarAction("Close", 1)]);
+        toolbarActions: [
+          new ToolbarAction("❌", 1),
+          new ToolbarAction("✔️", 2)
+        ]);
     StreamSubscription sub = mapView.onMapReady.listen((_) {
       mapView.setMarkers(_markers);
       mapView.setPolylines(_lines);
@@ -240,9 +353,7 @@ class _MyAppState extends State<MyApp> {
     compositeSubscription.add(sub);
     sub = mapView.onToolbarAction.listen((id) {
       print("Toolbar button id = $id");
-      if (id == 1) {
-        _handleDismiss();
-      }
+      _handleDismiss(id != 1);
     });
     compositeSubscription.add(sub);
     sub = mapView.onInfoWindowTapped.listen((marker) {
@@ -251,20 +362,22 @@ class _MyAppState extends State<MyApp> {
     compositeSubscription.add(sub);
   }
 
-  _handleDismiss() async {
-    double zoomLevel = await mapView.zoomLevel;
-    Location centerLocation = await mapView.centerLocation;
-    List<Marker> visibleAnnotations = await mapView.visibleAnnotations;
-    List<Polyline> visibleLines = await mapView.visiblePolyLines;
-    List<Polygon> visiblePolygons = await mapView.visiblePolygons;
-    print("Zoom Level: $zoomLevel");
-    print("Center: $centerLocation");
-    print("Visible Annotation Count: ${visibleAnnotations.length}");
-    print("Visible Polylines Count: ${visibleLines.length}");
-    print("Visible Polygons Count: ${visiblePolygons.length}");
-    var uri = await staticMapProvider.getImageUriFromMap(mapView,
-        width: 900, height: 400);
-    setState(() => staticMapUri = uri);
+  _handleDismiss(bool submit) async {
+    if (submit) {
+      double zoomLevel = await mapView.zoomLevel;
+      Location centerLocation = await mapView.centerLocation;
+      List<Marker> visibleAnnotations = await mapView.visibleAnnotations;
+      List<Polyline> visibleLines = await mapView.visiblePolyLines;
+      List<Polygon> visiblePolygons = await mapView.visiblePolygons;
+      print("Zoom Level: $zoomLevel");
+      print("Center: $centerLocation");
+      print("Visible Annotation Count: ${visibleAnnotations.length}");
+      print("Visible Polylines Count: ${visibleLines.length}");
+      print("Visible Polygons Count: ${visiblePolygons.length}");
+      var uri = await staticMapProvider.getImageUriFromMap(mapView,
+          width: 900, height: 400);
+      setState(() => staticMapUri = uri);
+    }
     mapView.dismiss();
     compositeSubscription.cancel();
   }
