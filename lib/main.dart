@@ -56,13 +56,15 @@ class _TrufiAppState extends State<TrufiApp> {
               new Container(
                 child: new LocationField(
                   fieldKey: _startLocationFieldKey,
-                  helperText: 'Choose your end location.',
+                  helperText: 'Choose your start location.',
                   labelText: 'Start',
                   onFieldSubmitted: (String value) {
                     setState(() {
                       // ...
                     });
                   },
+                  mapView: mapView,
+                  staticMapProvider: staticMapProvider,
                 ),
               ),
               new Container(
@@ -75,17 +77,8 @@ class _TrufiAppState extends State<TrufiApp> {
                       // ...
                     });
                   },
-                ),
-              ),
-              new Container(
-                child: new LocationField(
-                  helperText: 'Choose your end location.',
-                  labelText: 'Start',
-                  onFieldSubmitted: (String value) {
-                    setState(() {
-                      // ...
-                    });
-                  },
+                  mapView: mapView,
+                  staticMapProvider: staticMapProvider,
                 ),
               ),
               new Container(
