@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:map_view/map_view.dart';
-import 'package:map_view/polygon.dart';
-import 'package:map_view/polyline.dart';
+
+import 'search_delegate.dart';
 
 class LocationField extends StatefulWidget {
   const LocationField({
@@ -35,8 +33,24 @@ class LocationField extends StatefulWidget {
 
 class _LocationFieldState extends State<LocationField> {
 
+  final SearchDemoSearchDelegate _delegate = new SearchDemoSearchDelegate();
+  final FocusNode _focusNode = new FocusNode();
+
   CameraPosition cameraPosition;
   Uri staticMapUri;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange(){
+    if (_focusNode.hasFocus) {
+      _focusNode.unfocus();
+      showSearch(context: context, delegate: _delegate);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +59,7 @@ class _LocationFieldState extends State<LocationField> {
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
+      focusNode: _focusNode,
       decoration: new InputDecoration(
         border: const UnderlineInputBorder(),
         filled: true,
