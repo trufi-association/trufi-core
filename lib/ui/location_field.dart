@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:map_view/map_view.dart';
 
-import 'search_delegate.dart';
+import 'location_search_delegate.dart';
 
 class LocationField extends StatefulWidget {
   const LocationField({
@@ -33,7 +33,7 @@ class LocationField extends StatefulWidget {
 
 class _LocationFieldState extends State<LocationField> {
 
-  final SearchDemoSearchDelegate _delegate = new SearchDemoSearchDelegate();
+  final LocationSearchDelegate _delegate = new LocationSearchDelegate();
   final FocusNode _focusNode = new FocusNode();
 
   CameraPosition cameraPosition;
