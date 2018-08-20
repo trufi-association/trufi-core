@@ -35,9 +35,7 @@ class _TrufiAppState extends State<TrufiApp> {
       new GlobalKey<FormFieldState<String>>();
   final GlobalKey<FormFieldState<String>> _endLocationFieldKey =
       new GlobalKey<FormFieldState<String>>();
-
-  Location startLocation;
-  Location endLocation;
+  Location currentLocation;
 
   @override
   initState() {
@@ -229,7 +227,10 @@ class _TrufiAppState extends State<TrufiApp> {
             showMyLocationButton: true,
             showCompassButton: true,
             initialCameraPosition: new CameraPosition(
-                new Location(45.526607443935724, -122.66731660813093), 15.0),
+                currentLocation != null
+                    ? currentLocation
+                    : new Location(53.547727, 9.992872),
+                15.0),
             hideToolbar: false,
             title: "Recently Visited"),
         toolbarActions: [
@@ -243,6 +244,10 @@ class _TrufiAppState extends State<TrufiApp> {
     });
     compositeSubscription.add(sub);
     sub = mapView.onLocationUpdated.listen((location) {
+      if (currentLocation == null) {
+        mapView.setCameraPosition(new CameraPosition(location, 15.0));
+      }
+      currentLocation = location;
       print("Location updated $location");
     });
     compositeSubscription.add(sub);
