@@ -1,21 +1,24 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:map_view/map_view.dart';
 
+import 'package:trufi_app/api/location_api.dart' as api;
+
 import 'location_search_delegate.dart';
 
 class LocationField extends StatefulWidget {
-  const LocationField({
-    this.fieldKey,
-    this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-    this.staticMapProvider,
-    this.onIconTap
-  });
+  const LocationField(
+      {this.fieldKey,
+      this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted,
+      this.staticMapProvider,
+      this.onIconTap});
 
   final Key fieldKey;
   final String hintText;
@@ -28,16 +31,18 @@ class LocationField extends StatefulWidget {
   final Function onIconTap;
 
   @override
-  _LocationFieldState createState() => new _LocationFieldState();
+  LocationFieldState createState() => new LocationFieldState();
 }
 
-class _LocationFieldState extends State<LocationField> {
-
+class LocationFieldState extends State<LocationField> {
   final LocationSearchDelegate _delegate = new LocationSearchDelegate();
   final FocusNode _focusNode = new FocusNode();
+  final TextEditingController _textEditController = new TextEditingController();
 
   CameraPosition cameraPosition;
   Uri staticMapUri;
+
+  api.Location location;
 
   @override
   void initState() {
@@ -45,11 +50,18 @@ class _LocationFieldState extends State<LocationField> {
     _focusNode.addListener(_onFocusChange);
   }
 
-  void _onFocusChange(){
+  void _onFocusChange() {
     if (_focusNode.hasFocus) {
       _focusNode.unfocus();
-      showSearch(context: context, delegate: _delegate);
+      _showSearch();
     }
+  }
+
+  _showSearch() async {
+    location = await showSearch(context: context, delegate: _delegate);
+    setState(() {
+      _textEditController.text = location?.description ?? "";
+    });
   }
 
   @override
@@ -60,6 +72,7 @@ class _LocationFieldState extends State<LocationField> {
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       focusNode: _focusNode,
+      controller: _textEditController,
       decoration: new InputDecoration(
         border: const UnderlineInputBorder(),
         filled: true,

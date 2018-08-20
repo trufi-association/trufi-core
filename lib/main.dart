@@ -26,14 +26,18 @@ class TrufiApp extends StatefulWidget {
 }
 
 class _TrufiAppState extends State<TrufiApp> {
-
   MapView mapView = new MapView();
   CameraPosition cameraPosition;
   var compositeSubscription = new CompositeSubscription();
   var staticMapProvider = new StaticMapProvider(API_KEY);
   Uri staticMapUri;
-  final GlobalKey<FormFieldState<String>> _startLocationFieldKey = new GlobalKey<FormFieldState<String>>();
-  final GlobalKey<FormFieldState<String>> _endLocationFieldKey = new GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> _startLocationFieldKey =
+      new GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> _endLocationFieldKey =
+      new GlobalKey<FormFieldState<String>>();
+
+  Location startLocation;
+  Location endLocation;
 
   @override
   initState() {
@@ -60,7 +64,7 @@ class _TrufiAppState extends State<TrufiApp> {
                   labelText: 'Start',
                   onFieldSubmitted: (String value) {
                     setState(() {
-                      // ...
+
                     });
                   },
                   onIconTap: () {
