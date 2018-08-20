@@ -87,40 +87,6 @@ class _TrufiAppState extends State<TrufiApp> {
                   staticMapProvider: staticMapProvider,
                 ),
               ),
-              new Container(
-                height: 500.0,
-                child: new Stack(
-                  children: <Widget>[
-                    new InkWell(
-                      child: new Center(
-                        child: new Image.network(staticMapUri.toString()),
-                      ),
-                    ),
-                    new Center(
-                        child: new Container(
-                      child: new Text(
-                        "Moin.",
-                        textAlign: TextAlign.center,
-                      ),
-                      padding: const EdgeInsets.all(20.0),
-                    )),
-                  ],
-                ),
-              ),
-              new Container(
-                padding: new EdgeInsets.only(top: 10.0),
-                child: new Text(
-                  "Tap the map to interact",
-                  style: new TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              new Container(
-                padding: new EdgeInsets.only(top: 25.0),
-                child:
-                    new Text("Camera Position: \n\nLat: ${cameraPosition.center
-                    .latitude}\n\nLng:${cameraPosition.center
-                    .longitude}\n\nZoom: ${cameraPosition.zoom}"),
-              ),
             ],
           )),
     );
