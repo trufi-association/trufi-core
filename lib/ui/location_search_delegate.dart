@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class LocationSearchDelegate extends SearchDelegate<int> {
-  final List<int> _data = new List<int>.generate(100001, (int i) => i).reversed.toList();
-  final List<int> _history = <int>[42607, 85604, 66374, 44, 174];
+import 'package:trufi_app/api/location_api.dart';
+
+class LocationSearchDelegate extends SearchDelegate<Location> {
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -20,51 +20,23 @@ class LocationSearchDelegate extends SearchDelegate<int> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-
-    final Iterable<int> suggestions = query.isEmpty
-        ? _history
-        : _data.where((int i) => '$i'.startsWith(query));
-
     return new _SuggestionList(
       query: query,
-      suggestions: suggestions.map((int i) => '$i').toList(),
-      onSelected: (String suggestion) {
-        query = suggestion;
-        showResults(context);
+      onSelected: (Location suggestion) {
+        query = suggestion.description;
+        this.close(context, suggestion);
+        //showResults(context);
       },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    final int searched = int.tryParse(query);
-    if (searched == null || !_data.contains(searched)) {
-      return new Center(
-        child: new Text(
-          '"$query"\n is not a valid integer between 0 and 100,000.\nTry again.',
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-
-    return new ListView(
-      children: <Widget>[
-        new _ResultCard(
-          title: 'This integer',
-          integer: searched,
-          searchDelegate: this,
-        ),
-        new _ResultCard(
-          title: 'Next integer',
-          integer: searched + 1,
-          searchDelegate: this,
-        ),
-        new _ResultCard(
-          title: 'Previous integer',
-          integer: searched - 1,
-          searchDelegate: this,
-        ),
-      ],
+    return new Center(
+      child: new Text(
+        'Result: "$query"',
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -73,89 +45,62 @@ class LocationSearchDelegate extends SearchDelegate<int> {
     return <Widget>[
       query.isEmpty
           ? new IconButton(
-        tooltip: 'Voice Search',
-        icon: const Icon(Icons.mic),
-        onPressed: () {
-          query = 'TODO: implement voice input';
-        },
-      )
+              icon: const Icon(null),
+              onPressed: () {},
+            )
           : new IconButton(
-        tooltip: 'Clear',
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-          showSuggestions(context);
-        },
-      )
+              tooltip: 'Clear',
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                query = '';
+                showSuggestions(context);
+              },
+            )
     ];
   }
 }
 
-class _ResultCard extends StatelessWidget {
-  const _ResultCard({this.integer, this.title, this.searchDelegate});
-
-  final int integer;
-  final String title;
-  final SearchDelegate<int> searchDelegate;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return new GestureDetector(
-      onTap: () {
-        searchDelegate.close(context, integer);
-      },
-      child: new Card(
-        child: new Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Column(
-            children: <Widget>[
-              new Text(title),
-              new Text(
-                '$integer',
-                style: theme.textTheme.headline.copyWith(fontSize: 72.0),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _SuggestionList extends StatelessWidget {
-  const _SuggestionList({this.suggestions, this.query, this.onSelected});
+  _SuggestionList({this.query, this.onSelected});
 
-  final List<String> suggestions;
   final String query;
-  final ValueChanged<String> onSelected;
+  final ValueChanged<Location> onSelected;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return new ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (BuildContext context, int i) {
-        final String suggestion = suggestions[i];
-        return new ListTile(
-          leading: query.isEmpty ? const Icon(Icons.history) : const Icon(null),
-          title: new RichText(
-            text: new TextSpan(
-              text: suggestion.substring(0, query.length),
-              style: theme.textTheme.subhead.copyWith(fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                new TextSpan(
-                  text: suggestion.substring(query.length),
-                  style: theme.textTheme.subhead,
+    return new FutureBuilder(
+        future: fetchLocations(query),
+        initialData: List<Location>(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Location>> suggestions) {
+          return new Container(
+              child: new ListView.builder(
+            itemCount: suggestions.data.length,
+            itemBuilder: (BuildContext context, int i) {
+              final Location suggestion = suggestions.data[i];
+              return new ListTile(
+                leading: const Icon(Icons.location_on),
+                title: new RichText(
+                  text: new TextSpan(
+                    text: suggestion.description,
+                    style: theme.textTheme.subhead
+                        .copyWith(fontWeight: FontWeight.bold),
+                    children: <TextSpan>[
+                      new TextSpan(
+                        text: 'lat:${suggestion.latitude}) lng:${suggestion
+                                .longitude}',
+                        style: theme.textTheme.subhead,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-          onTap: () {
-            onSelected(suggestion);
-          },
-        );
-      },
-    );
+                onTap: () {
+                  onSelected(suggestion);
+                },
+              );
+            },
+          ));
+        });
   }
 }
