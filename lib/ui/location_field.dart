@@ -8,21 +8,20 @@ import 'package:trufi_app/trufi_models.dart' as models;
 import 'package:trufi_app/ui/location_search_delegate.dart';
 
 class LocationField extends StatefulWidget {
-  const LocationField({this.fieldKey,
-    this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-    this.mapView});
+  const LocationField(
+      {this.fieldKey,
+      this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.onFieldSubmitted,
+      this.mapView});
 
   final Key fieldKey;
   final String hintText;
   final String labelText;
   final String helperText;
-  final FormFieldSetter<String> onSaved;
-  final FormFieldValidator<String> validator;
+  final FormFieldSetter<models.Location> onSaved;
   final ValueChanged<models.Location> onFieldSubmitted;
   final MapView mapView;
 
@@ -32,7 +31,7 @@ class LocationField extends StatefulWidget {
 
 class LocationFieldState extends State<LocationField> {
   final CompositeSubscription _compositeSubscription =
-  new CompositeSubscription();
+      new CompositeSubscription();
   final LocationSearchDelegate _searchDelegate = new LocationSearchDelegate();
   final FocusNode _focusNode = new FocusNode();
   final TextEditingController _textEditController = new TextEditingController();
@@ -56,28 +55,40 @@ class LocationFieldState extends State<LocationField> {
   Widget build(BuildContext context) {
     return new Container(
         child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            new Expanded(
-                child: new TextFormField(
-                  key: widget.fieldKey,
-                  onSaved: widget.onSaved,
-                  validator: widget.validator,
-                  focusNode: _focusNode,
-                  controller: _textEditController,
-                  decoration: new InputDecoration(
-                    border: const UnderlineInputBorder(),
-                    filled: true,
-                    hintText: widget.hintText,
-                    labelText: widget.labelText,
-                    helperText: widget.helperText,
-                  ),
-                )),
-            new Center(
-                child: new IconButton(
-                    icon: new Icon(Icons.add_location), onPressed: _showMap))
-          ],
-        ));
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        new Expanded(
+            child: new TextFormField(
+          key: widget.fieldKey,
+          onSaved: (value) {
+            widget.onSaved(location);
+          },
+          onFieldSubmitted: (value) {
+            widget.onFieldSubmitted(location);
+          },
+          validator: _validate,
+          focusNode: _focusNode,
+          controller: _textEditController,
+          decoration: new InputDecoration(
+            border: const UnderlineInputBorder(),
+            filled: true,
+            hintText: widget.hintText,
+            labelText: widget.labelText,
+            helperText: widget.helperText,
+          ),
+        )),
+        new Center(
+            child: new IconButton(
+                icon: new Icon(Icons.add_location), onPressed: _showMap))
+      ],
+    ));
+  }
+
+  String _validate(String value) {
+    if (location == null) {
+      return 'Please choose a location.';
+    }
+    return null;
   }
 
   _showSearch() async {
@@ -150,8 +161,7 @@ class LocationFieldState extends State<LocationField> {
       _setLocation(new models.Location(
           description: "Marker Position",
           latitude: _positionMarker.latitude,
-          longitude: _positionMarker.longitude)
-      );
+          longitude: _positionMarker.longitude));
     }
     widget.mapView.dismiss();
     _compositeSubscription.cancel();

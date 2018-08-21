@@ -12,4 +12,8 @@ class Location {
       longitude: json['lng'],
     );
   }
+
+  String toString() {
+    return '$latitude,$longitude';
+  }
 }
