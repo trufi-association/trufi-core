@@ -7,6 +7,7 @@ import 'package:trufi_app/trufi_models.dart' as models;
 
 const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com:8080';
 const String SearchPath = '/otp/routers/default/geocode';
+const String PlanPath = 'otp/routers/default/plan';
 
 Future<List<models.Location>> fetchLocations(String query) async {
   Uri request = Uri.http(Endpoint, SearchPath, {
@@ -28,4 +29,19 @@ List<models.Location> _parseLocations(String responseBody) {
   return parsed
       .map<models.Location>((json) => new models.Location.fromJson(json))
       .toList();
+}
+
+Future<String> fetchPlan(models.Location from, models.Location to) async {
+  Uri request = Uri.http(Endpoint, PlanPath, {
+    "fromPlace": from.toString(),
+    "toPlace": to.toString(),
+    "date": "01-01-2018",
+    "mode": "TRANSIT,WALK"
+  });
+  final response = await http.get(request);
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception('Failed to load plan');
+  }
 }
