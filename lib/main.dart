@@ -23,22 +23,11 @@ class TrufiApp extends StatefulWidget {
 
 class _TrufiAppState extends State<TrufiApp> {
   MapView mapView = new MapView();
-  CameraPosition cameraPosition;
 
-  var staticMapProvider = new StaticMapProvider(API_KEY);
-  Uri staticMapUri;
   final GlobalKey<FormFieldState<String>> _startLocationFieldKey =
       new GlobalKey<FormFieldState<String>>();
   final GlobalKey<FormFieldState<String>> _endLocationFieldKey =
       new GlobalKey<FormFieldState<String>>();
-
-  @override
-  initState() {
-    super.initState();
-    cameraPosition = new CameraPosition(Locations.portland, 2.0);
-    staticMapUri = staticMapProvider.getStaticUri(Locations.portland, 12,
-        width: 900, height: 400, mapType: StaticMapViewType.roadmap);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,28 +42,18 @@ class _TrufiAppState extends State<TrufiApp> {
               new Container(
                 padding: EdgeInsets.all(16.0),
                 child: new LocationField(
-                  fieldKey: _startLocationFieldKey,
-                  helperText: 'Choose your start location.',
-                  labelText: 'Start',
-                  onFieldSubmitted: (models.Location value) {
-                    setState(() {});
-                  },
-                  mapView: mapView,
-                  staticMapProvider: staticMapProvider,
-                ),
+                    fieldKey: _startLocationFieldKey,
+                    helperText: 'Choose your start location.',
+                    labelText: 'Start',
+                    mapView: mapView),
               ),
               new Container(
                 padding: EdgeInsets.all(16.0),
                 child: new LocationField(
-                  fieldKey: _endLocationFieldKey,
-                  helperText: 'Choose your end location.',
-                  labelText: 'End',
-                  onFieldSubmitted: (models.Location value) {
-                    setState(() {});
-                  },
-                  mapView: mapView,
-                  staticMapProvider: staticMapProvider,
-                ),
+                    fieldKey: _endLocationFieldKey,
+                    helperText: 'Choose your end location.',
+                    labelText: 'End',
+                    mapView: mapView),
               ),
             ],
           )),
