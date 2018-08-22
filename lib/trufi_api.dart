@@ -25,13 +25,13 @@ Future<List<models.Location>> fetchLocations(String query) async {
 }
 
 List<models.Location> _parseLocations(String responseBody) {
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  final parsed = json.decode(responseBody);
   return parsed
       .map<models.Location>((json) => new models.Location.fromJson(json))
       .toList();
 }
 
-Future<String> fetchPlan(models.Location from, models.Location to) async {
+Future<models.Plan> fetchPlan(models.Location from, models.Location to) async {
   Uri request = Uri.http(Endpoint, PlanPath, {
     "fromPlace": from.toString(),
     "toPlace": to.toString(),
@@ -40,8 +40,13 @@ Future<String> fetchPlan(models.Location from, models.Location to) async {
   });
   final response = await http.get(request);
   if (response.statusCode == 200) {
-    return response.body;
+    return compute(_parsePlan, response.body);
   } else {
     throw Exception('Failed to load plan');
   }
+}
+
+models.Plan _parsePlan(String responseBody) {
+  final parsed = json.decode(responseBody);
+  return models.Plan.fromJson(parsed['plan']);
 }
