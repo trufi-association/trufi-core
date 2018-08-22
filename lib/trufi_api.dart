@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:trufi_app/trufi_models.dart' as models;
+import 'package:trufi_app/trufi_models.dart';
 
 const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com:8080';
 const String SearchPath = '/otp/routers/default/geocode';
 const String PlanPath = 'otp/routers/default/plan';
 
-Future<List<models.Location>> fetchLocations(String query) async {
+Future<List<TrufiLocation>> fetchLocations(String query) async {
   Uri request = Uri.http(Endpoint, SearchPath, {
     "query": query,
     "autocomplete": "true",
@@ -24,14 +24,14 @@ Future<List<models.Location>> fetchLocations(String query) async {
   }
 }
 
-List<models.Location> _parseLocations(String responseBody) {
+List<TrufiLocation> _parseLocations(String responseBody) {
   final parsed = json.decode(responseBody);
   return parsed
-      .map<models.Location>((json) => new models.Location.fromJson(json))
+      .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
       .toList();
 }
 
-Future<models.Plan> fetchPlan(models.Location from, models.Location to) async {
+Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
   Uri request = Uri.http(Endpoint, PlanPath, {
     "fromPlace": from.toString(),
     "toPlace": to.toString(),
@@ -46,7 +46,7 @@ Future<models.Plan> fetchPlan(models.Location from, models.Location to) async {
   }
 }
 
-models.Plan _parsePlan(String responseBody) {
+Plan _parsePlan(String responseBody) {
   final parsed = json.decode(responseBody);
-  return models.Plan.fromJson(parsed['plan']);
+  return Plan.fromJson(parsed['plan']);
 }

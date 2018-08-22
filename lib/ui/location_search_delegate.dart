@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_api.dart';
-import 'package:trufi_app/trufi_models.dart' as models;
+import 'package:trufi_app/trufi_models.dart';
 
-class LocationSearchDelegate extends SearchDelegate<models.Location> {
+class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildLeading(BuildContext context) {
     return new IconButton(
@@ -22,7 +22,7 @@ class LocationSearchDelegate extends SearchDelegate<models.Location> {
   Widget buildSuggestions(BuildContext context) {
     return new _SuggestionList(
       query: query,
-      onSelected: (models.Location suggestion) {
+      onSelected: (TrufiLocation suggestion) {
         query = suggestion.description;
         this.close(context, suggestion);
         //showResults(context);
@@ -64,21 +64,21 @@ class _SuggestionList extends StatelessWidget {
   _SuggestionList({this.query, this.onSelected});
 
   final String query;
-  final ValueChanged<models.Location> onSelected;
+  final ValueChanged<TrufiLocation> onSelected;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return new FutureBuilder(
         future: fetchLocations(query),
-        initialData: new List<models.Location>(),
+        initialData: new List<TrufiLocation>(),
         builder: (BuildContext context,
-            AsyncSnapshot<List<models.Location>> suggestions) {
+            AsyncSnapshot<List<TrufiLocation>> suggestions) {
           return new Container(
               child: new ListView.builder(
             itemCount: suggestions.data?.length ?? 0,
             itemBuilder: (BuildContext context, int i) {
-              final models.Location suggestion = suggestions.data[i];
+              final TrufiLocation suggestion = suggestions.data[i];
               return new ListTile(
                 leading: const Icon(Icons.location_on),
                 title: new RichText(
