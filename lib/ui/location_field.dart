@@ -30,8 +30,7 @@ class LocationField extends StatefulWidget {
 }
 
 class LocationFieldState extends State<LocationField> {
-  final CompositeSubscription _compositeSubscription =
-      new CompositeSubscription();
+  final CompositeSubscription _subscription = new CompositeSubscription();
   final LocationSearchDelegate _searchDelegate = new LocationSearchDelegate();
   final FocusNode _focusNode = new FocusNode();
   final TextEditingController _textEditController = new TextEditingController();
@@ -97,6 +96,22 @@ class LocationFieldState extends State<LocationField> {
 
   Marker _positionMarker;
 
+  Marker _createMarker(double latitude, double longitude) {
+    return new Marker(
+      "1",
+      "Position",
+      latitude,
+      longitude,
+      color: Colors.blue,
+      draggable: true,
+      markerIcon: new MarkerIcon(
+        "images/marker.png",
+        width: 64.0,
+        height: 64.0,
+      ),
+    );
+  }
+
   _showMap() async {
     pkg_location.Location l = pkg_location.Location();
     Map<String, double> currentLocation = await l.getLocation();
@@ -122,8 +137,7 @@ class LocationFieldState extends State<LocationField> {
     StreamSubscription sub = widget.mapView.onMapReady.listen((_) {
       widget.mapView.setMarkers(<Marker>[_positionMarker]);
     });
-    _compositeSubscription.add(sub);
-    _compositeSubscription.add(sub);
+    _subscription.add(sub);
 
     // Replace marker on map tap
     sub = widget.mapView.onMapTapped.listen((location) {
@@ -131,29 +145,13 @@ class LocationFieldState extends State<LocationField> {
       _positionMarker = _createMarker(location.latitude, location.longitude);
       widget.mapView.addMarker(_positionMarker);
     });
-    _compositeSubscription.add(sub);
+    _subscription.add(sub);
 
     // React on toolbar buttons
     sub = widget.mapView.onToolbarAction.listen((id) {
       _hideMap(id != 1);
     });
-    _compositeSubscription.add(sub);
-  }
-
-  Marker _createMarker(double latitude, double longitude) {
-    return new Marker(
-      "1",
-      "Position",
-      latitude,
-      longitude,
-      color: Colors.blue,
-      draggable: true,
-      markerIcon: new MarkerIcon(
-        "images/marker.png",
-        width: 64.0,
-        height: 64.0,
-      ),
-    );
+    _subscription.add(sub);
   }
 
   _hideMap(bool submit) async {
@@ -164,7 +162,7 @@ class LocationFieldState extends State<LocationField> {
           longitude: _positionMarker.longitude));
     }
     widget.mapView.dismiss();
-    _compositeSubscription.cancel();
+    _subscription.cancel();
   }
 
   _setLocation(models.Location location) {
