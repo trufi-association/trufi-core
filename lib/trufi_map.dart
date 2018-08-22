@@ -131,7 +131,7 @@ Map<PlanItinerary, List<Polyline>> _createItineraries(Plan plan) {
 }
 
 List<Location> _decodePolyline(String encoded) {
-  List<Location> poly = new List<Location>();
+  List<Location> points = new List<Location>();
   int index = 0, len = encoded.length;
   int lat = 0, lng = 0;
   while (index < len) {
@@ -153,7 +153,7 @@ List<Location> _decodePolyline(String encoded) {
     int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
     lng += dlng;
     Location p = new Location(lat / 1E5, lng / 1E5);
-    poly.add(p);
+    points.add(p);
   }
-  return poly;
+  return points;
 }
