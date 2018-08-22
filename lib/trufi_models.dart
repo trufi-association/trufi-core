@@ -1,12 +1,12 @@
-class Location {
+class TrufiLocation {
   final String description;
   final double latitude;
   final double longitude;
 
-  Location({this.description, this.latitude, this.longitude});
+  TrufiLocation({this.description, this.latitude, this.longitude});
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
+  factory TrufiLocation.fromJson(Map<String, dynamic> json) {
+    return TrufiLocation(
       description: json['description'],
       latitude: json['lat'],
       longitude: json['lng'],

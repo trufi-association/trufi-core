@@ -4,7 +4,7 @@ import 'package:composite_subscription/composite_subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' as pkg_location;
 import 'package:map_view/map_view.dart';
-import 'package:trufi_app/trufi_models.dart' as models;
+import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/ui/location_search_delegate.dart';
 
 class LocationField extends StatefulWidget {
@@ -21,8 +21,8 @@ class LocationField extends StatefulWidget {
   final String hintText;
   final String labelText;
   final String helperText;
-  final FormFieldSetter<models.Location> onSaved;
-  final ValueChanged<models.Location> onFieldSubmitted;
+  final FormFieldSetter<TrufiLocation> onSaved;
+  final ValueChanged<TrufiLocation> onFieldSubmitted;
   final MapView mapView;
 
   @override
@@ -35,7 +35,7 @@ class LocationFieldState extends State<LocationField> {
   final FocusNode _focusNode = new FocusNode();
   final TextEditingController _textEditController = new TextEditingController();
 
-  models.Location location;
+  TrufiLocation location;
 
   @override
   void initState() {
@@ -156,7 +156,7 @@ class LocationFieldState extends State<LocationField> {
 
   _hideMap(bool submit) async {
     if (submit) {
-      _setLocation(new models.Location(
+      _setLocation(new TrufiLocation(
           description: "Marker Position",
           latitude: _positionMarker.latitude,
           longitude: _positionMarker.longitude));
@@ -165,7 +165,7 @@ class LocationFieldState extends State<LocationField> {
     _subscription.cancel();
   }
 
-  _setLocation(models.Location location) {
+  _setLocation(TrufiLocation location) {
     setState(() {
       this.location = location;
       _textEditController.text = location.description;
