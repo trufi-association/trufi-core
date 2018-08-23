@@ -126,10 +126,12 @@ class _TrufiAppState extends State<TrufiApp>
           child: _planData.plan != null
               ? new Row(children: <Widget>[
                   new Expanded(
-                      child: new RaisedButton(
-                          color: Colors.blue,
-                          onPressed: () => _submit(),
-                          child: const Text("Show on map")))
+                      child: _planData.plan.error != null
+                          ? new Text(_planData.plan.error.message)
+                          : new RaisedButton(
+                              color: Colors.blue,
+                              onPressed: () => _submit(),
+                              child: const Text("Show on map")))
                 ])
               : new Container(),
         ),
