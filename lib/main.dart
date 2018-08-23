@@ -1,3 +1,4 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 
@@ -35,37 +36,61 @@ class PlanData {
   }
 }
 
-class _TrufiAppState extends State<TrufiApp> {
+class _TrufiAppState extends State<TrufiApp>
+    with SingleTickerProviderStateMixin {
   final PlanData _planData = new PlanData();
   final MapView _mapView = new MapView();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
+  Animation<double> animation;
+  AnimationController controller;
+
+  initState() {
+    super.initState();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 250), vsync: this);
+    animation = Tween(begin: 110.0, end: 190.0).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // the state that has changed here is the animation object’s value
+        });
+      });
+  }
+
+  dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: new Scaffold(
-          appBar: new AppBar(
-              title: new Text('Trufi'),
-              actions: _planData.toPlace != null
-                  ? <Widget>[
-                      new IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () {
-                            _formKey.currentState.reset();
-                            setState(() {
-                              _planData.reset();
-                            });
-                          })
-                    ]
-                  : <Widget>[]),
-          body: new Container(
-              padding: new EdgeInsets.all(16.0),
-              child: new Form(
+        appBar: new AppBar(
+          title: new Text('Trufi'),
+          backgroundColor: const Color(0xffffd600),
+          actions: _planData.toPlace != null
+              ? <Widget>[
+                  new IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        _formKey.currentState.reset();
+                        setState(() {
+                          _planData.reset();
+                        });
+                        controller.reverse();
+                      })
+                ]
+              : <Widget>[],
+          bottom: new PreferredSize(
+              child: new Container(
+                padding: new EdgeInsets.all(16.0),
+                child: new Form(
                   key: _formKey,
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      _planData.toPlace != null
+                      _planData.toPlace != null && controller.isCompleted
                           ? new LocationFormField(
                               helperText: 'Choose your origin location.',
                               labelText: 'Origin',
@@ -85,21 +110,30 @@ class _TrufiAppState extends State<TrufiApp> {
                             print(value);
                             setState(() {
                               _planData.toPlace = value;
+                              controller.forward();
                               _fetchPlan();
                             });
                           },
                           mapView: _mapView),
-                      _planData.plan != null
-                          ? new Row(children: <Widget>[
-                              new Expanded(
-                                  child: new RaisedButton(
-                                      color: Colors.blue,
-                                      onPressed: () => _submit(),
-                                      child: const Text("Show on map")))
-                            ])
-                          : new Container(),
                     ],
-                  )))),
+                  ),
+                ),
+              ),
+              preferredSize: new Size.fromHeight(animation.value)),
+        ),
+        body: new Container(
+          padding: new EdgeInsets.all(16.0),
+          child: _planData.plan != null
+              ? new Row(children: <Widget>[
+                  new Expanded(
+                      child: new RaisedButton(
+                          color: Colors.blue,
+                          onPressed: () => _submit(),
+                          child: const Text("Show on map")))
+                ])
+              : new Container(),
+        ),
+      ),
     );
   }
 
