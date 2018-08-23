@@ -23,17 +23,35 @@ class Plan {
   final PlanLocation from;
   final PlanLocation to;
   final List<PlanItinerary> itineraries;
+  final PlanError error;
 
-  Plan({this.date, this.from, this.to, this.itineraries});
+  Plan({this.date, this.from, this.to, this.itineraries, this.error});
 
   factory Plan.fromJson(Map<String, dynamic> json) {
-    return Plan(
-        date: json['date'],
-        from: PlanLocation.fromJson(json['from']),
-        to: PlanLocation.fromJson(json['to']),
-        itineraries: json['itineraries']
-            .map<PlanItinerary>((json) => new PlanItinerary.fromJson(json))
-            .toList());
+    if (json.containsKey('error')) {
+      return Plan(error: PlanError.fromJson(json['error']));
+    } else {
+      Map<String, dynamic> planJson = json['plan'];
+      return Plan(
+          date: planJson['date'],
+          from: PlanLocation.fromJson(planJson['from']),
+          to: PlanLocation.fromJson(planJson['to']),
+          itineraries: planJson['itineraries']
+              .map<PlanItinerary>(
+                  (itineraryJson) => new PlanItinerary.fromJson(itineraryJson))
+              .toList());
+    }
+  }
+}
+
+class PlanError {
+  final int id;
+  final String message;
+
+  PlanError(this.id, this.message);
+
+  factory PlanError.fromJson(Map<String, dynamic> json) {
+    return PlanError(json['id'], json['msg']);
   }
 }
 

@@ -48,5 +48,5 @@ Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
 
 Plan _parsePlan(String responseBody) {
   final parsed = json.decode(responseBody);
-  return Plan.fromJson(parsed['plan']);
+  return Plan.fromJson(parsed);
 }
