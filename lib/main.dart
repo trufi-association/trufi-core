@@ -2,7 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 
-import 'package:trufi_app/trufi_api.dart';
+import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
@@ -95,7 +95,6 @@ class _TrufiAppState extends State<TrufiApp>
                               helperText: 'Choose your origin location.',
                               labelText: 'Origin',
                               onSaved: (value) {
-                                print(value);
                                 setState(() {
                                   _planData.fromPlace = value;
                                   _fetchPlan();
@@ -107,7 +106,6 @@ class _TrufiAppState extends State<TrufiApp>
                           helperText: 'Choose your destination.',
                           labelText: 'Destination',
                           onSaved: (value) {
-                            print(value);
                             setState(() {
                               _planData.toPlace = value;
                               controller.forward();
@@ -147,7 +145,7 @@ class _TrufiAppState extends State<TrufiApp>
             latitude: -17.4603761,
             longitude: -66.1860606);
       }
-      Plan plan = await fetchPlan(_planData.fromPlace, _planData.toPlace);
+      Plan plan = await api.fetchPlan(_planData.fromPlace, _planData.toPlace);
       setState(() {
         _planData.plan = plan;
       });
@@ -157,8 +155,8 @@ class _TrufiAppState extends State<TrufiApp>
   _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      new TrufiMap.fromPlan(
-              _mapView, await fetchPlan(_planData.fromPlace, _planData.toPlace))
+      new TrufiMap.fromPlan(_mapView,
+              await api.fetchPlan(_planData.fromPlace, _planData.toPlace))
           .showMap();
     }
   }
