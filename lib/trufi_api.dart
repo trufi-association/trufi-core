@@ -6,14 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:trufi_app/trufi_models.dart';
 
-const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com:8080';
+const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
 const String SearchPath = '/otp/routers/default/geocode';
 const String PlanPath = 'otp/routers/default/plan';
 
 Future<List<TrufiLocation>> fetchLocations(String query) async {
-  Uri request = Uri.http(Endpoint, SearchPath, {
+  Uri request = Uri.https(Endpoint, SearchPath, {
     "query": query,
-    "autocomplete": "true",
+    "autocomplete": "false",
     "corners": "true",
     "stops": "false"
   });
