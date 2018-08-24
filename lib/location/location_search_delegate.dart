@@ -106,7 +106,6 @@ class _SuggestionList extends StatelessWidget {
         initialData: new List<TrufiLocation>(),
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> suggestions) {
-          print("suggestions: $suggestions");
           return new SliverPadding(
             padding: EdgeInsets.all(8.0),
             sliver: new SliverFixedExtentList(

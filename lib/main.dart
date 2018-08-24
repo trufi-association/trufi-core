@@ -24,26 +24,16 @@ class TrufiApp extends StatefulWidget {
   _TrufiAppState createState() => new _TrufiAppState();
 }
 
-class PlanData {
-  TrufiLocation fromPlace;
-  TrufiLocation toPlace;
-  Plan plan;
-
-  reset() {
-    fromPlace = null;
-    toPlace = null;
-    plan = null;
-  }
-}
-
 class _TrufiAppState extends State<TrufiApp>
     with SingleTickerProviderStateMixin {
-  final PlanData _planData = new PlanData();
   final MapView _mapView = new MapView();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  Animation<double> animation;
   AnimationController controller;
+  Animation<double> animation;
+  TrufiLocation fromPlace;
+  TrufiLocation toPlace;
+  Plan plan;
 
   initState() {
     super.initState();
@@ -69,17 +59,10 @@ class _TrufiAppState extends State<TrufiApp>
         appBar: new AppBar(
           title: new Text('Trufi'),
           backgroundColor: const Color(0xffffd600),
-          actions: _planData.toPlace != null
+          actions: toPlace != null
               ? <Widget>[
                   new IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        _formKey.currentState.reset();
-                        setState(() {
-                          _planData.reset();
-                        });
-                        controller.reverse();
-                      })
+                      icon: Icon(Icons.close), onPressed: () => _reset())
                 ]
               : <Widget>[],
           bottom: new PreferredSize(
@@ -90,28 +73,17 @@ class _TrufiAppState extends State<TrufiApp>
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      _planData.toPlace != null && controller.isCompleted
+                      _isFromFieldVisible()
                           ? new LocationFormField(
                               helperText: 'Choose your origin location.',
                               labelText: 'Origin',
-                              onSaved: (value) {
-                                setState(() {
-                                  _planData.fromPlace = value;
-                                  _fetchPlan();
-                                });
-                              },
+                              onSaved: (value) => _setFromPlace(value),
                               mapView: _mapView)
                           : new Container(),
                       new LocationFormField(
                           helperText: 'Choose your destination.',
                           labelText: 'Destination',
-                          onSaved: (value) {
-                            setState(() {
-                              _planData.toPlace = value;
-                              controller.forward();
-                              _fetchPlan();
-                            });
-                          },
+                          onSaved: (value) => _setToPlace(value),
                           mapView: _mapView),
                     ],
                   ),
@@ -121,14 +93,14 @@ class _TrufiAppState extends State<TrufiApp>
         ),
         body: new Container(
           padding: new EdgeInsets.all(16.0),
-          child: _planData.plan != null
+          child: _isPlanVisible()
               ? new Row(children: <Widget>[
                   new Expanded(
-                      child: _planData.plan.error != null
-                          ? new Text(_planData.plan.error.message)
+                      child: _isPlanErrorVisible()
+                          ? new Text(plan.error.message)
                           : new RaisedButton(
                               color: const Color(0xffffd600),
-                              onPressed: () => _submit(),
+                              onPressed: () => _showMap(),
                               child: const Text("Show on map")))
                 ])
               : new Container(),
@@ -137,27 +109,65 @@ class _TrufiAppState extends State<TrufiApp>
     );
   }
 
+  _reset() {
+    _formKey.currentState.reset();
+    setState(() {
+      fromPlace = null;
+      toPlace = null;
+      plan = null;
+      controller.reverse();
+    });
+  }
+
+  _setFromPlace(TrufiLocation value) {
+    setState(() {
+      fromPlace = value;
+      _fetchPlan();
+    });
+  }
+
+  _setToPlace(TrufiLocation value) {
+    setState(() {
+      toPlace = value;
+      if (toPlace != null) {
+        controller.forward();
+      }
+      _fetchPlan();
+    });
+  }
+
+  _setPlan(Plan value) {
+    setState(() {
+      plan = value;
+    });
+  }
+
   _fetchPlan() async {
-    if (_planData.toPlace != null) {
-      if (_planData.fromPlace == null) {
-        _planData.fromPlace = new TrufiLocation(
+    if (toPlace != null) {
+      if (fromPlace == null) {
+        fromPlace = new TrufiLocation(
             description: "Current Position",
             latitude: -17.4603761,
             longitude: -66.1860606);
       }
-      Plan plan = await api.fetchPlan(_planData.fromPlace, _planData.toPlace);
-      setState(() {
-        _planData.plan = plan;
-      });
+      _setPlan(await api.fetchPlan(fromPlace, toPlace));
     }
   }
 
-  _submit() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      new TrufiMap.fromPlan(_mapView,
-              await api.fetchPlan(_planData.fromPlace, _planData.toPlace))
-          .showMap();
-    }
+  bool _isFromFieldVisible() {
+    return toPlace != null && controller.isCompleted;
+  }
+
+  bool _isPlanVisible() {
+    return plan != null;
+  }
+
+  bool _isPlanErrorVisible() {
+    return plan?.error != null ?? false;
+  }
+
+  _showMap() async {
+    new TrufiMap.fromPlan(_mapView, await api.fetchPlan(fromPlace, toPlace))
+        .showMap();
   }
 }
