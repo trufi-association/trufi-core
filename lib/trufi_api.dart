@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:trufi_app/trufi_models.dart';
@@ -27,7 +28,7 @@ Future<List<TrufiLocation>> fetchLocations(String query) async {
 List<TrufiLocation> _parseLocations(String responseBody) {
   final parsed = json.decode(responseBody);
   return parsed
-      .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
+      .map<TrufiLocation>((json) => new TrufiLocation.fromSearchJson(json))
       .toList();
 }
 

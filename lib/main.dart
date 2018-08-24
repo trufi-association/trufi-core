@@ -5,7 +5,7 @@ import 'package:map_view/map_view.dart';
 import 'package:trufi_app/trufi_api.dart';
 import 'package:trufi_app/trufi_map.dart';
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/ui/location_form_field.dart';
+import 'package:trufi_app/location/location_form_field.dart';
 
 /// This API Key will be used for both the interactive maps as well as the static maps.
 /// Make sure that you have enabled the following APIs in the Google API Console (https://console.developers.google.com/apis)
@@ -84,7 +84,7 @@ class _TrufiAppState extends State<TrufiApp>
               : <Widget>[],
           bottom: new PreferredSize(
               child: new Container(
-                padding: new EdgeInsets.all(16.0),
+                padding: new EdgeInsets.all(8.0),
                 child: new Form(
                   key: _formKey,
                   child: new Column(
@@ -129,7 +129,7 @@ class _TrufiAppState extends State<TrufiApp>
                       child: _planData.plan.error != null
                           ? new Text(_planData.plan.error.message)
                           : new RaisedButton(
-                              color: Colors.blue,
+                              color: const Color(0xffffd600),
                               onPressed: () => _submit(),
                               child: const Text("Show on map")))
                 ])

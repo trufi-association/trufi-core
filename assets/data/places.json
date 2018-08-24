@@ -1,0 +1,79 @@
+[
+  {
+    "coords": {
+      "lat": -17.3939461,
+      "lng": -66.1484697
+    },
+    "name": "UMSS Entrada"
+  },
+  {
+    "coords": {
+      "lat": -17.3994593,
+      "lng": -66.1578441
+    },
+    "name": "Aroma esq. Ayacucho"
+  },
+  {
+    "coords": {
+      "lat": -17.3928091,
+      "lng": -66.1585365
+    },
+    "name": "ECOBOL Post Office"
+  },
+  {
+    "coords": {
+      "lat": -17.4022491,
+      "lng": -66.1575437
+    },
+    "name": "Terminal de Buses"
+  },
+  {
+    "coords": {
+      "lat": -17.4033113,
+      "lng": -66.1539951
+    },
+    "name": "Estación de Trenes"
+  },
+  {
+    "coords": {
+      "lat": -17.3805186,
+      "lng": -66.1514722
+    },
+    "name": "Cine Center"
+  },
+  {
+    "coords": {
+      "lat": -17.3823045,
+      "lng": -66.1598209
+    },
+    "name": "Flags Plaza"
+  },
+  {
+    "coords": {
+      "lat": -17.3940004,
+      "lng": -66.1671074
+    },
+    "name": "Puente Quillacollo"
+  },
+  {
+    "coords": {
+      "lat": -17.3792677,
+      "lng": -66.1617936
+    },
+    "name": "Estadio Félix Capriles"
+  },
+  {
+    "coords": {
+      "lat": -17.3873052,
+      "lng": -66.1649576
+    },
+    "name": "Puente Cobija Charques"
+  },
+  {
+    "coords": {
+      "lat": -17.3740982,
+      "lng": -66.1378992
+    },
+    "name": "América Este"
+  }
+]
