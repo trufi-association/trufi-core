@@ -33,7 +33,7 @@ List<TrufiLocation> _parseLocations(String responseBody) {
 }
 
 Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
-  Uri request = Uri.http(Endpoint, PlanPath, {
+  Uri request = Uri.https(Endpoint, PlanPath, {
     "fromPlace": from.toString(),
     "toPlace": to.toString(),
     "date": "01-01-2018",
