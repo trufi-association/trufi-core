@@ -1,16 +1,45 @@
 class TrufiLocation {
+
+  static const String _Description = 'description';
+  static const String _Latitude = 'latitude';
+  static const String _Longitude = 'longitude';
+
   final String description;
   final double latitude;
   final double longitude;
 
   TrufiLocation({this.description, this.latitude, this.longitude});
 
-  factory TrufiLocation.fromJson(Map<String, dynamic> json) {
+  factory TrufiLocation.fromSearchJson(Map<String, dynamic> json) {
     return TrufiLocation(
       description: json['description'],
       latitude: json['lat'],
       longitude: json['lng'],
     );
+  }
+
+  factory TrufiLocation.fromImportantPlacesJson(Map<String, dynamic> json) {
+    return TrufiLocation(
+      description: json['name'],
+      latitude: json['coords']['lat'],
+      longitude: json['coords']['lng'],
+    );
+  }
+
+  factory TrufiLocation.fromJson(Map<String, dynamic> json) {
+    return TrufiLocation(
+      description: json[_Description],
+      latitude: json[_Latitude],
+      longitude: json[_Longitude],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      _Description: description,
+      _Latitude: latitude,
+      _Longitude: longitude,
+    };
   }
 
   String toString() {

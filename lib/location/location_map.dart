@@ -78,7 +78,7 @@ Marker _createMarker(double latitude, double longitude) {
     color: Colors.blue,
     draggable: true,
     markerIcon: new MarkerIcon(
-      "images/marker.png",
+      "assets/images/marker.png",
       width: 64.0,
       height: 64.0,
     ),
