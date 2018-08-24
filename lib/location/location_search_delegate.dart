@@ -74,60 +74,81 @@ class _SuggestionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     List<Widget> slivers = new List();
+    slivers.add(new SliverPadding(padding: EdgeInsets.all(4.0)));
     if (query.isEmpty) {
-      slivers.add(new SliverToBoxAdapter(
-        child: new Text("Recent".toUpperCase()),
-      ));
-      slivers.add(createFutureBuilder(
+      slivers.add(_buildTitle(theme, "Recent"));
+      slivers.add(_buildFutureBuilder(
           context, theme, history.fetchLocations(5), Icons.history));
     } else {
-      slivers.add(new SliverToBoxAdapter(
-        child: new Text("Search Results".toUpperCase()),
-      ));
-      slivers.add(createFutureBuilder(
+      slivers.add(_buildTitle(theme, "Search Results"));
+      slivers.add(_buildFutureBuilder(
           context, theme, api.fetchLocations(query), Icons.history));
     }
-    slivers.add(new SliverToBoxAdapter(
-      child: new Text("Places".toUpperCase()),
-    ));
-    slivers.add(createFutureBuilder(context, theme,
+    slivers.add(_buildTitle(theme, "Places"));
+    slivers.add(_buildFutureBuilder(context, theme,
         places.fetchLocations(context, query), Icons.location_on));
+    slivers.add(new SliverPadding(padding: EdgeInsets.all(4.0)));
     return new Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
       child: new CustomScrollView(
         slivers: slivers,
       ),
     );
   }
 
-  Widget createFutureBuilder(BuildContext context, ThemeData theme,
+  Widget _buildTitle(ThemeData theme, String title) {
+    return new SliverToBoxAdapter(
+      child: new Container(
+        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+        child: new Row(
+          children: <Widget>[
+            new RichText(
+              text: new TextSpan(
+                text: title.toUpperCase(),
+                style: theme.textTheme.caption,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFutureBuilder(BuildContext context, ThemeData theme,
       Future<List<TrufiLocation>> future, IconData iconData) {
     return new FutureBuilder(
         future: future,
         initialData: new List<TrufiLocation>(),
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> suggestions) {
-          return new SliverPadding(
-            padding: EdgeInsets.all(8.0),
-            sliver: new SliverFixedExtentList(
-                delegate: new SliverChildBuilderDelegate((context, index) {
-                  final TrufiLocation suggestion = suggestions.data[index];
-                  return new ListTile(
-                    leading: new Icon(iconData),
-                    title: new RichText(
-                      text: new TextSpan(
-                        text: suggestion.description,
-                        style: theme.textTheme.subhead
-                            .copyWith(fontWeight: FontWeight.bold),
+          return new SliverList(
+            delegate: new SliverChildBuilderDelegate((context, index) {
+              final TrufiLocation suggestion = suggestions.data[index];
+              return new GestureDetector(
+                onTap: () => _handleTap(suggestion),
+                child: new Container(
+                  margin: EdgeInsets.all(2.0),
+                  child: new Row(
+                    children: <Widget>[
+                      new Icon(iconData),
+                      new Container(width: 8.0),
+                      new RichText(
+                        text: new TextSpan(
+                          text: suggestion.description,
+                          style: theme.textTheme.body1,
+                        ),
                       ),
-                    ),
-                    onTap: () {
-                      history.addLocation(suggestion);
-                      onSelected(suggestion);
-                    },
-                  );
-                }, childCount: suggestions.data.length),
-                itemExtent: 30.0),
+                    ],
+                  ),
+                ),
+              );
+            }, childCount: suggestions.data.length),
           );
         });
+  }
+
+  _handleTap(TrufiLocation value) {
+    history.addLocation(value);
+    onSelected(value);
   }
 }

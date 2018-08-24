@@ -31,9 +31,11 @@ List<TrufiLocation> _parsePlaces(_PlacesData data) {
       .map<TrufiLocation>(
           (json) => new TrufiLocation.fromImportantPlacesJson(json))
       .toList();
-  return data.query.isEmpty
-      ? places
-      : places
-          .where((location) => location.description.contains(data.query))
-          .toList();
+  if (data.query.isEmpty) {
+    return places;
+  }
+  final String query = data.query.toLowerCase();
+  return places
+      .where((l) => l.description.toLowerCase().contains(query))
+      .toList();
 }
