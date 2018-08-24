@@ -148,14 +148,6 @@ class _TrufiAppState extends State<TrufiApp>
     return toPlace != null && controller.isCompleted;
   }
 
-  bool _isPlanVisible() {
-    return plan != null;
-  }
-
-  bool _isPlanErrorVisible() {
-    return plan?.error != null ?? false;
-  }
-
   _showMap() async {
     new TrufiMap.fromPlan(_mapView, await api.fetchPlan(fromPlace, toPlace))
         .showMap();
@@ -186,6 +178,13 @@ class _TrufiAppState extends State<TrufiApp>
                   onPressed: () => _showMap(),
                   child: const Text("Show on map")))
         ]),
+        new Expanded(
+          child: new ListView.builder(
+            itemBuilder: (BuildContext context, int index) =>
+                ItineraryItem(plan.itineraries[index]),
+            itemCount: plan.itineraries.length,
+          ),
+        ),
       ],
     );
   }
@@ -197,71 +196,30 @@ class _TrufiAppState extends State<TrufiApp>
 
 // Displays one Entry. If the entry has children then it's displayed
 // with an ExpansionTile.
-class EntryItem extends StatelessWidget {
-  const EntryItem(this.entry);
+class ItineraryItem extends StatelessWidget {
+  const ItineraryItem(this.itinerary);
 
-  final Entry entry;
+  final PlanItinerary itinerary;
 
-  Widget _buildTiles(Entry root) {
-    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+  Widget _buildTiles(PlanItinerary itinerary) {
+    if (itinerary.legs.isEmpty) return ListTile(title: Text("empty"));
     return ExpansionTile(
-      key: PageStorageKey<Entry>(root),
-      title: Text(root.title),
-      children: root.children.map(_buildTiles).toList(),
+      key: PageStorageKey<PlanItinerary>(itinerary),
+      title: Text(itinerary.duration.toString()),
+      children: itinerary.legs.map(_buildLegsTiles).toList(),
+    );
+  }
+
+  Widget _buildLegsTiles(PlanItineraryLeg legs) {
+    if (legs.points.isEmpty) return ListTile(title: Text("empty"));
+    return new Row(children: <Widget>[
+      new Text(legs.points)
+    ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildTiles(entry);
+    return _buildTiles(itinerary);
   }
 }
-
-// One entry in the multilevel list displayed by this app.
-class Entry {
-  Entry(this.title, [this.children = const <Entry>[]]);
-
-  final String title;
-  final List<Entry> children;
-}
-
-final List<Entry> data = <Entry>[
-  Entry(
-    'Chapter A',
-    <Entry>[
-      Entry(
-        'Section A0',
-        <Entry>[
-          Entry('Item A0.1'),
-          Entry('Item A0.2'),
-          Entry('Item A0.3'),
-        ],
-      ),
-      Entry('Section A1'),
-      Entry('Section A2'),
-    ],
-  ),
-  Entry(
-    'Chapter B',
-    <Entry>[
-      Entry('Section B0'),
-      Entry('Section B1'),
-    ],
-  ),
-  Entry(
-    'Chapter C',
-    <Entry>[
-      Entry('Section C0'),
-      Entry('Section C1'),
-      Entry(
-        'Section C2',
-        <Entry>[
-          Entry('Item C2.0'),
-          Entry('Item C2.1'),
-          Entry('Item C2.2'),
-          Entry('Item C2.3'),
-        ],
-      ),
-    ],
-  ),
-];
