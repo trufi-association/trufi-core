@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
 import 'package:map_view/polyline.dart';
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/trufi_map_utils.dart';
 
 class TrufiMap {
   final MapView mapView;
@@ -18,8 +19,8 @@ class TrufiMap {
   factory TrufiMap.fromPlan(MapView mapView, Plan plan) {
     return new TrufiMap(
         mapView,
-        _createMarker(plan.from.latitude, plan.from.longitude),
-        _createMarker(plan.to.latitude, plan.to.longitude),
+        createOriginMarker(plan.from.latitude, plan.from.longitude),
+        createDestinationMarker(plan.to.latitude, plan.to.longitude),
         _createItineraries(plan));
   }
 
@@ -98,29 +99,13 @@ class TrufiMap {
   }
 }
 
-Marker _createMarker(double latitude, double longitude) {
-  return new Marker(
-    "1",
-    "Position",
-    latitude,
-    longitude,
-    color: Colors.blue,
-    draggable: true,
-    markerIcon: new MarkerIcon(
-      "assets/images/marker.png",
-      width: 64.0,
-      height: 64.0,
-    ),
-  );
-}
-
 Map<PlanItinerary, List<Polyline>> _createItineraries(Plan plan) {
   Map<PlanItinerary, List<Polyline>> itineraries = Map();
   int polylineId = 0;
   plan.itineraries.forEach((itinerary) {
     List<Polyline> polylines = List();
     itinerary.legs.forEach((leg) {
-      List<Location> points = _decodePolyline(leg.points);
+      List<Location> points = decodePolyline(leg.points);
       polylines.add(new Polyline(polylineId.toString(), points,
           color: Colors.grey, width: 4.0));
       polylineId++;
@@ -128,32 +113,4 @@ Map<PlanItinerary, List<Polyline>> _createItineraries(Plan plan) {
     itineraries.addAll({itinerary: polylines});
   });
   return itineraries;
-}
-
-List<Location> _decodePolyline(String encoded) {
-  List<Location> points = new List<Location>();
-  int index = 0, len = encoded.length;
-  int lat = 0, lng = 0;
-  while (index < len) {
-    int b, shift = 0, result = 0;
-    do {
-      b = encoded.codeUnitAt(index++) - 63;
-      result |= (b & 0x1f) << shift;
-      shift += 5;
-    } while (b >= 0x20);
-    int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-    lat += dlat;
-    shift = 0;
-    result = 0;
-    do {
-      b = encoded.codeUnitAt(index++) - 63;
-      result |= (b & 0x1f) << shift;
-      shift += 5;
-    } while (b >= 0x20);
-    int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-    lng += dlng;
-    Location p = new Location(lat / 1E5, lng / 1E5);
-    points.add(p);
-  }
-  return points;
 }

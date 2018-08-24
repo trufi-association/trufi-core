@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:composite_subscription/composite_subscription.dart';
-import 'package:flutter/material.dart';
 import 'package:map_view/map_view.dart';
+import 'package:trufi_app/trufi_map_utils.dart';
 
 typedef void OnSubmit(double latitude, double longitude);
 typedef void OnCancel();
@@ -20,7 +20,7 @@ class LocationMap {
 
   factory LocationMap.create(MapView mapView,
       {OnSubmit onSubmit, OnCancel onCancel}) {
-    return new LocationMap(mapView, _createMarker(-17.0, -66.0),
+    return new LocationMap(mapView, createPositionMarker(-17.0, -66.0),
         onSubmit: onSubmit, onCancel: onCancel);
   }
 
@@ -67,20 +67,4 @@ class LocationMap {
     mapView.dismiss();
     _subs.cancel();
   }
-}
-
-Marker _createMarker(double latitude, double longitude) {
-  return new Marker(
-    "1",
-    "Position",
-    latitude,
-    longitude,
-    color: Colors.blue,
-    draggable: true,
-    markerIcon: new MarkerIcon(
-      "assets/images/marker.png",
-      width: 64.0,
-      height: 64.0,
-    ),
-  );
 }
