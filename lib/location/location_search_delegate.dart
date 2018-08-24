@@ -118,9 +118,15 @@ class _SuggestionList extends StatelessWidget {
       Future<List<TrufiLocation>> future, IconData iconData) {
     return new FutureBuilder(
         future: future,
-        initialData: new List<TrufiLocation>(),
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> suggestions) {
+          if (suggestions.data == null) {
+            return new SliverToBoxAdapter(
+              child: new LinearProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation(Colors.yellow),
+              ),
+            );
+          }
           return new SliverList(
             delegate: new SliverChildBuilderDelegate((context, index) {
               final TrufiLocation suggestion = suggestions.data[index];
@@ -132,10 +138,14 @@ class _SuggestionList extends StatelessWidget {
                     children: <Widget>[
                       new Icon(iconData),
                       new Container(width: 8.0),
-                      new RichText(
-                        text: new TextSpan(
-                          text: suggestion.description,
-                          style: theme.textTheme.body1,
+                      new Flexible(
+                        child: new RichText(
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                          text: new TextSpan(
+                            text: suggestion.description,
+                            style: theme.textTheme.body1,
+                          ),
                         ),
                       ),
                     ],
