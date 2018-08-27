@@ -9,19 +9,26 @@ import 'package:trufi_app/trufi_map_utils.dart';
 
 class TrufiMap {
   final MapView mapView;
+  final Plan plan;
   final Marker fromMarker;
   final Marker toMarker;
-  final Map<PlanItinerary, List<Polyline>> itineraries;
   final CompositeSubscription _subs = new CompositeSubscription();
 
-  TrufiMap(this.mapView, this.fromMarker, this.toMarker, this.itineraries);
+  Map<PlanItinerary, List<Polyline>> itineraries;
+  PlanItinerary selectedItinerary;
+
+  TrufiMap(this.mapView, this.plan, this.fromMarker, this.toMarker,
+      this.itineraries, this.selectedItinerary);
 
   factory TrufiMap.fromPlan(MapView mapView, Plan plan) {
+    PlanItinerary selectedItinerary = plan.itineraries.first;
     return new TrufiMap(
         mapView,
+        plan,
         createOriginMarker(plan.from.latitude, plan.from.longitude),
         createDestinationMarker(plan.to.latitude, plan.to.longitude),
-        _createItineraries(plan));
+        createItineraries(plan, selectedItinerary),
+        selectedItinerary);
   }
 
   showMap() {
@@ -65,27 +72,20 @@ class TrufiMap {
   }
 
   _selectItineraryEntryForPolyline(Polyline polyline) {
-    _unselectAllItineraries();
-    _updateItineraryEntry(_itineraryEntryForPolyline(polyline), Colors.green);
+    PlanItinerary selectedItinerary = _itineraryForPolyline(polyline);
+    if (selectedItinerary != null) {
+      itineraries.entries.forEach((entry) {
+        entry.value.forEach((p) => mapView.removePolyline(p));
+      });
+      itineraries.clear();      itineraries = createItineraries(plan, selectedItinerary);
+      itineraries.forEach((_, p) => p.forEach((p) => mapView.addPolyline(p)));
+    }
   }
 
-  _unselectAllItineraries() {
-    itineraries.entries
-        .forEach((entry) => _updateItineraryEntry(entry, Colors.grey));
-  }
-
-  _updateItineraryEntry(
-      MapEntry<PlanItinerary, List<Polyline>> entry, Color color) {
-    if (entry == null || color == null) return;
-    List<Polyline> newPolylines = new List();
-    Polyline newPolyline;
-    entry.value.forEach((p) {
-      newPolyline = new Polyline(p.id, p.points, color: color, width: p.width);
-      newPolylines.add(newPolyline);
-      mapView.removePolyline(p);
-      mapView.addPolyline(newPolyline);
-    });
-    itineraries.addAll({entry.key: newPolylines});
+  PlanItinerary _itineraryForPolyline(Polyline polyline) {
+    MapEntry<PlanItinerary, List<Polyline>> entry =
+        _itineraryEntryForPolyline(polyline);
+    return entry != null ? entry.key : null;
   }
 
   MapEntry<PlanItinerary, List<Polyline>> _itineraryEntryForPolyline(
@@ -99,15 +99,18 @@ class TrufiMap {
   }
 }
 
-Map<PlanItinerary, List<Polyline>> _createItineraries(Plan plan) {
+Map<PlanItinerary, List<Polyline>> createItineraries(
+    Plan plan, PlanItinerary selectedItinerary) {
   Map<PlanItinerary, List<Polyline>> itineraries = Map();
   int polylineId = 0;
   plan.itineraries.forEach((itinerary) {
     List<Polyline> polylines = List();
+    bool isSelected = itinerary == selectedItinerary;
     itinerary.legs.forEach((leg) {
       List<Location> points = decodePolyline(leg.points);
       polylines.add(new Polyline(polylineId.toString(), points,
-          color: Colors.grey, width: 4.0));
+          color: isSelected ? Colors.green : Colors.grey,
+          width: isSelected ? 6.0 : 4.0));
       polylineId++;
     });
     itineraries.addAll({itinerary: polylines});
