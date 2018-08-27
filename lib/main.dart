@@ -93,17 +93,7 @@ class _TrufiAppState extends State<TrufiApp>
         ),
         body: new Container(
           padding: new EdgeInsets.all(16.0),
-          child: _isPlanVisible()
-              ? new Row(children: <Widget>[
-                  new Expanded(
-                      child: _isPlanErrorVisible()
-                          ? new Text(plan.error.message)
-                          : new RaisedButton(
-                              color: const Color(0xffffd600),
-                              onPressed: () => _showMap(),
-                              child: const Text("Show on map")))
-                ])
-              : new Container(),
+          child: _buildPlan(),
         ),
       ),
     );
@@ -158,16 +148,78 @@ class _TrufiAppState extends State<TrufiApp>
     return toPlace != null && controller.isCompleted;
   }
 
-  bool _isPlanVisible() {
-    return plan != null;
-  }
-
-  bool _isPlanErrorVisible() {
-    return plan?.error != null ?? false;
-  }
-
   _showMap() async {
     new TrufiMap.fromPlan(_mapView, await api.fetchPlan(fromPlace, toPlace))
         .showMap();
+  }
+
+  Widget _buildPlan() {
+    PlanError error = plan?.error;
+    return new Container(
+      padding: new EdgeInsets.all(16.0),
+      child: error != null
+          ? _buildPlanFailure(error)
+          : plan != null ? _buildPlanSuccess(plan) : _buildPlanEmpty(),
+    );
+  }
+
+  Widget _buildPlanFailure(PlanError error) {
+    return new Container(child: new Text(error.message));
+  }
+
+  Widget _buildPlanSuccess(Plan plan) {
+    return new Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        new Row(children: <Widget>[
+          new Expanded(
+              child: new RaisedButton(
+                  color: const Color(0xffffd600),
+                  onPressed: () => _showMap(),
+                  child: const Text("Show on map")))
+        ]),
+        new Expanded(
+          child: new ListView.builder(
+            itemBuilder: (BuildContext context, int index) =>
+                ItineraryItem(plan.itineraries[index]),
+            itemCount: plan.itineraries.length,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlanEmpty() {
+    return new Container();
+  }
+}
+
+// Displays one Entry. If the entry has children then it's displayed
+// with an ExpansionTile.
+class ItineraryItem extends StatelessWidget {
+  const ItineraryItem(this.itinerary);
+
+  final PlanItinerary itinerary;
+
+  Widget _buildTiles(PlanItinerary itinerary) {
+    if (itinerary.legs.isEmpty) return ListTile(title: Text("empty"));
+    return ExpansionTile(
+      key: PageStorageKey<PlanItinerary>(itinerary),
+      title: Text(itinerary.duration.toString()),
+      children: itinerary.legs.map(_buildLegsTiles).toList(),
+    );
+  }
+
+  Widget _buildLegsTiles(PlanItineraryLeg legs) {
+    if (legs.points.isEmpty) return ListTile(title: Text("empty"));
+    return new Row(children: <Widget>[
+      new Text(legs.points)
+    ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildTiles(itinerary);
   }
 }
