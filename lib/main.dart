@@ -4,10 +4,9 @@ import 'package:map_view/map_view.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map.dart';
+import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
-
-import 'package:trufi_app/map_controller_page.dart';
 
 /// This API Key will be used for both the interactive maps as well as the static maps.
 /// Make sure that you have enabled the following APIs in the Google API Console (https://console.developers.google.com/apis)
@@ -77,13 +76,11 @@ class _TrufiAppState extends State<TrufiApp>
                     children: <Widget>[
                       _isFromFieldVisible()
                           ? new LocationFormField(
-                              helperText: 'Choose your origin location.',
                               labelText: 'Origin',
                               onSaved: (value) => _setFromPlace(value),
                               mapView: _mapView)
                           : new Container(),
                       new LocationFormField(
-                          helperText: 'Choose your destination.',
                           labelText: 'Destination',
                           onSaved: (value) => _setToPlace(value),
                           mapView: _mapView),
@@ -159,7 +156,7 @@ class _TrufiAppState extends State<TrufiApp>
     return new Container(
       child: error != null
           ? _buildPlanFailure(error)
-          : plan != null ? _buildPlanSuccess(plan) : _buildPlanEmpty(),
+          : plan != null ? _buildPlanSuccessMap(plan) : _buildPlanEmpty(),
     );
   }
 
@@ -187,6 +184,10 @@ class _TrufiAppState extends State<TrufiApp>
         ),
       ],
     );
+  }
+
+  Widget _buildPlanSuccessMap(Plan plan) {
+    return new MapControllerPage(plan: plan);
   }
 
   Widget _buildPlanEmpty() {
