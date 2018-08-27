@@ -41,7 +41,7 @@ class TrufiMap {
             initialCameraPosition: new CameraPosition(
                 new Location((fromMarker.latitude + toMarker.latitude) / 2.0,
                     (fromMarker.longitude + toMarker.longitude) / 2.0),
-                12.0),
+                13.0),
             hideToolbar: false,
             title: "Choose start position"),
         toolbarActions: [new ToolbarAction("Close", 1)]);
@@ -77,7 +77,8 @@ class TrufiMap {
       itineraries.entries.forEach((entry) {
         entry.value.forEach((p) => mapView.removePolyline(p));
       });
-      itineraries.clear();      itineraries = createItineraries(plan, selectedItinerary);
+      itineraries.clear();
+      itineraries = createItineraries(plan, selectedItinerary);
       itineraries.forEach((_, p) => p.forEach((p) => mapView.addPolyline(p)));
     }
   }
@@ -108,9 +109,12 @@ Map<PlanItinerary, List<Polyline>> createItineraries(
     bool isSelected = itinerary == selectedItinerary;
     itinerary.legs.forEach((leg) {
       List<Location> points = decodePolyline(leg.points);
-      polylines.add(new Polyline(polylineId.toString(), points,
-          color: isSelected ? Colors.green : Colors.grey,
-          width: isSelected ? 6.0 : 4.0));
+      Polyline polyline = new Polyline(polylineId.toString(), points,
+          color: isSelected
+              ? leg.mode == 'WALK' ? Colors.blue : Colors.green
+              : Colors.grey,
+          width: isSelected ? 6.0 : 3.0);
+      polylines.add(polyline);
       polylineId++;
     });
     itineraries.addAll({itinerary: polylines});

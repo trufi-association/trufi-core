@@ -147,10 +147,11 @@ class PlanItinerary {
 
 class PlanItineraryLeg {
   final String points;
+  final String mode;
 
-  PlanItineraryLeg({this.points});
+  PlanItineraryLeg({this.points, this.mode});
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
-    return new PlanItineraryLeg(points: json['legGeometry']['points']);
+    return new PlanItineraryLeg(points: json['legGeometry']['points'], mode: json['mode']);
   }
 }
