@@ -7,6 +7,8 @@ import 'package:trufi_app/trufi_map.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 
+import 'package:trufi_app/map_controller_page.dart';
+
 /// This API Key will be used for both the interactive maps as well as the static maps.
 /// Make sure that you have enabled the following APIs in the Google API Console (https://console.developers.google.com/apis)
 /// - Static Maps API
@@ -92,7 +94,6 @@ class _TrufiAppState extends State<TrufiApp>
               preferredSize: new Size.fromHeight(animation.value)),
         ),
         body: new Container(
-          padding: new EdgeInsets.all(16.0),
           child: _buildPlan(),
         ),
       ),
@@ -156,7 +157,6 @@ class _TrufiAppState extends State<TrufiApp>
   Widget _buildPlan() {
     PlanError error = plan?.error;
     return new Container(
-      padding: new EdgeInsets.all(16.0),
       child: error != null
           ? _buildPlanFailure(error)
           : plan != null ? _buildPlanSuccess(plan) : _buildPlanEmpty(),
@@ -190,7 +190,7 @@ class _TrufiAppState extends State<TrufiApp>
   }
 
   Widget _buildPlanEmpty() {
-    return new Container();
+    return new MapControllerPage();
   }
 }
 
@@ -212,9 +212,8 @@ class ItineraryItem extends StatelessWidget {
 
   Widget _buildLegsTiles(PlanItineraryLeg legs) {
     if (legs.points.isEmpty) return ListTile(title: Text("empty"));
-    return new Row(children: <Widget>[
-      new Text(legs.points)
-    ],
+    return new Row(
+      children: <Widget>[new Text(legs.points)],
     );
   }
 
