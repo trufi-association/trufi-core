@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:map_view/map_view.dart';
+import 'package:flutter/services.dart';
+import 'package:latlong/latlong.dart';
+import 'package:location/location.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
-import 'package:trufi_app/trufi_map.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
@@ -16,7 +19,6 @@ import 'package:trufi_app/location/location_form_field.dart';
 const API_KEY = "***REMOVED***";
 
 void main() {
-  MapView.setApiKey(API_KEY);
   runApp(new TrufiApp());
 }
 
@@ -27,7 +29,6 @@ class TrufiApp extends StatefulWidget {
 
 class _TrufiAppState extends State<TrufiApp>
     with SingleTickerProviderStateMixin {
-  final MapView _mapView = new MapView();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
       new GlobalKey<FormFieldState<TrufiLocation>>();
@@ -50,6 +51,47 @@ class _TrufiAppState extends State<TrufiApp>
           // the state that has changed here is the animation object’s value
         });
       });
+    initPlatformState();
+    _locationSubscription =
+        _location.onLocationChanged().listen((Map<String, double> result) {
+      setState(() {
+        _currentLocation = result;
+      });
+    });
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  StreamSubscription<Map<String, double>> _locationSubscription;
+  Map<String, double> _startLocation;
+  Map<String, double> _currentLocation;
+  Location _location = new Location();
+  bool _permission = false;
+  String error;
+
+  initPlatformState() async {
+    Map<String, double> location;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      _permission = await _location.hasPermission();
+      location = await _location.getLocation();
+      error = null;
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'Permission denied';
+      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error =
+            'Permission denied - please ask the user to enable it from the app settings';
+      }
+      location = null;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    //if (!mounted) return;
+    setState(() {
+      _startLocation = location;
+    });
   }
 
   dispose() {
@@ -93,11 +135,13 @@ class _TrufiAppState extends State<TrufiApp>
                 child: new IconButton(
                     icon: Icon(Icons.arrow_back), onPressed: () => _reset())),
             new Expanded(
-                child: new LocationFormField(
-                    key: _fromFieldKey,
-                    labelText: 'Origin',
-                    onSaved: (value) => _setFromPlace(value),
-                    mapView: _mapView)),
+              child: new LocationFormField(
+                key: _fromFieldKey,
+                labelText: 'Origin',
+                onSaved: (value) => _setFromPlace(value),
+                position: _currentPosition(),
+              ),
+            ),
           ],
         ),
       );
@@ -107,15 +151,25 @@ class _TrufiAppState extends State<TrufiApp>
         children: <Widget>[
           new SizedBox(width: 40.0),
           new Expanded(
-              child: new LocationFormField(
-                  key: _toFieldKey,
-                  labelText: 'Destination',
-                  onSaved: (value) => _setToPlace(value),
-                  mapView: _mapView)),
+            child: new LocationFormField(
+              key: _toFieldKey,
+              labelText: 'Destination',
+              onSaved: (value) => _setToPlace(value),
+              position: _currentPosition(),
+            ),
+          ),
         ],
       ),
     );
     return new Column(mainAxisAlignment: MainAxisAlignment.end, children: rows);
+  }
+
+  _currentPosition() {
+    if (_currentLocation != null) {
+      return LatLng(
+          _currentLocation['latitude'], _currentLocation['longitude']);
+    }
+    return null;
   }
 
   _reset() {
@@ -167,10 +221,7 @@ class _TrufiAppState extends State<TrufiApp>
     return toPlace != null && controller.isCompleted;
   }
 
-  _showMap() async {
-    new TrufiMap.fromPlan(_mapView, await api.fetchPlan(fromPlace, toPlace))
-        .showMap();
-  }
+  _showMap() async {}
 
   Widget _buildPlan() {
     PlanError error = plan?.error;

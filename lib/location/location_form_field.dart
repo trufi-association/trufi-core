@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:map_view/map_view.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_delegate.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
@@ -14,7 +14,8 @@ class LocationFormField extends FormField<TrufiLocation> {
       String hintText,
       String labelText,
       String helperText,
-      MapView mapView})
+      LatLng position,
+      Function(LatLng point) onSelected})
       : super(
             key: key,
             onSaved: onSaved,
@@ -29,40 +30,23 @@ class LocationFormField extends FormField<TrufiLocation> {
                   focusNode.unfocus();
                   state.didChange(await showSearch(
                       context: state.context,
-                      delegate: new LocationSearchDelegate()));
+                      delegate:
+                          new LocationSearchDelegate(position: position, onSelected: onSelected)));
                   state.save();
                 }
               });
-              return new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  new Expanded(
-                      child: new TextField(
-                    focusNode: focusNode,
-                    controller: new TextEditingController(
-                        text: state.value?.description ?? ''),
-                    decoration: new InputDecoration(
-                      border: const UnderlineInputBorder(),
-                      filled: true,
-                      hintText: hintText,
-                      labelText: labelText,
-                      helperText: helperText,
-                    ),
-                  )),
-                  new Center(
-                      child: new IconButton(
-                          icon: new Icon(Icons.add_location),
-                          onPressed: () {
-                            LocationMap.create(mapView,
-                                onSubmit: (latitude, longitude) {
-                              state.didChange(new TrufiLocation(
-                                  description: "Marker Position",
-                                  latitude: latitude,
-                                  longitude: longitude));
-                              state.save();
-                            }).showMap();
-                          }))
-                ],
+              return new TextField(
+                style: Theme.of(state.context).textTheme.body1,
+                focusNode: focusNode,
+                controller: new TextEditingController(
+                    text: state.value?.description ?? ''),
+                decoration: new InputDecoration(
+                  border: const UnderlineInputBorder(),
+                  filled: true,
+                  hintText: hintText,
+                  labelText: labelText,
+                  helperText: helperText,
+                ),
               );
             });
 }

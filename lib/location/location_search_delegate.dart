@@ -1,21 +1,39 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_places.dart' as places;
+import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_history.dart' as history;
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
+  final LatLng position;
+  final Function(LatLng) onSelected;
+
+  TrufiLocation result;
+
+  LocationSearchDelegate({this.position, this.onSelected});
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+      primaryColor: theme.primaryColor,
+      primaryIconTheme: theme.primaryIconTheme,
+      primaryColorBrightness: theme.primaryColorBrightness,
+      primaryTextTheme: theme.primaryTextTheme,
+    );
+  }
+
   @override
   Widget buildLeading(BuildContext context) {
-    return new IconButton(
+    return IconButton(
       tooltip: 'Back',
-      icon: new AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
+      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -24,57 +42,63 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return new _SuggestionList(
+    return _SuggestionList(
       query: query,
+      position: position,
       onSelected: (TrufiLocation suggestion) {
         query = suggestion.description;
-        this.close(context, suggestion);
-        //showResults(context);
+        result = suggestion;
+        showResults(context);
       },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return new Center(
-      child: new Text(
-        'Result: "$query"',
-        textAlign: TextAlign.center,
-      ),
-    );
+    _close(context);
+    return Container();
+  }
+
+  _close(BuildContext context) async {
+    close(context, result);
   }
 
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
       query.isEmpty
-          ? new IconButton(
+          ? IconButton(
               icon: const Icon(null),
               onPressed: () {},
             )
-          : new IconButton(
+          : IconButton(
               tooltip: 'Clear',
               icon: const Icon(Icons.clear),
               onPressed: () {
                 query = '';
                 showSuggestions(context);
               },
-            )
+            ),
     ];
   }
 }
 
 class _SuggestionList extends StatelessWidget {
   final String query;
+  final LatLng position;
   final ValueChanged<TrufiLocation> onSelected;
 
-  _SuggestionList({this.query, this.onSelected});
+  _SuggestionList({this.query, this.position, this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    List<Widget> slivers = new List();
-    slivers.add(new SliverPadding(padding: EdgeInsets.all(4.0)));
+    List<Widget> slivers = List();
+    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    if (position != null) {
+      slivers.add(_buildYourLocation(theme));
+    }
+    slivers.add(_buildChooseOnMap(context, theme));
     if (query.isEmpty) {
       slivers.add(_buildTitle(theme, "Recent"));
       slivers.add(_buildFutureBuilder(
@@ -82,30 +106,44 @@ class _SuggestionList extends StatelessWidget {
     } else {
       slivers.add(_buildTitle(theme, "Search Results"));
       slivers.add(_buildFutureBuilder(
-          context, theme, api.fetchLocations(query), Icons.history));
+          context, theme, api.fetchLocations(query), Icons.location_on));
     }
     slivers.add(_buildTitle(theme, "Places"));
     slivers.add(_buildFutureBuilder(context, theme,
         places.fetchLocations(context, query), Icons.location_on));
-    slivers.add(new SliverPadding(padding: EdgeInsets.all(4.0)));
-    return new Container(
+    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),
-      child: new CustomScrollView(
+      child: CustomScrollView(
         slivers: slivers,
       ),
     );
   }
 
-  Widget _buildTitle(ThemeData theme, String title) {
-    return new SliverToBoxAdapter(
-      child: new Container(
+  _buildYourLocation(ThemeData theme) {
+    return SliverToBoxAdapter(
+      child: _buildItem(theme, () => _handleOnYourLocationTap(),
+          Icons.gps_fixed, "Your location"),
+    );
+  }
+
+  _buildChooseOnMap(BuildContext context, ThemeData theme) {
+    return SliverToBoxAdapter(
+      child: _buildItem(theme, () => _handleOnChooseOnMapTap(context),
+          Icons.location_on, "Choose on map"),
+    );
+  }
+
+  _buildTitle(ThemeData theme, String title) {
+    return SliverToBoxAdapter(
+      child: Container(
         padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-        child: new Row(
+        child: Row(
           children: <Widget>[
-            new RichText(
-              text: new TextSpan(
+            RichText(
+              text: TextSpan(
                 text: title.toUpperCase(),
-                style: theme.textTheme.caption,
+                style: theme.textTheme.body1,
               ),
             ),
           ],
@@ -114,50 +152,81 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildFutureBuilder(BuildContext context, ThemeData theme,
+  _buildFutureBuilder(BuildContext context, ThemeData theme,
       Future<List<TrufiLocation>> future, IconData iconData) {
-    return new FutureBuilder(
+    return FutureBuilder(
         future: future,
         builder: (BuildContext context,
-            AsyncSnapshot<List<TrufiLocation>> suggestions) {
-          if (suggestions.data == null) {
-            return new SliverToBoxAdapter(
-              child: new LinearProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation(Colors.yellow),
+            AsyncSnapshot<List<TrufiLocation>> snapshot) {
+          if (snapshot.data == null) {
+            return SliverToBoxAdapter(
+              child: LinearProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.yellow),
               ),
             );
           }
-          return new SliverList(
-            delegate: new SliverChildBuilderDelegate((context, index) {
-              final TrufiLocation suggestion = suggestions.data[index];
-              return new GestureDetector(
-                onTap: () => _handleTap(suggestion),
-                child: new Container(
-                  margin: EdgeInsets.all(2.0),
-                  child: new Row(
-                    children: <Widget>[
-                      new Icon(iconData),
-                      new Container(width: 8.0),
-                      new Flexible(
-                        child: new RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          text: new TextSpan(
-                            text: suggestion.description,
-                            style: theme.textTheme.body1,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }, childCount: suggestions.data.length),
+          return SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final TrufiLocation value = snapshot.data[index];
+              return _buildItem(theme, () => _selectTrufiLocation(value),
+                  iconData, value.description);
+            }, childCount: snapshot.data.length),
           );
         });
   }
 
-  _handleTap(TrufiLocation value) {
+  _buildItem(ThemeData theme, Function onTap, IconData iconData, String title) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(2.0),
+        child: Row(
+          children: <Widget>[
+            Icon(iconData),
+            Container(width: 8.0),
+            Expanded(
+              child: RichText(
+                maxLines: 1,
+                overflow: TextOverflow.clip,
+                text: TextSpan(
+                  text: title,
+                  style: theme.textTheme.body2,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _handleOnYourLocationTap() {
+    _selectLatLng(position);
+  }
+
+  _handleOnChooseOnMapTap(BuildContext context) async {
+    _selectLatLng(
+      await Navigator.push(
+        context,
+        MaterialPageRoute<LatLng>(
+          builder: (context) => ChooseOnMapScreen(position: position),
+        ),
+      ),
+    );
+  }
+
+  _selectLatLng(LatLng value) {
+    if (value == null) return;
+    _selectTrufiLocation(
+      TrufiLocation(
+        description: "Map Marker",
+        latitude: value.latitude,
+        longitude: value.longitude,
+      ),
+    );
+  }
+
+  _selectTrufiLocation(TrufiLocation value) {
     history.addLocation(value);
     onSelected(value);
   }
