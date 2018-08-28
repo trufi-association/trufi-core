@@ -29,6 +29,10 @@ class _TrufiAppState extends State<TrufiApp>
     with SingleTickerProviderStateMixin {
   final MapView _mapView = new MapView();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
+      new GlobalKey<FormFieldState<TrufiLocation>>();
+  final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
+      new GlobalKey<FormFieldState<TrufiLocation>>();
 
   AnimationController controller;
   Animation<double> animation;
@@ -40,7 +44,7 @@ class _TrufiAppState extends State<TrufiApp>
     super.initState();
     controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
-    animation = Tween(begin: 110.0, end: 190.0).animate(controller)
+    animation = Tween(begin: 10.0, end: 72.0).animate(controller)
       ..addListener(() {
         setState(() {
           // the state that has changed here is the animation object’s value
@@ -56,45 +60,62 @@ class _TrufiAppState extends State<TrufiApp>
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Trufi'),
-          backgroundColor: const Color(0xffffd600),
-          actions: toPlace != null
-              ? <Widget>[
-                  new IconButton(
-                      icon: Icon(Icons.close), onPressed: () => _reset())
-                ]
-              : <Widget>[],
-          bottom: new PreferredSize(
-              child: new Container(
-                padding: new EdgeInsets.all(8.0),
-                child: new Form(
-                  key: _formKey,
-                  child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      _isFromFieldVisible()
-                          ? new LocationFormField(
-                              labelText: 'Origin',
-                              onSaved: (value) => _setFromPlace(value),
-                              mapView: _mapView)
-                          : new Container(),
-                      new LocationFormField(
-                          labelText: 'Destination',
-                          onSaved: (value) => _setToPlace(value),
-                          mapView: _mapView),
-                    ],
-                  ),
-                ),
-              ),
-              preferredSize: new Size.fromHeight(animation.value)),
-        ),
-        body: new Container(
-          child: _buildPlan(),
+      theme: new ThemeData(primaryColor: const Color(0xffffd600)),
+      home: new Form(
+        key: _formKey,
+        child: new Scaffold(
+          appBar: new AppBar(
+            bottom: new PreferredSize(
+              child: new Container(),
+              preferredSize: new Size.fromHeight(animation.value),
+            ),
+            flexibleSpace: new Container(
+              padding: new EdgeInsets.all(8.0),
+              child: _buildFormFields(),
+            ),
+          ),
+          body: new Container(
+            child: _buildPlan(),
+          ),
         ),
       ),
     );
+  }
+
+  _buildFormFields() {
+    List<Row> rows = List();
+    if (_isFromFieldVisible()) {
+      rows.add(
+        new Row(
+          children: <Widget>[
+            new SizedBox(
+                width: 40.0,
+                child: new IconButton(
+                    icon: Icon(Icons.arrow_back), onPressed: () => _reset())),
+            new Expanded(
+                child: new LocationFormField(
+                    key: _fromFieldKey,
+                    labelText: 'Origin',
+                    onSaved: (value) => _setFromPlace(value),
+                    mapView: _mapView)),
+          ],
+        ),
+      );
+    }
+    rows.add(
+      new Row(
+        children: <Widget>[
+          new SizedBox(width: 40.0),
+          new Expanded(
+              child: new LocationFormField(
+                  key: _toFieldKey,
+                  labelText: 'Destination',
+                  onSaved: (value) => _setToPlace(value),
+                  mapView: _mapView)),
+        ],
+      ),
+    );
+    return new Column(mainAxisAlignment: MainAxisAlignment.end, children: rows);
   }
 
   _reset() {

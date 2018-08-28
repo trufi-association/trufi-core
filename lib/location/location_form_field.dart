@@ -6,7 +6,8 @@ import 'package:trufi_app/location/location_search_delegate.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
   LocationFormField(
-      {FormFieldSetter<TrufiLocation> onSaved,
+      {Key key,
+      FormFieldSetter<TrufiLocation> onSaved,
       FormFieldValidator<TrufiLocation> validator,
       TrufiLocation initialValue,
       bool autovalidate = false,
@@ -15,6 +16,7 @@ class LocationFormField extends FormField<TrufiLocation> {
       String helperText,
       MapView mapView})
       : super(
+            key: key,
             onSaved: onSaved,
             validator: validator,
             initialValue: initialValue,
