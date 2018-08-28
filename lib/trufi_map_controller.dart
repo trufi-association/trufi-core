@@ -6,10 +6,13 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
+typedef void OnSelected(PlanItinerary itinerary);
+
 class MapControllerPage extends StatefulWidget {
   final Plan plan;
+  final OnSelected onSelected;
 
-  MapControllerPage({this.plan});
+  MapControllerPage({this.plan, this.onSelected});
 
   @override
   MapControllerPageState createState() {
@@ -43,7 +46,8 @@ class MapControllerPageState extends State<MapControllerPage> {
         _markers.add(createToMarker(createLatLngWithPlanLocation(plan.to)));
       }
       if (plan.itineraries.isNotEmpty) {
-        if (_selectedItinerary == null || !plan.itineraries.contains(_selectedItinerary)) {
+        if (_selectedItinerary == null ||
+            !plan.itineraries.contains(_selectedItinerary)) {
           _selectedItinerary = plan.itineraries.first;
         }
         _itineraries = createItineraries(plan, _selectedItinerary);
@@ -74,10 +78,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                 onTap: (point) => _mapTap(point),
               ),
               layers: [
-                new TileLayerOptions(
-                    urlTemplate:
-                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    subdomains: ['a', 'b', 'c']),
+                _mapBoxTileLayerOptions(),
                 new PolylineLayerOptions(polylines: _polylines),
                 new MarkerLayerOptions(markers: _markers),
               ],
@@ -88,11 +89,32 @@ class MapControllerPageState extends State<MapControllerPage> {
     );
   }
 
+  _openStreetMapTileLayerOptions() {
+    return new TileLayerOptions(
+        urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        subdomains: ['a', 'b', 'c']);
+  }
+
+  _mapBoxTileLayerOptions() {
+    return new TileLayerOptions(
+      urlTemplate: "https://api.tiles.mapbox.com/v4/"
+          "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+      additionalOptions: {
+        'accessToken':
+            'pk.eyJ1IjoicmF4ZGEiLCJhIjoiY2plZWI4ZGNtMDhjdDJ4cXVzbndzdjJrdCJ9.glZextqSSPedd2MudTlMbQ',
+        'id': 'mapbox.streets',
+      },
+    );
+  }
+
   _mapTap(LatLng point) {
     Polyline polyline = polylineHitTest(_polylines, point);
     if (polyline != null) {
       setState(() {
         _selectedItinerary = _itineraryForPolyline(polyline);
+        if (widget.onSelected != null) {
+          widget.onSelected(_selectedItinerary);
+        }
       });
     }
   }
