@@ -12,8 +12,6 @@ class LocationFormField extends FormField<TrufiLocation> {
     TrufiLocation initialValue,
     bool autovalidate = false,
     String hintText,
-    String labelText,
-    String helperText,
     LatLng position,
   }) : super(
             key: key,
@@ -22,32 +20,45 @@ class LocationFormField extends FormField<TrufiLocation> {
             initialValue: initialValue,
             autovalidate: autovalidate,
             builder: (FormFieldState<TrufiLocation> state) {
-              // Open location search
-              FocusNode focusNode = new FocusNode();
-              focusNode.addListener(() async {
-                if (focusNode.hasFocus) {
-                  focusNode.unfocus();
-                  TrufiLocation location = await showSearch(
-                    context: state.context,
-                    delegate: new LocationSearchDelegate(position: position),
-                  );
-                  if (location != null) {
-                    state.didChange(location);
-                    state.save();
-                  }
-                }
-              });
-              return new TextField(
-                style: Theme.of(state.context).textTheme.body1,
-                focusNode: focusNode,
-                controller: new TextEditingController(
-                    text: state.value?.description ?? ''),
-                decoration: new InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  filled: true,
-                  hintText: hintText,
-                  labelText: labelText,
-                  helperText: helperText,
+              ThemeData theme = Theme.of(state.context);
+              TextStyle textStyle = theme.textTheme.body1;
+              TextStyle hintStyle = theme.textTheme.caption;
+              return Container(
+                padding: EdgeInsets.all(4.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    TrufiLocation location = await showSearch(
+                      context: state.context,
+                      delegate: LocationSearchDelegate(position: position),
+                    );
+                    if (location != null) {
+                      state.didChange(location);
+                      state.save();
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(2.0),
+                    decoration: new BoxDecoration(
+                      color: theme.highlightColor,
+                      //borderRadius: new BorderRadius.all(const Radius.circular(8.0)),
+                      border: new Border(
+                        bottom: new BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                    child: SizedBox(
+                      height: 32.0,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        alignment: Alignment.centerLeft,
+                        child: RichText(
+                          text: TextSpan(
+                            style: state.value != null ? textStyle : hintStyle,
+                            text: state.value?.description ?? hintText,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               );
             });
