@@ -21,6 +21,7 @@ class MapControllerPage extends StatefulWidget {
 
 class MapControllerPageState extends State<MapControllerPage> {
   MapController mapController;
+  Plan _plan;
   Map<PlanItinerary, List<Polyline>> _itineraries;
   PlanItinerary _selectedItinerary;
   List<Marker> _markers = <Marker>[];
@@ -32,24 +33,25 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   Widget build(BuildContext context) {
-    Plan plan = widget.plan;
+    bool needsFitBounds = widget.plan != null && widget.plan != _plan;
+    _plan = widget.plan;
     _itineraries = Map();
     _markers = List();
     _polylines = List();
     var bounds = LatLngBounds();
-    if (plan != null) {
-      if (plan.from != null) {
-        _markers.add(createFromMarker(createLatLngWithPlanLocation(plan.from)));
+    if (_plan != null) {
+      if (_plan.from != null) {
+        _markers.add(buildFromMarker(createLatLngWithPlanLocation(_plan.from)));
       }
-      if (plan.to != null) {
-        _markers.add(createToMarker(createLatLngWithPlanLocation(plan.to)));
+      if (_plan.to != null) {
+        _markers.add(buildToMarker(createLatLngWithPlanLocation(_plan.to)));
       }
-      if (plan.itineraries.isNotEmpty) {
+      if (_plan.itineraries.isNotEmpty) {
         if (_selectedItinerary == null ||
-            !plan.itineraries.contains(_selectedItinerary)) {
-          _selectedItinerary = plan.itineraries.first;
+            !_plan.itineraries.contains(_selectedItinerary)) {
+          _selectedItinerary = _plan.itineraries.first;
         }
-        _itineraries = createItineraries(plan, _selectedItinerary);
+        _itineraries = createItineraries(_plan, _selectedItinerary);
         _itineraries.forEach((_, polylines) => _polylines.addAll(polylines));
       }
     }
@@ -59,7 +61,7 @@ class MapControllerPageState extends State<MapControllerPage> {
         bounds.extend(point);
       });
     });
-    if (bounds.isValid) {
+    if (needsFitBounds && bounds.isValid) {
       mapController.fitBounds(bounds);
     }
 

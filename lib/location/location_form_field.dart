@@ -5,18 +5,17 @@ import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_search_delegate.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
-  LocationFormField(
-      {Key key,
-      FormFieldSetter<TrufiLocation> onSaved,
-      FormFieldValidator<TrufiLocation> validator,
-      TrufiLocation initialValue,
-      bool autovalidate = false,
-      String hintText,
-      String labelText,
-      String helperText,
-      LatLng position,
-      Function(LatLng point) onSelected})
-      : super(
+  LocationFormField({
+    Key key,
+    FormFieldSetter<TrufiLocation> onSaved,
+    FormFieldValidator<TrufiLocation> validator,
+    TrufiLocation initialValue,
+    bool autovalidate = false,
+    String hintText,
+    String labelText,
+    String helperText,
+    LatLng position,
+  }) : super(
             key: key,
             onSaved: onSaved,
             validator: validator,
@@ -28,11 +27,14 @@ class LocationFormField extends FormField<TrufiLocation> {
               focusNode.addListener(() async {
                 if (focusNode.hasFocus) {
                   focusNode.unfocus();
-                  state.didChange(await showSearch(
-                      context: state.context,
-                      delegate:
-                          new LocationSearchDelegate(position: position, onSelected: onSelected)));
-                  state.save();
+                  TrufiLocation location = await showSearch(
+                    context: state.context,
+                    delegate: new LocationSearchDelegate(position: position),
+                  );
+                  if (location != null) {
+                    state.didChange(location);
+                    state.save();
+                  }
                 }
               });
               return new TextField(

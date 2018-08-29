@@ -209,9 +209,10 @@ class _TrufiAppState extends State<TrufiApp>
     if (toPlace != null) {
       if (fromPlace == null) {
         fromPlace = new TrufiLocation(
-            description: "Current Position",
-            latitude: -17.4603761,
-            longitude: -66.1860606);
+          description: "Current Position",
+          latitude: -17.4603761,
+          longitude: -66.1860606,
+        );
       }
       _setPlan(await api.fetchPlan(fromPlace, toPlace));
     }
