@@ -10,8 +10,9 @@ typedef void OnSelected(PlanItinerary itinerary);
 class MapControllerPage extends StatefulWidget {
   final Plan plan;
   final OnSelected onSelected;
+  final LatLng yourLocation;
 
-  MapControllerPage({this.plan, this.onSelected});
+  MapControllerPage({this.plan, this.onSelected, this.yourLocation});
 
   @override
   MapControllerPageState createState() {
@@ -26,14 +27,18 @@ class MapControllerPageState extends State<MapControllerPage> {
   PlanItinerary _selectedItinerary;
   List<Marker> _markers = <Marker>[];
   List<Polyline> _polylines = <Polyline>[];
+  bool _needsCameraUpdate = true;
 
   void initState() {
     super.initState();
-    mapController = MapController();
+    mapController = MapController()
+      ..onReady.then((_) {
+        setState(() {});
+      });
   }
 
   Widget build(BuildContext context) {
-    bool needsFitBounds = widget.plan != null && widget.plan != _plan;
+    _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
     _plan = widget.plan;
     _itineraries = Map();
     _markers = List();
@@ -61,10 +66,14 @@ class MapControllerPageState extends State<MapControllerPage> {
         bounds.extend(point);
       });
     });
-    if (needsFitBounds && bounds.isValid) {
-      mapController.fitBounds(bounds);
+    if (_needsCameraUpdate && mapController.ready) {
+      if (bounds.isValid) {
+        mapController.fitBounds(bounds);
+      } else if (widget.yourLocation != null) {
+        mapController.move(widget.yourLocation, 15.0);
+      }
+      _needsCameraUpdate = false;
     }
-
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: Column(

@@ -1,5 +1,4 @@
 class TrufiLocation {
-
   static const String _Description = 'description';
   static const String _Latitude = 'latitude';
   static const String _Longitude = 'longitude';
@@ -148,10 +147,42 @@ class PlanItinerary {
 class PlanItineraryLeg {
   final String points;
   final String mode;
+  final String route;
+  final double distance;
+  final double duration;
+  final String toName;
 
-  PlanItineraryLeg({this.points, this.mode});
+  PlanItineraryLeg(
+      {this.points,
+      this.mode,
+      this.route,
+      this.distance,
+      this.duration,
+      this.toName});
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
-    return new PlanItineraryLeg(points: json['legGeometry']['points'], mode: json['mode']);
+    return new PlanItineraryLeg(
+      points: json['legGeometry']['points'],
+      mode: json['mode'],
+      route: json['route'],
+      distance: json['distance'],
+      duration: json['duration'],
+      toName: json['to']['name'],
+    );
+  }
+
+  String toInstruction() {
+    StringBuffer sb = StringBuffer();
+    String distanceString = distance >= 1000
+        ? (distance ~/ 1000).toString() + " km"
+        : distance.toInt().toString() + " m";
+    String durationString = (duration ~/ 60).toString() + " m";
+    if (mode == 'WALK') {
+      sb.write("Walk $distanceString to $toName ($durationString)");
+    } else if (mode == 'BUS') {
+      sb.write(
+          "Ride Bus $route for $distanceString to $toName ($durationString)");
+    }
+    return sb.toString();
   }
 }

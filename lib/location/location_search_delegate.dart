@@ -54,11 +54,15 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildResults(BuildContext context) {
-    _close(context);
-    return Container();
+    return SizedBox.expand(
+      child: RaisedButton(
+        child: Text(result.description),
+        onPressed: () => _close(context),
+      ),
+    );
   }
 
-  _close(BuildContext context) async {
+  _close(BuildContext context) {
     close(context, result);
   }
 
