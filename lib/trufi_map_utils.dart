@@ -24,19 +24,15 @@ mapBoxTileLayerOptions() {
   );
 }
 
-LatLng createLatLngWithPlanLocation(PlanLocation location) {
-  return LatLng(location.latitude, location.longitude);
+Marker buildFromMarker(LatLng latLng) {
+  return buildMarker(latLng, Icons.adjust, AnchorPos.center, Colors.blue);
 }
 
-Marker createFromMarker(LatLng latLng) {
-  return createMarker(latLng, Icons.adjust, AnchorPos.center, Colors.blue);
+Marker buildToMarker(LatLng latLng) {
+  return buildMarker(latLng, Icons.location_on, AnchorPos.top, Colors.red);
 }
 
-Marker createToMarker(LatLng latLng) {
-  return createMarker(latLng, Icons.location_on, AnchorPos.top, Colors.red);
-}
-
-Marker createMarker(
+Marker buildMarker(
     LatLng latLng, IconData iconData, AnchorPos anchor, Color color) {
   return new Marker(
     point: latLng,
@@ -44,6 +40,10 @@ Marker createMarker(
     builder: (context) =>
     new Container(child: new Icon(iconData, color: color)),
   );
+}
+
+LatLng createLatLngWithPlanLocation(PlanLocation location) {
+  return LatLng(location.latitude, location.longitude);
 }
 
 Map<PlanItinerary, List<Polyline>> createItineraries(

@@ -22,7 +22,7 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   void initState() {
     super.initState();
-    marker = createToMarker(widget.position != null
+    marker = buildToMarker(widget.position != null
         ? widget.position
         : LatLng(-17.413977, -66.165321));
     mapController = MapController();
@@ -68,7 +68,7 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   _handleOnMapTap(LatLng point) {
     setState(() {
-      marker = createToMarker(point);
+      marker = buildToMarker(point);
     });
   }
 

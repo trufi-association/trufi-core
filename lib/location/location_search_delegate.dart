@@ -12,11 +12,10 @@ import 'package:trufi_app/location/location_search_history.dart' as history;
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   final LatLng position;
-  final Function(LatLng) onSelected;
 
   TrufiLocation result;
 
-  LocationSearchDelegate({this.position, this.onSelected});
+  LocationSearchDelegate({this.position});
 
   @override
   ThemeData appBarTheme(BuildContext context) {
