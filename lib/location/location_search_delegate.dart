@@ -54,9 +54,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return SizedBox.expand(
+    return Center(
       child: RaisedButton(
-        child: Text(result.description),
+        child: Text("Navigate to ${result.description}"),
         onPressed: () => _close(context),
       ),
     );

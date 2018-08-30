@@ -70,7 +70,11 @@ class MapControllerPageState extends State<MapControllerPage> {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
       } else if (widget.yourLocation != null) {
-        mapController.move(widget.yourLocation, 15.0);
+        try {
+          mapController.move(widget.yourLocation, 15.0);
+        } catch (e) {
+
+        }
       }
       _needsCameraUpdate = false;
     }
