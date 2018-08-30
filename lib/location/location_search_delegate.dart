@@ -115,10 +115,13 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(context, theme,
         places.fetchLocations(context, query), Icons.location_on));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      child: CustomScrollView(
-        slivers: slivers,
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        child: CustomScrollView(
+          slivers: slivers,
+        ),
       ),
     );
   }

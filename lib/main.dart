@@ -125,13 +125,22 @@ class _TrufiAppState extends State<TrufiApp>
 
   _buildFormFields() {
     List<Row> rows = List();
+    bool swapLocationsEnabled = false;
     if (_isFromFieldVisible()) {
       rows.add(
-        _buildFormField(_fromFieldKey, "Origin", _setFromPlace),
+        _buildFormField(_fromFieldKey, "Origin", _setFromPlace,
+            initialValue: fromPlace),
       );
+      swapLocationsEnabled = true;
     }
     rows.add(
-      _buildFormField(_toFieldKey, "Destination", _setToPlace),
+      _buildFormField(_toFieldKey, "Destination", _setToPlace,
+          trailing: swapLocationsEnabled
+              ? GestureDetector(
+                  onTap: () => _swapLocations(),
+                  child: Icon(Icons.swap_vert),
+                )
+              : null),
     );
     return SafeArea(
       child: Container(
@@ -144,17 +153,26 @@ class _TrufiAppState extends State<TrufiApp>
     );
   }
 
-  _buildFormField(Key key, String hintText, Function(TrufiLocation) onSaved) {
+  _buildFormField(Key key, String hintText, Function(TrufiLocation) onSaved,
+      {TrufiLocation initialValue, Widget leading, Widget trailing}) {
     return Row(
       children: <Widget>[
-        SizedBox(width: 40.0),
+        SizedBox(
+          width: 40.0,
+          child: leading,
+        ),
         Expanded(
           child: LocationFormField(
             key: key,
             hintText: hintText,
             onSaved: onSaved,
+            initialValue: initialValue,
             yourLocation: _currentPosition(),
           ),
+        ),
+        SizedBox(
+          width: 40.0,
+          child: trailing,
         ),
       ],
     );
@@ -196,9 +214,21 @@ class _TrufiAppState extends State<TrufiApp>
     });
   }
 
+  _swapLocations() {
+    var fromPlaceTemp = fromPlace;
+    var toPlaceTemp = toPlace;
+    _toFieldKey.currentState.didChange(fromPlaceTemp);
+    _toFieldKey.currentState.save();
+    _fromFieldKey.currentState.didChange(toPlaceTemp);
+    _fromFieldKey.currentState.save();
+  }
+
   _setPlan(Plan value) {
     setState(() {
       plan = value;
+      if (plan.itineraries.length > 0) {
+        itinerary = plan.itineraries.first;
+      }
     });
   }
 
@@ -212,10 +242,15 @@ class _TrufiAppState extends State<TrufiApp>
     if (toPlace != null) {
       if (fromPlace == null) {
         LatLng point = _currentPosition();
-        fromPlace = TrufiLocation.fromLatLng("Current Position",
-            point != null ? point : LatLng(-17.4603761, -66.1860606));
+        _setFromPlace(
+          TrufiLocation.fromLatLng(
+            "Current Position",
+            point != null ? point : LatLng(-17.4603761, -66.1860606),
+          ),
+        );
+      } else {
+        _setPlan(await api.fetchPlan(fromPlace, toPlace));
       }
-      _setPlan(await api.fetchPlan(fromPlace, toPlace));
     }
   }
 
@@ -271,7 +306,7 @@ class _TrufiAppState extends State<TrufiApp>
   _buildItinerary(ThemeData theme) {
     return itinerary != null
         ? Container(
-            height: 200.0,
+            height: 150.0,
             child: SafeArea(
               child: ListView.builder(
                 padding: EdgeInsets.all(8.0),

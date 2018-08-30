@@ -8,17 +8,13 @@ class LocationFormField extends FormField<TrufiLocation> {
   LocationFormField({
     Key key,
     FormFieldSetter<TrufiLocation> onSaved,
-    FormFieldValidator<TrufiLocation> validator,
     TrufiLocation initialValue,
-    bool autovalidate = false,
     String hintText,
     LatLng yourLocation,
   }) : super(
             key: key,
             onSaved: onSaved,
-            validator: validator,
             initialValue: initialValue,
-            autovalidate: autovalidate,
             builder: (FormFieldState<TrufiLocation> state) {
               ThemeData theme = Theme.of(state.context);
               TextStyle textStyle = theme.textTheme.body1;
@@ -29,7 +25,8 @@ class LocationFormField extends FormField<TrufiLocation> {
                   onTap: () async {
                     TrufiLocation location = await showSearch(
                       context: state.context,
-                      delegate: LocationSearchDelegate(yourLocation: yourLocation),
+                      delegate:
+                          LocationSearchDelegate(yourLocation: yourLocation),
                     );
                     if (location != null) {
                       state.didChange(location);
@@ -40,7 +37,6 @@ class LocationFormField extends FormField<TrufiLocation> {
                     padding: EdgeInsets.all(2.0),
                     decoration: new BoxDecoration(
                       color: theme.highlightColor,
-                      //borderRadius: new BorderRadius.all(const Radius.circular(8.0)),
                       border: new Border(
                         bottom: new BorderSide(color: Colors.black, width: 1.0),
                       ),
