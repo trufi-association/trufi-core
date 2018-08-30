@@ -60,10 +60,14 @@ Marker buildBusMarker(LatLng point, String route, Color color,
                   Icons.directions_bus,
                   color: Colors.white,
                 ),
-                Text(
-                  route,
-                  style: TextStyle(
-                    color: Colors.white,
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      route,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],

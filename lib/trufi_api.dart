@@ -18,7 +18,7 @@ Future<List<TrufiLocation>> fetchLocations(String query) async {
   });
   final response = await http.get(request);
   if (response.statusCode == 200) {
-    return compute(_parseLocations, response.body);
+    return compute(_parseLocations, utf8.decode(response.bodyBytes));
   } else {
     throw Exception('Failed to load locations');
   }
@@ -40,7 +40,7 @@ Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
   });
   final response = await http.get(request);
   if (response.statusCode == 200) {
-    return compute(_parsePlan, response.body);
+    return compute(_parsePlan, utf8.decode(response.bodyBytes));
   } else {
     throw Exception('Failed to load plan');
   }
