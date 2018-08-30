@@ -23,10 +23,12 @@ class MapControllerPage extends StatefulWidget {
 class MapControllerPageState extends State<MapControllerPage> {
   MapController mapController;
   Plan _plan;
-  Map<PlanItinerary, List<PolylineWithMarker>> _itineraries;
   PlanItinerary _selectedItinerary;
-  List<Marker> _markers = <Marker>[];
-  List<Polyline> _polylines = <Polyline>[];
+  Map<PlanItinerary, List<PolylineWithMarker>> _itineraries = Map();
+  List<Marker> _markers = List();
+  List<Polyline> _polylines = List();
+  List<Marker> _selectedMarkers = List();
+  List<Polyline> _selectedPolylines = List();
   bool _needsCameraUpdate = true;
 
   void initState() {
@@ -40,9 +42,11 @@ class MapControllerPageState extends State<MapControllerPage> {
   Widget build(BuildContext context) {
     _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
     _plan = widget.plan;
-    _itineraries = Map();
-    _markers = List();
-    _polylines = List();
+    _itineraries.clear();
+    _markers.clear();
+    _polylines.clear();
+    _selectedMarkers.clear();
+    _selectedPolylines.clear();
     var bounds = LatLngBounds();
     if (_plan != null) {
       if (_plan.from != null) {
@@ -56,13 +60,23 @@ class MapControllerPageState extends State<MapControllerPage> {
             !_plan.itineraries.contains(_selectedItinerary)) {
           _selectedItinerary = _plan.itineraries.first;
         }
-        _itineraries = createItineraries(_plan, _selectedItinerary);
-        _itineraries.forEach((_, polylinesWithMarker) {
+        _itineraries.addAll(
+            createItineraries(_plan, _selectedItinerary, _setItinerary));
+        _itineraries.forEach((itinerary, polylinesWithMarker) {
+          bool isSelected = itinerary == _selectedItinerary;
           polylinesWithMarker.forEach((pws) {
             if (pws.marker != null) {
-              _markers.add(pws.marker);
+              if (isSelected) {
+                _selectedMarkers.add(pws.marker);
+              } else {
+                _markers.add(pws.marker);
+              }
             }
-            _polylines.add(pws.polyline);
+            if (isSelected) {
+              _selectedPolylines.add(pws.polyline);
+            } else {
+              _polylines.add(pws.polyline);
+            }
           });
         });
       }
@@ -99,7 +113,9 @@ class MapControllerPageState extends State<MapControllerPage> {
               layers: [
                 mapBoxTileLayerOptions(),
                 PolylineLayerOptions(polylines: _polylines),
+                PolylineLayerOptions(polylines: _selectedPolylines),
                 MarkerLayerOptions(markers: _markers),
+                MarkerLayerOptions(markers: _selectedMarkers),
               ],
             ),
           ),
@@ -111,13 +127,17 @@ class MapControllerPageState extends State<MapControllerPage> {
   _handleOnMapTap(LatLng point) {
     Polyline polyline = polylineHitTest(_polylines, point);
     if (polyline != null) {
-      setState(() {
-        _selectedItinerary = _itineraryForPolyline(polyline);
-        if (widget.onSelected != null) {
-          widget.onSelected(_selectedItinerary);
-        }
-      });
+      _setItinerary(_itineraryForPolyline(polyline));
     }
+  }
+
+  _setItinerary(PlanItinerary value) {
+    setState(() {
+      _selectedItinerary = value;
+      if (widget.onSelected != null) {
+        widget.onSelected(_selectedItinerary);
+      }
+    });
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
