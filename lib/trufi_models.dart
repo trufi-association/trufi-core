@@ -184,9 +184,9 @@ class PlanItineraryLeg {
   String toInstruction() {
     StringBuffer sb = StringBuffer();
     String distanceString = distance >= 1000
-        ? (distance ~/ 1000).toString() + " km"
-        : distance.toInt().toString() + " m";
-    String durationString = (duration ~/ 60).toString() + " m";
+        ? (distance.ceil() ~/ 1000).toString() + " km"
+        : distance.ceil().toString() + " m";
+    String durationString = (duration.ceil() ~/ 60).toString() + " m";
     if (mode == 'WALK') {
       sb.write("Walk $distanceString to $toName ($durationString)");
     } else if (mode == 'BUS') {
