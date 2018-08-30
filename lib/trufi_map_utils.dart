@@ -6,6 +6,13 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
+class PolylineWithMarker {
+  final Polyline polyline;
+  final Marker marker;
+
+  PolylineWithMarker(this.polyline, this.marker);
+}
+
 openStreetMapTileLayerOptions() {
   return new TileLayerOptions(
       urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -18,27 +25,56 @@ mapBoxTileLayerOptions() {
         "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
     additionalOptions: {
       'accessToken':
-      'pk.eyJ1IjoicmF4ZGEiLCJhIjoiY2plZWI4ZGNtMDhjdDJ4cXVzbndzdjJrdCJ9.glZextqSSPedd2MudTlMbQ',
+          'pk.eyJ1IjoicmF4ZGEiLCJhIjoiY2plZWI4ZGNtMDhjdDJ4cXVzbndzdjJrdCJ9.glZextqSSPedd2MudTlMbQ',
       'id': 'mapbox.streets',
     },
   );
 }
 
-Marker buildFromMarker(LatLng latLng) {
-  return buildMarker(latLng, Icons.adjust, AnchorPos.center, Colors.blue);
+Marker buildFromMarker(LatLng point) {
+  return buildMarker(point, Icons.adjust, AnchorPos.center, Colors.blue);
 }
 
-Marker buildToMarker(LatLng latLng) {
-  return buildMarker(latLng, Icons.location_on, AnchorPos.top, Colors.red);
+Marker buildToMarker(LatLng point) {
+  return buildMarker(point, Icons.location_on, AnchorPos.top, Colors.red);
+}
+
+Marker buildBusMarker(LatLng point, String route, Color color) {
+  return new Marker(
+      width: 50.0,
+      height: 40.0,
+      point: point,
+      anchor: AnchorPos.center,
+      builder: (context) => new Container(
+            padding: EdgeInsets.all(4.0),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+            ),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.directions_bus,
+                  color: Colors.white,
+                ),
+                Text(
+                  route,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ));
 }
 
 Marker buildMarker(
-    LatLng latLng, IconData iconData, AnchorPos anchor, Color color) {
+    LatLng point, IconData iconData, AnchorPos anchor, Color color) {
   return new Marker(
-    point: latLng,
+    point: point,
     anchor: anchor,
     builder: (context) =>
-    new Container(child: new Icon(iconData, color: color)),
+        new Container(child: new Icon(iconData, color: color)),
   );
 }
 
@@ -46,11 +82,11 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
   return LatLng(location.latitude, location.longitude);
 }
 
-Map<PlanItinerary, List<Polyline>> createItineraries(
+Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
     Plan plan, PlanItinerary selectedItinerary) {
-  Map<PlanItinerary, List<Polyline>> itineraries = Map();
+  Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
-    List<Polyline> polylines = List();
+    List<PolylineWithMarker> polylinesWithMarker = List();
     bool isSelected = itinerary == selectedItinerary;
     itinerary.legs.forEach((leg) {
       List<LatLng> points = decodePolyline(leg.points);
@@ -60,9 +96,16 @@ Map<PlanItinerary, List<Polyline>> createItineraries(
               ? leg.mode == 'WALK' ? Colors.blue : Colors.green
               : Colors.grey,
           strokeWidth: isSelected ? 6.0 : 3.0);
-      polylines.add(polyline);
+      Marker marker = leg.mode != 'WALK'
+          ? buildBusMarker(
+              midPointForPolyline(polyline),
+              leg.route,
+              isSelected ? Colors.green : Colors.grey,
+            )
+          : null;
+      polylinesWithMarker.add(PolylineWithMarker(polyline, marker));
     });
-    itineraries.addAll({itinerary: polylines});
+    itineraries.addAll({itinerary: polylinesWithMarker});
   });
   return itineraries;
 }
@@ -126,11 +169,38 @@ double distToSegmentSquared(LatLng p, LatLng v, LatLng w) {
   double l2 = dist2(v, w);
   if (l2 == 0) return dist2(p, v);
   double t = ((p.longitude - v.longitude) * (w.longitude - v.longitude) +
-      (p.latitude - v.latitude) * (w.latitude - v.latitude)) /
+          (p.latitude - v.latitude) * (w.latitude - v.latitude)) /
       l2;
   t = max(0.0, min(1.0, t));
   return dist2(
       p,
       LatLng(v.latitude + t * (w.latitude - v.latitude),
           v.longitude + t * (w.longitude - v.longitude)));
+}
+
+double lengthForPolyline(Polyline polyline) {
+  double totalLength = 0.0;
+  for (int i = 0; i < polyline.points.length - 1; i++) {
+    totalLength += dist2(polyline.points[i], polyline.points[i + 1]);
+  }
+  return totalLength;
+}
+
+LatLng midPointForPolyline(Polyline polyline) {
+  double midPointLength = lengthForPolyline(polyline) / 2;
+  double totalLength = 0.0;
+  for (int i = 0; i < polyline.points.length - 1; i++) {
+    LatLng p0 = polyline.points[i];
+    LatLng p1 = polyline.points[i + 1];
+    double segmentLength = dist2(p0, p1);
+    totalLength += segmentLength;
+    if (midPointLength < totalLength) {
+      double factor1 = segmentLength / (totalLength - midPointLength);
+      double factor0 = 1.0 - factor1;
+      double latitude = p0.latitude * factor0 + p1.latitude * factor1;
+      double longitude = p0.longitude * factor0 + p1.longitude * factor1;
+      return LatLng(latitude, longitude);
+    }
+  }
+  return null;
 }
