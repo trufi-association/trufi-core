@@ -39,13 +39,16 @@ Marker buildToMarker(LatLng point) {
   return buildMarker(point, Icons.location_on, AnchorPos.top, Colors.red);
 }
 
-Marker buildBusMarker(LatLng point, String route, Color color) {
+Marker buildBusMarker(LatLng point, String route, Color color,
+    {Function onTap}) {
   return new Marker(
-      width: 50.0,
-      height: 40.0,
-      point: point,
-      anchor: AnchorPos.center,
-      builder: (context) => new Container(
+    width: 70.0,
+    height: 40.0,
+    point: point,
+    anchor: AnchorPos.center,
+    builder: (context) => GestureDetector(
+          onTap: onTap,
+          child: Container(
             padding: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
               color: color,
@@ -65,7 +68,9 @@ Marker buildBusMarker(LatLng point, String route, Color color) {
                 ),
               ],
             ),
-          ));
+          ),
+        ),
+  );
 }
 
 Marker buildMarker(
@@ -83,7 +88,7 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 }
 
 Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
-    Plan plan, PlanItinerary selectedItinerary) {
+    Plan plan, PlanItinerary selectedItinerary, Function(PlanItinerary) onTap) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
     List<PolylineWithMarker> polylinesWithMarker = List();
@@ -101,6 +106,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
               midPointForPolyline(polyline),
               leg.route,
               isSelected ? Colors.green : Colors.grey,
+              onTap: () => onTap(itinerary),
             )
           : null;
       polylinesWithMarker.add(PolylineWithMarker(polyline, marker));
