@@ -1,3 +1,5 @@
+import 'package:latlong/latlong.dart';
+
 class TrufiLocation {
   static const String _Description = 'description';
   static const String _Latitude = 'latitude';
@@ -8,6 +10,14 @@ class TrufiLocation {
   final double longitude;
 
   TrufiLocation({this.description, this.latitude, this.longitude});
+
+  factory TrufiLocation.fromLatLng(String description, LatLng point) {
+    return TrufiLocation(
+      description: description,
+      latitude: point.latitude,
+      longitude: point.longitude,
+    );
+  }
 
   factory TrufiLocation.fromSearchJson(Map<String, dynamic> json) {
     return TrufiLocation(

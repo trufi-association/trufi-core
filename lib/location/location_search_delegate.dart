@@ -11,11 +11,11 @@ import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_history.dart' as history;
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
-  final LatLng position;
+  final LatLng yourLocation;
 
   TrufiLocation result;
 
-  LocationSearchDelegate({this.position});
+  LocationSearchDelegate({this.yourLocation});
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -43,7 +43,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildSuggestions(BuildContext context) {
     return _SuggestionList(
       query: query,
-      position: position,
+      yourLocation: yourLocation,
       onSelected: (TrufiLocation suggestion) {
         query = suggestion.description;
         result = suggestion;
@@ -88,17 +88,17 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
 class _SuggestionList extends StatelessWidget {
   final String query;
-  final LatLng position;
+  final LatLng yourLocation;
   final ValueChanged<TrufiLocation> onSelected;
 
-  _SuggestionList({this.query, this.position, this.onSelected});
+  _SuggestionList({this.query, this.yourLocation, this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     List<Widget> slivers = List();
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
-    if (position != null) {
+    if (yourLocation != null) {
       slivers.add(_buildYourLocation(theme));
     }
     slivers.add(_buildChooseOnMap(context, theme));
@@ -204,7 +204,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   _handleOnYourLocationTap() {
-    _selectLatLng(position);
+    _selectLatLng(yourLocation);
   }
 
   _handleOnChooseOnMapTap(BuildContext context) async {
@@ -212,7 +212,7 @@ class _SuggestionList extends StatelessWidget {
       await Navigator.push(
         context,
         MaterialPageRoute<LatLng>(
-          builder: (context) => ChooseOnMapScreen(position: position),
+          builder: (context) => ChooseOnMapScreen(position: yourLocation),
         ),
       ),
     );

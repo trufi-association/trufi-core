@@ -12,7 +12,7 @@ class LocationFormField extends FormField<TrufiLocation> {
     TrufiLocation initialValue,
     bool autovalidate = false,
     String hintText,
-    LatLng position,
+    LatLng yourLocation,
   }) : super(
             key: key,
             onSaved: onSaved,
@@ -29,7 +29,7 @@ class LocationFormField extends FormField<TrufiLocation> {
                   onTap: () async {
                     TrufiLocation location = await showSearch(
                       context: state.context,
-                      delegate: LocationSearchDelegate(position: position),
+                      delegate: LocationSearchDelegate(yourLocation: yourLocation),
                     );
                     if (location != null) {
                       state.didChange(location);
