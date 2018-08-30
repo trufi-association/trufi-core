@@ -98,6 +98,7 @@ class _TrufiAppState extends State<TrufiApp>
   Widget build(BuildContext context) {
     ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: theme,
       home: Form(
         key: _formKey,
@@ -183,7 +184,7 @@ class _TrufiAppState extends State<TrufiApp>
       return LatLng(
           _currentLocation['latitude'], _currentLocation['longitude']);
     }
-    return null;
+    return LatLng(-17.4603761, -66.1860606);
   }
 
   _reset() {
@@ -241,11 +242,10 @@ class _TrufiAppState extends State<TrufiApp>
   _fetchPlan() async {
     if (toPlace != null) {
       if (fromPlace == null) {
-        LatLng point = _currentPosition();
         _setFromPlace(
           TrufiLocation.fromLatLng(
             "Current Position",
-            point != null ? point : LatLng(-17.4603761, -66.1860606),
+            _currentPosition(),
           ),
         );
       } else {
