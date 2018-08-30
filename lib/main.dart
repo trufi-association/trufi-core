@@ -153,13 +153,14 @@ class _TrufiAppState extends State<TrufiApp>
             key: key,
             hintText: hintText,
             onSaved: onSaved,
+            yourLocation: _currentPosition(),
           ),
         ),
       ],
     );
   }
 
-  _currentPosition() {
+  LatLng _currentPosition() {
     if (_currentLocation != null) {
       return LatLng(
           _currentLocation['latitude'], _currentLocation['longitude']);
@@ -210,11 +211,9 @@ class _TrufiAppState extends State<TrufiApp>
   _fetchPlan() async {
     if (toPlace != null) {
       if (fromPlace == null) {
-        fromPlace = TrufiLocation(
-          description: "Current Position",
-          latitude: -17.4603761,
-          longitude: -66.1860606,
-        );
+        LatLng point = _currentPosition();
+        fromPlace = TrufiLocation.fromLatLng("Current Position",
+            point != null ? point : LatLng(-17.4603761, -66.1860606));
       }
       _setPlan(await api.fetchPlan(fromPlace, toPlace));
     }
