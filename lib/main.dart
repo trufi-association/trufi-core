@@ -1,16 +1,13 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:latlong/latlong.dart';
-import 'package:location/location.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
+import 'package:trufi_app/location/location_provider.dart';
 
 void main() {
   runApp(new TrufiApp());
@@ -29,6 +26,7 @@ class _TrufiAppState extends State<TrufiApp>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
+  LocationProvider locationProvider;
   AnimationController controller;
   Animation<double> animation;
   TrufiLocation fromPlace;
@@ -38,55 +36,13 @@ class _TrufiAppState extends State<TrufiApp>
 
   initState() {
     super.initState();
+    locationProvider = LocationProvider()..init();
     controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
     animation = Tween(begin: 0.0, end: 42.0).animate(controller)
       ..addListener(() {
-        setState(() {
-          // the state that has changed here is the animation object’s value
-        });
+        setState(() {});
       });
-    initPlatformState();
-    _locationSubscription =
-        _location.onLocationChanged().listen((Map<String, double> result) {
-      setState(() {
-        _currentLocation = result;
-      });
-    });
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  StreamSubscription<Map<String, double>> _locationSubscription;
-  Map<String, double> _startLocation;
-  Map<String, double> _currentLocation;
-  Location _location = Location();
-  bool _permission = false;
-  String error;
-
-  initPlatformState() async {
-    Map<String, double> location;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      _permission = await _location.hasPermission();
-      location = await _location.getLocation();
-      error = null;
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = 'Permission denied';
-      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error =
-            'Permission denied - please ask the user to enable it from the app settings';
-      }
-      location = null;
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    //if (!mounted) return;
-    setState(() {
-      _startLocation = location;
-    });
   }
 
   dispose() {
@@ -103,28 +59,25 @@ class _TrufiAppState extends State<TrufiApp>
       home: Form(
         key: _formKey,
         child: Scaffold(
-          appBar: AppBar(
-            bottom: PreferredSize(
-              child: Container(),
-              preferredSize: Size.fromHeight(animation.value),
-            ),
-            flexibleSpace: _buildFormFields(),
-            leading: _isFromFieldVisible()
-                ? IconButton(
-                    icon: Icon(Platform.isIOS
-                        ? Icons.arrow_back_ios
-                        : Icons.arrow_back),
-                    onPressed: () => _reset(),
-                  )
-                : null,
-          ),
-          body: _buildPlan(theme),
+          appBar: _buildAppBar(),
+          body: _buildBody(theme),
         ),
       ),
     );
   }
 
-  _buildFormFields() {
+  Widget _buildAppBar() {
+    return AppBar(
+      bottom: PreferredSize(
+        child: Container(),
+        preferredSize: Size.fromHeight(animation.value),
+      ),
+      flexibleSpace: _buildFormFields(),
+      leading: _buildResetButton(),
+    );
+  }
+
+  Widget _buildFormFields() {
     List<Row> rows = List();
     bool swapLocationsEnabled = false;
     if (_isFromFieldVisible()) {
@@ -138,7 +91,7 @@ class _TrufiAppState extends State<TrufiApp>
       _buildFormField(_toFieldKey, "Destination", _setToPlace,
           trailing: swapLocationsEnabled
               ? GestureDetector(
-                  onTap: () => _swapLocations(),
+                  onTap: () => _swapPlaces(),
                   child: Icon(Icons.swap_vert),
                 )
               : null),
@@ -154,7 +107,18 @@ class _TrufiAppState extends State<TrufiApp>
     );
   }
 
-  _buildFormField(Key key, String hintText, Function(TrufiLocation) onSaved,
+  Widget _buildResetButton() {
+    if (!_isFromFieldVisible()) {
+      return null;
+    }
+    return IconButton(
+      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      onPressed: () => _reset(),
+    );
+  }
+
+  Widget _buildFormField(
+      Key key, String hintText, Function(TrufiLocation) onSaved,
       {TrufiLocation initialValue, Widget leading, Widget trailing}) {
     return Row(
       children: <Widget>[
@@ -168,7 +132,7 @@ class _TrufiAppState extends State<TrufiApp>
             hintText: hintText,
             onSaved: onSaved,
             initialValue: initialValue,
-            yourLocation: _currentPosition(),
+            yourLocation: locationProvider.location,
           ),
         ),
         SizedBox(
@@ -179,12 +143,74 @@ class _TrufiAppState extends State<TrufiApp>
     );
   }
 
-  LatLng _currentPosition() {
-    if (_currentLocation != null) {
-      return LatLng(
-          _currentLocation['latitude'], _currentLocation['longitude']);
-    }
-    return LatLng(-17.4603761, -66.1860606);
+  bool _isFromFieldVisible() {
+    return toPlace != null && controller.isCompleted;
+  }
+
+  Widget _buildBody(ThemeData theme) {
+    PlanError error = plan?.error;
+    return Container(
+      child: error != null
+          ? _buildBodyError(error)
+          : plan != null ? _buildBodyPlan(theme, plan) : _buildBodyEmpty(),
+    );
+  }
+
+  Widget _buildBodyError(PlanError error) {
+    return Container(padding: EdgeInsets.all(8.0), child: Text(error.message));
+  }
+
+  Widget _buildBodyPlan(ThemeData theme, Plan plan) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: MapControllerPage(
+            plan: plan,
+            yourLocation: locationProvider.location,
+            onSelected: (itinerary) => _setItinerary(itinerary),
+          ),
+        ),
+        _buildItinerary(theme),
+      ],
+    );
+  }
+
+  Widget _buildItinerary(ThemeData theme) {
+    return itinerary != null
+        ? Container(
+            height: 150.0,
+            child: SafeArea(
+              child: ListView.builder(
+                padding: EdgeInsets.all(8.0),
+                itemBuilder: (BuildContext context, int index) {
+                  PlanItineraryLeg leg = itinerary.legs[index];
+                  return Row(
+                    children: <Widget>[
+                      Icon(leg.mode == 'WALK'
+                          ? Icons.directions_walk
+                          : Icons.directions_bus),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: theme.textTheme.body1,
+                            text: leg.toInstruction(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                itemCount: itinerary.legs.length,
+              ),
+            ),
+          )
+        : null;
+  }
+
+  Widget _buildBodyEmpty() {
+    return MapControllerPage(
+      yourLocation: locationProvider.location,
+    );
   }
 
   _reset() {
@@ -215,19 +241,10 @@ class _TrufiAppState extends State<TrufiApp>
     });
   }
 
-  _swapLocations() {
-    var fromPlaceTemp = fromPlace;
-    var toPlaceTemp = toPlace;
-    _toFieldKey.currentState.didChange(fromPlaceTemp);
-    _toFieldKey.currentState.save();
-    _fromFieldKey.currentState.didChange(toPlaceTemp);
-    _fromFieldKey.currentState.save();
-  }
-
   _setPlan(Plan value) {
     setState(() {
       plan = value;
-      if (plan.itineraries.length > 0) {
+      if ((plan?.itineraries?.length ?? 0) > 0) {
         itinerary = plan.itineraries.first;
       }
     });
@@ -239,134 +256,25 @@ class _TrufiAppState extends State<TrufiApp>
     });
   }
 
+  _swapPlaces() {
+    _toFieldKey.currentState.didChange(fromPlace);
+    _fromFieldKey.currentState.didChange(toPlace);
+    _toFieldKey.currentState.save();
+    _fromFieldKey.currentState.save();
+  }
+
   _fetchPlan() async {
     if (toPlace != null) {
       if (fromPlace == null) {
         _setFromPlace(
           TrufiLocation.fromLatLng(
             "Current Position",
-            _currentPosition(),
+            locationProvider.location,
           ),
         );
       } else {
         _setPlan(await api.fetchPlan(fromPlace, toPlace));
       }
     }
-  }
-
-  bool _isFromFieldVisible() {
-    return toPlace != null && controller.isCompleted;
-  }
-
-  Widget _buildPlan(ThemeData theme) {
-    PlanError error = plan?.error;
-    return Container(
-      child: error != null
-          ? _buildPlanFailure(error)
-          : plan != null
-              ? _buildPlanSuccessMap(theme, plan)
-              : _buildPlanEmpty(),
-    );
-  }
-
-  Widget _buildPlanFailure(PlanError error) {
-    return Container(padding: EdgeInsets.all(8.0), child: Text(error.message));
-  }
-
-  Widget _buildPlanSuccess(Plan plan) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) =>
-                ItineraryItem(plan.itineraries[index]),
-            itemCount: plan.itineraries.length,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPlanSuccessMap(ThemeData theme, Plan plan) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: MapControllerPage(
-            plan: plan,
-            yourLocation: _currentPosition(),
-            onSelected: (itinerary) => _setItinerary(itinerary),
-          ),
-        ),
-        _buildItinerary(theme),
-      ],
-    );
-  }
-
-  _buildItinerary(ThemeData theme) {
-    return itinerary != null
-        ? Container(
-            height: 150.0,
-            child: SafeArea(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                itemBuilder: (BuildContext context, int index) {
-                  PlanItineraryLeg leg = itinerary.legs[index];
-                  return Row(
-                    children: <Widget>[
-                      Icon(leg.mode == 'WALK'
-                          ? Icons.directions_walk
-                          : Icons.directions_bus),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.body1,
-                            text: leg.toInstruction(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                itemCount: itinerary.legs.length,
-              ),
-            ),
-          )
-        : Container();
-  }
-
-  Widget _buildPlanEmpty() {
-    return MapControllerPage(
-      yourLocation: _currentPosition(),
-    );
-  }
-}
-
-// Displays one Entry. If the entry has children then it's displayed
-// with an ExpansionTile.
-class ItineraryItem extends StatelessWidget {
-  const ItineraryItem(this.itinerary);
-
-  final PlanItinerary itinerary;
-
-  Widget _buildTiles(PlanItinerary itinerary) {
-    if (itinerary.legs.isEmpty) return ListTile(title: Text("empty"));
-    return ExpansionTile(
-      key: PageStorageKey<PlanItinerary>(itinerary),
-      title: Text(itinerary.duration.toString()),
-      children: itinerary.legs.map(_buildLegsTiles).toList(),
-    );
-  }
-
-  Widget _buildLegsTiles(PlanItineraryLeg legs) {
-    if (legs.points.isEmpty) return ListTile(title: Text("empty"));
-    return Row(
-      children: <Widget>[Text(legs.points)],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildTiles(itinerary);
   }
 }
