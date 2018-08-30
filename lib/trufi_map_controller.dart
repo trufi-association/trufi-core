@@ -23,7 +23,7 @@ class MapControllerPage extends StatefulWidget {
 class MapControllerPageState extends State<MapControllerPage> {
   MapController mapController;
   Plan _plan;
-  Map<PlanItinerary, List<Polyline>> _itineraries;
+  Map<PlanItinerary, List<PolylineWithMarker>> _itineraries;
   PlanItinerary _selectedItinerary;
   List<Marker> _markers = <Marker>[];
   List<Polyline> _polylines = <Polyline>[];
@@ -57,7 +57,14 @@ class MapControllerPageState extends State<MapControllerPage> {
           _selectedItinerary = _plan.itineraries.first;
         }
         _itineraries = createItineraries(_plan, _selectedItinerary);
-        _itineraries.forEach((_, polylines) => _polylines.addAll(polylines));
+        _itineraries.forEach((_, polylinesWithMarker) {
+          polylinesWithMarker.forEach((pws) {
+            if (pws.marker != null) {
+              _markers.add(pws.marker);
+            }
+            _polylines.add(pws.polyline);
+          });
+        });
       }
     }
     _markers.forEach((marker) => bounds.extend(marker.point));
@@ -72,9 +79,7 @@ class MapControllerPageState extends State<MapControllerPage> {
       } else if (widget.yourLocation != null) {
         try {
           mapController.move(widget.yourLocation, 15.0);
-        } catch (e) {
-
-        }
+        } catch (e) {}
       }
       _needsCameraUpdate = false;
     }
@@ -116,16 +121,17 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
-    MapEntry<PlanItinerary, List<Polyline>> entry =
+    MapEntry<PlanItinerary, List<PolylineWithMarker>> entry =
         _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
-  MapEntry<PlanItinerary, List<Polyline>> _itineraryEntryForPolyline(
+  MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
       Polyline polyline) {
     return _itineraries.entries.firstWhere(
         (pair) =>
-            pair.value.firstWhere((p) => p == polyline, orElse: () => null) !=
+            pair.value.firstWhere((pwm) => pwm.polyline == polyline,
+                orElse: () => null) !=
             null,
         orElse: () => null);
   }
