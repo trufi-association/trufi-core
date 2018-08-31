@@ -7,38 +7,43 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/location/location_search_favorites.dart';
 
 class LocationStorage {
-  final File file;
-  final List<TrufiLocation> locations;
+  final File _file;
+  final List<TrufiLocation> _locations;
 
-  LocationStorage(this.file, this.locations);
+  LocationStorage(this._file, this._locations);
 
   Future<List<TrufiLocation>> fetchLocations() async {
+    var locations = _locations.toList();
+    locations.sort(sortByFavorite);
     return locations;
   }
 
   Future<List<TrufiLocation>> fetchLocationsWithLimit(int limit) async {
-    return locations.sublist(0, min(locations.length, limit));
+    var locations = _locations.sublist(0, min(_locations.length, limit));
+    locations.sort(sortByFavorite);
+    return locations;
   }
 
   add(TrufiLocation location) {
     remove(location);
-    locations.add(location);
+    _locations.add(location);
     _save();
   }
 
   remove(TrufiLocation location) {
-    locations.remove(location);
+    _locations.remove(location);
     _save();
   }
 
   bool contains(TrufiLocation location) {
-    return locations.contains(location);
+    return _locations.contains(location);
   }
 
   _save() {
-    writeStorage(file, locations);
+    writeStorage(_file, _locations);
   }
 }
 
@@ -60,13 +65,21 @@ Future<List<TrufiLocation>> readStorage(File file) async {
     String encoded = await file.readAsString();
     return compute(_parseStorage, encoded);
   } catch (e) {
+    print(e);
     return compute(_parseStorage, "[]");
   }
 }
 
 List<TrufiLocation> _parseStorage(String encoded) {
-  final parsed = json.decode(encoded);
-  return parsed
-      .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
-      .toList();
+  List<TrufiLocation> locations;
+  try {
+    final parsed = json.decode(encoded);
+    locations = parsed
+        .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
+        .toList();
+  } catch (e) {
+    print(e);
+    locations = List();
+  }
+  return locations;
 }

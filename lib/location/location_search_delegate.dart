@@ -175,6 +175,7 @@ class _SuggestionList extends StatelessWidget {
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> snapshot) {
           if (snapshot.hasError) {
+            print(snapshot.error);
             if (snapshot.error is api.FetchRequestException) {
               return SliverToBoxAdapter(
                 child: _buildErrorItem(theme, "No internet connection"),
@@ -292,16 +293,9 @@ class FavoriteButton extends StatefulWidget {
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
-  bool _isFavorite;
-
-  @override
-  void initState() {
-    super.initState();
-    _isFavorite = Favorites.instance.contains(widget.location);
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool _isFavorite = Favorites.instance.contains(widget.location);
     return GestureDetector(
       onTap: () {
         if (_isFavorite) {
@@ -309,9 +303,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
         } else {
           Favorites.instance.add(widget.location);
         }
-        setState(() {
-          _isFavorite = !_isFavorite;
-        });
+        setState(() {});
       },
       child: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border),
     );

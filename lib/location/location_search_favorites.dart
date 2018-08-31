@@ -18,3 +18,9 @@ class Favorites extends LocationStorage {
 
   factory Favorites() => _instance;
 }
+
+int sortByFavorite(TrufiLocation a, TrufiLocation b) {
+  bool aIsFavorite = Favorites.instance.contains(a);
+  bool bIsFavorite = Favorites.instance.contains(b);
+  return aIsFavorite == bIsFavorite ? 0 : aIsFavorite ? -1 : 1;
+}
