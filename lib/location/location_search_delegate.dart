@@ -6,9 +6,10 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/trufi_places.dart' as places;
 import 'package:trufi_app/location/location_map.dart';
-import 'package:trufi_app/location/location_search_history.dart' as history;
+import 'package:trufi_app/location/location_search_favorites.dart';
+import 'package:trufi_app/location/location_search_history.dart';
+import 'package:trufi_app/location/location_search_places.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   final LatLng yourLocation;
@@ -109,16 +110,16 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildChooseOnMap(context, theme));
     if (query.isEmpty) {
       slivers.add(_buildTitle(theme, "Recent"));
-      slivers.add(_buildFutureBuilder(
-          context, theme, history.fetchLocations(5), Icons.history));
+      slivers.add(_buildFutureBuilder(context, theme,
+          History.instance.fetchLocationsWithLimit(5), Icons.history, true));
     } else {
       slivers.add(_buildTitle(theme, "Search Results"));
       slivers.add(_buildFutureBuilder(
-          context, theme, api.fetchLocations(query), Icons.location_on));
+          context, theme, api.fetchLocations(query), Icons.location_on, true));
     }
     slivers.add(_buildTitle(theme, "Places"));
     slivers.add(_buildFutureBuilder(context, theme,
-        places.fetchLocations(context, query), Icons.location_on));
+        Places.instance.fetchLocations(query), Icons.location_on, true));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       bottom: false,
@@ -163,8 +164,12 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildFutureBuilder(BuildContext context, ThemeData theme,
-      Future<List<TrufiLocation>> future, IconData iconData) {
+  Widget _buildFutureBuilder(
+      BuildContext context,
+      ThemeData theme,
+      Future<List<TrufiLocation>> future,
+      IconData iconData,
+      bool isFavoritable) {
     return FutureBuilder(
         future: future,
         builder: (BuildContext context,
@@ -195,7 +200,8 @@ class _SuggestionList extends StatelessWidget {
             delegate: SliverChildBuilderDelegate((context, index) {
               final TrufiLocation value = snapshot.data[index];
               return _buildItem(theme, () => _onSelectedTrufiLocation(value),
-                  iconData, value.description);
+                  iconData, value.description,
+                  trailing: isFavoritable ? FavoriteButton(value) : null);
             }, childCount: snapshot.data.length),
           );
         });
@@ -206,27 +212,32 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildItem(
-      ThemeData theme, Function onTap, IconData iconData, String title) {
+      ThemeData theme, Function onTap, IconData iconData, String title,
+      {Widget trailing}) {
+    Row row = Row(
+      children: <Widget>[
+        Icon(iconData),
+        Container(width: 8.0),
+        Expanded(
+          child: RichText(
+            maxLines: 1,
+            overflow: TextOverflow.clip,
+            text: TextSpan(
+              text: title,
+              style: theme.textTheme.body2,
+            ),
+          ),
+        ),
+      ],
+    );
+    if (trailing != null) {
+      row.children.add(trailing);
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.all(2.0),
-        child: Row(
-          children: <Widget>[
-            Icon(iconData),
-            Container(width: 8.0),
-            Expanded(
-              child: RichText(
-                maxLines: 1,
-                overflow: TextOverflow.clip,
-                text: TextSpan(
-                  text: title,
-                  style: theme.textTheme.body2,
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: row,
       ),
     );
   }
@@ -258,7 +269,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   _onSelectedTrufiLocation(TrufiLocation value) {
-    history.addLocation(value);
+    History.instance.add(value);
     if (onSelected != null) {
       onSelected(value);
     }
@@ -268,5 +279,41 @@ class _SuggestionList extends StatelessWidget {
     if (onMapTapped != null) {
       onMapTapped(TrufiLocation.fromLatLng("Map Marker", value));
     }
+  }
+}
+
+class FavoriteButton extends StatefulWidget {
+  final TrufiLocation location;
+
+  FavoriteButton(this.location);
+
+  @override
+  FavoriteButtonState createState() => FavoriteButtonState();
+}
+
+class FavoriteButtonState extends State<FavoriteButton> {
+  bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = Favorites.instance.contains(widget.location);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (_isFavorite) {
+          Favorites.instance.remove(widget.location);
+        } else {
+          Favorites.instance.add(widget.location);
+        }
+        setState(() {
+          _isFavorite = !_isFavorite;
+        });
+      },
+      child: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border),
+    );
   }
 }
