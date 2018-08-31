@@ -1,54 +1,20 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
-
+import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-Future<List<TrufiLocation>> fetchLocations(int limit) async {
-  List<TrufiLocation> history = await _readHistory();
-  return history.sublist(0, min(history.length, limit));
-}
+class History extends LocationStorage {
+  static History _instance;
 
-addLocation(TrufiLocation location) async {
-  List<TrufiLocation> history = await _readHistory();
-  history.removeWhere((l) => l.description == location.description);
-  history.insert(0, location);
-  _writeHistory(history);
-}
+  static History get instance => _instance;
 
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/location_search_history.txt');
-}
-
-Future<File> _writeHistory(List<TrufiLocation> locations) async {
-  final file = await _localFile;
-  return file.writeAsString(
-      json.encode(locations.map((location) => location.toJson()).toList()));
-}
-
-Future<List<TrufiLocation>> _readHistory() async {
-  try {
-    final file = await _localFile;
-    String encoded = await file.readAsString();
-    return compute(_parseHistory, encoded);
-  } catch (e) {
-    return compute(_parseHistory, "[]");
+  static void init() async {
+    File file = await localFile("location_search_history.json");
+    _instance ??= History._init(file, await readStorage(file));
   }
-}
 
-List<TrufiLocation> _parseHistory(String encoded) {
-  final parsed = json.decode(encoded);
-  return parsed
-      .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
-      .toList();
+  History._init(File file, List<TrufiLocation> locations)
+      : super(file, locations);
+
+  factory History() => _instance;
 }

@@ -51,6 +51,15 @@ class TrufiLocation {
     };
   }
 
+  bool operator ==(o) =>
+      o is TrufiLocation &&
+      o.description == description &&
+      o.latitude == latitude &&
+      o.longitude == longitude;
+
+  int get hashCode =>
+      description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
+
   String toString() {
     return '$latitude,$longitude';
   }

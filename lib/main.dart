@@ -8,6 +8,9 @@ import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
+import 'package:trufi_app/location/location_search_favorites.dart';
+import 'package:trufi_app/location/location_search_history.dart';
+import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/location/location_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -61,6 +64,9 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
 
   initState() {
     super.initState();
+    Favorites.init();
+    History.init();
+    Places.init(this.context);
     locationProvider = LocationProvider()..init();
     controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);

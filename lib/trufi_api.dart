@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
@@ -39,15 +41,18 @@ Future<List<TrufiLocation>> fetchLocations(String query) async {
   });
   final response = await fetchRequest(request);
   if (response.statusCode == 200) {
-    return compute(_parseLocations, utf8.decode(response.bodyBytes));
+    List<TrufiLocation> locations =
+        await compute(_parseLocations, utf8.decode(response.bodyBytes));
+    locations.sort(sortByFavorite);
+    return locations;
   } else {
     throw FetchResponseException('Failed to load locations');
   }
 }
 
 List<TrufiLocation> _parseLocations(String responseBody) {
-  final parsed = json.decode(responseBody);
-  return parsed
+  return json
+      .decode(responseBody)
       .map<TrufiLocation>((json) => new TrufiLocation.fromSearchJson(json))
       .toList();
 }
@@ -68,8 +73,7 @@ Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
 }
 
 Plan _parsePlan(String responseBody) {
-  final parsed = json.decode(responseBody);
-  return Plan.fromJson(parsed);
+  return Plan.fromJson(json.decode(responseBody));
 }
 
 Future<http.Response> fetchRequest(Uri request) async {
