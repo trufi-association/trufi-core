@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_app/truffi_localizations.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_models.dart';
@@ -105,19 +106,19 @@ class _SuggestionList extends StatelessWidget {
     List<Widget> slivers = List();
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     if (yourLocation != null) {
-      slivers.add(_buildYourLocation(theme));
+      slivers.add(_buildYourLocation(context, theme));
     }
     slivers.add(_buildChooseOnMap(context, theme));
     if (query.isEmpty) {
-      slivers.add(_buildTitle(theme, "Recent"));
+      slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).recent));
       slivers.add(_buildFutureBuilder(context, theme,
           History.instance.fetchLocationsWithLimit(5), Icons.history, true));
     } else {
-      slivers.add(_buildTitle(theme, "Search Results"));
+      slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).searchResults));
       slivers.add(_buildFutureBuilder(
           context, theme, api.fetchLocations(query), Icons.location_on, true));
     }
-    slivers.add(_buildTitle(theme, "Places"));
+    slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).places));
     slivers.add(_buildFutureBuilder(context, theme,
         Places.instance.fetchLocations(query), Icons.location_on, true));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
@@ -132,17 +133,17 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildYourLocation(ThemeData theme) {
+  Widget _buildYourLocation(BuildContext context, ThemeData theme) {
     return SliverToBoxAdapter(
       child: _buildItem(theme, () => _handleOnYourLocationTap(),
-          Icons.gps_fixed, "Your location"),
+          Icons.gps_fixed, TruffiLocalizations.of(context).location)
     );
   }
 
   Widget _buildChooseOnMap(BuildContext context, ThemeData theme) {
     return SliverToBoxAdapter(
       child: _buildItem(theme, () => _handleOnChooseOnMapTap(context),
-          Icons.location_on, "Choose on map"),
+          Icons.location_on, TruffiLocalizations.of(context).chooseMap),
     );
   }
 
