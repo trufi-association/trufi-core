@@ -169,6 +169,21 @@ class _SuggestionList extends StatelessWidget {
         future: future,
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> snapshot) {
+          if (snapshot.hasError) {
+            if (snapshot.error is api.FetchRequestException) {
+              return SliverToBoxAdapter(
+                child: _buildErrorItem(theme, "No internet connection"),
+              );
+            } else if (snapshot.error is api.FetchResponseException) {
+              return SliverToBoxAdapter(
+                child: _buildErrorItem(theme, "Failed to load data"),
+              );
+            } else {
+              return SliverToBoxAdapter(
+                child: _buildErrorItem(theme, "Unknown error"),
+              );
+            }
+          }
           if (snapshot.data == null) {
             return SliverToBoxAdapter(
               child: LinearProgressIndicator(
@@ -186,7 +201,12 @@ class _SuggestionList extends StatelessWidget {
         });
   }
 
-  Widget _buildItem(ThemeData theme, Function onTap, IconData iconData, String title) {
+  Widget _buildErrorItem(ThemeData theme, String title) {
+    return _buildItem(theme, null, Icons.error, title);
+  }
+
+  Widget _buildItem(
+      ThemeData theme, Function onTap, IconData iconData, String title) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
