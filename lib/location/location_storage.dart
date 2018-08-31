@@ -5,12 +5,14 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_search_favorites.dart';
 
 class LocationStorage {
   final File _file;
+  final Lock _fileLock = new Lock();
   final List<TrufiLocation> _locations;
 
   LocationStorage(this._file, this._locations);
@@ -42,8 +44,8 @@ class LocationStorage {
     return _locations.contains(location);
   }
 
-  _save() {
-    writeStorage(_file, _locations);
+  _save() async {
+    await _fileLock.synchronized(() => writeStorage(_file, _locations));
   }
 }
 
