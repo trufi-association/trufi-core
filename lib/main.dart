@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_app/TruffiLocalizations.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(new TrufiApp());
@@ -54,6 +56,17 @@ class _TrufiAppState extends State<TrufiApp>
   Widget build(BuildContext context) {
     ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
     return MaterialApp(
+      localizationsDelegates: [
+        const TruffiLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('de', 'DE'), // German
+        const Locale('es', 'ES'), // Spanish
+        // ... other locales the app supports
+      ],
       debugShowCheckedModeBanner: false,
       theme: theme,
       home: Form(
@@ -80,15 +93,18 @@ class _TrufiAppState extends State<TrufiApp>
   Widget _buildFormFields() {
     List<Row> rows = List();
     bool swapLocationsEnabled = false;
+
     if (_isFromFieldVisible()) {
       rows.add(
-        _buildFormField(_fromFieldKey, "Origin", _setFromPlace,
+        _buildFormField(_fromFieldKey, TruffiLocalizations.of(context).origin,
+            _setFromPlace,
             initialValue: fromPlace),
       );
       swapLocationsEnabled = true;
     }
     rows.add(
-      _buildFormField(_toFieldKey, "Destination", _setToPlace,
+      _buildFormField(
+          _toFieldKey, TruffiLocalizations.of(context).destination, _setToPlace,
           trailing: swapLocationsEnabled
               ? GestureDetector(
                   onTap: () => _swapPlaces(),
