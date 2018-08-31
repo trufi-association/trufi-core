@@ -80,6 +80,10 @@ class Plan {
               .toList());
     }
   }
+
+  factory Plan.fromError(String error) {
+    return Plan(error: PlanError.fromError(error));
+  }
 }
 
 class PlanError {
@@ -90,6 +94,10 @@ class PlanError {
 
   factory PlanError.fromJson(Map<String, dynamic> json) {
     return PlanError(json['id'], json['msg']);
+  }
+
+  factory PlanError.fromError(String error) {
+    return PlanError(-1, error);
   }
 }
 

@@ -157,7 +157,14 @@ class _TrufiAppState extends State<TrufiApp>
   }
 
   Widget _buildBodyError(PlanError error) {
-    return Container(padding: EdgeInsets.all(8.0), child: Text(error.message));
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Center(
+        child: Text(
+          error.message,
+        ),
+      ),
+    );
   }
 
   Widget _buildBodyPlan(ThemeData theme, Plan plan) {
@@ -273,7 +280,15 @@ class _TrufiAppState extends State<TrufiApp>
           ),
         );
       } else {
-        _setPlan(await api.fetchPlan(fromPlace, toPlace));
+        try {
+          _setPlan(await api.fetchPlan(fromPlace, toPlace));
+        } on api.FetchRequestException catch (e) {
+          print(e);
+          _setPlan(Plan.fromError("No internet connection"));
+        } on api.FetchResponseException catch (e) {
+          print(e);
+          _setPlan(Plan.fromError("Failed to load plan"));
+        }
       }
     }
   }

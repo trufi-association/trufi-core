@@ -9,6 +9,27 @@ const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
 const String SearchPath = '/otp/routers/default/geocode';
 const String PlanPath = 'otp/routers/default/plan';
 
+class FetchRequestException implements Exception {
+  final Exception _innerException;
+
+  FetchRequestException(this._innerException);
+
+  String toString() {
+    return "Fetch request exception caused by: ${_innerException.toString()}";
+  }
+}
+
+class FetchResponseException implements Exception {
+  final String _message;
+
+  FetchResponseException(this._message);
+
+  @override
+  String toString() {
+    return "FetchResponseException: $_message";
+  }
+}
+
 Future<List<TrufiLocation>> fetchLocations(String query) async {
   Uri request = Uri.https(Endpoint, SearchPath, {
     "query": query,
@@ -16,11 +37,11 @@ Future<List<TrufiLocation>> fetchLocations(String query) async {
     "corners": "true",
     "stops": "false"
   });
-  final response = await http.get(request);
+  final response = await fetchRequest(request);
   if (response.statusCode == 200) {
     return compute(_parseLocations, utf8.decode(response.bodyBytes));
   } else {
-    throw Exception('Failed to load locations');
+    throw FetchResponseException('Failed to load locations');
   }
 }
 
@@ -38,15 +59,23 @@ Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
     "date": "01-01-2018",
     "mode": "TRANSIT,WALK"
   });
-  final response = await http.get(request);
+  final response = await fetchRequest(request);
   if (response.statusCode == 200) {
     return compute(_parsePlan, utf8.decode(response.bodyBytes));
   } else {
-    throw Exception('Failed to load plan');
+    throw FetchResponseException('Failed to load plan');
   }
 }
 
 Plan _parsePlan(String responseBody) {
   final parsed = json.decode(responseBody);
   return Plan.fromJson(parsed);
+}
+
+Future<http.Response> fetchRequest(Uri request) async {
+  try {
+    return await http.get(request);
+  } catch (e) {
+    throw FetchRequestException(e);
+  }
 }
