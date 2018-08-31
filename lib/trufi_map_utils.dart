@@ -42,8 +42,8 @@ Marker buildToMarker(LatLng point) {
 Marker buildBusMarker(LatLng point, String route, Color color,
     {Function onTap}) {
   return new Marker(
-    width: 70.0,
-    height: 40.0,
+    width: 50.0,
+    height: 30.0,
     point: point,
     anchor: AnchorPos.center,
     builder: (context) => GestureDetector(
@@ -54,23 +54,17 @@ Marker buildBusMarker(LatLng point, String route, Color color,
               color: color,
               borderRadius: BorderRadius.all(Radius.circular(4.0)),
             ),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.directions_bus,
-                  color: Colors.white,
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      route,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.directions_bus,
+                    color: Colors.white,
                   ),
-                ),
-              ],
+                  Text(route, style: TextStyle(color: Colors.white)),
+                ],
+              ),
             ),
           ),
         ),
