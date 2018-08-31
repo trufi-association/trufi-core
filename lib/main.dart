@@ -15,12 +15,35 @@ void main() {
   runApp(new TrufiApp());
 }
 
-class TrufiApp extends StatefulWidget {
+class TrufiApp extends StatelessWidget {
   @override
-  _TrufiAppState createState() => _TrufiAppState();
+  Widget build(BuildContext context) {
+    ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
+    return MaterialApp(
+      localizationsDelegates: [
+        const TruffiLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('de', 'DE'), // German
+        const Locale('es', 'ES'), // Spanish
+        // ... other locales the app supports
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: theme,
+      home: TrufiAppHome(),
+    );
+  }
 }
 
-class _TrufiAppState extends State<TrufiApp>
+class TrufiAppHome extends StatefulWidget {
+  @override
+  _TrufiAppHomeState createState() => _TrufiAppHomeState();
+}
+
+class _TrufiAppHomeState extends State<TrufiAppHome>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
@@ -54,43 +77,27 @@ class _TrufiAppState extends State<TrufiApp>
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
-    return MaterialApp(
-      localizationsDelegates: [
-        const TruffiLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'), // English
-        const Locale('de', 'DE'), // German
-        const Locale('es', 'ES'), // Spanish
-        // ... other locales the app supports
-      ],
-      debugShowCheckedModeBanner: false,
-      theme: theme,
-      home: Form(
-        key: _formKey,
-        child: Scaffold(
-          appBar: _buildAppBar(),
-          body: _buildBody(theme),
-        ),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: _buildAppBar(context),
+        body: _buildBody(Theme.of(context)),
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       bottom: PreferredSize(
         child: Container(),
         preferredSize: Size.fromHeight(animation.value),
       ),
-      flexibleSpace: _buildFormFields(),
+      flexibleSpace: _buildFormFields(context),
       leading: _buildResetButton(),
     );
   }
 
-  Widget _buildFormFields() {
+  Widget _buildFormFields(BuildContext context) {
     List<Row> rows = List();
     bool swapLocationsEnabled = false;
 
