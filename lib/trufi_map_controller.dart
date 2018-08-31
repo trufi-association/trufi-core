@@ -91,6 +91,7 @@ class MapControllerPageState extends State<MapControllerPage> {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
       } else if (widget.yourLocation != null) {
+        // TODO during the initial phase this code fails - don't know why
         try {
           mapController.move(widget.yourLocation, 15.0);
         } catch (e) {}
