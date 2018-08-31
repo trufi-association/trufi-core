@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_app/TruffiLocalizations.dart';
+import 'package:trufi_app/truffi_localizations.dart';
 
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_map_controller.dart';
