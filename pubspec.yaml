@@ -11,6 +11,7 @@ dependencies:
   composite_subscription: ^0.1.0
   location: ^1.4.1
   path_provider: ^0.4.1
+  synchronized: ^1.5.1+1
 
 dev_dependencies:
   flutter_test:
