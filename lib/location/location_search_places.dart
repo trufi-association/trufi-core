@@ -4,9 +4,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/trufi_models.dart';
-
-const String _PlacesPath = 'assets/data/places.json';
 
 class Places {
   static Places _instance;
@@ -17,20 +16,21 @@ class Places {
     _instance ??= Places._init(await _readPlaces(context));
   }
 
-  final List<TrufiLocation> locations;
+  final List<TrufiLocation> _locations;
 
-  Places._init(this.locations);
+  Places._init(this._locations);
 
   factory Places() => _instance;
 
   Future<List<TrufiLocation>> fetchLocations(String query) async {
-    if (query.isEmpty) {
-      return locations;
-    }
     query = query.toLowerCase();
-    return locations
-        .where((l) => l.description.toLowerCase().contains(query))
-        .toList();
+    var locations = query.isEmpty
+        ? _locations.toList()
+        : _locations
+            .where((l) => l.description.toLowerCase().contains(query))
+            .toList();
+    locations.sort(sortByFavorite);
+    return locations;
   }
 }
 
@@ -38,7 +38,7 @@ Future<List<TrufiLocation>> _readPlaces(BuildContext context) async {
   return compute(
     _parsePlaces,
     await DefaultAssetBundle.of(context).loadString(
-          _PlacesPath,
+          "assets/data/places.json",
           cache: true,
         ),
   );
