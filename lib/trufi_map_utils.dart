@@ -39,6 +39,10 @@ Marker buildToMarker(LatLng point) {
   return buildMarker(point, Icons.location_on, AnchorPos.top, Colors.red);
 }
 
+Marker buildYourLocationMarker(LatLng point) {
+  return buildMarker(point, Icons.my_location, AnchorPos.center, Colors.blue);
+}
+
 Marker buildBusMarker(LatLng point, String route, Color color,
     {Function onTap}) {
   return new Marker(
