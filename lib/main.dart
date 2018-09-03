@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/animation.dart';
@@ -39,9 +40,6 @@ class _TrufiAppState extends State<TrufiApp>
 
   initState() {
     super.initState();
-    Favorites.init();
-    History.init();
-    Places.init(this.context);
     locationProvider = LocationProvider()..init();
     controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
@@ -49,6 +47,11 @@ class _TrufiAppState extends State<TrufiApp>
       ..addListener(() {
         setState(() {});
       });
+    Future.delayed(Duration.zero, () {
+      Favorites.init();
+      History.init();
+      Places.init(this.context);
+    });
   }
 
   dispose() {
