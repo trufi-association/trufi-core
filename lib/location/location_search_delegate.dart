@@ -235,10 +235,10 @@ class _SuggestionList extends StatelessWidget {
     if (trailing != null) {
       row.children.add(trailing);
     }
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.all(2.0),
+        margin: EdgeInsets.all(8.0),
         child: row,
       ),
     );
