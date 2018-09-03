@@ -229,7 +229,7 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
                         child: RichText(
                           text: TextSpan(
                             style: theme.textTheme.body1,
-                            text: leg.toInstruction(),
+                            text: leg.toInstruction(context),
                           ),
                         ),
                       ),
@@ -304,7 +304,7 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
       if (fromPlace == null) {
         _setFromPlace(
           TrufiLocation.fromLatLng(
-            "Current Position",
+            TrufiLocalizations.of(context).searchCurrentPosition,
             locationProvider.location,
           ),
         );
@@ -313,10 +313,10 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
           _setPlan(await api.fetchPlan(fromPlace, toPlace));
         } on api.FetchRequestException catch (e) {
           print(e);
-          _setPlan(Plan.fromError("No internet connection"));
+          _setPlan(Plan.fromError(TrufiLocalizations.of(context).commonNoInternet));
         } on api.FetchResponseException catch (e) {
           print(e);
-          _setPlan(Plan.fromError("Failed to load plan"));
+          _setPlan(Plan.fromError(TrufiLocalizations.of(context).searchFailLoadingPlan));
         }
       }
     }

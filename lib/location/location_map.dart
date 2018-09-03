@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/location/location_map_controller.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 
 class ChooseOnMapScreen extends StatelessWidget {
   final LatLng position;
@@ -20,7 +21,7 @@ class ChooseOnMapScreen extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.clip,
               text: new TextSpan(
-                text: "Choose a point",
+                text: TrufiLocalizations.of(context).mapChoosePoint,
                 style: theme.textTheme.title,
               ),
             ),
@@ -28,7 +29,7 @@ class ChooseOnMapScreen extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.clip,
               text: new TextSpan(
-                text: "Tap on map to choose",
+                text: TrufiLocalizations.of(context).mapTapToChoose,
                 style: theme.textTheme.subhead,
               ),
             ),
