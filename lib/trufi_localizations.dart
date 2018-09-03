@@ -25,6 +25,7 @@ class TrufiLocalizations {
   static const String SearchSectionResults = "search_title_result";
   static const String SearchCurrentPosition = "search_current_position";
   static const String SearchSectionMapMarker = "search_map_marker";
+  static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String MapSectionChoosePoint = "map_choose_point";
   static const String MapSectionTapToChoose = "map_tap_to_choose";
@@ -50,6 +51,7 @@ class TrufiLocalizations {
       SearchCurrentPosition: 'Current Position',
       SearchFailLoadingPlan: 'Failed to load plan',
       SearchSectionMapMarker: 'Map Marker',
+      SearchNavigateToMarker: 'Navigate to ',
       MapSectionChoosePoint: 'Choose a point',
       MapSectionTapToChoose: 'Tap on map to choose',
       InstructionWalk: 'Walk',
@@ -72,6 +74,7 @@ class TrufiLocalizations {
       SearchCurrentPosition: 'Posición actual',
       SearchFailLoadingPlan: 'Error al cargar plan',
       SearchSectionMapMarker: 'Posición en el Mapa',
+      SearchNavigateToMarker: 'Ir hasta ',
       MapSectionChoosePoint: 'Elige un punto en el mapa',
       MapSectionTapToChoose: 'Toca el mapa para elegir un punto',
       InstructionWalk: 'Camina',
@@ -94,6 +97,7 @@ class TrufiLocalizations {
       SearchCurrentPosition: 'Aktuelle Position',
       SearchFailLoadingPlan: 'Fehler beim Laden dem Plan',
       SearchSectionMapMarker: 'Kartenmarkierung',
+      SearchNavigateToMarker: 'Navigieren ',
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
       MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
       InstructionWalk: 'Gehen Sie',
@@ -153,6 +157,10 @@ class TrufiLocalizations {
 
   String get searchMapMarker {
     return _localizedValues[locale.languageCode][SearchSectionMapMarker];
+  }
+
+  String get searchNavigate {
+    return _localizedValues[locale.languageCode][SearchNavigateToMarker];
   }
 
   String get searchFailLoadingPlan {
