@@ -268,26 +268,31 @@ class _SuggestionList extends StatelessWidget {
   }
 
   _onSelectedLatLng(LatLng value) {
-    if (value == null) return;
-    _onSelectedTrufiLocation(
-      TrufiLocation(
-        description: "Map Marker",
-        latitude: value.latitude,
-        longitude: value.longitude,
-      ),
-    );
+    if (value != null) {
+      _onSelectedTrufiLocation(
+        TrufiLocation(
+          description: "Map Marker",
+          latitude: value.latitude,
+          longitude: value.longitude,
+        ),
+      );
+    }
   }
 
   _onSelectedTrufiLocation(TrufiLocation value) {
-    History.instance.add(value);
-    if (onSelected != null) {
-      onSelected(value);
+    if (value != null) {
+      History.instance.add(value);
+      if (onSelected != null) {
+        onSelected(value);
+      }
     }
   }
 
   _onMapTapped(LatLng value) {
-    if (onMapTapped != null) {
-      onMapTapped(TrufiLocation.fromLatLng("Map Marker", value));
+    if (value != null) {
+      if (onMapTapped != null) {
+        onMapTapped(TrufiLocation.fromLatLng("Map Marker", value));
+      }
     }
   }
 }
