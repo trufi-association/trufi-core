@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_app/truffi_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:trufi_app/trufi_api.dart' as api;
-import 'package:trufi_app/trufi_map_controller.dart';
-import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
+import 'package:trufi_app/location/location_provider.dart';
 import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
-import 'package:trufi_app/location/location_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trufi_app/trufi_api.dart' as api;
+import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/trufi_map_controller.dart';
+import 'package:trufi_app/trufi_models.dart';
 
 void main() {
   runApp(new TrufiApp());
@@ -24,7 +24,7 @@ class TrufiApp extends StatelessWidget {
     ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
     return MaterialApp(
       localizationsDelegates: [
-        const TruffiLocalizationsDelegate(),
+        const TrufiLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
@@ -109,15 +109,15 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
 
     if (_isFromFieldVisible()) {
       rows.add(
-        _buildFormField(_fromFieldKey, TruffiLocalizations.of(context).origin,
-            _setFromPlace,
+        _buildFormField(_fromFieldKey,
+            TrufiLocalizations.of(context).commonOrigin, _setFromPlace,
             initialValue: fromPlace),
       );
       swapLocationsEnabled = true;
     }
     rows.add(
-      _buildFormField(
-          _toFieldKey, TruffiLocalizations.of(context).destination, _setToPlace,
+      _buildFormField(_toFieldKey,
+          TrufiLocalizations.of(context).commonDestination, _setToPlace,
           trailing: swapLocationsEnabled
               ? GestureDetector(
                   onTap: () => _swapPlaces(),

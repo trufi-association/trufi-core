@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_app/truffi_localizations.dart';
 
-import 'package:trufi_app/trufi_api.dart' as api;
-import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
+import 'package:trufi_app/trufi_api.dart' as api;
+import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/trufi_models.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   final LatLng yourLocation;
@@ -110,15 +110,18 @@ class _SuggestionList extends StatelessWidget {
     }
     slivers.add(_buildChooseOnMap(context, theme));
     if (query.isEmpty) {
-      slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).recent));
+      slivers.add(
+          _buildTitle(theme, TrufiLocalizations.of(context).searchTitleRecent));
       slivers.add(_buildFutureBuilder(context, theme,
           History.instance.fetchLocationsWithLimit(5), Icons.history, true));
     } else {
-      slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).searchResults));
+      slivers.add(_buildTitle(
+          theme, TrufiLocalizations.of(context).searchTitleResults));
       slivers.add(_buildFutureBuilder(
           context, theme, api.fetchLocations(query), Icons.location_on, true));
     }
-    slivers.add(_buildTitle(theme, TruffiLocalizations.of(context).places));
+    slivers.add(
+        _buildTitle(theme, TrufiLocalizations.of(context).searchTitlePlaces));
     slivers.add(_buildFutureBuilder(context, theme,
         Places.instance.fetchLocations(query), Icons.location_on, true));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
@@ -135,15 +138,20 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildYourLocation(BuildContext context, ThemeData theme) {
     return SliverToBoxAdapter(
-      child: _buildItem(theme, () => _handleOnYourLocationTap(),
-          Icons.gps_fixed, TruffiLocalizations.of(context).location)
-    );
+        child: _buildItem(
+            theme,
+            () => _handleOnYourLocationTap(),
+            Icons.gps_fixed,
+            TrufiLocalizations.of(context).searchItemYourLocation));
   }
 
   Widget _buildChooseOnMap(BuildContext context, ThemeData theme) {
     return SliverToBoxAdapter(
-      child: _buildItem(theme, () => _handleOnChooseOnMapTap(context),
-          Icons.location_on, TruffiLocalizations.of(context).chooseMap),
+      child: _buildItem(
+          theme,
+          () => _handleOnChooseOnMapTap(context),
+          Icons.location_on,
+          TrufiLocalizations.of(context).searchItemChooseOnMap),
     );
   }
 
