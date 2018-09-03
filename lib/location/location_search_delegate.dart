@@ -187,15 +187,15 @@ class _SuggestionList extends StatelessWidget {
             print(snapshot.error);
             if (snapshot.error is api.FetchRequestException) {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, "No internet connection"),
+                child: _buildErrorItem(theme, TrufiLocalizations.of(context).commonNoInternet),
               );
             } else if (snapshot.error is api.FetchResponseException) {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, "Failed to load data"),
+                child: _buildErrorItem(theme, TrufiLocalizations.of(context).commonFailLoading),
               );
             } else {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, "Unknown error"),
+                child: _buildErrorItem(theme, TrufiLocalizations.of(context).commonUnknownError),
               );
             }
           }
