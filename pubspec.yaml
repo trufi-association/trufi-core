@@ -5,10 +5,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_map: ^0.0.11
+  flutter_map: ^0.1.0
   cupertino_icons: ^0.1.2
   http: ^0.11.3+16
-  composite_subscription: ^0.1.0
   location: ^1.4.1
   path_provider: ^0.4.1
   synchronized: ^1.5.1+1
