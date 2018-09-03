@@ -16,6 +16,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   final LatLng yourLocation;
 
   TrufiLocation result;
+  String mapMarker;
 
   LocationSearchDelegate({this.yourLocation});
 
@@ -59,9 +60,10 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildResults(BuildContext context) {
+    String navigate = TrufiLocalizations.of(context).searchNavigate;
     return Center(
       child: RaisedButton(
-        child: Text("Navigate to ${result.description}"),
+        child: Text( navigate + result.description),
         onPressed: () => _close(context),
       ),
     );
@@ -96,12 +98,14 @@ class _SuggestionList extends StatelessWidget {
   final LatLng yourLocation;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
+  String mapMarker;
 
   _SuggestionList(
       {this.query, this.yourLocation, this.onSelected, this.onMapTapped});
 
   @override
   Widget build(BuildContext context) {
+    mapMarker = TrufiLocalizations.of(context).searchMapMarker;
     final ThemeData theme = Theme.of(context);
     List<Widget> slivers = List();
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
@@ -271,7 +275,7 @@ class _SuggestionList extends StatelessWidget {
     if (value != null) {
       _onSelectedTrufiLocation(
         TrufiLocation(
-          description: "Map Marker",
+          description: mapMarker,
           latitude: value.latitude,
           longitude: value.longitude,
         ),
@@ -291,7 +295,7 @@ class _SuggestionList extends StatelessWidget {
   _onMapTapped(LatLng value) {
     if (value != null) {
       if (onMapTapped != null) {
-        onMapTapped(TrufiLocation.fromLatLng("Map Marker", value));
+        onMapTapped(TrufiLocation.fromLatLng(mapMarker, value));
       }
     }
   }
