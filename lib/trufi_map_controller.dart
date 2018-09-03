@@ -87,6 +87,9 @@ class MapControllerPageState extends State<MapControllerPage> {
         bounds.extend(point);
       });
     });
+    if (widget.yourLocation != null) {
+      _markers.add(buildYourLocationMarker(widget.yourLocation));
+    }
     if (_needsCameraUpdate && mapController.ready) {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
