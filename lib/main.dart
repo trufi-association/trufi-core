@@ -177,50 +177,105 @@ class _TrufiAppState extends State<TrufiApp>
   }
 
   Widget _buildBodyPlan(ThemeData theme, Plan plan) {
-    return Column(
+    return Stack(
+      fit: StackFit.expand,
       children: <Widget>[
-        Expanded(
+        Positioned.fill(
           child: MapControllerPage(
             plan: plan,
             yourLocation: locationProvider.location,
             onSelected: (itinerary) => _setItinerary(itinerary),
+            selectedItinerary: itinerary,
           ),
         ),
-        _buildItinerary(theme),
+        Positioned(
+          height: 150.0,
+          left: 20.0,
+          right: 20.0,
+          bottom: 0.0,
+          child: _buildItineraries(theme),
+        ),
       ],
     );
   }
 
-  Widget _buildItinerary(ThemeData theme) {
-    return itinerary != null
-        ? Container(
-            height: 150.0,
-            child: SafeArea(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                itemBuilder: (BuildContext context, int index) {
-                  PlanItineraryLeg leg = itinerary.legs[index];
-                  return Row(
-                    children: <Widget>[
-                      Icon(leg.mode == 'WALK'
-                          ? Icons.directions_walk
-                          : Icons.directions_bus),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.body1,
-                            text: leg.toInstruction(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                itemCount: itinerary.legs.length,
+  Widget _buildItineraries(ThemeData theme) {
+    if (itinerary == null) return null;
+    bool isPageable = (plan?.itineraries?.length ?? 0) > 0;
+    List<Widget> children = List();
+    if (isPageable) {
+      children.add(
+        GestureDetector(
+          onTap: _handleOnPreviousItineraryTapped,
+          child: Icon(Icons.arrow_left),
+        ),
+      );
+    }
+    children.add(
+      Expanded(
+        child: isPageable
+            ? Dismissible(
+                key: ValueKey(itinerary),
+                onDismissed: _handleItineraryDismissed,
+                child: _buildItinerary(theme),
+              )
+            : _buildItinerary(theme),
+      ),
+    );
+    if (isPageable) {
+      children.add(
+        GestureDetector(
+          onTap: _handleOnNextItineraryTapped,
+          child: Icon(Icons.arrow_right),
+        ),
+      );
+    }
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
+      child: Row(children: children),
+    );
+  }
+
+  _buildItinerary(ThemeData theme) {
+    return SafeArea(
+      child: ListView.builder(
+        padding: EdgeInsets.all(8.0),
+        itemBuilder: (BuildContext context, int index) {
+          PlanItineraryLeg leg = itinerary.legs[index];
+          return Row(
+            children: <Widget>[
+              Icon(leg.mode == 'WALK'
+                  ? Icons.directions_walk
+                  : Icons.directions_bus),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: theme.textTheme.body1,
+                    text: leg.toInstruction(),
+                  ),
+                ),
               ),
-            ),
-          )
-        : null;
+            ],
+          );
+        },
+        itemCount: itinerary.legs.length,
+      ),
+    );
+  }
+
+  _handleOnPreviousItineraryTapped() {
+    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) - 1);
+  }
+
+  _handleOnNextItineraryTapped() {
+    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) + 1);
+  }
+
+  _handleItineraryDismissed(DismissDirection direction) {
+    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) +
+        (direction == DismissDirection.endToStart ? 1 : -1));
   }
 
   Widget _buildBodyEmpty() {
@@ -264,6 +319,13 @@ class _TrufiAppState extends State<TrufiApp>
         itinerary = plan.itineraries.first;
       }
     });
+  }
+
+  _setItineraryWithIndex(int index) {
+    index = index < 0
+        ? plan.itineraries.length - 1
+        : index > plan.itineraries.length - 1 ? 0 : index;
+    _setItinerary(plan.itineraries[index]);
   }
 
   _setItinerary(PlanItinerary value) {
