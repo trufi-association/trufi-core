@@ -12,6 +12,7 @@ import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/location/location_provider.dart';
+import 'package:trufi_app/plan/plan_view.dart';
 
 void main() {
   runApp(new TrufiApp());
@@ -36,7 +37,6 @@ class _TrufiAppState extends State<TrufiApp>
   TrufiLocation fromPlace;
   TrufiLocation toPlace;
   Plan plan;
-  PlanItinerary itinerary;
 
   initState() {
     super.initState();
@@ -161,7 +161,12 @@ class _TrufiAppState extends State<TrufiApp>
     return Container(
       child: error != null
           ? _buildBodyError(error)
-          : plan != null ? _buildBodyPlan(theme, plan) : _buildBodyEmpty(),
+          : plan != null
+              ? PlanView(
+                  plan,
+                  locationProvider.location,
+                )
+              : _buildBodyEmpty(),
     );
   }
 
@@ -176,108 +181,6 @@ class _TrufiAppState extends State<TrufiApp>
     );
   }
 
-  Widget _buildBodyPlan(ThemeData theme, Plan plan) {
-    return Stack(
-      fit: StackFit.expand,
-      children: <Widget>[
-        Positioned.fill(
-          child: MapControllerPage(
-            plan: plan,
-            yourLocation: locationProvider.location,
-            onSelected: (itinerary) => _setItinerary(itinerary),
-            selectedItinerary: itinerary,
-          ),
-        ),
-        Positioned(
-          height: 150.0,
-          left: 20.0,
-          right: 20.0,
-          bottom: 0.0,
-          child: _buildItineraries(theme),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildItineraries(ThemeData theme) {
-    if (itinerary == null) return null;
-    bool isPageable = (plan?.itineraries?.length ?? 0) > 0;
-    List<Widget> children = List();
-    if (isPageable) {
-      children.add(
-        GestureDetector(
-          onTap: _handleOnPreviousItineraryTapped,
-          child: Icon(Icons.arrow_left),
-        ),
-      );
-    }
-    children.add(
-      Expanded(
-        child: isPageable
-            ? Dismissible(
-                key: ValueKey(itinerary),
-                onDismissed: _handleItineraryDismissed,
-                child: _buildItinerary(theme),
-              )
-            : _buildItinerary(theme),
-      ),
-    );
-    if (isPageable) {
-      children.add(
-        GestureDetector(
-          onTap: _handleOnNextItineraryTapped,
-          child: Icon(Icons.arrow_right),
-        ),
-      );
-    }
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
-      child: Row(children: children),
-    );
-  }
-
-  _buildItinerary(ThemeData theme) {
-    return SafeArea(
-      child: ListView.builder(
-        padding: EdgeInsets.all(8.0),
-        itemBuilder: (BuildContext context, int index) {
-          PlanItineraryLeg leg = itinerary.legs[index];
-          return Row(
-            children: <Widget>[
-              Icon(leg.mode == 'WALK'
-                  ? Icons.directions_walk
-                  : Icons.directions_bus),
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: theme.textTheme.body1,
-                    text: leg.toInstruction(),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        itemCount: itinerary.legs.length,
-      ),
-    );
-  }
-
-  _handleOnPreviousItineraryTapped() {
-    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) - 1);
-  }
-
-  _handleOnNextItineraryTapped() {
-    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) + 1);
-  }
-
-  _handleItineraryDismissed(DismissDirection direction) {
-    _setItineraryWithIndex(plan.itineraries.indexOf(itinerary) +
-        (direction == DismissDirection.endToStart ? 1 : -1));
-  }
-
   Widget _buildBodyEmpty() {
     return MapControllerPage(
       yourLocation: locationProvider.location,
@@ -290,7 +193,6 @@ class _TrufiAppState extends State<TrufiApp>
       fromPlace = null;
       toPlace = null;
       plan = null;
-      itinerary = null;
       controller.reverse();
     });
   }
@@ -315,22 +217,6 @@ class _TrufiAppState extends State<TrufiApp>
   _setPlan(Plan value) {
     setState(() {
       plan = value;
-      if ((plan?.itineraries?.length ?? 0) > 0) {
-        itinerary = plan.itineraries.first;
-      }
-    });
-  }
-
-  _setItineraryWithIndex(int index) {
-    index = index < 0
-        ? plan.itineraries.length - 1
-        : index > plan.itineraries.length - 1 ? 0 : index;
-    _setItinerary(plan.itineraries[index]);
-  }
-
-  _setItinerary(PlanItinerary value) {
-    setState(() {
-      itinerary = value;
     });
   }
 
