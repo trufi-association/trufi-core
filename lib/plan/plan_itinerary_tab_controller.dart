@@ -81,7 +81,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                 child: RichText(
                   text: TextSpan(
                     style: theme.textTheme.body1,
-                    text: leg.toInstruction(),
+                    text: leg.toInstruction(context),
                   ),
                 ),
               ),
