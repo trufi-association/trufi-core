@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_app/polyline_layer_circle.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
@@ -97,10 +98,16 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
     bool isSelected = itinerary == selectedItinerary;
     itinerary.legs.forEach((leg) {
       List<LatLng> points = decodePolyline(leg.points);
-      Polyline polyline = new Polyline(
+      Polyline polyline = leg.mode == 'WALK' ? new PolylineCircle(
           points: points,
           color: isSelected
-              ? leg.mode == 'WALK' ? Colors.blue : Colors.green
+              ? Colors.blue
+              : Colors.grey,
+          strokeWidth: isSelected ? 6.0 : 3.0) :
+      new Polyline(
+          points: points,
+          color: isSelected
+              ? Colors.green
               : Colors.grey,
           strokeWidth: isSelected ? 6.0 : 3.0);
       Marker marker = leg.mode != 'WALK'
