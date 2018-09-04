@@ -6,7 +6,8 @@ class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
 
-  PlanItineraryTabPages(this.tabController, this.itineraries);
+  PlanItineraryTabPages(this.tabController, this.itineraries)
+      : assert(itineraries != null && itineraries.length > 0);
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();

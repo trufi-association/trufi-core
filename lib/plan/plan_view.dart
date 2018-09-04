@@ -9,7 +9,7 @@ class PlanView extends StatefulWidget {
   final Plan plan;
   final LatLng yourLocation;
 
-  PlanView(this.plan, this.yourLocation);
+  PlanView(this.plan, this.yourLocation) : assert(plan != null);
 
   @override
   PlanViewState createState() => PlanViewState();
