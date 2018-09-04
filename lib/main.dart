@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/animation.dart';
@@ -9,6 +10,7 @@ import 'package:trufi_app/location/location_provider.dart';
 import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
+import 'package:trufi_app/plan/plan_view.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
@@ -60,13 +62,9 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
   TrufiLocation fromPlace;
   TrufiLocation toPlace;
   Plan plan;
-  PlanItinerary itinerary;
 
   initState() {
     super.initState();
-    Favorites.init();
-    History.init();
-    Places.init(this.context);
     locationProvider = LocationProvider()..init();
     controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
@@ -74,6 +72,11 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
       ..addListener(() {
         setState(() {});
       });
+    Future.delayed(Duration.zero, () {
+      Favorites.init();
+      History.init();
+      Places.init(this.context);
+    });
   }
 
   dispose() {
@@ -181,7 +184,12 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
     return Container(
       child: error != null
           ? _buildBodyError(error)
-          : plan != null ? _buildBodyPlan(theme, plan) : _buildBodyEmpty(),
+          : plan != null
+              ? PlanView(
+                  plan,
+                  locationProvider.location,
+                )
+              : _buildBodyEmpty(),
     );
   }
 
@@ -196,53 +204,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
     );
   }
 
-  Widget _buildBodyPlan(ThemeData theme, Plan plan) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: MapControllerPage(
-            plan: plan,
-            yourLocation: locationProvider.location,
-            onSelected: (itinerary) => _setItinerary(itinerary),
-          ),
-        ),
-        _buildItinerary(theme),
-      ],
-    );
-  }
-
-  Widget _buildItinerary(ThemeData theme) {
-    return itinerary != null
-        ? Container(
-            height: 150.0,
-            child: SafeArea(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8.0),
-                itemBuilder: (BuildContext context, int index) {
-                  PlanItineraryLeg leg = itinerary.legs[index];
-                  return Row(
-                    children: <Widget>[
-                      Icon(leg.mode == 'WALK'
-                          ? Icons.directions_walk
-                          : Icons.directions_bus),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.body1,
-                            text: leg.toInstruction(context),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                itemCount: itinerary.legs.length,
-              ),
-            ),
-          )
-        : null;
-  }
-
   Widget _buildBodyEmpty() {
     return MapControllerPage(
       yourLocation: locationProvider.location,
@@ -255,7 +216,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
       fromPlace = null;
       toPlace = null;
       plan = null;
-      itinerary = null;
       controller.reverse();
     });
   }
@@ -280,15 +240,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
   _setPlan(Plan value) {
     setState(() {
       plan = value;
-      if ((plan?.itineraries?.length ?? 0) > 0) {
-        itinerary = plan.itineraries.first;
-      }
-    });
-  }
-
-  _setItinerary(PlanItinerary value) {
-    setState(() {
-      itinerary = value;
     });
   }
 
@@ -313,10 +264,12 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
           _setPlan(await api.fetchPlan(fromPlace, toPlace));
         } on api.FetchRequestException catch (e) {
           print(e);
-          _setPlan(Plan.fromError(TrufiLocalizations.of(context).commonNoInternet));
+          _setPlan(
+              Plan.fromError(TrufiLocalizations.of(context).commonNoInternet));
         } on api.FetchResponseException catch (e) {
           print(e);
-          _setPlan(Plan.fromError(TrufiLocalizations.of(context).searchFailLoadingPlan));
+          _setPlan(Plan.fromError(
+              TrufiLocalizations.of(context).searchFailLoadingPlan));
         }
       }
     }

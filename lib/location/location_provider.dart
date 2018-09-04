@@ -1,7 +1,8 @@
 import 'package:flutter/services.dart';
-import 'package:composite_subscription/composite_subscription.dart';
 import 'package:location/location.dart';
 import 'package:latlong/latlong.dart';
+
+import 'package:trufi_app/composite_subscription.dart';
 
 class LocationProvider {
   final Function(LatLng) onLocationChanged;

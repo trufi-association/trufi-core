@@ -18,16 +18,19 @@ class MapControllerPage extends StatefulWidget {
 
 class MapControllerPageState extends State<MapControllerPage> {
   MapController mapController;
-  Marker marker;
+  Marker chooseOnMapMarker;
+  Marker yourLocationMarker;
 
   void initState() {
     super.initState();
-    marker = buildToMarker(widget.position != null
+    LatLng point = widget.position != null
         ? widget.position
-        : LatLng(-17.413977, -66.165321));
+        : LatLng(-17.413977, -66.165321);
+    chooseOnMapMarker = buildToMarker(point);
+    yourLocationMarker = buildYourLocationMarker(point);
     mapController = MapController();
     mapController.onReady.then((_) {
-      mapController.move(marker.point, 15.0);
+      mapController.move(point, 15.0);
     });
   }
 
@@ -47,7 +50,12 @@ class MapControllerPageState extends State<MapControllerPage> {
               ),
               layers: [
                 mapBoxTileLayerOptions(),
-                MarkerLayerOptions(markers: <Marker>[marker]),
+                MarkerLayerOptions(
+                  markers: <Marker>[
+                    yourLocationMarker,
+                    chooseOnMapMarker,
+                  ],
+                ),
               ],
             ),
           ),
@@ -68,13 +76,13 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   _handleOnMapTap(LatLng point) {
     setState(() {
-      marker = buildToMarker(point);
+      chooseOnMapMarker = buildToMarker(point);
     });
   }
 
   _handleOnOKPressed(BuildContext context) {
     if (widget.onSelected != null) {
-      widget.onSelected(marker.point);
+      widget.onSelected(chooseOnMapMarker.point);
     }
   }
 }
