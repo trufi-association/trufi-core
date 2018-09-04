@@ -11,8 +11,10 @@ class MapControllerPage extends StatefulWidget {
   final Plan plan;
   final OnSelected onSelected;
   final LatLng yourLocation;
+  final PlanItinerary selectedItinerary;
 
-  MapControllerPage({this.plan, this.onSelected, this.yourLocation});
+  MapControllerPage(
+      {this.plan, this.onSelected, this.yourLocation, this.selectedItinerary});
 
   @override
   MapControllerPageState createState() {
@@ -42,6 +44,7 @@ class MapControllerPageState extends State<MapControllerPage> {
   Widget build(BuildContext context) {
     _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
     _plan = widget.plan;
+    _selectedItinerary = widget.selectedItinerary;
     _itineraries.clear();
     _markers.clear();
     _polylines.clear();
@@ -87,6 +90,9 @@ class MapControllerPageState extends State<MapControllerPage> {
         bounds.extend(point);
       });
     });
+    if (widget.yourLocation != null) {
+      _markers.add(buildYourLocationMarker(widget.yourLocation));
+    }
     if (_needsCameraUpdate && mapController.ready) {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
