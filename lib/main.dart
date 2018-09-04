@@ -3,27 +3,52 @@ import 'dart:io';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:trufi_app/trufi_api.dart' as api;
-import 'package:trufi_app/trufi_map_controller.dart';
-import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_form_field.dart';
+import 'package:trufi_app/location/location_provider.dart';
 import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
-import 'package:trufi_app/location/location_provider.dart';
 import 'package:trufi_app/plan/plan_view.dart';
+import 'package:trufi_app/trufi_api.dart' as api;
+import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/trufi_map_controller.dart';
+import 'package:trufi_app/trufi_models.dart';
 
 void main() {
   runApp(new TrufiApp());
 }
 
-class TrufiApp extends StatefulWidget {
+class TrufiApp extends StatelessWidget {
   @override
-  _TrufiAppState createState() => _TrufiAppState();
+  Widget build(BuildContext context) {
+    ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
+    return MaterialApp(
+      localizationsDelegates: [
+        const TrufiLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('de', 'DE'), // German
+        const Locale('es', 'ES'), // Spanish
+        // ... other locales the app supports
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: theme,
+      home: TrufiAppHome(),
+    );
+  }
 }
 
-class _TrufiAppState extends State<TrufiApp>
+class TrufiAppHome extends StatefulWidget {
+  @override
+  _TrufiAppHomeState createState() => _TrufiAppHomeState();
+}
+
+class _TrufiAppHomeState extends State<TrufiAppHome>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
@@ -61,43 +86,41 @@ class _TrufiAppState extends State<TrufiApp>
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: theme,
-      home: Form(
-        key: _formKey,
-        child: Scaffold(
-          appBar: _buildAppBar(),
-          body: _buildBody(theme),
-        ),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: _buildAppBar(context),
+        body: _buildBody(Theme.of(context)),
       ),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       bottom: PreferredSize(
         child: Container(),
         preferredSize: Size.fromHeight(animation.value),
       ),
-      flexibleSpace: _buildFormFields(),
+      flexibleSpace: _buildFormFields(context),
       leading: _buildResetButton(),
     );
   }
 
-  Widget _buildFormFields() {
+  Widget _buildFormFields(BuildContext context) {
     List<Row> rows = List();
     bool swapLocationsEnabled = false;
+
     if (_isFromFieldVisible()) {
       rows.add(
-        _buildFormField(_fromFieldKey, "Origin", _setFromPlace,
+        _buildFormField(_fromFieldKey,
+            TrufiLocalizations.of(context).commonOrigin, _setFromPlace,
             initialValue: fromPlace),
       );
       swapLocationsEnabled = true;
     }
     rows.add(
-      _buildFormField(_toFieldKey, "Destination", _setToPlace,
+      _buildFormField(_toFieldKey,
+          TrufiLocalizations.of(context).commonDestination, _setToPlace,
           trailing: swapLocationsEnabled
               ? GestureDetector(
                   onTap: () => _swapPlaces(),
@@ -232,7 +255,7 @@ class _TrufiAppState extends State<TrufiApp>
       if (fromPlace == null) {
         _setFromPlace(
           TrufiLocation.fromLatLng(
-            "Current Position",
+            TrufiLocalizations.of(context).searchCurrentPosition,
             locationProvider.location,
           ),
         );
@@ -241,10 +264,12 @@ class _TrufiAppState extends State<TrufiApp>
           _setPlan(await api.fetchPlan(fromPlace, toPlace));
         } on api.FetchRequestException catch (e) {
           print(e);
-          _setPlan(Plan.fromError("No internet connection"));
+          _setPlan(
+              Plan.fromError(TrufiLocalizations.of(context).commonNoInternet));
         } on api.FetchResponseException catch (e) {
           print(e);
-          _setPlan(Plan.fromError("Failed to load plan"));
+          _setPlan(Plan.fromError(
+              TrufiLocalizations.of(context).searchFailLoadingPlan));
         }
       }
     }

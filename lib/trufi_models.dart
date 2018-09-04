@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
   static const String _Description = 'description';
@@ -198,17 +200,33 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstruction() {
+  String toInstruction(BuildContext context) {
+    String walk = TrufiLocalizations.of(context).instructionWalk;
+    String bus = TrufiLocalizations.of(context).instructionBus;
+    String forString = TrufiLocalizations.of(context).instructionFor;
+    String toString = TrufiLocalizations.of(context).instructionTo;
+
     StringBuffer sb = StringBuffer();
     String distanceString = distance >= 1000
         ? (distance.ceil() ~/ 1000).toString() + " km"
         : distance.ceil().toString() + " m";
-    String durationString = (duration.ceil() ~/ 60).toString() + " m";
+    String durationString = (duration.ceil() ~/ 60).toString() + " min";
+    String destinationString = toName;
     if (mode == 'WALK') {
-      sb.write("Walk $distanceString to $toName ($durationString)");
+      if (toName == 'Destination') {
+        destinationString = TrufiLocalizations.of(context).commonDestination;
+      }
+      sb.write(walk +
+          " $distanceString " +
+          toString +
+          " $destinationString ($durationString)");
     } else if (mode == 'BUS') {
-      sb.write(
-          "Ride Bus $route for $distanceString to $toName ($durationString)");
+      sb.write(bus +
+          " $route " +
+          forString +
+          " $distanceString " +
+          toString +
+          " $toName ($durationString)");
     }
     return sb.toString();
   }
