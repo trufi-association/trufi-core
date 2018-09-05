@@ -104,29 +104,58 @@ class MapControllerPageState extends State<MapControllerPage> {
       }
       _needsCameraUpdate = false;
     }
-    return Padding(
-      padding: EdgeInsets.all(0.0),
-      child: Column(
-        children: [
-          Flexible(
-            child: FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                zoom: 5.0,
-                maxZoom: 19.0,
-                minZoom: 1.0,
-                onTap: (point) => _handleOnMapTap(point),
-              ),
-              layers: [
-                mapBoxTileLayerOptions(),
-                PolylineLayerOptions(polylines: _polylines),
-                PolylineLayerOptions(polylines: _selectedPolylines),
-                MarkerLayerOptions(markers: _markers),
-                MarkerLayerOptions(markers: _selectedMarkers),
-              ],
+    double buttonMargin = 20.0;
+    double buttonPadding = 10.0;
+    double buttonSize = 50.0;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(
+          child: FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              zoom: 5.0,
+              maxZoom: 19.0,
+              minZoom: 1.0,
+              onTap: (point) => _handleOnMapTap(point),
             ),
+            layers: [
+              mapBoxTileLayerOptions(),
+              PolylineLayerOptions(polylines: _polylines),
+              PolylineLayerOptions(polylines: _selectedPolylines),
+              MarkerLayerOptions(markers: _markers),
+              MarkerLayerOptions(markers: _selectedMarkers),
+            ],
           ),
-        ],
+        ),
+        Positioned(
+          top: buttonMargin,
+          right: buttonMargin,
+          width: buttonSize,
+          height: buttonSize,
+          child:
+              _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
+        ),
+        Positioned(
+          top: buttonMargin + buttonPadding + buttonSize,
+          right: buttonMargin,
+          width: buttonSize,
+          height: buttonSize,
+          child: _buildButton(Icons.crop, _handleOnCropButtonTapped),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButton(IconData iconData, Function onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(8.0))),
+        child: Icon(iconData),
       ),
     );
   }
@@ -135,6 +164,22 @@ class MapControllerPageState extends State<MapControllerPage> {
     Polyline polyline = polylineHitTest(_polylines, point);
     if (polyline != null) {
       _setItinerary(_itineraryForPolyline(polyline));
+    }
+  }
+
+  void _handleOnMyLocationButtonTapped() {
+    mapController.move(widget.yourLocation, 17.0);
+  }
+
+  void _handleOnCropButtonTapped() {
+    var bounds = LatLngBounds();
+    _selectedPolylines.forEach((polyline) {
+      polyline.points.forEach((point) {
+        bounds.extend(point);
+      });
+    });
+    if (bounds.isValid) {
+      mapController.fitBounds(bounds);
     }
   }
 
