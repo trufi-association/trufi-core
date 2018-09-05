@@ -49,7 +49,7 @@ class PlanViewState extends State<PlanView>
           ),
         ),
         Positioned(
-          height: 150.0,
+          height: 200.0,
           left: 20.0,
           right: 20.0,
           bottom: 0.0,
@@ -64,7 +64,6 @@ class PlanViewState extends State<PlanView>
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
-      height: 200.0,
       child: PlanItineraryTabPages(
         tabController,
         itineraries,

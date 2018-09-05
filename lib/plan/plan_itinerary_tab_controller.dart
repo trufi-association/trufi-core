@@ -17,8 +17,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
-      bottom: false,
       child: Row(
         children: <Widget>[
           IconButton(
@@ -79,10 +77,13 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                   ? Icons.directions_walk
                   : Icons.directions_bus),
               Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    style: theme.textTheme.body1,
-                    text: leg.toInstruction(context),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: RichText(
+                    text: TextSpan(
+                      style: theme.textTheme.body2,
+                      text: leg.toInstruction(context),
+                    ),
                   ),
                 ),
               ),
