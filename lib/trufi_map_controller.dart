@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_app/polyline_layer_circle.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
@@ -31,6 +32,8 @@ class MapControllerPageState extends State<MapControllerPage> {
   List<Polyline> _polylines = List();
   List<Marker> _selectedMarkers = List();
   List<Polyline> _selectedPolylines = List();
+  List<Polyline> _selectedWalkedPolylines = List();
+  List<Polyline> _walkedPolylines = List();
   bool _needsCameraUpdate = true;
 
   void initState() {
@@ -50,6 +53,9 @@ class MapControllerPageState extends State<MapControllerPage> {
     _polylines.clear();
     _selectedMarkers.clear();
     _selectedPolylines.clear();
+    _selectedWalkedPolylines.clear();
+    _walkedPolylines.clear();
+
     var bounds = LatLngBounds();
     if (_plan != null) {
       if (_plan.from != null) {
@@ -76,7 +82,15 @@ class MapControllerPageState extends State<MapControllerPage> {
               }
             }
             if (isSelected) {
-              _selectedPolylines.add(pws.polyline);
+              itinerary.legs.forEach((leg) {
+                if (leg.mode == 'WALK') {
+                  print("walk selected");
+                  _selectedWalkedPolylines.add(pws.polyline);
+                } else {
+                  print("bus selected");
+                  _selectedPolylines.add(pws.polyline);
+                }
+              });
             } else {
               _polylines.add(pws.polyline);
             }
@@ -104,6 +118,7 @@ class MapControllerPageState extends State<MapControllerPage> {
       }
       _needsCameraUpdate = false;
     }
+
     return Padding(
       padding: EdgeInsets.all(0.0),
       child: Column(
@@ -121,6 +136,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                 mapBoxTileLayerOptions(),
                 PolylineLayerOptions(polylines: _polylines),
                 PolylineLayerOptions(polylines: _selectedPolylines),
+                PolylineCircleLayerOptions(polylines: _selectedWalkedPolylines),
                 MarkerLayerOptions(markers: _markers),
                 MarkerLayerOptions(markers: _selectedMarkers),
               ],
@@ -149,16 +165,16 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
     MapEntry<PlanItinerary, List<PolylineWithMarker>> entry =
-        _itineraryEntryForPolyline(polyline);
+    _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
   MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
       Polyline polyline) {
     return _itineraries.entries.firstWhere(
-        (pair) =>
-            pair.value.firstWhere((pwm) => pwm.polyline == polyline,
-                orElse: () => null) !=
+            (pair) =>
+        pair.value.firstWhere((pwm) => pwm.polyline == polyline,
+            orElse: () => null) !=
             null,
         orElse: () => null);
   }
