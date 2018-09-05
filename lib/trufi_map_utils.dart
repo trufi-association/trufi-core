@@ -98,11 +98,15 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
     itinerary.legs.forEach((leg) {
       List<LatLng> points = decodePolyline(leg.points);
       Polyline polyline = new Polyline(
-          points: points,
-          color: isSelected
-              ? leg.mode == 'WALK' ? Colors.blue : Colors.green
-              : Colors.grey,
-          strokeWidth: isSelected ? 6.0 : 3.0);
+        points: points,
+        color: isSelected
+            ? leg.mode == 'WALK' ? Colors.blue : Colors.green
+            : Colors.grey,
+        strokeWidth: isSelected ? 6.0 : 3.0,
+        borderColor: Colors.white,
+        borderStrokeWidth: 3.0,
+        isDotted: leg.mode == 'WALK',
+      );
       Marker marker = leg.mode != 'WALK'
           ? buildBusMarker(
               midPointForPolyline(polyline),
