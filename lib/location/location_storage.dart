@@ -31,7 +31,7 @@ class LocationStorage {
 
   add(TrufiLocation location) {
     remove(location);
-    _locations.add(location);
+    _locations.insert(0, location);
     _save();
   }
 

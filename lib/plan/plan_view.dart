@@ -17,21 +17,19 @@ class PlanView extends StatefulWidget {
 
 class PlanViewState extends State<PlanView>
     with SingleTickerProviderStateMixin {
-  List<PlanItinerary> itineraries;
   PlanItinerary selectedItinerary;
   TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    itineraries = widget.plan?.itineraries ?? List();
-    if (itineraries.length > 0) {
-      selectedItinerary = itineraries.first;
+    if (widget.plan.itineraries.length > 0) {
+      selectedItinerary = widget.plan.itineraries.first;
     }
     tabController =
         TabController(length: widget.plan.itineraries.length, vsync: this)
           ..addListener(() {
-            _setItinerary(itineraries[tabController.index]);
+            _setItinerary(widget.plan.itineraries[tabController.index]);
           });
   }
 
@@ -66,7 +64,7 @@ class PlanViewState extends State<PlanView>
           borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
       child: PlanItineraryTabPages(
         tabController,
-        itineraries,
+        widget.plan.itineraries,
       ),
     );
   }
@@ -74,7 +72,7 @@ class PlanViewState extends State<PlanView>
   void _setItinerary(PlanItinerary value) {
     setState(() {
       selectedItinerary = value;
-      tabController.animateTo(itineraries.indexOf(value));
+      tabController.animateTo(widget.plan.itineraries.indexOf(value));
     });
   }
 }
