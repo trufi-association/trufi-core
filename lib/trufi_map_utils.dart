@@ -32,7 +32,7 @@ mapBoxTileLayerOptions() {
 }
 
 Marker buildFromMarker(LatLng point) {
-  return buildMarker(point, Icons.adjust, AnchorPos.center, Colors.blue);
+  return buildMarker(point, Icons.adjust, AnchorPos.center, Colors.black);
 }
 
 Marker buildToMarker(LatLng point) {

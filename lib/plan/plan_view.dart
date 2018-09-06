@@ -60,8 +60,10 @@ class PlanViewState extends State<PlanView>
   Widget _buildItineraries(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+      ),
       child: PlanItineraryTabPages(
         tabController,
         widget.plan.itineraries,
