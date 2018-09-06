@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
 class MapControllerPage extends StatefulWidget {
-  final LatLng position;
-  final Function(LatLng) onSelected;
+  final LatLng initialPosition;
+  final ValueChanged<LatLng> onSelected;
 
-  MapControllerPage({this.position, this.onSelected});
+  MapControllerPage(
+    this.initialPosition, {
+    this.onSelected,
+  }) : assert(initialPosition != null);
 
   @override
-  MapControllerPageState createState() {
-    return MapControllerPageState();
-  }
+  MapControllerPageState createState() => MapControllerPageState();
 }
 
 class MapControllerPageState extends State<MapControllerPage> {
@@ -23,54 +26,54 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   void initState() {
     super.initState();
-    LatLng point = widget.position != null
-        ? widget.position
-        : LatLng(-17.413977, -66.165321);
-    chooseOnMapMarker = buildToMarker(point);
-    yourLocationMarker = buildYourLocationMarker(point);
-    mapController = MapController();
-    mapController.onReady.then((_) {
-      mapController.move(point, 15.0);
-    });
+    chooseOnMapMarker = buildToMarker(widget.initialPosition);
+    mapController = MapController()
+      ..onReady.then((_) {
+        mapController.move(widget.initialPosition, 15.0);
+      });
   }
 
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(0.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                zoom: 5.0,
-                maxZoom: 19.0,
-                minZoom: 1.0,
-                onTap: (point) => _handleOnMapTap(point),
-              ),
-              layers: [
-                mapBoxTileLayerOptions(),
-                MarkerLayerOptions(
-                  markers: <Marker>[
-                    yourLocationMarker,
-                    chooseOnMapMarker,
-                  ],
+    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder<LatLng>(
+            stream: locationBloc.outLocationUpdate,
+            initialData: widget.initialPosition,
+            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+              List<Marker> markers = <Marker>[chooseOnMapMarker];
+              if (snapshot.data != null) {
+                yourLocationMarker = buildYourLocationMarker(snapshot.data);
+                markers.add(yourLocationMarker);
+              }
+              return FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  zoom: 5.0,
+                  maxZoom: 19.0,
+                  minZoom: 1.0,
+                  onTap: (point) => _handleOnMapTap(point),
                 ),
-              ],
+                layers: [
+                  mapBoxTileLayerOptions(),
+                  MarkerLayerOptions(markers: markers),
+                ],
+              );
+            },
+          ),
+        ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: RaisedButton(
+                child: Text("OK"),
+                onPressed: () => _handleOnOKPressed(context),
+              ),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: RaisedButton(
-                  child: Text("OK"),
-                  onPressed: () => _handleOnOKPressed(context),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_search_delegate.dart';
@@ -10,7 +9,6 @@ class LocationFormField extends FormField<TrufiLocation> {
     FormFieldSetter<TrufiLocation> onSaved,
     TrufiLocation initialValue,
     String hintText,
-    LatLng yourLocation,
   }) : super(
             key: key,
             onSaved: onSaved,
@@ -25,8 +23,7 @@ class LocationFormField extends FormField<TrufiLocation> {
                   onTap: () async {
                     TrufiLocation location = await showSearch(
                       context: state.context,
-                      delegate:
-                          LocationSearchDelegate(yourLocation: yourLocation),
+                      delegate: LocationSearchDelegate(),
                     );
                     if (location != null) {
                       state.didChange(location);
