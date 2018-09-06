@@ -5,9 +5,9 @@ import 'package:trufi_app/location/location_map_controller.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class ChooseOnMapScreen extends StatelessWidget {
-  final LatLng position;
+  final LatLng initialPosition;
 
-  ChooseOnMapScreen({this.position});
+  ChooseOnMapScreen(this.initialPosition) : assert(initialPosition != null);
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,8 @@ class ChooseOnMapScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        child: new MapControllerPage(
-          position: position,
+        child: MapControllerPage(
+          initialPosition,
           onSelected: (point) {
             Navigator.pop(context, point);
           },

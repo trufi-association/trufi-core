@@ -1,8 +1,36 @@
-import 'package:flutter/services.dart';
-import 'package:location/location.dart';
-import 'package:latlong/latlong.dart';
+import 'dart:async';
 
+import 'package:flutter/services.dart';
+import 'package:latlong/latlong.dart';
+import 'package:location/location.dart';
+import 'package:rxdart/rxdart.dart';
+
+import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/composite_subscription.dart';
+
+class LocationBloc implements BlocBase {
+  LocationProvider _locationProvider;
+
+  BehaviorSubject<LatLng> _locationUpdateController =
+      new BehaviorSubject<LatLng>();
+
+  Sink<LatLng> get _inLocationUpdate => _locationUpdateController.sink;
+
+  Stream<LatLng> get outLocationUpdate => _locationUpdateController.stream;
+
+  LocationBloc() {
+    _locationProvider = LocationProvider(onLocationChanged: (location) {
+      _inLocationUpdate.add(location);
+    })
+      ..init();
+  }
+
+  @override
+  void dispose() {
+    _locationProvider.dispose();
+    _locationUpdateController.close();
+  }
+}
 
 class LocationProvider {
   final Function(LatLng) onLocationChanged;
