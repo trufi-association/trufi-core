@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
 
 class PlanView extends StatefulWidget {
   final Plan plan;
-  final LatLng yourLocation;
 
-  PlanView(this.plan, this.yourLocation) : assert(plan != null);
+  PlanView(this.plan) : assert(plan != null);
 
   @override
   PlanViewState createState() => PlanViewState();
@@ -35,15 +36,21 @@ class PlanViewState extends State<PlanView>
 
   @override
   Widget build(BuildContext context) {
+    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
         Positioned.fill(
-          child: MapControllerPage(
-            plan: widget.plan,
-            yourLocation: widget.yourLocation,
-            onSelected: _setItinerary,
-            selectedItinerary: selectedItinerary,
+          child: StreamBuilder<LatLng>(
+            stream: locationBloc.outLocationUpdate,
+            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+              return MapControllerPage(
+                plan: widget.plan,
+                initialPosition: snapshot.data,
+                onSelected: _setItinerary,
+                selectedItinerary: selectedItinerary,
+              );
+            },
           ),
         ),
         Positioned(
