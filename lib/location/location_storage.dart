@@ -4,12 +4,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:synchronized/synchronized.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorites_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/location/location_search_favorites.dart';
 
 class LocationStorage {
   final File _file;
@@ -21,15 +23,26 @@ class LocationStorage {
   UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
       UnmodifiableListView(_locations);
 
-  Future<List<TrufiLocation>> fetchLocations() async {
-    var locations = _locations.toList();
-    locations.sort(sortByFavorite);
-    return locations;
+  Future<List<TrufiLocation>> fetchLocations(BuildContext context) async {
+    return _sortedByFavorites(_locations.toList(), context);
   }
 
-  Future<List<TrufiLocation>> fetchLocationsWithLimit(int limit) async {
-    var locations = _locations.sublist(0, min(_locations.length, limit));
-    locations.sort(sortByFavorite);
+  Future<List<TrufiLocation>> fetchLocationsWithLimit(
+    BuildContext context,
+    int limit,
+  ) async {
+    return _sortedByFavorites(
+      _locations.sublist(0, min(_locations.length, limit)),
+      context,
+    );
+  }
+
+  Future<List<TrufiLocation>> _sortedByFavorites(
+    List<TrufiLocation> locations,
+    BuildContext context,
+  ) async {
+    FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    locations.sort((a, b) => sortByFavorite(a, b, bloc.favorites));
     return locations;
   }
 
@@ -81,7 +94,7 @@ List<TrufiLocation> _parseStorage(String encoded) {
   try {
     final parsed = json.decode(encoded);
     locations = parsed
-        .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
+        .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
         .toList();
   } catch (e) {
     print(e);

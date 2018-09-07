@@ -10,7 +10,6 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorites_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan_view.dart';
@@ -80,7 +79,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
         setState(() {});
       });
     Future.delayed(Duration.zero, () {
-      Favorites.init();
       History.init();
       Places.init(this.context);
     });
