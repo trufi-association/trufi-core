@@ -418,12 +418,11 @@ class FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    print("moin?");
     final FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data) {
+        if (snapshot.data == true) {
           return GestureDetector(
             onTap: () => bloc.inRemoveFavorite.add(widget.location),
             child: Icon(Icons.favorite),
