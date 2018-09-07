@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class FavoriteBloc implements BlocBase {
+class FavoriteLocationBloc implements BlocBase {
   // IsFavorite
   final BehaviorSubject<bool> _isFavoriteController = BehaviorSubject<bool>();
 
@@ -19,7 +19,7 @@ class FavoriteBloc implements BlocBase {
 
   // Constructor
 
-  FavoriteBloc(TrufiLocation location) {
+  FavoriteLocationBloc(TrufiLocation location) {
     _favoritesController.stream
         .map((locations) => locations.any((TrufiLocation l) => l == location))
         .listen((isFavorite) => _isFavoriteController.add(isFavorite));

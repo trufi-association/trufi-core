@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorites_bloc.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationStorage {
@@ -41,7 +41,8 @@ class LocationStorage {
     List<TrufiLocation> locations,
     BuildContext context,
   ) async {
-    FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    FavoriteLocationsBloc bloc =
+        BlocProvider.of<FavoriteLocationsBloc>(context);
     locations.sort((a, b) => sortByFavorite(a, b, bloc.favorites));
     return locations;
   }
