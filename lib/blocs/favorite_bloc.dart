@@ -21,7 +21,7 @@ class FavoriteBloc implements BlocBase {
 
   FavoriteBloc(TrufiLocation location) {
     _favoritesController.stream
-        .map((list) => list.any((TrufiLocation item) => item == location))
+        .map((locations) => locations.any((TrufiLocation l) => l == location))
         .listen((isFavorite) => _isFavoriteController.add(isFavorite));
   }
 
