@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorite_bloc.dart';
+import 'package:trufi_app/blocs/favorites_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_map.dart';
-import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
@@ -260,13 +261,22 @@ class _SuggestionList extends StatelessWidget {
               ),
             );
           }
+          FavoritesBloc favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
           return SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final TrufiLocation value = snapshot.data[index];
-              return _buildItem(theme, () => _onSelectedTrufiLocation(value),
-                  iconData, value.description,
-                  trailing: isFavoritable ? FavoriteButton(value) : null);
-            }, childCount: snapshot.data.length),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final TrufiLocation value = snapshot.data[index];
+                return _buildItem(theme, () => _onSelectedTrufiLocation(value),
+                    iconData, value.description,
+                    trailing: isFavoritable
+                        ? FavoriteButton(
+                            location: value,
+                            favoritesStream: favoritesBloc.outFavorites,
+                          )
+                        : null);
+              },
+              childCount: snapshot.data.length,
+            ),
           );
         });
   }
@@ -359,28 +369,72 @@ class _SuggestionList extends StatelessWidget {
 }
 
 class FavoriteButton extends StatefulWidget {
-  final TrufiLocation location;
+  FavoriteButton({
+    Key key,
+    this.location,
+    @required this.favoritesStream,
+  }) : super(key: key);
 
-  FavoriteButton(this.location);
+  final TrufiLocation location;
+  final Stream<List<TrufiLocation>> favoritesStream;
 
   @override
   FavoriteButtonState createState() => FavoriteButtonState();
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
+  FavoriteBloc _bloc;
+
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBloc();
+  }
+
+  @override
+  void didUpdateWidget(FavoriteButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _disposeBloc();
+    _createBloc();
+  }
+
+  @override
+  void dispose() {
+    _disposeBloc();
+    super.dispose();
+  }
+
+  void _createBloc() {
+    _bloc = FavoriteBloc(widget.location);
+    _subscription = widget.favoritesStream.listen(_bloc.inFavorites.add);
+  }
+
+  void _disposeBloc() {
+    _subscription.cancel();
+    _bloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool _isFavorite = Favorites.instance.contains(widget.location);
-    return GestureDetector(
-      onTap: () {
-        if (_isFavorite) {
-          Favorites.instance.remove(widget.location);
+    print("moin?");
+    final FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    return StreamBuilder(
+      stream: _bloc.outIsFavorite,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.data) {
+          return GestureDetector(
+            onTap: () => bloc.inRemoveFavorite.add(widget.location),
+            child: Icon(Icons.favorite),
+          );
         } else {
-          Favorites.instance.add(widget.location);
+          return GestureDetector(
+            onTap: () => bloc.inAddFavorite.add(widget.location),
+            child: Icon(Icons.favorite_border),
+          );
         }
-        setState(() {});
       },
-      child: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border),
     );
   }
 }

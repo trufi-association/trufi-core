@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -16,6 +17,9 @@ class LocationStorage {
   final List<TrufiLocation> _locations;
 
   LocationStorage(this._file, this._locations);
+
+  UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
+      UnmodifiableListView(_locations);
 
   Future<List<TrufiLocation>> fetchLocations() async {
     var locations = _locations.toList();
