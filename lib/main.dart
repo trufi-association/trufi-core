@@ -101,6 +101,7 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
       new DrawerItem(
           TrufiLocalizations.of(context).connections, Icons.linear_scale),
       new DrawerItem(TrufiLocalizations.of(context).about, Icons.info),
+      new DrawerItem(TrufiLocalizations.of(context).feedback, Icons.create)
     ];
     drawerOptions.clear();
     for (var i = 0; i < drawerItems.length; i++) {
@@ -285,7 +286,7 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
       case 0:
         return new PlanFragment(plan);
       case 1:
-        return new FirstFragment();
+        return new AboutFragment();
       default:
         return new Text("Error");
     }
