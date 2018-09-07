@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:rxdart/rxdart.dart';
@@ -18,7 +17,7 @@ class FavoritesBloc implements BlocBase {
   LocationStorage _favorites;
 
   void _init() async {
-    File file = await localFile("location_search_history.json");
+    File file = await localFile("location_search_favorites.json");
     List<TrufiLocation> locations = await readStorage(file);
     _favorites = LocationStorage(file, locations);
     _notify();
