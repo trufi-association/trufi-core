@@ -36,6 +36,7 @@ class TrufiLocalizations {
   static const String InstructionFor = "instruction_for";
   static const String Connections = "connection";
   static const String About = "about";
+  static const String Feedback = "feedback";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -61,7 +62,8 @@ class TrufiLocalizations {
       InstructionTo: 'to',
       InstructionFor: 'for',
       Connections: 'Connections',
-      About: 'About'
+      About: 'About',
+      Feedback: 'Feedback'
     },
     'es': {
       Title: 'TrufiApp',
@@ -109,7 +111,8 @@ class TrufiLocalizations {
       InstructionTo: 'zur',
       InstructionFor: 'für',
       Connections: 'Verbindungen',
-      About: 'Über'
+      About: 'Über',
+      Feedback: 'Feedback'
     },
   };
 
@@ -203,6 +206,10 @@ class TrufiLocalizations {
 
   String get about {
     return _localizedValues[locale.languageCode][About];
+  }
+
+  String get feedback {
+    return _localizedValues[locale.languageCode][Feedback];
   }
 }
 
