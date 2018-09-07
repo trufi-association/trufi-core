@@ -7,8 +7,8 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_storage.dart';
 
-class FavoritesBloc implements BlocBase {
-  FavoritesBloc() {
+class FavoriteLocationsBloc implements BlocBase {
+  FavoriteLocationsBloc() {
     _addFavoriteController.listen(_handleAddFavorite);
     _removeFavoriteController.listen(_handleRemoveFavorite);
     _init();

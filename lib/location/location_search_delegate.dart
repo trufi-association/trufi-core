@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorite_bloc.dart';
-import 'package:trufi_app/blocs/favorites_bloc.dart';
+import 'package:trufi_app/blocs/favorite_location_bloc.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_history.dart';
@@ -262,7 +262,8 @@ class _SuggestionList extends StatelessWidget {
               ),
             );
           }
-          FavoritesBloc favoritesBloc = BlocProvider.of<FavoritesBloc>(context);
+          FavoriteLocationsBloc favoriteLocationsBloc =
+              BlocProvider.of<FavoriteLocationsBloc>(context);
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -275,7 +276,7 @@ class _SuggestionList extends StatelessWidget {
                   trailing: isFavoritable
                       ? FavoriteButton(
                           location: value,
-                          favoritesStream: favoritesBloc.outFavorites,
+                          favoritesStream: favoriteLocationsBloc.outFavorites,
                         )
                       : null,
                 );
@@ -388,7 +389,7 @@ class FavoriteButton extends StatefulWidget {
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
-  FavoriteBloc _bloc;
+  FavoriteLocationBloc _bloc;
 
   StreamSubscription _subscription;
 
@@ -412,7 +413,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
   }
 
   void _createBloc() {
-    _bloc = FavoriteBloc(widget.location);
+    _bloc = FavoriteLocationBloc(widget.location);
     _subscription = widget.favoritesStream.listen(_bloc.inFavorites.add);
   }
 
@@ -423,7 +424,8 @@ class FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    final FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    final FavoriteLocationsBloc bloc =
+        BlocProvider.of<FavoriteLocationsBloc>(context);
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {

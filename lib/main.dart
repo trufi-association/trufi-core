@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorites_bloc.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_search_history.dart';
@@ -21,8 +21,8 @@ import 'package:trufi_app/trufi_models.dart';
 void main() {
   runApp(BlocProvider<LocationBloc>(
     bloc: LocationBloc(),
-    child: BlocProvider<FavoritesBloc>(
-      bloc: FavoritesBloc(),
+    child: BlocProvider<FavoriteLocationsBloc>(
+      bloc: FavoriteLocationsBloc(),
       child: TrufiApp(),
     ),
   ));

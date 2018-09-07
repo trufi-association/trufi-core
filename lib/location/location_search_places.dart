@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorites_bloc.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class Places {
@@ -25,7 +25,8 @@ class Places {
 
   Future<List<TrufiLocation>> fetchLocations(
       BuildContext context, String query) async {
-    FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    FavoriteLocationsBloc bloc =
+        BlocProvider.of<FavoriteLocationsBloc>(context);
     query = query.toLowerCase();
     var locations = query.isEmpty
         ? _locations.toList()
