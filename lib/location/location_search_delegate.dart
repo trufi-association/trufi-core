@@ -119,7 +119,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         theme,
-        History.instance.fetchLocationsWithLimit(5),
+        History.instance.fetchLocationsWithLimit(context, 5),
         Icons.history,
         true,
       ));
@@ -134,7 +134,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         theme,
-        api.fetchLocations(query),
+        api.fetchLocations(context, query),
         Icons.location_on,
         true,
       ));
@@ -149,7 +149,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(
       context,
       theme,
-      Places.instance.fetchLocations(query),
+      Places.instance.fetchLocations(context, query),
       Icons.location_on,
       true,
     ));
@@ -220,11 +220,12 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildFutureBuilder(
-      BuildContext context,
-      ThemeData theme,
-      Future<List<TrufiLocation>> future,
-      IconData iconData,
-      bool isFavoritable) {
+    BuildContext context,
+    ThemeData theme,
+    Future<List<TrufiLocation>> future,
+    IconData iconData,
+    bool isFavoritable,
+  ) {
     return FutureBuilder(
         future: future,
         builder: (BuildContext context,
@@ -266,14 +267,18 @@ class _SuggestionList extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final TrufiLocation value = snapshot.data[index];
-                return _buildItem(theme, () => _onSelectedTrufiLocation(value),
-                    iconData, value.description,
-                    trailing: isFavoritable
-                        ? FavoriteButton(
-                            location: value,
-                            favoritesStream: favoritesBloc.outFavorites,
-                          )
-                        : null);
+                return _buildItem(
+                  theme,
+                  () => _onSelectedTrufiLocation(value),
+                  iconData,
+                  value.description,
+                  trailing: isFavoritable
+                      ? FavoriteButton(
+                          location: value,
+                          favoritesStream: favoritesBloc.outFavorites,
+                        )
+                      : null,
+                );
               },
               childCount: snapshot.data.length,
             ),

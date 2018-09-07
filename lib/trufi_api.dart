@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:trufi_app/location/location_search_favorites.dart';
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorites_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
@@ -12,9 +14,9 @@ const String SearchPath = '/otp/routers/default/geocode';
 const String PlanPath = 'otp/routers/default/plan';
 
 class FetchRequestException implements Exception {
-  final Exception _innerException;
-
   FetchRequestException(this._innerException);
+
+  final Exception _innerException;
 
   String toString() {
     return "Fetch request exception caused by: ${_innerException.toString()}";
@@ -22,9 +24,9 @@ class FetchRequestException implements Exception {
 }
 
 class FetchResponseException implements Exception {
-  final String _message;
-
   FetchResponseException(this._message);
+
+  final String _message;
 
   @override
   String toString() {
@@ -32,7 +34,10 @@ class FetchResponseException implements Exception {
   }
 }
 
-Future<List<TrufiLocation>> fetchLocations(String query) async {
+Future<List<TrufiLocation>> fetchLocations(
+  BuildContext context,
+  String query,
+) async {
   Uri request = Uri.https(Endpoint, SearchPath, {
     "query": query,
     "autocomplete": "false",
@@ -41,10 +46,15 @@ Future<List<TrufiLocation>> fetchLocations(String query) async {
   });
   final response = await fetchRequest(request);
   if (response.statusCode == 200) {
-    List<TrufiLocation> locations =
-        await compute(_parseLocations, utf8.decode(response.bodyBytes));
-    locations.sort(sortByFavorite);
-    return locations;
+    List<TrufiLocation> locations = await compute(
+      _parseLocations,
+      utf8.decode(response.bodyBytes),
+    );
+    FavoritesBloc bloc = BlocProvider.of<FavoritesBloc>(context);
+    return bloc.outFavorites.last.then<List<TrufiLocation>>((favorites) {
+      locations.sort((a, b) => sortByFavorite(a, b, favorites));
+      return locations;
+    });
   } else {
     throw FetchResponseException('Failed to load locations');
   }
