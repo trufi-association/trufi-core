@@ -43,7 +43,7 @@ class LocationStorage {
   ) async {
     FavoriteLocationsBloc bloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
-    locations.sort((a, b) => sortByFavorite(a, b, bloc.favorites));
+    locations.sort((a, b) => sortByFavoriteLocations(a, b, bloc.favorites));
     return locations;
   }
 

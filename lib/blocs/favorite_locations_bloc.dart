@@ -15,7 +15,7 @@ class FavoriteLocationsBloc extends LocationsBloc {
   List<TrufiLocation> get favorites => locations;
 }
 
-int sortByFavorite(
+int sortByFavoriteLocations(
   TrufiLocation a,
   TrufiLocation b,
   List<TrufiLocation> favorites,
