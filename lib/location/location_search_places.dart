@@ -33,7 +33,7 @@ class Places {
         : _locations
             .where((l) => l.description.toLowerCase().contains(query))
             .toList();
-    locations.sort((a, b) => sortByFavorite(a, b, bloc.favorites));
+    locations.sort((a, b) => sortByFavoriteLocations(a, b, bloc.favorites));
     return locations;
   }
 }
