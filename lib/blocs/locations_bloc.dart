@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -71,6 +72,14 @@ class LocationsBloc implements BlocBase {
   // Getter
 
   List<TrufiLocation> get locations => _locations.unmodifiableListView;
+
+  // Fetch
+
+  Future<List<TrufiLocation>> fetch(BuildContext context) =>
+      _locations.fetchLocations(context);
+
+  Future<List<TrufiLocation>> fetchWithLimit(BuildContext context, int limit) =>
+      _locations.fetchLocationsWithLimit(context, limit);
 }
 
 int sortByLocations(
