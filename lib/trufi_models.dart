@@ -200,6 +200,7 @@ class PlanItineraryLeg {
     this.points,
     this.mode,
     this.route,
+    this.carType,
     this.distance,
     this.duration,
     this.toName,
@@ -208,6 +209,7 @@ class PlanItineraryLeg {
   final String points;
   final String mode;
   final String route;
+  final String carType;
   final double distance;
   final double duration;
   final String toName;
@@ -217,6 +219,7 @@ class PlanItineraryLeg {
       points: json['legGeometry']['points'],
       mode: json['mode'],
       route: json['route'],
+      carType: json['routeLongName'],
       distance: json['distance'],
       duration: json['duration'],
       toName: json['to']['name'],
@@ -236,9 +239,19 @@ class PlanItineraryLeg {
       sb.write(
           "${localizations.instructionWalk} $distanceString ${localizations.instructionTo} $destinationString ($durationString)");
     } else if (mode == 'BUS') {
+      String carTypeString = '';
+      String carTypeResult = carType.toLowerCase();
+      if (carTypeResult.contains('trufi')) {
+        carTypeString = localizations.instructionRideTrufi;
+      } else if (carTypeResult.contains('micro') || carTypeResult.contains('minibus')){
+        carTypeString = localizations.instructionRideMicro;
+      } else {
+        carTypeString = localizations.instructionRideBus;
+      }
       sb.write(
-          "${localizations.instructionBus} $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
+          "${localizations.instructionRide} $carTypeString $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
     }
+    print(sb.toString());
     return sb.toString();
   }
 }

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
+typedef OnTabCallback = void Function();
+
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
+  final OnTabCallback onTabCallback;
 
-  PlanItineraryTabPages(this.tabController, this.itineraries)
+  PlanItineraryTabPages(
+      this.tabController, this.itineraries, this.onTabCallback)
       : assert(itineraries != null && itineraries.length > 0);
 
   @override
@@ -28,6 +32,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
           Expanded(
             child: Column(
               children: <Widget>[
+                GestureDetector(
+                    onTapDown: _onTabDownDetected,
+                    child: Icon(Icons.keyboard_arrow_down)),
                 Expanded(
                   child: TabBarView(
                     controller: widget.tabController,
@@ -71,14 +78,26 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         padding: EdgeInsets.all(8.0),
         itemBuilder: (BuildContext context, int index) {
           PlanItineraryLeg leg = itinerary.legs[index];
+          IconData iconBus = Icons.directions_bus;
+          if (leg.mode == 'BUS') {
+            String carTypeString = leg.carType.toLowerCase();
+            print(carTypeString);
+            if (carTypeString.contains('trufi')) {
+              iconBus = Icons.local_taxi;
+            } else if (carTypeString.contains('micro') ||
+                carTypeString.contains('minibus')) {
+              iconBus = Icons.airport_shuttle;
+            } else {
+              // use bus icon
+            }
+          }
+
           return Row(
             children: <Widget>[
-              Icon(leg.mode == 'WALK'
-                  ? Icons.directions_walk
-                  : Icons.directions_bus),
+              Icon(leg.mode == 'WALK' ? Icons.directions_walk : iconBus),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
                   child: RichText(
                     text: TextSpan(
                       style: theme.textTheme.body2,
@@ -93,5 +112,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         itemCount: itinerary.legs.length,
       ),
     );
+  }
+
+  void _onTabDownDetected(TapDownDetails details) {
+    widget.onTabCallback();
   }
 }
