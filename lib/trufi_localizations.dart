@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show SynchronousFuture;
+import 'package:flutter/material.dart';
 
 class TrufiLocalizations {
   TrufiLocalizations(this.locale);
@@ -15,7 +15,8 @@ class TrufiLocalizations {
   static const String Title = "title";
   static const String CommonDestination = "common_destination";
   static const String CommonOrigin = "common_origin";
-  static const String CommonNoInternetConnection = "common_no_internet_connection";
+  static const String CommonNoInternetConnection =
+      "common_no_internet_connection";
   static const String CommonFailLoadingData = "common_fail_loading_data";
   static const String CommonUnknownError = "common_unknown_error";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
@@ -33,7 +34,9 @@ class TrufiLocalizations {
   static const String InstructionBus = "instruction_bus_ride";
   static const String InstructionTo = "instruction_to";
   static const String InstructionFor = "instruction_for";
-
+  static const String Connections = "connection";
+  static const String About = "about";
+  static const String Feedback = "feedback";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -58,6 +61,9 @@ class TrufiLocalizations {
       InstructionBus: 'Ride bus',
       InstructionTo: 'to',
       InstructionFor: 'for',
+      Connections: 'Connections',
+      About: 'About',
+      Feedback: 'Feedback'
     },
     'es': {
       Title: 'TrufiApp',
@@ -104,6 +110,9 @@ class TrufiLocalizations {
       InstructionBus: 'Fahren Sie mit dem Bus',
       InstructionTo: 'zur',
       InstructionFor: 'für',
+      Connections: 'Verbindungen',
+      About: 'Über',
+      Feedback: 'Feedback'
     },
   };
 
@@ -189,6 +198,18 @@ class TrufiLocalizations {
 
   String get mapTapToChoose {
     return _localizedValues[locale.languageCode][MapSectionTapToChoose];
+  }
+
+  String get connections {
+    return _localizedValues[locale.languageCode][Connections];
+  }
+
+  String get about {
+    return _localizedValues[locale.languageCode][About];
+  }
+
+  String get feedback {
+    return _localizedValues[locale.languageCode][Feedback];
   }
 }
 
