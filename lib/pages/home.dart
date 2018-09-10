@@ -179,7 +179,9 @@ class HomePageState extends State<HomePage>
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-        return MapControllerPage();
+        return MapControllerPage(
+          initialPosition: snapshot.data,
+        );
       },
     );
   }
