@@ -117,36 +117,39 @@ class MapControllerPageState extends State<MapControllerPage> {
     double buttonMargin = 20.0;
     double buttonPadding = 10.0;
     double buttonSize = 50.0;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned.fill(
-          child: FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              zoom: 5.0,
-              maxZoom: 19.0,
-              minZoom: 1.0,
-              onTap: _handleOnMapTap,
-            ),
-            layers: <LayerOptions>[
-              mapBoxTileLayerOptions(),
-              MarkerLayerOptions(markers: _backgroundMarkers),
-              PolylineLayerOptions(polylines: _polylines),
-              PolylineLayerOptions(polylines: _selectedPolylines),
-              MarkerLayerOptions(markers: _foregroundMarkers),
-              MarkerLayerOptions(markers: _selectedMarkers),
-            ],
+    List<Widget> children = <Widget>[];
+    children.add(
+      Positioned.fill(
+        child: FlutterMap(
+          mapController: mapController,
+          options: MapOptions(
+            zoom: 5.0,
+            maxZoom: 19.0,
+            minZoom: 1.0,
+            onTap: _handleOnMapTap,
           ),
+          layers: <LayerOptions>[
+            mapBoxTileLayerOptions(),
+            MarkerLayerOptions(markers: _backgroundMarkers),
+            PolylineLayerOptions(polylines: _polylines),
+            PolylineLayerOptions(polylines: _selectedPolylines),
+            MarkerLayerOptions(markers: _foregroundMarkers),
+            MarkerLayerOptions(markers: _selectedMarkers),
+          ],
         ),
-        Positioned(
-          top: buttonMargin,
-          right: buttonMargin,
-          width: buttonSize,
-          height: buttonSize,
-          child:
-              _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
-        ),
+      ),
+    );
+    children.add(
+      Positioned(
+        top: buttonMargin,
+        right: buttonMargin,
+        width: buttonSize,
+        height: buttonSize,
+        child: _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
+      ),
+    );
+    if (_plan != null) {
+      children.add(
         Positioned(
           top: buttonMargin + buttonPadding + buttonSize,
           right: buttonMargin,
@@ -154,8 +157,9 @@ class MapControllerPageState extends State<MapControllerPage> {
           height: buttonSize,
           child: _buildButton(Icons.crop, _handleOnCropButtonTapped),
         ),
-      ],
-    );
+      );
+    }
+    return Stack(fit: StackFit.expand, children: children);
   }
 
   Widget _buildButton(IconData iconData, Function onTap) {
