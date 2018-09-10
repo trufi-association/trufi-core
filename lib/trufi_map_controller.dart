@@ -108,8 +108,13 @@ class MapControllerPageState extends State<MapControllerPage> {
         mapController.fitBounds(bounds);
         _needsCameraUpdate = false;
       } else if (widget.initialPosition != null) {
-        mapController.move(widget.initialPosition, 15.0);
-        _needsCameraUpdate = false;
+        try {
+          mapController.move(widget.initialPosition, 15.0);
+          _needsCameraUpdate = false;
+        } catch (e) {
+          // TODO: In some cases the map throws an exception on an early move call
+          print(e);
+        }
       }
     }
 
