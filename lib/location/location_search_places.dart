@@ -25,7 +25,7 @@ class Places {
 
   Future<List<TrufiLocation>> fetchLocations(
       BuildContext context, String query) async {
-    FavoriteLocationsBloc bloc =
+    final FavoriteLocationsBloc favoriteLocationsBloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
     query = query.toLowerCase();
     var locations = query.isEmpty
@@ -33,7 +33,9 @@ class Places {
         : _locations
             .where((l) => l.description.toLowerCase().contains(query))
             .toList();
-    locations.sort((a, b) => sortByFavoriteLocations(a, b, bloc.favorites));
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
     return locations;
   }
 }
