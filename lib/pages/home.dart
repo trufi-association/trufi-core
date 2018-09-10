@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_bloc.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/drawer.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_search_places.dart';
@@ -174,9 +174,10 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildBodyEmpty(BuildContext context) {
-    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
     return StreamBuilder<LatLng>(
-      stream: locationBloc.outLocationUpdate,
+      stream: locationProviderBloc.outLocationUpdate,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         return MapControllerPage();
       },
@@ -224,7 +225,8 @@ class HomePageState extends State<HomePage>
   }
 
   void _fetchPlan() async {
-    final LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
+    final LocationProviderBloc locationBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
     if (toPlace != null) {
       if (fromPlace == null) {
         locationBloc.outLocationUpdate.first.then((location) {

@@ -3,17 +3,17 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_bloc.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
 class MapControllerPage extends StatefulWidget {
-  final LatLng initialPosition;
-  final ValueChanged<LatLng> onSelected;
-
   MapControllerPage(
     this.initialPosition, {
     this.onSelected,
   }) : assert(initialPosition != null);
+
+  final LatLng initialPosition;
+  final ValueChanged<LatLng> onSelected;
 
   @override
   MapControllerPageState createState() => MapControllerPageState();
@@ -34,12 +34,13 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   Widget build(BuildContext context) {
-    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
     return Column(
       children: [
         Expanded(
           child: StreamBuilder<LatLng>(
-            stream: locationBloc.outLocationUpdate,
+            stream: locationProviderBloc.outLocationUpdate,
             initialData: widget.initialPosition,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
               List<Marker> markers = <Marker>[chooseOnMapMarker];
@@ -77,13 +78,13 @@ class MapControllerPageState extends State<MapControllerPage> {
     );
   }
 
-  _handleOnMapTap(LatLng point) {
+  void _handleOnMapTap(LatLng point) {
     setState(() {
       chooseOnMapMarker = buildToMarker(point);
     });
   }
 
-  _handleOnOKPressed(BuildContext context) {
+  void _handleOnOKPressed(BuildContext context) {
     if (widget.onSelected != null) {
       widget.onSelected(chooseOnMapMarker.point);
     }

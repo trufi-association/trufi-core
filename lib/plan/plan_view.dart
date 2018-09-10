@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_bloc.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
@@ -36,13 +36,13 @@ class PlanViewState extends State<PlanView>
 
   @override
   Widget build(BuildContext context) {
-    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
+    LocationProviderBloc locationProviderBloc = BlocProvider.of<LocationProviderBloc>(context);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
         Positioned.fill(
           child: StreamBuilder<LatLng>(
-            stream: locationBloc.outLocationUpdate,
+            stream: locationProviderBloc.outLocationUpdate,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
               return MapControllerPage(
                 plan: widget.plan,

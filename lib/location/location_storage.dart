@@ -41,9 +41,11 @@ class LocationStorage {
     List<TrufiLocation> locations,
     BuildContext context,
   ) async {
-    FavoriteLocationsBloc bloc =
+    final FavoriteLocationsBloc favoriteLocationsBloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
-    locations.sort((a, b) => sortByFavoriteLocations(a, b, bloc.favorites));
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
     return locations;
   }
 

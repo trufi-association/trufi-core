@@ -6,6 +6,12 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class FavoriteLocationBloc implements BlocBase {
+  FavoriteLocationBloc(TrufiLocation location) {
+    _favoritesController.stream
+        .map((locations) => locations.any((TrufiLocation l) => l == location))
+        .listen((isFavorite) => _isFavoriteController.add(isFavorite));
+  }
+
   // IsFavorite
   final BehaviorSubject<bool> _isFavoriteController = BehaviorSubject<bool>();
 
@@ -16,14 +22,6 @@ class FavoriteLocationBloc implements BlocBase {
       StreamController<List<TrufiLocation>>();
 
   Sink<List<TrufiLocation>> get inFavorites => _favoritesController.sink;
-
-  // Constructor
-
-  FavoriteLocationBloc(TrufiLocation location) {
-    _favoritesController.stream
-        .map((locations) => locations.any((TrufiLocation l) => l == location))
-        .listen((isFavorite) => _isFavoriteController.add(isFavorite));
-  }
 
   // Dispose
 
