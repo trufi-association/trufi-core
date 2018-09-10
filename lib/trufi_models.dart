@@ -251,7 +251,6 @@ class PlanItineraryLeg {
       sb.write(
           "${localizations.instructionRide} $carTypeString $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
     }
-    print(sb.toString());
     return sb.toString();
   }
 }

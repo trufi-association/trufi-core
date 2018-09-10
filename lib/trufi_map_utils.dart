@@ -43,8 +43,21 @@ Marker buildYourLocationMarker(LatLng point) {
   return buildMarker(point, Icons.my_location, AnchorPos.center, Colors.blue);
 }
 
-Marker buildBusMarker(LatLng point, String route, Color color,
+Marker buildBusMarker(LatLng point, String route, Color color, String carType,
     {Function onTap}) {
+  Icon iconCarType = Icon(Icons.directions_bus, color: Colors.white);
+
+  if (carType.contains('trufi')) {
+    iconCarType = Icon(Icons.local_taxi, color: Colors.white);
+  } else if (carType.contains('micro')) {
+    iconCarType = Icon(Icons.airport_shuttle, color: Colors.white);
+  } else if (carType.contains('minibus')) {
+    // TODO: change to proper icon!!
+    iconCarType = Icon(Icons.train, color: Colors.white);
+  } else {
+    // use bus icon
+  }
+
   return new Marker(
     width: 50.0,
     height: 30.0,
@@ -62,10 +75,7 @@ Marker buildBusMarker(LatLng point, String route, Color color,
               fit: BoxFit.scaleDown,
               child: Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.directions_bus,
-                    color: Colors.white,
-                  ),
+                  iconCarType,
                   Text(route, style: TextStyle(color: Colors.white)),
                 ],
               ),
@@ -112,6 +122,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
               midPointForPolyline(polyline),
               leg.route,
               isSelected ? Colors.green : Colors.grey,
+              leg.carType.toLowerCase(),
               onTap: () => onTap(itinerary),
             )
           : null;
