@@ -50,12 +50,12 @@ Future<List<TrufiLocation>> fetchLocations(
       _parseLocations,
       utf8.decode(response.bodyBytes),
     );
-    FavoriteLocationsBloc bloc =
+    final FavoriteLocationsBloc favoriteLocationsBloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
-    return bloc.outFavorites.last.then<List<TrufiLocation>>((favorites) {
-      locations.sort((a, b) => sortByFavoriteLocations(a, b, favorites));
-      return locations;
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
+    return locations;
   } else {
     throw FetchResponseException('Failed to load locations');
   }

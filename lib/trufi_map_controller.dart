@@ -8,17 +8,17 @@ import 'package:trufi_app/trufi_map_utils.dart';
 typedef void OnSelected(PlanItinerary itinerary);
 
 class MapControllerPage extends StatefulWidget {
-  final Plan plan;
-  final LatLng initialPosition;
-  final OnSelected onSelected;
-  final PlanItinerary selectedItinerary;
-
   MapControllerPage({
     this.plan,
     this.initialPosition,
     this.onSelected,
     this.selectedItinerary,
   });
+
+  final Plan plan;
+  final LatLng initialPosition;
+  final OnSelected onSelected;
+  final PlanItinerary selectedItinerary;
 
   @override
   MapControllerPageState createState() {
@@ -108,8 +108,13 @@ class MapControllerPageState extends State<MapControllerPage> {
         mapController.fitBounds(bounds);
         _needsCameraUpdate = false;
       } else if (widget.initialPosition != null) {
-        mapController.move(widget.initialPosition, 15.0);
-        _needsCameraUpdate = false;
+        try {
+          mapController.move(widget.initialPosition, 15.0);
+          _needsCameraUpdate = false;
+        } catch (e) {
+          // TODO: In some cases the map throws an exception on an early move call
+          print(e);
+        }
       }
     }
 
@@ -117,36 +122,39 @@ class MapControllerPageState extends State<MapControllerPage> {
     double buttonMargin = 20.0;
     double buttonPadding = 10.0;
     double buttonSize = 50.0;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Positioned.fill(
-          child: FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              zoom: 5.0,
-              maxZoom: 19.0,
-              minZoom: 1.0,
-              onTap: _handleOnMapTap,
-            ),
-            layers: <LayerOptions>[
-              mapBoxTileLayerOptions(),
-              MarkerLayerOptions(markers: _backgroundMarkers),
-              PolylineLayerOptions(polylines: _polylines),
-              PolylineLayerOptions(polylines: _selectedPolylines),
-              MarkerLayerOptions(markers: _foregroundMarkers),
-              MarkerLayerOptions(markers: _selectedMarkers),
-            ],
+    List<Widget> children = <Widget>[];
+    children.add(
+      Positioned.fill(
+        child: FlutterMap(
+          mapController: mapController,
+          options: MapOptions(
+            zoom: 5.0,
+            maxZoom: 19.0,
+            minZoom: 1.0,
+            onTap: _handleOnMapTap,
           ),
+          layers: <LayerOptions>[
+            mapBoxTileLayerOptions(),
+            MarkerLayerOptions(markers: _backgroundMarkers),
+            PolylineLayerOptions(polylines: _polylines),
+            PolylineLayerOptions(polylines: _selectedPolylines),
+            MarkerLayerOptions(markers: _foregroundMarkers),
+            MarkerLayerOptions(markers: _selectedMarkers),
+          ],
         ),
-        Positioned(
-          top: buttonMargin,
-          right: buttonMargin,
-          width: buttonSize,
-          height: buttonSize,
-          child:
-              _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
-        ),
+      ),
+    );
+    children.add(
+      Positioned(
+        top: buttonMargin,
+        right: buttonMargin,
+        width: buttonSize,
+        height: buttonSize,
+        child: _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
+      ),
+    );
+    if (_plan != null) {
+      children.add(
         Positioned(
           top: buttonMargin + buttonPadding + buttonSize,
           right: buttonMargin,
@@ -154,8 +162,9 @@ class MapControllerPageState extends State<MapControllerPage> {
           height: buttonSize,
           child: _buildButton(Icons.crop, _handleOnCropButtonTapped),
         ),
-      ],
-    );
+      );
+    }
+    return Stack(fit: StackFit.expand, children: children);
   }
 
   Widget _buildButton(IconData iconData, Function onTap) {
