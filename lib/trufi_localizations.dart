@@ -87,6 +87,9 @@ class TrufiLocalizations {
       InstructionBus: 'Toma el bus',
       InstructionTo: 'hacia',
       InstructionFor: 'por',
+      Connections: 'Conexiones',
+      About: 'Sobre nosotros',
+      Feedback: 'Feedback'
     },
     'de': {
       Title: 'TrufiApp',
