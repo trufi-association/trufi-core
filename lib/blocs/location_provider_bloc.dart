@@ -32,6 +32,10 @@ class LocationProviderBloc implements BlocBase {
     _locationProvider.dispose();
     _locationUpdateController.close();
   }
+
+  // Getter
+
+  LatLng get location => _locationProvider.location;
 }
 
 class LocationProvider {
