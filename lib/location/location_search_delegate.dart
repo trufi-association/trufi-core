@@ -7,9 +7,9 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_map.dart';
-import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
@@ -42,6 +42,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    HistoryLocationsBloc bloc = BlocProvider.of<HistoryLocationsBloc>(context);
     return _SuggestionList(
       query: query,
       onSelected: (TrufiLocation suggestion) {
@@ -52,6 +53,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         result = location;
         showResults(context);
       },
+      bloc: bloc,
     );
   }
 
@@ -92,15 +94,23 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 }
 
 class _SuggestionList extends StatelessWidget {
+  final HistoryLocationsBloc bloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
 
-  _SuggestionList({this.query, this.onSelected, this.onMapTapped});
+  _SuggestionList({
+    this.query,
+    this.onSelected,
+    this.onMapTapped,
+    @required this.bloc,
+  });
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    HistoryLocationsBloc historyLocationsBloc =
+        BlocProvider.of<HistoryLocationsBloc>(context);
     List<Widget> slivers = List();
     //
     // Alternatives
@@ -119,7 +129,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         theme,
-        History.instance.fetchLocationsWithLimit(context, 5),
+        historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
         true,
       ));
@@ -354,7 +364,7 @@ class _SuggestionList extends StatelessWidget {
 
   void _onSelectedTrufiLocation(TrufiLocation value) {
     if (value != null) {
-      History.instance.add(value);
+      bloc.inAddLocation.add(value);
       if (onSelected != null) {
         onSelected(value);
       }
