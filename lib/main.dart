@@ -4,15 +4,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_bloc.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 void main() {
-  runApp(BlocProvider<LocationBloc>(
-    bloc: LocationBloc(),
+  runApp(BlocProvider<LocationProviderBloc>(
+    bloc: LocationProviderBloc(),
     child: BlocProvider<FavoriteLocationsBloc>(
       bloc: FavoriteLocationsBloc(),
       child: BlocProvider<HistoryLocationsBloc>(
@@ -49,4 +49,3 @@ class TrufiApp extends StatelessWidget {
     );
   }
 }
-

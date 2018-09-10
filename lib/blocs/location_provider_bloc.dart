@@ -8,7 +8,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/composite_subscription.dart';
 
-class LocationBloc implements BlocBase {
+class LocationProviderBloc implements BlocBase {
+  LocationProviderBloc() {
+    _locationProvider = LocationProvider(onLocationChanged: (location) {
+      _inLocationUpdate.add(location);
+    })
+      ..init();
+  }
+
   LocationProvider _locationProvider;
 
   BehaviorSubject<LatLng> _locationUpdateController =
@@ -18,12 +25,7 @@ class LocationBloc implements BlocBase {
 
   Stream<LatLng> get outLocationUpdate => _locationUpdateController.stream;
 
-  LocationBloc() {
-    _locationProvider = LocationProvider(onLocationChanged: (location) {
-      _inLocationUpdate.add(location);
-    })
-      ..init();
-  }
+  // Dispose
 
   @override
   void dispose() {
@@ -68,13 +70,13 @@ class LocationProvider {
     );
   }
 
-  _onLocationChanged(LatLng value) {
+  void _onLocationChanged(LatLng value) {
     if (onLocationChanged != null) {
       onLocationChanged(value);
     }
   }
 
-  _onLocationError(String error) {
+  void _onLocationError(String error) {
     if (onLocationError != null) {
       onLocationError(error);
     }
