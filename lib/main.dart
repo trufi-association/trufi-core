@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trufi_app/about_fragment.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -12,10 +13,9 @@ import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_search_places.dart';
-import 'package:trufi_app/plan/plan_view.dart';
+import 'package:trufi_app/plan_fragment.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 void main() {
@@ -59,6 +59,13 @@ class TrufiAppHome extends StatefulWidget {
   _TrufiAppHomeState createState() => _TrufiAppHomeState();
 }
 
+class DrawerItem {
+  String title;
+  IconData icon;
+
+  DrawerItem(this.title, this.icon);
+}
+
 class _TrufiAppHomeState extends State<TrufiAppHome>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -72,6 +79,10 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
   TrufiLocation fromPlace;
   TrufiLocation toPlace;
   Plan plan;
+
+  var drawerItems;
+  var drawerOptions = <Widget>[];
+  int _selectedDrawerIndex = 0;
 
   initState() {
     super.initState();
@@ -93,24 +104,45 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
 
   @override
   Widget build(BuildContext context) {
+    drawerItems = [
+      new DrawerItem(
+          TrufiLocalizations.of(context).connections, Icons.linear_scale),
+      new DrawerItem(TrufiLocalizations.of(context).about, Icons.info),
+      new DrawerItem(TrufiLocalizations.of(context).feedback, Icons.create)
+    ];
+    drawerOptions.clear();
+    for (var i = 0; i < drawerItems.length; i++) {
+      var d = drawerItems[i];
+      drawerOptions.add(new ListTile(
+        leading: new Icon(d.icon),
+        title: new Text(d.title),
+        selected: i == _selectedDrawerIndex,
+        onTap: () => _onSelectItem(i),
+      ));
+    }
+
     return Form(
       key: _formKey,
       child: Scaffold(
-        appBar: _buildAppBar(context),
-        body: _buildBody(Theme.of(context)),
-      ),
+          appBar: _buildAppBar(context),
+          body: _buildBody(Theme.of(context)),
+          drawer: _buildDrawer()),
     );
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return AppBar(
-      bottom: PreferredSize(
-        child: Container(),
-        preferredSize: Size.fromHeight(animation.value),
-      ),
-      flexibleSpace: _buildFormFields(context),
-      leading: _buildResetButton(),
-    );
+    if (_selectedDrawerIndex == 0) {
+      return AppBar(
+        bottom: PreferredSize(
+          child: Container(),
+          preferredSize: Size.fromHeight(animation.value),
+        ),
+        flexibleSpace: _buildFormFields(context),
+        leading: _buildResetButton(),
+      );
+    } else {
+      return AppBar();
+    }
   }
 
   Widget _buildFormFields(BuildContext context) {
@@ -184,36 +216,8 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
     return toPlace != null && controller.isCompleted;
   }
 
-  Widget _buildBody(ThemeData theme) {
-    PlanError error = plan?.error;
-    return Container(
-      child: error != null
-          ? _buildBodyError(error)
-          : plan != null ? PlanView(plan) : _buildBodyEmpty(),
-    );
-  }
-
-  Widget _buildBodyError(PlanError error) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Center(
-        child: Text(
-          error.message,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBodyEmpty() {
-    LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
-    return StreamBuilder<LatLng>(
-      stream: locationBloc.outLocationUpdate,
-      builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-        return MapControllerPage(
-          initialPosition: snapshot.data,
-        );
-      },
-    );
+  Widget _buildBody(ThemeData theme, {drawer}) {
+    return _getDrawerItemWidget(_selectedDrawerIndex);
   }
 
   void _reset() {
@@ -282,5 +286,37 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
         }
       }
     }
+  }
+
+  _getDrawerItemWidget(int pos) {
+    switch (pos) {
+      case 0:
+        return new PlanFragment(plan);
+      case 1:
+        return new AboutFragment();
+      default:
+        return new Text("Error");
+    }
+  }
+
+  _onSelectItem(int index) {
+    setState(() => _selectedDrawerIndex = index);
+    Navigator.of(context).pop(); // close the drawer
+  }
+
+  _buildDrawer() {
+    return new Drawer(
+        child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+          DrawerHeader(
+            child: Text(TrufiLocalizations.of(context).title),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          new Column(children: drawerOptions)
+        ]));
   }
 }
