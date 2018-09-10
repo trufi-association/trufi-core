@@ -8,9 +8,9 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan_view.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
@@ -23,7 +23,10 @@ void main() {
     bloc: LocationBloc(),
     child: BlocProvider<FavoriteLocationsBloc>(
       bloc: FavoriteLocationsBloc(),
-      child: TrufiApp(),
+      child: BlocProvider<HistoryLocationsBloc>(
+        bloc: HistoryLocationsBloc(),
+        child: TrufiApp(),
+      ),
     ),
   ));
 }
@@ -79,7 +82,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
         setState(() {});
       });
     Future.delayed(Duration.zero, () {
-      History.init();
       Places.init(this.context);
     });
   }
