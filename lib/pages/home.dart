@@ -177,7 +177,6 @@ class HomePageState extends State<HomePage>
     LocationBloc locationBloc = BlocProvider.of<LocationBloc>(context);
     return StreamBuilder<LatLng>(
       stream: locationBloc.outLocationUpdate,
-      initialData: LatLng(-17.0, -66.0),
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         return MapControllerPage();
       },
