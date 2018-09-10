@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorite_location_bloc.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_map.dart';
-import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
@@ -118,7 +119,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         theme,
-        History.instance.fetchLocationsWithLimit(5),
+        History.instance.fetchLocationsWithLimit(context, 5),
         Icons.history,
         true,
       ));
@@ -133,7 +134,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         theme,
-        api.fetchLocations(query),
+        api.fetchLocations(context, query),
         Icons.location_on,
         true,
       ));
@@ -148,7 +149,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(
       context,
       theme,
-      Places.instance.fetchLocations(query),
+      Places.instance.fetchLocations(context, query),
       Icons.location_on,
       true,
     ));
@@ -219,11 +220,12 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildFutureBuilder(
-      BuildContext context,
-      ThemeData theme,
-      Future<List<TrufiLocation>> future,
-      IconData iconData,
-      bool isFavoritable) {
+    BuildContext context,
+    ThemeData theme,
+    Future<List<TrufiLocation>> future,
+    IconData iconData,
+    bool isFavoritable,
+  ) {
     return FutureBuilder(
         future: future,
         builder: (BuildContext context,
@@ -260,13 +262,27 @@ class _SuggestionList extends StatelessWidget {
               ),
             );
           }
+          FavoriteLocationsBloc favoriteLocationsBloc =
+              BlocProvider.of<FavoriteLocationsBloc>(context);
           return SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final TrufiLocation value = snapshot.data[index];
-              return _buildItem(theme, () => _onSelectedTrufiLocation(value),
-                  iconData, value.description,
-                  trailing: isFavoritable ? FavoriteButton(value) : null);
-            }, childCount: snapshot.data.length),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final TrufiLocation value = snapshot.data[index];
+                return _buildItem(
+                  theme,
+                  () => _onSelectedTrufiLocation(value),
+                  iconData,
+                  value.description,
+                  trailing: isFavoritable
+                      ? FavoriteButton(
+                          location: value,
+                          favoritesStream: favoriteLocationsBloc.outFavorites,
+                        )
+                      : null,
+                );
+              },
+              childCount: snapshot.data.length,
+            ),
           );
         });
   }
@@ -359,28 +375,72 @@ class _SuggestionList extends StatelessWidget {
 }
 
 class FavoriteButton extends StatefulWidget {
-  final TrufiLocation location;
+  FavoriteButton({
+    Key key,
+    this.location,
+    @required this.favoritesStream,
+  }) : super(key: key);
 
-  FavoriteButton(this.location);
+  final TrufiLocation location;
+  final Stream<List<TrufiLocation>> favoritesStream;
 
   @override
   FavoriteButtonState createState() => FavoriteButtonState();
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
+  FavoriteLocationBloc _bloc;
+
+  StreamSubscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _createBloc();
+  }
+
+  @override
+  void didUpdateWidget(FavoriteButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _disposeBloc();
+    _createBloc();
+  }
+
+  @override
+  void dispose() {
+    _disposeBloc();
+    super.dispose();
+  }
+
+  void _createBloc() {
+    _bloc = FavoriteLocationBloc(widget.location);
+    _subscription = widget.favoritesStream.listen(_bloc.inFavorites.add);
+  }
+
+  void _disposeBloc() {
+    _subscription.cancel();
+    _bloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool _isFavorite = Favorites.instance.contains(widget.location);
-    return GestureDetector(
-      onTap: () {
-        if (_isFavorite) {
-          Favorites.instance.remove(widget.location);
+    final FavoriteLocationsBloc bloc =
+        BlocProvider.of<FavoriteLocationsBloc>(context);
+    return StreamBuilder(
+      stream: _bloc.outIsFavorite,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.data == true) {
+          return GestureDetector(
+            onTap: () => bloc.inRemoveFavorite.add(widget.location),
+            child: Icon(Icons.favorite),
+          );
         } else {
-          Favorites.instance.add(widget.location);
+          return GestureDetector(
+            onTap: () => bloc.inAddFavorite.add(widget.location),
+            child: Icon(Icons.favorite_border),
+          );
         }
-        setState(() {});
       },
-      child: Icon(_isFavorite ? Icons.favorite : Icons.favorite_border),
     );
   }
 }

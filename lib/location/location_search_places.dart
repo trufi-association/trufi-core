@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/location/location_search_favorites.dart';
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class Places {
@@ -22,14 +23,17 @@ class Places {
 
   factory Places() => _instance;
 
-  Future<List<TrufiLocation>> fetchLocations(String query) async {
+  Future<List<TrufiLocation>> fetchLocations(
+      BuildContext context, String query) async {
+    FavoriteLocationsBloc bloc =
+        BlocProvider.of<FavoriteLocationsBloc>(context);
     query = query.toLowerCase();
     var locations = query.isEmpty
         ? _locations.toList()
         : _locations
             .where((l) => l.description.toLowerCase().contains(query))
             .toList();
-    locations.sort(sortByFavorite);
+    locations.sort((a, b) => sortByFavoriteLocations(a, b, bloc.favorites));
     return locations;
   }
 }
@@ -38,9 +42,9 @@ Future<List<TrufiLocation>> _readPlaces(BuildContext context) async {
   return compute(
     _parsePlaces,
     await DefaultAssetBundle.of(context).loadString(
-          "assets/data/places.json",
-          cache: true,
-        ),
+      "assets/data/places.json",
+      cache: true,
+    ),
   );
 }
 
@@ -48,6 +52,7 @@ List<TrufiLocation> _parsePlaces(String encoded) {
   final parsed = json.decode(encoded);
   return parsed
       .map<TrufiLocation>(
-          (json) => new TrufiLocation.fromImportantPlacesJson(json))
+        (json) => TrufiLocation.fromImportantPlacesJson(json),
+      )
       .toList();
 }

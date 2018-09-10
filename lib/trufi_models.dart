@@ -3,6 +3,14 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
+  TrufiLocation({
+    @required this.description,
+    @required this.latitude,
+    @required this.longitude,
+  })  : assert(description != null),
+        assert(latitude != null),
+        assert(longitude != null);
+
   static const String _Description = 'description';
   static const String _Latitude = 'latitude';
   static const String _Longitude = 'longitude';
@@ -10,8 +18,6 @@ class TrufiLocation {
   final String description;
   final double latitude;
   final double longitude;
-
-  TrufiLocation({this.description, this.latitude, this.longitude});
 
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
@@ -68,13 +74,19 @@ class TrufiLocation {
 }
 
 class Plan {
+  Plan({
+    this.date,
+    this.from,
+    this.to,
+    this.itineraries,
+    this.error,
+  });
+
   final int date;
   final PlanLocation from;
   final PlanLocation to;
   final List<PlanItinerary> itineraries;
   final PlanError error;
-
-  Plan({this.date, this.from, this.to, this.itineraries, this.error});
 
   factory Plan.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('error')) {
@@ -87,7 +99,8 @@ class Plan {
           to: PlanLocation.fromJson(planJson['to']),
           itineraries: planJson['itineraries']
               .map<PlanItinerary>(
-                  (itineraryJson) => new PlanItinerary.fromJson(itineraryJson))
+                (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
+              )
               .toList());
     }
   }
@@ -98,10 +111,10 @@ class Plan {
 }
 
 class PlanError {
+  PlanError(this.id, this.message);
+
   final int id;
   final String message;
-
-  PlanError(this.id, this.message);
 
   factory PlanError.fromJson(Map<String, dynamic> json) {
     return PlanError(json['id'], json['msg']);
@@ -113,19 +126,41 @@ class PlanError {
 }
 
 class PlanLocation {
+  PlanLocation({
+    this.name,
+    this.latitude,
+    this.longitude,
+  });
+
   final String name;
   final double latitude;
   final double longitude;
 
-  PlanLocation({this.name, this.latitude, this.longitude});
-
   factory PlanLocation.fromJson(Map<String, dynamic> json) {
     return PlanLocation(
-        name: json['name'], latitude: json['lat'], longitude: json['lon']);
+      name: json['name'],
+      latitude: json['lat'],
+      longitude: json['lon'],
+    );
   }
 }
 
 class PlanItinerary {
+  PlanItinerary({
+    this.duration,
+    this.startTime,
+    this.endTime,
+    this.walkTime,
+    this.transitTime,
+    this.waitingTime,
+    this.walkDistance,
+    this.walkLimitExceeded,
+    this.elevationLost,
+    this.elevationGained,
+    this.transfers,
+    this.legs,
+  });
+
   final int duration;
   final int startTime;
   final int endTime;
@@ -139,22 +174,8 @@ class PlanItinerary {
   final int transfers;
   final List<PlanItineraryLeg> legs;
 
-  PlanItinerary(
-      {this.duration,
-      this.startTime,
-      this.endTime,
-      this.walkTime,
-      this.transitTime,
-      this.waitingTime,
-      this.walkDistance,
-      this.walkLimitExceeded,
-      this.elevationLost,
-      this.elevationGained,
-      this.transfers,
-      this.legs});
-
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
-    return new PlanItinerary(
+    return PlanItinerary(
         duration: json['duration'],
         startTime: json['startTime'],
         endTime: json['endTime'],
@@ -168,12 +189,22 @@ class PlanItinerary {
         transfers: json['transfers'],
         legs: json['legs']
             .map<PlanItineraryLeg>(
-                (json) => new PlanItineraryLeg.fromJson(json))
+              (json) => PlanItineraryLeg.fromJson(json),
+            )
             .toList());
   }
 }
 
 class PlanItineraryLeg {
+  PlanItineraryLeg({
+    this.points,
+    this.mode,
+    this.route,
+    this.distance,
+    this.duration,
+    this.toName,
+  });
+
   final String points;
   final String mode;
   final String route;
@@ -181,16 +212,8 @@ class PlanItineraryLeg {
   final double duration;
   final String toName;
 
-  PlanItineraryLeg(
-      {this.points,
-      this.mode,
-      this.route,
-      this.distance,
-      this.duration,
-      this.toName});
-
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
-    return new PlanItineraryLeg(
+    return PlanItineraryLeg(
       points: json['legGeometry']['points'],
       mode: json['mode'],
       route: json['route'],

@@ -7,9 +7,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/location/location_search_favorites.dart';
 import 'package:trufi_app/location/location_search_history.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan_view.dart';
@@ -19,7 +19,13 @@ import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 void main() {
-  runApp(BlocProvider<LocationBloc>(bloc: LocationBloc(), child: TrufiApp()));
+  runApp(BlocProvider<LocationBloc>(
+    bloc: LocationBloc(),
+    child: BlocProvider<FavoriteLocationsBloc>(
+      bloc: FavoriteLocationsBloc(),
+      child: TrufiApp(),
+    ),
+  ));
 }
 
 class TrufiApp extends StatelessWidget {
@@ -73,7 +79,6 @@ class _TrufiAppHomeState extends State<TrufiAppHome>
         setState(() {});
       });
     Future.delayed(Duration.zero, () {
-      Favorites.init();
       History.init();
       Places.init(this.context);
     });
