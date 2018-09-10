@@ -224,32 +224,20 @@ class PlanItineraryLeg {
   }
 
   String toInstruction(BuildContext context) {
-    String walk = TrufiLocalizations.of(context).instructionWalk;
-    String bus = TrufiLocalizations.of(context).instructionBus;
-    String forString = TrufiLocalizations.of(context).instructionFor;
-    String toString = TrufiLocalizations.of(context).instructionTo;
-
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
     String distanceString = distance >= 1000
         ? (distance.ceil() ~/ 1000).toString() + " km"
         : distance.ceil().toString() + " m";
     String durationString = (duration.ceil() ~/ 60).toString() + " min";
-    String destinationString = toName;
+    String destinationString =
+        toName == 'Destination' ? localizations.commonDestination : toName;
     if (mode == 'WALK') {
-      if (toName == 'Destination') {
-        destinationString = TrufiLocalizations.of(context).commonDestination;
-      }
-      sb.write(walk +
-          " $distanceString " +
-          toString +
-          " $destinationString ($durationString)");
+      sb.write(
+          "${localizations.instructionWalk} $distanceString ${localizations.instructionTo} $destinationString ($durationString)");
     } else if (mode == 'BUS') {
-      sb.write(bus +
-          " $route " +
-          forString +
-          " $distanceString " +
-          toString +
-          " $toName ($durationString)");
+      sb.write(
+          "${localizations.instructionBus} $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
     }
     return sb.toString();
   }
