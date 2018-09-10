@@ -6,6 +6,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
+import 'package:trufi_app/widgets/visible.dart';
 
 class PlanView extends StatefulWidget {
   final Plan plan;
@@ -61,7 +62,7 @@ class PlanViewState extends State<PlanView>
           left: 20.0,
           right: 20.0,
           bottom: 0.0,
-          child: Visibility(
+          child: VisibleWidget(
             child: _buildItineraries(context),
             visibility: _visibleFlag,
             removedChild: new Container(
@@ -75,20 +76,6 @@ class PlanViewState extends State<PlanView>
                 onPressed: _toggleInstructions,
               ),
             ),
-          ),
-        ),
-        Positioned(
-          right: 20.0,
-          bottom: 150.0,
-          child: Visibility(
-            visibility: _visibleFlag == VisibilityFlag.visible
-                ? VisibilityFlag.visible
-                : VisibilityFlag.gone,
-            child: IconButton(
-                color: Colors.black,
-                icon: Icon(Icons.keyboard_arrow_down),
-                onPressed: _toggleInstructions),
-            removedChild: new Container(),
           ),
         ),
       ],
@@ -105,6 +92,7 @@ class PlanViewState extends State<PlanView>
       child: PlanItineraryTabPages(
         tabController,
         widget.plan.itineraries,
+        _toggleInstructions,
       ),
     );
   }
@@ -124,46 +112,5 @@ class PlanViewState extends State<PlanView>
         _visibleFlag = VisibilityFlag.visible;
       }
     });
-  }
-}
-
-enum VisibilityFlag {
-  visible,
-  invisible,
-  offscreen,
-  gone,
-}
-
-class Visibility extends StatelessWidget {
-  final VisibilityFlag visibility;
-  final Widget child;
-  final Widget removedChild;
-
-  Visibility({
-    @required this.child,
-    @required this.visibility,
-    @required this.removedChild,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (visibility == VisibilityFlag.visible) {
-      return child;
-    } else if (visibility == VisibilityFlag.invisible) {
-      return new IgnorePointer(
-        ignoring: true,
-        child: new Opacity(
-          opacity: 0.0,
-          child: child,
-        ),
-      );
-    } else if (visibility == VisibilityFlag.offscreen) {
-      return new Offstage(
-        offstage: true,
-        child: child,
-      );
-    } else {
-      return removedChild;
-    }
   }
 }
