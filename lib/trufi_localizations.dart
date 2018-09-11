@@ -41,6 +41,8 @@ class TrufiLocalizations {
   static const String Connections = "connection";
   static const String About = "about";
   static const String Feedback = "feedback";
+  static const String FeedbackContent = "feedback_content";
+  static const String FeedbackButton = "feedback_button";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -71,7 +73,9 @@ class TrufiLocalizations {
       InstructionFor: 'for',
       Connections: 'Connections',
       About: 'About',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: 'We would like to hear from you. Send us your comments and suggestions.',
+      FeedbackButton: 'Send us an E-mail',
     },
     'es': {
       Title: 'TrufiApp',
@@ -101,7 +105,9 @@ class TrufiLocalizations {
       InstructionFor: 'por',
       Connections: 'Conexiones',
       About: 'Sobre nosotros',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: 'Nos gustaría saber de usted. Envíenos sus comentarios y sugerencias.',
+      FeedbackButton: 'Envianos un correo',
     },
     'de': {
       Title: 'TrufiApp',
@@ -122,7 +128,7 @@ class TrufiLocalizations {
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
       MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
       InstructionWalk: 'Gehen Sie',
-      InstructionRide: 'Fahren Sie mit ',
+      InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
       InstructionRideMicro: 'dem Micro',
       InstructionRideMinibus: 'dem Minibus',
@@ -131,7 +137,9 @@ class TrufiLocalizations {
       InstructionFor: 'für',
       Connections: 'Verbindungen',
       About: 'Über',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: 'Wir würden gerne von Ihnen hören. Senden Sie uns Ihre Kommentare und Vorschläge.',
+      FeedbackButton: 'E-mail schicken',
     },
   };
 
@@ -245,6 +253,14 @@ class TrufiLocalizations {
 
   String get feedback {
     return _localizedValues[locale.languageCode][Feedback];
+  }
+
+  String get feedbackContent {
+    return _localizedValues[locale.languageCode][FeedbackContent];
+  }
+
+  String get feedbackButton {
+    return _localizedValues[locale.languageCode][FeedbackButton];
   }
 }
 
