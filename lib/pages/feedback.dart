@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:trufi_app/drawer.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +33,7 @@ class _FeedBackPageState extends State<_FeedBackPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch';
     }
   }
 
@@ -58,7 +57,8 @@ class _FeedBackPageState extends State<_FeedBackPage> {
             child: new Text(
               localizations.feedbackContent,
               maxLines: 3,
-              style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.7),
+              style:
+                  DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.7),
             ),
             padding: const EdgeInsets.all(24.0),
           ),
