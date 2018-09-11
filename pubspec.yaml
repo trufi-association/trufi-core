@@ -19,7 +19,7 @@ dependencies:
   path_provider: ^0.4.1
   rxdart: ^0.18.1
   synchronized: ^1.5.1+1
-
+  shared_preferences: ^0.4.2
 
 dev_dependencies:
   flutter_test:

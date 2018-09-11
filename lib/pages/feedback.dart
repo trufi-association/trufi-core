@@ -12,7 +12,7 @@ class FeedbackPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(localizations.feedback)),
       body: Center(child: Text("Any questions?")),
-      drawer: buildDrawer(context, route),
+      drawer: TrufiDrawer(FeedbackPage.route),
     );
   }
 }
