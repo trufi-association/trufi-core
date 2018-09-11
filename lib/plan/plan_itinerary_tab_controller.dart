@@ -86,7 +86,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
             } else if (carTypeString.contains('micro') ) {
               iconCarType = Icons.airport_shuttle;
             } else if (carTypeString.contains('minibus')){
-              iconCarType = Icons.train;
+              iconCarType = Icons.tram;
             } else {
               // use bus icon
             }

@@ -239,18 +239,23 @@ class PlanItineraryLeg {
       sb.write(
           "${localizations.instructionWalk} $distanceString ${localizations.instructionTo} $destinationString ($durationString)");
     } else if (mode == 'BUS') {
-      String carTypeString = '';
-      String carTypeResult = carType.toLowerCase();
-      if (carTypeResult.contains('trufi')) {
-        carTypeString = localizations.instructionRideTrufi;
-      } else if (carTypeResult.contains('micro') || carTypeResult.contains('minibus')){
-        carTypeString = localizations.instructionRideMicro;
-      } else {
-        carTypeString = localizations.instructionRideBus;
-      }
+      String carTypeString = _setCarType(localizations);
       sb.write(
           "${localizations.instructionRide} $carTypeString $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
     }
     return sb.toString();
+  }
+
+  String _setCarType(TrufiLocalizations localizations) {
+    String carTypeResult = carType.toLowerCase();
+    if (carTypeResult.contains('trufi')) {
+      return localizations.instructionRideTrufi;
+    } else if (carTypeResult.contains('micro')) {
+      return  localizations.instructionRideMicro;
+    } else if (carTypeResult.contains('minibus')) {
+      return  localizations.instructionRideMinibus;
+    } else {
+      return localizations.instructionRideBus;
+    }
   }
 }

@@ -34,6 +34,7 @@ class TrufiLocalizations {
   static const String InstructionRide = "instruction_ride";
   static const String InstructionRideBus = "instruction_ride_bus";
   static const String InstructionRideMicro = "instruction_ride_micro";
+  static const String InstructionRideMinibus = "instruction_ride_minibus";
   static const String InstructionRideTrufi = "instruction_ride_trufi";
   static const String InstructionTo = "instruction_to";
   static const String InstructionFor = "instruction_for";
@@ -64,6 +65,7 @@ class TrufiLocalizations {
       InstructionRide: 'Ride',
       InstructionRideBus: 'bus',
       InstructionRideMicro: 'micro',
+      InstructionRideMinibus: 'minibus',
       InstructionRideTrufi: 'trufi',
       InstructionTo: 'to',
       InstructionFor: 'for',
@@ -93,6 +95,7 @@ class TrufiLocalizations {
       InstructionRide: 'Toma',
       InstructionRideBus: 'el bus',
       InstructionRideMicro: 'el micro',
+      InstructionRideMinibus: 'el minibus',
       InstructionRideTrufi: 'la trufi',
       InstructionTo: 'hacia',
       InstructionFor: 'por',
@@ -121,8 +124,9 @@ class TrufiLocalizations {
       InstructionWalk: 'Gehen Sie',
       InstructionRide: 'Fahren Sie mit ',
       InstructionRideBus: 'dem Bus',
-      InstructionRideMicro: 'dem micro',
-      InstructionRideTrufi: 'der trufi',
+      InstructionRideMicro: 'dem Micro',
+      InstructionRideMinibus: 'dem Minibus',
+      InstructionRideTrufi: 'der Trufi',
       InstructionTo: 'zur',
       InstructionFor: 'für',
       Connections: 'Verbindungen',
@@ -205,6 +209,10 @@ class TrufiLocalizations {
 
   String get instructionRideMicro {
     return _localizedValues[locale.languageCode][InstructionRideMicro];
+  }
+
+  String get instructionRideMinibus {
+    return _localizedValues[locale.languageCode][InstructionRideMinibus];
   }
 
   String get instructionRideTrufi {
