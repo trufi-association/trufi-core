@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
   TrufiLocalizations(this.locale);
 
-  final Locale locale;
+  Locale locale;
+
+  static const String SAVED_LANGUAGE_CODE = "LOCALE";
 
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
@@ -42,6 +45,10 @@ class TrufiLocalizations {
   static const String Connections = "connection";
   static const String About = "about";
   static const String Feedback = "feedback";
+  static const String Language = "language";
+  static const String English = "english";
+  static const String German = "german";
+  static const String Spanish = "spanish";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -73,7 +80,11 @@ class TrufiLocalizations {
       InstructionFor: 'for',
       Connections: 'Connections',
       About: 'About',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      Language: 'Language',
+      English: 'English',
+      German: 'German',
+      Spanish: 'Spanish'
     },
     'es': {
       Title: 'TrufiApp',
@@ -104,7 +115,11 @@ class TrufiLocalizations {
       InstructionFor: 'por',
       Connections: 'Conexiones',
       About: 'Sobre nosotros',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      Language: 'Idioma',
+      English: 'Inglés',
+      German: 'Alemán',
+      Spanish: 'Español'
     },
     'de': {
       Title: 'TrufiApp',
@@ -135,7 +150,11 @@ class TrufiLocalizations {
       InstructionFor: 'für',
       Connections: 'Verbindungen',
       About: 'Über',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      Language: 'Sprache',
+      English: 'Englisch',
+      German: 'Deutsch',
+      Spanish: 'Spanisch'
     },
   };
 
@@ -254,23 +273,95 @@ class TrufiLocalizations {
   String get feedback {
     return _localizedValues[locale.languageCode][Feedback];
   }
+
+  String get language {
+    return _localizedValues[locale.languageCode][Language];
+  }
+
+  String get english {
+    return _localizedValues[locale.languageCode][English];
+  }
+
+  String get german {
+    return _localizedValues[locale.languageCode][German];
+  }
+
+  String get spanish {
+    return _localizedValues[locale.languageCode][Spanish];
+  }
+
+  void switchToLanguage(String languageCode) {
+    locale = getLocale(languageCode);
+  }
+
+  static getLocale(String languageCode) {
+    switch (languageCode) {
+      case "en":
+        return Locale('en', 'US');
+        break;
+      case "de":
+        return Locale('de', 'DE');
+        break;
+      case "es":
+        return Locale('es', 'ES');
+        break;
+      default:
+        break;
+    }
+  }
+
+  getLanguageCode(String languageString) {
+    if (languageString == _localizedValues[locale.languageCode][English]) {
+      return "en";
+    } else if (languageString ==
+        _localizedValues[locale.languageCode][German]) {
+      return "de";
+    } else {
+      return "es";
+    }
+  }
+
+  String getLanguageString(String languageCode) {
+    switch (languageCode) {
+      case "en":
+        return _localizedValues[locale.languageCode][English];
+        break;
+      case "de":
+        return _localizedValues[locale.languageCode][German];
+        break;
+      default:
+        return _localizedValues[locale.languageCode][Spanish];
+        break;
+    }
+  }
 }
 
 class TrufiLocalizationsDelegate
     extends LocalizationsDelegate<TrufiLocalizations> {
-  const TrufiLocalizationsDelegate();
+  TrufiLocalizations localizations;
+
+  TrufiLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) =>
       ['en', 'es', 'de'].contains(locale.languageCode);
 
   @override
-  Future<TrufiLocalizations> load(Locale locale) {
-    // Returning a SynchronousFuture here because an async "load" operation
-    // isn't needed to produce an instance of DemoLocalizations.
+  Future<TrufiLocalizations> load(Locale locale) async {
+    localizations = await _getLocalizations();
+    if (localizations != null) {
+      return localizations;
+    }
     return SynchronousFuture<TrufiLocalizations>(TrufiLocalizations(locale));
   }
 
   @override
-  bool shouldReload(TrufiLocalizationsDelegate old) => false;
+  bool shouldReload(TrufiLocalizationsDelegate old) =>
+      localizations == null ? false : old.localizations != localizations;
+
+  Future<TrufiLocalizations> _getLocalizations() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String languageCode = prefs.get(TrufiLocalizations.SAVED_LANGUAGE_CODE);
+    return TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)));
+  }
 }

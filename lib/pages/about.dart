@@ -12,7 +12,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(localizations.about)),
       body: Center(child: Text("It's all about TRUFI")),
-      drawer: buildDrawer(context, route),
+      drawer: TrufiDrawer(AboutPage.route),
     );
   }
 }
