@@ -302,11 +302,8 @@ class TrufiLocalizations {
       case "de":
         return Locale('de', 'DE');
         break;
-      case "es":
-        return Locale('es', 'ES');
-        break;
       default:
-        break;
+        return Locale('es', 'ES');
     }
   }
 
