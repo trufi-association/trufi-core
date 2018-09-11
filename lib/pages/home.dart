@@ -200,7 +200,7 @@ class HomePageState extends State<HomePage>
         BlocProvider.of<LocationProviderBloc>(context);
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
-      initialData: locationProviderBloc.location,
+      initialData: locationProviderBloc.lastLocation,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         return MapControllerPage(
           initialPosition: snapshot.data,
@@ -256,7 +256,7 @@ class HomePageState extends State<HomePage>
         _setFromPlace(
           TrufiLocation.fromLatLng(
             localizations.searchCurrentPosition,
-            locationProviderBloc.location,
+            locationProviderBloc.lastLocation,
           ),
         );
       } else {
