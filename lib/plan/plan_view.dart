@@ -6,6 +6,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
+import 'package:trufi_app/widgets/visible.dart';
 
 class PlanView extends StatefulWidget {
   final Plan plan;
@@ -20,6 +21,7 @@ class PlanViewState extends State<PlanView>
     with SingleTickerProviderStateMixin {
   PlanItinerary selectedItinerary;
   TabController tabController;
+  VisibilityFlag _visibleFlag = VisibilityFlag.visible;
 
   @override
   void initState() {
@@ -56,17 +58,21 @@ class PlanViewState extends State<PlanView>
           ),
         ),
         Positioned(
-          height: 200.0,
+          height: _visibleFlag == VisibilityFlag.visible ? 200.0 : 50.0,
           left: 20.0,
           right: 20.0,
           bottom: 0.0,
-          child: _buildItineraries(context),
+          child: VisibleWidget(
+            child: _buildItinerariesVisible(context),
+            visibility: _visibleFlag,
+            removedChild: _buildItinerariesGone(context),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildItineraries(BuildContext context) {
+  Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -76,6 +82,21 @@ class PlanViewState extends State<PlanView>
       child: PlanItineraryTabPages(
         tabController,
         widget.plan.itineraries,
+        _toggleInstructions,
+      ),
+    );
+  }
+
+  Widget _buildItinerariesGone(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+      ),
+      child: IconButton(
+        icon: Icon(Icons.keyboard_arrow_up),
+        onPressed: _toggleInstructions,
       ),
     );
   }
@@ -84,6 +105,14 @@ class PlanViewState extends State<PlanView>
     setState(() {
       selectedItinerary = value;
       tabController.animateTo(widget.plan.itineraries.indexOf(value));
+    });
+  }
+
+  void _toggleInstructions() {
+    setState(() {
+      _visibleFlag = _visibleFlag == VisibilityFlag.visible
+          ? VisibilityFlag.gone
+          : VisibilityFlag.visible;
     });
   }
 }

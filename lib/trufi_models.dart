@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
@@ -217,6 +219,7 @@ class PlanItineraryLeg {
     this.points,
     this.mode,
     this.route,
+    this.routeLongName,
     this.distance,
     this.duration,
     this.toName,
@@ -229,11 +232,13 @@ class PlanItineraryLeg {
   static const _Mode = "mode";
   static const _Name = "name";
   static const _Route = "route";
+  static const _RouteLongName = "routeLongName";
   static const _To = "to";
 
   final String points;
   final String mode;
   final String route;
+  final String routeLongName;
   final double distance;
   final double duration;
   final String toName;
@@ -243,6 +248,7 @@ class PlanItineraryLeg {
       points: json[_LegGeometry][_Points],
       mode: json[_Mode],
       route: json[_Route],
+      routeLongName: json[_RouteLongName],
       distance: json[_Distance],
       duration: json[_Duration],
       toName: json[_To][_Name],
@@ -252,19 +258,14 @@ class PlanItineraryLeg {
   String toInstruction(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
-    String distanceString = distance >= 1000
-        ? (distance.ceil() ~/ 1000).toString() + " km"
-        : distance.ceil().toString() + " m";
-    String durationString = (duration.ceil() ~/ 60).toString() + " min";
-    String destinationString =
-        toName == 'Destination' ? localizations.commonDestination : toName;
     if (mode == 'WALK') {
-      sb.write(
-          "${localizations.instructionWalk} $distanceString ${localizations.instructionTo} $destinationString ($durationString)");
+      sb.write("${localizations.instructionWalk}");
     } else if (mode == 'BUS') {
       sb.write(
-          "${localizations.instructionBus} $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
+          "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}");
     }
+    sb.write(
+        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()})");
     return sb.toString();
   }
 
@@ -273,9 +274,48 @@ class PlanItineraryLeg {
       _LegGeometry: {_Points: points},
       _Mode: mode,
       _Route: route,
+      _RouteLongName: routeLongName,
       _Distance: distance,
       _Duration: duration,
       _To: {_Name: toName}
     };
+  }
+
+  String _carTypeString(TrufiLocalizations localizations) {
+    String carType = routeLongName?.toLowerCase() ?? "";
+    return carType.contains('trufi')
+        ? localizations.instructionRideTrufi
+        : carType.contains('micro')
+            ? localizations.instructionRideMicro
+            : carType.contains('minibus')
+                ? localizations.instructionRideMinibus
+                : localizations.instructionRideBus;
+  }
+
+  String _distanceString() {
+    return distance >= 1000
+        ? (distance.ceil() ~/ 1000).toString() + " km"
+        : distance.ceil().toString() + " m";
+  }
+
+  String _durationString() {
+    return (duration.ceil() ~/ 60).toString() + " min";
+  }
+
+  String _toString(TrufiLocalizations localizations) {
+    return toName == 'Destination' ? localizations.commonDestination : toName;
+  }
+
+  IconData iconData() {
+    String carType = routeLongName?.toLowerCase() ?? "";
+    return mode == 'WALK'
+        ? Icons.directions_walk
+        : carType.contains('trufi')
+            ? Icons.local_taxi
+            : carType.contains('micro')
+                ? Icons.airport_shuttle
+                : carType.contains('minibus')
+                    ? Icons.train
+                    : Icons.directions_bus;
   }
 }

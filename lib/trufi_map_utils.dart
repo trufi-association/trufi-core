@@ -43,7 +43,7 @@ Marker buildYourLocationMarker(LatLng point) {
   return buildMarker(point, Icons.my_location, AnchorPos.center, Colors.blue);
 }
 
-Marker buildBusMarker(LatLng point, String route, Color color,
+Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
     {Function onTap}) {
   return new Marker(
     width: 50.0,
@@ -62,11 +62,8 @@ Marker buildBusMarker(LatLng point, String route, Color color,
               fit: BoxFit.scaleDown,
               child: Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.directions_bus,
-                    color: Colors.white,
-                  ),
-                  Text(route, style: TextStyle(color: Colors.white)),
+                  Icon(leg.iconData(), color: Colors.white),
+                  Text(leg.route, style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -110,8 +107,8 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
       Marker marker = leg.mode != 'WALK'
           ? buildBusMarker(
               midPointForPolyline(polyline),
-              leg.route,
               isSelected ? Colors.green : Colors.grey,
+              leg,
               onTap: () => onTap(itinerary),
             )
           : null;

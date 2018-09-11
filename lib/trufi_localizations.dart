@@ -31,7 +31,11 @@ class TrufiLocalizations {
   static const String MapSectionChoosePoint = "map_choose_point";
   static const String MapSectionTapToChoose = "map_tap_to_choose";
   static const String InstructionWalk = "instruction_walk";
-  static const String InstructionBus = "instruction_bus_ride";
+  static const String InstructionRide = "instruction_ride";
+  static const String InstructionRideBus = "instruction_ride_bus";
+  static const String InstructionRideMicro = "instruction_ride_micro";
+  static const String InstructionRideMinibus = "instruction_ride_minibus";
+  static const String InstructionRideTrufi = "instruction_ride_trufi";
   static const String InstructionTo = "instruction_to";
   static const String InstructionFor = "instruction_for";
   static const String Connections = "connection";
@@ -58,7 +62,11 @@ class TrufiLocalizations {
       MapSectionChoosePoint: 'Choose a point',
       MapSectionTapToChoose: 'Tap on map to choose',
       InstructionWalk: 'Walk',
-      InstructionBus: 'Ride bus',
+      InstructionRide: 'Ride',
+      InstructionRideBus: 'bus',
+      InstructionRideMicro: 'micro',
+      InstructionRideMinibus: 'minibus',
+      InstructionRideTrufi: 'trufi',
       InstructionTo: 'to',
       InstructionFor: 'for',
       Connections: 'Connections',
@@ -84,9 +92,16 @@ class TrufiLocalizations {
       MapSectionChoosePoint: 'Elige un punto en el mapa',
       MapSectionTapToChoose: 'Toca el mapa para elegir un punto',
       InstructionWalk: 'Camina',
-      InstructionBus: 'Toma el bus',
+      InstructionRide: 'Toma',
+      InstructionRideBus: 'el bus',
+      InstructionRideMicro: 'el micro',
+      InstructionRideMinibus: 'el minibus',
+      InstructionRideTrufi: 'la trufi',
       InstructionTo: 'hacia',
       InstructionFor: 'por',
+      Connections: 'Conexiones',
+      About: 'Sobre nosotros',
+      Feedback: 'Feedback'
     },
     'de': {
       Title: 'TrufiApp',
@@ -107,7 +122,11 @@ class TrufiLocalizations {
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
       MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
       InstructionWalk: 'Gehen Sie',
-      InstructionBus: 'Fahren Sie mit dem Bus',
+      InstructionRide: 'Fahren Sie mit ',
+      InstructionRideBus: 'dem Bus',
+      InstructionRideMicro: 'dem Micro',
+      InstructionRideMinibus: 'dem Minibus',
+      InstructionRideTrufi: 'der Trufi',
       InstructionTo: 'zur',
       InstructionFor: 'für',
       Connections: 'Verbindungen',
@@ -180,8 +199,24 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][InstructionWalk];
   }
 
-  String get instructionBus {
-    return _localizedValues[locale.languageCode][InstructionBus];
+  String get instructionRide {
+    return _localizedValues[locale.languageCode][InstructionRide];
+  }
+
+  String get instructionRideBus {
+    return _localizedValues[locale.languageCode][InstructionRideBus];
+  }
+
+  String get instructionRideMicro {
+    return _localizedValues[locale.languageCode][InstructionRideMicro];
+  }
+
+  String get instructionRideMinibus {
+    return _localizedValues[locale.languageCode][InstructionRideMinibus];
+  }
+
+  String get instructionRideTrufi {
+    return _localizedValues[locale.languageCode][InstructionRideTrufi];
   }
 
   String get instructionTo {
