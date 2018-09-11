@@ -108,22 +108,20 @@ class _SuggestionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    final ThemeData theme = Theme.of(context);
     List<Widget> slivers = List();
     //
     // Alternatives
     //
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
-    slivers.add(_buildYourLocation(context, theme));
-    slivers.add(_buildChooseOnMap(context, theme));
+    slivers.add(_buildYourLocation(context));
+    slivers.add(_buildChooseOnMap(context));
     if (query.isEmpty) {
       //
       // History
       //
-      slivers.add(_buildTitle(theme, localizations.searchTitleRecent));
       slivers.add(_buildFutureBuilder(
         context,
-        theme,
+        localizations.searchTitleRecent,
         historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
         true,
@@ -132,10 +130,9 @@ class _SuggestionList extends StatelessWidget {
       //
       // Search Results
       //
-      slivers.add(_buildTitle(theme, localizations.searchTitleResults));
       slivers.add(_buildFutureBuilder(
         context,
-        theme,
+        localizations.searchTitleResults,
         api.fetchLocations(context, query),
         Icons.location_on,
         true,
@@ -144,10 +141,9 @@ class _SuggestionList extends StatelessWidget {
     //
     // Places
     //
-    slivers.add(_buildTitle(theme, localizations.searchTitlePlaces));
     slivers.add(_buildFutureBuilder(
       context,
-      theme,
+      localizations.searchTitlePlaces,
       Places.instance.fetchLocations(context, query),
       Icons.location_on,
       true,
@@ -167,17 +163,17 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildYourLocation(BuildContext context, ThemeData theme) {
+  Widget _buildYourLocation(BuildContext context) {
     final LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return SliverToBoxAdapter(
       child: StreamBuilder<LatLng>(
         stream: locationProviderBloc.outLocationUpdate,
-        initialData: _initialPosition(),
+        initialData: locationProviderBloc.location,
         builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
           return _buildItem(
-              theme,
+              context,
               () => _handleOnYourLocationTap(context, snapshot.data),
               Icons.gps_fixed,
               localizations.searchItemYourLocation);
@@ -186,17 +182,17 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildChooseOnMap(BuildContext context, ThemeData theme) {
+  Widget _buildChooseOnMap(BuildContext context) {
     final LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return SliverToBoxAdapter(
       child: StreamBuilder<LatLng>(
           stream: locationProviderBloc.outLocationUpdate,
-          initialData: _initialPosition(),
+          initialData: locationProviderBloc.location,
           builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
             return _buildItem(
-                theme,
+                context,
                 () => _handleOnChooseOnMapTap(context, snapshot.data),
                 Icons.location_on,
                 localizations.searchItemChooseOnMap);
@@ -204,27 +200,26 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(ThemeData theme, String title) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-        child: Row(
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                text: title.toUpperCase(),
-                style: theme.textTheme.body1,
-              ),
+  Widget _buildTitle(BuildContext context, String title) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              text: title.toUpperCase(),
+              style: theme.textTheme.body1,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildFutureBuilder(
     BuildContext context,
-    ThemeData theme,
+    String title,
     Future<List<TrufiLocation>> future,
     IconData iconData,
     bool isFavoritable,
@@ -239,15 +234,24 @@ class _SuggestionList extends StatelessWidget {
             print(snapshot.error);
             if (snapshot.error is api.FetchRequestException) {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, localizations.commonNoInternet),
+                child: _buildErrorItem(
+                  context,
+                  localizations.commonNoInternet,
+                ),
               );
             } else if (snapshot.error is api.FetchResponseException) {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, localizations.commonFailLoading),
+                child: _buildErrorItem(
+                  context,
+                  localizations.commonFailLoading,
+                ),
               );
             } else {
               return SliverToBoxAdapter(
-                child: _buildErrorItem(theme, localizations.commonUnknownError),
+                child: _buildErrorItem(
+                  context,
+                  localizations.commonUnknownError,
+                ),
               );
             }
           }
@@ -260,12 +264,18 @@ class _SuggestionList extends StatelessWidget {
           }
           final FavoriteLocationsBloc favoriteLocationsBloc =
               BlocProvider.of<FavoriteLocationsBloc>(context);
+          int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                final TrufiLocation value = snapshot.data[index];
+                // Title
+                if (index == 0) {
+                  return _buildTitle(context, title);
+                }
+                // Item
+                final TrufiLocation value = snapshot.data[index - 1];
                 return _buildItem(
-                  theme,
+                  context,
                   () => _onSelectedTrufiLocation(value),
                   iconData,
                   value.description,
@@ -277,23 +287,24 @@ class _SuggestionList extends StatelessWidget {
                       : null,
                 );
               },
-              childCount: snapshot.data.length,
+              childCount: count,
             ),
           );
         });
   }
 
-  Widget _buildErrorItem(ThemeData theme, String title) {
-    return _buildItem(theme, null, Icons.error, title);
+  Widget _buildErrorItem(BuildContext context, String title) {
+    return _buildItem(context, null, Icons.error, title);
   }
 
   Widget _buildItem(
-    ThemeData theme,
+    BuildContext context,
     Function onTap,
     IconData iconData,
     String title, {
     Widget trailing,
   }) {
+    ThemeData theme = Theme.of(context);
     Row row = Row(
       children: <Widget>[
         Icon(iconData),
@@ -370,10 +381,6 @@ class _SuggestionList extends StatelessWidget {
         onMapTapped(TrufiLocation.fromLatLng(description, value));
       }
     }
-  }
-
-  LatLng _initialPosition() {
-    return LatLng(-17.413977, -66.165321);
   }
 }
 
