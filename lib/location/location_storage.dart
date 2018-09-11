@@ -14,11 +14,11 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationStorage {
-  final File _file;
-  final Lock _fileLock = new Lock();
-  final List<TrufiLocation> _locations;
-
   LocationStorage(this._file, this._locations);
+
+  final File _file;
+  final Lock _fileLock = Lock();
+  final List<TrufiLocation> _locations;
 
   UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
       UnmodifiableListView(_locations);
@@ -49,13 +49,13 @@ class LocationStorage {
     return locations;
   }
 
-  add(TrufiLocation location) {
+  void add(TrufiLocation location) {
     remove(location);
     _locations.insert(0, location);
     _save();
   }
 
-  remove(TrufiLocation location) {
+  void remove(TrufiLocation location) {
     _locations.remove(location);
     _save();
   }
@@ -64,7 +64,7 @@ class LocationStorage {
     return _locations.contains(location);
   }
 
-  _save() async {
+  void _save() async {
     await _fileLock.synchronized(() => writeStorage(_file, _locations));
   }
 }
