@@ -304,6 +304,7 @@ class TrufiLocalizations {
         break;
       default:
         return Locale('es', 'ES');
+        break;
     }
   }
 
