@@ -53,7 +53,7 @@ Marker buildBusMarker(LatLng point, String route, Color color, String carType,
     iconCarType = Icon(Icons.airport_shuttle, color: Colors.white);
   } else if (carType.contains('minibus')) {
     // TODO: change to proper icon!!
-    iconCarType = Icon(Icons.train, color: Colors.white);
+    iconCarType = Icon(Icons.tram, color: Colors.white);
   } else {
     // use bus icon
   }
