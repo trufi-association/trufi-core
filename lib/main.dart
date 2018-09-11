@@ -22,36 +22,17 @@ void main() {
   ));
 }
 
-class TrufiApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return TrufiAppState();
-  }
-
-  static TrufiAppState of(BuildContext context) {
-    return context.ancestorStateOfType(const TypeMatcher<TrufiAppState>());
-  }
-}
-
-class TrufiAppState extends State<TrufiApp> {
-  TrufiLocalizationsDelegate localizationsDelegate;
-
-  @override
-  void initState() {
-    super.initState();
-    localizationsDelegate = TrufiLocalizationsDelegate();
-  }
-
+class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
     return MaterialApp(
       routes: <String, WidgetBuilder>{
         AboutPage.route: (context) => AboutPage(),
-        FeedbackPage.route: (context) => FeedbackPage()
+        FeedbackPage.route: (context) => FeedbackPage(),
       },
       localizationsDelegates: [
-        localizationsDelegate,
+        TrufiLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
