@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
@@ -43,6 +45,14 @@ class TrufiLocation {
     );
   }
 
+  factory TrufiLocation.fromPlanLocation(PlanLocation value) {
+    return TrufiLocation(
+      description: value.name,
+      latitude: value.latitude,
+      longitude: value.longitude,
+    );
+  }
+
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     return TrufiLocation(
       description: json[_Description],
@@ -75,29 +85,32 @@ class TrufiLocation {
 
 class Plan {
   Plan({
-    this.date,
     this.from,
     this.to,
     this.itineraries,
     this.error,
   });
 
-  final int date;
+  static const _Error = "error";
+  static const _Itineraries = "itineraries";
+  static const _From = "from";
+  static const _Plan = "plan";
+  static const _To = "to";
+
   final PlanLocation from;
   final PlanLocation to;
   final List<PlanItinerary> itineraries;
   final PlanError error;
 
   factory Plan.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('error')) {
-      return Plan(error: PlanError.fromJson(json['error']));
+    if (json.containsKey(_Error)) {
+      return Plan(error: PlanError.fromJson(json[_Error]));
     } else {
-      Map<String, dynamic> planJson = json['plan'];
+      Map<String, dynamic> planJson = json[_Plan];
       return Plan(
-          date: planJson['date'],
-          from: PlanLocation.fromJson(planJson['from']),
-          to: PlanLocation.fromJson(planJson['to']),
-          itineraries: planJson['itineraries']
+          from: PlanLocation.fromJson(planJson[_From]),
+          to: PlanLocation.fromJson(planJson[_To]),
+          itineraries: planJson[_Itineraries]
               .map<PlanItinerary>(
                 (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
               )
@@ -108,20 +121,43 @@ class Plan {
   factory Plan.fromError(String error) {
     return Plan(error: PlanError.fromError(error));
   }
+
+  Map<String, dynamic> toJson() {
+    return error != null
+        ? {_Error: error.toJson()}
+        : {
+            _Plan: {
+              _From: from.toJson(),
+              _To: to.toJson(),
+              _Itineraries:
+                  itineraries.map((itinerary) => itinerary.toJson()).toList()
+            }
+          };
+  }
 }
 
 class PlanError {
   PlanError(this.id, this.message);
 
+  static const String _Id = "id";
+  static const String _Message = "msg";
+
   final int id;
   final String message;
 
   factory PlanError.fromJson(Map<String, dynamic> json) {
-    return PlanError(json['id'], json['msg']);
+    return PlanError(json[_Id], json[_Message]);
   }
 
   factory PlanError.fromError(String error) {
     return PlanError(-1, error);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      _Id: id,
+      _Message: message,
+    };
   }
 }
 
@@ -132,66 +168,49 @@ class PlanLocation {
     this.longitude,
   });
 
+  static const String _Name = "name";
+  static const String _Latitude = "lat";
+  static const String _Longitude = "lon";
+
   final String name;
   final double latitude;
   final double longitude;
 
   factory PlanLocation.fromJson(Map<String, dynamic> json) {
     return PlanLocation(
-      name: json['name'],
-      latitude: json['lat'],
-      longitude: json['lon'],
+      name: json[_Name],
+      latitude: json[_Latitude],
+      longitude: json[_Longitude],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      _Name: name,
+      _Latitude: latitude,
+      _Longitude: longitude,
+    };
   }
 }
 
 class PlanItinerary {
   PlanItinerary({
-    this.duration,
-    this.startTime,
-    this.endTime,
-    this.walkTime,
-    this.transitTime,
-    this.waitingTime,
-    this.walkDistance,
-    this.walkLimitExceeded,
-    this.elevationLost,
-    this.elevationGained,
-    this.transfers,
     this.legs,
   });
 
-  final int duration;
-  final int startTime;
-  final int endTime;
-  final int walkTime;
-  final int transitTime;
-  final int waitingTime;
-  final double walkDistance;
-  final bool walkLimitExceeded;
-  final double elevationLost;
-  final double elevationGained;
-  final int transfers;
+  static const String _Legs = "legs";
+
   final List<PlanItineraryLeg> legs;
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-        duration: json['duration'],
-        startTime: json['startTime'],
-        endTime: json['endTime'],
-        walkTime: json['walkTime'],
-        transitTime: json['transitTime'],
-        waitingTime: json['waitingTime'],
-        walkDistance: json['walkDistance'],
-        walkLimitExceeded: json['walkLimitExceeded'],
-        elevationLost: json['elevationLost'],
-        elevationGained: json['elevationGained'],
-        transfers: json['transfers'],
-        legs: json['legs']
-            .map<PlanItineraryLeg>(
-              (json) => PlanItineraryLeg.fromJson(json),
-            )
-            .toList());
+        legs: json[_Legs].map<PlanItineraryLeg>((json) {
+      return PlanItineraryLeg.fromJson(json);
+    }).toList());
+  }
+
+  Map<String, dynamic> toJson() {
+    return {_Legs: legs.map((itinerary) => itinerary.toJson()).toList()};
   }
 }
 
@@ -200,57 +219,101 @@ class PlanItineraryLeg {
     this.points,
     this.mode,
     this.route,
-    this.carType,
+    this.routeLongName,
     this.distance,
     this.duration,
     this.toName,
   });
 
+  static const _Distance = "distance";
+  static const _Duration = "duration";
+  static const _LegGeometry = "legGeometry";
+  static const _Points = "points";
+  static const _Mode = "mode";
+  static const _Name = "name";
+  static const _Route = "route";
+  static const _RouteLongName = "routeLongName";
+  static const _To = "to";
+
   final String points;
   final String mode;
   final String route;
-  final String carType;
+  final String routeLongName;
   final double distance;
   final double duration;
   final String toName;
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
-      points: json['legGeometry']['points'],
-      mode: json['mode'],
-      route: json['route'],
-      carType: json['routeLongName'],
-      distance: json['distance'],
-      duration: json['duration'],
-      toName: json['to']['name'],
+      points: json[_LegGeometry][_Points],
+      mode: json[_Mode],
+      route: json[_Route],
+      routeLongName: json[_RouteLongName],
+      distance: json[_Distance],
+      duration: json[_Duration],
+      toName: json[_To][_Name],
     );
   }
 
   String toInstruction(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
-    String distanceString = distance >= 1000
+    if (mode == 'WALK') {
+      sb.write("${localizations.instructionWalk}");
+    } else if (mode == 'BUS') {
+      sb.write(
+          "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}");
+    }
+    sb.write(
+        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()}");
+    return sb.toString();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      _LegGeometry: {_Points: points},
+      _Mode: mode,
+      _Route: route,
+      _RouteLongName: routeLongName,
+      _Distance: distance,
+      _Duration: duration,
+      _To: {_Name: toName}
+    };
+  }
+
+  String _carTypeString(TrufiLocalizations localizations) {
+    String carType = routeLongName.toLowerCase();
+    return carType.contains('trufi')
+        ? localizations.instructionRideTrufi
+        : carType.contains('micro') || carType.contains('minibus')
+            ? localizations.instructionRideMicro
+            : localizations.instructionRideBus;
+  }
+
+  String _distanceString() {
+    return distance >= 1000
         ? (distance.ceil() ~/ 1000).toString() + " km"
         : distance.ceil().toString() + " m";
-    String durationString = (duration.ceil() ~/ 60).toString() + " min";
-    String destinationString =
-        toName == 'Destination' ? localizations.commonDestination : toName;
-    if (mode == 'WALK') {
-      sb.write(
-          "${localizations.instructionWalk} $distanceString ${localizations.instructionTo} $destinationString ($durationString)");
-    } else if (mode == 'BUS') {
-      String carTypeString = '';
-      String carTypeResult = carType.toLowerCase();
-      if (carTypeResult.contains('trufi')) {
-        carTypeString = localizations.instructionRideTrufi;
-      } else if (carTypeResult.contains('micro') || carTypeResult.contains('minibus')){
-        carTypeString = localizations.instructionRideMicro;
-      } else {
-        carTypeString = localizations.instructionRideBus;
-      }
-      sb.write(
-          "${localizations.instructionRide} $carTypeString $route ${localizations.instructionFor} $distanceString ${localizations.instructionTo} $toName ($durationString)");
-    }
-    return sb.toString();
+  }
+
+  String _durationString() {
+    return (duration.ceil() ~/ 60).toString() + " min";
+  }
+
+  String _toString(TrufiLocalizations localizations) {
+    return toName == 'Destination' ? localizations.commonDestination : toName;
+  }
+
+  IconData iconData() {
+    String carType = routeLongName.toLowerCase();
+    return mode == 'WALK'
+        ? Icons.directions_walk
+        : carType.contains('trufi')
+            ? Icons.local_taxi
+            : carType.contains('micro')
+                ? Icons.airport_shuttle
+                : carType.contains('minibus')
+                    ? Icons.train
+                    : Icons.directions_bus;
   }
 }

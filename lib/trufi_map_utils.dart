@@ -122,7 +122,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
               midPointForPolyline(polyline),
               leg.route,
               isSelected ? Colors.green : Colors.grey,
-              leg.carType.toLowerCase(),
+              leg.routeLongName.toLowerCase(),
               onTap: () => onTap(itinerary),
             )
           : null;
