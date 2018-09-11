@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:trufi_app/app_builder.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
@@ -46,31 +45,25 @@ class TrufiAppState extends State<TrufiApp> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
-    return AppBuilder(builder: (context) {
-      return MaterialApp(
-        routes: <String, WidgetBuilder>{
-          AboutPage.route: (context) => AboutPage(),
-          FeedbackPage.route: (context) => FeedbackPage()
-        },
-        localizationsDelegates: [
-          localizationsDelegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('en', 'US'), // English
-          const Locale('de', 'DE'), // German
-          const Locale('es', 'ES'), // Spanish
-          // ... other locales the app supports
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: theme,
-        home: HomePage(),
-      );
-    });
-  }
-
-  void rebuild() {
-    setState(() {});
+    return MaterialApp(
+      routes: <String, WidgetBuilder>{
+        AboutPage.route: (context) => AboutPage(),
+        FeedbackPage.route: (context) => FeedbackPage()
+      },
+      localizationsDelegates: [
+        localizationsDelegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('de', 'DE'), // German
+        const Locale('es', 'ES'), // Spanish
+        // ... other locales the app supports
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: theme,
+      home: HomePage(),
+    );
   }
 }
