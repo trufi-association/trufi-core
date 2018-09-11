@@ -124,7 +124,6 @@ class _SuggestionList extends StatelessWidget {
         localizations.searchTitleRecent,
         historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
-        true,
       ));
     } else {
       //
@@ -135,7 +134,7 @@ class _SuggestionList extends StatelessWidget {
         localizations.searchTitleResults,
         api.fetchLocations(context, query),
         Icons.location_on,
-        true,
+        isVisibleWhenEmpty: true,
       ));
     }
     //
@@ -146,7 +145,6 @@ class _SuggestionList extends StatelessWidget {
       localizations.searchTitlePlaces,
       Places.instance.fetchLocations(context, query),
       Icons.location_on,
-      true,
     ));
     //
     // List
@@ -221,15 +219,18 @@ class _SuggestionList extends StatelessWidget {
     BuildContext context,
     String title,
     Future<List<TrufiLocation>> future,
-    IconData iconData,
-    bool isFavoritable,
-  ) {
+    IconData iconData, {
+    bool isVisibleWhenEmpty = false,
+  }) {
     return FutureBuilder(
         future: future,
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> snapshot) {
+          final FavoriteLocationsBloc favoriteLocationsBloc =
+              BlocProvider.of<FavoriteLocationsBloc>(context);
           final TrufiLocalizations localizations =
               TrufiLocalizations.of(context);
+          // Error
           if (snapshot.hasError) {
             print(snapshot.error);
             if (snapshot.error is api.FetchRequestException) {
@@ -255,6 +256,7 @@ class _SuggestionList extends StatelessWidget {
               );
             }
           }
+          // Loading
           if (snapshot.data == null) {
             return SliverToBoxAdapter(
               child: LinearProgressIndicator(
@@ -262,9 +264,19 @@ class _SuggestionList extends StatelessWidget {
               ),
             );
           }
-          final FavoriteLocationsBloc favoriteLocationsBloc =
-              BlocProvider.of<FavoriteLocationsBloc>(context);
+          // No results
           int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
+          if (count == 0 && isVisibleWhenEmpty) {
+            return SliverToBoxAdapter(
+              child: Column(
+                children: <Widget>[
+                  _buildTitle(context, title),
+                  _buildErrorItem(context, localizations.searchItemNoResults),
+                ],
+              ),
+            );
+          }
+          // Items
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -279,12 +291,10 @@ class _SuggestionList extends StatelessWidget {
                   () => _onSelectedTrufiLocation(value),
                   iconData,
                   value.description,
-                  trailing: isFavoritable
-                      ? FavoriteButton(
-                          location: value,
-                          favoritesStream: favoriteLocationsBloc.outLocations,
-                        )
-                      : null,
+                  trailing: FavoriteButton(
+                    location: value,
+                    favoritesStream: favoriteLocationsBloc.outLocations,
+                  ),
                 );
               },
               childCount: count,

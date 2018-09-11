@@ -21,6 +21,7 @@ class TrufiLocalizations {
   static const String CommonUnknownError = "common_unknown_error";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
   static const String SearchItemYourLocation = "search_item_your_location";
+  static const String SearchItemNoResults = "search_item_no_results";
   static const String SearchSectionPlaces = "search_title_places";
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionResults = "search_title_result";
@@ -52,6 +53,7 @@ class TrufiLocalizations {
       CommonUnknownError: 'unknown error',
       SearchItemChooseOnMap: 'Choose on map',
       SearchItemYourLocation: 'Your location',
+      SearchItemNoResults: 'No results',
       SearchSectionPlaces: 'Places',
       SearchSectionRecent: 'Recent',
       SearchSectionResults: 'Search Results',
@@ -82,6 +84,7 @@ class TrufiLocalizations {
       CommonUnknownError: 'Error desconocido',
       SearchItemChooseOnMap: 'Seleccionar en el mapa',
       SearchItemYourLocation: 'Tu ubicación',
+      SearchItemNoResults: 'Ningun resultado',
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: 'Recientes',
       SearchSectionResults: 'Resultados de búsqueda',
@@ -112,6 +115,7 @@ class TrufiLocalizations {
       CommonUnknownError: 'Unbekannter Fehler',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
       SearchItemYourLocation: 'Ihr Standort',
+      SearchItemNoResults: 'Keine Ergebnisse',
       SearchSectionPlaces: 'Orte',
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionResults: 'Suchergebnisse',
@@ -165,6 +169,10 @@ class TrufiLocalizations {
 
   String get searchItemYourLocation {
     return _localizedValues[locale.languageCode][SearchItemYourLocation];
+  }
+
+  String get searchItemNoResults {
+    return _localizedValues[locale.languageCode][SearchItemNoResults];
   }
 
   String get searchTitlePlaces {
