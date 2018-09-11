@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
+typedef OnTapCallback = void Function();
+
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
+  final OnTapCallback onTapCallback;
 
-  PlanItineraryTabPages(this.tabController, this.itineraries)
-      : assert(itineraries != null && itineraries.length > 0);
+  PlanItineraryTabPages(
+    this.tabController,
+    this.itineraries,
+    this.onTapCallback,
+  ) : assert(itineraries != null && itineraries.length > 0);
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
@@ -28,6 +34,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
           Expanded(
             child: Column(
               children: <Widget>[
+                GestureDetector(
+                    onTapDown: _onTapDownDetected,
+                    child: Icon(Icons.keyboard_arrow_down)),
                 Expanded(
                   child: TabBarView(
                     controller: widget.tabController,
@@ -73,12 +82,10 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
           PlanItineraryLeg leg = itinerary.legs[index];
           return Row(
             children: <Widget>[
-              Icon(leg.mode == 'WALK'
-                  ? Icons.directions_walk
-                  : Icons.directions_bus),
+              Icon(leg.iconData()),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
                   child: RichText(
                     text: TextSpan(
                       style: theme.textTheme.body2,
@@ -93,5 +100,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         itemCount: itinerary.legs.length,
       ),
     );
+  }
+
+  void _onTapDownDetected(TapDownDetails details) {
+    widget.onTapCallback();
   }
 }
