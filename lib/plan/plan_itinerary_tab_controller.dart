@@ -78,23 +78,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         padding: EdgeInsets.all(8.0),
         itemBuilder: (BuildContext context, int index) {
           PlanItineraryLeg leg = itinerary.legs[index];
-          IconData iconCarType = Icons.directions_bus;
-          if (leg.mode == 'BUS') {
-            String carTypeString = leg.carType.toLowerCase();
-            if (carTypeString.contains('trufi')) {
-              iconCarType = Icons.local_taxi;
-            } else if (carTypeString.contains('micro') ) {
-              iconCarType = Icons.airport_shuttle;
-            } else if (carTypeString.contains('minibus')){
-              iconCarType = Icons.train;
-            } else {
-              // use bus icon
-            }
-          }
-
           return Row(
             children: <Widget>[
-              Icon(leg.mode == 'WALK' ? Icons.directions_walk : iconCarType),
+              Icon(leg.iconData()),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
