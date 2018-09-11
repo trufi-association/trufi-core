@@ -282,7 +282,7 @@ class PlanItineraryLeg {
   }
 
   String _carTypeString(TrufiLocalizations localizations) {
-    String carType = routeLongName.toLowerCase();
+    String carType = routeLongName?.toLowerCase() ?? "";
     return carType.contains('trufi')
         ? localizations.instructionRideTrufi
         : carType.contains('micro') || carType.contains('minibus')
@@ -305,7 +305,7 @@ class PlanItineraryLeg {
   }
 
   IconData iconData() {
-    String carType = routeLongName.toLowerCase();
+    String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'WALK'
         ? Icons.directions_walk
         : carType.contains('trufi')
