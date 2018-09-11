@@ -63,26 +63,16 @@ class PlanViewState extends State<PlanView>
           right: 20.0,
           bottom: 0.0,
           child: VisibleWidget(
-            child: _buildItineraries(context),
+            child: _buildItinerariesVisible(context),
             visibility: _visibleFlag,
-            removedChild: new Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
-                boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
-              ),
-              child: IconButton(
-                icon: Icon(Icons.keyboard_arrow_up),
-                onPressed: _toggleInstructions,
-              ),
-            ),
+            removedChild: _buildItinerariesGone(context),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildItineraries(BuildContext context) {
+  Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -97,6 +87,20 @@ class PlanViewState extends State<PlanView>
     );
   }
 
+  Widget _buildItinerariesGone(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+      ),
+      child: IconButton(
+        icon: Icon(Icons.keyboard_arrow_up),
+        onPressed: _toggleInstructions,
+      ),
+    );
+  }
+
   void _setItinerary(PlanItinerary value) {
     setState(() {
       selectedItinerary = value;
@@ -106,11 +110,9 @@ class PlanViewState extends State<PlanView>
 
   void _toggleInstructions() {
     setState(() {
-      if (_visibleFlag == VisibilityFlag.visible) {
-        _visibleFlag = VisibilityFlag.gone;
-      } else {
-        _visibleFlag = VisibilityFlag.visible;
-      }
+      _visibleFlag = _visibleFlag == VisibilityFlag.visible
+          ? VisibilityFlag.gone
+          : VisibilityFlag.visible;
     });
   }
 }
