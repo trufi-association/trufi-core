@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
@@ -35,62 +36,107 @@ class LocationProviderBloc implements BlocBase {
 
   // Getter
 
-  LatLng get location => _locationProvider.location;
+  bool get hasPermission => _locationProvider.hasPermission;
+
+  LatLng get lastLocation => _locationProvider.lastLocation;
+
+  Exception get error => _locationProvider.error;
+}
+
+class PermissionDeniedException implements Exception {
+  PermissionDeniedException(this._innerException);
+
+  final Exception _innerException;
+
+  @override
+  String toString() {
+    return "PermissionDeniedException: ${_innerException.toString()}";
+  }
+}
+
+class PermissionDeniedNeverAskException implements Exception {
+  PermissionDeniedNeverAskException(this._innerException);
+
+  final Exception _innerException;
+
+  @override
+  String toString() {
+    return "PermissionDeniedNeverAskException: ${_innerException.toString()}";
+  }
 }
 
 class LocationProvider {
-  final Function(LatLng) onLocationChanged;
-  final Function(String) onLocationError;
+  LocationProvider({
+    this.onLocationChanged,
+    this.onError,
+  });
 
-  LocationProvider({this.onLocationChanged, this.onLocationError});
+  final ValueChanged<LatLng> onLocationChanged;
+  final ValueChanged<Exception> onError;
 
-  CompositeSubscription _subscriptions = CompositeSubscription();
-  Location _location = Location();
+  final CompositeSubscription _subscriptions = CompositeSubscription();
+  final Location _locationManager = Location();
 
-  bool permission = false;
-  LatLng location = LatLng(-17.4603761, -66.1860606);
-  String error;
+  bool _hasPermission = false;
+  LatLng _location = LatLng(-17.4603761, -66.1860606);
+  Exception _error;
 
   init() async {
     try {
-      permission = await _location.hasPermission();
-      location = createLatLng(await _location.getLocation());
-      error = null;
-      _onLocationChanged(location);
+      _hasPermission = await _locationManager.hasPermission();
+      _handleOnLocationChanged(
+        _createLatLng(
+          await _locationManager.getLocation(),
+        ),
+      );
     } on PlatformException catch (e) {
+      Exception error = e;
       if (e.code == 'PERMISSION_DENIED') {
-        error = 'Permission denied';
+        error = PermissionDeniedException(e);
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error = 'Permission denied - please ask the user to enable it';
+        error = PermissionDeniedNeverAskException(e);
       }
-      _onLocationError(error);
+      _handleOnError(error);
     }
     _subscriptions.add(
-      _location.onLocationChanged().listen(
+      _locationManager.onLocationChanged().listen(
         (Map<String, double> result) {
-          _onLocationChanged(createLatLng(result));
+          _handleOnLocationChanged(_createLatLng(result));
         },
       ),
     );
   }
 
-  void _onLocationChanged(LatLng value) {
-    if (onLocationChanged != null) {
+  void _handleOnLocationChanged(LatLng value) {
+    _location = value;
+    _error = null;
+    if (onLocationChanged != null && value != null) {
       onLocationChanged(value);
     }
   }
 
-  void _onLocationError(String error) {
-    if (onLocationError != null) {
-      onLocationError(error);
+  void _handleOnError(Exception value) {
+    _error = value;
+    if (onError != null && value != null) {
+      onError(value);
     }
   }
 
-  LatLng createLatLng(Map<String, double> value) {
-    return LatLng(value['latitude'], value['longitude']);
-  }
+  // Dispose
 
   dispose() {
     _subscriptions.cancel();
   }
+
+  // Getter
+
+  bool get hasPermission => _hasPermission;
+
+  LatLng get lastLocation => _location;
+
+  Exception get error => _error;
+}
+
+LatLng _createLatLng(Map<String, double> value) {
+  return LatLng(value['latitude'], value['longitude']);
 }

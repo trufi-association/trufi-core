@@ -168,7 +168,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: StreamBuilder<LatLng>(
         stream: locationProviderBloc.outLocationUpdate,
-        initialData: locationProviderBloc.location,
+        initialData: locationProviderBloc.lastLocation,
         builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
           return _buildItem(
               context,
@@ -187,7 +187,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: StreamBuilder<LatLng>(
           stream: locationProviderBloc.outLocationUpdate,
-          initialData: locationProviderBloc.location,
+          initialData: locationProviderBloc.lastLocation,
           builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
             return _buildItem(
                 context,
