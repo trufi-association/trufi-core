@@ -265,7 +265,7 @@ class PlanItineraryLeg {
           "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}");
     }
     sb.write(
-        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()}");
+        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()})");
     return sb.toString();
   }
 
@@ -285,9 +285,11 @@ class PlanItineraryLeg {
     String carType = routeLongName?.toLowerCase() ?? "";
     return carType.contains('trufi')
         ? localizations.instructionRideTrufi
-        : carType.contains('micro') || carType.contains('minibus')
+        : carType.contains('micro')
             ? localizations.instructionRideMicro
-            : localizations.instructionRideBus;
+            : carType.contains('minibus')
+                ? localizations.instructionRideMinibus
+                : localizations.instructionRideBus;
   }
 
   String _distanceString() {
