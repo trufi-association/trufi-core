@@ -47,7 +47,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               child: Text(
                 localizations.feedbackContent,
                 style: TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
               ),
               padding: const EdgeInsets.all(24.0),
             ),

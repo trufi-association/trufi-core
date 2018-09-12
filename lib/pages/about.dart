@@ -11,7 +11,8 @@ class AboutPage extends StatelessWidget {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(localizations.menuAbout)),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -19,12 +20,13 @@ class AboutPage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: Text(
                 localizations.title,
-                style: TextStyle(fontSize: 30.0),
+                style: TextStyle(fontSize: 28.0),
               ),
             ),
             Container(
               child: Text(
                 localizations.tagLine,
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20.0),
               ),
             ),
@@ -33,7 +35,7 @@ class AboutPage extends StatelessWidget {
               child: Text(
                 localizations.aboutContent,
                 style: TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
               ),
             ),
           ],
