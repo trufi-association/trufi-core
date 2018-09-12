@@ -38,7 +38,7 @@ class FeedBackPageState extends State<FeedbackPage> {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     const String toLaunch = 'mailto:feedback@trufi.com?subject=Feedback';
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.feedback)),
+      appBar: AppBar(title: Text(localizations.menuFeedback)),
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
