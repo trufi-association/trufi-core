@@ -13,17 +13,20 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+          padding: EdgeInsets.only(top: 35.0),
           child: Column(
             children: <Widget>[
               Text(
                 localizations.title,
                 style: TextStyle(fontSize: 20.0),
               ),
-              Text(
-                localizations.description,
-                textAlign: TextAlign.justify,
-              ),
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  localizations.description,
+                  textAlign: TextAlign.center,
+                ),
+              )
             ],
           ),
           decoration: BoxDecoration(
