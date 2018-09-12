@@ -36,9 +36,9 @@ class FeedBackPageState extends State<FeedbackPage> {
   @override
   Widget build(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    const String toLaunch = 'mailto:feedback@trufi.com?subject=Feedback';
+    const String toLaunch = 'mailto:trufi-feedback@googlegroups.com?subject=Feedback';
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.feedback)),
+      appBar: AppBar(title: Text(localizations.menuFeedback)),
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +47,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               child: Text(
                 localizations.feedbackContent,
                 style: TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
               ),
               padding: const EdgeInsets.all(24.0),
             ),

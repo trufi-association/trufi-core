@@ -8,6 +8,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
+import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 void main() {
@@ -31,6 +32,7 @@ class TrufiApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         AboutPage.route: (context) => AboutPage(),
         FeedbackPage.route: (context) => FeedbackPage(),
+        TeamPage.route: (context) => TeamPage(),
       },
       localizationsDelegates: [
         const TrufiLocalizationsDelegate(),
