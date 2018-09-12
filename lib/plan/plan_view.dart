@@ -40,28 +40,28 @@ class PlanViewState extends State<PlanView>
   Widget build(BuildContext context) {
     LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
-    return StreamBuilder<LatLng>(
-      stream: locationProviderBloc.outLocationUpdate,
-      initialData: locationProviderBloc.location,
-      builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-        return Column(
-          children: <Widget>[
-            Expanded(
-              child: MapControllerPage(
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: StreamBuilder<LatLng>(
+            stream: locationProviderBloc.outLocationUpdate,
+            initialData: locationProviderBloc.location,
+            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+              return MapControllerPage(
                 plan: widget.plan,
                 initialPosition: snapshot.data,
                 onSelected: _setItinerary,
                 selectedItinerary: selectedItinerary,
-              ),
-            ),
-            VisibleWidget(
-              child: _buildItinerariesVisible(context),
-              visibility: _visibleFlag,
-              removedChild: _buildItinerariesGone(context),
-            ),
-          ],
-        );
-      },
+              );
+            },
+          ),
+        ),
+        VisibleWidget(
+          child: _buildItinerariesVisible(context),
+          visibility: _visibleFlag,
+          removedChild: _buildItinerariesGone(context),
+        ),
+      ],
     );
   }
 
@@ -83,20 +83,21 @@ class PlanViewState extends State<PlanView>
   Widget _buildItinerariesGone(BuildContext context) {
     return Container(
       height: 60.0,
+      padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: _setSummaryForSelectedItinerary(),
-          ),
-          IconButton(
-            icon: Icon(Icons.keyboard_arrow_up),
-            onPressed: _toggleInstructions,
-          ),
-        ],
+      child: InkWell(
+        onTap: _toggleInstructions,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: _buildItinerarySummary(selectedItinerary),
+            ),
+            Icon(Icons.keyboard_arrow_up),
+          ],
+        ),
       ),
     );
   }
@@ -116,9 +117,9 @@ class PlanViewState extends State<PlanView>
     });
   }
 
-  Widget _setSummaryForSelectedItinerary() {
+  Widget _buildItinerarySummary(PlanItinerary itinerary) {
     List<Widget> summary = List();
-    var legs = selectedItinerary.legs;
+    var legs = itinerary.legs;
     for (var i = 0; i < legs.length; i++) {
       var leg = legs[i];
       summary.add(
