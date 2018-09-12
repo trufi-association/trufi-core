@@ -74,7 +74,7 @@ class TrufiLocalizations {
       Connections: 'Connections',
       About: 'About',
       Feedback: 'Feedback',
-      FeedbackContent: 'We would like to hear from you. Send us your comments and suggestions.',
+      FeedbackContent: 'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackButton: 'Send us an E-mail',
     },
     'es': {
@@ -106,7 +106,7 @@ class TrufiLocalizations {
       Connections: 'Conexiones',
       About: 'Sobre nosotros',
       Feedback: 'Feedback',
-      FeedbackContent: 'Nos gustaría saber de usted. Envíenos sus comentarios y sugerencias.',
+      FeedbackContent: '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
       FeedbackButton: 'Envianos un correo',
     },
     'de': {
@@ -138,7 +138,7 @@ class TrufiLocalizations {
       Connections: 'Verbindungen',
       About: 'Über',
       Feedback: 'Feedback',
-      FeedbackContent: 'Wir würden gerne von Ihnen hören. Senden Sie uns Ihre Kommentare und Vorschläge.',
+      FeedbackContent: 'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
       FeedbackButton: 'E-mail schicken',
     },
   };
