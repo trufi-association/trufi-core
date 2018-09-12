@@ -83,20 +83,22 @@ class PlanViewState extends State<PlanView>
   Widget _buildItinerariesGone(BuildContext context) {
     return Container(
       height: 60.0,
-      padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
-      child: InkWell(
-        onTap: _toggleInstructions,
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: _buildItinerarySummary(selectedItinerary),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: _toggleInstructions,
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: _buildItinerarySummary(selectedItinerary)),
+                Icon(Icons.keyboard_arrow_up),
+              ],
             ),
-            Icon(Icons.keyboard_arrow_up),
-          ],
+          ),
         ),
       ),
     );
