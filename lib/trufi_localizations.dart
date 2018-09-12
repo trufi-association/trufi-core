@@ -42,6 +42,8 @@ class TrufiLocalizations {
   static const String Connections = "connection";
   static const String About = "about";
   static const String Feedback = "feedback";
+  static const String FeedbackContent = "feedback_content";
+  static const String FeedbackButton = "feedback_button";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -73,7 +75,9 @@ class TrufiLocalizations {
       InstructionFor: 'for',
       Connections: 'Connections',
       About: 'About',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: 'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
+      FeedbackButton: 'Send us an E-mail',
     },
     'es': {
       Title: 'TrufiApp',
@@ -104,7 +108,9 @@ class TrufiLocalizations {
       InstructionFor: 'por',
       Connections: 'Conexiones',
       About: 'Sobre nosotros',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
+      FeedbackButton: 'Envianos un correo',
     },
     'de': {
       Title: 'TrufiApp',
@@ -126,7 +132,7 @@ class TrufiLocalizations {
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
       MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
       InstructionWalk: 'Gehen Sie',
-      InstructionRide: 'Fahren Sie mit ',
+      InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
       InstructionRideMicro: 'dem Micro',
       InstructionRideMinibus: 'dem Minibus',
@@ -135,7 +141,9 @@ class TrufiLocalizations {
       InstructionFor: 'für',
       Connections: 'Verbindungen',
       About: 'Über',
-      Feedback: 'Feedback'
+      Feedback: 'Feedback',
+      FeedbackContent: 'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
+      FeedbackButton: 'E-mail schicken',
     },
   };
 
@@ -253,6 +261,14 @@ class TrufiLocalizations {
 
   String get feedback {
     return _localizedValues[locale.languageCode][Feedback];
+  }
+
+  String get feedbackContent {
+    return _localizedValues[locale.languageCode][FeedbackContent];
+  }
+
+  String get feedbackButton {
+    return _localizedValues[locale.languageCode][FeedbackButton];
   }
 }
 
