@@ -13,6 +13,7 @@ class AboutPage extends StatelessWidget {
       appBar: AppBar(title: Text(localizations.menuAbout)),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(16.0),

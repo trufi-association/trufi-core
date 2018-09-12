@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
+import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 Drawer buildDrawer(BuildContext context, String currentRoute) {
@@ -12,11 +13,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
+          padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(16.0),
-              ),
               Text(
                 localizations.title,
                 style: TextStyle(fontSize: 20.0),
@@ -58,9 +57,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ListTile(
           leading: Icon(Icons.people),
           title: Text(localizations.menuTeam),
-          selected: currentRoute == FeedbackPage.route,
+          selected: currentRoute == TeamPage.route,
           onTap: () {
-            Navigator.popAndPushNamed(context, FeedbackPage.route);
+            Navigator.popAndPushNamed(context, TeamPage.route);
           },
         ),
       ],
