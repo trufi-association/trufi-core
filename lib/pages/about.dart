@@ -10,8 +10,34 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.about)),
-      body: Center(child: Text("It's all about TRUFI")),
+      appBar: AppBar(title: Text(localizations.menuAbout)),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                localizations.title,
+                style: TextStyle(fontSize: 30.0),
+              ),
+            ),
+            Container(
+              child: Text(
+                localizations.tagLine,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                localizations.aboutContent,
+                style: TextStyle(fontSize: 20.0),
+                textAlign: TextAlign.justify,
+              ),
+            ),
+          ],
+        ),
+      ),
       drawer: buildDrawer(context, route),
     );
   }
