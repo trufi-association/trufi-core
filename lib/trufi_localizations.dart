@@ -48,10 +48,10 @@ class TrufiLocalizations {
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
+  static const String MenuLanguage = "language";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
-  static const String Language = "language";
   static const String English = "english";
   static const String German = "german";
   static const String Spanish = "spanish";
@@ -60,7 +60,8 @@ class TrufiLocalizations {
     'en': {
       Title: 'Trufi App',
       TagLine: 'Public transportation in Cochabamba',
-      Description: 'The best way to travel with trufis, micros and busses through Cochabamba.',
+      Description:
+          'The best way to travel with trufis, micros and busses through Cochabamba.',
       CommonDestination: 'Destination',
       CommonOrigin: 'Origin',
       CommonNoInternetConnection: 'No internet connection',
@@ -90,19 +91,21 @@ class TrufiLocalizations {
       MenuAbout: 'About',
       MenuTeam: 'Become part of the Team',
       MenuFeedback: 'Send Feedback',
-      FeedbackContent: 'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
+      FeedbackContent:
+          'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackButton: 'Send us an E-mail',
-      AboutContent: 'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
-      Language: 'Language',
+      AboutContent:
+          'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      MenuLanguage: 'Language',
       English: 'English',
       German: 'German',
       Spanish: 'Spanish'
-
     },
     'es': {
       Title: 'Trufi App',
       TagLine: 'Transporte público en Cochabamba',
-      Description: 'La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.',
+      Description:
+          'La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.',
       CommonDestination: 'Destino',
       CommonOrigin: 'Origen',
       CommonNoInternetConnection: 'Sin conexión a internet',
@@ -132,10 +135,12 @@ class TrufiLocalizations {
       MenuAbout: 'Acerca',
       MenuTeam: 'Forme parte del equipo',
       MenuFeedback: 'Envía comentarios',
-      FeedbackContent: '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
+      FeedbackContent:
+          '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
       FeedbackButton: 'Envianos un correo',
-      AboutContent: 'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
-      Language: 'Idioma',
+      AboutContent:
+          'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      MenuLanguage: 'Idioma',
       English: 'Inglés',
       German: 'Alemán',
       Spanish: 'Español'
@@ -143,7 +148,8 @@ class TrufiLocalizations {
     'de': {
       Title: 'Trufi App',
       TagLine: 'Öffentliche Verkehrsmittel in Cochabamba',
-      Description: 'Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen.',
+      Description:
+          'Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen.',
       CommonDestination: 'Fahrtziel',
       CommonOrigin: 'Startpunkt',
       CommonNoInternetConnection: 'Keine Internetverbindung',
@@ -173,10 +179,12 @@ class TrufiLocalizations {
       MenuAbout: 'Über',
       MenuTeam: 'Werde Teil des Teams',
       MenuFeedback: 'Feedback',
-      FeedbackContent: 'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
+      FeedbackContent:
+          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
       FeedbackButton: 'E-mail schicken',
-      AboutContent: 'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
-      Language: 'Sprache',
+      AboutContent:
+          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
+      MenuLanguage: 'Sprache',
       English: 'Englisch',
       German: 'Deutsch',
       Spanish: 'Spanisch'
@@ -190,6 +198,7 @@ class TrufiLocalizations {
   String get tagLine {
     return _localizedValues[locale.languageCode][TagLine];
   }
+
   String get description {
     return _localizedValues[locale.languageCode][Description];
   }
@@ -306,7 +315,6 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][MenuTeam];
   }
 
-
   String get menuFeedback {
     return _localizedValues[locale.languageCode][MenuFeedback];
   }
@@ -319,13 +327,12 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][FeedbackButton];
   }
 
-
   String get aboutContent {
     return _localizedValues[locale.languageCode][AboutContent];
   }
 
   String get language {
-    return _localizedValues[locale.languageCode][Language];
+    return _localizedValues[locale.languageCode][MenuLanguage];
   }
 
   String get english {
