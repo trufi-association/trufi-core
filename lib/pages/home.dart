@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
@@ -35,17 +34,8 @@ class HomePageState extends State<HomePage>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
-  AnimationController controller;
-  Animation<double> animation;
-
   initState() {
     super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
-    animation = Tween(begin: 0.0, end: 42.0).animate(controller)
-      ..addListener(() {
-        setState(() {});
-      });
     Future.delayed(Duration.zero, () {
       Places.init(this.context);
     });
@@ -58,15 +48,10 @@ class HomePageState extends State<HomePage>
         setState(() {
           _fromFieldKey.currentState?.didChange(data.fromPlace);
           _toFieldKey.currentState?.didChange(data.toPlace);
-          controller.forward();
         });
       }
-    }
-  }
 
-  dispose() {
-    controller.dispose();
-    super.dispose();
+    }
   }
 
   @override
@@ -84,7 +69,7 @@ class HomePageState extends State<HomePage>
     return AppBar(
       bottom: PreferredSize(
         child: Container(),
-        preferredSize: Size.fromHeight(animation.value),
+        preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
       leading: _buildResetButton(),
@@ -94,25 +79,23 @@ class HomePageState extends State<HomePage>
   Widget _buildFormFields(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     List<Row> rows = List();
-    bool swapLocationsEnabled = false;
-    if (_isFromFieldVisible()) {
-      rows.add(
-        _buildFormField(
-          _fromFieldKey,
-          localizations.commonOrigin,
-          _setFromPlace,
-          initialValue: data.fromPlace,
-        ),
-      );
-      swapLocationsEnabled = true;
-    }
+
+    rows.add(
+      _buildFormField(
+        _fromFieldKey,
+        localizations.commonOrigin,
+        _setFromPlace,
+        initialValue: data.fromPlace,
+      ),
+    );
+
     rows.add(
       _buildFormField(
         _toFieldKey,
         localizations.commonDestination,
         _setToPlace,
         initialValue: data.toPlace,
-        trailing: swapLocationsEnabled
+        trailing: _isToFieldSet()
             ? GestureDetector(
                 onTap: () => _swapPlaces(),
                 child: Icon(Icons.swap_vert),
@@ -132,7 +115,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildResetButton() {
-    if (!_isFromFieldVisible()) {
+    if (!_isToFieldSet()) {
       return null;
     }
     return IconButton(
@@ -169,10 +152,6 @@ class HomePageState extends State<HomePage>
         ),
       ],
     );
-  }
-
-  bool _isFromFieldVisible() {
-    return data.toPlace != null && controller.isCompleted;
   }
 
   Widget _buildBody(BuildContext context) {
@@ -212,8 +191,8 @@ class HomePageState extends State<HomePage>
   void _reset() {
     _formKey.currentState.reset();
     setState(() {
+      print("reset");
       data.reset();
-      controller.reverse();
     });
   }
 
@@ -227,9 +206,6 @@ class HomePageState extends State<HomePage>
   void _setToPlace(TrufiLocation value) {
     setState(() {
       data.toPlace = value;
-      if (data.toPlace != null) {
-        controller.forward();
-      }
       _fetchPlan();
     });
   }
@@ -272,6 +248,10 @@ class HomePageState extends State<HomePage>
       }
     }
   }
+
+  bool _isToFieldSet() {
+    return data.toPlace != null;
+  }
 }
 
 class HomePageStateData {
@@ -307,9 +287,9 @@ class HomePageStateData {
 
   Map<String, dynamic> toJson() {
     return {
-      _FromPlace: fromPlace.toJson(),
-      _ToPlace: toPlace.toJson(),
-      _Plan: plan.toJson(),
+      _FromPlace: fromPlace != null ? fromPlace.toJson(): null,
+      _ToPlace: toPlace != null ? toPlace.toJson() : null,
+      _Plan: plan != null ? plan.toJson() : null,
     };
   }
 

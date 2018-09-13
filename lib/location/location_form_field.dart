@@ -31,17 +31,17 @@ class LocationFormField extends FormField<TrufiLocation> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.all(1.0),
                   decoration: new BoxDecoration(
-                    color: theme.highlightColor,
-                    border: new Border(
-                      bottom: new BorderSide(color: Colors.black, width: 1.0),
-                    ),
+                    color: Colors.transparent,
+                    border: new Border.all(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
                   ),
                   child: SizedBox(
                     height: 32.0,
                     child: FittedBox(
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: RichText(
                         text: state.value != null
