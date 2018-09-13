@@ -14,8 +14,8 @@ dependencies:
       ref: feat/customise_polylines
 
   cupertino_icons: ^0.1.2
+  geolocator: ^1.7.0
   http: ^0.11.3+16
-  location: ^1.4.1
   path_provider: ^0.4.1
   rxdart: ^0.18.1
   synchronized: ^1.5.1+1
