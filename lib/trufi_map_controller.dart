@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
+import 'package:trufi_app/widgets/alerts.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
@@ -42,11 +45,20 @@ class MapControllerPageState extends State<MapControllerPage> {
     super.initState();
     mapController = MapController()
       ..onReady.then((_) {
-        setState(() {});
+        mapController.move(
+          widget.initialPosition != null
+              ? widget.initialPosition
+              : LatLng(-17.4603761, -66.1860606),
+          15.0,
+        );
       });
   }
 
   Widget build(BuildContext context) {
+    final LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+
+    // Clear content
     _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
     _plan = widget.plan;
     _selectedItinerary = widget.selectedItinerary;
@@ -76,7 +88,8 @@ class MapControllerPageState extends State<MapControllerPage> {
           _selectedItinerary = _plan.itineraries.first;
         }
         _itineraries.addAll(
-            createItineraries(_plan, _selectedItinerary, _setItinerary));
+          createItineraries(_plan, _selectedItinerary, _setItinerary),
+        );
         _itineraries.forEach((itinerary, polylinesWithMarker) {
           bool isSelected = itinerary == _selectedItinerary;
           polylinesWithMarker.forEach((polylineWithMarker) {
@@ -100,21 +113,10 @@ class MapControllerPageState extends State<MapControllerPage> {
         });
       }
     }
-    if (widget.initialPosition != null) {
-      _foregroundMarkers.add(buildYourLocationMarker(widget.initialPosition));
-    }
     if (_needsCameraUpdate && mapController.ready) {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
         _needsCameraUpdate = false;
-      } else if (widget.initialPosition != null) {
-        try {
-          mapController.move(widget.initialPosition, 15.0);
-          _needsCameraUpdate = false;
-        } catch (e) {
-          // TODO: In some cases the map throws an exception on an early move call
-          print(e);
-        }
       }
     }
 
@@ -125,22 +127,30 @@ class MapControllerPageState extends State<MapControllerPage> {
     List<Widget> children = <Widget>[];
     children.add(
       Positioned.fill(
-        child: FlutterMap(
-          mapController: mapController,
-          options: MapOptions(
-            zoom: 5.0,
-            maxZoom: 19.0,
-            minZoom: 1.0,
-            onTap: _handleOnMapTap,
-          ),
-          layers: <LayerOptions>[
-            mapBoxTileLayerOptions(),
-            MarkerLayerOptions(markers: _backgroundMarkers),
-            PolylineLayerOptions(polylines: _polylines),
-            PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _foregroundMarkers),
-            MarkerLayerOptions(markers: _selectedMarkers),
-          ],
+        child: StreamBuilder<LatLng>(
+          stream: locationProviderBloc.outLocationUpdate,
+          builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+            if (snapshot.data != null) {
+              _foregroundMarkers.add(buildYourLocationMarker(snapshot.data));
+            }
+            return FlutterMap(
+              mapController: mapController,
+              options: MapOptions(
+                zoom: 5.0,
+                maxZoom: 19.0,
+                minZoom: 1.0,
+                onTap: _handleOnMapTap,
+              ),
+              layers: <LayerOptions>[
+                mapBoxTileLayerOptions(),
+                MarkerLayerOptions(markers: _backgroundMarkers),
+                PolylineLayerOptions(polylines: _polylines),
+                PolylineLayerOptions(polylines: _selectedPolylines),
+                MarkerLayerOptions(markers: _foregroundMarkers),
+                MarkerLayerOptions(markers: _selectedMarkers),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -150,7 +160,10 @@ class MapControllerPageState extends State<MapControllerPage> {
         right: buttonMargin,
         width: buttonSize,
         height: buttonSize,
-        child: _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
+        child: _buildButton(
+          Icons.my_location,
+          () => _handleOnMyLocationButtonTapped(context),
+        ),
       ),
     );
     if (_plan != null) {
@@ -189,8 +202,18 @@ class MapControllerPageState extends State<MapControllerPage> {
     }
   }
 
-  void _handleOnMyLocationButtonTapped() {
-    mapController.move(widget.initialPosition, 17.0);
+  void _handleOnMyLocationButtonTapped(BuildContext context) async {
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    LatLng lastLocation = await locationProviderBloc.lastLocation;
+    if (lastLocation != null) {
+      mapController.move(lastLocation, 17.0);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => buildAlertLocationServicesDenied(context),
+    );
   }
 
   void _handleOnCropButtonTapped() {
