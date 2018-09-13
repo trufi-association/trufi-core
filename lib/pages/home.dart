@@ -6,7 +6,6 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/drawer.dart';
@@ -72,12 +71,15 @@ class HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
-      child: Scaffold(
+        key: _formKey,
+        child: Scaffold(
           appBar: _buildAppBar(context),
           body: _buildBody(context),
-          drawer: buildDrawer(context, HomePage.route)),
-    );
+          drawer: TrufiDrawer(
+            HomePage.route,
+            onLanguageChangedCallback: () => setState(() {}),
+          ),
+        ));
   }
 
   Widget _buildAppBar(BuildContext context) {
