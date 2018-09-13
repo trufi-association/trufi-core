@@ -13,6 +13,12 @@ class TrufiLocalizations {
   }
 
   static const String Title = "title";
+  static const String AlertLocationServicesDeniedTitle =
+      "alert_location_services_denied_title";
+  static const String AlertLocationServicesDeniedMessage =
+      "alert_location_services_denied_message";
+  static const String CommonOK = "common_ok";
+  static const String CommonCancel = "common_cancel";
   static const String CommonDestination = "common_destination";
   static const String CommonOrigin = "common_origin";
   static const String CommonNoInternetConnection =
@@ -46,6 +52,11 @@ class TrufiLocalizations {
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
       Title: 'TrufiApp',
+      AlertLocationServicesDeniedTitle: 'No location',
+      AlertLocationServicesDeniedMessage:
+          'Please make sure your device has GPS and the Location settings are activated.',
+      CommonOK: 'OK',
+      CommonCancel: 'Cancel',
       CommonDestination: 'Destination',
       CommonOrigin: 'Origin',
       CommonNoInternetConnection: 'No internet connection',
@@ -77,6 +88,11 @@ class TrufiLocalizations {
     },
     'es': {
       Title: 'TrufiApp',
+      AlertLocationServicesDeniedTitle: 'Sin acceso a la ubicación',
+      AlertLocationServicesDeniedMessage:
+          'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
+      CommonOK: 'Aceptar',
+      CommonCancel: 'Cancelar',
       CommonDestination: 'Destino',
       CommonOrigin: 'Origen',
       CommonNoInternetConnection: 'Sin conexión a internet',
@@ -108,6 +124,11 @@ class TrufiLocalizations {
     },
     'de': {
       Title: 'TrufiApp',
+      AlertLocationServicesDeniedTitle: 'Kein Standort',
+      AlertLocationServicesDeniedMessage:
+          'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.',
+      CommonOK: 'OK',
+      CommonCancel: 'Abbrechen',
       CommonDestination: 'Fahrtziel',
       CommonOrigin: 'Startpunkt',
       CommonNoInternetConnection: 'Keine Internetverbindung',
@@ -141,6 +162,24 @@ class TrufiLocalizations {
 
   String get title {
     return _localizedValues[locale.languageCode][Title];
+  }
+
+  String get alertLocationServicesDeniedTitle {
+    return _localizedValues[locale.languageCode]
+        [AlertLocationServicesDeniedTitle];
+  }
+
+  String get alertLocationServicesDeniedMessage {
+    return _localizedValues[locale.languageCode]
+        [AlertLocationServicesDeniedMessage];
+  }
+
+  String get commonOK {
+    return _localizedValues[locale.languageCode][CommonOK];
+  }
+
+  String get commonCancel {
+    return _localizedValues[locale.languageCode][CommonCancel];
   }
 
   String get commonDestination {

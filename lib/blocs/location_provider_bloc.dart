@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -11,10 +10,9 @@ import 'package:trufi_app/composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
   LocationProviderBloc() {
-    _locationProvider = LocationProvider(onLocationChanged: (location) {
-      _inLocationUpdate.add(location);
-    })
-      ..init();
+    _locationProvider = LocationProvider(
+      onLocationChanged: _inLocationUpdate.add,
+    )..init();
   }
 
   LocationProvider _locationProvider;
@@ -36,89 +34,53 @@ class LocationProviderBloc implements BlocBase {
 
   // Getter
 
-  bool get hasPermission => _locationProvider.hasPermission;
-
-  LatLng get lastLocation => _locationProvider.lastLocation;
-
-  Exception get error => _locationProvider.error;
-}
-
-class PermissionDeniedException implements Exception {
-  PermissionDeniedException(this._innerException);
-
-  final Exception _innerException;
-
-  @override
-  String toString() {
-    return "PermissionDeniedException: ${_innerException.toString()}";
+  Future<LatLng> get lastLocation async {
+    LatLng lastLocation;
+    try {
+      GeolocationStatus status = await _locationProvider.status;
+      if (status == GeolocationStatus.granted) {
+        lastLocation = await _locationProvider.lastLocation;
+        if (lastLocation == null) {
+          print("Location provider: No last location");
+        }
+      } else {
+        print("Location provider: Permission not granted");
+      }
+    } catch (e) {
+      print("Location provider: ${e.toString()}");
+    }
+    return lastLocation;
   }
-}
 
-class PermissionDeniedNeverAskException implements Exception {
-  PermissionDeniedNeverAskException(this._innerException);
-
-  final Exception _innerException;
-
-  @override
-  String toString() {
-    return "PermissionDeniedNeverAskException: ${_innerException.toString()}";
-  }
+  Future<GeolocationStatus> get status async => _locationProvider.status;
 }
 
 class LocationProvider {
   LocationProvider({
     this.onLocationChanged,
-    this.onError,
   });
 
   final ValueChanged<LatLng> onLocationChanged;
-  final ValueChanged<Exception> onError;
 
   final CompositeSubscription _subscriptions = CompositeSubscription();
-  final Location _locationManager = Location();
-
-  bool _hasPermission = false;
-  LatLng _location = LatLng(-17.4603761, -66.1860606);
-  Exception _error;
+  final Geolocator _geolocator = Geolocator();
+  final LocationOptions _locationOptions = LocationOptions(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 10,
+  );
 
   init() async {
-    try {
-      _hasPermission = await _locationManager.hasPermission();
-      _handleOnLocationChanged(
-        _createLatLng(
-          await _locationManager.getLocation(),
-        ),
-      );
-    } on PlatformException catch (e) {
-      Exception error = e;
-      if (e.code == 'PERMISSION_DENIED') {
-        error = PermissionDeniedException(e);
-      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error = PermissionDeniedNeverAskException(e);
-      }
-      _handleOnError(error);
-    }
+    _subscriptions.cancel();
     _subscriptions.add(
-      _locationManager.onLocationChanged().listen(
-        (Map<String, double> result) {
-          _handleOnLocationChanged(_createLatLng(result));
-        },
+      (await _geolocator.getPositionStream(_locationOptions)).listen(
+        (position) => _handleOnLocationChanged(position),
       ),
     );
   }
 
-  void _handleOnLocationChanged(LatLng value) {
-    _location = value;
-    _error = null;
-    if (onLocationChanged != null && value != null) {
-      onLocationChanged(value);
-    }
-  }
-
-  void _handleOnError(Exception value) {
-    _error = value;
-    if (onError != null && value != null) {
-      onError(value);
+  void _handleOnLocationChanged(Position value) {
+    if (onLocationChanged != null) {
+      onLocationChanged(LatLng(value.latitude, value.longitude));
     }
   }
 
@@ -130,13 +92,16 @@ class LocationProvider {
 
   // Getter
 
-  bool get hasPermission => _hasPermission;
+  Future<LatLng> get lastLocation async {
+    Position position = await _geolocator.getLastKnownPosition(
+      LocationAccuracy.high,
+    );
+    return position != null
+        ? LatLng(position.latitude, position.longitude)
+        : null;
+  }
 
-  LatLng get lastLocation => _location;
-
-  Exception get error => _error;
-}
-
-LatLng _createLatLng(Map<String, double> value) {
-  return LatLng(value['latitude'], value['longitude']);
+  Future<GeolocationStatus> get status async {
+    return _geolocator.checkGeolocationPermissionStatus();
+  }
 }
