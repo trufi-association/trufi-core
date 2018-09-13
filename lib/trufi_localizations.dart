@@ -26,9 +26,10 @@ class TrufiLocalizations {
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionResults = "search_title_result";
   static const String SearchCurrentPosition = "search_current_position";
+  static const String SearchSectionPleaseSelect = "search_please_select";
+  static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
   static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
-  static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String MapSectionChoosePoint = "map_choose_point";
   static const String MapSectionTapToChoose = "map_tap_to_choose";
   static const String InstructionWalk = "instruction_walk";
@@ -60,6 +61,7 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recent',
       SearchSectionResults: 'Search Results',
       SearchCurrentPosition: 'Current Position',
+      SearchSectionPleaseSelect: 'Please select',
       SearchFailLoadingPlan: 'Failed to load plan',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
@@ -93,6 +95,7 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recientes',
       SearchSectionResults: 'Resultados de búsqueda',
       SearchCurrentPosition: 'Posición actual',
+      SearchSectionPleaseSelect: 'Por favor seleccione',
       SearchFailLoadingPlan: 'Error al cargar plan',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
@@ -126,6 +129,7 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionResults: 'Suchergebnisse',
       SearchCurrentPosition: 'Aktuelle Position',
+      SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden dem Plan',
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigieren',
@@ -199,16 +203,20 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][SearchCurrentPosition];
   }
 
+  String get searchPleaseSelect {
+    return _localizedValues[locale.languageCode][SearchSectionPleaseSelect];
+  }
+
+  String get searchFailLoadingPlan {
+    return _localizedValues[locale.languageCode][SearchFailLoadingPlan];
+  }
+
   String get searchMapMarker {
     return _localizedValues[locale.languageCode][SearchSectionMapMarker];
   }
 
   String get searchNavigate {
     return _localizedValues[locale.languageCode][SearchNavigateToMarker];
-  }
-
-  String get searchFailLoadingPlan {
-    return _localizedValues[locale.languageCode][SearchFailLoadingPlan];
   }
 
   String get instructionWalk {
