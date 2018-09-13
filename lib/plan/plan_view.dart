@@ -40,10 +40,9 @@ class PlanViewState extends State<PlanView>
   Widget build(BuildContext context) {
     LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
-    return Stack(
-      fit: StackFit.expand,
+    return Column(
       children: <Widget>[
-        Positioned.fill(
+        Expanded(
           child: StreamBuilder<LatLng>(
             stream: locationProviderBloc.outLocationUpdate,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
@@ -56,16 +55,10 @@ class PlanViewState extends State<PlanView>
             },
           ),
         ),
-        Positioned(
-          height: _visibleFlag == VisibilityFlag.visible ? 200.0 : 50.0,
-          left: 20.0,
-          right: 20.0,
-          bottom: 0.0,
-          child: VisibleWidget(
-            child: _buildItinerariesVisible(context),
-            visibility: _visibleFlag,
-            removedChild: _buildItinerariesGone(context),
-          ),
+        VisibleWidget(
+          child: _buildItinerariesVisible(context),
+          visibility: _visibleFlag,
+          removedChild: _buildItinerariesGone(context),
         ),
       ],
     );
@@ -73,9 +66,9 @@ class PlanViewState extends State<PlanView>
 
   Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
+      height: 200.0,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
       child: PlanItineraryTabPages(
@@ -88,14 +81,24 @@ class PlanViewState extends State<PlanView>
 
   Widget _buildItinerariesGone(BuildContext context) {
     return Container(
+      height: 60.0,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
-      child: IconButton(
-        icon: Icon(Icons.keyboard_arrow_up),
-        onPressed: _toggleInstructions,
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: _toggleInstructions,
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(child: _buildItinerarySummary(selectedItinerary)),
+                Icon(Icons.keyboard_arrow_up),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -113,5 +116,32 @@ class PlanViewState extends State<PlanView>
           ? VisibilityFlag.gone
           : VisibilityFlag.visible;
     });
+  }
+
+  Widget _buildItinerarySummary(PlanItinerary itinerary) {
+    List<Widget> summary = List();
+    var legs = itinerary.legs;
+    for (var i = 0; i < legs.length; i++) {
+      var leg = legs[i];
+      summary.add(
+        Row(
+          children: <Widget>[
+            Icon(leg.iconData()),
+            leg.mode == 'BUS'
+                ? Text(
+                    leg.route,
+                    style: new TextStyle(fontWeight: FontWeight.bold),
+                  )
+                : Text((leg.duration.ceil() ~/ 60).toString()),
+            i < (legs.length - 1)
+                ? Icon(Icons.keyboard_arrow_right)
+                : Container(),
+          ],
+        ),
+      );
+    }
+    return Row(
+      children: summary,
+    );
   }
 }
