@@ -4,13 +4,14 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
 class MapControllerPage extends StatefulWidget {
-  MapControllerPage(
-    this.initialPosition, {
+  MapControllerPage({
+    this.initialPosition,
     this.onSelected,
-  }) : assert(initialPosition != null);
+  });
 
   final LatLng initialPosition;
   final ValueChanged<LatLng> onSelected;
@@ -26,22 +27,30 @@ class MapControllerPageState extends State<MapControllerPage> {
 
   void initState() {
     super.initState();
-    chooseOnMapMarker = buildToMarker(widget.initialPosition);
+    chooseOnMapMarker = buildToMarker(
+      widget.initialPosition != null
+          ? widget.initialPosition
+          : LatLng(-17.4603761, -66.1860606),
+    );
     mapController = MapController()
       ..onReady.then((_) {
-        mapController.move(widget.initialPosition, 15.0);
+        mapController.move(
+          chooseOnMapMarker.point,
+          15.0,
+        );
       });
   }
 
   Widget build(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
+    final LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
+    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Column(
       children: [
         Expanded(
           child: StreamBuilder<LatLng>(
             stream: locationProviderBloc.outLocationUpdate,
-            initialData: widget.initialPosition,
+            initialData: null,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
               List<Marker> markers = <Marker>[chooseOnMapMarker];
               if (snapshot.data != null) {
@@ -67,9 +76,11 @@ class MapControllerPageState extends State<MapControllerPage> {
         Row(
           children: <Widget>[
             Expanded(
-              child: RaisedButton(
-                child: Text("OK"),
-                onPressed: () => _handleOnOKPressed(context),
+              child: SafeArea(
+                child: RaisedButton(
+                  child: Text(localizations.commonOK),
+                  onPressed: () => _handleOnOKPressed(context),
+                ),
               ),
             ),
           ],

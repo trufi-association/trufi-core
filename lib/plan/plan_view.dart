@@ -45,7 +45,6 @@ class PlanViewState extends State<PlanView>
         Expanded(
           child: StreamBuilder<LatLng>(
             stream: locationProviderBloc.outLocationUpdate,
-            initialData: locationProviderBloc.location,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
               return MapControllerPage(
                 plan: widget.plan,

@@ -176,7 +176,6 @@ class HomePageState extends State<HomePage>
         BlocProvider.of<LocationProviderBloc>(context);
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
-      initialData: locationProviderBloc.location,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         return MapControllerPage(
           initialPosition: snapshot.data,
@@ -225,12 +224,15 @@ class HomePageState extends State<HomePage>
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     if (data.toPlace != null) {
       if (data.fromPlace == null) {
-        _setFromPlace(
-          TrufiLocation.fromLatLng(
-            localizations.searchCurrentPosition,
-            locationProviderBloc.location,
-          ),
-        );
+        final LatLng lastLocation = await locationProviderBloc.lastLocation;
+        if (lastLocation != null) {
+          _setFromPlace(
+            TrufiLocation.fromLatLng(
+              localizations.searchCurrentPosition,
+              lastLocation,
+            ),
+          );
+        }
       } else {
         try {
           _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));

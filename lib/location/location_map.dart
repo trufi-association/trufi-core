@@ -7,7 +7,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 class ChooseOnMapScreen extends StatelessWidget {
   final LatLng initialPosition;
 
-  ChooseOnMapScreen(this.initialPosition) : assert(initialPosition != null);
+  ChooseOnMapScreen({this.initialPosition});
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +17,18 @@ class ChooseOnMapScreen extends StatelessWidget {
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new RichText(
+            RichText(
               maxLines: 1,
               overflow: TextOverflow.clip,
-              text: new TextSpan(
+              text: TextSpan(
                 text: TrufiLocalizations.of(context).mapChoosePoint,
                 style: theme.textTheme.title,
               ),
             ),
-            new RichText(
+            RichText(
               maxLines: 1,
               overflow: TextOverflow.clip,
-              text: new TextSpan(
+              text: TextSpan(
                 text: TrufiLocalizations.of(context).mapTapToChoose,
                 style: theme.textTheme.subhead,
               ),
@@ -38,7 +38,7 @@ class ChooseOnMapScreen extends StatelessWidget {
       ),
       body: Container(
         child: MapControllerPage(
-          initialPosition,
+          initialPosition: initialPosition,
           onSelected: (point) {
             Navigator.pop(context, point);
           },
