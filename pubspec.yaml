@@ -20,6 +20,8 @@ dependencies:
   rxdart: ^0.18.1
   synchronized: ^1.5.1+1
   shared_preferences: ^0.4.2
+  url_launcher: ^3.0.3
+
 
 dev_dependencies:
   flutter_test:
