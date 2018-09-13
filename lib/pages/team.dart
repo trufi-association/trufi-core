@@ -18,8 +18,10 @@ class TeamPageState extends State<TeamPage> {
       body: Center(
         child: Text('Team!'),
       ),
-      drawer:
-          TrufiDrawer(TeamPage.route, onLanguageChangedCallback: () => setState(() {})),
+      drawer: TrufiDrawer(
+        TeamPage.route,
+        onLanguageChangedCallback: () => setState(() {}),
+      ),
     );
   }
 }

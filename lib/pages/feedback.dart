@@ -64,8 +64,10 @@ class FeedBackPageState extends State<FeedbackPage> {
           ],
         ),
       ),
-      drawer: TrufiDrawer(FeedbackPage.route,
-          onLanguageChangedCallback: () => setState(() {})),
+      drawer: TrufiDrawer(
+        FeedbackPage.route,
+        onLanguageChangedCallback: () => setState(() {}),
+      ),
     );
   }
 }
