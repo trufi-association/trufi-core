@@ -39,18 +39,18 @@ class HomePageState extends State<HomePage>
     super.initState();
     Future.delayed(Duration.zero, () {
       Places.init(this.context);
+      _init();
     });
-    _loadPlan();
   }
 
-  void _loadPlan() async {
-    if (await data.load()) {
-      if (data.toPlace != null) {
-        setState(() {
-          _fromFieldKey.currentState?.didChange(data.fromPlace);
-          _toFieldKey.currentState?.didChange(data.toPlace);
-        });
-      }
+  void _init() async {
+    if (await data.load() && data.toPlace != null) {
+      setState(() {
+        _fromFieldKey.currentState?.didChange(data.fromPlace);
+        _toFieldKey.currentState?.didChange(data.toPlace);
+      });
+    } else {
+      _setFromPlaceToCurrentPosition();
     }
   }
 
@@ -76,50 +76,46 @@ class HomePageState extends State<HomePage>
         preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: _isToFieldSet() ? _buildResetButton() : null,
+      leading: data.isResettable ? _buildResetButton() : null,
     );
   }
 
   Widget _buildFormFields(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    List<Row> rows = List();
-    // start point
-    rows.add(
-      _buildFormField(
-        _fromFieldKey,
-        localizations.searchCurrentPosition,
-        _setFromPlace,
-      ),
-    );
-    // destination point
-    rows.add(
-      _buildFormField(
-        _toFieldKey,
-        localizations.searchPleaseSelect,
-        _setToPlace,
-        trailing: _isToFieldSet()
-            ? GestureDetector(
-                onTap: () => _swapPlaces(),
-                child: Icon(Icons.swap_vert),
-              )
-            : null,
-      ),
-    );
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: rows,
+          children: <Widget>[
+            _buildFormField(
+              _fromFieldKey,
+              localizations.searchPleaseSelect,
+              _setFromPlace,
+            ),
+            _buildFormField(
+              _toFieldKey,
+              localizations.searchPleaseSelect,
+              _setToPlace,
+              trailing: data.isSwappable ? _buildSwapButton() : null,
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSwapButton() {
+    return GestureDetector(
+      onTap: _swapPlaces,
+      child: Icon(Icons.swap_vert),
     );
   }
 
   Widget _buildResetButton() {
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-      onPressed: () => _reset(),
+      onPressed: _reset,
     );
   }
 
@@ -203,9 +199,10 @@ class HomePageState extends State<HomePage>
   }
 
   void _reset() {
-    _formKey.currentState.reset();
     setState(() {
       data.reset();
+      _formKey.currentState.reset();
+      _setFromPlaceToCurrentPosition();
     });
   }
 
@@ -227,6 +224,21 @@ class HomePageState extends State<HomePage>
     });
   }
 
+  void _setFromPlaceToCurrentPosition() async {
+    final LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final LatLng lastLocation = await locationProviderBloc.lastLocation;
+    if (lastLocation != null) {
+      _setFromPlace(
+        TrufiLocation.fromLatLng(
+          localizations.searchCurrentPosition,
+          lastLocation,
+        ),
+      );
+    }
+  }
+
   void _setToPlace(TrufiLocation toPlace) {
     setState(() {
       data.toPlace = toPlace;
@@ -246,38 +258,20 @@ class HomePageState extends State<HomePage>
   }
 
   void _fetchPlan() async {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    if (data.toPlace != null) {
-      if (data.fromPlace == null) {
-        final LatLng lastLocation = await locationProviderBloc.lastLocation;
-        if (lastLocation != null) {
-          _setFromPlace(
-            TrufiLocation.fromLatLng(
-              localizations.searchCurrentPosition,
-              lastLocation,
-            ),
-          );
-        }
-      } else {
-        setState(() => _isFetching = true);
-        try {
-          _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
-        } on api.FetchRequestException catch (e) {
-          print(e);
-          _setPlan(Plan.fromError(localizations.commonNoInternet));
-        } on api.FetchResponseException catch (e) {
-          print(e);
-          _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
-        }
-        setState(() => _isFetching = false);
+    if (data.toPlace != null && data.fromPlace != null) {
+      setState(() => _isFetching = true);
+      try {
+        _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
+      } on api.FetchRequestException catch (e) {
+        print(e);
+        _setPlan(Plan.fromError(localizations.commonNoInternet));
+      } on api.FetchResponseException catch (e) {
+        print(e);
+        _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
+      setState(() => _isFetching = false);
     }
-  }
-
-  bool _isToFieldSet() {
-    return data.toPlace != null;
   }
 }
 
@@ -349,6 +343,10 @@ class HomePageStateData {
   }
 
   // Getter
+
+  bool get isSwappable => _fromPlace != null && _toPlace != null;
+
+  bool get isResettable => _toPlace != null || _plan != null;
 
   TrufiLocation get fromPlace => _fromPlace;
 
