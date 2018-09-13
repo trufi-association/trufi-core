@@ -262,10 +262,10 @@ class PlanItineraryLeg {
       sb.write("${localizations.instructionWalk}");
     } else if (mode == 'BUS') {
       sb.write(
-          "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}");
+          "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}");
     }
     sb.write(
-        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()})");
+        " ${_durationString()} (${_distanceString()}) ${localizations.instructionTo}\n${_toString(localizations)}");
     return sb.toString();
   }
 
