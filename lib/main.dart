@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
+import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 void main() {
@@ -31,9 +31,10 @@ class TrufiApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         AboutPage.route: (context) => AboutPage(),
         FeedbackPage.route: (context) => FeedbackPage(),
+        TeamPage.route: (context) => TeamPage(),
       },
       localizationsDelegates: [
-        const TrufiLocalizationsDelegate(),
+        TrufiLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
