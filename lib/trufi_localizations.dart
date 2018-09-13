@@ -2,17 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
   TrufiLocalizations(this.locale);
 
-  final Locale locale;
+  Locale locale;
+
+  static const String SAVED_LANGUAGE_CODE = "LOCALE";
 
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
 
   static const String Title = "title";
+  static const String TagLine = "tag_line";
+  static const String Description = "description";
   static const String AlertLocationServicesDeniedTitle =
       "alert_location_services_denied_title";
   static const String AlertLocationServicesDeniedMessage =
@@ -32,9 +37,10 @@ class TrufiLocalizations {
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionResults = "search_title_result";
   static const String SearchCurrentPosition = "search_current_position";
+  static const String SearchSectionPleaseSelect = "search_please_select";
+  static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
   static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
-  static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String MapSectionChoosePoint = "map_choose_point";
   static const String MapSectionTapToChoose = "map_tap_to_choose";
   static const String InstructionWalk = "instruction_walk";
@@ -45,13 +51,24 @@ class TrufiLocalizations {
   static const String InstructionRideTrufi = "instruction_ride_trufi";
   static const String InstructionTo = "instruction_to";
   static const String InstructionFor = "instruction_for";
-  static const String Connections = "connection";
-  static const String About = "about";
-  static const String Feedback = "feedback";
+  static const String MenuConnections = "menu_connection";
+  static const String MenuAbout = "menu_about";
+  static const String MenuTeam = "menu_team";
+  static const String MenuFeedback = "menu_feedback";
+  static const String MenuLanguage = "language";
+  static const String FeedbackContent = "feedback_content";
+  static const String FeedbackButton = "feedback_button";
+  static const String AboutContent = "about_content";
+  static const String English = "english";
+  static const String German = "german";
+  static const String Spanish = "spanish";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      Title: 'TrufiApp',
+      Title: 'Trufi App',
+      TagLine: 'Public transportation in Cochabamba',
+      Description:
+          'The best way to travel with trufis, micros and busses through Cochabamba.',
       AlertLocationServicesDeniedTitle: 'No location',
       AlertLocationServicesDeniedMessage:
           'Please make sure your device has GPS and the Location settings are activated.',
@@ -69,6 +86,7 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recent',
       SearchSectionResults: 'Search Results',
       SearchCurrentPosition: 'Current Position',
+      SearchSectionPleaseSelect: 'Please select',
       SearchFailLoadingPlan: 'Failed to load plan',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
@@ -76,18 +94,31 @@ class TrufiLocalizations {
       MapSectionTapToChoose: 'Tap on map to choose',
       InstructionWalk: 'Walk',
       InstructionRide: 'Ride',
-      InstructionRideBus: 'bus',
-      InstructionRideMicro: 'micro',
-      InstructionRideMinibus: 'minibus',
-      InstructionRideTrufi: 'trufi',
+      InstructionRideBus: 'Bus',
+      InstructionRideMicro: 'Micro',
+      InstructionRideMinibus: 'Minibus',
+      InstructionRideTrufi: 'Trufi',
       InstructionTo: 'to',
       InstructionFor: 'for',
-      Connections: 'Connections',
-      About: 'About',
-      Feedback: 'Feedback'
+      MenuConnections: 'Show routes',
+      MenuAbout: 'About',
+      MenuTeam: 'Become part of the Team',
+      MenuFeedback: 'Send Feedback',
+      FeedbackContent:
+          'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
+      FeedbackButton: 'Send us an E-mail',
+      AboutContent:
+          'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      MenuLanguage: 'Language',
+      English: 'English',
+      German: 'German',
+      Spanish: 'Spanish'
     },
     'es': {
-      Title: 'TrufiApp',
+      Title: 'Trufi App',
+      TagLine: 'Transporte público en Cochabamba',
+      Description:
+          'La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.',
       AlertLocationServicesDeniedTitle: 'Sin acceso a la ubicación',
       AlertLocationServicesDeniedMessage:
           'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
@@ -105,25 +136,39 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recientes',
       SearchSectionResults: 'Resultados de búsqueda',
       SearchCurrentPosition: 'Posición actual',
+      SearchSectionPleaseSelect: 'Por favor seleccione',
       SearchFailLoadingPlan: 'Error al cargar plan',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
       MapSectionChoosePoint: 'Elige un punto en el mapa',
       MapSectionTapToChoose: 'Toca el mapa para elegir un punto',
-      InstructionWalk: 'Camina',
-      InstructionRide: 'Toma',
-      InstructionRideBus: 'el bus',
-      InstructionRideMicro: 'el micro',
-      InstructionRideMinibus: 'el minibus',
-      InstructionRideTrufi: 'la trufi',
-      InstructionTo: 'hacia',
+      InstructionWalk: 'Caminar',
+      InstructionRide: 'Tomar',
+      InstructionRideBus: 'Bus',
+      InstructionRideMicro: 'Micro',
+      InstructionRideMinibus: 'Minibus',
+      InstructionRideTrufi: 'Trufi',
+      InstructionTo: 'hasta',
       InstructionFor: 'por',
-      Connections: 'Conexiones',
-      About: 'Sobre nosotros',
-      Feedback: 'Feedback'
+      MenuConnections: 'Muestra rutas',
+      MenuAbout: 'Acerca',
+      MenuTeam: 'Forme parte del equipo',
+      MenuFeedback: 'Envía comentarios',
+      FeedbackContent:
+          '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
+      FeedbackButton: 'Envianos un correo',
+      AboutContent:
+          'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      MenuLanguage: 'Idioma',
+      English: 'Inglés',
+      German: 'Alemán',
+      Spanish: 'Español'
     },
     'de': {
-      Title: 'TrufiApp',
+      Title: 'Trufi App',
+      TagLine: 'Öffentliche Verkehrsmittel in Cochabamba',
+      Description:
+          'Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen.',
       AlertLocationServicesDeniedTitle: 'Kein Standort',
       AlertLocationServicesDeniedMessage:
           'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.',
@@ -141,27 +186,46 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionResults: 'Suchergebnisse',
       SearchCurrentPosition: 'Aktuelle Position',
+      SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden dem Plan',
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigieren',
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
       MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
       InstructionWalk: 'Gehen Sie',
-      InstructionRide: 'Fahren Sie mit ',
+      InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
       InstructionRideMicro: 'dem Micro',
       InstructionRideMinibus: 'dem Minibus',
       InstructionRideTrufi: 'der Trufi',
       InstructionTo: 'zur',
       InstructionFor: 'für',
-      Connections: 'Verbindungen',
-      About: 'Über',
-      Feedback: 'Feedback'
+      MenuConnections: 'Verbindungen',
+      MenuAbout: 'Über',
+      MenuTeam: 'Werde Teil des Teams',
+      MenuFeedback: 'Feedback',
+      FeedbackContent:
+          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
+      FeedbackButton: 'E-mail schicken',
+      AboutContent:
+          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
+      MenuLanguage: 'Sprache',
+      English: 'Englisch',
+      German: 'Deutsch',
+      Spanish: 'Spanisch'
     },
   };
 
   String get title {
     return _localizedValues[locale.languageCode][Title];
+  }
+
+  String get tagLine {
+    return _localizedValues[locale.languageCode][TagLine];
+  }
+
+  String get description {
+    return _localizedValues[locale.languageCode][Description];
   }
 
   String get alertLocationServicesDeniedTitle {
@@ -230,16 +294,20 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][SearchCurrentPosition];
   }
 
+  String get searchPleaseSelect {
+    return _localizedValues[locale.languageCode][SearchSectionPleaseSelect];
+  }
+
+  String get searchFailLoadingPlan {
+    return _localizedValues[locale.languageCode][SearchFailLoadingPlan];
+  }
+
   String get searchMapMarker {
     return _localizedValues[locale.languageCode][SearchSectionMapMarker];
   }
 
   String get searchNavigate {
     return _localizedValues[locale.languageCode][SearchNavigateToMarker];
-  }
-
-  String get searchFailLoadingPlan {
-    return _localizedValues[locale.languageCode][SearchFailLoadingPlan];
   }
 
   String get instructionWalk {
@@ -282,34 +350,120 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][MapSectionTapToChoose];
   }
 
-  String get connections {
-    return _localizedValues[locale.languageCode][Connections];
+  String get menuConnections {
+    return _localizedValues[locale.languageCode][MenuConnections];
   }
 
-  String get about {
-    return _localizedValues[locale.languageCode][About];
+  String get menuAbout {
+    return _localizedValues[locale.languageCode][MenuAbout];
   }
 
-  String get feedback {
-    return _localizedValues[locale.languageCode][Feedback];
+  String get menuTeam {
+    return _localizedValues[locale.languageCode][MenuTeam];
+  }
+
+  String get menuFeedback {
+    return _localizedValues[locale.languageCode][MenuFeedback];
+  }
+
+  String get feedbackContent {
+    return _localizedValues[locale.languageCode][FeedbackContent];
+  }
+
+  String get feedbackButton {
+    return _localizedValues[locale.languageCode][FeedbackButton];
+  }
+
+  String get aboutContent {
+    return _localizedValues[locale.languageCode][AboutContent];
+  }
+
+  String get language {
+    return _localizedValues[locale.languageCode][MenuLanguage];
+  }
+
+  String get english {
+    return _localizedValues[locale.languageCode][English];
+  }
+
+  String get german {
+    return _localizedValues[locale.languageCode][German];
+  }
+
+  String get spanish {
+    return _localizedValues[locale.languageCode][Spanish];
+  }
+
+  void switchToLanguage(String languageCode) {
+    locale = getLocale(languageCode);
+  }
+
+  static getLocale(String languageCode) {
+    switch (languageCode) {
+      case "en":
+        return Locale('en', 'US');
+        break;
+      case "de":
+        return Locale('de', 'DE');
+        break;
+      default:
+        return Locale('es', 'ES');
+        break;
+    }
+  }
+
+  getLanguageCode(String languageString) {
+    if (languageString == _localizedValues[locale.languageCode][English]) {
+      return "en";
+    } else if (languageString ==
+        _localizedValues[locale.languageCode][German]) {
+      return "de";
+    } else {
+      return "es";
+    }
+  }
+
+  String getLanguageString(String languageCode) {
+    switch (languageCode) {
+      case "en":
+        return _localizedValues[locale.languageCode][English];
+        break;
+      case "de":
+        return _localizedValues[locale.languageCode][German];
+        break;
+      default:
+        return _localizedValues[locale.languageCode][Spanish];
+        break;
+    }
   }
 }
 
 class TrufiLocalizationsDelegate
     extends LocalizationsDelegate<TrufiLocalizations> {
-  const TrufiLocalizationsDelegate();
+  TrufiLocalizations localizations;
+
+  TrufiLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) =>
       ['en', 'es', 'de'].contains(locale.languageCode);
 
   @override
-  Future<TrufiLocalizations> load(Locale locale) {
-    // Returning a SynchronousFuture here because an async "load" operation
-    // isn't needed to produce an instance of DemoLocalizations.
+  Future<TrufiLocalizations> load(Locale locale) async {
+    localizations = await _getLocalizations();
+    if (localizations != null) {
+      return localizations;
+    }
     return SynchronousFuture<TrufiLocalizations>(TrufiLocalizations(locale));
   }
 
   @override
-  bool shouldReload(TrufiLocalizationsDelegate old) => false;
+  bool shouldReload(TrufiLocalizationsDelegate old) =>
+      localizations == null ? false : old.localizations != localizations;
+
+  Future<TrufiLocalizations> _getLocalizations() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String languageCode = prefs.get(TrufiLocalizations.SAVED_LANGUAGE_CODE);
+    return TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)));
+  }
 }
