@@ -75,8 +75,10 @@ class HomePageState extends State<HomePage>
         child: Scaffold(
           appBar: _buildAppBar(context),
           body: _buildBody(context),
-          drawer: TrufiDrawer(HomePage.route,
-              onLanguageChangedCallback: () => setState(() {})),
+          drawer: TrufiDrawer(
+            HomePage.route,
+            onLanguageChangedCallback: () => setState(() {}),
+          ),
         ));
   }
 

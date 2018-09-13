@@ -45,8 +45,10 @@ class AboutPageState extends State<AboutPage> {
           ],
         ),
       ),
-      drawer: TrufiDrawer(AboutPage.route,
-          onLanguageChangedCallback: () => setState(() {})),
+      drawer: TrufiDrawer(
+        AboutPage.route,
+        onLanguageChangedCallback: () => setState(() {}),
+      ),
     );
   }
 }

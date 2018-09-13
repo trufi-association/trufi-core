@@ -7,8 +7,8 @@ import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
-  String currentRoute;
-  Function onLanguageChangedCallback;
+  final String currentRoute;
+  final Function onLanguageChangedCallback;
 
   TrufiDrawer(this.currentRoute, {this.onLanguageChangedCallback});
 
@@ -41,7 +41,10 @@ class DrawerState extends State<TrufiDrawer> {
   }
 
   Drawer buildDrawer(
-      BuildContext context, String currentRoute, SharedPreferences prefs) {
+    BuildContext context,
+    String currentRoute,
+    SharedPreferences prefs,
+  ) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -112,17 +115,22 @@ class DrawerState extends State<TrufiDrawer> {
       leading: Icon(Icons.language),
       title: new DropdownButton<String>(
         style: theme.textTheme.body2,
-        value:
-            localizations.getLanguageString(localizations.locale.languageCode),
+        value: localizations.getLanguageString(
+          localizations.locale.languageCode,
+        ),
         onChanged: (String newValue) {
           SharedPreferences.getInstance().then((prefs) {
             String languageCode = trufiLocalizations.getLanguageCode(newValue);
             prefs.setString(
-                TrufiLocalizations.SAVED_LANGUAGE_CODE, languageCode);
+              TrufiLocalizations.SAVED_LANGUAGE_CODE,
+              languageCode,
+            );
             trufiLocalizations.switchToLanguage(languageCode);
-            if (onLanguageChangedCallback != null) {
-              setState(onLanguageChangedCallback);
-            }
+            setState(() {
+              if (onLanguageChangedCallback != null) {
+                onLanguageChangedCallback();
+              }
+            });
           });
         },
         items: <String>[
@@ -130,9 +138,9 @@ class DrawerState extends State<TrufiDrawer> {
           localizations.english,
           localizations.german
         ].map((String value) {
-          return new DropdownMenuItem<String>(
+          return DropdownMenuItem<String>(
             value: value,
-            child: new Text(value),
+            child: Text(value),
           );
         }).toList(),
       ),
