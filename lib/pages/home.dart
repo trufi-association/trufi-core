@@ -72,29 +72,27 @@ class HomePageState extends State<HomePage>
         preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: _buildResetButton(),
+      leading: _isToFieldSet() ? _buildResetButton() : null,
     );
   }
 
   Widget _buildFormFields(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     List<Row> rows = List();
-
+    // start point
     rows.add(
       _buildFormField(
         _fromFieldKey,
-        localizations.commonOrigin,
+        localizations.searchCurrentPosition,
         _setFromPlace,
-        initialValue: data.fromPlace,
       ),
     );
-
+    // destination point
     rows.add(
       _buildFormField(
         _toFieldKey,
-        localizations.commonDestination,
+        localizations.searchPleaseSelect,
         _setToPlace,
-        initialValue: data.toPlace,
         trailing: _isToFieldSet()
             ? GestureDetector(
                 onTap: () => _swapPlaces(),
@@ -115,9 +113,6 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildResetButton() {
-    if (!_isToFieldSet()) {
-      return null;
-    }
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
       onPressed: () => _reset(),
@@ -143,7 +138,6 @@ class HomePageState extends State<HomePage>
             key: key,
             hintText: hintText,
             onSaved: onSaved,
-            initialValue: initialValue,
           ),
         ),
         SizedBox(
@@ -191,7 +185,6 @@ class HomePageState extends State<HomePage>
   void _reset() {
     _formKey.currentState.reset();
     setState(() {
-      print("reset");
       data.reset();
     });
   }
