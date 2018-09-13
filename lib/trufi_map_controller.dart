@@ -143,7 +143,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                 onTap: _handleOnMapTap,
               ),
               layers: <LayerOptions>[
-                mapBoxTileLayerOptions(),
+                tilehostingTileLayerOptions(),
                 MarkerLayerOptions(markers: _backgroundMarkers),
                 PolylineLayerOptions(polylines: _polylines),
                 PolylineLayerOptions(polylines: _selectedPolylines),
