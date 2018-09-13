@@ -33,6 +33,8 @@ class HomePageState extends State<HomePage>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
+  bool _isFetching = false;
+
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
@@ -49,7 +51,6 @@ class HomePageState extends State<HomePage>
           _toFieldKey.currentState?.didChange(data.toPlace);
         });
       }
-
     }
   }
 
@@ -153,11 +154,28 @@ class HomePageState extends State<HomePage>
 
   Widget _buildBody(BuildContext context) {
     PlanError error = data.plan?.error;
-    return Container(
+    Widget body = Container(
       child: error != null
           ? _buildBodyError(error)
           : data.plan != null ? PlanView(data.plan) : _buildBodyEmpty(context),
     );
+    if (_isFetching) {
+      return Stack(
+        children: <Widget>[
+          Positioned.fill(child: body),
+          Positioned.fill(
+            child: Container(
+              color: Colors.black54,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          )
+        ],
+      );
+    } else {
+      return body;
+    }
   }
 
   Widget _buildBodyError(PlanError error) {
@@ -234,6 +252,7 @@ class HomePageState extends State<HomePage>
           );
         }
       } else {
+        setState(() => _isFetching = true);
         try {
           _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
         } on api.FetchRequestException catch (e) {
@@ -243,6 +262,7 @@ class HomePageState extends State<HomePage>
           print(e);
           _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
         }
+        setState(() => _isFetching = false);
       }
     }
   }
@@ -285,7 +305,7 @@ class HomePageStateData {
 
   Map<String, dynamic> toJson() {
     return {
-      _FromPlace: fromPlace != null ? fromPlace.toJson(): null,
+      _FromPlace: fromPlace != null ? fromPlace.toJson() : null,
       _ToPlace: toPlace != null ? toPlace.toJson() : null,
       _Plan: plan != null ? plan.toJson() : null,
     };
