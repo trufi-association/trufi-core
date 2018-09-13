@@ -55,6 +55,7 @@ class TrufiLocalizations {
   static const String English = "english";
   static const String German = "german";
   static const String Spanish = "spanish";
+  static const String Quechua = "quechua";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -91,15 +92,16 @@ class TrufiLocalizations {
       MenuAbout: 'About',
       MenuTeam: 'Become part of the Team',
       MenuFeedback: 'Send Feedback',
+      MenuLanguage: 'Language',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackButton: 'Send us an E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
-      MenuLanguage: 'Language',
       English: 'English',
       German: 'German',
-      Spanish: 'Spanish'
+      Spanish: 'Spanish',
+      Quechua: 'Quechua'
     },
     'es': {
       Title: 'Trufi App',
@@ -143,7 +145,8 @@ class TrufiLocalizations {
       MenuLanguage: 'Idioma',
       English: 'Inglés',
       German: 'Alemán',
-      Spanish: 'Español'
+      Spanish: 'Español',
+      Quechua: 'Quechua'
     },
     'de': {
       Title: 'Trufi App',
@@ -187,8 +190,50 @@ class TrufiLocalizations {
       MenuLanguage: 'Sprache',
       English: 'Englisch',
       German: 'Deutsch',
-      Spanish: 'Spanisch'
+      Spanish: 'Spanisch',
+      Quechua: 'Quechua'
     },
+    'qu': {
+      Title: 'Trufi App',
+      TagLine: '-',
+      Description: '-',
+      CommonDestination: 'Mayman',
+      CommonOrigin: 'Maymanta',
+      CommonNoInternetConnection: 'Mana internet canchu',
+      CommonFailLoadingData: 'Mana aticunchu tariyta datusta',
+      CommonUnknownError: 'Mana yachacunchu imachus pasan',
+      SearchItemChooseOnMap: 'Ajllaw uj mapata',
+      SearchItemYourLocation: 'Gan cashanqui',
+      SearchSectionPlaces: 'Lugares',
+      SearchSectionRecent: "Kuintan masc'asgas",
+      SearchSectionResults: "Masc'asgas",
+      SearchCurrentPosition: 'Maypi cunan cashani',
+      SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
+      SearchSectionMapMarker: 'Maypi cashani mapapy',
+      SearchNavigateToMarker: 'Rina chaycamana',
+      MapSectionChoosePoint: 'Ajllaw uj puntuta mapapy',
+      MapSectionTapToChoose: "Ñit'iy mapapy",
+      InstructionWalk: 'Purina',
+      InstructionRide: '-',
+      InstructionRideBus: '-',
+      InstructionRideMicro: '-',
+      InstructionRideMinibus: '-',
+      InstructionRideTrufi: '-',
+      InstructionTo: 'Maycaman',
+      InstructionFor: 'Mayninta',
+      MenuConnections: '-',
+      MenuAbout: '-',
+      MenuTeam: '-',
+      MenuFeedback: '-',
+      MenuLanguage: '-',
+      FeedbackContent: '-',
+      FeedbackButton: '-',
+      AboutContent: '-',
+      English: 'English',
+      German: 'German',
+      Spanish: 'Spanish',
+      Quechua: 'Quechua'
+    }
   };
 
   String get title {
@@ -347,6 +392,10 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][Spanish];
   }
 
+  String get quechua {
+    return _localizedValues[locale.languageCode][Quechua];
+  }
+
   void switchToLanguage(String languageCode) {
     locale = getLocale(languageCode);
   }
@@ -358,6 +407,9 @@ class TrufiLocalizations {
         break;
       case "de":
         return Locale('de', 'DE');
+        break;
+      case "qu":
+        return Locale('qu', 'BO');
         break;
       default:
         return Locale('es', 'ES');
@@ -371,6 +423,9 @@ class TrufiLocalizations {
     } else if (languageString ==
         _localizedValues[locale.languageCode][German]) {
       return "de";
+    } else if (languageString ==
+        _localizedValues[locale.languageCode][Quechua]) {
+      return "qu";
     } else {
       return "es";
     }
@@ -383,6 +438,9 @@ class TrufiLocalizations {
         break;
       case "de":
         return _localizedValues[locale.languageCode][German];
+        break;
+      case "qu":
+        return _localizedValues[locale.languageCode][Quechua];
         break;
       default:
         return _localizedValues[locale.languageCode][Spanish];
