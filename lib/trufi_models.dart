@@ -313,9 +313,9 @@ class PlanItineraryLeg {
         : carType.contains('trufi')
             ? Icons.local_taxi
             : carType.contains('micro')
-                ? Icons.airport_shuttle
+                ? Icons.directions_bus
                 : carType.contains('minibus')
-                    ? Icons.train
+                    ? Icons.airport_shuttle
                     : Icons.directions_bus;
   }
 }
