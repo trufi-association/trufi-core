@@ -209,31 +209,40 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  void _setFromPlace(TrufiLocation value) async {
+  void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
     setState(() {
-      data.fromPlace = value;
+      data.fromPlace = fromPlace;
+      data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(data.toPlace);
+      _fromFieldKey.currentState.didChange(data.fromPlace);
       _fetchPlan();
     });
   }
 
-  void _setToPlace(TrufiLocation value) {
+  void _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
-      data.toPlace = value;
+      data.fromPlace = fromPlace;
+      _fromFieldKey.currentState.didChange(data.fromPlace);
       _fetchPlan();
     });
   }
 
-  void _setPlan(Plan value) {
+  void _setToPlace(TrufiLocation toPlace) {
     setState(() {
-      data.plan = value;
+      data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(data.toPlace);
+      _fetchPlan();
+    });
+  }
+
+  void _setPlan(Plan plan) {
+    setState(() {
+      data.plan = plan;
     });
   }
 
   void _swapPlaces() {
-    _toFieldKey.currentState.didChange(data.fromPlace);
-    _fromFieldKey.currentState.didChange(data.toPlace);
-    _toFieldKey.currentState.save();
-    _fromFieldKey.currentState.save();
+    _setPlaces(data.toPlace, data.fromPlace);
   }
 
   void _fetchPlan() async {
