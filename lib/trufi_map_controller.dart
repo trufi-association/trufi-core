@@ -51,6 +51,7 @@ class MapControllerPageState extends State<MapControllerPage> {
               : LatLng(-17.4603761, -66.1860606),
           15.0,
         );
+        setState(() {});
       });
   }
 
