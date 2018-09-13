@@ -99,17 +99,19 @@ class DrawerState extends State<TrufiDrawer> {
               Navigator.popAndPushNamed(context, TeamPage.route);
             },
           ),
-          buildDropdownButton(prefs)
+          buildDropdownButton(context, prefs)
         ],
       ),
     );
   }
 
-  Widget buildDropdownButton(SharedPreferences prefs) {
+  Widget buildDropdownButton(BuildContext context, SharedPreferences prefs) {
+    ThemeData theme = Theme.of(context);
     TrufiLocalizations trufiLocalizations = TrufiLocalizations.of(context);
     return new ListTile(
       leading: Icon(Icons.language),
       title: new DropdownButton<String>(
+        style: theme.textTheme.body2,
         value:
             localizations.getLanguageString(localizations.locale.languageCode),
         onChanged: (String newValue) {
