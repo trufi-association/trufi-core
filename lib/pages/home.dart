@@ -67,6 +67,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
       bottom: PreferredSize(
         child: Container(),
         preferredSize: Size.fromHeight(40.0),
