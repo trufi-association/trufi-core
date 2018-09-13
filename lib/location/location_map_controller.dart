@@ -66,7 +66,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                   onTap: (point) => _handleOnMapTap(point),
                 ),
                 layers: [
-                  mapBoxTileLayerOptions(),
+                  tilehostingTileLayerOptions(),
                   MarkerLayerOptions(markers: markers),
                 ],
               );
