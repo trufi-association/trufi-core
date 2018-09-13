@@ -7,10 +7,10 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
+  PolylineWithMarker(this.polyline, this.marker);
+
   final Polyline polyline;
   final Marker marker;
-
-  PolylineWithMarker(this.polyline, this.marker);
 }
 
 openStreetMapTileLayerOptions() {
