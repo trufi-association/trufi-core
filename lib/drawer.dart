@@ -118,11 +118,7 @@ class DrawerState extends State<TrufiDrawer> {
             prefs.setString(
                 TrufiLocalizations.SAVED_LANGUAGE_CODE, languageCode);
             trufiLocalizations.switchToLanguage(languageCode);
-            if (onLanguageChangedCallback == null) {
-              setState(() {
-                Navigator.popAndPushNamed(context, currentRoute);
-              });
-            } else {
+            if (onLanguageChangedCallback != null) {
               setState(onLanguageChangedCallback);
             }
           });
