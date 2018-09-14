@@ -206,8 +206,8 @@ class TrufiLocalizations {
       MenuTeam: 'Werde Teil des Teams',
       MenuFeedback: 'Feedback',
       FeedbackContent:
-          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
-      FeedbackButton: 'E-mail schicken',
+          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
+      FeedbackButton: 'E-Mail senden',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
       MenuLanguage: 'Sprache',
