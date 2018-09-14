@@ -60,6 +60,7 @@ class TrufiLocalizations {
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
+  static const String TeamContent = "team_content";
   static const String English = "english";
   static const String German = "german";
   static const String Spanish = "spanish";
@@ -110,6 +111,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Send us an E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      TeamContent: 'People and companies involved:',
       MenuLanguage: 'Language',
       English: 'English',
       German: 'German',
@@ -160,6 +162,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Envianos un correo',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      TeamContent: 'Personas y empresas involucradas:',
       MenuLanguage: 'Idioma',
       English: 'Inglés',
       German: 'Alemán',
@@ -210,6 +213,7 @@ class TrufiLocalizations {
       FeedbackButton: 'E-Mail senden',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Nahverkehr lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen das Transportsystem in Cochabamba und der nährenen Umgebung zu erleichtern.',
+      TeamContent: 'Beteiligte Personen und Firmen:',
       MenuLanguage: 'Sprache',
       English: 'Englisch',
       German: 'Deutsch',
@@ -377,6 +381,10 @@ class TrufiLocalizations {
 
   String get aboutContent {
     return _localizedValues[locale.languageCode][AboutContent];
+  }
+
+  String get teamContent {
+    return _localizedValues[locale.languageCode][TeamContent];
   }
 
   String get language {
