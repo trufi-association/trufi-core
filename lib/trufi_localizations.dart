@@ -41,8 +41,9 @@ class TrufiLocalizations {
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
   static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
-  static const String MapSectionChoosePoint = "map_choose_point";
-  static const String MapSectionTapToChoose = "map_tap_to_choose";
+  static const String ChooseLocationPageTitle = "choose_location_page_title";
+  static const String ChooseLocationPageSubtitle =
+      "choose_location_page_subtitle";
   static const String InstructionWalk = "instruction_walk";
   static const String InstructionRide = "instruction_ride";
   static const String InstructionRideBus = "instruction_ride_bus";
@@ -90,8 +91,8 @@ class TrufiLocalizations {
       SearchFailLoadingPlan: 'Failed to load plan',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
-      MapSectionChoosePoint: 'Choose a point',
-      MapSectionTapToChoose: 'Tap on map to choose',
+      ChooseLocationPageTitle: 'Choose a point',
+      ChooseLocationPageSubtitle: 'Tap on map to choose',
       InstructionWalk: 'Walk',
       InstructionRide: 'Ride',
       InstructionRideBus: 'Bus',
@@ -140,8 +141,8 @@ class TrufiLocalizations {
       SearchFailLoadingPlan: 'Error al cargar plan',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
-      MapSectionChoosePoint: 'Elige un punto en el mapa',
-      MapSectionTapToChoose: 'Toca el mapa para elegir un punto',
+      ChooseLocationPageTitle: 'Elige un punto en el mapa',
+      ChooseLocationPageSubtitle: 'Toca el mapa para elegir un punto',
       InstructionWalk: 'Caminar',
       InstructionRide: 'Tomar',
       InstructionRideBus: 'Bus',
@@ -189,9 +190,9 @@ class TrufiLocalizations {
       SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden dem Plan',
       SearchSectionMapMarker: 'Kartenmarkierung',
-      SearchNavigateToMarker: 'Navigieren',
-      MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
-      MapSectionTapToChoose: 'Auf der Karte ein Punkt Auswählen',
+      SearchNavigateToMarker: 'Navigiere zur',
+      ChooseLocationPageTitle: 'Ort auswählen',
+      ChooseLocationPageSubtitle: 'Zum Anpassen auf die Karte tippen',
       InstructionWalk: 'Gehen Sie',
       InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
@@ -205,10 +206,10 @@ class TrufiLocalizations {
       MenuTeam: 'Werde Teil des Teams',
       MenuFeedback: 'Feedback',
       FeedbackContent:
-          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihr Telefon an, damit wir Ihnen antworten können.',
-      FeedbackButton: 'E-mail schicken',
+          'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
+      FeedbackButton: 'E-Mail senden',
       AboutContent:
-          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
+          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Nahverkehr lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen das Transportsystem in Cochabamba und der nährenen Umgebung zu erleichtern.',
       MenuLanguage: 'Sprache',
       English: 'Englisch',
       German: 'Deutsch',
@@ -342,12 +343,12 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][InstructionFor];
   }
 
-  String get mapChoosePoint {
-    return _localizedValues[locale.languageCode][MapSectionChoosePoint];
+  String get chooseLocationPageTitle {
+    return _localizedValues[locale.languageCode][ChooseLocationPageTitle];
   }
 
-  String get mapTapToChoose {
-    return _localizedValues[locale.languageCode][MapSectionTapToChoose];
+  String get chooseLocationPageSubtitle {
+    return _localizedValues[locale.languageCode][ChooseLocationPageSubtitle];
   }
 
   String get menuConnections {
