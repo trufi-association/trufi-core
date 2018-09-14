@@ -56,6 +56,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               style: theme.textTheme.title,
               textAlign: TextAlign.justify,
             ),
+            Container(height: 16.0),
             FutureBuilder<Null>(
                 future: _launched,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
