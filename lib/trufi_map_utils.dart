@@ -39,12 +39,13 @@ Marker buildToMarker(LatLng point) {
 
 Marker buildYourLocationMarker(LatLng point) {
   var decoration = new BoxDecoration(
-    color: Colors.white,
+    color: Colors.blue,
+    border: Border.all(color: Colors.white, width: 3.5),
     shape: BoxShape.circle,
     boxShadow: [
       new BoxShadow(
         color: Colors.blue,
-        spreadRadius: 10.0,
+        spreadRadius: 8.0,
         blurRadius: 30.0,
       ),
     ],
