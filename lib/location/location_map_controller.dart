@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
+import 'package:trufi_app/widgets/trufi_map.dart';
 
 class MapControllerPage extends StatefulWidget {
   MapControllerPage({
@@ -23,7 +22,6 @@ class MapControllerPage extends StatefulWidget {
 class MapControllerPageState extends State<MapControllerPage> {
   MapController mapController;
   Marker chooseOnMapMarker;
-  Marker yourLocationMarker;
 
   void initState() {
     super.initState();
@@ -34,43 +32,26 @@ class MapControllerPageState extends State<MapControllerPage> {
     );
     mapController = MapController()
       ..onReady.then((_) {
-        mapController.move(
-          chooseOnMapMarker.point,
-          15.0,
-        );
+        mapController.move(chooseOnMapMarker.point, 15.0);
       });
   }
 
   Widget build(BuildContext context) {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Column(
       children: [
         Expanded(
-          child: StreamBuilder<LatLng>(
-            stream: locationProviderBloc.outLocationUpdate,
-            initialData: null,
-            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-              List<Marker> markers = <Marker>[chooseOnMapMarker];
-              if (snapshot.data != null) {
-                yourLocationMarker = buildYourLocationMarker(snapshot.data);
-                markers.add(yourLocationMarker);
-              }
-              return FlutterMap(
-                mapController: mapController,
-                options: MapOptions(
-                  zoom: 5.0,
-                  maxZoom: 19.0,
-                  minZoom: 1.0,
-                  onTap: (point) => _handleOnMapTap(point),
-                ),
-                layers: [
-                  tilehostingTileLayerOptions(),
-                  MarkerLayerOptions(markers: markers),
-                ],
-              );
-            },
+          child: TrufiMap(
+            mapController: mapController,
+            mapOptions: MapOptions(
+              zoom: 5.0,
+              maxZoom: 19.0,
+              minZoom: 1.0,
+              onTap: _handleOnMapTap,
+            ),
+            layers: <LayerOptions>[
+              MarkerLayerOptions(markers: <Marker>[chooseOnMapMarker])
+            ],
           ),
         ),
         Row(
