@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
+  static const String SavedLanguageCode = "saved_language_code";
+
   TrufiLocalizations(this.locale);
 
   Locale locale;
-
-  static const String SAVED_LANGUAGE_CODE = "LOCALE";
 
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
@@ -60,6 +60,7 @@ class TrufiLocalizations {
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
+  static const String TeamContent = "team_content";
   static const String English = "english";
   static const String German = "german";
   static const String Spanish = "spanish";
@@ -111,6 +112,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Send us an E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      TeamContent: 'People and companies involved:',
       English: 'English',
       German: 'German',
       Spanish: 'Spanish'
@@ -161,6 +163,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Envianos un correo',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés',
       German: 'Alemán',
       Spanish: 'Español'
@@ -211,6 +214,7 @@ class TrufiLocalizations {
       FeedbackButton: 'E-Mail senden',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Nahverkehr lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen das Transportsystem in Cochabamba und der nährenen Umgebung zu erleichtern.',
+      TeamContent: 'Beteiligte Personen und Firmen:',
       English: 'Englisch',
       German: 'Deutsch',
       Spanish: 'Spanisch'
@@ -383,6 +387,10 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][AboutContent];
   }
 
+  String get teamContent {
+    return _localizedValues[locale.languageCode][TeamContent];
+  }
+
   String get english {
     return _localizedValues[locale.languageCode][English];
   }
@@ -446,8 +454,9 @@ class TrufiLocalizationsDelegate
   TrufiLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      ['en', 'es', 'de'].contains(locale.languageCode);
+  bool isSupported(Locale locale) {
+    return ['en', 'es', 'de'].contains(locale.languageCode);
+  }
 
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
@@ -464,7 +473,9 @@ class TrufiLocalizationsDelegate
 
   Future<TrufiLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.SAVED_LANGUAGE_CODE);
-    return TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)));
+    String languageCode = prefs.get(TrufiLocalizations.SavedLanguageCode);
+    return languageCode != null
+        ? TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)))
+        : null;
   }
 }

@@ -122,7 +122,7 @@ class DrawerState extends State<TrufiDrawer> {
           SharedPreferences.getInstance().then((prefs) {
             String languageCode = trufiLocalizations.getLanguageCode(newValue);
             prefs.setString(
-              TrufiLocalizations.SAVED_LANGUAGE_CODE,
+              TrufiLocalizations.SavedLanguageCode,
               languageCode,
             );
             trufiLocalizations.switchToLanguage(languageCode);
