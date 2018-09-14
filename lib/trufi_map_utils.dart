@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
@@ -40,7 +40,19 @@ Marker buildToMarker(LatLng point) {
 }
 
 Marker buildYourLocationMarker(LatLng point) {
-  return buildMarker(point, Icons.my_location, AnchorPos.center, Colors.blue);
+  var decoration = new BoxDecoration(
+    color: Colors.white,
+    shape: BoxShape.circle,
+    boxShadow: [
+      new BoxShadow(
+        color: Colors.blue,
+        spreadRadius: 10.0,
+        blurRadius: 30.0,
+      ),
+    ],
+  );
+  return buildMarker(point, CircleIcon.circle, AnchorPos.center, Colors.blue,
+      decoration: decoration);
 }
 
 Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
@@ -73,12 +85,15 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
 }
 
 Marker buildMarker(
-    LatLng point, IconData iconData, AnchorPos anchor, Color color) {
+    LatLng point, IconData iconData, AnchorPos anchor, Color color,
+    {Decoration decoration}) {
   return new Marker(
     point: point,
     anchor: anchor,
-    builder: (context) =>
-        new Container(child: new Icon(iconData, color: color)),
+    builder: (context) => new Container(
+          decoration: decoration,
+          child: new Icon(iconData, color: color),
+        ),
   );
 }
 
@@ -212,4 +227,12 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
+}
+
+class CircleIcon {
+  CircleIcon._();
+
+  static const _kFontFam = 'CircleIcon';
+
+  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam);
 }
