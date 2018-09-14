@@ -12,16 +12,35 @@ class TeamPage extends StatefulWidget {
 class TeamPageState extends State<TeamPage> {
   @override
   Widget build(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.menuTeam)),
-      body: Center(
-        child: Text('Team!'),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
+      drawer: _buildDrawer(context),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(title: Text(TrufiLocalizations.of(context).menuTeam));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Container(
+      padding: EdgeInsets.all(24.0),
+      child: Center(
+        child: Text(
+          "People and companies involved: Andreas Helms, Annika Bock, Christian Brückner, Christoph Hanser, Javier Rocha, Luz Choque, Malte Dölker, Marcel Köhler, Martin Kleppe, Michael Brückner, Natalya Blanco, Neyda Mili, Patrick Cuellar, QUIBIQ, Raimund Wege, Samuel Riotz, SIRcode.io, Ubilabs",
+          style: theme.textTheme.title,
+          textAlign: TextAlign.justify,
+        ),
       ),
-      drawer: TrufiDrawer(
-        TeamPage.route,
-        onLanguageChangedCallback: () => setState(() {}),
-      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return TrufiDrawer(
+      TeamPage.route,
+      onLanguageChangedCallback: () => setState(() {}),
     );
   }
 }
