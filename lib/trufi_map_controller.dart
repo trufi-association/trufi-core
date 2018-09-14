@@ -51,6 +51,7 @@ class MapControllerPageState extends State<MapControllerPage> {
               : LatLng(-17.4603761, -66.1860606),
           15.0,
         );
+        setState(() {});
       });
   }
 
@@ -59,7 +60,9 @@ class MapControllerPageState extends State<MapControllerPage> {
         BlocProvider.of<LocationProviderBloc>(context);
 
     // Clear content
-    _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
+    _needsCameraUpdate = _needsCameraUpdate ||
+        widget.plan != _plan ||
+        widget.selectedItinerary != _selectedItinerary;
     _plan = widget.plan;
     _selectedItinerary = widget.selectedItinerary;
     _itineraries.clear();
@@ -96,19 +99,19 @@ class MapControllerPageState extends State<MapControllerPage> {
             if (polylineWithMarker.marker != null) {
               if (isSelected) {
                 _selectedMarkers.add(polylineWithMarker.marker);
+                bounds.extend(polylineWithMarker.marker.point);
               } else {
                 _foregroundMarkers.add(polylineWithMarker.marker);
               }
-              bounds.extend(polylineWithMarker.marker.point);
             }
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
+              polylineWithMarker.polyline.points.forEach((point) {
+                bounds.extend(point);
+              });
             } else {
               _polylines.add(polylineWithMarker.polyline);
             }
-            polylineWithMarker.polyline.points.forEach((point) {
-              bounds.extend(point);
-            });
           });
         });
       }
@@ -142,7 +145,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                 onTap: _handleOnMapTap,
               ),
               layers: <LayerOptions>[
-                mapBoxTileLayerOptions(),
+                tilehostingTileLayerOptions(),
                 MarkerLayerOptions(markers: _backgroundMarkers),
                 PolylineLayerOptions(polylines: _polylines),
                 PolylineLayerOptions(polylines: _selectedPolylines),
@@ -217,15 +220,9 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   void _handleOnCropButtonTapped() {
-    var bounds = LatLngBounds();
-    _selectedPolylines.forEach((polyline) {
-      polyline.points.forEach((point) {
-        bounds.extend(point);
-      });
+    setState(() {
+      _needsCameraUpdate = true;
     });
-    if (bounds.isValid) {
-      mapController.fitBounds(bounds);
-    }
   }
 
   void _setItinerary(PlanItinerary value) {
@@ -244,12 +241,14 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
-      Polyline polyline) {
-    return _itineraries.entries.firstWhere(
-        (pair) =>
-            pair.value.firstWhere((pwm) => pwm.polyline == polyline,
-                orElse: () => null) !=
-            null,
-        orElse: () => null);
+    Polyline polyline,
+  ) {
+    return _itineraries.entries.firstWhere((pair) {
+      return null !=
+          pair.value.firstWhere(
+            (pwm) => pwm.polyline == polyline,
+            orElse: () => null,
+          );
+    }, orElse: () => null);
   }
 }

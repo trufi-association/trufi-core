@@ -7,10 +7,10 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
+  PolylineWithMarker(this.polyline, this.marker);
+
   final Polyline polyline;
   final Marker marker;
-
-  PolylineWithMarker(this.polyline, this.marker);
 }
 
 openStreetMapTileLayerOptions() {
@@ -19,14 +19,12 @@ openStreetMapTileLayerOptions() {
       subdomains: ['a', 'b', 'c']);
 }
 
-mapBoxTileLayerOptions() {
+tilehostingTileLayerOptions() {
   return new TileLayerOptions(
-    urlTemplate: "https://api.tiles.mapbox.com/v4/"
-        "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+    urlTemplate:
+        "https://maps.tilehosting.com/styles/positron/{z}/{x}/{y}.png?key={key}",
     additionalOptions: {
-      'accessToken':
-          'pk.eyJ1IjoicmF4ZGEiLCJhIjoiY2plZWI4ZGNtMDhjdDJ4cXVzbndzdjJrdCJ9.glZextqSSPedd2MudTlMbQ',
-      'id': 'mapbox.streets',
+      'key': 'QNVqPrA4XDeyff2S5h6S',
     },
   );
 }
