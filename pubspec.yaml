@@ -43,6 +43,10 @@ flutter:
   assets:
     - assets/data/places.json
     - assets/data/team.txt
+  fonts:
+  - family: CircleIcon
+    fonts:
+    - asset: fonts/CircleIcon.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
