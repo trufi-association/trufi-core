@@ -29,11 +29,12 @@ class PlanViewState extends State<PlanView>
     if (widget.plan.itineraries.length > 0) {
       selectedItinerary = widget.plan.itineraries.first;
     }
-    tabController =
-        TabController(length: widget.plan.itineraries.length, vsync: this)
-          ..addListener(() {
-            _setItinerary(widget.plan.itineraries[tabController.index]);
-          });
+    tabController = TabController(
+      length: widget.plan.itineraries.length,
+      vsync: this,
+    )..addListener(() {
+        _setItinerary(widget.plan.itineraries[tabController.index]);
+      });
   }
 
   @override
