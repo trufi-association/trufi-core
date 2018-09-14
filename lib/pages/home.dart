@@ -246,6 +246,7 @@ class HomePageState extends State<HomePage>
         context: context,
         builder: (context) => buildAlert(
               context: context,
+              title: TrufiLocalizations.of(context).commonError,
               content: error.message,
             ),
       );
