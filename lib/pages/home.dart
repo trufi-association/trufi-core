@@ -240,6 +240,16 @@ class HomePageState extends State<HomePage>
     setState(() {
       data.plan = plan;
     });
+    PlanError error = data.plan?.error;
+    if (error != null) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlert(
+              context: context,
+              content: error.message,
+            ),
+      );
+    }
   }
 
   void _swapPlaces() {
@@ -251,30 +261,13 @@ class HomePageState extends State<HomePage>
     if (data.toPlace != null && data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        PlanError error = data.plan?.error;
-        if (error != null) {
-          showDialog(
-            context: context,
-            builder: (context) =>
-                buildAlert(context, localizations.commonError, error.message),
-          );
-        } else {
-          _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
-        }
+        _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
       } on api.FetchRequestException catch (e) {
         print(e);
-        showDialog(
-          context: context,
-          builder: (context) => buildAlert(context, localizations.commonError,
-              localizations.commonNoInternet),
-        );
+        _setPlan(Plan.fromError(localizations.commonNoInternet));
       } on api.FetchResponseException catch (e) {
         print(e);
-        showDialog(
-          context: context,
-          builder: (context) => buildAlert(context, localizations.commonError,
-              localizations.searchFailLoadingPlan),
-        );
+        _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
       setState(() => _isFetching = false);
     }
