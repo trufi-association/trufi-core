@@ -9,8 +9,8 @@ import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/location/location_map.dart';
 import 'package:trufi_app/location/location_search_places.dart';
+import 'package:trufi_app/pages/choose_location.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -358,7 +358,7 @@ class _SuggestionList extends StatelessWidget {
       await Navigator.push(
         context,
         MaterialPageRoute<LatLng>(builder: (context) {
-          return ChooseOnMapScreen(initialPosition: lastLocation);
+          return ChooseLocationPage(initialPosition: lastLocation);
         }),
       ),
     );
