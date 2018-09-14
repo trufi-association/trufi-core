@@ -54,7 +54,7 @@ class FeedBackPageState extends State<FeedbackPage> {
             Text(
               localizations.feedbackContent,
               style: theme.textTheme.title,
-              textAlign: TextAlign.justify,
+              textAlign: TextAlign.center,
             ),
             Container(height: 16.0),
             FutureBuilder<Null>(
