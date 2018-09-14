@@ -16,6 +16,7 @@ import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/widgets/alerts.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -49,7 +50,6 @@ class HomePageState extends State<HomePage>
           _toFieldKey.currentState?.didChange(data.toPlace);
         });
       }
-
     }
   }
 
@@ -152,11 +152,10 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildBody(BuildContext context) {
-    PlanError error = data.plan?.error;
     return Container(
-      child: error != null
-          ? _buildBodyError(error)
-          : data.plan != null ? PlanView(data.plan) : _buildBodyEmpty(context),
+      child: (data.plan != null && data.plan.error == null
+          ? PlanView(data.plan)
+          : _buildBodyEmpty(context)),
     );
   }
 
@@ -236,12 +235,28 @@ class HomePageState extends State<HomePage>
       } else {
         try {
           _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
+          PlanError error = data.plan?.error;
+          if (error != null) {
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  buildAlert(context, localizations.commonError, error.message),
+            );
+          }
         } on api.FetchRequestException catch (e) {
           print(e);
-          _setPlan(Plan.fromError(localizations.commonNoInternet));
+          showDialog(
+            context: context,
+            builder: (context) => buildAlert(context, localizations.commonError,
+                localizations.commonNoInternet),
+          );
         } on api.FetchResponseException catch (e) {
           print(e);
-          _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
+          showDialog(
+            context: context,
+            builder: (context) => buildAlert(context, localizations.commonError,
+                localizations.searchFailLoadingPlan),
+          );
         }
       }
     }
@@ -285,7 +300,7 @@ class HomePageStateData {
 
   Map<String, dynamic> toJson() {
     return {
-      _FromPlace: fromPlace != null ? fromPlace.toJson(): null,
+      _FromPlace: fromPlace != null ? fromPlace.toJson() : null,
       _ToPlace: toPlace != null ? toPlace.toJson() : null,
       _Plan: plan != null ? plan.toJson() : null,
     };

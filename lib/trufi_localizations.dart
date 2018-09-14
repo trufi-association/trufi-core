@@ -30,6 +30,7 @@ class TrufiLocalizations {
       "common_no_internet_connection";
   static const String CommonFailLoadingData = "common_fail_loading_data";
   static const String CommonUnknownError = "common_unknown_error";
+  static const String CommonError = "common_error";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
   static const String SearchItemYourLocation = "search_item_your_location";
   static const String SearchItemNoResults = "search_item_no_results";
@@ -55,7 +56,6 @@ class TrufiLocalizations {
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
-  static const String MenuLanguage = "language";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
@@ -76,9 +76,10 @@ class TrufiLocalizations {
       CommonCancel: 'Cancel',
       CommonDestination: 'Destination',
       CommonOrigin: 'Origin',
-      CommonNoInternetConnection: 'No internet connection',
+      CommonNoInternetConnection: 'No internet connection.',
       CommonFailLoadingData: 'Failed to load data',
       CommonUnknownError: 'unknown error',
+      CommonError: 'Error',
       SearchItemChooseOnMap: 'Choose on map',
       SearchItemYourLocation: 'Your location',
       SearchItemNoResults: 'No results',
@@ -87,7 +88,7 @@ class TrufiLocalizations {
       SearchSectionResults: 'Search Results',
       SearchCurrentPosition: 'Current Position',
       SearchSectionPleaseSelect: 'Please select',
-      SearchFailLoadingPlan: 'Failed to load plan',
+      SearchFailLoadingPlan: 'Failed to load plan.',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
       MapSectionChoosePoint: 'Choose a point',
@@ -109,7 +110,6 @@ class TrufiLocalizations {
       FeedbackButton: 'Send us an E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
-      MenuLanguage: 'Language',
       English: 'English',
       German: 'German',
       Spanish: 'Spanish'
@@ -126,9 +126,10 @@ class TrufiLocalizations {
       CommonCancel: 'Cancelar',
       CommonDestination: 'Destino',
       CommonOrigin: 'Origen',
-      CommonNoInternetConnection: 'Sin conexión a internet',
+      CommonNoInternetConnection: 'Sin conexión a internet.',
       CommonFailLoadingData: 'Error al cargar datos',
       CommonUnknownError: 'Error desconocido',
+      CommonError: 'Error',
       SearchItemChooseOnMap: 'Seleccionar en el mapa',
       SearchItemYourLocation: 'Tu ubicación',
       SearchItemNoResults: 'Ningun resultado',
@@ -137,7 +138,7 @@ class TrufiLocalizations {
       SearchSectionResults: 'Resultados de búsqueda',
       SearchCurrentPosition: 'Posición actual',
       SearchSectionPleaseSelect: 'Por favor seleccione',
-      SearchFailLoadingPlan: 'Error al cargar plan',
+      SearchFailLoadingPlan: 'Error al cargar plan.',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
       MapSectionChoosePoint: 'Elige un punto en el mapa',
@@ -159,7 +160,6 @@ class TrufiLocalizations {
       FeedbackButton: 'Envianos un correo',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
-      MenuLanguage: 'Idioma',
       English: 'Inglés',
       German: 'Alemán',
       Spanish: 'Español'
@@ -176,9 +176,10 @@ class TrufiLocalizations {
       CommonCancel: 'Abbrechen',
       CommonDestination: 'Fahrtziel',
       CommonOrigin: 'Startpunkt',
-      CommonNoInternetConnection: 'Keine Internetverbindung',
+      CommonNoInternetConnection: 'Keine Internetverbindung.',
       CommonFailLoadingData: 'Fehler beim Laden der Daten',
       CommonUnknownError: 'Unbekannter Fehler',
+      CommonError: 'Fehler',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
       SearchItemYourLocation: 'Ihr Standort',
       SearchItemNoResults: 'Keine Ergebnisse',
@@ -187,7 +188,7 @@ class TrufiLocalizations {
       SearchSectionResults: 'Suchergebnisse',
       SearchCurrentPosition: 'Aktuelle Position',
       SearchSectionPleaseSelect: 'Bitte auswählen',
-      SearchFailLoadingPlan: 'Fehler beim Laden dem Plan',
+      SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigieren',
       MapSectionChoosePoint: 'Auf der Karte ein Punkt Auswählen',
@@ -209,11 +210,10 @@ class TrufiLocalizations {
       FeedbackButton: 'E-mail schicken',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Verkehrsmittel lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen zu erleichtern, das Transportsystem in Cochabamba und Umgebung zu nutzen.',
-      MenuLanguage: 'Sprache',
       English: 'Englisch',
       German: 'Deutsch',
       Spanish: 'Spanisch'
-    },
+    }
   };
 
   String get title {
@@ -264,6 +264,10 @@ class TrufiLocalizations {
 
   String get commonUnknownError {
     return _localizedValues[locale.languageCode][CommonUnknownError];
+  }
+
+  String get commonError {
+    return _localizedValues[locale.languageCode][CommonError];
   }
 
   String get searchItemChooseOnMap {
@@ -376,10 +380,6 @@ class TrufiLocalizations {
 
   String get aboutContent {
     return _localizedValues[locale.languageCode][AboutContent];
-  }
-
-  String get language {
-    return _localizedValues[locale.languageCode][MenuLanguage];
   }
 
   String get english {
