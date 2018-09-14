@@ -37,34 +37,6 @@ class PlanViewState extends State<PlanView>
       });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: StreamBuilder<LatLng>(
-            stream: locationProviderBloc.outLocationUpdate,
-            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-              return MapControllerPage(
-                plan: widget.plan,
-                initialPosition: snapshot.data,
-                onSelected: _setItinerary,
-                selectedItinerary: selectedItinerary,
-              );
-            },
-          ),
-        ),
-        VisibleWidget(
-          child: _buildItinerariesVisible(context),
-          visibility: _visibleFlag,
-          removedChild: _buildItinerariesGone(context),
-        ),
-      ],
-    );
-  }
-
   Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
       height: 200.0,
@@ -75,8 +47,52 @@ class PlanViewState extends State<PlanView>
       child: PlanItineraryTabPages(
         tabController,
         widget.plan.itineraries,
-        _toggleInstructions,
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    ThemeData theme = Theme.of(context);
+    return Stack(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Expanded(
+              child: StreamBuilder<LatLng>(
+                stream: locationProviderBloc.outLocationUpdate,
+                builder:
+                    (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+                  return MapControllerPage(
+                    plan: widget.plan,
+                    initialPosition: snapshot.data,
+                    onSelected: _setItinerary,
+                    selectedItinerary: selectedItinerary,
+                  );
+                },
+              ),
+            ),
+            VisibleWidget(
+              child: _buildItinerariesVisible(context),
+              visibility: _visibleFlag,
+              removedChild: _buildItinerariesGone(context),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: _visibleFlag == VisibilityFlag.visible ? 170.0 : 30.0,
+          right: 15.0,
+          child: FloatingActionButton(
+            child: _visibleFlag == VisibilityFlag.visible
+                ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
+                : Icon(Icons.keyboard_arrow_up, color: Colors.black),
+            onPressed: _toggleInstructions,
+            backgroundColor: theme.primaryColor,
+          ),
+        ),
+      ],
     );
   }
 
@@ -95,7 +111,6 @@ class PlanViewState extends State<PlanView>
             child: Row(
               children: <Widget>[
                 Expanded(child: _buildItinerarySummary(selectedItinerary)),
-                Icon(Icons.keyboard_arrow_up),
               ],
             ),
           ),

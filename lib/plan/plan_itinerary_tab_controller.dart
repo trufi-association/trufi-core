@@ -7,12 +7,10 @@ typedef OnTapCallback = void Function();
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
-  final OnTapCallback onTapCallback;
 
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
-    this.onTapCallback,
   ) : assert(itineraries != null && itineraries.length > 0);
 
   @override
@@ -34,9 +32,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
           Expanded(
             child: Column(
               children: <Widget>[
-                GestureDetector(
-                    onTapDown: _onTapDownDetected,
-                    child: Icon(Icons.keyboard_arrow_down)),
                 Expanded(
                   child: TabBarView(
                     controller: widget.tabController,
@@ -100,9 +95,5 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         itemCount: itinerary.legs.length,
       ),
     );
-  }
-
-  void _onTapDownDetected(TapDownDetails details) {
-    widget.onTapCallback();
   }
 }
