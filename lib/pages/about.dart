@@ -12,43 +12,50 @@ class AboutPage extends StatefulWidget {
 class AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.menuAbout)),
-      body: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                localizations.title,
-                style: TextStyle(fontSize: 28.0),
-              ),
-            ),
-            Container(
-              child: Text(
-                localizations.tagLine,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                localizations.aboutContent,
-                style: TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
+      drawer: _buildDrawer(context),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(title: Text(TrufiLocalizations.of(context).menuAbout));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return Container(
+      padding: EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            localizations.title,
+            style: theme.textTheme.title,
+          ),
+          Container(height: 8.0),
+          Text(
+            localizations.tagLine,
+            textAlign: TextAlign.center,
+            style: theme.textTheme.subhead,
+          ),
+          Container(height: 16.0),
+          Text(
+            localizations.aboutContent,
+            style: theme.textTheme.body2,
+            textAlign: TextAlign.justify,
+          ),
+        ],
       ),
-      drawer: TrufiDrawer(
-        AboutPage.route,
-        onLanguageChangedCallback: () => setState(() {}),
-      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return TrufiDrawer(
+      AboutPage.route,
+      onLanguageChangedCallback: () => setState(() {}),
     );
   }
 }
