@@ -16,6 +16,7 @@ import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/widgets/alerts.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -149,11 +150,10 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildBody(BuildContext context) {
-    PlanError error = data.plan?.error;
     Widget body = Container(
-      child: error != null
-          ? _buildBodyError(error)
-          : data.plan != null ? PlanView(data.plan) : _buildBodyEmpty(context),
+      child: data.plan != null && data.plan.error == null
+          ? PlanView(data.plan)
+          : _buildBodyEmpty(context),
     );
     if (_isFetching) {
       return Stack(
@@ -172,17 +172,6 @@ class HomePageState extends State<HomePage>
     } else {
       return body;
     }
-  }
-
-  Widget _buildBodyError(PlanError error) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Center(
-        child: Text(
-          error.message,
-        ),
-      ),
-    );
   }
 
   Widget _buildBodyEmpty(BuildContext context) {
@@ -251,6 +240,17 @@ class HomePageState extends State<HomePage>
     setState(() {
       data.plan = plan;
     });
+    PlanError error = data.plan?.error;
+    if (error != null) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlert(
+              context: context,
+              title: TrufiLocalizations.of(context).commonError,
+              content: error.message,
+            ),
+      );
+    }
   }
 
   void _swapPlaces() {
