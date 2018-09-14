@@ -465,6 +465,8 @@ class TrufiLocalizationsDelegate
   Future<TrufiLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String languageCode = prefs.get(TrufiLocalizations.SAVED_LANGUAGE_CODE);
-    return TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)));
+    return languageCode != null
+        ? TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)))
+        : null;
   }
 }
