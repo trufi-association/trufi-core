@@ -23,12 +23,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
     return SafeArea(
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.chevron_left),
-            onPressed: () {
-              _handleArrowButtonPress(context, -1);
-            },
-          ),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -47,12 +41,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.chevron_right),
-            onPressed: () {
-              _handleArrowButtonPress(context, 1);
-            },
           ),
         ],
       ),

@@ -17,15 +17,25 @@ class PlanView extends StatefulWidget {
   PlanViewState createState() => PlanViewState();
 }
 
-class PlanViewState extends State<PlanView>
-    with SingleTickerProviderStateMixin {
+class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
   PlanItinerary selectedItinerary;
   TabController tabController;
   VisibilityFlag _visibleFlag = VisibilityFlag.visible;
 
+  AnimationController animationController;
+  Animation<double> animation;
+
   @override
   void initState() {
     super.initState();
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+    animation = Tween(begin: 200.0, end: 60.0).animate(animationController)
+      ..addListener(() {
+        setState(() {});
+      });
     if (widget.plan.itineraries.length > 0) {
       selectedItinerary = widget.plan.itineraries.first;
     }
@@ -37,9 +47,15 @@ class PlanViewState extends State<PlanView>
       });
   }
 
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
-      height: 200.0,
+      height: animation.value,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
@@ -82,8 +98,8 @@ class PlanViewState extends State<PlanView>
           ],
         ),
         Positioned(
-          bottom: _visibleFlag == VisibilityFlag.visible ? 170.0 : 30.0,
-          right: 15.0,
+          bottom: animation.value - 28.0,
+          right: 16.0,
           child: FloatingActionButton(
             child: _visibleFlag == VisibilityFlag.visible
                 ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
@@ -98,7 +114,7 @@ class PlanViewState extends State<PlanView>
 
   Widget _buildItinerariesGone(BuildContext context) {
     return Container(
-      height: 60.0,
+      height: animation.value,
       decoration: BoxDecoration(
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
@@ -131,6 +147,11 @@ class PlanViewState extends State<PlanView>
       _visibleFlag = _visibleFlag == VisibilityFlag.visible
           ? VisibilityFlag.gone
           : VisibilityFlag.visible;
+      if (_visibleFlag == VisibilityFlag.gone) {
+        animationController.forward();
+      } else {
+        animationController.reverse();
+      }
     });
   }
 
