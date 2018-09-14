@@ -55,7 +55,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             maxLines: 1,
             overflow: TextOverflow.clip,
             text: TextSpan(
-              text: localizations.mapChoosePoint,
+              text: localizations.chooseLocationPageTitle,
               style: theme.textTheme.title,
             ),
           ),
@@ -63,7 +63,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             maxLines: 1,
             overflow: TextOverflow.clip,
             text: TextSpan(
-              text: localizations.mapTapToChoose,
+              text: localizations.chooseLocationPageSubtitle,
               style: theme.textTheme.subhead,
             ),
           ),
