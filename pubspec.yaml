@@ -7,11 +7,11 @@ dependencies:
   flutter_localizations:
           sdk: flutter
 
-  #flutter_map: ^0.1.0
-  flutter_map:
-    git:
-      url: git@github.com:ubilabs/flutter_map.git
-      ref: feat/customise_polylines
+  flutter_map: ^0.1.2
+  #flutter_map:
+  #  git:
+  #    url: git@github.com:ubilabs/flutter_map.git
+  #    ref: feat/customise_polylines
 
   cupertino_icons: ^0.1.2
   geolocator: ^1.7.0
