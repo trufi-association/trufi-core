@@ -29,8 +29,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                 Expanded(
                   child: TabBarView(
                     controller: widget.tabController,
-                    children: widget.itineraries
-                        .map<Widget>((PlanItinerary itinerary) {
+                    children: widget.itineraries.map<Widget>((
+                      PlanItinerary itinerary,
+                    ) {
                       return _buildItinerary(context, itinerary);
                     }).toList(),
                   ),
@@ -45,15 +46,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         ],
       ),
     );
-  }
-
-  void _handleArrowButtonPress(BuildContext context, int delta) {
-    if (!widget.tabController.indexIsChanging) {
-      widget.tabController.animateTo(
-        (widget.tabController.index + delta)
-            .clamp(0, widget.itineraries.length - 1),
-      );
-    }
   }
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
