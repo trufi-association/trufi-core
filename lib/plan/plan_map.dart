@@ -11,8 +11,8 @@ import 'package:trufi_app/widgets/trufi_map.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
-class MapControllerPage extends StatefulWidget {
-  MapControllerPage({
+class PlanMapPage extends StatefulWidget {
+  PlanMapPage({
     this.plan,
     this.initialPosition,
     this.onSelected,
@@ -25,12 +25,10 @@ class MapControllerPage extends StatefulWidget {
   final PlanItinerary selectedItinerary;
 
   @override
-  MapControllerPageState createState() {
-    return MapControllerPageState();
-  }
+  PlanMapPageState createState() => PlanMapPageState();
 }
 
-class MapControllerPageState extends State<MapControllerPage> {
+class PlanMapPageState extends State<PlanMapPage> {
   MapController mapController;
   Plan _plan;
   PlanItinerary _selectedItinerary;

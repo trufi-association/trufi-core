@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
-typedef OnTapCallback = void Function();
-
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
