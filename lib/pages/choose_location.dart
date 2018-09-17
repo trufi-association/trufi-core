@@ -131,7 +131,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnCheckTap() {
-    Navigator.pop(context, _chooseOnMapMarker.point);
+    Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
   void _handleOnMapTap(LatLng point) {
