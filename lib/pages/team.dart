@@ -17,10 +17,10 @@ class TeamPageState extends State<TeamPage> {
   @override
   void initState() {
     super.initState();
-    _initTeam();
+    _loadTeam();
   }
 
-  void _initTeam() async {
+  void _loadTeam() async {
     rootBundle.loadString('assets/data/team.txt').then((value) {
       setState(() {
         _teamString = value;
