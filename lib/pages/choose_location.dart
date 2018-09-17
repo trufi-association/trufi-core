@@ -108,7 +108,10 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         ),
         FloatingActionButton(
           backgroundColor: theme.primaryColor,
-          child: Icon(Icons.check),
+          child: Icon(
+            Icons.check,
+            color: theme.primaryIconTheme.color,
+          ),
           onPressed: _handleOnCheckTap,
           heroTag: null,
         ),

@@ -5,16 +5,16 @@ import 'package:trufi_app/plan/plan_map.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/visible.dart';
 
-class PlanView extends StatefulWidget {
+class PlanPage extends StatefulWidget {
   final Plan plan;
 
-  PlanView(this.plan) : assert(plan != null);
+  PlanPage(this.plan) : assert(plan != null);
 
   @override
-  PlanViewState createState() => PlanViewState();
+  PlanPageState createState() => PlanPageState();
 }
 
-class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
+class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   PlanItinerary selectedItinerary;
   TabController tabController;
   VisibilityFlag _visibleFlag = VisibilityFlag.visible;
