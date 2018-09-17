@@ -19,7 +19,7 @@ openStreetMapTileLayerOptions() {
       subdomains: ['a', 'b', 'c']);
 }
 
-tilehostingTileLayerOptions() {
+tileHostingTileLayerOptions() {
   return new TileLayerOptions(
     urlTemplate:
         "https://maps.tilehosting.com/styles/positron/{z}/{x}/{y}.png?key={key}",
