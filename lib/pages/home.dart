@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -13,12 +12,12 @@ import 'package:trufi_app/drawer.dart';
 import 'package:trufi_app/io/file_storage.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_search_places.dart';
-import 'package:trufi_app/plan/plan_view.dart';
+import 'package:trufi_app/plan/plan.dart';
+import 'package:trufi_app/plan/plan_empty.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/trufi_map.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -36,18 +35,17 @@ class HomePageState extends State<HomePage>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
-  MapController mapController = MapController();
   bool _isFetching = false;
 
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       Places.init(this.context);
-      _init();
+      _loadState();
     });
   }
 
-  void _init() async {
+  void _loadState() async {
     if (await data.load() && data.toPlace != null) {
       setState(() {
         _fromFieldKey.currentState?.didChange(data.fromPlace);
@@ -155,8 +153,8 @@ class HomePageState extends State<HomePage>
   Widget _buildBody(BuildContext context) {
     Widget body = Container(
       child: data.plan != null && data.plan.error == null
-          ? PlanView(data.plan)
-          : _buildBodyEmpty(context),
+          ? PlanPage(data.plan)
+          : PlanEmptyPage(),
     );
     if (_isFetching) {
       return Stack(
@@ -175,17 +173,6 @@ class HomePageState extends State<HomePage>
     } else {
       return body;
     }
-  }
-
-  Widget _buildBodyEmpty(BuildContext context) {
-    return TrufiMap(
-      mapController: mapController,
-      mapOptions: MapOptions(
-        zoom: 5.0,
-        maxZoom: 19.0,
-        minZoom: 1.0,
-      ),
-    );
   }
 
   void _reset() {
