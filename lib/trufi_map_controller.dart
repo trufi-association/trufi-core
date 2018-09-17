@@ -7,6 +7,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/trufi_map.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
@@ -56,9 +57,6 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   Widget build(BuildContext context) {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-
     // Clear content
     _needsCameraUpdate = _needsCameraUpdate ||
         widget.plan != _plan ||
@@ -122,78 +120,66 @@ class MapControllerPageState extends State<MapControllerPage> {
         _needsCameraUpdate = false;
       }
     }
-
-    // Layers
-    double buttonMargin = 20.0;
-    double buttonPadding = 10.0;
-    double buttonSize = 50.0;
-    List<Widget> children = <Widget>[];
-    children.add(
-      Positioned.fill(
-        child: StreamBuilder<LatLng>(
-          stream: locationProviderBloc.outLocationUpdate,
-          builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-            if (snapshot.data != null) {
-              _foregroundMarkers.add(buildYourLocationMarker(snapshot.data));
-            }
-            return FlutterMap(
-              mapController: mapController,
-              options: MapOptions(
-                zoom: 5.0,
-                maxZoom: 19.0,
-                minZoom: 1.0,
-                onTap: _handleOnMapTap,
-              ),
-              layers: <LayerOptions>[
-                tilehostingTileLayerOptions(),
-                MarkerLayerOptions(markers: _backgroundMarkers),
-                PolylineLayerOptions(polylines: _polylines),
-                PolylineLayerOptions(polylines: _selectedPolylines),
-                MarkerLayerOptions(markers: _foregroundMarkers),
-                MarkerLayerOptions(markers: _selectedMarkers),
-              ],
-            );
-          },
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: TrufiMap(
+            mapController: mapController,
+            mapOptions: MapOptions(
+              zoom: 5.0,
+              maxZoom: 19.0,
+              minZoom: 1.0,
+              onTap: _handleOnMapTap,
+            ),
+            layers: <LayerOptions>[
+              MarkerLayerOptions(markers: _backgroundMarkers),
+              PolylineLayerOptions(polylines: _polylines),
+              PolylineLayerOptions(polylines: _selectedPolylines),
+              MarkerLayerOptions(markers: _foregroundMarkers),
+              MarkerLayerOptions(markers: _selectedMarkers),
+            ],
+          ),
         ),
-      ),
-    );
-    children.add(
-      Positioned(
-        top: buttonMargin,
-        right: buttonMargin,
-        width: buttonSize,
-        height: buttonSize,
-        child: _buildButton(
-          Icons.my_location,
-          () => _handleOnMyLocationButtonTapped(context),
-        ),
-      ),
-    );
-    if (_plan != null) {
-      children.add(
         Positioned(
-          top: buttonMargin + buttonPadding + buttonSize,
-          right: buttonMargin,
-          width: buttonSize,
-          height: buttonSize,
-          child: _buildButton(Icons.crop, _handleOnCropButtonTapped),
+          bottom: 36.0,
+          right: 16.0,
+          child: _buildFloatingActionButtons(context),
         ),
-      );
-    }
-    return Stack(fit: StackFit.expand, children: children);
+      ],
+    );
   }
 
-  Widget _buildButton(IconData iconData, Function onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+  Widget _buildFloatingActionButtons(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        _buildFloatingActionButton(
+          context,
+          Icons.crop_free,
+          _handleOnCropTap,
         ),
+        _buildFloatingActionButton(
+          context,
+          Icons.my_location,
+          _handleOnMyLocationTap,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFloatingActionButton(
+    BuildContext context,
+    IconData iconData,
+    Function onPressed,
+  ) {
+    return ScaleTransition(
+      scale: AlwaysStoppedAnimation<double>(0.8),
+      child: FloatingActionButton(
+        backgroundColor: Colors.grey,
         child: Icon(iconData),
+        onPressed: onPressed,
+        heroTag: null,
       ),
     );
   }
@@ -205,7 +191,7 @@ class MapControllerPageState extends State<MapControllerPage> {
     }
   }
 
-  void _handleOnMyLocationButtonTapped(BuildContext context) async {
+  void _handleOnMyLocationTap() async {
     LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
@@ -219,7 +205,7 @@ class MapControllerPageState extends State<MapControllerPage> {
     );
   }
 
-  void _handleOnCropButtonTapped() {
+  void _handleOnCropTap() {
     setState(() {
       _needsCameraUpdate = true;
     });

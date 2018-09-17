@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_controller.dart';
@@ -69,25 +66,15 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    ThemeData theme = Theme.of(context);
     return Stack(
       children: <Widget>[
         Column(
           children: <Widget>[
             Expanded(
-              child: StreamBuilder<LatLng>(
-                stream: locationProviderBloc.outLocationUpdate,
-                builder:
-                    (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-                  return MapControllerPage(
-                    plan: widget.plan,
-                    initialPosition: snapshot.data,
-                    onSelected: _setItinerary,
-                    selectedItinerary: selectedItinerary,
-                  );
-                },
+              child: MapControllerPage(
+                plan: widget.plan,
+                onSelected: _setItinerary,
+                selectedItinerary: selectedItinerary,
               ),
             ),
             VisibleWidget(
@@ -100,13 +87,7 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
         Positioned(
           bottom: animation.value - 28.0,
           right: 16.0,
-          child: FloatingActionButton(
-            child: _visibleFlag == VisibilityFlag.visible
-                ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
-                : Icon(Icons.keyboard_arrow_up, color: Colors.black),
-            onPressed: _toggleInstructions,
-            backgroundColor: theme.primaryColor,
-          ),
+          child: _buildFloatingActionButton(context),
         ),
       ],
     );
@@ -132,6 +113,17 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFloatingActionButton(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return FloatingActionButton(
+      child: _visibleFlag == VisibilityFlag.visible
+          ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
+          : Icon(Icons.keyboard_arrow_up, color: Colors.black),
+      onPressed: _toggleInstructions,
+      backgroundColor: theme.primaryColor,
     );
   }
 

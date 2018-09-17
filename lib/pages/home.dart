@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/drawer.dart';
@@ -14,9 +16,9 @@ import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan_view.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/trufi_map.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -34,6 +36,7 @@ class HomePageState extends State<HomePage>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
+  MapController mapController = MapController();
   bool _isFetching = false;
 
   initState() {
@@ -166,7 +169,7 @@ class HomePageState extends State<HomePage>
                 child: CircularProgressIndicator(),
               ),
             ),
-          )
+          ),
         ],
       );
     } else {
@@ -175,15 +178,13 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildBodyEmpty(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    return StreamBuilder<LatLng>(
-      stream: locationProviderBloc.outLocationUpdate,
-      builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-        return MapControllerPage(
-          initialPosition: snapshot.data,
-        );
-      },
+    return TrufiMap(
+      mapController: mapController,
+      mapOptions: MapOptions(
+        zoom: 5.0,
+        maxZoom: 19.0,
+        minZoom: 1.0,
+      ),
     );
   }
 
