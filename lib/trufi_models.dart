@@ -255,31 +255,30 @@ class PlanItineraryLeg {
     );
   }
 
+  String toInstructionQuechua(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    StringBuffer sb = StringBuffer();
+    if (mode == 'WALK') {
+      sb.write("${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}" );
+    } else if (mode == 'BUS') {
+      sb.write(
+          "${_carTypeString(localizations)} #$route ${_distanceString(localizations)} -  ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)}) ${localizations.instructionRide} ");
+    }
+    return sb.toString();
+  }
+
   String toInstruction(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
-
-    // build instructions for Quechua
-    if (localizations.locale.languageCode == 'qu'){
-      if (mode == 'WALK') {
-        sb.write("${localizations.instructionWalk} ${_distanceString(localizations)}${localizations.instructionWalk2}\n${_toString(localizations)} ${localizations.instructionWalk3} ");
-      } else if (mode == 'BUS') {
-        sb.write(
-            "${_carTypeString(localizations)} #$route ${_distanceString(localizations)}-${_toString(localizations)} ${localizations.instructionRideBus2} (${_durationString(localizations)}) ${localizations.instructionRideBus3}");
-      }
-      return sb.toString();
-
-    } else {  // build instructions for other languages
-      if (mode == 'WALK') {
-        sb.write("${localizations.instructionWalk}");
-      } else if (mode == 'BUS') {
-        sb.write(
-            "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}");
-      }
+    if (mode == 'WALK') {
+      sb.write("${localizations.instructionWalk}");
+    } else if (mode == 'BUS') {
       sb.write(
-          " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}");
-      return sb.toString();
+          "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}");
     }
+    sb.write(
+        " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}");
+    return sb.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -312,7 +311,8 @@ class PlanItineraryLeg {
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return (duration.ceil() ~/ 60).toString() + localizations.instructionMinutes;
+    return (duration.ceil() ~/ 60).toString() +
+        localizations.instructionMinutes;
   }
 
   String _toString(TrufiLocalizations localizations) {
