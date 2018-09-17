@@ -29,6 +29,15 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           ? widget.initialPosition
           : TrufiMap.cochabambaLocation,
     );
+    _mapController.onReady.then((_) {
+      _mapController.move(
+        widget.initialPosition != null
+            ? widget.initialPosition
+            : TrufiMap.cochabambaLocation,
+        12.0,
+      );
+      setState(() {});
+    });
   }
 
   @override
@@ -80,7 +89,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
       layers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
       ],
-      initialPosition: _chooseOnMapMarker.point,
     );
   }
 
