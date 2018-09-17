@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -10,10 +10,9 @@ import 'package:trufi_app/composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
   LocationProviderBloc() {
-    _locationProvider = LocationProvider(onLocationChanged: (location) {
-      _inLocationUpdate.add(location);
-    })
-      ..init();
+    _locationProvider = LocationProvider(
+      onLocationChanged: _inLocationUpdate.add,
+    )..init();
   }
 
   LocationProvider _locationProvider;
@@ -35,62 +34,74 @@ class LocationProviderBloc implements BlocBase {
 
   // Getter
 
-  LatLng get location => _locationProvider.location;
+  Future<LatLng> get lastLocation async {
+    LatLng lastLocation;
+    try {
+      GeolocationStatus status = await _locationProvider.status;
+      if (status == GeolocationStatus.granted) {
+        lastLocation = await _locationProvider.lastLocation;
+        if (lastLocation == null) {
+          print("Location provider: No last location");
+        }
+      } else {
+        print("Location provider: Permission not granted");
+      }
+    } catch (e) {
+      print("Location provider: ${e.toString()}");
+    }
+    return lastLocation;
+  }
+
+  Future<GeolocationStatus> get status async => _locationProvider.status;
 }
 
 class LocationProvider {
-  final Function(LatLng) onLocationChanged;
-  final Function(String) onLocationError;
+  LocationProvider({
+    this.onLocationChanged,
+  });
 
-  LocationProvider({this.onLocationChanged, this.onLocationError});
+  final ValueChanged<LatLng> onLocationChanged;
 
-  CompositeSubscription _subscriptions = CompositeSubscription();
-  Location _location = Location();
-
-  bool permission = false;
-  LatLng location = LatLng(-17.4603761, -66.1860606);
-  String error;
+  final CompositeSubscription _subscriptions = CompositeSubscription();
+  final Geolocator _geolocator = Geolocator();
+  final LocationOptions _locationOptions = LocationOptions(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 10,
+  );
 
   init() async {
-    try {
-      permission = await _location.hasPermission();
-      location = createLatLng(await _location.getLocation());
-      error = null;
-      _onLocationChanged(location);
-    } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        error = 'Permission denied';
-      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        error = 'Permission denied - please ask the user to enable it';
-      }
-      _onLocationError(error);
-    }
+    _subscriptions.cancel();
     _subscriptions.add(
-      _location.onLocationChanged().listen(
-        (Map<String, double> result) {
-          _onLocationChanged(createLatLng(result));
-        },
+      (await _geolocator.getPositionStream(_locationOptions)).listen(
+        (position) => _handleOnLocationChanged(position),
       ),
     );
   }
 
-  void _onLocationChanged(LatLng value) {
+  void _handleOnLocationChanged(Position value) {
     if (onLocationChanged != null) {
-      onLocationChanged(value);
+      onLocationChanged(LatLng(value.latitude, value.longitude));
     }
   }
 
-  void _onLocationError(String error) {
-    if (onLocationError != null) {
-      onLocationError(error);
-    }
-  }
-
-  LatLng createLatLng(Map<String, double> value) {
-    return LatLng(value['latitude'], value['longitude']);
-  }
+  // Dispose
 
   dispose() {
     _subscriptions.cancel();
+  }
+
+  // Getter
+
+  Future<LatLng> get lastLocation async {
+    Position position = await _geolocator.getLastKnownPosition(
+      LocationAccuracy.high,
+    );
+    return position != null
+        ? LatLng(position.latitude, position.longitude)
+        : null;
+  }
+
+  Future<GeolocationStatus> get status async {
+    return _geolocator.checkGeolocationPermissionStatus();
   }
 }

@@ -258,15 +258,28 @@ class PlanItineraryLeg {
   String toInstruction(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
-    if (mode == 'WALK') {
-      sb.write("${localizations.instructionWalk}");
-    } else if (mode == 'BUS') {
+
+    // build instructions for Quechua
+    if (localizations.locale.languageCode == 'qu'){
+      if (mode == 'WALK') {
+        sb.write("${localizations.instructionWalk} ${_distanceString(localizations)}${localizations.instructionWalk2}\n${_toString(localizations)} ${localizations.instructionWalk3} ");
+      } else if (mode == 'BUS') {
+        sb.write(
+            "${_carTypeString(localizations)} #$route ${_distanceString(localizations)}-${_toString(localizations)} ${localizations.instructionRideBus2} (${_durationString(localizations)}) ${localizations.instructionRideBus3}");
+      }
+      return sb.toString();
+
+    } else {  // build instructions for other languages
+      if (mode == 'WALK') {
+        sb.write("${localizations.instructionWalk}");
+      } else if (mode == 'BUS') {
+        sb.write(
+            "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}");
+      }
       sb.write(
-          "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}");
+          " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}");
+      return sb.toString();
     }
-    sb.write(
-        " ${_distanceString()} ${localizations.instructionTo} ${_toString(localizations)} (${_durationString()})");
-    return sb.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -292,14 +305,14 @@ class PlanItineraryLeg {
                 : localizations.instructionRideBus;
   }
 
-  String _distanceString() {
+  String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? (distance.ceil() ~/ 1000).toString() + " km"
-        : distance.ceil().toString() + " m";
+        ? (distance.ceil() ~/ 1000).toString() + localizations.instructionUnitKm
+        : distance.ceil().toString() + localizations.instructionUnitMeter;
   }
 
-  String _durationString() {
-    return (duration.ceil() ~/ 60).toString() + " min";
+  String _durationString(TrufiLocalizations localizations) {
+    return (duration.ceil() ~/ 60).toString() + localizations.instructionMinutes;
   }
 
   String _toString(TrufiLocalizations localizations) {
@@ -313,9 +326,9 @@ class PlanItineraryLeg {
         : carType.contains('trufi')
             ? Icons.local_taxi
             : carType.contains('micro')
-                ? Icons.airport_shuttle
+                ? Icons.directions_bus
                 : carType.contains('minibus')
-                    ? Icons.train
+                    ? Icons.airport_shuttle
                     : Icons.directions_bus;
   }
 }

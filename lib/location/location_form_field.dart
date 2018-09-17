@@ -7,12 +7,10 @@ class LocationFormField extends FormField<TrufiLocation> {
   LocationFormField({
     Key key,
     FormFieldSetter<TrufiLocation> onSaved,
-    TrufiLocation initialValue,
     String hintText,
   }) : super(
           key: key,
           onSaved: onSaved,
-          initialValue: initialValue,
           builder: (FormFieldState<TrufiLocation> state) {
             ThemeData theme = Theme.of(state.context);
             TextStyle textStyle = theme.textTheme.body1;
@@ -31,28 +29,30 @@ class LocationFormField extends FormField<TrufiLocation> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.all(1.0),
                   decoration: new BoxDecoration(
-                    color: theme.highlightColor,
-                    border: new Border(
-                      bottom: new BorderSide(color: Colors.black, width: 1.0),
-                    ),
+                    color: Colors.transparent,
+                    border: new Border.all(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
                   child: SizedBox(
                     height: 32.0,
                     child: FittedBox(
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
-                      child: RichText(
-                        text: state.value != null
-                            ? TextSpan(
-                                style: textStyle,
-                                text: state.value.description,
-                              )
-                            : TextSpan(
-                                style: hintStyle,
-                                text: hintText,
-                              ),
+                      child: Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: RichText(
+                          text: state.value != null
+                              ? TextSpan(
+                                  style: textStyle,
+                                  text: state.value.description,
+                                )
+                              : TextSpan(
+                                  style: hintStyle,
+                                  text: hintText,
+                                ),
+                        ),
                       ),
                     ),
                   ),

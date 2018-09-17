@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/drawer.dart';
@@ -15,8 +16,9 @@ import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan_view.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/trufi_map.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -34,38 +36,26 @@ class HomePageState extends State<HomePage>
   final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
 
-  AnimationController controller;
-  Animation<double> animation;
+  MapController mapController = MapController();
+  bool _isFetching = false;
 
   initState() {
     super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
-    animation = Tween(begin: 0.0, end: 42.0).animate(controller)
-      ..addListener(() {
-        setState(() {});
-      });
     Future.delayed(Duration.zero, () {
       Places.init(this.context);
+      _init();
     });
-    _loadPlan();
   }
 
-  void _loadPlan() async {
-    if (await data.load()) {
-      if (data.toPlace != null) {
-        setState(() {
-          _fromFieldKey.currentState?.didChange(data.fromPlace);
-          _toFieldKey.currentState?.didChange(data.toPlace);
-          controller.forward();
-        });
-      }
+  void _init() async {
+    if (await data.load() && data.toPlace != null) {
+      setState(() {
+        _fromFieldKey.currentState?.didChange(data.fromPlace);
+        _toFieldKey.currentState?.didChange(data.toPlace);
+      });
+    } else {
+      _setFromPlaceToCurrentPosition();
     }
-  }
-
-  dispose() {
-    controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -84,62 +74,52 @@ class HomePageState extends State<HomePage>
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
       bottom: PreferredSize(
         child: Container(),
-        preferredSize: Size.fromHeight(animation.value),
+        preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: _buildResetButton(),
+      leading: data.isResettable ? _buildResetButton() : null,
     );
   }
 
   Widget _buildFormFields(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    List<Row> rows = List();
-    bool swapLocationsEnabled = false;
-    if (_isFromFieldVisible()) {
-      rows.add(
-        _buildFormField(
-          _fromFieldKey,
-          localizations.commonOrigin,
-          _setFromPlace,
-          initialValue: data.fromPlace,
-        ),
-      );
-      swapLocationsEnabled = true;
-    }
-    rows.add(
-      _buildFormField(
-        _toFieldKey,
-        localizations.commonDestination,
-        _setToPlace,
-        initialValue: data.toPlace,
-        trailing: swapLocationsEnabled
-            ? GestureDetector(
-                onTap: () => _swapPlaces(),
-                child: Icon(Icons.swap_vert),
-              )
-            : null,
-      ),
-    );
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: rows,
+          children: <Widget>[
+            _buildFormField(
+              _fromFieldKey,
+              localizations.searchPleaseSelect,
+              _setFromPlace,
+            ),
+            _buildFormField(
+              _toFieldKey,
+              localizations.searchPleaseSelect,
+              _setToPlace,
+              trailing: data.isSwappable ? _buildSwapButton() : null,
+            ),
+          ],
         ),
       ),
     );
   }
 
+  Widget _buildSwapButton() {
+    return GestureDetector(
+      onTap: _swapPlaces,
+      child: Icon(Icons.swap_vert),
+    );
+  }
+
   Widget _buildResetButton() {
-    if (!_isFromFieldVisible()) {
-      return null;
-    }
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-      onPressed: () => _reset(),
+      onPressed: _reset,
     );
   }
 
@@ -162,7 +142,6 @@ class HomePageState extends State<HomePage>
             key: key,
             hintText: hintText,
             onSaved: onSaved,
-            initialValue: initialValue,
           ),
         ),
         SizedBox(
@@ -173,105 +152,126 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  bool _isFromFieldVisible() {
-    return data.toPlace != null && controller.isCompleted;
-  }
-
   Widget _buildBody(BuildContext context) {
-    PlanError error = data.plan?.error;
-    return Container(
-      child: error != null
-          ? _buildBodyError(error)
-          : data.plan != null ? PlanView(data.plan) : _buildBodyEmpty(context),
+    Widget body = Container(
+      child: data.plan != null && data.plan.error == null
+          ? PlanView(data.plan)
+          : _buildBodyEmpty(context),
     );
+    if (_isFetching) {
+      return Stack(
+        children: <Widget>[
+          Positioned.fill(child: body),
+          Positioned.fill(
+            child: Container(
+              color: Colors.black54,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return body;
+    }
   }
 
-  Widget _buildBodyError(PlanError error) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Center(
-        child: Text(
-          error.message,
-        ),
+  Widget _buildBodyEmpty(BuildContext context) {
+    return TrufiMap(
+      mapController: mapController,
+      mapOptions: MapOptions(
+        zoom: 5.0,
+        maxZoom: 19.0,
+        minZoom: 1.0,
       ),
     );
   }
 
-  Widget _buildBodyEmpty(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    return StreamBuilder<LatLng>(
-      stream: locationProviderBloc.outLocationUpdate,
-      initialData: locationProviderBloc.location,
-      builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-        return MapControllerPage(
-          initialPosition: snapshot.data,
-        );
-      },
-    );
-  }
-
   void _reset() {
-    _formKey.currentState.reset();
     setState(() {
       data.reset();
-      controller.reverse();
+      _formKey.currentState.reset();
+      _setFromPlaceToCurrentPosition();
     });
   }
 
-  void _setFromPlace(TrufiLocation value) async {
+  void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
     setState(() {
-      data.fromPlace = value;
+      data.fromPlace = fromPlace;
+      data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(data.toPlace);
+      _fromFieldKey.currentState.didChange(data.fromPlace);
       _fetchPlan();
     });
   }
 
-  void _setToPlace(TrufiLocation value) {
+  void _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
-      data.toPlace = value;
-      if (data.toPlace != null) {
-        controller.forward();
-      }
+      data.fromPlace = fromPlace;
+      _fromFieldKey.currentState.didChange(data.fromPlace);
       _fetchPlan();
     });
   }
 
-  void _setPlan(Plan value) {
-    setState(() {
-      data.plan = value;
-    });
-  }
-
-  void _swapPlaces() {
-    _toFieldKey.currentState.didChange(data.fromPlace);
-    _fromFieldKey.currentState.didChange(data.toPlace);
-    _toFieldKey.currentState.save();
-    _fromFieldKey.currentState.save();
-  }
-
-  void _fetchPlan() async {
+  void _setFromPlaceToCurrentPosition() async {
     final LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    if (data.toPlace != null) {
-      if (data.fromPlace == null) {
-        _setFromPlace(
-          TrufiLocation.fromLatLng(
-            localizations.searchCurrentPosition,
-            locationProviderBloc.location,
-          ),
-        );
-      } else {
-        try {
-          _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
-        } on api.FetchRequestException catch (e) {
-          print(e);
-          _setPlan(Plan.fromError(localizations.commonNoInternet));
-        } on api.FetchResponseException catch (e) {
-          print(e);
-          _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
-        }
+    final LatLng lastLocation = await locationProviderBloc.lastLocation;
+    if (lastLocation != null) {
+      _setFromPlace(
+        TrufiLocation.fromLatLng(
+          localizations.searchCurrentPosition,
+          lastLocation,
+        ),
+      );
+    }
+  }
+
+  void _setToPlace(TrufiLocation toPlace) {
+    setState(() {
+      data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(data.toPlace);
+      _fetchPlan();
+    });
+  }
+
+  void _setPlan(Plan plan) {
+    setState(() {
+      data.plan = plan;
+    });
+    PlanError error = data.plan?.error;
+    if (error != null) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlert(
+              context: context,
+              title: TrufiLocalizations.of(context).commonError,
+              content: error.message,
+            ),
+      );
+    }
+  }
+
+  void _swapPlaces() {
+    _setPlaces(data.toPlace, data.fromPlace);
+  }
+
+  void _fetchPlan() async {
+    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    if (data.toPlace != null && data.fromPlace != null) {
+      setState(() => _isFetching = true);
+      try {
+        _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
+      } on api.FetchRequestException catch (e) {
+        print(e);
+        _setPlan(Plan.fromError(localizations.commonNoInternet));
+      } on api.FetchResponseException catch (e) {
+        print(e);
+        _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
+      setState(() => _isFetching = false);
     }
   }
 }
@@ -309,9 +309,9 @@ class HomePageStateData {
 
   Map<String, dynamic> toJson() {
     return {
-      _FromPlace: fromPlace.toJson(),
-      _ToPlace: toPlace.toJson(),
-      _Plan: plan.toJson(),
+      _FromPlace: fromPlace != null ? fromPlace.toJson() : null,
+      _ToPlace: toPlace != null ? toPlace.toJson() : null,
+      _Plan: plan != null ? plan.toJson() : null,
     };
   }
 
@@ -344,6 +344,10 @@ class HomePageStateData {
   }
 
   // Getter
+
+  bool get isSwappable => _fromPlace != null && _toPlace != null;
+
+  bool get isResettable => _toPlace != null || _plan != null;
 
   TrufiLocation get fromPlace => _fromPlace;
 

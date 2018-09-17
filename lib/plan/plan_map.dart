@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
+import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/trufi_map.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
-class MapControllerPage extends StatefulWidget {
-  MapControllerPage({
+class PlanMapPage extends StatefulWidget {
+  PlanMapPage({
     this.plan,
     this.initialPosition,
     this.onSelected,
@@ -21,12 +25,10 @@ class MapControllerPage extends StatefulWidget {
   final PlanItinerary selectedItinerary;
 
   @override
-  MapControllerPageState createState() {
-    return MapControllerPageState();
-  }
+  PlanMapPageState createState() => PlanMapPageState();
 }
 
-class MapControllerPageState extends State<MapControllerPage> {
+class PlanMapPageState extends State<PlanMapPage> {
   MapController mapController;
   Plan _plan;
   PlanItinerary _selectedItinerary;
@@ -42,12 +44,21 @@ class MapControllerPageState extends State<MapControllerPage> {
     super.initState();
     mapController = MapController()
       ..onReady.then((_) {
+        mapController.move(
+          widget.initialPosition != null
+              ? widget.initialPosition
+              : LatLng(-17.4603761, -66.1860606),
+          15.0,
+        );
         setState(() {});
       });
   }
 
   Widget build(BuildContext context) {
-    _needsCameraUpdate = _needsCameraUpdate || widget.plan != _plan;
+    // Clear content
+    _needsCameraUpdate = _needsCameraUpdate ||
+        widget.plan != _plan ||
+        widget.selectedItinerary != _selectedItinerary;
     _plan = widget.plan;
     _selectedItinerary = widget.selectedItinerary;
     _itineraries.clear();
@@ -76,108 +87,97 @@ class MapControllerPageState extends State<MapControllerPage> {
           _selectedItinerary = _plan.itineraries.first;
         }
         _itineraries.addAll(
-            createItineraries(_plan, _selectedItinerary, _setItinerary));
+          createItineraries(_plan, _selectedItinerary, _setItinerary),
+        );
         _itineraries.forEach((itinerary, polylinesWithMarker) {
           bool isSelected = itinerary == _selectedItinerary;
           polylinesWithMarker.forEach((polylineWithMarker) {
             if (polylineWithMarker.marker != null) {
               if (isSelected) {
                 _selectedMarkers.add(polylineWithMarker.marker);
+                bounds.extend(polylineWithMarker.marker.point);
               } else {
                 _foregroundMarkers.add(polylineWithMarker.marker);
               }
-              bounds.extend(polylineWithMarker.marker.point);
             }
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
+              polylineWithMarker.polyline.points.forEach((point) {
+                bounds.extend(point);
+              });
             } else {
               _polylines.add(polylineWithMarker.polyline);
             }
-            polylineWithMarker.polyline.points.forEach((point) {
-              bounds.extend(point);
-            });
           });
         });
       }
-    }
-    if (widget.initialPosition != null) {
-      _foregroundMarkers.add(buildYourLocationMarker(widget.initialPosition));
     }
     if (_needsCameraUpdate && mapController.ready) {
       if (bounds.isValid) {
         mapController.fitBounds(bounds);
         _needsCameraUpdate = false;
-      } else if (widget.initialPosition != null) {
-        try {
-          mapController.move(widget.initialPosition, 15.0);
-          _needsCameraUpdate = false;
-        } catch (e) {
-          // TODO: In some cases the map throws an exception on an early move call
-          print(e);
-        }
       }
     }
-
-    // Layers
-    double buttonMargin = 20.0;
-    double buttonPadding = 10.0;
-    double buttonSize = 50.0;
-    List<Widget> children = <Widget>[];
-    children.add(
-      Positioned.fill(
-        child: FlutterMap(
-          mapController: mapController,
-          options: MapOptions(
-            zoom: 5.0,
-            maxZoom: 19.0,
-            minZoom: 1.0,
-            onTap: _handleOnMapTap,
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: TrufiMap(
+            mapController: mapController,
+            mapOptions: MapOptions(
+              zoom: 5.0,
+              maxZoom: 19.0,
+              minZoom: 1.0,
+              onTap: _handleOnMapTap,
+            ),
+            layers: <LayerOptions>[
+              MarkerLayerOptions(markers: _backgroundMarkers),
+              PolylineLayerOptions(polylines: _polylines),
+              PolylineLayerOptions(polylines: _selectedPolylines),
+              MarkerLayerOptions(markers: _foregroundMarkers),
+              MarkerLayerOptions(markers: _selectedMarkers),
+            ],
           ),
-          layers: <LayerOptions>[
-            mapBoxTileLayerOptions(),
-            MarkerLayerOptions(markers: _backgroundMarkers),
-            PolylineLayerOptions(polylines: _polylines),
-            PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _foregroundMarkers),
-            MarkerLayerOptions(markers: _selectedMarkers),
-          ],
         ),
-      ),
-    );
-    children.add(
-      Positioned(
-        top: buttonMargin,
-        right: buttonMargin,
-        width: buttonSize,
-        height: buttonSize,
-        child: _buildButton(Icons.my_location, _handleOnMyLocationButtonTapped),
-      ),
-    );
-    if (_plan != null) {
-      children.add(
         Positioned(
-          top: buttonMargin + buttonPadding + buttonSize,
-          right: buttonMargin,
-          width: buttonSize,
-          height: buttonSize,
-          child: _buildButton(Icons.crop, _handleOnCropButtonTapped),
+          bottom: 36.0,
+          right: 16.0,
+          child: _buildFloatingActionButtons(context),
         ),
-      );
-    }
-    return Stack(fit: StackFit.expand, children: children);
+      ],
+    );
   }
 
-  Widget _buildButton(IconData iconData, Function onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+  Widget _buildFloatingActionButtons(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        _buildFloatingActionButton(
+          context,
+          Icons.crop_free,
+          _handleOnCropTap,
         ),
+        _buildFloatingActionButton(
+          context,
+          Icons.my_location,
+          _handleOnMyLocationTap,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFloatingActionButton(
+    BuildContext context,
+    IconData iconData,
+    Function onPressed,
+  ) {
+    return ScaleTransition(
+      scale: AlwaysStoppedAnimation<double>(0.8),
+      child: FloatingActionButton(
+        backgroundColor: Colors.grey,
         child: Icon(iconData),
+        onPressed: onPressed,
+        heroTag: null,
       ),
     );
   }
@@ -189,20 +189,24 @@ class MapControllerPageState extends State<MapControllerPage> {
     }
   }
 
-  void _handleOnMyLocationButtonTapped() {
-    mapController.move(widget.initialPosition, 17.0);
+  void _handleOnMyLocationTap() async {
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    LatLng lastLocation = await locationProviderBloc.lastLocation;
+    if (lastLocation != null) {
+      mapController.move(lastLocation, 17.0);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => buildAlertLocationServicesDenied(context),
+    );
   }
 
-  void _handleOnCropButtonTapped() {
-    var bounds = LatLngBounds();
-    _selectedPolylines.forEach((polyline) {
-      polyline.points.forEach((point) {
-        bounds.extend(point);
-      });
+  void _handleOnCropTap() {
+    setState(() {
+      _needsCameraUpdate = true;
     });
-    if (bounds.isValid) {
-      mapController.fitBounds(bounds);
-    }
   }
 
   void _setItinerary(PlanItinerary value) {
@@ -221,12 +225,14 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
-      Polyline polyline) {
-    return _itineraries.entries.firstWhere(
-        (pair) =>
-            pair.value.firstWhere((pwm) => pwm.polyline == polyline,
-                orElse: () => null) !=
-            null,
-        orElse: () => null);
+    Polyline polyline,
+  ) {
+    return _itineraries.entries.firstWhere((pair) {
+      return null !=
+          pair.value.firstWhere(
+            (pwm) => pwm.polyline == polyline,
+            orElse: () => null,
+          );
+    }, orElse: () => null);
   }
 }
