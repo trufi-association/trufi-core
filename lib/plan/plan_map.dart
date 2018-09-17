@@ -136,6 +136,7 @@ class PlanMapPageState extends State<PlanMapPage> {
               MarkerLayerOptions(markers: _foregroundMarkers),
               MarkerLayerOptions(markers: _selectedMarkers),
             ],
+            initialPosition: widget.initialPosition,
           ),
         ),
         Positioned(

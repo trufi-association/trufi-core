@@ -17,22 +17,7 @@ class PlanEmptyPage extends StatefulWidget {
 }
 
 class PlanEmptyPageState extends State<PlanEmptyPage> {
-  MapController _mapController;
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController = MapController()
-      ..onReady.then((_) {
-        _mapController.move(
-          widget.initialPosition != null
-              ? widget.initialPosition
-              : LatLng(-17.4603761, -66.1860606),
-          15.0,
-        );
-        setState(() {});
-      });
-  }
+  MapController _mapController = MapController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +29,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
           maxZoom: 19.0,
           minZoom: 1.0,
         ),
+        initialPosition: widget.initialPosition,
       ),
       Positioned(
         bottom: 16.0,

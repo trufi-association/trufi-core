@@ -19,20 +19,16 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  MapController mapController;
-  Marker chooseOnMapMarker;
+  MapController _mapController = MapController();
+  Marker _chooseOnMapMarker;
 
   void initState() {
     super.initState();
-    chooseOnMapMarker = buildToMarker(
+    _chooseOnMapMarker = buildToMarker(
       widget.initialPosition != null
           ? widget.initialPosition
-          : LatLng(-17.4603761, -66.1860606),
+          : TrufiMap.cochabambaLocation,
     );
-    mapController = MapController()
-      ..onReady.then((_) {
-        mapController.move(chooseOnMapMarker.point, 15.0);
-      });
   }
 
   @override
@@ -74,7 +70,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
 
   Widget _buildBody(BuildContext context) {
     return TrufiMap(
-      mapController: mapController,
+      mapController: _mapController,
       mapOptions: MapOptions(
         zoom: 5.0,
         maxZoom: 19.0,
@@ -82,8 +78,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         onTap: _handleOnMapTap,
       ),
       layers: <LayerOptions>[
-        MarkerLayerOptions(markers: <Marker>[chooseOnMapMarker])
+        MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
       ],
+      initialPosition: _chooseOnMapMarker.point,
     );
   }
 
@@ -124,7 +121,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         BlocProvider.of<LocationProviderBloc>(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      mapController.move(lastLocation, 17.0);
+      _mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(
@@ -134,12 +131,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnCheckTap() {
-    Navigator.pop(context, chooseOnMapMarker.point);
+    Navigator.pop(context, _chooseOnMapMarker.point);
   }
 
   void _handleOnMapTap(LatLng point) {
     setState(() {
-      chooseOnMapMarker = buildToMarker(point);
+      _chooseOnMapMarker = buildToMarker(point);
     });
   }
 }
