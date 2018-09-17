@@ -29,7 +29,7 @@ class PlanMapPage extends StatefulWidget {
 }
 
 class PlanMapPageState extends State<PlanMapPage> {
-  MapController mapController;
+  MapController _mapController;
   Plan _plan;
   PlanItinerary _selectedItinerary;
   Map<PlanItinerary, List<PolylineWithMarker>> _itineraries = Map();
@@ -42,9 +42,9 @@ class PlanMapPageState extends State<PlanMapPage> {
 
   void initState() {
     super.initState();
-    mapController = MapController()
+    _mapController = MapController()
       ..onReady.then((_) {
-        mapController.move(
+        _mapController.move(
           widget.initialPosition != null
               ? widget.initialPosition
               : LatLng(-17.4603761, -66.1860606),
@@ -112,9 +112,9 @@ class PlanMapPageState extends State<PlanMapPage> {
         });
       }
     }
-    if (_needsCameraUpdate && mapController.ready) {
+    if (_needsCameraUpdate && _mapController.ready) {
       if (bounds.isValid) {
-        mapController.fitBounds(bounds);
+        _mapController.fitBounds(bounds);
         _needsCameraUpdate = false;
       }
     }
@@ -122,7 +122,7 @@ class PlanMapPageState extends State<PlanMapPage> {
       children: <Widget>[
         Positioned.fill(
           child: TrufiMap(
-            mapController: mapController,
+            mapController: _mapController,
             mapOptions: MapOptions(
               zoom: 5.0,
               maxZoom: 19.0,
@@ -194,7 +194,7 @@ class PlanMapPageState extends State<PlanMapPage> {
         BlocProvider.of<LocationProviderBloc>(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      mapController.move(lastLocation, 17.0);
+      _mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(

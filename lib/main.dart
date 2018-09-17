@@ -27,7 +27,11 @@ void main() {
 class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = ThemeData(primaryColor: const Color(0xffffd600));
+    ThemeData theme = ThemeData(
+      brightness: Brightness.light,
+      primaryColor: const Color(0xffffd600),
+      primaryIconTheme: const IconThemeData(color: Colors.black),
+    );
     return MaterialApp(
       routes: <String, WidgetBuilder>{
         AboutPage.route: (context) => AboutPage(),
