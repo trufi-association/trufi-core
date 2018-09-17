@@ -14,13 +14,14 @@ class PolylineWithMarker {
 }
 
 openStreetMapTileLayerOptions() {
-  return new TileLayerOptions(
-      urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      subdomains: ['a', 'b', 'c']);
+  return TileLayerOptions(
+    urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    subdomains: ['a', 'b', 'c'],
+  );
 }
 
-tilehostingTileLayerOptions() {
-  return new TileLayerOptions(
+tileHostingTileLayerOptions() {
+  return TileLayerOptions(
     urlTemplate:
         "https://maps.tilehosting.com/styles/positron/{z}/{x}/{y}.png?key={key}",
     additionalOptions: {
@@ -38,25 +39,33 @@ Marker buildToMarker(LatLng point) {
 }
 
 Marker buildYourLocationMarker(LatLng point) {
-  var decoration = new BoxDecoration(
-    color: Colors.blue,
-    border: Border.all(color: Colors.white, width: 3.5),
-    shape: BoxShape.circle,
-    boxShadow: [
-      new BoxShadow(
-        color: Colors.blue,
-        spreadRadius: 8.0,
-        blurRadius: 30.0,
-      ),
-    ],
+  return buildMarker(
+    point,
+    CircleIcon.circle,
+    AnchorPos.center,
+    Colors.blue,
+    decoration: BoxDecoration(
+      color: Colors.blue,
+      border: Border.all(color: Colors.white, width: 3.5),
+      shape: BoxShape.circle,
+      boxShadow: [
+        new BoxShadow(
+          color: Colors.blue,
+          spreadRadius: 8.0,
+          blurRadius: 30.0,
+        ),
+      ],
+    ),
   );
-  return buildMarker(point, CircleIcon.circle, AnchorPos.center, Colors.blue,
-      decoration: decoration);
 }
 
-Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
-    {Function onTap}) {
-  return new Marker(
+Marker buildBusMarker(
+  LatLng point,
+  Color color,
+  PlanItineraryLeg leg, {
+  Function onTap,
+}) {
+  return Marker(
     width: 50.0,
     height: 30.0,
     point: point,
@@ -84,15 +93,21 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
 }
 
 Marker buildMarker(
-    LatLng point, IconData iconData, AnchorPos anchor, Color color,
-    {Decoration decoration}) {
-  return new Marker(
+  LatLng point,
+  IconData iconData,
+  AnchorPos anchor,
+  Color color, {
+  Decoration decoration,
+}) {
+  return Marker(
     point: point,
     anchor: anchor,
-    builder: (context) => new Container(
-          decoration: decoration,
-          child: new Icon(iconData, color: color),
-        ),
+    builder: (context) {
+      return Container(
+        decoration: decoration,
+        child: Icon(iconData, color: color),
+      );
+    },
   );
 }
 
@@ -101,7 +116,10 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 }
 
 Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
-    Plan plan, PlanItinerary selectedItinerary, Function(PlanItinerary) onTap) {
+  Plan plan,
+  PlanItinerary selectedItinerary,
+  Function(PlanItinerary) onTap,
+) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
     List<PolylineWithMarker> polylinesWithMarker = List();

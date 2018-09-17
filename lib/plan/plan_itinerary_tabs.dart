@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
-typedef OnTapCallback = void Function();
-
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
-  final OnTapCallback onTapCallback;
 
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
-    this.onTapCallback,
   ) : assert(itineraries != null && itineraries.length > 0);
 
   @override
@@ -25,23 +21,15 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
     return SafeArea(
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.chevron_left),
-            onPressed: () {
-              _handleArrowButtonPress(context, -1);
-            },
-          ),
           Expanded(
             child: Column(
               children: <Widget>[
-                GestureDetector(
-                    onTapDown: _onTapDownDetected,
-                    child: Icon(Icons.keyboard_arrow_down)),
                 Expanded(
                   child: TabBarView(
                     controller: widget.tabController,
-                    children: widget.itineraries
-                        .map<Widget>((PlanItinerary itinerary) {
+                    children: widget.itineraries.map<Widget>((
+                      PlanItinerary itinerary,
+                    ) {
                       return _buildItinerary(context, itinerary);
                     }).toList(),
                   ),
@@ -53,24 +41,9 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.chevron_right),
-            onPressed: () {
-              _handleArrowButtonPress(context, 1);
-            },
-          ),
         ],
       ),
     );
-  }
-
-  void _handleArrowButtonPress(BuildContext context, int delta) {
-    if (!widget.tabController.indexIsChanging) {
-      widget.tabController.animateTo(
-        (widget.tabController.index + delta)
-            .clamp(0, widget.itineraries.length - 1),
-      );
-    }
   }
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
@@ -100,9 +73,5 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
         itemCount: itinerary.legs.length,
       ),
     );
-  }
-
-  void _onTapDownDetected(TapDownDetails details) {
-    widget.onTapCallback();
   }
 }
