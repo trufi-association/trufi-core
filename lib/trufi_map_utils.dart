@@ -1,32 +1,31 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
+  PolylineWithMarker(this.polyline, this.marker);
+
   final Polyline polyline;
   final Marker marker;
-
-  PolylineWithMarker(this.polyline, this.marker);
 }
 
 openStreetMapTileLayerOptions() {
-  return new TileLayerOptions(
-      urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      subdomains: ['a', 'b', 'c']);
+  return TileLayerOptions(
+    urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    subdomains: ['a', 'b', 'c'],
+  );
 }
 
-mapBoxTileLayerOptions() {
-  return new TileLayerOptions(
-    urlTemplate: "https://api.tiles.mapbox.com/v4/"
-        "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+tileHostingTileLayerOptions() {
+  return TileLayerOptions(
+    urlTemplate:
+        "https://maps.tilehosting.com/styles/positron/{z}/{x}/{y}.png?key={key}",
     additionalOptions: {
-      'accessToken':
-          'pk.eyJ1IjoicmF4ZGEiLCJhIjoiY2plZWI4ZGNtMDhjdDJ4cXVzbndzdjJrdCJ9.glZextqSSPedd2MudTlMbQ',
-      'id': 'mapbox.streets',
+      'key': '***REMOVED***',
     },
   );
 }
@@ -40,12 +39,33 @@ Marker buildToMarker(LatLng point) {
 }
 
 Marker buildYourLocationMarker(LatLng point) {
-  return buildMarker(point, Icons.my_location, AnchorPos.center, Colors.blue);
+  return buildMarker(
+    point,
+    CircleIcon.circle,
+    AnchorPos.center,
+    Colors.blue,
+    decoration: BoxDecoration(
+      color: Colors.blue,
+      border: Border.all(color: Colors.white, width: 3.5),
+      shape: BoxShape.circle,
+      boxShadow: [
+        new BoxShadow(
+          color: Colors.blue,
+          spreadRadius: 8.0,
+          blurRadius: 30.0,
+        ),
+      ],
+    ),
+  );
 }
 
-Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
-    {Function onTap}) {
-  return new Marker(
+Marker buildBusMarker(
+  LatLng point,
+  Color color,
+  PlanItineraryLeg leg, {
+  Function onTap,
+}) {
+  return Marker(
     width: 50.0,
     height: 30.0,
     point: point,
@@ -73,12 +93,21 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
 }
 
 Marker buildMarker(
-    LatLng point, IconData iconData, AnchorPos anchor, Color color) {
-  return new Marker(
+  LatLng point,
+  IconData iconData,
+  AnchorPos anchor,
+  Color color, {
+  Decoration decoration,
+}) {
+  return Marker(
     point: point,
     anchor: anchor,
-    builder: (context) =>
-        new Container(child: new Icon(iconData, color: color)),
+    builder: (context) {
+      return Container(
+        decoration: decoration,
+        child: Icon(iconData, color: color),
+      );
+    },
   );
 }
 
@@ -87,7 +116,10 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 }
 
 Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
-    Plan plan, PlanItinerary selectedItinerary, Function(PlanItinerary) onTap) {
+  Plan plan,
+  PlanItinerary selectedItinerary,
+  Function(PlanItinerary) onTap,
+) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
     List<PolylineWithMarker> polylinesWithMarker = List();
@@ -212,4 +244,12 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
+}
+
+class CircleIcon {
+  CircleIcon._();
+
+  static const _kFontFam = 'CircleIcon';
+
+  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam);
 }

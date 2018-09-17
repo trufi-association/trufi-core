@@ -15,6 +15,9 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class FeedBackPageState extends State<FeedbackPage> {
+  static const LaunchUrl =
+      "mailto:trufi-feedback@googlegroups.com?subject=Feedback";
+
   Future<Null> _launched;
 
   Future<Null> _launch(String url) async {
@@ -25,49 +28,65 @@ class FeedBackPageState extends State<FeedbackPage> {
     }
   }
 
-  Widget _launchStatus(BuildContext context, AsyncSnapshot<Null> snapshot) {
-    if (snapshot.hasError) {
-      return new Text('Error: ${snapshot.error}');
-    } else {
-      return const Text('');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    const String toLaunch =
-        'mailto:trufi-feedback@googlegroups.com?subject=Feedback';
     return Scaffold(
-      appBar: AppBar(title: Text(localizations.menuFeedback)),
-      body: new Center(
-        child: new Column(
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
+      drawer: _buildDrawer(context),
+      floatingActionButton: _buildFloatingActionButton(context),
+    );
+  }
+
+  Widget _buildAppBar(BuildContext context) {
+    return AppBar(title: Text(TrufiLocalizations.of(context).menuFeedback));
+  }
+
+  Widget _buildBody(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return Container(
+      padding: EdgeInsets.all(24.0),
+      child: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Container(
-              child: Text(
-                localizations.feedbackContent,
-                style: TextStyle(fontSize: 20.0),
-                textAlign: TextAlign.center,
-              ),
-              padding: const EdgeInsets.all(24.0),
+            Text(
+              localizations.feedbackContent,
+              style: theme.textTheme.title,
+              textAlign: TextAlign.center,
             ),
-            const Padding(padding: const EdgeInsets.all(16.0)),
-            new RaisedButton(
-              onPressed: () => setState(() {
-                    _launched = _launch(toLaunch);
-                  }),
-              child: new Text(localizations.feedbackButton),
-            ),
-            const Padding(padding: const EdgeInsets.all(16.0)),
-            new FutureBuilder<Null>(future: _launched, builder: _launchStatus),
+            Container(height: 16.0),
+            FutureBuilder<Null>(
+                future: _launched,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  return Text(snapshot.hasError ? "${snapshot.error}" : "");
+                }),
           ],
         ),
       ),
-      drawer: TrufiDrawer(
-        FeedbackPage.route,
-        onLanguageChangedCallback: () => setState(() {}),
-      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return TrufiDrawer(
+      FeedbackPage.route,
+      onLanguageChangedCallback: () => setState(() {}),
+    );
+  }
+
+  Widget _buildFloatingActionButton(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return FloatingActionButton.extended(
+      backgroundColor: theme.primaryColor,
+      icon: Icon(Icons.send),
+      label: Text(localizations.feedbackButton),
+      onPressed: () {
+        setState(() {
+          _launched = _launch(LaunchUrl);
+        });
+      },
     );
   }
 }

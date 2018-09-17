@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:trufi_app/blocs/locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
