@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/plan/plan_itinerary_tab_controller.dart';
+import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
+import 'package:trufi_app/plan/plan_map.dart';
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/trufi_map_controller.dart';
 import 'package:trufi_app/widgets/visible.dart';
 
 class PlanView extends StatefulWidget {
@@ -71,7 +71,7 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
         Column(
           children: <Widget>[
             Expanded(
-              child: MapControllerPage(
+              child: PlanMapPage(
                 plan: widget.plan,
                 onSelected: _setItinerary,
                 selectedItinerary: selectedItinerary,
