@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:trufi_app/drawer.dart';
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/utils/file_utils.dart';
 
 class TeamPage extends StatefulWidget {
   static const String route = "team";
-  final FileUtils fileUtils = FileUtils();
 
   @override
   State<StatefulWidget> createState() => new TeamPageState();
 }
 
 class TeamPageState extends State<TeamPage> {
-  static const String PATH_TEAM_FILE = 'assets/data/team.txt';
   String _teamString = '';
-  TrufiLocalizations localizations;
+
+  @override
+  void initState() {
+    super.initState();
+    _initTeam();
+  }
+
+  void _initTeam() async {
+    rootBundle.loadString('assets/data/team.txt').then((value) {
+      setState(() {
+        _teamString = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    localizations = TrufiLocalizations.of(context);
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
@@ -27,18 +38,13 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return AppBar(title: Text(localizations.menuTeam));
   }
 
   Widget _buildBody(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
-    widget.fileUtils.readFile(PATH_TEAM_FILE).then((String value) {
-      setState(() {
-        _teamString = value;
-      });
-    });
-
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Container(
       padding: EdgeInsets.all(24.0),
       child: Center(
@@ -57,8 +63,7 @@ class TeamPageState extends State<TeamPage> {
                 style: theme.textTheme.subhead,
                 textAlign: TextAlign.center,
               ),
-            )
-
+            ),
           ],
         ),
       ),
