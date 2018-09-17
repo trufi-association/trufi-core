@@ -47,6 +47,7 @@ class TrufiApp extends StatelessWidget {
         const Locale('en', 'US'), // English
         const Locale('de', 'DE'), // German
         const Locale('es', 'ES'), // Spanish
+        const Locale('qu', 'BO'), // Quechua
         // ... other locales the app supports
       ],
       debugShowCheckedModeBanner: false,

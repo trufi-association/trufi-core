@@ -45,14 +45,18 @@ class TrufiLocalizations {
   static const String ChooseLocationPageTitle = "choose_location_page_title";
   static const String ChooseLocationPageSubtitle =
       "choose_location_page_subtitle";
+  static const String InstructionWalkStart = "instruction_walk_start";
   static const String InstructionWalk = "instruction_walk";
   static const String InstructionRide = "instruction_ride";
   static const String InstructionRideBus = "instruction_ride_bus";
+  static const String InstructionMinutes = "instruction_minutes";
   static const String InstructionRideMicro = "instruction_ride_micro";
   static const String InstructionRideMinibus = "instruction_ride_minibus";
   static const String InstructionRideTrufi = "instruction_ride_trufi";
   static const String InstructionTo = "instruction_to";
   static const String InstructionFor = "instruction_for";
+  static const String InstructionUnitKilometer = "instruction_unit_km";
+  static const String InstructionUnitMeter = "instruction_unit_meter";
   static const String MenuConnections = "menu_connection";
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
@@ -64,6 +68,7 @@ class TrufiLocalizations {
   static const String English = "english";
   static const String German = "german";
   static const String Spanish = "spanish";
+  static const String Quechua = "quechua";
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
@@ -98,11 +103,14 @@ class TrufiLocalizations {
       InstructionWalk: 'Walk',
       InstructionRide: 'Ride',
       InstructionRideBus: 'Bus',
+      InstructionMinutes: "min",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
       InstructionTo: 'to',
       InstructionFor: 'for',
+      InstructionUnitKilometer: 'km',
+      InstructionUnitMeter: 'm',
       MenuConnections: 'Show routes',
       MenuAbout: 'About',
       MenuTeam: 'Become part of the Team',
@@ -115,7 +123,8 @@ class TrufiLocalizations {
       TeamContent: 'People and companies involved:',
       English: 'English',
       German: 'German',
-      Spanish: 'Spanish'
+      Spanish: 'Spanish',
+      Quechua: 'Quechua'
     },
     'es': {
       Title: 'Trufi App',
@@ -149,24 +158,28 @@ class TrufiLocalizations {
       InstructionWalk: 'Caminar',
       InstructionRide: 'Tomar',
       InstructionRideBus: 'Bus',
+      InstructionMinutes: "minutos",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
       InstructionTo: 'hasta',
       InstructionFor: 'por',
+      InstructionUnitKilometer: 'kilómetros',
+      InstructionUnitMeter: 'metros',
       MenuConnections: 'Muestra rutas',
       MenuAbout: 'Acerca',
       MenuTeam: 'Forme parte del equipo',
       MenuFeedback: 'Envía comentarios',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
-      FeedbackButton: 'Envianos un correo',
+      FeedbackButton: 'Envíanos un correo',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
       TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés',
       German: 'Alemán',
-      Spanish: 'Español'
+      Spanish: 'Español',
+      Quechua: 'Quechua'
     },
     'de': {
       Title: 'Trufi App',
@@ -200,11 +213,14 @@ class TrufiLocalizations {
       InstructionWalk: 'Gehen Sie',
       InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
+      InstructionMinutes: "Min",
       InstructionRideMicro: 'dem Micro',
       InstructionRideMinibus: 'dem Minibus',
       InstructionRideTrufi: 'der Trufi',
       InstructionTo: 'zur',
       InstructionFor: 'für',
+      InstructionUnitKilometer: 'km',
+      InstructionUnitMeter: 'm',
       MenuConnections: 'Verbindungen',
       MenuAbout: 'Über',
       MenuTeam: 'Werde Teil des Teams',
@@ -217,7 +233,64 @@ class TrufiLocalizations {
       TeamContent: 'Beteiligte Personen und Firmen:',
       English: 'Englisch',
       German: 'Deutsch',
-      Spanish: 'Spanisch'
+      Spanish: 'Spanisch',
+      Quechua: 'Quechua'
+    },
+    'qu': {
+      Title: 'Trufi App',
+      TagLine: 'Transporte público en Cochabamba',
+      Description:
+          "Trufis, microspi, buspi ima qhuchapampapi aswan sumaq ch’usanapaq.",
+      AlertLocationServicesDeniedTitle: "Sin acceso a la ubicación",
+      AlertLocationServicesDeniedMessage:
+          "Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.",
+      CommonOK: 'Aceptar',
+      CommonCancel: 'Cancelar',
+      CommonDestination: 'Mayman',
+      CommonOrigin: 'Maymanta',
+      CommonNoInternetConnection: 'Mana internet canchu',
+      CommonFailLoadingData: 'Mana aticunchu tariyta datusta',
+      CommonUnknownError: 'Mana yachacunchu imachus pasan',
+      CommonError: 'Error',
+      SearchItemChooseOnMap: 'Ajllaw uj mapata',
+      SearchItemYourLocation: 'Gan cashanqui',
+      SearchItemNoResults: "Ningun resultado",
+      SearchSectionPlaces: 'Lugares',
+      SearchSectionRecent: "Kuintan masc'asgas",
+      SearchSectionResults: "Masc'asgas",
+      SearchCurrentPosition: 'Maypi cunan cashani',
+      SearchSectionPleaseSelect: "Por favor seleccione",
+      SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
+      SearchSectionMapMarker: 'Maypi cashani mapapy',
+      SearchNavigateToMarker: 'Rina chaycamana',
+      ChooseLocationPageTitle: 'Ajllaw uj puntuta mapapy',
+      ChooseLocationPageSubtitle: "Ñit'iy mapapy",
+      InstructionWalkStart: 'Juk chiqamanta',
+      InstructionWalk: 'puriy',
+      InstructionRide: 'jap’iy',
+      InstructionRideBus: "Bus",
+      InstructionMinutes: "ch’inini-phani",
+      InstructionRideMicro: 'Micro',
+      InstructionRideMinibus: 'Minibus',
+      InstructionRideTrufi: 'Trufi',
+      InstructionTo: 'waq chiqaman',
+      InstructionFor: 'kama',
+      InstructionUnitKilometer: 'km',
+      InstructionUnitMeter: 'mts',
+      MenuConnections: "Ñankunata rikhuchiy",
+      MenuAbout: "Imamanta yachayta munanki?",
+      MenuTeam: "Ñuqaykuwan",
+      MenuFeedback: "Yuyaskiniyykita riqsichiwayku",
+      FeedbackContent:
+          "mayna riqch’asunki Bus App? Mayk’aqpis  pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq",
+      FeedbackButton: 'Envíanos un correo',
+      AboutContent:
+          "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan aswan sasata ch’usanaykipaq.",
+      TeamContent: 'Personas y empresas involucradas:',
+      English: 'English',
+      German: 'German',
+      Spanish: 'Spanish',
+      Quechua: 'Quechua'
     }
   };
 
@@ -319,6 +392,10 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][SearchNavigateToMarker];
   }
 
+  String get instructionWalkStart {
+    return _localizedValues[locale.languageCode][InstructionWalkStart];
+  }
+
   String get instructionWalk {
     return _localizedValues[locale.languageCode][InstructionWalk];
   }
@@ -329,6 +406,10 @@ class TrufiLocalizations {
 
   String get instructionRideBus {
     return _localizedValues[locale.languageCode][InstructionRideBus];
+  }
+
+  String get instructionMinutes {
+    return _localizedValues[locale.languageCode][InstructionMinutes];
   }
 
   String get instructionRideMicro {
@@ -349,6 +430,14 @@ class TrufiLocalizations {
 
   String get instructionFor {
     return _localizedValues[locale.languageCode][InstructionFor];
+  }
+
+  String get instructionUnitKm {
+    return _localizedValues[locale.languageCode][InstructionUnitKilometer];
+  }
+
+  String get instructionUnitMeter {
+    return _localizedValues[locale.languageCode][InstructionUnitMeter];
   }
 
   String get chooseLocationPageTitle {
@@ -403,6 +492,12 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][Spanish];
   }
 
+  String get quechua {
+    return _localizedValues[locale.languageCode][Quechua];
+  }
+
+  bool get isQuechua => locale.languageCode == 'qu';
+
   void switchToLanguage(String languageCode) {
     locale = getLocale(languageCode);
   }
@@ -414,6 +509,9 @@ class TrufiLocalizations {
         break;
       case "de":
         return Locale('de', 'DE');
+        break;
+      case "qu":
+        return Locale('qu', 'BO');
         break;
       default:
         return Locale('es', 'ES');
@@ -427,6 +525,9 @@ class TrufiLocalizations {
     } else if (languageString ==
         _localizedValues[locale.languageCode][German]) {
       return "de";
+    } else if (languageString ==
+        _localizedValues[locale.languageCode][Quechua]) {
+      return "qu";
     } else {
       return "es";
     }
@@ -439,6 +540,9 @@ class TrufiLocalizations {
         break;
       case "de":
         return _localizedValues[locale.languageCode][German];
+        break;
+      case "qu":
+        return _localizedValues[locale.languageCode][Quechua];
         break;
       default:
         return _localizedValues[locale.languageCode][Spanish];
