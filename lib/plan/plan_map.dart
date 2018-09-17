@@ -40,6 +40,20 @@ class PlanMapPageState extends State<PlanMapPage> {
   List<Polyline> _selectedPolylines = List();
   bool _needsCameraUpdate = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _mapController.onReady.then((_) {
+      _mapController.move(
+        widget.initialPosition != null
+            ? widget.initialPosition
+            : TrufiMap.cochabambaLocation,
+        12.0,
+      );
+      setState(() {});
+    });
+  }
+
   Widget build(BuildContext context) {
     // Clear content
     _needsCameraUpdate = _needsCameraUpdate ||
@@ -106,24 +120,21 @@ class PlanMapPageState extends State<PlanMapPage> {
     }
     return Stack(
       children: <Widget>[
-        Positioned.fill(
-          child: TrufiMap(
-            mapController: _mapController,
-            mapOptions: MapOptions(
-              zoom: 5.0,
-              maxZoom: 19.0,
-              minZoom: 1.0,
-              onTap: _handleOnMapTap,
-            ),
-            layers: <LayerOptions>[
-              MarkerLayerOptions(markers: _backgroundMarkers),
-              PolylineLayerOptions(polylines: _polylines),
-              PolylineLayerOptions(polylines: _selectedPolylines),
-              MarkerLayerOptions(markers: _foregroundMarkers),
-              MarkerLayerOptions(markers: _selectedMarkers),
-            ],
-            initialPosition: widget.initialPosition,
+        TrufiMap(
+          mapController: _mapController,
+          mapOptions: MapOptions(
+            zoom: 5.0,
+            maxZoom: 19.0,
+            minZoom: 1.0,
+            onTap: _handleOnMapTap,
           ),
+          layers: <LayerOptions>[
+            MarkerLayerOptions(markers: _backgroundMarkers),
+            PolylineLayerOptions(polylines: _polylines),
+            PolylineLayerOptions(polylines: _selectedPolylines),
+            MarkerLayerOptions(markers: _foregroundMarkers),
+            MarkerLayerOptions(markers: _selectedMarkers),
+          ],
         ),
         Positioned(
           bottom: 36.0,
