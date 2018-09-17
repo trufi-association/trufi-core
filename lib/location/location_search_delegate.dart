@@ -33,7 +33,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      tooltip: 'Back',
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
       onPressed: () {
         close(context, null);
@@ -60,17 +59,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildResults(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    String text = "${localizations.searchNavigate} ${result.description}";
-    return Center(
-      child: RaisedButton(
-        child: Text(text),
-        onPressed: () => _close(context),
-      ),
-    );
-  }
-
-  void _close(BuildContext context) {
+    print("${localizations.searchNavigate} ${result.description}");
     close(context, result);
+    return Container();
   }
 
   @override
@@ -82,7 +73,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               onPressed: () {},
             )
           : IconButton(
-              tooltip: 'Clear',
               icon: const Icon(Icons.clear),
               onPressed: () {
                 query = '';
@@ -354,14 +344,14 @@ class _SuggestionList extends StatelessWidget {
         BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
+    LatLng mapLocation = await Navigator.of(context).push(
+      MaterialPageRoute<LatLng>(builder: (context) {
+        return ChooseLocationPage(initialPosition: lastLocation);
+      }),
+    );
     _onMapTapped(
-      localizations.searchMapMarker,
-      await Navigator.push(
-        context,
-        MaterialPageRoute<LatLng>(builder: (context) {
-          return ChooseLocationPage(initialPosition: lastLocation);
-        }),
-      ),
+      description: localizations.searchMapMarker,
+      location: mapLocation,
     );
   }
 
@@ -394,10 +384,13 @@ class _SuggestionList extends StatelessWidget {
     }
   }
 
-  void _onMapTapped(String description, LatLng value) {
-    if (value != null) {
+  void _onMapTapped({
+    String description,
+    LatLng location,
+  }) {
+    if (location != null) {
       if (onMapTapped != null) {
-        onMapTapped(TrufiLocation.fromLatLng(description, value));
+        onMapTapped(TrufiLocation.fromLatLng(description, location));
       }
     }
   }
@@ -460,14 +453,20 @@ class FavoriteButtonState extends State<FavoriteButton> {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data == true) {
           return GestureDetector(
-            onTap: () =>
-                favoriteLocationsBloc.inRemoveLocation.add(widget.location),
+            onTap: () {
+              favoriteLocationsBloc.inRemoveLocation.add(
+                widget.location,
+              );
+            },
             child: Icon(Icons.favorite),
           );
         } else {
           return GestureDetector(
-            onTap: () =>
-                favoriteLocationsBloc.inAddLocation.add(widget.location),
+            onTap: () {
+              favoriteLocationsBloc.inAddLocation.add(
+                widget.location,
+              );
+            },
             child: Icon(Icons.favorite_border),
           );
         }
