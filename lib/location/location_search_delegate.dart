@@ -60,7 +60,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildResults(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     print("${localizations.searchNavigate} ${result.description}");
-    close(context, result);
+    Future.delayed(Duration.zero, () {
+      close(context, result);
+    });
     return Container();
   }
 
@@ -202,6 +204,7 @@ class _SuggestionList extends StatelessWidget {
   }) {
     return FutureBuilder(
         future: future,
+        initialData: null,
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> snapshot) {
           final FavoriteLocationsBloc favoriteLocationsBloc =
