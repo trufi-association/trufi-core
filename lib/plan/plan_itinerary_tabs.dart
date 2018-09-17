@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
@@ -48,6 +48,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
     ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: ListView.builder(
         padding: EdgeInsets.all(8.0),
@@ -58,11 +59,13 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
               Icon(leg.iconData()),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 3.0),
+                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   child: RichText(
                     text: TextSpan(
                       style: theme.textTheme.body2,
-                      text: leg.toInstruction(context),
+                      text: localizations.isQuechua
+                          ? leg.toInstructionQuechua(context)
+                          : leg.toInstruction(context),
                     ),
                   ),
                 ),

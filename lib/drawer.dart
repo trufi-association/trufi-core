@@ -135,6 +135,7 @@ class DrawerState extends State<TrufiDrawer> {
         },
         items: <String>[
           localizations.spanish,
+          localizations.quechua,
           localizations.english,
           localizations.german
         ].map((String value) {
