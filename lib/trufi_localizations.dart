@@ -267,7 +267,7 @@ class TrufiLocalizations {
       ChooseLocationPageSubtitle: "Ñit'iy mapapy",
       InstructionWalkStart: 'Juk chiqamanta',
       InstructionWalk: 'puriy.',
-      InstructionRide: 'jap’iy', // No needed for Quechua
+      InstructionRide: 'jap’iy',
       InstructionRideBus: "Bus",
       InstructionMinutes: " ch’inini-phani",
       InstructionRideMicro: 'Micro',
