@@ -20,6 +20,20 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
   MapController _mapController = MapController();
 
   @override
+  void initState() {
+    super.initState();
+    _mapController.onReady.then((_) {
+      _mapController.move(
+        widget.initialPosition != null
+            ? widget.initialPosition
+            : TrufiMap.cochabambaLocation,
+        12.0,
+      );
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
       TrufiMap(
@@ -29,7 +43,6 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
           maxZoom: 19.0,
           minZoom: 1.0,
         ),
-        initialPosition: widget.initialPosition,
       ),
       Positioned(
         bottom: 16.0,
