@@ -172,7 +172,7 @@ class TrufiLocalizations {
       MenuFeedback: 'Envía comentarios',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
-      FeedbackButton: 'Envianos un correo',
+      FeedbackButton: 'Envíanos un correo',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
       TeamContent: 'Personas y empresas involucradas:',
@@ -283,10 +283,10 @@ class TrufiLocalizations {
       MenuFeedback: "Yuyaskiniyykita riqsichiwayku",
       FeedbackContent:
           "mayna riqch’asunki Bus App? Mayk’aqpis  pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq",
-      FeedbackButton: '-',
+      FeedbackButton: 'Envíanos un correo',
       AboutContent:
           "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan aswan sasata ch’usanaykipaq.",
-      TeamContent: "-",
+      TeamContent: 'Personas y empresas involucradas:',
       English: 'English',
       German: 'German',
       Spanish: 'Spanish',
