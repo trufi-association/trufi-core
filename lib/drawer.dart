@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
@@ -7,44 +8,30 @@ import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
+  TrufiDrawer(this.currentRoute, {this.onLanguageChangedCallback});
+
   final String currentRoute;
   final Function onLanguageChangedCallback;
 
-  TrufiDrawer(this.currentRoute, {this.onLanguageChangedCallback});
-
   @override
-  State<StatefulWidget> createState() {
-    return DrawerState(currentRoute, onLanguageChangedCallback);
-  }
+  DrawerState createState() => DrawerState();
 }
 
 class DrawerState extends State<TrufiDrawer> {
-  String currentRoute;
-  Function onLanguageChangedCallback;
-  SharedPreferences sharedPreferences;
-  TrufiLocalizations localizations;
-
-  DrawerState(this.currentRoute, this.onLanguageChangedCallback);
+  SharedPreferences _sharedPreferences;
 
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((prefs) {
-      sharedPreferences = prefs;
+      _sharedPreferences = prefs;
       setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    localizations = TrufiLocalizations.of(context);
-    return buildDrawer(context, currentRoute, sharedPreferences);
-  }
-
-  Drawer buildDrawer(
-    BuildContext context,
-    String currentRoute,
-    SharedPreferences prefs,
-  ) {
+    ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -55,80 +42,78 @@ class DrawerState extends State<TrufiDrawer> {
               children: <Widget>[
                 Text(
                   localizations.title,
-                  style: TextStyle(fontSize: 20.0),
+                  style: theme.textTheme.title,
                 ),
                 Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Text(
                     localizations.description,
+                    style: theme.textTheme.subhead,
                     textAlign: TextAlign.center,
                   ),
                 )
               ],
             ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           ),
-          ListTile(
-            leading: Icon(Icons.linear_scale),
-            title: Text(localizations.menuConnections),
-            selected: currentRoute == HomePage.route,
-            onTap: () {
-              Navigator.popAndPushNamed(context, HomePage.route);
-            },
+          _buildListItem(
+            Icons.linear_scale,
+            localizations.menuConnections,
+            HomePage.route,
           ),
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text(localizations.menuAbout),
-            selected: currentRoute == AboutPage.route,
-            onTap: () {
-              Navigator.popAndPushNamed(context, AboutPage.route);
-            },
+          _buildListItem(
+            Icons.info,
+            localizations.menuAbout,
+            AboutPage.route,
           ),
-          ListTile(
-            leading: Icon(Icons.create),
-            title: Text(localizations.menuFeedback),
-            selected: currentRoute == FeedbackPage.route,
-            onTap: () {
-              Navigator.popAndPushNamed(context, FeedbackPage.route);
-            },
+          _buildListItem(
+            Icons.create,
+            localizations.menuFeedback,
+            FeedbackPage.route,
           ),
-          ListTile(
-            leading: Icon(Icons.people),
-            title: Text(localizations.menuTeam),
-            selected: currentRoute == TeamPage.route,
-            onTap: () {
-              Navigator.popAndPushNamed(context, TeamPage.route);
-            },
+          _buildListItem(
+            Icons.people,
+            localizations.menuTeam,
+            TeamPage.route,
           ),
-          buildDropdownButton(context, prefs)
+          _buildDropdownButton(context),
         ],
       ),
     );
   }
 
-  Widget buildDropdownButton(BuildContext context, SharedPreferences prefs) {
+  Widget _buildListItem(IconData iconData, String title, String route) {
+    return ListTile(
+      leading: Icon(iconData),
+      title: Text(title),
+      selected: widget.currentRoute == route,
+      onTap: () {
+        Navigator.popAndPushNamed(context, route);
+      },
+    );
+  }
+
+  Widget _buildDropdownButton(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TrufiLocalizations trufiLocalizations = TrufiLocalizations.of(context);
-    return new ListTile(
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return ListTile(
       leading: Icon(Icons.language),
-      title: new DropdownButton<String>(
+      title: DropdownButton<String>(
         style: theme.textTheme.body2,
         value: localizations.getLanguageString(
           localizations.locale.languageCode,
         ),
         onChanged: (String newValue) {
           SharedPreferences.getInstance().then((prefs) {
-            String languageCode = trufiLocalizations.getLanguageCode(newValue);
-            prefs.setString(
+            String languageCode = localizations.getLanguageCode(newValue);
+            _sharedPreferences.setString(
               TrufiLocalizations.SavedLanguageCode,
               languageCode,
             );
-            trufiLocalizations.switchToLanguage(languageCode);
+            localizations.switchToLanguage(languageCode);
             setState(() {
-              if (onLanguageChangedCallback != null) {
-                onLanguageChangedCallback();
+              if (widget.onLanguageChangedCallback != null) {
+                widget.onLanguageChangedCallback();
               }
             });
           });
@@ -141,7 +126,10 @@ class DrawerState extends State<TrufiDrawer> {
         ].map((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: Text(
+              value,
+              style: theme.textTheme.body2,
+            ),
           );
         }).toList(),
       ),
