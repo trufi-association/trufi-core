@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final HomePageStateData data = HomePageStateData();
+  final HomePageStateData _data = HomePageStateData();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
       GlobalKey<FormFieldState<TrufiLocation>>();
@@ -46,10 +46,10 @@ class HomePageState extends State<HomePage>
   }
 
   void _loadState() async {
-    if (await data.load() && data.toPlace != null) {
+    if (await _data.load() && _data.toPlace != null) {
       setState(() {
-        _fromFieldKey.currentState?.didChange(data.fromPlace);
-        _toFieldKey.currentState?.didChange(data.toPlace);
+        _fromFieldKey.currentState?.didChange(_data.fromPlace);
+        _toFieldKey.currentState?.didChange(_data.toPlace);
       });
     } else {
       _setFromPlaceToCurrentPosition();
@@ -78,7 +78,7 @@ class HomePageState extends State<HomePage>
         preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: data.isResettable ? _buildResetButton() : null,
+      leading: _data.isResettable ? _buildResetButton() : null,
     );
   }
 
@@ -99,7 +99,7 @@ class HomePageState extends State<HomePage>
               _toFieldKey,
               localizations.searchPleaseSelect,
               _setToPlace,
-              trailing: data.isSwappable ? _buildSwapButton() : null,
+              trailing: _data.isSwappable ? _buildSwapButton() : null,
             ),
           ],
         ),
@@ -152,8 +152,8 @@ class HomePageState extends State<HomePage>
 
   Widget _buildBody(BuildContext context) {
     Widget body = Container(
-      child: data.plan != null && data.plan.error == null
-          ? PlanPage(data.plan)
+      child: _data.plan != null && _data.plan.error == null
+          ? PlanPage(_data.plan)
           : PlanEmptyPage(),
     );
     if (_isFetching) {
@@ -177,7 +177,7 @@ class HomePageState extends State<HomePage>
 
   void _reset() {
     setState(() {
-      data.reset();
+      _data.reset();
       _formKey.currentState.reset();
       _setFromPlaceToCurrentPosition();
     });
@@ -185,18 +185,18 @@ class HomePageState extends State<HomePage>
 
   void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
     setState(() {
-      data.fromPlace = fromPlace;
-      data.toPlace = toPlace;
-      _toFieldKey.currentState.didChange(data.toPlace);
-      _fromFieldKey.currentState.didChange(data.fromPlace);
+      _data.fromPlace = fromPlace;
+      _data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(_data.toPlace);
+      _fromFieldKey.currentState.didChange(_data.fromPlace);
       _fetchPlan();
     });
   }
 
   void _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
-      data.fromPlace = fromPlace;
-      _fromFieldKey.currentState.didChange(data.fromPlace);
+      _data.fromPlace = fromPlace;
+      _fromFieldKey.currentState.didChange(_data.fromPlace);
       _fetchPlan();
     });
   }
@@ -218,17 +218,17 @@ class HomePageState extends State<HomePage>
 
   void _setToPlace(TrufiLocation toPlace) {
     setState(() {
-      data.toPlace = toPlace;
-      _toFieldKey.currentState.didChange(data.toPlace);
+      _data.toPlace = toPlace;
+      _toFieldKey.currentState.didChange(_data.toPlace);
       _fetchPlan();
     });
   }
 
   void _setPlan(Plan plan) {
     setState(() {
-      data.plan = plan;
+      _data.plan = plan;
     });
-    PlanError error = data.plan?.error;
+    PlanError error = _data.plan?.error;
     if (error != null) {
       showDialog(
         context: context,
@@ -242,15 +242,15 @@ class HomePageState extends State<HomePage>
   }
 
   void _swapPlaces() {
-    _setPlaces(data.toPlace, data.fromPlace);
+    _setPlaces(_data.toPlace, _data.fromPlace);
   }
 
   void _fetchPlan() async {
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    if (data.toPlace != null && data.fromPlace != null) {
+    if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _setPlan(await api.fetchPlan(data.fromPlace, data.toPlace));
+        _setPlan(await api.fetchPlan(_data.fromPlace, _data.toPlace));
       } on api.FetchRequestException catch (e) {
         print(e);
         _setPlan(Plan.fromError(localizations.commonNoInternet));
