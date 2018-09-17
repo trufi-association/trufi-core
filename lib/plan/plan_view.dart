@@ -107,7 +107,12 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
             padding: EdgeInsets.all(10.0),
             child: Row(
               children: <Widget>[
-                Expanded(child: _buildItinerarySummary(selectedItinerary)),
+                Expanded(
+                  child: _buildItinerarySummary(
+                    context,
+                    selectedItinerary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -147,7 +152,8 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
     });
   }
 
-  Widget _buildItinerarySummary(PlanItinerary itinerary) {
+  Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
+    ThemeData theme = Theme.of(context);
     List<Widget> summary = List();
     var legs = itinerary.legs;
     for (var i = 0; i < legs.length; i++) {
@@ -159,9 +165,14 @@ class PlanViewState extends State<PlanView> with TickerProviderStateMixin {
             leg.mode == 'BUS'
                 ? Text(
                     leg.route,
-                    style: new TextStyle(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.body2.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   )
-                : Text((leg.duration.ceil() ~/ 60).toString()),
+                : Text(
+                    (leg.duration.ceil() ~/ 60).toString(),
+                    style: theme.textTheme.body1,
+                  ),
             i < (legs.length - 1)
                 ? Icon(Icons.keyboard_arrow_right)
                 : Container(),
