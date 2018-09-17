@@ -276,7 +276,7 @@ class _SuggestionList extends StatelessWidget {
                 final TrufiLocation value = snapshot.data[index - 1];
                 return _buildItem(
                   context,
-                  () => _onSelectedTrufiLocation(value),
+                  () => _onSelectedTrufiLocation(value, addToHistory: true),
                   iconData,
                   value.description,
                   trailing: FavoriteButton(
@@ -337,8 +337,9 @@ class _SuggestionList extends StatelessWidget {
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
       _onSelectedLatLng(
-        TrufiLocalizations.of(context).searchMapMarker,
-        lastLocation,
+        description: TrufiLocalizations.of(context).searchMapMarker,
+        location: lastLocation,
+        addToHistory: false,
       );
       return;
     }
@@ -364,21 +365,29 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _onSelectedLatLng(String description, LatLng value) {
-    if (value != null) {
-      _onSelectedTrufiLocation(
-        TrufiLocation(
-          description: description,
-          latitude: value.latitude,
-          longitude: value.longitude,
-        ),
-      );
-    }
+  void _onSelectedLatLng({
+    @required String description,
+    @required LatLng location,
+    bool addToHistory,
+  }) {
+    _onSelectedTrufiLocation(
+      TrufiLocation(
+        description: description,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      ),
+      addToHistory: addToHistory,
+    );
   }
 
-  void _onSelectedTrufiLocation(TrufiLocation value) {
+  void _onSelectedTrufiLocation(
+    TrufiLocation value, {
+    bool addToHistory,
+  }) {
     if (value != null) {
-      historyLocationsBloc.inAddLocation.add(value);
+      if (addToHistory) {
+        historyLocationsBloc.inAddLocation.add(value);
+      }
       if (onSelected != null) {
         onSelected(value);
       }
