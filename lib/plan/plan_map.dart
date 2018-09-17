@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -29,6 +31,9 @@ class PlanMapPage extends StatefulWidget {
 }
 
 class PlanMapPageState extends State<PlanMapPage> {
+  final GlobalKey<CropButtonState> _cropButtonKey =
+      GlobalKey<CropButtonState>();
+
   MapController _mapController = MapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
@@ -38,6 +43,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   List<Polyline> _polylines = List();
   List<Marker> _selectedMarkers = List();
   List<Polyline> _selectedPolylines = List();
+  LatLngBounds _selectedBounds = LatLngBounds();
   bool _needsCameraUpdate = true;
 
   @override
@@ -67,19 +73,19 @@ class PlanMapPageState extends State<PlanMapPage> {
     _polylines.clear();
     _selectedMarkers.clear();
     _selectedPolylines.clear();
-    var bounds = LatLngBounds();
+    _selectedBounds = LatLngBounds();
 
     // Build markers and polylines
     if (_plan != null) {
       if (_plan.from != null) {
         LatLng point = createLatLngWithPlanLocation(_plan.from);
         _backgroundMarkers.add(buildFromMarker(point));
-        bounds.extend(point);
+        _selectedBounds.extend(point);
       }
       if (_plan.to != null) {
         LatLng point = createLatLngWithPlanLocation(_plan.to);
         _foregroundMarkers.add(buildToMarker(point));
-        bounds.extend(point);
+        _selectedBounds.extend(point);
       }
       if (_plan.itineraries.isNotEmpty) {
         if (_selectedItinerary == null ||
@@ -95,7 +101,7 @@ class PlanMapPageState extends State<PlanMapPage> {
             if (polylineWithMarker.marker != null) {
               if (isSelected) {
                 _selectedMarkers.add(polylineWithMarker.marker);
-                bounds.extend(polylineWithMarker.marker.point);
+                _selectedBounds.extend(polylineWithMarker.marker.point);
               } else {
                 _foregroundMarkers.add(polylineWithMarker.marker);
               }
@@ -103,7 +109,7 @@ class PlanMapPageState extends State<PlanMapPage> {
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
               polylineWithMarker.polyline.points.forEach((point) {
-                bounds.extend(point);
+                _selectedBounds.extend(point);
               });
             } else {
               _polylines.add(polylineWithMarker.polyline);
@@ -113,8 +119,8 @@ class PlanMapPageState extends State<PlanMapPage> {
       }
     }
     if (_needsCameraUpdate && _mapController.ready) {
-      if (bounds.isValid) {
-        _mapController.fitBounds(bounds);
+      if (_selectedBounds.isValid) {
+        _mapController.fitBounds(_selectedBounds);
         _needsCameraUpdate = false;
       }
     }
@@ -127,6 +133,7 @@ class PlanMapPageState extends State<PlanMapPage> {
             maxZoom: 19.0,
             minZoom: 1.0,
             onTap: _handleOnMapTap,
+            onPositionChanged: _handleOnMapPositionChanged,
           ),
           layers: <LayerOptions>[
             MarkerLayerOptions(markers: _backgroundMarkers),
@@ -150,10 +157,10 @@ class PlanMapPageState extends State<PlanMapPage> {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        _buildFloatingActionButton(
-          context,
-          Icons.crop_free,
-          _handleOnCropTap,
+        CropButton(
+          key: _cropButtonKey,
+          iconData: Icons.crop_free,
+          onPressed: _handleOnCropTap,
         ),
         _buildFloatingActionButton(
           context,
@@ -184,6 +191,16 @@ class PlanMapPageState extends State<PlanMapPage> {
     Polyline polyline = polylineHitTest(_polylines, point);
     if (polyline != null) {
       _setItinerary(_itineraryForPolyline(polyline));
+    }
+  }
+
+  void _handleOnMapPositionChanged(MapPosition position) {
+    if (_selectedBounds != null && _selectedBounds.isValid) {
+      Future.delayed(Duration.zero, () {
+        _cropButtonKey.currentState.setVisible(
+          !position.bounds.containsBounds(_selectedBounds),
+        );
+      });
     }
   }
 
@@ -232,5 +249,73 @@ class PlanMapPageState extends State<PlanMapPage> {
             orElse: () => null,
           );
     }, orElse: () => null);
+  }
+}
+
+class CropButton extends StatefulWidget {
+  CropButton({
+    Key key,
+    @required this.iconData,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final Function onPressed;
+
+  @override
+  CropButtonState createState() => CropButtonState();
+}
+
+class CropButtonState extends State<CropButton>
+    with SingleTickerProviderStateMixin {
+  bool _visible = false;
+
+  AnimationController _animationController;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 250),
+      vsync: this,
+    );
+    _animation = Tween(begin: 0.0, end: 0.8).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _animation,
+      child: FloatingActionButton(
+        backgroundColor: Colors.grey,
+        child: Icon(widget.iconData),
+        onPressed: _handleOnPressed,
+        heroTag: null,
+      ),
+    );
+  }
+
+  void _handleOnPressed() {
+    widget.onPressed();
+    setVisible(false);
+  }
+
+  bool get isVisible => _visible;
+
+  void setVisible(bool visible) {
+    if (_visible != visible) {
+      setState(() {
+        _visible = visible;
+        if (visible) {
+          _animationController.forward();
+        } else {
+          _animationController.reverse();
+        }
+      });
+    }
   }
 }
