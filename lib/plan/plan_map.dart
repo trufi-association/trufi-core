@@ -29,7 +29,7 @@ class PlanMapPage extends StatefulWidget {
 }
 
 class PlanMapPageState extends State<PlanMapPage> {
-  MapController _mapController;
+  MapController _mapController = MapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
   Map<PlanItinerary, List<PolylineWithMarker>> _itineraries = Map();
@@ -39,20 +39,6 @@ class PlanMapPageState extends State<PlanMapPage> {
   List<Marker> _selectedMarkers = List();
   List<Polyline> _selectedPolylines = List();
   bool _needsCameraUpdate = true;
-
-  void initState() {
-    super.initState();
-    _mapController = MapController()
-      ..onReady.then((_) {
-        _mapController.move(
-          widget.initialPosition != null
-              ? widget.initialPosition
-              : LatLng(-17.4603761, -66.1860606),
-          15.0,
-        );
-        setState(() {});
-      });
-  }
 
   Widget build(BuildContext context) {
     // Clear content
