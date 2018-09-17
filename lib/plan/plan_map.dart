@@ -162,28 +162,11 @@ class PlanMapPageState extends State<PlanMapPage> {
           iconData: Icons.crop_free,
           onPressed: _handleOnCropTap,
         ),
-        _buildFloatingActionButton(
-          context,
-          Icons.my_location,
-          _handleOnMyLocationTap,
+        MyLocationButton(
+          iconData: Icons.my_location,
+          onPressed: _handleOnMyLocationTap,
         ),
       ],
-    );
-  }
-
-  Widget _buildFloatingActionButton(
-    BuildContext context,
-    IconData iconData,
-    Function onPressed,
-  ) {
-    return ScaleTransition(
-      scale: AlwaysStoppedAnimation<double>(0.8),
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(iconData),
-        onPressed: onPressed,
-        heroTag: null,
-      ),
     );
   }
 
@@ -317,5 +300,28 @@ class CropButtonState extends State<CropButton>
         }
       });
     }
+  }
+}
+
+class MyLocationButton extends StatelessWidget {
+  MyLocationButton({
+    this.iconData,
+    this.onPressed,
+  });
+
+  final IconData iconData;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: AlwaysStoppedAnimation<double>(0.8),
+      child: FloatingActionButton(
+        backgroundColor: Colors.grey,
+        child: Icon(iconData),
+        onPressed: onPressed,
+        heroTag: null,
+      ),
+    );
   }
 }
