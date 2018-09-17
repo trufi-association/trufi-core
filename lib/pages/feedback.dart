@@ -80,8 +80,11 @@ class FeedBackPageState extends State<FeedbackPage> {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return FloatingActionButton.extended(
       backgroundColor: theme.primaryColor,
-      icon: Icon(Icons.send),
-      label: Text(localizations.feedbackButton),
+      icon: Icon(Icons.send, color: theme.primaryIconTheme.color),
+      label: Text(
+        localizations.feedbackButton,
+        style: theme.primaryTextTheme.body1,
+      ),
       onPressed: () {
         setState(() {
           _launched = _launch(LaunchUrl);
