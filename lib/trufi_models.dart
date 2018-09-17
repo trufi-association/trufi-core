@@ -306,13 +306,13 @@ class PlanItineraryLeg {
 
   String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? (distance.ceil() ~/ 1000).toString() + localizations.instructionUnitKm
-        : distance.ceil().toString() + localizations.instructionUnitMeter;
+        ? (distance.ceil() ~/ 1000).toString() + " ${localizations.instructionUnitKm}"
+        : distance.ceil().toString() + " ${localizations.instructionUnitMeter}";
   }
 
   String _durationString(TrufiLocalizations localizations) {
     return (duration.ceil() ~/ 60).toString() +
-        localizations.instructionMinutes;
+        " ${localizations.instructionMinutes}";
   }
 
   String _toString(TrufiLocalizations localizations) {

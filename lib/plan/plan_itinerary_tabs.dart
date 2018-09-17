@@ -49,7 +49,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    var languageCode = localizations.locale.languageCode;
     return SafeArea(
       child: ListView.builder(
         padding: EdgeInsets.all(8.0),
@@ -64,7 +63,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                   child: RichText(
                     text: TextSpan(
                       style: theme.textTheme.body2,
-                      text: languageCode == 'qu'
+                      text: localizations.isQuechua
                           ? leg.toInstructionQuechua(context)
                           : leg.toInstruction(context),
                     ),
