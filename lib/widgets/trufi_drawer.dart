@@ -110,7 +110,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           SharedPreferences.getInstance().then((prefs) {
             String languageCode = localizations.getLanguageCode(newValue);
             _sharedPreferences.setString(
-              TrufiLocalizations.SavedLanguageCode,
+              TrufiLocalizations.savedLanguageCode,
               languageCode,
             );
             localizations.switchToLanguage(languageCode);

@@ -59,7 +59,7 @@ class TrufiMaterialLocalizationsDelegate
 
   Future<TrufiMaterialLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.SavedLanguageCode);
+    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
     return languageCode != null
         ? TrufiMaterialLocalizations(TrufiLocalizations.getLocale(languageCode))
         : null;

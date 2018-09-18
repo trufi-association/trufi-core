@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
-  static const String SavedLanguageCode = "saved_language_code";
+  static const String savedLanguageCode = "saved_language_code";
 
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
@@ -576,7 +576,7 @@ class TrufiLocalizationsDelegate
 
   Future<TrufiLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.SavedLanguageCode);
+    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
     return languageCode != null
         ? TrufiLocalizations(TrufiLocalizations.getLocale(languageCode))
         : null;
