@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
@@ -40,24 +41,52 @@ Marker buildToMarker(LatLng point) {
 }
 
 Marker buildYourLocationMarker(LatLng point) {
-  return buildMarker(
-    point,
-    CircleIcon.circle,
-    AnchorPos.center,
-    Colors.blue,
-    decoration: BoxDecoration(
-      color: Colors.blue,
-      border: Border.all(color: Colors.white, width: 3.5),
-      shape: BoxShape.circle,
-      boxShadow: [
-        new BoxShadow(
-          color: Colors.blue,
-          spreadRadius: 8.0,
-          blurRadius: 30.0,
-        ),
-      ],
-    ),
+  return Marker(
+    point: point,
+    anchor: AnchorPos.center,
+    builder: (context) => MyLocationMarker(),
   );
+}
+
+class MyLocationMarker extends StatefulWidget {
+  @override
+  MyLocationMarkerState createState() => MyLocationMarkerState();
+}
+
+class MyLocationMarkerState extends State<MyLocationMarker> {
+  double _direction = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterCompass.events.listen((double direction) {
+      setState(() {
+        _direction = direction;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.rotate(
+      angle: (-pi / 180.0) * _direction,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          border: Border.all(color: Colors.white, width: 3.5),
+          shape: BoxShape.circle,
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.blue,
+              spreadRadius: 8.0,
+              blurRadius: 30.0,
+            ),
+          ],
+        ),
+        //child: Icon(Icons.directions, color: Colors.blue),
+      ),
+    );
+  }
 }
 
 Marker buildBusMarker(
