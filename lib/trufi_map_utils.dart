@@ -42,6 +42,8 @@ Marker buildToMarker(LatLng point) {
 
 Marker buildYourLocationMarker(LatLng point) {
   return Marker(
+    width: 50.0,
+    height: 50.0,
     point: point,
     anchor: AnchorPos.center,
     builder: (context) => MyLocationMarker(),
@@ -54,7 +56,7 @@ class MyLocationMarker extends StatefulWidget {
 }
 
 class MyLocationMarkerState extends State<MyLocationMarker> {
-  double _direction = 0.0;
+  double _direction;
 
   @override
   void initState() {
@@ -68,24 +70,40 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: (-pi / 180.0) * _direction,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          border: Border.all(color: Colors.white, width: 3.5),
-          shape: BoxShape.circle,
-          boxShadow: [
-            new BoxShadow(
+    List<Widget> children = <Widget>[
+      Center(
+        child: Transform.scale(
+          scale: 0.5,
+          child: Container(
+            decoration: BoxDecoration(
               color: Colors.blue,
-              spreadRadius: 8.0,
-              blurRadius: 30.0,
+              border: Border.all(color: Colors.white, width: 3.5),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue,
+                  spreadRadius: 8.0,
+                  blurRadius: 30.0,
+                ),
+              ],
             ),
-          ],
+            child: Icon(CircleIcon.circle, color: Colors.blue),
+          ),
         ),
-        //child: Icon(Icons.directions, color: Colors.blue),
       ),
-    );
+    ];
+    if (_direction != null) {
+      children.add(
+        Transform.rotate(
+          angle: (pi / 180.0) * _direction,
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: Icon(Icons.arrow_drop_up, color: Colors.blue),
+          ),
+        ),
+      );
+    }
+    return Stack(children: children);
   }
 }
 
