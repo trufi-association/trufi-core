@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/location/location_search_delegate.dart';
+import 'package:trufi_app/trufi_models.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
   LocationFormField({

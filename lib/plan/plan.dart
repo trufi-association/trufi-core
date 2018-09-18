@@ -15,50 +15,50 @@ class PlanPage extends StatefulWidget {
 }
 
 class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
-  PlanItinerary selectedItinerary;
-  TabController tabController;
+  PlanItinerary _selectedItinerary;
+  TabController _tabController;
   VisibilityFlag _visibleFlag = VisibilityFlag.visible;
 
-  AnimationController animationController;
-  Animation<double> animation;
+  AnimationController _animationController;
+  Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
-    animation = Tween(begin: 200.0, end: 60.0).animate(animationController)
+    _animation = Tween(begin: 200.0, end: 60.0).animate(_animationController)
       ..addListener(() {
         setState(() {});
       });
     if (widget.plan.itineraries.length > 0) {
-      selectedItinerary = widget.plan.itineraries.first;
+      _selectedItinerary = widget.plan.itineraries.first;
     }
-    tabController = TabController(
+    _tabController = TabController(
       length: widget.plan.itineraries.length,
       vsync: this,
     )..addListener(() {
-        _setItinerary(widget.plan.itineraries[tabController.index]);
+        _setItinerary(widget.plan.itineraries[_tabController.index]);
       });
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   Widget _buildItinerariesVisible(BuildContext context) {
     return Container(
-      height: animation.value,
+      height: _animation.value,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
       child: PlanItineraryTabPages(
-        tabController,
+        _tabController,
         widget.plan.itineraries,
       ),
     );
@@ -74,7 +74,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
               child: PlanMapPage(
                 plan: widget.plan,
                 onSelected: _setItinerary,
-                selectedItinerary: selectedItinerary,
+                selectedItinerary: _selectedItinerary,
               ),
             ),
             VisibleWidget(
@@ -85,7 +85,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           ],
         ),
         Positioned(
-          bottom: animation.value - 28.0,
+          bottom: _animation.value - 28.0,
           right: 16.0,
           child: _buildFloatingActionButton(context),
         ),
@@ -95,7 +95,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   Widget _buildItinerariesGone(BuildContext context) {
     return Container(
-      height: animation.value,
+      height: _animation.value,
       decoration: BoxDecoration(
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
@@ -110,7 +110,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
                 Expanded(
                   child: _buildItinerarySummary(
                     context,
-                    selectedItinerary,
+                    _selectedItinerary,
                   ),
                 ),
               ],
@@ -134,8 +134,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   void _setItinerary(PlanItinerary value) {
     setState(() {
-      selectedItinerary = value;
-      tabController.animateTo(widget.plan.itineraries.indexOf(value));
+      _selectedItinerary = value;
+      _tabController.animateTo(widget.plan.itineraries.indexOf(value));
     });
   }
 
@@ -145,9 +145,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           ? VisibilityFlag.gone
           : VisibilityFlag.visible;
       if (_visibleFlag == VisibilityFlag.gone) {
-        animationController.forward();
+        _animationController.forward();
       } else {
-        animationController.reverse();
+        _animationController.reverse();
       }
     });
   }
