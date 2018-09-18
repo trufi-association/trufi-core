@@ -40,23 +40,29 @@ Marker buildToMarker(LatLng point) {
 }
 
 Marker buildYourLocationMarker(LatLng point) {
-  return buildMarker(
-    point,
-    CircleIcon.circle,
-    AnchorPos.center,
-    Colors.blue,
-    decoration: BoxDecoration(
-      color: Colors.blue,
-      border: Border.all(color: Colors.white, width: 3.5),
-      shape: BoxShape.circle,
-      boxShadow: [
-        new BoxShadow(
-          color: Colors.blue,
-          spreadRadius: 8.0,
-          blurRadius: 30.0,
+  return Marker(
+    point: point,
+    anchor: AnchorPos.center,
+    builder: (context) {
+      return ScaleTransition(
+        scale: AlwaysStoppedAnimation<double>(0.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            border: Border.all(color: Colors.white, width: 3.5),
+            shape: BoxShape.circle,
+            boxShadow: [
+              new BoxShadow(
+                color: Colors.blue,
+                spreadRadius: 8.0,
+                blurRadius: 30.0,
+              ),
+            ],
+          ),
+          child: Icon(CircleIcon.circle, color: Colors.blue),
         ),
-      ],
-    ),
+      );
+    },
   );
 }
 
