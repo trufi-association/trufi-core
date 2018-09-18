@@ -6,6 +6,7 @@ import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/trufi_material_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
   TrufiDrawer(this.currentRoute, {this.onLanguageChangedCallback});
@@ -96,6 +97,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   Widget _buildDropdownButton(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    TrufiMaterialLocalizations materialLocalizations =
+        TrufiMaterialLocalizations.of(context);
     return ListTile(
       leading: Icon(Icons.language),
       title: DropdownButton<String>(
@@ -107,10 +110,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           SharedPreferences.getInstance().then((prefs) {
             String languageCode = localizations.getLanguageCode(newValue);
             _sharedPreferences.setString(
-              TrufiLocalizations.SavedLanguageCode,
+              TrufiLocalizations.savedLanguageCode,
               languageCode,
             );
             localizations.switchToLanguage(languageCode);
+            materialLocalizations.switchToLanguage(languageCode);
             setState(() {
               if (widget.onLanguageChangedCallback != null) {
                 widget.onLanguageChangedCallback();
