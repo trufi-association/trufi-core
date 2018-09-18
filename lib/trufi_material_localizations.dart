@@ -6,13 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
-  Locale locale;
-
-  TrufiMaterialLocalizations(this.locale) : super();
-
   static TrufiMaterialLocalizations of(BuildContext context) {
     return MaterialLocalizations.of(context);
   }
+
+  TrufiMaterialLocalizations(this.locale) : super();
+
+  Locale locale;
 
   void switchToLanguage(String languageCode) {
     locale = TrufiLocalizations.getLocale(languageCode);
@@ -35,9 +35,9 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
 
 class TrufiMaterialLocalizationsDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {
-  TrufiMaterialLocalizations localizations;
-
   TrufiMaterialLocalizationsDelegate();
+
+  TrufiMaterialLocalizations localizations;
 
   @override
   bool isSupported(Locale locale) {
@@ -54,15 +54,15 @@ class TrufiMaterialLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(TrufiMaterialLocalizationsDelegate old) =>
-      localizations == null ? false : old.localizations != localizations;
+  bool shouldReload(TrufiMaterialLocalizationsDelegate old) {
+    return localizations == null ? false : old.localizations != localizations;
+  }
 
   Future<TrufiMaterialLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
+    String languageCode = prefs.get(TrufiLocalizations.SavedLanguageCode);
     return languageCode != null
-        ? TrufiMaterialLocalizations(
-            (TrufiLocalizations.getLocale(languageCode)))
+        ? TrufiMaterialLocalizations(TrufiLocalizations.getLocale(languageCode))
         : null;
   }
 }
