@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
-  static const String SavedLanguageCode = "saved_language_code";
+  static const String savedLanguageCode = "saved_language_code";
 
   TrufiLocalizations(this.locale);
 
@@ -560,7 +560,7 @@ class TrufiLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'es', 'de'].contains(locale.languageCode);
+    return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
   }
 
   @override
@@ -578,7 +578,7 @@ class TrufiLocalizationsDelegate
 
   Future<TrufiLocalizations> _getLocalizations() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.SavedLanguageCode);
+    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
     return languageCode != null
         ? TrufiLocalizations((TrufiLocalizations.getLocale(languageCode)))
         : null;
