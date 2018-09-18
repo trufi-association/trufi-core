@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
@@ -10,7 +11,7 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
     return MaterialLocalizations.of(context);
   }
 
-  TrufiMaterialLocalizations(this.locale) : super();
+  TrufiMaterialLocalizations(this.locale);
 
   Locale locale;
 
@@ -35,8 +36,6 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
 
 class TrufiMaterialLocalizationsDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {
-  TrufiMaterialLocalizationsDelegate();
-
   TrufiMaterialLocalizations localizations;
 
   @override
