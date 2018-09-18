@@ -59,10 +59,12 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildResults(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    print("${localizations.searchNavigate} ${_result.description}");
-    Future.delayed(Duration.zero, () {
-      close(context, _result);
-    });
+    if (_result != null) {
+      print("${localizations.searchNavigate} ${_result.description}");
+      Future.delayed(Duration.zero, () {
+        close(context, _result);
+      });
+    }
     return Container();
   }
 
