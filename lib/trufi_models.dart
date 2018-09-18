@@ -259,10 +259,11 @@ class PlanItineraryLeg {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
-      sb.write("${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}" );
+      sb.write(
+          "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}");
     } else if (mode == 'BUS') {
       sb.write(
-          "${_carTypeString(localizations)} #$route ${_distanceString(localizations)} -  ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)}) ${localizations.instructionRide} ");
+          "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_distanceString(localizations)} - ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)})");
     }
     return sb.toString();
   }
@@ -306,7 +307,8 @@ class PlanItineraryLeg {
 
   String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? (distance.ceil() ~/ 1000).toString() + " ${localizations.instructionUnitKm}"
+        ? (distance.ceil() ~/ 1000).toString() +
+            " ${localizations.instructionUnitKm}"
         : distance.ceil().toString() + " ${localizations.instructionUnitMeter}";
   }
 
