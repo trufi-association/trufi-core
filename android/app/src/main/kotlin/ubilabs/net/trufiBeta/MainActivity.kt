@@ -1,4 +1,4 @@
-package ubilabs.net.trufibeta
+package ubilabs.net.trufiBeta
 
 import android.os.Bundle
 
