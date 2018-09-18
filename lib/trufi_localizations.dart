@@ -556,8 +556,6 @@ class TrufiLocalizationsDelegate
     extends LocalizationsDelegate<TrufiLocalizations> {
   TrufiLocalizations localizations;
 
-  TrufiLocalizationsDelegate();
-
   @override
   bool isSupported(Locale locale) {
     return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
