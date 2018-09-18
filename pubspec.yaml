@@ -1,5 +1,5 @@
 name: trufi_app
-description: Trufi App
+description: Trufi Beta
 
 dependencies:
   flutter:
@@ -16,10 +16,10 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_compass: ^0.0.2
   geolocator: ^1.7.0
-  http: ^0.11.3+16
+  http: ^0.11.3+17
   path_provider: ^0.4.1
   rxdart: ^0.18.1
-  synchronized: ^1.5.1+1
+  synchronized: ^1.5.2
   shared_preferences: ^0.4.2
   url_launcher: ^3.0.3
 
