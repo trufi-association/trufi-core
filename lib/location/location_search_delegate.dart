@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
