@@ -65,7 +65,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         close(context, _result);
       });
     }
-    return Container();
+    return buildSuggestions(context);
   }
 
   @override
