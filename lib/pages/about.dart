@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_app/drawer.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 class AboutPage extends StatefulWidget {
   static const String route = "about";

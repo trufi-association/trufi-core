@@ -14,10 +14,10 @@ class TrufiDrawer extends StatefulWidget {
   final Function onLanguageChangedCallback;
 
   @override
-  DrawerState createState() => DrawerState();
+  TrufiDrawerState createState() => TrufiDrawerState();
 }
 
-class DrawerState extends State<TrufiDrawer> {
+class TrufiDrawerState extends State<TrufiDrawer> {
   SharedPreferences _sharedPreferences;
 
   void initState() {
