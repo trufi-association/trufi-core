@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
@@ -236,7 +237,7 @@ LatLng midPointForPolyline(Polyline polyline) {
     double segmentLength = dist2(p0, p1);
     totalLength += segmentLength;
     if (midPointLength < totalLength) {
-      double factor1 = segmentLength / (totalLength - midPointLength);
+      double factor1 = (totalLength - midPointLength) / segmentLength;
       double factor0 = 1.0 - factor1;
       double latitude = p0.latitude * factor0 + p1.latitude * factor1;
       double longitude = p0.longitude * factor0 + p1.longitude * factor1;

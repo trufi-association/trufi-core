@@ -17,7 +17,7 @@ import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
-  TrufiLocation result;
+  TrufiLocation _result;
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -45,11 +45,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     return _SuggestionList(
       query: query,
       onSelected: (TrufiLocation suggestion) {
-        result = suggestion;
-        close(context, result);
+        _result = suggestion;
+        close(context, _result);
       },
       onMapTapped: (TrufiLocation location) {
-        result = location;
+        _result = location;
         showResults(context);
       },
       historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
@@ -59,9 +59,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildResults(BuildContext context) {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    print("${localizations.searchNavigate} ${result.description}");
+    print("${localizations.searchNavigate} ${_result.description}");
     Future.delayed(Duration.zero, () {
-      close(context, result);
+      close(context, _result);
     });
     return Container();
   }

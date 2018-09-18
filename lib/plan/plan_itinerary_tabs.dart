@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
-  final TabController tabController;
-  final List<PlanItinerary> itineraries;
-
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
   ) : assert(itineraries != null && itineraries.length > 0);
+
+  final TabController tabController;
+  final List<PlanItinerary> itineraries;
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();

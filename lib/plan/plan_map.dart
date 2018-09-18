@@ -210,6 +210,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   void _setItinerary(PlanItinerary value) {
     setState(() {
       _selectedItinerary = value;
+      _needsCameraUpdate = true;
       if (widget.onSelected != null) {
         widget.onSelected(_selectedItinerary);
       }

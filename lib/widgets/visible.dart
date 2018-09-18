@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 // Example found in
 // https://medium.com/flutter-io/managing-visibility-in-flutter-f558588adefe
 
