@@ -84,7 +84,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         zoom: 5.0,
         maxZoom: 19.0,
         minZoom: 1.0,
-        onTap: _handleOnMapTap,
+        onPositionChanged: _handleOnMapPositionChanged,
       ),
       layers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
@@ -142,9 +142,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
-  void _handleOnMapTap(LatLng point) {
-    setState(() {
-      _chooseOnMapMarker = buildToMarker(point);
+  void _handleOnMapPositionChanged(MapPosition position) {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        _chooseOnMapMarker = buildToMarker(position.center);
+      });
     });
   }
 }
