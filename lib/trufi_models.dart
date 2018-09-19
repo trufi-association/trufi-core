@@ -255,8 +255,7 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstructionQuechua(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+  String toInstructionQuechua(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(
@@ -268,8 +267,7 @@ class PlanItineraryLeg {
     return sb.toString();
   }
 
-  String toInstruction(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+  String toInstruction(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write("${localizations.instructionWalk}");
