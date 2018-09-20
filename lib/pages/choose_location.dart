@@ -86,7 +86,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         minZoom: 1.0,
         onPositionChanged: _handleOnMapPositionChanged,
       ),
-      layers: <LayerOptions>[
+      foregroundLayers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
       ],
     );
