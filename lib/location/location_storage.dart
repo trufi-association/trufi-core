@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -14,10 +15,9 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationStorage {
-  LocationStorage(this._file, this._locations);
+  LocationStorage(this.key, this._locations);
 
-  final File _file;
-  final Lock _fileLock = Lock();
+  final String key;
   final List<TrufiLocation> _locations;
 
   UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
@@ -64,8 +64,8 @@ class LocationStorage {
     return _locations.contains(location);
   }
 
-  void _save() async {
-    await _fileLock.synchronized(() => writeStorage(_file, _locations));
+  void _save() {
+    writeStorage(key, _locations);
   }
 }
 
@@ -77,14 +77,14 @@ Future<File> localFile(String fileName) async {
   return File('${await _localPath}/$fileName');
 }
 
-Future<File> writeStorage(File file, List<TrufiLocation> locations) {
-  return file.writeAsString(
-      json.encode(locations.map((location) => location.toJson()).toList()));
+Future<bool> writeStorage(String key, List<TrufiLocation> locations) {
+  return SharedPreferences.getInstance().then((prefs) => prefs.setString(key, json.encode(locations.map((location) => location.toJson()).toList())));
 }
 
-Future<List<TrufiLocation>> readStorage(File file) async {
+Future<List<TrufiLocation>> readStorage(String key) async {
   try {
-    String encoded = await file.readAsString();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String encoded = prefs.getString(key);
     return compute(_parseStorage, encoded);
   } catch (e) {
     print(e);
