@@ -43,6 +43,7 @@ flutter:
   assets:
     - assets/data/places.json
     - assets/data/team.txt
+    - test/assets/tile.png
   fonts:
   - family: CircleIcon
     fonts:
