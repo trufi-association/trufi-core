@@ -34,7 +34,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         widget.initialPosition != null
             ? widget.initialPosition
             : TrufiMap.cochabambaLocation,
-        12.0,
+        11.0,
       );
       setState(() {});
     });
