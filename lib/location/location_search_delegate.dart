@@ -345,14 +345,9 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnChooseOnMapTap(BuildContext context) async {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
     LatLng mapLocation = await Navigator.of(context).push(
-      MaterialPageRoute<LatLng>(builder: (context) {
-        return ChooseLocationPage(initialPosition: lastLocation);
-      }),
+      MaterialPageRoute<LatLng>(builder: (context) => ChooseLocationPage()),
     );
     _onMapTapped(
       description: localizations.searchMapMarker,
