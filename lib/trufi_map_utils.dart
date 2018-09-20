@@ -42,11 +42,8 @@ Marker buildToMarker(LatLng point) {
     anchor: AnchorPos.top,
     builder: (context) {
       return Container(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: SvgPicture.asset(
-            "assets/images/map_marker.svg",
-          ),
+        child: SvgPicture.asset(
+          "assets/images/map_marker.svg",
         ),
       );
     },
