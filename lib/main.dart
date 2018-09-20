@@ -13,16 +13,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_material_localizations.dart';
 
 void main() {
-  runApp(BlocProvider<LocationProviderBloc>(
-    bloc: LocationProviderBloc(),
-    child: BlocProvider<FavoriteLocationsBloc>(
-      bloc: FavoriteLocationsBloc(),
-      child: BlocProvider<HistoryLocationsBloc>(
-        bloc: HistoryLocationsBloc(),
-        child: TrufiApp(),
-      ),
-    ),
-  ));
+  runApp(TrufiApp());
 }
 
 class TrufiApp extends StatelessWidget {
@@ -33,27 +24,36 @@ class TrufiApp extends StatelessWidget {
       primaryColor: const Color(0xffffd600),
       primaryIconTheme: const IconThemeData(color: Colors.black),
     );
-    return MaterialApp(
-      routes: <String, WidgetBuilder>{
-        AboutPage.route: (context) => AboutPage(),
-        FeedbackPage.route: (context) => FeedbackPage(),
-        TeamPage.route: (context) => TeamPage(),
-      },
-      localizationsDelegates: [
-        TrufiLocalizationsDelegate(),
-        TrufiMaterialLocalizationsDelegate(),
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', 'US'), // English
-        const Locale('de', 'DE'), // German
-        const Locale('es', 'ES'), // Spanish
-        const Locale('qu', 'BO'), // Quechua
-        // ... other locales the app supports
-      ],
-      debugShowCheckedModeBanner: false,
-      theme: theme,
-      home: HomePage(),
+    return BlocProvider<LocationProviderBloc>(
+      bloc: LocationProviderBloc(),
+      child: BlocProvider<FavoriteLocationsBloc>(
+        bloc: FavoriteLocationsBloc(),
+        child: BlocProvider<HistoryLocationsBloc>(
+          bloc: HistoryLocationsBloc(),
+          child: MaterialApp(
+            routes: <String, WidgetBuilder>{
+              AboutPage.route: (context) => AboutPage(),
+              FeedbackPage.route: (context) => FeedbackPage(),
+              TeamPage.route: (context) => TeamPage(),
+            },
+            localizationsDelegates: [
+              TrufiLocalizationsDelegate(),
+              TrufiMaterialLocalizationsDelegate(),
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en', 'US'), // English
+              const Locale('de', 'DE'), // German
+              const Locale('es', 'ES'), // Spanish
+              const Locale('qu', 'BO'), // Quechua
+              // ... other locales the app supports
+            ],
+            debugShowCheckedModeBanner: false,
+            theme: theme,
+            home: HomePage(),
+          ),
+        ),
+      ),
     );
   }
 }
