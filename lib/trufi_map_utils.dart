@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
@@ -36,7 +37,17 @@ Marker buildFromMarker(LatLng point) {
 }
 
 Marker buildToMarker(LatLng point) {
-  return buildMarker(point, Icons.location_on, AnchorPos.top, Colors.red);
+  return Marker(
+    point: point,
+    anchor: AnchorPos.top,
+    builder: (context) {
+      return Container(
+        child: SvgPicture.asset(
+          "assets/images/map_marker.svg",
+        ),
+      );
+    },
+  );
 }
 
 Marker buildYourLocationMarker(LatLng point) {

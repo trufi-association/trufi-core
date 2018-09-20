@@ -12,12 +12,14 @@ class TrufiMap extends StatefulWidget {
   TrufiMap({
     @required this.mapController,
     @required this.mapOptions,
-    this.layers,
+    this.backgroundLayers,
+    this.foregroundLayers,
   });
 
   final MapController mapController;
   final MapOptions mapOptions;
-  final List<LayerOptions> layers;
+  final List<LayerOptions> backgroundLayers;
+  final List<LayerOptions> foregroundLayers;
 
   @override
   TrufiMapState createState() => TrufiMapState();
@@ -36,9 +38,9 @@ class TrufiMapState extends State<TrufiMap> {
         List<LayerOptions> layers = List();
         // Map tiles layer
         layers.add(tileHostingTileLayerOptions());
-        // Parent layers
-        if (widget.layers != null) {
-          layers.addAll(widget.layers);
+        // Parent background layers
+        if (widget.backgroundLayers != null) {
+          layers.addAll(widget.backgroundLayers);
         }
         // Your location layer
         if (snapshot.data != null) {
@@ -46,6 +48,10 @@ class TrufiMapState extends State<TrufiMap> {
           layers.add(MarkerLayerOptions(markers: <Marker>[yourLocationMarker]));
         } else {
           yourLocationMarker = null;
+        }
+        // Parent foreground layers
+        if (widget.foregroundLayers != null) {
+          layers.addAll(widget.foregroundLayers);
         }
         return FlutterMap(
           mapController: widget.mapController,
