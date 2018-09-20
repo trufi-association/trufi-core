@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
+
   static TrufiMaterialLocalizations of(BuildContext context) {
     return MaterialLocalizations.of(context);
   }
@@ -49,7 +51,7 @@ class TrufiMaterialLocalizationsDelegate
     if (localizations != null) {
       return localizations;
     }
-    return GlobalMaterialLocalizations.delegate.load(locale);
+    return SynchronousFuture<TrufiMaterialLocalizations>(TrufiMaterialLocalizations(locale));
   }
 
   @override
