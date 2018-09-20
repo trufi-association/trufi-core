@@ -135,7 +135,7 @@ class PlanMapPageState extends State<PlanMapPage> {
             onTap: _handleOnMapTap,
             onPositionChanged: _handleOnMapPositionChanged,
           ),
-          layers: <LayerOptions>[
+          backgroundLayers: <LayerOptions>[
             MarkerLayerOptions(markers: _backgroundMarkers),
             PolylineLayerOptions(polylines: _polylines),
             PolylineLayerOptions(polylines: _selectedPolylines),
