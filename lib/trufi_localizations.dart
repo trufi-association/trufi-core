@@ -226,7 +226,7 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Verbindungen',
       MenuAbout: 'Über',
-      MenuTeam: 'Teams',
+      MenuTeam: 'Team',
       MenuFeedback: 'Feedback',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
