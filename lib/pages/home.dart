@@ -19,6 +19,8 @@ import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
+import 'package:trufi_app/pages/home_keys.dart' as home_keys;
+
 class HomePage extends StatefulWidget {
   static const String route = '/';
 
@@ -29,11 +31,9 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   final HomePageStateData _data = HomePageStateData();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
-      GlobalKey<FormFieldState<TrufiLocation>>();
-  final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
-      GlobalKey<FormFieldState<TrufiLocation>>();
+  final _formKey = GlobalKey<FormState>();
+  final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
+  final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
 
   bool _isFetching = false;
 
@@ -58,16 +58,15 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Scaffold(
-          appBar: _buildAppBar(context),
-          body: _buildBody(context),
-          drawer: TrufiDrawer(
-            HomePage.route,
-            onLanguageChangedCallback: () => setState(() {}),
-          ),
-        ));
+    return Scaffold(
+      key: ValueKey(home_keys.page),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
+      drawer: TrufiDrawer(
+        HomePage.route,
+        onLanguageChangedCallback: () => setState(() {}),
+      ),
+    );
   }
 
   Widget _buildAppBar(BuildContext context) {
@@ -87,21 +86,26 @@ class HomePageState extends State<HomePage>
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            _buildFormField(
-              _fromFieldKey,
-              localizations.searchPleaseSelect,
-              _setFromPlace,
-            ),
-            _buildFormField(
-              _toFieldKey,
-              localizations.searchPleaseSelect,
-              _setToPlace,
-              trailing: _data.isSwappable ? _buildSwapButton() : null,
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              _buildFormField(
+                _fromFieldKey,
+                ValueKey(home_keys.fromPlaceField),
+                localizations.searchPleaseSelect,
+                _setFromPlace,
+              ),
+              _buildFormField(
+                _toFieldKey,
+                ValueKey(home_keys.toPlaceField),
+                localizations.searchPleaseSelect,
+                _setToPlace,
+                trailing: _data.isSwappable ? _buildSwapButton() : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -109,6 +113,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildSwapButton() {
     return GestureDetector(
+      key: ValueKey(home_keys.swapButton),
       onTap: _swapPlaces,
       child: Icon(Icons.swap_vert),
     );
@@ -123,6 +128,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildFormField(
     Key key,
+    ValueKey<String> valueKey,
     String hintText,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
@@ -136,6 +142,7 @@ class HomePageState extends State<HomePage>
           child: leading,
         ),
         Expanded(
+          key: valueKey,
           child: LocationFormField(
             key: key,
             hintText: hintText,

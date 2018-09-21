@@ -1,6 +1,8 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+import 'robots/home_robot.dart';
+
 void main() {
   group('home test', () {
     FlutterDriver driver;
@@ -16,13 +18,15 @@ void main() {
     });
 
     test('home', () async {
-      HomeRobot().seesMyLocationFab();
+      driver = await FlutterDriver.connect();
+      HomeRobot r = HomeRobot(driver);
+      r = await (await (await r.seesFromPlacesField()).seesToPlacesField())
+          .seesNotSwapButton();
+//      await r.seesFromPlacesField().then((r) async {
+//        await r.seesToPlacesField().then((r) async {
+//          await r.seesNotSwapButton();
+//        });
+//      });
     });
   });
-}
-
-class HomeRobot {
-  HomeRobot seesMyLocationFab() {
-    return this;
-  }
 }
