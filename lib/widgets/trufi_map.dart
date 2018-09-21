@@ -37,7 +37,7 @@ class TrufiMapState extends State<TrufiMap> {
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         List<LayerOptions> layers = List();
         // Map tiles layer
-        layers.add(tileHostingTileLayerOptions());
+        layers.add(offlineMapTileLayerOptions());
         // Parent background layers
         if (widget.backgroundLayers != null) {
           layers.addAll(widget.backgroundLayers);

@@ -22,6 +22,14 @@ openStreetMapTileLayerOptions() {
   );
 }
 
+offlineMapTileLayerOptions() {
+  return TileLayerOptions(
+    offlineMode: true,
+    maxZoom: 18.0,
+    urlTemplate: "assets/tiles/{z}-{x}-{y}.png",
+  );
+}
+
 tileHostingTileLayerOptions() {
   return TileLayerOptions(
     urlTemplate:
