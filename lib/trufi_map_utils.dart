@@ -5,14 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
-  PolylineWithMarker(this.polyline, this.marker);
+  PolylineWithMarker(this.polyline, this.markers);
 
   final Polyline polyline;
-  final Marker marker;
+  final List<Marker> markers;
 }
 
 openStreetMapTileLayerOptions() {
@@ -44,6 +43,26 @@ Marker buildToMarker(LatLng point) {
       return Container(
         child: SvgPicture.asset(
           "assets/images/map_marker.svg",
+        ),
+      );
+    },
+  );
+}
+
+Marker buildTransferMarker(LatLng point) {
+  return Marker(
+    point: point,
+    anchor: AnchorPos.center,
+    builder: (context) {
+      return ScaleTransition(
+        scale: AlwaysStoppedAnimation<double>(0.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.grey, width: 3.5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(CircleIcon.circle, color: Colors.white),
         ),
       );
     },
@@ -154,6 +173,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
         borderStrokeWidth: 3.0,
         isDotted: leg.mode == 'WALK',
       );
+      var markers = List<Marker>();
       Marker marker = leg.mode != 'WALK'
           ? buildBusMarker(
               midPointForPolyline(polyline),
@@ -162,7 +182,15 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
               onTap: () => onTap(itinerary),
             )
           : null;
-      polylinesWithMarker.add(PolylineWithMarker(polyline, marker));
+      if (marker != null && isSelected) {
+        markers.add(marker);
+      }
+      if (isSelected) {
+        Marker start = buildTransferMarker(firstPointForPolyline(polyline));
+        Marker end = buildTransferMarker(lastPointForPolyline(polyline));
+        markers.addAll([start, end]);
+      }
+      polylinesWithMarker.add(PolylineWithMarker(polyline, markers));
     });
     itineraries.addAll({itinerary: polylinesWithMarker});
   });
@@ -262,6 +290,14 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
+}
+
+LatLng firstPointForPolyline(Polyline polyline) {
+  return polyline.points[0];
+}
+
+LatLng lastPointForPolyline(Polyline polyline) {
+  return polyline.points[polyline.points.length - 1];
 }
 
 class CircleIcon {
