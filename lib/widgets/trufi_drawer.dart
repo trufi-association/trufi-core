@@ -89,7 +89,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       title: Text(title),
       selected: widget.currentRoute == route,
       onTap: () {
-        Navigator.popAndPushNamed(context, route);
+        Navigator.pushReplacementNamed(context, route);
       },
     );
   }
