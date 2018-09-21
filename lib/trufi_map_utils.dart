@@ -158,10 +158,14 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
   Function(PlanItinerary) onTap,
 ) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
+  var markers = List<Marker>();
   plan.itineraries.forEach((itinerary) {
+    var legsAmount = itinerary.legs.length;
     List<PolylineWithMarker> polylinesWithMarker = List();
     bool isSelected = itinerary == selectedItinerary;
-    itinerary.legs.forEach((leg) {
+    for (var i = 0; i < legsAmount; i++) {
+      var leg = itinerary.legs[i];
+
       List<LatLng> points = decodePolyline(leg.points);
       Polyline polyline = new Polyline(
         points: points,
@@ -173,25 +177,26 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
         borderStrokeWidth: 3.0,
         isDotted: leg.mode == 'WALK',
       );
-      var markers = List<Marker>();
-      Marker marker = leg.mode != 'WALK'
-          ? buildBusMarker(
-              midPointForPolyline(polyline),
-              isSelected ? Colors.green : Colors.grey,
-              leg,
-              onTap: () => onTap(itinerary),
-            )
-          : null;
-      if (marker != null && isSelected) {
-        markers.add(marker);
+
+      // Create bus marker
+      if (leg.mode != 'WALK' && isSelected) {
+        markers.add(
+          buildBusMarker(
+            midPointForPolyline(polyline),
+            isSelected ? Colors.green : Colors.grey,
+            leg,
+            onTap: () => onTap(itinerary),
+          ),
+        );
       }
-      if (isSelected) {
-        Marker start = buildTransferMarker(firstPointForPolyline(polyline));
+
+      // Create transfer markers
+      if (isSelected && i < legsAmount - 1) {
         Marker end = buildTransferMarker(lastPointForPolyline(polyline));
-        markers.addAll([start, end]);
+        markers.add(end);
       }
       polylinesWithMarker.add(PolylineWithMarker(polyline, markers));
-    });
+    }
     itineraries.addAll({itinerary: polylinesWithMarker});
   });
   return itineraries;
@@ -290,10 +295,6 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
-}
-
-LatLng firstPointForPolyline(Polyline polyline) {
-  return polyline.points[0];
 }
 
 LatLng lastPointForPolyline(Polyline polyline) {
