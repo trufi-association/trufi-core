@@ -47,24 +47,28 @@ class FeedBackPageState extends State<FeedbackPage> {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            localizations.feedbackTitle,
+            style: theme.textTheme.title,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 16.0),
+            child: Text(
               localizations.feedbackContent,
-              style: theme.textTheme.title,
-              textAlign: TextAlign.center,
+              style: theme.textTheme.body1,
             ),
-            Container(height: 16.0),
-            FutureBuilder<Null>(
-                future: _launched,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return Text(snapshot.hasError ? "${snapshot.error}" : "");
-                }),
-          ],
-        ),
+          ),
+          Container(height: 16.0),
+          FutureBuilder<Null>(
+              future: _launched,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Text(snapshot.hasError ? "${snapshot.error}" : "");
+              }),
+        ],
       ),
     );
   }

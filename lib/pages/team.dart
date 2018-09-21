@@ -46,26 +46,22 @@ class TeamPageState extends State<TeamPage> {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              localizations.teamContent,
-              style: theme.textTheme.title,
-              textAlign: TextAlign.center,
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            localizations.teamContent,
+            style: theme.textTheme.title,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 16.0),
+            child: Text(
+              _teamString,
+              style: theme.textTheme.body1,
             ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                _teamString,
-                style: theme.textTheme.subhead,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

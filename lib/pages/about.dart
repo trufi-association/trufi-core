@@ -28,25 +28,29 @@ class AboutPageState extends State<AboutPage> {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return Container(
-      padding: EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            localizations.title,
-            style: theme.textTheme.title,
+          Container(
+            child: Text(
+              localizations.title,
+              style: theme.textTheme.title,
+            ),
           ),
-          Container(height: 8.0),
-          Text(
-            localizations.tagLine,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.subhead,
+          Container(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text(
+              localizations.tagLine,
+              style: theme.textTheme.subhead,
+            ),
           ),
-          Container(height: 16.0),
-          Text(
-            localizations.aboutContent,
-            style: theme.textTheme.body2,
-            textAlign: TextAlign.justify,
+          Container(
+            padding: EdgeInsets.only(top: 16.0),
+            child: Text(
+              localizations.aboutContent,
+              style: theme.textTheme.body1,
+            ),
           ),
         ],
       ),
