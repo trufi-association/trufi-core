@@ -19,14 +19,14 @@ void main() {
 
     test('home', () async {
       driver = await FlutterDriver.connect();
-      HomeRobot r = HomeRobot(driver);
-      r = await (await (await r.seesFromPlacesField()).seesToPlacesField())
-          .seesNotSwapButton();
-//      await r.seesFromPlacesField().then((r) async {
-//        await r.seesToPlacesField().then((r) async {
-//          await r.seesNotSwapButton();
-//        });
-//      });
+      HomeRobot robot = HomeRobot(driver, Future.value(null));
+      await robot
+          .seesFromPlacesField()
+          .seesToPlacesField()
+          .seesSwapButton()
+          .tapsOnFromPlacesField()
+          .seesSearchField()
+          .work;
     });
   });
 }
