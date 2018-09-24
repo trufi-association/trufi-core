@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -76,7 +77,8 @@ Future<File> localFile(String fileName) async {
 }
 
 Future<bool> writeStorage(String key, List<TrufiLocation> locations) {
-  return SharedPreferences.getInstance().then((prefs) => prefs.setString(key, json.encode(locations.map((location) => location.toJson()).toList())));
+  return SharedPreferences.getInstance().then((prefs) => prefs.setString(key,
+      json.encode(locations.map((location) => location.toJson()).toList())));
 }
 
 Future<List<TrufiLocation>> readStorage(String key) async {

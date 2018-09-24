@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_models.dart';
 
 class PolylineWithMarker {
@@ -54,8 +55,8 @@ Marker buildTransferMarker(LatLng point) {
     point: point,
     anchor: AnchorPos.center,
     builder: (context) {
-      return ScaleTransition(
-        scale: AlwaysStoppedAnimation<double>(0.5),
+      return Transform.scale(
+        scale: 0.4,
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -74,8 +75,8 @@ Marker buildYourLocationMarker(LatLng point) {
     point: point,
     anchor: AnchorPos.center,
     builder: (context) {
-      return ScaleTransition(
-        scale: AlwaysStoppedAnimation<double>(0.5),
+      return Transform.scale(
+        scale: 0.5,
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blue,
@@ -159,7 +160,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
 ) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
-  var markers = List<Marker>();
+    var markers = List<Marker>();
     var legsAmount = itinerary.legs.length;
     List<PolylineWithMarker> polylinesWithMarker = List();
     bool isSelected = itinerary == selectedItinerary;
@@ -180,21 +181,23 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
 
       // Create transfer markers
       if (isSelected && i < legsAmount - 1) {
-        Marker end = buildTransferMarker(lastPointForPolyline(polyline));
-        markers.add(end);
+        markers.add(
+          buildTransferMarker(
+            polyline.points[polyline.points.length - 1],
+          ),
+        );
       }
 
-      Marker busMarker = leg.mode != 'WALK'
-          ? buildBusMarker(
-              midPointForPolyline(polyline),
-              isSelected ? Colors.green : Colors.grey,
-              leg,
-              onTap: () => onTap(itinerary),
-            )
-          : null;
-
-      markers.add(busMarker);
-
+      if (leg.mode != 'WALK') {
+        markers.add(
+          buildBusMarker(
+            midPointForPolyline(polyline),
+            isSelected ? Colors.green : Colors.grey,
+            leg,
+            onTap: () => onTap(itinerary),
+          ),
+        );
+      }
       polylinesWithMarker.add(PolylineWithMarker(polyline, markers));
     }
     itineraries.addAll({itinerary: polylinesWithMarker});
@@ -295,10 +298,6 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
-}
-
-LatLng lastPointForPolyline(Polyline polyline) {
-  return polyline.points[polyline.points.length - 1];
 }
 
 class CircleIcon {
