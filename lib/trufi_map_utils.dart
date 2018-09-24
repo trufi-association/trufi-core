@@ -158,8 +158,8 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
   Function(PlanItinerary) onTap,
 ) {
   Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
-  var markers = List<Marker>();
   plan.itineraries.forEach((itinerary) {
+  var markers = List<Marker>();
     var legsAmount = itinerary.legs.length;
     List<PolylineWithMarker> polylinesWithMarker = List();
     bool isSelected = itinerary == selectedItinerary;
@@ -178,23 +178,23 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
         isDotted: leg.mode == 'WALK',
       );
 
-      // Create bus marker
-      if (leg.mode != 'WALK' && isSelected) {
-        markers.add(
-          buildBusMarker(
-            midPointForPolyline(polyline),
-            isSelected ? Colors.green : Colors.grey,
-            leg,
-            onTap: () => onTap(itinerary),
-          ),
-        );
-      }
-
       // Create transfer markers
       if (isSelected && i < legsAmount - 1) {
         Marker end = buildTransferMarker(lastPointForPolyline(polyline));
         markers.add(end);
       }
+
+      Marker busMarker = leg.mode != 'WALK'
+          ? buildBusMarker(
+              midPointForPolyline(polyline),
+              isSelected ? Colors.green : Colors.grey,
+              leg,
+              onTap: () => onTap(itinerary),
+            )
+          : null;
+
+      markers.add(busMarker);
+
       polylinesWithMarker.add(PolylineWithMarker(polyline, markers));
     }
     itineraries.addAll({itinerary: polylinesWithMarker});
