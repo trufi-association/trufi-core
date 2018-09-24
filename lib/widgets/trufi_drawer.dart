@@ -38,21 +38,21 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            padding: EdgeInsets.only(top: 35.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
                   localizations.title,
                   style: theme.textTheme.title,
                 ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
+                Container(
+                  padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
-                    localizations.description,
+                    localizations.tagLine,
                     style: theme.textTheme.subhead,
-                    textAlign: TextAlign.center,
                   ),
-                )
+                ),
               ],
             ),
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),

@@ -54,6 +54,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return AppBar(
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RichText(
