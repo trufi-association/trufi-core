@@ -34,8 +34,8 @@ abstract class LocationStorage {
     var locations = query.isEmpty
         ? _locations.toList()
         : _locations
-        .where((l) => l.description.toLowerCase().contains(query))
-        .toList();
+            .where((l) => l.description.toLowerCase().contains(query))
+            .toList();
     return _sortedByFavorites(locations, context);
   }
 
