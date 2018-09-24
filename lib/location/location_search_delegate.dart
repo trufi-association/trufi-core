@@ -34,6 +34,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      tooltip: "Back",
       onPressed: () {
         close(context, null);
       },
