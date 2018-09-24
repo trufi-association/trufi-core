@@ -16,22 +16,22 @@ class HomeRobot extends Robot {
         );
 
   HomeRobot seesFromPlacesField() {
-    work = work.then((_) => seesKey(home_keys.fromPlaceField));
+    work = work.then((_) async => await seesKey(home_keys.fromPlaceField));
     return this;
   }
 
   HomeRobot seesToPlacesField() {
-    work = work.then((_) => seesKey(home_keys.toPlaceField));
+    work = work.then((_) async => await seesKey(home_keys.toPlaceField));
     return this;
   }
 
   HomeRobot seesNotSwapButton() {
-    work = work.then((_) => seesNotKey(home_keys.swapButton));
+    work = work.then((_) async => await seesNotKey(home_keys.swapButton));
     return this;
   }
 
   HomeRobot seesSwapButton() {
-    work = work.then((_) => seesKey(home_keys.swapButton));
+    work = work.then((_) async => await seesKey(home_keys.swapButton));
     return this;
   }
 
