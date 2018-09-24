@@ -88,16 +88,15 @@ Future<List<TrufiLocation>> readStorage(String key) async {
 }
 
 List<TrufiLocation> _parseStorage(String encoded) {
-  if (encoded == null || encoded.isEmpty) {
-    return List();
+  if (encoded != null && encoded.isNotEmpty) {
+    try {
+      return json
+          .decode(encoded)
+          .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
+          .toList();
+    } catch (e) {
+      print("Failed to parse location storage: $e");
+    }
   }
-  try {
-    final parsed = json.decode(encoded);
-    return parsed
-        .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
-        .toList();
-  } catch (e) {
-    print("Failed to parse location storage: $e");
-    return List();
-  }
+  return List();
 }
