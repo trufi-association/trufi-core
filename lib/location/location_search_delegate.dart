@@ -8,8 +8,8 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
+import 'package:trufi_app/blocs/important_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/pages/choose_location.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
@@ -34,6 +34,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      tooltip: "Back",
       onPressed: () {
         close(context, null);
       },
@@ -53,6 +54,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
+      importantLocationsBloc: BlocProvider.of<ImportantLocationsBloc>(context),
     );
   }
 
@@ -93,9 +95,11 @@ class _SuggestionList extends StatelessWidget {
     this.onSelected,
     this.onMapTapped,
     @required this.historyLocationsBloc,
+    @required this.importantLocationsBloc,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
+  final ImportantLocationsBloc importantLocationsBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
@@ -138,7 +142,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(
       context,
       localizations.searchTitlePlaces,
-      Places.instance.fetchLocations(context, query),
+      importantLocationsBloc.fetchWithQuery(context, query),
       Icons.location_on,
     ));
     //
