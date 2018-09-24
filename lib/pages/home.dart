@@ -372,7 +372,6 @@ class HomePageStateData {
 
 HomePageStateData _parse(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
-    print(encoded);
     try {
       return HomePageStateData.fromJson(json.decode(encoded));
     } catch (e) {
