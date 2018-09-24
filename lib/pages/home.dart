@@ -259,10 +259,10 @@ class HomePageState extends State<HomePage>
       try {
         _setPlan(await api.fetchPlan(_data.fromPlace, _data.toPlace));
       } on api.FetchRequestException catch (e) {
-        print(e);
+        print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.commonNoInternet));
       } on api.FetchResponseException catch (e) {
-        print(e);
+        print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
       setState(() => _isFetching = false);
@@ -330,7 +330,7 @@ class HomePageStateData {
         return true;
       }
     } catch (e) {
-      print(e);
+      print("Failed to load plan: $e");
     }
     return false;
   }
@@ -371,12 +371,13 @@ class HomePageStateData {
 }
 
 HomePageStateData _parse(String encoded) {
-  HomePageStateData data;
-  try {
-    final parsed = json.decode(encoded);
-    data = HomePageStateData.fromJson(parsed);
-  } catch (e) {
-    print(e);
+  if (encoded != null && encoded.isNotEmpty) {
+    print(encoded);
+    try {
+      return HomePageStateData.fromJson(json.decode(encoded));
+    } catch (e) {
+      print("Failed to parse home page state data: $e");
+    }
   }
-  return data;
+  return HomePageStateData();
 }

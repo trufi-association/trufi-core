@@ -54,6 +54,9 @@ class TrufiLocation {
   }
 
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
     return TrufiLocation(
       description: json[_Description],
       latitude: json[_Latitude],
@@ -103,6 +106,9 @@ class Plan {
   final PlanError error;
 
   factory Plan.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
     if (json.containsKey(_Error)) {
       return Plan(error: PlanError.fromJson(json[_Error]));
     } else {
