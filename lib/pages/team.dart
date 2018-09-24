@@ -52,9 +52,11 @@ class TeamPageState extends State<TeamPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                localizations.teamContent,
-                style: theme.textTheme.title,
+              Container(
+                child: Text(
+                  localizations.teamContent,
+                  style: theme.textTheme.title,
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
