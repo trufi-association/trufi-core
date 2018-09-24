@@ -62,6 +62,7 @@ class TrufiLocalizations {
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
   static const String FeedbackContent = "feedback_content";
+  static const String FeedbackTitle = "feedback_title";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
   static const String TeamContent = "team_content";
@@ -113,11 +114,12 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Show routes',
       MenuAbout: 'About',
-      MenuTeam: 'Become part of the Team',
+      MenuTeam: 'Team',
       MenuFeedback: 'Send Feedback',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
-      FeedbackButton: 'Send us an E-mail',
+      FeedbackTitle: 'Send us an E-mail',
+      FeedbackButton: 'E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
       TeamContent: 'People and companies involved:',
@@ -168,11 +170,12 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'metros',
       MenuConnections: 'Muestra rutas',
       MenuAbout: 'Acerca',
-      MenuTeam: 'Forme parte del equipo',
+      MenuTeam: 'Equipo',
       MenuFeedback: 'Envía comentarios',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
-      FeedbackButton: 'Envíanos un correo',
+      FeedbackTitle: 'Envíanos un correo electrónico',
+      FeedbackButton: 'Correo electrónico',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
       TeamContent: 'Personas y empresas involucradas:',
@@ -223,13 +226,14 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Verbindungen',
       MenuAbout: 'Über',
-      MenuTeam: 'Werde Teil des Teams',
+      MenuTeam: 'Team',
       MenuFeedback: 'Feedback',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
-      FeedbackButton: 'E-Mail senden',
+      FeedbackTitle: 'E-Mail senden',
+      FeedbackButton: 'E-mail',
       AboutContent:
-          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Nahverkehr lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen das Transportsystem in Cochabamba und der nährenen Umgebung zu erleichtern.',
+          'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.',
       TeamContent: 'Beteiligte Personen und Firmen:',
       English: 'Englisch',
       German: 'Deutsch',
@@ -279,12 +283,12 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'mts',
       MenuConnections: "Ñankunata rikhuchiy",
       MenuAbout: "Imamanta yachayta munanki?",
-      MenuTeam: "Ñuqaykuwan khuchka llamk’ay!",
+      MenuTeam: "Ñuqaykuwan",
       MenuFeedback: "Yuyasqayniykita riqsichiwayku",
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
-      FeedbackButton: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
-      // 'Envíanos un correo',
+      FeedbackTitle: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
+      FeedbackButton: 'Correo electrónico',
       AboutContent:
           "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
       TeamContent: 'Personas y empresas involucradas:',
@@ -467,6 +471,10 @@ class TrufiLocalizations {
 
   String get feedbackContent {
     return _localizedValues[locale.languageCode][FeedbackContent];
+  }
+
+  String get feedbackTitle {
+    return _localizedValues[locale.languageCode][FeedbackTitle];
   }
 
   String get feedbackButton {

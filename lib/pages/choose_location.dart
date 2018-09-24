@@ -34,7 +34,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         widget.initialPosition != null
             ? widget.initialPosition
             : TrufiMap.cochabambaLocation,
-        12.0,
+        11.0,
       );
       setState(() {});
     });
@@ -54,6 +54,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return AppBar(
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RichText(
@@ -84,9 +85,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         zoom: 5.0,
         maxZoom: 19.0,
         minZoom: 1.0,
-        onTap: _handleOnMapTap,
+        onPositionChanged: _handleOnMapPositionChanged,
       ),
-      layers: <LayerOptions>[
+      foregroundLayers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
       ],
     );
@@ -142,9 +143,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
-  void _handleOnMapTap(LatLng point) {
-    setState(() {
-      _chooseOnMapMarker = buildToMarker(point);
+  void _handleOnMapPositionChanged(MapPosition position) {
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        _chooseOnMapMarker = buildToMarker(position.center);
+      });
     });
   }
 }

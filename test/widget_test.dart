@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
@@ -36,9 +37,9 @@ void main() {
       return BlocProvider<LocationProviderBloc>(
           bloc: LocationProviderBloc(),
           child: BlocProvider<FavoriteLocationsBloc>(
-              bloc: FavoriteLocationsBloc(),
+              bloc: FavoriteLocationsBloc(context),
               child: BlocProvider<HistoryLocationsBloc>(
-                  bloc: HistoryLocationsBloc(),
+                  bloc: HistoryLocationsBloc(context),
                   child: MaterialApp(localizationsDelegates: [
                     TrufiLocalizationsDelegate(),
                     TrufiMaterialLocalizationsDelegate(),
