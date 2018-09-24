@@ -25,7 +25,10 @@ void main() {
           .seesToPlacesField()
           .seesNotSwapButton()
           .tapsOnFromPlacesField()
-          //.seesSearchField()
+          .seesSearchField()
+          .seesBackButton()
+          .tapsOnBackButton()
+          .seesFromPlacesField()
           .work;
     });
   });

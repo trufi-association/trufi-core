@@ -1,6 +1,8 @@
 import 'package:flutter_driver/flutter_driver.dart';
 
 class Robot {
+  static final String backButtonTooltip = "Back";
+
   Robot(this.driver, this.finder, this.work);
 
   final FlutterDriver driver;
@@ -31,5 +33,10 @@ class Robot {
   tapsOnKey(String key) async {
     print("taps on: $key");
     await driver.tap(find.byValueKey(key));
+  }
+
+  tapsOnTooltip(String tooltip) async {
+    print("taps on: $tooltip");
+    await driver.tap(find.byTooltip(tooltip));
   }
 }
