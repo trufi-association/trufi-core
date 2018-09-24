@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/plan/plan_empty.dart';
@@ -17,8 +18,6 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
-
-import 'package:trufi_app/pages/home_keys.dart' as home_keys;
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -57,7 +56,7 @@ class HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ValueKey(home_keys.page),
+      key: ValueKey(keys.homePage),
       appBar: _buildAppBar(context),
       body: _buildBody(context),
       drawer: TrufiDrawer(
@@ -91,13 +90,13 @@ class HomePageState extends State<HomePage>
             children: <Widget>[
               _buildFormField(
                 _fromFieldKey,
-                ValueKey(home_keys.fromPlaceField),
+                ValueKey(keys.homePageFromPlaceField),
                 localizations.searchPleaseSelect,
                 _setFromPlace,
               ),
               _buildFormField(
                 _toFieldKey,
-                ValueKey(home_keys.toPlaceField),
+                ValueKey(keys.homePageToPlaceField),
                 localizations.searchPleaseSelect,
                 _setToPlace,
                 trailing: _data.isSwappable ? _buildSwapButton() : null,
@@ -111,7 +110,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildSwapButton() {
     return GestureDetector(
-      key: ValueKey(home_keys.swapButton),
+      key: ValueKey(keys.homePageSwapButton),
       onTap: _swapPlaces,
       child: Icon(Icons.swap_vert),
     );

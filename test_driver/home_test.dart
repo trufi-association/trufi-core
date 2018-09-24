@@ -18,7 +18,6 @@ void main() {
     });
 
     test('home', () async {
-      driver = await FlutterDriver.connect();
       HomeRobot robot = HomeRobot(driver, Future.value(null));
       await robot
           .seesFromPlacesField()
