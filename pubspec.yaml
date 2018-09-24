@@ -14,6 +14,7 @@ dependencies:
   #    ref: feat/customise_polylines
 
   cupertino_icons: ^0.1.2
+  flutter_svg: ^0.6.0
   geolocator: ^1.7.0
   http: ^0.11.3+17
   path_provider: ^0.4.1
@@ -24,6 +25,8 @@ dependencies:
   mockito: 3.0.0
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
@@ -44,6 +47,8 @@ flutter:
     - assets/data/places.json
     - assets/data/team.txt
     - test/assets/tile.png
+    - assets/images/map_marker.svg
+
   fonts:
   - family: CircleIcon
     fonts:

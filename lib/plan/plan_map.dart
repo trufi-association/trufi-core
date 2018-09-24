@@ -98,14 +98,15 @@ class PlanMapPageState extends State<PlanMapPage> {
         _itineraries.forEach((itinerary, polylinesWithMarker) {
           bool isSelected = itinerary == _selectedItinerary;
           polylinesWithMarker.forEach((polylineWithMarker) {
-            if (polylineWithMarker.marker != null) {
+            polylineWithMarker.markers.forEach((marker) {
               if (isSelected) {
-                _selectedMarkers.add(polylineWithMarker.marker);
-                _selectedBounds.extend(polylineWithMarker.marker.point);
+                _selectedMarkers.add(marker);
+                _selectedBounds.extend(marker.point);
               } else {
-                _foregroundMarkers.add(polylineWithMarker.marker);
+                _backgroundMarkers.add(marker);
               }
-            }
+            });
+
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
               polylineWithMarker.polyline.points.forEach((point) {
@@ -135,12 +136,12 @@ class PlanMapPageState extends State<PlanMapPage> {
             onTap: _handleOnMapTap,
             onPositionChanged: _handleOnMapPositionChanged,
           ),
-          layers: <LayerOptions>[
-            MarkerLayerOptions(markers: _backgroundMarkers),
+          backgroundLayers: <LayerOptions>[
             PolylineLayerOptions(polylines: _polylines),
+            MarkerLayerOptions(markers: _backgroundMarkers),
             PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _foregroundMarkers),
             MarkerLayerOptions(markers: _selectedMarkers),
+            MarkerLayerOptions(markers: _foregroundMarkers),
           ],
         ),
         Positioned(
