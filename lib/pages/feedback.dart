@@ -53,9 +53,11 @@ class FeedBackPageState extends State<FeedbackPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                localizations.feedbackTitle,
-                style: theme.textTheme.title,
+              Container(
+                child: Text(
+                  localizations.feedbackTitle,
+                  style: theme.textTheme.title,
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
@@ -64,12 +66,14 @@ class FeedBackPageState extends State<FeedbackPage> {
                   style: theme.textTheme.body1,
                 ),
               ),
-              Container(height: 16.0),
-              FutureBuilder<Null>(
-                  future: _launched,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return Text(snapshot.hasError ? "${snapshot.error}" : "");
-                  }),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: FutureBuilder<Null>(
+                    future: _launched,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return Text(snapshot.hasError ? "${snapshot.error}" : "");
+                    }),
+              ),
             ],
           ),
         )
