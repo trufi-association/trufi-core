@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/plan/plan_empty.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
@@ -40,7 +39,6 @@ class HomePageState extends State<HomePage>
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Places.init(this.context);
       _loadState();
     });
   }
