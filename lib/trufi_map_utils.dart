@@ -8,8 +8,8 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
-class PolylineWithMarker {
-  PolylineWithMarker(this.polyline, this.markers);
+class PolylineWithMarkers {
+  PolylineWithMarkers(this.polyline, this.markers);
 
   final Polyline polyline;
   final List<Marker> markers;
@@ -153,20 +153,20 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
   return LatLng(location.latitude, location.longitude);
 }
 
-Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
+Map<PlanItinerary, List<PolylineWithMarkers>> createItineraries(
   Plan plan,
   PlanItinerary selectedItinerary,
   Function(PlanItinerary) onTap,
 ) {
-  Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
+  Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
   plan.itineraries.forEach((itinerary) {
-    var markers = List<Marker>();
-    var legsAmount = itinerary.legs.length;
-    List<PolylineWithMarker> polylinesWithMarker = List();
+    List<Marker> markers = List();
+    List<PolylineWithMarkers> polylinesWithMarker = List();
     bool isSelected = itinerary == selectedItinerary;
-    for (var i = 0; i < legsAmount; i++) {
-      var leg = itinerary.legs[i];
+    for (int i = 0; i < itinerary.legs.length; i++) {
+      PlanItineraryLeg leg = itinerary.legs[i];
 
+      // Polyline
       List<LatLng> points = decodePolyline(leg.points);
       Polyline polyline = new Polyline(
         points: points,
@@ -179,8 +179,8 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
         isDotted: leg.mode == 'WALK',
       );
 
-      // Create transfer markers
-      if (isSelected && i < legsAmount - 1) {
+      // Transfer marker
+      if (isSelected && i < itinerary.legs.length - 1) {
         markers.add(
           buildTransferMarker(
             polyline.points[polyline.points.length - 1],
@@ -188,6 +188,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
         );
       }
 
+      // Bus marker
       if (leg.mode != 'WALK') {
         markers.add(
           buildBusMarker(
@@ -198,7 +199,7 @@ Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
           ),
         );
       }
-      polylinesWithMarker.add(PolylineWithMarker(polyline, markers));
+      polylinesWithMarker.add(PolylineWithMarkers(polyline, markers));
     }
     itineraries.addAll({itinerary: polylinesWithMarker});
   });
