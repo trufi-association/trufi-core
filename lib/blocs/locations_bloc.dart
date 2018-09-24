@@ -9,17 +9,17 @@ import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationsBloc implements BlocBase {
-  LocationsBloc(String keyStorage) {
+  LocationsBloc(String key) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);
-    _init(keyStorage);
+    _locations = LocationStorage(key);
+    _loadLocations();
   }
 
   LocationStorage _locations;
 
-  void _init(String keyStorage) async {
-    List<TrufiLocation> locations = await readStorage(keyStorage);
-    _locations = LocationStorage(keyStorage, locations);
+  void _loadLocations() async {
+    await _locations.load();
     _notify();
   }
 

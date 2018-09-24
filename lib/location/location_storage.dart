@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -14,10 +12,16 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationStorage {
-  LocationStorage(this.key, this._locations);
+  LocationStorage(this.key);
 
   final String key;
-  final List<TrufiLocation> _locations;
+
+  final List<TrufiLocation> _locations = List();
+
+  Future<void> load() async {
+    _locations.clear();
+    _locations.addAll(await readStorage(key));
+  }
 
   UnmodifiableListView<TrufiLocation> get unmodifiableListView {
     return UnmodifiableListView(_locations);
