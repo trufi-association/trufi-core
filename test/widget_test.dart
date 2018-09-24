@@ -7,17 +7,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_material_localizations.dart';
 
+import 'image_tile.dart';
 import 'mock_http_client.dart';
 
 void main() {
@@ -25,7 +26,7 @@ void main() {
     HttpOverrides.global = new TestHttpOverrides({
       Uri.parse(
               'https://maps.tilehosting.com/styles/positron/5/17/tile.png?key=***REMOVED***'):
-          (await rootBundle.load("test/assets/tile.png")).buffer.asUint8List()
+          dummyImageData
     });
   });
 
@@ -44,8 +45,9 @@ void main() {
                     GlobalWidgetsLocalizations.delegate,
                   ], home: HomePage()))));
     }));
-    tester.pump();
-    HomeRobot().seesMyLocationFab().seesPleaseSelect();
+
+    await tester.pump();
+    HomeRobot().seesMyLocationFab().seesAppBar().seesFormFields();
   });
 }
 
@@ -54,9 +56,15 @@ class HomeRobot {
     expect(find.byIcon(Icons.my_location), findsOneWidget);
     return this;
   }
+  HomeRobot seesAppBar() {
+    final Finder formField = find.byType(AppBar);
+    expect(formField, findsOneWidget);
+    return this;
+  }
 
-  HomeRobot seesPleaseSelect() {
-    expect(find.text("Please select"), findsOneWidget);
+  HomeRobot seesFormFields() {
+    final Finder formField = find.byType(LocationFormField);
+    expect(formField, findsNWidgets(2));
     return this;
   }
 }
