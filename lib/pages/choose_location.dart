@@ -102,8 +102,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         Container(
           height: 70.0,
           width: 56.0,
-          child: ScaleTransition(
-            scale: AlwaysStoppedAnimation<double>(0.8),
+          child: Transform.scale(
+            scale: 0.8,
             child: FloatingActionButton(
               backgroundColor: Colors.grey,
               child: Icon(Icons.my_location),

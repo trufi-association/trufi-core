@@ -316,8 +316,8 @@ class MyLocationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: AlwaysStoppedAnimation<double>(0.8),
+    return Transform.scale(
+      scale: 0.8,
       child: FloatingActionButton(
         backgroundColor: Colors.grey,
         child: Icon(iconData),
