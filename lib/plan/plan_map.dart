@@ -37,7 +37,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   MapController _mapController = MapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
-  Map<PlanItinerary, List<PolylineWithMarker>> _itineraries = Map();
+  Map<PlanItinerary, List<PolylineWithMarkers>> _itineraries = Map();
   List<Marker> _backgroundMarkers = List();
   List<Marker> _foregroundMarkers = List();
   List<Polyline> _polylines = List();
@@ -219,12 +219,12 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
-    MapEntry<PlanItinerary, List<PolylineWithMarker>> entry =
+    MapEntry<PlanItinerary, List<PolylineWithMarkers>> entry =
         _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
-  MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
+  MapEntry<PlanItinerary, List<PolylineWithMarkers>> _itineraryEntryForPolyline(
     Polyline polyline,
   ) {
     return _itineraries.entries.firstWhere((pair) {
