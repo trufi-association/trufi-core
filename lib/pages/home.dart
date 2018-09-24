@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/io/file_storage.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -271,6 +271,8 @@ class HomePageState extends State<HomePage>
 }
 
 class HomePageStateData {
+  static final prefsKey = "home_page_state_data";
+
   HomePageStateData({
     TrufiLocation fromPlace,
     TrufiLocation toPlace,
@@ -284,8 +286,6 @@ class HomePageStateData {
   static const String _FromPlace = "fromPlace";
   static const String _ToPlace = "toPlace";
   static const String _Plan = "plan";
-
-  final FileStorage storage = FileStorage("home_page_state_data.json");
 
   TrufiLocation _fromPlace;
   TrufiLocation _toPlace;
@@ -311,16 +311,18 @@ class HomePageStateData {
 
   // Methods
 
-  void reset() {
+  void reset() async {
     fromPlace = null;
     toPlace = null;
     plan = null;
-    storage.delete();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(prefsKey);
   }
 
   Future<bool> load() async {
     try {
-      HomePageStateData data = await compute(_parse, await storage.read());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      HomePageStateData data = await compute(_parse, prefs.getString(prefsKey));
       if (data != null) {
         fromPlace = data.fromPlace;
         toPlace = data.toPlace;
@@ -334,7 +336,8 @@ class HomePageStateData {
   }
 
   void _save() async {
-    storage.write(json.encode(toJson()));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(prefsKey, json.encode(toJson()));
   }
 
   // Getter

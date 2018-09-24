@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -20,8 +19,9 @@ class LocationStorage {
   final String key;
   final List<TrufiLocation> _locations;
 
-  UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
-      UnmodifiableListView(_locations);
+  UnmodifiableListView<TrufiLocation> get unmodifiableListView {
+    return UnmodifiableListView(_locations);
+  }
 
   Future<List<TrufiLocation>> fetchLocations(BuildContext context) async {
     return _sortedByFavorites(_locations.toList(), context);
@@ -69,39 +69,35 @@ class LocationStorage {
   }
 }
 
-Future<String> get _localPath async {
-  return (await getApplicationDocumentsDirectory()).path;
-}
-
-Future<File> localFile(String fileName) async {
-  return File('${await _localPath}/$fileName');
-}
-
-Future<bool> writeStorage(String key, List<TrufiLocation> locations) {
-  return SharedPreferences.getInstance().then((prefs) => prefs.setString(key, json.encode(locations.map((location) => location.toJson()).toList())));
+void writeStorage(String key, List<TrufiLocation> locations) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.setString(
+    key,
+    json.encode(locations.map((location) => location.toJson()).toList()),
+  );
 }
 
 Future<List<TrufiLocation>> readStorage(String key) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
   try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String encoded = prefs.getString(key);
-    return compute(_parseStorage, encoded);
+    return compute(_parseStorage, preferences.getString(key));
   } catch (e) {
-    print(e);
-    return compute(_parseStorage, "[]");
+    print("Failed to read location storage: $e");
+    return Future<List<TrufiLocation>>.value(<TrufiLocation>[]);
   }
 }
 
 List<TrufiLocation> _parseStorage(String encoded) {
-  List<TrufiLocation> locations;
+  if (encoded == null || encoded.isEmpty) {
+    return List();
+  }
   try {
     final parsed = json.decode(encoded);
-    locations = parsed
+    return parsed
         .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
         .toList();
   } catch (e) {
-    print(e);
-    locations = List();
+    print("Failed to parse location storage: $e");
+    return List();
   }
-  return locations;
 }

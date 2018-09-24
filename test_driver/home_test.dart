@@ -23,9 +23,9 @@ void main() {
       await robot
           .seesFromPlacesField()
           .seesToPlacesField()
-          .seesSwapButton()
+          .seesNotSwapButton()
           .tapsOnFromPlacesField()
-          .seesSearchField()
+          //.seesSearchField()
           .work;
     });
   });
