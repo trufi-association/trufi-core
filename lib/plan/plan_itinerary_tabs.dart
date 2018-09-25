@@ -65,8 +65,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                     text: TextSpan(
                       style: theme.textTheme.body2,
                       text: localizations.isQuechua
-                          ? leg.toInstructionQuechua(context)
-                          : leg.toInstruction(context),
+                          ? leg.toInstructionQuechua(localizations)
+                          : leg.toInstruction(localizations),
                     ),
                   ),
                 ),

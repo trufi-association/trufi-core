@@ -22,7 +22,7 @@ dependencies:
   synchronized: ^1.5.2
   shared_preferences: ^0.4.2
   url_launcher: ^3.0.3
-
+  mockito: 3.0.0
 
 dev_dependencies:
   flutter_driver:
@@ -46,7 +46,9 @@ flutter:
   assets:
     - assets/data/places.json
     - assets/data/team.txt
+    - test/assets/tile.png
     - assets/images/map_marker.svg
+
   fonts:
   - family: CircleIcon
     fonts:

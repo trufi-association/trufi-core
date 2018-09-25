@@ -35,6 +35,7 @@ class HomePageState extends State<HomePage>
 
   bool _isFetching = false;
 
+  @override
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
