@@ -27,13 +27,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     _chooseOnMapMarker = buildToMarker(
       widget.initialPosition != null
           ? widget.initialPosition
-          : TrufiMap.cochabambaLocation,
+          : TrufiMap.cochabambaCenter,
     );
     _mapController.onReady.then((_) {
       _mapController.move(
         widget.initialPosition != null
             ? widget.initialPosition
-            : TrufiMap.cochabambaLocation,
+            : TrufiMap.cochabambaCenter,
         11.0,
       );
       setState(() {});
@@ -86,6 +86,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         maxZoom: 18.0,
         minZoom: 8.0,
         onPositionChanged: _handleOnMapPositionChanged,
+        swPanBoundary: TrufiMap.cochabambaSouthWest,
+        nePanBoundary: TrufiMap.cochabambaNorthEast,
+        center: TrufiMap.cochabambaCenter,
       ),
       foregroundLayers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
