@@ -65,6 +65,7 @@ class TrufiLocalizations {
   static const String FeedbackTitle = "feedback_title";
   static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
+  static const String LicenseButton = "license_button";
   static const String TeamContent = "team_content";
   static const String English = "english";
   static const String German = "german";
@@ -122,6 +123,7 @@ class TrufiLocalizations {
       FeedbackButton: 'E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      LicenseButton: 'Licenses',
       TeamContent: 'People and companies involved:',
       English: 'English',
       German: 'German',
@@ -178,6 +180,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Correo electrónico',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      LicenseButton: 'Licencias',
       TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés',
       German: 'Alemán',
@@ -234,6 +237,7 @@ class TrufiLocalizations {
       FeedbackButton: 'E-mail',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.',
+      LicenseButton: 'Lizenzen',
       TeamContent: 'Beteiligte Personen und Firmen:',
       English: 'Englisch',
       German: 'Deutsch',
@@ -291,6 +295,7 @@ class TrufiLocalizations {
       FeedbackButton: 'Correo electrónico',
       AboutContent:
           "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
+      LicenseButton: 'Licencias',
       TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés simi',
       German: 'Aleman simi',
@@ -483,6 +488,10 @@ class TrufiLocalizations {
 
   String get aboutContent {
     return _localizedValues[locale.languageCode][AboutContent];
+  }
+
+  String get license {
+    return _localizedValues[locale.languageCode][LicenseButton];
   }
 
   String get teamContent {
