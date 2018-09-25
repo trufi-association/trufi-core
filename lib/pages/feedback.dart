@@ -46,26 +46,38 @@ class FeedBackPageState extends State<FeedbackPage> {
   Widget _buildBody(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              localizations.feedbackContent,
-              style: theme.textTheme.title,
-              textAlign: TextAlign.center,
-            ),
-            Container(height: 16.0),
-            FutureBuilder<Null>(
-                future: _launched,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return Text(snapshot.hasError ? "${snapshot.error}" : "");
-                }),
-          ],
-        ),
-      ),
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  localizations.feedbackTitle,
+                  style: theme.textTheme.title,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  localizations.feedbackContent,
+                  style: theme.textTheme.body1,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: FutureBuilder<Null>(
+                    future: _launched,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return Text(snapshot.hasError ? "${snapshot.error}" : "");
+                    }),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
