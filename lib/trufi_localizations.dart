@@ -114,7 +114,7 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Show routes',
       MenuAbout: 'About',
-      MenuTeam: 'Team',
+      MenuTeam: 'Contributors',
       MenuFeedback: 'Send Feedback',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
@@ -170,7 +170,7 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'metros',
       MenuConnections: 'Muestra rutas',
       MenuAbout: 'Acerca',
-      MenuTeam: 'Equipo',
+      MenuTeam: 'Colaboradores',
       MenuFeedback: 'Envía comentarios',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
@@ -226,7 +226,7 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Verbindungen',
       MenuAbout: 'Über',
-      MenuTeam: 'Team',
+      MenuTeam: 'Mitwirkende',
       MenuFeedback: 'Feedback',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
