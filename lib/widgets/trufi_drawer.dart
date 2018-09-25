@@ -84,13 +84,20 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildListItem(IconData iconData, String title, String route) {
-    return ListTile(
-      leading: Icon(iconData),
-      title: Text(title),
-      selected: widget.currentRoute == route,
-      onTap: () {
-        Navigator.pushReplacementNamed(context, route);
-      },
+    bool isSelected = widget.currentRoute == route;
+    return Container(
+      color: isSelected ? Colors.grey[300] : null,
+      child: ListTile(
+        leading: Icon(iconData, color: isSelected ? Colors.black : Colors.grey),
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.black),
+        ),
+        selected: isSelected,
+        onTap: () {
+          Navigator.pushReplacementNamed(context, route);
+        },
+      ),
     );
   }
 
