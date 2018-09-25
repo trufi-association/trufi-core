@@ -82,7 +82,7 @@ class LocationProvider {
   start() async {
     _subscriptions.cancel();
     _subscriptions.add(
-      (await _geolocator.getPositionStream(_locationOptions)).listen(
+      (_geolocator.getPositionStream(_locationOptions)).listen(
         (position) => _handleOnLocationChanged(position),
       ),
     );
@@ -108,7 +108,7 @@ class LocationProvider {
 
   Future<LatLng> get lastLocation async {
     Position position = await _geolocator.getLastKnownPosition(
-      LocationAccuracy.high,
+      desiredAccuracy: LocationAccuracy.high,
     );
     return position != null
         ? LatLng(position.latitude, position.longitude)
