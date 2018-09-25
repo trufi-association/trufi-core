@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +74,6 @@ class HomePageState extends State<HomePage>
         preferredSize: Size.fromHeight(40.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: _data.isResettable ? _buildResetButton() : null,
     );
   }
 
@@ -114,13 +112,6 @@ class HomePageState extends State<HomePage>
       key: ValueKey(keys.homePageSwapButton),
       onTap: _swapPlaces,
       child: Icon(Icons.swap_vert),
-    );
-  }
-
-  Widget _buildResetButton() {
-    return IconButton(
-      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
-      onPressed: _reset,
     );
   }
 
@@ -178,14 +169,6 @@ class HomePageState extends State<HomePage>
     } else {
       return body;
     }
-  }
-
-  void _reset() {
-    setState(() {
-      _data.reset();
-      _formKey.currentState.reset();
-      _setFromPlaceToCurrentPosition();
-    });
   }
 
   void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
@@ -341,8 +324,6 @@ class HomePageStateData {
   // Getter
 
   bool get isSwappable => _fromPlace != null && _toPlace != null;
-
-  bool get isResettable => _toPlace != null || _plan != null;
 
   TrufiLocation get fromPlace => _fromPlace;
 
