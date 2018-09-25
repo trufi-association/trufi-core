@@ -33,31 +33,82 @@ class TrufiApp extends StatelessWidget {
           bloc: HistoryLocationsBloc(context),
           child: BlocProvider<ImportantLocationsBloc>(
             bloc: ImportantLocationsBloc(context),
-            child: MaterialApp(
-              routes: <String, WidgetBuilder>{
-                AboutPage.route: (context) => AboutPage(),
-                FeedbackPage.route: (context) => FeedbackPage(),
-                TeamPage.route: (context) => TeamPage(),
-              },
-              localizationsDelegates: [
-                TrufiLocalizationsDelegate(),
-                TrufiMaterialLocalizationsDelegate(),
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: [
-                const Locale('en', 'US'), // English
-                const Locale('de', 'DE'), // German
-                const Locale('es', 'ES'), // Spanish
-                const Locale('qu', 'BO'), // Quechua
-                // ... other locales the app supports
-              ],
-              debugShowCheckedModeBanner: false,
-              theme: theme,
-              home: HomePage(),
+            child: AppLifecycleReactor(
+              child: MaterialApp(
+                routes: <String, WidgetBuilder>{
+                  AboutPage.route: (context) => AboutPage(),
+                  FeedbackPage.route: (context) => FeedbackPage(),
+                  TeamPage.route: (context) => TeamPage(),
+                },
+                localizationsDelegates: [
+                  TrufiLocalizationsDelegate(),
+                  TrufiMaterialLocalizationsDelegate(),
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('en', 'US'), // English
+                  const Locale('de', 'DE'), // German
+                  const Locale('es', 'ES'), // Spanish
+                  const Locale('qu', 'BO'), // Quechua
+                  // ... other locales the app supports
+                ],
+                debugShowCheckedModeBanner: false,
+                theme: theme,
+                home: HomePage(),
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class AppLifecycleReactor extends StatefulWidget {
+  const AppLifecycleReactor({
+    Key key,
+    @required this.child,
+  }) : super(key: key);
+
+  final Widget child;
+
+  @override
+  _AppLifecycleReactorState createState() => _AppLifecycleReactorState();
+}
+
+class _AppLifecycleReactorState extends State<AppLifecycleReactor>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  AppLifecycleState _notification;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    print("AppLifecycleState: $state");
+    setState(() {
+      _notification = state;
+      if (_notification == AppLifecycleState.resumed) {
+        locationProviderBloc.start();
+      } else {
+        locationProviderBloc.stop();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }
