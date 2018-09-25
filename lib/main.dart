@@ -94,21 +94,21 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    print("AppLifecycleState: $state");
     setState(() {
       _notification = state;
+      if (_notification == AppLifecycleState.resumed) {
+        locationProviderBloc.start();
+      } else {
+        locationProviderBloc.stop();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    print(_notification);
-    if (_notification == AppLifecycleState.inactive) {
-      locationProviderBloc.stop();
-    } else if (_notification == AppLifecycleState.resumed) {
-      locationProviderBloc.start();
-    }
     return widget.child;
   }
 }
