@@ -5,12 +5,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/io/file_storage.dart';
+import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/plan/plan_empty.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
@@ -29,18 +29,15 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   final HomePageStateData _data = HomePageStateData();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormFieldState<TrufiLocation>> _fromFieldKey =
-      GlobalKey<FormFieldState<TrufiLocation>>();
-  final GlobalKey<FormFieldState<TrufiLocation>> _toFieldKey =
-      GlobalKey<FormFieldState<TrufiLocation>>();
+  final _formKey = GlobalKey<FormState>();
+  final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
+  final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
 
   bool _isFetching = false;
 
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Places.init(this.context);
       _loadState();
     });
   }
@@ -58,16 +55,15 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Scaffold(
-          appBar: _buildAppBar(context),
-          body: _buildBody(context),
-          drawer: TrufiDrawer(
-            HomePage.route,
-            onLanguageChangedCallback: () => setState(() {}),
-          ),
-        ));
+    return Scaffold(
+      key: ValueKey(keys.homePage),
+      appBar: _buildAppBar(context),
+      body: _buildBody(context),
+      drawer: TrufiDrawer(
+        HomePage.route,
+        onLanguageChangedCallback: () => setState(() {}),
+      ),
+    );
   }
 
   Widget _buildAppBar(BuildContext context) {
@@ -87,21 +83,26 @@ class HomePageState extends State<HomePage>
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            _buildFormField(
-              _fromFieldKey,
-              localizations.searchPleaseSelect,
-              _setFromPlace,
-            ),
-            _buildFormField(
-              _toFieldKey,
-              localizations.searchPleaseSelect,
-              _setToPlace,
-              trailing: _data.isSwappable ? _buildSwapButton() : null,
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              _buildFormField(
+                _fromFieldKey,
+                ValueKey(keys.homePageFromPlaceField),
+                localizations.searchPleaseSelect,
+                _setFromPlace,
+              ),
+              _buildFormField(
+                _toFieldKey,
+                ValueKey(keys.homePageToPlaceField),
+                localizations.searchPleaseSelect,
+                _setToPlace,
+                trailing: _data.isSwappable ? _buildSwapButton() : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -109,6 +110,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildSwapButton() {
     return GestureDetector(
+      key: ValueKey(keys.homePageSwapButton),
       onTap: _swapPlaces,
       child: Icon(Icons.swap_vert),
     );
@@ -123,6 +125,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildFormField(
     Key key,
+    ValueKey<String> valueKey,
     String hintText,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
@@ -136,6 +139,7 @@ class HomePageState extends State<HomePage>
           child: leading,
         ),
         Expanded(
+          key: valueKey,
           child: LocationFormField(
             key: key,
             hintText: hintText,
@@ -252,10 +256,10 @@ class HomePageState extends State<HomePage>
       try {
         _setPlan(await api.fetchPlan(_data.fromPlace, _data.toPlace));
       } on api.FetchRequestException catch (e) {
-        print(e);
+        print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.commonNoInternet));
       } on api.FetchResponseException catch (e) {
-        print(e);
+        print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
       setState(() => _isFetching = false);
@@ -264,6 +268,8 @@ class HomePageState extends State<HomePage>
 }
 
 class HomePageStateData {
+  static final prefsKey = "home_page_state_data";
+
   HomePageStateData({
     TrufiLocation fromPlace,
     TrufiLocation toPlace,
@@ -277,8 +283,6 @@ class HomePageStateData {
   static const String _FromPlace = "fromPlace";
   static const String _ToPlace = "toPlace";
   static const String _Plan = "plan";
-
-  final FileStorage storage = FileStorage("home_page_state_data.json");
 
   TrufiLocation _fromPlace;
   TrufiLocation _toPlace;
@@ -304,16 +308,18 @@ class HomePageStateData {
 
   // Methods
 
-  void reset() {
+  void reset() async {
     fromPlace = null;
     toPlace = null;
     plan = null;
-    storage.delete();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(prefsKey);
   }
 
   Future<bool> load() async {
     try {
-      HomePageStateData data = await compute(_parse, await storage.read());
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      HomePageStateData data = await compute(_parse, prefs.getString(prefsKey));
       if (data != null) {
         fromPlace = data.fromPlace;
         toPlace = data.toPlace;
@@ -321,13 +327,14 @@ class HomePageStateData {
         return true;
       }
     } catch (e) {
-      print(e);
+      print("Failed to load plan: $e");
     }
     return false;
   }
 
   void _save() async {
-    storage.write(json.encode(toJson()));
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(prefsKey, json.encode(toJson()));
   }
 
   // Getter
@@ -361,12 +368,12 @@ class HomePageStateData {
 }
 
 HomePageStateData _parse(String encoded) {
-  HomePageStateData data;
-  try {
-    final parsed = json.decode(encoded);
-    data = HomePageStateData.fromJson(parsed);
-  } catch (e) {
-    print(e);
+  if (encoded != null && encoded.isNotEmpty) {
+    try {
+      return HomePageStateData.fromJson(json.decode(encoded));
+    } catch (e) {
+      print("Failed to parse home page state data: $e");
+    }
   }
-  return data;
+  return HomePageStateData();
 }

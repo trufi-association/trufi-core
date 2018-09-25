@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,19 +8,13 @@ import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class LocationsBloc implements BlocBase {
-  LocationsBloc(String keyStorage) {
+  LocationsBloc(BuildContext context, this.locationStorage) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);
-    _init(keyStorage);
+    locationStorage.load(context).then((_) => _notify);
   }
 
-  LocationStorage _locations;
-
-  void _init(String keyStorage) async {
-    List<TrufiLocation> locations = await readStorage(keyStorage);
-    _locations = LocationStorage(keyStorage, locations);
-    _notify();
-  }
+  final LocationStorage locationStorage;
 
   // AddLocation
   BehaviorSubject<TrufiLocation> _addLocationController =
@@ -55,12 +48,12 @@ class LocationsBloc implements BlocBase {
   // Handle
 
   void _handleAdd(TrufiLocation value) {
-    _locations.add(value);
+    locationStorage.add(value);
     _notify();
   }
 
   void _handleRemove(TrufiLocation value) {
-    _locations.remove(value);
+    locationStorage.remove(value);
     _notify();
   }
 
@@ -70,15 +63,27 @@ class LocationsBloc implements BlocBase {
 
   // Getter
 
-  List<TrufiLocation> get locations => _locations.unmodifiableListView;
+  List<TrufiLocation> get locations => locationStorage.unmodifiableListView;
 
   // Fetch
 
-  Future<List<TrufiLocation>> fetch(BuildContext context) =>
-      _locations.fetchLocations(context);
+  Future<List<TrufiLocation>> fetch(BuildContext context) {
+    return locationStorage.fetchLocations(context);
+  }
 
-  Future<List<TrufiLocation>> fetchWithLimit(BuildContext context, int limit) =>
-      _locations.fetchLocationsWithLimit(context, limit);
+  Future<List<TrufiLocation>> fetchWithQuery(
+    BuildContext context,
+    String query,
+  ) {
+    return locationStorage.fetchLocationsWithQuery(context, query);
+  }
+
+  Future<List<TrufiLocation>> fetchWithLimit(
+    BuildContext context,
+    int limit,
+  ) {
+    return locationStorage.fetchLocationsWithLimit(context, limit);
+  }
 }
 
 int sortByLocations(
