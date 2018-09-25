@@ -26,7 +26,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
       _mapController.move(
         widget.initialPosition != null
             ? widget.initialPosition
-            : TrufiMap.cochabambaLocation,
+            : TrufiMap.cochabambaCenter,
         12.0,
       );
       setState(() {});
@@ -42,6 +42,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
           zoom: 13.0,
           maxZoom: 18.0,
           minZoom: 8.0,
+          swPanBoundary: TrufiMap.cochabambaSouthWest,
+          nePanBoundary: TrufiMap.cochabambaNorthEast,
+          center: TrufiMap.cochabambaCenter,
         ),
       ),
       Positioned(

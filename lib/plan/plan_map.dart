@@ -53,7 +53,7 @@ class PlanMapPageState extends State<PlanMapPage> {
       _mapController.move(
         widget.initialPosition != null
             ? widget.initialPosition
-            : TrufiMap.cochabambaLocation,
+            : TrufiMap.cochabambaCenter,
         12.0,
       );
       setState(() {});
@@ -135,6 +135,9 @@ class PlanMapPageState extends State<PlanMapPage> {
             minZoom: 8.0,
             onTap: _handleOnMapTap,
             onPositionChanged: _handleOnMapPositionChanged,
+            swPanBoundary: TrufiMap.cochabambaSouthWest,
+            nePanBoundary: TrufiMap.cochabambaNorthEast,
+            center: TrufiMap.cochabambaCenter,
           ),
           backgroundLayers: <LayerOptions>[
             PolylineLayerOptions(polylines: _polylines),
