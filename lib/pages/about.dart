@@ -57,10 +57,10 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: RaisedButton(
-                    child: Text('License'),
+                    child: Text(localizations.license),
                     onPressed: () => showLicensePage(
                         context: context,
-                        applicationName: 'Trufi Beta',
+                        applicationName: localizations.title,
                         applicationVersion: '0.0.1')),
               )
             ],
