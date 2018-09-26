@@ -214,7 +214,7 @@ class HomePageState extends State<HomePage>
     if (lastLocation != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
-          localizations.searchCurrentPosition,
+          localizations.searchItemYourLocation,
           lastLocation,
         ),
       );
