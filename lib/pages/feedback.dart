@@ -98,6 +98,7 @@ class FeedBackPageState extends State<FeedbackPage> {
           _launched = _launch(LaunchUrl);
         });
       },
+      heroTag: null,
     );
   }
 }
