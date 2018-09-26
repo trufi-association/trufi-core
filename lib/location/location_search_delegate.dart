@@ -21,13 +21,16 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
+    assert(context != null);
     final ThemeData theme = Theme.of(context);
+    TextTheme partialTheme = TextTheme(title: TextStyle(fontSize: 16.0));
+
+    assert(theme != null);
     return theme.copyWith(
-      primaryColor: theme.primaryColor,
-      primaryIconTheme: theme.primaryIconTheme,
-      primaryColorBrightness: theme.primaryColorBrightness,
-      primaryTextTheme: theme.primaryTextTheme,
-    );
+        primaryColor: Colors.white,
+        primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+        primaryColorBrightness: Brightness.light,
+        textTheme: theme.textTheme.merge(partialTheme));
   }
 
   @override
@@ -75,8 +78,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     return <Widget>[
       query.isEmpty
           ? IconButton(
-              icon: const Icon(null),
-              onPressed: () {},
+              icon: const Icon(Icons.search),
+              onPressed: () {
+              },
             )
           : IconButton(
               icon: const Icon(Icons.clear),
