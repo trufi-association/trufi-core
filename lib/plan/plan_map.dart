@@ -131,7 +131,7 @@ class PlanMapPageState extends State<PlanMapPage> {
           mapController: _mapController,
           mapOptions: MapOptions(
             zoom: 13.0,
-            maxZoom: 18.0,
+            maxZoom: 15.0,
             minZoom: 8.0,
             onTap: _handleOnMapTap,
             onPositionChanged: _handleOnMapPositionChanged,
