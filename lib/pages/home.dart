@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/keys.dart' as keys;
@@ -58,10 +59,7 @@ class HomePageState extends State<HomePage>
       key: ValueKey(keys.homePage),
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(
-        HomePage.route,
-        onLanguageChangedCallback: () => setState(() {}),
-      ),
+      drawer: TrufiDrawer(HomePage.route),
     );
   }
 

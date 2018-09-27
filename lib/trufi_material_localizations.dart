@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
-
   static TrufiMaterialLocalizations of(BuildContext context) {
     return MaterialLocalizations.of(context);
   }
@@ -37,6 +35,10 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
 
 class TrufiMaterialLocalizationsDelegate
     extends LocalizationsDelegate<MaterialLocalizations> {
+  TrufiMaterialLocalizationsDelegate(this.languageCode);
+
+  final String languageCode;
+
   TrufiMaterialLocalizations localizations;
 
   @override
@@ -47,10 +49,11 @@ class TrufiMaterialLocalizationsDelegate
   @override
   Future<TrufiMaterialLocalizations> load(Locale locale) async {
     localizations = await _getLocalizations();
-    if (localizations != null) {
-      return localizations;
-    }
-    return SynchronousFuture<TrufiMaterialLocalizations>(TrufiMaterialLocalizations(locale));
+    return localizations != null
+        ? localizations
+        : SynchronousFuture<TrufiMaterialLocalizations>(
+            TrufiMaterialLocalizations(locale),
+          );
   }
 
   @override
@@ -59,8 +62,6 @@ class TrufiMaterialLocalizationsDelegate
   }
 
   Future<TrufiMaterialLocalizations> _getLocalizations() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
     return languageCode != null
         ? TrufiMaterialLocalizations(TrufiLocalizations.getLocale(languageCode))
         : null;

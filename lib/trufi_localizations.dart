@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
   static const String savedLanguageCode = "saved_language_code";
@@ -562,6 +561,10 @@ class TrufiLocalizations {
 
 class TrufiLocalizationsDelegate
     extends LocalizationsDelegate<TrufiLocalizations> {
+  TrufiLocalizationsDelegate(this.languageCode);
+
+  final String languageCode;
+
   TrufiLocalizations localizations;
 
   @override
@@ -572,19 +575,19 @@ class TrufiLocalizationsDelegate
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
     localizations = await _getLocalizations();
-    if (localizations != null) {
-      return localizations;
-    }
-    return SynchronousFuture<TrufiLocalizations>(TrufiLocalizations(locale));
+    return localizations != null
+        ? localizations
+        : SynchronousFuture<TrufiLocalizations>(
+            TrufiLocalizations(locale),
+          );
   }
 
   @override
-  bool shouldReload(TrufiLocalizationsDelegate old) =>
-      localizations == null ? false : old.localizations != localizations;
+  bool shouldReload(TrufiLocalizationsDelegate old) {
+    return localizations == null ? false : old.localizations != localizations;
+  }
 
   Future<TrufiLocalizations> _getLocalizations() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
     return languageCode != null
         ? TrufiLocalizations(TrufiLocalizations.getLocale(languageCode))
         : null;

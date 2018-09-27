@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
@@ -9,26 +10,15 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_material_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
-  TrufiDrawer(this.currentRoute, {this.onLanguageChangedCallback});
+  TrufiDrawer(this.currentRoute);
 
   final String currentRoute;
-  final Function onLanguageChangedCallback;
 
   @override
   TrufiDrawerState createState() => TrufiDrawerState();
 }
 
 class TrufiDrawerState extends State<TrufiDrawer> {
-  SharedPreferences _sharedPreferences;
-
-  void initState() {
-    super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      _sharedPreferences = prefs;
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -102,6 +92,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildDropdownButton(BuildContext context) {
+    PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     TrufiMaterialLocalizations materialLocalizations =
@@ -114,20 +105,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           localizations.locale.languageCode,
         ),
         onChanged: (String newValue) {
-          SharedPreferences.getInstance().then((prefs) {
-            String languageCode = localizations.getLanguageCode(newValue);
-            _sharedPreferences.setString(
-              TrufiLocalizations.savedLanguageCode,
-              languageCode,
-            );
-            localizations.switchToLanguage(languageCode);
-            materialLocalizations.switchToLanguage(languageCode);
-            setState(() {
-              if (widget.onLanguageChangedCallback != null) {
-                widget.onLanguageChangedCallback();
-              }
-            });
-          });
+          String languageCode = localizations.getLanguageCode(newValue);
+          localizations.switchToLanguage(languageCode);
+          materialLocalizations.switchToLanguage(languageCode);
+          preferencesBloc.inChangeLanguageCode.add(languageCode);
         },
         items: <String>[
           localizations.spanish,
