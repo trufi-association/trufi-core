@@ -108,7 +108,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           String languageCode = localizations.getLanguageCode(newValue);
           localizations.switchToLanguage(languageCode);
           materialLocalizations.switchToLanguage(languageCode);
-          preferencesBloc.inChangeLanguageCode.add(languageCode);
+          preferencesBloc.inSwitchLanguageCode.add(languageCode);
         },
         items: <String>[
           localizations.spanish,

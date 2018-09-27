@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 
 class TrufiLocalizations {
-  static const String savedLanguageCode = "saved_language_code";
-
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
@@ -565,8 +563,6 @@ class TrufiLocalizationsDelegate
 
   final String languageCode;
 
-  TrufiLocalizations localizations;
-
   @override
   bool isSupported(Locale locale) {
     return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
@@ -574,22 +570,17 @@ class TrufiLocalizationsDelegate
 
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
-    localizations = await _getLocalizations();
-    return localizations != null
-        ? localizations
-        : SynchronousFuture<TrufiLocalizations>(
-            TrufiLocalizations(locale),
-          );
+    // The language code has a higher priority than the locale
+    TrufiLocalizations localizations = TrufiLocalizations(
+      TrufiLocalizations.getLocale(languageCode),
+    );
+    return SynchronousFuture<TrufiLocalizations>(
+      localizations != null ? localizations : TrufiLocalizations(locale),
+    );
   }
 
   @override
   bool shouldReload(TrufiLocalizationsDelegate old) {
-    return localizations == null ? false : old.localizations != localizations;
-  }
-
-  Future<TrufiLocalizations> _getLocalizations() async {
-    return languageCode != null
-        ? TrufiLocalizations(TrufiLocalizations.getLocale(languageCode))
-        : null;
+    return old.languageCode != languageCode;
   }
 }
