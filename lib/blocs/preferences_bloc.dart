@@ -7,6 +7,7 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 
 class PreferencesBloc extends BlocBase {
   static const String keyLanguageCode = "language_code";
+  static const String keyStateHomePage = "state_home_page";
 
   PreferencesBloc() {
     _switchLanguageCodeController.listen(_handleSwitchLanguage);
@@ -49,4 +50,12 @@ class PreferencesBloc extends BlocBase {
   // Getter
 
   String get languageCode => _preferences?.getString(keyLanguageCode);
+
+  String get stateHomePage => _preferences?.getString(keyStateHomePage);
+
+  // Setter
+
+  set stateHomePage(String value) {
+    _preferences?.setString(keyStateHomePage, value);
+  }
 }

@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -43,7 +43,7 @@ class HomePageState extends State<HomePage>
   }
 
   void _loadState() async {
-    if (await _data.load() && _data.toPlace != null) {
+    if (await _data.load(context) && _data.toPlace != null) {
       setState(() {
         _fromFieldKey.currentState?.didChange(_data.fromPlace);
         _toFieldKey.currentState?.didChange(_data.toPlace);
@@ -178,7 +178,7 @@ class HomePageState extends State<HomePage>
 
   void _reset() {
     setState(() {
-      _data.reset();
+      _data.reset(context);
       _formKey.currentState.reset();
       _setFromPlaceToCurrentPosition();
     });
@@ -188,6 +188,7 @@ class HomePageState extends State<HomePage>
     setState(() {
       _data.fromPlace = fromPlace;
       _data.toPlace = toPlace;
+      _data.save(context);
       _toFieldKey.currentState.didChange(_data.toPlace);
       _fromFieldKey.currentState.didChange(_data.fromPlace);
       _fetchPlan();
@@ -197,6 +198,7 @@ class HomePageState extends State<HomePage>
   void _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
       _data.fromPlace = fromPlace;
+      _data.save(context);
       _fromFieldKey.currentState.didChange(_data.fromPlace);
       _fetchPlan();
     });
@@ -220,6 +222,7 @@ class HomePageState extends State<HomePage>
   void _setToPlace(TrufiLocation toPlace) {
     setState(() {
       _data.toPlace = toPlace;
+      _data.save(context);
       _toFieldKey.currentState.didChange(_data.toPlace);
       _fetchPlan();
     });
@@ -228,6 +231,7 @@ class HomePageState extends State<HomePage>
   void _setPlan(Plan plan) {
     setState(() {
       _data.plan = plan;
+      _data.save(context);
     });
     PlanError error = _data.plan?.error;
     if (error != null) {
@@ -265,25 +269,15 @@ class HomePageState extends State<HomePage>
 }
 
 class HomePageStateData {
-  static final prefsKey = "home_page_state_data";
-
-  HomePageStateData({
-    TrufiLocation fromPlace,
-    TrufiLocation toPlace,
-    Plan plan,
-  }) {
-    _fromPlace = fromPlace;
-    _toPlace = toPlace;
-    _plan = plan;
-  }
-
   static const String _FromPlace = "fromPlace";
   static const String _ToPlace = "toPlace";
   static const String _Plan = "plan";
 
-  TrufiLocation _fromPlace;
-  TrufiLocation _toPlace;
-  Plan _plan;
+  HomePageStateData({this.fromPlace, this.toPlace, this.plan});
+
+  TrufiLocation fromPlace;
+  TrufiLocation toPlace;
+  Plan plan;
 
   // Json
 
@@ -305,18 +299,19 @@ class HomePageStateData {
 
   // Methods
 
-  void reset() async {
+  void reset(BuildContext context) async {
     fromPlace = null;
     toPlace = null;
     plan = null;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(prefsKey);
+    BlocProvider.of<PreferencesBloc>(context).stateHomePage = null;
   }
 
-  Future<bool> load() async {
+  Future<bool> load(BuildContext context) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      HomePageStateData data = await compute(_parse, prefs.getString(prefsKey));
+      HomePageStateData data = await compute(
+        _parse,
+        BlocProvider.of<PreferencesBloc>(context).stateHomePage,
+      );
       if (data != null) {
         fromPlace = data.fromPlace;
         toPlace = data.toPlace;
@@ -329,39 +324,17 @@ class HomePageStateData {
     return false;
   }
 
-  void _save() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(prefsKey, json.encode(toJson()));
+  void save(BuildContext context) async {
+    BlocProvider.of<PreferencesBloc>(context).stateHomePage = json.encode(
+      toJson(),
+    );
   }
 
   // Getter
 
-  bool get isSwappable => _fromPlace != null && _toPlace != null;
+  bool get isSwappable => fromPlace != null && toPlace != null;
 
-  bool get isResettable => _toPlace != null || _plan != null;
-
-  TrufiLocation get fromPlace => _fromPlace;
-
-  TrufiLocation get toPlace => _toPlace;
-
-  Plan get plan => _plan;
-
-  // Setter
-
-  set fromPlace(TrufiLocation value) {
-    _fromPlace = value;
-    _save();
-  }
-
-  set toPlace(TrufiLocation value) {
-    _toPlace = value;
-    _save();
-  }
-
-  set plan(Plan value) {
-    _plan = value;
-    _save();
-  }
+  bool get isResettable => toPlace != null || plan != null;
 }
 
 HomePageStateData _parse(String encoded) {
