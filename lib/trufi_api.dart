@@ -52,13 +52,9 @@ Future<List<TrufiLocation>> fetchLocations(
     );
     final FavoriteLocationsBloc favoriteLocationsBloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
-
-    favoriteLocationsBloc.locations.forEach((favorite){
-      if (locations.contains(favorite)){
-        locations.remove(favorite);
-      }
+    locations.sort((a, b){
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
-
     return locations;
   } else {
     throw FetchResponseException('Failed to load locations');
