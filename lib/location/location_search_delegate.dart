@@ -458,7 +458,10 @@ class FavoriteButtonState extends State<FavoriteButton> {
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data == true) {
+        bool isFavorite = favoriteLocationsBloc.locations.contains(
+          widget.location,
+        );
+        if (isFavorite == true) {
           return GestureDetector(
             onTap: () {
               favoriteLocationsBloc.inRemoveLocation.add(
