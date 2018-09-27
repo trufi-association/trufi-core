@@ -317,7 +317,7 @@ class PlanItineraryLeg {
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return (duration.ceil() ~/ 60).toString() +
+    return (duration.ceil()/ 60).ceil().toString() +
         " ${localizations.instructionMinutes}";
   }
 

@@ -46,8 +46,9 @@ flutter:
   assets:
     - assets/data/places.json
     - assets/data/team.txt
-    - test/assets/tile.png
     - assets/images/map_marker.svg
+    - assets/tiles/
+    - test/assets/tile.png
 
   fonts:
   - family: CircleIcon
