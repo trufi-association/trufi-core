@@ -41,8 +41,8 @@ void main() {
               child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: MaterialApp(localizationsDelegates: [
-                    TrufiLocalizationsDelegate(),
-                    TrufiMaterialLocalizationsDelegate(),
+                    TrufiLocalizationsDelegate("en"),
+                    TrufiMaterialLocalizationsDelegate("en"),
                     GlobalWidgetsLocalizations.delegate,
                   ], home: HomePage()))));
     }));
