@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/keys.dart' as keys;
@@ -35,6 +33,7 @@ class HomePageState extends State<HomePage>
 
   bool _isFetching = false;
 
+  @override
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
@@ -71,10 +70,9 @@ class HomePageState extends State<HomePage>
       backgroundColor: Colors.white,
       bottom: PreferredSize(
         child: Container(),
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: Size.fromHeight(45.0),
       ),
       flexibleSpace: _buildFormFields(context),
-      leading: _data.isResettable ? _buildResetButton() : null,
     );
   }
 
@@ -93,6 +91,7 @@ class HomePageState extends State<HomePage>
                 ValueKey(keys.homePageFromPlaceField),
                 localizations.searchPleaseSelect,
                 _setFromPlace,
+                trailing: _data.isResettable ? _buildResetButton() : null,
               ),
               _buildFormField(
                 _toFieldKey,
@@ -118,7 +117,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildResetButton() {
     return IconButton(
-      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      icon: Icon(Icons.clear),
       onPressed: _reset,
     );
   }
