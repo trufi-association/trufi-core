@@ -90,19 +90,15 @@ class FeedBackPageState extends State<FeedbackPage> {
 
   Widget _buildFloatingActionButton(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       backgroundColor: theme.primaryColor,
-      icon: Icon(Icons.send, color: theme.primaryIconTheme.color),
-      label: Text(
-        localizations.feedbackButton,
-        style: theme.primaryTextTheme.body1,
-      ),
+      child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
           _launched = _launch(LaunchUrl);
         });
       },
+      heroTag: null,
     );
   }
 }
