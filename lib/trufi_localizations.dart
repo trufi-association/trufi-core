@@ -37,7 +37,6 @@ class TrufiLocalizations {
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionFavorites = "search_title_favorites";
   static const String SearchSectionResults = "search_title_result";
-  static const String SearchCurrentPosition = "search_current_position";
   static const String SearchSectionPleaseSelect = "search_please_select";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
@@ -95,7 +94,6 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recent',
       SearchSectionFavorites: 'Favorites',
       SearchSectionResults: 'Search Results',
-      SearchCurrentPosition: 'Current Position',
       SearchSectionPleaseSelect: 'Please select',
       SearchFailLoadingPlan: 'Failed to load plan.',
       SearchSectionMapMarker: 'Map Marker',
@@ -152,7 +150,6 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recientes',
       SearchSectionFavorites: 'Favoritos',
       SearchSectionResults: 'Resultados de búsqueda',
-      SearchCurrentPosition: 'Posición actual',
       SearchSectionPleaseSelect: 'Por favor seleccione',
       SearchFailLoadingPlan: 'Error al cargar plan.',
       SearchSectionMapMarker: 'Posición en el Mapa',
@@ -209,7 +206,6 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionFavorites: 'Favoriten',
       SearchSectionResults: 'Suchergebnisse',
-      SearchCurrentPosition: 'Aktuelle Position',
       SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
       SearchSectionMapMarker: 'Kartenmarkierung',
@@ -266,7 +262,6 @@ class TrufiLocalizations {
       SearchSectionRecent: "Kuintan masc'asgas",
       SearchSectionFavorites: "Favoritos",
       SearchSectionResults: "Masc'asgas",
-      SearchCurrentPosition: 'Maypi cunan cashani',
       SearchSectionPleaseSelect: "Por favor seleccione",
       SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
       SearchSectionMapMarker: 'Maypi cashani mapapy',
@@ -383,10 +378,6 @@ class TrufiLocalizations {
 
   String get searchTitleResults {
     return _localizedValues[locale.languageCode][SearchSectionResults];
-  }
-
-  String get searchCurrentPosition {
-    return _localizedValues[locale.languageCode][SearchCurrentPosition];
   }
 
   String get searchPleaseSelect {
