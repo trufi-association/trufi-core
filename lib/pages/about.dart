@@ -54,6 +54,15 @@ class AboutPageState extends State<AboutPage> {
                   style: theme.textTheme.body1,
                 ),
               ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: RaisedButton(
+                    child: Text(localizations.license),
+                    onPressed: () => showLicensePage(
+                        context: context,
+                        applicationName: localizations.title,
+                        applicationVersion: '0.0.1')),
+              )
             ],
           ),
         )
