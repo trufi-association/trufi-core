@@ -7,7 +7,9 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
 class TrufiMap extends StatefulWidget {
-  static final LatLng cochabambaLocation = LatLng(-17.3940469, -66.233916);
+  static final LatLng cochabambaCenter = LatLng(-17.3940469, -66.233916);
+  static final LatLng cochabambaSouthWest = LatLng(-17.79300, -66.75000);
+  static final LatLng cochabambaNorthEast = LatLng(-16.90400, -65.67400);
 
   TrufiMap({
     @required this.mapController,
@@ -37,7 +39,7 @@ class TrufiMapState extends State<TrufiMap> {
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
         List<LayerOptions> layers = List();
         // Map tiles layer
-        layers.add(tileHostingTileLayerOptions());
+        layers.add(offlineMapTileLayerOptions());
         // Parent background layers
         if (widget.backgroundLayers != null) {
           layers.addAll(widget.backgroundLayers);
