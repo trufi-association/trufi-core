@@ -20,13 +20,14 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   TrufiLocation _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) {
+  ThemeData appBarTheme(BuildContext context){
     final ThemeData theme = Theme.of(context);
+    TextTheme partialTheme = theme.primaryTextTheme.copyWith(title: TextStyle(fontSize: 16.0));
     return theme.copyWith(
-      primaryColor: theme.primaryColor,
-      primaryIconTheme: theme.primaryIconTheme,
-      primaryColorBrightness: theme.primaryColorBrightness,
-      primaryTextTheme: theme.primaryTextTheme,
+        primaryColor: Colors.white,
+        primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+        primaryColorBrightness: Brightness.light,
+        textTheme: theme.textTheme.merge(partialTheme)
     );
   }
 
@@ -193,7 +194,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body1,
+              style: theme.textTheme.body2,
             ),
           ),
         ],
@@ -312,7 +313,7 @@ class _SuggestionList extends StatelessWidget {
             overflow: TextOverflow.clip,
             text: TextSpan(
               text: title,
-              style: theme.textTheme.body2,
+              style: theme.textTheme.body1,
             ),
           ),
         ),
