@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
