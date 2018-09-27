@@ -106,7 +106,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       primaryIconTheme: const IconThemeData(color: Colors.black),
     );
     return StreamBuilder(
-      stream: preferencesBloc.outChangeLanguageCode,
+      stream: preferencesBloc.outSwitchLanguageCode,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return MaterialApp(
           routes: <String, WidgetBuilder>{
