@@ -20,17 +20,15 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   TrufiLocation _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) {
-    assert(context != null);
+  ThemeData appBarTheme(BuildContext context){
     final ThemeData theme = Theme.of(context);
-    TextTheme partialTheme = TextTheme(title: TextStyle(fontSize: 16.0));
-
-    assert(theme != null);
+    TextTheme partialTheme = theme.primaryTextTheme.copyWith(title: TextStyle(fontSize: 16.0));
     return theme.copyWith(
         primaryColor: Colors.white,
         primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
         primaryColorBrightness: Brightness.light,
-        textTheme: theme.textTheme.merge(partialTheme));
+        textTheme: theme.textTheme.merge(partialTheme)
+    );
   }
 
   @override
@@ -78,9 +76,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     return <Widget>[
       query.isEmpty
           ? IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-              },
+              icon: const Icon(null),
+              onPressed: () {},
             )
           : IconButton(
               icon: const Icon(Icons.clear),
@@ -197,7 +194,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body1,
+              style: theme.textTheme.body2,
             ),
           ),
         ],
@@ -316,7 +313,7 @@ class _SuggestionList extends StatelessWidget {
             overflow: TextOverflow.clip,
             text: TextSpan(
               text: title,
-              style: theme.textTheme.body2,
+              style: theme.textTheme.body1,
             ),
           ),
         ),
