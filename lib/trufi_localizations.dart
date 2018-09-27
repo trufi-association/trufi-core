@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TrufiLocalizations {
   static const String savedLanguageCode = "saved_language_code";
-
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
@@ -36,6 +35,7 @@ class TrufiLocalizations {
   static const String SearchItemNoResults = "search_item_no_results";
   static const String SearchSectionPlaces = "search_title_places";
   static const String SearchSectionRecent = "search_title_recent";
+  static const String SearchSectionFavorites = "search_title_favorites";
   static const String SearchSectionResults = "search_title_result";
   static const String SearchCurrentPosition = "search_current_position";
   static const String SearchSectionPleaseSelect = "search_please_select";
@@ -94,6 +94,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'No results',
       SearchSectionPlaces: 'Places',
       SearchSectionRecent: 'Recent',
+      SearchSectionFavorites: 'Favorites',
       SearchSectionResults: 'Search Results',
       SearchCurrentPosition: 'Current Position',
       SearchSectionPleaseSelect: 'Please select',
@@ -151,6 +152,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'Ningun resultado',
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: 'Recientes',
+      SearchSectionFavorites: 'Favoritos',
       SearchSectionResults: 'Resultados de búsqueda',
       SearchCurrentPosition: 'Posición actual',
       SearchSectionPleaseSelect: 'Por favor seleccione',
@@ -208,6 +210,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'Keine Ergebnisse',
       SearchSectionPlaces: 'Orte',
       SearchSectionRecent: 'Zuletzt gesucht',
+      SearchSectionFavorites: 'Favoriten',
       SearchSectionResults: 'Suchergebnisse',
       SearchCurrentPosition: 'Aktuelle Position',
       SearchSectionPleaseSelect: 'Bitte auswählen',
@@ -265,6 +268,7 @@ class TrufiLocalizations {
       SearchItemNoResults: "Ningun resultado",
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: "Kuintan masc'asgas",
+      SearchSectionFavorites: "Favoritos",
       SearchSectionResults: "Masc'asgas",
       SearchCurrentPosition: 'Maypi cunan cashani',
       SearchSectionPleaseSelect: "Por favor seleccione",
@@ -376,6 +380,10 @@ class TrufiLocalizations {
 
   String get searchTitleRecent {
     return _localizedValues[locale.languageCode][SearchSectionRecent];
+  }
+
+  String get searchTitleFavorites {
+    return _localizedValues[locale.languageCode][SearchSectionFavorites];
   }
 
   String get searchTitleResults {

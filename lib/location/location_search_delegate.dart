@@ -54,6 +54,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
+      favoriteLocationsBloc: BlocProvider.of<FavoriteLocationsBloc>(context),
       importantLocationsBloc: BlocProvider.of<ImportantLocationsBloc>(context),
     );
   }
@@ -95,10 +96,12 @@ class _SuggestionList extends StatelessWidget {
     this.onSelected,
     this.onMapTapped,
     @required this.historyLocationsBloc,
+    @required this.favoriteLocationsBloc,
     @required this.importantLocationsBloc,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
+  final FavoriteLocationsBloc favoriteLocationsBloc;
   final ImportantLocationsBloc importantLocationsBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -136,6 +139,18 @@ class _SuggestionList extends StatelessWidget {
         isVisibleWhenEmpty: true,
       ));
     }
+
+    //
+    // Favorites
+    //
+    slivers.add(_buildFutureBuilder(
+      context,
+      localizations.searchTitleFavorites,
+      favoriteLocationsBloc.fetchWithLimit(context, 5),
+      Icons.location_on,
+      isVisibleWhenEmpty: true,
+    ));
+
     //
     // Places
     //
@@ -193,7 +208,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body1,
+              style: theme.textTheme.body2,
             ),
           ),
         ],
@@ -213,8 +228,6 @@ class _SuggestionList extends StatelessWidget {
         initialData: null,
         builder: (BuildContext context,
             AsyncSnapshot<List<TrufiLocation>> snapshot) {
-          final FavoriteLocationsBloc favoriteLocationsBloc =
-              BlocProvider.of<FavoriteLocationsBloc>(context);
           final TrufiLocalizations localizations =
               TrufiLocalizations.of(context);
           // Error
@@ -312,7 +325,7 @@ class _SuggestionList extends StatelessWidget {
             overflow: TextOverflow.clip,
             text: TextSpan(
               text: title,
-              style: theme.textTheme.body2,
+              style: theme.textTheme.body1,
             ),
           ),
         ),
