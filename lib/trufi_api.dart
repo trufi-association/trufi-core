@@ -52,7 +52,7 @@ Future<List<TrufiLocation>> fetchLocations(
     );
     final FavoriteLocationsBloc favoriteLocationsBloc =
         BlocProvider.of<FavoriteLocationsBloc>(context);
-    locations.sort((a, b){
+    locations.sort((a, b) {
       return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
     return locations;
