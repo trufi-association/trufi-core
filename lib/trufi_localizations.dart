@@ -63,7 +63,6 @@ class TrufiLocalizations {
   static const String MenuFeedback = "menu_feedback";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackTitle = "feedback_title";
-  static const String FeedbackButton = "feedback_button";
   static const String AboutContent = "about_content";
   static const String LicenseButton = "license_button";
   static const String TeamContent = "team_content";
@@ -120,7 +119,6 @@ class TrufiLocalizations {
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackTitle: 'Send us an E-mail',
-      FeedbackButton: 'E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
       LicenseButton: 'Licenses',
@@ -177,7 +175,6 @@ class TrufiLocalizations {
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
       FeedbackTitle: 'Envíanos un correo electrónico',
-      FeedbackButton: 'Correo electrónico',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
       LicenseButton: 'Licencias',
@@ -234,7 +231,6 @@ class TrufiLocalizations {
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
       FeedbackTitle: 'E-Mail senden',
-      FeedbackButton: 'E-mail',
       AboutContent:
           'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.',
       LicenseButton: 'Lizenzen',
@@ -292,7 +288,6 @@ class TrufiLocalizations {
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
       FeedbackTitle: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
-      FeedbackButton: 'Correo electrónico',
       AboutContent:
           "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
       LicenseButton: 'Licencias',
@@ -480,10 +475,6 @@ class TrufiLocalizations {
 
   String get feedbackTitle {
     return _localizedValues[locale.languageCode][FeedbackTitle];
-  }
-
-  String get feedbackButton {
-    return _localizedValues[locale.languageCode][FeedbackButton];
   }
 
   String get aboutContent {
