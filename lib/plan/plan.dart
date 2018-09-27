@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/visible.dart';
 
@@ -123,12 +124,15 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   Widget _buildFloatingActionButton(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return FloatingActionButton(
-      child: _visibleFlag == VisibilityFlag.visible
-          ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
-          : Icon(Icons.keyboard_arrow_up, color: Colors.black),
-      onPressed: _toggleInstructions,
-      backgroundColor: theme.primaryColor,
+    return Transform.scale(
+      scale: 0.8,
+      child: FloatingActionButton(
+        child: _visibleFlag == VisibilityFlag.visible
+            ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
+            : Icon(Icons.keyboard_arrow_up, color: Colors.black),
+        onPressed: _toggleInstructions,
+        backgroundColor: theme.primaryColor,
+      ),
     );
   }
 
@@ -154,6 +158,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
     ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+
     List<Widget> summary = List();
     var legs = itinerary.legs;
     for (var i = 0; i < legs.length; i++) {
@@ -170,7 +176,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
                     ),
                   )
                 : Text(
-                    (leg.duration.ceil() ~/ 60).toString(),
+                    "${(leg.duration.ceil()/ 60).ceil().toString()} ${localizations.instructionMinutes}",
                     style: theme.textTheme.body1,
                   ),
             i < (legs.length - 1)
