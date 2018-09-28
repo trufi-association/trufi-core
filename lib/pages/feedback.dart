@@ -34,7 +34,7 @@ class FeedBackPageState extends State<FeedbackPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(FeedbackPage.route),
       floatingActionButton: _buildFloatingActionButton(context),
     );
   }
@@ -78,13 +78,6 @@ class FeedBackPageState extends State<FeedbackPage> {
           ),
         )
       ],
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      FeedbackPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
     );
   }
 

@@ -16,12 +16,14 @@ class AboutPageState extends State<AboutPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(AboutPage.route),
     );
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return AppBar(title: Text(TrufiLocalizations.of(context).menuAbout));
+    return AppBar(
+      title: Text(TrufiLocalizations.of(context).menuAbout),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -57,23 +59,20 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: RaisedButton(
-                    child: Text(localizations.license),
-                    onPressed: () => showLicensePage(
-                        context: context,
-                        applicationName: localizations.title,
-                        applicationVersion: '0.0.1')),
+                  child: Text(localizations.license),
+                  onPressed: () {
+                    return showLicensePage(
+                      context: context,
+                      applicationName: localizations.title,
+                      applicationVersion: '0.0.1',
+                    );
+                  },
+                ),
               )
             ],
           ),
         )
       ],
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      AboutPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
     );
   }
 }
