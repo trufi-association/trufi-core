@@ -118,13 +118,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             TrufiMaterialLocalizationsDelegate(snapshot.data),
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: [
-            const Locale('en', 'US'), // English
-            const Locale('de', 'DE'), // German
-            const Locale('es', 'ES'), // Spanish
-            const Locale('qu', 'BO'), // Quechua
-            // ... other locales the app supports
-          ],
+          supportedLocales: locales,
           debugShowCheckedModeBanner: false,
           theme: theme,
           home: HomePage(),
