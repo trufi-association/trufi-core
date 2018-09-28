@@ -137,9 +137,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFavoritesList(
         context,
         localizations.searchTitleFavorites,
-        favoriteLocationsBloc.fetch(context),
         Icons.location_on,
-        isVisibleWhenEmpty: true,
       ));
     } else {
       //
@@ -306,9 +304,8 @@ class _SuggestionList extends StatelessWidget {
         });
   }
 
-  Widget _buildFavoritesList(BuildContext context, String title,
-      Future<List<TrufiLocation>> fetchWithLimit, IconData iconData,
-      {bool isVisibleWhenEmpty}) {
+  Widget _buildFavoritesList(
+      BuildContext context, String title, IconData iconData) {
     return StreamBuilder(
         stream: favoriteLocationsBloc.outLocations,
         builder: (BuildContext context,
@@ -358,7 +355,7 @@ class _SuggestionList extends StatelessWidget {
             count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
           }
           // No results
-          if (count == 0 && isVisibleWhenEmpty && favorites.isEmpty) {
+          if (count == 0 && favorites.isEmpty) {
             return SliverToBoxAdapter(
               child: Column(
                 children: <Widget>[
