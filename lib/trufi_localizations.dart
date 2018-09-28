@@ -3,6 +3,17 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 
+const String languageCodeEnglish = "en";
+const String languageCodeGerman = "de";
+const String languageCodeQuechua = "qu";
+const String languageCodeSpanish = "es";
+const List<String> languageCodes = [
+  languageCodeEnglish,
+  languageCodeGerman,
+  languageCodeQuechua,
+  languageCodeSpanish,
+];
+
 class TrufiLocalizations {
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
@@ -493,38 +504,7 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][Quechua];
   }
 
-  bool get isQuechua => locale.languageCode == 'qu';
-
-  getLanguageCode(String languageString) {
-    if (languageString == _localizedValues[locale.languageCode][English]) {
-      return "en";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][German]) {
-      return "de";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][Quechua]) {
-      return "qu";
-    } else {
-      return "es";
-    }
-  }
-
-  String getLanguageString(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return _localizedValues[locale.languageCode][English];
-        break;
-      case "de":
-        return _localizedValues[locale.languageCode][German];
-        break;
-      case "qu":
-        return _localizedValues[locale.languageCode][Quechua];
-        break;
-      default:
-        return _localizedValues[locale.languageCode][Spanish];
-        break;
-    }
-  }
+  bool get isQuechua => locale.languageCode == languageCodeQuechua;
 }
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
@@ -539,12 +519,12 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   @override
   String get searchFieldLabel {
     switch (locale.languageCode) {
-      case 'qu':
-        return "Mask'ay";
-      case "es":
-        return "Buscar";
-      case "de":
+      case languageCodeGerman:
         return "Suchen";
+      case languageCodeQuechua:
+        return "Mask'ay";
+      case languageCodeSpanish:
+        return "Buscar";
       default:
         return super.searchFieldLabel;
     }
@@ -587,7 +567,7 @@ abstract class TrufiLocalizationsDelegateBase<T>
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
+    return languageCodes.contains(locale.languageCode);
   }
 
   @override
@@ -597,13 +577,13 @@ abstract class TrufiLocalizationsDelegateBase<T>
 
   Locale localeForLanguageCode(String languageCode) {
     switch (languageCode) {
-      case "en":
+      case languageCodeEnglish:
         return Locale('en', 'US');
         break;
-      case "de":
+      case languageCodeGerman:
         return Locale('de', 'DE');
         break;
-      case "qu":
+      case languageCodeQuechua:
         return Locale('qu', 'BO');
         break;
       default:
