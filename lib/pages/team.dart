@@ -33,7 +33,7 @@ class TeamPageState extends State<TeamPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(TeamPage.route),
     );
   }
 
@@ -69,13 +69,6 @@ class TeamPageState extends State<TeamPage> {
           ),
         )
       ],
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      TeamPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
     );
   }
 }
