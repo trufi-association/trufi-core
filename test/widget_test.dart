@@ -17,7 +17,6 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_material_localizations.dart';
 
 import 'image_tile.dart';
 import 'mock_http_client.dart';
@@ -57,6 +56,7 @@ class HomeRobot {
     expect(find.byIcon(Icons.my_location), findsOneWidget);
     return this;
   }
+
   HomeRobot seesAppBar() {
     final Finder formField = find.byType(AppBar);
     expect(formField, findsOneWidget);
