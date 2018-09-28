@@ -20,14 +20,16 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   TrufiLocation _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context){
+  ThemeData appBarTheme(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    TextTheme partialTheme = theme.primaryTextTheme.copyWith(title: TextStyle(fontSize: 16.0));
+    TextTheme partialTheme = theme.primaryTextTheme.copyWith(
+      title: TextStyle(fontSize: 16.0),
+    );
     return theme.copyWith(
-        primaryColor: Colors.white,
-        primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-        primaryColorBrightness: Brightness.light,
-        textTheme: theme.textTheme.merge(partialTheme)
+      primaryColor: Colors.white,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+      primaryColorBrightness: Brightness.light,
+      textTheme: theme.textTheme.merge(partialTheme),
     );
   }
 
@@ -456,7 +458,10 @@ class FavoriteButtonState extends State<FavoriteButton> {
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data == true) {
+        bool isFavorite = favoriteLocationsBloc.locations.contains(
+          widget.location,
+        );
+        if (isFavorite == true) {
           return GestureDetector(
             onTap: () {
               favoriteLocationsBloc.inRemoveLocation.add(

@@ -47,7 +47,7 @@ flutter:
     - assets/data/places.json
     - assets/data/team.txt
     - assets/images/map_marker.svg
-    - assets/tiles/
+    # - assets/tiles/
     - test/assets/tile.png
 
   fonts:
