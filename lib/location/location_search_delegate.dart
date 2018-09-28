@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/favorite_button.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   TrufiLocation _result;
@@ -57,6 +57,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
+      favoriteLocationsBloc: BlocProvider.of<FavoriteLocationsBloc>(context),
       importantLocationsBloc: BlocProvider.of<ImportantLocationsBloc>(context),
     );
   }
@@ -98,10 +99,12 @@ class _SuggestionList extends StatelessWidget {
     this.onSelected,
     this.onMapTapped,
     @required this.historyLocationsBloc,
+    @required this.favoriteLocationsBloc,
     @required this.importantLocationsBloc,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
+  final FavoriteLocationsBloc favoriteLocationsBloc;
   final ImportantLocationsBloc importantLocationsBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -126,6 +129,14 @@ class _SuggestionList extends StatelessWidget {
         localizations.searchTitleRecent,
         historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
+      ));
+      //
+      // Favorites
+      //
+      slivers.add(_buildFavoritesList(
+        context,
+        localizations.searchTitleFavorites,
+        Icons.location_on,
       ));
     } else {
       //
@@ -212,85 +223,123 @@ class _SuggestionList extends StatelessWidget {
     bool isVisibleWhenEmpty = false,
   }) {
     return FutureBuilder(
-        future: future,
-        initialData: null,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<TrufiLocation>> snapshot) {
-          final FavoriteLocationsBloc favoriteLocationsBloc =
-              BlocProvider.of<FavoriteLocationsBloc>(context);
-          final TrufiLocalizations localizations =
-              TrufiLocalizations.of(context);
-          // Error
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            if (snapshot.error is api.FetchRequestException) {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonNoInternet,
-                ),
-              );
-            } else if (snapshot.error is api.FetchResponseException) {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonFailLoading,
-                ),
-              );
-            } else {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonUnknownError,
-                ),
-              );
-            }
-          }
-          // Loading
-          if (snapshot.data == null) {
+      future: future,
+      initialData: null,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
+        final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+        // Error
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          if (snapshot.error is api.FetchRequestException) {
             return SliverToBoxAdapter(
-              child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
+              child: _buildErrorItem(
+                context,
+                localizations.commonNoInternet,
+              ),
+            );
+          } else if (snapshot.error is api.FetchResponseException) {
+            return SliverToBoxAdapter(
+              child: _buildErrorItem(
+                context,
+                localizations.commonFailLoading,
+              ),
+            );
+          } else {
+            return SliverToBoxAdapter(
+              child: _buildErrorItem(
+                context,
+                localizations.commonUnknownError,
               ),
             );
           }
-          // No results
-          int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
-          if (count == 0 && isVisibleWhenEmpty) {
-            return SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
-                  _buildTitle(context, title),
-                  _buildErrorItem(context, localizations.searchItemNoResults),
-                ],
-              ),
-            );
-          }
-          // Items
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                // Title
-                if (index == 0) {
-                  return _buildTitle(context, title);
-                }
-                // Item
-                final TrufiLocation value = snapshot.data[index - 1];
-                return _buildItem(
-                  context,
-                  () => _onSelectedTrufiLocation(value, addToHistory: true),
-                  iconData,
-                  value.description,
-                  trailing: FavoriteButton(
-                    location: value,
-                    favoritesStream: favoriteLocationsBloc.outLocations,
-                  ),
-                );
-              },
-              childCount: count,
+        }
+        // Loading
+        if (snapshot.data == null) {
+          return SliverToBoxAdapter(
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Colors.yellow),
             ),
           );
-        });
+        }
+        // No results
+        int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
+        if (count == 0 && isVisibleWhenEmpty) {
+          return SliverToBoxAdapter(
+            child: Column(
+              children: <Widget>[
+                _buildTitle(context, title),
+                _buildErrorItem(context, localizations.searchItemNoResults),
+              ],
+            ),
+          );
+        }
+        // Items
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              // Title
+              if (index == 0) {
+                return _buildTitle(context, title);
+              }
+              // Item
+              final TrufiLocation value = snapshot.data[index - 1];
+              return _buildItem(
+                context,
+                () => _onSelectedTrufiLocation(value, addToHistory: true),
+                iconData,
+                value.description,
+                trailing: FavoriteButton(
+                  location: value,
+                  favoritesStream: favoriteLocationsBloc.outLocations,
+                ),
+              );
+            },
+            childCount: count,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFavoritesList(
+    BuildContext context,
+    String title,
+    IconData iconData,
+  ) {
+    return StreamBuilder(
+      stream: favoriteLocationsBloc.outLocations,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TrufiLocation>> snapshot,
+      ) {
+        List<TrufiLocation> favorites = favoriteLocationsBloc.locations;
+        int count = favorites.length > 0 ? favorites.length + 1 : 0;
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              // Title
+              if (index == 0) {
+                return _buildTitle(context, title);
+              }
+              // Item
+              final TrufiLocation value = favorites[index - 1];
+              return _buildItem(
+                context,
+                () => _onSelectedTrufiLocation(value, addToHistory: true),
+                iconData,
+                value.description,
+                trailing: FavoriteButton(
+                  location: value,
+                  favoritesStream: favoriteLocationsBloc.outLocations,
+                ),
+              );
+            },
+            childCount: count,
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildErrorItem(BuildContext context, String title) {
@@ -400,87 +449,5 @@ class _SuggestionList extends StatelessWidget {
         onMapTapped(TrufiLocation.fromLatLng(description, location));
       }
     }
-  }
-}
-
-class FavoriteButton extends StatefulWidget {
-  FavoriteButton({
-    Key key,
-    this.location,
-    @required this.favoritesStream,
-  }) : super(key: key);
-
-  final TrufiLocation location;
-  final Stream<List<TrufiLocation>> favoritesStream;
-
-  @override
-  FavoriteButtonState createState() => FavoriteButtonState();
-}
-
-class FavoriteButtonState extends State<FavoriteButton> {
-  FavoriteLocationBloc _bloc;
-
-  StreamSubscription _subscription;
-
-  @override
-  void initState() {
-    super.initState();
-    _createBloc();
-  }
-
-  @override
-  void didUpdateWidget(FavoriteButton oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _disposeBloc();
-    _createBloc();
-  }
-
-  @override
-  void dispose() {
-    _disposeBloc();
-    super.dispose();
-  }
-
-  void _createBloc() {
-    _bloc = FavoriteLocationBloc(widget.location);
-    _subscription = widget.favoritesStream.listen(_bloc.inFavorites.add);
-  }
-
-  void _disposeBloc() {
-    _subscription.cancel();
-    _bloc.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final FavoriteLocationsBloc favoriteLocationsBloc =
-        BlocProvider.of<FavoriteLocationsBloc>(context);
-    return StreamBuilder(
-      stream: _bloc.outIsFavorite,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        bool isFavorite = favoriteLocationsBloc.locations.contains(
-          widget.location,
-        );
-        if (isFavorite == true) {
-          return GestureDetector(
-            onTap: () {
-              favoriteLocationsBloc.inRemoveLocation.add(
-                widget.location,
-              );
-            },
-            child: Icon(Icons.favorite),
-          );
-        } else {
-          return GestureDetector(
-            onTap: () {
-              favoriteLocationsBloc.inAddLocation.add(
-                widget.location,
-              );
-            },
-            child: Icon(Icons.favorite_border),
-          );
-        }
-      },
-    );
   }
 }
