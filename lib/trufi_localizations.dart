@@ -13,6 +13,16 @@ const List<String> languageCodes = [
   languageCodeQuechua,
   languageCodeSpanish,
 ];
+const Locale localeEnglish = Locale('en', 'US'); // English
+const Locale localeGerman = Locale('de', 'DE'); // German
+const Locale localeQuechua = Locale('qu', 'BO'); // Quechua
+const Locale localeSpanish = Locale('es', 'ES'); // Spanish
+const List<Locale> locales = <Locale>[
+  localeEnglish,
+  localeGerman,
+  localeQuechua,
+  localeSpanish,
+];
 
 class TrufiLocalizations {
   static TrufiLocalizations of(BuildContext context) {
@@ -578,16 +588,16 @@ abstract class TrufiLocalizationsDelegateBase<T>
   Locale localeForLanguageCode(String languageCode) {
     switch (languageCode) {
       case languageCodeEnglish:
-        return Locale('en', 'US');
+        return localeEnglish;
         break;
       case languageCodeGerman:
-        return Locale('de', 'DE');
+        return localeGerman;
         break;
       case languageCodeQuechua:
-        return Locale('qu', 'BO');
+        return localeQuechua;
         break;
       default:
-        return Locale('es', 'ES');
+        return localeSpanish;
         break;
     }
   }
