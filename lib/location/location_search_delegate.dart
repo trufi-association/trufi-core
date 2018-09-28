@@ -275,29 +275,7 @@ class _SuggestionList extends StatelessWidget {
           );
         }
         // Items
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              // Title
-              if (index == 0) {
-                return _buildTitle(context, title);
-              }
-              // Item
-              final TrufiLocation value = snapshot.data[index - 1];
-              return _buildItem(
-                context,
-                () => _onSelectedTrufiLocation(value, addToHistory: true),
-                iconData,
-                value.description,
-                trailing: FavoriteButton(
-                  location: value,
-                  favoritesStream: favoriteLocationsBloc.outLocations,
-                ),
-              );
-            },
-            childCount: count,
-          ),
-        );
+        return _buildLocationsList(title, iconData, snapshot.data);
       },
     );
   }
@@ -313,32 +291,43 @@ class _SuggestionList extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
-        List<TrufiLocation> favorites = favoriteLocationsBloc.locations;
-        int count = favorites.length > 0 ? favorites.length + 1 : 0;
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              // Title
-              if (index == 0) {
-                return _buildTitle(context, title);
-              }
-              // Item
-              final TrufiLocation value = favorites[index - 1];
-              return _buildItem(
-                context,
-                () => _onSelectedTrufiLocation(value, addToHistory: true),
-                iconData,
-                value.description,
-                trailing: FavoriteButton(
-                  location: value,
-                  favoritesStream: favoriteLocationsBloc.outLocations,
-                ),
-              );
-            },
-            childCount: count,
-          ),
+        return _buildLocationsList(
+          title,
+          iconData,
+          favoriteLocationsBloc.locations,
         );
       },
+    );
+  }
+
+  Widget _buildLocationsList(
+    String title,
+    IconData iconData,
+    List<TrufiLocation> locations,
+  ) {
+    int count = locations.length > 0 ? locations.length + 1 : 0;
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          // Title
+          if (index == 0) {
+            return _buildTitle(context, title);
+          }
+          // Item
+          final TrufiLocation location = locations[index - 1];
+          return _buildItem(
+            context,
+            () => _handleOnSelectedTrufiLocation(location, addToHistory: true),
+            iconData,
+            location.description,
+            trailing: FavoriteButton(
+              location: location,
+              favoritesStream: favoriteLocationsBloc.outLocations,
+            ),
+          );
+        },
+        childCount: count,
+      ),
     );
   }
 
@@ -362,10 +351,7 @@ class _SuggestionList extends StatelessWidget {
           child: RichText(
             maxLines: 1,
             overflow: TextOverflow.clip,
-            text: TextSpan(
-              text: title,
-              style: theme.textTheme.body1,
-            ),
+            text: TextSpan(text: title, style: theme.textTheme.body1),
           ),
         ),
       ],
@@ -375,10 +361,7 @@ class _SuggestionList extends StatelessWidget {
     }
     return InkWell(
       onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.all(8.0),
-        child: row,
-      ),
+      child: Container(margin: EdgeInsets.all(8.0), child: row),
     );
   }
 
@@ -387,7 +370,7 @@ class _SuggestionList extends StatelessWidget {
         BlocProvider.of<LocationProviderBloc>(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _onSelectedLatLng(
+      _handleOnSelectedLatLng(
         description: TrufiLocalizations.of(context).searchMapMarker,
         location: lastLocation,
         addToHistory: false,
@@ -405,18 +388,18 @@ class _SuggestionList extends StatelessWidget {
     LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(builder: (context) => ChooseLocationPage()),
     );
-    _onMapTapped(
+    _handleOnMapTapped(
       description: localizations.searchMapMarker,
       location: mapLocation,
     );
   }
 
-  void _onSelectedLatLng({
+  void _handleOnSelectedLatLng({
     @required String description,
     @required LatLng location,
     bool addToHistory,
   }) {
-    _onSelectedTrufiLocation(
+    _handleOnSelectedTrufiLocation(
       TrufiLocation(
         description: description,
         latitude: location.latitude,
@@ -426,7 +409,7 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _onSelectedTrufiLocation(
+  void _handleOnSelectedTrufiLocation(
     TrufiLocation value, {
     bool addToHistory,
   }) {
@@ -440,10 +423,7 @@ class _SuggestionList extends StatelessWidget {
     }
   }
 
-  void _onMapTapped({
-    String description,
-    LatLng location,
-  }) {
+  void _handleOnMapTapped({String description, LatLng location}) {
     if (location != null) {
       if (onMapTapped != null) {
         onMapTapped(TrufiLocation.fromLatLng(description, location));
