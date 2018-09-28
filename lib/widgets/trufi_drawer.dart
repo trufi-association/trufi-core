@@ -66,7 +66,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localizations.menuTeam,
             TeamPage.route,
           ),
-          _buildDropdownButton(context),
+          _buildLanguageDropdownButton(context),
         ],
       ),
     );
@@ -90,32 +90,30 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     );
   }
 
-  Widget _buildDropdownButton(BuildContext context) {
+  Widget _buildLanguageDropdownButton(BuildContext context) {
     PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    String languageCode = localizations.locale.languageCode;
+    List<LanguageDropdownValue> values = <LanguageDropdownValue>[
+      LanguageDropdownValue(languageCodeSpanish, localizations.spanish),
+      LanguageDropdownValue(languageCodeQuechua, localizations.quechua),
+      LanguageDropdownValue(languageCodeEnglish, localizations.english),
+      LanguageDropdownValue(languageCodeGerman, localizations.german),
+    ];
     return ListTile(
       leading: Icon(Icons.language),
-      title: DropdownButton<String>(
+      title: DropdownButton<LanguageDropdownValue>(
         style: theme.textTheme.body2,
-        value: localizations.getLanguageString(
-          localizations.locale.languageCode,
-        ),
-        onChanged: (String newValue) {
-          preferencesBloc.inSwitchLanguageCode.add(
-            localizations.getLanguageCode(newValue),
-          );
+        value: values.firstWhere((value) => value.languageCode == languageCode),
+        onChanged: (LanguageDropdownValue value) {
+          preferencesBloc.inSwitchLanguageCode.add(value.languageCode);
         },
-        items: <String>[
-          localizations.spanish,
-          localizations.quechua,
-          localizations.english,
-          localizations.german
-        ].map((String value) {
-          return DropdownMenuItem<String>(
+        items: values.map((LanguageDropdownValue value) {
+          return DropdownMenuItem<LanguageDropdownValue>(
             value: value,
             child: Text(
-              value,
+              value.languageString,
               style: theme.textTheme.body2,
             ),
           );
@@ -123,4 +121,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       ),
     );
   }
+}
+
+class LanguageDropdownValue {
+  LanguageDropdownValue(this.languageCode, this.languageString);
+
+  final String languageCode;
+  final String languageString;
 }
