@@ -2,17 +2,36 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+const String languageCodeEnglish = "en";
+const String languageCodeGerman = "de";
+const String languageCodeQuechua = "qu";
+const String languageCodeSpanish = "es";
+const List<String> languageCodes = [
+  languageCodeEnglish,
+  languageCodeGerman,
+  languageCodeQuechua,
+  languageCodeSpanish,
+];
+const Locale localeEnglish = Locale('en', 'US'); // English
+const Locale localeGerman = Locale('de', 'DE'); // German
+const Locale localeQuechua = Locale('qu', 'BO'); // Quechua
+const Locale localeSpanish = Locale('es', 'ES'); // Spanish
+const List<Locale> locales = <Locale>[
+  localeEnglish,
+  localeGerman,
+  localeQuechua,
+  localeSpanish,
+];
 
 class TrufiLocalizations {
-  static const String savedLanguageCode = "saved_language_code";
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
 
   TrufiLocalizations(this.locale);
 
-  Locale locale;
+  final Locale locale;
 
   static const String Title = "title";
   static const String TagLine = "tag_line";
@@ -504,88 +523,91 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][Quechua];
   }
 
-  bool get isQuechua => locale.languageCode == 'qu';
+  bool get isQuechua => locale.languageCode == languageCodeQuechua;
+}
 
-  void switchToLanguage(String languageCode) {
-    locale = getLocale(languageCode);
+class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
+  static TrufiMaterialLocalizations of(BuildContext context) {
+    return MaterialLocalizations.of(context);
   }
 
-  static getLocale(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return Locale('en', 'US');
-        break;
-      case "de":
-        return Locale('de', 'DE');
-        break;
-      case "qu":
-        return Locale('qu', 'BO');
-        break;
+  TrufiMaterialLocalizations(this.locale);
+
+  final Locale locale;
+
+  @override
+  String get searchFieldLabel {
+    switch (locale.languageCode) {
+      case languageCodeGerman:
+        return "Suchen";
+      case languageCodeQuechua:
+        return "Mask'ay";
+      case languageCodeSpanish:
+        return "Buscar";
       default:
-        return Locale('es', 'ES');
-        break;
-    }
-  }
-
-  getLanguageCode(String languageString) {
-    if (languageString == _localizedValues[locale.languageCode][English]) {
-      return "en";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][German]) {
-      return "de";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][Quechua]) {
-      return "qu";
-    } else {
-      return "es";
-    }
-  }
-
-  String getLanguageString(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return _localizedValues[locale.languageCode][English];
-        break;
-      case "de":
-        return _localizedValues[locale.languageCode][German];
-        break;
-      case "qu":
-        return _localizedValues[locale.languageCode][Quechua];
-        break;
-      default:
-        return _localizedValues[locale.languageCode][Spanish];
-        break;
+        return super.searchFieldLabel;
     }
   }
 }
 
 class TrufiLocalizationsDelegate
-    extends LocalizationsDelegate<TrufiLocalizations> {
-  TrufiLocalizations localizations;
-
-  @override
-  bool isSupported(Locale locale) {
-    return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
-  }
+    extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
+  TrufiLocalizationsDelegate(String languageCode) : super(languageCode);
 
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
-    localizations = await _getLocalizations();
-    if (localizations != null) {
-      return localizations;
-    }
-    return SynchronousFuture<TrufiLocalizations>(TrufiLocalizations(locale));
+    return SynchronousFuture<TrufiLocalizations>(
+      TrufiLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
+class TrufiMaterialLocalizationsDelegate
+    extends TrufiLocalizationsDelegateBase<MaterialLocalizations> {
+  TrufiMaterialLocalizationsDelegate(String languageCode) : super(languageCode);
+
+  @override
+  Future<TrufiMaterialLocalizations> load(Locale locale) async {
+    return SynchronousFuture<TrufiMaterialLocalizations>(
+      TrufiMaterialLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
+abstract class TrufiLocalizationsDelegateBase<T>
+    extends LocalizationsDelegate<T> {
+  TrufiLocalizationsDelegateBase(this.languageCode);
+
+  final String languageCode;
+
+  @override
+  bool isSupported(Locale locale) {
+    return languageCodes.contains(locale.languageCode);
   }
 
   @override
-  bool shouldReload(TrufiLocalizationsDelegate old) =>
-      localizations == null ? false : old.localizations != localizations;
+  bool shouldReload(TrufiLocalizationsDelegateBase<T> old) {
+    return old.languageCode != languageCode;
+  }
 
-  Future<TrufiLocalizations> _getLocalizations() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
-    return languageCode != null
-        ? TrufiLocalizations(TrufiLocalizations.getLocale(languageCode))
-        : null;
+  Locale localeForLanguageCode(String languageCode) {
+    switch (languageCode) {
+      case languageCodeEnglish:
+        return localeEnglish;
+        break;
+      case languageCodeGerman:
+        return localeGerman;
+        break;
+      case languageCodeQuechua:
+        return localeQuechua;
+        break;
+      default:
+        return localeSpanish;
+        break;
+    }
   }
 }
