@@ -10,7 +10,7 @@ class TrufiLocalizations {
 
   TrufiLocalizations(this.locale);
 
-  Locale locale;
+  final Locale locale;
 
   static const String Title = "title";
   static const String TagLine = "tag_line";
@@ -494,10 +494,6 @@ class TrufiLocalizations {
   }
 
   bool get isQuechua => locale.languageCode == 'qu';
-
-  void switchToLanguage(String languageCode) {
-    locale = getLocale(languageCode);
-  }
 
   static getLocale(String languageCode) {
     switch (languageCode) {

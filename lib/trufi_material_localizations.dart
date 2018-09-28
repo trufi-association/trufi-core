@@ -12,11 +12,7 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
 
   TrufiMaterialLocalizations(this.locale);
 
-  Locale locale;
-
-  void switchToLanguage(String languageCode) {
-    locale = TrufiLocalizations.getLocale(languageCode);
-  }
+  final Locale locale;
 
   @override
   String get searchFieldLabel {
