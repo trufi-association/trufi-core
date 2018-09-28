@@ -44,7 +44,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return _SuggestionList(
+    return SuggestionList(
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
@@ -91,8 +91,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   }
 }
 
-class _SuggestionList extends StatelessWidget {
-  _SuggestionList({
+class SuggestionList extends StatefulWidget {
+  SuggestionList({
     this.query,
     this.onSelected,
     this.onMapTapped,
@@ -109,6 +109,12 @@ class _SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onMapTapped;
 
   @override
+  SuggestionListState createState() => SuggestionListState();
+
+}
+
+class SuggestionListState extends State<SuggestionList> {
+  @override
   Widget build(BuildContext context) {
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     List<Widget> slivers = List();
@@ -118,14 +124,14 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
-    if (query.isEmpty) {
+    if (widget.query.isEmpty) {
       //
       // History
       //
       slivers.add(_buildFutureBuilder(
         context,
         localizations.searchTitleRecent,
-        historyLocationsBloc.fetchWithLimit(context, 5),
+        widget.historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
       ));
 
@@ -135,7 +141,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         localizations.searchTitleFavorites,
-        favoriteLocationsBloc.fetchWithLimit(context, 5),
+        widget.favoriteLocationsBloc.fetchWithLimit(context, 5),
         Icons.location_on,
         isVisibleWhenEmpty: true,
       ));
@@ -147,7 +153,7 @@ class _SuggestionList extends StatelessWidget {
       slivers.add(_buildFutureBuilder(
         context,
         localizations.searchTitleResults,
-        api.fetchLocations(context, query),
+        api.fetchLocations(context, widget.query),
         Icons.location_on,
         isVisibleWhenEmpty: true,
       ));
@@ -159,7 +165,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(
       context,
       localizations.searchTitlePlaces,
-      importantLocationsBloc.fetchWithQuery(context, query),
+      widget.importantLocationsBloc.fetchWithQuery(context, widget.query),
       Icons.location_on,
     ));
     //
@@ -295,7 +301,7 @@ class _SuggestionList extends StatelessWidget {
                   value.description,
                   trailing: FavoriteButton(
                     location: value,
-                    favoritesStream: favoriteLocationsBloc.outLocations,
+                    favoritesStream: widget.favoriteLocationsBloc.outLocations,
                   ),
                 );
               },
@@ -395,10 +401,10 @@ class _SuggestionList extends StatelessWidget {
   }) {
     if (value != null) {
       if (addToHistory) {
-        historyLocationsBloc.inAddLocation.add(value);
+        widget.historyLocationsBloc.inAddLocation.add(value);
       }
-      if (onSelected != null) {
-        onSelected(value);
+      if (widget.onSelected != null) {
+        widget.onSelected(value);
       }
     }
   }
@@ -408,8 +414,8 @@ class _SuggestionList extends StatelessWidget {
     LatLng location,
   }) {
     if (location != null) {
-      if (onMapTapped != null) {
-        onMapTapped(TrufiLocation.fromLatLng(description, location));
+      if (widget.onMapTapped != null) {
+        widget.onMapTapped(TrufiLocation.fromLatLng(description, location));
       }
     }
   }
