@@ -495,23 +495,6 @@ class TrufiLocalizations {
 
   bool get isQuechua => locale.languageCode == 'qu';
 
-  static getLocale(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return Locale('en', 'US');
-        break;
-      case "de":
-        return Locale('de', 'DE');
-        break;
-      case "qu":
-        return Locale('qu', 'BO');
-        break;
-      default:
-        return Locale('es', 'ES');
-        break;
-    }
-  }
-
   getLanguageCode(String languageString) {
     if (languageString == _localizedValues[locale.languageCode][English]) {
       return "en";
@@ -544,34 +527,6 @@ class TrufiLocalizations {
   }
 }
 
-class TrufiLocalizationsDelegate
-    extends LocalizationsDelegate<TrufiLocalizations> {
-  TrufiLocalizationsDelegate(this.languageCode);
-
-  final String languageCode;
-
-  @override
-  bool isSupported(Locale locale) {
-    return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
-  }
-
-  @override
-  Future<TrufiLocalizations> load(Locale locale) async {
-    // The language code has a higher priority than the locale
-    TrufiLocalizations localizations = TrufiLocalizations(
-      TrufiLocalizations.getLocale(languageCode),
-    );
-    return SynchronousFuture<TrufiLocalizations>(
-      localizations != null ? localizations : TrufiLocalizations(locale),
-    );
-  }
-
-  @override
-  bool shouldReload(TrufiLocalizationsDelegate old) {
-    return old.languageCode != languageCode;
-  }
-}
-
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   static TrufiMaterialLocalizations of(BuildContext context) {
     return MaterialLocalizations.of(context);
@@ -596,13 +551,39 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   }
 }
 
+class TrufiLocalizationsDelegate
+    extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
+  TrufiLocalizationsDelegate(String languageCode) : super(languageCode);
+
+  @override
+  Future<TrufiLocalizations> load(Locale locale) async {
+    return SynchronousFuture<TrufiLocalizations>(
+      TrufiLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
 class TrufiMaterialLocalizationsDelegate
-    extends LocalizationsDelegate<MaterialLocalizations> {
-  TrufiMaterialLocalizationsDelegate(this.languageCode);
+    extends TrufiLocalizationsDelegateBase<MaterialLocalizations> {
+  TrufiMaterialLocalizationsDelegate(String languageCode) : super(languageCode);
+
+  @override
+  Future<TrufiMaterialLocalizations> load(Locale locale) async {
+    return SynchronousFuture<TrufiMaterialLocalizations>(
+      TrufiMaterialLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
+abstract class TrufiLocalizationsDelegateBase<T>
+    extends LocalizationsDelegate<T> {
+  TrufiLocalizationsDelegateBase(this.languageCode);
 
   final String languageCode;
-
-  TrufiMaterialLocalizations localizations;
 
   @override
   bool isSupported(Locale locale) {
@@ -610,23 +591,24 @@ class TrufiMaterialLocalizationsDelegate
   }
 
   @override
-  Future<TrufiMaterialLocalizations> load(Locale locale) async {
-    localizations = await _getLocalizations();
-    return localizations != null
-        ? localizations
-        : SynchronousFuture<TrufiMaterialLocalizations>(
-            TrufiMaterialLocalizations(locale),
-          );
+  bool shouldReload(TrufiLocalizationsDelegateBase<T> old) {
+    return old.languageCode != languageCode;
   }
 
-  @override
-  bool shouldReload(TrufiMaterialLocalizationsDelegate old) {
-    return localizations == null ? false : old.localizations != localizations;
-  }
-
-  Future<TrufiMaterialLocalizations> _getLocalizations() async {
-    return languageCode != null
-        ? TrufiMaterialLocalizations(TrufiLocalizations.getLocale(languageCode))
-        : null;
+  Locale localeForLanguageCode(String languageCode) {
+    switch (languageCode) {
+      case "en":
+        return Locale('en', 'US');
+        break;
+      case "de":
+        return Locale('de', 'DE');
+        break;
+      case "qu":
+        return Locale('qu', 'BO');
+        break;
+      default:
+        return Locale('es', 'ES');
+        break;
+    }
   }
 }
