@@ -54,6 +54,9 @@ class TrufiLocation {
   }
 
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
     return TrufiLocation(
       description: json[_Description],
       latitude: json[_Latitude],
@@ -103,6 +106,9 @@ class Plan {
   final PlanError error;
 
   factory Plan.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
     if (json.containsKey(_Error)) {
       return Plan(error: PlanError.fromJson(json[_Error]));
     } else {
@@ -255,8 +261,7 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstructionQuechua(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+  String toInstructionQuechua(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(
@@ -268,8 +273,7 @@ class PlanItineraryLeg {
     return sb.toString();
   }
 
-  String toInstruction(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+  String toInstruction(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write("${localizations.instructionWalk}");
@@ -313,7 +317,7 @@ class PlanItineraryLeg {
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return (duration.ceil() ~/ 60).toString() +
+    return (duration.ceil()/ 60).ceil().toString() +
         " ${localizations.instructionMinutes}";
   }
 

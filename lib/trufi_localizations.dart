@@ -2,18 +2,36 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+const String languageCodeEnglish = "en";
+const String languageCodeGerman = "de";
+const String languageCodeQuechua = "qu";
+const String languageCodeSpanish = "es";
+const List<String> languageCodes = [
+  languageCodeEnglish,
+  languageCodeGerman,
+  languageCodeQuechua,
+  languageCodeSpanish,
+];
+const Locale localeEnglish = Locale('en', 'US'); // English
+const Locale localeGerman = Locale('de', 'DE'); // German
+const Locale localeQuechua = Locale('qu', 'BO'); // Quechua
+const Locale localeSpanish = Locale('es', 'ES'); // Spanish
+const List<Locale> locales = <Locale>[
+  localeEnglish,
+  localeGerman,
+  localeQuechua,
+  localeSpanish,
+];
 
 class TrufiLocalizations {
-  static const String savedLanguageCode = "saved_language_code";
-
   static TrufiLocalizations of(BuildContext context) {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
 
   TrufiLocalizations(this.locale);
 
-  Locale locale;
+  final Locale locale;
 
   static const String Title = "title";
   static const String TagLine = "tag_line";
@@ -37,7 +55,6 @@ class TrufiLocalizations {
   static const String SearchSectionPlaces = "search_title_places";
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionResults = "search_title_result";
-  static const String SearchCurrentPosition = "search_current_position";
   static const String SearchSectionPleaseSelect = "search_please_select";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
@@ -62,8 +79,9 @@ class TrufiLocalizations {
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
   static const String FeedbackContent = "feedback_content";
-  static const String FeedbackButton = "feedback_button";
+  static const String FeedbackTitle = "feedback_title";
   static const String AboutContent = "about_content";
+  static const String LicenseButton = "license_button";
   static const String TeamContent = "team_content";
   static const String English = "english";
   static const String German = "german";
@@ -93,7 +111,6 @@ class TrufiLocalizations {
       SearchSectionPlaces: 'Places',
       SearchSectionRecent: 'Recent',
       SearchSectionResults: 'Search Results',
-      SearchCurrentPosition: 'Current Position',
       SearchSectionPleaseSelect: 'Please select',
       SearchFailLoadingPlan: 'Failed to load plan.',
       SearchSectionMapMarker: 'Map Marker',
@@ -113,13 +130,14 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Show routes',
       MenuAbout: 'About',
-      MenuTeam: 'Become part of the Team',
+      MenuTeam: 'Contributors',
       MenuFeedback: 'Send Feedback',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
-      FeedbackButton: 'Send us an E-mail',
+      FeedbackTitle: 'Send us an E-mail',
       AboutContent:
           'We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.',
+      LicenseButton: 'Licenses',
       TeamContent: 'People and companies involved:',
       English: 'English',
       German: 'German',
@@ -148,7 +166,6 @@ class TrufiLocalizations {
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: 'Recientes',
       SearchSectionResults: 'Resultados de búsqueda',
-      SearchCurrentPosition: 'Posición actual',
       SearchSectionPleaseSelect: 'Por favor seleccione',
       SearchFailLoadingPlan: 'Error al cargar plan.',
       SearchSectionMapMarker: 'Posición en el Mapa',
@@ -168,13 +185,14 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'metros',
       MenuConnections: 'Muestra rutas',
       MenuAbout: 'Acerca',
-      MenuTeam: 'Forme parte del equipo',
+      MenuTeam: 'Colaboradores',
       MenuFeedback: 'Envía comentarios',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
-      FeedbackButton: 'Envíanos un correo',
+      FeedbackTitle: 'Envíanos un correo electrónico',
       AboutContent:
           'Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.',
+      LicenseButton: 'Licencias',
       TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés',
       German: 'Alemán',
@@ -203,7 +221,6 @@ class TrufiLocalizations {
       SearchSectionPlaces: 'Orte',
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionResults: 'Suchergebnisse',
-      SearchCurrentPosition: 'Aktuelle Position',
       SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
       SearchSectionMapMarker: 'Kartenmarkierung',
@@ -223,13 +240,14 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'm',
       MenuConnections: 'Verbindungen',
       MenuAbout: 'Über',
-      MenuTeam: 'Werde Teil des Teams',
+      MenuTeam: 'Mitwirkende',
       MenuFeedback: 'Feedback',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
-      FeedbackButton: 'E-Mail senden',
+      FeedbackTitle: 'E-Mail senden',
       AboutContent:
-          'Wir sind ein bolivianisches und internationales Team, die den öffentlichen Nahverkehr lieben und unterstützen möchten. Wir haben diese App entwickelt, um den Menschen das Transportsystem in Cochabamba und der nährenen Umgebung zu erleichtern.',
+          'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.',
+      LicenseButton: 'Lizenzen',
       TeamContent: 'Beteiligte Personen und Firmen:',
       English: 'Englisch',
       German: 'Deutsch',
@@ -258,7 +276,6 @@ class TrufiLocalizations {
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: "Kuintan masc'asgas",
       SearchSectionResults: "Masc'asgas",
-      SearchCurrentPosition: 'Maypi cunan cashani',
       SearchSectionPleaseSelect: "Por favor seleccione",
       SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
       SearchSectionMapMarker: 'Maypi cashani mapapy',
@@ -279,14 +296,14 @@ class TrufiLocalizations {
       InstructionUnitMeter: 'mts',
       MenuConnections: "Ñankunata rikhuchiy",
       MenuAbout: "Imamanta yachayta munanki?",
-      MenuTeam: "Ñuqaykuwan khuchka llamk’ay!",
+      MenuTeam: "Ñuqaykuwan",
       MenuFeedback: "Yuyasqayniykita riqsichiwayku",
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
-      FeedbackButton: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
-      // 'Envíanos un correo',
+      FeedbackTitle: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
       AboutContent:
           "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
+      LicenseButton: 'Licencias',
       TeamContent: 'Personas y empresas involucradas:',
       English: 'Inglés simi',
       German: 'Aleman simi',
@@ -371,10 +388,6 @@ class TrufiLocalizations {
 
   String get searchTitleResults {
     return _localizedValues[locale.languageCode][SearchSectionResults];
-  }
-
-  String get searchCurrentPosition {
-    return _localizedValues[locale.languageCode][SearchCurrentPosition];
   }
 
   String get searchPleaseSelect {
@@ -469,12 +482,16 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][FeedbackContent];
   }
 
-  String get feedbackButton {
-    return _localizedValues[locale.languageCode][FeedbackButton];
+  String get feedbackTitle {
+    return _localizedValues[locale.languageCode][FeedbackTitle];
   }
 
   String get aboutContent {
     return _localizedValues[locale.languageCode][AboutContent];
+  }
+
+  String get license {
+    return _localizedValues[locale.languageCode][LicenseButton];
   }
 
   String get teamContent {
@@ -497,88 +514,91 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][Quechua];
   }
 
-  bool get isQuechua => locale.languageCode == 'qu';
+  bool get isQuechua => locale.languageCode == languageCodeQuechua;
+}
 
-  void switchToLanguage(String languageCode) {
-    locale = getLocale(languageCode);
+class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
+  static TrufiMaterialLocalizations of(BuildContext context) {
+    return MaterialLocalizations.of(context);
   }
 
-  static getLocale(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return Locale('en', 'US');
-        break;
-      case "de":
-        return Locale('de', 'DE');
-        break;
-      case "qu":
-        return Locale('qu', 'BO');
-        break;
+  TrufiMaterialLocalizations(this.locale);
+
+  final Locale locale;
+
+  @override
+  String get searchFieldLabel {
+    switch (locale.languageCode) {
+      case languageCodeGerman:
+        return "Suchen";
+      case languageCodeQuechua:
+        return "Mask'ay";
+      case languageCodeSpanish:
+        return "Buscar";
       default:
-        return Locale('es', 'ES');
-        break;
-    }
-  }
-
-  getLanguageCode(String languageString) {
-    if (languageString == _localizedValues[locale.languageCode][English]) {
-      return "en";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][German]) {
-      return "de";
-    } else if (languageString ==
-        _localizedValues[locale.languageCode][Quechua]) {
-      return "qu";
-    } else {
-      return "es";
-    }
-  }
-
-  String getLanguageString(String languageCode) {
-    switch (languageCode) {
-      case "en":
-        return _localizedValues[locale.languageCode][English];
-        break;
-      case "de":
-        return _localizedValues[locale.languageCode][German];
-        break;
-      case "qu":
-        return _localizedValues[locale.languageCode][Quechua];
-        break;
-      default:
-        return _localizedValues[locale.languageCode][Spanish];
-        break;
+        return super.searchFieldLabel;
     }
   }
 }
 
 class TrufiLocalizationsDelegate
-    extends LocalizationsDelegate<TrufiLocalizations> {
-  TrufiLocalizations localizations;
-
-  @override
-  bool isSupported(Locale locale) {
-    return ['en', 'es', 'de', 'qu'].contains(locale.languageCode);
-  }
+    extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
+  TrufiLocalizationsDelegate(String languageCode) : super(languageCode);
 
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
-    localizations = await _getLocalizations();
-    if (localizations != null) {
-      return localizations;
-    }
-    return SynchronousFuture<TrufiLocalizations>(TrufiLocalizations(locale));
+    return SynchronousFuture<TrufiLocalizations>(
+      TrufiLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
+class TrufiMaterialLocalizationsDelegate
+    extends TrufiLocalizationsDelegateBase<MaterialLocalizations> {
+  TrufiMaterialLocalizationsDelegate(String languageCode) : super(languageCode);
+
+  @override
+  Future<TrufiMaterialLocalizations> load(Locale locale) async {
+    return SynchronousFuture<TrufiMaterialLocalizations>(
+      TrufiMaterialLocalizations(
+        languageCode != null ? localeForLanguageCode(languageCode) : locale,
+      ),
+    );
+  }
+}
+
+abstract class TrufiLocalizationsDelegateBase<T>
+    extends LocalizationsDelegate<T> {
+  TrufiLocalizationsDelegateBase(this.languageCode);
+
+  final String languageCode;
+
+  @override
+  bool isSupported(Locale locale) {
+    return languageCodes.contains(locale.languageCode);
   }
 
   @override
-  bool shouldReload(TrufiLocalizationsDelegate old) =>
-      localizations == null ? false : old.localizations != localizations;
+  bool shouldReload(TrufiLocalizationsDelegateBase<T> old) {
+    return old.languageCode != languageCode;
+  }
 
-  Future<TrufiLocalizations> _getLocalizations() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.get(TrufiLocalizations.savedLanguageCode);
-    return languageCode != null
-        ? TrufiLocalizations(TrufiLocalizations.getLocale(languageCode))
-        : null;
+  Locale localeForLanguageCode(String languageCode) {
+    switch (languageCode) {
+      case languageCodeEnglish:
+        return localeEnglish;
+        break;
+      case languageCodeGerman:
+        return localeGerman;
+        break;
+      case languageCodeQuechua:
+        return localeQuechua;
+        break;
+      default:
+        return localeSpanish;
+        break;
+    }
   }
 }

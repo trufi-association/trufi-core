@@ -37,7 +37,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   MapController _mapController = MapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
-  Map<PlanItinerary, List<PolylineWithMarker>> _itineraries = Map();
+  Map<PlanItinerary, List<PolylineWithMarkers>> _itineraries = Map();
   List<Marker> _backgroundMarkers = List();
   List<Marker> _foregroundMarkers = List();
   List<Polyline> _polylines = List();
@@ -53,7 +53,7 @@ class PlanMapPageState extends State<PlanMapPage> {
       _mapController.move(
         widget.initialPosition != null
             ? widget.initialPosition
-            : TrufiMap.cochabambaLocation,
+            : TrufiMap.cochabambaCenter,
         12.0,
       );
       setState(() {});
@@ -98,14 +98,15 @@ class PlanMapPageState extends State<PlanMapPage> {
         _itineraries.forEach((itinerary, polylinesWithMarker) {
           bool isSelected = itinerary == _selectedItinerary;
           polylinesWithMarker.forEach((polylineWithMarker) {
-            if (polylineWithMarker.marker != null) {
+            polylineWithMarker.markers.forEach((marker) {
               if (isSelected) {
-                _selectedMarkers.add(polylineWithMarker.marker);
-                _selectedBounds.extend(polylineWithMarker.marker.point);
+                _selectedMarkers.add(marker);
+                _selectedBounds.extend(marker.point);
               } else {
-                _foregroundMarkers.add(polylineWithMarker.marker);
+                _backgroundMarkers.add(marker);
               }
-            }
+            });
+
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
               polylineWithMarker.polyline.points.forEach((point) {
@@ -129,18 +130,21 @@ class PlanMapPageState extends State<PlanMapPage> {
         TrufiMap(
           mapController: _mapController,
           mapOptions: MapOptions(
-            zoom: 5.0,
-            maxZoom: 19.0,
-            minZoom: 1.0,
+            zoom: 13.0,
+            maxZoom: 15.0,
+            minZoom: 8.0,
             onTap: _handleOnMapTap,
             onPositionChanged: _handleOnMapPositionChanged,
+            swPanBoundary: TrufiMap.cochabambaSouthWest,
+            nePanBoundary: TrufiMap.cochabambaNorthEast,
+            center: TrufiMap.cochabambaCenter,
           ),
           backgroundLayers: <LayerOptions>[
-            MarkerLayerOptions(markers: _backgroundMarkers),
             PolylineLayerOptions(polylines: _polylines),
+            MarkerLayerOptions(markers: _backgroundMarkers),
             PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _foregroundMarkers),
             MarkerLayerOptions(markers: _selectedMarkers),
+            MarkerLayerOptions(markers: _foregroundMarkers),
           ],
         ),
         Positioned(
@@ -218,12 +222,12 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
-    MapEntry<PlanItinerary, List<PolylineWithMarker>> entry =
+    MapEntry<PlanItinerary, List<PolylineWithMarkers>> entry =
         _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
-  MapEntry<PlanItinerary, List<PolylineWithMarker>> _itineraryEntryForPolyline(
+  MapEntry<PlanItinerary, List<PolylineWithMarkers>> _itineraryEntryForPolyline(
     Polyline polyline,
   ) {
     return _itineraries.entries.firstWhere((pair) {
@@ -315,8 +319,8 @@ class MyLocationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: AlwaysStoppedAnimation<double>(0.8),
+    return Transform.scale(
+      scale: 0.8,
       child: FloatingActionButton(
         backgroundColor: Colors.grey,
         child: Icon(iconData),

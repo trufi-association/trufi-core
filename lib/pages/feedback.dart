@@ -34,7 +34,7 @@ class FeedBackPageState extends State<FeedbackPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(FeedbackPage.route),
       floatingActionButton: _buildFloatingActionButton(context),
     );
   }
@@ -46,51 +46,52 @@ class FeedBackPageState extends State<FeedbackPage> {
   Widget _buildBody(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              localizations.feedbackContent,
-              style: theme.textTheme.title,
-              textAlign: TextAlign.center,
-            ),
-            Container(height: 16.0),
-            FutureBuilder<Null>(
-                future: _launched,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return Text(snapshot.hasError ? "${snapshot.error}" : "");
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      FeedbackPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  localizations.feedbackTitle,
+                  style: theme.textTheme.title,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  localizations.feedbackContent,
+                  style: theme.textTheme.body1,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: FutureBuilder<Null>(
+                    future: _launched,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return Text(snapshot.hasError ? "${snapshot.error}" : "");
+                    }),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return FloatingActionButton.extended(
+    return FloatingActionButton(
       backgroundColor: theme.primaryColor,
-      icon: Icon(Icons.send, color: theme.primaryIconTheme.color),
-      label: Text(
-        localizations.feedbackButton,
-        style: theme.primaryTextTheme.body1,
-      ),
+      child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
           _launched = _launch(LaunchUrl);
         });
       },
+      heroTag: null,
     );
   }
 }

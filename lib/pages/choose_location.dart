@@ -27,13 +27,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     _chooseOnMapMarker = buildToMarker(
       widget.initialPosition != null
           ? widget.initialPosition
-          : TrufiMap.cochabambaLocation,
+          : TrufiMap.cochabambaCenter,
     );
     _mapController.onReady.then((_) {
       _mapController.move(
         widget.initialPosition != null
             ? widget.initialPosition
-            : TrufiMap.cochabambaLocation,
+            : TrufiMap.cochabambaCenter,
         11.0,
       );
       setState(() {});
@@ -54,6 +54,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return AppBar(
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RichText(
@@ -81,10 +82,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     return TrufiMap(
       mapController: _mapController,
       mapOptions: MapOptions(
-        zoom: 5.0,
-        maxZoom: 19.0,
-        minZoom: 1.0,
+        zoom: 13.0,
+        maxZoom: 15.0,
+        minZoom: 8.0,
         onPositionChanged: _handleOnMapPositionChanged,
+        swPanBoundary: TrufiMap.cochabambaSouthWest,
+        nePanBoundary: TrufiMap.cochabambaNorthEast,
+        center: TrufiMap.cochabambaCenter,
       ),
       foregroundLayers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
@@ -101,8 +105,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         Container(
           height: 70.0,
           width: 56.0,
-          child: ScaleTransition(
-            scale: AlwaysStoppedAnimation<double>(0.8),
+          child: Transform.scale(
+            scale: 0.8,
             child: FloatingActionButton(
               backgroundColor: Colors.grey,
               child: Icon(Icons.my_location),

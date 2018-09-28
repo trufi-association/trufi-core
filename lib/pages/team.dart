@@ -33,7 +33,7 @@ class TeamPageState extends State<TeamPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(TeamPage.route),
     );
   }
 
@@ -45,35 +45,30 @@ class TeamPageState extends State<TeamPage> {
   Widget _buildBody(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              localizations.teamContent,
-              style: theme.textTheme.title,
-              textAlign: TextAlign.center,
-            ),
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                _teamString,
-                style: theme.textTheme.subhead,
-                textAlign: TextAlign.center,
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  localizations.teamContent,
+                  style: theme.textTheme.title,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      TeamPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  _teamString,
+                  style: theme.textTheme.body1,
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

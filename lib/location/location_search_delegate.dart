@@ -8,8 +8,8 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_location_bloc.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
+import 'package:trufi_app/blocs/important_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/location/location_search_places.dart';
 import 'package:trufi_app/pages/choose_location.dart';
 import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
@@ -22,11 +22,14 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    TextTheme partialTheme = theme.primaryTextTheme.copyWith(
+      title: TextStyle(fontSize: 16.0),
+    );
     return theme.copyWith(
-      primaryColor: theme.primaryColor,
-      primaryIconTheme: theme.primaryIconTheme,
-      primaryColorBrightness: theme.primaryColorBrightness,
-      primaryTextTheme: theme.primaryTextTheme,
+      primaryColor: Colors.white,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
+      primaryColorBrightness: Brightness.light,
+      textTheme: theme.textTheme.merge(partialTheme),
     );
   }
 
@@ -34,6 +37,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      tooltip: "Back",
       onPressed: () {
         close(context, null);
       },
@@ -53,6 +57,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
+      importantLocationsBloc: BlocProvider.of<ImportantLocationsBloc>(context),
     );
   }
 
@@ -93,9 +98,11 @@ class _SuggestionList extends StatelessWidget {
     this.onSelected,
     this.onMapTapped,
     @required this.historyLocationsBloc,
+    @required this.importantLocationsBloc,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
+  final ImportantLocationsBloc importantLocationsBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
@@ -138,7 +145,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(_buildFutureBuilder(
       context,
       localizations.searchTitlePlaces,
-      Places.instance.fetchLocations(context, query),
+      importantLocationsBloc.fetchWithQuery(context, query),
       Icons.location_on,
     ));
     //
@@ -189,7 +196,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body1,
+              style: theme.textTheme.body2,
             ),
           ),
         ],
@@ -308,7 +315,7 @@ class _SuggestionList extends StatelessWidget {
             overflow: TextOverflow.clip,
             text: TextSpan(
               text: title,
-              style: theme.textTheme.body2,
+              style: theme.textTheme.body1,
             ),
           ),
         ),
@@ -451,7 +458,10 @@ class FavoriteButtonState extends State<FavoriteButton> {
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.data == true) {
+        bool isFavorite = favoriteLocationsBloc.locations.contains(
+          widget.location,
+        );
+        if (isFavorite == true) {
           return GestureDetector(
             onTap: () {
               favoriteLocationsBloc.inRemoveLocation.add(
