@@ -130,7 +130,6 @@ class _SuggestionList extends StatelessWidget {
         historyLocationsBloc.fetchWithLimit(context, 5),
         Icons.history,
       ));
-
       //
       // Favorites
       //
@@ -151,7 +150,6 @@ class _SuggestionList extends StatelessWidget {
         isVisibleWhenEmpty: true,
       ));
     }
-
     //
     // Places
     //
@@ -225,83 +223,83 @@ class _SuggestionList extends StatelessWidget {
     bool isVisibleWhenEmpty = false,
   }) {
     return FutureBuilder(
-        future: future,
-        initialData: null,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<TrufiLocation>> snapshot) {
-          final TrufiLocalizations localizations =
-              TrufiLocalizations.of(context);
-          // Error
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            if (snapshot.error is api.FetchRequestException) {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonNoInternet,
-                ),
-              );
-            } else if (snapshot.error is api.FetchResponseException) {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonFailLoading,
-                ),
-              );
-            } else {
-              return SliverToBoxAdapter(
-                child: _buildErrorItem(
-                  context,
-                  localizations.commonUnknownError,
-                ),
-              );
-            }
-          }
-          // Loading
-          if (snapshot.data == null) {
+      future: future,
+      initialData: null,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
+        final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+        // Error
+        if (snapshot.hasError) {
+          print(snapshot.error);
+          if (snapshot.error is api.FetchRequestException) {
             return SliverToBoxAdapter(
-              child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
+              child: _buildErrorItem(
+                context,
+                localizations.commonNoInternet,
+              ),
+            );
+          } else if (snapshot.error is api.FetchResponseException) {
+            return SliverToBoxAdapter(
+              child: _buildErrorItem(
+                context,
+                localizations.commonFailLoading,
+              ),
+            );
+          } else {
+            return SliverToBoxAdapter(
+              child: _buildErrorItem(
+                context,
+                localizations.commonUnknownError,
               ),
             );
           }
-          // No results
-          int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
-          if (count == 0 && isVisibleWhenEmpty) {
-            return SliverToBoxAdapter(
-              child: Column(
-                children: <Widget>[
-                  _buildTitle(context, title),
-                  _buildErrorItem(context, localizations.searchItemNoResults),
-                ],
-              ),
-            );
-          }
-          // Items
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                // Title
-                if (index == 0) {
-                  return _buildTitle(context, title);
-                }
-                // Item
-                final TrufiLocation value = snapshot.data[index - 1];
-                return _buildItem(
-                  context,
-                  () => _onSelectedTrufiLocation(value, addToHistory: true),
-                  iconData,
-                  value.description,
-                  trailing: FavoriteButton(
-                    location: value,
-                    favoritesStream: favoriteLocationsBloc.outLocations,
-                  ),
-                );
-              },
-              childCount: count,
+        }
+        // Loading
+        if (snapshot.data == null) {
+          return SliverToBoxAdapter(
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Colors.yellow),
             ),
           );
-        });
+        }
+        // No results
+        int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
+        if (count == 0 && isVisibleWhenEmpty) {
+          return SliverToBoxAdapter(
+            child: Column(
+              children: <Widget>[
+                _buildTitle(context, title),
+                _buildErrorItem(context, localizations.searchItemNoResults),
+              ],
+            ),
+          );
+        }
+        // Items
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              // Title
+              if (index == 0) {
+                return _buildTitle(context, title);
+              }
+              // Item
+              final TrufiLocation value = snapshot.data[index - 1];
+              return _buildItem(
+                context,
+                () => _onSelectedTrufiLocation(value, addToHistory: true),
+                iconData,
+                value.description,
+                trailing: FavoriteButton(
+                  location: value,
+                  favoritesStream: favoriteLocationsBloc.outLocations,
+                ),
+              );
+            },
+            childCount: count,
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildFavoritesList(
