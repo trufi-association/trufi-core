@@ -16,47 +16,63 @@ class AboutPageState extends State<AboutPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: _buildDrawer(context),
+      drawer: TrufiDrawer(AboutPage.route),
     );
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return AppBar(title: Text(TrufiLocalizations.of(context).menuAbout));
+    return AppBar(
+      title: Text(TrufiLocalizations.of(context).menuAbout),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return Container(
-      padding: EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            localizations.title,
-            style: theme.textTheme.title,
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  localizations.title,
+                  style: theme.textTheme.title,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text(
+                  localizations.tagLine,
+                  style: theme.textTheme.subhead,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  localizations.aboutContent,
+                  style: theme.textTheme.body1,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: RaisedButton(
+                  child: Text(localizations.license),
+                  onPressed: () {
+                    return showLicensePage(
+                      context: context,
+                      applicationName: localizations.title,
+                      applicationVersion: '0.0.1',
+                    );
+                  },
+                ),
+              )
+            ],
           ),
-          Container(height: 8.0),
-          Text(
-            localizations.tagLine,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.subhead,
-          ),
-          Container(height: 16.0),
-          Text(
-            localizations.aboutContent,
-            style: theme.textTheme.body2,
-            textAlign: TextAlign.justify,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return TrufiDrawer(
-      AboutPage.route,
-      onLanguageChangedCallback: () => setState(() {}),
+        )
+      ],
     );
   }
 }
