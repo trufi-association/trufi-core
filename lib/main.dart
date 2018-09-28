@@ -12,7 +12,6 @@ import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_material_localizations.dart';
 
 void main() {
   runApp(TrufiApp());
