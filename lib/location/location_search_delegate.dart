@@ -198,23 +198,6 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(BuildContext context, String title) {
-    final ThemeData theme = Theme.of(context);
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-      child: Row(
-        children: <Widget>[
-          RichText(
-            text: TextSpan(
-              text: title.toUpperCase(),
-              style: theme.textTheme.body2,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildFutureBuilder(
     BuildContext context,
     String title,
@@ -327,6 +310,23 @@ class _SuggestionList extends StatelessWidget {
           );
         },
         childCount: count,
+      ),
+    );
+  }
+
+  Widget _buildTitle(BuildContext context, String title) {
+    final ThemeData theme = Theme.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+      child: Row(
+        children: <Widget>[
+          RichText(
+            text: TextSpan(
+              text: title.toUpperCase(),
+              style: theme.textTheme.body2,
+            ),
+          ),
+        ],
       ),
     );
   }
