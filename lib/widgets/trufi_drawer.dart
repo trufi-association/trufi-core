@@ -127,17 +127,17 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final PreferencesBloc preferencesBloc = PreferencesBloc.of(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return StreamBuilder(
-      stream: preferencesBloc.outChangeOffline,
+      stream: preferencesBloc.outChangeOnline,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        bool isOffline = snapshot.data == true;
+        bool isOnline = snapshot.data == true;
         return ListTile(
           leading: Icon(
-            isOffline ? Icons.cloud_off : Icons.cloud,
+            isOnline ? Icons.cloud : Icons.cloud_off,
           ),
           title: Text(
-            isOffline ? localizations.menuOffline : localizations.menuOnline,
+            isOnline ? localizations.menuOnline : localizations.menuOffline,
           ),
-          onTap: () => preferencesBloc.inChangeOffline.add(!isOffline),
+          onTap: () => preferencesBloc.inChangeOnline.add(!isOnline),
         );
       },
     );
