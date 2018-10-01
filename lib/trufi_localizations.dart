@@ -79,7 +79,6 @@ class TrufiLocalizations {
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
-  static const String MenuOffline = "menu_offline";
   static const String MenuOnline = "menu_online";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackTitle = "feedback_title";
@@ -136,7 +135,6 @@ class TrufiLocalizations {
       MenuAbout: 'About',
       MenuTeam: 'Contributors',
       MenuFeedback: 'Send Feedback',
-      MenuOffline: 'Offline',
       MenuOnline: 'Online',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
@@ -194,7 +192,6 @@ class TrufiLocalizations {
       MenuAbout: 'Acerca',
       MenuTeam: 'Colaboradores',
       MenuFeedback: 'Envía comentarios',
-      MenuOffline: 'Offline',
       MenuOnline: 'Online',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
@@ -252,7 +249,6 @@ class TrufiLocalizations {
       MenuAbout: 'Über',
       MenuTeam: 'Mitwirkende',
       MenuFeedback: 'Feedback',
-      MenuOffline: 'Offline',
       MenuOnline: 'Online',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
@@ -311,7 +307,6 @@ class TrufiLocalizations {
       MenuAbout: "Imamanta yachayta munanki?",
       MenuTeam: "Ñuqaykuwan",
       MenuFeedback: "Yuyasqayniykita riqsichiwayku",
-      MenuOffline: 'Offline',
       MenuOnline: 'Online',
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
@@ -495,10 +490,6 @@ class TrufiLocalizations {
 
   String get menuFeedback {
     return _localizedValues[locale.languageCode][MenuFeedback];
-  }
-
-  String get menuOffline {
-    return _localizedValues[locale.languageCode][MenuOffline];
   }
 
   String get menuOnline {

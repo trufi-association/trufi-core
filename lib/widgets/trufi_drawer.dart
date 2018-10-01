@@ -124,20 +124,19 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildOfflineToggle(BuildContext context) {
-    final PreferencesBloc preferencesBloc = PreferencesBloc.of(context);
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final preferencesBloc = PreferencesBloc.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return StreamBuilder(
       stream: preferencesBloc.outChangeOnline,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         bool isOnline = snapshot.data == true;
-        return ListTile(
-          leading: Icon(
-            isOnline ? Icons.cloud : Icons.cloud_off,
-          ),
-          title: Text(
-            isOnline ? localizations.menuOnline : localizations.menuOffline,
-          ),
-          onTap: () => preferencesBloc.inChangeOnline.add(!isOnline),
+        return SwitchListTile(
+          title: Text(localizations.menuOnline),
+          value: isOnline,
+          onChanged: preferencesBloc.inChangeOnline.add,
+          activeColor: theme.primaryColor,
+          secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
         );
       },
     );
