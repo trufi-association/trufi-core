@@ -1,11 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class FavoriteLocationBloc implements BlocBase {
+  static FavoriteLocationBloc of(BuildContext context) {
+    return BlocProvider.of<FavoriteLocationBloc>(context);
+  }
+
   FavoriteLocationBloc(TrufiLocation location) {
     _favoritesController.stream
         .map((locations) => locations.any((TrufiLocation l) => l == location))
