@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
@@ -129,8 +128,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnMyLocationTap() async {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
       _mapController.move(lastLocation, 17.0);

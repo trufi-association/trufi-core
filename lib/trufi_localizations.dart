@@ -54,6 +54,7 @@ class TrufiLocalizations {
   static const String SearchItemNoResults = "search_item_no_results";
   static const String SearchSectionPlaces = "search_title_places";
   static const String SearchSectionRecent = "search_title_recent";
+  static const String SearchSectionFavorites = "search_title_favorites";
   static const String SearchSectionResults = "search_title_result";
   static const String SearchSectionPleaseSelect = "search_please_select";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
@@ -112,6 +113,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'No results',
       SearchSectionPlaces: 'Places',
       SearchSectionRecent: 'Recent',
+      SearchSectionFavorites: 'Favorites',
       SearchSectionResults: 'Search Results',
       SearchSectionPleaseSelect: 'Please select',
       SearchFailLoadingPlan: 'Failed to load plan.',
@@ -169,6 +171,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'Ningun resultado',
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: 'Recientes',
+      SearchSectionFavorites: 'Favoritos',
       SearchSectionResults: 'Resultados de búsqueda',
       SearchSectionPleaseSelect: 'Por favor seleccione',
       SearchFailLoadingPlan: 'Error al cargar plan.',
@@ -179,7 +182,7 @@ class TrufiLocalizations {
       InstructionWalk: 'Caminar',
       InstructionRide: 'Tomar',
       InstructionRideBus: 'Bus',
-      InstructionMinutes: "minutos",
+      InstructionMinutes: "min",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
@@ -226,6 +229,7 @@ class TrufiLocalizations {
       SearchItemNoResults: 'Keine Ergebnisse',
       SearchSectionPlaces: 'Orte',
       SearchSectionRecent: 'Zuletzt gesucht',
+      SearchSectionFavorites: 'Favoriten',
       SearchSectionResults: 'Suchergebnisse',
       SearchSectionPleaseSelect: 'Bitte auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
@@ -283,6 +287,7 @@ class TrufiLocalizations {
       SearchItemNoResults: "Ningun resultado",
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: "Kuintan masc'asgas",
+      SearchSectionFavorites: "Favoritos",
       SearchSectionResults: "Masc'asgas",
       SearchSectionPleaseSelect: "Por favor seleccione",
       SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
@@ -294,7 +299,7 @@ class TrufiLocalizations {
       InstructionWalk: 'puriy',
       InstructionRide: 'ñisqata jap’iy',
       InstructionRideBus: "Bus",
-      InstructionMinutes: "ch’inini-phani",
+      InstructionMinutes: "min",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
@@ -394,6 +399,10 @@ class TrufiLocalizations {
 
   String get searchTitleRecent {
     return _localizedValues[locale.languageCode][SearchSectionRecent];
+  }
+
+  String get searchTitleFavorites {
+    return _localizedValues[locale.languageCode][SearchSectionFavorites];
   }
 
   String get searchTitleResults {

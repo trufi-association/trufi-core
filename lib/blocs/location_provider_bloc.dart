@@ -9,6 +9,10 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
+  static LocationProviderBloc of(BuildContext context) {
+    return BlocProvider.of<LocationProviderBloc>(context);
+  }
+
   LocationProviderBloc() {
     _locationProvider = LocationProvider(
       onLocationChanged: _inLocationUpdate.add,

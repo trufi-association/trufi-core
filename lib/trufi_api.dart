@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -50,8 +49,7 @@ Future<List<TrufiLocation>> fetchLocations(
       _parseLocations,
       utf8.decode(response.bodyBytes),
     );
-    final FavoriteLocationsBloc favoriteLocationsBloc =
-        BlocProvider.of<FavoriteLocationsBloc>(context);
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     locations.sort((a, b) {
       return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });

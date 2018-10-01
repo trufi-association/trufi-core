@@ -71,8 +71,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    if (_notification == state) {
+      return;
+    }
+    final locationProviderBloc = LocationProviderBloc.of(context);
     print("AppLifecycleState: $state");
     setState(() {
       _notification = state;
@@ -98,7 +100,7 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
+    final preferencesBloc = PreferencesBloc.of(context);
     ThemeData theme = ThemeData(
       brightness: Brightness.light,
       primaryColor: const Color(0xffffd600),
