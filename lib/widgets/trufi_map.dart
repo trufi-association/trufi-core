@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
@@ -32,8 +31,7 @@ class TrufiMapState extends State<TrufiMap> {
 
   @override
   Widget build(BuildContext context) {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {

@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/keys.dart' as keys;
@@ -205,8 +204,7 @@ class HomePageState extends State<HomePage>
   }
 
   void _setFromPlaceToCurrentPosition() async {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
     final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     final LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
@@ -303,14 +301,14 @@ class HomePageStateData {
     fromPlace = null;
     toPlace = null;
     plan = null;
-    BlocProvider.of<PreferencesBloc>(context).stateHomePage = null;
+    PreferencesBloc.of(context).stateHomePage = null;
   }
 
   Future<bool> load(BuildContext context) async {
     try {
       HomePageStateData data = await compute(
         _parse,
-        BlocProvider.of<PreferencesBloc>(context).stateHomePage,
+        PreferencesBloc.of(context).stateHomePage,
       );
       if (data != null) {
         fromPlace = data.fromPlace;
@@ -325,9 +323,7 @@ class HomePageStateData {
   }
 
   void save(BuildContext context) async {
-    BlocProvider.of<PreferencesBloc>(context).stateHomePage = json.encode(
-      toJson(),
-    );
+    PreferencesBloc.of(context).stateHomePage = json.encode(toJson());
   }
 
   // Getter

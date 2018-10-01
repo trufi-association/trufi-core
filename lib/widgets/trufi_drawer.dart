@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
@@ -91,7 +90,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
-    PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
+    final preferencesBloc = PreferencesBloc.of(context);
     ThemeData theme = Theme.of(context);
     TrufiLocalizations localizations = TrufiLocalizations.of(context);
     String languageCode = localizations.locale.languageCode;
