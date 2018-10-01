@@ -71,6 +71,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_notification == state) {
+      return;
+    }
     LocationProviderBloc locationProviderBloc =
         BlocProvider.of<LocationProviderBloc>(context);
     print("AppLifecycleState: $state");
