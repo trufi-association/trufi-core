@@ -65,8 +65,9 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localizations.menuTeam,
             TeamPage.route,
           ),
-          _buildLanguageDropdownButton(context),
+          Divider(),
           _buildOfflineToggle(context),
+          _buildLanguageDropdownButton(context),
         ],
       ),
     );
