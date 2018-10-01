@@ -112,60 +112,23 @@ class _SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
     List<Widget> slivers = List();
-    //
-    // Alternatives
-    //
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
     if (query.isEmpty) {
-      //
-      // History
-      //
-      slivers.add(_buildFutureBuilder(
-        context,
-        localizations.searchTitleRecent,
-        historyLocationsBloc.fetchWithLimit(context, 5),
-        Icons.history,
-      ));
-      //
-      // Favorites
-      //
+      slivers.add(_buildHistoryList(context));
       slivers.add(_buildFavoritesList(context));
     } else {
-      //
-      // Search Results
-      //
-      slivers.add(_buildFutureBuilder(
-        context,
-        localizations.searchTitleResults,
-        api.fetchLocations(context, query),
-        Icons.location_on,
-        isVisibleWhenEmpty: true,
-      ));
+      slivers.add(_buildSearchResultList(context));
     }
-    //
-    // Places
-    //
-    slivers.add(_buildFutureBuilder(
-      context,
-      localizations.searchTitlePlaces,
-      importantLocationsBloc.fetchWithQuery(context, query),
-      Icons.location_on,
-    ));
-    //
-    // List
-    //
+    slivers.add(_buildPlacesList(context));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       bottom: false,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
-        child: CustomScrollView(
-          slivers: slivers,
-        ),
+        child: CustomScrollView(slivers: slivers),
       ),
     );
   }
@@ -191,6 +154,54 @@ class _SuggestionList extends StatelessWidget {
         Icons.location_on,
         localizations.searchItemChooseOnMap,
       ),
+    );
+  }
+
+  Widget _buildHistoryList(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return _buildFutureBuilder(
+      context,
+      localizations.searchTitleRecent,
+      historyLocationsBloc.fetchWithLimit(context, 5),
+      Icons.history,
+    );
+  }
+
+  Widget _buildFavoritesList(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return StreamBuilder(
+      stream: favoriteLocationsBloc.outLocations,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TrufiLocation>> snapshot,
+      ) {
+        return _buildLocationsList(
+          localizations.searchTitleFavorites,
+          Icons.location_on,
+          favoriteLocationsBloc.locations,
+        );
+      },
+    );
+  }
+
+  Widget _buildSearchResultList(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return _buildFutureBuilder(
+      context,
+      localizations.searchTitleResults,
+      api.fetchLocations(context, query),
+      Icons.location_on,
+      isVisibleWhenEmpty: true,
+    );
+  }
+
+  Widget _buildPlacesList(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    return _buildFutureBuilder(
+      context,
+      localizations.searchTitlePlaces,
+      importantLocationsBloc.fetchWithQuery(context, query),
+      Icons.location_on,
     );
   }
 
@@ -255,23 +266,6 @@ class _SuggestionList extends StatelessWidget {
         }
         // Items
         return _buildLocationsList(title, iconData, snapshot.data);
-      },
-    );
-  }
-
-  Widget _buildFavoritesList(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    return StreamBuilder(
-      stream: favoriteLocationsBloc.outLocations,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiLocation>> snapshot,
-      ) {
-        return _buildLocationsList(
-          localizations.searchTitleFavorites,
-          Icons.location_on,
-          favoriteLocationsBloc.locations,
-        );
       },
     );
   }
