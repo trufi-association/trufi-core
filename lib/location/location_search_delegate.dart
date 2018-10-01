@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
@@ -56,9 +55,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         _result = location;
         showResults(context);
       },
-      historyLocationsBloc: BlocProvider.of<HistoryLocationsBloc>(context),
-      favoriteLocationsBloc: BlocProvider.of<FavoriteLocationsBloc>(context),
-      importantLocationsBloc: BlocProvider.of<ImportantLocationsBloc>(context),
+      historyLocationsBloc: HistoryLocationsBloc.of(context),
+      favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
+      importantLocationsBloc: ImportantLocationsBloc.of(context),
     );
   }
 
@@ -353,8 +352,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnYourLocationTap(BuildContext context) async {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
       _handleOnSelectedLatLng(

@@ -1,11 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 
 class PreferencesBloc extends BlocBase {
+  static PreferencesBloc of(BuildContext context) {
+    return BlocProvider.of<PreferencesBloc>(context);
+  }
+
   static const String keyLanguageCode = "language_code";
   static const String keyStateHomePage = "state_home_page";
 
