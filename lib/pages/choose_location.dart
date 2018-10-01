@@ -80,15 +80,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   Widget _buildBody(BuildContext context) {
     return TrufiMap(
       mapController: _mapController,
-      mapOptions: MapOptions(
-        zoom: 13.0,
-        maxZoom: 15.0,
-        minZoom: 8.0,
-        onPositionChanged: _handleOnMapPositionChanged,
-        swPanBoundary: TrufiMap.cochabambaSouthWest,
-        nePanBoundary: TrufiMap.cochabambaNorthEast,
-        center: TrufiMap.cochabambaCenter,
-      ),
+      onPositionChanged: _handleOnMapPositionChanged,
       foregroundLayers: <LayerOptions>[
         MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
       ],

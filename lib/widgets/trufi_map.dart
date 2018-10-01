@@ -13,15 +13,17 @@ class TrufiMap extends StatefulWidget {
 
   TrufiMap({
     @required this.mapController,
-    @required this.mapOptions,
     this.backgroundLayers,
     this.foregroundLayers,
+    this.onTap,
+    this.onPositionChanged,
   });
 
   final MapController mapController;
-  final MapOptions mapOptions;
   final List<LayerOptions> backgroundLayers;
   final List<LayerOptions> foregroundLayers;
+  final TapCallback onTap;
+  final PositionCallback onPositionChanged;
 
   @override
   TrufiMapState createState() => TrufiMapState();
@@ -45,9 +47,10 @@ class TrufiMapState extends State<TrufiMap> {
             AsyncSnapshot<LatLng> snapshotLocation,
           ) {
             List<LayerOptions> layers = List();
+            bool isOnline = snapshotOnline.data == true;
             // Map tiles layer
             layers.add(
-              snapshotOnline.data == true
+              isOnline
                   ? tileHostingTileLayerOptions()
                   : offlineMapTileLayerOptions(),
             );
@@ -71,7 +74,16 @@ class TrufiMapState extends State<TrufiMap> {
             }
             return FlutterMap(
               mapController: widget.mapController,
-              options: widget.mapOptions,
+              options: MapOptions(
+                minZoom: isOnline ? 1 : 8,
+                maxZoom: isOnline ? 19 : 14,
+                zoom: 13,
+                onTap: widget.onTap,
+                onPositionChanged: widget.onPositionChanged,
+                swPanBoundary: TrufiMap.cochabambaSouthWest,
+                nePanBoundary: TrufiMap.cochabambaNorthEast,
+                center: TrufiMap.cochabambaCenter,
+              ),
               layers: layers,
             );
           },

@@ -128,16 +128,8 @@ class PlanMapPageState extends State<PlanMapPage> {
       children: <Widget>[
         TrufiMap(
           mapController: _mapController,
-          mapOptions: MapOptions(
-            zoom: 13.0,
-            maxZoom: 15.0,
-            minZoom: 8.0,
-            onTap: _handleOnMapTap,
-            onPositionChanged: _handleOnMapPositionChanged,
-            swPanBoundary: TrufiMap.cochabambaSouthWest,
-            nePanBoundary: TrufiMap.cochabambaNorthEast,
-            center: TrufiMap.cochabambaCenter,
-          ),
+          onTap: _handleOnMapTap,
+          onPositionChanged: _handleOnMapPositionChanged,
           backgroundLayers: <LayerOptions>[
             PolylineLayerOptions(polylines: _polylines),
             MarkerLayerOptions(markers: _backgroundMarkers),
