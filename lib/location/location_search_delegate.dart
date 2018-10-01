@@ -133,11 +133,7 @@ class _SuggestionList extends StatelessWidget {
       //
       // Favorites
       //
-      slivers.add(_buildFavoritesList(
-        context,
-        localizations.searchTitleFavorites,
-        Icons.location_on,
-      ));
+      slivers.add(_buildFavoritesList(context));
     } else {
       //
       // Search Results
@@ -263,11 +259,8 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoritesList(
-    BuildContext context,
-    String title,
-    IconData iconData,
-  ) {
+  Widget _buildFavoritesList(BuildContext context) {
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
     return StreamBuilder(
       stream: favoriteLocationsBloc.outLocations,
       builder: (
@@ -275,8 +268,8 @@ class _SuggestionList extends StatelessWidget {
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
         return _buildLocationsList(
-          title,
-          iconData,
+          localizations.searchTitleFavorites,
+          Icons.location_on,
           favoriteLocationsBloc.locations,
         );
       },
