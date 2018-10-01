@@ -74,6 +74,17 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
     if (_notification == state) {
       return;
     }
+    LocationProviderBloc locationProviderBloc =
+        BlocProvider.of<LocationProviderBloc>(context);
+    print("AppLifecycleState: $state");
+    setState(() {
+      _notification = state;
+      if (_notification == AppLifecycleState.resumed) {
+        locationProviderBloc.start();
+      } else {
+        locationProviderBloc.stop();
+      }
+    });
   }
 
   @override
