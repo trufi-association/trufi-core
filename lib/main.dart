@@ -75,6 +75,7 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
       return;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return widget.child;
