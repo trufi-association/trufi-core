@@ -12,12 +12,12 @@ class PreferencesBloc extends BlocBase {
   }
 
   static const String propertyLanguageCodeKey = "property_language_code";
-  static const String propertyOfflineKey = "property_offline";
+  static const String propertyOnlineKey = "property_online";
   static const String stateHomePageKey = "state_home_page";
 
   PreferencesBloc() {
     _changeLanguageCodeController.listen(_handleChangeLanguageCode);
-    _changeOfflineController.listen(_handleChangeOffline);
+    _changeOnlineController.listen(_handleChangeOnline);
     SharedPreferences.getInstance().then((preferences) {
       _preferences = preferences;
       _load();
@@ -26,7 +26,7 @@ class PreferencesBloc extends BlocBase {
 
   void _load() {
     _loadLanguageCode();
-    _loadOffline();
+    _loadOnline();
   }
 
   void _loadLanguageCode() {
@@ -36,10 +36,10 @@ class PreferencesBloc extends BlocBase {
     }
   }
 
-  void _loadOffline() {
-    bool offline = _preferences.getBool(propertyOfflineKey);
-    if (offline != null) {
-      inChangeOffline.add(offline);
+  void _loadOnline() {
+    bool online = _preferences.getBool(propertyOnlineKey);
+    if (online != null) {
+      inChangeOnline.add(online);
     }
   }
 
@@ -57,15 +57,15 @@ class PreferencesBloc extends BlocBase {
     return _changeLanguageCodeController.stream;
   }
 
-  // Change offline
-  BehaviorSubject<bool> _changeOfflineController = new BehaviorSubject<bool>();
+  // Change online
+  BehaviorSubject<bool> _changeOnlineController = new BehaviorSubject<bool>();
 
-  Sink<bool> get inChangeOffline {
-    return _changeOfflineController.sink;
+  Sink<bool> get inChangeOnline {
+    return _changeOnlineController.sink;
   }
 
-  Stream<bool> get outChangeOffline {
-    return _changeOfflineController.stream;
+  Stream<bool> get outChangeOnline {
+    return _changeOnlineController.stream;
   }
 
   // Dispose
@@ -73,13 +73,13 @@ class PreferencesBloc extends BlocBase {
   @override
   void dispose() {
     _changeLanguageCodeController.close();
-    _changeOfflineController.close();
+    _changeOnlineController.close();
   }
 
   // Handle
 
-  void _handleChangeOffline(bool value) {
-    _preferences.setBool(propertyOfflineKey, value);
+  void _handleChangeOnline(bool value) {
+    _preferences.setBool(propertyOnlineKey, value);
   }
 
   void _handleChangeLanguageCode(String value) {

@@ -33,10 +33,10 @@ class TrufiMapState extends State<TrufiMap> {
     final locationProviderBloc = LocationProviderBloc.of(context);
     final preferencesBloc = PreferencesBloc.of(context);
     return StreamBuilder<bool>(
-      stream: preferencesBloc.outChangeOffline,
+      stream: preferencesBloc.outChangeOnline,
       builder: (
         BuildContext context,
-        AsyncSnapshot<bool> snapshotOffline,
+        AsyncSnapshot<bool> snapshotOnline,
       ) {
         return StreamBuilder<LatLng>(
           stream: locationProviderBloc.outLocationUpdate,
@@ -47,9 +47,9 @@ class TrufiMapState extends State<TrufiMap> {
             List<LayerOptions> layers = List();
             // Map tiles layer
             layers.add(
-              snapshotOffline.data == true
-                  ? offlineMapTileLayerOptions()
-                  : tileHostingTileLayerOptions(),
+              snapshotOnline.data == true
+                  ? tileHostingTileLayerOptions()
+                  : offlineMapTileLayerOptions(),
             );
             // Parent background layers
             if (widget.backgroundLayers != null) {
