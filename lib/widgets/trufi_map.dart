@@ -75,9 +75,9 @@ class TrufiMapState extends State<TrufiMap> {
             return FlutterMap(
               mapController: widget.mapController,
               options: MapOptions(
-                minZoom: isOnline ? 1 : 8,
-                maxZoom: isOnline ? 19 : 14,
-                zoom: 13,
+                minZoom: isOnline ? 1.0 : 8.0,
+                maxZoom: isOnline ? 19.0 : 14.0,
+                zoom: 13.0,
                 onTap: widget.onTap,
                 onPositionChanged: widget.onPositionChanged,
                 swPanBoundary: TrufiMap.cochabambaSouthWest,
