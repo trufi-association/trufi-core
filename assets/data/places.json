@@ -1,5 +1,4 @@
-[
-  {
+[{
     "coords": {
       "lat": -17.3939461,
       "lng": -66.1484697
@@ -75,5 +74,4355 @@
       "lng": -66.1378992
     },
     "name": "América Este"
+  }, {
+    "name": "LIBRERIA UYUNI",
+    "coords": {
+      "lat": -17.3915257,
+      "lng": -66.1580452
+    }
+  }, {
+    "name": "Trabajo NUR",
+    "coords": {
+      "lat": -17.37328,
+      "lng": -66.17533209999999
+    }
+  }, {
+    "name": "FUBODE AGENCIA LORETO, Avenue Panamericana",
+    "coords": {
+      "lat": -17.4228284,
+      "lng": -66.1582947
+    }
+  }, {
+    "name": "Mormon Temple, Manzanilla",
+    "coords": {
+      "lat": -17.3643091,
+      "lng": -66.14773749999999
+    }
+  }, {
+    "name": "Colegio Valle Hermoso, M.Lutherking",
+    "coords": {
+      "lat": -17.4404195,
+      "lng": -66.1288605
+    }
+  }, {
+    "name": "Colegio, Avenida Reducto, Tiquipaya",
+    "coords": {
+      "lat": -17.3359194,
+      "lng": -66.21942539999999
+    }
+  }, {
+    "name": "Apart Hotel Regina",
+    "coords": {
+      "lat": -17.386291,
+      "lng": -66.157702
+    }
+  }, {
+    "name": "Avenida Papa Paulo 1134",
+    "coords": {
+      "lat": -17.3835079,
+      "lng": -66.1486602
+    }
+  }, {
+    "name": "Hotel Regina Resort & Convenciones, Camino a Apote",
+    "coords": {
+      "lat": -17.335992,
+      "lng": -66.230755
+    }
+  }, {
+    "name": "lavaderos y parqueos el prado, Avenida José Ballivian",
+    "coords": {
+      "lat": -17.384514,
+      "lng": -66.1585793
+    }
+  }, {
+    "name": "La Papelera S.A., Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3940417,
+      "lng": -66.22937619999999
+    }
+  }, {
+    "name": "Estación de servicio Panamericana",
+    "coords": {
+      "lat": -17.3832785,
+      "lng": -66.1830257
+    }
+  }, {
+    "name": "Fundación Universitaria Simón I. Patiño, Potosi",
+    "coords": {
+      "lat": -17.3745436,
+      "lng": -66.15256440000002
+    }
+  }, {
+    "name": "FERRETERIA AMERICA EXPRESS, Avenida Circunvalacion",
+    "coords": {
+      "lat": -17.371171,
+      "lng": -66.1405293
+    }
+  }, {
+    "name": "Mariscal Santa Cruz, Calle Hernan Morales",
+    "coords": {
+      "lat": -17.4005556,
+      "lng": -66.1741667
+    }
+  }, {
+    "name": "Surtidor Coronilla",
+    "coords": {
+      "lat": -17.4071388,
+      "lng": -66.16428810000001
+    }
+  }, {
+    "name": "Templo mormon, Belgica",
+    "coords": {
+      "lat": -17.4465155,
+      "lng": -66.12397709999999
+    }
+  }, {
+    "name": "Hospital Viedma, Venezuela",
+    "coords": {
+      "lat": -17.3855473,
+      "lng": -66.1486484
+    }
+  }, {
+    "name": "El Prado Hotel",
+    "coords": {
+      "lat": -17.3850385,
+      "lng": -66.15828640000001
+    }
+  }, {
+    "name": "Hospital Univalle",
+    "coords": {
+      "lat": -17.421234,
+      "lng": -66.1328995
+    }
+  }, {
+    "name": "Cementerio Sacaba",
+    "coords": {
+      "lat": -17.4113106,
+      "lng": -66.0411013
+    }
+  }, {
+    "name": "Hospital Univalle Norte",
+    "coords": {
+      "lat": -17.3722017,
+      "lng": -66.1608364
+    }
+  }, {
+    "name": "Centro De Salud Cerró Verde, Yawar Mallku",
+    "coords": {
+      "lat": -17.4149284,
+      "lng": -66.1437179
+    }
+  }, {
+    "name": "Banco Prodem S.A. - Agencia Cruce Taquiña, Alfredo Araujo",
+    "coords": {
+      "lat": -17.3548268,
+      "lng": -66.18783119999999
+    }
+  }, {
+    "name": "Distribuidor Beiging, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3934246,
+      "lng": -66.1844097
+    }
+  }, {
+    "name": "Mercado Ingavi",
+    "coords": {
+      "lat": -17.3901342,
+      "lng": -66.170833
+    }
+  }, {
+    "name": "LA MERCED, Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3973263,
+      "lng": -66.2075957
+    }
+  }, {
+    "name": "Restaurante De La Angostura",
+    "coords": {
+      "lat": -17.5210941,
+      "lng": -66.08720939999999
+    }
+  }, {
+    "name": "YPFB",
+    "coords": {
+      "lat": -17.385468,
+      "lng": -66.153746
+    }
+  }, {
+    "name": "BNB",
+    "coords": {
+      "lat": -17.3925127,
+      "lng": -66.1565888
+    }
+  }, {
+    "name": "Cancha Libertador, Alalay",
+    "coords": {
+      "lat": -17.4099541,
+      "lng": -66.14388149999999
+    }
+  }, {
+    "name": "Colegio Jose Nicolas Maldonado",
+    "coords": {
+      "lat": -17.4015788,
+      "lng": -66.0450783
+    }
+  }, {
+    "name": "Farmacias Bolivia, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3926955,
+      "lng": -66.15888819999999
+    }
+  }, {
+    "name": "IDIF, Albert Einsten",
+    "coords": {
+      "lat": -17.3773748,
+      "lng": -66.2001586
+    }
+  }, {
+    "name": "Banco Sol, Agencia San Martin, Calle San Martin",
+    "coords": {
+      "lat": -17.4013341,
+      "lng": -66.1533711
+    }
+  }, {
+    "name": "Hospital, Innominada",
+    "coords": {
+      "lat": -17.3833479,
+      "lng": -66.0968312
+    }
+  }, {
+    "name": "Familia Alarcon Pucun",
+    "coords": {
+      "lat": -17.3291122,
+      "lng": -66.1938504
+    }
+  }, {
+    "name": "Hotel Regina, Jose de La Reza",
+    "coords": {
+      "lat": -17.386751,
+      "lng": -66.157297
+    }
+  }, {
+    "name": "BNB, Av. America",
+    "coords": {
+      "lat": -17.3730999,
+      "lng": -66.1565056
+    }
+  }, {
+    "name": "Olmedo Patton Inversiones & Asociados, Calle J. C. Torrez",
+    "coords": {
+      "lat": -17.38257,
+      "lng": -66.145003
+    }
+  }, {
+    "name": "Banco Bisa Cine Center, Avenida Ramón Rivero",
+    "coords": {
+      "lat": -17.3809772,
+      "lng": -66.1514396
+    }
+  }, {
+    "name": "Cooperativa Sarco, Avenida América",
+    "coords": {
+      "lat": -17.3713847,
+      "lng": -66.1769414
+    }
+  }, {
+    "name": "H.A.M. Colcapirhua",
+    "coords": {
+      "lat": -17.3886291,
+      "lng": -66.2404584
+    }
+  }, {
+    "name": "Jardin Botanico",
+    "coords": {
+      "lat": -17.3776759,
+      "lng": -66.1399879
+    }
+  }, {
+    "name": "Cristo Viene (Central)",
+    "coords": {
+      "lat": -17.3836369,
+      "lng": -66.1535864
+    }
+  }, {
+    "name": "Hotel - HI-Hostal Versalles, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3987234,
+      "lng": -66.15793529999999
+    }
+  }, {
+    "name": "Laboratorios Farmaceuticos IFARBO Ltda.",
+    "coords": {
+      "lat": -17.3946789,
+      "lng": -66.2138475
+    }
+  }, {
+    "name": "Centro De Salud Simon Bolivar",
+    "coords": {
+      "lat": -17.4025949,
+      "lng": -66.2355597
+    }
+  }, {
+    "name": "Edificio Cowork",
+    "coords": {
+      "lat": -17.371549,
+      "lng": -66.1469505
+    }
+  }, {
+    "name": "Tarata",
+    "coords": {
+      "lat": -17.6091383,
+      "lng": -66.0255368
+    }
+  }, {
+    "name": "La Pampa, Santivañez",
+    "coords": {
+      "lat": -17.5572876,
+      "lng": -66.13901229999999
+    }
+  }, {
+    "name": "Urbanizacion Bella Vista",
+    "coords": {
+      "lat": -17.3740144,
+      "lng": -66.09534889999999
+    }
+  }, {
+    "name": "Hamburgón - Turumanka, C.Ismael Cespedez",
+    "coords": {
+      "lat": -17.3753269,
+      "lng": -66.1821932
+    }
+  }, {
+    "name": "Familia Galvez Chavez",
+    "coords": {
+      "lat": -17.3984355,
+      "lng": -66.2548757
+    }
+  }, {
+    "name": "Parque del Arquitecto",
+    "coords": {
+      "lat": -17.3740156,
+      "lng": -66.1458021
+    }
+  }, {
+    "name": "Plaza 14 de Septiembre",
+    "coords": {
+      "lat": -17.3942109,
+      "lng": -66.1563759
+    }
+  }, {
+    "name": "Plaza 14 de Septiembre., Plaza 14 de Septiembre.",
+    "coords": {
+      "lat": -17.3937938,
+      "lng": -66.15696059999999
+    }
+  }, {
+    "name": "AUTOVENTA JR",
+    "coords": {
+      "lat": -17.3707656,
+      "lng": -66.1886509
+    }
+  }, {
+    "name": "Universidad Catolica San Pablo",
+    "coords": {
+      "lat": -17.3731671,
+      "lng": -66.1424019
+    }
+  }, {
+    "name": "Cancha Ayacucho",
+    "coords": {
+      "lat": -17.4139766,
+      "lng": -66.1653223
+    }
+  }, {
+    "name": "Urbanizacion San Andres",
+    "coords": {
+      "lat": -17.3421282,
+      "lng": -66.1747956
+    }
+  }, {
+    "name": "Hipermaxi Sofer, Avenida Oquendo",
+    "coords": {
+      "lat": -17.3845229,
+      "lng": -66.15068210000001
+    }
+  }, {
+    "name": "Cajero Automatico Banco Bisa Hipermaxi, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3937336,
+      "lng": -66.18200279999999
+    }
+  }, {
+    "name": "Centro de Salud Chimba",
+    "coords": {
+      "lat": -17.4057922,
+      "lng": -66.18165259999999
+    }
+  }, {
+    "name": "Hipermaxi, A.Borda",
+    "coords": {
+      "lat": -17.394084,
+      "lng": -66.1823335
+    }
+  }, {
+    "name": "Siglo XX",
+    "coords": {
+      "lat": -17.3878833,
+      "lng": -66.2519642
+    }
+  }, {
+    "name": "Hotel Heroinas",
+    "coords": {
+      "lat": -17.3929453,
+      "lng": -66.16045729999999
+    }
+  }, {
+    "name": "Papa Paulo market",
+    "coords": {
+      "lat": -17.3837661,
+      "lng": -66.1477103
+    }
+  }, {
+    "name": "CRISTO REY AG.EL PASO",
+    "coords": {
+      "lat": -17.3384977,
+      "lng": -66.2660551
+    }
+  }, {
+    "name": "Juzgado Sacaba, Padilla",
+    "coords": {
+      "lat": -17.40467,
+      "lng": -66.04233839999999
+    }
+  }, {
+    "name": "Av Aroma Y Huayna Kapac, Avenida Aroma",
+    "coords": {
+      "lat": -17.4003772,
+      "lng": -66.1625574
+    }
+  }, {
+    "name": "Centro De Salud Pacata",
+    "coords": {
+      "lat": -17.3657609,
+      "lng": -66.1241857
+    }
+  }, {
+    "name": "Tamborada, VALLE HERMOSO",
+    "coords": {
+      "lat": -17.4586767,
+      "lng": -66.1334514
+    }
+  }, {
+    "name": "Super Market America - Trojes",
+    "coords": {
+      "lat": -17.3469114,
+      "lng": -66.2003658
+    }
+  }, {
+    "name": "Universidad Católica Boliviana San Pablo - Cochabamba",
+    "coords": {
+      "lat": -17.371812,
+      "lng": -66.143635
+    }
+  }, {
+    "name": "Burger King, Avenida José Ballivian",
+    "coords": {
+      "lat": -17.3833591,
+      "lng": -66.1596344
+    }
+  }, {
+    "name": "Fundación Sedes Sapientiae, Avenida América",
+    "coords": {
+      "lat": -17.3733046,
+      "lng": -66.142298
+    }
+  }, {
+    "name": "Villa Pagador, Avenue Humberto Asin Rivero",
+    "coords": {
+      "lat": -17.4395347,
+      "lng": -66.1164009
+    }
+  }, {
+    "name": "Templo de la Angostura",
+    "coords": {
+      "lat": -17.5346748,
+      "lng": -66.0792148
+    }
+  }, {
+    "name": "Laguna la angostura Cochabamba, Angostura",
+    "coords": {
+      "lat": -17.5302558,
+      "lng": -66.0849909
+    }
+  }, {
+    "name": "Home Center Fácil, Avenida Uyuni",
+    "coords": {
+      "lat": -17.3766273,
+      "lng": -66.1448327
+    }
+  }, {
+    "name": "Urbanización Paraiso",
+    "coords": {
+      "lat": -17.380835,
+      "lng": -66.1300005
+    }
+  }, {
+    "name": "Quillacollo Stadium, Ruta Nacional 4",
+    "coords": {
+      "lat": -17.3920968,
+      "lng": -66.2751119
+    }
+  }, {
+    "name": "Laboratorio de Geotecnia de la Universidad Mayor de San Simón - GTUMSS",
+    "coords": {
+      "lat": -17.4492293,
+      "lng": -66.1431777
+    }
+  }, {
+    "name": "pedregal Park",
+    "coords": {
+      "lat": -17.3702206,
+      "lng": -66.1115585
+    }
+  }, {
+    "name": "PRADO, Avenida Heroínas",
+    "coords": {
+      "lat": -17.3910979,
+      "lng": -66.1523615
+    }
+  }, {
+    "name": "Univalle, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3942928,
+      "lng": -66.1586233
+    }
+  }, {
+    "name": "Colegio Mayor Victor Ustariz, Tarata",
+    "coords": {
+      "lat": -17.6091383,
+      "lng": -66.0255368
+    }
+  }, {
+    "name": "Semapa, Atahuallpa",
+    "coords": {
+      "lat": -17.3641818,
+      "lng": -66.1621634
+    }
+  }, {
+    "name": "Terminal de Buses CARRASCO",
+    "coords": {
+      "lat": -17.3987059,
+      "lng": -66.14838879999999
+    }
+  }, {
+    "name": "SEGIP",
+    "coords": {
+      "lat": -17.4079357,
+      "lng": -66.28051789999999
+    }
+  }, {
+    "name": "La Chingada, Teofilo Vargas",
+    "coords": {
+      "lat": -17.376027,
+      "lng": -66.165883
+    }
+  }, {
+    "name": "Pro Salud",
+    "coords": {
+      "lat": -17.3947375,
+      "lng": -66.1806603
+    }
+  }, {
+    "name": "parque mariscal santa cruz",
+    "coords": {
+      "lat": -17.4007367,
+      "lng": -66.1738373
+    }
+  }, {
+    "name": "Carpintería UMSS, Calle Julián María López",
+    "coords": {
+      "lat": -17.3949059,
+      "lng": -66.14535839999999
+    }
+  }, {
+    "name": "ES El Manantial IV -GNV",
+    "coords": {
+      "lat": -17.3718681,
+      "lng": -66.16930719999999
+    }
+  }, {
+    "name": "Kinder Tía Kika",
+    "coords": {
+      "lat": -17.3705362,
+      "lng": -66.1420143
+    }
+  }, {
+    "name": "Colegio Gerardo Vargas Vidal, Alalay",
+    "coords": {
+      "lat": -17.4399966,
+      "lng": -66.1284471
+    }
+  }, {
+    "name": "Parqueo Lanza",
+    "coords": {
+      "lat": -17.3966307,
+      "lng": -66.15257319999999
+    }
+  }, {
+    "name": "AMERICAN IRIS PAPER COMPANY",
+    "coords": {
+      "lat": -17.394545,
+      "lng": -66.23584269999999
+    }
+  }, {
+    "name": "valle hermoso",
+    "coords": {
+      "lat": -17.4454973,
+      "lng": -66.1224648
+    }
+  }, {
+    "name": "Hughes Schools",
+    "coords": {
+      "lat": -17.3844825,
+      "lng": -66.0896087
+    }
+  }, {
+    "name": "Talleres Villavicencio, 23 De Marzo",
+    "coords": {
+      "lat": -17.3893235,
+      "lng": -66.1847956
+    }
+  }, {
+    "name": "Ayopaya, Rico Toro",
+    "coords": {
+      "lat": -17.3871375,
+      "lng": -66.28475180000001
+    }
+  }, {
+    "name": "COLEGIO REPUBLICA DEL ECUADOR ",
+    "coords": {
+      "lat": -17.4136066,
+      "lng": -66.0944303
+    }
+  }, {
+    "name": "Laboratorio Bagó, Manuel Carrasco Jimenes",
+    "coords": {
+      "lat": -17.3601674,
+      "lng": -66.174399
+    }
+  }, {
+    "name": "FUBODE AG. LORETO, Avenue Panamericana",
+    "coords": {
+      "lat": -17.4179327,
+      "lng": -66.1575178
+    }
+  }, {
+    "name": "Textiles Ulala, Alalay",
+    "coords": {
+      "lat": -17.4338292,
+      "lng": -66.12086339999999
+    }
+  }, {
+    "name": "La Recoleta Barber Shop",
+    "coords": {
+      "lat": -17.3782614,
+      "lng": -66.1541725
+    }
+  }, {
+    "name": "Colombianwear, Calle B. Colorados",
+    "coords": {
+      "lat": -17.378526,
+      "lng": -66.168643
+    }
+  }, {
+    "name": "Univalle América, Avenida América",
+    "coords": {
+      "lat": -17.3724109,
+      "lng": -66.1610996
+    }
+  }, {
+    "name": "Cerro Verde Central Market, Utama",
+    "coords": {
+      "lat": -17.4143912,
+      "lng": -66.144295
+    }
+  }, {
+    "name": "Mercado 10 de Febrero",
+    "coords": {
+      "lat": -17.440043,
+      "lng": -66.1163047
+    }
+  }, {
+    "name": "Parque Kanata",
+    "coords": {
+      "lat": -17.4128145,
+      "lng": -66.158299
+    }
+  }, {
+    "name": "EMIAS SRL, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3964256,
+      "lng": -66.1583265
+    }
+  }, {
+    "name": "Sarco",
+    "coords": {
+      "lat": -17.3668019,
+      "lng": -66.1987138
+    }
+  }, {
+    "name": "Concordia - Casa De Funerales, Avenida Martín de la Rocha",
+    "coords": {
+      "lat": -17.3826878,
+      "lng": -66.1664493
+    }
+  }, {
+    "name": "Los Incas",
+    "coords": {
+      "lat": -17.4063441,
+      "lng": -66.1657871
+    }
+  }, {
+    "name": "Mercado Loreto",
+    "coords": {
+      "lat": -17.4233377,
+      "lng": -66.1572008
+    }
+  }, {
+    "name": "Laguna Eventos y naturaleza, Tiquipaya",
+    "coords": {
+      "lat": -17.3626373,
+      "lng": -66.2109522
+    }
+  }, {
+    "name": "Escuela Heroinas, Ayacucho",
+    "coords": {
+      "lat": -17.4003749,
+      "lng": -66.27928709999999
+    }
+  }, {
+    "name": "Galeria La Merced, Calle Esteban Arze",
+    "coords": {
+      "lat": -17.4044588,
+      "lng": -66.1558683
+    }
+  }, {
+    "name": "Antezana, Avenida Santa Cruz",
+    "coords": {
+      "lat": -17.3807403,
+      "lng": -66.1570029
+    }
+  }, {
+    "name": "Homero",
+    "coords": {
+      "lat": -17.3581842,
+      "lng": -66.1579789
+    }
+  }, {
+    "name": "Plazuela Quintanilla",
+    "coords": {
+      "lat": -17.3821388,
+      "lng": -66.151844
+    }
+  }, {
+    "name": "Banco Bisa, Tarata",
+    "coords": {
+      "lat": -17.4040449,
+      "lng": -66.1576741
+    }
+  }, {
+    "name": "Prado, Avenida José Ballivian (El Prado)",
+    "coords": {
+      "lat": -17.3874398,
+      "lng": -66.15651489999999
+    }
+  }, {
+    "name": "Molino de Oro",
+    "coords": {
+      "lat": -17.3971698,
+      "lng": -66.2821738
+    }
+  }, {
+    "name": "Cercado",
+    "coords": {
+      "lat": -17.3697351,
+      "lng": -66.1653224
+    }
+  }, {
+    "name": "Libreria, Trabajos En Goma Eva.",
+    "coords": {
+      "lat": -17.3768778,
+      "lng": -66.1193782
+    }
+  }, {
+    "name": "SEMAPA",
+    "coords": {
+      "lat": -17.4325296,
+      "lng": -66.19730009999999
+    }
+  }, {
+    "name": "Kinder Melchor Urquidi",
+    "coords": {
+      "lat": -17.3999321,
+      "lng": -66.15639569999999
+    }
+  }, {
+    "name": "Parque Demetrio Canelas",
+    "coords": {
+      "lat": -17.3802673,
+      "lng": -66.1683944
+    }
+  }, {
+    "name": "Centro de Salud Jaihuayco, Chimoré",
+    "coords": {
+      "lat": -17.4166539,
+      "lng": -66.16687879999999
+    }
+  }, {
+    "name": "Optica Salamanca",
+    "coords": {
+      "lat": -17.391709,
+      "lng": -66.154498
+    }
+  }, {
+    "name": "6 de Agosto, San Mateo",
+    "coords": {
+      "lat": -17.4396592,
+      "lng": -66.1610949
+    }
+  }, {
+    "name": "Centro de Salud Chavez Rancho, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3949219,
+      "lng": -66.1903672
+    }
+  }, {
+    "name": "HOTEL ANGOSTURA, Tarata",
+    "coords": {
+      "lat": -17.5309141,
+      "lng": -66.08726899999999
+    }
+  }, {
+    "name": "Farmacia Barrientos, Avenida República de Suecia",
+    "coords": {
+      "lat": -17.4191438,
+      "lng": -66.14879359999999
+    }
+  }, {
+    "name": "YPFB Gualberto Villarroel refinery refining, Avenida Petrolera carretera antigua a, Santa Vera Cruz",
+    "coords": {
+      "lat": -17.4541517,
+      "lng": -66.1221928
+    }
+  }, {
+    "name": "Plazuela Corazonistas / Guzman Quiton, Avenida Heroínas",
+    "coords": {
+      "lat": -17.393189,
+      "lng": -66.16151119999999
+    }
+  }, {
+    "name": "Caja De Salud De Caminos",
+    "coords": {
+      "lat": -17.3808548,
+      "lng": -66.1679711
+    }
+  }, {
+    "name": "Restaurant Tiquipaya, Calle Cochabamba, Tiquipaya",
+    "coords": {
+      "lat": -17.3386122,
+      "lng": -66.2213271
+    }
+  }, {
+    "name": "Sarcobamba, Avenida Thunupa",
+    "coords": {
+      "lat": -17.3789555,
+      "lng": -66.1884688
+    }
+  }, {
+    "name": "SACHAWASI CHURRASQUERIA",
+    "coords": {
+      "lat": -17.3713937,
+      "lng": -66.17461949999999
+    }
+  }, {
+    "name": "Centro De Salud Kantuta, Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3970402,
+      "lng": -66.1939939
+    }
+  }, {
+    "name": "ES El Manantial",
+    "coords": {
+      "lat": -17.4126889,
+      "lng": -66.1552031
+    }
+  }, {
+    "name": "Terminal De Buses, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.4026167,
+      "lng": -66.1579002
+    }
+  }, {
+    "name": "CENTREX S.R.L., M.Melgarejo",
+    "coords": {
+      "lat": -17.3751404,
+      "lng": -66.1440539
+    }
+  }, {
+    "name": "Cementerio de Pucara Grande",
+    "coords": {
+      "lat": -17.4641173,
+      "lng": -66.1649564
+    }
+  }, {
+    "name": "Escuela de Natacion Santorini, Ecuador",
+    "coords": {
+      "lat": -17.3910973,
+      "lng": -66.1656412
+    }
+  }, {
+    "name": "Bicentenario, Avenue Centenario",
+    "coords": {
+      "lat": -17.3493006,
+      "lng": -66.18558709999999
+    }
+  }, {
+    "name": "Concordia - Cementerio Jardín, 16 de Julio",
+    "coords": {
+      "lat": -17.3811834,
+      "lng": -66.2216552
+    }
+  }, {
+    "name": "Bnb cajero automático",
+    "coords": {
+      "lat": -17.3977118,
+      "lng": -66.28033789999999
+    }
+  }, {
+    "name": "Universidad Privada Boliviana, Avenida Juan Pablo II",
+    "coords": {
+      "lat": -17.3988937,
+      "lng": -66.21849569999999
+    }
+  }, {
+    "name": "Salud familiar, Los Olivos",
+    "coords": {
+      "lat": -17.3679238,
+      "lng": -66.142416
+    }
+  }, {
+    "name": "Stadium De Sipe Sipe, Sipe Sipe",
+    "coords": {
+      "lat": -17.4574408,
+      "lng": -66.35640599999999
+    }
+  }, {
+    "name": "Laboratorio Universo",
+    "coords": {
+      "lat": -17.381597,
+      "lng": -66.15315
+    }
+  }, {
+    "name": "Biblioteca Simón I. Patiño, Avenida América",
+    "coords": {
+      "lat": -17.3742405,
+      "lng": -66.1535869
+    }
+  }, {
+    "name": "Mercado LA PAMPA",
+    "coords": {
+      "lat": -17.4034159,
+      "lng": -66.1521635
+    }
+  }, {
+    "name": "casa valle hermoso",
+    "coords": {
+      "lat": -17.4509382,
+      "lng": -66.1287723
+    }
+  }, {
+    "name": "UNIVALLE Campus AV. AMERICA",
+    "coords": {
+      "lat": -17.3723837,
+      "lng": -66.16127829999999
+    }
+  }, {
+    "name": "Segip Colcapirhua, Pantaleón Dalence",
+    "coords": {
+      "lat": -17.3879979,
+      "lng": -66.2178304
+    }
+  }, {
+    "name": "Universidad Mayor de San Simón, Jordan",
+    "coords": {
+      "lat": -17.3940024,
+      "lng": -66.14745289999999
+    }
+  }, {
+    "name": "Capilla De Pandoja",
+    "coords": {
+      "lat": -17.3639194,
+      "lng": -66.2688641
+    }
+  }, {
+    "name": "Fitness Cala Cala",
+    "coords": {
+      "lat": -17.3685794,
+      "lng": -66.1644259
+    }
+  }, {
+    "name": "Parque de la Familia, Avenida Pedro Domingo Murillo",
+    "coords": {
+      "lat": -17.386436,
+      "lng": -66.1634633
+    }
+  }, {
+    "name": "San Miguel",
+    "coords": {
+      "lat": -17.3480869,
+      "lng": -66.262749
+    }
+  }, {
+    "name": "Ifel Srl",
+    "coords": {
+      "lat": -17.3542427,
+      "lng": -66.18033
+    }
+  }, {
+    "name": "Cajero BCP",
+    "coords": {
+      "lat": -17.3545855,
+      "lng": -66.18793509999999
+    }
+  }, {
+    "name": "Itocta , Casa De Las Hijas Del Divino Salvador",
+    "coords": {
+      "lat": -17.4593969,
+      "lng": -66.1863372
+    }
+  }, {
+    "name": "Colegio Tiquipaya, Avenida Ecológica",
+    "coords": {
+      "lat": -17.3447551,
+      "lng": -66.2077264
+    }
+  }, {
+    "name": "Asociacion Accidental Tunari - JOCA y Molinari Rail",
+    "coords": {
+      "lat": -17.3841428,
+      "lng": -66.1601684
+    }
+  }, {
+    "name": "Hotel Aranjuez Cochabamba, Buenos Aires",
+    "coords": {
+      "lat": -17.373893,
+      "lng": -66.15437299999999
+    }
+  }, {
+    "name": "Migraciones Cbba, Avenida Julio Rodríguez Morales",
+    "coords": {
+      "lat": -17.3696523,
+      "lng": -66.155868
+    }
+  }, {
+    "name": "Universidad Del Valle, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3941406,
+      "lng": -66.1586809
+    }
+  }, {
+    "name": "BancoSol, ATM Beijing, Claudio Ptolomeo",
+    "coords": {
+      "lat": -17.3957034,
+      "lng": -66.1854954
+    }
+  }, {
+    "name": "Restaurante Heroinas",
+    "coords": {
+      "lat": -17.3919,
+      "lng": -66.1560151
+    }
+  }, {
+    "name": "Optica America",
+    "coords": {
+      "lat": -17.392601,
+      "lng": -66.15432799999999
+    }
+  }, {
+    "name": "Centro de eventos Manantial",
+    "coords": {
+      "lat": -17.3646061,
+      "lng": -66.20453599999999
+    }
+  }, {
+    "name": "Cruce Taquiña, Avenida Simón López",
+    "coords": {
+      "lat": -17.3543915,
+      "lng": -66.1874289
+    }
+  }, {
+    "name": "Internet Cala Cala",
+    "coords": {
+      "lat": -17.3694341,
+      "lng": -66.1642063
+    }
+  }, {
+    "name": "Ferreteria America, Uruguay",
+    "coords": {
+      "lat": -17.3979197,
+      "lng": -66.1528957
+    }
+  }, {
+    "name": "Parque De La Familia, Hamiraya",
+    "coords": {
+      "lat": -17.386378,
+      "lng": -66.1628018
+    }
+  }, {
+    "name": "Tiquipaya Hospital, Tiquipaya",
+    "coords": {
+      "lat": -17.3370601,
+      "lng": -66.217664
+    }
+  }, {
+    "name": "Banco Bisa, Avenida Heroínas",
+    "coords": {
+      "lat": -17.3918587,
+      "lng": -66.1552624
+    }
+  }, {
+    "name": "Banco Bisa Cajero Torres Sofer, Avenida Oquendo",
+    "coords": {
+      "lat": -17.3846838,
+      "lng": -66.15114849999999
+    }
+  }, {
+    "name": "Cine Center",
+    "coords": {
+      "lat": -17.3732621,
+      "lng": -66.2775269
+    }
+  }, {
+    "name": "EMI, Avenida Del Ejercito",
+    "coords": {
+      "lat": -17.3790879,
+      "lng": -66.1476611
+    }
+  }, {
+    "name": "BancoSol, Agencia San Martin, Calle San Martin",
+    "coords": {
+      "lat": -17.4009392,
+      "lng": -66.15335040000001
+    }
+  }, {
+    "name": "La Chimba",
+    "coords": {
+      "lat": -17.3961764,
+      "lng": -66.18514440000001
+    }
+  }, {
+    "name": "ABOGADOS MOLINA SALAZAR, Ladislao Cabrera",
+    "coords": {
+      "lat": -17.3972366,
+      "lng": -66.1544191
+    }
+  }, {
+    "name": "Café Molino Blanco, Chuquisaca",
+    "coords": {
+      "lat": -17.3856406,
+      "lng": -66.1549931
+    }
+  }, {
+    "name": "Banco Bisa, Avenida Simón López",
+    "coords": {
+      "lat": -17.3655986,
+      "lng": -66.17553889999999
+    }
+  }, {
+    "name": "Angostura",
+    "coords": {
+      "lat": -17.5576346,
+      "lng": -66.0552751
+    }
+  }, {
+    "name": "Unidad Educativa Daniel Salamanca",
+    "coords": {
+      "lat": -17.3882571,
+      "lng": -66.24191189999999
+    }
+  }, {
+    "name": "Escuela Tupac Katari",
+    "coords": {
+      "lat": -17.437288,
+      "lng": -66.1356528
+    }
+  }, {
+    "name": "Hogar San Jose, Tumusla",
+    "coords": {
+      "lat": -17.3890555,
+      "lng": -66.16236549999999
+    }
+  }, {
+    "name": "SEGIP",
+    "coords": {
+      "lat": -17.4538907,
+      "lng": -66.1631957
+    }
+  }, {
+    "name": "Colcapirhua",
+    "coords": {
+      "lat": -17.3932218,
+      "lng": -66.2276993
+    }
+  }, {
+    "name": "Centro Medico Valle Hermoso, Alalay",
+    "coords": {
+      "lat": -17.4395427,
+      "lng": -66.13086
+    }
+  }, {
+    "name": "Glass Center Parabrisas",
+    "coords": {
+      "lat": -17.3741916,
+      "lng": -66.13879469999999
+    }
+  }, {
+    "name": "Universidad Católica Boliviana San Pablo Unidad Académica Cochabamba - Ramón Rivero, Pje. E",
+    "coords": {
+      "lat": -17.3818792,
+      "lng": -66.1557163
+    }
+  }, {
+    "name": "Hotel Cochabamba, Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3960463,
+      "lng": -66.2236425
+    }
+  }, {
+    "name": "Tamborada",
+    "coords": {
+      "lat": -17.4662638,
+      "lng": -66.1415298
+    }
+  }, {
+    "name": "POSGRADO DPG FCyT UMSS",
+    "coords": {
+      "lat": -17.3931347,
+      "lng": -66.1470777
+    }
+  }, {
+    "name": "Urbanizacion Tunari",
+    "coords": {
+      "lat": -17.3418587,
+      "lng": -66.17562579999999
+    }
+  }, {
+    "name": "Ballet UMSS",
+    "coords": {
+      "lat": -17.394948,
+      "lng": -66.143441
+    }
+  }, {
+    "name": "Museo Arqueológico, Nataniel Aguirre",
+    "coords": {
+      "lat": -17.3953714,
+      "lng": -66.1573605
+    }
+  }, {
+    "name": "Laboratorio De Hidráulica - UMSS (LHUMSS)",
+    "coords": {
+      "lat": -17.4492395,
+      "lng": -66.1428505
+    }
+  }, {
+    "name": "Cancha Don Bosco",
+    "coords": {
+      "lat": -17.4339476,
+      "lng": -66.156052
+    }
+  }, {
+    "name": "Parque Prehistorico Sacaba",
+    "coords": {
+      "lat": -17.3965261,
+      "lng": -66.0526857
+    }
+  }, {
+    "name": "Clinica Dental Antezana, Max Bascope",
+    "coords": {
+      "lat": -17.3996493,
+      "lng": -66.28690689999999
+    }
+  }, {
+    "name": "Parque Bicentenario",
+    "coords": {
+      "lat": -17.3494908,
+      "lng": -66.1849005
+    }
+  }, {
+    "name": "Futvalle",
+    "coords": {
+      "lat": -17.3727668,
+      "lng": -66.14013179999999
+    }
+  }, {
+    "name": "SEMAPA, secretaría de obras, Kapac Yupanqui",
+    "coords": {
+      "lat": -17.3631703,
+      "lng": -66.1628159
+    }
+  }, {
+    "name": "Molino Andino S.A., Arquímedes",
+    "coords": {
+      "lat": -17.4006197,
+      "lng": -66.2012974
+    }
+  }, {
+    "name": "Hansa",
+    "coords": {
+      "lat": -17.391837,
+      "lng": -66.20258330000001
+    }
+  }, {
+    "name": "Don Bosco - Fatima",
+    "coords": {
+      "lat": -17.3576732,
+      "lng": -66.238073
+    }
+  }, {
+    "name": "Iglesia Evangélica Pentecostal Cerro Verde",
+    "coords": {
+      "lat": -17.4140449,
+      "lng": -66.1426688
+    }
+  }, {
+    "name": "Plaza Principal De Sacaba",
+    "coords": {
+      "lat": -17.403875,
+      "lng": -66.039791
+    }
+  }, {
+    "name": "Casa Potosí, Potosi",
+    "coords": {
+      "lat": -17.371069,
+      "lng": -66.15365129999999
+    }
+  }, {
+    "name": "Jardín Botánico Martin Cardenas, Raul Rivero Torres",
+    "coords": {
+      "lat": -17.3772163,
+      "lng": -66.1396673
+    }
+  }, {
+    "name": "CHILIMARCA MARY",
+    "coords": {
+      "lat": -17.333746,
+      "lng": -66.2010414
+    }
+  }, {
+    "name": "Ferreteria Molina",
+    "coords": {
+      "lat": -17.3587882,
+      "lng": -66.1734847
+    }
+  }, {
+    "name": "Parque de estudio y reflexión Montecillo",
+    "coords": {
+      "lat": -17.3207127,
+      "lng": -66.217137
+    }
+  }, {
+    "name": "Farmacias BOLIVIA, Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3764068,
+      "lng": -66.1760006
+    }
+  }, {
+    "name": "Caja Petrolera, General Achá",
+    "coords": {
+      "lat": -17.3936358,
+      "lng": -66.1596351
+    }
+  }, {
+    "name": "Banco Bisa, Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3714108,
+      "lng": -66.175946
+    }
+  }, {
+    "name": "Urbanización Lomas De Aranjuez",
+    "coords": {
+      "lat": -17.3568404,
+      "lng": -66.1452444
+    }
+  }, {
+    "name": "Sebastián Ramírez Stadium, Tiquipaya",
+    "coords": {
+      "lat": -17.3420474,
+      "lng": -66.21768999999999
+    }
+  }, {
+    "name": "Cala Cala Market, Avenida América",
+    "coords": {
+      "lat": -17.3722654,
+      "lng": -66.1617436
+    }
+  }, {
+    "name": "Hospital Mallco Rancho",
+    "coords": {
+      "lat": -17.4194503,
+      "lng": -66.3645552
+    }
+  }, {
+    "name": "ITSa., Avenida Circunvalacion",
+    "coords": {
+      "lat": -17.4068357,
+      "lng": -66.0456042
+    }
+  }, {
+    "name": "Comida Colombiana, Uruguay",
+    "coords": {
+      "lat": -17.399101,
+      "lng": -66.1564825
+    }
+  }, {
+    "name": "Campamento EBC Cbba",
+    "coords": {
+      "lat": -17.4676698,
+      "lng": -66.1701309
+    }
+  }, {
+    "name": "Tupuraya",
+    "coords": {
+      "lat": -17.373837,
+      "lng": -66.1430135
+    }
+  }, {
+    "name": "Trabajo Fundació N EnseñARTR, Chipaya",
+    "coords": {
+      "lat": -17.3730698,
+      "lng": -66.1846189
+    }
+  }, {
+    "name": "Banco Bisa, Avenida Siglo XX",
+    "coords": {
+      "lat": -17.4276395,
+      "lng": -66.13029809999999
+    }
+  }, {
+    "name": "Centro De Salud Rojas Mejia, Hernan Morales",
+    "coords": {
+      "lat": -17.4008148,
+      "lng": -66.1720749
+    }
+  }, {
+    "name": "Escultura Marina Nuñez del Prado",
+    "coords": {
+      "lat": -17.390564,
+      "lng": -66.154411
+    }
+  }, {
+    "name": "Cowork Café Express, Antezana",
+    "coords": {
+      "lat": -17.3865002,
+      "lng": -66.1533812
+    }
+  }, {
+    "name": "Plazuela Tarija",
+    "coords": {
+      "lat": -17.3737389,
+      "lng": -66.1429206
+    }
+  }, {
+    "name": "BURGER KING, Barrancas",
+    "coords": {
+      "lat": -17.421037,
+      "lng": -66.13066119999999
+    }
+  }, {
+    "name": "Pil Andina, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3895465,
+      "lng": -66.2541955
+    }
+  }, {
+    "name": "Torres Sofer, Avenida Oquendo",
+    "coords": {
+      "lat": -17.384582,
+      "lng": -66.1511041
+    }
+  }, {
+    "name": "Plaza de Comidas IC Norte, Avenida D'Orbigny",
+    "coords": {
+      "lat": -17.3881,
+      "lng": -66.1800903
+    }
+  }, {
+    "name": "FEICOBOL, Circuito Bolivia",
+    "coords": {
+      "lat": -17.4181486,
+      "lng": -66.129652
+    }
+  }, {
+    "name": "Jalasoft, Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3659373,
+      "lng": -66.1754823
+    }
+  }, {
+    "name": "burger king, M.E.Ballivian",
+    "coords": {
+      "lat": -17.3833515,
+      "lng": -66.1595932
+    }
+  }, {
+    "name": "Centro Comercial Molino El Gallo",
+    "coords": {
+      "lat": -17.4067987,
+      "lng": -66.1550736
+    }
+  }, {
+    "name": "Panamericana, Noruega",
+    "coords": {
+      "lat": -17.441185,
+      "lng": -66.13828459999999
+    }
+  }, {
+    "name": "Estación de servicio YPFB, Avenida América",
+    "coords": {
+      "lat": -17.371533,
+      "lng": -66.1734405
+    }
+  }, {
+    "name": "Farmacia Panamericana - Heroinas",
+    "coords": {
+      "lat": -17.3918914,
+      "lng": -66.1541738
+    }
+  }, {
+    "name": "El Mirador Barrio El Solterito",
+    "coords": {
+      "lat": -17.3899704,
+      "lng": -66.1374385
+    }
+  }, {
+    "name": "Republicade Italia",
+    "coords": {
+      "lat": -17.4026266,
+      "lng": -66.0449033
+    }
+  }, {
+    "name": "Colegio Don Bosco, Plazuela Quintanilla",
+    "coords": {
+      "lat": -17.3833112,
+      "lng": -66.1510074
+    }
+  }, {
+    "name": "Fundación Jala, Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3664544,
+      "lng": -66.17555469999999
+    }
+  }, {
+    "name": "Farmacias Bolivia, 25 de Mayo",
+    "coords": {
+      "lat": -17.3992056,
+      "lng": -66.1543052
+    }
+  }, {
+    "name": "Clínica Aranjuez, Juan Crisostomo Carrillo",
+    "coords": {
+      "lat": -17.3823151,
+      "lng": -66.153516
+    }
+  }, {
+    "name": "RESIDENCIAL BRASILIA, Av 9 de Abril",
+    "coords": {
+      "lat": -17.3993778,
+      "lng": -66.15275199999999
+    }
+  }, {
+    "name": "Hospital Cochabamba",
+    "coords": {
+      "lat": -17.4005797,
+      "lng": -66.1560618
+    }
+  }, {
+    "name": "Laguna eventos, Inominada",
+    "coords": {
+      "lat": -17.362901,
+      "lng": -66.21096600000001
+    }
+  }, {
+    "name": "Familia Huayraña Calancha, Tiquipaya",
+    "coords": {
+      "lat": -17.3298231,
+      "lng": -66.20192349999999
+    }
+  }, {
+    "name": "Manuel Marin 1139",
+    "coords": {
+      "lat": -17.3832052,
+      "lng": -66.1730864
+    }
+  }, {
+    "name": "Caja Petrolera de Salud, Avenida 6 de Agosto",
+    "coords": {
+      "lat": -17.4118813,
+      "lng": -66.1623341
+    }
+  }, {
+    "name": "Torre Norte, Avenida América",
+    "coords": {
+      "lat": -17.3731701,
+      "lng": -66.15760709999999
+    }
+  }, {
+    "name": "Bolivia Adventist University, Av. Simón I. Patiño",
+    "coords": {
+      "lat": -17.3869811,
+      "lng": -66.3172715
+    }
+  }, {
+    "name": "HACIENDA SANTA MARIA, J. Castillo",
+    "coords": {
+      "lat": -17.3651344,
+      "lng": -66.1301642
+    }
+  }, {
+    "name": "Agencia Beijing, Avenida Beiging",
+    "coords": {
+      "lat": -17.3771309,
+      "lng": -66.1813114
+    }
+  }, {
+    "name": "Tiquipaya church, Calle Pablo Jaimes, Tiquipaya",
+    "coords": {
+      "lat": -17.3375919,
+      "lng": -66.2186351
+    }
+  }, {
+    "name": "Hipermaxi",
+    "coords": {
+      "lat": -17.384296,
+      "lng": -66.1588697
+    }
+  }, {
+    "name": "Plaza Sucre, Bolivar",
+    "coords": {
+      "lat": -17.3922673,
+      "lng": -66.1480329
+    }
+  }, {
+    "name": "Colegio  6 DE AGOSTO, Avenue Panamericana",
+    "coords": {
+      "lat": -17.4849866,
+      "lng": -66.1729513
+    }
+  }, {
+    "name": "Caja Petrolera De Salud - Administrativo, General Achá",
+    "coords": {
+      "lat": -17.3936568,
+      "lng": -66.1596492
+    }
+  }, {
+    "name": "Recoleta",
+    "coords": {
+      "lat": -17.3795148,
+      "lng": -66.1520764
+    }
+  }, {
+    "name": "E.S. BEIJING, Avenida Beiging",
+    "coords": {
+      "lat": -17.3897876,
+      "lng": -66.1833233
+    }
+  }, {
+    "name": "Kanata, Capinota",
+    "coords": {
+      "lat": -17.4125902,
+      "lng": -66.15844369999999
+    }
+  }, {
+    "name": "Domingo Savio, Irigoyen",
+    "coords": {
+      "lat": -17.3763202,
+      "lng": -66.18400679999999
+    }
+  }, {
+    "name": "CASA DE SENET, Germán Busch",
+    "coords": {
+      "lat": -17.3779282,
+      "lng": -66.26802239999999
+    }
+  }, {
+    "name": "Estacion De Servicio Chiquicollo, Avenida América",
+    "coords": {
+      "lat": -17.3693394,
+      "lng": -66.18949549999999
+    }
+  }, {
+    "name": "SEGIP - DE SACABA, Ingavi",
+    "coords": {
+      "lat": -17.4027845,
+      "lng": -66.0472082
+    }
+  }, {
+    "name": "Umss, Avenida Guillermo Urquidi",
+    "coords": {
+      "lat": -17.3973559,
+      "lng": -66.1460641
+    }
+  }, {
+    "name": "Cementerio Angostura, 7",
+    "coords": {
+      "lat": -17.511524,
+      "lng": -66.0878642
+    }
+  }, {
+    "name": "Homero Park",
+    "coords": {
+      "lat": -17.3579254,
+      "lng": -66.1580097
+    }
+  }, {
+    "name": "AISB",
+    "coords": {
+      "lat": -17.3549937,
+      "lng": -66.201961
+    }
+  }, {
+    "name": "Juan Pablo II",
+    "coords": {
+      "lat": -17.3890509,
+      "lng": -66.19590629999999
+    }
+  }, {
+    "name": "Club de Bienestar Hipermaxi El Prado (Nutricion Herbalife)",
+    "coords": {
+      "lat": -17.3842296,
+      "lng": -66.1589005
+    }
+  }, {
+    "name": "SEGIP, Avenida Circunvalacion",
+    "coords": {
+      "lat": -17.3729642,
+      "lng": -66.1357909
+    }
+  }, {
+    "name": "El Libertador, Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.3714744,
+      "lng": -66.16369569999999
+    }
+  }, {
+    "name": "Potosí",
+    "coords": {
+      "lat": -20.624713,
+      "lng": -66.9988011
+    }
+  }, {
+    "name": "Villa Tunari Uncia",
+    "coords": {
+      "lat": -17.4139766,
+      "lng": -66.1653224
+    }
+  }, {
+    "name": "Terminal",
+    "coords": {
+      "lat": -17.4139766,
+      "lng": -66.1653224
+    }
+  }, {
+    "name": "Villa pagador, Avenue De La Fuerza Aerea",
+    "coords": {
+      "lat": -17.4139766,
+      "lng": -66.1653224
+    }
+  }, {
+    "name": "Parqueo UCB, Benjamin Guzman",
+    "coords": {
+      "lat": -17.372287,
+      "lng": -66.1440825
+    }
+  }, {
+    "name": "Politécnico Militar de Aeronáutica",
+    "coords": {
+      "lat": -17.4477318,
+      "lng": -66.14084919999999
+    }
+  }, {
+    "name": "Auto Venta Cherrys",
+    "coords": {
+      "lat": -17.377066,
+      "lng": -66.180697
+    }
+  }, {
+    "name": "Jorge Wilstermann Airport",
+    "coords": {
+      "lat": -17.4170476,
+      "lng": -66.1787081
+    }
+  }, {
+    "name": "U.E NUESTRA SEÑORA DE LA MERCED, Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3977271,
+      "lng": -66.2071873
+    }
+  }, {
+    "name": "Salon de eventos Cabet",
+    "coords": {
+      "lat": -17.38611,
+      "lng": -66.1870132
+    }
+  }, {
+    "name": "Ayopaya",
+    "coords": {
+      "lat": -16.5515874,
+      "lng": -66.5223902
+    }
+  }, {
+    "name": "hospital univalle",
+    "coords": {
+      "lat": -17.3723095,
+      "lng": -66.1608485
+    }
+  }, {
+    "name": "Puente Cobija Charques, Avenida Rivereña",
+    "coords": {
+      "lat": -17.3873052,
+      "lng": -66.1649576
+    }
+  }, {
+    "name": "Tiquipaya Villa Oruro",
+    "coords": {
+      "lat": -17.3268376,
+      "lng": -66.23153839999999
+    }
+  }, {
+    "name": "Americas",
+    "coords": {
+      "lat": 54.5259614,
+      "lng": -105.2551187
+    }
+  }, {
+    "name": "farmacias Bolivia, Avenida José Ballivian",
+    "coords": {
+      "lat": -17.3870301,
+      "lng": -66.15655459999999
+    }
+  }, {
+    "name": "Hughes Schools, Avenida Nicolas Maldonado",
+    "coords": {
+      "lat": -17.3809482,
+      "lng": -66.0971618
+    }
+  }, {
+    "name": "Shopping Center San Martín",
+    "coords": {
+      "lat": -17.3975269,
+      "lng": -66.15363099999999
+    }
+  }, {
+    "name": "Colegio Don Bosco Colcaphirua",
+    "coords": {
+      "lat": -17.3866605,
+      "lng": -66.2267889
+    }
+  }, {
+    "name": "Colegio Cala-Cala, Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.3706386,
+      "lng": -66.1630321
+    }
+  }, {
+    "name": "Surtidor Cochabamba, Cañada Cochabamba",
+    "coords": {
+      "lat": -17.4012102,
+      "lng": -66.182559
+    }
+  }, {
+    "name": "IESE - UMSS",
+    "coords": {
+      "lat": -17.3934802,
+      "lng": -66.1473513
+    }
+  }, {
+    "name": "Los Ceibos Multi-Centro Comercial, Sucre",
+    "coords": {
+      "lat": -17.3938461,
+      "lng": -66.15347179999999
+    }
+  }, {
+    "name": "Casablanca, 25 de Mayo",
+    "coords": {
+      "lat": -17.3895423,
+      "lng": -66.15602489999999
+    }
+  }, {
+    "name": "Homer Burger, Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.3686796,
+      "lng": -66.1640527
+    }
+  }, {
+    "name": "Sarco Cochabamba",
+    "coords": {
+      "lat": -17.3730413,
+      "lng": -66.1899712
+    }
+  }, {
+    "name": "Levante Dental El Prado, Av José Ballivian (El Prado)",
+    "coords": {
+      "lat": -17.3846569,
+      "lng": -66.1564728
+    }
+  }, {
+    "name": "HOME CHICKEN, Los Alamos",
+    "coords": {
+      "lat": -17.3903691,
+      "lng": -66.1879153
+    }
+  }, {
+    "name": "Complejo deportivo Pacata",
+    "coords": {
+      "lat": -17.3693053,
+      "lng": -66.1194044
+    }
+  }, {
+    "name": "SEDES Servicio Departamental de Salud, Avenida Aniceto Arce",
+    "coords": {
+      "lat": -17.3883176,
+      "lng": -66.14927709999999
+    }
+  }, {
+    "name": "Pedro Barrientos",
+    "coords": {
+      "lat": -17.3919272,
+      "lng": -66.1545865
+    }
+  }, {
+    "name": "ES Chimboco Srl",
+    "coords": {
+      "lat": -17.3999933,
+      "lng": -66.04378679999999
+    }
+  }, {
+    "name": "Farmacia Villarroel, Mexico",
+    "coords": {
+      "lat": -17.3884993,
+      "lng": -66.161626
+    }
+  }, {
+    "name": "Textiles Jadue (Cochabamba), Avenida Siglo XX",
+    "coords": {
+      "lat": -17.4202071,
+      "lng": -66.1388031
+    }
+  }, {
+    "name": "Libreria Uyuni, Colombia, Cochabamba Bolivia",
+    "coords": {
+      "lat": -17.3914124,
+      "lng": -66.1580584
+    }
+  }, {
+    "name": "Cajero BCP, Pje. G",
+    "coords": {
+      "lat": -17.3710238,
+      "lng": -66.1838078
+    }
+  }, {
+    "name": "Laguna Alalay",
+    "coords": {
+      "lat": -17.4078327,
+      "lng": -66.1385519
+    }
+  }, {
+    "name": "Postgrado Universidad Católica Boliviana San Pablo, Oruro",
+    "coords": {
+      "lat": -17.382252,
+      "lng": -66.1561431
+    }
+  }, {
+    "name": "E.S.SIGLO XX",
+    "coords": {
+      "lat": -17.4354719,
+      "lng": -66.1249687
+    }
+  }, {
+    "name": "Banco Bisa, Avenida América",
+    "coords": {
+      "lat": -17.3729065,
+      "lng": -66.1588096
+    }
+  }, {
+    "name": "La Angostura Lake",
+    "coords": {
+      "lat": -17.5348,
+      "lng": -66.0928
+    }
+  }, {
+    "name": "Quillacollo Municipal Stadium, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3928269,
+      "lng": -66.2750744
+    }
+  }, {
+    "name": "Plaza Bolívar",
+    "coords": {
+      "lat": -17.394625,
+      "lng": -66.2811443
+    }
+  }, {
+    "name": "A.Garcia 1135",
+    "coords": {
+      "lat": -17.3770118,
+      "lng": -66.14684319999999
+    }
+  }, {
+    "name": "Parque familiar Sacaba",
+    "coords": {
+      "lat": -17.3642645,
+      "lng": -66.104759
+    }
+  }, {
+    "name": "Hipermaxi, Avenue Juan de La Rosa",
+    "coords": {
+      "lat": -17.3769908,
+      "lng": -66.1725909
+    }
+  }, {
+    "name": "Emi Universidad mia♥️",
+    "coords": {
+      "lat": -17.3834887,
+      "lng": -66.15719899999999
+    }
+  }, {
+    "name": "Casa de Campo, Avenida Uyuni",
+    "coords": {
+      "lat": -17.3786786,
+      "lng": -66.1516116
+    }
+  }, {
+    "name": "Hospital Mexico",
+    "coords": {
+      "lat": -17.4007851,
+      "lng": -66.03518129999999
+    }
+  }, {
+    "name": "Juan Capriles, J.Capriles 144",
+    "coords": {
+      "lat": -17.3715358,
+      "lng": -66.16113349999999
+    }
+  }, {
+    "name": "Hostal Casa Vieja (Colonial), Junin",
+    "coords": {
+      "lat": -17.3923465,
+      "lng": -66.1599244
+    }
+  }, {
+    "name": "MEMI UMSS",
+    "coords": {
+      "lat": -17.3931897,
+      "lng": -66.14694349999999
+    }
+  }, {
+    "name": "Politecnico Sacaba",
+    "coords": {
+      "lat": -17.3994135,
+      "lng": -66.02172399999999
+    }
+  }, {
+    "name": "Universidad Salesiana",
+    "coords": {
+      "lat": -17.362732,
+      "lng": -66.2378153
+    }
+  }, {
+    "name": "Cancha de la Esmeralda",
+    "coords": {
+      "lat": -17.3898095,
+      "lng": -66.2965188
+    }
+  }, {
+    "name": "Cancha 14 De Septiembre",
+    "coords": {
+      "lat": -17.3990917,
+      "lng": -66.2695483
+    }
+  }, {
+    "name": "Cancha Olimpia",
+    "coords": {
+      "lat": -17.4198866,
+      "lng": -66.1651182
+    }
+  }, {
+    "name": "Ticti Norte",
+    "coords": {
+      "lat": -17.3499727,
+      "lng": -66.1667061
+    }
+  }, {
+    "name": "Market Villa Mexico, V.Del Carmen",
+    "coords": {
+      "lat": -17.4344462,
+      "lng": -66.156695
+    }
+  }, {
+    "name": "Salamanca Solutions International",
+    "coords": {
+      "lat": -17.373826,
+      "lng": -66.156711
+    }
+  }, {
+    "name": "Cámara de Exportadores de Cochabamba CADEXCO, Luis Uriona",
+    "coords": {
+      "lat": -17.4104852,
+      "lng": -66.17227439999999
+    }
+  }, {
+    "name": "YPFB Redes De Gas, Antezana",
+    "coords": {
+      "lat": -17.3856363,
+      "lng": -66.1538221
+    }
+  }, {
+    "name": "Cala Cala",
+    "coords": {
+      "lat": -17.3721605,
+      "lng": -66.168426
+    }
+  }, {
+    "name": "Ferreteria La Merced",
+    "coords": {
+      "lat": -17.3979985,
+      "lng": -66.152085
+    }
+  }, {
+    "name": "Novecento, Calle Lanza",
+    "coords": {
+      "lat": -17.3857595,
+      "lng": -66.1552011
+    }
+  }, {
+    "name": "Tribunal Electoral Departamental Cochabamba, Avenida Simón López",
+    "coords": {
+      "lat": -17.3666924,
+      "lng": -66.1663681
+    }
+  }, {
+    "name": "Juan Pablo II Fase 2",
+    "coords": {
+      "lat": -17.387502,
+      "lng": -66.1952038
+    }
+  }, {
+    "name": "Farmacia Pando",
+    "coords": {
+      "lat": -17.3702005,
+      "lng": -66.1513813
+    }
+  }, {
+    "name": "Clinica La Paz",
+    "coords": {
+      "lat": -17.3867088,
+      "lng": -66.1583413
+    }
+  }, {
+    "name": "Cancha Villa Granado",
+    "coords": {
+      "lat": -17.3818735,
+      "lng": -66.1885065
+    }
+  }, {
+    "name": "Quillacollo",
+    "coords": {
+      "lat": -17.394253,
+      "lng": -66.2724183
+    }
+  }, {
+    "name": "Recoleta, Beni",
+    "coords": {
+      "lat": -17.378366,
+      "lng": -66.1522158
+    }
+  }, {
+    "name": "Parque Demetrio Canelas Y Beijing",
+    "coords": {
+      "lat": -17.3789199,
+      "lng": -66.1811464
+    }
+  }, {
+    "name": "Familia Espinoza",
+    "coords": {
+      "lat": -17.3730602,
+      "lng": -66.27409100000001
+    }
+  }, {
+    "name": "Beigin Y Simob Lopez",
+    "coords": {
+      "lat": -17.3574947,
+      "lng": -66.1757287
+    }
+  }, {
+    "name": "Mercantil Santa Cruz, Avenue Portales",
+    "coords": {
+      "lat": -17.3750719,
+      "lng": -66.156802
+    }
+  }, {
+    "name": "Sachawasi Peña Churrasqueria, Avenida Ecológica",
+    "coords": {
+      "lat": -17.3489241,
+      "lng": -66.1958942
+    }
+  }, {
+    "name": "Estadio Sudamericano Felix Capriles, Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.3792677,
+      "lng": -66.1617936
+    }
+  }, {
+    "name": "hospital",
+    "coords": {
+      "lat": -17.3743247,
+      "lng": -66.322816
+    }
+  }, {
+    "name": "Capilla De Don Bosco",
+    "coords": {
+      "lat": -17.3834743,
+      "lng": -66.15068090000001
+    }
+  }, {
+    "name": "Cowork express",
+    "coords": {
+      "lat": -17.3867078,
+      "lng": -66.1532816
+    }
+  }, {
+    "name": "Colegio Sebastian Pagador",
+    "coords": {
+      "lat": -17.4392859,
+      "lng": -66.11795959999999
+    }
+  }, {
+    "name": "Biblioteca Tupuraya - UCB Cochabamba",
+    "coords": {
+      "lat": -17.3717659,
+      "lng": -66.1438134
+    }
+  }, {
+    "name": "Cine Center, Avenue Ramon Rivero",
+    "coords": {
+      "lat": -17.3805186,
+      "lng": -66.1514722
+    }
+  }, {
+    "name": "Surtidor",
+    "coords": {
+      "lat": -17.3654157,
+      "lng": -66.1733824
+    }
+  }, {
+    "name": "Mercado 10 De Febrero",
+    "coords": {
+      "lat": -17.3608112,
+      "lng": -66.1825278
+    }
+  }, {
+    "name": "CANCHA CHULUMANI",
+    "coords": {
+      "lat": -17.3875124,
+      "lng": -66.29623889999999
+    }
+  }, {
+    "name": "ES El Manantial II",
+    "coords": {
+      "lat": -17.3576054,
+      "lng": -66.1839446
+    }
+  }, {
+    "name": "La Paz",
+    "coords": {
+      "lat": -15.0892416,
+      "lng": -68.52471489999999
+    }
+  }, {
+    "name": "República de Bolivia",
+    "coords": {
+      "lat": -16.290154,
+      "lng": -63.58865299999999
+    }
+  }, {
+    "name": "Farmacia Viedma, Paccieri",
+    "coords": {
+      "lat": -17.3848007,
+      "lng": -66.14846539999999
+    }
+  }, {
+    "name": "EMI, Calle Lanza",
+    "coords": {
+      "lat": -17.3837621,
+      "lng": -66.1573283
+    }
+  }, {
+    "name": "Cancha Barrio Manaco",
+    "coords": {
+      "lat": -17.4054138,
+      "lng": -66.28078649999999
+    }
+  }, {
+    "name": "Airline Pilot Academy A.P.A, Pedro Blanco",
+    "coords": {
+      "lat": -17.376453,
+      "lng": -66.157273
+    }
+  }, {
+    "name": "UPB Extensión Universitaria",
+    "coords": {
+      "lat": -17.3747266,
+      "lng": -66.1374251
+    }
+  }, {
+    "name": "Building El Manantial",
+    "coords": {
+      "lat": -17.3663401,
+      "lng": -66.1680291
+    }
+  }, {
+    "name": "Cancha PANAMERICANA, Avenue Panamericana",
+    "coords": {
+      "lat": -17.4254819,
+      "lng": -66.1585663
+    }
+  }, {
+    "name": "Supermercado América, Avenue Juan de La Rosa",
+    "coords": {
+      "lat": -17.376625,
+      "lng": -66.175187
+    }
+  }, {
+    "name": "Sarcobamba",
+    "coords": {
+      "lat": -17.3751202,
+      "lng": -66.1861448
+    }
+  }, {
+    "name": "Surtidor Cochabamba, Blanco Galindo Avenue",
+    "coords": {
+      "lat": -17.3915276,
+      "lng": -66.223569
+    }
+  }, {
+    "name": "PIL Andina Planta Colcapirhua",
+    "coords": {
+      "lat": -17.3992165,
+      "lng": -66.2331815
+    }
+  }, {
+    "name": "YPFB Aviacion, Avenue Del Cabildo",
+    "coords": {
+      "lat": -17.4221569,
+      "lng": -66.17170709999999
+    }
+  }, {
+    "name": "La Chingada",
+    "coords": {
+      "lat": -17.3712116,
+      "lng": -66.1509028
+    }
+  }, {
+    "name": "UE DANIEL SALAMANCA",
+    "coords": {
+      "lat": -17.3955602,
+      "lng": -66.1634693
+    }
+  }, {
+    "name": "Banco Bisa Cajero Ayacucho, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.4039675,
+      "lng": -66.15735459999999
+    }
+  }, {
+    "name": "laboratorio geotecnia",
+    "coords": {
+      "lat": -17.4615541,
+      "lng": -66.12221939999999
+    }
+  }, {
+    "name": "Sacaba",
+    "coords": {
+      "lat": -17.4037042,
+      "lng": -66.0404057
+    }
+  }, {
+    "name": "Pedro Poveda, Avenida América",
+    "coords": {
+      "lat": -17.3744725,
+      "lng": -66.143943
+    }
+  }, {
+    "name": "Farmacia Pacata, Diego Mosquera",
+    "coords": {
+      "lat": -17.3756546,
+      "lng": -66.1224711
+    }
+  }, {
+    "name": "Laboratorios IFA Cochabamba, Calle Antofagasta",
+    "coords": {
+      "lat": -17.3650304,
+      "lng": -66.1941393
+    }
+  }, {
+    "name": "Banco Prodem S.A. - Agencia La Pampa, Pulacayo",
+    "coords": {
+      "lat": -17.4051208,
+      "lng": -66.1514711
+    }
+  }, {
+    "name": "Juan Pablo Quiroga Cuellar - Cirujano Plástico",
+    "coords": {
+      "lat": -17.3833674,
+      "lng": -66.15272230000001
+    }
+  }, {
+    "name": "Pacata",
+    "coords": {
+      "lat": -17.3700173,
+      "lng": -66.12368
+    }
+  }, {
+    "name": "Colcapirhua, La Paz",
+    "coords": {
+      "lat": -17.3812128,
+      "lng": -66.23876249999999
+    }
+  }, {
+    "name": "SEGIP ZONA SUR",
+    "coords": {
+      "lat": -17.4542354,
+      "lng": -66.1637131
+    }
+  }, {
+    "name": "cementerio VALLE HERMOSO, Avenue Miraflores",
+    "coords": {
+      "lat": -17.4352503,
+      "lng": -66.1285133
+    }
+  }, {
+    "name": "IFARBO Ltda., Avenida América",
+    "coords": {
+      "lat": -17.3713809,
+      "lng": -66.1776354
+    }
+  }, {
+    "name": "Colegio Mayor Victor Ustariz",
+    "coords": {
+      "lat": -17.374123,
+      "lng": -66.1896509
+    }
+  }, {
+    "name": "Cristo Rey, Avenida Peru",
+    "coords": {
+      "lat": -17.3895794,
+      "lng": -66.17063420000001
+    }
+  }, {
+    "name": "Cristo de la Concordia",
+    "coords": {
+      "lat": -17.4007804,
+      "lng": -66.1214404
+    }
+  }, {
+    "name": "Pil Andina, Irigoyen",
+    "coords": {
+      "lat": -17.3725695,
+      "lng": -66.18343850000001
+    }
+  }, {
+    "name": "Laboratorio Clinico Central",
+    "coords": {
+      "lat": -17.3908989,
+      "lng": -66.16127829999999
+    }
+  }, {
+    "name": "Liceo América y Liceo Quillacollo, General Pando",
+    "coords": {
+      "lat": -17.3950441,
+      "lng": -66.2793267
+    }
+  }, {
+    "name": "Dental Center Cordes, Carlos Davis",
+    "coords": {
+      "lat": -17.3880928,
+      "lng": -66.1447331
+    }
+  }, {
+    "name": "Laboratorio Universo, Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.3714173,
+      "lng": -66.1628344
+    }
+  }, {
+    "name": "Mercado La Paz",
+    "coords": {
+      "lat": -17.4031996,
+      "lng": -66.1545245
+    }
+  }, {
+    "name": "Puente Recoleta",
+    "coords": {
+      "lat": -17.3795148,
+      "lng": -66.1520764
+    }
+  }, {
+    "name": "Puente Antezana, Avenida Santa Cruz",
+    "coords": {
+      "lat": -17.3807403,
+      "lng": -66.1570029
+    }
+  }, {
+    "name": "Terminal Quillacollo",
+    "coords": {
+      "lat": -17.3926709,
+      "lng": -66.2725577
+    }
+  }, {
+    "name": "Familia Huayraña Calancha",
+    "coords": {
+      "lat": -17.4014608,
+      "lng": -66.1932439
+    }
+  }, {
+    "name": "Colombianas, Calle Atacama",
+    "coords": {
+      "lat": -17.3820355,
+      "lng": -66.1783428
+    }
+  }, {
+    "name": "F.F.P. FASSIL AG. LA PAMPA",
+    "coords": {
+      "lat": -17.40505,
+      "lng": -66.15608329999999
+    }
+  }, {
+    "name": "Terminal De Buses Cochabamba, Colomi",
+    "coords": {
+      "lat": -17.3313334,
+      "lng": -65.86888429999999
+    }
+  }, {
+    "name": "Pollos Panchita San Martin 1, Calama",
+    "coords": {
+      "lat": -17.3956057,
+      "lng": -66.1538106
+    }
+  }, {
+    "name": "Centro De Salud Jaihuayco Cochabamba",
+    "coords": {
+      "lat": -17.4168383,
+      "lng": -66.162925
+    }
+  }, {
+    "name": "Center Notre Dame Events and Conventions, Avenue D'Orbigni",
+    "coords": {
+      "lat": -17.386814,
+      "lng": -66.18388399999999
+    }
+  }, {
+    "name": "ES El Manantial III, Avenue Ruben Dario",
+    "coords": {
+      "lat": -17.3810091,
+      "lng": -66.1421131
+    }
+  }, {
+    "name": "Policlinico Villa Loreto",
+    "coords": {
+      "lat": -17.4200642,
+      "lng": -66.1564235
+    }
+  }, {
+    "name": "Templo Mormon",
+    "coords": {
+      "lat": -17.3731708,
+      "lng": -66.15386769999999
+    }
+  }, {
+    "name": "Banco Bisa, Avenida Beiging",
+    "coords": {
+      "lat": -17.3757918,
+      "lng": -66.18113029999999
+    }
+  }, {
+    "name": "Universidade Privada del Valle, Tiquipaya",
+    "coords": {
+      "lat": -17.3305883,
+      "lng": -66.2254286
+    }
+  }, {
+    "name": "South America",
+    "coords": {
+      "lat": -8.783195,
+      "lng": -55.491477
+    }
+  }, {
+    "name": "Surtidor Aeropuerto",
+    "coords": {
+      "lat": -17.4078695,
+      "lng": -66.17151129999999
+    }
+  }, {
+    "name": "QUILLACOLLO GRILL",
+    "coords": {
+      "lat": -17.3943284,
+      "lng": -66.2782766
+    }
+  }, {
+    "name": "Mercado Valle Hermoso",
+    "coords": {
+      "lat": -17.4478958,
+      "lng": -66.1273765
+    }
+  }, {
+    "name": "Pension HAMIRAYA",
+    "coords": {
+      "lat": -17.3906145,
+      "lng": -66.15968339999999
+    }
+  }, {
+    "name": "IC Norte, Avenida América",
+    "coords": {
+      "lat": -17.372696,
+      "lng": -66.1511261
+    }
+  }, {
+    "name": "Avenida Santa Cruz 1132",
+    "coords": {
+      "lat": -17.379453,
+      "lng": -66.15696129999999
+    }
+  }, {
+    "name": "Cristo de la Concordia, Avenida de la Concordia",
+    "coords": {
+      "lat": -17.3843511,
+      "lng": -66.13497699999999
+    }
+  }, {
+    "name": "Urban Soul Dance Studio, Venezuela",
+    "coords": {
+      "lat": -17.3883521,
+      "lng": -66.1537316
+    }
+  }, {
+    "name": "Terminal de Ómnibuses de Sacaba",
+    "coords": {
+      "lat": -17.4000019,
+      "lng": -66.0426915
+    }
+  }, {
+    "name": "HERBALIFE, Club de Bienestar LANZA",
+    "coords": {
+      "lat": -17.4001564,
+      "lng": -66.1520341
+    }
+  }, {
+    "name": "Dirección General De Migración Cochabamba",
+    "coords": {
+      "lat": -17.3696507,
+      "lng": -66.1558648
+    }
+  }, {
+    "name": "Bancosol, Sol Amigo Villa Loreto, N.Rios",
+    "coords": {
+      "lat": -17.4219085,
+      "lng": -66.15820240000001
+    }
+  }, {
+    "name": "BNB sucursal Blanco Galindo",
+    "coords": {
+      "lat": -17.394187,
+      "lng": -66.1695502
+    }
+  }, {
+    "name": "Lanza Esquina Calama, Calle Lanza",
+    "coords": {
+      "lat": -17.3958363,
+      "lng": -66.1526671
+    }
+  }, {
+    "name": "colegio colcapirhua",
+    "coords": {
+      "lat": -17.3796824,
+      "lng": -66.2161399
+    }
+  }, {
+    "name": "Hipermaxi El Prado",
+    "coords": {
+      "lat": -17.3842281,
+      "lng": -66.15884419999999
+    }
+  }, {
+    "name": "COMPLEJO DEPORTIVO PACATA JOE RAQUET",
+    "coords": {
+      "lat": -17.3737712,
+      "lng": -66.1246884
+    }
+  }, {
+    "name": "F.F.P. PRODEM AG. LA PAMPA, Pulacayo",
+    "coords": {
+      "lat": -17.4050542,
+      "lng": -66.15232139999999
+    }
+  }, {
+    "name": "CASA VIEJA RestCbba",
+    "coords": {
+      "lat": -17.3955784,
+      "lng": -66.1655316
+    }
+  }, {
+    "name": "Tigo",
+    "coords": {
+      "lat": -17.380278,
+      "lng": -66.151111
+    }
+  }, {
+    "name": "Tiquipaya",
+    "coords": {
+      "lat": -17.3346125,
+      "lng": -66.2158927
+    }
+  }, {
+    "name": "Plaza Colón",
+    "coords": {
+      "lat": -17.3880676,
+      "lng": -66.155841
+    }
+  }, {
+    "name": "Colcapirhua",
+    "coords": {
+      "lat": -17.3945582,
+      "lng": -66.2307672
+    }
+  }, {
+    "name": "Iglesia Bautista Mallco Rancho, Sipe Sipe",
+    "coords": {
+      "lat": -17.4203034,
+      "lng": -66.3579286
+    }
+  }, {
+    "name": "BNB, Avenida Ayacucho",
+    "coords": {
+      "lat": -17.4026509,
+      "lng": -66.1576821
+    }
+  }, {
+    "name": "Los Libertadores, Avenida Heroínas",
+    "coords": {
+      "lat": -17.3932179,
+      "lng": -66.1636259
+    }
+  }, {
+    "name": "Salon Heroinas, 25 de Mayo",
+    "coords": {
+      "lat": -17.3918719,
+      "lng": -66.1556641
+    }
+  }, {
+    "name": "Auto Sales Bolivia, Ave Beijing",
+    "coords": {
+      "lat": -17.4003794,
+      "lng": -66.187339
+    }
+  }, {
+    "name": "Centro Simon I. Patiño, Potosi",
+    "coords": {
+      "lat": -17.3748328,
+      "lng": -66.1531461
+    }
+  }, {
+    "name": "Casa Campestre, Avenida Elias Meneces",
+    "coords": {
+      "lat": -17.3805021,
+      "lng": -66.2512541
+    }
+  }, {
+    "name": "ProSalud, Daniel Pena South",
+    "coords": {
+      "lat": -17.3645446,
+      "lng": -66.1791301
+    }
+  }, {
+    "name": "Juzgado Sacaba",
+    "coords": {
+      "lat": -17.4049554,
+      "lng": -66.0419059
+    }
+  }, {
+    "name": "Cine Center, Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.3930086,
+      "lng": -66.27321189999999
+    }
+  }, {
+    "name": "Restaurante Peruano",
+    "coords": {
+      "lat": -17.4031304,
+      "lng": -66.155091
+    }
+  }, {
+    "name": "Cowork Cafe",
+    "coords": {
+      "lat": -17.3696497,
+      "lng": -66.1624779
+    }
+  }, {
+    "name": "Molino de Pihusi",
+    "coords": {
+      "lat": -17.3182578,
+      "lng": -66.24671140000001
+    }
+  }, {
+    "name": "Concordia - Hospedaje y Servicios Turísticos, Calle J. C. Torrez",
+    "coords": {
+      "lat": -17.3825813,
+      "lng": -66.1449319
+    }
+  }, {
+    "name": "Barrio Chino Cochabamba, Avenida República",
+    "coords": {
+      "lat": -17.4048232,
+      "lng": -66.15111209999999
+    }
+  }, {
+    "name": "BNB, Avenue Pando",
+    "coords": {
+      "lat": -17.372785,
+      "lng": -66.1511439
+    }
+  }, {
+    "name": "Hacienda Santa María, Calle Nicaragua",
+    "coords": {
+      "lat": -17.3898402,
+      "lng": -66.11794549999999
+    }
+  }, {
+    "name": "Pucará",
+    "coords": {
+      "lat": -17.4833329,
+      "lng": -66.166667
+    }
+  }, {
+    "name": "Restaurant Casa Campestre, Bernardo Monteagudo",
+    "coords": {
+      "lat": -17.3766839,
+      "lng": -66.14781529999999
+    }
+  }, {
+    "name": "Los Angeles, La Paz",
+    "coords": {
+      "lat": -17.3858859,
+      "lng": -66.1599542
+    }
+  }, {
+    "name": "Excombatientes, Excombatiente",
+    "coords": {
+      "lat": -17.3851785,
+      "lng": -66.1740603
+    }
+  }, {
+    "name": "SCESI - UMSS, UMSS",
+    "coords": {
+      "lat": -17.3932633,
+      "lng": -66.1448595
+    }
+  }, {
+    "name": "Puente Huayna Kapac, Ave Victor Ustariz",
+    "coords": {
+      "lat": -17.3969747,
+      "lng": -66.1677479
+    }
+  }, {
+    "name": "FCYT UMSS, Jordan",
+    "coords": {
+      "lat": -17.3938633,
+      "lng": -66.14561619999999
+    }
+  }, {
+    "name": "Villa Pagador Entel Multicenter",
+    "coords": {
+      "lat": -17.4394449,
+      "lng": -66.1165947
+    }
+  }, {
+    "name": "BancoSol, ATM Aniceto Arce, Avenida Aniceto Arce",
+    "coords": {
+      "lat": -17.3846444,
+      "lng": -66.1465362
+    }
+  }, {
+    "name": "Farmacia Católica",
+    "coords": {
+      "lat": -17.3988277,
+      "lng": -66.2807308
+    }
+  }, {
+    "name": "Colegio Republica De Venezuela",
+    "coords": {
+      "lat": -17.3797944,
+      "lng": -66.174336
+    }
+  }, {
+    "name": "Caja Petrolera de Salud - Policlinico Central, Calle San Martin",
+    "coords": {
+      "lat": -17.3929181,
+      "lng": -66.154268
+    }
+  }, {
+    "name": "Caja Petrolera de Salud",
+    "coords": {
+      "lat": -17.3929181,
+      "lng": -66.154268
+    }
+  }, {
+    "name": "Saladitos Lanza, Calle Lanza",
+    "coords": {
+      "lat": -17.3955634,
+      "lng": -66.152771
+    }
+  }, {
+    "name": "IC Norte, Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3884585,
+      "lng": -66.17968119999999
+    }
+  }, {
+    "name": "Brasil",
+    "coords": {
+      "lat": -14.235004,
+      "lng": -51.92528
+    }
+  }, {
+    "name": "Estudio Juridico Antezana, Jordan",
+    "coords": {
+      "lat": -17.3947833,
+      "lng": -66.15352159999999
+    }
+  }, {
+    "name": "Antezana",
+    "coords": {
+      "lat": -17.3902899,
+      "lng": -66.1526281
+    }
+  }, {
+    "name": "Av. América",
+    "coords": {
+      "lat": -17.4026322,
+      "lng": -66.0327441
+    }
+  }, {
+    "name": "Av Aroma",
+    "coords": {
+      "lat": -17.3996205,
+      "lng": -66.15660799999999
+    }
+  }, {
+    "name": "Av Linde",
+    "coords": {
+      "lat": -17.3594142,
+      "lng": -66.1961741
+    }
+  }, {
+    "name": "Av Pando",
+    "coords": {
+      "lat": -17.3721671,
+      "lng": -66.1514535
+    }
+  }, {
+    "name": "Av Perú",
+    "coords": {
+      "lat": -17.3858235,
+      "lng": -66.1701334
+    }
+  }, {
+    "name": "Brasilia",
+    "coords": {
+      "lat": -17.4434184,
+      "lng": -66.126859
+    }
+  }, {
+    "name": "Calle los Eucaliptos",
+    "coords": {
+      "lat": -16.290154,
+      "lng": -63.58865299999999
+    }
+  }, {
+    "name": "Colombia",
+    "coords": {
+      "lat": -17.3906834,
+      "lng": -66.1544943
+    }
+  }, {
+    "name": "Guayacan",
+    "coords": {
+      "lat": -17.4232657,
+      "lng": -66.12688729999999
+    }
+  }, {
+    "name": "Hamiraya",
+    "coords": {
+      "lat": -17.3918519,
+      "lng": -66.16134749999999
+    }
+  }, {
+    "name": "Irigoyen",
+    "coords": {
+      "lat": -17.3793261,
+      "lng": -66.1836896
+    }
+  }, {
+    "name": "Pasaje C",
+    "coords": {
+      "lat": -17.398738,
+      "lng": -66.1659619
+    }
+  }, {
+    "name": "Angostura",
+    "coords": {
+      "lat": -17.4106589,
+      "lng": -66.15533169999999
+    }
+  }, {
+    "name": "Av La Paz",
+    "coords": {
+      "lat": -17.3496586,
+      "lng": -66.1815641
+    }
+  }, {
+    "name": "Ayacucho",
+    "coords": {
+      "lat": -17.4003283,
+      "lng": -66.2785079
+    }
+  }, {
+    "name": "Pillpintu",
+    "coords": {
+      "lat": -17.3548619,
+      "lng": -66.1773328
+    }
+  }, {
+    "name": "Qallawaya",
+    "coords": {
+      "lat": -17.3737014,
+      "lng": -66.1903056
+    }
+  }, {
+    "name": "25 de Mayo",
+    "coords": {
+      "lat": -17.3951109,
+      "lng": -66.1550907
+    }
+  }, {
+    "name": "Av Oquendo",
+    "coords": {
+      "lat": -17.3926875,
+      "lng": -66.1497627
+    }
+  }, {
+    "name": "Calle Sucre, Tiquipaya",
+    "coords": {
+      "lat": -17.3393499,
+      "lng": -66.21920229999999
+    }
+  }, {
+    "name": "J.R.Molina",
+    "coords": {
+      "lat": -17.4245318,
+      "lng": -66.1573891
+    }
+  }, {
+    "name": "Los Ceibos",
+    "coords": {
+      "lat": -17.3676203,
+      "lng": -66.1713343
+    }
+  }, {
+    "name": "Av Peru",
+    "coords": {
+      "lat": -16.489468,
+      "lng": -68.1444077
+    }
+  }, {
+    "name": "Patacamaya",
+    "coords": {
+      "lat": -17.2409282,
+      "lng": -67.91063179999999
+    }
+  }, {
+    "name": "Calle sucre",
+    "coords": {
+      "lat": -19.0121582,
+      "lng": -65.2863112
+    }
+  }, {
+    "name": "Peru",
+    "coords": {
+      "lat": -17.3817894,
+      "lng": -66.15660919999999
+    }
+  }, {
+    "name": "Tupac Katari",
+    "coords": {
+      "lat": -16.5222333,
+      "lng": -68.1459872
+    }
+  }, {
+    "name": "Calle Lindero",
+    "coords": {
+      "lat": -16.290154,
+      "lng": -63.58865299999999
+    }
+  }, {
+    "name": "Mallco Rancho",
+    "coords": {
+      "lat": -17.4194503,
+      "lng": -66.3645552
+    }
+  }, {
+    "name": "Pando",
+    "coords": {
+      "lat": -17.4072937,
+      "lng": -66.0337876
+    }
+  }, {
+    "name": "Uyuni",
+    "coords": {
+      "lat": -17.4089651,
+      "lng": -66.03941259999999
+    }
+  }, {
+    "name": "Avenida Octava",
+    "coords": {
+      "lat": -17.3969212,
+      "lng": -66.10038329999999
+    }
+  }, {
+    "name": "Ingavi",
+    "coords": {
+      "lat": -17.4040743,
+      "lng": -66.0435479
+    }
+  }, {
+    "name": "Pasaje Bolivar",
+    "coords": {
+      "lat": -16.290154,
+      "lng": -63.58865299999999
+    }
+  }, {
+    "name": "Calle Santa Cruz",
+    "coords": {
+      "lat": -17.8212736,
+      "lng": -63.1680529
+    }
+  }, {
+    "name": "Colombia",
+    "coords": {
+      "lat": -17.4037042,
+      "lng": -66.0404057
+    }
+  }, {
+    "name": "Pando",
+    "coords": {
+      "lat": -17.3590362,
+      "lng": -66.1504893
+    }
+  }, {
+    "name": "Avenida Santa Cruz",
+    "coords": {
+      "lat": -17.7864783,
+      "lng": -63.164527
+    }
+  }, {
+    "name": "Brasil",
+    "coords": {
+      "lat": -17.3993203,
+      "lng": -66.15108769999999
+    }
+  }, {
+    "name": "Caripe",
+    "coords": {
+      "lat": -17.3589589,
+      "lng": -66.1513757
+    }
+  }, {
+    "name": "Illapa",
+    "coords": {
+      "lat": -17.3675043,
+      "lng": -66.173874
+    }
+  }, {
+    "name": "Ingavi",
+    "coords": {
+      "lat": -17.4379992,
+      "lng": -66.11751459999999
+    }
+  }, {
+    "name": "La Paz",
+    "coords": {
+      "lat": -17.3857115,
+      "lng": -66.1580071
+    }
+  }, {
+    "name": "Perú",
+    "coords": {
+      "lat": -17.4066038,
+      "lng": -66.2805422
+    }
+  }, {
+    "name": "Potosi",
+    "coords": {
+      "lat": -17.3732012,
+      "lng": -66.1537594
+    }
+  }, {
+    "name": "Tarata",
+    "coords": {
+      "lat": -17.6091383,
+      "lng": -66.0255368
+    }
+  }, {
+    "name": "Ayopaya",
+    "coords": {
+      "lat": -17.4156976,
+      "lng": -66.1673991
+    }
+  }, {
+    "name": "Brasil",
+    "coords": {
+      "lat": -17.4050285,
+      "lng": -66.2803347
+    }
+  }, {
+    "name": "16 de Julio, Quillacollo",
+    "coords": {
+      "lat": -17.4071401,
+      "lng": -66.28062609999999
+    }
+  }, {
+    "name": "Av Ricardo Jaimes Freyre",
+    "coords": {
+      "lat": -17.3677851,
+      "lng": -66.1679585
+    }
+  }, {
+    "name": "Avenida Circunvalación",
+    "coords": {
+      "lat": -17.4019043,
+      "lng": -66.2874956
+    }
+  }, {
+    "name": "Avenida Demetrio Canelas",
+    "coords": {
+      "lat": -17.3791709,
+      "lng": -66.1786151
+    }
+  }, {
+    "name": "Avenue Circunvalacion II",
+    "coords": {
+      "lat": -17.3548205,
+      "lng": -66.1570249
+    }
+  }, {
+    "name": "Boulevard de la Recoleta",
+    "coords": {
+      "lat": -17.3784991,
+      "lng": -66.1506619
+    }
+  }, {
+    "name": "Pasaje Cap. Jorge Ayalac",
+    "coords": {
+      "lat": -17.380473,
+      "lng": -66.14989489999999
+    }
+  }, {
+    "name": "6 de Agosto",
+    "coords": {
+      "lat": -17.3882259,
+      "lng": -66.2426942
+    }
+  }, {
+    "name": "16 de Julio",
+    "coords": {
+      "lat": -17.3864594,
+      "lng": -66.22172139999999
+    }
+  }, {
+    "name": "Av. Ricardo Jaimes Freyre",
+    "coords": {
+      "lat": -17.3677851,
+      "lng": -66.1679585
+    }
+  }, {
+    "name": "Calle Gualberto Villarroel, Tiquipaya",
+    "coords": {
+      "lat": -17.3297035,
+      "lng": -66.2151643
+    }
+  }, {
+    "name": "Cleómedes Blanco Galindo",
+    "coords": {
+      "lat": -17.39566,
+      "lng": -66.2048878
+    }
+  }, {
+    "name": "Aniceto arce",
+    "coords": {
+      "lat": -17.3962753,
+      "lng": -66.2316424
+    }
+  }, {
+    "name": "Avenida C. Blanco Galindo",
+    "coords": {
+      "lat": -17.392468,
+      "lng": -66.2642913
+    }
+  }, {
+    "name": "Avenida Circunvalación II",
+    "coords": {
+      "lat": -17.3650354,
+      "lng": -66.1248329
+    }
+  }, {
+    "name": "Avenida De La Fuerza Aerea",
+    "coords": {
+      "lat": -17.4197854,
+      "lng": -66.1663339
+    }
+  }, {
+    "name": "Avenue Gabriel Rene Moreno",
+    "coords": {
+      "lat": -17.3703572,
+      "lng": -66.1716637
+    }
+  }, {
+    "name": "Blanco Galindo Avenue 1817",
+    "coords": {
+      "lat": -17.3916424,
+      "lng": -66.22128099999999
+    }
+  }, {
+    "name": "Pasaje Pando",
+    "coords": {
+      "lat": -17.3567599,
+      "lng": -66.24186519999999
+    }
+  }, {
+    "name": "16 de Julio",
+    "coords": {
+      "lat": -17.3456672,
+      "lng": -66.19763379999999
+    }
+  }, {
+    "name": "Av América",
+    "coords": {
+      "lat": -17.3725238,
+      "lng": -66.1638093
+    }
+  }, {
+    "name": "Av Humboldt",
+    "coords": {
+      "lat": -17.3833113,
+      "lng": -66.1636729
+    }
+  }, {
+    "name": "Av Oquendo",
+    "coords": {
+      "lat": -17.3859577,
+      "lng": -66.25930269999999
+    }
+  }, {
+    "name": "Avenida Circunvalación",
+    "coords": {
+      "lat": -21.5244334,
+      "lng": -64.724563
+    }
+  }, {
+    "name": "CAP.R.Pabon",
+    "coords": {
+      "lat": -17.4057153,
+      "lng": -66.17561429999999
+    }
+  }, {
+    "name": "Calle Belzu",
+    "coords": {
+      "lat": -17.3852657,
+      "lng": -66.1435478
+    }
+  }, {
+    "name": "Calle Lanza",
+    "coords": {
+      "lat": -17.391718,
+      "lng": -66.15347799999999
+    }
+  }, {
+    "name": "Casto Rojas",
+    "coords": {
+      "lat": -17.3809652,
+      "lng": -66.1743839
+    }
+  }, {
+    "name": "Diego Prado",
+    "coords": {
+      "lat": -17.4397048,
+      "lng": -66.1514002
+    }
+  }, {
+    "name": "J.E. Molina",
+    "coords": {
+      "lat": -17.3850836,
+      "lng": -66.14296829999999
+    }
+  }, {
+    "name": "Los Angeles",
+    "coords": {
+      "lat": -17.3424587,
+      "lng": -66.1707472
+    }
+  }, {
+    "name": "Quillacollo",
+    "coords": {
+      "lat": -17.4061423,
+      "lng": -66.1554695
+    }
+  }, {
+    "name": "Thomas Mann",
+    "coords": {
+      "lat": -17.3613793,
+      "lng": -66.1575749
+    }
+  }, {
+    "name": "16 de Julio",
+    "coords": {
+      "lat": -17.4071401,
+      "lng": -66.28062609999999
+    }
+  }, {
+    "name": "Av. América 752",
+    "coords": {
+      "lat": -17.4026322,
+      "lng": -66.0327441
+    }
+  }, {
+    "name": "Av Heroínas",
+    "coords": {
+      "lat": -17.3909856,
+      "lng": -66.1500892
+    }
+  }, {
+    "name": "Av Salamanca",
+    "coords": {
+      "lat": -17.384925,
+      "lng": -66.15362089999999
+    }
+  }, {
+    "name": "Avenida América",
+    "coords": {
+      "lat": -17.4026322,
+      "lng": -66.0327441
+    }
+  }, {
+    "name": "Avenida Peru",
+    "coords": {
+      "lat": -17.3858235,
+      "lng": -66.1701334
+    }
+  }, {
+    "name": "Calle BARRIENTOS, Colomi",
+    "coords": {
+      "lat": -17.3362913,
+      "lng": -65.868072
+    }
+  }, {
+    "name": "Calle Sucre",
+    "coords": {
+      "lat": -17.3550003,
+      "lng": -66.2477643
+    }
+  }, {
+    "name": "Calle la Paz",
+    "coords": {
+      "lat": -17.3845416,
+      "lng": -66.15709799999999
+    }
+  }, {
+    "name": "Luis Zegarra",
+    "coords": {
+      "lat": -17.3792793,
+      "lng": -66.1928463
+    }
+  }, {
+    "name": "Pasaje Pando",
+    "coords": {
+      "lat": -17.3748654,
+      "lng": -66.1511967
+    }
+  }, {
+    "name": "Pasaje Uyuni",
+    "coords": {
+      "lat": -17.3757293,
+      "lng": -66.14212540000001
+    }
+  }, {
+    "name": "Tupac Katari",
+    "coords": {
+      "lat": -17.3682766,
+      "lng": -66.1617934
+    }
+  }, {
+    "name": "Villa Tunari",
+    "coords": {
+      "lat": -17.4202484,
+      "lng": -66.1567407
+    }
+  }, {
+    "name": "A Rafel Pabon",
+    "coords": {
+      "lat": -17.4131791,
+      "lng": -66.1686656
+    }
+  }, {
+    "name": "Av. Petrolera",
+    "coords": {
+      "lat": -17.4443219,
+      "lng": -66.1398758
+    }
+  }, {
+    "name": "Av.Chilimarca",
+    "coords": {
+      "lat": -17.3330584,
+      "lng": -66.2026498
+    }
+  }, {
+    "name": "Av Circunvalacion",
+    "coords": {
+      "lat": -17.4061346,
+      "lng": -66.0476687
+    }
+  }, {
+    "name": "Av Pando 1236",
+    "coords": {
+      "lat": -17.3764718,
+      "lng": -66.1512319
+    }
+  }, {
+    "name": "Avenida Aroma",
+    "coords": {
+      "lat": -17.3996205,
+      "lng": -66.15660799999999
+    }
+  }, {
+    "name": "Avenida Belzu",
+    "coords": {
+      "lat": -17.3928363,
+      "lng": -66.14240199999999
+    }
+  }, {
+    "name": "Avenida Pando",
+    "coords": {
+      "lat": -17.3721671,
+      "lng": -66.1514535
+    }
+  }, {
+    "name": "Avenida Uyuni",
+    "coords": {
+      "lat": -17.3781744,
+      "lng": -66.14809559999999
+    }
+  }, {
+    "name": "J.J. Carrasco",
+    "coords": {
+      "lat": -17.3952346,
+      "lng": -66.1379535
+    }
+  }, {
+    "name": "Juan Capriles",
+    "coords": {
+      "lat": -17.3719612,
+      "lng": -66.1560899
+    }
+  }, {
+    "name": "Lucas Mendoza",
+    "coords": {
+      "lat": -17.3744245,
+      "lng": -66.1726206
+    }
+  }, {
+    "name": "Nicolas Ortiz",
+    "coords": {
+      "lat": -17.3850931,
+      "lng": -66.18911849999999
+    }
+  }, {
+    "name": "Pasaje Olmedo",
+    "coords": {
+      "lat": -17.3836876,
+      "lng": -66.1452036
+    }
+  }, {
+    "name": "Av. Santa Cruz",
+    "coords": {
+      "lat": -17.3739273,
+      "lng": -66.1569756
+    }
+  }, {
+    "name": "Av. Parque de las Memorias",
+    "coords": {
+      "lat": -17.3789387,
+      "lng": -66.1135572
+    }
+  }, {
+    "name": "Av Chiquicollo",
+    "coords": {
+      "lat": -17.3671688,
+      "lng": -66.19733939999999
+    }
+  }, {
+    "name": "Avenida Ingavi",
+    "coords": {
+      "lat": -17.4056573,
+      "lng": -66.1780426
+    }
+  }, {
+    "name": "Avenue Beijing",
+    "coords": {
+      "lat": -17.3602669,
+      "lng": -66.1771131
+    }
+  }, {
+    "name": "De La Tapia 25",
+    "coords": {
+      "lat": -17.3742739,
+      "lng": -66.1643883
+    }
+  }, {
+    "name": "Excombatientes",
+    "coords": {
+      "lat": -17.3937068,
+      "lng": -66.2154911
+    }
+  }, {
+    "name": "J. De Los Rios",
+    "coords": {
+      "lat": -17.3680005,
+      "lng": -66.1371881
+    }
+  }, {
+    "name": "Pasaje Beijing",
+    "coords": {
+      "lat": -17.3798939,
+      "lng": -66.181567
+    }
+  }, {
+    "name": "Pasaje Estrada",
+    "coords": {
+      "lat": -17.3795528,
+      "lng": -66.1590508
+    }
+  }, {
+    "name": "Pasaje La Paz",
+    "coords": {
+      "lat": -17.3915533,
+      "lng": -66.2786558
+    }
+  }, {
+    "name": "Pedro Carrasco",
+    "coords": {
+      "lat": -17.3730652,
+      "lng": -66.1242394
+    }
+  }, {
+    "name": "A.Villavicencio",
+    "coords": {
+      "lat": -17.3969495,
+      "lng": -66.18413029999999
+    }
+  }, {
+    "name": "Av. Santa Cruz",
+    "coords": {
+      "lat": -17.3716562,
+      "lng": -66.2830358
+    }
+  }, {
+    "name": "Av América 752",
+    "coords": {
+      "lat": -17.3730811,
+      "lng": -66.153001
+    }
+  }, {
+    "name": "Avenida Oquendo",
+    "coords": {
+      "lat": -17.3926875,
+      "lng": -66.1497627
+    }
+  }, {
+    "name": "Avenida Beiging",
+    "coords": {
+      "lat": -17.3634524,
+      "lng": -66.17797039999999
+    }
+  }, {
+    "name": "Avenue Heroinas",
+    "coords": {
+      "lat": -17.3941339,
+      "lng": -66.1674197
+    }
+  }, {
+    "name": "Camino a Itocta",
+    "coords": {
+      "lat": -17.4581995,
+      "lng": -66.18387659999999
+    }
+  }, {
+    "name": "Calle F. Viedma",
+    "coords": {
+      "lat": -17.3884799,
+      "lng": -66.16933759999999
+    }
+  }, {
+    "name": "Calle la Merced",
+    "coords": {
+      "lat": -17.3926652,
+      "lng": -66.17425659999999
+    }
+  }, {
+    "name": "Emiliano Luján",
+    "coords": {
+      "lat": -17.3651439,
+      "lng": -66.1860561
+    }
+  }, {
+    "name": "Nicolas Menacho",
+    "coords": {
+      "lat": -17.3672515,
+      "lng": -66.1872126
+    }
+  }, {
+    "name": "Tijsi Wiraqocha",
+    "coords": {
+      "lat": -17.3492171,
+      "lng": -66.1796792
+    }
+  }, {
+    "name": "V.Del Carmen 25",
+    "coords": {
+      "lat": -17.4346442,
+      "lng": -66.1558859
+    }
+  }, {
+    "name": "14 de Septiembre",
+    "coords": {
+      "lat": -17.3456034,
+      "lng": -66.1947742
+    }
+  }, {
+    "name": "Av Simón López",
+    "coords": {
+      "lat": -17.3649733,
+      "lng": -66.1766272
+    }
+  }, {
+    "name": "Avenida Oquendo",
+    "coords": {
+      "lat": -17.3859577,
+      "lng": -66.25930269999999
+    }
+  }, {
+    "name": "Avenida Ayacucho",
+    "coords": {
+      "lat": -17.3967232,
+      "lng": -66.1582129
+    }
+  }, {
+    "name": "Avenida América",
+    "coords": {
+      "lat": -17.3725238,
+      "lng": -66.1638093
+    }
+  }, {
+    "name": "Avenida Calancha",
+    "coords": {
+      "lat": -17.383087,
+      "lng": -66.1651147
+    }
+  }, {
+    "name": "Avenida Humboldt",
+    "coords": {
+      "lat": -17.3833113,
+      "lng": -66.1636729
+    }
+  }, {
+    "name": "Avenida Siglo XX",
+    "coords": {
+      "lat": -17.4315964,
+      "lng": -66.127652
+    }
+  }, {
+    "name": "Calle San Martin",
+    "coords": {
+      "lat": -17.394938,
+      "lng": -66.1540016
+    }
+  }, {
+    "name": "Capitán Arzabe",
+    "coords": {
+      "lat": -17.3889234,
+      "lng": -66.2770632
+    }
+  }, {
+    "name": "Circunvalacion Norte Carcaje",
+    "coords": {
+      "lat": -17.5365405,
+      "lng": -66.03184379999999
+    }
+  }, {
+    "name": "David Alvestegui",
+    "coords": {
+      "lat": -17.3707437,
+      "lng": -66.1494998
+    }
+  }, {
+    "name": "Jose M. Carrasco",
+    "coords": {
+      "lat": -17.4235715,
+      "lng": -66.1582098
+    }
+  }, {
+    "name": "Melchor Cespedes",
+    "coords": {
+      "lat": -17.3662255,
+      "lng": -66.13054509999999
+    }
+  }, {
+    "name": "Nicolas Paganini",
+    "coords": {
+      "lat": -17.3666744,
+      "lng": -66.1900575
+    }
+  }, {
+    "name": "14 de Septiembre",
+    "coords": {
+      "lat": -17.3983409,
+      "lng": -66.2747699
+    }
+  }, {
+    "name": "Av Circunvalacion",
+    "coords": {
+      "lat": -17.365884,
+      "lng": -66.1579436
+    }
+  }, {
+    "name": "Avenida Heroínas",
+    "coords": {
+      "lat": -17.3909856,
+      "lng": -66.1500892
+    }
+  }, {
+    "name": "Avenida Petrolera",
+    "coords": {
+      "lat": -17.4443219,
+      "lng": -66.1398758
+    }
+  }, {
+    "name": "Avenida Rivereña",
+    "coords": {
+      "lat": -17.3856594,
+      "lng": -66.1642402
+    }
+  }, {
+    "name": "Avenida Salamanca",
+    "coords": {
+      "lat": -17.384925,
+      "lng": -66.15362089999999
+    }
+  }, {
+    "name": "Calle 16 de Julio",
+    "coords": {
+      "lat": -17.390076,
+      "lng": -66.1515324
+    }
+  }, {
+    "name": "Delfin Cordova 25",
+    "coords": {
+      "lat": -17.3781121,
+      "lng": -66.1933676
+    }
+  }, {
+    "name": "Juan Capriles 144",
+    "coords": {
+      "lat": -17.3719612,
+      "lng": -66.1560899
+    }
+  }, {
+    "name": "Nicolas Del Campo",
+    "coords": {
+      "lat": -17.438764,
+      "lng": -66.12079969999999
+    }
+  }, {
+    "name": "Pasaje Pando 1236",
+    "coords": {
+      "lat": -17.3748654,
+      "lng": -66.1511967
+    }
+  }, {
+    "name": "S.Tomas De Aquino",
+    "coords": {
+      "lat": -17.4357461,
+      "lng": -66.1565272
+    }
+  }, {
+    "name": "Av. Circunvalacion",
+    "coords": {
+      "lat": -17.365884,
+      "lng": -66.1579436
+    }
+  }, {
+    "name": "Avenida M.I. Belzu",
+    "coords": {
+      "lat": -17.3928363,
+      "lng": -66.14240199999999
+    }
+  }, {
+    "name": "Avenida Barrientos",
+    "coords": {
+      "lat": -17.407168,
+      "lng": -66.1535474
+    }
+  }, {
+    "name": "Avenida Circunvalacion",
+    "coords": {
+      "lat": -17.4061346,
+      "lng": -66.0476687
+    }
+  }, {
+    "name": "Avenida Papa Paulo",
+    "coords": {
+      "lat": -17.3838772,
+      "lng": -66.1474158
+    }
+  }, {
+    "name": "Avenida República",
+    "coords": {
+      "lat": -17.4105213,
+      "lng": -66.1508825
+    }
+  }, {
+    "name": "Avenue 6 de Agosto",
+    "coords": {
+      "lat": -17.4104162,
+      "lng": -66.1648618
+    }
+  }, {
+    "name": "CAP.Rafael Zubieta",
+    "coords": {
+      "lat": -17.4015792,
+      "lng": -66.1777273
+    }
+  }, {
+    "name": "Demétrio Canelas",
+    "coords": {
+      "lat": -17.4055618,
+      "lng": -66.2804149
+    }
+  }, {
+    "name": "Friedrich Schiller",
+    "coords": {
+      "lat": -17.3588465,
+      "lng": -66.1573171
+    }
+  }, {
+    "name": "Julio Arauco Prado",
+    "coords": {
+      "lat": -17.3924151,
+      "lng": -66.1458988
+    }
+  }, {
+    "name": "Vicente Villarroel",
+    "coords": {
+      "lat": -17.3720564,
+      "lng": -66.12482609999999
+    }
+  }, {
+    "name": "Av Circunvalación",
+    "coords": {
+      "lat": -17.4019043,
+      "lng": -66.2874956
+    }
+  }, {
+    "name": "Av Demetrio Canelas",
+    "coords": {
+      "lat": -17.3791709,
+      "lng": -66.1786151
+    }
+  }, {
+    "name": "Avenida 6 de Agosto",
+    "coords": {
+      "lat": -17.4124019,
+      "lng": -66.1538403
+    }
+  }, {
+    "name": "Avenida Chiquicollo",
+    "coords": {
+      "lat": -17.3671688,
+      "lng": -66.19733939999999
+    }
+  }, {
+    "name": "Avenida Ruben Dario",
+    "coords": {
+      "lat": -17.3876478,
+      "lng": -66.1409458
+    }
+  }, {
+    "name": "Avenue La Tamborada",
+    "coords": {
+      "lat": -17.4417655,
+      "lng": -66.1551133
+    }
+  }, {
+    "name": "Avenue Panamericana",
+    "coords": {
+      "lat": -17.4113964,
+      "lng": -66.1562138
+    }
+  }, {
+    "name": "Avenue Ramon Rivero",
+    "coords": {
+      "lat": -17.3790846,
+      "lng": -66.1424554
+    }
+  }, {
+    "name": "Cap.Nuflo de Chavez",
+    "coords": {
+      "lat": -17.410454,
+      "lng": -66.1463813
+    }
+  }, {
+    "name": "Av Guillermo Urquidi",
+    "coords": {
+      "lat": -17.3954254,
+      "lng": -66.1432308
+    }
+  }, {
+    "name": "Avenida 6 de Agosto",
+    "coords": {
+      "lat": -17.3976395,
+      "lng": -66.2805517
+    }
+  }, {
+    "name": "Avenida Aniceto Arce",
+    "coords": {
+      "lat": -17.384221,
+      "lng": -66.1464067
+    }
+  }, {
+    "name": "Avenida Huayna Kapac",
+    "coords": {
+      "lat": -17.3984508,
+      "lng": -66.165244
+    }
+  }, {
+    "name": "Avenida Panamericana",
+    "coords": {
+      "lat": -17.4113964,
+      "lng": -66.1562138
+    }
+  }, {
+    "name": "Avenida Tadeo Haenke",
+    "coords": {
+      "lat": -17.3827486,
+      "lng": -66.1863126
+    }
+  }, {
+    "name": "Calle Eudoro Galindo",
+    "coords": {
+      "lat": -17.3671049,
+      "lng": -66.14558699999999
+    }
+  }, {
+    "name": "Cap. Victor Ustariz",
+    "coords": {
+      "lat": -17.3976396,
+      "lng": -66.283118
+    }
+  }, {
+    "name": "Ingavi",
+    "coords": {
+      "lat": -17.387751,
+      "lng": -66.2412425
+    }
+  }, {
+    "name": "La Paz",
+    "coords": {
+      "lat": -17.3738378,
+      "lng": -66.23772939999999
+    }
+  }, {
+    "name": "Antonio Villavicencio",
+    "coords": {
+      "lat": -17.4045167,
+      "lng": -66.1848797
+    }
+  }, {
+    "name": "Av Circunvalación II",
+    "coords": {
+      "lat": -17.3650354,
+      "lng": -66.1248329
+    }
+  }, {
+    "name": "Avenida Melchor Perez",
+    "coords": {
+      "lat": -17.3937749,
+      "lng": -66.18034060000001
+    }
+  }, {
+    "name": "Avenida Juan Pablo II",
+    "coords": {
+      "lat": -17.3864333,
+      "lng": -66.1991178
+    }
+  }, {
+    "name": "Avenida Panamericana",
+    "coords": {
+      "lat": -17.3864357,
+      "lng": -66.25497229999999
+    }
+  }, {
+    "name": "Avenida Ramón Rivero",
+    "coords": {
+      "lat": -17.3809042,
+      "lng": -66.1508527
+    }
+  }, {
+    "name": "Avenida Simón López",
+    "coords": {
+      "lat": -17.3649733,
+      "lng": -66.1766272
+    }
+  }, {
+    "name": "Avenue G. Rene Moreno",
+    "coords": {
+      "lat": -17.3703572,
+      "lng": -66.1716637
+    }
+  }, {
+    "name": "Blanco Galindo Avenue",
+    "coords": {
+      "lat": -17.3916424,
+      "lng": -66.22128099999999
+    }
+  }, {
+    "name": "Calle B. de las Casas",
+    "coords": {
+      "lat": -17.3856906,
+      "lng": -66.167152
+    }
+  }, {
+    "name": "Demétrio Canelas 25",
+    "coords": {
+      "lat": -17.4055618,
+      "lng": -66.2804149
+    }
+  }, {
+    "name": "Parque Excombatientes",
+    "coords": {
+      "lat": -17.3856958,
+      "lng": -66.17232899999999
+    }
+  }, {
+    "name": "Av Blanco Galindo 1817",
+    "coords": {
+      "lat": -17.3939846,
+      "lng": -66.1745407
+    }
+  }, {
+    "name": "Avenida Circunvalacion",
+    "coords": {
+      "lat": -17.365884,
+      "lng": -66.1579436
+    }
+  }, {
+    "name": "Calle Jose M. Carrasco",
+    "coords": {
+      "lat": -17.4235715,
+      "lng": -66.1582098
+    }
+  }, {
+    "name": "Av Gabriel René Moreno",
+    "coords": {
+      "lat": -17.379851,
+      "lng": -66.1740469
+    }
+  }, {
+    "name": "Av Gualberto Villarroel",
+    "coords": {
+      "lat": -17.3731528,
+      "lng": -66.15908809999999
+    }
+  }, {
+    "name": "Avenida Melchor Urquidi",
+    "coords": {
+      "lat": -17.3753667,
+      "lng": -66.1498081
+    }
+  }, {
+    "name": "Avenida Blanco Galindo",
+    "coords": {
+      "lat": -17.392468,
+      "lng": -66.2642913
+    }
+  }, {
+    "name": "Avenida Juan de La Rosa",
+    "coords": {
+      "lat": -17.3763426,
+      "lng": -66.1743919
+    }
+  }, {
+    "name": "Avenida de la Concordia",
+    "coords": {
+      "lat": -17.3901447,
+      "lng": -66.1354693
+    }
+  }, {
+    "name": "Parque Demetrio Canelas",
+    "coords": {
+      "lat": -17.3799167,
+      "lng": -66.1722692
+    }
+  }, {
+    "name": "Pasaje Francisco Viedma",
+    "coords": {
+      "lat": -17.3848931,
+      "lng": -66.1686866
+    }
+  }, {
+    "name": "Plaza 14 de Septiembre.",
+    "coords": {
+      "lat": -17.3942079,
+      "lng": -66.1564114
+    }
+  }, {
+    "name": "Av Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3806478,
+      "lng": -66.1762966
+    }
+  }, {
+    "name": "Avenida Gualberto Villarroel",
+    "coords": {
+      "lat": -17.3731528,
+      "lng": -66.15908809999999
+    }
+  }, {
+    "name": "Pedro J.Cayetano De La Llosa",
+    "coords": {
+      "lat": -17.39566,
+      "lng": -66.2048878
+    }
+  }, {
+    "name": "Avenida Oquendo, Cochabamba, República de Bolivia",
+    "coords": {
+      "lat": -17.3926875,
+      "lng": -66.1497627
+    }
+  }, {
+    "name": "Avenida Reducto",
+    "coords": {
+      "lat": -17.3702638,
+      "lng": -66.2319619
+    }
+  }, {
+    "name": "Avenida Oquendo, Quillacollo, República de Bolivia",
+    "coords": {
+      "lat": -17.3859577,
+      "lng": -66.25930269999999
+    }
+  }, {
+    "name": "Circunvalacion Avenida Beiging",
+    "coords": {
+      "lat": -17.3936356,
+      "lng": -66.1844309
+    }
+  }, {
+    "name": "Avenida J.Manuel Villa Vicencio",
+    "coords": {
+      "lat": -17.3777152,
+      "lng": -66.1903277
+    }
+  }, {
+    "name": "Pasaje Pando 1236",
+    "coords": {
+      "lat": -17.3567599,
+      "lng": -66.24186519999999
+    }
+  }, {
+    "name": "Avenida J. Manuel Villa Vicencio",
+    "coords": {
+      "lat": -17.3777152,
+      "lng": -66.1903277
+    }
+  }, {
+    "name": "Avenida 16 de Julio",
+    "coords": {
+      "lat": -17.3864594,
+      "lng": -66.22172139999999
+    }
+  }, {
+    "name": "Avenida Melchor Pérez de Olguín",
+    "coords": {
+      "lat": -17.3806478,
+      "lng": -66.1762966
+    }
+  }, {
+    "name": "Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3969431,
+      "lng": -66.1951223
+    }
+  }, {
+    "name": "Avenida Libertador Simón Bolívar",
+    "coords": {
+      "lat": -17.374259,
+      "lng": -66.1621863
+    }
+  }, {
+    "name": "6 de Agosto, Colcapirhua Municipality",
+    "coords": {
+      "lat": -17.3882259,
+      "lng": -66.2426942
+    }
+  }, {
+    "name": "16 de Julio, Colcapirhua Municipality",
+    "coords": {
+      "lat": -17.3988212,
+      "lng": -66.2304025
+    }
+  }, {
+    "name": "Pasaje Samuel Villarroel",
+    "coords": {
+      "lat": -17.3891799,
+      "lng": -66.2390166
+    }
+  }, {
+    "name": "Avenida 16 de Julio, Colcapirhua Municipality",
+    "coords": {
+      "lat": -17.3864594,
+      "lng": -66.22172139999999
+    }
+  }, {
+    "name": "Avenida Capitán Víctor Ustáriz",
+    "coords": {
+      "lat": -17.3932521,
+      "lng": -66.2324482
+    }
   }
 ]
