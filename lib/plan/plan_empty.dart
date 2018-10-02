@@ -16,26 +16,19 @@ class PlanEmptyPage extends StatefulWidget {
 }
 
 class PlanEmptyPageState extends State<PlanEmptyPage> {
-  MapController _mapController = MapController();
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        12.0,
-      );
-      setState(() {});
-    });
-  }
+  TrufiOnlineMapController _mapController = TrufiOnlineMapController();
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      TrufiMap(mapController: _mapController),
+      TrufiOnlineMap(
+        mapController: _mapController,
+        layerOptionsBuilder: (context) {
+          return <LayerOptions>[
+            _mapController.state.yourLocationLayer,
+          ];
+        },
+      ),
       Positioned(
         bottom: 16.0,
         right: 16.0,

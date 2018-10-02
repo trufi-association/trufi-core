@@ -18,7 +18,7 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  MapController _mapController = MapController();
+  TrufiOnlineMapController _mapController = TrufiOnlineMapController();
   Marker _chooseOnMapMarker;
 
   void initState() {
@@ -28,15 +28,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           ? widget.initialPosition
           : TrufiMap.cochabambaCenter,
     );
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        11.0,
-      );
-      setState(() {});
-    });
   }
 
   @override
@@ -78,12 +69,15 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return TrufiMap(
+    return TrufiOnlineMap(
       mapController: _mapController,
       onPositionChanged: _handleOnMapPositionChanged,
-      foregroundLayers: <LayerOptions>[
-        MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
-      ],
+      layerOptionsBuilder: (context) {
+        return <LayerOptions>[
+          _mapController.state.yourLocationLayer,
+          MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
+        ];
+      },
     );
   }
 
