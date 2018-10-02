@@ -33,7 +33,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   final GlobalKey<CropButtonState> _cropButtonKey =
       GlobalKey<CropButtonState>();
 
-  MapController _mapController = MapController();
+  TrufiOnlineMapController _mapController = TrufiOnlineMapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
   Map<PlanItinerary, List<PolylineWithMarkers>> _itineraries = Map();
@@ -44,20 +44,6 @@ class PlanMapPageState extends State<PlanMapPage> {
   List<Polyline> _selectedPolylines = List();
   LatLngBounds _selectedBounds = LatLngBounds();
   bool _needsCameraUpdate = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        12.0,
-      );
-      setState(() {});
-    });
-  }
 
   Widget build(BuildContext context) {
     // Clear content
@@ -126,17 +112,20 @@ class PlanMapPageState extends State<PlanMapPage> {
     }
     return Stack(
       children: <Widget>[
-        TrufiMap(
+        TrufiOnlineMap(
           mapController: _mapController,
           onTap: _handleOnMapTap,
           onPositionChanged: _handleOnMapPositionChanged,
-          backgroundLayers: <LayerOptions>[
-            PolylineLayerOptions(polylines: _polylines),
-            MarkerLayerOptions(markers: _backgroundMarkers),
-            PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _selectedMarkers),
-            MarkerLayerOptions(markers: _foregroundMarkers),
-          ],
+          layerOptionsBuilder: (context) {
+            return <LayerOptions>[
+              PolylineLayerOptions(polylines: _polylines),
+              MarkerLayerOptions(markers: _backgroundMarkers),
+              PolylineLayerOptions(polylines: _selectedPolylines),
+              MarkerLayerOptions(markers: _selectedMarkers),
+              _mapController.state.yourLocationLayer,
+              MarkerLayerOptions(markers: _foregroundMarkers),
+            ];
+          },
         ),
         Positioned(
           bottom: 36.0,
