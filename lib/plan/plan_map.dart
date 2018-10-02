@@ -157,15 +157,8 @@ class PlanMapPageState extends State<PlanMapPage> {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        CropButton(
-          key: _cropButtonKey,
-          iconData: Icons.crop_free,
-          onPressed: _handleOnCropPressed,
-        ),
-        YourLocationButton(
-          iconData: Icons.my_location,
-          onPressed: _handleOnYourLocationPressed,
-        ),
+        CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
+        YourLocationButton(onPressed: _handleOnYourLocationPressed),
       ],
     );
   }

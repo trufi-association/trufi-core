@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
 class YourLocationButton extends StatelessWidget {
-  YourLocationButton({
-    this.iconData,
-    this.onPressed,
-  });
+  YourLocationButton({this.onPressed});
 
-  final IconData iconData;
   final Function onPressed;
 
   @override
@@ -15,7 +11,7 @@ class YourLocationButton extends StatelessWidget {
       scale: 0.8,
       child: FloatingActionButton(
         backgroundColor: Colors.grey,
-        child: Icon(iconData),
+        child: Icon(Icons.my_location),
         onPressed: onPressed,
         heroTag: null,
       ),

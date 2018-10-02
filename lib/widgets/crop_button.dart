@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 class CropButton extends StatefulWidget {
   CropButton({
     Key key,
-    @required this.iconData,
     @required this.onPressed,
   }) : super(key: key);
 
-  final IconData iconData;
   final Function onPressed;
 
   @override
@@ -40,7 +38,7 @@ class CropButtonState extends State<CropButton>
       scale: _animation,
       child: FloatingActionButton(
         backgroundColor: Colors.grey,
-        child: Icon(widget.iconData),
+        child: Icon(Icons.crop_free),
         onPressed: _handleOnPressed,
         heroTag: null,
       ),
