@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
 
 class PlanEmptyPage extends StatefulWidget {
@@ -16,35 +14,19 @@ class PlanEmptyPage extends StatefulWidget {
 }
 
 class PlanEmptyPageState extends State<PlanEmptyPage> {
-  MapController _mapController = MapController();
-
-  @override
-  void initState() {
-    super.initState();
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        12.0,
-      );
-      setState(() {});
-    });
-  }
+  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      TrufiMap(
-        mapController: _mapController,
-        mapOptions: MapOptions(
-          zoom: 13.0,
-          maxZoom: 15.0,
-          minZoom: 8.0,
-          swPanBoundary: TrufiMap.cochabambaSouthWest,
-          nePanBoundary: TrufiMap.cochabambaNorthEast,
-          center: TrufiMap.cochabambaCenter,
-        ),
+      TrufiOnAndOfflineMap(
+        key: ValueKey("PlanEmptyMap"),
+        controller: _trufiOnAndOfflineMapController,
+        layerOptionsBuilder: (context) {
+          return <LayerOptions>[
+            _trufiOnAndOfflineMapController.yourLocationLayer,
+          ];
+        },
       ),
       Positioned(
         bottom: 16.0,
@@ -59,21 +41,12 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       child: Icon(Icons.my_location, color: theme.primaryIconTheme.color),
-      onPressed: _handleOnMyLocationTap,
+      onPressed: _handleOnYourLocationPressed,
       heroTag: null,
     );
   }
 
-  void _handleOnMyLocationTap() async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
+  void _handleOnYourLocationPressed() async {
+    _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 }
