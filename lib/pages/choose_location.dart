@@ -18,7 +18,7 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  final _trufiOnlineMapController = TrufiOnlineMapController();
+  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
 
   Marker _chooseOnMapMarker;
 
@@ -33,7 +33,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
 
   @override
   void dispose() {
-    _trufiOnlineMapController.dispose();
+    _trufiOnAndOfflineMapController.dispose();
     super.dispose();
   }
 
@@ -76,12 +76,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return TrufiOnlineMap(
-      trufiOnlineMapController: _trufiOnlineMapController,
+    return TrufiOnAndOfflineMap(
+      controller: _trufiOnAndOfflineMapController,
       onPositionChanged: _handleOnMapPositionChanged,
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
-          _trufiOnlineMapController.yourLocationLayer,
+          _trufiOnAndOfflineMapController.yourLocationLayer,
           MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
         ];
       },
@@ -124,7 +124,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _trufiOnlineMapController.mapController.move(lastLocation, 17.0);
+      _trufiOnAndOfflineMapController.mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(

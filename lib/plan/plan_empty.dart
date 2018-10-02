@@ -16,17 +16,17 @@ class PlanEmptyPage extends StatefulWidget {
 }
 
 class PlanEmptyPageState extends State<PlanEmptyPage> {
-  final _trufiOnlineMapController = TrufiOnlineMapController();
+  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      TrufiOnlineMap(
+      TrufiOnAndOfflineMap(
         key: ValueKey("PlanEmptyMap"),
-        trufiOnlineMapController: _trufiOnlineMapController,
+        controller: _trufiOnAndOfflineMapController,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
-            _trufiOnlineMapController.yourLocationLayer,
+            _trufiOnAndOfflineMapController.yourLocationLayer,
           ];
         },
       ),
@@ -52,7 +52,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _trufiOnlineMapController.mapController.move(lastLocation, 17.0);
+      _trufiOnAndOfflineMapController.mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(

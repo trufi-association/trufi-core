@@ -12,25 +12,25 @@ import 'package:trufi_app/trufi_map_utils.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
-class TrufiOnlineMapController {
-  TrufiOnlineMapController() {
-    _offlineTrufiMapController.outMapReady.listen((_) => _inMapReady.add(null));
-    _onlineTrufiMapController.outMapReady.listen((_) => _inMapReady.add(null));
+class TrufiOnAndOfflineMapController {
+  TrufiOnAndOfflineMapController() {
+    _offlineController.outMapReady.listen((_) => _inMapReady.add(null));
+    _onlineController.outMapReady.listen((_) => _inMapReady.add(null));
   }
 
-  final _offlineTrufiMapController = TrufiMapController();
-  final _onlineTrufiMapController = TrufiMapController();
-  final _mapReadyController = new BehaviorSubject<Null>();
+  final _offlineController = TrufiMapController();
+  final _onlineController = TrufiMapController();
+  final _mapReadyController = BehaviorSubject<Null>();
 
-  TrufiOnlineMapState _state;
+  TrufiOnAndOfflineMapState _state;
 
   void dispose() {
-    _offlineTrufiMapController.dispose();
-    _onlineTrufiMapController.dispose();
+    _offlineController.dispose();
+    _onlineController.dispose();
     _mapReadyController.close();
   }
 
-  set state(TrufiOnlineMapState state) {
+  set state(TrufiOnAndOfflineMapState state) {
     _state = state;
   }
 
@@ -38,9 +38,9 @@ class TrufiOnlineMapController {
 
   Stream<Null> get outMapReady => _mapReadyController.stream;
 
-  TrufiMapController get offline => _offlineTrufiMapController;
+  TrufiMapController get offline => _offlineController;
 
-  TrufiMapController get online => _onlineTrufiMapController;
+  TrufiMapController get online => _onlineController;
 
   TrufiMapController get active => _isOnline ? online : offline;
 
@@ -51,25 +51,25 @@ class TrufiOnlineMapController {
   bool get _isOnline => _state?.isOnline ?? false;
 }
 
-class TrufiOnlineMap extends StatefulWidget {
-  TrufiOnlineMap({
+class TrufiOnAndOfflineMap extends StatefulWidget {
+  TrufiOnAndOfflineMap({
     Key key,
-    @required this.trufiOnlineMapController,
+    @required this.controller,
     @required this.layerOptionsBuilder,
     this.onTap,
     this.onPositionChanged,
   }) : super(key: key);
 
-  final TrufiOnlineMapController trufiOnlineMapController;
+  final TrufiOnAndOfflineMapController controller;
   final LayerOptionsBuilder layerOptionsBuilder;
   final TapCallback onTap;
   final PositionCallback onPositionChanged;
 
   @override
-  TrufiOnlineMapState createState() => TrufiOnlineMapState();
+  TrufiOnAndOfflineMapState createState() => TrufiOnAndOfflineMapState();
 }
 
-class TrufiOnlineMapState extends State<TrufiOnlineMap> {
+class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   final _subscriptions = CompositeSubscription();
 
   bool _online = false;
@@ -77,7 +77,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   @override
   void initState() {
     super.initState();
-    widget.trufiOnlineMapController.state = this;
+    widget.controller.state = this;
     _subscriptions.add(
       PreferencesBloc.of(context).outChangeOnline.listen((online) {
         setState(() {
@@ -98,7 +98,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
     return _online
         ? TrufiMap(
             key: ValueKey("TrufiOnlineMap"),
-            trufiMapController: widget.trufiOnlineMapController.online,
+            controller: widget.controller.online,
             mapOptions: MapOptions(
               minZoom: 1.0,
               maxZoom: 19.0,
@@ -115,7 +115,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
           )
         : TrufiMap(
             key: ValueKey("TrufiOfflineMap"),
-            trufiMapController: widget.trufiOnlineMapController.offline,
+            controller: widget.controller.offline,
             mapOptions: MapOptions(
               minZoom: 8.0,
               maxZoom: 14.0,
@@ -149,9 +149,9 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
 
 class TrufiMapController {
   final _mapController = MapController();
+  final _mapReadyController = BehaviorSubject<Null>();
 
   TrufiMapState _state;
-  BehaviorSubject<Null> _mapReadyController = new BehaviorSubject<Null>();
 
   void dispose() {
     _mapReadyController.close();
@@ -181,12 +181,12 @@ class TrufiMap extends StatefulWidget {
 
   TrufiMap({
     Key key,
-    @required this.trufiMapController,
+    @required this.controller,
     @required this.mapOptions,
     @required this.layerOptionsBuilder,
   }) : super(key: key);
 
-  final TrufiMapController trufiMapController;
+  final TrufiMapController controller;
   final MapOptions mapOptions;
   final LayerOptionsBuilder layerOptionsBuilder;
 
@@ -200,7 +200,7 @@ class TrufiMapState extends State<TrufiMap> {
   @override
   void initState() {
     super.initState();
-    widget.trufiMapController.state = this;
+    widget.controller.state = this;
   }
 
   @override
@@ -215,7 +215,7 @@ class TrufiMapState extends State<TrufiMap> {
               : <Marker>[],
         );
         return FlutterMap(
-          mapController: widget.trufiMapController.mapController,
+          mapController: widget.controller.mapController,
           options: widget.mapOptions,
           layers: widget.layerOptionsBuilder(context),
         );
