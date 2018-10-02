@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/crop_button.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
+import 'package:trufi_app/widgets/your_location_button.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
@@ -160,11 +160,11 @@ class PlanMapPageState extends State<PlanMapPage> {
         CropButton(
           key: _cropButtonKey,
           iconData: Icons.crop_free,
-          onPressed: _handleOnCropTap,
+          onPressed: _handleOnCropPressed,
         ),
-        MyLocationButton(
+        YourLocationButton(
           iconData: Icons.my_location,
-          onPressed: _handleOnMyLocationTap,
+          onPressed: _handleOnYourLocationPressed,
         ),
       ],
     );
@@ -185,20 +185,11 @@ class PlanMapPageState extends State<PlanMapPage> {
     }
   }
 
-  void _handleOnMyLocationTap() async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
+  void _handleOnYourLocationPressed() async {
+    _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 
-  void _handleOnCropTap() {
+  void _handleOnCropPressed() {
     setState(() {
       _needsCameraUpdate = true;
     });
@@ -215,8 +206,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
-    MapEntry<PlanItinerary, List<PolylineWithMarkers>> entry =
-        _itineraryEntryForPolyline(polyline);
+    final entry = _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
@@ -236,96 +226,5 @@ class PlanMapPageState extends State<PlanMapPage> {
 
   MapController get _mapController {
     return _trufiOnAndOfflineMapController.mapController;
-  }
-}
-
-class CropButton extends StatefulWidget {
-  CropButton({
-    Key key,
-    @required this.iconData,
-    @required this.onPressed,
-  }) : super(key: key);
-
-  final IconData iconData;
-  final Function onPressed;
-
-  @override
-  CropButtonState createState() => CropButtonState();
-}
-
-class CropButtonState extends State<CropButton>
-    with SingleTickerProviderStateMixin {
-  bool _visible = false;
-
-  AnimationController _animationController;
-  Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _animation = Tween(begin: 0.0, end: 0.8).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(widget.iconData),
-        onPressed: _handleOnPressed,
-        heroTag: null,
-      ),
-    );
-  }
-
-  void _handleOnPressed() {
-    widget.onPressed();
-    setVisible(false);
-  }
-
-  bool get isVisible => _visible;
-
-  void setVisible(bool visible) {
-    if (_visible != visible) {
-      setState(() {
-        _visible = visible;
-        if (visible) {
-          _animationController.forward();
-        } else {
-          _animationController.reverse();
-        }
-      });
-    }
-  }
-}
-
-class MyLocationButton extends StatelessWidget {
-  MyLocationButton({
-    this.iconData,
-    this.onPressed,
-  });
-
-  final IconData iconData;
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 0.8,
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(iconData),
-        onPressed: onPressed,
-        heroTag: null,
-      ),
-    );
   }
 }

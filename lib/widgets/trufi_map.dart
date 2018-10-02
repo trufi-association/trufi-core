@@ -9,6 +9,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
+import 'package:trufi_app/widgets/alerts.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
@@ -24,14 +25,18 @@ class TrufiOnAndOfflineMapController {
 
   TrufiOnAndOfflineMapState _state;
 
+  set state(TrufiOnAndOfflineMapState state) {
+    _state = state;
+  }
+
   void dispose() {
     _offlineController.dispose();
     _onlineController.dispose();
     _mapReadyController.close();
   }
 
-  set state(TrufiOnAndOfflineMapState state) {
-    _state = state;
+  void moveToYourLocation(BuildContext context) {
+    active.moveToYourLocation(context);
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;
@@ -153,16 +158,29 @@ class TrufiMapController {
 
   TrufiMapState _state;
 
-  void dispose() {
-    _mapReadyController.close();
-  }
-
   set state(TrufiMapState state) {
     _state = state;
     _mapController.onReady.then((_) {
       _mapController.move(TrufiMap.cochabambaCenter, 12.0);
       _inMapReady.add(null);
     });
+  }
+
+  void dispose() {
+    _mapReadyController.close();
+  }
+
+  void moveToYourLocation(BuildContext context) async {
+    final locationProviderBloc = LocationProviderBloc.of(context);
+    LatLng lastLocation = await locationProviderBloc.lastLocation;
+    if (lastLocation != null) {
+      _mapController.move(lastLocation, 17.0);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) => buildAlertLocationServicesDenied(context),
+    );
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;

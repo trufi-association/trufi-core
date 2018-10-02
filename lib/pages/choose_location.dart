@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
@@ -102,7 +100,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             child: FloatingActionButton(
               backgroundColor: Colors.grey,
               child: Icon(Icons.my_location),
-              onPressed: _handleOnMyLocationTap,
+              onPressed: _handleOnYourLocationPressed,
               heroTag: null,
             ),
           ),
@@ -113,27 +111,18 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             Icons.check,
             color: theme.primaryIconTheme.color,
           ),
-          onPressed: _handleOnCheckTap,
+          onPressed: _handleOnCheckPressed,
           heroTag: null,
         ),
       ],
     );
   }
 
-  void _handleOnMyLocationTap() async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
-      _trufiOnAndOfflineMapController.mapController.move(lastLocation, 17.0);
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
+  void _handleOnYourLocationPressed() async {
+    _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 
-  void _handleOnCheckTap() {
+  void _handleOnCheckPressed() {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
