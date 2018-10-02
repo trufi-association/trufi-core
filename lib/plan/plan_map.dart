@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
@@ -30,20 +29,39 @@ class PlanMapPage extends StatefulWidget {
 }
 
 class PlanMapPageState extends State<PlanMapPage> {
-  final GlobalKey<CropButtonState> _cropButtonKey =
-      GlobalKey<CropButtonState>();
+  final _cropButtonKey = GlobalKey<CropButtonState>();
+  final _subscriptions = CompositeSubscription();
+  final _trufiOnlineMapController = TrufiOnlineMapController();
+  final _itineraries = Map<PlanItinerary, List<PolylineWithMarkers>>();
+  final _polylines = List<Polyline>();
+  final _backgroundMarkers = List<Marker>();
+  final _foregroundMarkers = List<Marker>();
+  final _selectedMarkers = List<Marker>();
+  final _selectedPolylines = List<Polyline>();
 
-  TrufiOnlineMapController _mapController = TrufiOnlineMapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
-  Map<PlanItinerary, List<PolylineWithMarkers>> _itineraries = Map();
-  List<Marker> _backgroundMarkers = List();
-  List<Marker> _foregroundMarkers = List();
-  List<Polyline> _polylines = List();
-  List<Marker> _selectedMarkers = List();
-  List<Polyline> _selectedPolylines = List();
   LatLngBounds _selectedBounds = LatLngBounds();
   bool _needsCameraUpdate = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscriptions.add(
+      _trufiOnlineMapController.outMapReady.listen((_) {
+        setState(() {
+          _needsCameraUpdate = true;
+        });
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.cancel();
+    _trufiOnlineMapController.dispose();
+    super.dispose();
+  }
 
   Widget build(BuildContext context) {
     // Clear content
@@ -91,7 +109,6 @@ class PlanMapPageState extends State<PlanMapPage> {
                 _backgroundMarkers.add(marker);
               }
             });
-
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
               polylineWithMarker.polyline.points.forEach((point) {
@@ -104,16 +121,17 @@ class PlanMapPageState extends State<PlanMapPage> {
         });
       }
     }
-    if (_needsCameraUpdate && _mapController.ready) {
+    if (_needsCameraUpdate && _trufiOnlineMapController.mapController.ready) {
       if (_selectedBounds.isValid) {
-        _mapController.fitBounds(_selectedBounds);
+        _trufiOnlineMapController.mapController.fitBounds(_selectedBounds);
         _needsCameraUpdate = false;
       }
     }
     return Stack(
       children: <Widget>[
         TrufiOnlineMap(
-          mapController: _mapController,
+          key: ValueKey("PlanMap"),
+          trufiOnlineMapController: _trufiOnlineMapController,
           onTap: _handleOnMapTap,
           onPositionChanged: _handleOnMapPositionChanged,
           layerOptionsBuilder: (context) {
@@ -122,7 +140,7 @@ class PlanMapPageState extends State<PlanMapPage> {
               MarkerLayerOptions(markers: _backgroundMarkers),
               PolylineLayerOptions(polylines: _selectedPolylines),
               MarkerLayerOptions(markers: _selectedMarkers),
-              _mapController.state.yourLocationLayer,
+              _trufiOnlineMapController.yourLocationLayer,
               MarkerLayerOptions(markers: _foregroundMarkers),
             ];
           },
@@ -163,11 +181,9 @@ class PlanMapPageState extends State<PlanMapPage> {
 
   void _handleOnMapPositionChanged(MapPosition position) {
     if (_selectedBounds != null && _selectedBounds.isValid) {
-      Future.delayed(Duration.zero, () {
-        _cropButtonKey.currentState.setVisible(
-          !position.bounds.containsBounds(_selectedBounds),
-        );
-      });
+      _cropButtonKey.currentState.setVisible(
+        !position.bounds.containsBounds(_selectedBounds),
+      );
     }
   }
 
@@ -175,7 +191,7 @@ class PlanMapPageState extends State<PlanMapPage> {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
+      _trufiOnlineMapController.mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(

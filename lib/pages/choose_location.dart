@@ -18,7 +18,8 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  TrufiOnlineMapController _mapController = TrufiOnlineMapController();
+  final _trufiOnlineMapController = TrufiOnlineMapController();
+
   Marker _chooseOnMapMarker;
 
   void initState() {
@@ -28,6 +29,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           ? widget.initialPosition
           : TrufiMap.cochabambaCenter,
     );
+  }
+
+  @override
+  void dispose() {
+    _trufiOnlineMapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,11 +77,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
 
   Widget _buildBody(BuildContext context) {
     return TrufiOnlineMap(
-      mapController: _mapController,
+      trufiOnlineMapController: _trufiOnlineMapController,
       onPositionChanged: _handleOnMapPositionChanged,
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
-          _mapController.state.yourLocationLayer,
+          _trufiOnlineMapController.yourLocationLayer,
           MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
         ];
       },
@@ -117,7 +124,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
+      _trufiOnlineMapController.mapController.move(lastLocation, 17.0);
       return;
     }
     showDialog(
@@ -131,10 +138,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnMapPositionChanged(MapPosition position) {
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        _chooseOnMapMarker = buildToMarker(position.center);
-      });
+    setState(() {
+      _chooseOnMapMarker = buildToMarker(position.center);
     });
   }
 }

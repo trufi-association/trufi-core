@@ -51,20 +51,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Widget _buildItinerariesVisible(BuildContext context) {
-    return Container(
-      height: _animation.value,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
-      ),
-      child: PlanItineraryTabPages(
-        _tabController,
-        widget.plan.itineraries,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -79,8 +65,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
               ),
             ),
             VisibleWidget(
-              child: _buildItinerariesVisible(context),
               visibility: _visibleFlag,
+              child: _buildItinerariesVisible(context),
               removedChild: _buildItinerariesGone(context),
             ),
           ],
@@ -91,6 +77,20 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           child: _buildFloatingActionButton(context),
         ),
       ],
+    );
+  }
+
+  Widget _buildItinerariesVisible(BuildContext context) {
+    return Container(
+      height: _animation.value,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+      ),
+      child: PlanItineraryTabPages(
+        _tabController,
+        widget.plan.itineraries,
+      ),
     );
   }
 
@@ -119,6 +119,40 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
+    ThemeData theme = Theme.of(context);
+    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    List<Widget> summary = List();
+    var legs = itinerary.legs;
+    for (var i = 0; i < legs.length; i++) {
+      var leg = legs[i];
+      summary.add(
+        Row(
+          children: <Widget>[
+            Icon(leg.iconData()),
+            leg.mode == 'BUS'
+                ? Text(
+                    leg.route,
+                    style: theme.textTheme.body2.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Text(
+                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes}",
+                    style: theme.textTheme.body1,
+                  ),
+            i < (legs.length - 1)
+                ? Icon(Icons.keyboard_arrow_right)
+                : Container(),
+          ],
+        ),
+      );
+    }
+    return Row(
+      children: summary,
     );
   }
 
@@ -154,40 +188,5 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         _animationController.reverse();
       }
     });
-  }
-
-  Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-
-    List<Widget> summary = List();
-    var legs = itinerary.legs;
-    for (var i = 0; i < legs.length; i++) {
-      var leg = legs[i];
-      summary.add(
-        Row(
-          children: <Widget>[
-            Icon(leg.iconData()),
-            leg.mode == 'BUS'
-                ? Text(
-                    leg.route,
-                    style: theme.textTheme.body2.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : Text(
-                    "${(leg.duration.ceil()/ 60).ceil().toString()} ${localizations.instructionMinutes}",
-                    style: theme.textTheme.body1,
-                  ),
-            i < (legs.length - 1)
-                ? Icon(Icons.keyboard_arrow_right)
-                : Container(),
-          ],
-        ),
-      );
-    }
-    return Row(
-      children: summary,
-    );
   }
 }
