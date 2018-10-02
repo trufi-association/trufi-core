@@ -11,56 +11,88 @@ class PreferencesBloc extends BlocBase {
     return BlocProvider.of<PreferencesBloc>(context);
   }
 
-  static const String keyLanguageCode = "language_code";
-  static const String keyStateHomePage = "state_home_page";
+  static const String propertyLanguageCodeKey = "property_language_code";
+  static const String propertyOnlineKey = "property_online";
+  static const String stateHomePageKey = "state_home_page";
 
   PreferencesBloc() {
-    _switchLanguageCodeController.listen(_handleSwitchLanguage);
+    _changeLanguageCodeController.listen(_handleChangeLanguageCode);
+    _changeOnlineController.listen(_handleChangeOnline);
     SharedPreferences.getInstance().then((preferences) {
       _preferences = preferences;
-      String languageCode = preferences.getString(keyLanguageCode);
-      if (languageCode != null) {
-        inSwitchLanguageCode.add(languageCode);
-      }
+      _load();
     });
+  }
+
+  void _load() {
+    _loadLanguageCode();
+    _loadOnline();
+  }
+
+  void _loadLanguageCode() {
+    String languageCode = _preferences.getString(propertyLanguageCodeKey);
+    if (languageCode != null) {
+      inChangeLanguageCode.add(languageCode);
+    }
+  }
+
+  void _loadOnline() {
+    bool online = _preferences.getBool(propertyOnlineKey);
+    if (online != null) {
+      inChangeOnline.add(online);
+    }
   }
 
   SharedPreferences _preferences;
 
-  // Switch language code
-  BehaviorSubject<String> _switchLanguageCodeController =
+  // Change language code
+  BehaviorSubject<String> _changeLanguageCodeController =
       new BehaviorSubject<String>();
 
-  Sink<String> get inSwitchLanguageCode {
-    return _switchLanguageCodeController.sink;
+  Sink<String> get inChangeLanguageCode {
+    return _changeLanguageCodeController.sink;
   }
 
-  Stream<String> get outSwitchLanguageCode {
-    return _switchLanguageCodeController.stream;
+  Stream<String> get outChangeLanguageCode {
+    return _changeLanguageCodeController.stream;
+  }
+
+  // Change online
+  BehaviorSubject<bool> _changeOnlineController = new BehaviorSubject<bool>();
+
+  Sink<bool> get inChangeOnline {
+    return _changeOnlineController.sink;
+  }
+
+  Stream<bool> get outChangeOnline {
+    return _changeOnlineController.stream;
   }
 
   // Dispose
 
   @override
   void dispose() {
-    _switchLanguageCodeController.close();
+    _changeLanguageCodeController.close();
+    _changeOnlineController.close();
   }
 
   // Handle
 
-  void _handleSwitchLanguage(String languageCode) {
-    _preferences.setString(keyLanguageCode, languageCode);
+  void _handleChangeOnline(bool value) {
+    _preferences.setBool(propertyOnlineKey, value);
+  }
+
+  void _handleChangeLanguageCode(String value) {
+    _preferences.setString(propertyLanguageCodeKey, value);
   }
 
   // Getter
 
-  String get languageCode => _preferences?.getString(keyLanguageCode);
-
-  String get stateHomePage => _preferences?.getString(keyStateHomePage);
+  String get stateHomePage => _preferences?.getString(stateHomePageKey);
 
   // Setter
 
   set stateHomePage(String value) {
-    _preferences?.setString(keyStateHomePage, value);
+    _preferences?.setString(stateHomePageKey, value);
   }
 }

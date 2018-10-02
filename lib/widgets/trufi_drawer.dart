@@ -65,6 +65,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localizations.menuTeam,
             TeamPage.route,
           ),
+          Divider(),
+          _buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
         ],
       ),
@@ -106,7 +108,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         style: theme.textTheme.body2,
         value: values.firstWhere((value) => value.languageCode == languageCode),
         onChanged: (LanguageDropdownValue value) {
-          preferencesBloc.inSwitchLanguageCode.add(value.languageCode);
+          preferencesBloc.inChangeLanguageCode.add(value.languageCode);
         },
         items: values.map((LanguageDropdownValue value) {
           return DropdownMenuItem<LanguageDropdownValue>(
@@ -118,6 +120,25 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           );
         }).toList(),
       ),
+    );
+  }
+
+  Widget _buildOfflineToggle(BuildContext context) {
+    final preferencesBloc = PreferencesBloc.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    return StreamBuilder(
+      stream: preferencesBloc.outChangeOnline,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        bool isOnline = snapshot.data == true;
+        return SwitchListTile(
+          title: Text(localizations.menuOnline),
+          value: isOnline,
+          onChanged: preferencesBloc.inChangeOnline.add,
+          activeColor: theme.primaryColor,
+          secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
+        );
+      },
     );
   }
 }

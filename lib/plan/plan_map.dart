@@ -1,14 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/crop_button.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
+import 'package:trufi_app/widgets/your_location_button.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
@@ -30,33 +29,38 @@ class PlanMapPage extends StatefulWidget {
 }
 
 class PlanMapPageState extends State<PlanMapPage> {
-  final GlobalKey<CropButtonState> _cropButtonKey =
-      GlobalKey<CropButtonState>();
+  final _cropButtonKey = GlobalKey<CropButtonState>();
+  final _subscriptions = CompositeSubscription();
+  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
+  final _itineraries = Map<PlanItinerary, List<PolylineWithMarkers>>();
+  final _polylines = List<Polyline>();
+  final _backgroundMarkers = List<Marker>();
+  final _foregroundMarkers = List<Marker>();
+  final _selectedMarkers = List<Marker>();
+  final _selectedPolylines = List<Polyline>();
 
-  MapController _mapController = MapController();
   Plan _plan;
   PlanItinerary _selectedItinerary;
-  Map<PlanItinerary, List<PolylineWithMarkers>> _itineraries = Map();
-  List<Marker> _backgroundMarkers = List();
-  List<Marker> _foregroundMarkers = List();
-  List<Polyline> _polylines = List();
-  List<Marker> _selectedMarkers = List();
-  List<Polyline> _selectedPolylines = List();
   LatLngBounds _selectedBounds = LatLngBounds();
   bool _needsCameraUpdate = true;
 
   @override
   void initState() {
     super.initState();
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        12.0,
-      );
-      setState(() {});
-    });
+    _subscriptions.add(
+      _trufiOnAndOfflineMapController.outMapReady.listen((_) {
+        setState(() {
+          _needsCameraUpdate = true;
+        });
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.cancel();
+    _trufiOnAndOfflineMapController.dispose();
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -105,7 +109,6 @@ class PlanMapPageState extends State<PlanMapPage> {
                 _backgroundMarkers.add(marker);
               }
             });
-
             if (isSelected) {
               _selectedPolylines.add(polylineWithMarker.polyline);
               polylineWithMarker.polyline.points.forEach((point) {
@@ -118,33 +121,27 @@ class PlanMapPageState extends State<PlanMapPage> {
         });
       }
     }
-    if (_needsCameraUpdate && _mapController.ready) {
-      if (_selectedBounds.isValid) {
-        _mapController.fitBounds(_selectedBounds);
-        _needsCameraUpdate = false;
-      }
+    if (_needsCameraUpdate && _selectedBounds.isValid && _mapController.ready) {
+      _mapController.fitBounds(_selectedBounds);
+      _needsCameraUpdate = false;
     }
     return Stack(
       children: <Widget>[
-        TrufiMap(
-          mapController: _mapController,
-          mapOptions: MapOptions(
-            zoom: 13.0,
-            maxZoom: 15.0,
-            minZoom: 8.0,
-            onTap: _handleOnMapTap,
-            onPositionChanged: _handleOnMapPositionChanged,
-            swPanBoundary: TrufiMap.cochabambaSouthWest,
-            nePanBoundary: TrufiMap.cochabambaNorthEast,
-            center: TrufiMap.cochabambaCenter,
-          ),
-          backgroundLayers: <LayerOptions>[
-            PolylineLayerOptions(polylines: _polylines),
-            MarkerLayerOptions(markers: _backgroundMarkers),
-            PolylineLayerOptions(polylines: _selectedPolylines),
-            MarkerLayerOptions(markers: _selectedMarkers),
-            MarkerLayerOptions(markers: _foregroundMarkers),
-          ],
+        TrufiOnAndOfflineMap(
+          key: ValueKey("PlanMap"),
+          controller: _trufiOnAndOfflineMapController,
+          onTap: _handleOnMapTap,
+          onPositionChanged: _handleOnMapPositionChanged,
+          layerOptionsBuilder: (context) {
+            return <LayerOptions>[
+              PolylineLayerOptions(polylines: _polylines),
+              MarkerLayerOptions(markers: _backgroundMarkers),
+              PolylineLayerOptions(polylines: _selectedPolylines),
+              MarkerLayerOptions(markers: _selectedMarkers),
+              _trufiOnAndOfflineMapController.yourLocationLayer,
+              MarkerLayerOptions(markers: _foregroundMarkers),
+            ];
+          },
         ),
         Positioned(
           bottom: 36.0,
@@ -163,11 +160,11 @@ class PlanMapPageState extends State<PlanMapPage> {
         CropButton(
           key: _cropButtonKey,
           iconData: Icons.crop_free,
-          onPressed: _handleOnCropTap,
+          onPressed: _handleOnCropPressed,
         ),
-        MyLocationButton(
+        YourLocationButton(
           iconData: Icons.my_location,
-          onPressed: _handleOnMyLocationTap,
+          onPressed: _handleOnYourLocationPressed,
         ),
       ],
     );
@@ -182,28 +179,17 @@ class PlanMapPageState extends State<PlanMapPage> {
 
   void _handleOnMapPositionChanged(MapPosition position) {
     if (_selectedBounds != null && _selectedBounds.isValid) {
-      Future.delayed(Duration.zero, () {
-        _cropButtonKey.currentState.setVisible(
-          !position.bounds.containsBounds(_selectedBounds),
-        );
-      });
+      _cropButtonKey.currentState.setVisible(
+        !position.bounds.containsBounds(_selectedBounds),
+      );
     }
   }
 
-  void _handleOnMyLocationTap() async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
+  void _handleOnYourLocationPressed() async {
+    _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 
-  void _handleOnCropTap() {
+  void _handleOnCropPressed() {
     setState(() {
       _needsCameraUpdate = true;
     });
@@ -220,8 +206,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
-    MapEntry<PlanItinerary, List<PolylineWithMarkers>> entry =
-        _itineraryEntryForPolyline(polyline);
+    final entry = _itineraryEntryForPolyline(polyline);
     return entry != null ? entry.key : null;
   }
 
@@ -236,95 +221,10 @@ class PlanMapPageState extends State<PlanMapPage> {
           );
     }, orElse: () => null);
   }
-}
 
-class CropButton extends StatefulWidget {
-  CropButton({
-    Key key,
-    @required this.iconData,
-    @required this.onPressed,
-  }) : super(key: key);
+  // Getter
 
-  final IconData iconData;
-  final Function onPressed;
-
-  @override
-  CropButtonState createState() => CropButtonState();
-}
-
-class CropButtonState extends State<CropButton>
-    with SingleTickerProviderStateMixin {
-  bool _visible = false;
-
-  AnimationController _animationController;
-  Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 250),
-      vsync: this,
-    );
-    _animation = Tween(begin: 0.0, end: 0.8).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _animation,
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(widget.iconData),
-        onPressed: _handleOnPressed,
-        heroTag: null,
-      ),
-    );
-  }
-
-  void _handleOnPressed() {
-    widget.onPressed();
-    setVisible(false);
-  }
-
-  bool get isVisible => _visible;
-
-  void setVisible(bool visible) {
-    if (_visible != visible) {
-      setState(() {
-        _visible = visible;
-        if (visible) {
-          _animationController.forward();
-        } else {
-          _animationController.reverse();
-        }
-      });
-    }
-  }
-}
-
-class MyLocationButton extends StatelessWidget {
-  MyLocationButton({
-    this.iconData,
-    this.onPressed,
-  });
-
-  final IconData iconData;
-  final Function onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 0.8,
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(iconData),
-        onPressed: onPressed,
-        heroTag: null,
-      ),
-    );
+  MapController get _mapController {
+    return _trufiOnAndOfflineMapController.mapController;
   }
 }
