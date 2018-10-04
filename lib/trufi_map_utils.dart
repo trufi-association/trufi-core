@@ -8,13 +8,6 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
 
-class PolylineWithMarkers {
-  PolylineWithMarkers(this.polyline, this.markers);
-
-  final Polyline polyline;
-  final List<Marker> markers;
-}
-
 openStreetMapTileLayerOptions() {
   return TileLayerOptions(
     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -159,59 +152,6 @@ Marker buildMarker(
 
 LatLng createLatLngWithPlanLocation(PlanLocation location) {
   return LatLng(location.latitude, location.longitude);
-}
-
-Map<PlanItinerary, List<PolylineWithMarkers>> createItineraries(
-  Plan plan,
-  PlanItinerary selectedItinerary,
-  Function(PlanItinerary) onTap,
-) {
-  Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
-  plan.itineraries.forEach((itinerary) {
-    List<Marker> markers = List();
-    List<PolylineWithMarkers> polylinesWithMarker = List();
-    bool isSelected = itinerary == selectedItinerary;
-    for (int i = 0; i < itinerary.legs.length; i++) {
-      PlanItineraryLeg leg = itinerary.legs[i];
-
-      // Polyline
-      List<LatLng> points = decodePolyline(leg.points);
-      Polyline polyline = new Polyline(
-        points: points,
-        color: isSelected
-            ? leg.mode == 'WALK' ? Colors.blue : Colors.green
-            : Colors.grey,
-        strokeWidth: isSelected ? 6.0 : 3.0,
-        borderColor: Colors.white,
-        borderStrokeWidth: 3.0,
-        isDotted: leg.mode == 'WALK',
-      );
-
-      // Transfer marker
-      if (isSelected && i < itinerary.legs.length - 1) {
-        markers.add(
-          buildTransferMarker(
-            polyline.points[polyline.points.length - 1],
-          ),
-        );
-      }
-
-      // Bus marker
-      if (leg.mode != 'WALK') {
-        markers.add(
-          buildBusMarker(
-            midPointForPolyline(polyline),
-            isSelected ? Colors.green : Colors.grey,
-            leg,
-            onTap: () => onTap(itinerary),
-          ),
-        );
-      }
-      polylinesWithMarker.add(PolylineWithMarkers(polyline, markers));
-    }
-    itineraries.addAll({itinerary: polylinesWithMarker});
-  });
-  return itineraries;
 }
 
 List<LatLng> decodePolyline(String encoded) {
