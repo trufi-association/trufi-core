@@ -100,43 +100,49 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
 
   @override
   Widget build(BuildContext context) {
-    return _online
-        ? TrufiMap(
-            key: ValueKey("TrufiOnlineMap"),
-            controller: widget.controller.online,
-            mapOptions: MapOptions(
-              minZoom: 1.0,
-              maxZoom: 19.0,
-              zoom: 13.0,
-              onTap: widget.onTap,
-              onPositionChanged: _handleOnPositionChanged,
-              center: TrufiMap.cochabambaCenter,
-            ),
-            layerOptionsBuilder: (context) {
-              return <LayerOptions>[
-                tileHostingTileLayerOptions(),
-              ]..addAll(widget.layerOptionsBuilder(context));
-            },
-          )
-        : TrufiMap(
-            key: ValueKey("TrufiOfflineMap"),
-            controller: widget.controller.offline,
-            mapOptions: MapOptions(
-              minZoom: 8.0,
-              maxZoom: 14.0,
-              zoom: 13.0,
-              onTap: widget.onTap,
-              onPositionChanged: _handleOnPositionChanged,
-              swPanBoundary: TrufiMap.cochabambaSouthWest,
-              nePanBoundary: TrufiMap.cochabambaNorthEast,
-              center: TrufiMap.cochabambaCenter,
-            ),
-            layerOptionsBuilder: (context) {
-              return <LayerOptions>[
-                offlineMapTileLayerOptions(),
-              ]..addAll(widget.layerOptionsBuilder(context));
-            },
-          );
+    return _online ? _buildOnlineMap() : _buildOfflineMap();
+  }
+
+  Widget _buildOnlineMap() {
+    return TrufiMap(
+      key: ValueKey("TrufiOnlineMap"),
+      controller: widget.controller.online,
+      mapOptions: MapOptions(
+        minZoom: 1.0,
+        maxZoom: 19.0,
+        zoom: 13.0,
+        onTap: widget.onTap,
+        onPositionChanged: _handleOnPositionChanged,
+        center: TrufiMap.cochabambaCenter,
+      ),
+      layerOptionsBuilder: (context) {
+        return <LayerOptions>[
+          tileHostingTileLayerOptions(),
+        ]..addAll(widget.layerOptionsBuilder(context));
+      },
+    );
+  }
+
+  Widget _buildOfflineMap() {
+    return TrufiMap(
+      key: ValueKey("TrufiOfflineMap"),
+      controller: widget.controller.offline,
+      mapOptions: MapOptions(
+        minZoom: 8.0,
+        maxZoom: 14.0,
+        zoom: 13.0,
+        onTap: widget.onTap,
+        onPositionChanged: _handleOnPositionChanged,
+        swPanBoundary: TrufiMap.cochabambaSouthWest,
+        nePanBoundary: TrufiMap.cochabambaNorthEast,
+        center: TrufiMap.cochabambaCenter,
+      ),
+      layerOptionsBuilder: (context) {
+        return <LayerOptions>[
+          offlineMapTileLayerOptions(),
+        ]..addAll(widget.layerOptionsBuilder(context));
+      },
+    );
   }
 
   void _handleOnPositionChanged(MapPosition position) {
