@@ -14,13 +14,11 @@ typedef void OnSelected(PlanItinerary itinerary);
 class PlanMapPage extends StatefulWidget {
   PlanMapPage({
     this.plan,
-    this.initialPosition,
     this.onSelected,
     this.selectedItinerary,
   });
 
   final Plan plan;
-  final LatLng initialPosition;
   final OnSelected onSelected;
   final PlanItinerary selectedItinerary;
 
@@ -32,25 +30,20 @@ class PlanMapPageState extends State<PlanMapPage> {
   final _cropButtonKey = GlobalKey<CropButtonState>();
   final _subscriptions = CompositeSubscription();
   final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
-  final _itineraries = Map<PlanItinerary, List<PolylineWithMarkers>>();
-  final _polylines = List<Polyline>();
-  final _backgroundMarkers = List<Marker>();
-  final _foregroundMarkers = List<Marker>();
-  final _selectedMarkers = List<Marker>();
-  final _selectedPolylines = List<Polyline>();
 
-  Plan _plan;
-  PlanItinerary _selectedItinerary;
-  LatLngBounds _selectedBounds = LatLngBounds();
-  bool _needsCameraUpdate = true;
+  PlanMapPageStateData _data;
 
   @override
   void initState() {
     super.initState();
+    _data = PlanMapPageStateData(
+      plan: widget.plan,
+      onItineraryTap: _setSelectedItinerary,
+    );
     _subscriptions.add(
       _trufiOnAndOfflineMapController.outMapReady.listen((_) {
         setState(() {
-          _needsCameraUpdate = true;
+          _data.needsCameraUpdate = true;
         });
       }),
     );
@@ -64,66 +57,11 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   Widget build(BuildContext context) {
-    // Clear content
-    _needsCameraUpdate = _needsCameraUpdate ||
-        widget.plan != _plan ||
-        widget.selectedItinerary != _selectedItinerary;
-    _plan = widget.plan;
-    _selectedItinerary = widget.selectedItinerary;
-    _itineraries.clear();
-    _backgroundMarkers.clear();
-    _foregroundMarkers.clear();
-    _polylines.clear();
-    _selectedMarkers.clear();
-    _selectedPolylines.clear();
-    _selectedBounds = LatLngBounds();
-
-    // Build markers and polylines
-    if (_plan != null) {
-      if (_plan.from != null) {
-        LatLng point = createLatLngWithPlanLocation(_plan.from);
-        _backgroundMarkers.add(buildFromMarker(point));
-        _selectedBounds.extend(point);
+    if (_mapController.ready) {
+      if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
+        _mapController.fitBounds(_data.selectedBounds);
+        _data.needsCameraUpdate = false;
       }
-      if (_plan.to != null) {
-        LatLng point = createLatLngWithPlanLocation(_plan.to);
-        _foregroundMarkers.add(buildToMarker(point));
-        _selectedBounds.extend(point);
-      }
-      if (_plan.itineraries.isNotEmpty) {
-        if (_selectedItinerary == null ||
-            !_plan.itineraries.contains(_selectedItinerary)) {
-          _selectedItinerary = _plan.itineraries.first;
-        }
-        _itineraries.addAll(
-          createItineraries(_plan, _selectedItinerary, _setItinerary),
-        );
-        _itineraries.forEach((itinerary, polylinesWithMarker) {
-          bool isSelected = itinerary == _selectedItinerary;
-          polylinesWithMarker.forEach((polylineWithMarker) {
-            polylineWithMarker.markers.forEach((marker) {
-              if (isSelected) {
-                _selectedMarkers.add(marker);
-                _selectedBounds.extend(marker.point);
-              } else {
-                _backgroundMarkers.add(marker);
-              }
-            });
-            if (isSelected) {
-              _selectedPolylines.add(polylineWithMarker.polyline);
-              polylineWithMarker.polyline.points.forEach((point) {
-                _selectedBounds.extend(point);
-              });
-            } else {
-              _polylines.add(polylineWithMarker.polyline);
-            }
-          });
-        });
-      }
-    }
-    if (_needsCameraUpdate && _selectedBounds.isValid && _mapController.ready) {
-      _mapController.fitBounds(_selectedBounds);
-      _needsCameraUpdate = false;
     }
     return Stack(
       children: <Widget>[
@@ -134,12 +72,13 @@ class PlanMapPageState extends State<PlanMapPage> {
           onPositionChanged: _handleOnMapPositionChanged,
           layerOptionsBuilder: (context) {
             return <LayerOptions>[
-              PolylineLayerOptions(polylines: _polylines),
-              MarkerLayerOptions(markers: _backgroundMarkers),
-              PolylineLayerOptions(polylines: _selectedPolylines),
-              MarkerLayerOptions(markers: _selectedMarkers),
+              _data.unselectedPolylinesLayer,
+              _data.unselectedMarkersLayer,
+              _data.fromMarkerLayer,
+              _data.selectedPolylinesLayer,
+              _data.selectedMarkersLayer,
               _trufiOnAndOfflineMapController.yourLocationLayer,
-              MarkerLayerOptions(markers: _foregroundMarkers),
+              _data.toMarkerLayer,
             ];
           },
         ),
@@ -164,16 +103,16 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   void _handleOnMapTap(LatLng point) {
-    Polyline polyline = polylineHitTest(_polylines, point);
-    if (polyline != null) {
-      _setItinerary(_itineraryForPolyline(polyline));
+    PlanItinerary tappedItinerary = _data.itineraryForPoint(point);
+    if (tappedItinerary != null) {
+      _setSelectedItinerary(tappedItinerary);
     }
   }
 
   void _handleOnMapPositionChanged(MapPosition position) {
-    if (_selectedBounds != null && _selectedBounds.isValid) {
+    if (_data.selectedBounds != null && _data.selectedBounds.isValid) {
       _cropButtonKey.currentState.setVisible(
-        !position.bounds.containsBounds(_selectedBounds),
+        !position.bounds.containsBounds(_data.selectedBounds),
       );
     }
   }
@@ -184,18 +123,153 @@ class PlanMapPageState extends State<PlanMapPage> {
 
   void _handleOnCropPressed() {
     setState(() {
-      _needsCameraUpdate = true;
+      _data.needsCameraUpdate = true;
     });
   }
 
-  void _setItinerary(PlanItinerary value) {
+  void _setSelectedItinerary(PlanItinerary value) {
     setState(() {
-      _selectedItinerary = value;
-      _needsCameraUpdate = true;
+      _data.selectedItinerary = value;
+      _data.needsCameraUpdate = true;
       if (widget.onSelected != null) {
-        widget.onSelected(_selectedItinerary);
+        widget.onSelected(_data.selectedItinerary);
       }
     });
+  }
+
+  // Getter
+
+  MapController get _mapController {
+    return _trufiOnAndOfflineMapController.mapController;
+  }
+}
+
+class PlanMapPageStateData {
+  PlanMapPageStateData({
+    this.plan,
+    this.onItineraryTap,
+  }) {
+    if (plan != null) {
+      if (plan.from != null) {
+        _fromMarker = buildFromMarker(createLatLngWithPlanLocation(plan.from));
+      }
+      if (plan.to != null) {
+        _toMarker = buildToMarker(createLatLngWithPlanLocation(plan.to));
+      }
+      if (plan.itineraries.isNotEmpty) {
+        selectedItinerary = plan.itineraries.first;
+      }
+    }
+  }
+
+  final Plan plan;
+  final ValueChanged<PlanItinerary> onItineraryTap;
+
+  final _itineraries = Map<PlanItinerary, List<PolylineWithMarkers>>();
+  final _unselectedMarkers = List<Marker>();
+  final _unselectedPolylines = List<Polyline>();
+  final _selectedMarkers = List<Marker>();
+  final _selectedPolylines = List<Polyline>();
+  final _allPolylines = List<Polyline>();
+
+  Marker _fromMarker;
+  Marker _toMarker;
+
+  LatLngBounds _selectedBounds = LatLngBounds();
+  PlanItinerary _selectedItinerary;
+
+  bool needsCameraUpdate = true;
+
+  void clear() {
+    _itineraries.clear();
+    _unselectedMarkers.clear();
+    _unselectedPolylines.clear();
+    _selectedMarkers.clear();
+    _selectedPolylines.clear();
+    _allPolylines.clear();
+    _selectedBounds = LatLngBounds();
+  }
+
+  // Getter
+
+  MarkerLayerOptions get fromMarkerLayer {
+    return MarkerLayerOptions(
+      markers: _fromMarker != null ? [_fromMarker] : [],
+    );
+  }
+
+  MarkerLayerOptions get toMarkerLayer {
+    return MarkerLayerOptions(
+      markers: _toMarker != null ? [_toMarker] : [],
+    );
+  }
+
+  MarkerLayerOptions get unselectedMarkersLayer {
+    return MarkerLayerOptions(markers: _unselectedMarkers);
+  }
+
+  PolylineLayerOptions get unselectedPolylinesLayer {
+    return PolylineLayerOptions(polylines: _unselectedPolylines);
+  }
+
+  MarkerLayerOptions get selectedMarkersLayer {
+    return MarkerLayerOptions(markers: _selectedMarkers);
+  }
+
+  PolylineLayerOptions get selectedPolylinesLayer {
+    return PolylineLayerOptions(polylines: _selectedPolylines);
+  }
+
+  LatLngBounds get selectedBounds => _selectedBounds;
+
+  PlanItinerary get selectedItinerary => _selectedItinerary;
+
+  // Setter
+
+  set selectedItinerary(PlanItinerary selectedItinerary) {
+    clear();
+    _selectedItinerary = selectedItinerary;
+    if (_fromMarker != null) {
+      _selectedBounds.extend(_fromMarker.point);
+    }
+    if (_toMarker != null) {
+      _selectedBounds.extend(_toMarker.point);
+    }
+    _itineraries.addAll(
+      _createItineraries(
+        plan: plan,
+        selectedItinerary: _selectedItinerary,
+        onTap: onItineraryTap,
+      ),
+    );
+    _itineraries.forEach((itinerary, polylinesWithMarker) {
+      bool isSelected = (itinerary == _selectedItinerary);
+      polylinesWithMarker.forEach((polylineWithMarker) {
+        polylineWithMarker.markers.forEach((marker) {
+          if (isSelected) {
+            _selectedMarkers.add(marker);
+            _selectedBounds.extend(marker.point);
+          } else {
+            _unselectedMarkers.add(marker);
+          }
+        });
+        if (isSelected) {
+          _selectedPolylines.add(polylineWithMarker.polyline);
+          polylineWithMarker.polyline.points.forEach((point) {
+            _selectedBounds.extend(point);
+          });
+        } else {
+          _unselectedPolylines.add(polylineWithMarker.polyline);
+        }
+        _allPolylines.add(polylineWithMarker.polyline);
+      });
+    });
+  }
+
+  // Helper
+
+  PlanItinerary itineraryForPoint(LatLng point) {
+    return _itineraryForPolyline(polylineHitTest(_allPolylines, point));
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
@@ -206,18 +280,77 @@ class PlanMapPageState extends State<PlanMapPage> {
   MapEntry<PlanItinerary, List<PolylineWithMarkers>> _itineraryEntryForPolyline(
     Polyline polyline,
   ) {
-    return _itineraries.entries.firstWhere((pair) {
-      return null !=
-          pair.value.firstWhere(
-            (pwm) => pwm.polyline == polyline,
-            orElse: () => null,
+    return _itineraries.entries.firstWhere(
+      (pair) {
+        return null !=
+            pair.value.firstWhere(
+              (pwm) => pwm.polyline == polyline,
+              orElse: () => null,
+            );
+      },
+      orElse: () => null,
+    );
+  }
+
+  Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries({
+    @required Plan plan,
+    @required PlanItinerary selectedItinerary,
+    @required Function(PlanItinerary) onTap,
+  }) {
+    Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
+    if (plan != null) {
+      plan.itineraries.forEach((itinerary) {
+        List<Marker> markers = List();
+        List<PolylineWithMarkers> polylinesWithMarkers = List();
+        bool isSelected = itinerary == selectedItinerary;
+        for (int i = 0; i < itinerary.legs.length; i++) {
+          PlanItineraryLeg leg = itinerary.legs[i];
+
+          // Polyline
+          List<LatLng> points = decodePolyline(leg.points);
+          Polyline polyline = new Polyline(
+            points: points,
+            color: isSelected
+                ? leg.mode == 'WALK' ? Colors.blue : Colors.green
+                : Colors.grey,
+            strokeWidth: isSelected ? 6.0 : 3.0,
+            borderColor: Colors.white,
+            borderStrokeWidth: 3.0,
+            isDotted: leg.mode == 'WALK',
           );
-    }, orElse: () => null);
-  }
 
-  // Getter
+          // Transfer marker
+          if (isSelected && i < itinerary.legs.length - 1) {
+            markers.add(
+              buildTransferMarker(
+                polyline.points[polyline.points.length - 1],
+              ),
+            );
+          }
 
-  MapController get _mapController {
-    return _trufiOnAndOfflineMapController.mapController;
+          // Bus marker
+          if (leg.mode != 'WALK') {
+            markers.add(
+              buildBusMarker(
+                midPointForPolyline(polyline),
+                isSelected ? Colors.green : Colors.grey,
+                leg,
+                onTap: () => onTap(itinerary),
+              ),
+            );
+          }
+          polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
+        }
+        itineraries.addAll({itinerary: polylinesWithMarkers});
+      });
+    }
+    return itineraries;
   }
+}
+
+class PolylineWithMarkers {
+  PolylineWithMarkers(this.polyline, this.markers);
+
+  final Polyline polyline;
+  final List<Marker> markers;
 }

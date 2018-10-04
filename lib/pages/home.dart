@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final HomePageStateData _data = HomePageStateData();
+  final _data = HomePageStateData();
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
@@ -235,11 +235,13 @@ class HomePageState extends State<HomePage>
     if (error != null) {
       showDialog(
         context: context,
-        builder: (context) => buildAlert(
-              context: context,
-              title: TrufiLocalizations.of(context).commonError,
-              content: error.message,
-            ),
+        builder: (context) {
+          return buildAlert(
+            context: context,
+            title: TrufiLocalizations.of(context).commonError,
+            content: error.message,
+          );
+        },
       );
     }
   }
