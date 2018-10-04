@@ -8,6 +8,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -30,15 +31,29 @@ class HomePageState extends State<HomePage>
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
+  final _subscriptions = CompositeSubscription();
 
   bool _isFetching = false;
 
   @override
   initState() {
     super.initState();
+    _subscriptions.add(
+      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+        if (_data.plan == null) {
+          _fetchPlan();
+        }
+      }),
+    );
     Future.delayed(Duration.zero, () {
       _loadState();
     });
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.cancel();
+    super.dispose();
   }
 
   void _loadState() async {
@@ -46,6 +61,9 @@ class HomePageState extends State<HomePage>
       setState(() {
         _fromFieldKey.currentState?.didChange(_data.fromPlace);
         _toFieldKey.currentState?.didChange(_data.toPlace);
+        if (_data.plan == null) {
+          _fetchPlan();
+        }
       });
     } else {
       _setFromPlaceToCurrentPosition();
@@ -185,6 +203,7 @@ class HomePageState extends State<HomePage>
 
   void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
     setState(() {
+      _data.plan = null;
       _data.fromPlace = fromPlace;
       _data.toPlace = toPlace;
       _data.save(context);
