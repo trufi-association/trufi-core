@@ -123,9 +123,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    List<Widget> summary = List();
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    final summary = List<Widget>();
     var legs = itinerary.legs;
     for (var i = 0; i < legs.length; i++) {
       var leg = legs[i];
@@ -157,7 +157,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Transform.scale(
       scale: 0.8,
       child: FloatingActionButton(

@@ -74,7 +74,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildFormFields(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
@@ -205,7 +205,7 @@ class HomePageState extends State<HomePage>
 
   void _setFromPlaceToCurrentPosition() async {
     final locationProviderBloc = LocationProviderBloc.of(context);
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     final LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
       _setFromPlace(
