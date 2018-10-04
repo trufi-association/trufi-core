@@ -20,8 +20,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    TextTheme partialTheme = theme.primaryTextTheme.copyWith(
+    final theme = Theme.of(context);
+    final partialTheme = theme.primaryTextTheme.copyWith(
       title: TextStyle(fontSize: 16.0),
     );
     return theme.copyWith(
@@ -63,7 +63,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildResults(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     if (_result != null) {
       print("${localizations.searchNavigate} ${_result.description}");
       Future.delayed(Duration.zero, () {
@@ -133,7 +133,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildYourLocation(BuildContext context) {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
@@ -145,7 +145,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildChooseOnMap(BuildContext context) {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
@@ -157,7 +157,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildHistoryList(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
       localizations.searchTitleRecent,
@@ -167,7 +167,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildFavoritesList(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return StreamBuilder(
       stream: favoriteLocationsBloc.outLocations,
       builder: (
@@ -304,7 +304,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, String title) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
@@ -331,7 +331,7 @@ class _SuggestionList extends StatelessWidget {
     String title, {
     Widget trailing,
   }) {
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     Row row = Row(
       children: <Widget>[
         Icon(iconData),
@@ -372,7 +372,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnChooseOnMapTap(BuildContext context) async {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(builder: (context) => ChooseLocationPage()),
     );

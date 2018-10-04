@@ -102,7 +102,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
-    ThemeData theme = ThemeData(
+    final theme = ThemeData(
       brightness: Brightness.light,
       primaryColor: const Color(0xffffd600),
       primaryIconTheme: const IconThemeData(color: Colors.black),
