@@ -259,10 +259,14 @@ class HomePageState extends State<HomePage>
         _setPlan(
           await requestManagerBloc.fetchPlan(_data.fromPlace, _data.toPlace),
         );
-      } on FetchRequestException catch (e) {
+      } on FetchOfflineRequestException catch (e) {
+        _setPlan(Plan.fromError(e.toString()));
+      } on FetchOfflineResponseException catch (e) {
+        _setPlan(Plan.fromError(e.toString()));
+      } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.commonNoInternet));
-      } on FetchResponseException catch (e) {
+      } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }

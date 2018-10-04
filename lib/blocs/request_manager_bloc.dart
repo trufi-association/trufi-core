@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_app/blocs/preferences_bloc.dart';
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class RequestManagerBloc implements BlocBase, RequestManager {
@@ -14,12 +16,30 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return BlocProvider.of<RequestManagerBloc>(context);
   }
 
+  RequestManagerBloc(this.preferencesBloc) {
+    _requestManager = _offlineRequestManager;
+    _subscriptions.add(
+      preferencesBloc.outChangeOnline.listen((online) {
+        _requestManager =
+            online ? _onlineRequestManager : _offlineRequestManager;
+      }),
+    );
+  }
+
+  final PreferencesBloc preferencesBloc;
+
+  final _subscriptions = CompositeSubscription();
+  final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
+
+  RequestManager _requestManager;
 
   // Dispose
 
   @override
-  void dispose() {}
+  void dispose() {
+    _subscriptions.cancel();
+  }
 
   // Methods
 
@@ -33,30 +53,47 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) {
     return _requestManager.fetchPlan(from, to);
   }
-
-  // Getter
-
-  RequestManager get _requestManager => _onlineRequestManager;
 }
 
-class FetchRequestException implements Exception {
-  FetchRequestException(this._innerException);
+class FetchOfflineRequestException implements Exception {
+  FetchOfflineRequestException(this._innerException);
 
   final Exception _innerException;
 
   String toString() {
-    return "Fetch request exception caused by: ${_innerException.toString()}";
+    return "Fetch offline request exception caused by: ${_innerException.toString()}";
   }
 }
 
-class FetchResponseException implements Exception {
-  FetchResponseException(this._message);
+class FetchOfflineResponseException implements Exception {
+  FetchOfflineResponseException(this._message);
 
   final String _message;
 
   @override
   String toString() {
-    return "FetchResponseException: $_message";
+    return "Fetch offline response exception: $_message";
+  }
+}
+
+class FetchOnlineRequestException implements Exception {
+  FetchOnlineRequestException(this._innerException);
+
+  final Exception _innerException;
+
+  String toString() {
+    return "Fetch online request exception caused by: ${_innerException.toString()}";
+  }
+}
+
+class FetchOnlineResponseException implements Exception {
+  FetchOnlineResponseException(this._message);
+
+  final String _message;
+
+  @override
+  String toString() {
+    return "Fetch online response exception: $_message";
   }
 }
 
@@ -67,6 +104,23 @@ abstract class RequestManager {
   );
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to);
+}
+
+class OfflineRequestManager implements RequestManager {
+  Future<List<TrufiLocation>> fetchLocations(
+    BuildContext context,
+    String query,
+  ) async {
+    throw FetchOfflineRequestException(
+      Exception("Fetch locations offline is not implemented yet."),
+    );
+  }
+
+  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
+    throw FetchOfflineRequestException(
+      Exception("Fetch plan offline is not implemented yet."),
+    );
+  }
 }
 
 class OnlineRequestManager implements RequestManager {
@@ -96,7 +150,7 @@ class OnlineRequestManager implements RequestManager {
       });
       return locations;
     } else {
-      throw FetchResponseException('Failed to load locations');
+      throw FetchOnlineResponseException('Failed to load locations');
     }
   }
 
@@ -111,7 +165,7 @@ class OnlineRequestManager implements RequestManager {
     if (response.statusCode == 200) {
       return compute(_parsePlan, utf8.decode(response.bodyBytes));
     } else {
-      throw FetchResponseException('Failed to load plan');
+      throw FetchOnlineResponseException('Failed to load plan');
     }
   }
 
@@ -119,7 +173,7 @@ class OnlineRequestManager implements RequestManager {
     try {
       return await http.get(request);
     } catch (e) {
-      throw FetchRequestException(e);
+      throw FetchOnlineRequestException(e);
     }
   }
 }

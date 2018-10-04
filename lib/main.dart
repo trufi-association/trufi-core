@@ -21,10 +21,11 @@ void main() {
 class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final preferencesBloc = PreferencesBloc();
     return BlocProvider<PreferencesBloc>(
-      bloc: PreferencesBloc(),
+      bloc: preferencesBloc,
       child: BlocProvider<RequestManagerBloc>(
-        bloc: RequestManagerBloc(),
+        bloc: RequestManagerBloc(preferencesBloc),
         child: BlocProvider<LocationProviderBloc>(
           bloc: LocationProviderBloc(),
           child: BlocProvider<FavoriteLocationsBloc>(
