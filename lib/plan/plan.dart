@@ -106,13 +106,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           onTap: _toggleInstructions,
           child: Container(
             padding: EdgeInsets.all(10.0),
-            child: Row(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: <Widget>[
-                Expanded(
-                  child: _buildItinerarySummary(
-                    context,
-                    _selectedItinerary,
-                  ),
+                _buildItinerarySummary(
+                  context,
+                  _selectedItinerary,
                 ),
               ],
             ),
