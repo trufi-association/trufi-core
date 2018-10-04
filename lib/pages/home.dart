@@ -231,19 +231,6 @@ class HomePageState extends State<HomePage>
       _data.plan = plan;
       _data.save(context);
     });
-    PlanError error = _data.plan?.error;
-    if (error != null) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return buildAlert(
-            context: context,
-            title: TrufiLocalizations.of(context).commonError,
-            content: error.message,
-          );
-        },
-      );
-    }
   }
 
   void _swapPlaces() {
@@ -260,18 +247,40 @@ class HomePageState extends State<HomePage>
           await requestManagerBloc.fetchPlan(_data.fromPlace, _data.toPlace),
         );
       } on FetchOfflineRequestException catch (e) {
-        _setPlan(Plan.fromError(e.toString()));
+        print("Failed to fetch plan: $e");
+        _showOnAndOfflineErrorAlert(
+          "Offline mode is not implemented yet.",
+          false,
+        );
       } on FetchOfflineResponseException catch (e) {
-        _setPlan(Plan.fromError(e.toString()));
+        print("Failed to fetch plan: $e");
+        _showOnAndOfflineErrorAlert(
+          "Offline mode is not implemented yet.",
+          false,
+        );
       } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _setPlan(Plan.fromError(localizations.commonNoInternet));
+        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, true);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
+        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
       }
       setState(() => _isFetching = false);
     }
+  }
+
+  void _showOnAndOfflineErrorAlert(String message, bool online) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return buildOnAndOfflineErrorAlert(
+          context: context,
+          online: online,
+          title: TrufiLocalizations.of(context).commonError,
+          content: message,
+        );
+      },
+    );
   }
 }
 
