@@ -42,6 +42,8 @@ class TrufiLocalizations {
       "alert_location_services_denied_message";
   static const String CommonOK = "common_ok";
   static const String CommonCancel = "common_cancel";
+  static const String CommonGoOffline = "common_go_offline";
+  static const String CommonGoOnline = "common_go_online";
   static const String CommonDestination = "common_destination";
   static const String CommonOrigin = "common_origin";
   static const String CommonNoInternetConnection =
@@ -101,6 +103,8 @@ class TrufiLocalizations {
           'Please make sure your device has GPS and the Location settings are activated.',
       CommonOK: 'OK',
       CommonCancel: 'Cancel',
+      CommonGoOffline: 'Go offline',
+      CommonGoOnline: 'Go online',
       CommonDestination: 'Destination',
       CommonOrigin: 'Origin',
       CommonNoInternetConnection: 'No internet connection.',
@@ -158,6 +162,8 @@ class TrufiLocalizations {
           'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
       CommonOK: 'Aceptar',
       CommonCancel: 'Cancelar',
+      CommonGoOffline: 'Go offline', // TODO
+      CommonGoOnline: 'Go online', // TODO
       CommonDestination: 'Destino',
       CommonOrigin: 'Origen',
       CommonNoInternetConnection: 'Sin conexión a internet.',
@@ -215,6 +221,8 @@ class TrufiLocalizations {
           'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.',
       CommonOK: 'OK',
       CommonCancel: 'Abbrechen',
+      CommonGoOffline: 'Offline gehen',
+      CommonGoOnline: 'Online gehen',
       CommonDestination: 'Fahrtziel',
       CommonOrigin: 'Startpunkt',
       CommonNoInternetConnection: 'Keine Internetverbindung.',
@@ -272,6 +280,8 @@ class TrufiLocalizations {
           "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
       CommonOK: 'Ari',
       CommonCancel: 'Mana',
+      CommonGoOffline: 'Go offline', // TODO
+      CommonGoOnline: 'Go online', // TODO
       CommonDestination: 'Mayman',
       CommonOrigin: 'Maymanta',
       CommonNoInternetConnection: 'Mana internet canchu',
@@ -350,6 +360,14 @@ class TrufiLocalizations {
 
   String get commonCancel {
     return _localizedValues[locale.languageCode][CommonCancel];
+  }
+
+  String get commonGoOffline {
+    return _localizedValues[locale.languageCode][CommonGoOffline];
+  }
+
+  String get commonGoOnline {
+    return _localizedValues[locale.languageCode][CommonGoOnline];
   }
 
   String get commonDestination {

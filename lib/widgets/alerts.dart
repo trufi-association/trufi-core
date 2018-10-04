@@ -31,12 +31,15 @@ Widget buildOnAndOfflineErrorAlert({
 }
 
 Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
+  final localizations = TrufiLocalizations.of(context);
   return FlatButton(
     onPressed: () {
       PreferencesBloc.of(context).inChangeOnline.add(online);
       Navigator.pop(context);
     },
-    child: Text(online ? "Switch to online" : "Switch to offline"),
+    child: Text(
+      online ? localizations.commonGoOnline : localizations.commonGoOffline,
+    ),
   );
 }
 
