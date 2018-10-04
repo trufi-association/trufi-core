@@ -7,11 +7,11 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
+import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/plan/plan_empty.dart';
-import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
@@ -251,15 +251,18 @@ class HomePageState extends State<HomePage>
   }
 
   void _fetchPlan() async {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final requestManagerBloc = RequestManagerBloc.of(context);
+    final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _setPlan(await api.fetchPlan(_data.fromPlace, _data.toPlace));
-      } on api.FetchRequestException catch (e) {
+        _setPlan(
+          await requestManagerBloc.fetchPlan(_data.fromPlace, _data.toPlace),
+        );
+      } on FetchRequestException catch (e) {
         print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.commonNoInternet));
-      } on api.FetchResponseException catch (e) {
+      } on FetchResponseException catch (e) {
         print("Failed to fetch plan: $e");
         _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
       }
