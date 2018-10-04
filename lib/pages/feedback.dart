@@ -44,8 +44,8 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return ListView(
       children: <Widget>[
         Container(
@@ -82,7 +82,7 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
