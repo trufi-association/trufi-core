@@ -8,8 +8,8 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/pages/choose_location.dart';
-import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
@@ -184,18 +184,19 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildSearchResultList(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final requestManagerBloc = RequestManagerBloc.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
       localizations.searchTitleResults,
-      api.fetchLocations(context, query),
+      requestManagerBloc.fetchLocations(context, query),
       Icons.location_on,
       isVisibleWhenEmpty: true,
     );
   }
 
   Widget _buildPlacesList(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
       localizations.searchTitlePlaces,
@@ -214,20 +215,22 @@ class _SuggestionList extends StatelessWidget {
     return FutureBuilder(
       future: future,
       initialData: null,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
-        final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TrufiLocation>> snapshot,
+      ) {
+        final localizations = TrufiLocalizations.of(context);
         // Error
         if (snapshot.hasError) {
           print(snapshot.error);
-          if (snapshot.error is api.FetchRequestException) {
+          if (snapshot.error is FetchRequestException) {
             return SliverToBoxAdapter(
               child: _buildErrorItem(
                 context,
                 localizations.commonNoInternet,
               ),
             );
-          } else if (snapshot.error is api.FetchResponseException) {
+          } else if (snapshot.error is FetchResponseException) {
             return SliverToBoxAdapter(
               child: _buildErrorItem(
                 context,
