@@ -48,8 +48,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
   }
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: ListView.builder(
         padding: EdgeInsets.all(8.0),

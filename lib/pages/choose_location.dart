@@ -45,8 +45,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return AppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,7 +87,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,

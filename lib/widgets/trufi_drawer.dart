@@ -19,8 +19,8 @@ class TrufiDrawer extends StatefulWidget {
 class TrufiDrawerState extends State<TrufiDrawer> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -93,10 +93,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    String languageCode = localizations.locale.languageCode;
-    List<LanguageDropdownValue> values = <LanguageDropdownValue>[
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    final languageCode = localizations.locale.languageCode;
+    final values = <LanguageDropdownValue>[
       LanguageDropdownValue(languageCodeSpanish, localizations.spanish),
       LanguageDropdownValue(languageCodeQuechua, localizations.quechua),
       LanguageDropdownValue(languageCodeEnglish, localizations.english),
