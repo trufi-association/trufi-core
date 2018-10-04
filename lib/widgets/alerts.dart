@@ -13,6 +13,18 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
   );
 }
 
+Widget buildErrorAlert({
+  @required BuildContext context,
+  String error,
+}) {
+  return _buildAlert(
+    context: context,
+    title: TrufiLocalizations.of(context).commonError,
+    content: error,
+    actions: [_buildOKButton(context)],
+  );
+}
+
 Widget buildOnAndOfflineErrorAlert({
   @required BuildContext context,
   @required bool online,

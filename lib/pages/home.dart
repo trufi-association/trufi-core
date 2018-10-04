@@ -262,9 +262,15 @@ class HomePageState extends State<HomePage>
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _setPlan(
-          await requestManagerBloc.fetchPlan(_data.fromPlace, _data.toPlace),
+        Plan plan = await requestManagerBloc.fetchPlan(
+          _data.fromPlace,
+          _data.toPlace,
         );
+        if (plan.hasError) {
+          _showErrorAlert(plan.error.message);
+        } else {
+          _setPlan(plan);
+        }
       } on FetchOfflineRequestException catch (e) {
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
@@ -283,9 +289,20 @@ class HomePageState extends State<HomePage>
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
+      } catch (e) {
+        print("Failed to fetch plan: $e");
       }
       setState(() => _isFetching = false);
     }
+  }
+
+  void _showErrorAlert(String error) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return buildErrorAlert(context: context, error: error);
+      },
+    );
   }
 
   void _showOnAndOfflineErrorAlert(String message, bool online) {

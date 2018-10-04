@@ -140,6 +140,8 @@ class Plan {
             }
           };
   }
+
+  bool get hasError => error != null;
 }
 
 class PlanError {
