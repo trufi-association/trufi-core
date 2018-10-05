@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/crop_button.dart';
@@ -12,15 +13,9 @@ import 'package:trufi_app/widgets/your_location_button.dart';
 typedef void OnSelected(PlanItinerary itinerary);
 
 class PlanMapPage extends StatefulWidget {
-  PlanMapPage({
-    this.plan,
-    this.onSelected,
-    this.selectedItinerary,
-  });
+  PlanMapPage({this.planPageController});
 
-  final Plan plan;
-  final OnSelected onSelected;
-  final PlanItinerary selectedItinerary;
+  final PlanPageController planPageController;
 
   @override
   PlanMapPageState createState() => PlanMapPageState();
@@ -37,12 +32,22 @@ class PlanMapPageState extends State<PlanMapPage> {
   void initState() {
     super.initState();
     _data = PlanMapPageStateData(
-      plan: widget.plan,
-      onItineraryTap: _setSelectedItinerary,
+      plan: widget.planPageController.plan,
+      onItineraryTap: widget.planPageController.inSelectedItinerary.add,
     );
     _subscriptions.add(
       _trufiOnAndOfflineMapController.outMapReady.listen((_) {
         setState(() {
+          _data.needsCameraUpdate = true;
+        });
+      }),
+    );
+    _subscriptions.add(
+      widget.planPageController.outSelectedItinerary.listen((
+        selectedItinerary,
+      ) {
+        setState(() {
+          _data.selectedItinerary = selectedItinerary;
           _data.needsCameraUpdate = true;
         });
       }),
@@ -105,7 +110,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   void _handleOnMapTap(LatLng point) {
     PlanItinerary tappedItinerary = _data.itineraryForPoint(point);
     if (tappedItinerary != null) {
-      _setSelectedItinerary(tappedItinerary);
+      widget.planPageController.inSelectedItinerary.add(tappedItinerary);
     }
   }
 
@@ -127,16 +132,6 @@ class PlanMapPageState extends State<PlanMapPage> {
     });
   }
 
-  void _setSelectedItinerary(PlanItinerary value) {
-    setState(() {
-      _data.selectedItinerary = value;
-      _data.needsCameraUpdate = true;
-      if (widget.onSelected != null) {
-        widget.onSelected(_data.selectedItinerary);
-      }
-    });
-  }
-
   // Getter
 
   MapController get _mapController {
@@ -146,8 +141,8 @@ class PlanMapPageState extends State<PlanMapPage> {
 
 class PlanMapPageStateData {
   PlanMapPageStateData({
-    this.plan,
-    this.onItineraryTap,
+    @required this.plan,
+    @required this.onItineraryTap,
   }) {
     if (plan != null) {
       if (plan.from != null) {
@@ -155,9 +150,6 @@ class PlanMapPageStateData {
       }
       if (plan.to != null) {
         _toMarker = buildToMarker(createLatLngWithPlanLocation(plan.to));
-      }
-      if (plan.itineraries.isNotEmpty) {
-        selectedItinerary = plan.itineraries.first;
       }
     }
   }

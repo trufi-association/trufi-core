@@ -1,10 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/visible.dart';
+
+class PlanPageController {
+  PlanPageController(this.plan) {
+    _subscriptions.add(
+      _selectedItineraryController.listen((selectedItinerary) {
+        _selectedItinerary = selectedItinerary;
+      }),
+    );
+  }
+
+  final Plan plan;
+
+  final _selectedItineraryController = BehaviorSubject<PlanItinerary>();
+  final _subscriptions = CompositeSubscription();
+
+  PlanItinerary _selectedItinerary;
+
+  void dispose() {
+    _selectedItineraryController.close();
+    _subscriptions.cancel();
+  }
+
+  Sink<PlanItinerary> get inSelectedItinerary {
+    return _selectedItineraryController.sink;
+  }
+
+  Stream<PlanItinerary> get outSelectedItinerary {
+    return _selectedItineraryController.stream;
+  }
+
+  PlanItinerary get selectedItinerary => _selectedItinerary;
+}
 
 class PlanPage extends StatefulWidget {
   final Plan plan;
@@ -16,7 +50,7 @@ class PlanPage extends StatefulWidget {
 }
 
 class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
-  PlanItinerary _selectedItinerary;
+  PlanPageController _planPageController;
   TabController _tabController;
   VisibilityFlag _visibleFlag = VisibilityFlag.visible;
 
@@ -34,20 +68,32 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       ..addListener(() {
         setState(() {});
       });
-    if (widget.plan.itineraries.length > 0) {
-      _selectedItinerary = widget.plan.itineraries.first;
+    _planPageController = PlanPageController(widget.plan);
+    if (_planPageController.plan.itineraries.isNotEmpty) {
+      _planPageController.inSelectedItinerary.add(
+        _planPageController.plan.itineraries.first,
+      );
     }
     _tabController = TabController(
-      length: widget.plan.itineraries.length,
+      length: _planPageController.plan.itineraries.length,
       vsync: this,
     )..addListener(() {
-        _setItinerary(widget.plan.itineraries[_tabController.index]);
+        _planPageController.inSelectedItinerary.add(
+          _planPageController.plan.itineraries[_tabController.index],
+        );
       });
+    _planPageController.outSelectedItinerary.listen((selectedItinerary) {
+      _tabController.animateTo(
+        _planPageController.plan.itineraries.indexOf(selectedItinerary),
+      );
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _planPageController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -58,11 +104,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         Column(
           children: <Widget>[
             Expanded(
-              child: PlanMapPage(
-                plan: widget.plan,
-                onSelected: _setItinerary,
-                selectedItinerary: _selectedItinerary,
-              ),
+              child: PlanMapPage(planPageController: _planPageController),
             ),
             VisibleWidget(
               visibility: _visibleFlag,
@@ -89,7 +131,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       ),
       child: PlanItineraryTabPages(
         _tabController,
-        widget.plan.itineraries,
+        _planPageController.plan.itineraries,
       ),
     );
   }
@@ -109,9 +151,15 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _buildItinerarySummary(
-                  context,
-                  _selectedItinerary,
+                StreamBuilder<PlanItinerary>(
+                  stream: _planPageController.outSelectedItinerary,
+                  initialData: _planPageController.selectedItinerary,
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<PlanItinerary> snapshot,
+                  ) {
+                    return _buildItinerarySummary(context, snapshot.data);
+                  },
                 ),
               ],
             ),
@@ -124,11 +172,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
-    final summary = List<Widget>();
-    var legs = itinerary.legs;
+    final children = List<Widget>();
+    final legs = itinerary?.legs ?? [];
     for (var i = 0; i < legs.length; i++) {
-      var leg = legs[i];
-      summary.add(
+      final leg = legs[i];
+      children.add(
         Row(
           children: <Widget>[
             Icon(leg.iconData()),
@@ -151,7 +199,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       );
     }
     return Row(
-      children: summary,
+      children: children,
     );
   }
 
@@ -167,13 +215,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         backgroundColor: theme.primaryColor,
       ),
     );
-  }
-
-  void _setItinerary(PlanItinerary value) {
-    setState(() {
-      _selectedItinerary = value;
-      _tabController.animateTo(widget.plan.itineraries.indexOf(value));
-    });
   }
 
   void _toggleInstructions() {
