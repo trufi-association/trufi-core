@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -60,10 +65,21 @@ class AppLifecycleReactor extends StatefulWidget {
 
 class _AppLifecycleReactorState extends State<AppLifecycleReactor>
     with WidgetsBindingObserver {
+  Permission permission = Permission.WriteExternalStorage;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    requestPermissionAndCopyGtfsToExternalStorage();
+  }
+
+  requestPermissionAndCopyGtfsToExternalStorage() async {
+    var writePermission = await SimplePermissions.checkPermission(permission);
+    if (!writePermission) {
+      await SimplePermissions.requestPermission(permission);
+    }
+    copyGtfsToExternalStorage('assets/data/cochabamba-gtfs.zip');
   }
 
   @override
@@ -91,6 +107,21 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   Widget build(BuildContext context) {
     return widget.child;
+  }
+
+  void copyGtfsToExternalStorage(String gtfsPath) async {
+    // load gtfs from assets
+    final gtfs = await rootBundle.load(gtfsPath);
+
+    // find file name
+    var fileName = gtfsPath.split("/").removeLast();
+    var gtfsCopy = new File((await getExternalStorageDirectory()).path + "/" + fileName);
+
+    var gtfsExists = await gtfsCopy.exists();
+    if (!gtfsExists){
+      gtfsCopy.writeAsBytes(gtfs.buffer.asUint8List());
+      print("File copied to " + gtfsCopy.toString());
+    }
   }
 }
 
