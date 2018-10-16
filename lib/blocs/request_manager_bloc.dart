@@ -9,6 +9,7 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class RequestManagerBloc implements BlocBase, RequestManager {
@@ -50,8 +51,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return _requestManager.fetchLocations(context, query);
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) {
-    return _requestManager.fetchPlan(from, to);
+  Future<Plan> fetchPlan(
+      BuildContext context, TrufiLocation from, TrufiLocation to) {
+    return _requestManager.fetchPlan(context, from, to);
   }
 }
 
@@ -103,7 +105,11 @@ abstract class RequestManager {
     String query,
   );
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to);
+  Future<Plan> fetchPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  );
 }
 
 class OfflineRequestManager implements RequestManager {
@@ -116,7 +122,8 @@ class OfflineRequestManager implements RequestManager {
     );
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
+  Future<Plan> fetchPlan(
+      BuildContext context, TrufiLocation from, TrufiLocation to) async {
     throw FetchOfflineRequestException(
       Exception("Fetch plan offline is not implemented yet."),
     );
@@ -154,7 +161,11 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
+  Future<Plan> fetchPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) async {
     Uri request = Uri.https(Endpoint, PlanPath, {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
@@ -163,7 +174,11 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return compute(_parsePlan, utf8.decode(response.bodyBytes));
+      Plan plan = await compute(_parsePlan, utf8.decode(response.bodyBytes));
+      if (plan.hasError) {
+        plan = _findErrorMessage(plan, context);
+      }
+      return plan;
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
@@ -176,6 +191,41 @@ class OnlineRequestManager implements RequestManager {
       throw FetchOnlineRequestException(e);
     }
   }
+}
+
+Plan _findErrorMessage(Plan plan, BuildContext context) {
+  TrufiLocalizations localizations = TrufiLocalizations.of(context);
+  if (plan.error.id == 500 || plan.error.id == 503) {
+    plan = Plan.fromError(localizations.errorServerUnavailable);
+  } else if (plan.error.id == 400) {
+    plan = Plan.fromError(localizations.errorOutOfBoundary);
+  } else if (plan.error.id == 404) {
+    plan = Plan.fromError(localizations.errorPathNotFound);
+  } else if (plan.error.id == 406) {
+    plan = Plan.fromError(localizations.errorNoTransitTimes);
+  } else if (plan.error.id == 408) {
+    plan = Plan.fromError(localizations.errorServerTimeout);
+  } else if (plan.error.id == 409) {
+    plan = Plan.fromError(localizations.errorTrivialDistance);
+  } else if (plan.error.id == 413) {
+    plan = Plan.fromError(localizations.errorServerCanNotHandleRequest);
+  } else if (plan.error.id == 440) {
+    plan = Plan.fromError(localizations.errorUnknownOrigin);
+  } else if (plan.error.id == 450) {
+    plan = Plan.fromError(localizations.errorUnknownDestination);
+  } else if (plan.error.id == 460) {
+    plan = Plan.fromError(localizations.errorUnknownOriginDestination);
+  } else if (plan.error.id == 470) {
+    plan = Plan.fromError(localizations.errorNoBarrierFree);
+  } else if (plan.error.id == 340) {
+    plan = Plan.fromError(localizations.errorAmbiguousOrigin);
+  } else if (plan.error.id == 350) {
+    plan = Plan.fromError(localizations.errorAmbiguousDestination);
+  } else if (plan.error.id == 360) {
+    plan = Plan.fromError(localizations.errorAmbiguousOriginDestination);
+  }
+
+  return plan;
 }
 
 List<TrufiLocation> _parseLocations(String responseBody) {
