@@ -104,14 +104,14 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _fromFieldKey,
                 ValueKey(keys.homePageFromPlaceField),
-                localizations.searchPleaseSelect,
+                localizations.searchPleaseSelectOrigin,
                 _setFromPlace,
                 trailing: _data.isResettable ? _buildResetButton() : null,
               ),
               _buildFormField(
                 _toFieldKey,
                 ValueKey(keys.homePageToPlaceField),
-                localizations.searchPleaseSelect,
+                localizations.searchPleaseSelectDestination,
                 _setToPlace,
                 trailing: _data.isSwappable ? _buildSwapButton() : null,
               ),
