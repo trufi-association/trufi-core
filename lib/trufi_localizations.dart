@@ -127,7 +127,7 @@ class TrufiLocalizations {
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
       ChooseLocationPageTitle: 'Choose a point',
-      ChooseLocationPageSubtitle: 'Tap on map to choose',
+      ChooseLocationPageSubtitle: 'Pan & zoom map under pin',
       InstructionWalk: 'Walk',
       InstructionRide: 'Ride',
       InstructionRideBus: 'Bus',
@@ -164,7 +164,7 @@ class TrufiLocalizations {
       AlertLocationServicesDeniedTitle: 'Sin acceso a la ubicación',
       AlertLocationServicesDeniedMessage:
           'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
-      CommonOK: 'Aceptar',
+      CommonOK: 'ACEPTAR',
       CommonCancel: 'Cancelar',
       CommonGoOffline: 'Go offline', // TODO
       CommonGoOnline: 'Go online', // TODO
@@ -187,7 +187,8 @@ class TrufiLocalizations {
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
       ChooseLocationPageTitle: 'Elige un punto en el mapa',
-      ChooseLocationPageSubtitle: 'Toca el mapa para elegir un punto',
+      ChooseLocationPageSubtitle:
+          'Amplía y mueve el mapa para centrar el marcador',
       InstructionWalk: 'Caminar',
       InstructionRide: 'Tomar',
       InstructionRideBus: 'Bus',
@@ -247,7 +248,7 @@ class TrufiLocalizations {
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigiere zur',
       ChooseLocationPageTitle: 'Ort auswählen',
-      ChooseLocationPageSubtitle: 'Zum Anpassen auf die Karte tippen',
+      ChooseLocationPageSubtitle: 'Karte unter Markierung schwenken und zoomen',
       InstructionWalk: 'Gehen Sie',
       InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
@@ -579,11 +580,11 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   String get searchFieldLabel {
     switch (locale.languageCode) {
       case languageCodeGerman:
-        return "Suchen";
+        return "Suchen Startpunkt";
       case languageCodeQuechua:
-        return "Mask'ay";
+        return "Mask'ay ";
       case languageCodeSpanish:
-        return "Buscar";
+        return "Buscar origen";
       default:
         return super.searchFieldLabel;
     }
