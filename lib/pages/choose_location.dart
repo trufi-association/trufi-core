@@ -53,23 +53,39 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RichText(
-            maxLines: 1,
-            overflow: TextOverflow.clip,
+            maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageTitle,
-              style: theme.textTheme.title,
+              style: theme.textTheme.body2,
             ),
           ),
           RichText(
-            maxLines: 1,
-            overflow: TextOverflow.clip,
+            maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageSubtitle,
-              style: theme.textTheme.subhead,
+              style: theme.textTheme.caption
+                  .copyWith(color: theme.textTheme.body2.color),
             ),
           ),
         ],
       ),
+      actions: <Widget>[
+        GestureDetector(
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.only(right: 24.0),
+              child: RichText(
+                maxLines: 1,
+                text: TextSpan(
+                  text: localizations.commonOK,
+                  style: theme.textTheme.button.copyWith(fontSize: theme.textTheme.caption.fontSize),
+                ),
+              ),
+            ),
+          ),
+          onTap: _handleOnConfirmationPressed,
+        )
+      ],
     );
   }
 
@@ -87,7 +103,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -95,25 +110,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         Container(
           height: 70.0,
           width: 56.0,
-          child: Transform.scale(
-            scale: 0.8,
             child: FloatingActionButton(
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.my_location),
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.my_location,
+                color: Colors.black,
+              ),
               onPressed: _handleOnYourLocationPressed,
               heroTag: null,
             ),
           ),
-        ),
-        FloatingActionButton(
-          backgroundColor: theme.primaryColor,
-          child: Icon(
-            Icons.check,
-            color: theme.primaryIconTheme.color,
-          ),
-          onPressed: _handleOnCheckPressed,
-          heroTag: null,
-        ),
       ],
     );
   }
@@ -122,7 +128,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 
-  void _handleOnCheckPressed() {
+  void _handleOnConfirmationPressed() {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
