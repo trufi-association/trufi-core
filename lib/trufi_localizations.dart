@@ -86,7 +86,10 @@ class TrufiLocalizations {
   static const String SearchSectionRecent = "search_title_recent";
   static const String SearchSectionFavorites = "search_title_favorites";
   static const String SearchSectionResults = "search_title_result";
-  static const String SearchSectionPleaseSelect = "search_please_select";
+  static const String SearchSectionPleaseSelectOrigin =
+      "search_please_select_origin";
+  static const String SearchSectionPleaseSelectDestination =
+      "search_please_select_destination";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
   static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
@@ -174,7 +177,8 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recent',
       SearchSectionFavorites: 'Favorites',
       SearchSectionResults: 'Search Results',
-      SearchSectionPleaseSelect: 'Please select',
+      SearchSectionPleaseSelectOrigin: 'Please select origin',
+      SearchSectionPleaseSelectDestination: 'Please select destination',
       SearchFailLoadingPlan: 'Failed to load plan.',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
@@ -261,7 +265,8 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Recientes',
       SearchSectionFavorites: 'Favoritos',
       SearchSectionResults: 'Resultados de búsqueda',
-      SearchSectionPleaseSelect: 'Por favor seleccione',
+      SearchSectionPleaseSelectOrigin: 'Por favor seleccione origen',
+      SearchSectionPleaseSelectDestination: 'Por favor seleccione destino',
       SearchFailLoadingPlan: 'Error al cargar plan.',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
@@ -348,7 +353,8 @@ class TrufiLocalizations {
       SearchSectionRecent: 'Zuletzt gesucht',
       SearchSectionFavorites: 'Favoriten',
       SearchSectionResults: 'Suchergebnisse',
-      SearchSectionPleaseSelect: 'Bitte auswählen',
+      SearchSectionPleaseSelectOrigin: 'Bitte Startpunkt auswählen',
+      SearchSectionPleaseSelectDestination: 'Bitte Ziel auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigiere zur',
@@ -435,7 +441,8 @@ class TrufiLocalizations {
       SearchSectionRecent: "Kuintan masc'asgas",
       SearchSectionFavorites: "Favoritos",
       SearchSectionResults: "Masc'asgas",
-      SearchSectionPleaseSelect: "Por favor seleccione",
+      SearchSectionPleaseSelectOrigin: "Por favor seleccione origen",
+      SearchSectionPleaseSelectDestination: "Por favor seleccione destino",
       SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
       SearchSectionMapMarker: 'Maypi cashani mapapy',
       SearchNavigateToMarker: 'Rina chaycamana',
@@ -632,8 +639,14 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][SearchSectionResults];
   }
 
-  String get searchPleaseSelect {
-    return _localizedValues[locale.languageCode][SearchSectionPleaseSelect];
+  String get searchPleaseSelectOrigin {
+    return _localizedValues[locale.languageCode]
+        [SearchSectionPleaseSelectOrigin];
+  }
+
+  String get searchPleaseSelectDestination {
+    return _localizedValues[locale.languageCode]
+        [SearchSectionPleaseSelectDestination];
   }
 
   String get searchFailLoadingPlan {
