@@ -88,7 +88,7 @@ class PlanMapPageState extends State<PlanMapPage> {
           },
         ),
         Positioned(
-          bottom: 36.0,
+          bottom: 24.0,
           right: 16.0,
           child: _buildFloatingActionButtons(context),
         ),
@@ -102,6 +102,9 @@ class PlanMapPageState extends State<PlanMapPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
+        Padding(
+          padding: EdgeInsets.all(4.0),
+        ),
         YourLocationButton(onPressed: _handleOnYourLocationPressed),
       ],
     );

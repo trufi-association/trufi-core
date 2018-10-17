@@ -7,14 +7,14 @@ class YourLocationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 0.8,
-      child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(Icons.my_location),
-        onPressed: onPressed,
-        heroTag: null,
+    return FloatingActionButton(
+      backgroundColor: Colors.white,
+      child: Icon(
+        Icons.my_location,
+        color: Colors.black,
       ),
+      onPressed: onPressed,
+      heroTag: null,
     );
   }
 }
