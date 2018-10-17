@@ -23,6 +23,8 @@ dependencies:
   shared_preferences: ^0.4.2
   url_launcher: ^3.0.3
   mockito: 3.0.0
+  simple_permissions: ^0.1.8
+
 
 dev_dependencies:
   flutter_driver:
@@ -46,6 +48,7 @@ flutter:
   assets:
     - assets/data/places.json
     - assets/data/team.txt
+    - assets/data/cochabamba-gtfs.zip
     - assets/images/map_marker.svg
     - assets/tiles/8/
     - assets/tiles/9/
