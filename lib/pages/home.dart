@@ -169,28 +169,109 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildBody(BuildContext context) {
-    Widget body = Container(
+    List<Widget> children = [Positioned.fill(child: _buildPlan(context))];
+    if (_isFetching) {
+      children.add(
+        Positioned.fill(child: _buildLoadingIndicator(context)),
+      );
+    }
+    children.add(
+      Positioned(
+        top: 0.0,
+        left: 0.0,
+        right: 0.0,
+        child: _buildStatus(context),
+      ),
+    );
+    return Stack(children: children);
+  }
+
+  Widget _buildPlan(BuildContext context) {
+    return Container(
       child: _data.plan != null && _data.plan.error == null
           ? PlanPage(_data.plan)
           : PlanEmptyPage(),
     );
-    if (_isFetching) {
-      return Stack(
-        children: <Widget>[
-          Positioned.fill(child: body),
-          Positioned.fill(
-            child: Container(
-              color: Colors.black54,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+  }
+
+  Widget _buildLoadingIndicator(BuildContext context) {
+    return Container(
+      color: Colors.black54,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildStatus(BuildContext context) {
+    final requestManagerBloc = RequestManagerBloc.of(context);
+    return StreamBuilder<OfflineRequestManagerStatus>(
+      stream: requestManagerBloc.offline.outStatusUpdate,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<OfflineRequestManagerStatus> snapshot,
+      ) {
+        final status = requestManagerBloc.offline.status;
+        print(status);
+        if (status == OfflineRequestManagerStatus.failed) {
+          return _buildErrorStatus(context);
+        } else if (status == OfflineRequestManagerStatus.preparing) {
+          return _buildPreparingStatus(context);
+        }
+        return Container();
+      },
+    );
+  }
+
+  Widget _buildPreparingStatus(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      height: 48.0,
+      child: Row(
+        children: [
+          Icon(Icons.cloud_off),
+          SizedBox(width: 8.0),
+          Text(
+            "Preparing offline mode...",
+            style: theme.primaryTextTheme.caption,
+          ),
+          SizedBox(width: 8.0),
+          Expanded(
+            child: LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+              valueColor: AlwaysStoppedAnimation(Colors.black),
             ),
           ),
         ],
-      );
-    } else {
-      return body;
-    }
+      ),
+    );
+  }
+
+  Widget _buildErrorStatus(BuildContext context) {
+    final requestManagerBloc = RequestManagerBloc.of(context);
+    final theme = Theme.of(context);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      height: 48.0,
+      child: Row(
+        children: [
+          Icon(Icons.cloud_off),
+          SizedBox(width: 8.0),
+          Text(
+            "Preparing offline mode failed",
+            style: theme.primaryTextTheme.caption,
+          ),
+          SizedBox(width: 8.0),
+          Expanded(
+            child: RaisedButton(
+              child: Text("Retry"),
+              onPressed: requestManagerBloc.offline.reset,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _reset() {
