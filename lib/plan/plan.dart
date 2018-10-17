@@ -113,11 +113,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
             ),
           ],
         ),
-        Positioned(
-          bottom: _animation.value - 28.0,
-          right: 16.0,
-          child: _buildFloatingActionButton(context),
-        ),
       ],
     );
   }
@@ -132,6 +127,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       child: PlanItineraryTabPages(
         _tabController,
         _planPageController.plan.itineraries,
+        _buildToggleSummaryButton(context),
       ),
     );
   }
@@ -147,23 +143,30 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         child: InkWell(
           onTap: _toggleInstructions,
           child: Container(
-            padding: EdgeInsets.all(10.0),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                StreamBuilder<PlanItinerary>(
-                  stream: _planPageController.outSelectedItinerary,
-                  initialData: _planPageController.selectedItinerary,
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<PlanItinerary> snapshot,
-                  ) {
-                    return _buildItinerarySummary(context, snapshot.data);
-                  },
-                ),
-              ],
-            ),
-          ),
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        StreamBuilder<PlanItinerary>(
+                          stream: _planPageController.outSelectedItinerary,
+                          initialData: _planPageController.selectedItinerary,
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<PlanItinerary> snapshot,
+                          ) {
+                            return _buildItinerarySummary(
+                                context, snapshot.data);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildToggleSummaryButton(context),
+                ],
+              )),
         ),
       ),
     );
@@ -203,16 +206,13 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
-    final theme = Theme.of(context);
-    return Transform.scale(
-      scale: 0.8,
-      child: FloatingActionButton(
+  Widget _buildToggleSummaryButton(BuildContext context) {
+    return Container(
+      child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
             ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
             : Icon(Icons.keyboard_arrow_up, color: Colors.black),
-        onPressed: _toggleInstructions,
-        backgroundColor: theme.primaryColor,
+        onTap: _toggleInstructions,
       ),
     );
   }
