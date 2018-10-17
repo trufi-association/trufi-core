@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:graphhopper/graphhopper.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -54,6 +55,10 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return _requestManager.fetchPlan(from, to);
   }
 }
+
+class FetchOfflineRequestIsNotPreparedException implements Exception {}
+
+class FetchOfflineRequestIsNotInitializedException implements Exception {}
 
 class FetchOfflineRequestException implements Exception {
   FetchOfflineRequestException(this._innerException);
@@ -107,6 +112,29 @@ abstract class RequestManager {
 }
 
 class OfflineRequestManager implements RequestManager {
+  OfflineRequestManager() {
+    Future.delayed(Duration.zero, () {
+      init();
+    });
+  }
+
+  bool _isPreparing = true;
+  bool _isInitialized = false;
+
+  void init() async {
+    try {
+      await Graphhopper.gtfsInit(
+        "/graphhopper/maps/",
+        "cochabamba",
+      );
+      _isInitialized = true;
+    } catch (e) {
+      print(e);
+      _isInitialized = false;
+    }
+    _isPreparing = false;
+  }
+
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
@@ -117,8 +145,22 @@ class OfflineRequestManager implements RequestManager {
   }
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
-    throw FetchOfflineRequestException(
-      Exception("Fetch plan offline is not implemented yet."),
+    if (_isPreparing) {
+      throw FetchOfflineRequestIsNotPreparedException();
+    }
+    if (!_isInitialized) {
+      throw FetchOfflineRequestIsNotInitializedException();
+    }
+    return Plan.fromGraphhopperJson(
+      await Graphhopper.gtfsRoute(
+        from.latitude,
+        from.longitude,
+        to.latitude,
+        to.longitude,
+        "2000-01-01T00:00:00.00Z",
+      ),
+      from,
+      to,
     );
   }
 }
