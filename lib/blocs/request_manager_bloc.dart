@@ -9,6 +9,7 @@ import 'package:graphhopper/graphhopper.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -58,6 +59,11 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) {
     return _requestManager.fetchPlan(from, to);
   }
+
+  // Getter
+
+  Stream<OfflineRequestManagerStatus> get outOfflineStatusUpdate =>
+      _offlineRequestManager.outStatusUpdate;
 }
 
 class FetchOfflineRequestIsNotPreparedException implements Exception {}
@@ -115,6 +121,12 @@ abstract class RequestManager {
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to);
 }
 
+enum OfflineRequestManagerStatus {
+  preparing,
+  initialized,
+  failed,
+}
+
 class OfflineRequestManager implements RequestManager {
   OfflineRequestManager() {
     Future.delayed(Duration.zero, () {
@@ -124,8 +136,16 @@ class OfflineRequestManager implements RequestManager {
 
   static const String externalPath = "/Download/ubilabs/trufi/";
 
-  bool _isPreparing = true;
-  bool _isInitialized = false;
+  BehaviorSubject<OfflineRequestManagerStatus> _statusUpdateController =
+      new BehaviorSubject<OfflineRequestManagerStatus>();
+
+  Sink<OfflineRequestManagerStatus> get _inStatusUpdate =>
+      _statusUpdateController.sink;
+
+  Stream<OfflineRequestManagerStatus> get outStatusUpdate =>
+      _statusUpdateController.stream;
+
+  var _status = OfflineRequestManagerStatus.preparing;
 
   void init() async {
     // Request storage permission
@@ -134,7 +154,7 @@ class OfflineRequestManager implements RequestManager {
     ];
     final result = await PermissionHandler().requestPermissions(permissions);
     if (result[PermissionGroup.storage] != PermissionStatus.granted) {
-      _isPreparing = false;
+      _setStatus(OfflineRequestManagerStatus.failed);
       return;
     }
 
@@ -148,12 +168,15 @@ class OfflineRequestManager implements RequestManager {
         externalPath,
         "cochabamba",
       );
-      _isInitialized = true;
+      _setStatus(OfflineRequestManagerStatus.initialized);
     } catch (e) {
       print(e);
-      _isInitialized = false;
+      _setStatus(OfflineRequestManagerStatus.failed);
     }
-    _isPreparing = false;
+  }
+
+  void dispose() {
+    _statusUpdateController.close();
   }
 
   Future<List<TrufiLocation>> fetchLocations(
@@ -166,10 +189,10 @@ class OfflineRequestManager implements RequestManager {
   }
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
-    if (_isPreparing) {
+    if (_status == OfflineRequestManagerStatus.preparing) {
       throw FetchOfflineRequestIsNotPreparedException();
     }
-    if (!_isInitialized) {
+    if (_status == OfflineRequestManagerStatus.failed) {
       throw FetchOfflineRequestIsNotInitializedException();
     }
     return Plan.fromGraphhopperJson(
@@ -197,6 +220,11 @@ class OfflineRequestManager implements RequestManager {
     await file.create(recursive: true);
     await file.writeAsBytes(data.buffer.asUint8List());
     print("File copied to ${file.toString()}");
+  }
+
+  void _setStatus(OfflineRequestManagerStatus status) {
+    _status = status;
+    _inStatusUpdate.add(status);
   }
 }
 
