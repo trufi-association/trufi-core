@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:graphhopper/graphhopper.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -118,13 +122,30 @@ class OfflineRequestManager implements RequestManager {
     });
   }
 
+  static const String externalPath = "/Download/ubilabs/trufi/";
+
   bool _isPreparing = true;
   bool _isInitialized = false;
 
   void init() async {
+    // Request storage permission
+    final List<PermissionGroup> permissions = <PermissionGroup>[
+      PermissionGroup.storage
+    ];
+    final result = await PermissionHandler().requestPermissions(permissions);
+    if (result[PermissionGroup.storage] != PermissionStatus.granted) {
+      _isPreparing = false;
+      return;
+    }
+
+    // Copy gtfs and pbf to external storage
+    await copyAsset("assets/data/cochabamba-gtfs.zip", externalPath);
+    await copyAsset("assets/data/cochabamba.pbf", externalPath);
+
+    // Initialize graphhopper
     try {
       await Graphhopper.gtfsInit(
-        "/graphhopper/maps/",
+        externalPath,
         "cochabamba",
       );
       _isInitialized = true;
@@ -162,6 +183,20 @@ class OfflineRequestManager implements RequestManager {
       from,
       to,
     );
+  }
+
+  Future<Null> copyAsset(String key, String path) async {
+    final fileName = key.split("/").removeLast();
+    final file = new File(
+      (await getExternalStorageDirectory()).path + path + fileName,
+    );
+    if (await file.exists()) {
+      await file.delete();
+    }
+    final data = await rootBundle.load(key);
+    await file.create(recursive: true);
+    await file.writeAsBytes(data.buffer.asUint8List());
+    print("File copied to ${file.toString()}");
   }
 }
 
