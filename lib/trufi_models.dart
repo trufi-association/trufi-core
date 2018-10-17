@@ -114,14 +114,45 @@ class Plan {
     } else {
       Map<String, dynamic> planJson = json[_Plan];
       return Plan(
-          from: PlanLocation.fromJson(planJson[_From]),
-          to: PlanLocation.fromJson(planJson[_To]),
-          itineraries: planJson[_Itineraries]
-              .map<PlanItinerary>(
-                (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
-              )
-              .toList());
+        from: PlanLocation.fromJson(planJson[_From]),
+        to: PlanLocation.fromJson(planJson[_To]),
+        itineraries: planJson[_Itineraries]
+            .map<PlanItinerary>(
+              (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
+            )
+            .toList(),
+      );
     }
+  }
+
+  factory Plan.fromGraphhopperJson(
+    Map<dynamic, dynamic> json,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    if (json == null) {
+      return null;
+    }
+    if (json.containsKey(_Error)) {
+      return Plan(error: PlanError.fromJson(json[_Error]));
+    }
+    return Plan(
+      from: PlanLocation(
+        name: from.description,
+        latitude: from.latitude,
+        longitude: from.longitude,
+      ),
+      to: PlanLocation(
+        name: to.description,
+        latitude: to.latitude,
+        longitude: to.longitude,
+      ),
+      itineraries: json[_Itineraries]
+          .map<PlanItinerary>(
+            (itineraryJson) => PlanItinerary.fromGraphhopperJson(itineraryJson),
+          )
+          .toList(),
+    );
   }
 
   factory Plan.fromError(String error) {
@@ -212,9 +243,18 @@ class PlanItinerary {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-        legs: json[_Legs].map<PlanItineraryLeg>((json) {
-      return PlanItineraryLeg.fromJson(json);
-    }).toList());
+      legs: json[_Legs].map<PlanItineraryLeg>((json) {
+        return PlanItineraryLeg.fromJson(json);
+      }).toList(),
+    );
+  }
+
+  factory PlanItinerary.fromGraphhopperJson(List<dynamic> json) {
+    return PlanItinerary(
+      legs: json.map<PlanItineraryLeg>((json) {
+        return PlanItineraryLeg.fromGraphhopperJson(json);
+      }).toList(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -242,6 +282,7 @@ class PlanItineraryLeg {
   static const _Route = "route";
   static const _RouteLongName = "routeLongName";
   static const _To = "to";
+  static const _ToName = "toName";
 
   final String points;
   final String mode;
@@ -260,6 +301,18 @@ class PlanItineraryLeg {
       distance: json[_Distance],
       duration: json[_Duration],
       toName: json[_To][_Name],
+    );
+  }
+
+  factory PlanItineraryLeg.fromGraphhopperJson(Map<dynamic, dynamic> json) {
+    return PlanItineraryLeg(
+      points: json[_Points],
+      mode: json[_Mode],
+      route: json[_Route],
+      routeLongName: json[_RouteLongName],
+      distance: json[_Distance],
+      duration: (json[_Duration] + .0) / 1000.0,
+      toName: json[_ToName],
     );
   }
 
