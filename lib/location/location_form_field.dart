@@ -14,7 +14,8 @@ class LocationFormField extends FormField<TrufiLocation> {
           builder: (FormFieldState<TrufiLocation> state) {
             final theme = Theme.of(state.context);
             final textStyle = theme.textTheme.body1;
-            final hintStyle = theme.textTheme.caption;
+            final hintStyle = theme.textTheme.body1
+                .copyWith(color: theme.textTheme.caption.color);
             return Container(
               padding: EdgeInsets.all(4.0),
               child: GestureDetector(
