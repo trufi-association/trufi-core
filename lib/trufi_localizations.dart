@@ -580,11 +580,11 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   String get searchFieldLabel {
     switch (locale.languageCode) {
       case languageCodeGerman:
-        return "Suchen Startpunkt";
+        return "Suchen";
       case languageCodeQuechua:
         return "Mask'ay ";
       case languageCodeSpanish:
-        return "Buscar origen";
+        return "Buscar";
       default:
         return super.searchFieldLabel;
     }
