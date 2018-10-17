@@ -62,8 +62,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
   // Getter
 
-  Stream<OfflineRequestManagerStatus> get outOfflineStatusUpdate =>
-      _offlineRequestManager.outStatusUpdate;
+  OfflineRequestManager get offline => _offlineRequestManager;
 }
 
 class FetchOfflineRequestIsNotPreparedException implements Exception {}
@@ -134,7 +133,9 @@ class OfflineRequestManager implements RequestManager {
     });
   }
 
-  static const String externalPath = "/Download/ubilabs/trufi/";
+  static const String externalPath = "/ubilabs/trufi/";
+  static const String assetGtfsZip = "assets/data/cochabamba-gtfs.zip";
+  static const String assetPbf = "assets/data/cochabamba.pbf";
 
   BehaviorSubject<OfflineRequestManagerStatus> _statusUpdateController =
       new BehaviorSubject<OfflineRequestManagerStatus>();
@@ -159,8 +160,8 @@ class OfflineRequestManager implements RequestManager {
     }
 
     // Copy gtfs and pbf to external storage
-    await copyAsset("assets/data/cochabamba-gtfs.zip", externalPath);
-    await copyAsset("assets/data/cochabamba.pbf", externalPath);
+    await _copyAssetToDownloadFolder(assetGtfsZip, externalPath);
+    await _copyAssetToDownloadFolder(assetPbf, externalPath);
 
     // Initialize graphhopper
     try {
@@ -208,10 +209,21 @@ class OfflineRequestManager implements RequestManager {
     );
   }
 
-  Future<Null> copyAsset(String key, String path) async {
+  void reset() async {
+    _setStatus(OfflineRequestManagerStatus.preparing);
+    try {
+      await Graphhopper.gtfsReset();
+      _setStatus(OfflineRequestManagerStatus.initialized);
+    } catch (e) {
+      print(e);
+      _setStatus(OfflineRequestManagerStatus.failed);
+    }
+  }
+
+  Future<Null> _copyAssetToDownloadFolder(String key, String path) async {
     final fileName = key.split("/").removeLast();
     final file = new File(
-      (await getExternalStorageDirectory()).path + path + fileName,
+      "${(await getExternalStorageDirectory()).path}/Download${path}cochabamba-gh/$fileName",
     );
     if (await file.exists()) {
       await file.delete();
@@ -226,6 +238,10 @@ class OfflineRequestManager implements RequestManager {
     _status = status;
     _inStatusUpdate.add(status);
   }
+
+  // Getter
+
+  OfflineRequestManagerStatus get status => _status;
 }
 
 class OnlineRequestManager implements RequestManager {
