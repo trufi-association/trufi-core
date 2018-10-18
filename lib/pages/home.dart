@@ -105,6 +105,7 @@ class HomePageState extends State<HomePage>
                 _fromFieldKey,
                 ValueKey(keys.homePageFromPlaceField),
                 localizations.searchPleaseSelectOrigin,
+                localizations.searchHintOrigin,
                 _setFromPlace,
                 trailing: _data.isResettable ? _buildResetButton() : null,
               ),
@@ -112,6 +113,7 @@ class HomePageState extends State<HomePage>
                 _toFieldKey,
                 ValueKey(keys.homePageToPlaceField),
                 localizations.searchPleaseSelectDestination,
+                localizations.searchHintDestination,
                 _setToPlace,
                 trailing: _data.isSwappable ? _buildSwapButton() : null,
               ),
@@ -141,6 +143,7 @@ class HomePageState extends State<HomePage>
     Key key,
     ValueKey<String> valueKey,
     String hintText,
+    String searchHintText,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
     Widget leading,
@@ -158,6 +161,7 @@ class HomePageState extends State<HomePage>
             key: key,
             hintText: hintText,
             onSaved: onSaved,
+            searchHintText: searchHintText,
           ),
         ),
         SizedBox(
@@ -344,6 +348,7 @@ class HomePageState extends State<HomePage>
       setState(() => _isFetching = true);
       try {
         Plan plan = await requestManagerBloc.fetchPlan(
+          context,
           _data.fromPlace,
           _data.toPlace,
         );

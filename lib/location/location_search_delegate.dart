@@ -21,14 +21,13 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theme.of(context);
-    final partialTheme = theme.primaryTextTheme.copyWith(
-      title: TextStyle(fontSize: 16.0),
-    );
     return theme.copyWith(
       primaryColor: Colors.white,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
       primaryColorBrightness: Brightness.light,
-      textTheme: theme.textTheme.merge(partialTheme),
+      textTheme: theme.primaryTextTheme.copyWith(
+        title: theme.primaryTextTheme.body1,
+      ),
     );
   }
 
@@ -309,6 +308,7 @@ class _SuggestionList extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
         children: <Widget>[
+          Container(padding: EdgeInsets.all(4.0)),
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
@@ -335,7 +335,7 @@ class _SuggestionList extends StatelessWidget {
     Row row = Row(
       children: <Widget>[
         Icon(iconData),
-        Container(width: 8.0),
+        Container(width: 32.0),
         Expanded(
           child: RichText(
             maxLines: 1,
