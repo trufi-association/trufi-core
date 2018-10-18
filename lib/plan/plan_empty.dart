@@ -37,10 +37,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
-    final theme = Theme.of(context);
     return FloatingActionButton(
-      backgroundColor: theme.primaryColor,
-      child: Icon(Icons.my_location, color: theme.primaryIconTheme.color),
+      backgroundColor: Colors.white,
+      child: Icon(Icons.my_location, color: Colors.black),
       onPressed: _handleOnYourLocationPressed,
       heroTag: null,
     );

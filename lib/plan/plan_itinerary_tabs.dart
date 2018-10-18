@@ -7,10 +7,12 @@ class PlanItineraryTabPages extends StatefulWidget {
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
+    this.toggleInstructions,
   ) : assert(itineraries != null && itineraries.length > 0);
 
   final TabController tabController;
   final List<PlanItinerary> itineraries;
+  final Widget toggleInstructions;
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
@@ -20,27 +22,30 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Row(
+      child: Stack(
         children: <Widget>[
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: TabBarView(
-                    controller: widget.tabController,
-                    children: widget.itineraries.map<Widget>((
-                      PlanItinerary itinerary,
-                    ) {
-                      return _buildItinerary(context, itinerary);
-                    }).toList(),
-                  ),
-                ),
-                TabPageSelector(
-                  selectedColor: Colors.black,
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: TabBarView(
                   controller: widget.tabController,
+                  children: widget.itineraries.map<Widget>((
+                    PlanItinerary itinerary,
+                  ) {
+                    return _buildItinerary(context, itinerary);
+                  }).toList(),
                 ),
-              ],
-            ),
+              ),
+              TabPageSelector(
+                selectedColor: Colors.black,
+                controller: widget.tabController,
+              ),
+            ],
+          ),
+          Positioned(
+            top: 16.0,
+            right: 10.0,
+            child: widget.toggleInstructions,
           ),
         ],
       ),
