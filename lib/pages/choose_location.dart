@@ -63,8 +63,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageSubtitle,
-              style: theme.textTheme.caption
-                  .copyWith(color: theme.textTheme.body2.color),
+              style: theme.textTheme.caption.copyWith(
+                color: theme.textTheme.body2.color,
+              ),
             ),
           ),
         ],
@@ -77,8 +78,10 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
-                  text: localizations.commonOK,
-                  style: theme.textTheme.button.copyWith(fontSize: theme.textTheme.caption.fontSize),
+                  text: localizations.commonOK.toUpperCase(),
+                  style: theme.textTheme.button.copyWith(
+                    fontSize: theme.textTheme.caption.fontSize,
+                  ),
                 ),
               ),
             ),
@@ -110,16 +113,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         Container(
           height: 70.0,
           width: 56.0,
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.my_location,
-                color: Colors.black,
-              ),
-              onPressed: _handleOnYourLocationPressed,
-              heroTag: null,
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.my_location,
+              color: Colors.black,
             ),
+            onPressed: _handleOnYourLocationPressed,
+            heroTag: null,
           ),
+        ),
       ],
     );
   }
