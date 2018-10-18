@@ -176,7 +176,12 @@ class OnlineRequestManager implements RequestManager {
     if (response.statusCode == 200) {
       Plan plan = await compute(_parsePlan, utf8.decode(response.bodyBytes));
       if (plan.hasError) {
-        plan = _findErrorMessage(plan, context);
+        plan = Plan.fromError(
+          _localizedErrorForPlanError(
+            plan.error,
+            TrufiLocalizations.of(context),
+          ),
+        );
       }
       return plan;
     } else {
@@ -191,41 +196,42 @@ class OnlineRequestManager implements RequestManager {
       throw FetchOnlineRequestException(e);
     }
   }
-}
 
-Plan _findErrorMessage(Plan plan, BuildContext context) {
-  TrufiLocalizations localizations = TrufiLocalizations.of(context);
-  if (plan.error.id == 500 || plan.error.id == 503) {
-    plan = Plan.fromError(localizations.errorServerUnavailable);
-  } else if (plan.error.id == 400) {
-    plan = Plan.fromError(localizations.errorOutOfBoundary);
-  } else if (plan.error.id == 404) {
-    plan = Plan.fromError(localizations.errorPathNotFound);
-  } else if (plan.error.id == 406) {
-    plan = Plan.fromError(localizations.errorNoTransitTimes);
-  } else if (plan.error.id == 408) {
-    plan = Plan.fromError(localizations.errorServerTimeout);
-  } else if (plan.error.id == 409) {
-    plan = Plan.fromError(localizations.errorTrivialDistance);
-  } else if (plan.error.id == 413) {
-    plan = Plan.fromError(localizations.errorServerCanNotHandleRequest);
-  } else if (plan.error.id == 440) {
-    plan = Plan.fromError(localizations.errorUnknownOrigin);
-  } else if (plan.error.id == 450) {
-    plan = Plan.fromError(localizations.errorUnknownDestination);
-  } else if (plan.error.id == 460) {
-    plan = Plan.fromError(localizations.errorUnknownOriginDestination);
-  } else if (plan.error.id == 470) {
-    plan = Plan.fromError(localizations.errorNoBarrierFree);
-  } else if (plan.error.id == 340) {
-    plan = Plan.fromError(localizations.errorAmbiguousOrigin);
-  } else if (plan.error.id == 350) {
-    plan = Plan.fromError(localizations.errorAmbiguousDestination);
-  } else if (plan.error.id == 360) {
-    plan = Plan.fromError(localizations.errorAmbiguousOriginDestination);
+  String _localizedErrorForPlanError(
+    PlanError error,
+    TrufiLocalizations localizations,
+  ) {
+    if (error.id == 500 || error.id == 503) {
+      return localizations.errorServerUnavailable;
+    } else if (error.id == 400) {
+      return localizations.errorOutOfBoundary;
+    } else if (error.id == 404) {
+      return localizations.errorPathNotFound;
+    } else if (error.id == 406) {
+      return localizations.errorNoTransitTimes;
+    } else if (error.id == 408) {
+      return localizations.errorServerTimeout;
+    } else if (error.id == 409) {
+      return localizations.errorTrivialDistance;
+    } else if (error.id == 413) {
+      return localizations.errorServerCanNotHandleRequest;
+    } else if (error.id == 440) {
+      return localizations.errorUnknownOrigin;
+    } else if (error.id == 450) {
+      return localizations.errorUnknownDestination;
+    } else if (error.id == 460) {
+      return localizations.errorUnknownOriginDestination;
+    } else if (error.id == 470) {
+      return localizations.errorNoBarrierFree;
+    } else if (error.id == 340) {
+      return localizations.errorAmbiguousOrigin;
+    } else if (error.id == 350) {
+      return localizations.errorAmbiguousDestination;
+    } else if (error.id == 360) {
+      return localizations.errorAmbiguousOriginDestination;
+    }
+    return error.message;
   }
-
-  return plan;
 }
 
 List<TrufiLocation> _parseLocations(String responseBody) {
