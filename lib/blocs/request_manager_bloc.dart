@@ -9,6 +9,7 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class RequestManagerBloc implements BlocBase, RequestManager {
@@ -50,8 +51,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return _requestManager.fetchLocations(context, query);
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) {
-    return _requestManager.fetchPlan(from, to);
+  Future<Plan> fetchPlan(
+      BuildContext context, TrufiLocation from, TrufiLocation to) {
+    return _requestManager.fetchPlan(context, from, to);
   }
 }
 
@@ -103,7 +105,11 @@ abstract class RequestManager {
     String query,
   );
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to);
+  Future<Plan> fetchPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  );
 }
 
 class OfflineRequestManager implements RequestManager {
@@ -116,7 +122,8 @@ class OfflineRequestManager implements RequestManager {
     );
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
+  Future<Plan> fetchPlan(
+      BuildContext context, TrufiLocation from, TrufiLocation to) async {
     throw FetchOfflineRequestException(
       Exception("Fetch plan offline is not implemented yet."),
     );
@@ -154,7 +161,11 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
+  Future<Plan> fetchPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) async {
     Uri request = Uri.https(Endpoint, PlanPath, {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
@@ -163,7 +174,16 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return compute(_parsePlan, utf8.decode(response.bodyBytes));
+      Plan plan = await compute(_parsePlan, utf8.decode(response.bodyBytes));
+      if (plan.hasError) {
+        plan = Plan.fromError(
+          _localizedErrorForPlanError(
+            plan.error,
+            TrufiLocalizations.of(context),
+          ),
+        );
+      }
+      return plan;
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
@@ -175,6 +195,42 @@ class OnlineRequestManager implements RequestManager {
     } catch (e) {
       throw FetchOnlineRequestException(e);
     }
+  }
+
+  String _localizedErrorForPlanError(
+    PlanError error,
+    TrufiLocalizations localizations,
+  ) {
+    if (error.id == 500 || error.id == 503) {
+      return localizations.errorServerUnavailable;
+    } else if (error.id == 400) {
+      return localizations.errorOutOfBoundary;
+    } else if (error.id == 404) {
+      return localizations.errorPathNotFound;
+    } else if (error.id == 406) {
+      return localizations.errorNoTransitTimes;
+    } else if (error.id == 408) {
+      return localizations.errorServerTimeout;
+    } else if (error.id == 409) {
+      return localizations.errorTrivialDistance;
+    } else if (error.id == 413) {
+      return localizations.errorServerCanNotHandleRequest;
+    } else if (error.id == 440) {
+      return localizations.errorUnknownOrigin;
+    } else if (error.id == 450) {
+      return localizations.errorUnknownDestination;
+    } else if (error.id == 460) {
+      return localizations.errorUnknownOriginDestination;
+    } else if (error.id == 470) {
+      return localizations.errorNoBarrierFree;
+    } else if (error.id == 340) {
+      return localizations.errorAmbiguousOrigin;
+    } else if (error.id == 350) {
+      return localizations.errorAmbiguousDestination;
+    } else if (error.id == 360) {
+      return localizations.errorAmbiguousOriginDestination;
+    }
+    return error.message;
   }
 }
 

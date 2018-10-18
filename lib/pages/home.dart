@@ -267,6 +267,7 @@ class HomePageState extends State<HomePage>
       setState(() => _isFetching = true);
       try {
         Plan plan = await requestManagerBloc.fetchPlan(
+          context,
           _data.fromPlace,
           _data.toPlace,
         );
