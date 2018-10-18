@@ -21,14 +21,13 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theme.of(context);
-    final partialTheme = theme.primaryTextTheme.copyWith(
-      title: TextStyle(fontSize: 16.0),
-    );
     return theme.copyWith(
       primaryColor: Colors.white,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
       primaryColorBrightness: Brightness.light,
-      textTheme: theme.textTheme.merge(partialTheme),
+      textTheme: theme.primaryTextTheme.copyWith(
+        title: theme.primaryTextTheme.body1,
+      ),
     );
   }
 
