@@ -26,7 +26,7 @@ class CropButtonState extends State<CropButton>
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
-    _animation = Tween(begin: 0.0, end: 0.8).animate(_animationController)
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController)
       ..addListener(() {
         setState(() {});
       });
@@ -37,8 +37,11 @@ class CropButtonState extends State<CropButton>
     return ScaleTransition(
       scale: _animation,
       child: FloatingActionButton(
-        backgroundColor: Colors.grey,
-        child: Icon(Icons.crop_free),
+        backgroundColor: Colors.white,
+        child: Icon(
+          Icons.crop_free,
+          color: Colors.black,
+        ),
         onPressed: _handleOnPressed,
         heroTag: null,
       ),
