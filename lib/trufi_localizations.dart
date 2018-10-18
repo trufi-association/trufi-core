@@ -326,7 +326,7 @@ class TrufiLocalizations {
       CommonUnknownError: 'Unbekannter Fehler',
       CommonError: 'Fehler',
       RouteRequestErrorServerUnavailable:
-          "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuche Sie es später erneut.",
+          "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.",
       RouteRequestErrorOutOfBoundary:
           'Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.',
       RouteRequestErrorPathNotFound:
