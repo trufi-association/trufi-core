@@ -51,6 +51,8 @@ class TrufiLocalizations {
   static const String CommonFailLoadingData = "common_fail_loading_data";
   static const String CommonUnknownError = "common_unknown_error";
   static const String CommonError = "common_error";
+  static const String SearchHintOrigin = "search_hint_origin";
+  static const String SearchHintDestination = "search_hint_destination";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
   static const String SearchItemYourLocation = "search_item_your_location";
   static const String SearchItemNoResults = "search_item_no_results";
@@ -114,6 +116,8 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Failed to load data',
       CommonUnknownError: 'unknown error',
       CommonError: 'Error',
+      SearchHintOrigin: 'Choose starting point',
+      SearchHintDestination: 'Choose destination',
       SearchItemChooseOnMap: 'Choose on map',
       SearchItemYourLocation: 'Your location',
       SearchItemNoResults: 'No results',
@@ -174,6 +178,8 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Error al cargar datos',
       CommonUnknownError: 'Error desconocido',
       CommonError: 'Error',
+      SearchHintOrigin: 'Selecciona punto de partida',
+      SearchHintDestination: 'Selecciona destino',
       SearchItemChooseOnMap: 'Seleccionar en el mapa',
       SearchItemYourLocation: 'Tu ubicación',
       SearchItemNoResults: 'Ningun resultado',
@@ -234,6 +240,8 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Fehler beim Laden der Daten',
       CommonUnknownError: 'Unbekannter Fehler',
       CommonError: 'Fehler',
+      SearchHintOrigin: 'Start auswählen',
+      SearchHintDestination: 'Ziel auswählen',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
       SearchItemYourLocation: 'Ihr Standort',
       SearchItemNoResults: 'Keine Ergebnisse',
@@ -294,6 +302,8 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Mana aticunchu tariyta datusta',
       CommonUnknownError: 'Mana yachacunchu imachus pasan',
       CommonError: 'Error',
+      SearchHintOrigin: 'Mask\'ay punto de partida',
+      SearchHintDestination: 'Mask\'ay destino',
       SearchItemChooseOnMap: 'Ajllaw uj mapata',
       SearchItemYourLocation: 'Gan cashanqui',
       SearchItemNoResults: "Ningun resultado",
@@ -399,6 +409,14 @@ class TrufiLocalizations {
 
   String get commonError {
     return _localizedValues[locale.languageCode][CommonError];
+  }
+
+  String get searchHintOrigin {
+    return _localizedValues[locale.languageCode][SearchHintOrigin];
+  }
+
+  String get searchHintDestination {
+    return _localizedValues[locale.languageCode][SearchHintDestination];
   }
 
   String get searchItemChooseOnMap {
@@ -574,19 +592,15 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   TrufiMaterialLocalizations(this.locale);
 
   final Locale locale;
+  String _searchHinText;
 
   @override
   String get searchFieldLabel {
-    switch (locale.languageCode) {
-      case languageCodeGerman:
-        return "Suchen";
-      case languageCodeQuechua:
-        return "Mask'ay";
-      case languageCodeSpanish:
-        return "Buscar";
-      default:
-        return super.searchFieldLabel;
-    }
+    return _searchHinText;
+  }
+
+  void setSearchHintText(String searchHintText) {
+    _searchHinText = searchHintText;
   }
 }
 
