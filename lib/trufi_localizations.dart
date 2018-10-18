@@ -164,7 +164,7 @@ class TrufiLocalizations {
       AlertLocationServicesDeniedTitle: 'Sin acceso a la ubicación',
       AlertLocationServicesDeniedMessage:
           'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
-      CommonOK: 'ACEPTAR',
+      CommonOK: 'Aceptar',
       CommonCancel: 'Cancelar',
       CommonGoOffline: 'Go offline', // TODO
       CommonGoOnline: 'Go online', // TODO
@@ -582,7 +582,7 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
       case languageCodeGerman:
         return "Suchen";
       case languageCodeQuechua:
-        return "Mask'ay ";
+        return "Mask'ay";
       case languageCodeSpanish:
         return "Buscar";
       default:

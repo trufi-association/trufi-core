@@ -158,7 +158,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
                             AsyncSnapshot<PlanItinerary> snapshot,
                           ) {
                             return _buildItinerarySummary(
-                                context, snapshot.data);
+                              context,
+                              snapshot.data,
+                            );
                           },
                         ),
                       ],
