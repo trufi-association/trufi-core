@@ -64,8 +64,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation = Tween(begin: 200.0, end: 60.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut,),)
-      ..addListener(() {
+    _animation = Tween(begin: 200.0, end: 60.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
         setState(() {});
       });
     _planPageController = PlanPageController(widget.plan);
