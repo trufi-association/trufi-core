@@ -325,33 +325,33 @@ class TrufiLocalizations {
       CommonUnknownError: 'Unbekannter Fehler',
       CommonError: 'Fehler',
       RouteRequestErrorServerUnavailable:
-          "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuche es später erneut.",
+          "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuche Sie es später erneut.",
       RouteRequestErrorOutOfBoundary:
-          'Trip ist nicht möglich. Sie versuchen möglicherweise, eine Reise außerhalb der Kartendatengrenze zu planen.',
+          'Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.',
       RouteRequestErrorPathNotFound:
-          'Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (Sie könnten beispielsweise in einer Wohnstraße beginnen, die nur mit einer Autobahn verbunden ist).',
+          'Dieser Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (dies ist beispielsweise der Fall, wenn Sie sich in einer Wohnstraße befinden, die nur mit einer Autobahn verbunden ist).',
       RouteRequestErrorNoTransitTimes:
-          'Keine Laufzeiten verfügbar. Das Datum kann in der Zukunft zu alt oder zu weit sein, oder es kann zu dem von Ihnen gewählten Zeitpunkt keinen Transitservice für Ihre Reise geben.',
+          'Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zuweit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.',
       RouteRequestErrorServerTimeout:
-          'Der Reiseplaner dauert zu lange, um Ihre Anfrage zu bearbeiten. Bitte versuchen Sie es später erneut.',
+          'Das Bearbeiten ihrer Anfrage dauert zu lange. Bitte versuchen Sie es später erneut.',
       RouteRequestErrorTrivialDistance:
-          'Der Startpunkt liegt in einer trivialen Entfernung vom Ziel.',
+          'Der Startpunkt liegt in einer trivialen Entfernung zum Ziel.',
       RouteRequestErrorServerCanNotHandleRequest:
           'Die Anfrage enthält Fehler, die der Server nicht verarbeiten kann.',
       RouteRequestErrorUnknownOrigin:
-          'Der Startpunkt ist unbekannt. Können Sie ein bisschen deutlicher sein?',
+          'Der Startpunkt ist unbekannt. Können Sie ein bisschen präziser sein?',
       RouteRequestErrorUnknownDestination:
-          'Das Ziel ist unbekannt. Können Sie ein bisschen deutlicher sein?',
+          'Das Ziel ist unbekannt. Können Sie ein bisschen präziser sein?',
       RouteRequestErrorOriginDestinationUnknown:
-          'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen deutlicher sein?',
+          'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen präziser sein?',
       RouteRequestErrorNoBarrierFree:
-          'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich',
+          'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.',
       RouteRequestErrorAmbiguousOrigin:
-          'Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen oder geben Sie eine deutliche Beschreibung.',
+          'Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
       RouteRequestErrorAmbiguousDestination:
-          'Der Reiseplaner weiß nicht genau, wohin er fahren möchte. Bitte wählen Sie aus den folgenden Optionen oder geben Sie eine deutliche Beschreibung.',
+          'Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
       RouteRequestErrorOriginDestinationAmbiguous:
-          'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen oder geben Sie eine deutliche Beschreibung.',
+          'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
       SearchHintOrigin: 'Start auswählen',
       SearchHintDestination: 'Ziel auswählen',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
