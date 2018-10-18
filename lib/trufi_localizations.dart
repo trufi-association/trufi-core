@@ -79,6 +79,8 @@ class TrufiLocalizations {
       "route_request_error_ambiguous_destination";
   static const String RouteRequestErrorOriginDestinationAmbiguous =
       "route_request_error_origin_destination_ambiguous";
+  static const String SearchHintOrigin = "search_hint_origin";
+  static const String SearchHintDestination = "search_hint_destination";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
   static const String SearchItemYourLocation = "search_item_your_location";
   static const String SearchItemNoResults = "search_item_no_results";
@@ -170,6 +172,8 @@ class TrufiLocalizations {
           'The trip planner is unsure of the destination you want to go to. Please select from the following options, or be more specific.',
       RouteRequestErrorOriginDestinationAmbiguous:
           'Both origin and destination are ambiguous. Please select from the following options, or be more specific.',
+      SearchHintOrigin: 'Choose starting point',
+      SearchHintDestination: 'Choose destination',
       SearchItemChooseOnMap: 'Choose on map',
       SearchItemYourLocation: 'Your location',
       SearchItemNoResults: 'No results',
@@ -258,6 +262,8 @@ class TrufiLocalizations {
           'El planificador de rutas no está seguro de tu destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
       RouteRequestErrorOriginDestinationAmbiguous:
           'Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      SearchHintOrigin: 'Selecciona punto de partida',
+      SearchHintDestination: 'Selecciona destino',
       SearchItemChooseOnMap: 'Seleccionar en el mapa',
       SearchItemYourLocation: 'Tu ubicación',
       SearchItemNoResults: 'Ningun resultado',
@@ -346,6 +352,8 @@ class TrufiLocalizations {
           'Der Reiseplaner weiß nicht genau, wohin er fahren möchte. Bitte wählen Sie aus den folgenden Optionen oder geben Sie eine deutliche Beschreibung.',
       RouteRequestErrorOriginDestinationAmbiguous:
           'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen oder geben Sie eine deutliche Beschreibung.',
+      SearchHintOrigin: 'Start auswählen',
+      SearchHintDestination: 'Ziel auswählen',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
       SearchItemYourLocation: 'Ihr Standort',
       SearchItemNoResults: 'Keine Ergebnisse',
@@ -434,6 +442,8 @@ class TrufiLocalizations {
           'El planificador de rutas no está seguro de tu destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
       RouteRequestErrorOriginDestinationAmbiguous:
           'Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      SearchHintOrigin: 'Mask\'ay punto de partida',
+      SearchHintDestination: 'Mask\'ay destino',
       SearchItemChooseOnMap: 'Ajllaw uj mapata',
       SearchItemYourLocation: 'Gan cashanqui',
       SearchItemNoResults: "Ningun resultado",
@@ -543,7 +553,7 @@ class TrufiLocalizations {
 
   String get errorServerUnavailable {
     return _localizedValues[locale.languageCode]
-    [RouteRequestErrorServerUnavailable];
+        [RouteRequestErrorServerUnavailable];
   }
 
   String get errorOutOfBoundary {
@@ -554,7 +564,6 @@ class TrufiLocalizations {
   String get errorPathNotFound {
     return _localizedValues[locale.languageCode][RouteRequestErrorPathNotFound];
   }
-
 
   String get errorNoTransitTimes {
     return _localizedValues[locale.languageCode]
@@ -609,6 +618,14 @@ class TrufiLocalizations {
   String get errorAmbiguousOriginDestination {
     return _localizedValues[locale.languageCode]
         [RouteRequestErrorOriginDestinationAmbiguous];
+  }
+
+  String get searchHintOrigin {
+    return _localizedValues[locale.languageCode][SearchHintOrigin];
+  }
+
+  String get searchHintDestination {
+    return _localizedValues[locale.languageCode][SearchHintDestination];
   }
 
   String get searchItemChooseOnMap {
@@ -784,19 +801,15 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   TrufiMaterialLocalizations(this.locale);
 
   final Locale locale;
+  String _searchHinText;
 
   @override
   String get searchFieldLabel {
-    switch (locale.languageCode) {
-      case languageCodeGerman:
-        return "Suchen";
-      case languageCodeQuechua:
-        return "Mask'ay";
-      case languageCodeSpanish:
-        return "Buscar";
-      default:
-        return super.searchFieldLabel;
-    }
+    return _searchHinText;
+  }
+
+  void setSearchHintText(String searchHintText) {
+    _searchHinText = searchHintText;
   }
 }
 
