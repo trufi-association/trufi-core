@@ -52,7 +52,10 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   }
 
   Future<Plan> fetchPlan(
-      BuildContext context, TrufiLocation from, TrufiLocation to) {
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
     return _requestManager.fetchPlan(context, from, to);
   }
 }
@@ -123,7 +126,10 @@ class OfflineRequestManager implements RequestManager {
   }
 
   Future<Plan> fetchPlan(
-      BuildContext context, TrufiLocation from, TrufiLocation to) async {
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) async {
     throw FetchOfflineRequestException(
       Exception("Fetch plan offline is not implemented yet."),
     );
