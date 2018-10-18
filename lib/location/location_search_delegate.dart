@@ -309,6 +309,7 @@ class _SuggestionList extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
         children: <Widget>[
+          Container(padding: EdgeInsets.all(4.0)),
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
@@ -335,7 +336,7 @@ class _SuggestionList extends StatelessWidget {
     Row row = Row(
       children: <Widget>[
         Icon(iconData),
-        Container(width: 8.0),
+        Container(width: 32.0),
         Expanded(
           child: RichText(
             maxLines: 1,
