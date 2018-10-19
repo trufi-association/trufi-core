@@ -7,7 +7,7 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class LocationsBloc implements BlocBase {
+abstract class LocationsBloc implements BlocBase {
   LocationsBloc(BuildContext context, this.locationStorage) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);

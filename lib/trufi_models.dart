@@ -140,6 +140,8 @@ class Plan {
             }
           };
   }
+
+  bool get hasError => error != null;
 }
 
 class PlanError {
@@ -265,10 +267,12 @@ class PlanItineraryLeg {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(
-          "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}");
+        "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}",
+      );
     } else if (mode == 'BUS') {
       sb.write(
-          "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_distanceString(localizations)} - ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)})");
+        "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_distanceString(localizations)} - ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)})",
+      );
     }
     return sb.toString();
   }
@@ -279,10 +283,12 @@ class PlanItineraryLeg {
       sb.write("${localizations.instructionWalk}");
     } else if (mode == 'BUS') {
       sb.write(
-          "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}");
+        "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}",
+      );
     }
     sb.write(
-        " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}");
+      " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}",
+    );
     return sb.toString();
   }
 
@@ -311,14 +317,12 @@ class PlanItineraryLeg {
 
   String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? (distance.ceil() ~/ 1000).toString() +
-            " ${localizations.instructionUnitKm}"
-        : distance.ceil().toString() + " ${localizations.instructionUnitMeter}";
+        ? "${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm}"
+        : "${distance.ceil()} ${localizations.instructionUnitMeter}";
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return (duration.ceil()/ 60).ceil().toString() +
-        " ${localizations.instructionMinutes}";
+    return "${(duration.ceil() / 60).ceil()} ${localizations.instructionMinutes}";
   }
 
   String _toString(TrufiLocalizations localizations) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
@@ -20,8 +19,8 @@ class TrufiDrawer extends StatefulWidget {
 class TrufiDrawerState extends State<TrufiDrawer> {
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -66,6 +65,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localizations.menuTeam,
             TeamPage.route,
           ),
+          Divider(),
+          _buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
         ],
       ),
@@ -91,11 +92,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
-    PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
-    String languageCode = localizations.locale.languageCode;
-    List<LanguageDropdownValue> values = <LanguageDropdownValue>[
+    final preferencesBloc = PreferencesBloc.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    final languageCode = localizations.locale.languageCode;
+    final values = <LanguageDropdownValue>[
       LanguageDropdownValue(languageCodeSpanish, localizations.spanish),
       LanguageDropdownValue(languageCodeQuechua, localizations.quechua),
       LanguageDropdownValue(languageCodeEnglish, localizations.english),
@@ -107,7 +108,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         style: theme.textTheme.body2,
         value: values.firstWhere((value) => value.languageCode == languageCode),
         onChanged: (LanguageDropdownValue value) {
-          preferencesBloc.inSwitchLanguageCode.add(value.languageCode);
+          preferencesBloc.inChangeLanguageCode.add(value.languageCode);
         },
         items: values.map((LanguageDropdownValue value) {
           return DropdownMenuItem<LanguageDropdownValue>(
@@ -119,6 +120,25 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           );
         }).toList(),
       ),
+    );
+  }
+
+  Widget _buildOfflineToggle(BuildContext context) {
+    final preferencesBloc = PreferencesBloc.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    return StreamBuilder(
+      stream: preferencesBloc.outChangeOnline,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        bool isOnline = snapshot.data == true;
+        return SwitchListTile(
+          title: Text(localizations.menuOnline),
+          value: isOnline,
+          onChanged: preferencesBloc.inChangeOnline.add,
+          activeColor: theme.primaryColor,
+          secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
+        );
+      },
     );
   }
 }

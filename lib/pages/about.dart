@@ -27,8 +27,8 @@ class AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return ListView(
       children: <Widget>[
         Container(
