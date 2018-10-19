@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/blocs/offline_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
@@ -34,8 +34,11 @@ class TrufiApp extends StatelessWidget {
               bloc: HistoryLocationsBloc(context),
               child: BlocProvider<ImportantLocationsBloc>(
                 bloc: ImportantLocationsBloc(context),
-                child: AppLifecycleReactor(
-                  child: LocalizedMaterialApp(),
+                child: BlocProvider<OfflineLocationsBloc>(
+                  bloc: OfflineLocationsBloc(context),
+                  child: AppLifecycleReactor(
+                    child: LocalizedMaterialApp(),
+                  ),
                 ),
               ),
             ),

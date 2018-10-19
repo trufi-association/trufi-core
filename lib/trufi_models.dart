@@ -1,25 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
-  TrufiLocation({
-    @required this.description,
-    @required this.latitude,
-    @required this.longitude,
-  })  : assert(description != null),
+  TrufiLocation(
+      {@required this.description,
+      @required this.latitude,
+      @required this.longitude,
+      this.importance})
+      : assert(description != null),
         assert(latitude != null),
         assert(longitude != null);
 
   static const String _Description = 'description';
   static const String _Latitude = 'latitude';
   static const String _Longitude = 'longitude';
+  static const String _Importance = 'importance';
 
   final String description;
   final double latitude;
   final double longitude;
+  final num importance;
 
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
@@ -29,20 +31,12 @@ class TrufiLocation {
     );
   }
 
-  factory TrufiLocation.fromSearchJson(Map<String, dynamic> json) {
+  factory TrufiLocation.fromLocationsJson(Map<String, dynamic> json) {
     return TrufiLocation(
-      description: json['description'],
-      latitude: json['lat'],
-      longitude: json['lng'],
-    );
-  }
-
-  factory TrufiLocation.fromImportantPlacesJson(Map<String, dynamic> json) {
-    return TrufiLocation(
-      description: json['name'],
-      latitude: json['coords']['lat'],
-      longitude: json['coords']['lng'],
-    );
+        description: json['name'],
+        latitude: json['coords']['lat'],
+        longitude: json['coords']['lng'],
+        importance: json['importance']);
   }
 
   factory TrufiLocation.fromPlanLocation(PlanLocation value) {
@@ -58,10 +52,10 @@ class TrufiLocation {
       return null;
     }
     return TrufiLocation(
-      description: json[_Description],
-      latitude: json[_Latitude],
-      longitude: json[_Longitude],
-    );
+        description: json[_Description],
+        latitude: json[_Latitude],
+        longitude: json[_Longitude],
+        importance: json[_Importance]);
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +63,7 @@ class TrufiLocation {
       _Description: description,
       _Latitude: latitude,
       _Longitude: longitude,
+      _Importance: importance
     };
   }
 
@@ -76,10 +71,14 @@ class TrufiLocation {
       o is TrufiLocation &&
       o.description == description &&
       o.latitude == latitude &&
-      o.longitude == longitude;
+      o.longitude == longitude &&
+      o.importance == importance;
 
   int get hashCode =>
-      description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
+      description.hashCode ^
+      latitude.hashCode ^
+      longitude.hashCode ^
+      importance.hashCode;
 
   String toString() {
     return '$latitude,$longitude';

@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_app/blocs/offline_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -111,9 +111,16 @@ class OfflineRequestManager implements RequestManager {
     BuildContext context,
     String query,
   ) async {
-    throw FetchOfflineRequestException(
-      Exception("Fetch locations offline is not implemented yet."),
-    );
+    List<TrufiLocation> locations =
+        await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
+    locations.sort((a, b) {
+      return a.importance.compareTo(b.importance) * -1;
+    });
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
   }
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
@@ -132,26 +139,16 @@ class OnlineRequestManager implements RequestManager {
     BuildContext context,
     String query,
   ) async {
-    Uri request = Uri.https(Endpoint, SearchPath, {
-      "query": query,
-      "autocomplete": "false",
-      "corners": "true",
-      "stops": "false"
+    List<TrufiLocation> locations =
+        await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
+    locations.sort((a, b) {
+      return a.importance.compareTo(b.importance) * -1;
     });
-    final response = await _fetchRequest(request);
-    if (response.statusCode == 200) {
-      List<TrufiLocation> locations = await compute(
-        _parseLocations,
-        utf8.decode(response.bodyBytes),
-      );
-      final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-      locations.sort((a, b) {
-        return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
-      });
-      return locations;
-    } else {
-      throw FetchOnlineResponseException('Failed to load locations');
-    }
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
   }
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) async {
@@ -176,13 +173,6 @@ class OnlineRequestManager implements RequestManager {
       throw FetchOnlineRequestException(e);
     }
   }
-}
-
-List<TrufiLocation> _parseLocations(String responseBody) {
-  return json
-      .decode(responseBody)
-      .map<TrufiLocation>((json) => new TrufiLocation.fromSearchJson(json))
-      .toList();
 }
 
 Plan _parsePlan(String responseBody) {
