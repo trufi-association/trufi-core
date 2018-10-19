@@ -146,6 +146,23 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 }
 
+class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {
+  TrufiDrawerRoute({
+    WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
+  }
+}
+
 class LanguageDropdownValue {
   LanguageDropdownValue(this.languageCode, this.languageString);
 
