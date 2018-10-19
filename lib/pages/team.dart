@@ -5,7 +5,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 class TeamPage extends StatefulWidget {
-  static const String route = "team";
+  static const String route = "/team";
 
   @override
   State<StatefulWidget> createState() => new TeamPageState();
