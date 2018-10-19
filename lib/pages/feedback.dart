@@ -7,7 +7,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 class FeedbackPage extends StatefulWidget {
-  static const String route = "feedback";
+  static const String route = "/feedback";
 
   FeedbackPage({Key key}) : super(key: key);
 
