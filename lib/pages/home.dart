@@ -16,6 +16,7 @@ import 'package:trufi_app/plan/plan_empty.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/offline_status.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -184,7 +185,7 @@ class HomePageState extends State<HomePage>
         top: 0.0,
         left: 0.0,
         right: 0.0,
-        child: _buildStatus(context),
+        child: OfflineStatus(),
       ),
     );
     return Stack(children: children);
@@ -203,77 +204,6 @@ class HomePageState extends State<HomePage>
       color: Colors.black54,
       child: Center(
         child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  Widget _buildStatus(BuildContext context) {
-    final requestManagerBloc = RequestManagerBloc.of(context);
-    return StreamBuilder<OfflineRequestManagerStatus>(
-      stream: requestManagerBloc.offline.outStatusUpdate,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<OfflineRequestManagerStatus> snapshot,
-      ) {
-        final status = requestManagerBloc.offline.status;
-        print(status);
-        if (status == OfflineRequestManagerStatus.failed) {
-          return _buildErrorStatus(context);
-        } else if (status == OfflineRequestManagerStatus.preparing) {
-          return _buildPreparingStatus(context);
-        }
-        return Container();
-      },
-    );
-  }
-
-  Widget _buildPreparingStatus(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 48.0,
-      child: Row(
-        children: [
-          Icon(Icons.cloud_off),
-          SizedBox(width: 8.0),
-          Text(
-            "Preparing offline mode...",
-            style: theme.primaryTextTheme.caption,
-          ),
-          SizedBox(width: 8.0),
-          Expanded(
-            child: LinearProgressIndicator(
-              backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation(Colors.black),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildErrorStatus(BuildContext context) {
-    final requestManagerBloc = RequestManagerBloc.of(context);
-    final theme = Theme.of(context);
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      height: 48.0,
-      child: Row(
-        children: [
-          Icon(Icons.cloud_off),
-          SizedBox(width: 8.0),
-          Text(
-            "Preparing offline mode failed",
-            style: theme.primaryTextTheme.caption,
-          ),
-          SizedBox(width: 8.0),
-          Expanded(
-            child: RaisedButton(
-              child: Text("Retry"),
-              onPressed: requestManagerBloc.offline.reset,
-            ),
-          ),
-        ],
       ),
     );
   }
