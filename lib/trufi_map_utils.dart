@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
@@ -73,29 +74,69 @@ Marker buildTransferMarker(LatLng point) {
 
 Marker buildYourLocationMarker(LatLng point) {
   return Marker(
+    width: 50.0,
+    height: 50.0,
     point: point,
     anchor: AnchorPos.center,
-    builder: (context) {
-      return Transform.scale(
-        scale: 0.5,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            border: Border.all(color: Colors.white, width: 3.5),
-            shape: BoxShape.circle,
-            boxShadow: [
-              new BoxShadow(
-                color: Colors.blue,
-                spreadRadius: 8.0,
-                blurRadius: 30.0,
-              ),
-            ],
+    builder: (context) => MyLocationMarker(),
+  );
+}
+
+class MyLocationMarker extends StatefulWidget {
+  @override
+  MyLocationMarkerState createState() => MyLocationMarkerState();
+}
+
+class MyLocationMarkerState extends State<MyLocationMarker> {
+  double _direction;
+
+  @override
+  void initState() {
+    super.initState();
+    FlutterCompass.events.listen((double direction) {
+      setState(() {
+        _direction = direction;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> children = <Widget>[
+      Center(
+        child: Transform.scale(
+          scale: 0.5,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              border: Border.all(color: Colors.white, width: 3.5),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue,
+                  spreadRadius: 8.0,
+                  blurRadius: 30.0,
+                ),
+              ],
+            ),
+            child: Icon(CircleIcon.circle, color: Colors.blue),
           ),
-          child: Icon(CircleIcon.circle, color: Colors.blue),
+        ),
+      ),
+    ];
+    if (_direction != null) {
+      children.add(
+        Transform.rotate(
+          angle: (pi / 180.0) * _direction,
+          child: Container(
+            alignment: Alignment.topCenter,
+            child: Icon(Icons.arrow_drop_up, color: Colors.blue),
+          ),
         ),
       );
-    },
-  );
+    }
+    return Stack(children: children);
+  }
 }
 
 Marker buildBusMarker(
