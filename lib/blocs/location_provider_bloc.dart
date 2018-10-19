@@ -9,10 +9,14 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
+  static LocationProviderBloc of(BuildContext context) {
+    return BlocProvider.of<LocationProviderBloc>(context);
+  }
+
   LocationProviderBloc() {
     _locationProvider = LocationProvider(
       onLocationChanged: _inLocationUpdate.add,
-    )..init();
+    );
   }
 
   LocationProvider _locationProvider;
@@ -30,6 +34,16 @@ class LocationProviderBloc implements BlocBase {
   void dispose() {
     _locationProvider.dispose();
     _locationUpdateController.close();
+  }
+
+  // Methods
+
+  void start() async {
+    _locationProvider.start();
+  }
+
+  void stop() async {
+    _locationProvider.stop();
   }
 
   // Getter
@@ -69,13 +83,17 @@ class LocationProvider {
     distanceFilter: 10,
   );
 
-  init() async {
+  start() async {
     _subscriptions.cancel();
     _subscriptions.add(
-      (await _geolocator.getPositionStream(_locationOptions)).listen(
+      (_geolocator.getPositionStream(_locationOptions)).listen(
         (position) => _handleOnLocationChanged(position),
       ),
     );
+  }
+
+  stop() async {
+    _subscriptions.cancel();
   }
 
   void _handleOnLocationChanged(Position value) {
@@ -94,7 +112,7 @@ class LocationProvider {
 
   Future<LatLng> get lastLocation async {
     Position position = await _geolocator.getLastKnownPosition(
-      LocationAccuracy.high,
+      desiredAccuracy: LocationAccuracy.high,
     );
     return position != null
         ? LatLng(position.latitude, position.longitude)

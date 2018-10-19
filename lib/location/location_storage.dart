@@ -1,30 +1,41 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:synchronized/synchronized.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class LocationStorage {
-  LocationStorage(this._file, this._locations);
+abstract class LocationStorage {
+  final List<TrufiLocation> _locations = List();
 
-  final File _file;
-  final Lock _fileLock = Lock();
-  final List<TrufiLocation> _locations;
+  Future<bool> load(BuildContext context);
 
-  UnmodifiableListView<TrufiLocation> get unmodifiableListView =>
-      UnmodifiableListView(_locations);
+  Future<bool> save();
+
+  UnmodifiableListView<TrufiLocation> get unmodifiableListView {
+    return UnmodifiableListView(_locations);
+  }
 
   Future<List<TrufiLocation>> fetchLocations(BuildContext context) async {
     return _sortedByFavorites(_locations.toList(), context);
+  }
+
+  Future<List<TrufiLocation>> fetchLocationsWithQuery(
+    BuildContext context,
+    String query,
+  ) async {
+    query = query.toLowerCase();
+    var locations = query.isEmpty
+        ? _locations.toList()
+        : _locations
+            .where((l) => l.description.toLowerCase().contains(query))
+            .toList();
+    return _sortedByFavorites(locations, context);
   }
 
   Future<List<TrufiLocation>> fetchLocationsWithLimit(
@@ -41,8 +52,7 @@ class LocationStorage {
     List<TrufiLocation> locations,
     BuildContext context,
   ) async {
-    final FavoriteLocationsBloc favoriteLocationsBloc =
-        BlocProvider.of<FavoriteLocationsBloc>(context);
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     locations.sort((a, b) {
       return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
@@ -52,56 +62,108 @@ class LocationStorage {
   void add(TrufiLocation location) {
     remove(location);
     _locations.insert(0, location);
-    _save();
+    save();
   }
 
   void remove(TrufiLocation location) {
     _locations.remove(location);
-    _save();
+    save();
   }
 
   bool contains(TrufiLocation location) {
     return _locations.contains(location);
   }
+}
 
-  void _save() async {
-    await _fileLock.synchronized(() => writeStorage(_file, _locations));
+class SharedPreferencesLocationStorage extends LocationStorage {
+  SharedPreferencesLocationStorage(this.key);
+
+  final String key;
+
+  Future<bool> load(BuildContext context) async {
+    _locations.clear();
+    _locations.addAll(await loadFromPreferences(key));
+    return true;
+  }
+
+  Future<bool> save() async {
+    return saveToPreferences(key, _locations);
   }
 }
 
-Future<String> get _localPath async {
-  return (await getApplicationDocumentsDirectory()).path;
+class ImportantLocationStorage extends LocationStorage {
+  ImportantLocationStorage(this.key);
+
+  final String key;
+
+  Future<bool> load(BuildContext context) async {
+    _locations.clear();
+    _locations.addAll(await loadFromAssets(context, key));
+    return true;
+  }
+
+  Future<bool> save() async {
+    return false;
+  }
 }
 
-Future<File> localFile(String fileName) async {
-  return File('${await _localPath}/$fileName');
+Future<bool> saveToPreferences(
+  String key,
+  List<TrufiLocation> locations,
+) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  return preferences.setString(
+    key,
+    json.encode(locations.map((location) => location.toJson()).toList()),
+  );
 }
 
-Future<File> writeStorage(File file, List<TrufiLocation> locations) {
-  return file.writeAsString(
-      json.encode(locations.map((location) => location.toJson()).toList()));
-}
-
-Future<List<TrufiLocation>> readStorage(File file) async {
+Future<List<TrufiLocation>> loadFromPreferences(String key) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
   try {
-    String encoded = await file.readAsString();
-    return compute(_parseStorage, encoded);
+    return compute(_parseTrufiLocations, preferences.getString(key));
   } catch (e) {
-    print(e);
-    return compute(_parseStorage, "[]");
+    print("Failed to read location storage: $e");
+    return Future<List<TrufiLocation>>.value(null);
   }
 }
 
-List<TrufiLocation> _parseStorage(String encoded) {
-  List<TrufiLocation> locations;
-  try {
-    final parsed = json.decode(encoded);
-    locations = parsed
-        .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
-        .toList();
-  } catch (e) {
-    print(e);
-    locations = List();
+Future<List<TrufiLocation>> loadFromAssets(
+  BuildContext context,
+  String key,
+) async {
+  return compute(
+    _parseImportantPlaces,
+    await DefaultAssetBundle.of(context).loadString(key),
+  );
+}
+
+List<TrufiLocation> _parseTrufiLocations(String encoded) {
+  if (encoded != null && encoded.isNotEmpty) {
+    try {
+      return json
+          .decode(encoded)
+          .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
+          .toList();
+    } catch (e) {
+      print("Failed to parse trufi locations: $e");
+    }
   }
-  return locations;
+  return List();
+}
+
+List<TrufiLocation> _parseImportantPlaces(String encoded) {
+  if (encoded != null && encoded.isNotEmpty) {
+    try {
+      return json
+          .decode(encoded)
+          .map<TrufiLocation>(
+            (json) => TrufiLocation.fromImportantPlacesJson(json),
+          )
+          .toList();
+    } catch (e) {
+      print("Failed to parse important places: $e");
+    }
+  }
+  return List();
 }

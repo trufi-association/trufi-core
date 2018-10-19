@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/trufi_models.dart';
-
-class PolylineWithMarker {
-  PolylineWithMarker(this.polyline, this.marker);
-
-  final Polyline polyline;
-  final Marker marker;
-}
 
 openStreetMapTileLayerOptions() {
   return TileLayerOptions(
     urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     subdomains: ['a', 'b', 'c'],
+  );
+}
+
+offlineMapTileLayerOptions() {
+  return TileLayerOptions(
+    offlineMode: true,
+    maxZoom: 18.0,
+    urlTemplate: "assets/tiles/{z}/{z}-{x}-{y}.png",
   );
 }
 
@@ -37,7 +39,37 @@ Marker buildFromMarker(LatLng point) {
 }
 
 Marker buildToMarker(LatLng point) {
-  return buildMarker(point, Icons.location_on, AnchorPos.top, Colors.red);
+  return Marker(
+    point: point,
+    anchor: AnchorPos.top,
+    builder: (context) {
+      return Container(
+        child: SvgPicture.asset(
+          "assets/images/map_marker.svg",
+        ),
+      );
+    },
+  );
+}
+
+Marker buildTransferMarker(LatLng point) {
+  return Marker(
+    point: point,
+    anchor: AnchorPos.center,
+    builder: (context) {
+      return Transform.scale(
+        scale: 0.4,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.grey, width: 3.5),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(CircleIcon.circle, color: Colors.white),
+        ),
+      );
+    },
+  );
 }
 
 Marker buildYourLocationMarker(LatLng point) {
@@ -161,42 +193,6 @@ Marker buildMarker(
 
 LatLng createLatLngWithPlanLocation(PlanLocation location) {
   return LatLng(location.latitude, location.longitude);
-}
-
-Map<PlanItinerary, List<PolylineWithMarker>> createItineraries(
-  Plan plan,
-  PlanItinerary selectedItinerary,
-  Function(PlanItinerary) onTap,
-) {
-  Map<PlanItinerary, List<PolylineWithMarker>> itineraries = Map();
-  plan.itineraries.forEach((itinerary) {
-    List<PolylineWithMarker> polylinesWithMarker = List();
-    bool isSelected = itinerary == selectedItinerary;
-    itinerary.legs.forEach((leg) {
-      List<LatLng> points = decodePolyline(leg.points);
-      Polyline polyline = new Polyline(
-        points: points,
-        color: isSelected
-            ? leg.mode == 'WALK' ? Colors.blue : Colors.green
-            : Colors.grey,
-        strokeWidth: isSelected ? 6.0 : 3.0,
-        borderColor: Colors.white,
-        borderStrokeWidth: 3.0,
-        isDotted: leg.mode == 'WALK',
-      );
-      Marker marker = leg.mode != 'WALK'
-          ? buildBusMarker(
-              midPointForPolyline(polyline),
-              isSelected ? Colors.green : Colors.grey,
-              leg,
-              onTap: () => onTap(itinerary),
-            )
-          : null;
-      polylinesWithMarker.add(PolylineWithMarker(polyline, marker));
-    });
-    itineraries.addAll({itinerary: polylinesWithMarker});
-  });
-  return itineraries;
 }
 
 List<LatLng> decodePolyline(String encoded) {
