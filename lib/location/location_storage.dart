@@ -3,10 +3,9 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -91,8 +90,8 @@ class SharedPreferencesLocationStorage extends LocationStorage {
   }
 }
 
-class ImportantLocationStorage extends LocationStorage {
-  ImportantLocationStorage(this.key);
+class JSONLocationStorage extends LocationStorage {
+  JSONLocationStorage(this.key);
 
   final String key;
 
@@ -133,7 +132,7 @@ Future<List<TrufiLocation>> loadFromAssets(
   String key,
 ) async {
   return compute(
-    _parseImportantPlaces,
+    _parseLocationsJSON,
     await DefaultAssetBundle.of(context).loadString(key),
   );
 }
@@ -152,17 +151,17 @@ List<TrufiLocation> _parseTrufiLocations(String encoded) {
   return List();
 }
 
-List<TrufiLocation> _parseImportantPlaces(String encoded) {
+List<TrufiLocation> _parseLocationsJSON(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
     try {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-            (json) => TrufiLocation.fromImportantPlacesJson(json),
+            (json) => TrufiLocation.fromLocationsJson(json),
           )
           .toList();
     } catch (e) {
-      print("Failed to parse important places: $e");
+      print("Failed to parse locations from JSON: $e");
     }
   }
   return List();

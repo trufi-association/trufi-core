@@ -4,15 +4,15 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/locations_bloc.dart';
 import 'package:trufi_app/location/location_storage.dart';
 
-class ImportantLocationsBloc extends LocationsBloc {
-  static ImportantLocationsBloc of(BuildContext context) {
-    return BlocProvider.of<ImportantLocationsBloc>(context);
+class OfflineLocationsBloc extends LocationsBloc {
+  static OfflineLocationsBloc of(BuildContext context) {
+    return BlocProvider.of<OfflineLocationsBloc>(context);
   }
 
-  ImportantLocationsBloc(
+  OfflineLocationsBloc(
     BuildContext context,
   ) : super(
           context,
-          JSONLocationStorage("assets/data/places.json"),
+          JSONLocationStorage("assets/data/locations.json"),
         );
 }

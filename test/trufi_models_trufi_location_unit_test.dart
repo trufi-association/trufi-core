@@ -33,30 +33,12 @@ void main() {
     expect(trufiLocation.longitude, 129.0);
   });
 
-  test('Load list <TrufiLocation> from search json', () async {
-    final file = new File('test/assets/response_search_location.json');
-    List<TrufiLocation> _listJsonLocation = json
-        .decode(await file.readAsString())
-        .map<TrufiLocation>((json) => new TrufiLocation.fromSearchJson(json))
-        .toList();
-
-    expect(
-        _listJsonLocation.first.description, "corner road & Calle L. Balzan ");
-    expect(_listJsonLocation.first.latitude, -17.401528900000002);
-    expect(_listJsonLocation.first.longitude, -66.1937169);
-
-    expect(_listJsonLocation.last.description,
-        "corner Pasaje L & Calle Luis Calvo ");
-    expect(_listJsonLocation.last.latitude, -17.3697205);
-    expect(_listJsonLocation.last.longitude, -66.1522482);
-  });
-
-  test('Load list <TrufiLocation> from important places json', () async {
+  test('Load list <TrufiLocation> from locations json', () async {
     final file = new File('assets/data/places.json');
     List<TrufiLocation> _listJsonLocation = json
         .decode(await file.readAsString())
         .map<TrufiLocation>(
-            (json) => new TrufiLocation.fromImportantPlacesJson(json))
+            (json) => new TrufiLocation.fromLocationsJson(json))
         .toList();
 
     expect(_listJsonLocation.first.description, "UMSS Entrada");
