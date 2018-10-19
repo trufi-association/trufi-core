@@ -7,6 +7,7 @@ import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
+import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
@@ -20,18 +21,22 @@ void main() {
 class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final preferencesBloc = PreferencesBloc();
     return BlocProvider<PreferencesBloc>(
-      bloc: PreferencesBloc(),
-      child: BlocProvider<LocationProviderBloc>(
-        bloc: LocationProviderBloc(),
-        child: BlocProvider<FavoriteLocationsBloc>(
-          bloc: FavoriteLocationsBloc(context),
-          child: BlocProvider<HistoryLocationsBloc>(
-            bloc: HistoryLocationsBloc(context),
-            child: BlocProvider<ImportantLocationsBloc>(
-              bloc: ImportantLocationsBloc(context),
-              child: AppLifecycleReactor(
-                child: LocalizedMaterialApp(),
+      bloc: preferencesBloc,
+      child: BlocProvider<RequestManagerBloc>(
+        bloc: RequestManagerBloc(preferencesBloc),
+        child: BlocProvider<LocationProviderBloc>(
+          bloc: LocationProviderBloc(),
+          child: BlocProvider<FavoriteLocationsBloc>(
+            bloc: FavoriteLocationsBloc(context),
+            child: BlocProvider<HistoryLocationsBloc>(
+              bloc: HistoryLocationsBloc(context),
+              child: BlocProvider<ImportantLocationsBloc>(
+                bloc: ImportantLocationsBloc(context),
+                child: AppLifecycleReactor(
+                  child: LocalizedMaterialApp(),
+                ),
               ),
             ),
           ),
@@ -71,8 +76,7 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
     print("AppLifecycleState: $state");
     setState(() {
       _notification = state;
@@ -98,14 +102,14 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    PreferencesBloc preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
-    ThemeData theme = ThemeData(
+    final preferencesBloc = PreferencesBloc.of(context);
+    final theme = ThemeData(
       brightness: Brightness.light,
       primaryColor: const Color(0xffffd600),
       primaryIconTheme: const IconThemeData(color: Colors.black),
     );
     return StreamBuilder(
-      stream: preferencesBloc.outSwitchLanguageCode,
+      stream: preferencesBloc.outChangeLanguageCode,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return MaterialApp(
           routes: <String, WidgetBuilder>{

@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
@@ -19,7 +16,8 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  MapController _mapController = MapController();
+  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
+
   Marker _chooseOnMapMarker;
 
   void initState() {
@@ -29,15 +27,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           ? widget.initialPosition
           : TrufiMap.cochabambaCenter,
     );
-    _mapController.onReady.then((_) {
-      _mapController.move(
-        widget.initialPosition != null
-            ? widget.initialPosition
-            : TrufiMap.cochabambaCenter,
-        11.0,
-      );
-      setState(() {});
-    });
+  }
+
+  @override
+  void dispose() {
+    _trufiOnAndOfflineMapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,54 +45,67 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return AppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RichText(
-            maxLines: 1,
-            overflow: TextOverflow.clip,
+            maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageTitle,
-              style: theme.textTheme.title,
+              style: theme.textTheme.body2,
             ),
           ),
           RichText(
-            maxLines: 1,
-            overflow: TextOverflow.clip,
+            maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageSubtitle,
-              style: theme.textTheme.subhead,
+              style: theme.textTheme.caption.copyWith(
+                color: theme.textTheme.body2.color,
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return TrufiMap(
-      mapController: _mapController,
-      mapOptions: MapOptions(
-        zoom: 13.0,
-        maxZoom: 15.0,
-        minZoom: 8.0,
-        onPositionChanged: _handleOnMapPositionChanged,
-        swPanBoundary: TrufiMap.cochabambaSouthWest,
-        nePanBoundary: TrufiMap.cochabambaNorthEast,
-        center: TrufiMap.cochabambaCenter,
-      ),
-      foregroundLayers: <LayerOptions>[
-        MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker])
+      actions: <Widget>[
+        GestureDetector(
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.only(right: 24.0),
+              child: RichText(
+                maxLines: 1,
+                text: TextSpan(
+                  text: localizations.commonOK.toUpperCase(),
+                  style: theme.textTheme.button.copyWith(
+                    fontSize: theme.textTheme.caption.fontSize,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          onTap: _handleOnConfirmationPressed,
+        )
       ],
     );
   }
 
+  Widget _buildBody(BuildContext context) {
+    return TrufiOnAndOfflineMap(
+      controller: _trufiOnAndOfflineMapController,
+      onPositionChanged: _handleOnMapPositionChanged,
+      layerOptionsBuilder: (context) {
+        return <LayerOptions>[
+          _trufiOnAndOfflineMapController.yourLocationLayer,
+          MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
+        ];
+      },
+    );
+  }
+
   Widget _buildFloatingActionButton(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -105,52 +113,31 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         Container(
           height: 70.0,
           width: 56.0,
-          child: Transform.scale(
-            scale: 0.8,
-            child: FloatingActionButton(
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.my_location),
-              onPressed: _handleOnMyLocationTap,
-              heroTag: null,
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            child: Icon(
+              Icons.my_location,
+              color: Colors.black,
             ),
+            onPressed: _handleOnYourLocationPressed,
+            heroTag: null,
           ),
-        ),
-        FloatingActionButton(
-          backgroundColor: theme.primaryColor,
-          child: Icon(
-            Icons.check,
-            color: theme.primaryIconTheme.color,
-          ),
-          onPressed: _handleOnCheckTap,
-          heroTag: null,
         ),
       ],
     );
   }
 
-  void _handleOnMyLocationTap() async {
-    LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
-      return;
-    }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
+  void _handleOnYourLocationPressed() async {
+    _trufiOnAndOfflineMapController.moveToYourLocation(context);
   }
 
-  void _handleOnCheckTap() {
+  void _handleOnConfirmationPressed() {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
   void _handleOnMapPositionChanged(MapPosition position) {
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        _chooseOnMapMarker = buildToMarker(position.center);
-      });
+    setState(() {
+      _chooseOnMapMarker = buildToMarker(position.center);
     });
   }
 }

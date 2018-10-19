@@ -42,6 +42,8 @@ class TrufiLocalizations {
       "alert_location_services_denied_message";
   static const String CommonOK = "common_ok";
   static const String CommonCancel = "common_cancel";
+  static const String CommonGoOffline = "common_go_offline";
+  static const String CommonGoOnline = "common_go_online";
   static const String CommonDestination = "common_destination";
   static const String CommonOrigin = "common_origin";
   static const String CommonNoInternetConnection =
@@ -49,13 +51,47 @@ class TrufiLocalizations {
   static const String CommonFailLoadingData = "common_fail_loading_data";
   static const String CommonUnknownError = "common_unknown_error";
   static const String CommonError = "common_error";
+  static const String RouteRequestErrorServerUnavailable =
+      "route_request_error_server_unavailable";
+  static const String RouteRequestErrorOutOfBoundary =
+      "route_request_error_out_of_boundary";
+  static const String RouteRequestErrorPathNotFound =
+      "route_request_error_path_not_found";
+  static const String RouteRequestErrorNoTransitTimes =
+      "route_request_error_no_transit_times";
+  static const String RouteRequestErrorServerTimeout =
+      "route_request_error_server_time_out";
+  static const String RouteRequestErrorTrivialDistance =
+      "route_request_error_trivial_distance";
+  static const String RouteRequestErrorServerCanNotHandleRequest =
+      "route_request_error_server_can_not_handle";
+  static const String RouteRequestErrorUnknownOrigin =
+      "route_request_error_unknown_origin";
+  static const String RouteRequestErrorUnknownDestination =
+      "route_request_error_unknown_destination";
+  static const String RouteRequestErrorOriginDestinationUnknown =
+      "route_request_error_origin_destination_unknown";
+  static const String RouteRequestErrorNoBarrierFree =
+      "route_request_error_no_barrier_free";
+  static const String RouteRequestErrorAmbiguousOrigin =
+      "route_request_error_ambiguous_origin";
+  static const String RouteRequestErrorAmbiguousDestination =
+      "route_request_error_ambiguous_destination";
+  static const String RouteRequestErrorOriginDestinationAmbiguous =
+      "route_request_error_origin_destination_ambiguous";
+  static const String SearchHintOrigin = "search_hint_origin";
+  static const String SearchHintDestination = "search_hint_destination";
   static const String SearchItemChooseOnMap = "search_item_choose_on_map";
   static const String SearchItemYourLocation = "search_item_your_location";
   static const String SearchItemNoResults = "search_item_no_results";
   static const String SearchSectionPlaces = "search_title_places";
   static const String SearchSectionRecent = "search_title_recent";
+  static const String SearchSectionFavorites = "search_title_favorites";
   static const String SearchSectionResults = "search_title_result";
-  static const String SearchSectionPleaseSelect = "search_please_select";
+  static const String SearchSectionPleaseSelectOrigin =
+      "search_please_select_origin";
+  static const String SearchSectionPleaseSelectDestination =
+      "search_please_select_destination";
   static const String SearchFailLoadingPlan = "search_fail_loading_plan";
   static const String SearchSectionMapMarker = "search_map_marker";
   static const String SearchNavigateToMarker = "search_navigate_to_map_marker";
@@ -78,6 +114,7 @@ class TrufiLocalizations {
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
+  static const String MenuOnline = "menu_online";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackTitle = "feedback_title";
   static const String AboutContent = "about_content";
@@ -99,24 +136,58 @@ class TrufiLocalizations {
           'Please make sure your device has GPS and the Location settings are activated.',
       CommonOK: 'OK',
       CommonCancel: 'Cancel',
+      CommonGoOffline: 'Go offline',
+      CommonGoOnline: 'Go online',
       CommonDestination: 'Destination',
       CommonOrigin: 'Origin',
       CommonNoInternetConnection: 'No internet connection.',
       CommonFailLoadingData: 'Failed to load data',
       CommonUnknownError: 'unknown error',
       CommonError: 'Error',
+      RouteRequestErrorServerUnavailable:
+          "We\'re sorry. The trip planner is temporarily unavailable. Please try again later.",
+      RouteRequestErrorOutOfBoundary:
+          'Trip is not possible.  You might be trying to plan a trip outside the map data boundary.',
+      RouteRequestErrorPathNotFound:
+          'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).',
+      RouteRequestErrorNoTransitTimes:
+          'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.',
+      RouteRequestErrorServerTimeout:
+          'The trip planner is taking way too long to process your request. Please try again later.',
+      RouteRequestErrorTrivialDistance:
+          'Origin is within a trivial distance of the destination.',
+      RouteRequestErrorServerCanNotHandleRequest:
+          'The request has errors that the server is not willing or able to process.',
+      RouteRequestErrorUnknownOrigin:
+          'Origin is unknown. Can you be a bit more descriptive?',
+      RouteRequestErrorUnknownDestination:
+          'Destination is unknown.  Can you be a bit more descriptive?',
+      RouteRequestErrorOriginDestinationUnknown:
+          'Both origin and destination are unknown. Can you be a bit more descriptive?',
+      RouteRequestErrorNoBarrierFree:
+          'Both origin and destination are not wheelchair accessible',
+      RouteRequestErrorAmbiguousOrigin:
+          'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.',
+      RouteRequestErrorAmbiguousDestination:
+          'The trip planner is unsure of the destination you want to go to. Please select from the following options, or be more specific.',
+      RouteRequestErrorOriginDestinationAmbiguous:
+          'Both origin and destination are ambiguous. Please select from the following options, or be more specific.',
+      SearchHintOrigin: 'Choose starting point',
+      SearchHintDestination: 'Choose destination',
       SearchItemChooseOnMap: 'Choose on map',
       SearchItemYourLocation: 'Your location',
       SearchItemNoResults: 'No results',
       SearchSectionPlaces: 'Places',
       SearchSectionRecent: 'Recent',
+      SearchSectionFavorites: 'Favorites',
       SearchSectionResults: 'Search Results',
-      SearchSectionPleaseSelect: 'Please select',
+      SearchSectionPleaseSelectOrigin: 'Select origin',
+      SearchSectionPleaseSelectDestination: 'Select destination',
       SearchFailLoadingPlan: 'Failed to load plan.',
       SearchSectionMapMarker: 'Map Marker',
       SearchNavigateToMarker: 'Navigate to',
       ChooseLocationPageTitle: 'Choose a point',
-      ChooseLocationPageSubtitle: 'Tap on map to choose',
+      ChooseLocationPageSubtitle: 'Pan & zoom map under pin',
       InstructionWalk: 'Walk',
       InstructionRide: 'Ride',
       InstructionRideBus: 'Bus',
@@ -132,6 +203,7 @@ class TrufiLocalizations {
       MenuAbout: 'About',
       MenuTeam: 'Contributors',
       MenuFeedback: 'Send Feedback',
+      MenuOnline: 'Online',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackTitle: 'Send us an E-mail',
@@ -154,28 +226,63 @@ class TrufiLocalizations {
           'Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.',
       CommonOK: 'Aceptar',
       CommonCancel: 'Cancelar',
+      CommonGoOffline: 'Go offline', // TODO
+      CommonGoOnline: 'Go online', // TODO
       CommonDestination: 'Destino',
       CommonOrigin: 'Origen',
       CommonNoInternetConnection: 'Sin conexión a internet.',
       CommonFailLoadingData: 'Error al cargar datos',
       CommonUnknownError: 'Error desconocido',
       CommonError: 'Error',
+      RouteRequestErrorServerUnavailable:
+          'Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.',
+      RouteRequestErrorOutOfBoundary:
+          'Viaje no disponible. Puede que estés intentando planificar un viaje fuera de los límites disponibles.',
+      RouteRequestErrorPathNotFound:
+          'Viaje no disponible. Tu punto partida o destino puede que no sean seguros, selecciona un inicio y final en calles residenciales.',
+      RouteRequestErrorNoTransitTimes:
+          'Tiempos no disponibles. La información disponible podría no ser válida para la fecha actual o no hay rutas disponibles para tu viaje.',
+      RouteRequestErrorServerTimeout:
+          'El planificador de rutas está tardando demasiado. Por favor, inténtalo más tarde.',
+      RouteRequestErrorTrivialDistance:
+          'Origen y destino están demasiado cerca.',
+      RouteRequestErrorServerCanNotHandleRequest:
+          'Error en la petición, el server no puede procesar la información.',
+      RouteRequestErrorUnknownOrigin:
+          'Origen desconocido. ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorUnknownDestination:
+          'Destino desconocido. ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorOriginDestinationUnknown:
+          'Origen y destino desconocidos ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorNoBarrierFree:
+          'Origen y destino no son accesibles a silla de ruedas.',
+      RouteRequestErrorAmbiguousOrigin:
+          'El planificador de rutas no está seguro de tu origen. Por favor, seleccione una de las siguientes opciones o introduzca un origen más exacto.',
+      RouteRequestErrorAmbiguousDestination:
+          'El planificador de rutas no está seguro de tu destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      RouteRequestErrorOriginDestinationAmbiguous:
+          'Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      SearchHintOrigin: 'Selecciona punto de partida',
+      SearchHintDestination: 'Selecciona destino',
       SearchItemChooseOnMap: 'Seleccionar en el mapa',
       SearchItemYourLocation: 'Tu ubicación',
       SearchItemNoResults: 'Ningun resultado',
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: 'Recientes',
+      SearchSectionFavorites: 'Favoritos',
       SearchSectionResults: 'Resultados de búsqueda',
-      SearchSectionPleaseSelect: 'Por favor seleccione',
+      SearchSectionPleaseSelectOrigin: 'Seleccione origen',
+      SearchSectionPleaseSelectDestination: 'Seleccione destino',
       SearchFailLoadingPlan: 'Error al cargar plan.',
       SearchSectionMapMarker: 'Posición en el Mapa',
       SearchNavigateToMarker: 'Ir hasta',
       ChooseLocationPageTitle: 'Elige un punto en el mapa',
-      ChooseLocationPageSubtitle: 'Toca el mapa para elegir un punto',
+      ChooseLocationPageSubtitle:
+          'Amplía y mueve el mapa para centrar el marcador',
       InstructionWalk: 'Caminar',
       InstructionRide: 'Tomar',
       InstructionRideBus: 'Bus',
-      InstructionMinutes: "minutos",
+      InstructionMinutes: "min",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
@@ -187,6 +294,7 @@ class TrufiLocalizations {
       MenuAbout: 'Acerca',
       MenuTeam: 'Colaboradores',
       MenuFeedback: 'Envía comentarios',
+      MenuOnline: 'Online',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
       FeedbackTitle: 'Envíanos un correo electrónico',
@@ -209,24 +317,58 @@ class TrufiLocalizations {
           'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.',
       CommonOK: 'OK',
       CommonCancel: 'Abbrechen',
+      CommonGoOffline: 'Offline gehen',
+      CommonGoOnline: 'Online gehen',
       CommonDestination: 'Fahrtziel',
       CommonOrigin: 'Startpunkt',
       CommonNoInternetConnection: 'Keine Internetverbindung.',
       CommonFailLoadingData: 'Fehler beim Laden der Daten',
       CommonUnknownError: 'Unbekannter Fehler',
       CommonError: 'Fehler',
+      RouteRequestErrorServerUnavailable:
+          "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.",
+      RouteRequestErrorOutOfBoundary:
+          'Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.',
+      RouteRequestErrorPathNotFound:
+          'Dieser Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (dies ist beispielsweise der Fall, wenn Sie sich in einer Wohnstraße befinden, die nur mit einer Autobahn verbunden ist).',
+      RouteRequestErrorNoTransitTimes:
+          'Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zuweit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.',
+      RouteRequestErrorServerTimeout:
+          'Das Bearbeiten ihrer Anfrage dauert zu lange. Bitte versuchen Sie es später erneut.',
+      RouteRequestErrorTrivialDistance:
+          'Der Startpunkt liegt in einer trivialen Entfernung zum Ziel.',
+      RouteRequestErrorServerCanNotHandleRequest:
+          'Die Anfrage enthält Fehler, die der Server nicht verarbeiten kann.',
+      RouteRequestErrorUnknownOrigin:
+          'Der Startpunkt ist unbekannt. Können Sie ein bisschen präziser sein?',
+      RouteRequestErrorUnknownDestination:
+          'Das Ziel ist unbekannt. Können Sie ein bisschen präziser sein?',
+      RouteRequestErrorOriginDestinationUnknown:
+          'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen präziser sein?',
+      RouteRequestErrorNoBarrierFree:
+          'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.',
+      RouteRequestErrorAmbiguousOrigin:
+          'Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
+      RouteRequestErrorAmbiguousDestination:
+          'Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
+      RouteRequestErrorOriginDestinationAmbiguous:
+          'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine präzisere Beschreibung an.',
+      SearchHintOrigin: 'Start auswählen',
+      SearchHintDestination: 'Ziel auswählen',
       SearchItemChooseOnMap: 'Auf der Karte auswählen',
       SearchItemYourLocation: 'Ihr Standort',
       SearchItemNoResults: 'Keine Ergebnisse',
       SearchSectionPlaces: 'Orte',
       SearchSectionRecent: 'Zuletzt gesucht',
+      SearchSectionFavorites: 'Favoriten',
       SearchSectionResults: 'Suchergebnisse',
-      SearchSectionPleaseSelect: 'Bitte auswählen',
+      SearchSectionPleaseSelectOrigin: 'Startpunkt auswählen',
+      SearchSectionPleaseSelectDestination: 'Ziel auswählen',
       SearchFailLoadingPlan: 'Fehler beim Laden des Plans.',
       SearchSectionMapMarker: 'Kartenmarkierung',
       SearchNavigateToMarker: 'Navigiere zur',
       ChooseLocationPageTitle: 'Ort auswählen',
-      ChooseLocationPageSubtitle: 'Zum Anpassen auf die Karte tippen',
+      ChooseLocationPageSubtitle: 'Karte unter Markierung schwenken und zoomen',
       InstructionWalk: 'Gehen Sie',
       InstructionRide: 'Fahren Sie mit',
       InstructionRideBus: 'dem Bus',
@@ -242,6 +384,7 @@ class TrufiLocalizations {
       MenuAbout: 'Über',
       MenuTeam: 'Mitwirkende',
       MenuFeedback: 'Feedback',
+      MenuOnline: 'Online',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
       FeedbackTitle: 'E-Mail senden',
@@ -264,19 +407,53 @@ class TrufiLocalizations {
           "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
       CommonOK: 'Ari',
       CommonCancel: 'Mana',
+      CommonGoOffline: 'Go offline', // TODO
+      CommonGoOnline: 'Go online', // TODO
       CommonDestination: 'Mayman',
       CommonOrigin: 'Maymanta',
       CommonNoInternetConnection: 'Mana internet canchu',
       CommonFailLoadingData: 'Mana aticunchu tariyta datusta',
       CommonUnknownError: 'Mana yachacunchu imachus pasan',
       CommonError: 'Error',
+      RouteRequestErrorServerUnavailable:
+          'Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.',
+      RouteRequestErrorOutOfBoundary:
+          'Viaje no disponible. Puede que estés intentando planificar un viaje fuera de los límites disponibles.',
+      RouteRequestErrorPathNotFound:
+          'Viaje no disponible. Tu punto partida o destino puede que no sean seguros, selecciona un inicio y final en calles residenciales.',
+      RouteRequestErrorNoTransitTimes:
+          'Tiempos no disponibles. La información disponible podría no ser válida para la fecha actual o no hay rutas disponibles para tu viaje.',
+      RouteRequestErrorServerTimeout:
+          'El planificador de rutas está tardando demasiado. Por favor, inténtalo más tarde.',
+      RouteRequestErrorTrivialDistance:
+          'Origen y destino están demasiado cerca.',
+      RouteRequestErrorServerCanNotHandleRequest:
+          'Error en la petición, el server no puede procesar la información.',
+      RouteRequestErrorUnknownOrigin:
+          'Origen desconocido. ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorUnknownDestination:
+          'Destino desconocido. ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorOriginDestinationUnknown:
+          'Origen y destino desconocidos ¿Puedes ser un poco más descriptivo?',
+      RouteRequestErrorNoBarrierFree:
+          'Origen y destino no son accesibles a silla de ruedas.',
+      RouteRequestErrorAmbiguousOrigin:
+          'El planificador de rutas no está seguro de tu origen. Por favor, seleccione una de las siguientes opciones o introduzca un origen más exacto.',
+      RouteRequestErrorAmbiguousDestination:
+          'El planificador de rutas no está seguro de tu destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      RouteRequestErrorOriginDestinationAmbiguous:
+          'Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.',
+      SearchHintOrigin: 'Mask\'ay punto de partida',
+      SearchHintDestination: 'Mask\'ay destino',
       SearchItemChooseOnMap: 'Ajllaw uj mapata',
       SearchItemYourLocation: 'Gan cashanqui',
       SearchItemNoResults: "Ningun resultado",
       SearchSectionPlaces: 'Lugares',
       SearchSectionRecent: "Kuintan masc'asgas",
+      SearchSectionFavorites: "Favoritos",
       SearchSectionResults: "Masc'asgas",
-      SearchSectionPleaseSelect: "Por favor seleccione",
+      SearchSectionPleaseSelectOrigin: "Seleccione origen",
+      SearchSectionPleaseSelectDestination: "Seleccione destino",
       SearchFailLoadingPlan: 'Mana taricunchu mayninta rinapaj',
       SearchSectionMapMarker: 'Maypi cashani mapapy',
       SearchNavigateToMarker: 'Rina chaycamana',
@@ -286,7 +463,7 @@ class TrufiLocalizations {
       InstructionWalk: 'puriy',
       InstructionRide: 'ñisqata jap’iy',
       InstructionRideBus: "Bus",
-      InstructionMinutes: "ch’inini-phani",
+      InstructionMinutes: "min",
       InstructionRideMicro: 'Micro',
       InstructionRideMinibus: 'Minibus',
       InstructionRideTrufi: 'Trufi',
@@ -298,6 +475,7 @@ class TrufiLocalizations {
       MenuAbout: "Imamanta yachayta munanki?",
       MenuTeam: "Ñuqaykuwan",
       MenuFeedback: "Yuyasqayniykita riqsichiwayku",
+      MenuOnline: 'Online',
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
       FeedbackTitle: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
@@ -342,6 +520,14 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][CommonCancel];
   }
 
+  String get commonGoOffline {
+    return _localizedValues[locale.languageCode][CommonGoOffline];
+  }
+
+  String get commonGoOnline {
+    return _localizedValues[locale.languageCode][CommonGoOnline];
+  }
+
   String get commonDestination {
     return _localizedValues[locale.languageCode][CommonDestination];
   }
@@ -366,6 +552,83 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][CommonError];
   }
 
+  String get errorServerUnavailable {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorServerUnavailable];
+  }
+
+  String get errorOutOfBoundary {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorOutOfBoundary];
+  }
+
+  String get errorPathNotFound {
+    return _localizedValues[locale.languageCode][RouteRequestErrorPathNotFound];
+  }
+
+  String get errorNoTransitTimes {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorNoTransitTimes];
+  }
+
+  String get errorServerTimeout {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorServerTimeout];
+  }
+
+  String get errorTrivialDistance {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorTrivialDistance];
+  }
+
+  String get errorServerCanNotHandleRequest {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorServerCanNotHandleRequest];
+  }
+
+  String get errorUnknownOrigin {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorUnknownOrigin];
+  }
+
+  String get errorUnknownDestination {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorUnknownDestination];
+  }
+
+  String get errorUnknownOriginDestination {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorOriginDestinationUnknown];
+  }
+
+  String get errorNoBarrierFree {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorNoBarrierFree];
+  }
+
+  String get errorAmbiguousOrigin {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorAmbiguousOrigin];
+  }
+
+  String get errorAmbiguousDestination {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorAmbiguousDestination];
+  }
+
+  String get errorAmbiguousOriginDestination {
+    return _localizedValues[locale.languageCode]
+        [RouteRequestErrorOriginDestinationAmbiguous];
+  }
+
+  String get searchHintOrigin {
+    return _localizedValues[locale.languageCode][SearchHintOrigin];
+  }
+
+  String get searchHintDestination {
+    return _localizedValues[locale.languageCode][SearchHintDestination];
+  }
+
   String get searchItemChooseOnMap {
     return _localizedValues[locale.languageCode][SearchItemChooseOnMap];
   }
@@ -386,12 +649,22 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][SearchSectionRecent];
   }
 
+  String get searchTitleFavorites {
+    return _localizedValues[locale.languageCode][SearchSectionFavorites];
+  }
+
   String get searchTitleResults {
     return _localizedValues[locale.languageCode][SearchSectionResults];
   }
 
-  String get searchPleaseSelect {
-    return _localizedValues[locale.languageCode][SearchSectionPleaseSelect];
+  String get searchPleaseSelectOrigin {
+    return _localizedValues[locale.languageCode]
+        [SearchSectionPleaseSelectOrigin];
+  }
+
+  String get searchPleaseSelectDestination {
+    return _localizedValues[locale.languageCode]
+        [SearchSectionPleaseSelectDestination];
   }
 
   String get searchFailLoadingPlan {
@@ -478,6 +751,10 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][MenuFeedback];
   }
 
+  String get menuOnline {
+    return _localizedValues[locale.languageCode][MenuOnline];
+  }
+
   String get feedbackContent {
     return _localizedValues[locale.languageCode][FeedbackContent];
   }
@@ -525,19 +802,15 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   TrufiMaterialLocalizations(this.locale);
 
   final Locale locale;
+  String _searchHinText;
 
   @override
   String get searchFieldLabel {
-    switch (locale.languageCode) {
-      case languageCodeGerman:
-        return "Suchen";
-      case languageCodeQuechua:
-        return "Mask'ay";
-      case languageCodeSpanish:
-        return "Buscar";
-      default:
-        return super.searchFieldLabel;
-    }
+    return _searchHinText;
+  }
+
+  void setSearchHintText(String searchHintText) {
+    _searchHinText = searchHintText;
   }
 }
 

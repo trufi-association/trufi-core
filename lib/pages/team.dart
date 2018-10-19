@@ -38,13 +38,13 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return AppBar(title: Text(localizations.menuTeam));
   }
 
   Widget _buildBody(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return ListView(
       children: <Widget>[
         Container(

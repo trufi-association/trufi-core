@@ -5,14 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
+import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
 import 'package:trufi_app/plan/plan_empty.dart';
-import 'package:trufi_app/trufi_api.dart' as api;
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
@@ -27,19 +27,33 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final HomePageStateData _data = HomePageStateData();
+  final _data = HomePageStateData();
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
+  final _subscriptions = CompositeSubscription();
 
   bool _isFetching = false;
 
   @override
   initState() {
     super.initState();
+    _subscriptions.add(
+      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+        if (_data.plan == null) {
+          _fetchPlan();
+        }
+      }),
+    );
     Future.delayed(Duration.zero, () {
       _loadState();
     });
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.cancel();
+    super.dispose();
   }
 
   void _loadState() async {
@@ -47,6 +61,9 @@ class HomePageState extends State<HomePage>
       setState(() {
         _fromFieldKey.currentState?.didChange(_data.fromPlace);
         _toFieldKey.currentState?.didChange(_data.toPlace);
+        if (_data.plan == null) {
+          _fetchPlan();
+        }
       });
     } else {
       _setFromPlaceToCurrentPosition();
@@ -75,7 +92,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildFormFields(BuildContext context) {
-    TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: Container(
         padding: EdgeInsets.all(4.0),
@@ -87,14 +104,16 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _fromFieldKey,
                 ValueKey(keys.homePageFromPlaceField),
-                localizations.searchPleaseSelect,
+                localizations.searchPleaseSelectOrigin,
+                localizations.searchHintOrigin,
                 _setFromPlace,
                 trailing: _data.isResettable ? _buildResetButton() : null,
               ),
               _buildFormField(
                 _toFieldKey,
                 ValueKey(keys.homePageToPlaceField),
-                localizations.searchPleaseSelect,
+                localizations.searchPleaseSelectDestination,
+                localizations.searchHintDestination,
                 _setToPlace,
                 trailing: _data.isSwappable ? _buildSwapButton() : null,
               ),
@@ -124,6 +143,7 @@ class HomePageState extends State<HomePage>
     Key key,
     ValueKey<String> valueKey,
     String hintText,
+    String searchHintText,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
     Widget leading,
@@ -141,6 +161,7 @@ class HomePageState extends State<HomePage>
             key: key,
             hintText: hintText,
             onSaved: onSaved,
+            searchHintText: searchHintText,
           ),
         ),
         SizedBox(
@@ -186,6 +207,7 @@ class HomePageState extends State<HomePage>
 
   void _setPlaces(TrufiLocation fromPlace, TrufiLocation toPlace) {
     setState(() {
+      _data.plan = null;
       _data.fromPlace = fromPlace;
       _data.toPlace = toPlace;
       _data.save(context);
@@ -205,9 +227,8 @@ class HomePageState extends State<HomePage>
   }
 
   void _setFromPlaceToCurrentPosition() async {
-    final LocationProviderBloc locationProviderBloc =
-        BlocProvider.of<LocationProviderBloc>(context);
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final locationProviderBloc = LocationProviderBloc.of(context);
+    final localizations = TrufiLocalizations.of(context);
     final LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
       _setFromPlace(
@@ -233,17 +254,6 @@ class HomePageState extends State<HomePage>
       _data.plan = plan;
       _data.save(context);
     });
-    PlanError error = _data.plan?.error;
-    if (error != null) {
-      showDialog(
-        context: context,
-        builder: (context) => buildAlert(
-              context: context,
-              title: TrufiLocalizations.of(context).commonError,
-              content: error.message,
-            ),
-      );
-    }
   }
 
   void _swapPlaces() {
@@ -251,20 +261,67 @@ class HomePageState extends State<HomePage>
   }
 
   void _fetchPlan() async {
-    final TrufiLocalizations localizations = TrufiLocalizations.of(context);
+    final requestManagerBloc = RequestManagerBloc.of(context);
+    final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _setPlan(await api.fetchPlan(_data.fromPlace, _data.toPlace));
-      } on api.FetchRequestException catch (e) {
+        Plan plan = await requestManagerBloc.fetchPlan(
+          context,
+          _data.fromPlace,
+          _data.toPlace,
+        );
+        if (plan.hasError) {
+          _showErrorAlert(plan.error.message);
+        } else {
+          _setPlan(plan);
+        }
+      } on FetchOfflineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _setPlan(Plan.fromError(localizations.commonNoInternet));
-      } on api.FetchResponseException catch (e) {
+        _showOnAndOfflineErrorAlert(
+          "Offline mode is not implemented yet.",
+          false,
+        );
+      } on FetchOfflineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _setPlan(Plan.fromError(localizations.searchFailLoadingPlan));
+        _showOnAndOfflineErrorAlert(
+          "Offline mode is not implemented yet.",
+          false,
+        );
+      } on FetchOnlineRequestException catch (e) {
+        print("Failed to fetch plan: $e");
+        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, true);
+      } on FetchOnlineResponseException catch (e) {
+        print("Failed to fetch plan: $e");
+        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
+      } catch (e) {
+        print("Failed to fetch plan: $e");
       }
       setState(() => _isFetching = false);
     }
+  }
+
+  void _showErrorAlert(String error) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return buildErrorAlert(context: context, error: error);
+      },
+    );
+  }
+
+  void _showOnAndOfflineErrorAlert(String message, bool online) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return buildOnAndOfflineErrorAlert(
+          context: context,
+          online: online,
+          title: TrufiLocalizations.of(context).commonError,
+          content: message,
+        );
+      },
+    );
   }
 }
 
@@ -303,14 +360,14 @@ class HomePageStateData {
     fromPlace = null;
     toPlace = null;
     plan = null;
-    BlocProvider.of<PreferencesBloc>(context).stateHomePage = null;
+    PreferencesBloc.of(context).stateHomePage = null;
   }
 
   Future<bool> load(BuildContext context) async {
     try {
       HomePageStateData data = await compute(
         _parse,
-        BlocProvider.of<PreferencesBloc>(context).stateHomePage,
+        PreferencesBloc.of(context).stateHomePage,
       );
       if (data != null) {
         fromPlace = data.fromPlace;
@@ -325,9 +382,7 @@ class HomePageStateData {
   }
 
   void save(BuildContext context) async {
-    BlocProvider.of<PreferencesBloc>(context).stateHomePage = json.encode(
-      toJson(),
-    );
+    PreferencesBloc.of(context).stateHomePage = json.encode(toJson());
   }
 
   // Getter
