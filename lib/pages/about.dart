@@ -4,7 +4,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 class AboutPage extends StatefulWidget {
-  static const String route = "about";
+  static const String route = "/about";
 
   @override
   State<StatefulWidget> createState() => new AboutPageState();
