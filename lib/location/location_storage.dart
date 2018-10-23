@@ -39,12 +39,12 @@ abstract class LocationStorage {
     var locations = query.isEmpty
         ? _locations.toList()
         : _locations.where((l) {
-            l.tempLevinshteinDistance =
+            l.tempLevenshteinDistance =
                 findMatchAndCalculateStringDistance(l.description, query);
-            return l.tempLevinshteinDistance < 5;
+            return l.tempLevenshteinDistance < 5;
           }).toList();
     locations.sort((a, b) {
-      return a.tempLevinshteinDistance.compareTo(b.tempLevinshteinDistance);
+      return a.tempLevenshteinDistance.compareTo(b.tempLevenshteinDistance);
     });
     return _sortedByFavorites(locations, context);
   }
