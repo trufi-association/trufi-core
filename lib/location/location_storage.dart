@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,11 +11,17 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 abstract class LocationStorage {
+  var diffMatchPatch = DiffMatchPatch();
+
   final List<TrufiLocation> _locations = List();
 
   Future<bool> load(BuildContext context);
 
   Future<bool> save();
+
+  LocationStorage() {
+    diffMatchPatch.matchThreshold = 0.3;
+  }
 
   UnmodifiableListView<TrufiLocation> get unmodifiableListView {
     return UnmodifiableListView(_locations);
@@ -31,10 +38,31 @@ abstract class LocationStorage {
     query = query.toLowerCase();
     var locations = query.isEmpty
         ? _locations.toList()
-        : _locations
-            .where((l) => l.description.toLowerCase().contains(query))
-            .toList();
+        : _locations.where((l) {
+            l.tempLevinshteinDistance =
+                findMatchAndCalculateStringDistance(l.description, query);
+            return l.tempLevinshteinDistance < 5;
+          }).toList();
+    locations.sort((a, b) {
+      return a.tempLevinshteinDistance.compareTo(b.tempLevinshteinDistance);
+    });
     return _sortedByFavorites(locations, context);
+  }
+
+  int findMatchAndCalculateStringDistance(String text, String query) {
+    //Find match in text similar to query
+    var position = diffMatchPatch.match(text, query, text.length);
+    //if match found, calculate levenshtein distance
+    if (position != -1 && position < text.length) {
+      return position + query.length <= text.length
+          ? diffMatchPatch.diff_levenshtein(diffMatchPatch.diff(
+              text.substring(position, position + query.length), query))
+          : diffMatchPatch.diff_levenshtein(
+              diffMatchPatch.diff(text.substring(position), query));
+    } else {
+      //if not match found, return distance 100
+      return 100;
+    }
   }
 
   Future<List<TrufiLocation>> fetchLocationsWithLimit(

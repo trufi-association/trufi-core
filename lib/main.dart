@@ -108,7 +108,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = ThemeData(
       brightness: Brightness.light,
-      primaryColor: const Color(0xffffd600),
+      primaryColor: const Color(0xffffd606),
       primaryIconTheme: const IconThemeData(color: Colors.black),
     );
     return StreamBuilder(

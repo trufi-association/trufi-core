@@ -22,6 +22,7 @@ dependencies:
   synchronized: ^1.5.2
   shared_preferences: ^0.4.2
   url_launcher: ^3.0.3
+  diff_match_patch: 0.3.0
   mockito: 3.0.0
 
 dev_dependencies:

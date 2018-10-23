@@ -22,6 +22,7 @@ class TrufiLocation {
   final double latitude;
   final double longitude;
   final num importance;
+  int tempLevinshteinDistance = 100;
 
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
