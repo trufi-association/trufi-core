@@ -39,10 +39,11 @@ abstract class LocationStorage {
                 l.description.toLowerCase(), query);
             return l.tempLevenshteinDistance < 5;
           }).toList();
+    locations = await _sortedByFavorites(locations, context);
     locations.sort((a, b) {
       return a.tempLevenshteinDistance.compareTo(b.tempLevenshteinDistance);
     });
-    return _sortedByFavorites(locations, context);
+    return locations;
   }
 
   int findMatchAndCalculateStringDistance(String text, String query) {

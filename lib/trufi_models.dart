@@ -72,14 +72,10 @@ class TrufiLocation {
       o is TrufiLocation &&
       o.description == description &&
       o.latitude == latitude &&
-      o.longitude == longitude &&
-      o.importance == importance;
+      o.longitude == longitude;
 
   int get hashCode =>
-      description.hashCode ^
-      latitude.hashCode ^
-      longitude.hashCode ^
-      importance.hashCode;
+      description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
 
   String toString() {
     return '$latitude,$longitude';
