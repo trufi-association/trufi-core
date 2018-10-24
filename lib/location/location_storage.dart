@@ -19,10 +19,6 @@ abstract class LocationStorage {
 
   Future<bool> save();
 
-  LocationStorage() {
-    diffMatchPatch.matchThreshold = 0.3;
-  }
-
   UnmodifiableListView<TrufiLocation> get unmodifiableListView {
     return UnmodifiableListView(_locations);
   }
@@ -39,8 +35,8 @@ abstract class LocationStorage {
     var locations = query.isEmpty
         ? _locations.toList()
         : _locations.where((l) {
-            l.tempLevenshteinDistance =
-                findMatchAndCalculateStringDistance(l.description, query);
+            l.tempLevenshteinDistance = findMatchAndCalculateStringDistance(
+                l.description.toLowerCase(), query);
             return l.tempLevenshteinDistance < 5;
           }).toList();
     locations.sort((a, b) {
@@ -51,12 +47,12 @@ abstract class LocationStorage {
 
   int findMatchAndCalculateStringDistance(String text, String query) {
     //Find match in text similar to query
-    var position = diffMatchPatch.match(text, query, text.length);
+    var position = diffMatchPatch.match(text, query, 0);
     //if match found, calculate levenshtein distance
     if (position != -1 && position < text.length) {
-      return position + query.length <= text.length
+      return position + query.length + 1 <= text.length
           ? diffMatchPatch.diff_levenshtein(diffMatchPatch.diff(
-              text.substring(position, position + query.length), query))
+              text.substring(position, position + query.length + 1), query))
           : diffMatchPatch.diff_levenshtein(
               diffMatchPatch.diff(text.substring(position), query));
     } else {
