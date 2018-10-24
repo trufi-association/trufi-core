@@ -114,7 +114,7 @@ class OfflineRequestManager implements RequestManager {
     List<TrufiLocation> locations =
         await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
     locations.sort((a, b) {
-      return a.importance.compareTo(b.importance) * -1;
+      return sortByImportance(a, b);
     });
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     locations.sort((a, b) {
@@ -142,7 +142,7 @@ class OnlineRequestManager implements RequestManager {
     List<TrufiLocation> locations =
         await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
     locations.sort((a, b) {
-      return a.importance.compareTo(b.importance) * -1;
+      return sortByImportance(a, b);
     });
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     locations.sort((a, b) {
