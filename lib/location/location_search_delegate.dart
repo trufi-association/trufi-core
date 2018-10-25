@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/important_locations_bloc.dart';
@@ -242,6 +241,7 @@ class _SuggestionList extends StatelessWidget {
             ),
           );
         }
+
         // No results
         int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
         if (count == 0 && isVisibleWhenEmpty) {

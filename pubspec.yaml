@@ -33,6 +33,7 @@ dependencies:
   shared_preferences: ^0.4.2
   url_launcher: ^3.0.3
   device_info: ^0.2.1
+  diff_match_patch: 0.3.0
 
 dev_dependencies:
   flutter_driver:
@@ -56,6 +57,7 @@ flutter:
   assets:
     - assets/data/cochabamba-gtfs.zip
     - assets/data/cochabamba.pbf
+    - assets/data/locations.json
     - assets/data/places.json
     - assets/data/team.txt
     - assets/images/map_marker.svg
