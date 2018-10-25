@@ -33,11 +33,12 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "ubilabs.net.trufiBeta"
-        minSdkVersion 26
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 6
         versionName "0.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     signingConfigs {
