@@ -33,6 +33,7 @@ class HomePageState extends State<HomePage>
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _subscriptions = CompositeSubscription();
+  var _offlineMode = false;
 
   bool _isFetching = false;
 
@@ -41,6 +42,11 @@ class HomePageState extends State<HomePage>
     super.initState();
     _subscriptions.add(
       PreferencesBloc.of(context).outChangeOfflineMode.listen((offline) {
+        if (offline) {
+          setState(() {
+            _offlineMode = true;
+          });
+        }
         if (_data.plan == null) {
           _fetchPlan();
         }
@@ -180,14 +186,16 @@ class HomePageState extends State<HomePage>
         Positioned.fill(child: _buildLoadingIndicator(context)),
       );
     }
-    children.add(
-      Positioned(
-        top: 0.0,
-        left: 0.0,
-        right: 0.0,
-        child: OfflineStatus(),
-      ),
-    );
+    if (_offlineMode) {
+      children.add(
+        Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: OfflineStatus(),
+        ),
+      );
+    }
     return Stack(children: children);
   }
 

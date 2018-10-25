@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +27,12 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     _requestManager = _onlineRequestManager;
     _subscriptions.add(
       preferencesBloc.outChangeOfflineMode.listen((offline) {
-        _requestManager =
-            offline ? _offlineRequestManager : _onlineRequestManager;
+        if (offline) {
+          _offlineRequestManager.init();
+          _requestManager = _offlineRequestManager;
+        } else {
+          _requestManager = _onlineRequestManager;
+        }
       }),
     );
   }
@@ -136,12 +140,6 @@ enum OfflineRequestManagerStatus {
 }
 
 class OfflineRequestManager implements RequestManager {
-  OfflineRequestManager() {
-    Future.delayed(Duration.zero, () {
-      init();
-    });
-  }
-
   static const String externalPath = "/ubilabs/trufi/";
   static const String assetGtfsZip = "assets/data/cochabamba-gtfs.zip";
   static const String assetPbf = "assets/data/cochabamba.pbf";
