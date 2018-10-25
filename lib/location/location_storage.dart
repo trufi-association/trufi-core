@@ -3,14 +3,17 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 abstract class LocationStorage {
+  var diffMatchPatch = DiffMatchPatch();
+
   final List<TrufiLocation> _locations = List();
 
   Future<bool> load(BuildContext context);
@@ -32,10 +35,32 @@ abstract class LocationStorage {
     query = query.toLowerCase();
     var locations = query.isEmpty
         ? _locations.toList()
-        : _locations
-            .where((l) => l.description.toLowerCase().contains(query))
-            .toList();
-    return _sortedByFavorites(locations, context);
+        : _locations.where((l) {
+            l.tempLevenshteinDistance = findMatchAndCalculateStringDistance(
+                l.description.toLowerCase(), query);
+            return l.tempLevenshteinDistance < 3;
+          }).toList();
+    locations = await _sortedByFavorites(locations, context);
+    locations.sort((a, b) {
+      return a.tempLevenshteinDistance.compareTo(b.tempLevenshteinDistance);
+    });
+    return locations;
+  }
+
+  int findMatchAndCalculateStringDistance(String text, String query) {
+    //Find match in text similar to query
+    var position = diffMatchPatch.match(text, query, 0);
+    //if match found, calculate levenshtein distance
+    if (position != -1 && position < text.length) {
+      return position + query.length + 1 <= text.length
+          ? diffMatchPatch.diff_levenshtein(diffMatchPatch.diff(
+              text.substring(position, position + query.length + 1), query))
+          : diffMatchPatch.diff_levenshtein(
+              diffMatchPatch.diff(text.substring(position), query));
+    } else {
+      //if not match found, return distance 100
+      return 100;
+    }
   }
 
   Future<List<TrufiLocation>> fetchLocationsWithLimit(
@@ -91,8 +116,8 @@ class SharedPreferencesLocationStorage extends LocationStorage {
   }
 }
 
-class ImportantLocationStorage extends LocationStorage {
-  ImportantLocationStorage(this.key);
+class JSONLocationStorage extends LocationStorage {
+  JSONLocationStorage(this.key);
 
   final String key;
 
@@ -133,7 +158,7 @@ Future<List<TrufiLocation>> loadFromAssets(
   String key,
 ) async {
   return compute(
-    _parseImportantPlaces,
+    _parseLocationsJSON,
     await DefaultAssetBundle.of(context).loadString(key),
   );
 }
@@ -152,17 +177,17 @@ List<TrufiLocation> _parseTrufiLocations(String encoded) {
   return List();
 }
 
-List<TrufiLocation> _parseImportantPlaces(String encoded) {
+List<TrufiLocation> _parseLocationsJSON(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
     try {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-            (json) => TrufiLocation.fromImportantPlacesJson(json),
+            (json) => TrufiLocation.fromLocationsJson(json),
           )
           .toList();
     } catch (e) {
-      print("Failed to parse important places: $e");
+      print("Failed to parse locations from JSON: $e");
     }
   }
   return List();
