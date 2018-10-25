@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
@@ -37,7 +38,7 @@ class TrufiLocation {
         description: json['name'],
         latitude: json['coords']['lat'],
         longitude: json['coords']['lng'],
-        importance: json['importance']);
+        importance: json['importance'],);
   }
 
   factory TrufiLocation.fromPlanLocation(PlanLocation value) {
@@ -56,7 +57,7 @@ class TrufiLocation {
         description: json[_Description],
         latitude: json[_Latitude],
         longitude: json[_Longitude],
-        importance: json[_Importance]);
+        importance: json[_Importance],);
   }
 
   Map<String, dynamic> toJson() {
@@ -64,7 +65,7 @@ class TrufiLocation {
       _Description: description,
       _Latitude: latitude,
       _Longitude: longitude,
-      _Importance: importance
+      _Importance: importance,
     };
   }
 
