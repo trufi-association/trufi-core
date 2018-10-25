@@ -29,7 +29,7 @@
         "lng": -66.17533209999999
     }
 }, {
-    "name": "FUBODE AGENCIA LORETO, Avenida Panamericana, Cochabamba",
+    "name": "FUBODE AGENCIA LORETO, Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4228284,
         "lng": -66.1582947
@@ -51,6 +51,12 @@
     "coords": {
         "lat": -17.4197395,
         "lng": -66.140281
+    }
+}, {
+    "name": "Cafe lea Mas, Cochabamba",
+    "coords": {
+        "lat": -17.3946349,
+        "lng": -66.1589468
     }
 }, {
     "name": "Colegio Valle Hermoso, M.Lutherking, Cochabamba",
@@ -113,6 +119,12 @@
         "lng": -66.16521209999999
     }
 }, {
+    "name": "ECOLOGICAL PRODUCTS NATURE S.A., Avenida Melchor Urquidi, Cochabamba",
+    "coords": {
+        "lat": -17.3726263,
+        "lng": -66.1498189
+    }
+}, {
     "name": "Iglesia Adventista Villa Pagador",
     "coords": {
         "lat": -17.4422766,
@@ -129,6 +141,12 @@
     "coords": {
         "lat": -17.384514,
         "lng": -66.1585793
+    }
+}, {
+    "name": "Colegio Ovando, Cochabamba",
+    "coords": {
+        "lat": -17.394433,
+        "lng": -66.13911689999999
     }
 }, {
     "name": "La Papelera S.A., Avenida Capitán Víctor Ustáriz, Colcapirhua Municipality",
@@ -239,6 +257,12 @@
         "lng": -65.873487
     }
 }, {
+    "name": "COLISEO UMSS, Cochabamba",
+    "coords": {
+        "lat": -17.3944222,
+        "lng": -66.1430812
+    }
+}, {
     "name": "Sivingani",
     "coords": {
         "lat": -17.4740171,
@@ -251,6 +275,12 @@
         "lng": -66.1497526
     }
 }, {
+    "name": "Kori Simi, Calle Lanza, Cochabamba",
+    "coords": {
+        "lat": -17.3852562,
+        "lng": -66.1556983
+    }
+}, {
     "name": "chillimarca house, Cochabamba",
     "coords": {
         "lat": -17.334058,
@@ -261,6 +291,12 @@
     "coords": {
         "lat": -17.3850385,
         "lng": -66.15828640000001
+    }
+}, {
+    "name": "Feria Internacional, Alalay",
+    "coords": {
+        "lat": -17.4178569,
+        "lng": -66.129594
     }
 }, {
     "name": "Hospital Univalle, Cochabamba",
@@ -287,6 +323,12 @@
         "lng": -66.1749636
     }
 }, {
+    "name": "Mercado De Colcapirhua, Avenida C. Blanco Galindo, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3905754,
+        "lng": -66.2439899
+    }
+}, {
     "name": "Centro De Salud Cerró Verde, Yawar Mallku, Cochabamba",
     "coords": {
         "lat": -17.4149284,
@@ -311,6 +353,18 @@
         "lng": -66.1596338
     }
 }, {
+    "name": "El Palacio Del Chicharrón FIL MAXIM, Avenida Siglo XX, Cochabamba",
+    "coords": {
+        "lat": -17.4417901,
+        "lng": -66.12520930000001
+    }
+}, {
+    "name": "Parque El Pulpo, Juan Roman, Cochabamba",
+    "coords": {
+        "lat": -17.4396167,
+        "lng": -66.15621279999999
+    }
+}, {
     "name": "Entel, Quillacollo",
     "coords": {
         "lat": -17.396074,
@@ -333,6 +387,12 @@
     "coords": {
         "lat": -17.3548268,
         "lng": -66.18783119999999
+    }
+}, {
+    "name": "Colomi",
+    "coords": {
+        "lat": -17.3399775,
+        "lng": -65.8649827
     }
 }, {
     "name": "Distribuidor Beiging, Avenida C. Blanco Galindo, Cochabamba",
@@ -369,6 +429,12 @@
     "coords": {
         "lat": -17.385468,
         "lng": -66.153746
+    }
+}, {
+    "name": "Centro Ecoturístico \"El Poncho\" (Quillacollo - Cochabamba), Unnamed Road",
+    "coords": {
+        "lat": -17.337405,
+        "lng": -66.291997
     }
 }, {
     "name": "Acuaventura, Quillacollo",
@@ -419,6 +485,12 @@
         "lng": -66.1710856
     }
 }, {
+    "name": "Maryknoll Elementary School, J.Capriles, Cochabamba",
+    "coords": {
+        "lat": -17.3714692,
+        "lng": -66.16180299999999
+    }
+}, {
     "name": "Chicharronería Doña Pola, Cochabamba",
     "coords": {
         "lat": -17.3724026,
@@ -461,13 +533,19 @@
         "lng": -66.0450783
     }
 }, {
+    "name": "Mi Casa Restaurante, Avenida Papa Paulo, Cochabamba",
+    "coords": {
+        "lat": -17.3852776,
+        "lng": -66.1434912
+    }
+}, {
     "name": "Radio Taxi Ciudad Jardin, Cochabamba",
     "coords": {
         "lat": -17.376616,
         "lng": -66.142823
     }
 }, {
-    "name": "TAB-CARGO F.A.B., Avenida Del Cabildo, Cochabamba",
+    "name": "TAB-CARGO F.A.B., Avenue Del Cabildo, Cochabamba",
     "coords": {
         "lat": -17.4205127,
         "lng": -66.16895079999999
@@ -515,7 +593,7 @@
         "lng": -66.052678
     }
 }, {
-    "name": "Planta CBN Taquiña, Avenida Centenario, Cochabamba",
+    "name": "Planta CBN Taquiña, Avenue Centenario, Cochabamba",
     "coords": {
         "lat": -17.3286894,
         "lng": -66.18529579999999
@@ -557,6 +635,12 @@
         "lng": -66.0952929
     }
 }, {
+    "name": "Iglesia de Dios Reformada \"Villa Israel\", Av. Panamericana",
+    "coords": {
+        "lat": -17.4870569,
+        "lng": -66.1764706
+    }
+}, {
     "name": "BNB, Av. America, Cochabamba",
     "coords": {
         "lat": -17.3730999,
@@ -573,6 +657,18 @@
     "coords": {
         "lat": -17.3809772,
         "lng": -66.1514396
+    }
+}, {
+    "name": "UE Elena Arce De Arce, Cochabamba",
+    "coords": {
+        "lat": -17.3703285,
+        "lng": -66.164215
+    }
+}, {
+    "name": "Sta Cruz Y Barrientos, Santa Cruz, Sacaba",
+    "coords": {
+        "lat": -17.4031033,
+        "lng": -66.0307275
     }
 }, {
     "name": "Cerebritos, España, Cochabamba",
@@ -713,7 +809,7 @@
         "lng": -66.1469505
     }
 }, {
-    "name": "Banco Union, Avenida Juan de La Rosa, Cochabamba",
+    "name": "Banco Union, Avenue Juan de La Rosa, Cochabamba",
     "coords": {
         "lat": -17.376827,
         "lng": -66.1725868
@@ -737,10 +833,28 @@
         "lng": -66.16156529999999
     }
 }, {
+    "name": "Clínica \"Arebalo\", Monseñor Roberto Nicoli, Sacaba",
+    "coords": {
+        "lat": -17.4031244,
+        "lng": -66.043869
+    }
+}, {
+    "name": "Hielo y Agua Chacaltaya, Avenue M.Urquidi, Cochabamba",
+    "coords": {
+        "lat": -17.3686252,
+        "lng": -66.15018409999999
+    }
+}, {
     "name": "Urbanizacion Bella Vista",
     "coords": {
         "lat": -17.3740144,
         "lng": -66.09534889999999
+    }
+}, {
+    "name": "Colegio La Salle, Junin, Cochabamba",
+    "coords": {
+        "lat": -17.3893424,
+        "lng": -66.160814
     }
 }, {
     "name": "Charques Doña Maria, Tarapaca, Cochabamba",
@@ -767,6 +881,12 @@
         "lng": -66.2548757
     }
 }, {
+    "name": "Colegio Tiquirani, Cochabamba",
+    "coords": {
+        "lat": -17.3902138,
+        "lng": -66.17424609999999
+    }
+}, {
     "name": "Parque del Arquitecto, Cochabamba",
     "coords": {
         "lat": -17.3740156,
@@ -791,16 +911,40 @@
         "lng": -46.4230861
     }
 }, {
+    "name": "Colegio Católico Guadalupano, Cochabamba",
+    "coords": {
+        "lat": -17.3692805,
+        "lng": -66.1447227
+    }
+}, {
+    "name": "ARCO IRIS eventos sociales, Avenida Siglo XX, Cochabamba",
+    "coords": {
+        "lat": -17.4369006,
+        "lng": -66.1255369
+    }
+}, {
     "name": "El Avion, Cochabamba",
     "coords": {
         "lat": -17.3988041,
         "lng": -66.15752859999999
     }
 }, {
+    "name": "Pairumani",
+    "coords": {
+        "lat": -17.3606465,
+        "lng": -66.3244866
+    }
+}, {
     "name": "AQUILIA - Abogados y Consultores, Sucre, Cochabamba",
     "coords": {
         "lat": -17.3937253,
         "lng": -66.1548648
+    }
+}, {
+    "name": "Distribuidora Siles, Cochabamba",
+    "coords": {
+        "lat": -17.4068276,
+        "lng": -66.15337319999999
     }
 }, {
     "name": "AUTOVENTA JR, Cochabamba",
@@ -821,6 +965,18 @@
         "lng": -66.1858989
     }
 }, {
+    "name": "Megatlon Xpress, Pasaje del Quijote, Cochabamba",
+    "coords": {
+        "lat": -17.3896274,
+        "lng": -66.1667698
+    }
+}, {
+    "name": "Tigo Money, Tiquipaya",
+    "coords": {
+        "lat": -17.3372511,
+        "lng": -66.2208364
+    }
+}, {
     "name": "BancoSol, 25 de Mayo, Cochabamba",
     "coords": {
         "lat": -17.3989409,
@@ -837,6 +993,12 @@
     "coords": {
         "lat": -17.4139766,
         "lng": -66.1653223
+    }
+}, {
+    "name": "Plazuela \"Demetrio Canelas\", Cochabamba",
+    "coords": {
+        "lat": -17.3795765,
+        "lng": -66.1712675
     }
 }, {
     "name": "Hupermall, Avenida Pando, Cochabamba",
@@ -899,6 +1061,12 @@
         "lng": -66.15303589999999
     }
 }, {
+    "name": "MULTICENTRO ENTEL, AV SUECIA, CBBA, Avenida República de Suecia, Cochabamba",
+    "coords": {
+        "lat": -17.4192647,
+        "lng": -66.1469942
+    }
+}, {
     "name": "Edificio Don Melchor, Avenida Melchor Urquidi, Cochabamba",
     "coords": {
         "lat": -17.3770453,
@@ -953,6 +1121,12 @@
         "lng": -66.15184870000002
     }
 }, {
+    "name": "Iglesia Alfa Y Omega Cochabamba, Manuela Rodriguez, Cochabamba",
+    "coords": {
+        "lat": -17.4165254,
+        "lng": -66.1564942
+    }
+}, {
     "name": "Hostal Kanata, Avenida Ayacucho, Cochabamba",
     "coords": {
         "lat": -17.4000851,
@@ -971,10 +1145,22 @@
         "lng": -66.1823335
     }
 }, {
+    "name": "Unidad Educativa EL MIRADOR, Alto Mirador",
+    "coords": {
+        "lat": -17.4725824,
+        "lng": -66.2090783
+    }
+}, {
     "name": "Banco Prodem S.A.- Agencia Jordan, Jordan, Cochabamba",
     "coords": {
         "lat": -17.3953759,
         "lng": -66.1564286
+    }
+}, {
+    "name": "Colegio Anglo Americano, Cochabamba",
+    "coords": {
+        "lat": -17.3688357,
+        "lng": -66.15610699999999
     }
 }, {
     "name": "Siglo XX, Quillacollo",
@@ -1013,6 +1199,12 @@
         "lng": -66.1583161
     }
 }, {
+    "name": "Oficina Parque Tunari, Cochabamba",
+    "coords": {
+        "lat": -17.363641,
+        "lng": -66.1430845
+    }
+}, {
     "name": "El Bateon Restaurante, East Cardenas, Cochabamba",
     "coords": {
         "lat": -17.3730346,
@@ -1031,7 +1223,7 @@
         "lng": -66.15118249999999
     }
 }, {
-    "name": "Urbanizacion El Bosque Norte, Avenida Centenario, Cochabamba",
+    "name": "Urbanizacion El Bosque Norte, Avenue Centenario, Cochabamba",
     "coords": {
         "lat": -17.3382839,
         "lng": -66.1855054
@@ -1043,13 +1235,19 @@
         "lng": -66.1625574
     }
 }, {
+    "name": "Colegio Adventista Sarmiento, Cochabamba",
+    "coords": {
+        "lat": -17.389421,
+        "lng": -66.1488037
+    }
+}, {
     "name": "Cooperativa De Ahorro Y Crédito San Antonio, Tarata, Cochabamba",
     "coords": {
         "lat": -17.403173,
         "lng": -66.1549553
     }
 }, {
-    "name": "Parroquia María Auxiliadora, Avenida Panamericana, Cochabamba",
+    "name": "Parroquia María Auxiliadora, Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4215155,
         "lng": -66.1583
@@ -1121,10 +1319,16 @@
         "lng": -66.1596344
     }
 }, {
-    "name": "Hotel Sucre, Avenida Aroma, Cochabamba",
+    "name": "Hotel Sucre, Avenue Aroma, Cochabamba",
     "coords": {
         "lat": -17.3997697,
         "lng": -66.15579450000001
+    }
+}, {
+    "name": "Alfa y Omega, Cochabamba",
+    "coords": {
+        "lat": -17.414177,
+        "lng": -66.1566817
     }
 }, {
     "name": "Fundación Sedes Sapientiae, Avenida América, Cochabamba",
@@ -1151,6 +1355,24 @@
         "lng": -66.1418102
     }
 }, {
+    "name": "Imprenta Bolivar, Bolivar, Cochabamba",
+    "coords": {
+        "lat": -17.3926084,
+        "lng": -66.15353069999999
+    }
+}, {
+    "name": "ES Colomi, Colomi",
+    "coords": {
+        "lat": -17.3337431,
+        "lng": -65.8685605
+    }
+}, {
+    "name": "Tunari National Park",
+    "coords": {
+        "lat": -17.2479728,
+        "lng": -66.3336757
+    }
+}, {
     "name": "Escuela De Aviacion DELTA CHARLIE, Cochabamba",
     "coords": {
         "lat": -17.4136457,
@@ -1163,10 +1385,22 @@
         "lng": -66.173827
     }
 }, {
-    "name": "Villa Pagador, Avenida Humberto Asin Rivero, Cochabamba",
+    "name": "Facultad de veterinaria UMSS, Quillacollo",
+    "coords": {
+        "lat": -17.3805527,
+        "lng": -66.2891439
+    }
+}, {
+    "name": "Villa Pagador, Avenue Humberto Asin Rivero, Cochabamba",
     "coords": {
         "lat": -17.4395347,
         "lng": -66.1164009
+    }
+}, {
+    "name": "Globos, Avenida Pando, Cochabamba",
+    "coords": {
+        "lat": -17.3765121,
+        "lng": -66.15100439999999
     }
 }, {
     "name": "Templo de la Angostura",
@@ -1187,6 +1421,18 @@
         "lng": -66.238151
     }
 }, {
+    "name": "VETERINARIA LOS GUARDIANES, Cochabamba",
+    "coords": {
+        "lat": -17.365151,
+        "lng": -66.153548
+    }
+}, {
+    "name": "Orellana Arce Odontologia Especializada, Avenida Capitán Víctor Ustáriz, Cochabamba",
+    "coords": {
+        "lat": -17.3965144,
+        "lng": -66.18794129999999
+    }
+}, {
     "name": "Centro de Salud El Paso",
     "coords": {
         "lat": -17.3418979,
@@ -1197,6 +1443,12 @@
     "coords": {
         "lat": -17.3430771,
         "lng": -66.1960816
+    }
+}, {
+    "name": "Banco Mercantil Santa Cruz, Avenida América, Cochabamba",
+    "coords": {
+        "lat": -17.3727581,
+        "lng": -66.1629791
     }
 }, {
     "name": "Cancha Quintanilla Sud, Calle Joseph Maldonado",
@@ -1295,6 +1547,12 @@
         "lng": -66.1523615
     }
 }, {
+    "name": "Iglesia Adventista, Cochabamba",
+    "coords": {
+        "lat": -17.3893968,
+        "lng": -66.1885937
+    }
+}, {
     "name": "COMTECO MUYURINA, Calle J. C. Torrez, Cochabamba",
     "coords": {
         "lat": -17.3822079,
@@ -1307,7 +1565,7 @@
         "lng": -66.1566792
     }
 }, {
-    "name": "Complejo Santa Bárbara, Avenida Copacabana, Cochabamba",
+    "name": "Complejo Santa Bárbara, Avenue Copacabana, Cochabamba",
     "coords": {
         "lat": -17.4256561,
         "lng": -66.1558203
@@ -1329,6 +1587,12 @@
     "coords": {
         "lat": -17.6091383,
         "lng": -66.0255368
+    }
+}, {
+    "name": "DUMBO, Avenida José Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.3875823,
+        "lng": -66.156337
     }
 }, {
     "name": "Club Deportivo Santo Domingo, Colon, Sacaba",
@@ -1361,10 +1625,22 @@
         "lng": -66.28051789999999
     }
 }, {
+    "name": "Barba de Padilla, Jose de La Reza, Cochabamba",
+    "coords": {
+        "lat": -17.3869151,
+        "lng": -66.1583508
+    }
+}, {
     "name": "La Chingada, Teofilo Vargas, Cochabamba",
     "coords": {
         "lat": -17.376027,
         "lng": -66.165883
+    }
+}, {
+    "name": "Museo Casona Santivañez, Santivanez, Cochabamba",
+    "coords": {
+        "lat": -17.3946576,
+        "lng": -66.159035
     }
 }, {
     "name": "CHICHARRONERIA COCHABAMBA MUYURINA, Avenida Uyuni, Cochabamba",
@@ -1377,6 +1653,12 @@
     "coords": {
         "lat": -17.3947375,
         "lng": -66.1806603
+    }
+}, {
+    "name": "Colegio Nacional Junin , Cochabamba - Bolivia, Cochabamba",
+    "coords": {
+        "lat": -17.3935605,
+        "lng": -66.15350769999999
     }
 }, {
     "name": "parque mariscal santa cruz, Cochabamba",
@@ -1421,6 +1703,12 @@
         "lng": -66.1
     }
 }, {
+    "name": "15 De Agosto 2039, Cochabamba",
+    "coords": {
+        "lat": -17.3871939,
+        "lng": -66.178034
+    }
+}, {
     "name": "UPAL, Tupac Amaru, Cochabamba",
     "coords": {
         "lat": -17.369495,
@@ -1437,6 +1725,12 @@
     "coords": {
         "lat": -17.3449669,
         "lng": -66.20479209999999
+    }
+}, {
+    "name": "Municipality of Sacaba, Colon, Sacaba",
+    "coords": {
+        "lat": -17.4038769,
+        "lng": -66.0395801
     }
 }, {
     "name": "Rellenos calama sucursal prado, Cochabamba",
@@ -1475,7 +1769,7 @@
         "lng": -66.15257319999999
     }
 }, {
-    "name": "CBN SALA DE VENTAS, Avenida Sumaj Llajta, Cochabamba",
+    "name": "CBN SALA DE VENTAS, Avenue Sumaj Llajta, Cochabamba",
     "coords": {
         "lat": -17.3607773,
         "lng": -66.1818485
@@ -1517,6 +1811,12 @@
         "lng": -66.23584269999999
     }
 }, {
+    "name": "Posgrado FCE - UMSS, La Paz, Cochabamba",
+    "coords": {
+        "lat": -17.3830955,
+        "lng": -66.1541403
+    }
+}, {
     "name": "valle hermoso, Cochabamba",
     "coords": {
         "lat": -17.4454973,
@@ -1535,6 +1835,12 @@
         "lng": -66.1511257
     }
 }, {
+    "name": "Fuerza Especial de Lucha Contra el Crimen, Cochabamba",
+    "coords": {
+        "lat": -17.4011396,
+        "lng": -66.1460786
+    }
+}, {
     "name": "Caja Nacional De Salud, Avenida Avaroa, Quillacollo",
     "coords": {
         "lat": -17.3987849,
@@ -1547,16 +1853,40 @@
         "lng": -66.2337422
     }
 }, {
+    "name": "UPS Cochabamba, Mariano Baptista, Cochabamba",
+    "coords": {
+        "lat": -17.3857694,
+        "lng": -66.1590645
+    }
+}, {
     "name": "Los sauces, Cochabamba",
     "coords": {
         "lat": -17.3726237,
         "lng": -66.1652759
     }
 }, {
+    "name": "Segip Colcapirhua - Licencias de Conducir, Pantaleón Dalence, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3879361,
+        "lng": -66.2177643
+    }
+}, {
+    "name": "Colegio Eusebio Tudela Tapia, Camino a Itocta, Cochabamba",
+    "coords": {
+        "lat": -17.4527335,
+        "lng": -66.2028136
+    }
+}, {
     "name": "ES Terminal de Buses Cochabamba, Avenida Ayacucho, Cochabamba",
     "coords": {
         "lat": -17.4037336,
         "lng": -66.1574212
+    }
+}, {
+    "name": "Epi Norte, Cala Cala, Cochabamba",
+    "coords": {
+        "lat": -17.3621511,
+        "lng": -66.1730237
     }
 }, {
     "name": "Ciudad Del Nino, Cochabamba",
@@ -1601,6 +1931,12 @@
         "lng": -66.1587171
     }
 }, {
+    "name": "Piscina Las Rocas, Ruta Nacional 4, Cochabamba",
+    "coords": {
+        "lat": -17.386601,
+        "lng": -66.0975879
+    }
+}, {
     "name": "muyurina edificio santa maria, Avenida Oquendo, Cochabamba",
     "coords": {
         "lat": -17.3868833,
@@ -1611,6 +1947,12 @@
     "coords": {
         "lat": -17.3871375,
         "lng": -66.28475180000001
+    }
+}, {
+    "name": "Comercial Beni, Beni, Cochabamba",
+    "coords": {
+        "lat": -17.376983,
+        "lng": -66.15858399999999
     }
 }, {
     "name": "COLEGIO \"REPUBLICA DEL ECUADOR \"",
@@ -1625,10 +1967,16 @@
         "lng": -66.174399
     }
 }, {
-    "name": "FUBODE AG. LORETO, Avenida Panamericana, Cochabamba",
+    "name": "FUBODE AG. LORETO, Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4179327,
         "lng": -66.1575178
+    }
+}, {
+    "name": "Nickilandia, Fco Viedma, Cochabamba",
+    "coords": {
+        "lat": -17.39233,
+        "lng": -66.1685447
     }
 }, {
     "name": "Estadium Villa Sebastian Pagador, Cochabamba",
@@ -1659,6 +2007,18 @@
     "coords": {
         "lat": -17.4088063,
         "lng": -66.2960744
+    }
+}, {
+    "name": "BOA, Cochabamba",
+    "coords": {
+        "lat": -17.3715819,
+        "lng": -66.1741435
+    }
+}, {
+    "name": "La Riviera, Avenida D'Orbigny, Cochabamba",
+    "coords": {
+        "lat": -17.3887728,
+        "lng": -66.18008999999999
     }
 }, {
     "name": "Instituto Americano, Potosi, Cochabamba",
@@ -1697,6 +2057,12 @@
         "lng": -66.144295
     }
 }, {
+    "name": "centro de salud payacollo, Quillacollo",
+    "coords": {
+        "lat": -17.4312245,
+        "lng": -66.3368996
+    }
+}, {
     "name": "Policia Transito, Quillacollo, Cochabamba",
     "coords": {
         "lat": -17.4079689,
@@ -1721,6 +2087,12 @@
         "lng": -66.14545389999999
     }
 }, {
+    "name": "BoA Cargo, Avenida Guillermo Killman, Cochabamba",
+    "coords": {
+        "lat": -17.4102721,
+        "lng": -66.1725419
+    }
+}, {
     "name": "Mercado 10 de Febrero",
     "coords": {
         "lat": -17.440043,
@@ -1733,6 +2105,12 @@
         "lng": -66.1633006
     }
 }, {
+    "name": "Centro De Nutrición Infantil Cerro Verde - Fundación Abina R. Patiño., Cochabamba",
+    "coords": {
+        "lat": -17.4164506,
+        "lng": -66.14791290000001
+    }
+}, {
     "name": "Parque Kanata, Cochabamba",
     "coords": {
         "lat": -17.4128145,
@@ -1743,6 +2121,18 @@
     "coords": {
         "lat": -17.3964256,
         "lng": -66.1583265
+    }
+}, {
+    "name": "Colegio Andres Bello, Avenida República, Cochabamba",
+    "coords": {
+        "lat": -17.4159337,
+        "lng": -66.15141899999999
+    }
+}, {
+    "name": "Felcc, Cochabamba",
+    "coords": {
+        "lat": -17.4009921,
+        "lng": -66.14603029999999
     }
 }, {
     "name": "Banco Ganadero, Avenida Ayacucho, Cochabamba",
@@ -1763,6 +2153,12 @@
         "lng": -66.1987138
     }
 }, {
+    "name": "CIDRE, Cochabamba",
+    "coords": {
+        "lat": -17.3845609,
+        "lng": -66.146377
+    }
+}, {
     "name": "Concordia - Casa De Funerales, Avenida Martín de la Rocha, Cochabamba",
     "coords": {
         "lat": -17.3826878,
@@ -1773,6 +2169,12 @@
     "coords": {
         "lat": -17.3743912,
         "lng": -66.1844716
+    }
+}, {
+    "name": "Trans Copacabana 1 MEM, Cochabamba",
+    "coords": {
+        "lat": -17.3892719,
+        "lng": -66.183138
     }
 }, {
     "name": "Los Incas, Cochabamba",
@@ -1787,6 +2189,12 @@
         "lng": -66.15651489999999
     }
 }, {
+    "name": "Tuscapujio Centro-lava Lava,Sacaba, Sacaba",
+    "coords": {
+        "lat": -17.421147,
+        "lng": -66.0587257
+    }
+}, {
     "name": "Manchester Sport Bar, 16 de Julio, Cochabamba",
     "coords": {
         "lat": -17.3818227,
@@ -1799,10 +2207,22 @@
         "lng": -66.2966886
     }
 }, {
-    "name": "Hospital Harry Williams, Avenida de Los Derechos Humanos, Cochabamba",
+    "name": "Hospital Harry Williams, Avenue de Los Derechos Humanos, Cochabamba",
     "coords": {
         "lat": -17.419851,
         "lng": -66.1468246
+    }
+}, {
+    "name": "PLASTIFORTE, Santiváñez",
+    "coords": {
+        "lat": -17.5574636,
+        "lng": -66.2523111
+    }
+}, {
+    "name": "Roca De Vidrio Lux Otb, Cochabamba",
+    "coords": {
+        "lat": -17.3492722,
+        "lng": -66.1758645
     }
 }, {
     "name": "ES Automovil Club Boliviano, Francisco Pizarro, Cochabamba",
@@ -1815,6 +2235,12 @@
     "coords": {
         "lat": -17.3487349,
         "lng": -66.1687027
+    }
+}, {
+    "name": "Santo Domingo Savio, Cochabamba",
+    "coords": {
+        "lat": -17.4211293,
+        "lng": -66.1590014
     }
 }, {
     "name": "Mercado Loreto, Cochabamba",
@@ -1869,6 +2295,12 @@
     "coords": {
         "lat": -17.393382,
         "lng": -66.16416439999999
+    }
+}, {
+    "name": "Banco Unión - Sucursal Av. República, Cochabamba",
+    "coords": {
+        "lat": -17.4104439,
+        "lng": -66.1511479
     }
 }, {
     "name": "Homero, Cochabamba",
@@ -1949,6 +2381,12 @@
         "lng": -66.1193782
     }
 }, {
+    "name": "Axs, Avenida Ayacucho, Cochabamba",
+    "coords": {
+        "lat": -17.3899378,
+        "lng": -66.1592684
+    }
+}, {
     "name": "SEMAPA, Cochabamba",
     "coords": {
         "lat": -17.4325296,
@@ -1971,6 +2409,12 @@
     "coords": {
         "lat": -17.4166539,
         "lng": -66.16687879999999
+    }
+}, {
+    "name": "DIRCABI Cbba., J.Capriles, Cochabamba",
+    "coords": {
+        "lat": -17.3718225,
+        "lng": -66.1617924
     }
 }, {
     "name": "Optica Salamanca, Cochabamba",
@@ -2015,6 +2459,12 @@
         "lng": -66.1903672
     }
 }, {
+    "name": "Potosi 111, Cochabamba",
+    "coords": {
+        "lat": -17.3708233,
+        "lng": -66.1534716
+    }
+}, {
     "name": "E.S. D'orbigni, Cochabamba",
     "coords": {
         "lat": -17.387652,
@@ -2025,6 +2475,12 @@
     "coords": {
         "lat": -17.4236812,
         "lng": -66.135217
+    }
+}, {
+    "name": "Cobija, Cochabamba",
+    "coords": {
+        "lat": -17.3876742,
+        "lng": -66.1647182
     }
 }, {
     "name": "Mollemolle, Cochabamba",
@@ -2039,10 +2495,28 @@
         "lng": -66.1533031
     }
 }, {
+    "name": "Tigo, Avenida José Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.386965,
+        "lng": -66.155925
+    }
+}, {
+    "name": "COLEGIO MARQUINA, Quillacollo",
+    "coords": {
+        "lat": -17.3425641,
+        "lng": -66.2918049
+    }
+}, {
     "name": "HOTEL ANGOSTURA, Tarata, Cochabamba",
     "coords": {
         "lat": -17.5309141,
         "lng": -66.08726899999999
+    }
+}, {
+    "name": "Ende Corporación, Cochabamba",
+    "coords": {
+        "lat": -17.3924788,
+        "lng": -66.1644328
     }
 }, {
     "name": "Farmacia Barrientos, Avenida República de Suecia, Cochabamba",
@@ -2141,6 +2615,12 @@
         "lng": -66.1552031
     }
 }, {
+    "name": "Customs Cochabamba Airport, Luis Uriona, Cochabamba",
+    "coords": {
+        "lat": -17.4106439,
+        "lng": -66.1723548
+    }
+}, {
     "name": "Caja Nacional De Salud, Avenida Ayacucho, Cochabamba",
     "coords": {
         "lat": -17.3939566,
@@ -2163,6 +2643,12 @@
     "coords": {
         "lat": -17.4057661,
         "lng": -66.17832369999999
+    }
+}, {
+    "name": "Colegio Maryknoll, Avenue Juan de La Rosa, Cochabamba",
+    "coords": {
+        "lat": -17.3772623,
+        "lng": -66.1677263
     }
 }, {
     "name": "Laguna Eventos, Quillacollo",
@@ -2219,13 +2705,19 @@
         "lng": -66.1649564
     }
 }, {
+    "name": "Wistupiku El Gallo, Cochabamba",
+    "coords": {
+        "lat": -17.4065701,
+        "lng": -66.1555011
+    }
+}, {
     "name": "Escuela de Natacion Santorini, Ecuador, Cochabamba",
     "coords": {
         "lat": -17.3910973,
         "lng": -66.1656412
     }
 }, {
-    "name": "Parada De Taxis A Cliza, Avenida Barrientos, Cochabamba",
+    "name": "Parada De Taxis A Cliza, Avenue Barrientos, Cochabamba",
     "coords": {
         "lat": -17.4063054,
         "lng": -66.1533611
@@ -2237,10 +2729,28 @@
         "lng": -66.1249813
     }
 }, {
-    "name": "Bicentenario, Avenida Centenario, Cochabamba",
+    "name": "CIDRE, Avenida Capitán Víctor Ustáriz, Cochabamba",
+    "coords": {
+        "lat": -17.396233,
+        "lng": -66.1807907
+    }
+}, {
+    "name": "Avenida Melchor Urquidi 1112, Cochabamba",
+    "coords": {
+        "lat": -17.3782259,
+        "lng": -66.1495963
+    }
+}, {
+    "name": "Bicentenario, Avenue Centenario, Cochabamba",
     "coords": {
         "lat": -17.3493006,
         "lng": -66.18558709999999
+    }
+}, {
+    "name": "Gerencia Regional Cochabamba - Aduana Nacional, Avenida Capitán Víctor Ustáriz, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3958302,
+        "lng": -66.2255843
     }
 }, {
     "name": "PIO X, Junin, Sacaba",
@@ -2285,10 +2795,22 @@
         "lng": -66.14845629999999
     }
 }, {
+    "name": "Restaurante \"El Bateon\", Cochabamba",
+    "coords": {
+        "lat": -17.3733866,
+        "lng": -66.1239034
+    }
+}, {
     "name": "Cochabamba",
     "coords": {
         "lat": -17.4139766,
         "lng": -66.1653224
+    }
+}, {
+    "name": "EL MESON DEL CANTOR, Cochabamba",
+    "coords": {
+        "lat": -17.365476,
+        "lng": -66.188347
     }
 }, {
     "name": "Recinto Ferial de Alalay, Cochabamba",
@@ -2301,6 +2823,12 @@
     "coords": {
         "lat": -17.3908528,
         "lng": -66.068472
+    }
+}, {
+    "name": "Saunas Ecologicas SRL., acera sud, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3915105,
+        "lng": -66.2287375
     }
 }, {
     "name": "Salud familiar, Los Olivos, Cochabamba",
@@ -2375,6 +2903,12 @@
         "lng": -66.1519922
     }
 }, {
+    "name": "American International Travel, Colombia, Cochabamba",
+    "coords": {
+        "lat": -17.3908754,
+        "lng": -66.1562472
+    }
+}, {
     "name": "BancoSol, Calle Esteban Arze, Cochabamba",
     "coords": {
         "lat": -17.3988041,
@@ -2399,10 +2933,16 @@
         "lng": -66.14770399999999
     }
 }, {
-    "name": "Rotonda del Avión, entre av killman, Avenida De La Fuerza Aerea, Cochabamba",
+    "name": "Rotonda del Avión, entre av killman, Avenue De La Fuerza Aerea, Cochabamba",
     "coords": {
         "lat": -17.4109356,
         "lng": -66.16467829999999
+    }
+}, {
+    "name": "SERECI Of.N°3 (Servicio de Regostro Civil), Cochabamba",
+    "coords": {
+        "lat": -17.3941848,
+        "lng": -66.1549899
     }
 }, {
     "name": "Capilla De Pandoja, Quillacollo",
@@ -2411,10 +2951,22 @@
         "lng": -66.2688641
     }
 }, {
-    "name": "SAN ANTONIO AG.BARRIENTOS, Avenida Barrientos, Cochabamba",
+    "name": "Iglesia Adventista del Séptimo Día - Cochabamba Norte, Cochabamba",
+    "coords": {
+        "lat": -17.3598656,
+        "lng": -66.17202019999999
+    }
+}, {
+    "name": "SAN ANTONIO AG.BARRIENTOS, Avenue Barrientos, Cochabamba",
     "coords": {
         "lat": -17.4124661,
         "lng": -66.1534533
+    }
+}, {
+    "name": "El ARCO, Cochabamba",
+    "coords": {
+        "lat": -17.4214951,
+        "lng": -66.15320919999999
     }
 }, {
     "name": "Fitness Cala Cala, Cochabamba",
@@ -2427,6 +2979,12 @@
     "coords": {
         "lat": -17.386436,
         "lng": -66.1634633
+    }
+}, {
+    "name": "Cámara Regional de Despachantes de Aduana de Cochabamba Bolivia, Calle Lanza, Cochabamba",
+    "coords": {
+        "lat": -17.3848869,
+        "lng": -66.1558723
     }
 }, {
     "name": "San Miguel",
@@ -2465,6 +3023,12 @@
         "lng": -66.18033
     }
 }, {
+    "name": "Futuro de Bolivia S.A. AFP, Ave Heroinas, Cochabamba",
+    "coords": {
+        "lat": -17.3908285,
+        "lng": -66.1483923
+    }
+}, {
     "name": "Avenida Santa Cruz 1347, Cochabamba",
     "coords": {
         "lat": -17.3760341,
@@ -2475,6 +3039,18 @@
     "coords": {
         "lat": -17.3545855,
         "lng": -66.18793509999999
+    }
+}, {
+    "name": "Megatlon Quillacollo, Quillacollo",
+    "coords": {
+        "lat": -17.3960193,
+        "lng": -66.2796855
+    }
+}, {
+    "name": "Plaza 10 Febrero Villa Sebastian Pagador, Cochabamba",
+    "coords": {
+        "lat": -17.4374127,
+        "lng": -66.11791769999999
     }
 }, {
     "name": "Itocta , Casa De Las Hijas Del Divino Salvador, Cochabamba",
@@ -2543,10 +3119,22 @@
         "lng": -66.1854954
     }
 }, {
+    "name": "Hospital Pucarita Chica, Cochabamba",
+    "coords": {
+        "lat": -17.4519054,
+        "lng": -66.2014152
+    }
+}, {
     "name": "TADE S.R.L., Los Alamos, Cochabamba",
     "coords": {
         "lat": -17.3899051,
         "lng": -66.1877098
+    }
+}, {
+    "name": "Coliseo Domingo Savio, Cochabamba",
+    "coords": {
+        "lat": -17.3812787,
+        "lng": -66.1441809
     }
 }, {
     "name": "Restaurante Heroinas, Cochabamba",
@@ -2565,6 +3153,12 @@
     "coords": {
         "lat": -17.3646061,
         "lng": -66.20453599999999
+    }
+}, {
+    "name": "Spa MARIANA MORALES, Colombia, Cochabamba",
+    "coords": {
+        "lat": -17.3906953,
+        "lng": -66.1544698
     }
 }, {
     "name": "Cajero Automatico \"Banco Union\" Colegio San Agustin, Cochabamba",
@@ -2591,7 +3185,7 @@
         "lng": -66.1800777
     }
 }, {
-    "name": "FRIGORIFICO LIBERTAD sucursal Portales, Avenida Portales, Cochabamba",
+    "name": "FRIGORIFICO LIBERTAD sucursal Portales, Avenue Portales, Cochabamba",
     "coords": {
         "lat": -17.3752726,
         "lng": -66.15624989999999
@@ -2637,6 +3231,12 @@
     "coords": {
         "lat": -17.4106387,
         "lng": -66.1506343
+    }
+}, {
+    "name": "Mercado De Flores, Cochabamba",
+    "coords": {
+        "lat": -17.3900801,
+        "lng": -66.157197
     }
 }, {
     "name": "Segip Colcapirua, Avenida 27 de Julio, Colcapirhua",
@@ -2693,6 +3293,12 @@
         "lng": -66.3001396
     }
 }, {
+    "name": "Avenida Santa Cruz 1110, Cochabamba",
+    "coords": {
+        "lat": -17.3798388,
+        "lng": -66.1569718
+    }
+}, {
     "name": "Estadium Cap. Angulo, Independencia, Sacaba",
     "coords": {
         "lat": -17.4069994,
@@ -2739,6 +3345,12 @@
     "coords": {
         "lat": -17.3383565,
         "lng": -66.2690884
+    }
+}, {
+    "name": "Aduana Nacional, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3968352,
+        "lng": -66.2251732
     }
 }, {
     "name": "Parroquia de San Jose, Hospital Viedma, Avenida Aniceto Arce, Cochabamba",
@@ -2807,10 +3419,22 @@
         "lng": -66.15236829999999
     }
 }, {
+    "name": "Salon de Eventos \"Status\", Quillacollo",
+    "coords": {
+        "lat": -17.4059017,
+        "lng": -66.278227
+    }
+}, {
     "name": "Plaza del Estudiante, Junin, Sacaba",
     "coords": {
         "lat": -17.4022913,
         "lng": -66.044164
+    }
+}, {
+    "name": "Elizabeth Seton Hospital, Avenue Blanco Galindo, Cochabamba",
+    "coords": {
+        "lat": -17.3931321,
+        "lng": -66.204021
     }
 }, {
     "name": "BROS, Avenida Santa Cruz, Cochabamba",
@@ -2879,6 +3503,18 @@
         "lng": -66.1087809
     }
 }, {
+    "name": "Bloques Militares, Avenida Ramón Rivero, Cochabamba",
+    "coords": {
+        "lat": -17.3801247,
+        "lng": -66.1476611
+    }
+}, {
+    "name": "Sucre 108, Cochabamba",
+    "coords": {
+        "lat": -17.3938693,
+        "lng": -66.1549687
+    }
+}, {
     "name": "TEMPLO SAN CARLOS, Avenida República, Cochabamba",
     "coords": {
         "lat": -17.4073997,
@@ -2889,6 +3525,12 @@
     "coords": {
         "lat": -17.3873036,
         "lng": -66.1561117
+    }
+}, {
+    "name": "Benitomo, Suipacha, Cochabamba",
+    "coords": {
+        "lat": -17.3946679,
+        "lng": -66.163702
     }
 }, {
     "name": "Parque Villa Moderna, Quillacollo",
@@ -2963,16 +3605,28 @@
         "lng": -66.2276993
     }
 }, {
+    "name": "Mercado 25 de mayo, Jordan, Cochabamba",
+    "coords": {
+        "lat": -17.3947412,
+        "lng": -66.1546326
+    }
+}, {
     "name": "Centro Medico Valle Hermoso, Alalay",
     "coords": {
         "lat": -17.4395427,
         "lng": -66.13086
     }
 }, {
-    "name": "Volunteer Challenge, Avenida Ramon Rivero, Cochabamba",
+    "name": "Volunteer Challenge, Avenue Ramon Rivero, Cochabamba",
     "coords": {
         "lat": -17.3808919,
         "lng": -66.1501676
+    }
+}, {
+    "name": "Lacteosbol, Pedro J.Cayetano De La Llosa, Cochabamba",
+    "coords": {
+        "lat": -17.3956501,
+        "lng": -66.202529
     }
 }, {
     "name": "Glass Center Parabrisas, Cochabamba",
@@ -3059,6 +3713,18 @@
         "lng": -66.17562579999999
     }
 }, {
+    "name": "Instituto Técnico Nacional Andrés Bello, Hamiraya, Cochabamba",
+    "coords": {
+        "lat": -17.3970513,
+        "lng": -66.1602892
+    }
+}, {
+    "name": "Sereci Registro Civil Quillacollo, Avenida Martín Cardenas, Quillacollo",
+    "coords": {
+        "lat": -17.4073353,
+        "lng": -66.2819391
+    }
+}, {
     "name": "SuperMall, Cochabamba",
     "coords": {
         "lat": -17.3942336,
@@ -3089,10 +3755,22 @@
         "lng": -66.1573605
     }
 }, {
+    "name": "ALIANZA IMPORT, Cochabamba",
+    "coords": {
+        "lat": -17.3930612,
+        "lng": -66.1982301
+    }
+}, {
     "name": "Laboratorio De Hidráulica - UMSS (LHUMSS), Cochabamba",
     "coords": {
         "lat": -17.4492395,
         "lng": -66.1428505
+    }
+}, {
+    "name": "NACIONAL TUNARI Park",
+    "coords": {
+        "lat": -17.3345086,
+        "lng": -66.1409676
     }
 }, {
     "name": "Seminario Bautista, Avenida Heroínas, Cochabamba",
@@ -3107,10 +3785,22 @@
         "lng": -66.15015749999999
     }
 }, {
+    "name": "Albina Patino R., Avenida Oquendo, Cochabamba",
+    "coords": {
+        "lat": -17.3946266,
+        "lng": -66.1496131
+    }
+}, {
     "name": "Cancha Don Bosco, Cochabamba",
     "coords": {
         "lat": -17.4339476,
         "lng": -66.156052
+    }
+}, {
+    "name": "Juzgados Sipesipe, Sipe Sipe",
+    "coords": {
+        "lat": -17.4532627,
+        "lng": -66.35712190000001
     }
 }, {
     "name": "Salon Avanti, Mostajo, Cochabamba",
@@ -3197,6 +3887,12 @@
         "lng": -66.153053
     }
 }, {
+    "name": "colegio sarmiento, Colombia, Cochabamba",
+    "coords": {
+        "lat": -17.389355,
+        "lng": -66.147583
+    }
+}, {
     "name": "Normal Simón Rodriguez PROFOCOM",
     "coords": {
         "lat": -17.4118093,
@@ -3221,6 +3917,12 @@
         "lng": -66.15705919999999
     }
 }, {
+    "name": "Petrolera",
+    "coords": {
+        "lat": -17.4139766,
+        "lng": -66.1653224
+    }
+}, {
     "name": "Ferreteria Taquiña, Cochabamba",
     "coords": {
         "lat": -17.3433254,
@@ -3237,6 +3939,12 @@
     "coords": {
         "lat": -17.391837,
         "lng": -66.20258330000001
+    }
+}, {
+    "name": "Consultorio Pedagogico Alecor, Cochabamba",
+    "coords": {
+        "lat": -17.3791352,
+        "lng": -66.1679087
     }
 }, {
     "name": "San Antonio, Tarata, Cochabamba",
@@ -3305,6 +4013,12 @@
         "lng": -66.1261223
     }
 }, {
+    "name": "Avenida Aroma 1082, Cochabamba",
+    "coords": {
+        "lat": -17.4037509,
+        "lng": -66.1634289
+    }
+}, {
     "name": "E.S. Circuito Bolivia S.A., Cochabamba",
     "coords": {
         "lat": -17.406682,
@@ -3329,6 +4043,18 @@
         "lng": -66.15365129999999
     }
 }, {
+    "name": "Iglesia Adventista del Séptimo Día, Cochabamba",
+    "coords": {
+        "lat": -17.3934335,
+        "lng": -66.1542925
+    }
+}, {
+    "name": "Ricardo Prudencio- Colegio Suecia, Cochabamba",
+    "coords": {
+        "lat": -17.4209884,
+        "lng": -66.14010929999999
+    }
+}, {
     "name": "Jardín Botánico \"Martin Cardenas\", Raul Rivero Torres, Cochabamba",
     "coords": {
         "lat": -17.3772163,
@@ -3339,6 +4065,12 @@
     "coords": {
         "lat": -17.395812,
         "lng": -66.1561244
+    }
+}, {
+    "name": "Instituto Boliviano de Yoga, Cochabamba",
+    "coords": {
+        "lat": -17.379013,
+        "lng": -66.1732534
     }
 }, {
     "name": "Queru Queru Alto, Cochabamba",
@@ -3359,16 +4091,28 @@
         "lng": -66.1734847
     }
 }, {
-    "name": "Avenida General Bernardino Bilbao Rioja 290, Cochabamba",
+    "name": "Avenue General Bernardino Bilbao Rioja 290, Cochabamba",
     "coords": {
         "lat": -17.3703862,
         "lng": -66.1270521
+    }
+}, {
+    "name": "Farmacia Cobija, M.Melgarejo, Cochabamba",
+    "coords": {
+        "lat": -17.3746,
+        "lng": -66.14268609999999
     }
 }, {
     "name": "Parque de estudio y reflexión Montecillo",
     "coords": {
         "lat": -17.3207127,
         "lng": -66.217137
+    }
+}, {
+    "name": "Dynamica, Cochabamba",
+    "coords": {
+        "lat": -17.3847058,
+        "lng": -66.15304019999999
     }
 }, {
     "name": "Hostal Cochabamba, Agustin Lopez, Cochabamba",
@@ -3387,6 +4131,12 @@
     "coords": {
         "lat": -17.3764068,
         "lng": -66.1760006
+    }
+}, {
+    "name": "Factory Bar & Grill, Avenue M.Urquidi, Cochabamba",
+    "coords": {
+        "lat": -17.3758056,
+        "lng": -66.1493807
     }
 }, {
     "name": "Caja Petrolera, General Achá, Cochabamba",
@@ -3485,10 +4235,22 @@
         "lng": -66.21768999999999
     }
 }, {
+    "name": "BBVA Prevision, Cochabamba",
+    "coords": {
+        "lat": -17.3850351,
+        "lng": -66.1534408
+    }
+}, {
     "name": "Hostal Oruro, Cochabamba",
     "coords": {
         "lat": -17.4004562,
         "lng": -66.156965
+    }
+}, {
+    "name": "O.T.B. Don Bosco, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3607866,
+        "lng": -66.2421459
     }
 }, {
     "name": "Banco Prodem S.A. - Cajero Automático Cochabamba Central, Calama, Cochabamba",
@@ -3513,6 +4275,18 @@
     "coords": {
         "lat": -17.372234,
         "lng": -66.1639655
+    }
+}, {
+    "name": "San José, Antonio Gonzales, Cochabamba",
+    "coords": {
+        "lat": -17.3898871,
+        "lng": -66.1929309
+    }
+}, {
+    "name": "Megatlon Express, Avenue Sumaj Llajta, Cochabamba",
+    "coords": {
+        "lat": -17.3609164,
+        "lng": -66.1817143
     }
 }, {
     "name": "Clinica Policial Virgen De Copacabana, Calle Pasteur, Cochabamba",
@@ -3557,6 +4331,12 @@
         "lng": -66.11115819999999
     }
 }, {
+    "name": "Hashi - Sushi Bar, Tarija, Cochabamba",
+    "coords": {
+        "lat": -17.3753238,
+        "lng": -66.1607685
+    }
+}, {
     "name": "Magenta, Avenida Libertador Simón Bolivar, Cochabamba",
     "coords": {
         "lat": -17.3705349,
@@ -3573,6 +4353,12 @@
     "coords": {
         "lat": -17.4676698,
         "lng": -66.1701309
+    }
+}, {
+    "name": "El Poncho Ecotouristique",
+    "coords": {
+        "lat": -17.3372329,
+        "lng": -66.2926573
     }
 }, {
     "name": "Surtidor Los ALAMOS, Los Alamos, Cochabamba",
@@ -3593,6 +4379,12 @@
         "lng": -66.1430135
     }
 }, {
+    "name": "Zona Mercado Calatayud, Avenida Aroma, Cochabamba",
+    "coords": {
+        "lat": -17.3984169,
+        "lng": -66.1526885
+    }
+}, {
     "name": "Banco Sol, Avenida C. Blanco Galindo, Quillacollo",
     "coords": {
         "lat": -17.3931513,
@@ -3605,7 +4397,7 @@
         "lng": -66.1562565
     }
 }, {
-    "name": "INFOCAL Campus Tupuraya, Avenida General Galindo, Cochabamba",
+    "name": "INFOCAL Campus Tupuraya, Avenue General Galindo, Cochabamba",
     "coords": {
         "lat": -17.371772,
         "lng": -66.141712
@@ -3629,16 +4421,40 @@
         "lng": -66.1512
     }
 }, {
+    "name": "Parque Tunari",
+    "coords": {
+        "lat": -17.3358506,
+        "lng": -66.13995539999999
+    }
+}, {
     "name": "Banco Bisa, Avenida Siglo XX, Cochabamba",
     "coords": {
         "lat": -17.4276395,
         "lng": -66.13029809999999
     }
 }, {
+    "name": "Radio Movil Pampa San Miguel",
+    "coords": {
+        "lat": -17.4657637,
+        "lng": -66.1462975
+    }
+}, {
+    "name": "Restaurante El Mirador, Cochabamba",
+    "coords": {
+        "lat": -17.3446129,
+        "lng": -66.1734247
+    }
+}, {
     "name": "Iglesia Apote, Quillacollo",
     "coords": {
         "lat": -17.3301223,
         "lng": -66.2416836
+    }
+}, {
+    "name": "Alojamiento Guadalquivir, Cliza",
+    "coords": {
+        "lat": -17.5879899,
+        "lng": -65.9342501
     }
 }, {
     "name": "Centro De Salud Rojas Mejia, Hernan Morales, Cochabamba",
@@ -3665,6 +4481,12 @@
         "lng": -66.2728474
     }
 }, {
+    "name": "Jayhuayco, Cochabamba",
+    "coords": {
+        "lat": -17.4211128,
+        "lng": -66.17705819999999
+    }
+}, {
     "name": "Plazuela Tarija, Cochabamba",
     "coords": {
         "lat": -17.3737389,
@@ -3675,6 +4497,12 @@
     "coords": {
         "lat": -17.4162401,
         "lng": -66.1248015
+    }
+}, {
+    "name": "UPS - SEPA, Camino al Paso, Quillacollo",
+    "coords": {
+        "lat": -17.3488203,
+        "lng": -66.2588963
     }
 }, {
     "name": "BURGER KING, Barrancas, Cochabamba",
@@ -3827,10 +4655,28 @@
         "lng": -66.17968859999999
     }
 }, {
+    "name": "Hospital Solomon Klein, Avenida Maximiliano Kolbe, Cochabamba",
+    "coords": {
+        "lat": -17.3830449,
+        "lng": -66.1096783
+    }
+}, {
     "name": "Impuestos Internos, Avenida América, Cochabamba",
     "coords": {
         "lat": -17.3723021,
         "lng": -66.16423809999999
+    }
+}, {
+    "name": "U.E. Villa Moderna, Quillacollo",
+    "coords": {
+        "lat": -17.3884502,
+        "lng": -66.2824408
+    }
+}, {
+    "name": "Liceo Elena Arce De Arce, Cochabamba",
+    "coords": {
+        "lat": -17.3703922,
+        "lng": -66.1644343
     }
 }, {
     "name": "Sombrero de Chola Sause Rancho, Sipe Sipe",
@@ -3899,6 +4745,12 @@
         "lng": -66.1606024
     }
 }, {
+    "name": "Banco Union cajero automatico Comercial el Gallo, Cochabamba",
+    "coords": {
+        "lat": -17.406618,
+        "lng": -66.1551015
+    }
+}, {
     "name": "Clínica Aranjuez, Juan Crisostomo Carrillo, Cochabamba",
     "coords": {
         "lat": -17.3823151,
@@ -3941,6 +4793,12 @@
         "lng": -66.1730864
     }
 }, {
+    "name": "Alcaldia De Cochabamba, Alalay",
+    "coords": {
+        "lat": -17.4201771,
+        "lng": -66.1293986
+    }
+}, {
     "name": "Caja Petrolera de Salud, Avenida 6 de Agosto, Cochabamba",
     "coords": {
         "lat": -17.4118813,
@@ -3965,10 +4823,28 @@
         "lng": -66.1489502
     }
 }, {
-    "name": "Puente De Tamborada, Avenida Panamericana, Cochabamba",
+    "name": "Puente De Tamborada, Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4398616,
         "lng": -66.16255439999999
+    }
+}, {
+    "name": "ENDE Corani S.A., Cochabamba",
+    "coords": {
+        "lat": -17.3846547,
+        "lng": -66.1511922
+    }
+}, {
+    "name": "Kanarrancho, Tiquipaya",
+    "coords": {
+        "lat": -17.3515173,
+        "lng": -66.20333889999999
+    }
+}, {
+    "name": "Trans Copacabana S.A., Luis Uriona, Cochabamba",
+    "coords": {
+        "lat": -17.4096891,
+        "lng": -66.1723427
     }
 }, {
     "name": "Centro De Salud Apote, Quillacollo",
@@ -4043,6 +4919,24 @@
         "lng": -66.2186351
     }
 }, {
+    "name": "Mons.Angel Caballero 203, Cochabamba",
+    "coords": {
+        "lat": -17.3975944,
+        "lng": -66.1824883
+    }
+}, {
+    "name": "Jaguar, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.39707,
+        "lng": -66.21898329999999
+    }
+}, {
+    "name": "Biblioteca Pairumani",
+    "coords": {
+        "lat": -17.3595014,
+        "lng": -66.3244843
+    }
+}, {
     "name": "Maesma Pizzeria, Avenida José Ballivian, Cochabamba",
     "coords": {
         "lat": -17.3858113,
@@ -4061,13 +4955,25 @@
         "lng": -66.1624229
     }
 }, {
+    "name": "Hospital Quillacollo, Avenida Suárez Miranda, Quillacollo",
+    "coords": {
+        "lat": -17.3876133,
+        "lng": -66.2815298
+    }
+}, {
     "name": "Plaza Sucre, Bolivar, Cochabamba",
     "coords": {
         "lat": -17.3922673,
         "lng": -66.1480329
     }
 }, {
-    "name": "Colegio \" 6 DE AGOSTO\", Avenida Panamericana, Cochabamba",
+    "name": "Condominio San Silvestre, Runasimi, Cochabamba",
+    "coords": {
+        "lat": -17.3510515,
+        "lng": -66.1786899
+    }
+}, {
+    "name": "Colegio \" 6 DE AGOSTO\", Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4849866,
         "lng": -66.1729513
@@ -4083,6 +4989,12 @@
     "coords": {
         "lat": -17.3831598,
         "lng": -66.1486826
+    }
+}, {
+    "name": "Registro Civil SERECI, Avenida Waldo Ballivian, Quillacollo",
+    "coords": {
+        "lat": -17.3905469,
+        "lng": -66.2809572
     }
 }, {
     "name": "Tobogán Park, Cochabamba",
@@ -4127,6 +5039,12 @@
         "lng": -66.1833233
     }
 }, {
+    "name": "Luis Calvo 2032, Cochabamba",
+    "coords": {
+        "lat": -17.3678795,
+        "lng": -66.1520476
+    }
+}, {
     "name": "Kanata, Capinota, Cochabamba",
     "coords": {
         "lat": -17.4125902,
@@ -4143,6 +5061,12 @@
     "coords": {
         "lat": -17.397206,
         "lng": -66.28189019999999
+    }
+}, {
+    "name": "Tigo Money, Cochabamba",
+    "coords": {
+        "lat": -17.3716866,
+        "lng": -66.1756292
     }
 }, {
     "name": "Restaurante VILLAZON, Avenida Chapare",
@@ -4167,6 +5091,12 @@
     "coords": {
         "lat": -17.4027845,
         "lng": -66.0472082
+    }
+}, {
+    "name": "Vehicular distributor Beijing, Avenue Beijing, Cochabamba",
+    "coords": {
+        "lat": -17.39329,
+        "lng": -66.1842437
     }
 }, {
     "name": "Posta Medica Mi Salud- Paucarpata, Quillacollo",
@@ -4197,6 +5127,12 @@
     "coords": {
         "lat": -17.3443643,
         "lng": -66.17820809999999
+    }
+}, {
+    "name": "Tigo, Quillacollo",
+    "coords": {
+        "lat": -17.3943463,
+        "lng": -66.2783373
     }
 }, {
     "name": "Cementerio Angostura, 7",
@@ -4265,7 +5201,7 @@
         "lng": -66.14740259999999
     }
 }, {
-    "name": "Clinica Morales, Avenida Gral Galindo, Cochabamba",
+    "name": "Clinica Morales, Avenue Gral Galindo, Cochabamba",
     "coords": {
         "lat": -17.380176,
         "lng": -66.14193759999999
@@ -4281,6 +5217,12 @@
     "coords": {
         "lat": -16.7117996,
         "lng": -65.6658568
+    }
+}, {
+    "name": "Facultad De Odontologia UMSS, Venezuela, Cochabamba",
+    "coords": {
+        "lat": -17.3867507,
+        "lng": -66.14984969999999
     }
 }, {
     "name": "Tumusla Repuestos, Tumusla, Cochabamba",
@@ -4331,6 +5273,12 @@
         "lng": -66.1860438
     }
 }, {
+    "name": "Ollerana Arce Odontologia Especializada, Cochabamba",
+    "coords": {
+        "lat": -17.3964148,
+        "lng": -66.18802889999999
+    }
+}, {
     "name": "Potosí",
     "coords": {
         "lat": -20.624713,
@@ -4341,6 +5289,12 @@
     "coords": {
         "lat": -17.4522934,
         "lng": -66.1563116
+    }
+}, {
+    "name": "JOYA, Estación de Servicio, Cochabamba",
+    "coords": {
+        "lat": -17.375255,
+        "lng": -66.135942
     }
 }, {
     "name": "Plaza Principal De Sipe Sipe Cochabamba Bolivia, Sipe Sipe",
@@ -4361,10 +5315,16 @@
         "lng": -66.1653224
     }
 }, {
-    "name": "Villa pagador, Avenida De La Fuerza Aerea, Cochabamba",
+    "name": "Villa pagador, Avenue De La Fuerza Aerea, Cochabamba",
     "coords": {
         "lat": -17.4139766,
         "lng": -66.1653224
+    }
+}, {
+    "name": "Hashi Sushi Bar, Tarija, Cochabamba",
+    "coords": {
+        "lat": -17.3752882,
+        "lng": -66.1607804
     }
 }, {
     "name": "Parqueo UCB, Benjamin Guzman, Cochabamba",
@@ -4373,7 +5333,25 @@
         "lng": -66.1440825
     }
 }, {
-    "name": "Ejercito de Salvacion, Avenida Paris",
+    "name": "Banco Pyme de la Comunidad - Agencia Molino el Gallo, Angostura, Cochabamba",
+    "coords": {
+        "lat": -17.4065796,
+        "lng": -66.15512559999999
+    }
+}, {
+    "name": "Fe y Alegría - Instituto de Audiología, General Achá, Cochabamba",
+    "coords": {
+        "lat": -17.3948344,
+        "lng": -66.1646252
+    }
+}, {
+    "name": "Tigo, Cochabamba",
+    "coords": {
+        "lat": -17.378056,
+        "lng": -66.1525
+    }
+}, {
+    "name": "Ejercito de Salvacion, Avenue Paris",
     "coords": {
         "lat": -17.4756795,
         "lng": -66.1025106
@@ -4403,10 +5381,22 @@
         "lng": -66.1511197
     }
 }, {
+    "name": "FELCN - Cochabamba, Cochabamba",
+    "coords": {
+        "lat": -17.3770185,
+        "lng": -66.15536639999999
+    }
+}, {
     "name": "Subestacion Rafael Urquidi, Cochabamba",
     "coords": {
         "lat": -17.4327372,
         "lng": -66.11753139999999
+    }
+}, {
+    "name": "Parque Cretácico CHIMBA, Cochabamba",
+    "coords": {
+        "lat": -17.3979767,
+        "lng": -66.1799515
     }
 }, {
     "name": "Deco Hogar, Calle Lanza, Cochabamba",
@@ -4433,6 +5423,12 @@
         "lng": -66.27164259999999
     }
 }, {
+    "name": "Parque Infantil Prado Villa Moderna, Avenida Antofagasta, Quillacollo",
+    "coords": {
+        "lat": -17.3823948,
+        "lng": -66.2814822
+    }
+}, {
     "name": "Jorge Wilstermann Airport, Cochabamba",
     "coords": {
         "lat": -17.4170476,
@@ -4445,10 +5441,16 @@
         "lng": -66.1532307
     }
 }, {
-    "name": "Cooperativa Pio X (AG. Santa Barbara), Avenida Santa Barbara, Cochabamba",
+    "name": "Cooperativa Pio X (AG. Santa Barbara), Avenue Santa Barbara, Cochabamba",
     "coords": {
         "lat": -17.4292051,
         "lng": -66.1561567
+    }
+}, {
+    "name": "WELLNESS FOOD, Cochabamba",
+    "coords": {
+        "lat": -17.3857661,
+        "lng": -66.1509888
     }
 }, {
     "name": "U.E NUESTRA SEÑORA DE LA MERCED, Avenida Capitán Víctor Ustáriz, Colcapirhua Municipality",
@@ -4511,10 +5513,22 @@
         "lng": -66.1681826
     }
 }, {
+    "name": "Salón de Eventos \"Ambar\", Hernan Morales, Cochabamba",
+    "coords": {
+        "lat": -17.4020896,
+        "lng": -66.1739044
+    }
+}, {
     "name": "Silpanchos \"El Castel\", Carmela Serruto, Quillacollo",
     "coords": {
         "lat": -17.3927684,
         "lng": -66.280093
+    }
+}, {
+    "name": "Cancha San Jose, Cayubaba, Cochabamba",
+    "coords": {
+        "lat": -17.3851372,
+        "lng": -66.1872491
     }
 }, {
     "name": "Caja de Salud CORDES, Cochabamba",
@@ -4533,6 +5547,12 @@
     "coords": {
         "lat": -17.3873052,
         "lng": -66.1649576
+    }
+}, {
+    "name": "AFP Prevision, Cochabamba",
+    "coords": {
+        "lat": -17.3848549,
+        "lng": -66.15333389999999
     }
 }, {
     "name": "Tiquipaya Villa Oruro, Quillacollo",
@@ -4625,6 +5645,12 @@
         "lng": -66.1541464
     }
 }, {
+    "name": "Hospital San Vicente, Mariano Baptista, Cochabamba",
+    "coords": {
+        "lat": -17.3877211,
+        "lng": -66.1587453
+    }
+}, {
     "name": "El paso Tecnologico, Calle",
     "coords": {
         "lat": -17.3341136,
@@ -4677,6 +5703,12 @@
     "coords": {
         "lat": -17.3909963,
         "lng": -66.1686861
+    }
+}, {
+    "name": "BancoSol, Sol Amigo Express Victor Ustariz, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3949139,
+        "lng": -66.2246901
     }
 }, {
     "name": "la mizqueñita, Avenida Circunvalacion, Sacaba",
@@ -4757,6 +5789,18 @@
         "lng": -66.1240284
     }
 }, {
+    "name": "Kilómetro 0 Av. Villazón, Cochabamba",
+    "coords": {
+        "lat": -17.3774196,
+        "lng": -66.1421534
+    }
+}, {
+    "name": "Central Radio Taxi Pacata, Cochabamba",
+    "coords": {
+        "lat": -17.3728666,
+        "lng": -66.11555469999999
+    }
+}, {
     "name": "Complejo deportivo Pacata, Cochabamba",
     "coords": {
         "lat": -17.3693053,
@@ -4775,10 +5819,22 @@
         "lng": -66.14927709999999
     }
 }, {
+    "name": "Plastiforte, Cochabamba, Cochabamba",
+    "coords": {
+        "lat": -17.393223,
+        "lng": -66.192007
+    }
+}, {
     "name": "Parque Deportivo Costanera, Cochabamba",
     "coords": {
         "lat": -17.3922273,
         "lng": -66.1662032
+    }
+}, {
+    "name": "Centro De Salud Pucarita, Cochabamba",
+    "coords": {
+        "lat": -17.4519403,
+        "lng": -66.2013525
     }
 }, {
     "name": "ES Sipe Sipe, Sipe Sipe",
@@ -4799,10 +5855,28 @@
         "lng": -66.1489696
     }
 }, {
+    "name": "Alcaldia Municipal de Vinto",
+    "coords": {
+        "lat": -17.3963316,
+        "lng": -66.31378699999999
+    }
+}, {
     "name": "Posta Medica de Chilimarca, Cochabamba",
     "coords": {
         "lat": -17.3349029,
         "lng": -66.2002122
+    }
+}, {
+    "name": "Megatlon Fitness Club, Calle San Martin, Cochabamba",
+    "coords": {
+        "lat": -17.3916652,
+        "lng": -66.1545407
+    }
+}, {
+    "name": "Juzgado de Colcapirhua, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.389364,
+        "lng": -66.24419999999999
     }
 }, {
     "name": "Pedro Barrientos, Cochabamba",
@@ -4871,6 +5945,12 @@
         "lng": -66.1249687
     }
 }, {
+    "name": "Centro Comercial Galindo Mall, Cochabamba",
+    "coords": {
+        "lat": -17.393236,
+        "lng": -66.158186
+    }
+}, {
     "name": "Teleférico, Avenida de la Concordia, Cochabamba",
     "coords": {
         "lat": -17.3848845,
@@ -4881,6 +5961,12 @@
     "coords": {
         "lat": -17.3729065,
         "lng": -66.1588096
+    }
+}, {
+    "name": "Condominio Las Retamas, Cochabamba",
+    "coords": {
+        "lat": -17.3672214,
+        "lng": -66.1411121
     }
 }, {
     "name": "La Angostura Lake",
@@ -4907,6 +5993,18 @@
         "lng": -66.2564132
     }
 }, {
+    "name": "IGLESIA ADVENTISTA LOMA LINDA",
+    "coords": {
+        "lat": -17.4138804,
+        "lng": -66.30615949999999
+    }
+}, {
+    "name": "Mercado Modelo Del Norte, Cochabamba",
+    "coords": {
+        "lat": -17.3519672,
+        "lng": -66.1730146
+    }
+}, {
     "name": "Oncologíco, Cochabamba",
     "coords": {
         "lat": -17.388293,
@@ -4923,6 +6021,18 @@
     "coords": {
         "lat": -17.394625,
         "lng": -66.2811443
+    }
+}, {
+    "name": "GALINDO Bienes Raices, Cochabamba",
+    "coords": {
+        "lat": -17.384032,
+        "lng": -66.1554093
+    }
+}, {
+    "name": "Estacion de Autobuses de Cliza, Cliza",
+    "coords": {
+        "lat": -17.5907536,
+        "lng": -65.9341962
     }
 }, {
     "name": "A.Garcia 1135, Cochabamba",
@@ -4961,6 +6071,12 @@
         "lng": -66.1519217
     }
 }, {
+    "name": "Coña Coña, Cochabamba",
+    "coords": {
+        "lat": -17.3880159,
+        "lng": -66.2062244
+    }
+}, {
     "name": "Plaza de Sacaba, Sacaba",
     "coords": {
         "lat": -17.4039386,
@@ -4979,13 +6095,31 @@
         "lng": -66.1409716
     }
 }, {
+    "name": "Cala Cala, Alcides Arguedas, Cochabamba",
+    "coords": {
+        "lat": -17.3738194,
+        "lng": -66.17443209999999
+    }
+}, {
+    "name": "Centro De Salud Alalay, Sacaba",
+    "coords": {
+        "lat": -17.4198588,
+        "lng": -66.02687980000002
+    }
+}, {
+    "name": "Piscina Alfredo Marquina, Avenida Libertador Simón Bolívar, Cochabamba",
+    "coords": {
+        "lat": -17.3811702,
+        "lng": -66.16081559999999
+    }
+}, {
     "name": "Clinica Boliviana Americana, Cochabamba",
     "coords": {
         "lat": -17.4009726,
         "lng": -66.1531301
     }
 }, {
-    "name": "Victoria, Avenida General Galindo, Cochabamba",
+    "name": "Victoria, Avenue General Galindo, Cochabamba",
     "coords": {
         "lat": -17.3751938,
         "lng": -66.1424375
@@ -4997,7 +6131,7 @@
         "lng": -66.129654
     }
 }, {
-    "name": "Hipermaxi, Avenida Juan de La Rosa, Cochabamba",
+    "name": "Hipermaxi, Avenue Juan de La Rosa, Cochabamba",
     "coords": {
         "lat": -17.3769908,
         "lng": -66.1725909
@@ -5055,6 +6189,12 @@
     "coords": {
         "lat": -17.3966157,
         "lng": -66.15741489999999
+    }
+}, {
+    "name": "Parque de Juegos San Simon, Cochabamba",
+    "coords": {
+        "lat": -17.4444913,
+        "lng": -66.1441145
     }
 }, {
     "name": "Casa de Campo, Avenida Uyuni, Cochabamba",
@@ -5165,6 +6305,12 @@
         "lng": -66.2965188
     }
 }, {
+    "name": "SERECI, Avenida Julio Rodríguez Morales, Cochabamba",
+    "coords": {
+        "lat": -17.374167,
+        "lng": -66.1423228
+    }
+}, {
     "name": "Fierrero Representaciones, Avenida Oquendo, Cochabamba",
     "coords": {
         "lat": -17.3995515,
@@ -5207,6 +6353,12 @@
         "lng": -66.1564322
     }
 }, {
+    "name": "Megatlon Fitness Club, Cochabamba",
+    "coords": {
+        "lat": -17.3611005,
+        "lng": -66.1818083
+    }
+}, {
     "name": "Toco Arena, calle, Cliza",
     "coords": {
         "lat": -17.617861,
@@ -5237,10 +6389,22 @@
         "lng": -66.1605585
     }
 }, {
+    "name": "Atelier Marquina Corp., Juan Capriles, Cochabamba",
+    "coords": {
+        "lat": -17.3718843,
+        "lng": -66.157687
+    }
+}, {
     "name": "Edificio Colon, Mexico, Cochabamba",
     "coords": {
         "lat": -17.3877051,
         "lng": -66.15618979999999
+    }
+}, {
+    "name": "Alianza Francesa, Cochabamba",
+    "coords": {
+        "lat": -17.3829003,
+        "lng": -66.1535274
     }
 }, {
     "name": "Avenida Humboldt 1185, Cochabamba",
@@ -5277,6 +6441,12 @@
     "coords": {
         "lat": -17.3721605,
         "lng": -66.168426
+    }
+}, {
+    "name": "A, Agustin Aspiazu, Cochabamba",
+    "coords": {
+        "lat": -17.397392,
+        "lng": -66.14208400000001
     }
 }, {
     "name": "Ferreteria La Merced, Cochabamba",
@@ -5393,6 +6563,18 @@
         "lng": -66.2724183
     }
 }, {
+    "name": "ABIA GAS, Antezana, Cochabamba",
+    "coords": {
+        "lat": -17.3856438,
+        "lng": -66.15402379999999
+    }
+}, {
+    "name": "Colegio Anglo Japones, Santiváñez",
+    "coords": {
+        "lat": -17.3953728,
+        "lng": -66.16313579999999
+    }
+}, {
     "name": "Shopping Sucre, Cochabamba",
     "coords": {
         "lat": -17.3937503,
@@ -5471,7 +6653,7 @@
         "lng": -66.1757287
     }
 }, {
-    "name": "Frigorifico Libertad, Avenida Portales, Cochabamba",
+    "name": "Frigorifico Libertad, Avenue Portales, Cochabamba",
     "coords": {
         "lat": -17.3751893,
         "lng": -66.1562327
@@ -5489,7 +6671,7 @@
         "lng": -66.1132389
     }
 }, {
-    "name": "Mercantil Santa Cruz, Avenida Portales, Cochabamba",
+    "name": "Mercantil Santa Cruz, Avenue Portales, Cochabamba",
     "coords": {
         "lat": -17.3750719,
         "lng": -66.156802
@@ -5517,6 +6699,12 @@
     "coords": {
         "lat": -17.370924,
         "lng": -66.1365125
+    }
+}, {
+    "name": "Joya Edificio, Bolivar, Cochabamba",
+    "coords": {
+        "lat": -17.3917524,
+        "lng": -66.1496338
     }
 }, {
     "name": "Motel Roma, Colcapirhua Municipality",
@@ -5549,6 +6737,18 @@
         "lng": -66.1958942
     }
 }, {
+    "name": "Vidrio Lux, Diego Veizaga, Cochabamba",
+    "coords": {
+        "lat": -17.435616,
+        "lng": -66.148231
+    }
+}, {
+    "name": "N-K 4 Chicheria El Pasaje, Calle Alamos, Quillacollo",
+    "coords": {
+        "lat": -17.3856683,
+        "lng": -66.2975281
+    }
+}, {
     "name": "Centro de Salud Villa Israel, Ruta Santivañez",
     "coords": {
         "lat": -17.4861494,
@@ -5559,6 +6759,12 @@
     "coords": {
         "lat": -17.4000374,
         "lng": -66.0432309
+    }
+}, {
+    "name": "Grupo Sion, Cochabamba",
+    "coords": {
+        "lat": -17.3888733,
+        "lng": -66.1665934
     }
 }, {
     "name": "Estadio Sudamericano Felix Capriles, Avenida Libertador Simón Bolívar, Cochabamba",
@@ -5573,6 +6779,12 @@
         "lng": -66.1509025
     }
 }, {
+    "name": "Centro Acuático GAMC, Cochabamba",
+    "coords": {
+        "lat": -17.4016894,
+        "lng": -66.1738656
+    }
+}, {
     "name": "Bnb Ag Simon López, Cochabamba",
     "coords": {
         "lat": -17.3661296,
@@ -5583,6 +6795,12 @@
     "coords": {
         "lat": -17.373887,
         "lng": -66.151042
+    }
+}, {
+    "name": "Salon De Eventos La Riviera, Avenida Simón López, Cochabamba",
+    "coords": {
+        "lat": -17.3665926,
+        "lng": -66.16586389999999
     }
 }, {
     "name": "hospital, Cochabamba",
@@ -5601,6 +6819,12 @@
     "coords": {
         "lat": -17.3834743,
         "lng": -66.15068090000001
+    }
+}, {
+    "name": "Escuela Cobija, Cochabamba",
+    "coords": {
+        "lat": -17.3900773,
+        "lng": -66.1585713
     }
 }, {
     "name": "MACY'S COCHABAMBA, Cochabamba",
@@ -5633,16 +6857,40 @@
         "lng": -66.1438134
     }
 }, {
-    "name": "Cine Center, Avenida Ramon Rivero, Cochabamba",
+    "name": "Cine Center, Avenue Ramon Rivero, Cochabamba",
     "coords": {
         "lat": -17.3805186,
         "lng": -66.1514722
+    }
+}, {
+    "name": "Hipermaxi, Cochabamba",
+    "coords": {
+        "lat": -17.3842312,
+        "lng": -66.158901
+    }
+}, {
+    "name": "TERRA CENTER, Calama, Cochabamba",
+    "coords": {
+        "lat": -17.3966234,
+        "lng": -66.15765139999999
     }
 }, {
     "name": "Joyeria Bolivar, Cochabamba",
     "coords": {
         "lat": -17.3987676,
         "lng": -66.1535458
+    }
+}, {
+    "name": "Calle Juan José Perez 108, Cochabamba",
+    "coords": {
+        "lat": -17.395961,
+        "lng": -66.1711158
+    }
+}, {
+    "name": "Edif. Montecillo de Madrid, Aguas Potables, Tiquipaya",
+    "coords": {
+        "lat": -17.3347221,
+        "lng": -66.2189522
     }
 }, {
     "name": "CMMAL, Cochabamba",
@@ -5693,6 +6941,12 @@
         "lng": -66.1825278
     }
 }, {
+    "name": "Trancapechos Cato, M.M.Marques, Cochabamba",
+    "coords": {
+        "lat": -17.3720682,
+        "lng": -66.1423865
+    }
+}, {
     "name": "Missisoft Inc, Tipianatipu, Cochabamba",
     "coords": {
         "lat": -17.4187658,
@@ -5711,6 +6965,12 @@
         "lng": -66.29623889999999
     }
 }, {
+    "name": "Unidad Educativa Obispo Anaya",
+    "coords": {
+        "lat": -17.4525753,
+        "lng": -66.1294446
+    }
+}, {
     "name": "Seminario Biblico U.C.E., Jordan, Cochabamba",
     "coords": {
         "lat": -17.3948368,
@@ -5727,6 +6987,12 @@
     "coords": {
         "lat": -17.4640379,
         "lng": -66.13979479999999
+    }
+}, {
+    "name": "ATM Banco Mercantil Santa Cruz, Avenida América, Cochabamba",
+    "coords": {
+        "lat": -17.3730061,
+        "lng": -66.15617910000002
     }
 }, {
     "name": "La Paz",
@@ -5763,6 +7029,12 @@
     "coords": {
         "lat": -17.4023027,
         "lng": -66.10878869999999
+    }
+}, {
+    "name": "Avenida Libertador Simón Bolívar 1112, Cochabamba",
+    "coords": {
+        "lat": -17.3751067,
+        "lng": -66.1618325
     }
 }, {
     "name": "EMI, Calle Lanza, Cochabamba",
@@ -5813,13 +7085,25 @@
         "lng": -66.1569332
     }
 }, {
+    "name": "SERECI, Cochabamba",
+    "coords": {
+        "lat": -17.3997344,
+        "lng": -66.1534345
+    }
+}, {
     "name": "INFOCAL Campus Arocagua, Cochabamba",
     "coords": {
         "lat": -17.382027,
         "lng": -66.116925
     }
 }, {
-    "name": "Cancha PANAMERICANA, Avenida Panamericana, Cochabamba",
+    "name": "Sauna Moreira, Quillacollo",
+    "coords": {
+        "lat": -17.4046805,
+        "lng": -66.2839213
+    }
+}, {
+    "name": "Cancha PANAMERICANA, Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4254819,
         "lng": -66.1585663
@@ -5867,7 +7151,13 @@
         "lng": -66.1186439
     }
 }, {
-    "name": "Supermercado América, Avenida Juan de La Rosa, Cochabamba",
+    "name": "Postgrado Derecho UMSS, Calle San Martin, Cochabamba",
+    "coords": {
+        "lat": -17.3922117,
+        "lng": -66.1544078
+    }
+}, {
+    "name": "Supermercado América, Avenue Juan de La Rosa, Cochabamba",
     "coords": {
         "lat": -17.376625,
         "lng": -66.175187
@@ -5879,13 +7169,19 @@
         "lng": -66.1861448
     }
 }, {
+    "name": "Dumbo, Avenida Heroínas, Cochabamba",
+    "coords": {
+        "lat": -17.3922401,
+        "lng": -66.15597319999999
+    }
+}, {
     "name": "Sipe Sipe, Sipe Sipe",
     "coords": {
         "lat": -17.4580453,
         "lng": -66.356227
     }
 }, {
-    "name": "Ceregger, Blanco Galindo Avenida, Cochabamba",
+    "name": "Ceregger, Blanco Galindo Avenue, Cochabamba",
     "coords": {
         "lat": -17.3915276,
         "lng": -66.223569
@@ -5897,7 +7193,7 @@
         "lng": -66.17163099999999
     }
 }, {
-    "name": "Surtidor Cochabamba, Blanco Galindo Avenida, Cochabamba",
+    "name": "Surtidor Cochabamba, Blanco Galindo Avenue, Cochabamba",
     "coords": {
         "lat": -17.3915276,
         "lng": -66.223569
@@ -5921,10 +7217,22 @@
         "lng": -66.1822066
     }
 }, {
+    "name": "Aduana Nacional Agencia Cbba., Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3963169,
+        "lng": -66.22519799999999
+    }
+}, {
     "name": "PIL Andina Planta Colcapirhua, Colcapirhua Municipality",
     "coords": {
         "lat": -17.3992165,
         "lng": -66.2331815
+    }
+}, {
+    "name": "Jaguar House Hostel, Cochabamba",
+    "coords": {
+        "lat": -17.384793,
+        "lng": -66.15966999999999
     }
 }, {
     "name": "Cooperativa San Antonio, Cochabamba",
@@ -5933,7 +7241,13 @@
         "lng": -66.1416529
     }
 }, {
-    "name": "YPFB Aviacion, Avenida Del Cabildo, Cochabamba",
+    "name": "Pizzabrosa, Tomas Frias, Cochabamba",
+    "coords": {
+        "lat": -17.3769614,
+        "lng": -66.1555602
+    }
+}, {
+    "name": "YPFB Aviacion, Avenue Del Cabildo, Cochabamba",
     "coords": {
         "lat": -17.4221569,
         "lng": -66.17170709999999
@@ -5979,6 +7293,12 @@
     "coords": {
         "lat": -17.3955602,
         "lng": -66.1634693
+    }
+}, {
+    "name": "STATUS CENTRO DE EVENTOS Y CONVENCIONES, Cochabamba",
+    "coords": {
+        "lat": -17.3520945,
+        "lng": -66.2039781
     }
 }, {
     "name": "Banco Bisa Cajero Ayacucho, Avenida Ayacucho, Cochabamba",
@@ -6051,6 +7371,18 @@
     "coords": {
         "lat": -17.3650304,
         "lng": -66.1941393
+    }
+}, {
+    "name": "Avenida Segunda 111, Cochabamba",
+    "coords": {
+        "lat": -17.3597729,
+        "lng": -66.18641579999999
+    }
+}, {
+    "name": "FACTORY, Barrancas, Cochabamba",
+    "coords": {
+        "lat": -17.4210152,
+        "lng": -66.1302535
     }
 }, {
     "name": "Banco Prodem S.A. - Agencia La Pampa, Pulacayo, Cochabamba",
@@ -6149,7 +7481,7 @@
         "lng": -66.14093679999999
     }
 }, {
-    "name": "El Bosque Sur, Avenida Centenario, Cochabamba",
+    "name": "El Bosque Sur, Avenue Centenario, Cochabamba",
     "coords": {
         "lat": -17.346872,
         "lng": -66.1868885
@@ -6167,7 +7499,7 @@
         "lng": -66.1614446
     }
 }, {
-    "name": "cementerio VALLE HERMOSO, Avenida Miraflores, Cochabamba",
+    "name": "cementerio VALLE HERMOSO, Avenue Miraflores, Cochabamba",
     "coords": {
         "lat": -17.4352503,
         "lng": -66.1285133
@@ -6245,6 +7577,12 @@
         "lng": -66.16127829999999
     }
 }, {
+    "name": "Plaza San Sebastian, L. Cabrera, Cochabamba",
+    "coords": {
+        "lat": -17.3986063,
+        "lng": -66.159931
+    }
+}, {
     "name": "Banco Union, Cochabamba",
     "coords": {
         "lat": -17.3829707,
@@ -6293,6 +7631,12 @@
         "lng": -66.1570029
     }
 }, {
+    "name": "Circulo de Amigos, Avenida Melchor Pérez de Olguín, Cochabamba",
+    "coords": {
+        "lat": -17.3785831,
+        "lng": -66.1759651
+    }
+}, {
     "name": "Lubricantes Santiaguito, Cochabamba",
     "coords": {
         "lat": -17.4125883,
@@ -6317,10 +7661,28 @@
         "lng": -66.1590464
     }
 }, {
+    "name": "Boliviana de Aviación, Avenida Simón López, Cochabamba",
+    "coords": {
+        "lat": -17.3611437,
+        "lng": -66.1812671
+    }
+}, {
     "name": "El Tábano Cochabamba, Avenida Gualberto Villarroel, Cochabamba",
     "coords": {
         "lat": -17.369422,
         "lng": -66.1586464
+    }
+}, {
+    "name": "Educational Unit Tiquirani",
+    "coords": {
+        "lat": -17.4638831,
+        "lng": -66.136032
+    }
+}, {
+    "name": "Laguna Corani, Corani",
+    "coords": {
+        "lat": -17.2726844,
+        "lng": -65.9022664
     }
 }, {
     "name": "USIP, Santivanez, Cochabamba",
@@ -6335,10 +7697,34 @@
         "lng": -66.2725577
     }
 }, {
+    "name": "Juzgado De Quillacollo, Cleomedes Blanco, Quillacollo",
+    "coords": {
+        "lat": -17.3988674,
+        "lng": -66.2801702
+    }
+}, {
+    "name": "Plazuela Cala Cala, Cochabamba",
+    "coords": {
+        "lat": -17.3682479,
+        "lng": -66.1639156
+    }
+}, {
+    "name": "Imp. de llantas Llantax - Show Room Cochabamba, Santivanez, Cochabamba - Bolivia",
+    "coords": {
+        "lat": -17.395276,
+        "lng": -66.16279000000002
+    }
+}, {
     "name": "INCISO, Cochabamba",
     "coords": {
         "lat": -17.396277,
         "lng": -66.156292
+    }
+}, {
+    "name": "P.A.I.S.E Caja Nacional de Salud, Potosi, Cochabamba",
+    "coords": {
+        "lat": -17.3765745,
+        "lng": -66.1538861
     }
 }, {
     "name": "SICME Electrik, General Achá, Cochabamba",
@@ -6357,6 +7743,12 @@
     "coords": {
         "lat": -17.4154111,
         "lng": -66.16819149999999
+    }
+}, {
+    "name": "BoA, Jordan, Cochabamba",
+    "coords": {
+        "lat": -17.3955547,
+        "lng": -66.15712719999999
     }
 }, {
     "name": "Colombianas, Calle Atacama, Cochabamba",
@@ -6395,16 +7787,22 @@
         "lng": -66.1571953
     }
 }, {
-    "name": "ESTACION DE SERVICIO DORBIGNI, Avenida D'orbigni, Cochabamba",
+    "name": "ESTACION DE SERVICIO DORBIGNI, Avenue D'orbigni, Cochabamba",
     "coords": {
         "lat": -17.3868231,
         "lng": -66.18357379999999
     }
 }, {
-    "name": "Restaurant TAQUIÑA, Avenida Centenario, Cochabamba",
+    "name": "Restaurant TAQUIÑA, Avenue Centenario, Cochabamba",
     "coords": {
         "lat": -17.3301739,
         "lng": -66.1845247
+    }
+}, {
+    "name": "Alcaldia, Quillacollo",
+    "coords": {
+        "lat": -17.3972479,
+        "lng": -66.2804854
     }
 }, {
     "name": "F.F.P. FASSIL AG. LA PAMPA, Cochabamba",
@@ -6503,7 +7901,7 @@
         "lng": -66.2818741
     }
 }, {
-    "name": "Center Notre Dame Events and Conventions, Avenida D'Orbigni, Cochabamba",
+    "name": "Center Notre Dame Events and Conventions, Avenue D'Orbigni, Cochabamba",
     "coords": {
         "lat": -17.386814,
         "lng": -66.18388399999999
@@ -6545,7 +7943,7 @@
         "lng": -66.1668241
     }
 }, {
-    "name": "ES El Manantial III, Avenida Ruben Dario, Cochabamba",
+    "name": "ES El Manantial III, Avenue Ruben Dario, Cochabamba",
     "coords": {
         "lat": -17.3810091,
         "lng": -66.1421131
@@ -6563,10 +7961,22 @@
         "lng": -66.1581818
     }
 }, {
+    "name": "Los Jardines de Montecillo, Avenida Reducto, Tiquipaya",
+    "coords": {
+        "lat": -17.3269989,
+        "lng": -66.2177358
+    }
+}, {
     "name": "Avicola Sofia Ltda.",
     "coords": {
         "lat": -17.3852991,
         "lng": -66.1010436
+    }
+}, {
+    "name": "CIDRE IFD, Colomi",
+    "coords": {
+        "lat": -17.3376598,
+        "lng": -65.8678274
     }
 }, {
     "name": "Templo Mormon, Cochabamba",
@@ -6579,6 +7989,12 @@
     "coords": {
         "lat": -17.3902564,
         "lng": -66.117796
+    }
+}, {
+    "name": "Hospital Seton, Cochabamba",
+    "coords": {
+        "lat": -17.3936076,
+        "lng": -66.20404909999999
     }
 }, {
     "name": "Banco Bisa, Avenida Beiging, Cochabamba",
@@ -6599,7 +8015,7 @@
         "lng": -66.2254286
     }
 }, {
-    "name": "ELFEC, Avenida Miguel De Cervantes, Cochabamba",
+    "name": "ELFEC, Avenue Miguel De Cervantes, Cochabamba",
     "coords": {
         "lat": -17.3615283,
         "lng": -66.159838
@@ -6627,6 +8043,12 @@
     "coords": {
         "lat": -17.389233,
         "lng": -66.17066969999999
+    }
+}, {
+    "name": "Salón de Eventos Arco Iris, Avenue De La Fuerza Aerea, 2227",
+    "coords": {
+        "lat": -17.4153434,
+        "lng": -66.1653529
     }
 }, {
     "name": "Cementerio Santivañez, Santiváñez",
@@ -6671,10 +8093,22 @@
         "lng": -66.17016319999999
     }
 }, {
+    "name": "plaza Virrey Toledo, Cochabamba",
+    "coords": {
+        "lat": -17.3903856,
+        "lng": -66.16876309999999
+    }
+}, {
     "name": "Mercado Calatayud, Calle Lanza, Cochabamba",
     "coords": {
         "lat": -17.3984067,
         "lng": -66.1528665
+    }
+}, {
+    "name": "14 de Septiembre 1083, Quillacollo",
+    "coords": {
+        "lat": -17.3987364,
+        "lng": -66.2702213
     }
 }, {
     "name": "Surtidor Aeropuerto, Cochabamba",
@@ -6719,6 +8153,12 @@
         "lng": -66.1621222
     }
 }, {
+    "name": "Los Tajibos Event & Grill, Cochabamba",
+    "coords": {
+        "lat": -17.3711886,
+        "lng": -66.1812285
+    }
+}, {
     "name": "IC Norte, Avenida América, Cochabamba",
     "coords": {
         "lat": -17.372696,
@@ -6729,6 +8169,12 @@
     "coords": {
         "lat": -17.3765113,
         "lng": -66.1801131
+    }
+}, {
+    "name": "Unidad Educativa Marquina, Quillacollo",
+    "coords": {
+        "lat": -17.340007,
+        "lng": -66.2886101
     }
 }, {
     "name": "Avenida Santa Cruz 1132, Cochabamba",
@@ -6753,6 +8199,12 @@
     "coords": {
         "lat": -17.3883521,
         "lng": -66.1537316
+    }
+}, {
+    "name": "Museo Arqueologico Piñami, Quillacollo",
+    "coords": {
+        "lat": -17.3798545,
+        "lng": -66.2549635
     }
 }, {
     "name": "Wajchilla 1027, Cochabamba",
@@ -6809,6 +8261,18 @@
         "lng": -66.1589612
     }
 }, {
+    "name": "Centro Cultural Alto Paraiso",
+    "coords": {
+        "lat": -17.4749083,
+        "lng": -66.1380058
+    }
+}, {
+    "name": "Museo Convento Santa Teresa, Mariano Baptista, Cochabamba",
+    "coords": {
+        "lat": -17.3898763,
+        "lng": -66.15808009999999
+    }
+}, {
     "name": "BNB sucursal Blanco Galindo, Cochabamba",
     "coords": {
         "lat": -17.394187,
@@ -6831,6 +8295,12 @@
     "coords": {
         "lat": -17.4235408,
         "lng": -66.15919219999999
+    }
+}, {
+    "name": "BancoSol, ATM Pacata Baja, Avenida Circunvalacion, Cochabamba",
+    "coords": {
+        "lat": -17.3732924,
+        "lng": -66.12577019999999
     }
 }, {
     "name": "Edificio Polifuncional de la Universidad del Valle - UNIVALLE, Avenida América, Cochabamba",
@@ -6911,10 +8381,16 @@
         "lng": -66.151111
     }
 }, {
-    "name": "Entel, Avenida Ayacucho, Cochabamba",
+    "name": "Entel, Avenue Ayacucho, Cochabamba",
     "coords": {
         "lat": -17.3933369,
         "lng": -66.158638
+    }
+}, {
+    "name": "Administración OTB San Andrés San Carlos, Cochabamba",
+    "coords": {
+        "lat": -17.3412833,
+        "lng": -66.1734535
     }
 }, {
     "name": "Tiquipaya",
@@ -6923,7 +8399,7 @@
         "lng": -66.2158927
     }
 }, {
-    "name": "Edificio Victoria, Avenida Santa Cruz, Cochabamba",
+    "name": "Edificio Victoria, Avenue Santa Cruz, Cochabamba",
     "coords": {
         "lat": -17.3724855,
         "lng": -66.15716809999999
@@ -6935,7 +8411,7 @@
         "lng": -66.155841
     }
 }, {
-    "name": "VIVA, Avenida Juan de La Rosa, Cochabamba",
+    "name": "VIVA, Avenue Juan de La Rosa, Cochabamba",
     "coords": {
         "lat": -17.3768978,
         "lng": -66.1727947
@@ -6945,6 +8421,12 @@
     "coords": {
         "lat": -17.3945582,
         "lng": -66.2307672
+    }
+}, {
+    "name": "ALIANZA CIA. DE SEGUROS, Avenida Uyuni, Cochabamba",
+    "coords": {
+        "lat": -17.379731,
+        "lng": -66.1550019
     }
 }, {
     "name": "Iglesia Bautista \"Mallco Rancho\", Sipe Sipe",
@@ -7025,6 +8507,12 @@
         "lng": -66.1654897
     }
 }, {
+    "name": "Agente BCP \"Punto Yanbal El Gallo\", Cochabamba",
+    "coords": {
+        "lat": -17.4068444,
+        "lng": -66.1550694
+    }
+}, {
     "name": "25 de Mayo 233, Cochabamba",
     "coords": {
         "lat": -17.390597,
@@ -7043,6 +8531,12 @@
         "lng": -66.1791301
     }
 }, {
+    "name": "Aguas Villavicencio, Quillacollo",
+    "coords": {
+        "lat": -17.399219,
+        "lng": -66.2730074
+    }
+}, {
     "name": "Juzgado Sacaba, Sacaba",
     "coords": {
         "lat": -17.4049554,
@@ -7059,6 +8553,12 @@
     "coords": {
         "lat": -17.3852968,
         "lng": -66.1874895
+    }
+}, {
+    "name": "Plaza de la Mujer, Avenida Oquendo, Cochabamba",
+    "coords": {
+        "lat": -17.3891307,
+        "lng": -66.15007109999999
     }
 }, {
     "name": "Restaurante Peruano, Cochabamba",
@@ -7095,6 +8595,12 @@
     "coords": {
         "lat": -17.3955851,
         "lng": -66.1643863
+    }
+}, {
+    "name": "BOA BOLIVIANA DE AVIACIÓN, Barrancas, Cochabamba",
+    "coords": {
+        "lat": -17.4195219,
+        "lng": -66.1296219
     }
 }, {
     "name": "Maica Central Health Center, Cochabamba",
@@ -7139,13 +8645,25 @@
         "lng": -66.15111209999999
     }
 }, {
+    "name": "Posgrado FCE - UMSS, Cochabamba",
+    "coords": {
+        "lat": -17.3829653,
+        "lng": -66.1540112
+    }
+}, {
+    "name": "La Llajta Restaurante, Cochabamba",
+    "coords": {
+        "lat": -17.3907895,
+        "lng": -66.1751956
+    }
+}, {
     "name": "Parque Lincoln, Cochabamba",
     "coords": {
         "lat": -17.3698485,
         "lng": -66.17034199999999
     }
 }, {
-    "name": "BNB, Avenida Pando, Cochabamba",
+    "name": "BNB, Avenue Pando, Cochabamba",
     "coords": {
         "lat": -17.372785,
         "lng": -66.1511439
@@ -7161,6 +8679,18 @@
     "coords": {
         "lat": -17.3898402,
         "lng": -66.11794549999999
+    }
+}, {
+    "name": "Iglesia Adventista Cercado, Quillacollo",
+    "coords": {
+        "lat": -17.4049157,
+        "lng": -66.307745
+    }
+}, {
+    "name": "Centro de Salud Ironcollo \"San José Obrero\", Quillacollo",
+    "coords": {
+        "lat": -17.3609095,
+        "lng": -66.2842781
     }
 }, {
     "name": "Cite Confecciones Cochabamba, Huanchaca, Cochabamba",
@@ -7181,16 +8711,34 @@
         "lng": -66.166667
     }
 }, {
+    "name": "Palma Real, Avenida América, Cochabamba",
+    "coords": {
+        "lat": -17.3723039,
+        "lng": -66.1579325
+    }
+}, {
     "name": "Hotel América, Cochabamba",
     "coords": {
         "lat": -17.3989371,
         "lng": -66.1554623
     }
 }, {
+    "name": "U. E. Mariano Ricardo Terrazas. U. E. Jose Quintin Mendoza, Cochabamba",
+    "coords": {
+        "lat": -17.3861249,
+        "lng": -66.1594339
+    }
+}, {
     "name": "Restaurant Casa Campestre, Bernardo Monteagudo, Cochabamba",
     "coords": {
         "lat": -17.3766839,
         "lng": -66.14781529999999
+    }
+}, {
+    "name": "Banco Bisa Cajero Super de Todo, Av. Panamericana, Cochabamba",
+    "coords": {
+        "lat": -17.3509152,
+        "lng": -66.1927871
     }
 }, {
     "name": "AUDITORIO FCE UMSS, Cochabamba",
@@ -7217,6 +8765,12 @@
         "lng": -66.1740603
     }
 }, {
+    "name": "Hospedaje Elma, Cañada Cochabamba, Cochabamba",
+    "coords": {
+        "lat": -17.4025549,
+        "lng": -66.1791918
+    }
+}, {
     "name": "Comuna Molle, Andre Bresson, Cochabamba",
     "coords": {
         "lat": -17.3966336,
@@ -7227,6 +8781,12 @@
     "coords": {
         "lat": -17.347918,
         "lng": -66.1787081
+    }
+}, {
+    "name": "Colegio Católico San Jose, Cochabamba",
+    "coords": {
+        "lat": -17.38986,
+        "lng": -66.19313319999999
     }
 }, {
     "name": "SCESI - UMSS, UMSS, Cochabamba",
@@ -7289,6 +8849,12 @@
         "lng": -66.174336
     }
 }, {
+    "name": "Cine Capitol Theater, Colombia, Cochabamba",
+    "coords": {
+        "lat": -17.3907089,
+        "lng": -66.1558197
+    }
+}, {
     "name": "Avenida Circunvalacion 0610, Sacaba",
     "coords": {
         "lat": -17.4096134,
@@ -7331,10 +8897,22 @@
         "lng": -66.1834612
     }
 }, {
+    "name": "Almacén Cobija, Jose Marti, Cochabamba",
+    "coords": {
+        "lat": -17.3901666,
+        "lng": -66.162236
+    }
+}, {
     "name": "Parroquia San Pio X, Avenida Manco Kapac, Cochabamba",
     "coords": {
         "lat": -17.4033062,
         "lng": -66.1668169
+    }
+}, {
+    "name": "Beni",
+    "coords": {
+        "lat": -14.3782747,
+        "lng": -65.0957792
     }
 }, {
     "name": "Clinica Cobija, Cochabamba",
@@ -7377,6 +8955,12 @@
     "coords": {
         "lat": -17.4463047,
         "lng": -66.1135058
+    }
+}, {
+    "name": "Llica",
+    "coords": {
+        "lat": -17.4382248,
+        "lng": -66.11276529999999
     }
 }, {
     "name": "Amancaya, Cochabamba",
@@ -7433,6 +9017,12 @@
         "lng": -66.1514535
     }
 }, {
+    "name": "Av Pando, Cochabamba",
+    "coords": {
+        "lat": -17.3721671,
+        "lng": -66.1514535
+    }
+}, {
     "name": "Av Perú, Cochabamba",
     "coords": {
         "lat": -17.3858235,
@@ -7443,6 +9033,12 @@
     "coords": {
         "lat": -17.3858235,
         "lng": -66.1701334
+    }
+}, {
+    "name": "Av Uyuni, Cochabamba",
+    "coords": {
+        "lat": -17.3781744,
+        "lng": -66.14809559999999
     }
 }, {
     "name": "Baptista, Cochabamba",
@@ -7499,6 +9095,12 @@
         "lng": -66.136173
     }
 }, {
+    "name": "Ciruelos, Cochabamba",
+    "coords": {
+        "lat": -17.3595975,
+        "lng": -66.1514194
+    }
+}, {
     "name": "Colombia, Cochabamba",
     "coords": {
         "lat": -17.3906834,
@@ -7529,10 +9131,22 @@
         "lng": -66.16134749999999
     }
 }, {
+    "name": "Hamiraya, Cochabamba",
+    "coords": {
+        "lat": -17.3918519,
+        "lng": -66.16134749999999
+    }
+}, {
     "name": "Honduras, Cochabamba",
     "coords": {
         "lat": -17.4014422,
         "lng": -66.1533365
+    }
+}, {
+    "name": "I.Montes, Cochabamba",
+    "coords": {
+        "lat": -17.4007015,
+        "lng": -66.1554838
     }
 }, {
     "name": "Irigoyen, Cochabamba",
@@ -7547,10 +9161,28 @@
         "lng": -66.160868
     }
 }, {
+    "name": "P.Tarija, Cochabamba",
+    "coords": {
+        "lat": -17.3739317,
+        "lng": -66.160868
+    }
+}, {
+    "name": "Paccieri, Cochabamba",
+    "coords": {
+        "lat": -17.3870817,
+        "lng": -66.1533548
+    }
+}, {
     "name": "Pasaje C, Cochabamba",
     "coords": {
         "lat": -17.398738,
         "lng": -66.1659619
+    }
+}, {
+    "name": "Pasaje K, Cochabamba",
+    "coords": {
+        "lat": -17.382548,
+        "lng": -66.20630009999999
     }
 }, {
     "name": "Runasimi, Cochabamba",
@@ -7589,6 +9221,12 @@
         "lng": -66.1815641
     }
 }, {
+    "name": "Av Tunari, Cochabamba",
+    "coords": {
+        "lat": -17.416952,
+        "lng": -66.1235967
+    }
+}, {
     "name": "Ayacucho, Quillacollo",
     "coords": {
         "lat": -17.4003283,
@@ -7599,6 +9237,12 @@
     "coords": {
         "lat": -17.4003283,
         "lng": -66.2785079
+    }
+}, {
+    "name": "Barrancas, Cochabamba",
+    "coords": {
+        "lat": -17.4221693,
+        "lng": -66.13115309999999
     }
 }, {
     "name": "Calicanto, Cochabamba",
@@ -7641,6 +9285,18 @@
     "coords": {
         "lat": -17.3778824,
         "lng": -66.1368056
+    }
+}, {
+    "name": "Llallagua, Cochabamba",
+    "coords": {
+        "lat": -17.4384071,
+        "lng": -66.1175221
+    }
+}, {
+    "name": "M.Barzola, Cochabamba",
+    "coords": {
+        "lat": -17.4061355,
+        "lng": -66.1529472
     }
 }, {
     "name": "Pillpintu, Cochabamba",
@@ -7727,6 +9383,18 @@
         "lng": -66.1550907
     }
 }, {
+    "name": "A. Palmero, Cochabamba",
+    "coords": {
+        "lat": -17.3896605,
+        "lng": -66.1924181
+    }
+}, {
+    "name": "A.Quijarro, Cochabamba",
+    "coords": {
+        "lat": -17.3711218,
+        "lng": -66.1454938
+    }
+}, {
     "name": "Atahuallpa, Cochabamba",
     "coords": {
         "lat": -17.3674194,
@@ -7751,6 +9419,18 @@
         "lng": -66.14899319999999
     }
 }, {
+    "name": "Calama 441, Cochabamba",
+    "coords": {
+        "lat": -17.3959367,
+        "lng": -66.1535834
+    }
+}, {
+    "name": "Calle Junin, Tiquipaya",
+    "coords": {
+        "lat": -17.3384466,
+        "lng": -66.2174582
+    }
+}, {
     "name": "Calle Junin, Tiquipaya",
     "coords": {
         "lat": -17.3384466,
@@ -7767,6 +9447,12 @@
     "coords": {
         "lat": -17.3393499,
         "lng": -66.21920229999999
+    }
+}, {
+    "name": "Chiquitano, Cochabamba",
+    "coords": {
+        "lat": -17.3712209,
+        "lng": -66.1917503
     }
 }, {
     "name": "Chuquisaca, Cochabamba",
@@ -7841,6 +9527,12 @@
         "lng": -66.1185319
     }
 }, {
+    "name": "La Joya",
+    "coords": {
+        "lat": -17.4478652,
+        "lng": -66.1143724
+    }
+}, {
     "name": "Calamarca",
     "coords": {
         "lat": -16.9087665,
@@ -7875,6 +9567,18 @@
     "coords": {
         "lat": -17.3945696,
         "lng": -66.0613339
+    }
+}, {
+    "name": "Calama 441",
+    "coords": {
+        "lat": -22.4543923,
+        "lng": -68.9293819
+    }
+}, {
+    "name": "Kanarancho",
+    "coords": {
+        "lat": -17.3507502,
+        "lng": -66.2059991
     }
 }, {
     "name": "Kanarancho",
@@ -7925,6 +9629,12 @@
         "lng": -66.0634468
     }
 }, {
+    "name": "Los Tajibos",
+    "coords": {
+        "lat": -17.378098,
+        "lng": -66.0899933
+    }
+}, {
     "name": "Anocaraire 2",
     "coords": {
         "lat": -17.3693934,
@@ -7955,6 +9665,12 @@
         "lng": -66.0370987
     }
 }, {
+    "name": "Tomas Barron",
+    "coords": {
+        "lat": -17.4414831,
+        "lng": -66.1144332
+    }
+}, {
     "name": "Tupac Katari",
     "coords": {
         "lat": -16.5222333,
@@ -7973,6 +9689,12 @@
         "lng": -66.04183789999999
     }
 }, {
+    "name": "Avenida Paris",
+    "coords": {
+        "lat": -17.4717233,
+        "lng": -66.1087369
+    }
+}, {
     "name": "Calle Lindero",
     "coords": {
         "lat": -16.290154,
@@ -7983,6 +9705,12 @@
     "coords": {
         "lat": -17.4055559,
         "lng": -66.0330999
+    }
+}, {
+    "name": "Junin, Sacaba",
+    "coords": {
+        "lat": -17.4025242,
+        "lng": -66.042878
     }
 }, {
     "name": "Junin, Sacaba",
@@ -8013,6 +9741,12 @@
     "coords": {
         "lat": -17.4072937,
         "lng": -66.0337876
+    }
+}, {
+    "name": "Uyuni, Sacaba",
+    "coords": {
+        "lat": -17.4089651,
+        "lng": -66.03941259999999
     }
 }, {
     "name": "Uyuni, Sacaba",
@@ -8075,6 +9809,12 @@
         "lng": -66.03112039999999
     }
 }, {
+    "name": "Tarija, Sacaba",
+    "coords": {
+        "lat": -17.4002783,
+        "lng": -66.03112039999999
+    }
+}, {
     "name": "Avenida Chapare",
     "coords": {
         "lat": -17.3927636,
@@ -8099,10 +9839,22 @@
         "lng": -66.0411246
     }
 }, {
+    "name": "Beni, Cochabamba",
+    "coords": {
+        "lat": -17.3770487,
+        "lng": -66.157057
+    }
+}, {
     "name": "Calle Anocaraire",
     "coords": {
         "lat": -17.3701469,
         "lng": -66.3295026
+    }
+}, {
+    "name": "Calle Calama 441",
+    "coords": {
+        "lat": -17.4016579,
+        "lng": -66.3210914
     }
 }, {
     "name": "Calle Santa Cruz",
@@ -8147,6 +9899,18 @@
         "lng": -66.1478669
     }
 }, {
+    "name": "Avenida Pairumani",
+    "coords": {
+        "lat": -17.3604687,
+        "lng": -66.32383109999999
+    }
+}, {
+    "name": "Beni, Quillacollo",
+    "coords": {
+        "lat": -17.3959337,
+        "lng": -66.2840886
+    }
+}, {
     "name": "Calle Antofagasta",
     "coords": {
         "lat": -17.3834323,
@@ -8157,6 +9921,18 @@
     "coords": {
         "lat": -17.3714981,
         "lng": -66.1713105
+    }
+}, {
+    "name": "Finot, Cochabamba",
+    "coords": {
+        "lat": -17.3714981,
+        "lng": -66.1713105
+    }
+}, {
+    "name": "Junin, Cochabamba",
+    "coords": {
+        "lat": -17.3916458,
+        "lng": -66.16017049999999
     }
 }, {
     "name": "Junin, Cochabamba",
@@ -8213,6 +9989,12 @@
         "lng": -66.15108769999999
     }
 }, {
+    "name": "Calama 441, Sacaba",
+    "coords": {
+        "lat": -17.4095587,
+        "lng": -66.033529
+    }
+}, {
     "name": "Calama, Cochabamba",
     "coords": {
         "lat": -17.3961638,
@@ -8231,10 +10013,28 @@
         "lng": -66.1513757
     }
 }, {
+    "name": "Caripe, Cochabamba",
+    "coords": {
+        "lat": -17.3589589,
+        "lng": -66.1513757
+    }
+}, {
     "name": "Colcha, Cochabamba",
     "coords": {
         "lat": -17.4354482,
         "lng": -66.1180337
+    }
+}, {
+    "name": "Colomi, Cochabamba",
+    "coords": {
+        "lat": -17.4137493,
+        "lng": -66.1661848
+    }
+}, {
+    "name": "Corani, Cochabamba",
+    "coords": {
+        "lat": -17.4206915,
+        "lng": -66.15488619999999
     }
 }, {
     "name": "Corani, Cochabamba",
@@ -8285,6 +10085,12 @@
         "lng": -66.27813569999999
     }
 }, {
+    "name": "Junin, Quillacollo",
+    "coords": {
+        "lat": -17.4016042,
+        "lng": -66.27813569999999
+    }
+}, {
     "name": "La Paz, Cochabamba",
     "coords": {
         "lat": -17.3857115,
@@ -8295,6 +10101,12 @@
     "coords": {
         "lat": -17.3857115,
         "lng": -66.1580071
+    }
+}, {
+    "name": "Mexico, Cochabamba",
+    "coords": {
+        "lat": -17.3886362,
+        "lng": -66.1619334
     }
 }, {
     "name": "Mexico, Cochabamba",
@@ -8325,6 +10137,12 @@
     "coords": {
         "lat": -17.4065934,
         "lng": -66.28053919999999
+    }
+}, {
+    "name": "Potosi, Cochabamba",
+    "coords": {
+        "lat": -17.3732012,
+        "lng": -66.1537594
     }
 }, {
     "name": "Potosi, Cochabamba",
@@ -8369,6 +10187,12 @@
         "lng": -66.16532250000002
     }
 }, {
+    "name": "Tablas, Cochabamba",
+    "coords": {
+        "lat": -17.4139872,
+        "lng": -66.16532250000002
+    }
+}, {
     "name": "Tarata, Cochabamba",
     "coords": {
         "lat": -17.6091383,
@@ -8381,10 +10205,22 @@
         "lng": -66.160888
     }
 }, {
+    "name": "Tarija, Cochabamba",
+    "coords": {
+        "lat": -17.3752601,
+        "lng": -66.160888
+    }
+}, {
     "name": "Ayopaya, Cochabamba",
     "coords": {
         "lat": -17.4156976,
         "lng": -66.1673991
+    }
+}, {
+    "name": "Bolivar, Cochabamba",
+    "coords": {
+        "lat": -17.3924627,
+        "lng": -66.1522086
     }
 }, {
     "name": "Bolivar, Cochabamba",
@@ -8435,10 +10271,22 @@
         "lng": -66.1573589
     }
 }, {
+    "name": "Mairana, Cochabamba",
+    "coords": {
+        "lat": -17.414187,
+        "lng": -66.1506318
+    }
+}, {
     "name": "Moliere, Cochabamba",
     "coords": {
         "lat": -17.3564376,
         "lng": -66.1581203
+    }
+}, {
+    "name": "Mérida, Cochabamba",
+    "coords": {
+        "lat": -17.4470838,
+        "lng": -66.1242755
     }
 }, {
     "name": "Qoyllur, Cochabamba",
@@ -8463,6 +10311,24 @@
     "coords": {
         "lat": -17.4071401,
         "lng": -66.28062609999999
+    }
+}, {
+    "name": "16 de Julio, Quillacollo, Cochabamba",
+    "coords": {
+        "lat": -17.4071428,
+        "lng": -66.28060789999999
+    }
+}, {
+    "name": "Arquimedes, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3996734,
+        "lng": -66.2194386
+    }
+}, {
+    "name": "Av Reducto, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3702638,
+        "lng": -66.2319619
     }
 }, {
     "name": "Av Reducto, Colcapirhua Municipality",
@@ -8495,6 +10361,12 @@
         "lng": -66.1786151
     }
 }, {
+    "name": "Avenida Suárez Miranda, Quillacollo",
+    "coords": {
+        "lat": -17.3880939,
+        "lng": -66.2810674
+    }
+}, {
     "name": "Avenida Simon I. Patiño, Cochabamba",
     "coords": {
         "lat": -17.41885,
@@ -8507,13 +10379,19 @@
         "lng": -66.2820776
     }
 }, {
-    "name": "Avenida Circunvalacion II, Cochabamba",
+    "name": "Avenida Waldo Ballivian, Quillacollo",
+    "coords": {
+        "lat": -17.3881567,
+        "lng": -66.2820776
+    }
+}, {
+    "name": "Avenue Circunvalacion II, Cochabamba",
     "coords": {
         "lat": -17.3548205,
         "lng": -66.1570249
     }
 }, {
-    "name": "Avenida Circunvalacion II, Cochabamba",
+    "name": "Avenue Circunvalacion II, Cochabamba",
     "coords": {
         "lat": -17.3548205,
         "lng": -66.1570249
@@ -8535,6 +10413,12 @@
     "coords": {
         "lat": -17.3473564,
         "lng": -66.1910935
+    }
+}, {
+    "name": "Norberto Galdo Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.3978517,
+        "lng": -66.1946734
     }
 }, {
     "name": "Norberto Galdo Ballivian, Cochabamba",
@@ -8687,28 +10571,34 @@
         "lng": -66.1663339
     }
 }, {
-    "name": "Avenida Gabriel Rene Moreno, Cochabamba",
+    "name": "Avenue Gabriel Rene Moreno, Cochabamba",
     "coords": {
         "lat": -17.3703572,
         "lng": -66.1716637
     }
 }, {
-    "name": "Avenida Gabriel Rene Moreno, Cochabamba",
+    "name": "Avenue Gabriel Rene Moreno, Cochabamba",
     "coords": {
         "lat": -17.3703572,
         "lng": -66.1716637
     }
 }, {
-    "name": "Avenida Republica de Suecia, Cochabamba",
+    "name": "Avenue Republica de Suecia, Cochabamba",
     "coords": {
         "lat": -17.419476,
         "lng": -66.1446589
     }
 }, {
-    "name": "Blanco Galindo Avenida 1817, Cochabamba",
+    "name": "Blanco Galindo Avenue 1817, Cochabamba",
     "coords": {
         "lat": -17.3916424,
         "lng": -66.22128099999999
+    }
+}, {
+    "name": "Pasaje Pando, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3567599,
+        "lng": -66.24186519999999
     }
 }, {
     "name": "Pasaje Pando, Colcapirhua Municipality",
@@ -8733,6 +10623,18 @@
     "coords": {
         "lat": -17.376191,
         "lng": -66.1864513
+    }
+}, {
+    "name": "23 De Marzo, Cochabamba",
+    "coords": {
+        "lat": -17.3885609,
+        "lng": -66.187316
+    }
+}, {
+    "name": "Arquímedes, Cochabamba",
+    "coords": {
+        "lat": -17.4004067,
+        "lng": -66.1920634
     }
 }, {
     "name": "Av. Beiging, Cochabamba",
@@ -8789,6 +10691,12 @@
         "lng": -66.25930269999999
     }
 }, {
+    "name": "Av Portales, Cochabamba",
+    "coords": {
+        "lat": -17.3753955,
+        "lng": -66.1512163
+    }
+}, {
     "name": "Av Siglo XX, Cochabamba",
     "coords": {
         "lat": -17.4315964,
@@ -8823,6 +10731,12 @@
     "coords": {
         "lat": -17.3852657,
         "lng": -66.1435478
+    }
+}, {
+    "name": "Calle Junin, Cochabamba",
+    "coords": {
+        "lat": -17.3916458,
+        "lng": -66.16017049999999
     }
 }, {
     "name": "Calle Lanza, Cochabamba",
@@ -8891,6 +10805,12 @@
         "lng": -66.14296829999999
     }
 }, {
+    "name": "Jose Merida, Cochabamba",
+    "coords": {
+        "lat": -17.371202,
+        "lng": -66.13059660000002
+    }
+}, {
     "name": "Jose Salmon, Cochabamba",
     "coords": {
         "lat": -17.3923159,
@@ -8913,6 +10833,12 @@
     "coords": {
         "lat": -17.3691751,
         "lng": -66.1411378
+    }
+}, {
+    "name": "Los Tajibos, Cochabamba",
+    "coords": {
+        "lat": -17.3628222,
+        "lng": -66.1459247
     }
 }, {
     "name": "Marie Curie, Cochabamba",
@@ -8993,16 +10919,34 @@
         "lng": -66.28060789999999
     }
 }, {
+    "name": "23 de Marzo, Quillacollo",
+    "coords": {
+        "lat": -17.387972,
+        "lng": -66.27987379999999
+    }
+}, {
     "name": "27 de Agosto, Cochabamba",
     "coords": {
         "lat": -17.4017126,
         "lng": -66.16571510000001
     }
 }, {
+    "name": "A.Villalobos, Cochabamba",
+    "coords": {
+        "lat": -17.3706216,
+        "lng": -66.14081879999999
+    }
+}, {
     "name": "Antofagasta, Quillacollo",
     "coords": {
         "lat": -17.3771439,
         "lng": -66.2781009
+    }
+}, {
+    "name": "Av. Calancha, Cochabamba",
+    "coords": {
+        "lat": -17.383087,
+        "lng": -66.1651147
     }
 }, {
     "name": "Av. Calancha, Cochabamba",
@@ -9027,6 +10971,18 @@
     "coords": {
         "lat": -17.3907906,
         "lng": -66.0761966
+    }
+}, {
+    "name": "Av D'Orbigni, Cochabamba",
+    "coords": {
+        "lat": -17.3880077,
+        "lng": -66.1737124
+    }
+}, {
+    "name": "Av D'Orbigny, Cochabamba",
+    "coords": {
+        "lat": -17.3872256,
+        "lng": -66.1821782
     }
 }, {
     "name": "Av Ecológica, Tiquipaya",
@@ -9065,6 +11021,12 @@
         "lng": -66.15362089999999
     }
 }, {
+    "name": "Ave Portales, Cochabamba",
+    "coords": {
+        "lat": -17.3751547,
+        "lng": -66.15596959999999
+    }
+}, {
     "name": "Avenida América, Sacaba",
     "coords": {
         "lat": -17.4026322,
@@ -9075,6 +11037,12 @@
     "coords": {
         "lat": -17.4026322,
         "lng": -66.0327441
+    }
+}, {
+    "name": "Avenida Khora, Tiquipaya",
+    "coords": {
+        "lat": -17.3409592,
+        "lng": -66.21432109999999
     }
 }, {
     "name": "Avenida Peru, Cochabamba",
@@ -9095,6 +11063,12 @@
         "lng": -66.1591306
     }
 }, {
+    "name": "Calle Avaroa, Cochabamba",
+    "coords": {
+        "lat": -17.3955288,
+        "lng": -66.16580189999999
+    }
+}, {
     "name": "Calle BARRIENTOS, Colomi",
     "coords": {
         "lat": -17.3362913,
@@ -9129,12 +11103,30 @@
     "coords": {
         "lat": -17.3845416,
         "lng": -66.15709799999999
+    }
+}, {
+    "name": "Enrique Arze, Cochabamba",
+    "coords": {
+        "lat": -17.3672546,
+        "lng": -66.16513379999999
     }
 }, {
     "name": "Esteban Arze, Cochabamba",
     "coords": {
         "lat": -17.4006825,
         "lng": -66.1552949
+    }
+}, {
+    "name": "Guayaramerin, Cochabamba",
+    "coords": {
+        "lat": -17.4076532,
+        "lng": -66.1517465
+    }
+}, {
+    "name": "Guadalquivir, Cochabamba",
+    "coords": {
+        "lat": -17.3766028,
+        "lng": -66.12140889999999
     }
 }, {
     "name": "Hartman J.A., Cochabamba",
@@ -9171,6 +11163,18 @@
     "coords": {
         "lat": -17.3757293,
         "lng": -66.14212540000001
+    }
+}, {
+    "name": "Pasaje Uyuni, Cochabamba",
+    "coords": {
+        "lat": -17.3757293,
+        "lng": -66.14212540000001
+    }
+}, {
+    "name": "Pedro Blanco, Cochabamba",
+    "coords": {
+        "lat": -17.3764145,
+        "lng": -66.1570373
     }
 }, {
     "name": "R.Dominicana, Cochabamba",
@@ -9239,6 +11243,18 @@
         "lng": -66.04183789999999
     }
 }, {
+    "name": "Av. D. Campos, Cochabamba",
+    "coords": {
+        "lat": -17.4024862,
+        "lng": -66.1797606
+    }
+}, {
+    "name": "Av. Petrolera, Cochabamba",
+    "coords": {
+        "lat": -17.4443219,
+        "lng": -66.1398758
+    }
+}, {
     "name": "Av. Petrolera, Cochabamba",
     "coords": {
         "lat": -17.4443219,
@@ -9255,6 +11271,12 @@
     "coords": {
         "lat": -17.3330584,
         "lng": -66.2026498
+    }
+}, {
+    "name": "Av 9 de Abril, Cochabamba",
+    "coords": {
+        "lat": -17.3991166,
+        "lng": -66.1425221
     }
 }, {
     "name": "Av Circunvalacion, Sacaba",
@@ -9341,6 +11363,24 @@
         "lng": -66.14809559999999
     }
 }, {
+    "name": "Avenida Uyuni, Cochabamba",
+    "coords": {
+        "lat": -17.3781744,
+        "lng": -66.14809559999999
+    }
+}, {
+    "name": "B.M. Pulacayo, Cochabamba",
+    "coords": {
+        "lat": -17.3703008,
+        "lng": -66.1697743
+    }
+}, {
+    "name": "Camino a Apote, Tiquipaya",
+    "coords": {
+        "lat": -17.3371162,
+        "lng": -66.22703059999999
+    }
+}, {
     "name": "Calle Chimane, Cochabamba",
     "coords": {
         "lat": -17.3804284,
@@ -9363,6 +11403,18 @@
     "coords": {
         "lat": -17.3819277,
         "lng": -66.1889313
+    }
+}, {
+    "name": "Calle Tutayay, Cochabamba",
+    "coords": {
+        "lat": -17.3530634,
+        "lng": -66.1689378
+    }
+}, {
+    "name": "General Achá, Cochabamba",
+    "coords": {
+        "lat": -17.3943197,
+        "lng": -66.1630332
     }
 }, {
     "name": "General Achá, Cochabamba",
@@ -9431,13 +11483,19 @@
         "lng": -66.18911849999999
     }
 }, {
+    "name": "Nicolas Ortiz, Cochabamba",
+    "coords": {
+        "lat": -17.3850931,
+        "lng": -66.18911849999999
+    }
+}, {
     "name": "Pasaje Olmedo, Cochabamba",
     "coords": {
         "lat": -17.3836876,
         "lng": -66.1452036
     }
 }, {
-    "name": "Quilla Calle, Cochabamba",
+    "name": "Quilla Street, Cochabamba",
     "coords": {
         "lat": -17.3695743,
         "lng": -66.1710688
@@ -9453,6 +11511,12 @@
     "coords": {
         "lat": -17.3893107,
         "lng": -66.2525899
+    }
+}, {
+    "name": "Av. Barrientos, Cochabamba",
+    "coords": {
+        "lat": -17.407168,
+        "lng": -66.1535474
     }
 }, {
     "name": "Av. Barrientos, Cochabamba",
@@ -9477,6 +11541,12 @@
     "coords": {
         "lat": -17.3789387,
         "lng": -66.1135572
+    }
+}, {
+    "name": "Av. República, Cochabamba",
+    "coords": {
+        "lat": -17.4105213,
+        "lng": -66.1508825
     }
 }, {
     "name": "Av 6 de Agosto, Cochabamba",
@@ -9509,6 +11579,18 @@
         "lng": -66.19733939999999
     }
 }, {
+    "name": "Av Manco Kapac, Cochabamba",
+    "coords": {
+        "lat": -17.4032342,
+        "lng": -66.1666301
+    }
+}, {
+    "name": "Avenida Beijin, Cochabamba",
+    "coords": {
+        "lat": -17.3658014,
+        "lng": -66.1787168
+    }
+}, {
     "name": "Avenida Ingavi, Cochabamba",
     "coords": {
         "lat": -17.4056573,
@@ -9533,16 +11615,22 @@
         "lng": -66.1815641
     }
 }, {
-    "name": "Avenida Beijing, Cochabamba",
+    "name": "Avenue Beijing, Cochabamba",
     "coords": {
         "lat": -17.3602669,
         "lng": -66.1771131
     }
 }, {
-    "name": "Avenida Beijing, Cochabamba",
+    "name": "Avenue Beijing, Cochabamba",
     "coords": {
         "lat": -17.3634524,
         "lng": -66.17797039999999
+    }
+}, {
+    "name": "Avenue Beijing, Cochabamba",
+    "coords": {
+        "lat": -17.3602669,
+        "lng": -66.1771131
     }
 }, {
     "name": "Calle Antezana, Cochabamba",
@@ -9563,16 +11651,46 @@
         "lng": -66.1586439
     }
 }, {
+    "name": "Calle Colorado, Cochabamba",
+    "coords": {
+        "lat": -17.3853144,
+        "lng": -66.1798874
+    }
+}, {
     "name": "Calle E. Finot, Cochabamba",
     "coords": {
         "lat": -17.3750539,
         "lng": -66.17197159999999
     }
 }, {
+    "name": "Calle E. Finot, Cochabamba",
+    "coords": {
+        "lat": -17.3750539,
+        "lng": -66.17197159999999
+    }
+}, {
+    "name": "Calle Hamiraya, Cochabamba",
+    "coords": {
+        "lat": -17.3918519,
+        "lng": -66.16134749999999
+    }
+}, {
     "name": "Calle Tucuypaj, Cochabamba",
     "coords": {
         "lat": -17.3651395,
         "lng": -66.2007358
+    }
+}, {
+    "name": "Carlos Taboada, Cochabamba",
+    "coords": {
+        "lat": -17.412972,
+        "lng": -66.1621991
+    }
+}, {
+    "name": "Daniel Campos, Quillacollo",
+    "coords": {
+        "lat": -17.3927809,
+        "lng": -66.29651369999999
     }
 }, {
     "name": "De La Tapia 25, Cochabamba",
@@ -9593,10 +11711,28 @@
         "lng": -66.2154911
     }
 }, {
+    "name": "F.Lope De Vega, Cochabamba",
+    "coords": {
+        "lat": -17.3521294,
+        "lng": -66.1609283
+    }
+}, {
+    "name": "General Pando, Quillacollo",
+    "coords": {
+        "lat": -17.3951915,
+        "lng": -66.2814642
+    }
+}, {
     "name": "German Urquidi, Cochabamba",
     "coords": {
         "lat": -17.384926,
         "lng": -66.1483866
+    }
+}, {
+    "name": "J. De Los Rios, Cochabamba",
+    "coords": {
+        "lat": -17.3680005,
+        "lng": -66.1371881
     }
 }, {
     "name": "J. De Los Rios, Cochabamba",
@@ -9615,6 +11751,24 @@
     "coords": {
         "lat": -17.3745332,
         "lng": -66.11738869999999
+    }
+}, {
+    "name": "Nestor Galindo, Cochabamba",
+    "coords": {
+        "lat": -17.3766913,
+        "lng": -66.1626637
+    }
+}, {
+    "name": "Oscar Dorado V, Cochabamba",
+    "coords": {
+        "lat": -17.376114,
+        "lng": -66.1940412
+    }
+}, {
+    "name": "Pasaje Bolivia, Cochabamba",
+    "coords": {
+        "lat": -17.3872132,
+        "lng": -66.14718599999999
     }
 }, {
     "name": "Pasaje Beijing, Cochabamba",
@@ -9647,16 +11801,40 @@
         "lng": -66.2786558
     }
 }, {
+    "name": "Pasaje Mairana, Cochabamba",
+    "coords": {
+        "lat": -17.4134159,
+        "lng": -66.1525236
+    }
+}, {
     "name": "Pedro Carrasco, Cochabamba",
     "coords": {
         "lat": -17.3730652,
         "lng": -66.1242394
     }
 }, {
+    "name": "Pedro Marquina, Cochabamba",
+    "coords": {
+        "lat": -17.3683367,
+        "lng": -66.1208877
+    }
+}, {
     "name": "Primo Castillo, Cochabamba",
     "coords": {
         "lat": -17.3549693,
         "lng": -66.1533096
+    }
+}, {
+    "name": "Ricardo Soruco, Cochabamba",
+    "coords": {
+        "lat": -17.4325484,
+        "lng": -66.1545646
+    }
+}, {
+    "name": "Tomás Barrón, Cochabamba",
+    "coords": {
+        "lat": -17.4418078,
+        "lng": -66.1182213
     }
 }, {
     "name": "A.Villavicencio, Cochabamba",
@@ -9719,6 +11897,12 @@
         "lng": -66.1464067
     }
 }, {
+    "name": "Av Aniceto Arce, Cochabamba",
+    "coords": {
+        "lat": -17.384221,
+        "lng": -66.1464067
+    }
+}, {
     "name": "Av Tadeo Haenke, Cochabamba",
     "coords": {
         "lat": -17.3827486,
@@ -9753,6 +11937,12 @@
     "coords": {
         "lat": -17.3814467,
         "lng": -66.1814706
+    }
+}, {
+    "name": "Avenida Cabildo, Cochabamba",
+    "coords": {
+        "lat": -17.4187319,
+        "lng": -66.1671058
     }
 }, {
     "name": "Avenida Segunda, Cochabamba",
@@ -9791,25 +11981,25 @@
         "lng": -66.2262191
     }
 }, {
-    "name": "Avenida Heroinas, Cochabamba",
+    "name": "Avenue Heroinas, Cochabamba",
     "coords": {
         "lat": -17.3941339,
         "lng": -66.1674197
     }
 }, {
-    "name": "Avenida Heroinas, Cochabamba",
+    "name": "Avenue Heroinas, Cochabamba",
     "coords": {
         "lat": -17.3941339,
         "lng": -66.1674197
     }
 }, {
-    "name": "Avenida Portales, Cochabamba",
+    "name": "Avenue Portales, Cochabamba",
     "coords": {
         "lat": -17.3751547,
         "lng": -66.15596959999999
     }
 }, {
-    "name": "Avenida Portales, Cochabamba",
+    "name": "Avenue Portales, Cochabamba",
     "coords": {
         "lat": -17.3751547,
         "lng": -66.15596959999999
@@ -9825,12 +12015,24 @@
     "coords": {
         "lat": -17.4581995,
         "lng": -66.18387659999999
+    }
+}, {
+    "name": "Calle 4, Pacata, Cochabamba",
+    "coords": {
+        "lat": -17.3703804,
+        "lng": -66.12779499999999
     }
 }, {
     "name": "Calle - Litoral, Cochabamba",
     "coords": {
         "lat": -17.3485689,
         "lng": -66.19053319999999
+    }
+}, {
+    "name": "Calle F. Viedma, Cochabamba",
+    "coords": {
+        "lat": -17.3884799,
+        "lng": -66.16933759999999
     }
 }, {
     "name": "Calle F. Viedma, Cochabamba",
@@ -9863,6 +12065,18 @@
         "lng": -66.1860561
     }
 }, {
+    "name": "Federico Blanco, Cochabamba",
+    "coords": {
+        "lat": -17.3865895,
+        "lng": -66.1509758
+    }
+}, {
+    "name": "Humberto Iporre, Cochabamba",
+    "coords": {
+        "lat": -17.3898967,
+        "lng": -66.1909421
+    }
+}, {
     "name": "Nicolas Menacho, Cochabamba",
     "coords": {
         "lat": -17.3672515,
@@ -9879,6 +12093,24 @@
     "coords": {
         "lat": -17.3938807,
         "lng": -66.3161824
+    }
+}, {
+    "name": "Pasaje Portales, Cochabamba",
+    "coords": {
+        "lat": -17.3772276,
+        "lng": -66.1530107
+    }
+}, {
+    "name": "Pasaje Tarapaca, Cochabamba",
+    "coords": {
+        "lat": -17.3973007,
+        "lng": -66.1630947
+    }
+}, {
+    "name": "Ricardo Soruco, Quillacollo",
+    "coords": {
+        "lat": -17.3981001,
+        "lng": -66.2768423
     }
 }, {
     "name": "Rodrigo Morales, Cochabamba",
@@ -9905,6 +12137,12 @@
         "lng": -66.1738755
     }
 }, {
+    "name": "Waldo Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.3675175,
+        "lng": -66.1738755
+    }
+}, {
     "name": "14 de Septiembre, Cochabamba",
     "coords": {
         "lat": -17.3456034,
@@ -9915,6 +12153,12 @@
     "coords": {
         "lat": -17.3456034,
         "lng": -66.1947742
+    }
+}, {
+    "name": "Adolfo Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.3645957,
+        "lng": -66.1878567
     }
 }, {
     "name": "Adolfo Ballivian, Cochabamba",
@@ -9977,6 +12221,12 @@
         "lng": -66.1766272
     }
 }, {
+    "name": "Av Simón López, Cochabamba",
+    "coords": {
+        "lat": -17.3649733,
+        "lng": -66.1766272
+    }
+}, {
     "name": "Avenida Oquendo, Quillacollo",
     "coords": {
         "lat": -17.3859577,
@@ -10001,6 +12251,12 @@
         "lng": -66.1576669
     }
 }, {
+    "name": "Avenida América 170, Sacaba",
+    "coords": {
+        "lat": -17.4026322,
+        "lng": -66.0327441
+    }
+}, {
     "name": "Avenida América, Cochabamba",
     "coords": {
         "lat": -17.3725238,
@@ -10011,6 +12267,12 @@
     "coords": {
         "lat": -17.3725238,
         "lng": -66.1638093
+    }
+}, {
+    "name": "Avenida Calancha, Cochabamba",
+    "coords": {
+        "lat": -17.383087,
+        "lng": -66.1651147
     }
 }, {
     "name": "Avenida Calancha, Cochabamba",
@@ -10035,6 +12297,12 @@
     "coords": {
         "lat": -17.3833113,
         "lng": -66.1636729
+    }
+}, {
+    "name": "Avenida Portales, Cochabamba",
+    "coords": {
+        "lat": -17.3753955,
+        "lng": -66.1512163
     }
 }, {
     "name": "Avenida San Antonio, Atyrá, Paraguay",
@@ -10067,19 +12335,19 @@
         "lng": -66.0761966
     }
 }, {
-    "name": "Avenida D'Orbigny, Cochabamba",
+    "name": "Avenue D'Orbigny, Cochabamba",
     "coords": {
         "lat": -17.3862904,
         "lng": -66.1910833
     }
 }, {
-    "name": "Avenida D'Orbigni, Cochabamba",
+    "name": "Avenue D'Orbigni, Cochabamba",
     "coords": {
         "lat": -17.3868735,
         "lng": -66.18358320000002
     }
 }, {
-    "name": "Avenida D'orbigni, Cochabamba",
+    "name": "Avenue D'orbigni, Cochabamba",
     "coords": {
         "lat": -17.3861582,
         "lng": -66.1854841
@@ -10089,6 +12357,18 @@
     "coords": {
         "lat": -17.3951109,
         "lng": -66.1550907
+    }
+}, {
+    "name": "Calle Arquimedes, Cochabamba",
+    "coords": {
+        "lat": -17.4031994,
+        "lng": -66.1769576
+    }
+}, {
+    "name": "Calle E. Galindo, Cochabamba",
+    "coords": {
+        "lat": -17.3671049,
+        "lng": -66.14558699999999
     }
 }, {
     "name": "Calle San Martin, Cochabamba",
@@ -10145,6 +12425,18 @@
         "lng": -66.1494998
     }
 }, {
+    "name": "General Camacho, Quillacollo",
+    "coords": {
+        "lat": -17.3968352,
+        "lng": -66.27786929999999
+    }
+}, {
+    "name": "Gualberto Villarroel, Sacaba",
+    "coords": {
+        "lat": -17.4040743,
+        "lng": -66.0435479
+    }
+}, {
     "name": "Gualberto Villarroel, Sacaba",
     "coords": {
         "lat": -17.4040743,
@@ -10163,6 +12455,12 @@
         "lng": -66.12886639999999
     }
 }, {
+    "name": "Los Laureles 370, Cochabamba",
+    "coords": {
+        "lat": -17.3639299,
+        "lng": -66.1453231
+    }
+}, {
     "name": "Melchor Cespedes, Cochabamba",
     "coords": {
         "lat": -17.3662255,
@@ -10179,6 +12477,18 @@
     "coords": {
         "lat": -17.366597,
         "lng": -66.1879508
+    }
+}, {
+    "name": "Niceto Rodriguez, Cochabamba",
+    "coords": {
+        "lat": -17.366597,
+        "lng": -66.1879508
+    }
+}, {
+    "name": "Nicolas Paganini, Cochabamba",
+    "coords": {
+        "lat": -17.3666744,
+        "lng": -66.1900575
     }
 }, {
     "name": "Nicolas Paganini, Cochabamba",
@@ -10221,6 +12531,12 @@
     "coords": {
         "lat": -17.3983409,
         "lng": -66.2747699
+    }
+}, {
+    "name": "Av. Gral. Campero, Cochabamba",
+    "coords": {
+        "lat": -17.3983353,
+        "lng": -66.1699277
     }
 }, {
     "name": "Av Circunvalacion, Cochabamba",
@@ -10307,6 +12623,12 @@
         "lng": -66.15362089999999
     }
 }, {
+    "name": "Avenida Salamanca, Cochabamba",
+    "coords": {
+        "lat": -17.384925,
+        "lng": -66.15362089999999
+    }
+}, {
     "name": "Calle - los Almos, Cochabamba",
     "coords": {
         "lat": -17.3452362,
@@ -10331,10 +12653,28 @@
         "lng": -66.1243803
     }
 }, {
+    "name": "Calle 23 de Marzo, Cochabamba",
+    "coords": {
+        "lat": -17.359978,
+        "lng": -66.1243803
+    }
+}, {
     "name": "Calle Antofagasta, Cochabamba",
     "coords": {
         "lat": -17.3834323,
         "lng": -66.1805665
+    }
+}, {
+    "name": "Calle Ecuador 508, Cochabamba",
+    "coords": {
+        "lat": -17.3894428,
+        "lng": -66.1537093
+    }
+}, {
+    "name": "Calle Ecuador 538, Cochabamba",
+    "coords": {
+        "lat": -17.3894428,
+        "lng": -66.1537093
     }
 }, {
     "name": "Calle J. Antezana, Cochabamba",
@@ -10397,6 +12737,12 @@
         "lng": -66.1600145
     }
 }, {
+    "name": "Nicasio Gutierrez, Cochabamba",
+    "coords": {
+        "lat": -17.369864,
+        "lng": -66.1885124
+    }
+}, {
     "name": "Nicolas Del Campo, Cochabamba",
     "coords": {
         "lat": -17.438764,
@@ -10451,10 +12797,34 @@
         "lng": -66.2642913
     }
 }, {
+    "name": "Av José Ballivian, Cochabamba",
+    "coords": {
+        "lat": -17.3852193,
+        "lng": -66.1579739
+    }
+}, {
     "name": "Av Juan de La Rosa, Cochabamba",
     "coords": {
         "lat": -17.3763426,
         "lng": -66.1743919
+    }
+}, {
+    "name": "Av Juan de La Rosa, Cochabamba",
+    "coords": {
+        "lat": -17.3763426,
+        "lng": -66.1743919
+    }
+}, {
+    "name": "Av Melchor Urquidi, Cochabamba",
+    "coords": {
+        "lat": -17.3753667,
+        "lng": -66.1498081
+    }
+}, {
+    "name": "Avenida 9 de Abril, Cochabamba",
+    "coords": {
+        "lat": -17.3991166,
+        "lng": -66.1425221
     }
 }, {
     "name": "Avenida 9 de Abril, Cochabamba",
@@ -10517,6 +12887,12 @@
         "lng": -66.0476687
     }
 }, {
+    "name": "Avenida Copacabana, Cochabamba",
+    "coords": {
+        "lat": -17.4258512,
+        "lng": -66.1597293
+    }
+}, {
     "name": "Avenida Ecológica, Cochabamba",
     "coords": {
         "lat": -17.3470529,
@@ -10571,13 +12947,19 @@
         "lng": -66.1966865
     }
 }, {
-    "name": "Avenida 6 de Agosto, Cochabamba",
+    "name": "Avenue 6 de Agosto, Cochabamba",
     "coords": {
         "lat": -17.4104162,
         "lng": -66.1648618
     }
 }, {
-    "name": "Avenida 6 de Agosto, Cochabamba",
+    "name": "Avenue 6 de Agosto, Cochabamba",
+    "coords": {
+        "lat": -17.4094124,
+        "lng": -66.1494824
+    }
+}, {
+    "name": "Avenue 6 de Agosto, Cochabamba",
     "coords": {
         "lat": -17.4104162,
         "lng": -66.1648618
@@ -10619,6 +13001,18 @@
         "lng": -66.1810737
     }
 }, {
+    "name": "Calle Guayaramerin, Cochabamba",
+    "coords": {
+        "lat": -17.4080586,
+        "lng": -66.1487234
+    }
+}, {
+    "name": "Calle de los Olmos, Cochabamba",
+    "coords": {
+        "lat": -17.3983993,
+        "lng": -66.178912
+    }
+}, {
     "name": "Demétrio Canelas, Quillacollo",
     "coords": {
         "lat": -17.4055618,
@@ -10631,6 +13025,12 @@
         "lng": -66.1573171
     }
 }, {
+    "name": "Johannes Gutenberg, Cochabamba",
+    "coords": {
+        "lat": -17.4032287,
+        "lng": -66.1979921
+    }
+}, {
     "name": "Julio Arauco Prado, Cochabamba",
     "coords": {
         "lat": -17.3924151,
@@ -10641,6 +13041,12 @@
     "coords": {
         "lat": -17.3924151,
         "lng": -66.1458988
+    }
+}, {
+    "name": "Pasaje del Cabildo, Cochabamba",
+    "coords": {
+        "lat": -17.3897747,
+        "lng": -66.1661848
     }
 }, {
     "name": "Pasaje del Quijote, Cochabamba",
@@ -10661,6 +13067,12 @@
         "lng": -66.12482609999999
     }
 }, {
+    "name": "A. Honorato Salazar, Cochabamba",
+    "coords": {
+        "lat": -17.3955392,
+        "lng": -66.1390661
+    }
+}, {
     "name": "Aroma, Colcapirhua Municipality",
     "coords": {
         "lat": -17.3992085,
@@ -10677,6 +13089,18 @@
     "coords": {
         "lat": -17.3763426,
         "lng": -66.1743919
+    }
+}, {
+    "name": "Av. Juan de la Rosa, Cochabamba",
+    "coords": {
+        "lat": -17.3785854,
+        "lng": -66.1628903
+    }
+}, {
+    "name": "Av.Suárez Miranda, Quillacollo",
+    "coords": {
+        "lat": -17.3732606,
+        "lng": -66.2802765
     }
 }, {
     "name": "Av Circunvalación, Quillacollo",
@@ -10697,6 +13121,12 @@
         "lng": -66.1786151
     }
 }, {
+    "name": "Avenida 23 de Marzo, Cochabamba",
+    "coords": {
+        "lat": -17.3754527,
+        "lng": -66.1366482
+    }
+}, {
     "name": "Avenida 6 de Agosto, Cochabamba",
     "coords": {
         "lat": -17.4124019,
@@ -10707,6 +13137,12 @@
     "coords": {
         "lat": -17.4117795,
         "lng": -66.1528739
+    }
+}, {
+    "name": "Avenida Manco Kapac, Cochabamba",
+    "coords": {
+        "lat": -17.4032342,
+        "lng": -66.1666301
     }
 }, {
     "name": "Avenida Manco Kapac, Cochabamba",
@@ -10727,10 +13163,28 @@
         "lng": -66.19733939999999
     }
 }, {
+    "name": "Avenida Del Cabildo, Cochabamba",
+    "coords": {
+        "lat": -17.4136795,
+        "lng": -66.16048959999999
+    }
+}, {
     "name": "Avenida Kilometro 7, Cochabamba",
     "coords": {
         "lat": -17.3989385,
         "lng": -66.1710133
+    }
+}, {
+    "name": "Avenida Kilometro 7, Cochabamba",
+    "coords": {
+        "lat": -17.3989385,
+        "lng": -66.1710133
+    }
+}, {
+    "name": "Avenida Ruben Dario, Cochabamba",
+    "coords": {
+        "lat": -17.3876478,
+        "lng": -66.1409458
     }
 }, {
     "name": "Avenida Ruben Dario, Cochabamba",
@@ -10751,31 +13205,37 @@
         "lng": -66.2830358
     }
 }, {
-    "name": "Avenida La Tamborada, Cochabamba",
+    "name": "Avenue La Tamborada, Cochabamba",
     "coords": {
         "lat": -17.4417655,
         "lng": -66.1551133
     }
 }, {
-    "name": "Avenida La Tamborada, Cochabamba",
+    "name": "Avenue La Tamborada, Cochabamba",
     "coords": {
         "lat": -17.4417655,
         "lng": -66.1551133
     }
 }, {
-    "name": "Avenida Panamericana, Cochabamba",
+    "name": "Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4113964,
         "lng": -66.1562138
     }
 }, {
-    "name": "Avenida Panamericana, Cochabamba",
+    "name": "Avenue Panamericana, Cochabamba",
     "coords": {
         "lat": -17.4113964,
         "lng": -66.1562138
     }
 }, {
-    "name": "Avenida Ramon Rivero, Cochabamba",
+    "name": "Avenue Ramon Rivero, Cochabamba",
+    "coords": {
+        "lat": -17.3790846,
+        "lng": -66.1424554
+    }
+}, {
+    "name": "Avenue Ramon Rivero, Cochabamba",
     "coords": {
         "lat": -17.3790846,
         "lng": -66.1424554
@@ -10799,10 +13259,22 @@
         "lng": -66.1221481
     }
 }, {
+    "name": "Fernando Magallanes, Cochabamba",
+    "coords": {
+        "lat": -17.3887842,
+        "lng": -66.1726864
+    }
+}, {
     "name": "Gabriel Rene Moreno, Cochabamba",
     "coords": {
         "lat": -17.3703572,
         "lng": -66.1716637
+    }
+}, {
+    "name": "Pasaje Guadalquivir, Cochabamba",
+    "coords": {
+        "lat": -17.3743974,
+        "lng": -66.1599924
     }
 }, {
     "name": "V. Rojas M. Caracas, Cochabamba",
@@ -10815,6 +13287,12 @@
     "coords": {
         "lat": -17.365884,
         "lng": -66.1579436
+    }
+}, {
+    "name": "Av Guillermo Killman, Cochabamba",
+    "coords": {
+        "lat": -17.4101956,
+        "lng": -66.1694127
     }
 }, {
     "name": "Av Guillermo Killman, Cochabamba",
@@ -10847,6 +13325,12 @@
         "lng": -66.2805517
     }
 }, {
+    "name": "Avenida América 170, Cochabamba",
+    "coords": {
+        "lat": -17.3725833,
+        "lng": -66.1612916
+    }
+}, {
     "name": "Avenida Aniceto Arce, Cochabamba",
     "coords": {
         "lat": -17.384221,
@@ -10863,6 +13347,12 @@
     "coords": {
         "lat": -17.3810077,
         "lng": -66.1523838
+    }
+}, {
+    "name": "Avenida Huayna Kapac, Cochabamba",
+    "coords": {
+        "lat": -17.3984508,
+        "lng": -66.165244
     }
 }, {
     "name": "Avenida Huayna Kapac, Cochabamba",
@@ -10905,6 +13395,12 @@
     "coords": {
         "lat": -17.4162691,
         "lng": -66.16144740000001
+    }
+}, {
+    "name": "Avenue Santa Barbara, Cochabamba",
+    "coords": {
+        "lat": -17.429215,
+        "lng": -66.1560989
     }
 }, {
     "name": "Calle - Luis Espinal, Cochabamba",
@@ -10967,6 +13463,12 @@
         "lng": -66.2411968
     }
 }, {
+    "name": "Junín, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3895287,
+        "lng": -66.2411968
+    }
+}, {
     "name": "La Paz, Colcapirhua Municipality",
     "coords": {
         "lat": -17.3738378,
@@ -10989,6 +13491,18 @@
     "coords": {
         "lat": -17.3791473,
         "lng": -66.15084209999999
+    }
+}, {
+    "name": "Pasarela Cine Center, Cochabamba",
+    "coords": {
+        "lat": -17.3791473,
+        "lng": -66.15084209999999
+    }
+}, {
+    "name": "Plaza San Sebastián, Cochabamba",
+    "coords": {
+        "lat": -17.3988187,
+        "lng": -66.16043069999999
     }
 }, {
     "name": "Antonio Villavicencio, Cochabamba",
@@ -11071,6 +13585,12 @@
 }, {
     "name": "Avenida Juan Pablo II, Cochabamba",
     "coords": {
+        "lat": -17.3795807,
+        "lng": -66.1988934
+    }
+}, {
+    "name": "Avenida Juan Pablo II, Cochabamba",
+    "coords": {
         "lat": -17.3985866,
         "lng": -66.2172362
     }
@@ -11093,10 +13613,10 @@
         "lng": -66.1508527
     }
 }, {
-    "name": "Avenida Simón López, Cochabamba",
+    "name": "Avenida Ramón Rivero, Cochabamba",
     "coords": {
-        "lat": -17.3649733,
-        "lng": -66.1766272
+        "lat": -17.3809042,
+        "lng": -66.1508527
     }
 }, {
     "name": "Avenida Simón López, Cochabamba",
@@ -11105,25 +13625,31 @@
         "lng": -66.1766272
     }
 }, {
-    "name": "Avenida G. Rene Moreno, Cochabamba",
+    "name": "Avenida Simón López, Cochabamba",
+    "coords": {
+        "lat": -17.3649733,
+        "lng": -66.1766272
+    }
+}, {
+    "name": "Avenue G. Rene Moreno, Cochabamba",
     "coords": {
         "lat": -17.3703572,
         "lng": -66.1716637
     }
 }, {
-    "name": "Avenida G. Rene Moreno, Cochabamba",
+    "name": "Avenue G. Rene Moreno, Cochabamba",
     "coords": {
         "lat": -17.3703572,
         "lng": -66.1716637
     }
 }, {
-    "name": "Blanco Galindo Avenida, Cochabamba",
+    "name": "Blanco Galindo Avenue, Cochabamba",
     "coords": {
         "lat": -17.3916424,
         "lng": -66.22128099999999
     }
 }, {
-    "name": "Blanco Galindo Avenida, Cochabamba",
+    "name": "Blanco Galindo Avenue, Cochabamba",
     "coords": {
         "lat": -17.3916424,
         "lng": -66.22128099999999
@@ -11225,6 +13751,12 @@
         "lng": -66.17229549999999
     }
 }, {
+    "name": "Calle V. de Copacabana, Cochabamba",
+    "coords": {
+        "lat": -17.4336027,
+        "lng": -66.1572122
+    }
+}, {
     "name": "Parque Ex Combatientes, Cochabamba",
     "coords": {
         "lat": -17.3856958,
@@ -11291,6 +13823,12 @@
         "lng": -66.27819269999999
     }
 }, {
+    "name": "Avenida Albina Patiño, Quillacollo",
+    "coords": {
+        "lat": -17.3939229,
+        "lng": -66.27819269999999
+    }
+}, {
     "name": "Avenida Blanco Galindo, Quillacollo",
     "coords": {
         "lat": -17.392468,
@@ -11301,6 +13839,12 @@
     "coords": {
         "lat": -17.392468,
         "lng": -66.2642913
+    }
+}, {
+    "name": "Avenida General Galindo, Cochabamba",
+    "coords": {
+        "lat": -17.3768516,
+        "lng": -66.142546
     }
 }, {
     "name": "Avenida Juan de La Rosa, Cochabamba",
@@ -11339,7 +13883,7 @@
         "lng": -66.1354693
     }
 }, {
-    "name": "Avenida Ramon Rivero 662, Cochabamba",
+    "name": "Avenue Ramon Rivero 662, Cochabamba",
     "coords": {
         "lat": -17.3790846,
         "lng": -66.1424554
@@ -11375,6 +13919,12 @@
         "lng": -66.1686866
     }
 }, {
+    "name": "Pasaje Francisco Viedma, Cochabamba",
+    "coords": {
+        "lat": -17.3848931,
+        "lng": -66.1686866
+    }
+}, {
     "name": "Plaza 14 de Septiembre., Cochabamba",
     "coords": {
         "lat": -17.3942079,
@@ -11393,6 +13943,12 @@
         "lng": -66.1564114
     }
 }, {
+    "name": "Av. Brasil - Centro, Foz do Iguaçu - State of Paraná, Brazil",
+    "coords": {
+        "lat": -25.5440182,
+        "lng": -54.586392
+    }
+}, {
     "name": "Av Capitán Víctor Ustáriz, Colcapirhua Municipality",
     "coords": {
         "lat": -17.393598,
@@ -11409,6 +13965,12 @@
     "coords": {
         "lat": -17.3980146,
         "lng": -66.2219422
+    }
+}, {
+    "name": "Daniel Campos, Colcapirhua Municipality",
+    "coords": {
+        "lat": -17.3880973,
+        "lng": -66.225011
     }
 }, {
     "name": "Rotonda Av Suecia y Mercado, Cochabamba",
@@ -11495,7 +14057,19 @@
         "lng": -66.1753136
     }
 }, {
-    "name": "Avenida Oquendo, Cochabamba, República de Bolivia",
+    "name": "Av José Ballivian (El Prado), Cochabamba",
+    "coords": {
+        "lat": -17.3875003,
+        "lng": -66.155878
+    }
+}, {
+    "name": "Av Libertador Simón Bolívar, Cochabamba",
+    "coords": {
+        "lat": -17.374259,
+        "lng": -66.1621863
+    }
+}, {
+    "name": "Avenida Oquendo, Cochabamba",
     "coords": {
         "lat": -17.3926875,
         "lng": -66.1497627
@@ -11531,10 +14105,16 @@
         "lng": -66.3053779
     }
 }, {
-    "name": "Avenida Oquendo, Quillacollo, República de Bolivia",
+    "name": "Avenida Oquendo, Quillacollo",
     "coords": {
         "lat": -17.3859577,
         "lng": -66.25930269999999
+    }
+}, {
+    "name": "Avenida Circunvalacion, Sacaba, Cochabamba",
+    "coords": {
+        "lat": -17.4061346,
+        "lng": -66.0476687
     }
 }, {
     "name": "Avenida Segunda Circunvalacion, Cochabamba",
@@ -11595,6 +14175,12 @@
     "coords": {
         "lat": -17.3567599,
         "lng": -66.24186519999999
+    }
+}, {
+    "name": "Avenida Capitán Victor Ustáriz, Cochabamba",
+    "coords": {
+        "lat": -17.3962827,
+        "lng": -66.1832893
     }
 }, {
     "name": "Avenida J. Manuel Villa Vicencio, Cochabamba",
@@ -11693,10 +14279,28 @@
         "lng": -66.21685529999999
     }
 }, {
+    "name": "Avenida Circunvalacion, Cochabamba",
+    "coords": {
+        "lat": -17.365884,
+        "lng": -66.1579436
+    }
+}, {
+    "name": "Avenida Circunvalación, Quillacollo, Cochabamba",
+    "coords": {
+        "lat": -17.4019043,
+        "lng": -66.2874956
+    }
+}, {
     "name": "6 de Agosto, Colcapirhua Municipality, Cochabamba",
     "coords": {
         "lat": -17.3882259,
         "lng": -66.2426942
+    }
+}, {
+    "name": "16 de Julio, Colcapirhua Municipality, Cochabamba",
+    "coords": {
+        "lat": -17.3988212,
+        "lng": -66.2304025
     }
 }, {
     "name": "16 de Julio, Colcapirhua Municipality, Cochabamba",
@@ -11715,6 +14319,12 @@
     "coords": {
         "lat": -17.3891799,
         "lng": -66.2390166
+    }
+}, {
+    "name": "Avenida 16 de Julio, Colcapirhua Municipality, Cochabamba",
+    "coords": {
+        "lat": -17.3864594,
+        "lng": -66.22172139999999
     }
 }, {
     "name": "Avenida 16 de Julio, Colcapirhua Municipality, Cochabamba",
