@@ -51,6 +51,7 @@ class TrufiLocalizations {
   static const String CommonFailLoadingData = "common_fail_loading_data";
   static const String CommonUnknownError = "common_unknown_error";
   static const String CommonError = "common_error";
+  static const String ErrorDeviceNotSupportsOffline = "error_device_not_supported";
   static const String RouteRequestErrorServerUnavailable =
       "route_request_error_server_unavailable";
   static const String RouteRequestErrorOutOfBoundary =
@@ -114,7 +115,7 @@ class TrufiLocalizations {
   static const String MenuAbout = "menu_about";
   static const String MenuTeam = "menu_team";
   static const String MenuFeedback = "menu_feedback";
-  static const String MenuOnline = "menu_online";
+  static const String MenuOffline = "menu_offline";
   static const String FeedbackContent = "feedback_content";
   static const String FeedbackTitle = "feedback_title";
   static const String AboutContent = "about_content";
@@ -144,6 +145,7 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Failed to load data',
       CommonUnknownError: 'unknown error',
       CommonError: 'Error',
+      ErrorDeviceNotSupportsOffline: 'Offline Mode is only available on devices running Android 8+',
       RouteRequestErrorServerUnavailable:
           "We\'re sorry. The trip planner is temporarily unavailable. Please try again later.",
       RouteRequestErrorOutOfBoundary:
@@ -203,7 +205,7 @@ class TrufiLocalizations {
       MenuAbout: 'About',
       MenuTeam: 'Contributors',
       MenuFeedback: 'Send Feedback',
-      MenuOnline: 'Online',
+      MenuOffline: 'Offline Mode',
       FeedbackContent:
           'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.',
       FeedbackTitle: 'Send us an E-mail',
@@ -234,6 +236,7 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Error al cargar datos',
       CommonUnknownError: 'Error desconocido',
       CommonError: 'Error',
+      ErrorDeviceNotSupportsOffline: 'Modo Offline está disponible solamente para teléfonos con Android 8+',
       RouteRequestErrorServerUnavailable:
           'Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.',
       RouteRequestErrorOutOfBoundary:
@@ -294,7 +297,7 @@ class TrufiLocalizations {
       MenuAbout: 'Acerca',
       MenuTeam: 'Colaboradores',
       MenuFeedback: 'Envía comentarios',
-      MenuOnline: 'Online',
+      MenuOffline: 'Modo Offline',
       FeedbackContent:
           '¿Tienes sugerencias para nuestra aplicación o encontraste algunos errores en los datos? Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.',
       FeedbackTitle: 'Envíanos un correo electrónico',
@@ -325,6 +328,7 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Fehler beim Laden der Daten',
       CommonUnknownError: 'Unbekannter Fehler',
       CommonError: 'Fehler',
+      ErrorDeviceNotSupportsOffline: 'Offline Modus ist nur auf Geräten mit Android 8+ verfügbar.',
       RouteRequestErrorServerUnavailable:
           "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.",
       RouteRequestErrorOutOfBoundary:
@@ -384,7 +388,7 @@ class TrufiLocalizations {
       MenuAbout: 'Über',
       MenuTeam: 'Mitwirkende',
       MenuFeedback: 'Feedback',
-      MenuOnline: 'Online',
+      MenuOffline: 'Offline Modus',
       FeedbackContent:
           'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.',
       FeedbackTitle: 'E-Mail senden',
@@ -415,6 +419,7 @@ class TrufiLocalizations {
       CommonFailLoadingData: 'Mana aticunchu tariyta datusta',
       CommonUnknownError: 'Mana yachacunchu imachus pasan',
       CommonError: 'Error',
+      ErrorDeviceNotSupportsOffline: 'Modo Offline disponible solamente para teléfonos con Android 8+',
       RouteRequestErrorServerUnavailable:
           'Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.',
       RouteRequestErrorOutOfBoundary:
@@ -475,7 +480,7 @@ class TrufiLocalizations {
       MenuAbout: "Imamanta yachayta munanki?",
       MenuTeam: "Ñuqaykuwan",
       MenuFeedback: "Yuyasqayniykita riqsichiwayku",
-      MenuOnline: 'Online',
+      MenuOffline: 'Modo Offline',
       FeedbackContent:
           "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
       FeedbackTitle: 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!',
@@ -550,6 +555,10 @@ class TrufiLocalizations {
 
   String get commonError {
     return _localizedValues[locale.languageCode][CommonError];
+  }
+
+  String get errorDeviceNotSupported {
+    return _localizedValues[locale.languageCode][ErrorDeviceNotSupportsOffline];
   }
 
   String get errorServerUnavailable {
@@ -751,8 +760,8 @@ class TrufiLocalizations {
     return _localizedValues[locale.languageCode][MenuFeedback];
   }
 
-  String get menuOnline {
-    return _localizedValues[locale.languageCode][MenuOnline];
+  String get menuOffline {
+    return _localizedValues[locale.languageCode][MenuOffline];
   }
 
   String get feedbackContent {

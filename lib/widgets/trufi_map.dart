@@ -47,13 +47,13 @@ class TrufiOnAndOfflineMapController {
 
   TrufiMapController get online => _onlineController;
 
-  TrufiMapController get active => _isOnline ? online : offline;
+  TrufiMapController get active => _isOfflineMode ? offline : online;
 
   MapController get mapController => active.mapController;
 
   LayerOptions get yourLocationLayer => active.yourLocationLayer;
 
-  bool get _isOnline => _state?.isOnline ?? false;
+  bool get _isOfflineMode => _state?.isOffline ?? false;
 }
 
 class TrufiOnAndOfflineMap extends StatefulWidget {
@@ -77,16 +77,16 @@ class TrufiOnAndOfflineMap extends StatefulWidget {
 class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   final _subscriptions = CompositeSubscription();
 
-  bool _online = false;
+  bool _offlineMode = false;
 
   @override
   void initState() {
     super.initState();
     widget.controller.state = this;
     _subscriptions.add(
-      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+      PreferencesBloc.of(context).outChangeOfflineMode.listen((offline) {
         setState(() {
-          _online = online;
+          _offlineMode = offline;
         });
       }),
     );
@@ -100,7 +100,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
 
   @override
   Widget build(BuildContext context) {
-    return _online ? _buildOnlineMap() : _buildOfflineMap();
+    return _offlineMode ? _buildOfflineMap() : _buildOnlineMap();
   }
 
   Widget _buildOnlineMap() {
@@ -155,7 +155,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
 
   // Getter
 
-  bool get isOnline => _online;
+  bool get isOffline => _offlineMode;
 }
 
 class TrufiMapController {
