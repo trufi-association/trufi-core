@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:synchronized/synchronized.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/offline_locations_bloc.dart';
@@ -24,6 +26,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
             online ? _onlineRequestManager : _offlineRequestManager;
       }),
     );
+    _lock = new Lock();
   }
 
   final PreferencesBloc preferencesBloc;
@@ -31,6 +34,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
+  Lock _lock;
+  CancelableOperation<List<TrufiLocation>> _operation;
 
   RequestManager _requestManager;
 
@@ -47,7 +52,19 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     BuildContext context,
     String query,
   ) {
-    return _requestManager.fetchLocations(context, query);
+    if (_operation != null) {
+      _operation.cancel();
+    }
+
+    if (!_lock.locked) {
+      return _lock.synchronized(() async {
+        _operation = CancelableOperation.fromFuture(Future.delayed(
+            Duration(seconds: 1),
+            () => _requestManager.fetchLocations(context, query)));
+        return _operation.valueOrCancellation(null);
+      });
+    }
+    return Future.value(null);
   }
 
   Future<Plan> fetchPlan(TrufiLocation from, TrufiLocation to) {
