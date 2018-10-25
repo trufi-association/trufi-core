@@ -13,6 +13,7 @@ import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/widgets/trufi_drawer.dart';
 
 void main() {
   runApp(TrufiApp());
@@ -108,14 +109,20 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       primaryColor: const Color(0xffffd600),
       primaryIconTheme: const IconThemeData(color: Colors.black),
     );
+    final routes = <String, WidgetBuilder>{
+      AboutPage.route: (context) => AboutPage(),
+      FeedbackPage.route: (context) => FeedbackPage(),
+      TeamPage.route: (context) => TeamPage(),
+    };
     return StreamBuilder(
       stream: preferencesBloc.outChangeLanguageCode,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return MaterialApp(
-          routes: <String, WidgetBuilder>{
-            AboutPage.route: (context) => AboutPage(),
-            FeedbackPage.route: (context) => FeedbackPage(),
-            TeamPage.route: (context) => TeamPage(),
+          onGenerateRoute: (settings) {
+            return new TrufiDrawerRoute(
+              builder: routes[settings.name],
+              settings: settings,
+            );
           },
           localizationsDelegates: [
             TrufiLocalizationsDelegate(snapshot.data),
