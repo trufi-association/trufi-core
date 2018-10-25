@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,9 +11,11 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_app/blocs/offline_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_localizations.dart';
@@ -35,6 +38,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
         }
       }),
     );
+    _lock = new Lock();
   }
 
   final PreferencesBloc preferencesBloc;
@@ -42,6 +46,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
+  Lock _lock;
+  CancelableOperation<List<TrufiLocation>> _operation;
 
   RequestManager _requestManager;
 
@@ -58,7 +64,19 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     BuildContext context,
     String query,
   ) {
-    return _requestManager.fetchLocations(context, query);
+    if (_operation != null) {
+      _operation.cancel();
+    }
+
+    if (!_lock.locked) {
+      return _lock.synchronized(() async {
+        _operation = CancelableOperation.fromFuture(Future.delayed(
+            Duration(seconds: 1),
+            () => _requestManager.fetchLocations(context, query)));
+        return _operation.valueOrCancellation(null);
+      });
+    }
+    return Future.value(null);
   }
 
   Future<Plan> fetchPlan(
@@ -191,9 +209,16 @@ class OfflineRequestManager implements RequestManager {
     BuildContext context,
     String query,
   ) async {
-    throw FetchOfflineRequestException(
-      Exception("Fetch locations offline is not implemented yet."),
-    );
+    List<TrufiLocation> locations =
+        await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
+    locations.sort((a, b) {
+      return sortByImportance(a, b);
+    });
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
   }
 
   Future<Plan> fetchPlan(
@@ -257,33 +282,22 @@ class OfflineRequestManager implements RequestManager {
 
 class OnlineRequestManager implements RequestManager {
   static const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
-  static const String SearchPath = '/otp/routers/default/geocode';
   static const String PlanPath = 'otp/routers/default/plan';
 
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
   ) async {
-    Uri request = Uri.https(Endpoint, SearchPath, {
-      "query": query,
-      "autocomplete": "false",
-      "corners": "true",
-      "stops": "false"
+    List<TrufiLocation> locations =
+        await OfflineLocationsBloc.of(context).fetchWithQuery(context, query);
+    locations.sort((a, b) {
+      return sortByImportance(a, b);
     });
-    final response = await _fetchRequest(request);
-    if (response.statusCode == 200) {
-      List<TrufiLocation> locations = await compute(
-        _parseLocations,
-        utf8.decode(response.bodyBytes),
-      );
-      final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-      locations.sort((a, b) {
-        return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
-      });
-      return locations;
-    } else {
-      throw FetchOnlineResponseException('Failed to load locations');
-    }
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
   }
 
   Future<Plan> fetchPlan(
@@ -357,13 +371,6 @@ class OnlineRequestManager implements RequestManager {
     }
     return error.message;
   }
-}
-
-List<TrufiLocation> _parseLocations(String responseBody) {
-  return json
-      .decode(responseBody)
-      .map<TrufiLocation>((json) => new TrufiLocation.fromSearchJson(json))
-      .toList();
 }
 
 Plan _parsePlan(String responseBody) {

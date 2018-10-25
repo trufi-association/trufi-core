@@ -13,6 +13,6 @@ class ImportantLocationsBloc extends LocationsBloc {
     BuildContext context,
   ) : super(
           context,
-          ImportantLocationStorage("assets/data/places.json"),
+          JSONLocationStorage("assets/data/places.json"),
         );
 }
