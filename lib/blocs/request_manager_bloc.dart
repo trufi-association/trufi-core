@@ -24,11 +24,11 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   }
 
   RequestManagerBloc(this.preferencesBloc) {
-    _requestManager = _offlineRequestManager;
+    _requestManager = _onlineRequestManager;
     _subscriptions.add(
-      preferencesBloc.outChangeOnline.listen((online) {
+      preferencesBloc.outChangeOfflineMode.listen((offline) {
         _requestManager =
-            online ? _onlineRequestManager : _offlineRequestManager;
+            offline ? _offlineRequestManager : _onlineRequestManager;
       }),
     );
   }

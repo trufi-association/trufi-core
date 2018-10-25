@@ -40,7 +40,7 @@ class HomePageState extends State<HomePage>
   initState() {
     super.initState();
     _subscriptions.add(
-      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+      PreferencesBloc.of(context).outChangeOfflineMode.listen((offline) {
         if (_data.plan == null) {
           _fetchPlan();
         }
@@ -287,24 +287,12 @@ class HomePageState extends State<HomePage>
         } else {
           _setPlan(plan);
         }
-      } on FetchOfflineRequestException catch (e) {
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet.",
-          false,
-        );
-      } on FetchOfflineResponseException catch (e) {
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet.",
-          false,
-        );
       } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, true);
+        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, false);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
+        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, false);
       } catch (e) {
         print("Failed to fetch plan: $e");
       }
@@ -321,13 +309,12 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  void _showOnAndOfflineErrorAlert(String message, bool online) {
+  void _showOnAndOfflineErrorAlert(String message, bool offline) {
     showDialog(
       context: context,
       builder: (context) {
         return buildOnAndOfflineErrorAlert(
           context: context,
-          online: online,
           title: TrufiLocalizations.of(context).commonError,
           content: message,
         );

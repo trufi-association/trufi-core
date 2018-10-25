@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
@@ -6,6 +9,7 @@ import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/widgets/alerts.dart';
 
 class TrufiDrawer extends StatefulWidget {
   TrufiDrawer(this.currentRoute);
@@ -66,7 +70,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             TeamPage.route,
           ),
           Divider(),
-          _buildOfflineToggle(context),
+          _buildOfflineModeToggle(context),
           _buildLanguageDropdownButton(context),
         ],
       ),
@@ -123,23 +127,72 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     );
   }
 
-  Widget _buildOfflineToggle(BuildContext context) {
+  Widget _buildOfflineModeToggle(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     return StreamBuilder(
-      stream: preferencesBloc.outChangeOnline,
+      stream: preferencesBloc.outChangeOfflineMode,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        bool isOnline = snapshot.data == true;
+        bool isOfflineModeOn = snapshot.data == true;
         return SwitchListTile(
-          title: Text(localizations.menuOnline),
-          value: isOnline,
-          onChanged: preferencesBloc.inChangeOnline.add,
+          title: Text(localizations.menuOffline),
+          value: isOfflineModeOn,
+          onChanged: (isOfflineOn) => _checkAndroidVersionAndActivateOffline(
+                preferencesBloc,
+                isOfflineOn,
+              ),
           activeColor: theme.primaryColor,
-          secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
+          secondary: Icon(Icons.cloud_off),
         );
       },
     );
+  }
+
+  Future<Null> _checkAndroidVersionAndActivateOffline(
+      PreferencesBloc preferencesBloc, bool isOfflineOn) async {
+    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        await deviceInfoPlugin.androidInfo.then((deviceInfo) {
+          if (deviceInfo.version.sdkInt > 25) {
+            preferencesBloc.inChangeOfflineMode.add(isOfflineOn);
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return buildOnAndOfflineErrorAlert(
+                  context: context,
+                  title: TrufiLocalizations.of(context).commonError,
+                  content:
+                      TrufiLocalizations.of(context).errorDeviceNotSupported,
+                );
+              },
+            );
+          }
+        });
+      } else if (Platform.isIOS) {
+        await deviceInfoPlugin.androidInfo.then((deviceInfo) {
+          if (deviceInfo.version.sdkInt > 25) {
+            preferencesBloc.inChangeOfflineMode.add(isOfflineOn);
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return buildOnAndOfflineErrorAlert(
+                  context: context,
+                  title: TrufiLocalizations.of(context).commonError,
+                  content:
+                      TrufiLocalizations.of(context).errorDeviceNotSupported,
+                );
+              },
+            );
+          }
+        });
+      } 
+    } on Exception {
+      print("Platform not foound");
+    }
   }
 }
 
