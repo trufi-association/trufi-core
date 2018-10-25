@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';

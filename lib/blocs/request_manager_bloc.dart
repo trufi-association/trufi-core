@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:synchronized/synchronized.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/offline_locations_bloc.dart';
@@ -149,7 +150,6 @@ class OfflineRequestManager implements RequestManager {
 
 class OnlineRequestManager implements RequestManager {
   static const String Endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
-  static const String SearchPath = '/otp/routers/default/geocode';
   static const String PlanPath = 'otp/routers/default/plan';
 
   Future<List<TrufiLocation>> fetchLocations(

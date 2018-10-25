@@ -7,6 +7,7 @@ import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
