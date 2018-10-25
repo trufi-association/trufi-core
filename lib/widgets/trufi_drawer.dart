@@ -89,7 +89,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         ),
         selected: isSelected,
         onTap: () {
-          Navigator.pushReplacementNamed(context, route);
+          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));
+          if (route != HomePage.route) {
+            Navigator.pushNamed(context, route);
+          }
         },
       ),
     );
@@ -193,6 +196,23 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     } on Exception {
       print("Platform not foound");
     }
+  }
+}
+
+class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {
+  TrufiDrawerRoute({
+    WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }
 

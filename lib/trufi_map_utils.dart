@@ -7,6 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 openStreetMapTileLayerOptions() {
@@ -88,16 +89,26 @@ class MyLocationMarker extends StatefulWidget {
 }
 
 class MyLocationMarkerState extends State<MyLocationMarker> {
+  final _subscriptions = CompositeSubscription();
+
   double _direction;
 
   @override
   void initState() {
     super.initState();
-    FlutterCompass.events.listen((double direction) {
-      setState(() {
-        _direction = direction;
-      });
-    });
+    _subscriptions.add(
+      FlutterCompass.events.listen((double direction) {
+        setState(() {
+          _direction = direction;
+        });
+      }),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscriptions.cancel();
+    super.dispose();
   }
 
   @override
