@@ -175,26 +175,30 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           }
         });
       } else if (Platform.isIOS) {
-        await deviceInfoPlugin.androidInfo.then((deviceInfo) {
-          if (deviceInfo.version.sdkInt > 25) {
-            preferencesBloc.inChangeOfflineMode.add(isOfflineOn);
-          } else {
-            showDialog(
+        showDialog(
+          context: context,
+          builder: (context) {
+            return buildOnAndOfflineErrorAlert(
               context: context,
-              builder: (context) {
-                return buildOnAndOfflineErrorAlert(
-                  context: context,
-                  title: TrufiLocalizations.of(context).commonError,
-                  content:
-                      TrufiLocalizations.of(context).errorDeviceNotSupported,
-                );
-              },
+              title: TrufiLocalizations.of(context).commonError,
+              content: TrufiLocalizations.of(context).errorDeviceNotSupported,
             );
-          }
-        });
-      } 
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return buildOnAndOfflineErrorAlert(
+              context: context,
+              title: TrufiLocalizations.of(context).commonError,
+              content: TrufiLocalizations.of(context).errorDeviceNotSupported,
+            );
+          },
+        );
+      }
     } on Exception {
-      print("Platform not foound");
+      print("Platform not found");
     }
   }
 }
