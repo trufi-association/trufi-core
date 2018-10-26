@@ -219,6 +219,7 @@ class HomePageState extends State<HomePage>
 
   void _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
+      _data.plan = null;
       _data.fromPlace = fromPlace;
       _data.save(context);
       _fromFieldKey.currentState.didChange(_data.fromPlace);
@@ -242,6 +243,7 @@ class HomePageState extends State<HomePage>
 
   void _setToPlace(TrufiLocation toPlace) {
     setState(() {
+      _data.plan = null;
       _data.toPlace = toPlace;
       _data.save(context);
       _toFieldKey.currentState.didChange(_data.toPlace);
