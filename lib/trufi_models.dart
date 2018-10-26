@@ -35,10 +35,11 @@ class TrufiLocation {
 
   factory TrufiLocation.fromLocationsJson(Map<String, dynamic> json) {
     return TrufiLocation(
-        description: json['name'],
-        latitude: json['coords']['lat'],
-        longitude: json['coords']['lng'],
-        importance: json['importance'],);
+      description: json['name'],
+      latitude: json['coords']['lat'],
+      longitude: json['coords']['lng'],
+      importance: json['importance'],
+    );
   }
 
   factory TrufiLocation.fromPlanLocation(PlanLocation value) {
@@ -54,10 +55,11 @@ class TrufiLocation {
       return null;
     }
     return TrufiLocation(
-        description: json[_Description],
-        latitude: json[_Latitude],
-        longitude: json[_Longitude],
-        importance: json[_Importance],);
+      description: json[_Description],
+      latitude: json[_Latitude],
+      longitude: json[_Longitude],
+      importance: json[_Importance],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -280,6 +282,9 @@ class PlanItineraryLeg {
   static const _RouteLongName = "routeLongName";
   static const _To = "to";
   static const _ToName = "toName";
+  // Graphhopper returns always "Destination" for the last leg of the itinerary
+  // this variable translate this word to the corresponding selected language
+  static const _GHDestinationString = "Destination";
 
   final String points;
   final String mode;
@@ -376,7 +381,9 @@ class PlanItineraryLeg {
   }
 
   String _toString(TrufiLocalizations localizations) {
-    return toName == 'Destination' ? localizations.commonDestination : toName;
+    return toName != _GHDestinationString && toName != null
+        ? toName
+        : localizations.commonDestination;
   }
 
   IconData iconData() {
