@@ -133,7 +133,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             TrufiMaterialLocalizationsDelegate(snapshot.data),
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: locales,
+          supportedLocales: supportedLocales,
           debugShowCheckedModeBanner: false,
           theme: theme,
           home: HomePage(),
