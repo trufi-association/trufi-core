@@ -69,7 +69,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                   child: RichText(
                     text: TextSpan(
                       style: theme.textTheme.body2,
-                      text: localizations.isQuechua
+                      text: localizations.locale.languageCode == "qu"
                           ? leg.toInstructionQuechua(localizations)
                           : leg.toInstruction(localizations),
                     ),
