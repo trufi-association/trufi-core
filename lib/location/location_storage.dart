@@ -37,7 +37,9 @@ abstract class LocationStorage {
         ? _locations.toList()
         : _locations.where((l) {
             l.tempLevenshteinDistance = findMatchAndCalculateStringDistance(
-                l.description.toLowerCase(), query);
+              l.description.toLowerCase(),
+              query,
+            );
             return l.tempLevenshteinDistance < 3;
           }).toList();
     locations = await _sortedByFavorites(locations, context);
