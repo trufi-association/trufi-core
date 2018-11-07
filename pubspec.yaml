@@ -18,16 +18,16 @@ dependencies:
       ref: fix/1_app_crash_in_emulator
 
   cupertino_icons: ^0.1.2
+  diff_match_patch: 0.3.0
   flutter_svg: ^0.6.0
   geolocator: ^2.0.1
   http: ^0.12.0
+  mockito: 3.0.0
   path_provider: ^0.4.1
   rxdart: ^0.18.1
-  synchronized: ^1.5.2
   shared_preferences: ^0.4.2
+  synchronized: ^1.5.2
   url_launcher: ^3.0.3
-  diff_match_patch: 0.3.0
-  mockito: 3.0.0
 
 dev_dependencies:
   flutter_driver:
