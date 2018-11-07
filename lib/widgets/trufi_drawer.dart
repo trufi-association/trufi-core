@@ -100,10 +100,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final localizations = TrufiLocalizations.of(context);
     final languageCode = localizations.locale.languageCode;
     final values = <LanguageDropdownValue>[
-      LanguageDropdownValue(languageCodeSpanish, localizations.spanish),
-      LanguageDropdownValue(languageCodeQuechua, localizations.quechua),
-      LanguageDropdownValue(languageCodeEnglish, localizations.english),
-      LanguageDropdownValue(languageCodeGerman, localizations.german),
+      LanguageDropdownValue("es", "Español"),
+      LanguageDropdownValue("qu", "Quechua simi"),
+      LanguageDropdownValue("en", "English"),
+      LanguageDropdownValue("de", "Deutsch"),
     ];
     return ListTile(
       leading: Icon(Icons.language),
