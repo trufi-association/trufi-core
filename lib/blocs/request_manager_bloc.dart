@@ -21,14 +21,13 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   }
 
   RequestManagerBloc(this.preferencesBloc) {
-    _requestManager = _offlineRequestManager;
+    _requestManager = _onlineRequestManager;
     _subscriptions.add(
       preferencesBloc.outChangeOnline.listen((online) {
         _requestManager =
             online ? _onlineRequestManager : _offlineRequestManager;
       }),
     );
-    _lock = new Lock();
   }
 
   final PreferencesBloc preferencesBloc;
@@ -36,9 +35,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
-  Lock _lock;
-  CancelableOperation<List<TrufiLocation>> _operation;
+  final _lock = Lock();
 
+  CancelableOperation<List<TrufiLocation>> _operation;
   RequestManager _requestManager;
 
   // Dispose

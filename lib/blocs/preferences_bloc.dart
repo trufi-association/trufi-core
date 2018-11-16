@@ -15,6 +15,8 @@ class PreferencesBloc extends BlocBase {
   static const String propertyOnlineKey = "property_online";
   static const String stateHomePageKey = "state_home_page";
 
+  static const bool defaultOnline = true;
+
   PreferencesBloc() {
     _changeLanguageCodeController.listen(_handleChangeLanguageCode);
     _changeOnlineController.listen(_handleChangeOnline);
@@ -37,10 +39,9 @@ class PreferencesBloc extends BlocBase {
   }
 
   void _loadOnline() {
-    bool online = _preferences.getBool(propertyOnlineKey);
-    if (online != null) {
-      inChangeOnline.add(online);
-    }
+    inChangeOnline.add(
+      _preferences.getBool(propertyOnlineKey) ?? defaultOnline,
+    );
   }
 
   SharedPreferences _preferences;
