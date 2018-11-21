@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/routing/routing_manager.dart';
+import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
@@ -128,6 +130,21 @@ class Plan {
     return Plan(error: PlanError.fromError(error));
   }
 
+  factory Plan.fromRoutingResult(final RoutingResult result) {
+    final itineraries = List<PlanItinerary>();
+    result.simpleRoutes.forEach((simpleRoute) {
+      itineraries.add(PlanItinerary.fromSimpleRoute(simpleRoute));
+    });
+    result.complexRoutes.values.forEach((complexRouteGroup) {
+      itineraries.add(PlanItinerary.fromComplexRouteGroup(complexRouteGroup));
+    });
+    return Plan(
+      from: PlanLocation.fromPoint(result.origin, "Origin"),
+      to: PlanLocation.fromPoint(result.destination, "Destination"),
+      itineraries: itineraries,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return error != null
         ? {_Error: error.toJson()}
@@ -192,6 +209,14 @@ class PlanLocation {
     );
   }
 
+  factory PlanLocation.fromPoint(Point point, String name) {
+    return PlanLocation(
+      name: name,
+      latitude: point.lat,
+      longitude: point.lng,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       _Name: name,
@@ -215,6 +240,22 @@ class PlanItinerary {
         legs: json[_Legs].map<PlanItineraryLeg>((json) {
       return PlanItineraryLeg.fromJson(json);
     }).toList());
+  }
+
+  factory PlanItinerary.fromSimpleRoute(SimpleRoute simpleRoute) {
+    return PlanItinerary(
+      legs: [PlanItineraryLeg.fromSimpleRoute(simpleRoute)],
+    );
+  }
+
+  factory PlanItinerary.fromComplexRouteGroup(ComplexRouteGroup group) {
+    final legs = List<PlanItineraryLeg>();
+    group.transfers.forEach((complexRoute) {
+      legs.add(PlanItineraryLeg.fromComplexRoute(complexRoute));
+    });
+    return PlanItinerary(
+      legs: legs,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -260,6 +301,41 @@ class PlanItineraryLeg {
       distance: json[_Distance],
       duration: json[_Duration],
       toName: json[_To][_Name],
+    );
+  }
+
+  factory PlanItineraryLeg.fromSimpleRoute(SimpleRoute simpleRoute) {
+    final polyline = List<LatLng>();
+    simpleRoute.points.forEach((point) {
+      polyline.add(LatLng(point.lat, point.lng));
+    });
+    return PlanItineraryLeg(
+      points: encodePolyline(polyline),
+      mode: "BUS",
+      route: simpleRoute.from.route.name,
+      routeLongName: "",
+      distance: simpleRoute.distance,
+      duration: 0,
+      toName: simpleRoute.to.route.name,
+    );
+  }
+
+  factory PlanItineraryLeg.fromComplexRoute(ComplexRoute complexRoute) {
+    final polyline = List<LatLng>();
+    complexRoute.pointsA.forEach((point) {
+      polyline.add(LatLng(point.lat, point.lng));
+    });
+    complexRoute.pointsB.forEach((point) {
+      polyline.add(LatLng(point.lat, point.lng));
+    });
+    return PlanItineraryLeg(
+      points: encodePolyline(polyline),
+      mode: "BUS",
+      route: complexRoute.from.route.name,
+      routeLongName: "",
+      distance: complexRoute.distance,
+      duration: 0,
+      toName: complexRoute.to.route.name,
     );
   }
 

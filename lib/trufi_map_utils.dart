@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -204,6 +205,37 @@ Marker buildMarker(
 
 LatLng createLatLngWithPlanLocation(PlanLocation location) {
   return LatLng(location.latitude, location.longitude);
+}
+
+String encodePolyline(List<LatLng> polyline) {
+  double precision = 1E5;
+  StringBuffer sb = StringBuffer();
+  int size = polyline.length;
+  int prevLat = 0;
+  int prevLon = 0;
+  for (int i = 0; i < size; i++) {
+    int num = (polyline[i].latitude * precision).floor();
+    _encodeNumber(sb, num - prevLat);
+    prevLat = num;
+    num = (polyline[i].longitude * precision).floor();
+    _encodeNumber(sb, num - prevLon);
+    prevLon = num;
+  }
+  return sb.toString();
+}
+
+void _encodeNumber(StringBuffer sb, int num) {
+  num = num << 1;
+  if (num < 0) {
+    num = ~num;
+  }
+  while (num >= 0x20) {
+    int nextValue = (0x20 | (num & 0x1f)) + 63;
+    sb.writeCharCode(nextValue);
+    num >>= 5;
+  }
+  num += 63;
+  sb.writeCharCode(num);
 }
 
 List<LatLng> decodePolyline(String encoded) {

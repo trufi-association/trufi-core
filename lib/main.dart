@@ -27,7 +27,7 @@ class TrufiApp extends StatelessWidget {
     return BlocProvider<PreferencesBloc>(
       bloc: preferencesBloc,
       child: BlocProvider<RequestManagerBloc>(
-        bloc: RequestManagerBloc(preferencesBloc),
+        bloc: RequestManagerBloc(context, preferencesBloc),
         child: BlocProvider<LocationProviderBloc>(
           bloc: LocationProviderBloc(),
           child: BlocProvider<FavoriteLocationsBloc>(

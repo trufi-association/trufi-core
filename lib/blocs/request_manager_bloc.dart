@@ -12,6 +12,7 @@ import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/offline_locations_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/routing/routing_manager.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -20,7 +21,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return BlocProvider.of<RequestManagerBloc>(context);
   }
 
-  RequestManagerBloc(this.preferencesBloc) {
+  RequestManagerBloc(BuildContext context, PreferencesBloc preferencesBloc) {
     _requestManager = _onlineRequestManager;
     _subscriptions.add(
       preferencesBloc.outChangeOnline.listen((online) {
@@ -28,9 +29,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
             online ? _onlineRequestManager : _offlineRequestManager;
       }),
     );
+    _offlineRequestManager.routingManager.load(context);
   }
-
-  final PreferencesBloc preferencesBloc;
 
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
@@ -133,6 +133,8 @@ abstract class RequestManager {
 }
 
 class OfflineRequestManager implements RequestManager {
+  final routingManager = RoutingManager();
+
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
@@ -154,8 +156,19 @@ class OfflineRequestManager implements RequestManager {
     TrufiLocation from,
     TrufiLocation to,
   ) async {
-    throw FetchOfflineRequestException(
-      Exception("Fetch plan offline is not implemented yet."),
+    return await compute(
+      _parseRoutingResult,
+      await compute(
+        _findRoutes,
+        RoutingParameter(
+          routingManager,
+          from.latitude,
+          from.longitude,
+          to.latitude,
+          to.longitude,
+          5,
+        ),
+      ),
     );
   }
 }
@@ -251,6 +264,38 @@ class OnlineRequestManager implements RequestManager {
     }
     return error.message;
   }
+}
+
+class RoutingParameter {
+  RoutingParameter(
+    this.routingManager,
+    this.oLat,
+    this.oLng,
+    this.dLat,
+    this.dLng,
+    this.maxRoutes,
+  );
+
+  final RoutingManager routingManager;
+  final double oLat;
+  final double oLng;
+  final double dLat;
+  final double dLng;
+  final int maxRoutes;
+}
+
+RoutingResult _findRoutes(RoutingParameter parameter) {
+  return parameter.routingManager.findRoutes(
+    parameter.oLat,
+    parameter.oLng,
+    parameter.dLat,
+    parameter.dLng,
+    parameter.maxRoutes,
+  );
+}
+
+Plan _parseRoutingResult(RoutingResult routingResult) {
+  return Plan.fromRoutingResult(routingResult);
 }
 
 Plan _parsePlan(String responseBody) {
