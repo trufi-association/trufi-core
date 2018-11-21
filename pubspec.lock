@@ -107,12 +107,10 @@ packages:
   flutter_compass:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "fix/1_app_crash_in_emulator"
-      resolved-ref: "274d595eeb07cac49f86e6370debc761c109e140"
-      url: "git@github.com:ubilabs/flutter_compass.git"
-    source: git
-    version: "0.0.1"
+      name: flutter_compass
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   flutter_driver:
     dependency: "direct dev"
     description: flutter

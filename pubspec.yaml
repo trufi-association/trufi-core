@@ -12,13 +12,10 @@ dependencies:
   #  git:
   #    url: git@github.com:ubilabs/flutter_map.git
   #    ref: feat/customise_polylines
-  flutter_compass:
-    git:
-      url: git@github.com:ubilabs/flutter_compass.git
-      ref: fix/1_app_crash_in_emulator
 
   cupertino_icons: ^0.1.2
   diff_match_patch: 0.3.0
+  flutter_compass: ^0.0.2
   flutter_svg: ^0.6.0
   geolocator: ^2.0.1
   http: ^0.12.0
