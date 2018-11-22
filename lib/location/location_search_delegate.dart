@@ -198,7 +198,7 @@ class _SuggestionList extends StatelessWidget {
     return _buildFutureBuilder(
       context,
       localizations.searchTitleResults,
-      requestManagerBloc.fetchLocations(context, query),
+      requestManagerBloc.fetchLocations(context, query, 30),
       Icons.location_on,
       isVisibleWhenEmpty: true,
     );
