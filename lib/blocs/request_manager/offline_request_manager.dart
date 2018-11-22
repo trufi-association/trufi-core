@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/important_locations_bloc.dart';
-import 'package:trufi_app/blocs/offline_locations_bloc.dart';
+import 'package:trufi_app/blocs/place_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/blocs/search_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class OfflineRequestManager implements RequestManager {
@@ -15,12 +15,12 @@ class OfflineRequestManager implements RequestManager {
     int limit,
   ) async {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    final offlineLocationsBloc = OfflineLocationsBloc.of(context);
-    final placeLocationsBloc = ImportantLocationsBloc.of(context);
+    final placeLocationsBloc = PlaceLocationsBloc.of(context);
+    final searchLocationsBloc = SearchLocationsBloc.of(context);
     // Search in places and locations
     final locations = (await Future.wait([
       placeLocationsBloc.fetchWithQuery(context, query), // High priority
-      offlineLocationsBloc.fetchWithQuery(context, query), // Low priority
+      searchLocationsBloc.fetchWithQuery(context, query), // Low priority
     ]))
         .expand((locations) => locations) // Concat lists
         .toList();

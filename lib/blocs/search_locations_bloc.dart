@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/locations_bloc.dart';
+import 'package:trufi_app/blocs/locations_bloc_base.dart';
 import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class OfflineLocationsBloc extends LocationsBloc {
-  static OfflineLocationsBloc of(BuildContext context) {
-    return BlocProvider.of<OfflineLocationsBloc>(context);
+class SearchLocationsBloc extends LocationsBlocBase {
+  static SearchLocationsBloc of(BuildContext context) {
+    return BlocProvider.of<SearchLocationsBloc>(context);
   }
 
-  OfflineLocationsBloc(
+  SearchLocationsBloc(
     BuildContext context,
   ) : super(
           context,
