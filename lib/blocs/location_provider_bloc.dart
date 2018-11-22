@@ -21,8 +21,7 @@ class LocationProviderBloc implements BlocBase {
 
   LocationProvider _locationProvider;
 
-  BehaviorSubject<LatLng> _locationUpdateController =
-      new BehaviorSubject<LatLng>();
+  final _locationUpdateController = BehaviorSubject<LatLng>();
 
   Sink<LatLng> get _inLocationUpdate => _locationUpdateController.sink;
 

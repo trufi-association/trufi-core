@@ -50,9 +50,9 @@ abstract class LocationStorage {
   }
 
   int findMatchAndCalculateStringDistance(String text, String query) {
-    //Find match in text similar to query
+    // Find match in text similar to query
     var position = diffMatchPatch.match(text, query, 0);
-    //if match found, calculate levenshtein distance
+    // if match found, calculate levenshtein distance
     if (position != -1 && position < text.length) {
       return position + query.length + 1 <= text.length
           ? diffMatchPatch.diff_levenshtein(diffMatchPatch.diff(
@@ -60,7 +60,7 @@ abstract class LocationStorage {
           : diffMatchPatch.diff_levenshtein(
               diffMatchPatch.diff(text.substring(position), query));
     } else {
-      //if not match found, return distance 100
+      // if not match found, return distance 100
       return 100;
     }
   }

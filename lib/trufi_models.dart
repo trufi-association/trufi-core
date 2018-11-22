@@ -51,6 +51,14 @@ class TrufiLocation {
     );
   }
 
+  factory TrufiLocation.fromSearch(Map<String, dynamic> json) {
+    return TrufiLocation(
+      description: json['description'],
+      latitude: json['lat'],
+      longitude: json['lng'],
+    );
+  }
+
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     if (json == null) {
       return null;

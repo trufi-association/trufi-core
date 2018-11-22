@@ -117,10 +117,10 @@ class _SuggestionList extends StatelessWidget {
     if (query.isEmpty) {
       slivers.add(_buildHistoryList(context));
       slivers.add(_buildFavoritesList(context));
+      slivers.add(_buildPlacesList(context));
     } else {
       slivers.add(_buildSearchResultList(context));
     }
-    slivers.add(_buildPlacesList(context));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       bottom: false,
@@ -182,6 +182,16 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
+  Widget _buildPlacesList(BuildContext context) {
+    final localizations = TrufiLocalizations.of(context);
+    return _buildFutureBuilder(
+      context,
+      localizations.searchTitlePlaces,
+      importantLocationsBloc.fetch(context),
+      Icons.place,
+    );
+  }
+
   Widget _buildSearchResultList(BuildContext context) {
     final requestManagerBloc = RequestManagerBloc.of(context);
     final localizations = TrufiLocalizations.of(context);
@@ -191,16 +201,6 @@ class _SuggestionList extends StatelessWidget {
       requestManagerBloc.fetchLocations(context, query),
       Icons.location_on,
       isVisibleWhenEmpty: true,
-    );
-  }
-
-  Widget _buildPlacesList(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
-    return _buildFutureBuilder(
-      context,
-      localizations.searchTitlePlaces,
-      importantLocationsBloc.fetchWithQuery(context, query),
-      Icons.location_on,
     );
   }
 

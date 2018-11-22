@@ -17,20 +17,19 @@ abstract class LocationsBloc implements BlocBase {
   final LocationStorage locationStorage;
 
   // AddLocation
-  BehaviorSubject<TrufiLocation> _addLocationController =
-      new BehaviorSubject<TrufiLocation>();
+  final _addLocationController = BehaviorSubject<TrufiLocation>();
 
   Sink<TrufiLocation> get inAddLocation => _addLocationController.sink;
 
   // RemoveLocation
-  BehaviorSubject<TrufiLocation> _removeLocationController =
-      new BehaviorSubject<TrufiLocation>();
+  final _removeLocationController = BehaviorSubject<TrufiLocation>();
 
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
   // Locations
-  BehaviorSubject<List<TrufiLocation>> _locationsController =
-      new BehaviorSubject<List<TrufiLocation>>(seedValue: []);
+  final _locationsController = BehaviorSubject<List<TrufiLocation>>(
+    seedValue: [],
+  );
 
   Sink<List<TrufiLocation>> get _inLocations => _locationsController.sink;
 
@@ -94,4 +93,13 @@ int sortByLocations(
   bool aIsAvailable = locations.contains(a);
   bool bIsAvailable = locations.contains(b);
   return aIsAvailable == bIsAvailable ? 0 : aIsAvailable ? -1 : 1;
+}
+
+int sortByImportance(TrufiLocation a, TrufiLocation b) {
+  if (a.importance != null &&
+      b.importance != null &&
+      a.tempLevenshteinDistance == b.tempLevenshteinDistance) {
+    return a.importance.compareTo(b.importance) * -1;
+  }
+  return 0;
 }
