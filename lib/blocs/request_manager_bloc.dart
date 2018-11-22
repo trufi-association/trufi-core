@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
@@ -31,9 +29,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
-  final _lock = Lock();
 
-  CancelableOperation<List<TrufiLocation>> _operation;
   RequestManager _requestManager;
 
   // Dispose
@@ -48,23 +44,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
+    int limit,
   ) {
-    if (_operation != null) {
-      _operation.cancel();
-    }
-
-    if (!_lock.locked) {
-      return _lock.synchronized(() async {
-        _operation = CancelableOperation.fromFuture(
-          Future.delayed(
-            Duration(seconds: 1),
-            () => _requestManager.fetchLocations(context, query),
-          ),
-        );
-        return _operation.valueOrCancellation(null);
-      });
-    }
-    return Future.value(null);
+    return _requestManager.fetchLocations(context, query, limit);
   }
 
   Future<Plan> fetchPlan(
@@ -82,6 +64,7 @@ abstract class RequestManager {
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
+    int limit,
   );
 
   Future<Plan> fetchPlan(

@@ -24,8 +24,6 @@ class TrufiLocation {
   final double longitude;
   final num importance;
 
-  int tempLevenshteinDistance = 100;
-
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
       description: description,
@@ -92,6 +90,13 @@ class TrufiLocation {
   String toString() {
     return '$latitude,$longitude';
   }
+}
+
+class LevenshteinTrufiLocation {
+  LevenshteinTrufiLocation(this.location, this.distance);
+
+  final TrufiLocation location;
+  final int distance;
 }
 
 class Plan {

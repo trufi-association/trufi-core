@@ -18,6 +18,7 @@ class OnlineRequestManager implements RequestManager {
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
     String query,
+    int limit,
   ) async {
     Uri request = Uri.https(endpoint, searchPath, {
       "query": query,
@@ -27,14 +28,19 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
+      final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
       List<TrufiLocation> locations = await compute(
         _parseLocations,
         utf8.decode(response.bodyBytes),
       );
-      final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+      // Favorites to the top
       locations.sort((a, b) {
         return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
       });
+      // Cutoff by limit
+      if (locations.length > limit) {
+        locations.removeRange(limit, locations.length);
+      }
       return locations;
     } else {
       throw FetchOnlineResponseException('Failed to load locations');
