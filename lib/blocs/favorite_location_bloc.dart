@@ -18,13 +18,12 @@ class FavoriteLocationBloc implements BlocBase {
   }
 
   // IsFavorite
-  final BehaviorSubject<bool> _isFavoriteController = BehaviorSubject<bool>();
+  final _isFavoriteController = BehaviorSubject<bool>();
 
   Stream<bool> get outIsFavorite => _isFavoriteController.stream;
 
   // Favorites
-  final StreamController<List<TrufiLocation>> _favoritesController =
-      StreamController<List<TrufiLocation>>();
+  final _favoritesController = StreamController<List<TrufiLocation>>();
 
   Sink<List<TrufiLocation>> get inFavorites => _favoritesController.sink;
 
