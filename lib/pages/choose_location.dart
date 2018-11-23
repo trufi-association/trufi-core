@@ -5,6 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
+import 'package:trufi_app/widgets/trufi_online_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPage({this.initialPosition});
@@ -16,7 +17,7 @@ class ChooseLocationPage extends StatefulWidget {
 }
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
-  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
+  final _trufiMapController = TrufiMapController();
 
   Marker _chooseOnMapMarker;
 
@@ -24,15 +25,15 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     super.initState();
     _chooseOnMapMarker = buildToMarker(TrufiMap.cochabambaCenter);
     if (widget.initialPosition != null) {
-      _trufiOnAndOfflineMapController.outMapReady.listen((_) {
-        _trufiOnAndOfflineMapController.move(widget.initialPosition, 16.0);
+      _trufiMapController.outMapReady.listen((_) {
+        _trufiMapController.move(widget.initialPosition, 16.0);
       });
     }
   }
 
   @override
   void dispose() {
-    _trufiOnAndOfflineMapController.dispose();
+    _trufiMapController.dispose();
     super.dispose();
   }
 
@@ -94,12 +95,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return TrufiOnAndOfflineMap(
-      controller: _trufiOnAndOfflineMapController,
+    return TrufiOnlineMap(
+      controller: _trufiMapController,
       onPositionChanged: _handleOnMapPositionChanged,
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
-          _trufiOnAndOfflineMapController.yourLocationLayer,
+          _trufiMapController.yourLocationLayer,
           MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
         ];
       },
@@ -129,7 +130,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiOnAndOfflineMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(context);
   }
 
   void _handleOnConfirmationPressed() {
