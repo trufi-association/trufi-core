@@ -161,10 +161,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     final localizations = TrufiLocalizations.of(context);
     final legs = itinerary?.legs ?? [];
     var totalTime = 0.0;
-    var distance = 0.0;
+    var totalDistance = 0.0;
+
     for (PlanItineraryLeg leg in legs) {
-      totalTime += leg.duration.ceil();
-      distance += leg.distance.ceil();
+      totalTime += (leg.duration.ceil() / 60).ceil();
+      totalDistance += leg.distance.ceil();
     }
     return Container(
       height: _animation2.value,
@@ -175,15 +176,17 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       padding: EdgeInsets.all(10.0),
       child: Row(
         children: <Widget>[
-          Text(
-              "${(totalTime / 60).ceil()} ${localizations.instructionMinutes} ",
+          Text("${totalTime.ceil()} ${localizations.instructionMinutes} ",
               style: theme.textTheme.title),
-          distance >= 1000
+          totalDistance >= 1000
               ? Text(
-                  "(${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm})",
-                  style: theme.textTheme.title)
+                  "(${(totalDistance.ceil()/1000).ceil()} ${localizations.instructionUnitKm})",
+                  style: theme.textTheme.title,
+                )
               : Text(
-                  "${distance.ceil()} ${localizations.instructionUnitMeter}"),
+                  "(${totalDistance.ceil()} ${localizations.instructionUnitMeter})",
+                  style: theme.textTheme.title,
+                ),
         ],
       ),
     );
@@ -267,7 +270,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
             ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
-            : Icon(Icons.dehaze, color: Colors.black),
+            : Icon(Icons.keyboard_arrow_up, color: Colors.black),
         onTap: _toggleInstructions,
       ),
     );
