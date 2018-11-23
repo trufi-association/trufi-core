@@ -47,8 +47,7 @@ class PreferencesBloc extends BlocBase {
   SharedPreferences _preferences;
 
   // Change language code
-  BehaviorSubject<String> _changeLanguageCodeController =
-      new BehaviorSubject<String>();
+  final _changeLanguageCodeController = BehaviorSubject<String>();
 
   Sink<String> get inChangeLanguageCode {
     return _changeLanguageCodeController.sink;
@@ -59,7 +58,7 @@ class PreferencesBloc extends BlocBase {
   }
 
   // Change online
-  BehaviorSubject<bool> _changeOnlineController = new BehaviorSubject<bool>();
+  final _changeOnlineController = BehaviorSubject<bool>();
 
   Sink<bool> get inChangeOnline {
     return _changeOnlineController.sink;

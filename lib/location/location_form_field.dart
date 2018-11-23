@@ -28,7 +28,9 @@ class LocationFormField extends FormField<TrufiLocation> {
                   materialLocalizations.setSearchHintText(searchHintText);
                   TrufiLocation location = await showSearch(
                     context: state.context,
-                    delegate: LocationSearchDelegate(),
+                    delegate: LocationSearchDelegate(
+                      currentLocation: state.value,
+                    ),
                   );
                   if (location != null) {
                     state.didChange(location);

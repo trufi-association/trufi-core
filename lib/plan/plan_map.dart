@@ -8,6 +8,7 @@ import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/crop_button.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
+import 'package:trufi_app/widgets/trufi_online_map.dart';
 import 'package:trufi_app/widgets/your_location_button.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
@@ -24,7 +25,7 @@ class PlanMapPage extends StatefulWidget {
 class PlanMapPageState extends State<PlanMapPage> {
   final _cropButtonKey = GlobalKey<CropButtonState>();
   final _subscriptions = CompositeSubscription();
-  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
+  final _trufiMapController = TrufiMapController();
 
   PlanMapPageStateData _data;
 
@@ -36,7 +37,7 @@ class PlanMapPageState extends State<PlanMapPage> {
       onItineraryTap: widget.planPageController.inSelectedItinerary.add,
     );
     _subscriptions.add(
-      _trufiOnAndOfflineMapController.outMapReady.listen((_) {
+      _trufiMapController.outMapReady.listen((_) {
         setState(() {
           _data.needsCameraUpdate = true;
         });
@@ -57,7 +58,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   @override
   void dispose() {
     _subscriptions.cancel();
-    _trufiOnAndOfflineMapController.dispose();
+    _trufiMapController.dispose();
     super.dispose();
   }
 
@@ -70,9 +71,9 @@ class PlanMapPageState extends State<PlanMapPage> {
     }
     return Stack(
       children: <Widget>[
-        TrufiOnAndOfflineMap(
+        TrufiOnlineMap(
           key: ValueKey("PlanMap"),
-          controller: _trufiOnAndOfflineMapController,
+          controller: _trufiMapController,
           onTap: _handleOnMapTap,
           onPositionChanged: _handleOnMapPositionChanged,
           layerOptionsBuilder: (context) {
@@ -82,7 +83,7 @@ class PlanMapPageState extends State<PlanMapPage> {
               _data.fromMarkerLayer,
               _data.selectedPolylinesLayer,
               _data.selectedMarkersLayer,
-              _trufiOnAndOfflineMapController.yourLocationLayer,
+              _trufiMapController.yourLocationLayer,
               _data.toMarkerLayer,
             ];
           },
@@ -124,7 +125,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiOnAndOfflineMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(context);
   }
 
   void _handleOnCropPressed() {
@@ -136,7 +137,7 @@ class PlanMapPageState extends State<PlanMapPage> {
   // Getter
 
   MapController get _mapController {
-    return _trufiOnAndOfflineMapController.mapController;
+    return _trufiMapController.mapController;
   }
 }
 
