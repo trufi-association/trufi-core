@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/blocs/request_manager/offline_request_manager.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -14,6 +15,8 @@ class OnlineRequestManager implements RequestManager {
   static const String endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
   static const String searchPath = '/otp/routers/default/geocode';
   static const String planPath = 'otp/routers/default/plan';
+
+  final _offlineRequestManager = OfflineRequestManager();
 
   Future<List<TrufiLocation>> fetchLocations(
     BuildContext context,
@@ -26,13 +29,17 @@ class OnlineRequestManager implements RequestManager {
       "corners": "true",
       "stops": "false",
     });
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-      List<TrufiLocation> locations = await compute(
-        _parseLocations,
-        utf8.decode(response.bodyBytes),
-      );
+      final locations = (await Future.wait([
+        // High priority
+        _offlineRequestManager.fetchLocations(context, query, limit),
+        // Low priority
+        compute(_parseLocations, utf8.decode(response.bodyBytes)),
+      ]))
+          .expand((locations) => locations) // Concat lists
+          .toList();
       // Favorites to the top
       locations.sort((a, b) {
         return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
