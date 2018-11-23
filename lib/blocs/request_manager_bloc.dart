@@ -46,7 +46,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     String query,
     int limit,
   ) {
-    return _requestManager.fetchLocations(context, query, limit);
+    // FIXME: For now we search locations always offline
+    //return _requestManager.fetchLocations(context, query, limit);
+    return _offlineRequestManager.fetchLocations(context, query, limit);
   }
 
   Future<Plan> fetchPlan(
@@ -54,7 +56,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     TrufiLocation from,
     TrufiLocation to,
   ) {
-    return _requestManager.fetchPlan(context, from, to);
+    // FIXME: For now we fetch plans always online
+    //return _requestManager.fetchPlan(context, from, to);
+    return _onlineRequestManager.fetchPlan(context, from, to);
   }
 }
 
