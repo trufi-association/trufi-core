@@ -74,9 +74,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
       ),
       actions: <Widget>[
         GestureDetector(
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.only(right: 24.0),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
+            child: Center(
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
