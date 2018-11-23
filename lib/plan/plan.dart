@@ -52,10 +52,11 @@ class PlanPage extends StatefulWidget {
 class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   PlanPageController _planPageController;
   TabController _tabController;
-  VisibilityFlag _visibleFlag = VisibilityFlag.visible;
+  VisibilityFlag _visibleFlag = VisibilityFlag.gone;
 
   AnimationController _animationController;
   Animation<double> _animation;
+  Animation<double> _animation2;
 
   @override
   void initState() {
@@ -64,7 +65,16 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation = Tween(begin: 200.0, end: 60.0).animate(
+    _animation = Tween(begin: 60.0, end: 200.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+        setState(() {});
+      });
+
+    _animation2 = Tween(begin: 60.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -112,8 +122,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
             ),
             VisibleWidget(
               visibility: _visibleFlag,
-              child: _buildItinerariesVisible(context),
-              removedChild: _buildItinerariesGone(context),
+              child: _buildItinerariesDetails(context),
+              removedChild: _buildItinerariesSummary(context),
             ),
           ],
         ),
@@ -121,59 +131,60 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildItinerariesVisible(BuildContext context) {
-    return Container(
-      height: _animation.value,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
-      ),
-      child: PlanItineraryTabPages(
-        _tabController,
-        _planPageController.plan.itineraries,
-        _buildToggleSummaryButton(context),
-      ),
+  Widget _buildItinerariesSummary(BuildContext context) {
+    return StreamBuilder<PlanItinerary>(
+      stream: _planPageController.outSelectedItinerary,
+      initialData: _planPageController.selectedItinerary,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<PlanItinerary> snapshot,
+      ) {
+        return Column(
+          children: <Widget>[
+            _buildTotalDurationFromSelectedItinerary(
+              context,
+              snapshot.data,
+            ),
+            _buildItinerarySummary(
+              context,
+              snapshot.data,
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildItinerariesGone(BuildContext context) {
+  Widget _buildTotalDurationFromSelectedItinerary(
+      BuildContext context, PlanItinerary itinerary) {
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    final legs = itinerary?.legs ?? [];
+    var totalTime = 0.0;
+    var distance = 0.0;
+    for (PlanItineraryLeg leg in legs) {
+      totalTime += leg.duration.ceil();
+      distance += leg.distance.ceil();
+    }
     return Container(
-      height: _animation.value,
+      height: _animation2.value,
       decoration: BoxDecoration(
+        color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
       ),
-      child: Material(
-        color: Colors.white,
-        child: InkWell(
-          onTap: _toggleInstructions,
-          child: Container(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        StreamBuilder<PlanItinerary>(
-                          stream: _planPageController.outSelectedItinerary,
-                          initialData: _planPageController.selectedItinerary,
-                          builder: (
-                            BuildContext context,
-                            AsyncSnapshot<PlanItinerary> snapshot,
-                          ) {
-                            return _buildItinerarySummary(
-                              context,
-                              snapshot.data,
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  _buildToggleSummaryButton(context),
-                ],
-              )),
-        ),
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        children: <Widget>[
+          Text(
+              "${(totalTime / 60).ceil()} ${localizations.instructionMinutes} ",
+              style: theme.textTheme.title),
+          distance >= 1000
+              ? Text(
+                  "(${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm})",
+                  style: theme.textTheme.title)
+              : Text(
+                  "${distance.ceil()} ${localizations.instructionUnitMeter}"),
+        ],
       ),
     );
   }
@@ -207,8 +218,47 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ),
       );
     }
-    return Row(
-      children: children,
+    return Material(
+      color: Colors.white,
+      child: InkWell(
+        onTap: _toggleInstructions,
+        child: Container(
+          height: _animation.value,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 1.0)],
+          ),
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    Row(children: children),
+                  ],
+                ),
+              ),
+              _buildToggleSummaryButton(context)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItinerariesDetails(BuildContext context) {
+    return Container(
+      height: _animation.value,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+      ),
+      child: PlanItineraryTabPages(
+        _tabController,
+        _planPageController.plan.itineraries,
+        _buildToggleSummaryButton(context),
+      ),
     );
   }
 
@@ -217,7 +267,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
             ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
-            : Icon(Icons.keyboard_arrow_up, color: Colors.black),
+            : Icon(Icons.dehaze, color: Colors.black),
         onTap: _toggleInstructions,
       ),
     );
@@ -229,9 +279,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           ? VisibilityFlag.gone
           : VisibilityFlag.visible;
       if (_visibleFlag == VisibilityFlag.gone) {
-        _animationController.forward();
-      } else {
         _animationController.reverse();
+      } else {
+        _animationController.forward();
       }
     });
   }
