@@ -66,7 +66,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             TeamPage.route,
           ),
           Divider(),
-          _buildOfflineToggle(context),
+          // FIXME: For now we do not provide this option
+          //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
         ],
       ),
