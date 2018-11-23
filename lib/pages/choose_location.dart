@@ -22,11 +22,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
 
   void initState() {
     super.initState();
-    _chooseOnMapMarker = buildToMarker(
-      widget.initialPosition != null
-          ? widget.initialPosition
-          : TrufiMap.cochabambaCenter,
-    );
+    _chooseOnMapMarker = buildToMarker(TrufiMap.cochabambaCenter);
+    if (widget.initialPosition != null) {
+      _trufiOnAndOfflineMapController.outMapReady.listen((_) {
+        _trufiOnAndOfflineMapController.move(widget.initialPosition, 16.0);
+      });
+    }
   }
 
   @override

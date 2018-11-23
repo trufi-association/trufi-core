@@ -16,6 +16,10 @@ import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/favorite_button.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
+  LocationSearchDelegate({this.currentLocation});
+
+  final TrufiLocation currentLocation;
+
   TrufiLocation _result;
 
   @override
@@ -54,6 +58,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         _result = location;
         showResults(context);
       },
+      currentLocation: currentLocation,
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       placeLocationsBloc: PlaceLocationsBloc.of(context),
@@ -96,6 +101,7 @@ class _SuggestionList extends StatelessWidget {
     this.query,
     this.onSelected,
     this.onMapTapped,
+    this.currentLocation,
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
     @required this.placeLocationsBloc,
@@ -107,6 +113,7 @@ class _SuggestionList extends StatelessWidget {
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
+  final TrufiLocation currentLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +382,16 @@ class _SuggestionList extends StatelessWidget {
   void _handleOnChooseOnMapTap(BuildContext context) async {
     final localizations = TrufiLocalizations.of(context);
     LatLng mapLocation = await Navigator.of(context).push(
-      MaterialPageRoute<LatLng>(builder: (context) => ChooseLocationPage()),
+      MaterialPageRoute<LatLng>(
+        builder: (context) => ChooseLocationPage(
+              initialPosition: currentLocation != null
+                  ? LatLng(
+                      currentLocation.latitude,
+                      currentLocation.longitude,
+                    )
+                  : null,
+            ),
+      ),
     );
     _handleOnMapTapped(
       description: localizations.searchMapMarker,
