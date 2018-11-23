@@ -114,6 +114,11 @@ class _SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
   final TrufiLocation currentLocation;
+  final abbreviation = {
+    "Avenida": "Av.",
+    "Calle": "Cl.",
+    "Camino": "C.º",
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -339,6 +344,9 @@ class _SuggestionList extends StatelessWidget {
     String title, {
     Widget trailing,
   }) {
+    abbreviation.forEach((from, replace) {
+      title = title.replaceAll(from, replace);
+    });
     final theme = Theme.of(context);
     Row row = Row(
       children: <Widget>[
