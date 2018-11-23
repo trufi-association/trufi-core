@@ -39,6 +39,10 @@ class TrufiOnAndOfflineMapController {
     active.moveToYourLocation(context);
   }
 
+  void move(LatLng center, double zoom) {
+    active.move(center, zoom);
+  }
+
   Sink<Null> get _inMapReady => _mapReadyController.sink;
 
   Stream<Null> get outMapReady => _mapReadyController.stream;
@@ -187,6 +191,10 @@ class TrufiMapController {
       context: context,
       builder: (context) => buildAlertLocationServicesDenied(context),
     );
+  }
+
+  void move(LatLng center, double zoom) {
+    _mapController.move(center, zoom);
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;
