@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/widgets/trufi_map.dart';
+import 'package:trufi_app/widgets/trufi_online_map.dart';
 
 class PlanEmptyPage extends StatefulWidget {
   PlanEmptyPage({this.initialPosition});
@@ -14,17 +15,17 @@ class PlanEmptyPage extends StatefulWidget {
 }
 
 class PlanEmptyPageState extends State<PlanEmptyPage> {
-  final _trufiOnAndOfflineMapController = TrufiOnAndOfflineMapController();
+  final _trufiMapController = TrufiMapController();
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
-      TrufiOnAndOfflineMap(
+      TrufiOnlineMap(
         key: ValueKey("PlanEmptyMap"),
-        controller: _trufiOnAndOfflineMapController,
+        controller: _trufiMapController,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
-            _trufiOnAndOfflineMapController.yourLocationLayer,
+            _trufiMapController.yourLocationLayer,
           ];
         },
       ),
@@ -46,6 +47,6 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiOnAndOfflineMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(context);
   }
 }

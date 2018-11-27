@@ -7,8 +7,8 @@ import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/location/location_storage.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-abstract class LocationsBloc implements BlocBase {
-  LocationsBloc(BuildContext context, this.locationStorage) {
+abstract class LocationsBlocBase implements BlocBase {
+  LocationsBlocBase(BuildContext context, this.locationStorage) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);
     locationStorage.load(context).then((_) => _notify);
@@ -17,20 +17,19 @@ abstract class LocationsBloc implements BlocBase {
   final LocationStorage locationStorage;
 
   // AddLocation
-  BehaviorSubject<TrufiLocation> _addLocationController =
-      new BehaviorSubject<TrufiLocation>();
+  final _addLocationController = BehaviorSubject<TrufiLocation>();
 
   Sink<TrufiLocation> get inAddLocation => _addLocationController.sink;
 
   // RemoveLocation
-  BehaviorSubject<TrufiLocation> _removeLocationController =
-      new BehaviorSubject<TrufiLocation>();
+  final _removeLocationController = BehaviorSubject<TrufiLocation>();
 
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
   // Locations
-  BehaviorSubject<List<TrufiLocation>> _locationsController =
-      new BehaviorSubject<List<TrufiLocation>>(seedValue: []);
+  final _locationsController = BehaviorSubject<List<TrufiLocation>>(
+    seedValue: [],
+  );
 
   Sink<List<TrufiLocation>> get _inLocations => _locationsController.sink;
 
@@ -71,7 +70,7 @@ abstract class LocationsBloc implements BlocBase {
     return locationStorage.fetchLocations(context);
   }
 
-  Future<List<TrufiLocation>> fetchWithQuery(
+  Future<List<LevenshteinTrufiLocation>> fetchWithQuery(
     BuildContext context,
     String query,
   ) {

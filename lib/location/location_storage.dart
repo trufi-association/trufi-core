@@ -28,43 +28,6 @@ abstract class LocationStorage {
     return _sortedByFavorites(_locations.toList(), context);
   }
 
-  Future<List<TrufiLocation>> fetchLocationsWithQuery(
-    BuildContext context,
-    String query,
-  ) async {
-    query = query.toLowerCase();
-    var locations = query.isEmpty
-        ? _locations.toList()
-        : _locations.where((l) {
-            l.tempLevenshteinDistance = findMatchAndCalculateStringDistance(
-              l.description.toLowerCase(),
-              query,
-            );
-            return l.tempLevenshteinDistance < 3;
-          }).toList();
-    locations = await _sortedByFavorites(locations, context);
-    locations.sort((a, b) {
-      return a.tempLevenshteinDistance.compareTo(b.tempLevenshteinDistance);
-    });
-    return locations;
-  }
-
-  int findMatchAndCalculateStringDistance(String text, String query) {
-    //Find match in text similar to query
-    var position = diffMatchPatch.match(text, query, 0);
-    //if match found, calculate levenshtein distance
-    if (position != -1 && position < text.length) {
-      return position + query.length + 1 <= text.length
-          ? diffMatchPatch.diff_levenshtein(diffMatchPatch.diff(
-              text.substring(position, position + query.length + 1), query))
-          : diffMatchPatch.diff_levenshtein(
-              diffMatchPatch.diff(text.substring(position), query));
-    } else {
-      //if not match found, return distance 100
-      return 100;
-    }
-  }
-
   Future<List<TrufiLocation>> fetchLocationsWithLimit(
     BuildContext context,
     int limit,
@@ -75,15 +38,24 @@ abstract class LocationStorage {
     );
   }
 
-  Future<List<TrufiLocation>> _sortedByFavorites(
-    List<TrufiLocation> locations,
+  Future<List<LevenshteinTrufiLocation>> fetchLocationsWithQuery(
     BuildContext context,
+    String query,
   ) async {
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    locations.sort((a, b) {
-      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
-    });
-    return locations;
+    query = query.toLowerCase();
+    return _locations.fold<List<LevenshteinTrufiLocation>>(
+      List<LevenshteinTrufiLocation>(),
+      (locations, location) {
+        int distance = _findMatchAndCalculateStringDistance(
+          location.description.toLowerCase(),
+          query,
+        );
+        if (distance < 3) {
+          locations.add(LevenshteinTrufiLocation(location, distance));
+        }
+        return locations;
+      },
+    );
   }
 
   void add(TrufiLocation location) {
@@ -99,6 +71,41 @@ abstract class LocationStorage {
 
   bool contains(TrufiLocation location) {
     return _locations.contains(location);
+  }
+
+  int _findMatchAndCalculateStringDistance(String text, String query) {
+    // Find match in text similar to query
+    var position = diffMatchPatch.match(text, query, 0);
+    // If match found, calculate levenshtein distance
+    if (position != -1 && position < text.length) {
+      return position + query.length + 1 <= text.length
+          ? diffMatchPatch.diff_levenshtein(
+              diffMatchPatch.diff(
+                text.substring(position, position + query.length + 1),
+                query,
+              ),
+            )
+          : diffMatchPatch.diff_levenshtein(
+              diffMatchPatch.diff(
+                text.substring(position),
+                query,
+              ),
+            );
+    } else {
+      // If no match found, return distance 100
+      return 100;
+    }
+  }
+
+  Future<List<TrufiLocation>> _sortedByFavorites(
+    List<TrufiLocation> locations,
+    BuildContext context,
+  ) async {
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
   }
 }
 
