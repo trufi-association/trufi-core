@@ -28,7 +28,7 @@ offlineMapTileLayerOptions() {
 tileHostingTileLayerOptions() {
   return TileLayerOptions(
     urlTemplate:
-        "https://maps.tilehosting.com/styles/positron/{z}/{x}/{y}.png?key={key}",
+        "https://maps.tilehosting.com/styles/streets/{z}/{x}/{y}.png?key={key}",
     additionalOptions: {
       'key': '***REMOVED***',
     },
