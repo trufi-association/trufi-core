@@ -88,7 +88,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     )..addListener(() {
         setState(() {});
       });
-    _animationSummaryHeight = Tween(begin: summaryHeight, end: 0.0).animate(
+    _animationSummaryHeight = Tween(begin: summaryHeight, end: instructionHeightMax).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
