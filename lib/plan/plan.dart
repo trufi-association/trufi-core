@@ -55,8 +55,13 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   VisibilityFlag _visibleFlag = VisibilityFlag.gone;
 
   AnimationController _animationController;
-  Animation<double> _animation;
-  Animation<double> _animation2;
+  Animation<double> _animationInstructionHeight;
+  Animation<double> _animationDurationHeight;
+  Animation<double> _animationSummaryHeight;
+  static const durationHeight = 60.0;
+  static const summaryHeight = 60.0;
+  static const instructionHeightMin = durationHeight + summaryHeight;
+  static const instructionHeightMax = 200.0;
 
   @override
   void initState() {
@@ -65,7 +70,25 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _animation = Tween(begin: 60.0, end: 200.0).animate(
+
+    _animationInstructionHeight =
+        Tween(begin: instructionHeightMin, end: instructionHeightMax).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+            setState(() {});
+          });
+    _animationDurationHeight = Tween(begin: durationHeight, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() {
+        setState(() {});
+      });
+    _animationSummaryHeight = Tween(begin: summaryHeight, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
@@ -74,14 +97,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         setState(() {});
       });
 
-    _animation2 = Tween(begin: 60.0, end: 0.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    )..addListener(() {
-        setState(() {});
-      });
     _planPageController = PlanPageController(widget.plan);
     if (_planPageController.plan.itineraries.isNotEmpty) {
       _planPageController.inSelectedItinerary.add(
@@ -168,7 +183,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       totalDistance += leg.distance.ceil();
     }
     return Container(
-      height: _animation2.value,
+      height: _animationDurationHeight.value,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
@@ -176,11 +191,13 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       padding: EdgeInsets.all(10.0),
       child: Row(
         children: <Widget>[
-          Text("${totalTime.ceil()} ${localizations.instructionMinutes} ",
-              style: theme.textTheme.title),
+          Text(
+            "${totalTime.ceil()} ${localizations.instructionMinutes} ",
+            style: theme.textTheme.title,
+          ),
           totalDistance >= 1000
               ? Text(
-                  "(${(totalDistance.ceil()/1000).ceil()} ${localizations.instructionUnitKm})",
+                  "(${(totalDistance.ceil() / 1000).ceil()} ${localizations.instructionUnitKm})",
                   style: theme.textTheme.title,
                 )
               : Text(
@@ -221,29 +238,31 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ),
       );
     }
-    return Material(
-      color: Colors.white,
-      child: InkWell(
-        onTap: _toggleInstructions,
-        child: Container(
-          height: _animation.value,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: <BoxShadow>[BoxShadow(blurRadius: 1.0)],
-          ),
-          padding: EdgeInsets.all(10.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Row(children: children),
-                  ],
+    return Container(
+      height: _animationSummaryHeight.value,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 1.0)],
+      ),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: _toggleInstructions,
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      Row(children: children),
+                    ],
+                  ),
                 ),
-              ),
-              _buildToggleSummaryButton(context)
-            ],
+                _buildToggleSummaryButton(context)
+              ],
+            ),
           ),
         ),
       ),
@@ -252,7 +271,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   Widget _buildItinerariesDetails(BuildContext context) {
     return Container(
-      height: _animation.value,
+      height: _animationInstructionHeight.value,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
