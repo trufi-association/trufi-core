@@ -284,7 +284,7 @@ class PlanItineraryLeg {
       );
     } else if (mode == 'BUS') {
       sb.write(
-        "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
+        "${_carTypeString(localizations)} $route ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
       );
     }
     return sb.toString();
@@ -296,7 +296,7 @@ class PlanItineraryLeg {
       sb.write("${localizations.instructionWalk}");
     } else if (mode == 'BUS') {
       sb.write(
-        "${localizations.instructionRide} ${_carTypeString(localizations)} #$route ${localizations.instructionFor}",
+        "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}",
       );
     }
     sb.write(
