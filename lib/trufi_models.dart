@@ -280,11 +280,11 @@ class PlanItineraryLeg {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(
-        "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo} ${_toString(localizations)} ${localizations.instructionWalk}",
+        "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)} ${localizations.instructionWalk}",
       );
     } else if (mode == 'BUS') {
       sb.write(
-        "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_distanceString(localizations)} - ${_toString(localizations)} ${localizations.instructionFor} (${_durationString(localizations)})",
+        "${_carTypeString(localizations)} #$route ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
       );
     }
     return sb.toString();
