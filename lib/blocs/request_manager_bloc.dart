@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
@@ -29,7 +31,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
+  final _fetchLocationLock = Lock();
 
+  CancelableOperation<List<TrufiLocation>> _fetchLocationOperation;
   RequestManager _requestManager;
 
   // Dispose
@@ -46,9 +50,31 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     String query,
     int limit,
   ) {
-    // FIXME: For now we search locations always online
-    //return _requestManager.fetchLocations(context, query, limit);
-    return _onlineRequestManager.fetchLocations(context, query, limit);
+    // Cancel running operation
+    if (_fetchLocationOperation != null) {
+      _fetchLocationOperation.cancel();
+      _fetchLocationOperation = null;
+    }
+
+    // Allow only one running request
+    return (_fetchLocationLock.locked)
+        ? Future.value(null)
+        : _fetchLocationLock.synchronized(() async {
+            _fetchLocationOperation = CancelableOperation.fromFuture(
+              Future.delayed(
+                Duration.zero,
+                () {
+                  // FIXME: For now we search locations always online
+                  return _onlineRequestManager.fetchLocations(
+                    context,
+                    query,
+                    limit,
+                  );
+                },
+              ),
+            );
+            return _fetchLocationOperation.valueOrCancellation(null);
+          });
   }
 
   Future<Plan> fetchPlan(
