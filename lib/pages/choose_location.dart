@@ -73,9 +73,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         ],
       ),
       actions: <Widget>[
-        GestureDetector(
+        FlatButton(
+          onPressed: _handleOnConfirmationPressed,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Center(
               child: RichText(
                 maxLines: 1,
@@ -88,7 +88,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
               ),
             ),
           ),
-          onTap: _handleOnConfirmationPressed,
         )
       ],
     );
