@@ -2,6 +2,7 @@
   "title": "Trufi App",
   "tag_line": "Transporte público en Cochabamba",
   "description": "Trufis, microspi, buspi ima qhuchapampapi aswan sumaq ch’usanapaq.",
+  "version": "Versión",
   "alert_location_services_denied_title": "Kay kiti mana tarikunchu",
   "alert_location_services_denied_message": "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
   "common_ok": "Ari",

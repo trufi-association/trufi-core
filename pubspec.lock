@@ -7,7 +7,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.33.0"
+    version: "0.34.0"
   ansicolor:
     dependency: transitive
     description:
@@ -21,7 +21,7 @@ packages:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.1"
   async:
     dependency: transitive
     description:
@@ -110,7 +110,7 @@ packages:
       name: flutter_compass
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   flutter_driver:
     dependency: "direct dev"
     description: flutter
@@ -134,7 +134,7 @@ packages:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2"
+    version: "0.6.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -146,7 +146,7 @@ packages:
       name: front_end
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.6"
+    version: "0.1.7"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -158,7 +158,7 @@ packages:
       name: geolocator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   glob:
     dependency: transitive
     description:
@@ -235,7 +235,7 @@ packages:
       name: kernel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.6"
+    version: "0.3.7"
   latlong:
     dependency: transitive
     description:
@@ -299,6 +299,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  package_info:
+    dependency: "direct main"
+    description:
+      name: package_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   package_resolver:
     dependency: transitive
     description:
@@ -319,7 +326,7 @@ packages:
       name: path_drawing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.1"
+    version: "0.4.0"
   path_parsing:
     dependency: transitive
     description:
@@ -340,7 +347,7 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   petitparser:
     dependency: transitive
     description:
@@ -499,7 +506,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.4"
+    version: "1.5.1+1"
   test_api:
     dependency: transitive
     description:
@@ -507,6 +514,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
+  test_core:
+    dependency: transitive
+    description:
+      name: test_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   transparent_image:
     dependency: transitive
     description:
@@ -592,5 +606,5 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.0.0 <3.0.0"
+  dart: ">=2.1.0-dev.5.0 <3.0.0"
   flutter: ">=0.7.3 <2.0.0"
