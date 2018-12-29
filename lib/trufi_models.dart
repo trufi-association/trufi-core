@@ -346,12 +346,14 @@ class PlanItineraryLeg {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'WALK'
         ? Icons.directions_walk
-        : carType.contains('trufi')
-            ? Icons.local_taxi
-            : carType.contains('micro')
-                ? Icons.directions_bus
-                : carType.contains('minibus')
-                    ? Icons.airport_shuttle
-                    : Icons.directions_bus;
+        : mode == 'CAR'
+            ? Icons.drive_eta
+            : carType.contains('trufi')
+                ? Icons.local_taxi
+                : carType.contains('micro')
+                    ? Icons.directions_bus
+                    : carType.contains('minibus')
+                        ? Icons.airport_shuttle
+                        : Icons.directions_bus;
   }
 }
