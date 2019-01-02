@@ -282,9 +282,9 @@ class PlanItineraryLeg {
       sb.write(
         "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)} ${localizations.instructionWalk}",
       );
-    } else if (mode == 'BUS') {
+    } else if (mode == 'BUS' || mode == 'CAR') {
       sb.write(
-        "${_carTypeString(localizations)} $route ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
+        "${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
       );
     }
     return sb.toString();
@@ -294,9 +294,9 @@ class PlanItineraryLeg {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write("${localizations.instructionWalk}");
-    } else if (mode == 'BUS') {
+    } else if (mode == 'BUS' || mode == 'CAR') {
       sb.write(
-        "${localizations.instructionRide} ${_carTypeString(localizations)} $route ${localizations.instructionFor}",
+        "${localizations.instructionRide} ${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionFor}",
       );
     }
     sb.write(
@@ -319,13 +319,15 @@ class PlanItineraryLeg {
 
   String _carTypeString(TrufiLocalizations localizations) {
     String carType = routeLongName?.toLowerCase() ?? "";
-    return carType.contains('trufi')
-        ? localizations.instructionRideTrufi
-        : carType.contains('micro')
-            ? localizations.instructionRideMicro
-            : carType.contains('minibus')
-                ? localizations.instructionRideMinibus
-                : localizations.instructionRideBus;
+    return mode == 'CAR'
+        ? localizations.instructionRideCar
+        : carType.contains('trufi')
+            ? localizations.instructionRideTrufi
+            : carType.contains('micro')
+                ? localizations.instructionRideMicro
+                : carType.contains('minibus')
+                    ? localizations.instructionRideMinibus
+                    : localizations.instructionRideBus;
   }
 
   String _distanceString(TrufiLocalizations localizations) {
