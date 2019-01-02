@@ -59,16 +59,14 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation from,
     TrufiLocation to,
   ) async {
-    Uri request = Uri.https(endpoint, planPath, {
-      "fromPlace": from.toString(),
-      "toPlace": to.toString(),
-      "date": "01-01-2018",
-      "mode": "TRANSIT,WALK"
-    });
-    final response = await _fetchRequest(request);
-    if (response.statusCode == 200) {
-      Plan plan = await compute(_parsePlan, utf8.decode(response.bodyBytes));
+    Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
+    if (plan.hasError) {
+      if (plan.error.id == 404) {
+        // If there is an error with TRANSIT
+        plan = await _fetchPlan(context, from, to, "CAR,WALK");
+      }
       if (plan.hasError) {
+        // If there is still an error with CAR
         plan = Plan.fromError(
           _localizedErrorForPlanError(
             plan.error,
@@ -76,7 +74,25 @@ class OnlineRequestManager implements RequestManager {
           ),
         );
       }
-      return plan;
+    }
+    return plan;
+  }
+
+  Future<Plan> _fetchPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+    String mode,
+  ) async {
+    Uri request = Uri.https(endpoint, planPath, {
+      "fromPlace": from.toString(),
+      "toPlace": to.toString(),
+      "date": "01-01-2018",
+      "mode": mode
+    });
+    final response = await _fetchRequest(request);
+    if (response.statusCode == 200) {
+      return await compute(_parsePlan, utf8.decode(response.bodyBytes));
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
