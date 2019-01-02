@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
@@ -29,6 +30,8 @@ class AboutPageState extends State<AboutPage> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
+    Future<PackageInfo> packageInfo = PackageInfo.fromPlatform();
+
     return ListView(
       children: <Widget>[
         Container(
@@ -43,7 +46,22 @@ class AboutPageState extends State<AboutPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 8.0),
+                child: new FutureBuilder(
+                  future: packageInfo,
+                  builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+                    if (snapshot.hasError || snapshot.connectionState != ConnectionState.done) {
+                      return Text("");
+                    }
+
+                    return Text(
+                      "${localizations.version} ${snapshot.data.version}",
+                      style: theme.textTheme.body1,
+                    );
+                  },
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
                 child: Text(
                   localizations.tagLine,
                   style: theme.textTheme.subhead,
@@ -64,7 +82,6 @@ class AboutPageState extends State<AboutPage> {
                     return showLicensePage(
                       context: context,
                       applicationName: localizations.title,
-                      applicationVersion: '0.0.1',
                     );
                   },
                 ),
