@@ -36,13 +36,18 @@ tileHostingTileLayerOptions() {
 }
 
 Marker buildFromMarker(LatLng point) {
-  return buildMarker(point, Icons.adjust, AnchorPos.center, Colors.black);
+  return buildMarker(
+    point,
+    Icons.adjust,
+    AnchorPos.align(AnchorAlign.center),
+    Colors.black,
+  );
 }
 
 Marker buildToMarker(LatLng point) {
   return Marker(
     point: point,
-    anchor: AnchorPos.top,
+    anchorPos: AnchorPos.align(AnchorAlign.top),
     builder: (context) {
       return Container(
         child: SvgPicture.asset(
@@ -56,7 +61,7 @@ Marker buildToMarker(LatLng point) {
 Marker buildTransferMarker(LatLng point) {
   return Marker(
     point: point,
-    anchor: AnchorPos.center,
+    anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) {
       return Transform.scale(
         scale: 0.4,
@@ -78,7 +83,7 @@ Marker buildYourLocationMarker(LatLng point) {
     width: 50.0,
     height: 50.0,
     point: point,
-    anchor: AnchorPos.center,
+    anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) => MyLocationMarker(),
   );
 }
@@ -160,7 +165,7 @@ Marker buildBusMarker(
     width: 50.0,
     height: 30.0,
     point: point,
-    anchor: AnchorPos.center,
+    anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) => GestureDetector(
           onTap: onTap,
           child: Container(
@@ -186,13 +191,13 @@ Marker buildBusMarker(
 Marker buildMarker(
   LatLng point,
   IconData iconData,
-  AnchorPos anchor,
+  AnchorPos anchorPos,
   Color color, {
   Decoration decoration,
 }) {
   return Marker(
     point: point,
-    anchor: anchor,
+    anchorPos: anchorPos,
     builder: (context) {
       return Container(
         decoration: decoration,
