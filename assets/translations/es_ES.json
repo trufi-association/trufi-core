@@ -2,6 +2,7 @@
   "title": "Trufi App",
   "tag_line": "Transporte público en Cochabamba",
   "description": "La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.",
+  "version": "Versión",
   "alert_location_services_denied_title": "Sin acceso a la ubicación",
   "alert_location_services_denied_message": "Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo.",
   "common_ok": "Aceptar",

@@ -2,6 +2,7 @@
   "title": "Trufi App",
   "tag_line": "Öffentliche Verkehrsmittel in Cochabamba",
   "description": "Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen.",
+  "version": "Version",
   "alert_location_services_denied_title": "Kein Standort",
   "alert_location_services_denied_message": "Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.",
   "common_ok": "OK",

@@ -49,6 +49,10 @@ class TrufiLocalizations {
     return translate("description");
   }
 
+  String get version {
+    return translate("version");
+  }
+
   String get alertLocationServicesDeniedTitle {
     return translate("alert_location_services_denied_title");
   }

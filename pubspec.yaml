@@ -25,6 +25,7 @@ dependencies:
   shared_preferences: ^0.4.2
   synchronized: ^1.5.2
   url_launcher: ^3.0.3
+  package_info: ^0.3.2
 
 dev_dependencies:
   flutter_driver:
