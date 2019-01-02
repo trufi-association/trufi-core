@@ -61,15 +61,19 @@ class OnlineRequestManager implements RequestManager {
   ) async {
     Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
     if (plan.hasError) {
-      if (plan.error.id == 404) //if there is an error with TRANSIT
+      if (plan.error.id == 404) {
+        // If there is an error with TRANSIT
         plan = await _fetchPlan(context, from, to, "CAR,WALK");
-      if (plan.hasError) //if still there is an error with CAR
+      }
+      if (plan.hasError) {
+        // If there is still an error with CAR
         plan = Plan.fromError(
           _localizedErrorForPlanError(
             plan.error,
             TrufiLocalizations.of(context),
           ),
         );
+      }
     }
     return plan;
   }
