@@ -34,12 +34,16 @@ class TrufiOnAndOfflineMapController {
     _mapReadyController.close();
   }
 
-  void moveToYourLocation(BuildContext context) {
-    active.moveToYourLocation(context);
+  void moveToYourLocation(BuildContext context, TickerProvider tickerProvider) {
+    active.moveToYourLocation(context: context, tickerProvider: tickerProvider);
   }
 
-  void move(LatLng center, double zoom) {
-    active.move(center, zoom);
+  void move(LatLng center, double zoom, TickerProvider tickerProvider) {
+    active.move(
+      center: center,
+      zoom: zoom,
+      tickerProvider: tickerProvider,
+    );
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;

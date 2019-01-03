@@ -8,10 +8,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/map/map_fit_bounds_animation.dart';
+import 'package:trufi_app/widgets/map/map_move_animation.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiMapController {
+  static const int animationDuration = 500;
+
   final _mapController = MapController();
   final _mapReadyController = BehaviorSubject<Null>();
 
@@ -29,11 +33,18 @@ class TrufiMapController {
     _mapReadyController.close();
   }
 
-  void moveToYourLocation(BuildContext context) async {
+  void moveToYourLocation({
+    @required BuildContext context,
+    TickerProvider tickerProvider,
+  }) async {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
+      move(
+        center: lastLocation,
+        zoom: 17.0,
+        tickerProvider: tickerProvider,
+      );
       return;
     }
     showDialog(
@@ -42,8 +53,36 @@ class TrufiMapController {
     );
   }
 
-  void move(LatLng center, double zoom) {
-    _mapController.move(center, zoom);
+  void move({
+    @required LatLng center,
+    @required double zoom,
+    TickerProvider tickerProvider,
+  }) {
+    if (tickerProvider == null) {
+      _mapController.move(center, zoom);
+    } else {
+      MapMoveAnimation(_mapController).move(
+        center: center,
+        zoom: zoom,
+        tickerProvider: tickerProvider,
+        milliseconds: animationDuration,
+      );
+    }
+  }
+
+  void fitBounds({
+    @required LatLngBounds bounds,
+    TickerProvider tickerProvider,
+  }) {
+    if (tickerProvider == null) {
+      _mapController.fitBounds(bounds);
+    } else {
+      MapFitBoundsAnimation(_mapController).fitBounds(
+        bounds: bounds,
+        tickerProvider: tickerProvider,
+        milliseconds: animationDuration,
+      );
+    }
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;
