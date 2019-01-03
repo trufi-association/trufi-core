@@ -48,12 +48,10 @@ class PlanMapPageState extends State<PlanMapPage>
       widget.planPageController.outSelectedItinerary.listen((
         selectedItinerary,
       ) {
-        if (_data._selectedItinerary != selectedItinerary) {
-          setState(() {
-            _data.selectedItinerary = selectedItinerary;
-            _data.needsCameraUpdate = true;
-          });
-        }
+        setState(() {
+          _data.selectedItinerary = selectedItinerary;
+          _data.needsCameraUpdate = true;
+        });
       }),
     );
   }
