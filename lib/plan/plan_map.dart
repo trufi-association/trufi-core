@@ -48,10 +48,12 @@ class PlanMapPageState extends State<PlanMapPage>
       widget.planPageController.outSelectedItinerary.listen((
         selectedItinerary,
       ) {
-        setState(() {
-          _data.selectedItinerary = selectedItinerary;
-          _data.needsCameraUpdate = true;
-        });
+        if (_data._selectedItinerary != selectedItinerary) {
+          setState(() {
+            _data.selectedItinerary = selectedItinerary;
+            _data.needsCameraUpdate = true;
+          });
+        }
       }),
     );
   }
@@ -270,7 +272,7 @@ class PlanMapPageStateData {
   // Helper
 
   PlanItinerary itineraryForPoint(LatLng point) {
-    return _itineraryForPolyline(polylineHitTest(_allPolylines, point));
+    return _itineraryForPolyline(polylineHitTest(_unselectedPolylines, point));
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {

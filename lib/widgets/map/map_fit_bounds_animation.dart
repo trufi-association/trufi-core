@@ -28,6 +28,7 @@ class MapFitBoundsAnimation {
       begin: mapController.bounds.sw.longitude,
       end: bounds.sw.longitude,
     );
+    final paddingTween = new Tween<double>(begin: 0.0, end: 12.0);
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),
       vsync: tickerProvider,
@@ -47,6 +48,9 @@ class MapFitBoundsAnimation {
             swLatitudeTween.evaluate(animation),
             swLongitudeTween.evaluate(animation),
           ),
+        ),
+        options: FitBoundsOptions(
+          padding: EdgeInsets.all(paddingTween.evaluate(animation)),
         ),
       );
     });
