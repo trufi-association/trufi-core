@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
@@ -55,14 +54,15 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 child: Text(
                   localizations.teamContent,
-                  style: theme.textTheme.title,
+                  style: theme.textTheme.title
+                      .copyWith(color: theme.textTheme.body2.color),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
                   _teamString,
-                  style: theme.textTheme.body1,
+                  style: theme.textTheme.body2,
                 ),
               ),
             ],

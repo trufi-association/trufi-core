@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:trufi_app/location/location_search_delegate.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -15,7 +14,7 @@ class LocationFormField extends FormField<TrufiLocation> {
           onSaved: onSaved,
           builder: (FormFieldState<TrufiLocation> state) {
             final theme = Theme.of(state.context);
-            final textStyle = theme.textTheme.body1;
+            final textStyle = theme.textTheme.body2;
             final hintStyle = theme.textTheme.body1.copyWith(
               color: theme.textTheme.caption.color,
             );
@@ -40,8 +39,8 @@ class LocationFormField extends FormField<TrufiLocation> {
                 child: Container(
                   padding: EdgeInsets.all(1.0),
                   decoration: new BoxDecoration(
-                    color: Colors.transparent,
-                    border: new Border.all(color: Colors.black, width: 1.0),
+                    color: Colors.white,
+                    border: new Border.all(color: Colors.white, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
                   child: SizedBox(

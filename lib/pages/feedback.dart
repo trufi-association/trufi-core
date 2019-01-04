@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FeedbackPage extends StatefulWidget {
   static const String route = "/feedback";
@@ -56,14 +55,15 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 child: Text(
                   localizations.feedbackTitle,
-                  style: theme.textTheme.title,
+                  style: theme.textTheme.title
+                      .copyWith(color: theme.textTheme.body2.color),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
                   localizations.feedbackContent,
-                  style: theme.textTheme.body1,
+                  style: theme.textTheme.body2,
                 ),
               ),
               Container(

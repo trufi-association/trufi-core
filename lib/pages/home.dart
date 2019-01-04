@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
@@ -82,7 +81,6 @@ class HomePageState extends State<HomePage>
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
       bottom: PreferredSize(
         child: Container(),
         preferredSize: Size.fromHeight(45.0),
@@ -128,7 +126,7 @@ class HomePageState extends State<HomePage>
     return GestureDetector(
       key: ValueKey(keys.homePageSwapButton),
       onTap: _swapPlaces,
-      child: Icon(Icons.swap_vert),
+      child: Icon(Icons.swap_vert)
     );
   }
 

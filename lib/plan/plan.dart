@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
@@ -88,14 +87,15 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     )..addListener(() {
         setState(() {});
       });
-    _animationSummaryHeight = Tween(begin: summaryHeight, end: instructionHeightMax).animate(
+    _animationSummaryHeight =
+        Tween(begin: summaryHeight, end: instructionHeightMax).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     )..addListener(() {
-        setState(() {});
-      });
+            setState(() {});
+          });
 
     _planPageController = PlanPageController(widget.plan);
     if (_planPageController.plan.itineraries.isNotEmpty) {
@@ -182,11 +182,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       totalTime += (leg.duration.ceil() / 60).ceil();
       totalDistance += leg.distance.ceil();
     }
+    Color backgroundColor = Theme.of(context).primaryColor;
     return Container(
       height: _animationDurationHeight.value,
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+        color: backgroundColor,
+        boxShadow: <BoxShadow>[BoxShadow(color: backgroundColor, blurRadius: 4.0)],
       ),
       padding: EdgeInsets.all(10.0),
       child: Row(
@@ -223,7 +224,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
             leg.mode == 'BUS'
                 ? Text(
                     leg.route,
-                    style: theme.textTheme.body2.copyWith(
+                    style: theme.textTheme.body1.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -241,11 +242,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     return Container(
       height: _animationSummaryHeight.value,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
         boxShadow: <BoxShadow>[BoxShadow(blurRadius: 1.0)],
       ),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).primaryColor,
         child: InkWell(
           onTap: _toggleInstructions,
           child: Container(
@@ -270,11 +271,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   }
 
   Widget _buildItinerariesDetails(BuildContext context) {
+    Color backgroundColor = Theme.of(context).primaryColor;
     return Container(
       height: _animationInstructionHeight.value,
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 4.0)],
+        color: backgroundColor,
+        boxShadow: <BoxShadow>[BoxShadow(color: backgroundColor, blurRadius: 4.0)],
       ),
       child: PlanItineraryTabPages(
         _tabController,
@@ -288,8 +290,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     return Container(
       child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
-            ? Icon(Icons.keyboard_arrow_down, color: Colors.black)
-            : Icon(Icons.keyboard_arrow_up, color: Colors.black),
+            ? Icon(Icons.keyboard_arrow_down)
+            : Icon(Icons.keyboard_arrow_up),
         onTap: _toggleInstructions,
       ),
     );

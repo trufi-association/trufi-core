@@ -82,7 +82,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         leading: Icon(iconData, color: isSelected ? Colors.black : Colors.grey),
         title: Text(
           title,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
         selected: isSelected,
         onTap: () {

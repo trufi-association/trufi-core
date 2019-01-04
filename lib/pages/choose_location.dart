@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
@@ -115,10 +114,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           height: 70.0,
           width: 56.0,
           child: FloatingActionButton(
-            backgroundColor: Colors.white,
             child: Icon(
               Icons.my_location,
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             onPressed: _handleOnYourLocationPressed,
             heroTag: null,

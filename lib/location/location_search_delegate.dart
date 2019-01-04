@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
-
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
@@ -27,10 +26,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     final theme = Theme.of(context);
     return theme.copyWith(
       primaryColor: Colors.white,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: theme.primaryTextTheme.copyWith(
-        title: theme.primaryTextTheme.body1,
+        title: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
+        body1: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
+        body2: theme.primaryTextTheme.body2.copyWith(color: theme.accentColor),
       ),
     );
   }
@@ -62,6 +62,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       placeLocationsBloc: PlaceLocationsBloc.of(context),
+      appBarTheme: appBarTheme(context),
     );
   }
 
@@ -97,15 +98,15 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 }
 
 class _SuggestionList extends StatelessWidget {
-  _SuggestionList({
-    this.query,
-    this.onSelected,
-    this.onMapTapped,
-    this.currentLocation,
-    @required this.historyLocationsBloc,
-    @required this.favoriteLocationsBloc,
-    @required this.placeLocationsBloc,
-  });
+  _SuggestionList(
+      {this.query,
+      this.onSelected,
+      this.onMapTapped,
+      this.currentLocation,
+      @required this.historyLocationsBloc,
+      @required this.favoriteLocationsBloc,
+      @required this.placeLocationsBloc,
+      @required this.appBarTheme});
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
@@ -114,6 +115,7 @@ class _SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
   final TrufiLocation currentLocation;
+  final ThemeData appBarTheme;
   final abbreviation = {
     "Avenida": "Av.",
     "Calle": "Cl.",
@@ -135,6 +137,7 @@ class _SuggestionList extends StatelessWidget {
     }
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
+      top: false,
       bottom: false,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -307,6 +310,7 @@ class _SuggestionList extends StatelessWidget {
             trailing: FavoriteButton(
               location: location,
               favoritesStream: favoriteLocationsBloc.outLocations,
+              color: appBarTheme.primaryIconTheme.color,
             ),
           );
         },
@@ -316,7 +320,6 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, String title) {
-    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
@@ -325,7 +328,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body2,
+              style: appBarTheme.textTheme.body2,
             ),
           ),
         ],
@@ -347,16 +350,15 @@ class _SuggestionList extends StatelessWidget {
     abbreviation.forEach((from, replace) {
       title = title.replaceAll(from, replace);
     });
-    final theme = Theme.of(context);
     Row row = Row(
       children: <Widget>[
-        Icon(iconData),
+        Icon(iconData, color: appBarTheme.primaryIconTheme.color),
         Container(width: 32.0),
         Expanded(
           child: RichText(
             maxLines: 1,
             overflow: TextOverflow.clip,
-            text: TextSpan(text: title, style: theme.textTheme.body1),
+            text: TextSpan(text: title, style: appBarTheme.textTheme.body1),
           ),
         ),
       ],

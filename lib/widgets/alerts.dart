@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
@@ -61,9 +60,11 @@ Widget _buildAlert({
   String content,
   List<Widget> actions,
 }) {
+  TextStyle textStyle =
+      TextStyle().copyWith(color: Theme.of(context).textTheme.body2.color);
   return AlertDialog(
-    title: title != null ? Text(title) : null,
-    content: content != null ? Text(content) : null,
+    title: title != null ? Text(title, style: textStyle) : null,
+    content: content != null ? Text(content, style: textStyle) : null,
     actions: actions,
   );
 }
