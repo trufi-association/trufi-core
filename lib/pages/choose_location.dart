@@ -15,7 +15,8 @@ class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPageState createState() => ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage> {
+class ChooseLocationPageState extends State<ChooseLocationPage>
+    with TickerProviderStateMixin {
   final _trufiMapController = TrufiMapController();
 
   Marker _chooseOnMapMarker;
@@ -25,7 +26,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     _chooseOnMapMarker = buildToMarker(TrufiMap.cochabambaCenter);
     if (widget.initialPosition != null) {
       _trufiMapController.outMapReady.listen((_) {
-        _trufiMapController.move(widget.initialPosition, 16.0);
+        _trufiMapController.move(
+          center: widget.initialPosition,
+          zoom: 16.0,
+          tickerProvider: this,
+        );
       });
     }
   }
@@ -127,7 +132,10 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(
+      context: context,
+      tickerProvider: this,
+    );
   }
 
   void _handleOnConfirmationPressed() {

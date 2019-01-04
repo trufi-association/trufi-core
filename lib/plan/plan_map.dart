@@ -21,7 +21,8 @@ class PlanMapPage extends StatefulWidget {
   PlanMapPageState createState() => PlanMapPageState();
 }
 
-class PlanMapPageState extends State<PlanMapPage> {
+class PlanMapPageState extends State<PlanMapPage>
+    with TickerProviderStateMixin {
   final _cropButtonKey = GlobalKey<CropButtonState>();
   final _subscriptions = CompositeSubscription();
   final _trufiMapController = TrufiMapController();
@@ -64,7 +65,10 @@ class PlanMapPageState extends State<PlanMapPage> {
   Widget build(BuildContext context) {
     if (_mapController.ready) {
       if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
-        _mapController.fitBounds(_data.selectedBounds);
+        _trufiMapController.fitBounds(
+          bounds: _data.selectedBounds,
+          tickerProvider: this,
+        );
         _data.needsCameraUpdate = false;
       }
     }
@@ -124,7 +128,10 @@ class PlanMapPageState extends State<PlanMapPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(
+      context: context,
+      tickerProvider: this,
+    );
   }
 
   void _handleOnCropPressed() {
@@ -262,7 +269,7 @@ class PlanMapPageStateData {
   // Helper
 
   PlanItinerary itineraryForPoint(LatLng point) {
-    return _itineraryForPolyline(polylineHitTest(_allPolylines, point));
+    return _itineraryForPolyline(polylineHitTest(_unselectedPolylines, point));
   }
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {

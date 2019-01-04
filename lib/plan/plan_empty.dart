@@ -13,7 +13,8 @@ class PlanEmptyPage extends StatefulWidget {
   PlanEmptyPageState createState() => PlanEmptyPageState();
 }
 
-class PlanEmptyPageState extends State<PlanEmptyPage> {
+class PlanEmptyPageState extends State<PlanEmptyPage>
+    with TickerProviderStateMixin {
   final _trufiMapController = TrufiMapController();
 
   @override
@@ -46,6 +47,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage> {
   }
 
   void _handleOnYourLocationPressed() async {
-    _trufiMapController.moveToYourLocation(context);
+    _trufiMapController.moveToYourLocation(
+      context: context,
+      tickerProvider: this,
+    );
   }
 }

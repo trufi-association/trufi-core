@@ -8,14 +8,18 @@ import 'package:rxdart/rxdart.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
+import 'package:trufi_app/widgets/trufi_map_animations.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiMapController {
+  static const int animationDuration = 500;
+
   final _mapController = MapController();
   final _mapReadyController = BehaviorSubject<Null>();
 
   TrufiMapState _state;
+  TrufiMapAnimations _animations;
 
   set state(TrufiMapState state) {
     _state = state;
@@ -23,17 +27,25 @@ class TrufiMapController {
       _mapController.move(TrufiMap.cochabambaCenter, 12.0);
       _inMapReady.add(null);
     });
+    _animations = TrufiMapAnimations(_mapController);
   }
 
   void dispose() {
     _mapReadyController.close();
   }
 
-  void moveToYourLocation(BuildContext context) async {
+  void moveToYourLocation({
+    @required BuildContext context,
+    TickerProvider tickerProvider,
+  }) async {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _mapController.move(lastLocation, 17.0);
+      move(
+        center: lastLocation,
+        zoom: 17.0,
+        tickerProvider: tickerProvider,
+      );
       return;
     }
     showDialog(
@@ -42,8 +54,36 @@ class TrufiMapController {
     );
   }
 
-  void move(LatLng center, double zoom) {
-    _mapController.move(center, zoom);
+  void move({
+    @required LatLng center,
+    @required double zoom,
+    TickerProvider tickerProvider,
+  }) {
+    if (tickerProvider == null) {
+      _mapController.move(center, zoom);
+    } else {
+      _animations.move(
+        center: center,
+        zoom: zoom,
+        tickerProvider: tickerProvider,
+        milliseconds: animationDuration,
+      );
+    }
+  }
+
+  void fitBounds({
+    @required LatLngBounds bounds,
+    TickerProvider tickerProvider,
+  }) {
+    if (tickerProvider == null) {
+      _mapController.fitBounds(bounds);
+    } else {
+      _animations.fitBounds(
+        bounds: bounds,
+        tickerProvider: tickerProvider,
+        milliseconds: animationDuration,
+      );
+    }
   }
 
   Sink<Null> get _inMapReady => _mapReadyController.sink;
