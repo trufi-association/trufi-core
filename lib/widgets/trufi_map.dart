@@ -8,8 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/map/map_fit_bounds_animation.dart';
-import 'package:trufi_app/widgets/map/map_move_animation.dart';
+import 'package:trufi_app/widgets/trufi_map_animations.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
@@ -20,6 +19,7 @@ class TrufiMapController {
   final _mapReadyController = BehaviorSubject<Null>();
 
   TrufiMapState _state;
+  TrufiMapAnimations _animations;
 
   set state(TrufiMapState state) {
     _state = state;
@@ -27,6 +27,7 @@ class TrufiMapController {
       _mapController.move(TrufiMap.cochabambaCenter, 12.0);
       _inMapReady.add(null);
     });
+    _animations = TrufiMapAnimations(_mapController);
   }
 
   void dispose() {
@@ -61,7 +62,7 @@ class TrufiMapController {
     if (tickerProvider == null) {
       _mapController.move(center, zoom);
     } else {
-      MapMoveAnimation(_mapController).move(
+      _animations.move(
         center: center,
         zoom: zoom,
         tickerProvider: tickerProvider,
@@ -77,7 +78,7 @@ class TrufiMapController {
     if (tickerProvider == null) {
       _mapController.fitBounds(bounds);
     } else {
-      MapFitBoundsAnimation(_mapController).fitBounds(
+      _animations.fitBounds(
         bounds: bounds,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
