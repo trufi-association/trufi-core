@@ -17,6 +17,7 @@ class LocationProviderBloc implements BlocBase {
     _locationProvider = LocationProvider(
       onLocationChanged: _inLocationUpdate.add,
     );
+    _locationProvider.start();
   }
 
   LocationProvider _locationProvider;
