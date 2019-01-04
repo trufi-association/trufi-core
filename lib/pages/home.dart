@@ -99,7 +99,7 @@ class HomePageState extends State<HomePage>
         child: Form(
           key: _formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _buildFormField(
                 _fromFieldKey,
@@ -125,17 +125,21 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildSwapButton() {
-    return GestureDetector(
-      key: ValueKey(keys.homePageSwapButton),
-      onTap: _swapPlaces,
-      child: Icon(Icons.swap_vert),
+    return FittedBox(
+      child: IconButton(
+        key: ValueKey(keys.homePageSwapButton),
+        icon: Icon(Icons.swap_vert),
+        onPressed: _swapPlaces,
+      ),
     );
   }
 
   Widget _buildResetButton() {
-    return IconButton(
-      icon: Icon(Icons.clear),
-      onPressed: _reset,
+    return FittedBox(
+      child: IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: _reset,
+      ),
     );
   }
 
