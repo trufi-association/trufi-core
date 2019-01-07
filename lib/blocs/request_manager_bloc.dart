@@ -34,6 +34,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _fetchLocationLock = Lock();
 
   CancelableOperation<List<TrufiLocation>> _fetchLocationOperation;
+  CancelableOperation<Plan> _fetchPlanOperation;
   RequestManager _requestManager;
 
   // Dispose
@@ -77,14 +78,29 @@ class RequestManagerBloc implements BlocBase, RequestManager {
           });
   }
 
+  void cancelFetchPlanOperation() {
+    if (_fetchPlanOperation != null) {
+      _fetchPlanOperation.cancel();
+      _fetchPlanOperation = null;
+    }
+  }
+
   Future<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
   ) {
-    // FIXME: For now we fetch plans always online
-    //return _requestManager.fetchPlan(context, from, to);
-    return _onlineRequestManager.fetchPlan(context, from, to);
+    _fetchPlanOperation = CancelableOperation.fromFuture(
+      Future.delayed(
+        Duration.zero,
+        () {
+          // FIXME: For now we fetch plans always online
+          //return _requestManager.fetchPlan(context, from, to);
+          return _onlineRequestManager.fetchPlan(context, from, to);
+        },
+      ),
+    );
+    return _fetchPlanOperation.valueOrCancellation(null);
   }
 }
 

@@ -268,6 +268,8 @@ class HomePageState extends State<HomePage>
 
   void _fetchPlan() async {
     final requestManagerBloc = RequestManagerBloc.of(context);
+    // cancel the last fetch plan operation for replace with the current request
+    requestManagerBloc.cancelFetchPlanOperation();
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
@@ -277,7 +279,9 @@ class HomePageState extends State<HomePage>
           _data.fromPlace,
           _data.toPlace,
         );
-        if (plan.hasError) {
+        if (plan == null) {
+          throw "Canceled by user";
+        } else if (plan.hasError) {
           _showErrorAlert(plan.error.message);
         } else {
           _setPlan(plan);
