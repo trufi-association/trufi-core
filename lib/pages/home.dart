@@ -34,6 +34,7 @@ class HomePageState extends State<HomePage>
   final _subscriptions = CompositeSubscription();
 
   bool _isFetching = false;
+  FetchPlanOperation _currentFetchPlanOperation;
 
   @override
   initState() {
@@ -269,16 +270,17 @@ class HomePageState extends State<HomePage>
   void _fetchPlan() async {
     final requestManagerBloc = RequestManagerBloc.of(context);
     // cancel the last fetch plan operation for replace with the current request
-    requestManagerBloc.cancelFetchPlanOperation();
+    if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        Plan plan = await requestManagerBloc.fetchPlan(
+        _currentFetchPlanOperation = requestManagerBloc.fetchPlanCancelable(
           context,
           _data.fromPlace,
           _data.toPlace,
         );
+        Plan plan = await _currentFetchPlanOperation.fetch();
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {
