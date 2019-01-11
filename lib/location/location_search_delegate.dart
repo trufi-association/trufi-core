@@ -109,7 +109,7 @@ class _SuggestionList extends StatelessWidget {
       @required this.historyLocationsBloc,
       @required this.favoriteLocationsBloc,
       @required this.placeLocationsBloc,
-      @required this.appBarTheme});
+      @required this.appBarTheme,});
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
