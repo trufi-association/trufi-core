@@ -135,7 +135,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
               ],
             ),
             child:
-                Icon(CircleIcon.circle, color: Theme.of(context).accentColor),
+                Icon(CircleIcon.circle, color: Theme.of(context).accentColor,),
           ),
         ),
       ),
