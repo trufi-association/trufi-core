@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:trufi_app/location/location_search_delegate.dart';
 import 'package:trufi_app/trufi_localizations.dart';
@@ -10,6 +11,7 @@ class LocationFormField extends FormField<TrufiLocation> {
     FormFieldSetter<TrufiLocation> onSaved,
     String hintText,
     String searchHintText,
+    SvgPicture leadingImage,
   }) : super(
           key: key,
           onSaved: onSaved,
@@ -44,27 +46,31 @@ class LocationFormField extends FormField<TrufiLocation> {
                     border: new Border.all(color: Colors.white, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
-                  child: SizedBox(
-                    height: 32.0,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: RichText(
-                          text: state.value != null
-                              ? TextSpan(
-                                  style: textStyle,
-                                  text: state.value.description,
-                                )
-                              : TextSpan(
-                                  style: hintStyle,
-                                  text: hintText,
-                                ),
+                  child: Row(children: <Widget>[
+                    Container(height: 16.0, child: leadingImage),
+                    SizedBox(
+                      height: 32.0,
+                      width: 236.0,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: RichText(
+                            text: state.value != null
+                                ? TextSpan(
+                                    style: textStyle,
+                                    text: state.value.description,
+                                  )
+                                : TextSpan(
+                                    style: hintStyle,
+                                    text: hintText,
+                                  ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ]),
                 ),
               ),
             );
