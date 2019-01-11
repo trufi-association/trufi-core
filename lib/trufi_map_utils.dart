@@ -37,12 +37,16 @@ tileHostingTileLayerOptions() {
 }
 
 Marker buildFromMarker(LatLng point) {
-  return buildMarker(
-    point,
-    Icons.adjust,
-    AnchorPos.align(AnchorAlign.center),
-    //ToDo: Find a better way to achieve this
-    const Color(0xffd81b60),
+  return Marker(
+    point: point,
+    anchorPos: AnchorPos.align(AnchorAlign.top),
+    builder: (context) {
+      return Container(
+        child: SvgPicture.asset(
+          "assets/images/from_marker.svg",
+        ),
+      );
+    },
   );
 }
 
@@ -53,7 +57,7 @@ Marker buildToMarker(LatLng point) {
     builder: (context) {
       return Container(
         child: SvgPicture.asset(
-          "assets/images/map_marker.svg",
+          "assets/images/to_marker.svg",
         ),
       );
     },
@@ -136,8 +140,10 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
                 ),
               ],
             ),
-            child:
-                Icon(CircleIcon.circle, color: Theme.of(context).accentColor,),
+            child: Icon(
+              CircleIcon.circle,
+              color: Theme.of(context).accentColor,
+            ),
           ),
         ),
       ),
@@ -148,8 +154,10 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
           angle: (pi / 180.0) * _direction,
           child: Container(
             alignment: Alignment.topCenter,
-            child:
-                Icon(Icons.arrow_drop_up, color: Theme.of(context).accentColor,),
+            child: Icon(
+              Icons.arrow_drop_up,
+              color: Theme.of(context).accentColor,
+            ),
           ),
         ),
       );
