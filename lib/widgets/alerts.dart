@@ -61,7 +61,7 @@ Widget _buildAlert({
   List<Widget> actions,
 }) {
   TextStyle textStyle =
-      TextStyle().copyWith(color: Theme.of(context).textTheme.body2.color);
+      TextStyle().copyWith(color: Theme.of(context).textTheme.body2.color,);
   return AlertDialog(
     title: title != null ? Text(title, style: textStyle) : null,
     content: content != null ? Text(content, style: textStyle) : null,
