@@ -49,6 +49,7 @@ flutter:
   assets:
     - assets/data/locations.json
     - assets/data/places.json
+    - assets/data/search.json
     - assets/data/team.txt
     - assets/translations/
     - assets/images/map_marker.svg
