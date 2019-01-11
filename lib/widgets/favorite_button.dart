@@ -9,7 +9,7 @@ import 'package:trufi_app/trufi_models.dart';
 
 class FavoriteButton extends StatefulWidget {
   FavoriteButton(
-      {Key key, this.location, @required this.favoritesStream, this.color})
+      {Key key, this.location, @required this.favoritesStream, this.color,})
       : super(key: key);
 
   final TrufiLocation location;
