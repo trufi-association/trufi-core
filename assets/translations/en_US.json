@@ -7,8 +7,6 @@
   "alert_location_services_denied_message": "Please make sure your device has GPS and the Location settings are activated.",
   "common_ok": "OK",
   "common_cancel": "Cancel",
-  "common_go_offline": "Go offline",
-  "common_go_online": "Go online",
   "common_destination": "Destination",
   "common_origin": "Origin",
   "common_no_internet_connection": "No internet connection.",

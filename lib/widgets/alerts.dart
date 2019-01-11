@@ -27,7 +27,6 @@ Widget buildErrorAlert({
 
 Widget buildOnAndOfflineErrorAlert({
   @required BuildContext context,
-  @required bool online,
   String title,
   String content,
 }) {
@@ -36,22 +35,8 @@ Widget buildOnAndOfflineErrorAlert({
     title: title,
     content: content,
     actions: [
-      _buildOnAndOfflineButton(context, !online),
       _buildOKButton(context),
     ],
-  );
-}
-
-Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
-  final localizations = TrufiLocalizations.of(context);
-  return FlatButton(
-    onPressed: () {
-      PreferencesBloc.of(context).inChangeOnline.add(online);
-      Navigator.pop(context);
-    },
-    child: Text(
-      online ? localizations.commonGoOnline : localizations.commonGoOffline,
-    ),
   );
 }
 

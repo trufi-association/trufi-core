@@ -7,8 +7,6 @@
   "alert_location_services_denied_message": "Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.",
   "common_ok": "OK",
   "common_cancel": "Abbrechen",
-  "common_go_offline": "Offline gehen",
-  "common_go_online": "Online gehen",
   "common_destination": "Fahrtziel",
   "common_origin": "Startpunkt",
   "common_no_internet_connection": "Keine Internetverbindung.",
