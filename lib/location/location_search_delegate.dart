@@ -257,7 +257,7 @@ class _SuggestionList extends StatelessWidget {
         if (snapshot.data == null) {
           return SliverToBoxAdapter(
             child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.yellow),
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
             ),
           );
         }
