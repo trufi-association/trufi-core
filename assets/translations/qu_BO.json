@@ -7,6 +7,8 @@
   "alert_location_services_denied_message": "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
   "common_ok": "Ari",
   "common_cancel": "Mana",
+  "common_go_offline": "Offline",
+  "common_go_online": "Online",
   "common_destination": "Mayman",
   "common_origin": "Maymanta",
   "common_no_internet_connection": "Mana internet kanchu",

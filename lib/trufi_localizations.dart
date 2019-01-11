@@ -69,6 +69,14 @@ class TrufiLocalizations {
     return translate("common_cancel");
   }
 
+  String get commonGoOffline {
+    return translate("common_go_offline");
+  }
+
+  String get commonGoOnline {
+    return translate("common_go_online");
+  }
+
   String get commonDestination {
     return translate("common_destination");
   }

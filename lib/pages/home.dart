@@ -293,19 +293,21 @@ class HomePageState extends State<HomePage>
       } on FetchOfflineRequestException catch (e) {
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet."
+          "Offline mode is not implemented yet.",
+          false,
         );
       } on FetchOfflineResponseException catch (e) {
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet."
+          "Offline mode is not implemented yet.",
+          false,
         );
       } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.commonNoInternet);
+        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, true);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan);
+        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
       } catch (e) {
         print("Failed to fetch plan: $e");
       }
@@ -322,12 +324,13 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  void _showOnAndOfflineErrorAlert(String message) {
+  void _showOnAndOfflineErrorAlert(String message, bool online) {
     showDialog(
       context: context,
       builder: (context) {
         return buildOnAndOfflineErrorAlert(
           context: context,
+          online: online,
           title: TrufiLocalizations.of(context).commonError,
           content: message,
         );
