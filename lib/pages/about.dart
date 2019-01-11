@@ -67,7 +67,7 @@ class AboutPageState extends State<AboutPage> {
                 child: Text(
                   localizations.tagLine,
                   style: theme.textTheme.subhead
-                      .copyWith(color: theme.textTheme.body2.color),
+                      .copyWith(color: theme.textTheme.body2.color,),
                 ),
               ),
               Container(
