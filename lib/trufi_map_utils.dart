@@ -147,7 +147,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
           child: Container(
             alignment: Alignment.topCenter,
             child:
-                Icon(Icons.arrow_drop_up, color: Theme.of(context).accentColor),
+                Icon(Icons.arrow_drop_up, color: Theme.of(context).accentColor,),
           ),
         ),
       );
