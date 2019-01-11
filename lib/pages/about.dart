@@ -42,7 +42,7 @@ class AboutPageState extends State<AboutPage> {
                 child: Text(
                   localizations.title,
                   style: theme.textTheme.title
-                      .copyWith(color: theme.textTheme.body2.color),
+                      .copyWith(color: theme.textTheme.body2.color,),
                 ),
               ),
               Container(
