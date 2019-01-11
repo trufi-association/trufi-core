@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 

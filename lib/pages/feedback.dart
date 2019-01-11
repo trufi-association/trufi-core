@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class FeedbackPage extends StatefulWidget {

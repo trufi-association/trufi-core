@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';

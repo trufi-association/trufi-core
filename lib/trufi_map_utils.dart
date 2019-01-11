@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
 

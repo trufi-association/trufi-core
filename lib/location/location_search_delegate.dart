@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
@@ -100,15 +101,16 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 }
 
 class _SuggestionList extends StatelessWidget {
-  _SuggestionList(
-      {this.query,
-      this.onSelected,
-      this.onMapTapped,
-      this.currentLocation,
-      @required this.historyLocationsBloc,
-      @required this.favoriteLocationsBloc,
-      @required this.placeLocationsBloc,
-      @required this.appBarTheme,});
+  _SuggestionList({
+    this.query,
+    this.onSelected,
+    this.onMapTapped,
+    this.currentLocation,
+    @required this.historyLocationsBloc,
+    @required this.favoriteLocationsBloc,
+    @required this.placeLocationsBloc,
+    @required this.appBarTheme,
+  });
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;

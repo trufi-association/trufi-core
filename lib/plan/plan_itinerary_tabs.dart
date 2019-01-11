@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 

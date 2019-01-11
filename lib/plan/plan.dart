@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:rxdart/rxdart.dart';
+
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
@@ -87,15 +89,17 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     )..addListener(() {
         setState(() {});
       });
-    _animationSummaryHeight =
-        Tween(begin: summaryHeight, end: instructionHeightMax,).animate(
+    _animationSummaryHeight = Tween(
+      begin: summaryHeight,
+      end: instructionHeightMax,
+    ).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.easeInOut,
       ),
     )..addListener(() {
-            setState(() {});
-          });
+        setState(() {});
+      });
 
     _planPageController = PlanPageController(widget.plan);
     if (_planPageController.plan.itineraries.isNotEmpty) {
@@ -187,7 +191,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       height: _animationDurationHeight.value,
       decoration: BoxDecoration(
         color: backgroundColor,
-        boxShadow: <BoxShadow>[BoxShadow(color: backgroundColor, blurRadius: 4.0)],
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: backgroundColor, blurRadius: 4.0)
+        ],
       ),
       padding: EdgeInsets.all(10.0),
       child: Row(
@@ -276,7 +282,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       height: _animationInstructionHeight.value,
       decoration: BoxDecoration(
         color: backgroundColor,
-        boxShadow: <BoxShadow>[BoxShadow(color: backgroundColor, blurRadius: 4.0)],
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: backgroundColor, blurRadius: 4.0)
+        ],
       ),
       child: PlanItineraryTabPages(
         _tabController,

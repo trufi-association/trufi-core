@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 

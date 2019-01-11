@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
