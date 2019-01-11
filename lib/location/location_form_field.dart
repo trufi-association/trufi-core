@@ -50,7 +50,7 @@ class LocationFormField extends FormField<TrufiLocation> {
                     Container(height: 16.0, child: leadingImage),
                     SizedBox(
                       height: 32.0,
-                      width: 236.0,
+                      width: 232.0,
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerLeft,
