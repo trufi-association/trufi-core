@@ -46,31 +46,32 @@ class LocationFormField extends FormField<TrufiLocation> {
                     border: new Border.all(color: Colors.white, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
-                  child: Row(children: <Widget>[
-                    Container(height: 16.0, child: leadingImage),
-                    SizedBox(
-                      height: 32.0,
-                      width: 232.0,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: RichText(
-                            text: state.value != null
-                                ? TextSpan(
-                                    style: textStyle,
-                                    text: state.value.description,
-                                  )
-                                : TextSpan(
-                                    style: hintStyle,
-                                    text: hintText,
-                                  ),
+                  child: SizedBox(
+                    height: 32.0,
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        direction: Axis.vertical,
+                        children: <Widget>[
+                          Container(height: 16.0, child: leadingImage),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: RichText(
+                                text: state.value != null
+                                    ? TextSpan(
+                                        style: textStyle,
+                                        text: state.value.description,
+                                      )
+                                    : TextSpan(
+                                        style: hintStyle,
+                                        text: hintText,
+                                      ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ]),
+                        ]),
+                  ),
                 ),
               ),
             );
