@@ -36,7 +36,8 @@ Widget buildOnAndOfflineErrorAlert({
     title: title,
     content: content,
     actions: [
-      _buildOnAndOfflineButton(context, !online),
+      //TODO: re-add when offline mode is implemented
+      //_buildOnAndOfflineButton(context, !online),
       _buildOKButton(context),
     ],
   );
