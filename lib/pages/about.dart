@@ -49,7 +49,7 @@ class AboutPageState extends State<AboutPage> {
                 child: new FutureBuilder(
                   future: packageInfo,
                   builder: (BuildContext context,
-                      AsyncSnapshot<PackageInfo> snapshot) {
+                      AsyncSnapshot<PackageInfo> snapshot,) {
                     if (snapshot.hasError ||
                         snapshot.connectionState != ConnectionState.done) {
                       return Text("");
