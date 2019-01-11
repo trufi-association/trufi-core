@@ -56,7 +56,7 @@ class FeedBackPageState extends State<FeedbackPage> {
                 child: Text(
                   localizations.feedbackTitle,
                   style: theme.textTheme.title
-                      .copyWith(color: theme.textTheme.body2.color),
+                      .copyWith(color: theme.textTheme.body2.color,),
                 ),
               ),
               Container(
