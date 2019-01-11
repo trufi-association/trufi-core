@@ -25,10 +25,10 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   ThemeData appBarTheme(BuildContext context) {
     final theme = Theme.of(context);
     return theme.copyWith(
-      primaryColor: Colors.black54,
+      primaryColor: Colors.white,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: theme.primaryTextTheme.copyWith(
-        title: theme.primaryTextTheme.body1.copyWith(color: Colors.white),
+        title: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
         body1: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
         body2: theme.primaryTextTheme.body2.copyWith(color: theme.accentColor),
       ),
@@ -40,7 +40,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     return IconButton(
       icon: Icon(
         Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-        color: Colors.white,
       ),
       tooltip: "Back",
       onPressed: () {
