@@ -251,7 +251,7 @@ class _SuggestionList extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
-        return _buildLocationsList(
+        return _buildObjectList(
           localizations.searchTitleFavorites,
           Icons.location_on,
           favoriteLocationsBloc.locations,
@@ -333,7 +333,7 @@ class _SuggestionList extends StatelessWidget {
           );
         }
         // Items
-        return _buildLocationsList(title, iconData, snapshot.data);
+        return _buildObjectList(title, iconData, snapshot.data);
       },
     );
   }
@@ -349,7 +349,7 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildLocationsList(
+  Widget _buildObjectList(
     String title,
     IconData iconData,
     List<dynamic> objects,

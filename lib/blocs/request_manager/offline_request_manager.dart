@@ -15,7 +15,7 @@ class OfflineRequestManager implements RequestManager {
   ) async {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final locationSearchBloc = LocationSearchBloc.of(context);
-    // Search in places and locations
+    // Search in places and streets
     final levenshteinObjects = (await Future.wait([
       locationSearchBloc.fetchPlacesWithQuery(context, query), // High priority
       locationSearchBloc.fetchStreetsWithQuery(context, query), // Low priority
