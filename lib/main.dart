@@ -4,11 +4,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/place_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/blocs/location_search_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/blocs/search_locations_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
@@ -30,17 +29,14 @@ class TrufiApp extends StatelessWidget {
         bloc: RequestManagerBloc(preferencesBloc),
         child: BlocProvider<LocationProviderBloc>(
           bloc: LocationProviderBloc(),
-          child: BlocProvider<FavoriteLocationsBloc>(
-            bloc: FavoriteLocationsBloc(context),
-            child: BlocProvider<HistoryLocationsBloc>(
-              bloc: HistoryLocationsBloc(context),
-              child: BlocProvider<PlaceLocationsBloc>(
-                bloc: PlaceLocationsBloc(context),
-                child: BlocProvider<SearchLocationsBloc>(
-                  bloc: SearchLocationsBloc(context),
-                  child: AppLifecycleReactor(
-                    child: LocalizedMaterialApp(),
-                  ),
+          child: BlocProvider<LocationSearchBloc>(
+            bloc: LocationSearchBloc(context),
+            child: BlocProvider<FavoriteLocationsBloc>(
+              bloc: FavoriteLocationsBloc(context),
+              child: BlocProvider<HistoryLocationsBloc>(
+                bloc: HistoryLocationsBloc(context),
+                child: AppLifecycleReactor(
+                  child: LocalizedMaterialApp(),
                 ),
               ),
             ),
