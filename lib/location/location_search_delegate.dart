@@ -7,7 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/history_locations_bloc.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/blocs/place_locations_bloc.dart';
+import 'package:trufi_app/blocs/location_search_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/pages/choose_location.dart';
 import 'package:trufi_app/trufi_localizations.dart';
@@ -65,7 +65,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       currentLocation: currentLocation,
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
-      placeLocationsBloc: PlaceLocationsBloc.of(context),
+      locationSearchBloc: LocationSearchBloc.of(context),
     );
   }
 
@@ -174,12 +174,12 @@ class _SuggestionList extends StatelessWidget {
     this.currentLocation,
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
-    @required this.placeLocationsBloc,
+    @required this.locationSearchBloc,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
-  final PlaceLocationsBloc placeLocationsBloc;
+  final LocationSearchBloc locationSearchBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
@@ -265,7 +265,7 @@ class _SuggestionList extends StatelessWidget {
     return _buildFutureBuilder(
       context,
       localizations.searchTitlePlaces,
-      placeLocationsBloc.fetch(context),
+      locationSearchBloc.fetchPlaces(context),
       Icons.place,
     );
   }

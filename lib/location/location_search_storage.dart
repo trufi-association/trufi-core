@@ -5,6 +5,7 @@ import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 const String keyPlaces = 'pois';
@@ -22,6 +23,10 @@ class LocationSearchStorage {
     final locationData = await loadFromAssets(context, key);
     _places.addAll(locationData.places);
     _streets.addAll(locationData.streets);
+  }
+
+  Future<List<TrufiLocation>> fetchPlaces(BuildContext context) async {
+    return _sortedByFavorites(_places.toList(), context);
   }
 
   Future<List<LevenshteinObject>> fetchPlacesWithQuery(
@@ -87,6 +92,17 @@ class LocationSearchStorage {
       return 100;
     }
   }
+
+  Future<List<TrufiLocation>> _sortedByFavorites(
+    List<TrufiLocation> locations,
+    BuildContext context,
+  ) async {
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    locations.sort((a, b) {
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+    });
+    return locations;
+  }
 }
 
 class LocationSearchData {
@@ -110,20 +126,17 @@ LocationSearchData _parseSearchJson(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
     try {
       final search = json.decode(encoded);
-
       // Places
       final places = search[keyPlaces]
           .map<TrufiLocation>(
             (json) => TrufiLocation.fromSearchPlacesJson(json),
           )
           .toList();
-
       // Streets
       final streets = Map<String, TrufiStreet>();
       search[keyStreets].keys.forEach((key) {
         streets[key] = TrufiStreet.fromSearchJson(search[keyStreets][key]);
       });
-
       // Junctions
       search[keyStreetJunctions].keys.forEach((key) {
         final street1 = streets[key];
