@@ -18,7 +18,7 @@ class SearchLocationsBloc extends LocationsBlocBase {
         );
 
   @override
-  Future<List<LevenshteinTrufiLocation>> fetchWithQuery(
+  Future<List<LevenshteinObject>> fetchWithQuery(
     BuildContext context,
     String query,
   ) async {
@@ -28,11 +28,13 @@ class SearchLocationsBloc extends LocationsBlocBase {
   }
 
   int _sortByImportance(
-    LevenshteinTrufiLocation a,
-    LevenshteinTrufiLocation b,
+    LevenshteinObject a,
+    LevenshteinObject b,
   ) {
-    if (a.location.importance != null && b.location.importance != null) {
-      return a.location.importance.compareTo(b.location.importance) * -1;
+    final aImportance = a.object is TrufiLocation ? a.object.importance : null;
+    final bImportance = b.object is TrufiLocation ? b.object.importance : null;
+    if (aImportance != null && bImportance != null) {
+      return aImportance.compareTo(bImportance) * -1;
     }
     return 0;
   }

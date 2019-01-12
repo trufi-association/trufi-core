@@ -38,20 +38,20 @@ abstract class LocationStorage {
     );
   }
 
-  Future<List<LevenshteinTrufiLocation>> fetchLocationsWithQuery(
+  Future<List<LevenshteinObject>> fetchLocationsWithQuery(
     BuildContext context,
     String query,
   ) async {
     query = query.toLowerCase();
-    return _locations.fold<List<LevenshteinTrufiLocation>>(
-      List<LevenshteinTrufiLocation>(),
+    return _locations.fold<List<LevenshteinObject>>(
+      List<LevenshteinObject>(),
       (locations, location) {
         int distance = _findMatchAndCalculateStringDistance(
           location.description.toLowerCase(),
           query,
         );
         if (distance < 3) {
-          locations.add(LevenshteinTrufiLocation(location, distance));
+          locations.add(LevenshteinObject(location, distance));
         }
         return locations;
       },

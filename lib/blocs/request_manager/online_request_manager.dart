@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/blocs/request_manager/offline_request_manager.dart';
+import 'package:trufi_app/blocs/request_manager/offline_request_manager_2.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -16,9 +16,9 @@ class OnlineRequestManager implements RequestManager {
   static const String searchPath = '/otp/routers/default/geocode';
   static const String planPath = 'otp/routers/default/plan';
 
-  final _offlineRequestManager = OfflineRequestManager();
+  final _offlineRequestManager = OfflineRequestManager2();
 
-  Future<List<TrufiLocation>> fetchLocations(
+  Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,

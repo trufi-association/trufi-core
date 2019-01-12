@@ -70,7 +70,7 @@ abstract class LocationsBlocBase implements BlocBase {
     return locationStorage.fetchLocations(context);
   }
 
-  Future<List<LevenshteinTrufiLocation>> fetchWithQuery(
+  Future<List<LevenshteinObject>> fetchWithQuery(
     BuildContext context,
     String query,
   ) {
@@ -86,11 +86,25 @@ abstract class LocationsBlocBase implements BlocBase {
 }
 
 int sortByLocations(
-  TrufiLocation a,
-  TrufiLocation b,
+  dynamic a,
+  dynamic b,
   List<TrufiLocation> locations,
 ) {
-  bool aIsAvailable = locations.contains(a);
-  bool bIsAvailable = locations.contains(b);
+  bool aIsAvailable = (a is TrufiLocation)
+      ? locations.contains(a)
+      : (a is TrufiStreet)
+          ? a.junctions.fold<bool>(
+              false,
+              (result, j) => result |= locations.contains(j.location),
+            )
+          : false;
+  bool bIsAvailable = (b is TrufiLocation)
+      ? locations.contains(b)
+      : (b is TrufiStreet)
+          ? b.junctions.fold<bool>(
+              false,
+              (result, j) => result |= locations.contains(j.location),
+            )
+          : false;
   return aIsAvailable == bIsAvailable ? 0 : aIsAvailable ? -1 : 1;
 }

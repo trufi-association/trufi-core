@@ -41,6 +41,14 @@ class TrufiLocation {
     );
   }
 
+  factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
+    return TrufiLocation(
+      description: json[0],
+      longitude: json[3][0].toDouble(),
+      latitude: json[3][1].toDouble(),
+    );
+  }
+
   factory TrufiLocation.fromPlanLocation(PlanLocation value) {
     return TrufiLocation(
       description: value.name,
@@ -92,10 +100,55 @@ class TrufiLocation {
   }
 }
 
-class LevenshteinTrufiLocation {
-  LevenshteinTrufiLocation(this.location, this.distance);
+class TrufiStreet {
+  TrufiStreet({@required this.location});
 
   final TrufiLocation location;
+  final junctions = List<TrufiStreetJunction>();
+
+  factory TrufiStreet.fromSearchJson(List<dynamic> json) {
+    return TrufiStreet(
+      location: TrufiLocation(
+        description: json[0],
+        longitude: json[1][0].toDouble(),
+        latitude: json[1][1].toDouble(),
+      ),
+    );
+  }
+
+  String get description => location.description;
+}
+
+class TrufiStreetJunction {
+  TrufiStreetJunction({
+    @required this.street1,
+    @required this.street2,
+    @required this.latitude,
+    @required this.longitude,
+  });
+
+  final TrufiStreet street1;
+  final TrufiStreet street2;
+  final double latitude;
+  final double longitude;
+
+  String get description {
+    return "${street1.location.description} y ${street2.location.description}";
+  }
+
+  TrufiLocation get location {
+    return TrufiLocation(
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
+}
+
+class LevenshteinObject {
+  LevenshteinObject(this.object, this.distance);
+
+  final dynamic object;
   final int distance;
 }
 

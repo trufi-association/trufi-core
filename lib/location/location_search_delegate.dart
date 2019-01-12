@@ -20,7 +20,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   final TrufiLocation currentLocation;
 
-  TrufiLocation _result;
+  dynamic _result;
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -58,6 +58,10 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         _result = location;
         showResults(context);
       },
+      onStreetTapped: (TrufiStreet street) {
+        _result = street;
+        showResults(context);
+      },
       currentLocation: currentLocation,
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
@@ -69,10 +73,15 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   Widget buildResults(BuildContext context) {
     final localizations = TrufiLocalizations.of(context);
     if (_result != null) {
-      print("${localizations.searchNavigate} ${_result.description}");
-      Future.delayed(Duration.zero, () {
-        close(context, _result);
-      });
+      if (_result is TrufiLocation) {
+        print("${localizations.searchNavigate} ${_result.description}");
+        Future.delayed(Duration.zero, () {
+          close(context, _result);
+        });
+      }
+      if (_result is TrufiStreet) {
+        return _buildStreetResults(context, _result);
+      }
     }
     return buildSuggestions(context);
   }
@@ -94,6 +103,66 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             ),
     ];
   }
+
+  Widget _buildStreetResults(BuildContext context, TrufiStreet street) {
+    List<Widget> slivers = List();
+    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    slivers.add(_buildStreetResultList(context, street));
+    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        child: CustomScrollView(slivers: slivers),
+      ),
+    );
+  }
+
+  Widget _buildStreetResultList(
+    BuildContext context,
+    TrufiStreet street,
+  ) {
+    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    final historyLocationBloc = HistoryLocationsBloc.of(context);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          // Center
+          if (index == 0) {
+            return _buildItem(
+              context,
+              () {
+                historyLocationBloc.inAddLocation.add(street.location);
+                close(context, street.location);
+              },
+              Icons.location_on,
+              street.description,
+              trailing: FavoriteButton(
+                location: street.location,
+                favoritesStream: favoriteLocationsBloc.outLocations,
+              ),
+            );
+          }
+          // Junctions
+          final junction = street.junctions[index - 1];
+          return _buildItem(
+            context,
+            () {
+              historyLocationBloc.inAddLocation.add(junction.location);
+              close(context, junction.location);
+            },
+            Icons.location_on,
+            "... y ${junction.street2.description}",
+            trailing: FavoriteButton(
+              location: junction.location,
+              favoritesStream: favoriteLocationsBloc.outLocations,
+            ),
+          );
+        },
+        childCount: street.junctions.length + 1,
+      ),
+    );
+  }
 }
 
 class _SuggestionList extends StatelessWidget {
@@ -101,6 +170,7 @@ class _SuggestionList extends StatelessWidget {
     this.query,
     this.onSelected,
     this.onMapTapped,
+    this.onStreetTapped,
     this.currentLocation,
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
@@ -113,12 +183,8 @@ class _SuggestionList extends StatelessWidget {
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onMapTapped;
+  final ValueChanged<TrufiStreet> onStreetTapped;
   final TrufiLocation currentLocation;
-  final abbreviation = {
-    "Avenida": "Av.",
-    "Calle": "Cl.",
-    "Camino": "C.º",
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +214,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
-        () => _handleOnYourLocationTap(context),
+        () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
         localizations.searchItemYourLocation,
       ),
@@ -160,7 +226,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
-        () => _handleOnChooseOnMapTap(context),
+        () => _handleOnChooseOnMapTapped(context),
         Icons.location_on,
         localizations.searchItemChooseOnMap,
       ),
@@ -219,7 +285,7 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildFutureBuilder(
     BuildContext context,
     String title,
-    Future<List<TrufiLocation>> future,
+    Future<List<dynamic>> future,
     IconData iconData, {
     bool isVisibleWhenEmpty = false,
   }) {
@@ -228,7 +294,7 @@ class _SuggestionList extends StatelessWidget {
       initialData: null,
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<TrufiLocation>> snapshot,
+        AsyncSnapshot<List<dynamic>> snapshot,
       ) {
         final localizations = TrufiLocalizations.of(context);
         // Error
@@ -254,7 +320,6 @@ class _SuggestionList extends StatelessWidget {
             ),
           );
         }
-
         // No results
         int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
         if (count == 0 && isVisibleWhenEmpty) {
@@ -287,9 +352,9 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildLocationsList(
     String title,
     IconData iconData,
-    List<TrufiLocation> locations,
+    List<dynamic> objects,
   ) {
-    int count = locations.length > 0 ? locations.length + 1 : 0;
+    int count = objects.length > 0 ? objects.length + 1 : 0;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -298,17 +363,27 @@ class _SuggestionList extends StatelessWidget {
             return _buildTitle(context, title);
           }
           // Item
-          final TrufiLocation location = locations[index - 1];
-          return _buildItem(
-            context,
-            () => _handleOnSelectedTrufiLocation(location, addToHistory: true),
-            iconData,
-            location.description,
-            trailing: FavoriteButton(
-              location: location,
-              favoritesStream: favoriteLocationsBloc.outLocations,
-            ),
-          );
+          final object = objects[index - 1];
+          if (object is TrufiLocation) {
+            return _buildItem(
+              context,
+              () => _handleOnLocationTapped(object, addToHistory: true),
+              iconData,
+              object.description,
+              trailing: FavoriteButton(
+                location: object,
+                favoritesStream: favoriteLocationsBloc.outLocations,
+              ),
+            );
+          } else if (object is TrufiStreet) {
+            return _buildItem(
+              context,
+              () => _handleOnStreetTapped(object),
+              iconData,
+              object.location.description,
+              trailing: Icon(Icons.keyboard_arrow_right),
+            );
+          }
         },
         childCount: count,
       ),
@@ -337,44 +412,11 @@ class _SuggestionList extends StatelessWidget {
     return _buildItem(context, null, Icons.error, title);
   }
 
-  Widget _buildItem(
-    BuildContext context,
-    Function onTap,
-    IconData iconData,
-    String title, {
-    Widget trailing,
-  }) {
-    abbreviation.forEach((from, replace) {
-      title = title.replaceAll(from, replace);
-    });
-    final theme = Theme.of(context);
-    Row row = Row(
-      children: <Widget>[
-        Icon(iconData),
-        Container(width: 32.0),
-        Expanded(
-          child: RichText(
-            maxLines: 1,
-            overflow: TextOverflow.clip,
-            text: TextSpan(text: title, style: theme.textTheme.body1),
-          ),
-        ),
-      ],
-    );
-    if (trailing != null) {
-      row.children.add(trailing);
-    }
-    return InkWell(
-      onTap: onTap,
-      child: Container(margin: EdgeInsets.all(8.0), child: row),
-    );
-  }
-
-  void _handleOnYourLocationTap(BuildContext context) async {
+  void _handleOnYourLocationTapped(BuildContext context) async {
     final locationProviderBloc = LocationProviderBloc.of(context);
     LatLng lastLocation = await locationProviderBloc.lastLocation;
     if (lastLocation != null) {
-      _handleOnSelectedLatLng(
+      _handleOnLatLngTapped(
         description: TrufiLocalizations.of(context).searchMapMarker,
         location: lastLocation,
         addToHistory: false,
@@ -387,7 +429,7 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _handleOnChooseOnMapTap(BuildContext context) async {
+  void _handleOnChooseOnMapTapped(BuildContext context) async {
     final localizations = TrufiLocalizations.of(context);
     LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
@@ -407,12 +449,12 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _handleOnSelectedLatLng({
+  void _handleOnLatLngTapped({
     @required String description,
     @required LatLng location,
     bool addToHistory,
   }) {
-    _handleOnSelectedTrufiLocation(
+    _handleOnLocationTapped(
       TrufiLocation(
         description: description,
         latitude: location.latitude,
@@ -422,7 +464,7 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _handleOnSelectedTrufiLocation(
+  void _handleOnLocationTapped(
     TrufiLocation value, {
     bool addToHistory,
   }) {
@@ -443,4 +485,51 @@ class _SuggestionList extends StatelessWidget {
       }
     }
   }
+
+  void _handleOnStreetTapped(TrufiStreet street) {
+    if (street != null) {
+      if (onStreetTapped != null) {
+        onStreetTapped(street);
+      }
+    }
+  }
+}
+
+final _abbreviation = {
+  "Avenida": "Av.",
+  "Calle": "Cl.",
+  "Camino": "C.º",
+};
+
+Widget _buildItem(
+  BuildContext context,
+  Function onTap,
+  IconData iconData,
+  String title, {
+  Widget trailing,
+}) {
+  _abbreviation.forEach((from, replace) {
+    title = title.replaceAll(from, replace);
+  });
+  final theme = Theme.of(context);
+  Row row = Row(
+    children: <Widget>[
+      Icon(iconData),
+      Container(width: 32.0),
+      Expanded(
+        child: RichText(
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          text: TextSpan(text: title, style: theme.textTheme.body1),
+        ),
+      ),
+    ],
+  );
+  if (trailing != null) {
+    row.children.add(trailing);
+  }
+  return InkWell(
+    onTap: onTap,
+    child: Container(margin: EdgeInsets.all(8.0), child: row),
+  );
 }

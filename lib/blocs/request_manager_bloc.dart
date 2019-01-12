@@ -6,7 +6,7 @@ import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/blocs/request_manager/offline_request_manager.dart';
+import 'package:trufi_app/blocs/request_manager/offline_request_manager_2.dart';
 import 'package:trufi_app/blocs/request_manager/online_request_manager.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -29,11 +29,11 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final PreferencesBloc preferencesBloc;
 
   final _subscriptions = CompositeSubscription();
-  final _offlineRequestManager = OfflineRequestManager();
+  final _offlineRequestManager = OfflineRequestManager2();
   final _onlineRequestManager = OnlineRequestManager();
   final _fetchLocationLock = Lock();
 
-  CancelableOperation<List<TrufiLocation>> _fetchLocationOperation;
+  CancelableOperation<List<dynamic>> _fetchLocationOperation;
   RequestManager _requestManager;
 
   // Dispose
@@ -45,7 +45,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
   // Methods
 
-  Future<List<TrufiLocation>> fetchLocations(
+  Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,
@@ -64,8 +64,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
               Future.delayed(
                 Duration.zero,
                 () {
-                  // FIXME: For now we search locations always online
-                  return _onlineRequestManager.fetchLocations(
+                  // FIXME: For now we search locations always offline
+                  return _offlineRequestManager.fetchLocations(
                     context,
                     query,
                     limit,
@@ -91,7 +91,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 // RequestManager
 
 abstract class RequestManager {
-  Future<List<TrufiLocation>> fetchLocations(
+  Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,

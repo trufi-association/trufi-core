@@ -3,24 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/place_locations_bloc.dart';
+import 'package:trufi_app/blocs/location_search_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/blocs/search_locations_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class OfflineRequestManager implements RequestManager {
-  Future<List<TrufiLocation>> fetchLocations(
+class OfflineRequestManager2 implements RequestManager {
+  Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,
   ) async {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    final placeLocationsBloc = PlaceLocationsBloc.of(context);
-    final searchLocationsBloc = SearchLocationsBloc.of(context);
+    final locationSearchBloc = LocationSearchBloc.of(context);
     // Search in places and locations
     final levenshteinObjects = (await Future.wait([
-      placeLocationsBloc.fetchWithQuery(context, query), // High priority
-      searchLocationsBloc.fetchWithQuery(context, query), // Low priority
+      locationSearchBloc.fetchPlacesWithQuery(context, query), // High priority
+      locationSearchBloc.fetchStreetsWithQuery(context, query), // Low priority
     ]))
         .expand((levenshteinObjects) => levenshteinObjects) // Concat lists
         .toList();
