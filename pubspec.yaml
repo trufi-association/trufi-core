@@ -50,7 +50,8 @@ flutter:
     - assets/data/search.json
     - assets/data/team.txt
     - assets/translations/
-    - assets/images/map_marker.svg
+    - assets/images/to_marker.svg
+    - assets/images/from_marker.svg
     # - assets/tiles/8/
     # - assets/tiles/9/
     # - assets/tiles/10/

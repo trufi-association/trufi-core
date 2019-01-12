@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:meta/meta.dart';
 
 import 'package:trufi_app/blocs/favorite_location_bloc.dart';
@@ -13,19 +14,25 @@ class FavoriteButton extends StatefulWidget {
     Key key,
     this.location,
     @required this.favoritesStream,
+    this.color,
   }) : super(key: key);
 
   final TrufiLocation location;
   final Stream<List<TrufiLocation>> favoritesStream;
+  final Color color;
 
   @override
-  FavoriteButtonState createState() => FavoriteButtonState();
+  FavoriteButtonState createState() => FavoriteButtonState(color);
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
+  FavoriteButtonState(this.color);
+
   FavoriteLocationBloc _bloc;
 
   StreamSubscription _subscription;
+
+  final Color color;
 
   @override
   void initState() {
@@ -72,7 +79,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
                 widget.location,
               );
             },
-            child: Icon(Icons.favorite),
+            child: Icon(Icons.favorite, color: color),
           );
         } else {
           return GestureDetector(
@@ -81,7 +88,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
                 widget.location,
               );
             },
-            child: Icon(Icons.favorite_border),
+            child: Icon(Icons.favorite_border, color: color),
           );
         }
       },

@@ -105,9 +105,19 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = ThemeData(
-      brightness: Brightness.light,
-      primaryColor: const Color(0xffffd606),
-      primaryIconTheme: const IconThemeData(color: Colors.black),
+      primaryColor: const Color(0xff263238),
+      accentColor: const Color(0xffd81b60),
+      backgroundColor: Colors.white,
+      iconTheme: const IconThemeData(color: Colors.white),
+      textTheme: TextTheme(
+        subhead:
+            Theme.of(context).textTheme.subhead.copyWith(color: Colors.white),
+        headline:
+            Theme.of(context).textTheme.headline.copyWith(color: Colors.white),
+        title: Theme.of(context).textTheme.title.copyWith(color: Colors.white),
+        body1: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
+        body2: Theme.of(context).textTheme.body1.copyWith(color: Colors.black),
+      ),
     );
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => AboutPage(),

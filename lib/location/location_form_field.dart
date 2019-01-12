@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:trufi_app/location/location_search_delegate.dart';
 import 'package:trufi_app/trufi_localizations.dart';
@@ -10,12 +11,13 @@ class LocationFormField extends FormField<TrufiLocation> {
     FormFieldSetter<TrufiLocation> onSaved,
     String hintText,
     String searchHintText,
+    SvgPicture leadingImage,
   }) : super(
           key: key,
           onSaved: onSaved,
           builder: (FormFieldState<TrufiLocation> state) {
             final theme = Theme.of(state.context);
-            final textStyle = theme.textTheme.body1;
+            final textStyle = theme.textTheme.body2;
             final hintStyle = theme.textTheme.body1.copyWith(
               color: theme.textTheme.caption.color,
             );
@@ -40,30 +42,35 @@ class LocationFormField extends FormField<TrufiLocation> {
                 child: Container(
                   padding: EdgeInsets.all(1.0),
                   decoration: new BoxDecoration(
-                    color: Colors.transparent,
-                    border: new Border.all(color: Colors.black, width: 1.0),
+                    color: Colors.white,
+                    border: new Border.all(color: Colors.white, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),
                   child: SizedBox(
                     height: 32.0,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.all(4.0),
-                        child: RichText(
-                          text: state.value != null
-                              ? TextSpan(
-                                  style: textStyle,
-                                  text: state.value.description,
-                                )
-                              : TextSpan(
-                                  style: hintStyle,
-                                  text: hintText,
-                                ),
-                        ),
-                      ),
-                    ),
+                    child: Wrap(
+                        alignment: WrapAlignment.center,
+                        direction: Axis.vertical,
+                        children: <Widget>[
+                          Container(height: 16.0, child: leadingImage),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Padding(
+                              padding: EdgeInsets.all(4.0),
+                              child: RichText(
+                                text: state.value != null
+                                    ? TextSpan(
+                                        style: textStyle,
+                                        text: state.value.description,
+                                      )
+                                    : TextSpan(
+                                        style: hintStyle,
+                                        text: hintText,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ]),
                   ),
                 ),
               ),

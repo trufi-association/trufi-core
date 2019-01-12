@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/plan/plan.dart';
-import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
+import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/crop_button.dart';
 import 'package:trufi_app/widgets/trufi_map.dart';
 import 'package:trufi_app/widgets/trufi_online_map.dart';
@@ -312,11 +313,11 @@ class PlanMapPageStateData {
           Polyline polyline = new Polyline(
             points: points,
             color: isSelected
-                ? leg.mode == 'WALK' ? Colors.blue : Colors.green
+                //ToDo: Find a better way to achieve this
+                ? Color(0xffd81b60)
                 : Colors.grey,
             strokeWidth: isSelected ? 6.0 : 3.0,
-            borderColor: Colors.white,
-            borderStrokeWidth: 3.0,
+            borderStrokeWidth: 0.0,
             isDotted: leg.mode == 'WALK',
           );
 
@@ -334,7 +335,10 @@ class PlanMapPageStateData {
             markers.add(
               buildBusMarker(
                 midPointForPolyline(polyline),
-                isSelected ? Colors.green : Colors.grey,
+                isSelected
+                    ? //ToDo: Find a better way to achieve this
+                    Color(0xffd81b60)
+                    : Colors.grey,
                 leg,
                 onTap: () => onTap(itinerary),
               ),

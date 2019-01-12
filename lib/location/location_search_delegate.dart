@@ -27,10 +27,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     final theme = Theme.of(context);
     return theme.copyWith(
       primaryColor: Colors.white,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: theme.primaryTextTheme.copyWith(
-        title: theme.primaryTextTheme.body1,
+        title: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
+        body1: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
+        body2: theme.primaryTextTheme.body2.copyWith(color: theme.accentColor),
       ),
     );
   }
@@ -38,7 +39,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back),
+      icon: Icon(
+        Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+      ),
       tooltip: "Back",
       onPressed: () {
         close(context, null);
@@ -66,6 +69,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       locationSearchBloc: LocationSearchBloc.of(context),
+      appBarTheme: appBarTheme(context),
     );
   }
 
@@ -131,6 +135,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
           if (index == 0) {
             return _buildItem(
               context,
+              appBarTheme(context),
               () {
                 historyLocationBloc.inAddLocation.add(street.location);
                 close(context, street.location);
@@ -140,6 +145,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               trailing: FavoriteButton(
                 location: street.location,
                 favoritesStream: favoriteLocationsBloc.outLocations,
+                color: appBarTheme(context).primaryIconTheme.color,
               ),
             );
           }
@@ -147,6 +153,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
           final junction = street.junctions[index - 1];
           return _buildItem(
             context,
+            appBarTheme(context),
             () {
               historyLocationBloc.inAddLocation.add(junction.location);
               close(context, junction.location);
@@ -156,6 +163,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             trailing: FavoriteButton(
               location: junction.location,
               favoritesStream: favoriteLocationsBloc.outLocations,
+              color: appBarTheme(context).primaryIconTheme.color,
             ),
           );
         },
@@ -175,6 +183,7 @@ class _SuggestionList extends StatelessWidget {
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
     @required this.locationSearchBloc,
+    @required this.appBarTheme,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
@@ -185,6 +194,7 @@ class _SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onMapTapped;
   final ValueChanged<TrufiStreet> onStreetTapped;
   final TrufiLocation currentLocation;
+  final ThemeData appBarTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +211,7 @@ class _SuggestionList extends StatelessWidget {
     }
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
+      top: false,
       bottom: false,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -214,6 +225,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
+        appBarTheme,
         () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
         localizations.searchItemYourLocation,
@@ -226,6 +238,7 @@ class _SuggestionList extends StatelessWidget {
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
+        appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
         Icons.location_on,
         localizations.searchItemChooseOnMap,
@@ -316,7 +329,7 @@ class _SuggestionList extends StatelessWidget {
         if (snapshot.data == null) {
           return SliverToBoxAdapter(
             child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.yellow),
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
             ),
           );
         }
@@ -367,21 +380,27 @@ class _SuggestionList extends StatelessWidget {
           if (object is TrufiLocation) {
             return _buildItem(
               context,
+              appBarTheme,
               () => _handleOnLocationTapped(object, addToHistory: true),
               iconData,
               object.description,
               trailing: FavoriteButton(
                 location: object,
                 favoritesStream: favoriteLocationsBloc.outLocations,
+                color: appBarTheme.primaryIconTheme.color,
               ),
             );
           } else if (object is TrufiStreet) {
             return _buildItem(
               context,
+              appBarTheme,
               () => _handleOnStreetTapped(object),
               iconData,
               object.location.description,
-              trailing: Icon(Icons.keyboard_arrow_right),
+              trailing: Icon(
+                Icons.keyboard_arrow_right,
+                color: appBarTheme.primaryIconTheme.color,
+              ),
             );
           }
         },
@@ -391,7 +410,6 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, String title) {
-    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
@@ -400,7 +418,7 @@ class _SuggestionList extends StatelessWidget {
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: theme.textTheme.body2,
+              style: appBarTheme.textTheme.body2,
             ),
           ),
         ],
@@ -409,7 +427,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildErrorItem(BuildContext context, String title) {
-    return _buildItem(context, null, Icons.error, title);
+    return _buildItem(context, appBarTheme, null, Icons.error, title);
   }
 
   void _handleOnYourLocationTapped(BuildContext context) async {
@@ -503,6 +521,7 @@ final _abbreviation = {
 
 Widget _buildItem(
   BuildContext context,
+  ThemeData theme,
   Function onTap,
   IconData iconData,
   String title, {
@@ -511,10 +530,9 @@ Widget _buildItem(
   _abbreviation.forEach((from, replace) {
     title = title.replaceAll(from, replace);
   });
-  final theme = Theme.of(context);
   Row row = Row(
     children: <Widget>[
-      Icon(iconData),
+      Icon(iconData, color: theme.primaryIconTheme.color),
       Container(width: 32.0),
       Expanded(
         child: RichText(
