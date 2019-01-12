@@ -47,8 +47,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/data/locations.json
-    - assets/data/places.json
+    - assets/data/search.json
     - assets/data/team.txt
     - assets/translations/
     - assets/images/to_marker.svg
@@ -61,7 +60,7 @@ flutter:
     # - assets/tiles/13/
     # - assets/tiles/14/
     # - assets/tiles/15/
-    - test/assets/tile.png
+    # - test/assets/tile.png
 
   fonts:
   - family: CircleIcon

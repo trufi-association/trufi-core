@@ -55,8 +55,9 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 child: Text(
                   localizations.teamContent,
-                  style: theme.textTheme.title
-                      .copyWith(color: theme.textTheme.body2.color,),
+                  style: theme.textTheme.title.copyWith(
+                    color: theme.textTheme.body2.color,
+                  ),
                 ),
               ),
               Container(

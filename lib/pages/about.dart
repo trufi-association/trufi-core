@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:package_info/package_info.dart';
 
 import 'package:trufi_app/trufi_localizations.dart';
@@ -42,20 +43,22 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 child: Text(
                   localizations.title,
-                  style: theme.textTheme.title
-                      .copyWith(color: theme.textTheme.body2.color,),
+                  style: theme.textTheme.title.copyWith(
+                    color: theme.textTheme.body2.color,
+                  ),
                 ),
               ),
               Container(
                 child: new FutureBuilder(
                   future: packageInfo,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<PackageInfo> snapshot,) {
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<PackageInfo> snapshot,
+                  ) {
                     if (snapshot.hasError ||
                         snapshot.connectionState != ConnectionState.done) {
                       return Text("");
                     }
-
                     return Text(
                       "${localizations.version} ${snapshot.data.version}",
                       style: theme.textTheme.body2,
@@ -67,8 +70,9 @@ class AboutPageState extends State<AboutPage> {
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
                   localizations.tagLine,
-                  style: theme.textTheme.subhead
-                      .copyWith(color: theme.textTheme.body2.color,),
+                  style: theme.textTheme.subhead.copyWith(
+                    color: theme.textTheme.body2.color,
+                  ),
                 ),
               ),
               Container(

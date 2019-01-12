@@ -57,8 +57,9 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 child: Text(
                   localizations.feedbackTitle,
-                  style: theme.textTheme.title
-                      .copyWith(color: theme.textTheme.body2.color,),
+                  style: theme.textTheme.title.copyWith(
+                    color: theme.textTheme.body2.color,
+                  ),
                 ),
               ),
               Container(
@@ -71,10 +72,11 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: FutureBuilder<Null>(
-                    future: _launched,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return Text(snapshot.hasError ? "${snapshot.error}" : "");
-                    }),
+                  future: _launched,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return Text(snapshot.hasError ? "${snapshot.error}" : "");
+                  },
+                ),
               ),
             ],
           ),
