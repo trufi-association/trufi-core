@@ -7,7 +7,7 @@ import 'package:trufi_app/blocs/location_search_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/trufi_models.dart';
 
-class OfflineRequestManager2 implements RequestManager {
+class OfflineRequestManager implements RequestManager {
   Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,

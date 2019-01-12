@@ -6,7 +6,7 @@ import 'package:synchronized/synchronized.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/blocs/request_manager/offline_request_manager_2.dart';
+import 'package:trufi_app/blocs/request_manager/offline_request_manager.dart';
 import 'package:trufi_app/blocs/request_manager/online_request_manager.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/trufi_models.dart';
@@ -29,7 +29,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final PreferencesBloc preferencesBloc;
 
   final _subscriptions = CompositeSubscription();
-  final _offlineRequestManager = OfflineRequestManager2();
+  final _offlineRequestManager = OfflineRequestManager();
   final _onlineRequestManager = OnlineRequestManager();
   final _fetchLocationLock = Lock();
 
