@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
@@ -34,7 +35,7 @@ class HomePageState extends State<HomePage>
   final _subscriptions = CompositeSubscription();
 
   bool _isFetching = false;
-  FetchPlanOperation _currentFetchPlanOperation;
+  CancelableOperation<Plan> _currentFetchPlanOperation;
 
   @override
   initState() {
@@ -275,12 +276,12 @@ class HomePageState extends State<HomePage>
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _currentFetchPlanOperation = requestManagerBloc.fetchPlanCancelable(
+        _currentFetchPlanOperation = requestManagerBloc.fetchPlan(
           context,
           _data.fromPlace,
           _data.toPlace,
         );
-        Plan plan = await _currentFetchPlanOperation.fetch();
+        Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {

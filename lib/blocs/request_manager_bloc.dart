@@ -77,26 +77,14 @@ class RequestManagerBloc implements BlocBase, RequestManager {
           });
   }
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
   ) {
     // FIXME: For now we fetch plans always online
-    //return _requestManager.fetchPlan(context, from, to);
+    // _requestManager.fetchPlan(context, from, to);
     return _onlineRequestManager.fetchPlan(context, from, to);
-  }
-
-  FetchPlanOperation fetchPlanCancelable(
-    BuildContext context,
-    TrufiLocation from,
-    TrufiLocation to,
-  ) {
-    return FetchPlanOperation(
-      // FIXME: For now we fetch plans always online
-      // _requestManager.fetchPlan(context, from, to);
-      _onlineRequestManager.fetchPlan(context, from, to),
-    );
   }
 }
 
@@ -109,7 +97,7 @@ abstract class RequestManager {
     int limit,
   );
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
@@ -157,21 +145,5 @@ class FetchOnlineResponseException implements Exception {
   @override
   String toString() {
     return "Fetch online response exception: $_message";
-  }
-}
-
-class FetchPlanOperation {
-  FetchPlanOperation(Future<Plan> fetch) {
-    _cancelableOperation = CancelableOperation.fromFuture(fetch);
-  }
-
-  CancelableOperation<Plan> _cancelableOperation;
-
-  Future<Plan> fetch() {
-    return _cancelableOperation.valueOrCancellation(null);
-  }
-
-  void cancel() {
-    _cancelableOperation.cancel();
   }
 }

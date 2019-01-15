@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -54,28 +55,30 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
-  ) async {
-    Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
-    if (plan.hasError) {
-      if (plan.error.id == 404) {
-        // If there is an error with TRANSIT
-        plan = await _fetchPlan(context, from, to, "CAR,WALK");
-      }
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
       if (plan.hasError) {
-        // If there is still an error with CAR
-        plan = Plan.fromError(
-          _localizedErrorForPlanError(
-            plan.error,
-            TrufiLocalizations.of(context),
-          ),
-        );
+        if (plan.error.id == 404) {
+          // If there is an error with TRANSIT
+          plan = await _fetchPlan(context, from, to, "CAR,WALK");
+        }
+        if (plan.hasError) {
+          // If there is still an error with CAR
+          plan = Plan.fromError(
+            _localizedErrorForPlanError(
+              plan.error,
+              TrufiLocalizations.of(context),
+            ),
+          );
+        }
       }
-    }
-    return plan;
+      return plan;
+    }());
   }
 
   Future<Plan> _fetchPlan(

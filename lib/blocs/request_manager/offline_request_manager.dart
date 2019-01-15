@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -41,13 +42,15 @@ class OfflineRequestManager implements RequestManager {
     return locations.map((location) => location.location).toList();
   }
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
-  ) async {
-    throw FetchOfflineRequestException(
-      Exception("Fetch plan offline is not implemented yet."),
-    );
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      throw FetchOfflineRequestException(
+        Exception("Fetch plan offline is not implemented yet."),
+      );
+    }());
   }
 }
