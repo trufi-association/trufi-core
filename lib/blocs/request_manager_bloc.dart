@@ -77,13 +77,13 @@ class RequestManagerBloc implements BlocBase, RequestManager {
           });
   }
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
   ) {
     // FIXME: For now we fetch plans always online
-    //return _requestManager.fetchPlan(context, from, to);
+    // _requestManager.fetchPlan(context, from, to);
     return _onlineRequestManager.fetchPlan(context, from, to);
   }
 }
@@ -97,7 +97,7 @@ abstract class RequestManager {
     int limit,
   );
 
-  Future<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,

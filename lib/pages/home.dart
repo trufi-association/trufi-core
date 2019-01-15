@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -35,6 +36,7 @@ class HomePageState extends State<HomePage>
   final _subscriptions = CompositeSubscription();
 
   bool _isFetching = false;
+  CancelableOperation<Plan> _currentFetchPlanOperation;
 
   @override
   initState() {
@@ -276,16 +278,21 @@ class HomePageState extends State<HomePage>
 
   void _fetchPlan() async {
     final requestManagerBloc = RequestManagerBloc.of(context);
+    // cancel the last fetch plan operation for replace with the current request
+    if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        Plan plan = await requestManagerBloc.fetchPlan(
+        _currentFetchPlanOperation = requestManagerBloc.fetchPlan(
           context,
           _data.fromPlace,
           _data.toPlace,
         );
-        if (plan.hasError) {
+        Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
+        if (plan == null) {
+          throw "Canceled by user";
+        } else if (plan.hasError) {
           _showErrorAlert(plan.error.message);
         } else {
           _setPlan(plan);
