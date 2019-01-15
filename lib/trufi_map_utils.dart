@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/composite_subscription.dart';
@@ -36,11 +37,16 @@ tileHostingTileLayerOptions() {
 }
 
 Marker buildFromMarker(LatLng point) {
-  return buildMarker(
-    point,
-    Icons.adjust,
-    AnchorPos.align(AnchorAlign.center),
-    Colors.black,
+  return Marker(
+    point: point,
+    anchorPos: AnchorPos.align(AnchorAlign.top),
+    builder: (context) {
+      return Container(
+        child: SvgPicture.asset(
+          "assets/images/from_marker.svg",
+        ),
+      );
+    },
   );
 }
 
@@ -51,7 +57,7 @@ Marker buildToMarker(LatLng point) {
     builder: (context) {
       return Container(
         child: SvgPicture.asset(
-          "assets/images/map_marker.svg",
+          "assets/images/to_marker.svg",
         ),
       );
     },
@@ -67,11 +73,10 @@ Marker buildTransferMarker(LatLng point) {
         scale: 0.4,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
             border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(CircleIcon.circle, color: Colors.white),
+          child: Icon(CircleIcon.circle),
         ),
       );
     },
@@ -124,18 +129,21 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
           scale: 0.5,
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).accentColor,
               border: Border.all(color: Colors.white, width: 3.5),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue,
+                  color: Theme.of(context).accentColor,
                   spreadRadius: 8.0,
                   blurRadius: 30.0,
                 ),
               ],
             ),
-            child: Icon(CircleIcon.circle, color: Colors.blue),
+            child: Icon(
+              CircleIcon.circle,
+              color: Theme.of(context).accentColor,
+            ),
           ),
         ),
       ),
@@ -146,7 +154,10 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
           angle: (pi / 180.0) * _direction,
           child: Container(
             alignment: Alignment.topCenter,
-            child: Icon(Icons.arrow_drop_up, color: Colors.blue),
+            child: Icon(
+              Icons.arrow_drop_up,
+              color: Theme.of(context).accentColor,
+            ),
           ),
         ),
       );
@@ -178,8 +189,8 @@ Marker buildBusMarker(
               fit: BoxFit.scaleDown,
               child: Row(
                 children: <Widget>[
-                  Icon(leg.iconData(), color: Colors.white),
-                  Text(leg.route, style: TextStyle(color: Colors.white)),
+                  Icon(leg.iconData()),
+                  Text(leg.route),
                 ],
               ),
             ),

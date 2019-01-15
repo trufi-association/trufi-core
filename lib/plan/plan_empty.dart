@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/widgets/trufi_map.dart';
@@ -40,7 +41,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   Widget _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       child: Icon(Icons.my_location, color: Colors.black),
       onPressed: _handleOnYourLocationPressed,
       heroTag: null,

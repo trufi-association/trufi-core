@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
@@ -84,7 +85,6 @@ class HomePageState extends State<HomePage>
 
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
       bottom: PreferredSize(
         child: Container(),
         preferredSize: Size.fromHeight(45.0),
@@ -108,6 +108,9 @@ class HomePageState extends State<HomePage>
                 ValueKey(keys.homePageFromPlaceField),
                 localizations.searchPleaseSelectOrigin,
                 localizations.searchHintOrigin,
+                SvgPicture.asset(
+                  "assets/images/from_marker.svg",
+                ),
                 _setFromPlace,
                 trailing: _data.isResettable ? _buildResetButton() : null,
               ),
@@ -116,6 +119,9 @@ class HomePageState extends State<HomePage>
                 ValueKey(keys.homePageToPlaceField),
                 localizations.searchPleaseSelectDestination,
                 localizations.searchHintDestination,
+                SvgPicture.asset(
+                  "assets/images/to_marker.svg",
+                ),
                 _setToPlace,
                 trailing: _data.isSwappable ? _buildSwapButton() : null,
               ),
@@ -150,6 +156,7 @@ class HomePageState extends State<HomePage>
     ValueKey<String> valueKey,
     String hintText,
     String searchHintText,
+    SvgPicture textLeadingImage,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
     Widget leading,
@@ -168,6 +175,7 @@ class HomePageState extends State<HomePage>
             hintText: hintText,
             onSaved: onSaved,
             searchHintText: searchHintText,
+            leadingImage: textLeadingImage,
           ),
         ),
         SizedBox(

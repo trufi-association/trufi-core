@@ -19,8 +19,8 @@ class FavoriteLocationsBloc extends LocationsBlocBase {
 }
 
 int sortByFavoriteLocations(
-  TrufiLocation a,
-  TrufiLocation b,
+  dynamic a,
+  dynamic b,
   List<TrufiLocation> favorites,
 ) {
   return sortByLocations(a, b, favorites);

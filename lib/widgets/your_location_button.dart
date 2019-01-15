@@ -8,7 +8,7 @@ class YourLocationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       child: Icon(
         Icons.my_location,
         color: Colors.black,

@@ -37,7 +37,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                 ),
               ),
               TabPageSelector(
-                selectedColor: Colors.black,
+                selectedColor: Theme.of(context).iconTheme.color,
                 controller: widget.tabController,
               ),
             ],
@@ -53,7 +53,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
   }
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
-    final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: ListView.builder(
@@ -68,7 +67,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   child: RichText(
                     text: TextSpan(
-                      style: theme.textTheme.body2,
                       text: localizations.locale.languageCode == "qu"
                           ? leg.toInstructionQuechua(localizations)
                           : leg.toInstruction(localizations),

@@ -37,7 +37,7 @@ class CropButtonState extends State<CropButton>
     return ScaleTransition(
       scale: _animation,
       child: FloatingActionButton(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         child: Icon(
           Icons.crop_free,
           color: Colors.black,
