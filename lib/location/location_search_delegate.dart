@@ -367,6 +367,12 @@ class _SuggestionList extends StatelessWidget {
     IconData iconData,
     List<dynamic> objects,
   ) {
+    try {
+      if (objects.length > 0)
+        objects.sort((a, b) => (a is TrufiStreet) ? -1 : 1);
+    } catch (e) {
+      // crash when objects.length is too big (7074 items)
+    }
     int count = objects.length > 0 ? objects.length + 1 : 0;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
