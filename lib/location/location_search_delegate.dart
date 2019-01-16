@@ -140,7 +140,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
                 historyLocationBloc.inAddLocation.add(street.location);
                 close(context, street.location);
               },
-              Icons.location_on,
+              Icons.label,
               street.description,
               trailing: FavoriteButton(
                 location: street.location,
@@ -158,7 +158,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               historyLocationBloc.inAddLocation.add(junction.location);
               close(context, junction.location);
             },
-            Icons.location_on,
+            Icons.label_outline,
             "... y ${junction.street2.description}",
             trailing: FavoriteButton(
               location: junction.location,
