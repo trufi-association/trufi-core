@@ -515,7 +515,7 @@ class _SuggestionList extends StatelessWidget {
 
 final _abbreviation = {
   "Avenida": "Av.",
-  "Calle": "Cl.",
+  "Calle": "C.",
   "Camino": "C.º",
 };
 
