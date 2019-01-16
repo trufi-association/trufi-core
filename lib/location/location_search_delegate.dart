@@ -27,6 +27,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     final theme = Theme.of(context);
     return theme.copyWith(
       primaryColor: Colors.white,
+      primaryColorBrightness: Brightness.light,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: theme.primaryTextTheme.copyWith(
         title: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
