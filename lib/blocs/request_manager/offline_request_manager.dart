@@ -31,6 +31,8 @@ class OfflineRequestManager implements RequestManager {
     }
     // Remove levenshtein
     final objects = levenshteinObjects.map((l) => l.object).toList();
+    // sort with street priority
+    objects.sort((a, b) => (a is TrufiStreet) ? -1 : 1);
     // Favorites to the top
     objects.sort((a, b) {
       return sortByFavoriteLocations(
