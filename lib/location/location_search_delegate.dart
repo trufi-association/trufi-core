@@ -395,7 +395,7 @@ class _SuggestionList extends StatelessWidget {
               context,
               appBarTheme,
               () => _handleOnStreetTapped(object),
-              iconData,
+              Icons.label,
               object.location.description,
               trailing: Icon(
                 Icons.keyboard_arrow_right,
