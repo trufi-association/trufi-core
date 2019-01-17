@@ -84,6 +84,7 @@ class OnlineRequestManager implements RequestManager {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": "01-01-2018",
+      "numItineraries":"10",
       "mode": mode
     });
     final response = await _fetchRequest(request);
