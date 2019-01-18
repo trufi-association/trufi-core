@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="SplashBackground" translatesAutoresizingMaskIntoConstraints="NO" id="YRO-k0-Ey4">
-                                <rect key="frame" x="-362.5" y="0.0" width="1100" height="667"/>
+                                <rect key="frame" x="7.5" y="0.0" width="360" height="667"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="fOm-nN-DoK">
                                 <rect key="frame" x="68.5" y="97.5" width="238" height="139"/>
@@ -45,7 +45,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SplashBackground" width="1100" height="640"/>
+        <image name="SplashBackground" width="360" height="640"/>
         <image name="SplashLogo" width="238" height="139"/>
     </resources>
 </document>
