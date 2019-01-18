@@ -108,6 +108,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       primaryColor: const Color(0xff263238),
       accentColor: const Color(0xffd81b60),
       backgroundColor: Colors.white,
+      primaryColorLight: const Color(0xffeceff1),
       iconTheme: const IconThemeData(color: Colors.white),
       textTheme: TextTheme(
         subhead:

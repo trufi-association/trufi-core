@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:rxdart/rxdart.dart';
-
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/plan/plan_itinerary_summary_tabs.dart';
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
-import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/visible.dart';
 
@@ -61,7 +59,9 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   Animation<double> _animationSummaryHeight;
   static const durationHeight = 60.0;
   static const summaryHeight = 60.0;
-  static const instructionHeightMin = durationHeight + summaryHeight;
+  static const selectedTabIndicatorHeight = 20;
+  static const instructionHeightMin =
+      durationHeight + summaryHeight + selectedTabIndicatorHeight;
   static const instructionHeightMax = 200.0;
 
   @override
@@ -91,7 +91,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       });
     _animationSummaryHeight = Tween(
       begin: summaryHeight,
-      end: instructionHeightMax,
+      end: instructionHeightMax - selectedTabIndicatorHeight,
     ).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -152,128 +152,29 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   Widget _buildItinerariesSummary(BuildContext context) {
     return StreamBuilder<PlanItinerary>(
-      stream: _planPageController.outSelectedItinerary,
-      initialData: _planPageController.selectedItinerary,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<PlanItinerary> snapshot,
-      ) {
-        return Column(
-          children: <Widget>[
-            _buildTotalDurationFromSelectedItinerary(
-              context,
-              snapshot.data,
-            ),
-            _buildItinerarySummary(
-              context,
-              snapshot.data,
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildTotalDurationFromSelectedItinerary(
-      BuildContext context, PlanItinerary itinerary) {
-    final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
-    final legs = itinerary?.legs ?? [];
-    var totalTime = 0.0;
-    var totalDistance = 0.0;
-
-    for (PlanItineraryLeg leg in legs) {
-      totalTime += (leg.duration.ceil() / 60).ceil();
-      totalDistance += leg.distance.ceil();
-    }
-    Color backgroundColor = Theme.of(context).primaryColor;
-    return Container(
-      height: _animationDurationHeight.value,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(color: backgroundColor, blurRadius: 4.0)
-        ],
-      ),
-      padding: EdgeInsets.all(10.0),
-      child: Row(
-        children: <Widget>[
-          Text(
-            "${totalTime.ceil()} ${localizations.instructionMinutes} ",
-            style: theme.textTheme.title,
-          ),
-          totalDistance >= 1000
-              ? Text(
-                  "(${(totalDistance.ceil() / 1000).ceil()} ${localizations.instructionUnitKm})",
-                  style: theme.textTheme.title,
-                )
-              : Text(
-                  "(${totalDistance.ceil()} ${localizations.instructionUnitMeter})",
-                  style: theme.textTheme.title,
-                ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildItinerarySummary(BuildContext context, PlanItinerary itinerary) {
-    final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
-    final children = List<Widget>();
-    final legs = itinerary?.legs ?? [];
-    for (var i = 0; i < legs.length; i++) {
-      final leg = legs[i];
-      children.add(
-        Row(
-          children: <Widget>[
-            Icon(leg.iconData()),
-            leg.mode == 'BUS'
-                ? Text(
-                    leg.route,
-                    style: theme.textTheme.body1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : Text(
-                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes}",
-                    style: theme.textTheme.body1,
-                  ),
-            i < (legs.length - 1)
-                ? Icon(Icons.keyboard_arrow_right)
-                : Container(),
-          ],
-        ),
-      );
-    }
-    return Container(
-      height: _animationSummaryHeight.value,
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        boxShadow: <BoxShadow>[BoxShadow(blurRadius: 1.0)],
-      ),
-      child: Material(
-        color: Theme.of(context).primaryColor,
-        child: InkWell(
-          onTap: _toggleInstructions,
-          child: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Row(children: children),
-                    ],
-                  ),
-                ),
-                _buildToggleSummaryButton(context)
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+        stream: _planPageController.outSelectedItinerary,
+        initialData: _planPageController.selectedItinerary,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<PlanItinerary> snapshot,
+        ) {
+          Color backgroundColor = Theme.of(context).primaryColor;
+          return Container(
+              height: _animationInstructionHeight.value,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                boxShadow: <BoxShadow>[
+                  BoxShadow(color: backgroundColor, blurRadius: 4.0)
+                ],
+              ),
+              child: PlanItinerarySummaryTabPages(
+                _animationDurationHeight.value,
+                _animationSummaryHeight.value,
+                _tabController,
+                _planPageController.plan.itineraries,
+                _buildToggleSummaryButton(context),
+              ));
+        });
   }
 
   Widget _buildItinerariesDetails(BuildContext context) {
@@ -298,8 +199,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     return Container(
       child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
-            ? Icon(Icons.keyboard_arrow_down)
-            : Icon(Icons.keyboard_arrow_up),
+            ? Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.grey,
+              )
+            : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
         onTap: _toggleInstructions,
       ),
     );
