@@ -241,7 +241,7 @@ class _SuggestionList extends StatelessWidget {
         context,
         appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
-        Icons.location_on,
+        Icons.place,
         localizations.searchItemChooseOnMap,
       ),
     );
@@ -267,7 +267,7 @@ class _SuggestionList extends StatelessWidget {
       ) {
         return _buildObjectList(
           localizations.searchTitleFavorites,
-          Icons.location_on,
+          Icons.place,
           favoriteLocationsBloc.locations,
         );
       },
@@ -291,7 +291,7 @@ class _SuggestionList extends StatelessWidget {
       context,
       localizations.searchTitleResults,
       requestManagerBloc.fetchLocations(context, query, 30),
-      Icons.location_on,
+      Icons.place,
       isVisibleWhenEmpty: true,
     );
   }
@@ -385,6 +385,7 @@ class _SuggestionList extends StatelessWidget {
               () => _handleOnLocationTapped(object, addToHistory: true),
               iconData,
               object.description,
+              subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
                 favoritesStream: favoriteLocationsBloc.outLocations,
@@ -526,6 +527,7 @@ Widget _buildItem(
   Function onTap,
   IconData iconData,
   String title, {
+  String subtitle,
   Widget trailing,
 }) {
   _abbreviation.forEach((from, replace) {
@@ -539,7 +541,11 @@ Widget _buildItem(
         child: RichText(
           maxLines: 1,
           overflow: TextOverflow.clip,
-          text: TextSpan(text: title, style: theme.textTheme.body1),
+          text: TextSpan(style: theme.textTheme.body1, children: <TextSpan>[
+            TextSpan(text: title),
+            TextSpan(text: "     "),
+            TextSpan(text: subtitle, style: TextStyle(color: theme.hintColor)),
+          ])
         ),
       ),
     ],

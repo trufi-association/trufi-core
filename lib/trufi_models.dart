@@ -9,6 +9,8 @@ class TrufiLocation {
     @required this.description,
     @required this.latitude,
     @required this.longitude,
+    this.address,
+    this.amenity,
     this.importance,
   })  : assert(description != null),
         assert(latitude != null),
@@ -20,6 +22,8 @@ class TrufiLocation {
   static const String _Importance = 'importance';
 
   final String description;
+  final String address;
+  final String amenity;
   final double latitude;
   final double longitude;
   final num importance;
@@ -44,6 +48,8 @@ class TrufiLocation {
   factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
     return TrufiLocation(
       description: json[0],
+      address: json[4],
+      amenity: json[5],
       longitude: json[3][0].toDouble(),
       latitude: json[3][1].toDouble(),
     );
