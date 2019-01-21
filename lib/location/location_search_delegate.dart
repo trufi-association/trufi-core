@@ -619,6 +619,7 @@ Widget _buildItem(
 }) {
   _abbreviation.forEach((from, replace) {
     title = title.replaceAll(from, replace);
+    subtitle = subtitle.replaceAll(from, replace);
   });
   Row row = Row(
     children: <Widget>[
