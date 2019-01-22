@@ -241,7 +241,7 @@ class _SuggestionList extends StatelessWidget {
         context,
         appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
-        Icons.location_on,
+        Icons.place,
         localizations.searchItemChooseOnMap,
       ),
     );
@@ -267,7 +267,7 @@ class _SuggestionList extends StatelessWidget {
       ) {
         return _buildObjectList(
           localizations.searchTitleFavorites,
-          Icons.location_on,
+          Icons.place,
           favoriteLocationsBloc.locations,
         );
       },
@@ -291,7 +291,7 @@ class _SuggestionList extends StatelessWidget {
       context,
       localizations.searchTitleResults,
       requestManagerBloc.fetchLocations(context, query, 30),
-      Icons.location_on,
+      Icons.place,
       isVisibleWhenEmpty: true,
     );
   }
@@ -363,6 +363,86 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
+  IconData _amenityToIconData(String amenity) {
+    switch (amenity) {
+      case 'bar':
+      case 'pub':
+      case 'biergarten':
+      case 'nightclub':
+        return Icons.local_bar;
+
+      case 'cafe':
+        return Icons.local_cafe;
+
+      case 'cinema':
+        return Icons.local_movies;
+
+      case 'pharmacy':
+        return Icons.local_pharmacy;
+
+      case 'fast_food':
+        return Icons.fastfood;
+
+      case 'food_court':
+      case 'restaurant':
+        return Icons.restaurant;
+
+      case 'theatre':
+        return Icons.local_play;
+
+      case 'parking':
+        return Icons.local_parking;
+
+      case 'doctors':
+      case 'dentist':
+      case 'veterinary':
+      case 'clinic':
+      case 'hospital':
+        return Icons.local_hospital;
+
+      case 'library':
+        return Icons.local_library;
+
+      case 'car_wash':
+        return Icons.local_car_wash;
+
+      case 'university':
+      case 'school':
+      case 'college':
+        return Icons.school;
+
+      case 'post_office':
+        return Icons.local_post_office;
+
+      case 'atm':
+        return Icons.local_atm;
+
+      case 'convenience':
+        return Icons.local_convenience_store;
+
+      case 'telephone':
+        return Icons.local_phone;
+
+      case 'internet_cafe':
+        return Icons.alternate_email;
+
+      case 'drinking_water':
+        return Icons.local_drink;
+
+      case 'charging_station':
+        return Icons.ev_station;
+
+      case 'fuel':
+        return Icons.local_gas_station;
+
+      case 'taxi':
+        return Icons.local_taxi;
+
+      default:
+        return null;
+    }
+  }
+
   Widget _buildObjectList(
     String title,
     IconData iconData,
@@ -379,12 +459,20 @@ class _SuggestionList extends StatelessWidget {
           // Item
           final object = objects[index - 1];
           if (object is TrufiLocation) {
+            IconData localIconData = iconData;
+
+            // Use special type icon if available, fallback to default
+            if (object.amenity != null) {
+              localIconData = _amenityToIconData(object.amenity) ?? iconData;
+            }
+
             return _buildItem(
               context,
               appBarTheme,
               () => _handleOnLocationTapped(object, addToHistory: true),
-              iconData,
+              localIconData,
               object.description,
+              subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
                 favoritesStream: favoriteLocationsBloc.outLocations,
@@ -526,10 +614,12 @@ Widget _buildItem(
   Function onTap,
   IconData iconData,
   String title, {
+  String subtitle,
   Widget trailing,
 }) {
   _abbreviation.forEach((from, replace) {
     title = title.replaceAll(from, replace);
+    subtitle = subtitle.replaceAll(from, replace);
   });
   Row row = Row(
     children: <Widget>[
@@ -539,7 +629,11 @@ Widget _buildItem(
         child: RichText(
           maxLines: 1,
           overflow: TextOverflow.clip,
-          text: TextSpan(text: title, style: theme.textTheme.body1),
+          text: TextSpan(style: theme.textTheme.body1, children: <TextSpan>[
+            TextSpan(text: title),
+            TextSpan(text: "     "),
+            TextSpan(text: subtitle, style: TextStyle(color: theme.hintColor)),
+          ])
         ),
       ),
     ],
