@@ -179,14 +179,30 @@ class Plan {
       return Plan(error: PlanError.fromJson(json[_Error]));
     } else {
       Map<String, dynamic> planJson = json[_Plan];
+      List<PlanItinerary> itineraries =
+          planJson[_Itineraries].map<PlanItinerary>((itineraryJson) {
+        return PlanItinerary.fromJson(itineraryJson);
+      }).toList();
+      
+      Map<String, PlanItinerary> tmpRepeat = Map();
+      List<PlanItinerary> itinerariesList = [];
+      itineraries.forEach((PlanItinerary itinerarie) {
+        String name;
+        itinerarie.legs.forEach((PlanItineraryLeg itinerarieLeg) {
+          if (name == null && itinerarieLeg.mode == "BUS")
+            name = itinerarieLeg.route;
+        });
+        if (name != null && tmpRepeat[name] == null) {
+          tmpRepeat[name] = itinerarie;
+          itinerariesList.add(itinerarie);
+        } else if (name == null) {
+          itinerariesList.add(itinerarie);
+        }
+      });
       return Plan(
           from: PlanLocation.fromJson(planJson[_From]),
           to: PlanLocation.fromJson(planJson[_To]),
-          itineraries: planJson[_Itineraries]
-              .map<PlanItinerary>(
-                (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
-              )
-              .toList());
+          itineraries: itinerariesList);
     }
   }
 
