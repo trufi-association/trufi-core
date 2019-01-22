@@ -12,7 +12,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
-  static const String endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
+  static const String endpoint = 'api.trufi.app';
   static const String searchPath = '/otp/routers/default/geocode';
   static const String planPath = 'otp/routers/default/plan';
 
