@@ -48,27 +48,37 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  CancelableOperation<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
   ) {
+    return _fetchCancelablePlan(context, from, to, "TRANSIT,WALK");
+  }
+
+  CancelableOperation<Plan> fetchCarPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return _fetchCancelablePlan(context, from, to, "CAR,WALK");
+  }
+
+  CancelableOperation<Plan> _fetchCancelablePlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+    String mode,
+  ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
+      Plan plan = await _fetchPlan(context, from, to, mode);
       if (plan.hasError) {
-        if (plan.error.id == 404) {
-          // If there is an error with TRANSIT
-          plan = await _fetchPlan(context, from, to, "CAR,WALK");
-        }
-        if (plan.hasError) {
-          // If there is still an error with CAR
-          plan = Plan.fromError(
-            _localizedErrorForPlanError(
-              plan.error,
-              TrufiLocalizations.of(context),
-            ),
-          );
-        }
+        plan = Plan.fromError(
+          _localizedErrorForPlanError(
+            plan.error,
+            TrufiLocalizations.of(context),
+          ),
+        );
       }
       return plan;
     }());
