@@ -45,7 +45,12 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       ),
       tooltip: "Back",
       onPressed: () {
-        close(context, null);
+        if (_result != null) {
+          _result = null;
+          showSuggestions(context);
+        } else {
+          close(context, null);
+        }
       },
     );
   }
