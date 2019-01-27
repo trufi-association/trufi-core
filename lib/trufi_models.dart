@@ -106,6 +106,12 @@ class TrufiLocation {
   }
 }
 
+final _abbreviation = {
+  "Avenida": "Av.",
+  "Calle": "C.",
+  "Camino": "C.º",
+};
+
 class TrufiStreet {
   TrufiStreet({@required this.location});
 
@@ -113,9 +119,13 @@ class TrufiStreet {
   final junctions = List<TrufiStreetJunction>();
 
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
+    String _description = json[0];
+    _abbreviation.forEach((from, replace) {
+      _description = _description?.replaceAll(from, replace);
+    });
     return TrufiStreet(
       location: TrufiLocation(
-        description: json[0],
+        description: _description,
         longitude: json[1][0].toDouble(),
         latitude: json[1][1].toDouble(),
       ),
