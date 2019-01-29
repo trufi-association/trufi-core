@@ -155,6 +155,9 @@ LocationSearchData _parseSearchJson(String encoded) {
             }
           });
         }
+        street1.junctions.sort((TrufiStreetJunction a, TrufiStreetJunction b) {
+          return a.description.compareTo(b.description);
+        });
       });
       return LocationSearchData(places, streets.values.toList());
     } catch (e) {
