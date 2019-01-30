@@ -43,7 +43,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
             ],
           ),
           Positioned(
-            top: 16.0,
+            top: 4.0,
             right: 10.0,
             child: widget.toggleInstructions,
           ),

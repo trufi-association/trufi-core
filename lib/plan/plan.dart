@@ -197,13 +197,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   }
 
   Widget _buildToggleSummaryButton(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        child: _visibleFlag == VisibilityFlag.visible
-            ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
-            : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
-        onTap: _toggleInstructions,
-      ),
+    return IconButton(
+      icon: _visibleFlag == VisibilityFlag.visible
+          ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
+          : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
+      onPressed: _toggleInstructions,
     );
   }
 
