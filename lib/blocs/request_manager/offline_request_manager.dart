@@ -45,7 +45,7 @@ class OfflineRequestManager implements RequestManager {
     return objects;
   }
 
-  CancelableOperation<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
@@ -53,6 +53,18 @@ class OfflineRequestManager implements RequestManager {
     return CancelableOperation.fromFuture(() async {
       throw FetchOfflineRequestException(
         Exception("Fetch plan offline is not implemented yet."),
+      );
+    }());
+  }
+
+  CancelableOperation<Plan> fetchCarPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      throw FetchOfflineRequestException(
+        Exception("Fetch plan as car route offline is not implemented yet."),
       );
     }());
   }
