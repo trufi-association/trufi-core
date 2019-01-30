@@ -101,6 +101,17 @@ class TrufiLocalizations {
     return translate("common_error");
   }
 
+  String get noRouteError => translate("no_route_error");
+
+  String get noRouteErrorActionCancel =>
+      translate("no_route_error_action_cancel");
+
+  String get noRouteErrorActionReportMissingRoute =>
+      translate("no_route_error_action_report_missing_route");
+
+  String get noRouteErrorActionShowCarRoute =>
+      translate("no_route_error_action_show_car_route");
+
   String get errorServerUnavailable {
     return translate("route_request_error_server_unavailable");
   }

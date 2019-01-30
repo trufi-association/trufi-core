@@ -6,11 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:latlong/latlong.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -276,24 +279,34 @@ class HomePageState extends State<HomePage>
     _setPlaces(_data.toPlace, _data.fromPlace);
   }
 
-  void _fetchPlan() async {
+  void _fetchPlan({bool car = false}) async {
     final requestManagerBloc = RequestManagerBloc.of(context);
-    // cancel the last fetch plan operation for replace with the current request
+    // Cancel the last fetch plan operation for replace with the current request
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       setState(() => _isFetching = true);
       try {
-        _currentFetchPlanOperation = requestManagerBloc.fetchPlan(
-          context,
-          _data.fromPlace,
-          _data.toPlace,
-        );
+        _currentFetchPlanOperation = car
+            ? requestManagerBloc.fetchCarPlan(
+                context,
+                _data.fromPlace,
+                _data.toPlace,
+              )
+            : requestManagerBloc.fetchTransitPlan(
+                context,
+                _data.fromPlace,
+                _data.toPlace,
+              );
         Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {
-          _showErrorAlert(plan.error.message);
+          if (car) {
+            _showCarErrorAlert(plan.error.message);
+          } else {
+            _showTransitErrorAlert(plan.error.message);
+          }
         } else {
           _setPlan(plan);
         }
@@ -322,11 +335,32 @@ class HomePageState extends State<HomePage>
     }
   }
 
-  void _showErrorAlert(String error) {
+  void _showCarErrorAlert(String error) {
     showDialog(
       context: context,
       builder: (context) {
-        return buildErrorAlert(context: context, error: error);
+        return buildCarErrorAlert(context: context, error: error);
+      },
+    );
+  }
+
+  void _showTransitErrorAlert(String error) async {
+    final lastLocation = await LocationProviderBloc.of(context).lastLocation;
+    final languageCode = TrufiLocalizations.of(context).locale.languageCode;
+    final packageInfo = await PackageInfo.fromPlatform();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return buildTransitErrorAlert(
+          context: context,
+          error: error,
+          onReportMissingRoute: () {
+            launch("$urlRouteFeedback?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}");
+          },
+          onShowCarRoute: () {
+            _fetchPlan(car: true);
+          },
+        );
       },
     );
   }
@@ -338,8 +372,8 @@ class HomePageState extends State<HomePage>
         return buildOnAndOfflineErrorAlert(
           context: context,
           online: online,
-          title: TrufiLocalizations.of(context).commonError,
-          content: message,
+          title: Text(TrufiLocalizations.of(context).commonError),
+          content: Text(message),
         );
       },
     );
