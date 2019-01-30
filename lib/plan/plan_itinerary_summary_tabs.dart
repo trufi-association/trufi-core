@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -26,8 +27,10 @@ class PlanItinerarySummaryTabPagesState
     extends State<PlanItinerarySummaryTabPages> {
   @override
   Widget build(BuildContext context) {
-    List itinenarySummaryTabs = List<Column>();
-    widget.itineraries.forEach((itinerary) => itinenarySummaryTabs.add(
+    final itinerarySummaryTabs = List<Column>();
+    widget.itineraries.forEach(
+      (itinerary) {
+        return itinerarySummaryTabs.add(
           Column(
             children: <Widget>[
               _buildTotalDurationFromSelectedItinerary(
@@ -40,7 +43,9 @@ class PlanItinerarySummaryTabPagesState
               ),
             ],
           ),
-        ));
+        );
+      },
+    );
     return SafeArea(
       child: Stack(
         children: <Widget>[
@@ -49,7 +54,7 @@ class PlanItinerarySummaryTabPagesState
               Expanded(
                 child: TabBarView(
                   controller: widget.tabController,
-                  children: itinenarySummaryTabs,
+                  children: itinerarySummaryTabs,
                 ),
               ),
               TabPageSelector(
@@ -72,37 +77,28 @@ class PlanItinerarySummaryTabPagesState
       BuildContext context, PlanItinerary itinerary) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
-    final legs = itinerary?.legs ?? [];
-    var totalTime = 0.0;
-    var totalDistance = 0.0;
-
-    for (PlanItineraryLeg leg in legs) {
-      totalTime += (leg.duration.ceil() / 60).ceil();
-      totalDistance += leg.distance.ceil();
-    }
-    Color backgroundColor = Theme.of(context).primaryColor;
     return Container(
       height: widget.animationDurationHeight,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: theme.primaryColor,
         boxShadow: <BoxShadow>[
-          BoxShadow(color: backgroundColor, blurRadius: 4.0)
+          BoxShadow(color: theme.primaryColor, blurRadius: 4.0),
         ],
       ),
       padding: EdgeInsets.all(10.0),
       child: Row(
         children: <Widget>[
           Text(
-            "${totalTime.ceil()} ${localizations.instructionMinutes} ",
+            "${itinerary.time} ${localizations.instructionMinutes} ",
             style: theme.textTheme.title,
           ),
-          totalDistance >= 1000
+          itinerary.distance >= 1000
               ? Text(
-                  "(${(totalDistance.ceil() / 1000).ceil()} ${localizations.instructionUnitKm})",
+                  "(${(itinerary.distance / 1000).ceil()} ${localizations.instructionUnitKm})",
                   style: theme.textTheme.title.copyWith(color: Colors.grey),
                 )
               : Text(
-                  "(${totalDistance.ceil()} ${localizations.instructionUnitMeter})",
+                  "(${itinerary.distance} ${localizations.instructionUnitMeter})",
                   style: theme.textTheme.title,
                 ),
         ],

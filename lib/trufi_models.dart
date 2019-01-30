@@ -287,13 +287,22 @@ class PlanLocation {
 }
 
 class PlanItinerary {
-  PlanItinerary({
-    this.legs,
-  });
-
   static const String _Legs = "legs";
 
+  static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
+      legs.fold<int>(0, (distance, leg) => distance += leg.distance.ceil());
+
+  static int _timeForLegs(List<PlanItineraryLeg> legs) => legs.fold<int>(
+      0, (time, leg) => time += (leg.duration.ceil() / 60).ceil());
+
+  PlanItinerary({
+    this.legs,
+  })  : this.distance = _distanceForLegs(legs),
+        this.time = _timeForLegs(legs);
+
   final List<PlanItineraryLeg> legs;
+  final int distance;
+  final int time;
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
