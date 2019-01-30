@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 
 class TrufiLocation {
@@ -102,13 +103,19 @@ class TrufiLocation {
   String toString() {
     return '$latitude,$longitude';
   }
-}
 
-final _abbreviation = {
-  "Avenida": "Av.",
-  "Calle": "C.",
-  "Camino": "C.º",
-};
+  String get displayName {
+    return abbreviations.keys.fold<String>(description, (
+      description,
+      abbreviation,
+    ) {
+      return description.replaceAll(
+        abbreviation,
+        abbreviations[abbreviation],
+      );
+    });
+  }
+}
 
 class TrufiStreet {
   TrufiStreet({@required this.location});
@@ -117,13 +124,9 @@ class TrufiStreet {
   final junctions = List<TrufiStreetJunction>();
 
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
-    String _description = json[0];
-    _abbreviation.forEach((from, replace) {
-      _description = _description?.replaceAll(from, replace);
-    });
     return TrufiStreet(
       location: TrufiLocation(
-        description: _description,
+        description: json[0],
         longitude: json[1][0].toDouble(),
         latitude: json[1][1].toDouble(),
       ),
@@ -131,6 +134,8 @@ class TrufiStreet {
   }
 
   String get description => location.description;
+
+  String get displayName => location.displayName;
 }
 
 class TrufiStreetJunction {
