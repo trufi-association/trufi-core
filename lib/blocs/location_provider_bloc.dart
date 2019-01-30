@@ -17,8 +17,6 @@ class LocationProviderBloc implements BlocBase {
     _locationProvider = LocationProvider(
       onLocationChanged: _inLocationUpdate.add,
     );
-    // start location listener on launch app
-    start();
   }
 
   LocationProvider _locationProvider;
@@ -40,8 +38,7 @@ class LocationProviderBloc implements BlocBase {
   // Methods
 
   void start() async {
-    GeolocationStatus status = await _locationProvider.status;
-    if (status == GeolocationStatus.granted) _locationProvider.start();
+    _locationProvider.start();
   }
 
   void stop() async {
