@@ -607,12 +607,6 @@ class _SuggestionList extends StatelessWidget {
   }
 }
 
-final _abbreviation = {
-  "Avenida": "Av.",
-  "Calle": "C.",
-  "Camino": "C.º",
-};
-
 Widget _buildItem(
   BuildContext context,
   ThemeData theme,
@@ -622,10 +616,6 @@ Widget _buildItem(
   String subtitle,
   Widget trailing,
 }) {
-  _abbreviation.forEach((from, replace) {
-    title = title?.replaceAll(from, replace);
-    subtitle = subtitle?.replaceAll(from, replace);
-  });
   Row row = Row(
     children: <Widget>[
       Icon(iconData, color: theme.primaryIconTheme.color),
