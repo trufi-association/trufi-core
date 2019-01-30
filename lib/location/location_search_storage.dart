@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
@@ -37,10 +38,22 @@ class LocationSearchStorage {
     return _places.fold<List<LevenshteinObject>>(
       List<LevenshteinObject>(),
       (locations, location) {
+        // Description
         int distance = _findMatchAndCalculateStringDistance(
           location.description.toLowerCase(),
           query,
         );
+        // Alternative names
+        location.alternativeNames?.forEach((alternativeName) {
+          distance = min(
+            distance,
+            _findMatchAndCalculateStringDistance(
+              alternativeName.toLowerCase(),
+              query,
+            ),
+          );
+        });
+        // Threshold
         if (distance < 3) {
           locations.add(LevenshteinObject(location, distance));
         }

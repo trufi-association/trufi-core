@@ -9,24 +9,25 @@ class TrufiLocation {
     @required this.description,
     @required this.latitude,
     @required this.longitude,
+    this.alternativeNames,
+    this.localizedNames,
     this.address,
     this.amenity,
-    this.importance,
   })  : assert(description != null),
         assert(latitude != null),
         assert(longitude != null);
 
-  static const String _Description = 'description';
-  static const String _Latitude = 'latitude';
-  static const String _Longitude = 'longitude';
-  static const String _Importance = 'importance';
+  static const String keyDescription = 'description';
+  static const String keyLatitude = 'latitude';
+  static const String keyLongitude = 'longitude';
 
   final String description;
-  final String address;
-  final String amenity;
   final double latitude;
   final double longitude;
-  final num importance;
+  final List<String> alternativeNames;
+  final Map<String, String> localizedNames;
+  final String address;
+  final String amenity;
 
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
@@ -41,17 +42,18 @@ class TrufiLocation {
       description: json['name'],
       latitude: json['coords']['lat'],
       longitude: json['coords']['lng'],
-      importance: json['importance'],
     );
   }
 
   factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
     return TrufiLocation(
-      description: json[0],
-      address: json[4],
-      amenity: json[5],
+      description: json[0].toString(),
+      alternativeNames: json[1].cast<String>(),
+      localizedNames: json[2].cast<String, String>(),
       longitude: json[3][0].toDouble(),
       latitude: json[3][1].toDouble(),
+      address: json[4],
+      amenity: json[5],
     );
   }
 
@@ -72,23 +74,19 @@ class TrufiLocation {
   }
 
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
+    if (json == null) return null;
     return TrufiLocation(
-      description: json[_Description],
-      latitude: json[_Latitude],
-      longitude: json[_Longitude],
-      importance: json[_Importance],
+      description: json[keyDescription],
+      latitude: json[keyLatitude],
+      longitude: json[keyLongitude],
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      _Description: description,
-      _Latitude: latitude,
-      _Longitude: longitude,
-      _Importance: importance,
+      keyDescription: description,
+      keyLatitude: latitude,
+      keyLongitude: longitude,
     };
   }
 
