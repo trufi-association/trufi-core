@@ -198,31 +198,46 @@ class Plan {
       return Plan(error: PlanError.fromJson(json[_Error]));
     } else {
       Map<String, dynamic> planJson = json[_Plan];
-      List<PlanItinerary> itineraries =
-          planJson[_Itineraries].map<PlanItinerary>((itineraryJson) {
-        return PlanItinerary.fromJson(itineraryJson);
-      }).toList();
-      
-      Map<String, PlanItinerary> tmpRepeat = Map();
-      List<PlanItinerary> itinerariesList = [];
-      itineraries.forEach((PlanItinerary itinerarie) {
-        String name;
-        itinerarie.legs.forEach((PlanItineraryLeg itinerarieLeg) {
-          if (name == null && itinerarieLeg.mode == "BUS")
-            name = itinerarieLeg.route;
-        });
-        if (name != null && tmpRepeat[name] == null) {
-          tmpRepeat[name] = itinerarie;
-          itinerariesList.add(itinerarie);
-        } else if (name == null) {
-          itinerariesList.add(itinerarie);
-        }
-      });
       return Plan(
-          from: PlanLocation.fromJson(planJson[_From]),
-          to: PlanLocation.fromJson(planJson[_To]),
-          itineraries: itinerariesList);
+        from: PlanLocation.fromJson(planJson[_From]),
+        to: PlanLocation.fromJson(planJson[_To]),
+        itineraries: _removePlanItineraryDuplicates(
+          planJson[_Itineraries]
+              .map<PlanItinerary>(
+                (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
+              )
+              .toList(),
+        ),
+      );
     }
+  }
+
+  static List<PlanItinerary> _removePlanItineraryDuplicates(
+    List<PlanItinerary> itineraries,
+  ) {
+    final usedRoutes = Set<String>();
+    // Fold the itinerary list to build up list without duplicates
+    return itineraries.fold<List<PlanItinerary>>(
+      List<PlanItinerary>(),
+      (itineraries, itinerary) {
+        // Get first bus leg
+        final firstBusLeg = itinerary.legs.firstWhere(
+          (leg) => leg.mode == "BUS",
+        );
+        // If no bus leg exist just add the itinerary
+        if (firstBusLeg == null) {
+          itineraries.add(itinerary);
+        } else {
+          // If a bus leg exist and the first route isn't used yet just add the itinerary
+          if (!usedRoutes.contains(firstBusLeg.route)) {
+            itineraries.add(itinerary);
+            usedRoutes.add(firstBusLeg.route);
+          }
+        }
+        // Return current list
+        return itineraries;
+      },
+    );
   }
 
   factory Plan.fromError(String error) {
