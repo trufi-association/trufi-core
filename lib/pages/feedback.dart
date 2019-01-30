@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
@@ -17,8 +17,7 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class FeedBackPageState extends State<FeedbackPage> {
-  static const LaunchUrl =
-      "mailto:trufi-feedback@googlegroups.com?subject=Feedback";
+  static const LaunchUrl = "mailto:$emailFeedback?subject=Feedback";
 
   Future<Null> _launched;
 

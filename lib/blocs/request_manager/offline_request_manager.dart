@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
@@ -32,9 +33,9 @@ class OfflineRequestManager implements RequestManager {
     // Remove levenshtein
     final objects = levenshteinObjects.map((l) => l.object).toList();
     // sort with street priority
-    objects.sort((a, b) => (a is TrufiStreet) ? -1 : 1);
+    mergeSort(objects, compare: (a, b) => (a is TrufiStreet) ? 0 : 1);
     // Favorites to the top
-    objects.sort((a, b) {
+    mergeSort(objects, compare: (a, b) {
       return sortByFavoriteLocations(
         a,
         b,
@@ -45,7 +46,7 @@ class OfflineRequestManager implements RequestManager {
     return objects;
   }
 
-  CancelableOperation<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
@@ -53,6 +54,18 @@ class OfflineRequestManager implements RequestManager {
     return CancelableOperation.fromFuture(() async {
       throw FetchOfflineRequestException(
         Exception("Fetch plan offline is not implemented yet."),
+      );
+    }());
+  }
+
+  CancelableOperation<Plan> fetchCarPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      throw FetchOfflineRequestException(
+        Exception("Fetch plan as car route offline is not implemented yet."),
       );
     }());
   }

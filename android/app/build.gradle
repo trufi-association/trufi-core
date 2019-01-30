@@ -31,12 +31,11 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "ubilabs.net.trufiBeta"
+        applicationId "app.trufi.navigator"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 15
-        versionName "0.0.15"
+        versionCode 1
+        versionName "0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

@@ -8,11 +8,11 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
-  static const String endpoint = 'trufiapp.westeurope.cloudapp.azure.com';
   static const String searchPath = '/otp/routers/default/geocode';
   static const String planPath = 'otp/routers/default/plan';
 
@@ -21,7 +21,7 @@ class OnlineRequestManager implements RequestManager {
     String query,
     int limit,
   ) async {
-    Uri request = Uri.https(endpoint, searchPath, {
+    Uri request = Uri.https(urlOtpEndpoint, searchPath, {
       "query": query,
       "autocomplete": "false",
       "corners": "true",
@@ -48,27 +48,37 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  CancelableOperation<Plan> fetchPlan(
+  CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
   ) {
+    return _fetchCancelablePlan(context, from, to, "TRANSIT,WALK");
+  }
+
+  CancelableOperation<Plan> fetchCarPlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return _fetchCancelablePlan(context, from, to, "CAR,WALK");
+  }
+
+  CancelableOperation<Plan> _fetchCancelablePlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+    String mode,
+  ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(context, from, to, "TRANSIT,WALK");
+      Plan plan = await _fetchPlan(context, from, to, mode);
       if (plan.hasError) {
-        if (plan.error.id == 404) {
-          // If there is an error with TRANSIT
-          plan = await _fetchPlan(context, from, to, "CAR,WALK");
-        }
-        if (plan.hasError) {
-          // If there is still an error with CAR
-          plan = Plan.fromError(
-            _localizedErrorForPlanError(
-              plan.error,
-              TrufiLocalizations.of(context),
-            ),
-          );
-        }
+        plan = Plan.fromError(
+          _localizedErrorForPlanError(
+            plan.error,
+            TrufiLocalizations.of(context),
+          ),
+        );
       }
       return plan;
     }());
@@ -80,7 +90,7 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    Uri request = Uri.https(endpoint, planPath, {
+    Uri request = Uri.https(urlOtpEndpoint, planPath, {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": "01-01-2018",
