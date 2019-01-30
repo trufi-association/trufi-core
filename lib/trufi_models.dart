@@ -52,8 +52,8 @@ class TrufiLocation {
       localizedNames: json[2].cast<String, String>(),
       longitude: json[3][0].toDouble(),
       latitude: json[3][1].toDouble(),
-      address: json[4].toString(),
-      amenity: json[5].toString(),
+      address: json[4],
+      amenity: json[5],
     );
   }
 
