@@ -200,10 +200,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     return Container(
       child: GestureDetector(
         child: _visibleFlag == VisibilityFlag.visible
-            ? Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.grey,
-              )
+            ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
             : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
         onTap: _toggleInstructions,
       ),
