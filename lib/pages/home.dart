@@ -13,6 +13,7 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -354,7 +355,7 @@ class HomePageState extends State<HomePage>
           context: context,
           error: error,
           onReportMissingRoute: () {
-            launch("https://trufifeedback.z15.web.core.windows.net/route.html?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}");
+            launch("$urlRouteFeedback?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}");
           },
           onShowCarRoute: () {
             _fetchPlan(car: true);

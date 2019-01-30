@@ -8,11 +8,11 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
-  static const String endpoint = 'api.trufi.app';
   static const String searchPath = '/otp/routers/default/geocode';
   static const String planPath = 'otp/routers/default/plan';
 
@@ -21,7 +21,7 @@ class OnlineRequestManager implements RequestManager {
     String query,
     int limit,
   ) async {
-    Uri request = Uri.https(endpoint, searchPath, {
+    Uri request = Uri.https(urlOtpEndpoint, searchPath, {
       "query": query,
       "autocomplete": "false",
       "corners": "true",
@@ -90,7 +90,7 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    Uri request = Uri.https(endpoint, planPath, {
+    Uri request = Uri.https(urlOtpEndpoint, planPath, {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": "01-01-2018",
