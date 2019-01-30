@@ -81,10 +81,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
     if (_result != null) {
       if (_result is TrufiLocation) {
-        print("${localizations.searchNavigate} ${_result.description}");
         Future.delayed(Duration.zero, () {
           close(context, _result);
         });
@@ -147,7 +145,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
                 close(context, street.location);
               },
               Icons.label,
-              street.description,
+              street.displayName,
               trailing: FavoriteButton(
                 location: street.location,
                 favoritesStream: favoriteLocationsBloc.outLocations,
@@ -165,7 +163,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               close(context, junction.location);
             },
             Icons.label_outline,
-            "... y ${junction.street2.description}",
+            "... y ${junction.street2.displayName}",
             trailing: FavoriteButton(
               location: junction.location,
               favoritesStream: favoriteLocationsBloc.outLocations,
@@ -476,7 +474,7 @@ class _SuggestionList extends StatelessWidget {
               appBarTheme,
               () => _handleOnLocationTapped(object, addToHistory: true),
               localIconData,
-              object.description,
+              object.displayName,
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
@@ -490,7 +488,7 @@ class _SuggestionList extends StatelessWidget {
               appBarTheme,
               () => _handleOnStreetTapped(object),
               Icons.label,
-              object.location.description,
+              object.displayName,
               trailing: Icon(
                 Icons.keyboard_arrow_right,
                 color: appBarTheme.primaryIconTheme.color,
@@ -624,11 +622,19 @@ Widget _buildItem(
         child: RichText(
           maxLines: 1,
           overflow: TextOverflow.clip,
-          text: TextSpan(style: theme.textTheme.body1, children: <TextSpan>[
-            TextSpan(text: title),
-            TextSpan(text: "     "),
-            TextSpan(text: subtitle, style: TextStyle(color: theme.hintColor)),
-          ])
+          text: TextSpan(
+            style: theme.textTheme.body1,
+            children: <TextSpan>[
+              TextSpan(text: title),
+              TextSpan(text: "     "),
+              TextSpan(
+                text: subtitle,
+                style: TextStyle(
+                  color: theme.hintColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ],
