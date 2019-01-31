@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/plan/plan_itinerary_summary_tabs.dart';
 import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
 import 'package:trufi_app/plan/plan_map.dart';
 import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/widgets/visible.dart';
 
 class PlanPageController {
   PlanPageController(this.plan) {
@@ -52,56 +50,10 @@ class PlanPage extends StatefulWidget {
 class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   PlanPageController _planPageController;
   TabController _tabController;
-  VisibilityFlag _visibleFlag = VisibilityFlag.gone;
-
-  AnimationController _animationController;
-  Animation<double> _animationInstructionHeight;
-  Animation<double> _animationDurationHeight;
-  Animation<double> _animationSummaryHeight;
-  static const durationHeight = 60.0;
-  static const summaryHeight = 60.0;
-  static const selectedTabIndicatorHeight = 20;
-  static const instructionHeightMin =
-      durationHeight + summaryHeight + selectedTabIndicatorHeight;
-  static const instructionHeightMax = 200.0;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    _animationInstructionHeight =
-        Tween(begin: instructionHeightMin, end: instructionHeightMax).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    )..addListener(() {
-            setState(() {});
-          });
-    _animationDurationHeight = Tween(begin: durationHeight, end: 0.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    )..addListener(() {
-        setState(() {});
-      });
-    _animationSummaryHeight = Tween(
-      begin: summaryHeight,
-      end: instructionHeightMax - selectedTabIndicatorHeight,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    )..addListener(() {
-        setState(() {});
-      });
-
     _planPageController = PlanPageController(widget.plan);
     if (_planPageController.plan.itineraries.isNotEmpty) {
       _planPageController.inSelectedItinerary.add(
@@ -125,7 +77,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _animationController.dispose();
     _planPageController.dispose();
     _tabController.dispose();
     super.dispose();
@@ -140,81 +91,13 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
             Expanded(
               child: PlanMapPage(planPageController: _planPageController),
             ),
-            VisibleWidget(
-              visibility: _visibleFlag,
-              child: _buildItinerariesDetails(context),
-              removedChild: _buildItinerariesSummary(context),
+            PlanItineraryTabPages(
+              _tabController,
+              _planPageController.plan.itineraries,
             ),
           ],
         ),
       ],
     );
-  }
-
-  Widget _buildItinerariesSummary(BuildContext context) {
-    return StreamBuilder<PlanItinerary>(
-        stream: _planPageController.outSelectedItinerary,
-        initialData: _planPageController.selectedItinerary,
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<PlanItinerary> snapshot,
-        ) {
-          Color backgroundColor = Theme.of(context).primaryColor;
-          return Container(
-              height: _animationInstructionHeight.value,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: backgroundColor, blurRadius: 4.0)
-                ],
-              ),
-              child: PlanItinerarySummaryTabPages(
-                _animationDurationHeight.value,
-                _animationSummaryHeight.value,
-                _tabController,
-                _planPageController.plan.itineraries,
-                _buildToggleSummaryButton(context),
-              ));
-        });
-  }
-
-  Widget _buildItinerariesDetails(BuildContext context) {
-    Color backgroundColor = Theme.of(context).primaryColor;
-    return Container(
-      height: _animationInstructionHeight.value,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(color: backgroundColor, blurRadius: 4.0)
-        ],
-      ),
-      child: PlanItineraryTabPages(
-        _tabController,
-        _planPageController.plan.itineraries,
-        _buildToggleSummaryButton(context),
-      ),
-    );
-  }
-
-  Widget _buildToggleSummaryButton(BuildContext context) {
-    return IconButton(
-      icon: _visibleFlag == VisibilityFlag.visible
-          ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
-          : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
-      onPressed: _toggleInstructions,
-    );
-  }
-
-  void _toggleInstructions() {
-    setState(() {
-      _visibleFlag = _visibleFlag == VisibilityFlag.visible
-          ? VisibilityFlag.gone
-          : VisibilityFlag.visible;
-      if (_visibleFlag == VisibilityFlag.gone) {
-        _animationController.reverse();
-      } else {
-        _animationController.forward();
-      }
-    });
   }
 }
