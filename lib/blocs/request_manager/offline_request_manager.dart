@@ -36,11 +36,7 @@ class OfflineRequestManager implements RequestManager {
     mergeSort(objects, compare: (a, b) => (a is TrufiStreet) ? -1 : 1);
     // Favorites to the top
     mergeSort(objects, compare: (a, b) {
-      return sortByFavoriteLocations(
-        a,
-        b,
-        favoriteLocationsBloc.locations,
-      );
+      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
     // Return result
     return objects;
