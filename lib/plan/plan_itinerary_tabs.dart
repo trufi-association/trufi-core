@@ -7,54 +7,132 @@ class PlanItineraryTabPages extends StatefulWidget {
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
-    this.toggleInstructions,
   ) : assert(itineraries != null && itineraries.length > 0);
 
   final TabController tabController;
   final List<PlanItinerary> itineraries;
-  final Widget toggleInstructions;
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
 }
 
-class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
+class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
+    with TickerProviderStateMixin {
+  static const _costHeight = 60.0;
+  static const _summaryHeight = 60.0;
+  static const _detailHeight = 200.0;
+
+  AnimationController _animationController;
+  Animation<double> _animationCostHeight;
+  Animation<double> _animationSummaryHeight;
+  Animation<double> _animationDetailHeight;
+
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    // Cost
+    _animationCostHeight = Tween(
+      begin: _costHeight,
+      end: 0.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() => setState(() {}));
+    // Summary
+    _animationSummaryHeight = Tween(
+      begin: _summaryHeight,
+      end: 0.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() => setState(() {}));
+    // Detail
+    _animationDetailHeight = Tween(
+      begin: 0.0,
+      end: _detailHeight,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    )..addListener(() => setState(() {}));
+
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Expanded(
-                child: TabBarView(
-                  controller: widget.tabController,
-                  children: widget.itineraries.map<Widget>((
-                    PlanItinerary itinerary,
-                  ) {
-                    return _buildItinerary(context, itinerary);
-                  }).toList(),
-                ),
-              ),
-              TabPageSelector(
-                selectedColor: Theme.of(context).iconTheme.color,
-                controller: widget.tabController,
-              ),
-            ],
-          ),
-          Positioned(
-            top: 4.0,
-            right: 10.0,
-            child: widget.toggleInstructions,
-          ),
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.primaryColor,
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: theme.primaryColor, blurRadius: 4.0)
         ],
+      ),
+      child: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  height: height,
+                  child: TabBarView(
+                    controller: widget.tabController,
+                    children: widget.itineraries.map<Widget>((
+                      PlanItinerary itinerary,
+                    ) {
+                      return _buildItinerary(context, itinerary);
+                    }).toList(),
+                  ),
+                ),
+                TabPageSelector(
+                  selectedColor: Theme.of(context).iconTheme.color,
+                  controller: widget.tabController,
+                ),
+              ],
+            ),
+            Positioned(
+              top: 4.0,
+              right: 10.0,
+              child: _buildExpandButton(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   _buildItinerary(BuildContext context, PlanItinerary itinerary) {
+    return _isExpanded
+        ? _buildItineraryExpanded(context, itinerary)
+        : _buildItineraryCollapsed(context, itinerary);
+  }
+
+  // Expanded
+
+  Widget _buildItineraryExpanded(
+    BuildContext context,
+    PlanItinerary itinerary,
+  ) {
     final localizations = TrufiLocalizations.of(context);
-    return SafeArea(
+    return Container(
+      height: _animationDetailHeight.value,
       child: ListView.builder(
         padding: EdgeInsets.all(8.0),
         itemBuilder: (BuildContext context, int index) {
@@ -81,4 +159,142 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages> {
       ),
     );
   }
+
+  // Collapsed
+
+  Widget _buildItineraryCollapsed(
+    BuildContext context,
+    PlanItinerary itinerary,
+  ) {
+    return Column(
+      children: <Widget>[
+        _buildItineraryCost(context, itinerary),
+        _buildItinerarySummary(context, itinerary),
+      ],
+    );
+  }
+
+  // Cost
+
+  Widget _buildItineraryCost(
+    BuildContext context,
+    PlanItinerary itinerary,
+  ) {
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    return Container(
+      height: _animationCostHeight.value,
+      decoration: BoxDecoration(
+        color: theme.primaryColor,
+        boxShadow: <BoxShadow>[
+          BoxShadow(color: theme.primaryColor, blurRadius: 4.0),
+        ],
+      ),
+      padding: EdgeInsets.all(10.0),
+      child: Row(
+        children: <Widget>[
+          Text(
+            "${itinerary.time} ${localizations.instructionMinutes} ",
+            style: theme.textTheme.title,
+          ),
+          itinerary.distance >= 1000
+              ? Text(
+                  "(${(itinerary.distance / 1000).ceil()} ${localizations.instructionUnitKm})",
+                  style: theme.textTheme.title.copyWith(color: Colors.grey),
+                )
+              : Text(
+                  "(${itinerary.distance} ${localizations.instructionUnitMeter})",
+                  style: theme.textTheme.title,
+                ),
+        ],
+      ),
+    );
+  }
+
+  // Summary
+
+  Widget _buildItinerarySummary(
+    BuildContext context,
+    PlanItinerary itinerary,
+  ) {
+    final theme = Theme.of(context);
+    final localizations = TrufiLocalizations.of(context);
+    final children = List<Widget>();
+    itinerary.legs.forEach((leg) {
+      children.add(
+        Row(
+          children: <Widget>[
+            Icon(leg.iconData()),
+            leg.mode == 'BUS'
+                ? Text(
+                    leg.route,
+                    style: theme.textTheme.body1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Text(
+                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes}",
+                    style: theme.textTheme.body1,
+                  ),
+            leg == itinerary.legs.last
+                ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+                : Container(),
+          ],
+        ),
+      );
+    });
+    return Container(
+      height: _animationSummaryHeight.value,
+      decoration: BoxDecoration(color: theme.primaryColor),
+      child: Material(
+        color: theme.primaryColor,
+        child: InkWell(
+          child: Container(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      Row(children: children),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Expand / Collapse
+
+  Widget _buildExpandButton(BuildContext context) {
+    return IconButton(
+      icon: _isExpanded
+          ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
+          : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
+      onPressed: _handleExpandButtonTapped,
+    );
+  }
+
+  void _handleExpandButtonTapped() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  // Getter
+
+  double get height =>
+      _animationDetailHeight.value +
+      _animationCostHeight.value +
+      _animationSummaryHeight.value;
 }
