@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
+import 'package:trufi_app/widgets/VerticalSwipeDetector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
   PlanItineraryTabPages(
@@ -165,11 +166,14 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     BuildContext context,
     PlanItinerary itinerary,
   ) {
-    return Column(
-      children: <Widget>[
-        _buildItineraryCost(context, itinerary),
-        _buildItinerarySummary(context, itinerary),
-      ],
+    return VerticalSwipeDetector(
+      onSwipeUp: () => _setIsExpanded(true),
+      child: Column(
+        children: <Widget>[
+          _buildItineraryCost(context, itinerary),
+          _buildItinerarySummary(context, itinerary),
+        ],
+      ),
     );
   }
 
@@ -275,11 +279,11 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       icon: _isExpanded
           ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
           : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
-      onPressed: _handleExpandButtonTapped,
+      onPressed: () => _setIsExpanded(!_isExpanded),
     );
   }
 
-  void _handleExpandButtonTapped() {
+  void _setIsExpanded(bool isExpanded) {
     setState(() {
       _isExpanded = !_isExpanded;
       if (_isExpanded) {
