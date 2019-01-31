@@ -66,7 +66,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
         curve: Curves.easeInOut,
       ),
     )..addListener(() => setState(() {}));
-
   }
 
   @override
@@ -236,7 +235,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes}",
                     style: theme.textTheme.body1,
                   ),
-            leg == itinerary.legs.last
+            leg != itinerary.legs.last
                 ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
                 : Container(),
           ],
