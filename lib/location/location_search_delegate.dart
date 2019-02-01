@@ -617,7 +617,7 @@ Widget _buildItem(
   Row row = Row(
     children: <Widget>[
       Icon(iconData, color: theme.primaryIconTheme.color),
-      Container(width: 32.0),
+      Container(width: 32.0, height: 48.0),
       Expanded(
         child: RichText(
           maxLines: 1,
@@ -644,6 +644,6 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
-    child: Container(margin: EdgeInsets.all(8.0), child: row),
+    child: Container(margin: EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }

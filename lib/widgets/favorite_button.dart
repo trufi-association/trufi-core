@@ -73,22 +73,22 @@ class FavoriteButtonState extends State<FavoriteButton> {
           widget.location,
         );
         if (isFavorite == true) {
-          return GestureDetector(
-            onTap: () {
+          return IconButton(
+            icon: Icon(Icons.favorite, color: color),
+            onPressed: () {
               favoriteLocationsBloc.inRemoveLocation.add(
                 widget.location,
               );
             },
-            child: Icon(Icons.favorite, color: color),
           );
         } else {
-          return GestureDetector(
-            onTap: () {
+          return IconButton(
+            icon: Icon(Icons.favorite_border, color: color),
+            onPressed: () {
               favoriteLocationsBloc.inAddLocation.add(
                 widget.location,
               );
             },
-            child: Icon(Icons.favorite_border, color: color),
           );
         }
       },
