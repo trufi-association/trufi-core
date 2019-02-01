@@ -14,6 +14,8 @@ const String keyStreets = 'streets';
 const String keyStreetJunctions = 'streetJunctions';
 
 class LocationSearchStorage {
+  static final _levenshteinDistanceThreshold = 3;
+
   final _diffMatchPatch = DiffMatchPatch();
   final _places = List<TrufiLocation>();
   final _streets = List<TrufiStreet>();
@@ -38,23 +40,11 @@ class LocationSearchStorage {
     return _places.fold<List<LevenshteinObject>>(
       List<LevenshteinObject>(),
       (locations, location) {
-        // Description
-        int distance = _findMatchAndCalculateStringDistance(
-          location.description.toLowerCase(),
+        final distance = _levenshteinDistanceForLocation(
+          location,
           query,
         );
-        // Alternative names
-        location.alternativeNames?.forEach((alternativeName) {
-          distance = min(
-            distance,
-            _findMatchAndCalculateStringDistance(
-              alternativeName.toLowerCase(),
-              query,
-            ),
-          );
-        });
-        // Threshold
-        if (distance < 3) {
+        if (distance < _levenshteinDistanceThreshold) {
           locations.add(LevenshteinObject(location, distance));
         }
         return locations;
@@ -70,11 +60,11 @@ class LocationSearchStorage {
     return _streets.fold<List<LevenshteinObject>>(
       List<LevenshteinObject>(),
       (streets, street) {
-        int distance = _findMatchAndCalculateStringDistance(
-          street.location.description.toLowerCase(),
+        final distance = _levenshteinDistanceForLocation(
+          street.location,
           query,
         );
-        if (distance < 3) {
+        if (distance < _levenshteinDistanceThreshold) {
           streets.add(LevenshteinObject(street, distance));
         }
         return streets;
@@ -82,9 +72,35 @@ class LocationSearchStorage {
     );
   }
 
-  int _findMatchAndCalculateStringDistance(String text, String query) {
+  int _levenshteinDistanceForLocation(
+    TrufiLocation location,
+    String query,
+  ) {
+    // Search in description
+    int distance = _levenshteinDistanceForString(
+      location.description.toLowerCase(),
+      query,
+    );
+    // Search in alternative names
+    location.alternativeNames?.forEach((alternativeName) {
+      distance = min(
+        distance,
+        _levenshteinDistanceForString(
+          alternativeName.toLowerCase(),
+          query,
+        ),
+      );
+    });
+    // Return distance
+    return distance;
+  }
+
+  int _levenshteinDistanceForString(
+    String text,
+    String query,
+  ) {
     // Find match in text similar to query
-    var position = _diffMatchPatch.match(text, query, 0);
+    final position = _diffMatchPatch.match(text, query, 0);
     // If match found, calculate levenshtein distance
     if (position != -1 && position < text.length) {
       return position + query.length + 1 <= text.length

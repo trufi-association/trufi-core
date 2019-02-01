@@ -127,8 +127,9 @@ class TrufiStreet {
     return TrufiStreet(
       location: TrufiLocation(
         description: json[0],
-        longitude: json[1][0].toDouble(),
-        latitude: json[1][1].toDouble(),
+        alternativeNames: json[1].cast<String>(),
+        longitude: json[2][0].toDouble(),
+        latitude: json[2][1].toDouble(),
       ),
     );
   }
