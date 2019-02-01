@@ -13,7 +13,7 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
   );
 }
 
-Widget buildCarErrorAlert({
+Widget buildErrorAlert({
   @required BuildContext context,
   String error,
 }) {
