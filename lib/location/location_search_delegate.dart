@@ -460,6 +460,10 @@ class _SuggestionList extends StatelessWidget {
         return Icons.local_mall;
 
       case 'tourism:hotel':
+      case 'tourism:hostel':
+      case 'tourism:guest_house':
+      case 'tourism:motel':
+      case 'tourism:apartment':
         return Icons.local_hotel;
 
       default:
