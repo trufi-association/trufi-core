@@ -459,6 +459,9 @@ class _SuggestionList extends StatelessWidget {
       case 'shop:mall':
         return Icons.local_mall;
 
+      case 'tourism:hotel':
+        return Icons.local_hotel;
+
       default:
         return null;
     }
