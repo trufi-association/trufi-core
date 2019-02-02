@@ -34,8 +34,8 @@ android {
         applicationId "app.trufi.navigator"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 6
-        versionName "1.0.1"
+        versionCode 7
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
