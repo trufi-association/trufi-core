@@ -366,80 +366,98 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  IconData _amenityToIconData(String amenity) {
-    switch (amenity) {
-      case 'bar':
-      case 'pub':
-      case 'biergarten':
-      case 'nightclub':
+  IconData _typeToIconData(String type) {
+    switch (type) {
+      case 'amenity:bar':
+      case 'amenity:pub':
+      case 'amenity:biergarten':
+      case 'amenity:nightclub':
         return Icons.local_bar;
 
-      case 'cafe':
+      case 'amenity:cafe':
         return Icons.local_cafe;
 
-      case 'cinema':
+      case 'amenity:cinema':
         return Icons.local_movies;
 
-      case 'pharmacy':
+      case 'amenity:pharmacy':
         return Icons.local_pharmacy;
 
-      case 'fast_food':
+      case 'amenity:fast_food':
         return Icons.fastfood;
 
-      case 'food_court':
-      case 'restaurant':
+      case 'amenity:food_court':
+      case 'amenity:restaurant':
         return Icons.restaurant;
 
-      case 'theatre':
+      case 'amenity:theatre':
         return Icons.local_play;
 
-      case 'parking':
+      case 'amenity:parking':
         return Icons.local_parking;
 
-      case 'doctors':
-      case 'dentist':
-      case 'veterinary':
-      case 'clinic':
-      case 'hospital':
+      case 'amenity:doctors':
+      case 'amenity:dentist':
+      case 'amenity:veterinary':
+      case 'amenity:clinic':
+      case 'amenity:hospital':
         return Icons.local_hospital;
 
-      case 'library':
+      case 'amenity:library':
         return Icons.local_library;
 
-      case 'car_wash':
+      case 'amenity:car_wash':
         return Icons.local_car_wash;
 
-      case 'university':
-      case 'school':
-      case 'college':
+      case 'amenity:university':
+      case 'amenity:school':
+      case 'amenity:college':
         return Icons.school;
 
-      case 'post_office':
+      case 'amenity:post_office':
         return Icons.local_post_office;
 
-      case 'atm':
+      case 'amenity:atm':
         return Icons.local_atm;
 
-      case 'convenience':
+      case 'amenity:convenience':
         return Icons.local_convenience_store;
 
-      case 'telephone':
+      case 'amenity:telephone':
         return Icons.local_phone;
 
-      case 'internet_cafe':
+      case 'amenity:internet_cafe':
         return Icons.alternate_email;
 
-      case 'drinking_water':
+      case 'amenity:drinking_water':
         return Icons.local_drink;
 
-      case 'charging_station':
+      case 'amenity:charging_station':
         return Icons.ev_station;
 
-      case 'fuel':
+      case 'amenity:fuel':
         return Icons.local_gas_station;
 
-      case 'taxi':
+      case 'amenity:taxi':
         return Icons.local_taxi;
+
+      case 'shop:florist':
+        return Icons.local_florist;
+
+      case 'shop:convenience':
+        return Icons.local_convenience_store;
+
+      case 'shop:supermarket':
+        return Icons.local_grocery_store;
+
+      case 'shop:laundry':
+        return Icons.local_laundry_service;
+
+      case 'shop:copyshop':
+        return Icons.local_printshop;
+
+      case 'shop:mall':
+        return Icons.local_mall;
 
       default:
         return null;
@@ -465,8 +483,8 @@ class _SuggestionList extends StatelessWidget {
             IconData localIconData = iconData;
 
             // Use special type icon if available, fallback to default
-            if (object.amenity != null) {
-              localIconData = _amenityToIconData(object.amenity) ?? iconData;
+            if (object.type != null) {
+              localIconData = _typeToIconData(object.type) ?? iconData;
             }
 
             return _buildItem(
