@@ -303,7 +303,7 @@ class HomePageState extends State<HomePage>
           throw "Canceled by user";
         } else if (plan.hasError) {
           if (car) {
-            _showCarErrorAlert(plan.error.message);
+            _showErrorAlert(plan.error.message);
           } else {
             _showTransitErrorAlert(plan.error.message);
           }
@@ -330,16 +330,17 @@ class HomePageState extends State<HomePage>
         _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
       } catch (e) {
         print("Failed to fetch plan: $e");
+        _showErrorAlert(e.toString());
       }
       setState(() => _isFetching = false);
     }
   }
 
-  void _showCarErrorAlert(String error) {
+  void _showErrorAlert(String error) {
     showDialog(
       context: context,
       builder: (context) {
-        return buildCarErrorAlert(context: context, error: error);
+        return buildErrorAlert(context: context, error: error);
       },
     );
   }
@@ -355,7 +356,9 @@ class HomePageState extends State<HomePage>
           context: context,
           error: error,
           onReportMissingRoute: () {
-            launch("$urlRouteFeedback?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}");
+            launch(
+              "$urlRouteFeedback?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}",
+            );
           },
           onShowCarRoute: () {
             _fetchPlan(car: true);

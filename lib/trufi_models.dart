@@ -224,6 +224,7 @@ class Plan {
         // Get first bus leg
         final firstBusLeg = itinerary.legs.firstWhere(
           (leg) => leg.mode == "BUS",
+          orElse: () => null,
         );
         // If no bus leg exist just add the itinerary
         if (firstBusLeg == null) {
