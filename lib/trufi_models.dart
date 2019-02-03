@@ -13,7 +13,7 @@ class TrufiLocation {
     this.alternativeNames,
     this.localizedNames,
     this.address,
-    this.amenity,
+    this.type,
   })  : assert(description != null),
         assert(latitude != null),
         assert(longitude != null);
@@ -28,7 +28,7 @@ class TrufiLocation {
   final List<String> alternativeNames;
   final Map<String, String> localizedNames;
   final String address;
-  final String amenity;
+  final String type;
 
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
@@ -54,7 +54,7 @@ class TrufiLocation {
       longitude: json[3][0].toDouble(),
       latitude: json[3][1].toDouble(),
       address: json[4],
-      amenity: json[5],
+      type: json[5],
     );
   }
 
