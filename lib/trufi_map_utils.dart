@@ -324,3 +324,11 @@ class CircleIcon {
 
   static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam);
 }
+
+class GondolaIcon {
+  GondolaIcon._();
+
+  static const _kFontFam = 'GondolaIcon';
+
+  static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam);
+}
