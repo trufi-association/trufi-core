@@ -4,6 +4,7 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_app/trufi_map_utils.dart';
 
 class TrufiLocation {
   TrufiLocation({
@@ -396,7 +397,7 @@ class PlanItineraryLeg {
       sb.write(
         "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)} ${localizations.instructionWalk}",
       );
-    } else if (mode == 'BUS' || mode == 'CAR') {
+    } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
       sb.write(
         "${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
       );
@@ -408,7 +409,7 @@ class PlanItineraryLeg {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write("${localizations.instructionWalk}");
-    } else if (mode == 'BUS' || mode == 'CAR') {
+    } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
       sb.write(
         "${localizations.instructionRide} ${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionFor}",
       );
@@ -441,7 +442,9 @@ class PlanItineraryLeg {
                 ? localizations.instructionRideMicro
                 : carType.contains('minibus')
                     ? localizations.instructionRideMinibus
-                    : localizations.instructionRideBus;
+                    : carType.contains('gondola')
+                        ? localizations.instructionRideGondola
+                        : localizations.instructionRideBus;
   }
 
   String _distanceString(TrufiLocalizations localizations) {
@@ -470,6 +473,8 @@ class PlanItineraryLeg {
                     ? Icons.directions_bus
                     : carType.contains('minibus')
                         ? Icons.airport_shuttle
-                        : Icons.directions_bus;
+                        : carType.contains('gondola')
+                            ? GondolaIcon.gondola
+                            : Icons.directions_bus;
   }
 }
