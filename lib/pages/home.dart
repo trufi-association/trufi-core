@@ -192,7 +192,7 @@ class HomePageState extends State<HomePage>
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
           ? PlanPage(_data.plan)
-          : PlanEmptyPage(),
+          : PlanEmptyPage(onLongPress: _handleOnLongPress),
     );
     if (_isFetching) {
       return Stack(
@@ -211,6 +211,15 @@ class HomePageState extends State<HomePage>
     } else {
       return body;
     }
+  }
+
+  void _handleOnLongPress(LatLng point) {
+    _setToPlace(
+      TrufiLocation.fromLatLng(
+        TrufiLocalizations.of(context).searchMapMarker,
+        point,
+      ),
+    );
   }
 
   void _reset() {

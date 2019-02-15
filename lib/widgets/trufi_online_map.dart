@@ -14,12 +14,14 @@ class TrufiOnlineMap extends StatefulWidget {
     @required this.controller,
     @required this.layerOptionsBuilder,
     this.onTap,
+    this.onLongPress,
     this.onPositionChanged,
   }) : super(key: key);
 
   final TrufiMapController controller;
   final LayerOptionsBuilder layerOptionsBuilder;
   final TapCallback onTap;
+  final LongPressCallback onLongPress;
   final PositionCallback onPositionChanged;
 
   @override
@@ -38,6 +40,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
         maxZoom: 19.0,
         zoom: 13.0,
         onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
         onPositionChanged: _handleOnPositionChanged,
         center: TrufiMap.cochabambaCenter,
       ),

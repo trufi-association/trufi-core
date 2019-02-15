@@ -131,9 +131,11 @@ packages:
   flutter_map:
     dependency: "direct main"
     description:
-      name: flutter_map
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "feat/map_long_press"
+      resolved-ref: "04f85ca81919c6bb323c0037c1b3a1fd595c5148"
+      url: "git@github.com:ubilabs/flutter_map.git"
+    source: git
     version: "0.4.0"
   flutter_svg:
     dependency: "direct main"
