@@ -48,12 +48,12 @@ class LocationProviderBloc implements BlocBase {
   // Getter
 
   Future<LatLng> get currentLocation async {
-    LatLng lastLocation;
+    LatLng location;
     try {
       GeolocationStatus status = await _locationProvider.status;
       if (status == GeolocationStatus.granted) {
-        lastLocation = await _locationProvider.currentLocation;
-        if (lastLocation == null) {
+        location = await _locationProvider.currentLocation;
+        if (location == null) {
           print("Location provider: No current location");
         }
       } else {
@@ -62,7 +62,7 @@ class LocationProviderBloc implements BlocBase {
     } catch (e) {
       print("Location provider: ${e.toString()}");
     }
-    return lastLocation;
+    return location;
   }
 
   Future<GeolocationStatus> get status async => _locationProvider.status;
