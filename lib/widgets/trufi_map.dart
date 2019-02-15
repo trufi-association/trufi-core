@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_map_animations.dart';
@@ -125,6 +128,7 @@ class TrufiMapState extends State<TrufiMap> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final locationProviderBloc = LocationProviderBloc.of(context);
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
@@ -134,11 +138,51 @@ class TrufiMapState extends State<TrufiMap> {
               ? <Marker>[buildYourLocationMarker(snapshot.data)]
               : <Marker>[],
         );
-        return FlutterMap(
-          mapController: widget.controller.mapController,
-          options: widget.mapOptions,
-          layers: widget.layerOptionsBuilder(context),
-        );
+        return Stack(children: [
+          Positioned.fill(
+            child: FlutterMap(
+              mapController: widget.controller.mapController,
+              options: widget.mapOptions,
+              layers: widget.layerOptionsBuilder(context),
+            ),
+          ),
+          Positioned(
+            left: 0.0,
+            bottom: 0.0,
+            child: Container(
+              padding: EdgeInsets.all(4.0),
+              color: Color(0x88ffffff),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      style: theme.textTheme.body1.copyWith(
+                        color: Colors.black,
+                      ),
+                      text: "©",
+                    ),
+                    TextSpan(
+                      style: theme.textTheme.body1.copyWith(
+                        color: theme.accentColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                      text: " OpenStreetMap ",
+                      recognizer: TapGestureRecognizer()..onTap = () {
+                        launch(urlOpenStreetMap);
+                      },
+                    ),
+                    TextSpan(
+                      style: theme.textTheme.body1.copyWith(
+                        color: theme.accentColor,
+                      ),
+                      text: "contributors",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ]);
       },
     );
   }
