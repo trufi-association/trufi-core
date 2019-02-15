@@ -7,9 +7,10 @@ import 'package:trufi_app/widgets/trufi_map.dart';
 import 'package:trufi_app/widgets/trufi_online_map.dart';
 
 class PlanEmptyPage extends StatefulWidget {
-  PlanEmptyPage({this.initialPosition});
+  PlanEmptyPage({this.initialPosition, this.onLongPress});
 
   final LatLng initialPosition;
+  final LongPressCallback onLongPress;
 
   @override
   PlanEmptyPageState createState() => PlanEmptyPageState();
@@ -25,6 +26,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       TrufiOnlineMap(
         key: ValueKey("PlanEmptyMap"),
         controller: _trufiMapController,
+        onLongPress: widget.onLongPress,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
             _trufiMapController.yourLocationLayer,
