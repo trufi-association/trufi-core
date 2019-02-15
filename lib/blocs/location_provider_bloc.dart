@@ -47,14 +47,14 @@ class LocationProviderBloc implements BlocBase {
 
   // Getter
 
-  Future<LatLng> get lastLocation async {
+  Future<LatLng> get currentLocation async {
     LatLng lastLocation;
     try {
       GeolocationStatus status = await _locationProvider.status;
       if (status == GeolocationStatus.granted) {
-        lastLocation = await _locationProvider.lastLocation;
+        lastLocation = await _locationProvider.currentLocation;
         if (lastLocation == null) {
-          print("Location provider: No last location");
+          print("Location provider: No current location");
         }
       } else {
         print("Location provider: Permission not granted");
@@ -109,8 +109,8 @@ class LocationProvider {
 
   // Getter
 
-  Future<LatLng> get lastLocation async {
-    Position position = await _geolocator.getLastKnownPosition(
+  Future<LatLng> get currentLocation async {
+    Position position = await _geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
     return position != null

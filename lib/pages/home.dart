@@ -5,7 +5,6 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -245,14 +244,13 @@ class HomePageState extends State<HomePage>
   }
 
   void _setFromPlaceToCurrentPosition() async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
     final localizations = TrufiLocalizations.of(context);
-    final LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
+    final location = await LocationProviderBloc.of(context).currentLocation;
+    if (location != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
           localizations.searchItemYourLocation,
-          lastLocation,
+          location,
         ),
       );
     }
@@ -346,7 +344,7 @@ class HomePageState extends State<HomePage>
   }
 
   void _showTransitErrorAlert(String error) async {
-    final lastLocation = await LocationProviderBloc.of(context).lastLocation;
+    final location = await LocationProviderBloc.of(context).currentLocation;
     final languageCode = TrufiLocalizations.of(context).locale.languageCode;
     final packageInfo = await PackageInfo.fromPlatform();
     showDialog(
@@ -357,7 +355,7 @@ class HomePageState extends State<HomePage>
           error: error,
           onReportMissingRoute: () {
             launch(
-              "$urlRouteFeedback?lang=$languageCode&geo=${lastLocation?.latitude},${lastLocation?.longitude}&app=${packageInfo.version}",
+              "$urlRouteFeedback?lang=$languageCode&geo=${location?.latitude},${location?.longitude}&app=${packageInfo.version}",
             );
           },
           onShowCarRoute: () {
