@@ -548,12 +548,11 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnYourLocationTapped(BuildContext context) async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
+    final location = await LocationProviderBloc.of(context).currentLocation;
+    if (location != null) {
       _handleOnLatLngTapped(
         description: TrufiLocalizations.of(context).searchMapMarker,
-        location: lastLocation,
+        location: location,
         addToHistory: false,
       );
       return;

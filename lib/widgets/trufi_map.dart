@@ -38,11 +38,10 @@ class TrufiMapController {
     @required BuildContext context,
     TickerProvider tickerProvider,
   }) async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    LatLng lastLocation = await locationProviderBloc.lastLocation;
-    if (lastLocation != null) {
+    final location = await LocationProviderBloc.of(context).currentLocation;
+    if (location != null) {
       move(
-        center: lastLocation,
+        center: location,
         zoom: 17.0,
         tickerProvider: tickerProvider,
       );
