@@ -57,6 +57,7 @@
   "instruction_ride_minibus": "Minibus",
   "instruction_ride_trufi": "Trufi",
   "instruction_ride_car": "Car",
+  "instruction_ride_gondola": "Gondola",
   "instruction_to": "to",
   "instruction_for": "for",
   "instruction_unit_kilometer": "km",

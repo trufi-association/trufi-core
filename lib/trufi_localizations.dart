@@ -260,6 +260,10 @@ class TrufiLocalizations {
     return translate("instruction_ride_car");
   }
 
+  String get instructionRideGondola {
+    return translate("instruction_ride_gondola");
+  }
+
   String get instructionTo {
     return translate("instruction_to");
   }
