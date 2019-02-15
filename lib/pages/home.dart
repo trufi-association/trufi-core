@@ -293,6 +293,28 @@ class HomePageState extends State<HomePage>
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
+      // Refresh your location
+      final yourLocation = localizations.searchItemYourLocation;
+      final refreshFromPlace = _data.fromPlace.description == yourLocation;
+      final refreshToPlace = _data.toPlace.description == yourLocation;
+      if (refreshFromPlace || refreshToPlace) {
+        final location = await LocationProviderBloc.of(context).currentLocation;
+        if (location != null) {
+          if (refreshFromPlace) {
+            _data.fromPlace = TrufiLocation.fromLatLng(yourLocation, location);
+          }
+          if (refreshToPlace) {
+            _data.toPlace = TrufiLocation.fromLatLng(yourLocation, location);
+          }
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => buildAlertLocationServicesDenied(context),
+          );
+          return; // Cancel fetch
+        }
+      }
+      // Start fetch
       setState(() => _isFetching = true);
       try {
         _currentFetchPlanOperation = car
