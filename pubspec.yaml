@@ -13,19 +13,19 @@ dependencies:
   #    url: git@github.com:ubilabs/flutter_map.git
   #    ref: feat/customise_polylines
 
-  cupertino_icons: ^0.1.2
+  cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
-  flutter_compass: ^0.0.2
-  flutter_svg: ^0.6.0
-  geolocator: ^2.0.1
-  http: ^0.12.0
+  flutter_compass: 0.0.3
+  flutter_svg: 0.6.3
+  geolocator: 2.0.1
+  http: 0.12.0
   mockito: 3.0.0
-  path_provider: ^0.4.1
-  rxdart: ^0.18.1
-  shared_preferences: ^0.4.2
-  synchronized: ^1.5.2
-  url_launcher: ^3.0.3
-  package_info: ^0.3.2
+  path_provider: 0.4.1
+  rxdart: 0.18.1
+  shared_preferences: 0.4.3
+  synchronized: 1.5.3
+  url_launcher: 3.0.3
+  package_info: 0.3.2
 
 dev_dependencies:
   flutter_driver:
