@@ -7,11 +7,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  #flutter_map: ^0.4.0
-  flutter_map:
-    git:
-      url: git@github.com:ubilabs/flutter_map.git
-      ref: feat/map_long_press
+  flutter_map: ^0.5.0
+  #flutter_map:
+  #  git:
+  #    url: git@github.com:ubilabs/flutter_map.git
+  #    ref: feat/map_long_press
 
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0

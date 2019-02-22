@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
+  cached_network_image:
+    dependency: transitive
+    description:
+      name: cached_network_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
   charcode:
     dependency: transitive
     description:
@@ -104,6 +111,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_cache_manager:
+    dependency: transitive
+    description:
+      name: flutter_cache_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   flutter_compass:
     dependency: "direct main"
     description:
@@ -131,12 +145,10 @@ packages:
   flutter_map:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feat/map_long_press"
-      resolved-ref: "04f85ca81919c6bb323c0037c1b3a1fd595c5148"
-      url: "git@github.com:ubilabs/flutter_map.git"
-    source: git
-    version: "0.4.0"
+      name: flutter_map
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -579,6 +591,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0+5"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   validate:
     dependency: transitive
     description:
