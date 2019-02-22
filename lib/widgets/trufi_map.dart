@@ -156,24 +156,25 @@ class TrufiMapState extends State<TrufiMap> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
+                      style: theme.textTheme.caption.copyWith(
                         color: Colors.black,
                       ),
                       text: "© ",
                     ),
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
+                      style: theme.textTheme.caption.copyWith(
                         color: theme.accentColor,
                         decoration: TextDecoration.underline,
                       ),
                       text: "OpenStreetMap",
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                        launch(urlOpenStreetMap);
-                      },
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launch(urlOpenStreetMap);
+                        },
                     ),
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
-                        color: theme.accentColor,
+                      style: theme.textTheme.caption.copyWith(
+                        color: Colors.black,
                       ),
                       text: " contributors",
                     ),
