@@ -105,6 +105,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       LanguageDropdownValue("qu", "Quechua simi"),
       LanguageDropdownValue("en", "English"),
       LanguageDropdownValue("de", "Deutsch"),
+      LanguageDropdownValue("fr", "French"),
     ];
     return ListTile(
       leading: Icon(Icons.language),
