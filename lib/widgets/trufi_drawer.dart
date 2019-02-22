@@ -1,3 +1,4 @@
+import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
@@ -69,6 +70,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           // FIXME: For now we do not provide this option
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
+          _buildAppReviewButton(context),
         ],
       ),
     );
@@ -144,6 +146,22 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
         );
       },
+    );
+  }
+
+  Widget _buildAppReviewButton(BuildContext context) {
+    final localizations = TrufiLocalizations.of(context);
+    return Container(
+      child: ListTile(
+        leading: Icon(Icons.star, color: Colors.grey),
+        title: Text(
+          localizations.menuAppReview,
+          style: TextStyle(color: Theme.of(context).textTheme.body2.color),
+        ),
+        onTap: () {
+          AppReview.requestReview.then((value) {});
+        },
+      ),
     );
   }
 }
