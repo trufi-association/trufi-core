@@ -310,6 +310,10 @@ class TrufiLocalizations {
     return translate("menu_online");
   }
 
+  String get menuAppReview {
+    return translate("menu_app_review");
+  }
+
   String get feedbackContent {
     return translate("feedback_content");
   }

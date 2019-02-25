@@ -13,6 +13,7 @@ dependencies:
   #    url: git@github.com:ubilabs/flutter_map.git
   #    ref: feat/map_long_press
 
+  app_review: 0.0.9+3
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
   flutter_compass: 0.0.3
