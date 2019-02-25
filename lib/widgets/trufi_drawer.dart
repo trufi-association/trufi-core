@@ -159,39 +159,34 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
   Widget _buildBottomRow(BuildContext context) {
     return Container(
-      color: Theme.of(context).primaryColor,
       padding: EdgeInsets.all(12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          RawMaterialButton(
-            fillColor: Colors.white,
-            shape: CircleBorder(),
-            onPressed: () => launch(urlTrufi),
-            child: SvgPicture.asset(
-              "assets/images/icon_trufi.svg",
-              height: 48.0,
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              onPressed: () => launch(urlTrufi),
+              child: SvgPicture.asset(
+                "assets/images/icon_trufi.svg",
+                height: 48.0,
+              ),
             ),
-          ),
-          RawMaterialButton(
-            padding: EdgeInsets.zero,
-            shape: CircleBorder(),
-            onPressed: () => launch(urlInstagram),
-            child: Image.asset(
-              "assets/images/icon_instagram.png",
-              height: 48.0,
+            MaterialButton(
+              onPressed: () => launch(urlInstagram),
+              child: SvgPicture.asset(
+                "assets/images/icon_instagram.svg",
+                height: 48.0,
+              ),
             ),
-          ),
-          RawMaterialButton(
-            padding: EdgeInsets.zero,
-            shape: CircleBorder(),
-            onPressed: () => launch(urlFacebook),
-            child: SvgPicture.asset(
-              "assets/images/icon_facebook.svg",
-              height: 48.0,
+            MaterialButton(
+              onPressed: () => launch(urlFacebook),
+              child: SvgPicture.asset(
+                "assets/images/icon_facebook.svg",
+                height: 48.0,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
