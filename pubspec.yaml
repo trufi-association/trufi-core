@@ -19,14 +19,16 @@ dependencies:
   flutter_compass: 0.0.3
   flutter_svg: 0.6.3
   geolocator: 2.0.1
+  google_api_availability: 1.0.4
   http: 0.12.0
   mockito: 3.0.0
   path_provider: 0.4.1
+  permission_handler: 2.1.2
   rxdart: 0.18.1
   shared_preferences: 0.4.3
   synchronized: 1.5.3
-  url_launcher: 3.0.3
-  package_info: 0.3.2
+  url_launcher: 4.1.0+1
+  package_info: 0.3.2+1
 
 dev_dependencies:
   flutter_driver:
