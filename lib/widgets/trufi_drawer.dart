@@ -181,24 +181,24 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       padding: EdgeInsets.all(12.0),
       child: SafeArea(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            MaterialButton(
-              onPressed: () => launch(urlTrufi),
+            GestureDetector(
+              onTap: () => launch(urlTrufi),
               child: SvgPicture.asset(
                 "assets/images/icon_trufi.svg",
                 height: 48.0,
               ),
             ),
-            MaterialButton(
-              onPressed: () => launch(urlInstagram),
+            GestureDetector(
+              onTap: () => launch(urlInstagram),
               child: SvgPicture.asset(
                 "assets/images/icon_instagram.svg",
                 height: 48.0,
               ),
             ),
-            MaterialButton(
-              onPressed: () => launch(urlFacebook),
+            GestureDetector(
+              onTap: () => launch(urlFacebook),
               child: SvgPicture.asset(
                 "assets/images/icon_facebook.svg",
                 height: 48.0,
