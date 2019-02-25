@@ -7,12 +7,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  #flutter_map: ^0.4.0
-  flutter_map:
-    git:
-      url: git@github.com:ubilabs/flutter_map.git
-      ref: feat/map_long_press
+  flutter_map: ^0.5.0
+  #flutter_map:
+  #  git:
+  #    url: git@github.com:ubilabs/flutter_map.git
+  #    ref: feat/map_long_press
 
+  app_review: 0.0.9+3
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
   flutter_compass: 0.0.3
@@ -50,8 +51,7 @@ flutter:
     - assets/data/search.json
     - assets/data/team.txt
     - assets/translations/
-    - assets/images/to_marker.svg
-    - assets/images/from_marker.svg
+    - assets/images/
     # - assets/tiles/8/
     # - assets/tiles/9/
     # - assets/tiles/10/

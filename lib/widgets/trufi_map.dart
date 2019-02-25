@@ -151,31 +151,31 @@ class TrufiMapState extends State<TrufiMap> {
             bottom: 0.0,
             child: Container(
               padding: EdgeInsets.all(4.0),
-              color: Color(0x88ffffff),
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
+                      style: theme.textTheme.caption.copyWith(
                         color: Colors.black,
                       ),
-                      text: "©",
+                      text: "© ",
                     ),
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
+                      style: theme.textTheme.caption.copyWith(
                         color: theme.accentColor,
                         decoration: TextDecoration.underline,
                       ),
-                      text: " OpenStreetMap ",
-                      recognizer: TapGestureRecognizer()..onTap = () {
-                        launch(urlOpenStreetMap);
-                      },
+                      text: "OpenStreetMap",
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launch(urlOpenStreetMap);
+                        },
                     ),
                     TextSpan(
-                      style: theme.textTheme.body1.copyWith(
-                        color: theme.accentColor,
+                      style: theme.textTheme.caption.copyWith(
+                        color: Colors.black,
                       ),
-                      text: "contributors",
+                      text: " contributors",
                     ),
                   ],
                 ),

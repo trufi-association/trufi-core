@@ -9,6 +9,8 @@ const List<Locale> supportedLocales = <Locale>[
   Locale('de', 'DE'), // German
   Locale('qu', 'BO'), // Quechua
   Locale('es', 'ES'), // Spanish
+  Locale('fr', 'FR'), // French
+  Locale('it', 'IT'), // Italian
 ];
 
 const Locale defaultLocale = Locale('es', 'ES');
@@ -308,6 +310,10 @@ class TrufiLocalizations {
     return translate("menu_online");
   }
 
+  String get menuAppReview {
+    return translate("menu_app_review");
+  }
+
   String get feedbackContent {
     return translate("feedback_content");
   }
@@ -342,6 +348,14 @@ class TrufiLocalizations {
 
   String get quechua {
     return translate("quechua");
+  }
+
+  String get french {
+    return translate("french");
+  }
+
+  String get italian {
+    return translate("italian");
   }
 }
 
