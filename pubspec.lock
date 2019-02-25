@@ -7,7 +7,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.34.0"
+    version: "0.35.2"
   ansicolor:
     dependency: transitive
     description:
@@ -70,7 +70,7 @@ packages:
       name: console_log_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.3"
+    version: "1.1.6"
   convert:
     dependency: transitive
     description:
@@ -174,7 +174,7 @@ packages:
       name: front_end
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.7"
+    version: "0.1.12"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -200,7 +200,7 @@ packages:
       name: google_api_availability
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.6+1"
   html:
     dependency: transitive
     description:
@@ -263,7 +263,7 @@ packages:
       name: kernel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.7"
+    version: "0.3.12"
   latlong:
     dependency: transitive
     description:
@@ -340,7 +340,7 @@ packages:
       name: package_resolver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.7"
   path:
     dependency: transitive
     description:
@@ -382,14 +382,14 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.2.0"
   petitparser:
     dependency: transitive
     description:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.1"
   platform:
     dependency: transitive
     description:
@@ -410,7 +410,7 @@ packages:
       name: pool
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.6"
+    version: "1.4.0"
   positioned_tap_detector:
     dependency: transitive
     description:
@@ -459,7 +459,7 @@ packages:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.3+3"
+    version: "0.7.4"
   shelf_packages_handler:
     dependency: transitive
     description:
@@ -646,7 +646,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.3"
+    version: "3.3.1"
   yaml:
     dependency: transitive
     description:

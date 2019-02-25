@@ -1,8 +1,11 @@
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
@@ -23,54 +26,61 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: <Widget>[
-          DrawerHeader(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
               children: <Widget>[
-                Text(
-                  localizations.title,
-                  style: theme.textTheme.title,
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
-                  child: Text(
-                    localizations.tagLine,
-                    style: theme.textTheme.subhead,
+                DrawerHeader(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Text(
+                        localizations.title,
+                        style: theme.textTheme.title,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
+                        child: Text(
+                          localizations.tagLine,
+                          style: theme.textTheme.subhead,
+                        ),
+                      ),
+                    ],
                   ),
+                  decoration: BoxDecoration(color: theme.primaryColor),
                 ),
+                _buildListItem(
+                  Icons.linear_scale,
+                  localizations.menuConnections,
+                  HomePage.route,
+                ),
+                _buildListItem(
+                  Icons.info,
+                  localizations.menuAbout,
+                  AboutPage.route,
+                ),
+                _buildListItem(
+                  Icons.create,
+                  localizations.menuFeedback,
+                  FeedbackPage.route,
+                ),
+                _buildListItem(
+                  Icons.people,
+                  localizations.menuTeam,
+                  TeamPage.route,
+                ),
+                Divider(),
+                // FIXME: For now we do not provide this option
+                //_buildOfflineToggle(context),
+                _buildLanguageDropdownButton(context),
+                _buildAppReviewButton(context),
               ],
             ),
-            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           ),
-          _buildListItem(
-            Icons.linear_scale,
-            localizations.menuConnections,
-            HomePage.route,
-          ),
-          _buildListItem(
-            Icons.info,
-            localizations.menuAbout,
-            AboutPage.route,
-          ),
-          _buildListItem(
-            Icons.create,
-            localizations.menuFeedback,
-            FeedbackPage.route,
-          ),
-          _buildListItem(
-            Icons.people,
-            localizations.menuTeam,
-            TeamPage.route,
-          ),
-          Divider(),
-          // FIXME: For now we do not provide this option
-          //_buildOfflineToggle(context),
-          _buildLanguageDropdownButton(context),
-          _buildAppReviewButton(context),
+          _buildBottomRow(context),
         ],
       ),
     );
@@ -103,11 +113,12 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final localizations = TrufiLocalizations.of(context);
     final languageCode = localizations.locale.languageCode;
     final values = <LanguageDropdownValue>[
-      LanguageDropdownValue("es", "Español"),
-      LanguageDropdownValue("qu", "Quechua simi"),
-      LanguageDropdownValue("en", "English"),
       LanguageDropdownValue("de", "Deutsch"),
+      LanguageDropdownValue("en", "English"),
+      LanguageDropdownValue("es", "Español"),
+      LanguageDropdownValue("fr", "French"),
       LanguageDropdownValue("it", "Italiano"),
+      LanguageDropdownValue("qu", "Quechua simi"),
     ];
     return ListTile(
       leading: Icon(Icons.language),
@@ -161,6 +172,40 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         onTap: () {
           AppReview.requestReview.then((value) {});
         },
+      ),
+    );
+  }
+
+  Widget _buildBottomRow(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.0),
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              onPressed: () => launch(urlTrufi),
+              child: SvgPicture.asset(
+                "assets/images/icon_trufi.svg",
+                height: 48.0,
+              ),
+            ),
+            MaterialButton(
+              onPressed: () => launch(urlInstagram),
+              child: SvgPicture.asset(
+                "assets/images/icon_instagram.svg",
+                height: 48.0,
+              ),
+            ),
+            MaterialButton(
+              onPressed: () => launch(urlFacebook),
+              child: SvgPicture.asset(
+                "assets/images/icon_facebook.svg",
+                height: 48.0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
