@@ -151,7 +151,6 @@ class TrufiMapState extends State<TrufiMap> {
             bottom: 0.0,
             child: Container(
               padding: EdgeInsets.all(4.0),
-              color: Color(0x88ffffff),
               child: RichText(
                 text: TextSpan(
                   children: [
