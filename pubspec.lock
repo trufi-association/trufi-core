@@ -340,7 +340,7 @@ packages:
       name: package_resolver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.10"
   path:
     dependency: transitive
     description:
