@@ -181,6 +181,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       padding: EdgeInsets.all(12.0),
       child: SafeArea(
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GestureDetector(
@@ -202,6 +203,14 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               child: SvgPicture.asset(
                 "assets/images/icon_facebook.svg",
                 height: 48.0,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => launch(urlDonate),
+              child: Icon(
+                Icons.monetization_on,
+                size: 56.0,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ],
