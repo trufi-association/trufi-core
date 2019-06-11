@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -51,6 +52,8 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   PlanPageController _planPageController;
   TabController _tabController;
 
+  var _showAnimation = true;
+
   @override
   void initState() {
     super.initState();
@@ -84,20 +87,34 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Expanded(
-              child: PlanMapPage(planPageController: _planPageController),
-            ),
-            PlanItineraryTabPages(
-              _tabController,
-              _planPageController.plan.itineraries,
-            ),
-          ],
+    final children = <Widget>[
+      Column(
+        children: <Widget>[
+          Expanded(
+            child: PlanMapPage(planPageController: _planPageController),
+          ),
+          PlanItineraryTabPages(
+            _tabController,
+            _planPageController.plan.itineraries,
+          ),
+        ],
+      ),
+    ];
+    if (_showAnimation) {
+      children.add(
+        Positioned.fill(
+          child: FlareActor(
+            "assets/images/success.flr",
+            animation: "Untitled",
+            callback: (animationName) {
+              setState(() {
+                _showAnimation = false;
+              });
+            },
+          ),
         ),
-      ],
-    );
+      );
+    }
+    return Stack(children: children);
   }
 }

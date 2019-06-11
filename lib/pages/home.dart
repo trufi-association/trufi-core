@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/async.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -200,11 +201,9 @@ class HomePageState extends State<HomePage>
         children: <Widget>[
           Positioned.fill(child: body),
           Positioned.fill(
-            child: Container(
-              color: Colors.black54,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            child: FlareActor(
+              "assets/images/loading.flr",
+              animation: "Trufi Drive",
             ),
           ),
         ],
