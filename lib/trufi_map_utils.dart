@@ -29,7 +29,7 @@ offlineMapTileLayerOptions() {
 tileHostingTileLayerOptions() {
   return TileLayerOptions(
     urlTemplate:
-        "https://maps.tilehosting.com/styles/streets/{z}/{x}/{y}.png?key={key}",
+        "https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key={key}",
     additionalOptions: {
       'key': '***REMOVED***',
     },
