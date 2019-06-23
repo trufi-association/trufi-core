@@ -65,7 +65,7 @@
   "instruction_unit_meter": "m",
   "menu_connections": "Ñankunata rikhuchiy",
   "menu_about": "Imamanta yachayta munanki?",
-  "menu_team": "Yanapaqkuna",
+  "menu_team": "Ñuqaykumanta",
   "menu_feedback": "Yuyasqayniykita riqsichiwayku",
   "menu_online": "Online",
   "menu_app_review": "Trufi Appta chaninchay",
@@ -73,5 +73,10 @@
   "feedback_title": "Correo electrónico ñiqta yuyasqasniykita apachimuwayku!",
   "about_content": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
   "license_button": "Licencias",
-  "team_content": "Runakuna chanta empresas thatkichiqkunamanta"
+  "team_content": "Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku: ",
+  "team_section_representatives_title": "Umalliqkuna",
+  "team_section_team_title": "Yanapaqkuna",
+  "team_section_translations_title": "Tiqraqkuna",
+  "team_section_routes_title": "Rutas yanapaqkuna",
+  "team_section_rotues_osm_addition": " chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, %s.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!"
 }

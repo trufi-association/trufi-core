@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:url_launcher/url_launcher.dart';
 
+import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
@@ -12,7 +17,13 @@ class TeamPage extends StatefulWidget {
 }
 
 class TeamPageState extends State<TeamPage> {
-  String _teamString = '';
+  static const launchUrl = "mailto:$emailInfo?subject=Contribution";
+
+  String _representatives;
+  String _team;
+  String _translations;
+  String _routes;
+  String _osm;
 
   @override
   void initState() {
@@ -21,9 +32,14 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _loadState() async {
-    rootBundle.loadString('assets/data/team.txt').then((value) {
+    rootBundle.loadString('assets/data/team.json').then((teamJson) {
+      final team = jsonDecode(teamJson);
       setState(() {
-        _teamString = value;
+        _representatives = team["representatives"];
+        _team = team["team"];
+        _translations = team["translations"];
+        _routes = team["routes"];
+        _osm = team["osm"];
       });
     });
   }
@@ -53,17 +69,57 @@ class TeamPageState extends State<TeamPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                child: Text(
-                  localizations.teamContent,
-                  style: theme.textTheme.title.copyWith(
-                    color: theme.textTheme.body2.color,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: localizations.teamContent,
+                        style: theme.textTheme.body2,
+                      ),
+                      TextSpan(
+                        text: emailInfo,
+                        style: theme.textTheme.body2.copyWith(
+                          color: theme.accentColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launch(launchUrl);
+                          },
+                      ),
+                      TextSpan(
+                        text: ".",
+                        style: theme.textTheme.body2,
+                      ),
+                    ],
                   ),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  _teamString,
+                  "${localizations.teamSectionRepresentativesTitle}: $_representatives",
+                  style: theme.textTheme.body2,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "${localizations.teamSectionTeamTitle}: $_team",
+                  style: theme.textTheme.body2,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "${localizations.teamSectionTranslationsTitle}: $_translations",
+                  style: theme.textTheme.body2,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "${localizations.teamSectionRoutesTitle}: $_routes${localizations.teamSectionRotuesOsmAddition(_osm)}",
                   style: theme.textTheme.body2,
                 ),
               ),

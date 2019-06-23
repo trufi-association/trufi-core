@@ -64,7 +64,7 @@
   "instruction_unit_meter": "m",
   "menu_connections": "Muestra rutas",
   "menu_about": "Acerca",
-  "menu_team": "Equipo",
+  "menu_team": "Sobre el equipo",
   "menu_feedback": "Enviar comentarios",
   "menu_online": "En línea",
   "menu_app_review": "Valora la aplicación",
@@ -72,5 +72,10 @@
   "feedback_title": "Envíanos un correo electrónico",
   "about_content": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.",
   "license_button": "Licencias",
-  "team_content": "Personas y empresas involucradas:"
+  "team_content": "Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a: ",
+  "team_section_representatives_title": "Representantes",
+  "team_section_team_title": "Equipo",
+  "team_section_translations_title": "Traducción",
+  "team_section_routes_title": "Rutas",
+  "team_section_rotues_osm_addition": " y todos los usuarios que subieron rutas a OpenStreetMap, como %s."
 }

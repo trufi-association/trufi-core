@@ -27,6 +27,7 @@ dependencies:
   permission_handler: 2.1.2
   rxdart: 0.18.1
   shared_preferences: 0.4.3
+  sprintf: 4.0.0
   synchronized: 1.5.3
   url_launcher: 4.1.0+1
   package_info: 0.3.2+1
@@ -51,8 +52,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/data/search.json
-    - assets/data/team.txt
+    - assets/data/
     - assets/translations/
     - assets/images/
     # - assets/tiles/8/
