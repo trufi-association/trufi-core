@@ -158,14 +158,17 @@ class TrufiMapState extends State<TrufiMap> {
                       style: theme.textTheme.caption.copyWith(
                         color: Colors.black,
                       ),
-                      text: "© ",
-                    ),
+                      text: "© MapTiler ",
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launch(urlMapTiler);
+                        },
+                    ), 
                     TextSpan(
                       style: theme.textTheme.caption.copyWith(
-                        color: theme.accentColor,
-                        decoration: TextDecoration.underline,
+                        color: Colors.black,
                       ),
-                      text: "OpenStreetMap",
+                      text: "© OpenStreetMap",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           launch(urlOpenStreetMap);
