@@ -7,6 +7,7 @@ const urlRouteFeedback = "https://trufifeedback.z15.web.core.windows.net/route.h
 const urlTrufi = 'https://www.trufi.app';
 const urlFacebook = 'https://www.facebook.com/trufiapp';
 const urlInstagram = 'https://www.instagram.com/trufi.app';
+const urlDonate = 'http://www.trufi.app/donate-inapp';
 
 final abbreviations = {
   "Avenida": "Av.",
