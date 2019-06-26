@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:package_info/package_info.dart';
 
 import 'package:trufi_app/trufi_localizations.dart';
@@ -93,7 +92,7 @@ class AboutPageState extends State<AboutPage> {
                     );
                   },
                 ),
-              )
+              ),
             ],
           ),
         )

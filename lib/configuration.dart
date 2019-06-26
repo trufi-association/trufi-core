@@ -1,4 +1,5 @@
 const emailFeedback = 'feedback@trufi.app';
+const emailInfo = 'info@trufi.app';
 
 const urlOtpEndpoint = 'api.trufi.app';
 const urlOpenStreetMap = 'https://www.openstreetmap.org/copyright';

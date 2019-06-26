@@ -17,7 +17,7 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class FeedBackPageState extends State<FeedbackPage> {
-  static const LaunchUrl = "mailto:$emailFeedback?subject=Feedback";
+  static const launchUrl = "mailto:$emailFeedback?subject=Feedback";
 
   Future<Null> _launched;
 
@@ -91,7 +91,7 @@ class FeedBackPageState extends State<FeedbackPage> {
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
-          _launched = _launch(LaunchUrl);
+          _launched = _launch(launchUrl);
         });
       },
       heroTag: null,

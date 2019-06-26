@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
+import 'package:sprintf/sprintf.dart';
 
 const List<Locale> supportedLocales = <Locale>[
   Locale('en', 'US'), // English
@@ -326,12 +328,32 @@ class TrufiLocalizations {
     return translate("about_content");
   }
 
-  String get license {
-    return translate("license_button");
-  }
-
   String get teamContent {
     return translate("team_content");
+  }
+
+  String get teamSectionRepresentativesTitle {
+    return translate("team_section_representatives_title");
+  }
+
+  String get teamSectionTeamTitle {
+    return translate("team_section_team_title");
+  }
+
+  String get teamSectionTranslationsTitle {
+    return translate("team_section_translations_title");
+  }
+
+  String get teamSectionRoutesTitle {
+    return translate("team_section_routes_title");
+  }
+
+  String teamSectionRotuesOsmAddition(String osm) {
+    return sprintf(translate("team_section_rotues_osm_addition"), [osm]);
+  }
+
+  String get license {
+    return translate("license_button");
   }
 
   String get english {
