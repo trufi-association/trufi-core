@@ -55,20 +55,20 @@ class TrufiMapAnimations {
     int milliseconds,
   }) {
     final neLatitudeTween = new Tween<double>(
-      begin: mapController.bounds.ne.latitude,
-      end: bounds.ne.latitude,
+      begin: mapController.bounds.northEast.latitude,
+      end: bounds.northEast.latitude,
     );
     final neLongitudeTween = new Tween<double>(
-      begin: mapController.bounds.ne.longitude,
-      end: bounds.ne.longitude,
+      begin: mapController.bounds.northEast.longitude,
+      end: bounds.northEast.longitude,
     );
     final swLatitudeTween = new Tween<double>(
-      begin: mapController.bounds.sw.latitude,
-      end: bounds.sw.latitude,
+      begin: mapController.bounds.southWest.latitude,
+      end: bounds.southWest.latitude,
     );
     final swLongitudeTween = new Tween<double>(
-      begin: mapController.bounds.sw.longitude,
-      end: bounds.sw.longitude,
+      begin: mapController.bounds.southWest.longitude,
+      end: bounds.southWest.longitude,
     );
     final paddingTween = new Tween<double>(begin: 0.0, end: 12.0);
     final controller = AnimationController(

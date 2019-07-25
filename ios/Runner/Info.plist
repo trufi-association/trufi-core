@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>TRUFI Beta</string>
+	<string>Trufi</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.14</string>
+	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
@@ -30,8 +30,6 @@
 	<string>key NSCalendarsUsageDescription</string>
 	<key>NSContactsUsageDescription</key>
 	<string>key NSContactsUsageDescription</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Using location to display on a map</string>
 	<key>NSMotionUsageDescription</key>
 	<string>key NSMotionUsageDescription</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

@@ -152,10 +152,14 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     );
   }
 
-  void _handleOnPositionChanged(MapPosition position, bool hasGesture) {
+  void _handleOnPositionChanged(
+    MapPosition position,
+    bool hasGesture,
+    bool isUserGesture,
+  ) {
     if (widget.onPositionChanged != null) {
       Future.delayed(Duration.zero, () {
-        widget.onPositionChanged(position, hasGesture);
+        widget.onPositionChanged(position, hasGesture, isUserGesture);
       });
     }
   }

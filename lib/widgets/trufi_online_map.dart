@@ -29,7 +29,6 @@ class TrufiOnlineMap extends StatefulWidget {
 }
 
 class TrufiOnlineMapState extends State<TrufiOnlineMap> {
-
   @override
   Widget build(BuildContext context) {
     return TrufiMap(
@@ -52,10 +51,14 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
     );
   }
 
-  void _handleOnPositionChanged(MapPosition position, bool hasGesture) {
+  void _handleOnPositionChanged(
+    MapPosition position,
+    bool hasGesture,
+    bool isUserGesture,
+  ) {
     if (widget.onPositionChanged != null) {
       Future.delayed(Duration.zero, () {
-        widget.onPositionChanged(position, hasGesture);
+        widget.onPositionChanged(position, hasGesture, isUserGesture);
       });
     }
   }

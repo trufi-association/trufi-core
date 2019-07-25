@@ -145,7 +145,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
-  void _handleOnMapPositionChanged(MapPosition position, bool hasGesture) {
+  void _handleOnMapPositionChanged(
+    MapPosition position,
+    bool hasGesture,
+    bool isUserGesture,
+  ) {
     setState(() {
       _chooseOnMapMarker = buildToMarker(position.center);
     });

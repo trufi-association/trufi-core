@@ -7,7 +7,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_map: ^0.5.0
+  flutter_map: 0.5.6
   #flutter_map:
   #  git:
   #    url: git@github.com:ubilabs/flutter_map.git
@@ -16,19 +16,19 @@ dependencies:
   app_review: 0.0.9+3
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
-  flare_flutter: 1.5.1
+  flare_flutter: 1.5.4
   flutter_compass: 0.0.3
-  flutter_svg: 0.6.3
+  flutter_svg: 0.13.1
   geolocator: 2.0.1
   google_api_availability: 1.0.4
   http: 0.12.0
   mockito: 3.0.0
-  path_provider: 0.4.1
+  path_provider: 1.1.0
   permission_handler: 2.1.2
   rxdart: 0.18.1
   shared_preferences: 0.4.3
   sprintf: 4.0.0
-  synchronized: 1.5.3
+  synchronized: 2.0.2
   url_launcher: 4.1.0+1
   package_info: 0.3.2+1
 
