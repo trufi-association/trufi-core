@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
@@ -17,8 +17,6 @@ class TeamPage extends StatefulWidget {
 }
 
 class TeamPageState extends State<TeamPage> {
-  static const launchUrl = "mailto:$emailInfo?subject=Contribution";
-
   String _representatives;
   String _team;
   String _translations;
@@ -61,6 +59,8 @@ class TeamPageState extends State<TeamPage> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
+    final emailInfo = GlobalConfiguration().getString("emailInfo");
+    final launchUrl = "mailto:$emailInfo?subject=Contribution";
     return ListView(
       children: <Widget>[
         Container(

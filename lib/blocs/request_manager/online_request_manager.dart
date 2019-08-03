@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,25 +9,27 @@ import 'package:http/http.dart' as http;
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
-  static const String searchPath = '/otp/routers/default/geocode';
-  static const String planPath = 'otp/routers/default/plan';
+  static const String searchPath = '/geocode';
+  static const String planPath = '/plan';
 
   Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,
   ) async {
-    Uri request = Uri.https(urlOtpEndpoint, searchPath, {
-      "query": query,
-      "autocomplete": "false",
-      "corners": "true",
-      "stops": "false",
-    });
+    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
+    Uri request = Uri
+      .parse(urlOtpEndpoint + searchPath)
+      .replace(queryParameters: {
+        "query": query,
+        "autocomplete": "false",
+        "corners": "true",
+        "stops": "false",
+      });
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -90,13 +93,16 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    Uri request = Uri.https(urlOtpEndpoint, planPath, {
-      "fromPlace": from.toString(),
-      "toPlace": to.toString(),
-      "date": "01-01-2018",
-      "numItineraries":"5",
-      "mode": mode
-    });
+    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
+    Uri request = Uri
+      .parse(urlOtpEndpoint + planPath)
+      .replace(queryParameters: {
+        "fromPlace": from.toString(),
+        "toPlace": to.toString(),
+        "date": "01-01-2018",
+        "numItineraries":"5",
+        "mode": mode
+      });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
       return await compute(_parsePlan, utf8.decode(response.bodyBytes));

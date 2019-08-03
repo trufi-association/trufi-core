@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 
@@ -106,6 +106,8 @@ class TrufiLocation {
   }
 
   String get displayName {
+    final abbreviations = new Map<String, String>
+      .from(GlobalConfiguration().get("abbreviations"));
     return abbreviations.keys.fold<String>(description, (
       description,
       abbreviation,

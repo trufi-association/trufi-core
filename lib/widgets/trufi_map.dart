@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -8,7 +9,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_map_utils.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_map_animations.dart';
@@ -130,6 +130,9 @@ class TrufiMapState extends State<TrufiMap> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final locationProviderBloc = LocationProviderBloc.of(context);
+    final cfg = GlobalConfiguration();
+    final urlMapTiler = cfg.getString("urlMapTiler");
+    final urlOpenStreetMap = cfg.getString("urlOpenStreetMap");
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {

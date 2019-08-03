@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
@@ -15,7 +16,8 @@ import 'package:trufi_app/pages/team.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
-void main() {
+void main() async {
+  await GlobalConfiguration().loadFromAsset("app_config");
   runApp(TrufiApp());
 }
 
