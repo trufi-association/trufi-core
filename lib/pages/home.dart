@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:async/async.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,6 @@ import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
 import 'package:trufi_app/plan/plan.dart';
@@ -378,6 +378,7 @@ class HomePageState extends State<HomePage>
     final location = await LocationProviderBloc.of(context).currentLocation;
     final languageCode = TrufiLocalizations.of(context).locale.languageCode;
     final packageInfo = await PackageInfo.fromPlatform();
+    final urlRouteFeedback = GlobalConfiguration().getString("urlRouteFeedback");
     showDialog(
       context: context,
       builder: (context) {

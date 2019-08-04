@@ -1,3 +1,4 @@
+import 'package:global_configuration/global_configuration.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/pages/feedback.dart';
 import 'package:trufi_app/pages/home.dart';
 import 'package:trufi_app/pages/team.dart';
@@ -177,6 +177,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildBottomRow(BuildContext context) {
+    final cfg = GlobalConfiguration();
+    final urlWebsite = cfg.getString("urlWebsite");
+    final urlInstagram = cfg.getString("urlInstagram");
+    final urlFacebook = cfg.getString("urlFacebook");
+    final urlDonate = cfg.getString("urlDonate");
     return Container(
       padding: EdgeInsets.all(12.0),
       child: SafeArea(
@@ -185,7 +190,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GestureDetector(
-              onTap: () => launch(urlTrufi),
+              onTap: () => launch(urlWebsite),
               child: SvgPicture.asset(
                 "assets/images/icon_trufi.svg",
                 height: 48.0,

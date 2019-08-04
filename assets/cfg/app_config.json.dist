@@ -1,0 +1,18 @@
+{
+    "emailFeedback": "feedback@example.org",
+    "emailInfo": "info@example.org",
+    "urlOtpEndpoint": "https://example.org/otp/routers/default",
+    "urlOpenStreetMap": "https://www.openstreetmap.org/copyright",
+    "urlMapTiler": "https://www.maptiler.com/copyright",
+    "urlRouteFeedback": "",
+    "urlWebsite": "",
+    "urlFacebook": "",
+    "urlInstagram": "",
+    "urlDonate": "",
+    "keyMapTiler": "",
+    "abbreviations": {
+        "Avenida": "Av.",
+        "Calle": "C.",
+        "Camino": "C.º"
+    }
+}

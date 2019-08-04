@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/configuration.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
@@ -17,8 +17,6 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class FeedBackPageState extends State<FeedbackPage> {
-  static const launchUrl = "mailto:$emailFeedback?subject=Feedback";
-
   Future<Null> _launched;
 
   Future<Null> _launch(String url) async {
@@ -86,6 +84,8 @@ class FeedBackPageState extends State<FeedbackPage> {
 
   Widget _buildFloatingActionButton(BuildContext context) {
     final theme = Theme.of(context);
+    final emailFeedback = GlobalConfiguration().getString("emailFeedback");
+    final launchUrl = "mailto:$emailFeedback?subject=Feedback";
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
