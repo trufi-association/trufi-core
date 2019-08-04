@@ -6,6 +6,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_app/composite_subscription.dart';
@@ -26,11 +27,12 @@ offlineMapTileLayerOptions() {
 }
 
 tileHostingTileLayerOptions() {
+  final key = GlobalConfiguration().getString("keyMapTiler");
   return TileLayerOptions(
     urlTemplate:
         "https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}@2x.png?key={key}",
     additionalOptions: {
-      'key': '***REMOVED***',
+      'key': key,
     },
   );
 }
