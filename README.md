@@ -36,4 +36,4 @@ If you want to start working on the Trufi App. Get started by reviewing the [Flu
 
 ## Free Software
 
-This program is Free Software: You can use, study, share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [license](LICENSE.md).
+This program is Free Software: You can use, study, share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [license](LICENSE).
