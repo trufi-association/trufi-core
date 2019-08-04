@@ -24,9 +24,8 @@ import 'mock_http_client.dart';
 void main() {
   setUp(() async {
     HttpOverrides.global = new TestHttpOverrides({
-      Uri.parse(
-              'https://maps.tilehosting.com/styles/positron/5/17/tile.png?key=***REMOVED***'):
-          dummyImageData
+      Uri.parse('https://maps.tilehosting.com/styles/positron/5/17/tile.png'):
+        dummyImageData
     });
   });
 
