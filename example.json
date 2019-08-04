@@ -1,0 +1,4 @@
+{
+  "map_tiler_key": "random_api_key",
+  "otp_endpoint": "the_route_to_the_otp_routing_server"
+}
