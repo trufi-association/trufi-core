@@ -36,4 +36,7 @@ If you want to start working on the Trufi App. Get started by reviewing the [Flu
 
 ## Free Software
 
-This program is Free Software: You can use, study, share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [license](LICENSE).
+Copyright 2019 - [Trufi Association](https://www.trufi-association.org/)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the [GNU General Public License version 3](./LICENSE) as published by the Free Software Foundation.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
