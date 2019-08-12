@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:global_configuration/global_configuration.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
@@ -190,7 +192,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             GestureDetector(
-              onTap: () => launch(urlWebsite),
+              onTap: () => launch(urlWebsite, forceSafariVC: false),
               child: SvgPicture.asset(
                 "assets/images/icon_trufi.svg",
                 height: 48.0,
@@ -210,7 +212,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 height: 48.0,
               ),
             ),
-            GestureDetector(
+            if (!Platform.isIOS) GestureDetector(
               onTap: () => launch(urlDonate),
               child: Icon(
                 Icons.monetization_on,
