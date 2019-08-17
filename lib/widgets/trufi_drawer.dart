@@ -118,7 +118,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       LanguageDropdownValue("de", "Deutsch"),
       LanguageDropdownValue("en", "English"),
       LanguageDropdownValue("es", "Español"),
-      LanguageDropdownValue("fr", "French"),
+      LanguageDropdownValue("fr", "Français"),
       LanguageDropdownValue("it", "Italiano"),
       LanguageDropdownValue("qu", "Quechua simi"),
     ];
