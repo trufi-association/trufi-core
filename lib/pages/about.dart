@@ -22,8 +22,9 @@ class AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    final localizations = TrufiLocalizations.of(context);
     return AppBar(
-      title: Text(TrufiLocalizations.of(context).menuAbout),
+      title: Text(localizations.menuAbout()),
     );
   }
 
@@ -41,7 +42,7 @@ class AboutPageState extends State<AboutPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localizations.title,
+                  localizations.title(),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -59,7 +60,7 @@ class AboutPageState extends State<AboutPage> {
                       return Text("");
                     }
                     return Text(
-                      "${localizations.version} ${snapshot.data.version}",
+                      localizations.version(snapshot.data.version),
                       style: theme.textTheme.body2,
                     );
                   },
@@ -68,7 +69,7 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.tagLine,
+                  localizations.tagline(),
                   style: theme.textTheme.subhead.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -77,18 +78,18 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.aboutContent,
+                  localizations.aboutContent(),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: RaisedButton(
-                  child: Text(localizations.license),
+                  child: Text(localizations.aboutLicenses()),
                   onPressed: () {
                     return showLicensePage(
                       context: context,
-                      applicationName: localizations.title,
+                      applicationName: localizations.title(),
                     );
                   },
                 ),

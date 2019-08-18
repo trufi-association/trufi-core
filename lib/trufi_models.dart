@@ -397,11 +397,11 @@ class PlanItineraryLeg {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(
-        "${localizations.instructionWalkStart} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)} ${localizations.instructionWalk}",
+        "${localizations.instructionWalkStart()} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo()}\n${_toString(localizations)} ${localizations.instructionWalk()}",
       );
     } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
       sb.write(
-        "${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionRide} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor}",
+        "${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionRide()} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor()}",
       );
     }
     return sb.toString();
@@ -410,14 +410,14 @@ class PlanItineraryLeg {
   String toInstruction(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
-      sb.write("${localizations.instructionWalk}");
+      sb.write("${localizations.instructionWalk()}");
     } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
       sb.write(
-        "${localizations.instructionRide} ${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionFor}",
+        "${localizations.instructionRide()} ${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionFor()}",
       );
     }
     sb.write(
-      " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo}\n${_toString(localizations)}",
+      " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo()}\n${_toString(localizations)}",
     );
     return sb.toString();
   }
@@ -437,30 +437,30 @@ class PlanItineraryLeg {
   String _carTypeString(TrufiLocalizations localizations) {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
-        ? localizations.instructionRideCar
+        ? localizations.instructionRideCar()
         : carType.contains('trufi')
-            ? localizations.instructionRideTrufi
+            ? localizations.instructionRideTrufi()
             : carType.contains('micro')
-                ? localizations.instructionRideMicro
+                ? localizations.instructionRideMicro()
                 : carType.contains('minibus')
-                    ? localizations.instructionRideMinibus
+                    ? localizations.instructionRideMinibus()
                     : carType.contains('gondola')
-                        ? localizations.instructionRideGondola
-                        : localizations.instructionRideBus;
+                        ? localizations.instructionRideGondola()
+                        : localizations.instructionRideBus();
   }
 
   String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? "${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm}"
-        : "${distance.ceil()} ${localizations.instructionUnitMeter}";
+        ? "${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm()}"
+        : "${distance.ceil()} ${localizations.instructionUnitMeter()}";
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return "${(duration.ceil() / 60).ceil()} ${localizations.instructionMinutes}";
+    return "${(duration.ceil() / 60).ceil()} ${localizations.instructionMinutes()}";
   }
 
   String _toString(TrufiLocalizations localizations) {
-    return toName == 'Destination' ? localizations.commonDestination : toName;
+    return toName == 'Destination' ? localizations.commonDestination() : toName;
   }
 
   IconData iconData() {

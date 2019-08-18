@@ -5,12 +5,12 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
-import 'package:sprintf/sprintf.dart';
+import 'package:intl/intl.dart';
 
 final supportedLanguages = List<Map<String, dynamic>>
   .from(GlobalConfiguration().get("supportedLanguages"));
 final defaultLang = supportedLanguages
-  .firstWhere((lang) => lang["default"]);
+  .firstWhere((lang) => lang["default"] ?? false);
 final supportedLocales = supportedLanguages
   .map((lang) => Locale(lang["languageCode"], lang["countryCode"]))
   .toList();
@@ -36,348 +36,542 @@ class TrufiLocalizations {
     return translation;
   }
 
-  String translate(String translationKey) {
-    return translation[translationKey] ?? translationKey;
-  }
-
-  String get title {
-    return translate("title");
-  }
-
-  String get tagLine {
-    return translate("tag_line");
-  }
-
-  String get description {
-    return translate("description");
-  }
-
-  String get version {
-    return translate("version");
-  }
-
-  String get alertLocationServicesDeniedTitle {
-    return translate("alert_location_services_denied_title");
-  }
-
-  String get alertLocationServicesDeniedMessage {
-    return translate("alert_location_services_denied_message");
-  }
-
-  String get commonOK {
-    return translate("common_ok");
-  }
-
-  String get commonCancel {
-    return translate("common_cancel");
-  }
-
-  String get commonGoOffline {
-    return translate("common_go_offline");
-  }
-
-  String get commonGoOnline {
-    return translate("common_go_online");
-  }
-
-  String get commonDestination {
-    return translate("common_destination");
-  }
-
-  String get commonOrigin {
-    return translate("common_origin");
-  }
-
-  String get commonNoInternet {
-    return translate("common_no_internet_connection");
-  }
-
-  String get commonFailLoading {
-    return translate("common_fail_loading_data");
-  }
-
-  String get commonUnknownError {
-    return translate("common_unknown_error");
-  }
-
-  String get commonError {
-    return translate("common_error");
-  }
-
-  String get noRouteError => translate("no_route_error");
-
-  String get noRouteErrorActionCancel =>
-      translate("no_route_error_action_cancel");
-
-  String get noRouteErrorActionReportMissingRoute =>
-      translate("no_route_error_action_report_missing_route");
-
-  String get noRouteErrorActionShowCarRoute =>
-      translate("no_route_error_action_show_car_route");
-
-  String get errorServerUnavailable {
-    return translate("route_request_error_server_unavailable");
-  }
-
-  String get errorOutOfBoundary {
-    return translate("route_request_error_out_of_boundary");
-  }
-
-  String get errorPathNotFound {
-    return translate("route_request_error_path_not_found");
-  }
-
-  String get errorNoTransitTimes {
-    return translate("route_request_error_no_transit_times");
-  }
-
-  String get errorServerTimeout {
-    return translate("route_request_error_server_timeout");
-  }
-
-  String get errorTrivialDistance {
-    return translate("route_request_error_trivial_distance");
-  }
-
-  String get errorServerCanNotHandleRequest {
-    return translate("route_request_error_server_can_not_handle_request");
-  }
-
-  String get errorUnknownOrigin {
-    return translate("route_request_error_unknown_origin");
-  }
-
-  String get errorUnknownDestination {
-    return translate("route_request_error_unknown_destination");
-  }
-
-  String get errorUnknownOriginDestination {
-    return translate("route_request_error_origin_destination_unknown");
-  }
-
-  String get errorNoBarrierFree {
-    return translate("route_request_error_no_barrier_free");
-  }
-
-  String get errorAmbiguousOrigin {
-    return translate("route_request_error_ambiguous_origin");
-  }
-
-  String get errorAmbiguousDestination {
-    return translate("route_request_error_ambiguous_destination");
-  }
-
-  String get errorAmbiguousOriginDestination {
-    return translate("route_request_error_origin_destination_ambiguous");
-  }
-
-  String get searchHintOrigin {
-    return translate("search_hint_origin");
-  }
-
-  String get searchHintDestination {
-    return translate("search_hint_destination");
-  }
-
-  String get searchItemChooseOnMap {
-    return translate("search_item_choose_on_map");
-  }
-
-  String get searchItemYourLocation {
-    return translate("search_item_your_location");
-  }
-
-  String get searchItemNoResults {
-    return translate("search_item_no_results");
-  }
-
-  String get searchTitlePlaces {
-    return translate("search_section_places");
-  }
-
-  String get searchTitleRecent {
-    return translate("search_section_recent");
-  }
-
-  String get searchTitleFavorites {
-    return translate("search_section_favorites");
-  }
-
-  String get searchTitleResults {
-    return translate("search_section_results");
-  }
-
-  String get searchPleaseSelectOrigin {
-    return translate("search_section_please_select_origin");
-  }
-
-  String get searchPleaseSelectDestination {
-    return translate("search_section_please_select_destination");
-  }
-
-  String get searchFailLoadingPlan {
-    return translate("search_fail_loading_plan");
-  }
-
-  String get searchMapMarker {
-    return translate("search_section_map_marker");
-  }
-
-  String get searchNavigate {
-    return translate("search_navigate_to_marker");
-  }
-
-  String get instructionWalkStart {
-    return translate("instruction_walk_start");
-  }
-
-  String get instructionWalk {
-    return translate("instruction_walk");
-  }
-
-  String get instructionRide {
-    return translate("instruction_ride");
-  }
-
-  String get instructionRideBus {
-    return translate("instruction_ride_bus");
-  }
-
-  String get instructionMinutes {
-    return translate("instruction_minutes");
-  }
-
-  String get instructionRideMicro {
-    return translate("instruction_ride_micro");
-  }
-
-  String get instructionRideMinibus {
-    return translate("instruction_ride_minibus");
-  }
-
-  String get instructionRideTrufi {
-    return translate("instruction_ride_trufi");
-  }
-
-  String get instructionRideCar {
-    return translate("instruction_ride_car");
-  }
-
-  String get instructionRideGondola {
-    return translate("instruction_ride_gondola");
-  }
-
-  String get instructionTo {
-    return translate("instruction_to");
-  }
-
-  String get instructionFor {
-    return translate("instruction_for");
-  }
-
-  String get instructionUnitKm {
-    return translate("instruction_unit_kilometer");
-  }
-
-  String get instructionUnitMeter {
-    return translate("instruction_unit_meter");
-  }
-
-  String get chooseLocationPageTitle {
-    return translate("choose_location_page_title");
-  }
-
-  String get chooseLocationPageSubtitle {
-    return translate("choose_location_page_subtitle");
-  }
-
-  String get menuConnections {
-    return translate("menu_connections");
-  }
-
-  String get menuAbout {
-    return translate("menu_about");
-  }
-
-  String get menuTeam {
-    return translate("menu_team");
-  }
-
-  String get menuFeedback {
-    return translate("menu_feedback");
-  }
-
-  String get menuOnline {
-    return translate("menu_online");
-  }
-
-  String get menuAppReview {
-    return translate("menu_app_review");
-  }
-
-  String get feedbackContent {
-    return translate("feedback_content");
-  }
-
-  String get feedbackTitle {
-    return translate("feedback_title");
-  }
-
-  String get aboutContent {
-    return translate("about_content");
-  }
-
-  String get teamContent {
-    return translate("team_content");
-  }
-
-  String get teamSectionRepresentativesTitle {
-    return translate("team_section_representatives_title");
-  }
-
-  String get teamSectionTeamTitle {
-    return translate("team_section_team_title");
-  }
-
-  String get teamSectionTranslationsTitle {
-    return translate("team_section_translations_title");
-  }
-
-  String get teamSectionRoutesTitle {
-    return translate("team_section_routes_title");
-  }
-
-  String teamSectionRotuesOsmAddition(String osm) {
-    return sprintf(translate("team_section_rotues_osm_addition"), [osm]);
-  }
-
-  String get license {
-    return translate("license_button");
-  }
-
-  String get english {
-    return translate("english");
-  }
-
-  String get german {
-    return translate("german");
-  }
-
-  String get spanish {
-    return translate("spanish");
-  }
-
-  String get quechua {
-    return translate("quechua");
-  }
-
-  String get french {
-    return translate("french");
-  }
-
-  String get italian {
-    return translate("italian");
-  }
+  String title() =>
+    Intl.message(
+      "Trufi App",
+      name: "title",
+      desc: "The application's name",
+    );
+
+  String tagline() =>
+    Intl.message(
+      "Public transportation in Cochabamba",
+      name: "tagLine",
+      desc: "A short marketing sentence that describes the app",
+    );
+
+  String description() =>
+    Intl.message(
+      "The best way to travel with trufis, micros and busses through Cochabamba.",
+      name: "description",
+      desc: "A sentence that describes the application's purpose",
+    );
+
+  String version(String version) =>
+    Intl.message(
+      "Version $version",
+      name: "version",
+      args: [version],
+      desc: "The application's version",
+    );
+
+  String alertLocationServicesDeniedTitle() =>
+    Intl.message(
+      "No location",
+      name: "alertLocationServicesDeniedTitle",
+      desc: "Title of dialog that explains that access to location services was denied",
+    );
+
+  String alertLocationServicesDeniedMessage() =>
+    Intl.message(
+      "Please make sure your device has GPS and the Location settings are activated.",
+      name: "alertLocationServicesDeniedMessage",
+      desc: "Text of dialog that explains that access to location services was denied",
+    );
+
+  String commonOK() =>
+    Intl.message(
+      "OK",
+      name: "commonOK",
+      desc: "OK button label",
+    );
+
+  String commonCancel() =>
+    Intl.message(
+      "Cancel",
+      name: "commonCancel",
+      desc: "Cancel button label",
+    );
+
+  String commonGoOffline() =>
+    Intl.message(
+      "Go offline",
+      name: "commonGoOffline",
+      desc: "Go offline button label",
+    );
+
+  String commonGoOnline() =>
+    Intl.message(
+      "Go online",
+      name: "commonGoOnline",
+      desc: "Go online button label",
+    );
+
+  String commonDestination() =>
+    Intl.message(
+      "Destination",
+      name: "commonDestination",
+      desc: "Destination field label",
+    );
+
+  String commonOrigin() =>
+    Intl.message(
+      "Origin",
+      name: "commonOrigin",
+      desc: "Origin field label",
+    );
+
+  String commonNoInternet() =>
+    Intl.message(
+      "No internet connection.",
+      name: "commonNoInternet",
+      desc: "Message when internet connection is lost",
+    );
+
+  String commonFailLoading() =>
+    Intl.message(
+      "Failed to load data",
+      name: "commonFailLoading",
+      desc: "Message when data could not be loaded",
+    );
+
+  String commonUnknownError() =>
+    Intl.message(
+      "Unknown error",
+      name: "commonUnknownError",
+      desc: "Message when an unknown error has occured",
+    );
+
+  String commonError() =>
+    Intl.message(
+      "Error",
+      name: "commonError",
+      desc: "Message when an error has occured",
+    );
+
+  String noRouteError() =>
+    Intl.message(
+      "Sorry, we could not find a route. What do you want to do?",
+      name: "noRouteError",
+      desc: "Message when no route could be found after a route search"
+    );
+
+  String noRouteErrorActionCancel() =>
+    Intl.message(
+      "Try another destination",
+      name: "noRouteErrorActionCancel",
+      desc: "Button label to try another destination when no route could be found",
+    );
+
+  String noRouteErrorActionReportMissingRoute() =>
+    Intl.message(
+      "Report a missing route",
+      name: "noRouteErrorActionReportMissingRoute",
+      desc: "Button label to report a missing route when no route could be found",
+    );
+
+  String noRouteErrorActionShowCarRoute() =>
+    Intl.message(
+      "Show route by car",
+      name: "noRouteErrorActionShowCarRoute",
+      desc: "Button label to show the car route when no route could be found",
+    );
+
+  String errorServerUnavailable() =>
+    Intl.message(
+      "We're sorry. The trip planner is temporarily unavailable. Please try again later.",
+      name: "errorServerUnavailable",
+      desc: "Message that is displayed when the trip planning server was not available",
+    );
+
+  String errorOutOfBoundary() =>
+    Intl.message(
+      "Trip is not possible. You might be trying to plan a trip outside the map data boundary.",
+      name: "errorOutOfBoundary",
+      desc: "Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries",
+    );
+
+  String errorPathNotFound() =>
+    Intl.message(
+      "Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).",
+      name: "errorPathNotFound",
+      desc: "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible",
+    );
+
+  String errorNoTransitTimes() =>
+    Intl.message(
+      "No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.",
+      name: "errorNoTransitTimes",
+      desc: "Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time",
+    );
+
+  String errorServerTimeout() =>
+    Intl.message(
+      "The trip planner is taking way too long to process your request. Please try again later.",
+      name: "errorServerTimeout",
+      desc: "Message that is displayed when a trip could not be planned, because the server is taking too long to respond",
+    );
+
+  String errorTrivialDistance() =>
+    Intl.message(
+      "Origin is within a trivial distance of the destination.",
+      name: "errorTrivialDistance",
+      desc: "Message that is displayed when a trip could not be planned, because origin and destination are too close to each other",
+    );
+
+  String errorServerCanNotHandleRequest() =>
+    Intl.message(
+      "The request has errors that the server is not willing or able to process.",
+      name: "errorServerCanNotHandleRequest",
+      desc: "Message that is displayed when a trip could not be planned, because the request had errors",
+    );
+
+  String errorUnknownOrigin() =>
+    Intl.message(
+      "Origin is unknown. Can you be a bit more descriptive?",
+      name: "errorUnknownOrigin",
+      desc: "Message that is displayed when a trip could not be planned, because the origin was not found",
+    );
+
+  String errorUnknownDestination() =>
+    Intl.message(
+      "Destination is unknown. Can you be a bit more descriptive?",
+      name: "errorUnknownDestination",
+      desc: "Message that is displayed when a trip could not be planned, because the destination was not found",
+    );
+
+  String errorUnknownOriginDestination() =>
+    Intl.message(
+      "Both origin and destination are unknown. Can you be a bit more descriptive?",
+      name: "errorUnknownOriginDestination",
+      desc: "Message that is displayed when a trip could not be planned, because both origin and destination were not found",
+    );
+
+  String errorNoBarrierFree() =>
+    Intl.message(
+      "Both origin and destination are not wheelchair accessible",
+      name: "errorNoBarrierFree",
+      desc: "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible",
+    );
+
+  String errorAmbiguousOrigin() =>
+    Intl.message(
+      "The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.",
+      name: "errorAmbiguousOrigin",
+      desc: "Message that is displayed when a trip could not be planned, because the specified origin is ambiguous",
+    );
+
+  String errorAmbiguousDestination() =>
+    Intl.message(
+      "The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.",
+      name: "errorAmbiguousDestination",
+      desc: "Message that is displayed when a trip could not be planned, because the specified destination is ambiguous",
+    );
+
+  String errorAmbiguousOriginDestination() =>
+    Intl.message(
+      "Both origin and destination are ambiguous. Please select from the following options, or be more specific.",
+      name: "errorAmbiguousOriginDestination",
+      desc: "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous",
+    );
+
+  String searchHintOrigin() =>
+    Intl.message(
+      "Choose starting point",
+      name: "searchHintOrigin",
+      desc: "Placeholder text for the origin field (in search state)",
+    );
+
+  String searchHintDestination() =>
+    Intl.message(
+      "Choose destination",
+      name: "searchHintDestination",
+      desc: "Placeholder text for the destination field (in search state)",
+    );
+
+  String searchItemChooseOnMap() =>
+    Intl.message(
+      "Choose on map",
+      name: "searchItemChooseOnMap",
+      desc: "Search option that allows to choose a point on the map",
+    );
+
+  String searchItemYourLocation() =>
+    Intl.message(
+      "Your location",
+      name: "searchItemYourLocation",
+      desc: "Search option that allows to use the current user location",
+    );
+
+  String searchItemNoResults() =>
+    Intl.message(
+      "No results",
+      name: "searchItemNoResults",
+      desc: "Message that is displayed when no results were found for the search term that was provided",
+    );
+
+  String searchTitlePlaces() =>
+    Intl.message(
+      "Places",
+      name: "searchTitlePlaces",
+      desc: "Search section title for common places",
+    );
+
+  String searchTitleRecent() =>
+    Intl.message(
+      "Recent",
+      name: "searchTitleRecent",
+      desc: "Search section title for recent location",
+    );
+
+  String searchTitleFavorites() =>
+    Intl.message(
+      "Favorites",
+      name: "searchTitleFavorites",
+      desc: "Search section title for locations marked as favorites",
+    );
+
+  String searchTitleResults() =>
+    Intl.message(
+      "Search Results",
+      name: "searchTitleResults",
+      desc: "Search section title for results found for the provided search term",
+    );
+
+  String searchPleaseSelectOrigin() =>
+    Intl.message(
+      "Select origin",
+      name: "searchPleaseSelectOrigin",
+      desc: "Placeholder text for the origin field (in map-visible state)",
+    );
+
+  String searchPleaseSelectDestination() =>
+    Intl.message(
+      "Select destination",
+      name: "searchPleaseSelectDestination",
+      desc: "Placeholder text for the destination field (in map-visible state)",
+    );
+
+  String searchFailLoadingPlan() =>
+    Intl.message(
+      "Failed to load plan.",
+      name: "searchFailLoadingPlan",
+      desc: "Message that is displayed when the response of the trip planning request could not be received",
+    );
+
+  String searchMapMarker() =>
+    Intl.message(
+      "Map Marker",
+      name: "searchMapMarker",
+      desc: "Location name displayed in search fields that represents a location choosen on the map",
+    );
+
+  String chooseLocationPageTitle() =>
+    Intl.message(
+      "Choose a point",
+      name: "chooseLocationPageTitle",
+      desc: "Page title when choosing a location on the map",
+    );
+
+  String chooseLocationPageSubtitle() =>
+    Intl.message(
+      "Pan & zoom map under pin",
+      name: "chooseLocationPageSubtitle",
+      desc: "Page subtitle when choosing a location on the map",
+    );
+
+  String instructionWalkStart() =>
+    Intl.message(
+      "Walk",
+      name: "instructionWalkStart",
+    );
+
+  String instructionWalk() =>
+    Intl.message(
+      "Walk",
+      name: "instructionWalk",
+    );
+
+  String instructionRide() =>
+    Intl.message(
+      "Ride",
+      name: "instructionRide",
+    );
+
+  String instructionRideBus() =>
+    Intl.message(
+      "Bus",
+      name: "instructionRideBus",
+    );
+
+  String instructionMinutes() =>
+    Intl.message(
+      "min",
+      name: "instructionMinutes",
+    );
+
+  String instructionRideMicro() =>
+    Intl.message(
+      "Micro",
+      name: "instructionRideMicro",
+    );
+
+  String instructionRideMinibus() =>
+    Intl.message(
+      "Minibus",
+      name: "instructionRideMinibus",
+    );
+
+  String instructionRideTrufi() =>
+    Intl.message(
+      "Trufi",
+      name: "instructionRideTrufi",
+    );
+
+  String instructionRideCar() =>
+    Intl.message(
+      "Car",
+      name: "instructionRideCar",
+    );
+
+  String instructionRideGondola() =>
+    Intl.message(
+      "Gondola",
+      name: "instructionRideGondola",
+    );
+
+  String instructionTo() =>
+    Intl.message(
+      "to",
+      name: "instructionTo",
+    );
+
+  String instructionFor() =>
+    Intl.message(
+      "for",
+      name: "instructionFor",
+    );
+
+  String instructionUnitKm() =>
+    Intl.message(
+      "km",
+      name: "instructionUnitKm",
+    );
+
+  String instructionUnitMeter() =>
+    Intl.message(
+      "m",
+      name: "instructionUnitMeter",
+    );
+
+  String menuConnections() =>
+    Intl.message(
+      "Show routes",
+      name: "menuConnections",
+      desc: "Menu item that shows the map/planned trip",
+    );
+
+  String menuAbout() =>
+    Intl.message(
+      "About",
+      name: "menuAbout",
+      desc: "Menu item that shows the about page",
+    );
+
+  String menuTeam() =>
+    Intl.message(
+      "Team",
+      name: "menuTeam",
+      desc: "Menu item that shows the team page",
+    );
+
+  String menuFeedback() =>
+    Intl.message(
+      "Send Feedback",
+      name: "menuFeedback",
+      desc: "Menu item that shows the feedback page",
+    );
+
+  String menuOnline() =>
+    Intl.message(
+      "Online",
+      name: "menuOnline",
+      desc: "Menu item that shows the state of online/offline routing",
+    );
+
+  String menuAppReview() =>
+    Intl.message(
+      "Rate the app",
+      name: "menuAppReview",
+      desc: "Menu item that triggers a native widget to rate the app",
+    );
+
+  String feedbackContent() =>
+    Intl.message(
+      "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",
+      name: "feedbackContent",
+      desc: "Text displayed on the feedback page",
+    );
+
+  String feedbackTitle() =>
+    Intl.message(
+      "Send us an E-mail",
+      name: "feedbackTitle",
+      desc: "Title displayed on the feedback page",
+    );
+  
+  String aboutContent() =>
+    Intl.message(
+      "We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
+      name: "aboutContent",
+      desc: "Text displayed on the about page",
+    );
+
+  String aboutLicenses() => 
+    Intl.message(
+      "Licenses",
+      name: "licenses",
+      desc: "Button label to show licenses",
+    );
+
+  String teamContent() =>
+    Intl.message(
+      "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:",
+      name: "teamContent",
+      desc: "Text displayed on the team page, followed by a email link",
+    );
+
+  String teamSectionRepresentatives(String representatives) =>
+    Intl.message(
+      "Representatives: $representatives",
+      name: "teamSectionRepresentatives",
+      args: [representatives],
+      desc: "List of representatives",
+    );
+
+  String teamSectionTeam(String teamMembers) =>
+    Intl.message(
+      "Team: $teamMembers",
+      name: "teamSectionTeam",
+      args: [teamMembers],
+      desc: "List of team members",
+    );
+
+  String teamSectionTranslations(String translators) =>
+    Intl.message(
+      "Translations: $translators",
+      name: "teamSectionTranslations",
+      args: [translators],
+      desc: "List of translators",
+    );
+
+  String teamSectionRoutes(String routeContributors, String osmContributors) =>
+    Intl.message(
+      "Routes: $routeContributors and all users that uploaded routes to OpenStreetMap, such as $osmContributors.\nContact us if you want to join the OpenStreetMap community!",
+      name: "teamSectionRoutes",
+      args: [routeContributors, osmContributors],
+      desc: "List of route contributors",
+    );
 }
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
@@ -413,6 +607,8 @@ class TrufiLocalizationsDelegate
     if (locale == null) {
       locale = defaultLocale;
     }
+
+    Intl.defaultLocale = defaultLocale.toLanguageTag();
 
     var translation = await TrufiLocalizations.loadTranslation(locale);
     return TrufiLocalizations(locale, translation);

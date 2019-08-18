@@ -110,8 +110,8 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _fromFieldKey,
                 ValueKey(keys.homePageFromPlaceField),
-                localizations.searchPleaseSelectOrigin,
-                localizations.searchHintOrigin,
+                localizations.searchPleaseSelectOrigin(),
+                localizations.searchHintOrigin(),
                 SvgPicture.asset(
                   "assets/images/from_marker.svg",
                 ),
@@ -121,8 +121,8 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _toFieldKey,
                 ValueKey(keys.homePageToPlaceField),
-                localizations.searchPleaseSelectDestination,
-                localizations.searchHintDestination,
+                localizations.searchPleaseSelectDestination(),
+                localizations.searchHintDestination(),
                 SvgPicture.asset(
                   "assets/images/to_marker.svg",
                 ),
@@ -216,7 +216,7 @@ class HomePageState extends State<HomePage>
   void _handleOnLongPress(LatLng point) {
     _setToPlace(
       TrufiLocation.fromLatLng(
-        TrufiLocalizations.of(context).searchMapMarker,
+        TrufiLocalizations.of(context).searchMapMarker(),
         point,
       ),
     );
@@ -258,7 +258,7 @@ class HomePageState extends State<HomePage>
     if (location != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
-          localizations.searchItemYourLocation,
+          localizations.searchItemYourLocation(),
           location,
         ),
       );
@@ -293,7 +293,7 @@ class HomePageState extends State<HomePage>
     final localizations = TrufiLocalizations.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       // Refresh your location
-      final yourLocation = localizations.searchItemYourLocation;
+      final yourLocation = localizations.searchItemYourLocation();
       final refreshFromPlace = _data.fromPlace.description == yourLocation;
       final refreshToPlace = _data.toPlace.description == yourLocation;
       if (refreshFromPlace || refreshToPlace) {
@@ -353,10 +353,10 @@ class HomePageState extends State<HomePage>
         );
       } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.commonNoInternet, true);
+        _showOnAndOfflineErrorAlert(localizations.commonNoInternet(), true);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan, true);
+        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan(), true);
       } catch (e) {
         print("Failed to fetch plan: $e");
         _showErrorAlert(e.toString());
@@ -399,13 +399,14 @@ class HomePageState extends State<HomePage>
   }
 
   void _showOnAndOfflineErrorAlert(String message, bool online) {
+    final localizations = TrufiLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) {
         return buildOnAndOfflineErrorAlert(
           context: context,
           online: online,
-          title: Text(TrufiLocalizations.of(context).commonError),
+          title: Text(localizations.commonError()),
           content: Text(message),
         );
       },

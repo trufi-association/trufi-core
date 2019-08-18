@@ -62,14 +62,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageTitle,
+              text: localizations.chooseLocationPageTitle(),
               style: theme.textTheme.body1,
             ),
           ),
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageSubtitle,
+              text: localizations.chooseLocationPageSubtitle(),
               style: theme.textTheme.caption.copyWith(
                 color: theme.textTheme.body1.color,
               ),
@@ -85,7 +85,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
-                  text: localizations.commonOK.toUpperCase(),
+                  text: localizations.commonOK(),
                   style: theme.textTheme.button.copyWith(
                     color: theme.textTheme.body1.color,
                     fontSize: theme.textTheme.caption.fontSize,

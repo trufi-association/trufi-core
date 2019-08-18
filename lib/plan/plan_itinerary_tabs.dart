@@ -197,16 +197,16 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       child: Row(
         children: <Widget>[
           Text(
-            "${itinerary.time} ${localizations.instructionMinutes} ",
+            "${itinerary.time} ${localizations.instructionMinutes()} ",
             style: theme.textTheme.title,
           ),
           itinerary.distance >= 1000
               ? Text(
-                  "(${(itinerary.distance / 1000).ceil()} ${localizations.instructionUnitKm})",
+                  "(${(itinerary.distance / 1000).ceil()} ${localizations.instructionUnitKm()})",
                   style: theme.textTheme.title.copyWith(color: Colors.grey),
                 )
               : Text(
-                  "(${itinerary.distance} ${localizations.instructionUnitMeter})",
+                  "(${itinerary.distance} ${localizations.instructionUnitMeter()})",
                   style: theme.textTheme.title,
                 ),
         ],
@@ -236,7 +236,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     ),
                   )
                 : Text(
-                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes}",
+                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes()}",
                     style: theme.textTheme.body1,
                   ),
             leg != itinerary.legs.last

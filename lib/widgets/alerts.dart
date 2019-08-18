@@ -7,8 +7,8 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
   final localizations = TrufiLocalizations.of(context);
   return _buildAlert(
     context: context,
-    title: Text(localizations.alertLocationServicesDeniedTitle),
-    content: Text(localizations.alertLocationServicesDeniedMessage),
+    title: Text(localizations.alertLocationServicesDeniedTitle()),
+    content: Text(localizations.alertLocationServicesDeniedMessage()),
     actions: [_buildOKButton(context)],
   );
 }
@@ -17,9 +17,10 @@ Widget buildErrorAlert({
   @required BuildContext context,
   String error,
 }) {
+  final localizations = TrufiLocalizations.of(context);
   return _buildAlert(
     context: context,
-    title: Text(TrufiLocalizations.of(context).commonError),
+    title: Text(localizations.commonError()),
     content: Text(error),
     actions: [_buildOKButton(context)],
   );
@@ -38,7 +39,7 @@ Widget buildTransitErrorAlert({
   );
   return _buildAlert(
     context: context,
-    title: Text(localizations.noRouteError),
+    title: Text(localizations.noRouteError()),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,14 +51,14 @@ Widget buildTransitErrorAlert({
             onReportMissingRoute();
           },
           child: Text(
-            localizations.noRouteErrorActionReportMissingRoute,
+            localizations.noRouteErrorActionReportMissingRoute(),
             style: actionTextStyle,
           ),
         ),
         FlatButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
-            localizations.noRouteErrorActionCancel,
+            localizations.noRouteErrorActionCancel(),
             style: actionTextStyle,
           ),
         ),
@@ -67,7 +68,7 @@ Widget buildTransitErrorAlert({
             onShowCarRoute();
           },
           child: Text(
-            localizations.noRouteErrorActionShowCarRoute,
+            localizations.noRouteErrorActionShowCarRoute(),
             style: actionTextStyle,
           ),
         ),
@@ -102,7 +103,7 @@ Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
       Navigator.pop(context);
     },
     child: Text(
-      online ? localizations.commonGoOnline : localizations.commonGoOffline,
+      online ? localizations.commonGoOnline() : localizations.commonGoOffline(),
     ),
   );
 }
@@ -122,8 +123,9 @@ Widget _buildAlert({
 }
 
 Widget _buildOKButton(BuildContext context) {
+  final localizations = TrufiLocalizations.of(context);
   return FlatButton(
     onPressed: () => Navigator.pop(context),
-    child: Text(TrufiLocalizations.of(context).commonOK),
+    child: Text(localizations.commonOK()),
   );
 }

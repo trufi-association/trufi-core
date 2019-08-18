@@ -232,7 +232,7 @@ class _SuggestionList extends StatelessWidget {
         appBarTheme,
         () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
-        localizations.searchItemYourLocation,
+        localizations.searchItemYourLocation(),
       ),
     );
   }
@@ -245,7 +245,7 @@ class _SuggestionList extends StatelessWidget {
         appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
         Icons.place,
-        localizations.searchItemChooseOnMap,
+        localizations.searchItemChooseOnMap(),
       ),
     );
   }
@@ -254,7 +254,7 @@ class _SuggestionList extends StatelessWidget {
     final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
-      localizations.searchTitleRecent,
+      localizations.searchTitleRecent(),
       historyLocationsBloc.fetchWithLimit(context, 5),
       Icons.history,
     );
@@ -269,7 +269,7 @@ class _SuggestionList extends StatelessWidget {
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
         return _buildObjectList(
-          localizations.searchTitleFavorites,
+          localizations.searchTitleFavorites(),
           Icons.place,
           favoriteLocationsBloc.locations,
         );
@@ -281,7 +281,7 @@ class _SuggestionList extends StatelessWidget {
     final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
-      localizations.searchTitlePlaces,
+      localizations.searchTitlePlaces(),
       locationSearchBloc.fetchPlaces(context),
       Icons.place,
     );
@@ -292,7 +292,7 @@ class _SuggestionList extends StatelessWidget {
     final localizations = TrufiLocalizations.of(context);
     return _buildFutureBuilder(
       context,
-      localizations.searchTitleResults,
+      localizations.searchTitleResults(),
       requestManagerBloc.fetchLocations(context, query, 30),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -317,15 +317,15 @@ class _SuggestionList extends StatelessWidget {
         // Error
         if (snapshot.hasError) {
           print(snapshot.error);
-          String error = localizations.commonUnknownError;
+          String error = localizations.commonUnknownError();
           if (snapshot.error is FetchOfflineRequestException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOfflineResponseException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOnlineRequestException) {
-            error = localizations.commonNoInternet;
+            error = localizations.commonNoInternet();
           } else if (snapshot.error is FetchOnlineResponseException) {
-            error = localizations.commonFailLoading;
+            error = localizations.commonFailLoading();
           }
           return _buildErrorList(context, title, error);
         }
@@ -344,7 +344,7 @@ class _SuggestionList extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _buildTitle(context, title),
-                _buildErrorItem(context, localizations.searchItemNoResults),
+                _buildErrorItem(context, localizations.searchItemNoResults()),
               ],
             ),
           );
@@ -548,10 +548,11 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnYourLocationTapped(BuildContext context) async {
+    final localizations = TrufiLocalizations.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       _handleOnLatLngTapped(
-        description: TrufiLocalizations.of(context).searchMapMarker,
+        description: localizations.searchMapMarker(),
         location: location,
         addToHistory: false,
       );
@@ -578,7 +579,7 @@ class _SuggestionList extends StatelessWidget {
       ),
     );
     _handleOnMapTapped(
-      description: localizations.searchMapMarker,
+      description: localizations.searchMapMarker(),
       location: mapLocation,
     );
   }

@@ -50,7 +50,7 @@ class TeamPageState extends State<TeamPage> {
 
   Widget _buildAppBar(BuildContext context) {
     final localizations = TrufiLocalizations.of(context);
-    return AppBar(title: Text(localizations.menuTeam));
+    return AppBar(title: Text(localizations.menuTeam()));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -70,7 +70,7 @@ class TeamPageState extends State<TeamPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: localizations.teamContent,
+                        text: localizations.teamContent() + " ",
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(
@@ -95,28 +95,28 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionRepresentativesTitle}: $_representatives",
+                  localizations.teamSectionRepresentatives(_representatives),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionTeamTitle}: $_team",
+                  localizations.teamSectionTeam(_team),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionTranslationsTitle}: $_translations",
+                  localizations.teamSectionTranslations(_translations),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionRoutesTitle}: $_routes${localizations.teamSectionRotuesOsmAddition(_osm)}",
+                  localizations.teamSectionRoutes(_routes, _osm),
                   style: theme.textTheme.body2,
                 ),
               ),
