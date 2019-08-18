@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:global_configuration/global_configuration.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import "package:trufi_app/translations/messages_all.dart";
 
 final supportedLanguages = List<Map<String, dynamic>>
   .from(GlobalConfiguration().get("supportedLanguages"));
@@ -21,20 +21,9 @@ class TrufiLocalizations {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
 
-  TrufiLocalizations(this.locale, this.translation);
+  TrufiLocalizations(this.locale);
 
   final Locale locale;
-  final Map<String, String> translation;
-
-  static Future<Map<String, String>> loadTranslation(Locale locale) async {
-    final localeString = locale.languageCode + "_" + locale.countryCode;
-    final assetPath = "assets/translations/$localeString.json";
-    final translationString = await rootBundle.loadString(assetPath);
-    final Map<String, dynamic> result = jsonDecode(translationString);
-    final translation = result.cast<String, String>();
-
-    return translation;
-  }
 
   String title() =>
     Intl.message(
@@ -619,10 +608,11 @@ class TrufiLocalizationsDelegate
       locale = defaultLocale;
     }
 
-    Intl.defaultLocale = defaultLocale.toLanguageTag();
+    final localeString = locale.toLanguageTag();
+    await initializeMessages(localeString);
+    Intl.defaultLocale = localeString;
 
-    var translation = await TrufiLocalizations.loadTranslation(locale);
-    return TrufiLocalizations(locale, translation);
+    return TrufiLocalizations(locale);
   }
 }
 
