@@ -46,7 +46,7 @@ class TrufiLocalizations {
   String tagline() =>
     Intl.message(
       "Public transportation in Cochabamba",
-      name: "tagLine",
+      name: "tagline",
       desc: "A short marketing sentence that describes the app",
     );
 
@@ -441,7 +441,7 @@ class TrufiLocalizations {
   String instructionDurationMinutes(num value) =>
     Intl.message(
       "$value min",
-      name: "instructionMinutes",
+      name: "instructionDurationMinutes",
       args: [value],
       desc: "Itinerary leg duration",
     );
@@ -449,7 +449,7 @@ class TrufiLocalizations {
   String instructionDistanceKm(num value) =>
     Intl.message(
       "$value km",
-      name: "instructionUnitKm",
+      name: "instructionDistanceKm",
       args: [value],
       desc: "Itinerary leg distance (km)",
     );
@@ -457,7 +457,7 @@ class TrufiLocalizations {
   String instructionDistanceMeters(num value) =>
     Intl.message(
       "$value m",
-      name: "instructionUnitMeter",
+      name: "instructionDistanceMeters",
       args: [value],
       desc: "Itinerary leg distance (m)",
     );
@@ -528,7 +528,7 @@ class TrufiLocalizations {
   String aboutLicenses() => 
     Intl.message(
       "Licenses",
-      name: "licenses",
+      name: "aboutLicenses",
       desc: "Button label to show licenses",
     );
 
