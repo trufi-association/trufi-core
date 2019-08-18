@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,15 +27,15 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _loadState() async {
-    rootBundle.loadString('assets/data/team.json').then((teamJson) {
-      final team = jsonDecode(teamJson);
-      setState(() {
-        _representatives = team["representatives"];
-        _team = team["team"];
-        _translations = team["translations"];
-        _routes = team["routes"];
-        _osm = team["osm"];
-      });
+    const joinSep = ", ";
+    final attributions = Map<String, List<dynamic>>
+      .from(GlobalConfiguration().get("attributions"));
+    setState(() {
+      _representatives = attributions["representatives"].join(joinSep);
+      _team = attributions["team"].join(joinSep);
+      _translations = attributions["translations"].join(joinSep);
+      _routes = attributions["routes"].join(joinSep);
+      _osm = attributions["osm"].join(joinSep);
     });
   }
 
