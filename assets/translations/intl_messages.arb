@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-08-18T21:42:18.954759",
+  "@@last_modified": "2019-08-18T21:55:41.548595",
   "title": "Trufi App",
   "@title": {
     "description": "The application's name",
@@ -23,7 +23,9 @@
     "description": "The application's version",
     "type": "text",
     "placeholders": {
-      "version": {}
+      "version": {
+        "example": "1.0"
+      }
     }
   },
   "alertLocationServicesDeniedTitle": "No location",
@@ -301,9 +303,15 @@
     "description": "Itinerary instruction (walking)",
     "type": "text",
     "placeholders": {
-      "duration": {},
-      "distance": {},
-      "location": {}
+      "duration": {
+        "example": "10 min"
+      },
+      "distance": {
+        "example": "500 m"
+      },
+      "location": {
+        "example": "Avenida Heroínas"
+      }
     }
   },
   "instructionRide": "Ride {vehicle} for {duration} ({distance}) to\n{location}",
@@ -311,10 +319,18 @@
     "description": "Itinerary instruction (vehicle)",
     "type": "text",
     "placeholders": {
-      "vehicle": {},
-      "duration": {},
-      "distance": {},
-      "location": {}
+      "vehicle": {
+        "example": "Bus 100"
+      },
+      "duration": {
+        "example": "10 min"
+      },
+      "distance": {
+        "example": "500 m"
+      },
+      "location": {
+        "example": "Avenida Heroínas"
+      }
     }
   },
   "instructionVehicleBus": "Bus",
@@ -358,7 +374,9 @@
     "description": "Itinerary leg duration",
     "type": "text",
     "placeholders": {
-      "value": {}
+      "value": {
+        "example": 10
+      }
     }
   },
   "instructionDistanceKm": "{value} km",
@@ -366,7 +384,9 @@
     "description": "Itinerary leg distance (km)",
     "type": "text",
     "placeholders": {
-      "value": {}
+      "value": {
+        "example": 10
+      }
     }
   },
   "instructionDistanceMeters": "{value} m",
@@ -374,7 +394,9 @@
     "description": "Itinerary leg distance (m)",
     "type": "text",
     "placeholders": {
-      "value": {}
+      "value": {
+        "example": 100
+      }
     }
   },
   "menuConnections": "Show routes",
@@ -448,7 +470,9 @@
     "description": "List of representatives",
     "type": "text",
     "placeholders": {
-      "representatives": {}
+      "representatives": {
+        "example": "Mario, Luigi"
+      }
     }
   },
   "teamSectionTeam": "Team: {teamMembers}",
@@ -456,7 +480,9 @@
     "description": "List of team members",
     "type": "text",
     "placeholders": {
-      "teamMembers": {}
+      "teamMembers": {
+        "example": "Peach, Toad, Daisy, Yoshi"
+      }
     }
   },
   "teamSectionTranslations": "Translations: {translators}",
@@ -464,7 +490,9 @@
     "description": "List of translators",
     "type": "text",
     "placeholders": {
-      "translators": {}
+      "translators": {
+        "example": "Bowser, Koopa, Gumba, Lakitu"
+      }
     }
   },
   "teamSectionRoutes": "Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\nContact us if you want to join the OpenStreetMap community!",
@@ -472,8 +500,12 @@
     "description": "List of route contributors",
     "type": "text",
     "placeholders": {
-      "routeContributors": {},
-      "osmContributors": {}
+      "routeContributors": {
+        "example": "Wario, Waluigi, Rosalina"
+      },
+      "osmContributors": {
+        "example": "Kamek, Birdo, Toadette, Bowser Jr."
+      }
     }
   }
 }

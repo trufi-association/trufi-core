@@ -63,6 +63,7 @@ class TrufiLocalizations {
       name: "version",
       args: [version],
       desc: "The application's version",
+      examples: const { "version": "1.0" },
     );
 
   String alertLocationServicesDeniedTitle() =>
@@ -386,6 +387,7 @@ class TrufiLocalizations {
       name: "instructionWalk",
       args: [duration, distance, location],
       desc: "Itinerary instruction (walking)",
+      examples: const { "duration": "10 min", "distance": "500 m", "location": "Avenida Heroínas" },
     );
 
   String instructionRide(String vehicle, String duration, String distance, String location) =>
@@ -394,6 +396,7 @@ class TrufiLocalizations {
       name: "instructionRide",
       args: [vehicle, duration, distance, location],
       desc: "Itinerary instruction (vehicle)",
+      examples: const { "vehicle": "Bus 100", "duration": "10 min", "distance": "500 m", "location": "Avenida Heroínas" },
     );
 
   String instructionVehicleBus() =>
@@ -444,6 +447,7 @@ class TrufiLocalizations {
       name: "instructionDurationMinutes",
       args: [value],
       desc: "Itinerary leg duration",
+      examples: const { "value": 10 },
     );
 
   String instructionDistanceKm(num value) =>
@@ -452,6 +456,7 @@ class TrufiLocalizations {
       name: "instructionDistanceKm",
       args: [value],
       desc: "Itinerary leg distance (km)",
+      examples: const { "value": 10 },
     );
 
   String instructionDistanceMeters(num value) =>
@@ -460,6 +465,7 @@ class TrufiLocalizations {
       name: "instructionDistanceMeters",
       args: [value],
       desc: "Itinerary leg distance (m)",
+      examples: const { "value": 100 },
     );
 
   String menuConnections() =>
@@ -545,6 +551,7 @@ class TrufiLocalizations {
       name: "teamSectionRepresentatives",
       args: [representatives],
       desc: "List of representatives",
+      examples: const { "representatives": "Mario, Luigi" },
     );
 
   String teamSectionTeam(String teamMembers) =>
@@ -553,6 +560,7 @@ class TrufiLocalizations {
       name: "teamSectionTeam",
       args: [teamMembers],
       desc: "List of team members",
+      examples: const { "teamMembers": "Peach, Toad, Daisy, Yoshi" },
     );
 
   String teamSectionTranslations(String translators) =>
@@ -561,6 +569,7 @@ class TrufiLocalizations {
       name: "teamSectionTranslations",
       args: [translators],
       desc: "List of translators",
+      examples: const { "translators": "Bowser, Koopa, Gumba, Lakitu" },
     );
 
   String teamSectionRoutes(String routeContributors, String osmContributors) =>
@@ -569,6 +578,10 @@ class TrufiLocalizations {
       name: "teamSectionRoutes",
       args: [routeContributors, osmContributors],
       desc: "List of route contributors",
+      examples: const {
+        "routeContributors": "Wario, Waluigi, Rosalina",
+        "osmContributors": "Kamek, Birdo, Toadette, Bowser Jr.",
+      },
     );
 }
 
