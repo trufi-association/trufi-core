@@ -393,32 +393,26 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstructionQuechua(TrufiLocalizations localizations) {
-    StringBuffer sb = StringBuffer();
-    if (mode == 'WALK') {
-      sb.write(
-        "${localizations.instructionWalkStart()} ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo()}\n${_toString(localizations)} ${localizations.instructionWalk()}",
-      );
-    } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
-      sb.write(
-        "${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionRide()} ${_durationString(localizations)} (${_distanceString(localizations)})\n${_toString(localizations)} ${localizations.instructionFor()}",
-      );
-    }
-    return sb.toString();
-  }
-
   String toInstruction(TrufiLocalizations localizations) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
-      sb.write("${localizations.instructionWalk()}");
-    } else if (mode == 'BUS' || mode == 'CAR' || mode == 'GONDOLA') {
       sb.write(
-        "${localizations.instructionRide()} ${_carTypeString(localizations)}${route.isNotEmpty ? " $route" : ""} ${localizations.instructionFor()}",
+        localizations.instructionWalk(
+          _durationString(localizations),
+          _distanceString(localizations),
+          _toString(localizations)
+        )
+      );
+    } else {
+      sb.write(
+        localizations.instructionRide(
+          _carTypeString(localizations) + (route.isNotEmpty ? " $route" : ""),
+          _durationString(localizations),
+          _distanceString(localizations),
+          _toString(localizations)
+        )
       );
     }
-    sb.write(
-      " ${_durationString(localizations)} (${_distanceString(localizations)}) ${localizations.instructionTo()}\n${_toString(localizations)}",
-    );
     return sb.toString();
   }
 
@@ -437,26 +431,27 @@ class PlanItineraryLeg {
   String _carTypeString(TrufiLocalizations localizations) {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
-        ? localizations.instructionRideCar()
+        ? localizations.instructionVehicleCar()
         : carType.contains('trufi')
-            ? localizations.instructionRideTrufi()
+            ? localizations.instructionVehicleTrufi()
             : carType.contains('micro')
-                ? localizations.instructionRideMicro()
+                ? localizations.instructionVehicleMicro()
                 : carType.contains('minibus')
-                    ? localizations.instructionRideMinibus()
+                    ? localizations.instructionVehicleMinibus()
                     : carType.contains('gondola')
-                        ? localizations.instructionRideGondola()
-                        : localizations.instructionRideBus();
+                        ? localizations.instructionVehicleGondola()
+                        : localizations.instructionVehicleBus();
   }
 
   String _distanceString(TrufiLocalizations localizations) {
     return distance >= 1000
-        ? "${(distance.ceil() ~/ 1000)} ${localizations.instructionUnitKm()}"
-        : "${distance.ceil()} ${localizations.instructionUnitMeter()}";
+        ? localizations.instructionDistanceKm(distance.ceil() ~/ 1000)
+        : localizations.instructionDistanceMeters(distance.ceil());
   }
 
   String _durationString(TrufiLocalizations localizations) {
-    return "${(duration.ceil() / 60).ceil()} ${localizations.instructionMinutes()}";
+    final value = (duration.ceil() / 60).ceil();
+    return localizations.instructionDurationMinutes(value);
   }
 
   String _toString(TrufiLocalizations localizations) {

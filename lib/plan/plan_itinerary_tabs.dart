@@ -145,9 +145,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                   padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                   child: RichText(
                     text: TextSpan(
-                      text: localizations.locale.languageCode == "qu"
-                          ? leg.toInstructionQuechua(localizations)
-                          : leg.toInstruction(localizations),
+                      text: leg.toInstruction(localizations),
                     ),
                   ),
                 ),
@@ -197,16 +195,16 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       child: Row(
         children: <Widget>[
           Text(
-            "${itinerary.time} ${localizations.instructionMinutes()} ",
+            localizations.instructionDurationMinutes(itinerary.time) + " ",
             style: theme.textTheme.title,
           ),
           itinerary.distance >= 1000
               ? Text(
-                  "(${(itinerary.distance / 1000).ceil()} ${localizations.instructionUnitKm()})",
+                  "(" + localizations.instructionDistanceKm((itinerary.distance / 1000).ceil()) + ")",
                   style: theme.textTheme.title.copyWith(color: Colors.grey),
                 )
               : Text(
-                  "(${itinerary.distance} ${localizations.instructionUnitMeter()})",
+                  "(" + localizations.instructionDistanceMeters(itinerary.distance) + ")",
                   style: theme.textTheme.title,
                 ),
         ],
@@ -236,7 +234,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     ),
                   )
                 : Text(
-                    "${(leg.duration.ceil() / 60).ceil().toString()} ${localizations.instructionMinutes()}",
+                    localizations.instructionDurationMinutes((leg.duration.ceil() / 60).ceil()),
                     style: theme.textTheme.body1,
                   ),
             leg != itinerary.legs.last

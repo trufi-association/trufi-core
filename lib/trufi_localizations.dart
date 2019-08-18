@@ -380,88 +380,86 @@ class TrufiLocalizations {
       desc: "Page subtitle when choosing a location on the map",
     );
 
-  String instructionWalkStart() =>
+  String instructionWalk(String duration, String distance, String location) =>
     Intl.message(
-      "Walk",
-      name: "instructionWalkStart",
-    );
-
-  String instructionWalk() =>
-    Intl.message(
-      "Walk",
+      "Walk $duration ($distance) to\n$location",
       name: "instructionWalk",
+      args: [duration, distance, location],
+      desc: "Itinerary instruction (walking)",
     );
 
-  String instructionRide() =>
+  String instructionRide(String vehicle, String duration, String distance, String location) =>
     Intl.message(
-      "Ride",
+      "Ride $vehicle for $duration ($distance) to\n$location",
       name: "instructionRide",
+      args: [vehicle, duration, distance, location],
+      desc: "Itinerary instruction (vehicle)",
     );
 
-  String instructionRideBus() =>
+  String instructionVehicleBus() =>
     Intl.message(
       "Bus",
-      name: "instructionRideBus",
+      name: "instructionVehicleBus",
+      desc: "Vehicle name (Bus)",
     );
 
-  String instructionMinutes() =>
-    Intl.message(
-      "min",
-      name: "instructionMinutes",
-    );
-
-  String instructionRideMicro() =>
+  String instructionVehicleMicro() =>
     Intl.message(
       "Micro",
-      name: "instructionRideMicro",
+      name: "instructionVehicleMicro",
+      desc: "Vehicle name (Micro)",
     );
 
-  String instructionRideMinibus() =>
+  String instructionVehicleMinibus() =>
     Intl.message(
       "Minibus",
-      name: "instructionRideMinibus",
+      name: "instructionVehicleMinibus",
+      desc: "Vehicle name (Minibus)",
     );
 
-  String instructionRideTrufi() =>
+  String instructionVehicleTrufi() =>
     Intl.message(
       "Trufi",
-      name: "instructionRideTrufi",
+      name: "instructionVehicleTrufi",
+      desc: "Vehicle name (Trufi)",
     );
 
-  String instructionRideCar() =>
+  String instructionVehicleCar() =>
     Intl.message(
       "Car",
-      name: "instructionRideCar",
+      name: "instructionVehicleCar",
+      desc: "Vehicle name (Car)",
     );
 
-  String instructionRideGondola() =>
+  String instructionVehicleGondola() =>
     Intl.message(
       "Gondola",
-      name: "instructionRideGondola",
+      name: "instructionVehicleGondola",
+      desc: "Vehicle name (Gondola)",
     );
 
-  String instructionTo() =>
+  String instructionDurationMinutes(num value) =>
     Intl.message(
-      "to",
-      name: "instructionTo",
+      "$value min",
+      name: "instructionMinutes",
+      args: [value],
+      desc: "Itinerary leg duration",
     );
 
-  String instructionFor() =>
+  String instructionDistanceKm(num value) =>
     Intl.message(
-      "for",
-      name: "instructionFor",
-    );
-
-  String instructionUnitKm() =>
-    Intl.message(
-      "km",
+      "$value km",
       name: "instructionUnitKm",
+      args: [value],
+      desc: "Itinerary leg distance (km)",
     );
 
-  String instructionUnitMeter() =>
+  String instructionDistanceMeters(num value) =>
     Intl.message(
-      "m",
+      "$value m",
       name: "instructionUnitMeter",
+      args: [value],
+      desc: "Itinerary leg distance (m)",
     );
 
   String menuConnections() =>
