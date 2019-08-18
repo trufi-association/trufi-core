@@ -1,21 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:sprintf/sprintf.dart';
 
-const List<Locale> supportedLocales = <Locale>[
-  Locale('en', 'US'), // English
-  Locale('de', 'DE'), // German
-  Locale('qu', 'BO'), // Quechua
-  Locale('es', 'ES'), // Spanish
-  Locale('fr', 'FR'), // French
-  Locale('it', 'IT'), // Italian
-];
-
-const Locale defaultLocale = Locale('es', 'ES');
+final supportedLanguages = List<Map<String, dynamic>>
+  .from(GlobalConfiguration().get("supportedLanguages"));
+final defaultLang = supportedLanguages
+  .firstWhere((lang) => lang["default"]);
+final supportedLocales = supportedLanguages
+  .map((lang) => Locale(lang["languageCode"], lang["countryCode"]))
+  .toList();
+final defaultLocale = Locale(defaultLang["languageCode"], defaultLang["countryCode"]);
 
 class TrufiLocalizations {
   static TrufiLocalizations of(BuildContext context) {

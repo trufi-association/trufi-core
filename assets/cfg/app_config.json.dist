@@ -14,5 +14,13 @@
         "Avenida": "Av.",
         "Calle": "C.",
         "Camino": "C.º"
-    }
+    },
+    "supportedLanguages": [
+        { "languageCode": "de", "countryCode": "DE", "languageString": "Deutsch" },
+        { "languageCode": "en", "countryCode": "US", "languageString": "English" },
+        { "languageCode": "es", "countryCode": "ES", "languageString": "Español", "default": true },
+        { "languageCode": "fr", "countryCode": "FR", "languageString": "Français" },
+        { "languageCode": "it", "countryCode": "IT", "languageString": "Italiano" },
+        { "languageCode": "qu", "countryCode": "BO", "languageString": "Quechua simi" }
+    ]
 }

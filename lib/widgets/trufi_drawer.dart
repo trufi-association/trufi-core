@@ -110,18 +110,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
+    final values = supportedLanguages
+      .map((lang) => LanguageDropdownValue(lang["languageCode"], lang["languageString"]))
+      .toList();
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     final languageCode = localizations.locale.languageCode;
-    final values = <LanguageDropdownValue>[
-      LanguageDropdownValue("de", "Deutsch"),
-      LanguageDropdownValue("en", "English"),
-      LanguageDropdownValue("es", "Español"),
-      LanguageDropdownValue("fr", "Français"),
-      LanguageDropdownValue("it", "Italiano"),
-      LanguageDropdownValue("qu", "Quechua simi"),
-    ];
     return ListTile(
       leading: Icon(Icons.language),
       title: DropdownButton<LanguageDropdownValue>(
