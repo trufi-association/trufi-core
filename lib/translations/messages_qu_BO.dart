@@ -42,7 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(value) => "${value} min";
 
-  static m3(vehicle, duration, distance, location) => "${vehicle} Jap’iy ${duration} (${distance})\n${location} kama";
+  static m3(vehicle, duration, distance, location) => "Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama";
 
   static m4(duration, distance, location) => "Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy";
 

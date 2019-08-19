@@ -313,7 +313,7 @@
       }
     }
   },
-  "instructionRide": "{vehicle} Jap’iy {duration} ({distance})\n{location} kama",
+  "instructionRide": "Jap’iy {vehicle} {duration} ({distance})\n{location} kama",
   "@instructionRide": {
     "description": "Itinerary instruction (vehicle)",
     "type": "text",
