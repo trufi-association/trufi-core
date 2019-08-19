@@ -1,0 +1,510 @@
+{
+  "title": "Trufi App",
+  "@title": {
+    "description": "The application's name",
+    "type": "text",
+    "placeholders": {}
+  },
+  "tagline": "Transporte público en Cochabamba",
+  "@tagline": {
+    "description": "A short marketing sentence that describes the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "description": "Trufis, microspi, buspi ima qhuchapampapi aswan sumaq ch’usanapaq.",
+  "@description": {
+    "description": "A sentence that describes the application's purpose",
+    "type": "text",
+    "placeholders": {}
+  },
+  "version": "Versión {version}",
+  "@version": {
+    "description": "The application's version",
+    "type": "text",
+    "placeholders": {
+      "version": {
+        "example": "1.0"
+      }
+    }
+  },
+  "alertLocationServicesDeniedTitle": "Kay kiti mana tarikunchu",
+  "@alertLocationServicesDeniedTitle": {
+    "description": "Title of dialog that explains that access to location services was denied",
+    "type": "text",
+    "placeholders": {}
+  },
+  "alertLocationServicesDeniedMessage": "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
+  "@alertLocationServicesDeniedMessage": {
+    "description": "Text of dialog that explains that access to location services was denied",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonOK": "Ari",
+  "@commonOK": {
+    "description": "OK button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonCancel": "Mana",
+  "@commonCancel": {
+    "description": "Cancel button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonGoOffline": "Offline",
+  "@commonGoOffline": {
+    "description": "Go offline button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonGoOnline": "Online",
+  "@commonGoOnline": {
+    "description": "Go online button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonDestination": "Mayman",
+  "@commonDestination": {
+    "description": "Destination field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonOrigin": "Maymanta",
+  "@commonOrigin": {
+    "description": "Origin field label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonNoInternet": "Mana internet kanchu",
+  "@commonNoInternet": {
+    "description": "Message when internet connection is lost",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonFailLoading": "Mana aticunchu tariyta datusta",
+  "@commonFailLoading": {
+    "description": "Message when data could not be loaded",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonUnknownError": "Mana yachacunchu ima pantay kasqanta chay",
+  "@commonUnknownError": {
+    "description": "Message when an unknown error has occured",
+    "type": "text",
+    "placeholders": {}
+  },
+  "commonError": "Pantay",
+  "@commonError": {
+    "description": "Message when an error has occured",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noRouteError": "Qhispichiwasqayku. Mana achhaykama ñanta tariyta atikunchu. Imata ruwayta munanki?",
+  "@noRouteError": {
+    "description": "Message when no route could be found after a route search",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noRouteErrorActionCancel": "Waq kitiwan watiqmanta mask'ay",
+  "@noRouteErrorActionCancel": {
+    "description": "Button label to try another destination when no route could be found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noRouteErrorActionReportMissingRoute": "Mana rikhurimuq ñanta riqsichiy",
+  "@noRouteErrorActionReportMissingRoute": {
+    "description": "Button label to report a missing route when no route could be found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "noRouteErrorActionShowCarRoute": "Autopaq kay ñanta rikhuchiy",
+  "@noRouteErrorActionShowCarRoute": {
+    "description": "Button label to show the car route when no route could be found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorServerUnavailable": "Qhispichiwasqayku. Kunan pacha, ñan mask’aqqa mana llamk’achkanku. Watiqmanta mask’ay juk ratumanta.",
+  "@errorServerUnavailable": {
+    "description": "Message that is displayed when the trip planning server was not available",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorOutOfBoundary": "Kay ch’usana kitiqa mana ruwakuyta atinchu. Manachu kay llaqtapi mana kasqanta kitita machkhanki?",
+  "@errorOutOfBoundary": {
+    "description": "Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorPathNotFound": "Kay ch’usana kitiqa mana ruwakuyta atikunchu mana ñan tarikusqanrayku, akllay qallariy chanta chayana kititaqa allin riqsisqa ñankunapi.",
+  "@errorPathNotFound": {
+    "description": "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorNoTransitTimes": "Mana llamk’aq phani kanchu. Ichas mana kay p’unchawpi ruwakuyta atikunmanchu, manaqa mana ñan kanmanchu ch’usanaykipaq.",
+  "@errorNoTransitTimes": {
+    "description": "Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorServerTimeout": "Kiti mask’aqqa anchata unaykachkan. Watiqmanta juk ratumanta mask’ay.",
+  "@errorServerTimeout": {
+    "description": "Message that is displayed when a trip could not be planned, because the server is taking too long to respond",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorTrivialDistance": "Qallariy chanta chayana kitkunaqa ancha qaylla kachkanku.",
+  "@errorTrivialDistance": {
+    "description": "Message that is displayed when a trip could not be planned, because origin and destination are too close to each other",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorServerCanNotHandleRequest": "Mañasqayki kitiqa mana tariyta atikunchu.",
+  "@errorServerCanNotHandleRequest": {
+    "description": "Message that is displayed when a trip could not be planned, because the request had errors",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUnknownOrigin": "Qallariy kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.",
+  "@errorUnknownOrigin": {
+    "description": "Message that is displayed when a trip could not be planned, because the origin was not found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUnknownDestination": "Chayana kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.",
+  "@errorUnknownDestination": {
+    "description": "Message that is displayed when a trip could not be planned, because the destination was not found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUnknownOriginDestination": "Qallariy chanta chayana kitikunaqa mana riqsisqachu kanku. Kitiykita aswan sut’ita riqsichiy.",
+  "@errorUnknownOriginDestination": {
+    "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorNoBarrierFree": "Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.",
+  "@errorNoBarrierFree": {
+    "description": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorAmbiguousOrigin": "Ñan wakichiqqa qallariy kitiykiqa mana riqsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.",
+  "@errorAmbiguousOrigin": {
+    "description": "Message that is displayed when a trip could not be planned, because the specified origin is ambiguous",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorAmbiguousDestination": "Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.",
+  "@errorAmbiguousDestination": {
+    "description": "Message that is displayed when a trip could not be planned, because the specified destination is ambiguous",
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorAmbiguousOriginDestination": "Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.",
+  "@errorAmbiguousOriginDestination": {
+    "description": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchHintOrigin": "Qallariy kitita akllay",
+  "@searchHintOrigin": {
+    "description": "Placeholder text for the origin field (in search state)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchHintDestination": "Chayana kitita akllay",
+  "@searchHintDestination": {
+    "description": "Placeholder text for the destination field (in search state)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchItemChooseOnMap": "Mapa ñisqapi akllay",
+  "@searchItemChooseOnMap": {
+    "description": "Search option that allows to choose a point on the map",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchItemYourLocation": "Kaypi kachkankii",
+  "@searchItemYourLocation": {
+    "description": "Search option that allows to use the current user location",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchItemNoResults": "Mana tarikunchu",
+  "@searchItemNoResults": {
+    "description": "Message that is displayed when no results were found for the search term that was provided",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchTitlePlaces": "Kitikuna",
+  "@searchTitlePlaces": {
+    "description": "Search section title for common places",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchTitleRecent": "Musuq mask'anakuna",
+  "@searchTitleRecent": {
+    "description": "Search section title for recent location",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchTitleFavorites": "Aswan mask'akuqkuna",
+  "@searchTitleFavorites": {
+    "description": "Search section title for locations marked as favorites",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchTitleResults": "Mask'anakuna riqsichiq",
+  "@searchTitleResults": {
+    "description": "Search section title for results found for the provided search term",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchPleaseSelectOrigin": "Qallariy kitita akllay",
+  "@searchPleaseSelectOrigin": {
+    "description": "Placeholder text for the origin field (in map-visible state)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchPleaseSelectDestination": "Chayana kitita akllay",
+  "@searchPleaseSelectDestination": {
+    "description": "Placeholder text for the destination field (in map-visible state)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchFailLoadingPlan": "Mana tarikunchu mayninta rinata",
+  "@searchFailLoadingPlan": {
+    "description": "Message that is displayed when the response of the trip planning request could not be received",
+    "type": "text",
+    "placeholders": {}
+  },
+  "searchMapMarker": "Maypi cashani mapapy",
+  "@searchMapMarker": {
+    "description": "Location name displayed in search fields that represents a location choosen on the map",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseLocationPageTitle": "Mapapi juk kitita riqsichiy",
+  "@chooseLocationPageTitle": {
+    "description": "Page title when choosing a location on the map",
+    "type": "text",
+    "placeholders": {}
+  },
+  "chooseLocationPageSubtitle": "Ñit'iy mapapi",
+  "@chooseLocationPageSubtitle": {
+    "description": "Page subtitle when choosing a location on the map",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionWalk": "Kaymanta puriy {duration} ({distance}) achaykama\n{location} Puriy",
+  "@instructionWalk": {
+    "description": "Itinerary instruction (walking)",
+    "type": "text",
+    "placeholders": {
+      "duration": {
+        "example": "10 min"
+      },
+      "distance": {
+        "example": "500 m"
+      },
+      "location": {
+        "example": "Avenida Heroínas"
+      }
+    }
+  },
+  "instructionRide": "{vehicle} Jap’iy {duration} ({distance})\n{location} kama",
+  "@instructionRide": {
+    "description": "Itinerary instruction (vehicle)",
+    "type": "text",
+    "placeholders": {
+      "vehicle": {
+        "example": "Bus 100"
+      },
+      "duration": {
+        "example": "10 min"
+      },
+      "distance": {
+        "example": "500 m"
+      },
+      "location": {
+        "example": "Avenida Heroínas"
+      }
+    }
+  },
+  "instructionVehicleBus": "Bus",
+  "@instructionVehicleBus": {
+    "description": "Vehicle name (Bus)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionVehicleMicro": "Micro",
+  "@instructionVehicleMicro": {
+    "description": "Vehicle name (Micro)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionVehicleMinibus": "Minibus",
+  "@instructionVehicleMinibus": {
+    "description": "Vehicle name (Minibus)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionVehicleTrufi": "Trufi",
+  "@instructionVehicleTrufi": {
+    "description": "Vehicle name (Trufi)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionVehicleCar": "Coche",
+  "@instructionVehicleCar": {
+    "description": "Vehicle name (Car)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionVehicleGondola": "Góndola",
+  "@instructionVehicleGondola": {
+    "description": "Vehicle name (Gondola)",
+    "type": "text",
+    "placeholders": {}
+  },
+  "instructionDurationMinutes": "{value} min",
+  "@instructionDurationMinutes": {
+    "description": "Itinerary leg duration",
+    "type": "text",
+    "placeholders": {
+      "value": {
+        "example": "10"
+      }
+    }
+  },
+  "instructionDistanceKm": "{value} km",
+  "@instructionDistanceKm": {
+    "description": "Itinerary leg distance (km)",
+    "type": "text",
+    "placeholders": {
+      "value": {
+        "example": "10"
+      }
+    }
+  },
+  "instructionDistanceMeters": "{value} m",
+  "@instructionDistanceMeters": {
+    "description": "Itinerary leg distance (m)",
+    "type": "text",
+    "placeholders": {
+      "value": {
+        "example": "100"
+      }
+    }
+  },
+  "menuConnections": "Ñankunata rikhuchiy",
+  "@menuConnections": {
+    "description": "Menu item that shows the map/planned trip",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuAbout": "Imamanta yachayta munanki?",
+  "@menuAbout": {
+    "description": "Menu item that shows the about page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuTeam": "Ñuqaykumanta",
+  "@menuTeam": {
+    "description": "Menu item that shows the team page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuFeedback": "Yuyasqayniykita riqsichiwayku",
+  "@menuFeedback": {
+    "description": "Menu item that shows the feedback page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuOnline": "Online",
+  "@menuOnline": {
+    "description": "Menu item that shows the state of online/offline routing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "menuAppReview": "Trufi Appta chaninchay",
+  "@menuAppReview": {
+    "description": "Menu item that triggers a native widget to rate the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedbackContent": "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
+  "@feedbackContent": {
+    "description": "Text displayed on the feedback page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedbackTitle": "Correo electrónico ñiqta yuyasqasniykita apachimuwayku!",
+  "@feedbackTitle": {
+    "description": "Title displayed on the feedback page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
+  "@aboutContent": {
+    "description": "Text displayed on the about page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "aboutLicenses": "Licencias",
+  "@aboutLicenses": {
+    "description": "Button label to show licenses",
+    "type": "text",
+    "placeholders": {}
+  },
+  "teamContent": "Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:",
+  "@teamContent": {
+    "description": "Text displayed on the team page, followed by a email link",
+    "type": "text",
+    "placeholders": {}
+  },
+  "teamSectionRepresentatives": "Umalliqkuna: {representatives}",
+  "@teamSectionRepresentatives": {
+    "description": "List of representatives",
+    "type": "text",
+    "placeholders": {
+      "representatives": {
+        "example": "Mario, Luigi"
+      }
+    }
+  },
+  "teamSectionTeam": "Yanapaqkuna: {teamMembers}",
+  "@teamSectionTeam": {
+    "description": "List of team members",
+    "type": "text",
+    "placeholders": {
+      "teamMembers": {
+        "example": "Peach, Toad, Daisy, Yoshi"
+      }
+    }
+  },
+  "teamSectionTranslations": "Tiqraqkuna: {translators}",
+  "@teamSectionTranslations": {
+    "description": "List of translators",
+    "type": "text",
+    "placeholders": {
+      "translators": {
+        "example": "Bowser, Koopa, Gumba, Lakitu"
+      }
+    }
+  },
+  "teamSectionRoutes": "Rutas yanapaqkuna: {routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, {osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!",
+  "@teamSectionRoutes": {
+    "description": "List of route contributors",
+    "type": "text",
+    "placeholders": {
+      "routeContributors": {
+        "example": "Wario, Waluigi, Rosalina"
+      },
+      "osmContributors": {
+        "example": "Kamek, Birdo, Toadette, Bowser Jr."
+      }
+    }
+  }
+}
