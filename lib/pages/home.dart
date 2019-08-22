@@ -163,8 +163,8 @@ class HomePageState extends State<HomePage>
                 child: _buildFormField(
                   _fromFieldKey,
                   ValueKey(keys.homePageFromPlaceField),
-                  localizations.searchPleaseSelectOrigin,
-                  localizations.searchHintOrigin,
+                  localizations.searchPleaseSelectOrigin(),
+                  localizations.searchHintOrigin(),
                   SvgPicture.asset(
                     "assets/images/from_marker.svg",
                   ),
@@ -180,8 +180,8 @@ class HomePageState extends State<HomePage>
                 child: _buildFormField(
                   _toFieldKey,
                   ValueKey(keys.homePageToPlaceField),
-                  localizations.searchPleaseSelectDestination,
-                  localizations.searchHintDestination,
+                  localizations.searchPleaseSelectDestination(),
+                  localizations.searchHintDestination(),
                   SvgPicture.asset(
                     "assets/images/to_marker.svg",
                   ),
