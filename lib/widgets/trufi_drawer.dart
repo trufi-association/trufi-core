@@ -40,13 +40,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text(
-                        localizations.title,
+                        localizations.title(),
                         style: theme.textTheme.title,
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
                         child: Text(
-                          localizations.tagLine,
+                          localizations.tagline(),
                           style: theme.textTheme.subhead,
                         ),
                       ),
@@ -56,22 +56,22 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 ),
                 _buildListItem(
                   Icons.linear_scale,
-                  localizations.menuConnections,
+                  localizations.menuConnections(),
                   HomePage.route,
                 ),
                 _buildListItem(
                   Icons.info,
-                  localizations.menuAbout,
+                  localizations.menuAbout(),
                   AboutPage.route,
                 ),
                 _buildListItem(
                   Icons.create,
-                  localizations.menuFeedback,
+                  localizations.menuFeedback(),
                   FeedbackPage.route,
                 ),
                 _buildListItem(
                   Icons.people,
-                  localizations.menuTeam,
+                  localizations.menuTeam(),
                   TeamPage.route,
                 ),
                 Divider(),
@@ -110,18 +110,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
+    final values = supportedLanguages
+      .map((lang) => LanguageDropdownValue(lang["languageCode"], lang["languageString"]))
+      .toList();
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     final languageCode = localizations.locale.languageCode;
-    final values = <LanguageDropdownValue>[
-      LanguageDropdownValue("de", "Deutsch"),
-      LanguageDropdownValue("en", "English"),
-      LanguageDropdownValue("es", "Español"),
-      LanguageDropdownValue("fr", "Français"),
-      LanguageDropdownValue("it", "Italiano"),
-      LanguageDropdownValue("qu", "Quechua simi"),
-    ];
     return ListTile(
       leading: Icon(Icons.language),
       title: DropdownButton<LanguageDropdownValue>(
@@ -152,7 +147,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         bool isOnline = snapshot.data == true;
         return SwitchListTile(
-          title: Text(localizations.menuOnline),
+          title: Text(localizations.menuOnline()),
           value: isOnline,
           onChanged: preferencesBloc.inChangeOnline.add,
           activeColor: theme.primaryColor,
@@ -168,7 +163,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       child: ListTile(
         leading: Icon(Icons.star, color: Colors.grey),
         title: Text(
-          localizations.menuAppReview,
+          localizations.menuAppReview(),
           style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
         onTap: () {

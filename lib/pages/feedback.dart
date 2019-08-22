@@ -38,7 +38,8 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    return AppBar(title: Text(TrufiLocalizations.of(context).menuFeedback));
+    final localizations = TrufiLocalizations.of(context);
+    return AppBar(title: Text(localizations.menuFeedback()));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -53,7 +54,7 @@ class FeedBackPageState extends State<FeedbackPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localizations.feedbackTitle,
+                  localizations.feedbackTitle(),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -62,7 +63,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.feedbackContent,
+                  localizations.feedbackContent(),
                   style: theme.textTheme.body2,
                 ),
               ),

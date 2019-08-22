@@ -14,5 +14,20 @@
         "Avenida": "Av.",
         "Calle": "C.",
         "Camino": "C.º"
+    },
+    "supportedLanguages": [
+        { "languageCode": "de", "countryCode": "DE", "languageString": "Deutsch" },
+        { "languageCode": "en", "countryCode": "US", "languageString": "English" },
+        { "languageCode": "es", "countryCode": "ES", "languageString": "Español", "default": true },
+        { "languageCode": "fr", "countryCode": "FR", "languageString": "Français" },
+        { "languageCode": "it", "countryCode": "IT", "languageString": "Italiano" },
+        { "languageCode": "qu", "countryCode": "BO", "languageString": "Quechua simi" }
+    ],
+    "attributions": {
+        "representatives": ["Christoph Hanser", "Samuel Rioja"],
+        "team": ["Andreas Helms", "Annika Bock", "Christian Brückner", "Javier Rocha", "Luz Choque", "Malte Dölker", "Martin Kleppe", "Michael Brückner", "Natalya Blanco", "Neyda Mili", "Raimund Wege"],
+        "translations": ["Gladys Aguilar", "Jeremy Maes", "Gaia Vitali Roscini"],
+        "routes": ["Trufi team", "Guia Cochala team"],
+        "osm": ["Marco Antonio", "Noémie", "Philipp", "Felix D"]
     }
 }

@@ -124,33 +124,33 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocalizations localizations,
   ) {
     if (error.id == 500 || error.id == 503) {
-      return localizations.errorServerUnavailable;
+      return localizations.errorServerUnavailable();
     } else if (error.id == 400) {
-      return localizations.errorOutOfBoundary;
+      return localizations.errorOutOfBoundary();
     } else if (error.id == 404) {
-      return localizations.errorPathNotFound;
+      return localizations.errorPathNotFound();
     } else if (error.id == 406) {
-      return localizations.errorNoTransitTimes;
+      return localizations.errorNoTransitTimes();
     } else if (error.id == 408) {
-      return localizations.errorServerTimeout;
+      return localizations.errorServerTimeout();
     } else if (error.id == 409) {
-      return localizations.errorTrivialDistance;
+      return localizations.errorTrivialDistance();
     } else if (error.id == 413) {
-      return localizations.errorServerCanNotHandleRequest;
+      return localizations.errorServerCanNotHandleRequest();
     } else if (error.id == 440) {
-      return localizations.errorUnknownOrigin;
+      return localizations.errorUnknownOrigin();
     } else if (error.id == 450) {
-      return localizations.errorUnknownDestination;
+      return localizations.errorUnknownDestination();
     } else if (error.id == 460) {
-      return localizations.errorUnknownOriginDestination;
+      return localizations.errorUnknownOriginDestination();
     } else if (error.id == 470) {
-      return localizations.errorNoBarrierFree;
+      return localizations.errorNoBarrierFree();
     } else if (error.id == 340) {
-      return localizations.errorAmbiguousOrigin;
+      return localizations.errorAmbiguousOrigin();
     } else if (error.id == 350) {
-      return localizations.errorAmbiguousDestination;
+      return localizations.errorAmbiguousDestination();
     } else if (error.id == 360) {
-      return localizations.errorAmbiguousOriginDestination;
+      return localizations.errorAmbiguousOriginDestination();
     }
     return error.message;
   }

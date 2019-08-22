@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,15 +27,15 @@ class TeamPageState extends State<TeamPage> {
   }
 
   void _loadState() async {
-    rootBundle.loadString('assets/data/team.json').then((teamJson) {
-      final team = jsonDecode(teamJson);
-      setState(() {
-        _representatives = team["representatives"];
-        _team = team["team"];
-        _translations = team["translations"];
-        _routes = team["routes"];
-        _osm = team["osm"];
-      });
+    const joinSep = ", ";
+    final attributions = Map<String, List<dynamic>>
+      .from(GlobalConfiguration().get("attributions"));
+    setState(() {
+      _representatives = attributions["representatives"].join(joinSep);
+      _team = attributions["team"].join(joinSep);
+      _translations = attributions["translations"].join(joinSep);
+      _routes = attributions["routes"].join(joinSep);
+      _osm = attributions["osm"].join(joinSep);
     });
   }
 
@@ -53,7 +50,7 @@ class TeamPageState extends State<TeamPage> {
 
   Widget _buildAppBar(BuildContext context) {
     final localizations = TrufiLocalizations.of(context);
-    return AppBar(title: Text(localizations.menuTeam));
+    return AppBar(title: Text(localizations.menuTeam()));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -73,7 +70,7 @@ class TeamPageState extends State<TeamPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: localizations.teamContent,
+                        text: localizations.teamContent() + " ",
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(
@@ -98,28 +95,28 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionRepresentativesTitle}: $_representatives",
+                  localizations.teamSectionRepresentatives(_representatives),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionTeamTitle}: $_team",
+                  localizations.teamSectionTeam(_team),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionTranslationsTitle}: $_translations",
+                  localizations.teamSectionTranslations(_translations),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  "${localizations.teamSectionRoutesTitle}: $_routes${localizations.teamSectionRotuesOsmAddition(_osm)}",
+                  localizations.teamSectionRoutes(_routes, _osm),
                   style: theme.textTheme.body2,
                 ),
               ),

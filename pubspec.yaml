@@ -13,6 +13,8 @@ dependencies:
   #    url: git@github.com:ubilabs/flutter_map.git
   #    ref: feat/map_long_press
 
+  intl: 0.15.8
+  intl_translation: 0.17.5
   app_review: 0.0.9+3
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
@@ -55,7 +57,6 @@ flutter:
   assets:
     - assets/cfg/
     - assets/data/
-    - assets/translations/
     - assets/images/
     # - assets/tiles/8/
     # - assets/tiles/9/
