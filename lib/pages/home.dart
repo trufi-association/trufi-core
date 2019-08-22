@@ -88,20 +88,26 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildAppBar(BuildContext context) {
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return AppBar(
       bottom: PreferredSize(
         child: Container(),
-        preferredSize: Size.fromHeight(45.0),
+        preferredSize: isPortrait
+          ? Size.fromHeight(45.0)
+          : Size.fromHeight(0.0),
       ),
-      flexibleSpace: _buildFormFields(context),
+      flexibleSpace: isPortrait
+        ? _buildFormFieldsPortrait(context)
+        : _buildFormFieldsLandscape(context),
     );
   }
 
-  Widget _buildFormFields(BuildContext context) {
+  Widget _buildFormFieldsPortrait(BuildContext context) {
     final localizations = TrufiLocalizations.of(context);
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.all(4.0),
+        padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -116,6 +122,7 @@ class HomePageState extends State<HomePage>
                   "assets/images/from_marker.svg",
                 ),
                 _setFromPlace,
+                leading: SizedBox.shrink(),
                 trailing: _data.isResettable ? _buildResetButton() : null,
               ),
               _buildFormField(
@@ -127,7 +134,8 @@ class HomePageState extends State<HomePage>
                   "assets/images/to_marker.svg",
                 ),
                 _setToPlace,
-                trailing: _data.isSwappable ? _buildSwapButton() : null,
+                leading: SizedBox.shrink(),
+                trailing: _data.isSwappable ? _buildSwapButton(Orientation.portrait) : null,
               ),
             ],
           ),
@@ -136,11 +144,70 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildSwapButton() {
+  Widget _buildFormFieldsLandscape(BuildContext context) {
+    final localizations = TrufiLocalizations.of(context);
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
+        child: Form(
+          key: _formKey,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              SizedBox(
+                width: 40.0,
+                child: null,
+              ),
+              Flexible(
+                flex: 1,
+                child: _buildFormField(
+                  _fromFieldKey,
+                  ValueKey(keys.homePageFromPlaceField),
+                  localizations.searchPleaseSelectOrigin,
+                  localizations.searchHintOrigin,
+                  SvgPicture.asset(
+                    "assets/images/from_marker.svg",
+                  ),
+                  _setFromPlace,
+                )
+              ),
+              SizedBox(
+                width: 40.0,
+                child: _data.isSwappable ? _buildSwapButton(Orientation.landscape) : null,
+              ),
+              Flexible(
+                flex: 1,
+                child: _buildFormField(
+                  _toFieldKey,
+                  ValueKey(keys.homePageToPlaceField),
+                  localizations.searchPleaseSelectDestination,
+                  localizations.searchHintDestination,
+                  SvgPicture.asset(
+                    "assets/images/to_marker.svg",
+                  ),
+                  _setToPlace,
+                )
+              ),
+              SizedBox(
+                width: 40.0,
+                child: _data.isResettable ? _buildResetButton() : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSwapButton(Orientation orientation) {
     return FittedBox(
       child: IconButton(
         key: ValueKey(keys.homePageSwapButton),
-        icon: Icon(Icons.swap_vert),
+        icon: Icon(
+          orientation == Orientation.portrait
+            ? Icons.swap_vert
+            : Icons.swap_horiz
+        ),
         onPressed: _swapPlaces,
       ),
     );
@@ -166,27 +233,41 @@ class HomePageState extends State<HomePage>
     Widget leading,
     Widget trailing,
   }) {
-    return Row(
-      children: <Widget>[
+    final children = <Widget>[];
+
+    if (leading != null) {
+      children.add(
         SizedBox(
           width: 40.0,
           child: leading,
+        )
+      );
+    }
+
+    children.add(
+      Expanded(
+        key: valueKey,
+        child: LocationFormField(
+          key: key,
+          hintText: hintText,
+          onSaved: onSaved,
+          searchHintText: searchHintText,
+          leadingImage: textLeadingImage,
         ),
-        Expanded(
-          key: valueKey,
-          child: LocationFormField(
-            key: key,
-            hintText: hintText,
-            onSaved: onSaved,
-            searchHintText: searchHintText,
-            leadingImage: textLeadingImage,
-          ),
-        ),
+      )
+    );
+
+    if (trailing != null) {
+      children.add(
         SizedBox(
           width: 40.0,
           child: trailing,
-        ),
-      ],
+        )
+      );
+    }
+
+    return Row(
+      children: children
     );
   }
 
