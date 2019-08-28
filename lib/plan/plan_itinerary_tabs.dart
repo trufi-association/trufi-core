@@ -19,9 +19,10 @@ class PlanItineraryTabPages extends StatefulWidget {
 
 class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     with TickerProviderStateMixin {
-  static const _costHeight = 60.0;
-  static const _summaryHeight = 60.0;
+  static const _costHeight = 40.0;
+  static const _summaryHeight = 40.0;
   static const _detailHeight = 200.0;
+  static const _paddingHeight = 20.0;
 
   AnimationController _animationController;
   Animation<double> _animationCostHeight;
@@ -101,15 +102,18 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     }).toList(),
                   ),
                 ),
-                TabPageSelector(
-                  selectedColor: Theme.of(context).iconTheme.color,
-                  controller: widget.tabController,
-                ),
+                Container(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: TabPageSelector(
+                    selectedColor: Theme.of(context).iconTheme.color,
+                    controller: widget.tabController,
+                  ),
+                )
               ],
             ),
             Positioned(
               top: 4.0,
-              right: 10.0,
+              right: 0.0,
               child: _buildExpandButton(context),
             ),
           ],
@@ -134,7 +138,12 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     return Container(
       height: _animationDetailHeight.value,
       child: ListView.builder(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.only(
+          top: _paddingHeight/2,
+          bottom: _paddingHeight/2,
+          left: 10.0,
+          right: 32.0,
+        ),
         itemBuilder: (BuildContext context, int index) {
           PlanItineraryLeg leg = itinerary.legs[index];
           return Row(
@@ -142,7 +151,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
               Icon(leg.iconData()),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  padding: EdgeInsets.all(8.0),
                   child: RichText(
                     text: TextSpan(
                       text: leg.toInstruction(localizations),
@@ -164,13 +173,23 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     BuildContext context,
     PlanItinerary itinerary,
   ) {
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return VerticalSwipeDetector(
       onSwipeUp: () => _setIsExpanded(true),
-      child: Column(
-        children: <Widget>[
-          _buildItineraryCost(context, itinerary),
-          _buildItinerarySummary(context, itinerary),
-        ],
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: _paddingHeight/2),
+        child: Flex(
+          direction: isPortrait
+            ? Axis.vertical
+            : Axis.horizontal,
+          children: <Widget>[
+            _buildItineraryCost(context, itinerary),
+            Expanded(
+              child: _buildItinerarySummary(context, itinerary)
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -191,7 +210,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           BoxShadow(color: theme.primaryColor, blurRadius: 4.0),
         ],
       ),
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.only(left: 16.0, right: 10.0),
       child: Row(
         children: <Widget>[
           Text(
@@ -228,7 +247,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             Icon(leg.iconData()),
             leg.mode == 'BUS'
                 ? Text(
-                    leg.route,
+                    " " + leg.route,
                     style: theme.textTheme.body1.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -251,7 +270,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
         color: theme.primaryColor,
         child: InkWell(
           child: Container(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.only(left: 12.0, right: 10.0),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -275,8 +294,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildExpandButton(BuildContext context) {
     return IconButton(
       icon: _isExpanded
-          ? Icon(Icons.keyboard_arrow_down, color: Colors.grey)
-          : Icon(Icons.keyboard_arrow_up, color: Colors.grey),
+          ? Icon(Icons.keyboard_arrow_down)
+          : Icon(Icons.keyboard_arrow_up),
       onPressed: () => _setIsExpanded(!_isExpanded),
     );
   }
@@ -294,8 +313,18 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
 
   // Getter
 
-  double get height =>
+  double get height {
+    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    var height =
       _animationDetailHeight.value +
       _animationCostHeight.value +
-      _animationSummaryHeight.value;
+      _paddingHeight;
+
+    if (isPortrait) {
+      height += _animationSummaryHeight.value;
+    }
+
+    return height;
+  }
+
 }
