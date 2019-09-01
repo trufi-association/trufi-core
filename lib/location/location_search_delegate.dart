@@ -163,7 +163,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               close(context, junction.location);
             },
             Icons.label_outline,
-            "... y ${junction.street2.displayName}",
+            "... and ${junction.street2.displayName}",
             trailing: FavoriteButton(
               location: junction.location,
               favoritesStream: favoriteLocationsBloc.outLocations,

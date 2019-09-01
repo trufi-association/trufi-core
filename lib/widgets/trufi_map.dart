@@ -98,9 +98,9 @@ class TrufiMapController {
 }
 
 class TrufiMap extends StatefulWidget {
-  static final LatLng cochabambaCenter = LatLng(-17.39000, -66.15400);
-  static final LatLng cochabambaSouthWest = LatLng(-17.79300, -66.75000);
-  static final LatLng cochabambaNorthEast = LatLng(-16.90400, -65.67400);
+  static final LatLng cochabambaCenter = LatLng(5.574558, -0.214656);
+  static final LatLng cochabambaSouthWest = LatLng(5.510057,-0.328217);
+  static final LatLng cochabambaNorthEast = LatLng(5.726678,0.071411);
 
   TrufiMap({
     Key key,

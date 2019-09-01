@@ -99,7 +99,7 @@ class OnlineRequestManager implements RequestManager {
       .replace(queryParameters: {
         "fromPlace": from.toString(),
         "toPlace": to.toString(),
-        "date": "01-01-2018",
+        "date": "04.03.2019",
         "numItineraries":"5",
         "mode": mode
       });
