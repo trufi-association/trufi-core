@@ -1,5 +1,5 @@
 {
-  "title": "Trufi App",
+  "title": "Trotro App",
   "@title": {
     "description": "The application's name",
     "type": "text",
@@ -458,7 +458,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "teamContent": "Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mit Hilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:",
+  "teamContent": "Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mit Hilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trotro App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:",
   "@teamContent": {
     "description": "Text displayed on the team page, followed by a email link",
     "type": "text",

@@ -29,7 +29,7 @@ void main() {
     });
   });
 
-  testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
+  testWidgets('Trotro App - Home Widget', (WidgetTester tester) async {
     await tester.pumpWidget(
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       return BlocProvider<LocationProviderBloc>(

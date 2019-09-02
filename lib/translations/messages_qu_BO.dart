@@ -89,7 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorUnknownDestination" : MessageLookupByLibrary.simpleMessage("Chayana kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy."),
     "errorUnknownOrigin" : MessageLookupByLibrary.simpleMessage("Qallariy kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy."),
     "errorUnknownOriginDestination" : MessageLookupByLibrary.simpleMessage("Qallariy chanta chayana kitikunaqa mana riqsisqachu kanku. Kitiykita aswan sut’ita riqsichiy."),
-    "feedbackContent" : MessageLookupByLibrary.simpleMessage("Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq."),
+    "feedbackContent" : MessageLookupByLibrary.simpleMessage("Imayna riqch’asunki Trotro App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq."),
     "feedbackTitle" : MessageLookupByLibrary.simpleMessage("Correo electrónico ñiqta yuyasqasniykita apachimuwayku!"),
     "instructionDistanceKm" : m0,
     "instructionDistanceMeters" : m1,
@@ -103,7 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionVehicleTrufi" : MessageLookupByLibrary.simpleMessage("Trufi"),
     "instructionWalk" : m4,
     "menuAbout" : MessageLookupByLibrary.simpleMessage("Imamanta yachayta munanki?"),
-    "menuAppReview" : MessageLookupByLibrary.simpleMessage("Trufi Appta chaninchay"),
+    "menuAppReview" : MessageLookupByLibrary.simpleMessage("Trotro Appta chaninchay"),
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Ñankunata rikhuchiy"),
     "menuFeedback" : MessageLookupByLibrary.simpleMessage("Yuyasqayniykita riqsichiwayku"),
     "menuOnline" : MessageLookupByLibrary.simpleMessage("Online"),
@@ -126,12 +126,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Musuq mask\'anakuna"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Mask\'anakuna riqsichiq"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Accra"),
-    "teamContent" : MessageLookupByLibrary.simpleMessage("Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:"),
+    "teamContent" : MessageLookupByLibrary.simpleMessage("Trufi Association ñisqa kay aplicación Trotro App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trotro App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,
     "teamSectionTeam" : m7,
     "teamSectionTranslations" : m8,
-    "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
+    "title" : MessageLookupByLibrary.simpleMessage("Trotro App"),
     "version" : m9
   };
 }

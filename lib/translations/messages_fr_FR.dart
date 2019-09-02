@@ -131,7 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "teamSectionRoutes" : m6,
     "teamSectionTeam" : m7,
     "teamSectionTranslations" : m8,
-    "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
+    "title" : MessageLookupByLibrary.simpleMessage("Trotro App"),
     "version" : m9
   };
 }

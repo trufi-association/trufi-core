@@ -126,12 +126,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recientes"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Resultados de búsqueda"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Accra"),
-    "teamContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a:"),
+    "teamContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trotro App y ser parte de nuestro equipo? Contáctanos a:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,
     "teamSectionTeam" : m7,
     "teamSectionTranslations" : m8,
-    "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
+    "title" : MessageLookupByLibrary.simpleMessage("Trotro App"),
     "version" : m9
   };
 }

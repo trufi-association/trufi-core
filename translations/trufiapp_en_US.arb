@@ -1,7 +1,7 @@
 {
   "@@locale": "en_US",
   "@@last_modified": "2019-08-18T23:19:00.243676",
-  "title": "Trufi App",
+  "title": "Trotro App",
   "@title": {
     "description": "The application's name",
     "type": "text",
@@ -460,7 +460,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "teamContent": "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:",
+  "teamContent": "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trotro App and be part of our team? Please contact us via:",
   "@teamContent": {
     "description": "Text displayed on the team page, followed by a email link",
     "type": "text",

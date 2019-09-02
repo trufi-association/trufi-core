@@ -27,7 +27,7 @@ class TrufiLocalizations {
 
   String title() =>
     Intl.message(
-      "Trufi App",
+      "Trotro App",
       name: "title",
       desc: "The application's name",
     );
@@ -529,7 +529,7 @@ class TrufiLocalizations {
 
   String teamContent() =>
     Intl.message(
-      "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:",
+      "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trotro App and be part of our team? Please contact us via:",
       name: "teamContent",
       desc: "Text displayed on the team page, followed by a email link",
     );

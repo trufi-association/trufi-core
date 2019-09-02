@@ -6,4 +6,4 @@
   Copyright © 2019 The Chromium Authors. All rights reserved.
 */
 
-"NSLocationWhenInUseUsageDescription" = "Trufi app necesita saber su ubicación para mostrarlo en el mapa.";
+"NSLocationWhenInUseUsageDescription" = "Trotro app necesita saber su ubicación para mostrarlo en el mapa.";

@@ -1,4 +1,4 @@
-# Trufi App
+# Trotro App
 
 The mobile app for public transportation.
 Built in [Flutter](https://flutter.dev/) and made by the Trufi Association, a social startup, to provide smartphone apps for informal traffic.
@@ -15,7 +15,7 @@ If you find any issues within this app, please report them at [the issue tracker
 
 <img src="https://www.trufi.app/wp-content/uploads/2019/02/device_pixel-497x1024.png" width="200" hspace="20"/><img src="https://www.trufi.app/wp-content/uploads/2019/02/device_iphone-507x1024.png" width="200" hspace="20" />
 
-## Get the Trufi App
+## Get the Trotro App
 
 The mobile application is currently available for the following cities:
 
@@ -26,7 +26,7 @@ Please contact the [Trufi Association](mailto:info@trufi-association.org) to get
 
 ## Building From Source
 
-If you want to start working on the Trufi App. Get started by reviewing the [Flutter documentation](https://flutter.dev) first. Then you can follow the next steps:
+If you want to start working on the Trotro App. Get started by reviewing the [Flutter documentation](https://flutter.dev) first. Then you can follow the next steps:
 
 * [Install the enviroment](https://flutter.dev/docs/get-started/install)
 * Close the the source code repository: `$ git clone https://github.com/trufi-association/trufi-app.git`
