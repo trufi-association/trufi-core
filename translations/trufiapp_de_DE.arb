@@ -5,13 +5,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "tagline": "Öffentliche Verkehrsmittel in Cochabamba",
+  "tagline": "Öffentliche Verkehrsmittel in Accra",
   "@tagline": {
     "description": "A short marketing sentence that describes the app",
     "type": "text",
     "placeholders": {}
   },
-  "description": "Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen.",
+  "description": "Der beste Weg mit Trufis, Mikros und Bussen durch Accra zu reisen.",
   "@description": {
     "description": "A sentence that describes the application's purpose",
     "type": "text",
@@ -446,7 +446,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
+  "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Accra und der näheren Umgebung zu erleichtern.",
   "@aboutContent": {
     "description": "Text displayed on the about page",
     "type": "text",

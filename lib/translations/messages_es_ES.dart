@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "aboutContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba."),
+    "aboutContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Accra."),
     "aboutLicenses" : MessageLookupByLibrary.simpleMessage("Licencias"),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Por favor, asegúrese de que el GPS y las configuraciones de ubicación esten activadas en su dispositivo."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("Sin acceso a la ubicación"),
@@ -74,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonOK" : MessageLookupByLibrary.simpleMessage("Aceptar"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Origen"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Error desconocido"),
-    "description" : MessageLookupByLibrary.simpleMessage("La mejor forma de viajar con trufis, micros y buses a través de Cochabamba."),
+    "description" : MessageLookupByLibrary.simpleMessage("La mejor forma de viajar con trufis, micros y buses a través de Accra."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("El planificador de rutas no está seguro de su destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto."),
     "errorAmbiguousOrigin" : MessageLookupByLibrary.simpleMessage("El planificador de rutas no está seguro de su origen. Por favor, seleccione una de las siguientes opciones o introduzca un origen más exacto."),
     "errorAmbiguousOriginDestination" : MessageLookupByLibrary.simpleMessage("Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto."),
@@ -125,7 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Lugares"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recientes"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Resultados de búsqueda"),
-    "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Cochabamba"),
+    "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Accra"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,

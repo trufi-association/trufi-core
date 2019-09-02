@@ -5,13 +5,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "tagline": "Transporte público en Cochabamba",
+  "tagline": "Transporte público en Accra",
   "@tagline": {
     "description": "A short marketing sentence that describes the app",
     "type": "text",
     "placeholders": {}
   },
-  "description": "La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.",
+  "description": "La mejor forma de viajar con trufis, micros y buses a través de Accra.",
   "@description": {
     "description": "A sentence that describes the application's purpose",
     "type": "text",
@@ -446,7 +446,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "aboutContent": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.",
+  "aboutContent": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Accra.",
   "@aboutContent": {
     "description": "Text displayed on the about page",
     "type": "text",

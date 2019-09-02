@@ -125,7 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Kitikuna"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Musuq mask\'anakuna"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Mask\'anakuna riqsichiq"),
-    "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Cochabamba"),
+    "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Accra"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,

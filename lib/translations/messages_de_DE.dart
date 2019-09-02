@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "aboutContent" : MessageLookupByLibrary.simpleMessage("Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern."),
+    "aboutContent" : MessageLookupByLibrary.simpleMessage("Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Accra und der näheren Umgebung zu erleichtern."),
     "aboutLicenses" : MessageLookupByLibrary.simpleMessage("Lizenzen"),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("Kein Standort"),
@@ -74,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Startpunkt"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Unbekannter Fehler"),
-    "description" : MessageLookupByLibrary.simpleMessage("Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen."),
+    "description" : MessageLookupByLibrary.simpleMessage("Der beste Weg mit Trufis, Mikros und Bussen durch Accra zu reisen."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
     "errorAmbiguousOrigin" : MessageLookupByLibrary.simpleMessage("Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
     "errorAmbiguousOriginDestination" : MessageLookupByLibrary.simpleMessage("Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
@@ -125,7 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Orte"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Zuletzt gesucht"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Suchergebnisse"),
-    "tagline" : MessageLookupByLibrary.simpleMessage("Öffentliche Verkehrsmittel in Cochabamba"),
+    "tagline" : MessageLookupByLibrary.simpleMessage("Öffentliche Verkehrsmittel in Accra"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mit Hilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,

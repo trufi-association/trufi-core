@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "aboutContent" : MessageLookupByLibrary.simpleMessage("We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area."),
+    "aboutContent" : MessageLookupByLibrary.simpleMessage("We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Accra and the surrounding area."),
     "aboutLicenses" : MessageLookupByLibrary.simpleMessage("Licenses"),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Please make sure your device has GPS and the Location settings are activated."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("No location"),
@@ -74,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Origin"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Unknown error"),
-    "description" : MessageLookupByLibrary.simpleMessage("The best way to travel with trufis, micros and busses through Cochabamba."),
+    "description" : MessageLookupByLibrary.simpleMessage("The best way to travel with trufis, micros and busses through Accra."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific."),
     "errorAmbiguousOrigin" : MessageLookupByLibrary.simpleMessage("The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific."),
     "errorAmbiguousOriginDestination" : MessageLookupByLibrary.simpleMessage("Both origin and destination are ambiguous. Please select from the following options, or be more specific."),
@@ -125,7 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Places"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recent"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Search Results"),
-    "tagline" : MessageLookupByLibrary.simpleMessage("Public transportation in Cochabamba"),
+    "tagline" : MessageLookupByLibrary.simpleMessage("Public transportation in Accra"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,

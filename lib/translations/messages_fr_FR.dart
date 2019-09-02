@@ -58,7 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "aboutContent" : MessageLookupByLibrary.simpleMessage("Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l\'utilisation du système de transport en commun à Cochabamba et dans les environs."),
+    "aboutContent" : MessageLookupByLibrary.simpleMessage("Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l\'utilisation du système de transport en commun à Accra et dans les environs."),
     "aboutLicenses" : MessageLookupByLibrary.simpleMessage("Licences"),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Assurez-vous que votre appareil dispose d\'un GPS et que les paramètres de localisation sont activés."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("Pas d\'emplacement"),
@@ -74,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Origine"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Erreur inconnue"),
-    "description" : MessageLookupByLibrary.simpleMessage("La meilleure façon de se déplacer en trufis, micros et bus dans Cochabamba."),
+    "description" : MessageLookupByLibrary.simpleMessage("La meilleure façon de se déplacer en trufis, micros et bus dans Accra."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("Le planificateur de trajet ne sait pas trop à quelle destination vous souhaitez aller. Veuillez choisir parmi les options suivantes ou être plus précis."),
     "errorAmbiguousOrigin" : MessageLookupByLibrary.simpleMessage("Le planificateur de trajet n\'est pas sûr du lieu de départ. Veuillez choisir parmis les options suivantes ou être plus précis."),
     "errorAmbiguousOriginDestination" : MessageLookupByLibrary.simpleMessage("L\'origine et la destination sont ambiguës. Veuillez choisir parmi les options suivantes ou être plus précis."),
@@ -125,7 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Endroits"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Récent"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Résultats de la recherche"),
-    "tagline" : MessageLookupByLibrary.simpleMessage("Transports en commun à Cochabamba"),
+    "tagline" : MessageLookupByLibrary.simpleMessage("Transports en commun à Accra"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Nous sommes une équipe internationale appelée Trufi Association qui a créé cette application avec l\'aide de nombreux bénévoles! Voulez-vous améliorer l\'application Trufi et faire partie de notre équipe? Merci de nous contacter via:"),
     "teamSectionRepresentatives" : m5,
     "teamSectionRoutes" : m6,
