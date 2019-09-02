@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -111,16 +112,23 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOnlineMap() {
+    final cfg = GlobalConfiguration();
+    final minZoom = cfg.getDouble("mapOnlineMinZoom");
+    final maxZoom = cfg.getDouble("mapOnlineMaxZoom");
+    final zoom = cfg.getDouble("mapOnlineZoom");
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
+
     return TrufiMap(
       key: ValueKey("TrufiOnlineMap"),
       controller: widget.controller.online,
       mapOptions: MapOptions(
-        minZoom: 1.0,
-        maxZoom: 19.0,
-        zoom: 13.0,
+        minZoom: minZoom,
+        maxZoom: maxZoom,
+        zoom: zoom,
         onTap: widget.onTap,
         onPositionChanged: _handleOnPositionChanged,
-        center: TrufiMap.cochabambaCenter,
+        center: mapCenter,
       ),
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
@@ -131,18 +139,29 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOfflineMap() {
+    final cfg = GlobalConfiguration();
+    final minZoom = cfg.getDouble("mapOfflineMinZoom");
+    final maxZoom = cfg.getDouble("mapOfflineMaxZoom");
+    final zoom = cfg.getDouble("mapOfflineZoom");
+    final southWestCoords = List<double>.from(cfg.get("mapSouthWestCoords"));
+    final northEastCoords = List<double>.from(cfg.get("mapNorthEastCoords"));
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+    final mapSouthWest = LatLng(southWestCoords[0], southWestCoords[1]);
+    final mapNorthEast = LatLng(northEastCoords[0], northEastCoords[1]);
+    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
+
     return TrufiMap(
       key: ValueKey("TrufiOfflineMap"),
       controller: widget.controller.offline,
       mapOptions: MapOptions(
-        minZoom: 8.0,
-        maxZoom: 14.0,
-        zoom: 13.0,
+        minZoom: minZoom,
+        maxZoom: maxZoom,
+        zoom: zoom,
         onTap: widget.onTap,
         onPositionChanged: _handleOnPositionChanged,
-        swPanBoundary: TrufiMap.cochabambaSouthWest,
-        nePanBoundary: TrufiMap.cochabambaNorthEast,
-        center: TrufiMap.cochabambaCenter,
+        swPanBoundary: mapSouthWest,
+        nePanBoundary: mapNorthEast,
+        center: mapCenter,
       ),
       layerOptionsBuilder: (context) {
         return <LayerOptions>[

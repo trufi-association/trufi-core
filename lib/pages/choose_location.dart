@@ -1,3 +1,4 @@
+import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -24,12 +25,18 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   void initState() {
     super.initState();
-    _chooseOnMapMarker = buildToMarker(TrufiMap.cochabambaCenter);
+
+    final cfg = GlobalConfiguration();
+    final zoom = cfg.getDouble("map.chooseLocationZoom");
+    final centerCoords = List<double>.from(cfg.get("map.centerCoords"));
+    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
+
+    _chooseOnMapMarker = buildToMarker(mapCenter);
     if (widget.initialPosition != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
           center: widget.initialPosition,
-          zoom: 16.0,
+          zoom: zoom,
           tickerProvider: this,
         );
       });

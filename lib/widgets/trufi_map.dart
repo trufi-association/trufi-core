@@ -27,7 +27,12 @@ class TrufiMapController {
   set state(TrufiMapState state) {
     _state = state;
     _mapController.onReady.then((_) {
-      _mapController.move(TrufiMap.cochabambaCenter, 12.0);
+      final cfg = GlobalConfiguration();
+      final zoom = cfg.getDouble("mapDefaultZoom");
+      final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+      final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
+
+      _mapController.move(mapCenter, zoom);
       _inMapReady.add(null);
     });
     _animations = TrufiMapAnimations(_mapController);
@@ -41,11 +46,13 @@ class TrufiMapController {
     @required BuildContext context,
     TickerProvider tickerProvider,
   }) async {
+    final cfg = GlobalConfiguration();
+    final zoom = cfg.getDouble("mapChooseLocationZoom");
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       move(
         center: location,
-        zoom: 17.0,
+        zoom: zoom,
         tickerProvider: tickerProvider,
       );
       return;
@@ -98,10 +105,6 @@ class TrufiMapController {
 }
 
 class TrufiMap extends StatefulWidget {
-  static final LatLng cochabambaCenter = LatLng(-17.39000, -66.15400);
-  static final LatLng cochabambaSouthWest = LatLng(-17.79300, -66.75000);
-  static final LatLng cochabambaNorthEast = LatLng(-16.90400, -65.67400);
-
   TrufiMap({
     Key key,
     @required this.controller,
