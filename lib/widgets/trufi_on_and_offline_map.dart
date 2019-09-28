@@ -116,7 +116,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     final minZoom = cfg.getDouble("mapOnlineMinZoom");
     final maxZoom = cfg.getDouble("mapOnlineMaxZoom");
     final zoom = cfg.getDouble("mapOnlineZoom");
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
     final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
 
     return TrufiMap(
@@ -143,9 +143,9 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     final minZoom = cfg.getDouble("mapOfflineMinZoom");
     final maxZoom = cfg.getDouble("mapOfflineMaxZoom");
     final zoom = cfg.getDouble("mapOfflineZoom");
-    final southWestCoords = List<double>.from(cfg.get("mapSouthWestCoords"));
-    final northEastCoords = List<double>.from(cfg.get("mapNorthEastCoords"));
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+    final southWestCoords = List<double>.from(cfg.get("mapSouthWestCoordsLatLng"));
+    final northEastCoords = List<double>.from(cfg.get("mapNorthEastCoordsLatLng"));
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
     final mapSouthWest = LatLng(southWestCoords[0], southWestCoords[1]);
     final mapNorthEast = LatLng(northEastCoords[0], northEastCoords[1]);
     final mapCenter = LatLng(centerCoords[0], centerCoords[1]);

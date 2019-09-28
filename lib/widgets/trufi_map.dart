@@ -29,7 +29,7 @@ class TrufiMapController {
     _mapController.onReady.then((_) {
       final cfg = GlobalConfiguration();
       final zoom = cfg.getDouble("mapDefaultZoom");
-      final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+      final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
       final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
 
       _mapController.move(mapCenter, zoom);

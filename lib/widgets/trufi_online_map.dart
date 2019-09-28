@@ -37,7 +37,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
     final minZoom = cfg.getDouble("mapOnlineMinZoom");
     final maxZoom = cfg.getDouble("mapOnlineMaxZoom");
     final zoom = cfg.getDouble("mapOnlineZoom");
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoords"));
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
     final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
 
     return TrufiMap(
