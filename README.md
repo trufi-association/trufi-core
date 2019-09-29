@@ -30,7 +30,7 @@ If you want to start working on the Trufi App. Get started by reviewing the [Flu
 
 * [Install the enviroment](https://flutter.dev/docs/get-started/install)
 * Close the the source code repository: `$ git clone https://github.com/trufi-association/trufi-app.git`
-* Copy the configuration file: `$ cp assets/cfg/app_config.json.dist to assets/cfg/app_config.json`
+* Copy the configuration file: `$ cp assets/cfg/app_config.json.dist assets/cfg/app_config.json`
 * Add your settings, like your private Map Tiler key in the configuration file.
 * Build a test version of the application with `$ flutter run`
 
