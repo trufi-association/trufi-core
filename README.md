@@ -31,7 +31,7 @@ If you want to start working on the Trufi App. Get started by reviewing the [Flu
 * [Install the enviroment](https://flutter.dev/docs/get-started/install)
 * Close the the source code repository: `$ git clone https://github.com/trufi-association/trufi-app.git`
 * Copy the configuration file: `$ cp assets/cfg/app_config.json.dist assets/cfg/app_config.json`
-* Add your settings, like your private [MapTiler key](https://cloud.maptiler.com/account/keys) in the configuration file.
+* Update the configuration and add your private [MapTiler key](https://cloud.maptiler.com/account/keys)
 * For Android: [Create a key store](https://flutter.dev/docs/deployment/android#signing-the-app) or use an existing key, fill the `android/key.properties` with path and password.
 * Build a test version of the application with `$ flutter run`
 
