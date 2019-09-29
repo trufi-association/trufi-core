@@ -94,12 +94,13 @@ class OnlineRequestManager implements RequestManager {
     String mode,
   ) async {
     final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
+
     Uri request = Uri
       .parse(urlOtpEndpoint + planPath)
       .replace(queryParameters: {
         "fromPlace": from.toString(),
         "toPlace": to.toString(),
-        "date": "01-01-2018",
+        "date": _todayMonthDayYear(),
         "numItineraries":"5",
         "mode": mode
       });
@@ -117,6 +118,13 @@ class OnlineRequestManager implements RequestManager {
     } catch (e) {
       throw FetchOnlineRequestException(e);
     }
+  }
+
+  String _todayMonthDayYear() {
+    var today = new DateTime.now();
+    return "${today.month.toString().padLeft(2,'0')}-" +
+      "${today.day.toString().padLeft(2,'0')}-" +
+      "${today.year.toString()}";
   }
 
   String _localizedErrorForPlanError(
