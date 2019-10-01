@@ -108,7 +108,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          if (urlDonate != "") _buildWebLinkItem(
+          if (!Platform.isIOS && urlDonate != "") _buildWebLinkItem(
             Icons.monetization_on,
             localizations.donate(),
             urlDonate,
