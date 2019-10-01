@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:trufi_app/custom_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
@@ -23,66 +23,117 @@ class TrufiDrawer extends StatefulWidget {
 }
 
 class TrufiDrawerState extends State<TrufiDrawer> {
+  AssetImage bgImage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    bgImage = AssetImage("assets/images/drawer-bg.jpg");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    precacheImage(bgImage, context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
+    final cfg = GlobalConfiguration();
+    final urlDonate = cfg.getString("urlDonate");
+    final urlWebsite = cfg.getString("urlWebsite");
+    final urlFacebook = cfg.getString("urlFacebook");
+    final urlTwitter = cfg.getString("urlTwitter");
+    final urlInstagram = cfg.getString("urlInstagram");
     return Drawer(
-      child: Column(
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: <Widget>[
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              image: DecorationImage(
+                image: bgImage,
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  const Color.fromRGBO(0, 0, 0, 0.5),
+                  BlendMode.multiply
+                ),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                DrawerHeader(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Text(
-                        localizations.title(),
-                        style: theme.textTheme.title,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
-                        child: Text(
-                          localizations.tagline(),
-                          style: theme.textTheme.subhead,
-                        ),
-                      ),
-                    ],
+                Text(
+                  localizations.title(),
+                  style: theme.textTheme.title,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
+                  child: Text(
+                    localizations.tagline(),
+                    style: theme.textTheme.subhead,
                   ),
-                  decoration: BoxDecoration(color: theme.primaryColor),
                 ),
-                _buildListItem(
-                  Icons.linear_scale,
-                  localizations.menuConnections(),
-                  HomePage.route,
-                ),
-                _buildListItem(
-                  Icons.info,
-                  localizations.menuAbout(),
-                  AboutPage.route,
-                ),
-                _buildListItem(
-                  Icons.create,
-                  localizations.menuFeedback(),
-                  FeedbackPage.route,
-                ),
-                _buildListItem(
-                  Icons.people,
-                  localizations.menuTeam(),
-                  TeamPage.route,
-                ),
-                Divider(),
-                // FIXME: For now we do not provide this option
-                //_buildOfflineToggle(context),
-                _buildLanguageDropdownButton(context),
-                _buildAppReviewButton(context),
               ],
             ),
           ),
-          _buildBottomRow(context),
+          _buildListItem(
+            Icons.linear_scale,
+            localizations.menuConnections(),
+            HomePage.route,
+          ),
+          _buildListItem(
+            Icons.feedback,
+            localizations.menuFeedback(),
+            FeedbackPage.route,
+          ),
+          _buildListItem(
+            Icons.people,
+            localizations.menuTeam(),
+            TeamPage.route,
+          ),
+          _buildListItem(
+            Icons.info,
+            localizations.menuAbout(),
+            AboutPage.route,
+          ),
+          Divider(),
+          // FIXME: For now we do not provide this option
+          //_buildOfflineToggle(context),
+          _buildLanguageDropdownButton(context),
+          _buildAppReviewButton(context),
+          if (urlDonate != "") _buildWebLinkItem(
+            Icons.monetization_on,
+            localizations.donate(),
+            urlDonate,
+          ),
+          Divider(),
+          if (urlWebsite != "") _buildWebLinkItem(
+            CustomIcons.trufi,
+            localizations.readOurBlog(),
+            urlWebsite,
+          ),
+          if (urlFacebook != "") _buildWebLinkItem(
+            CustomIcons.facebook,
+            localizations.followOnFacebook(),
+            urlFacebook,
+          ),
+          if (urlTwitter != "") _buildWebLinkItem(
+            CustomIcons.twitter,
+            localizations.followOnTwitter(),
+            urlTwitter,
+          ),
+          if (urlInstagram != "") _buildWebLinkItem(
+            CustomIcons.instagram,
+            localizations.followOnInstagram(),
+            urlInstagram,
+          ),
         ],
       ),
     );
@@ -173,53 +224,19 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     );
   }
 
-  Widget _buildBottomRow(BuildContext context) {
-    final cfg = GlobalConfiguration();
-    final urlWebsite = cfg.getString("urlWebsite");
-    final urlInstagram = cfg.getString("urlInstagram");
-    final urlFacebook = cfg.getString("urlFacebook");
-    final urlDonate = cfg.getString("urlDonate");
+  Widget _buildWebLinkItem(IconData iconData, String title, String url) {
     return Container(
-      padding: EdgeInsets.all(12.0),
-      child: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            GestureDetector(
-              onTap: () => launch(urlWebsite, forceSafariVC: false),
-              child: SvgPicture.asset(
-                "assets/images/icon_trufi.svg",
-                height: 48.0,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => launch(urlInstagram),
-              child: SvgPicture.asset(
-                "assets/images/icon_instagram.svg",
-                height: 48.0,
-              ),
-            ),
-            GestureDetector(
-              onTap: () => launch(urlFacebook),
-              child: SvgPicture.asset(
-                "assets/images/icon_facebook.svg",
-                height: 48.0,
-              ),
-            ),
-            if (!Platform.isIOS) GestureDetector(
-              onTap: () => launch(urlDonate),
-              child: Icon(
-                Icons.monetization_on,
-                size: 56.0,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ],
+      child: ListTile(
+        leading: Icon(iconData, color: Colors.grey),
+        title: Text(
+          title,
+          style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
+        onTap: () => launch(url),
       ),
     );
   }
+
 }
 
 class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {
