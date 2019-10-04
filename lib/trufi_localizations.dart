@@ -527,6 +527,13 @@ class TrufiLocalizations {
       desc: "Button label to show licenses",
     );
 
+  String aboutOpenSource() =>
+    Intl.message(
+      "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
+      name: "aboutOpenSource",
+      desc: "A note about open source",
+    );
+
   String teamContent() =>
     Intl.message(
       "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:",
