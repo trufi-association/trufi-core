@@ -499,6 +499,22 @@ class TrufiLocalizations {
       desc: "Menu item that triggers a native widget to rate the app",
     );
 
+  String menuShareApp() =>
+    Intl.message(
+      "Share the app",
+      name: "menuShareApp",
+      desc: "Menu item that triggers a native widget to rate the app",
+    );
+
+  String shareAppText(String url) =>
+    Intl.message(
+      "Download Trufi App, the public transport app for Cochabamba, at $url",
+      name: "shareAppText",
+      args: [url],
+      desc: "Text with URL that is used when sharing the app.",
+      examples: const { "url": "https://trufi.share.url" },
+    );
+
   String feedbackContent() =>
     Intl.message(
       "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",

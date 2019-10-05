@@ -46,6 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Walk ${duration} (${distance}) to\n${location}";
 
+  static m10(url) => "Download Trufi App, the public transport app for Cochabamba, at ${url}";
+
   static m5(representatives) => "Representatives: ${representatives}";
 
   static m6(routeContributors, osmContributors) => "Routes: ${routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!";
@@ -116,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Show routes"),
     "menuFeedback" : MessageLookupByLibrary.simpleMessage("Send Feedback"),
     "menuOnline" : MessageLookupByLibrary.simpleMessage("Online"),
+    "menuShareApp" : MessageLookupByLibrary.simpleMessage("Share the app"),
     "menuTeam" : MessageLookupByLibrary.simpleMessage("Team"),
     "noRouteError" : MessageLookupByLibrary.simpleMessage("Sorry, we could not find a route. What do you want to do?"),
     "noRouteErrorActionCancel" : MessageLookupByLibrary.simpleMessage("Try another destination"),
@@ -135,6 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Places"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recent"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Search Results"),
+    "shareAppText" : m10,
     "tagline" : MessageLookupByLibrary.simpleMessage("Public transportation in Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:"),
     "teamSectionRepresentatives" : m5,

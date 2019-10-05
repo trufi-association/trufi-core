@@ -1,6 +1,6 @@
 {
   "@@locale": "en_US",
-  "@@last_modified": "2019-10-05T18:17:10.033380",
+  "@@last_modified": "2019-10-03T19:41:18.706758",
   "title": "Trufi App",
   "@title": {
     "description": "The application's name",
@@ -435,6 +435,22 @@
     "description": "Menu item that triggers a native widget to rate the app",
     "type": "text",
     "placeholders": {}
+  },
+  "menuShareApp": "Share the app",
+  "@menuShareApp": {
+    "description": "Menu item that triggers a native widget to rate the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareAppText": "Download Trufi App, the public transport app for Cochabamba, at {url}",
+  "@shareAppText": {
+    "description": "Text with URL that is used when sharing the app.",
+    "type": "text",
+    "placeholders": {
+      "url": {
+        "example": "https://trufi.share.url"
+      }
+    }
   },
   "feedbackContent": "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",
   "@feedbackContent": {

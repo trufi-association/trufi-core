@@ -109,12 +109,12 @@ class HomePageState extends State<HomePage>
       bottom: PreferredSize(
         child: Container(),
         preferredSize: isPortrait
-          ? Size.fromHeight(45.0)
-          : Size.fromHeight(0.0),
+            ? Size.fromHeight(45.0)
+            : Size.fromHeight(0.0),
       ),
       flexibleSpace: isPortrait
-        ? _buildFormFieldsPortrait(context)
-        : _buildFormFieldsLandscape(context),
+          ? _buildFormFieldsPortrait(context)
+          : _buildFormFieldsLandscape(context),
     );
   }
 
@@ -138,7 +138,9 @@ class HomePageState extends State<HomePage>
                 ),
                 _setFromPlace,
                 leading: SizedBox.shrink(),
-                trailing: _data.isResettable ? _buildResetButton() : null,
+                trailing: _data.isResettable
+                    ? _buildResetButton(context)
+                    : null,
               ),
               _buildFormField(
                 _toFieldKey,
@@ -150,7 +152,9 @@ class HomePageState extends State<HomePage>
                 ),
                 _setToPlace,
                 leading: SizedBox.shrink(),
-                trailing: _data.isSwappable ? _buildSwapButton(Orientation.portrait) : null,
+                trailing: _data.isSwappable
+                    ? _buildSwapButton(context, Orientation.portrait)
+                    : null,
               ),
             ],
           ),
@@ -188,7 +192,9 @@ class HomePageState extends State<HomePage>
               ),
               SizedBox(
                 width: 40.0,
-                child: _data.isSwappable ? _buildSwapButton(Orientation.landscape) : null,
+                child: _data.isSwappable
+                    ? _buildSwapButton(context, Orientation.landscape)
+                    : null,
               ),
               Flexible(
                 flex: 1,
@@ -205,7 +211,9 @@ class HomePageState extends State<HomePage>
               ),
               SizedBox(
                 width: 40.0,
-                child: _data.isResettable ? _buildResetButton() : null,
+                child: _data.isResettable
+                    ? _buildResetButton(context)
+                    : null,
               ),
             ],
           ),
@@ -214,24 +222,28 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildSwapButton(Orientation orientation) {
+  Widget _buildSwapButton(BuildContext context, Orientation orientation) {
     return FittedBox(
       child: IconButton(
         key: ValueKey(keys.homePageSwapButton),
         icon: Icon(
           orientation == Orientation.portrait
-            ? Icons.swap_vert
-            : Icons.swap_horiz
+              ? Icons.swap_vert
+              : Icons.swap_horiz,
+          color: Theme.of(context).primaryIconTheme.color,
         ),
         onPressed: _swapPlaces,
       ),
     );
   }
 
-  Widget _buildResetButton() {
+  Widget _buildResetButton(BuildContext context) {
     return FittedBox(
       child: IconButton(
-        icon: Icon(Icons.clear),
+        icon: Icon(
+          Icons.clear,
+          color: Theme.of(context).primaryIconTheme.color,
+        ),
         onPressed: _reset,
       ),
     );
