@@ -5,6 +5,7 @@ import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:trufi_app/custom_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/pages/about.dart';
@@ -45,6 +46,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final localizations = TrufiLocalizations.of(context);
     final cfg = GlobalConfiguration();
     final urlDonate = cfg.getString("urlDonate");
+    final urlShare = cfg.getString("urlShare");
     final urlWebsite = cfg.getString("urlWebsite");
     final urlFacebook = cfg.getString("urlFacebook");
     final urlTwitter = cfg.getString("urlTwitter");
@@ -108,6 +110,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
+          _buildAppShareButton(context, urlShare),
           if (!Platform.isIOS && urlDonate != "") _buildWebLinkItem(
             Icons.monetization_on,
             localizations.donate(),
@@ -219,6 +222,22 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         ),
         onTap: () {
           AppReview.requestReview.then((value) {});
+        },
+      ),
+    );
+  }
+
+  Widget _buildAppShareButton(BuildContext context, String url) {
+    final localizations = TrufiLocalizations.of(context);
+    return Container(
+      child: ListTile(
+        leading: Icon(Icons.share, color: Colors.grey),
+        title: Text(
+          localizations.menuShareApp(),
+          style: TextStyle(color: Theme.of(context).textTheme.body2.color),
+        ),
+        onTap: () {
+          Share.share(localizations.shareAppText(url));
         },
       ),
     );
