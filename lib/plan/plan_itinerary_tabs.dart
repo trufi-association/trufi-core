@@ -291,6 +291,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       icon: _isExpanded
           ? Icon(Icons.keyboard_arrow_down)
           : Icon(Icons.keyboard_arrow_up),
+      color: Theme.of(context).primaryIconTheme.color,
       onPressed: () => _setIsExpanded(!_isExpanded),
     );
   }
