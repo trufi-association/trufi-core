@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:trufi_app/blocs/location_provider_bloc.dart';
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/blocs/app_review_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
 import 'package:trufi_app/keys.dart' as keys;
 import 'package:trufi_app/location/location_form_field.dart';
@@ -23,6 +24,7 @@ import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 import 'package:trufi_app/widgets/alerts.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
+import 'package:trufi_app/widgets/app_review_dialog.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -32,7 +34,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final _data = HomePageStateData();
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
@@ -45,6 +47,7 @@ class HomePageState extends State<HomePage>
   @override
   initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _subscriptions.add(
       PreferencesBloc.of(context).outChangeOnline.listen((online) {
         if (_data.plan == null) {
@@ -59,8 +62,20 @@ class HomePageState extends State<HomePage>
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _subscriptions.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final appReviewBloc = AppReviewBloc.of(context);
+      if (await appReviewBloc.isAppReviewAppropriate()) {
+        showAppReviewDialog(context);
+        appReviewBloc.markReviewRequestedForCurrentVersion();
+      }
+    }
   }
 
   void _loadState() async {
@@ -419,6 +434,7 @@ class HomePageState extends State<HomePage>
           }
         } else {
           _setPlan(plan);
+          AppReviewBloc.of(context).incrementReviewWorthyActions();
         }
       } on FetchOfflineRequestException catch (e) {
         print("Failed to fetch plan: $e");

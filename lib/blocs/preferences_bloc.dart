@@ -14,6 +14,8 @@ class PreferencesBloc extends BlocBase {
   static const String propertyLanguageCodeKey = "property_language_code";
   static const String propertyOnlineKey = "property_online";
   static const String stateHomePageKey = "state_home_page";
+  static const String reviewWorthyActionCountKey = "review_worthy_action_count";
+  static const String lastReviewRequestAppVersionKey = "last_review_request_app_version";
 
   static const bool defaultOnline = true;
 
@@ -89,10 +91,18 @@ class PreferencesBloc extends BlocBase {
   // Getter
 
   String get stateHomePage => _preferences?.getString(stateHomePageKey);
+  int get reviewWorthyActionCount => _preferences?.getInt(reviewWorthyActionCountKey);
+  String get lastReviewRequestAppVersion => _preferences?.getString(lastReviewRequestAppVersionKey);
 
   // Setter
 
   set stateHomePage(String value) {
     _preferences?.setString(stateHomePageKey, value);
+  }
+  set reviewWorthyActionCount(int count) {
+    _preferences?.setInt(reviewWorthyActionCountKey, count);
+  }
+  set lastReviewRequestAppVersion(String version) {
+    _preferences?.setString(lastReviewRequestAppVersionKey, version);
   }
 }

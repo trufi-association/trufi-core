@@ -10,6 +10,7 @@
     "urlTwitter": "",
     "urlInstagram": "",
     "urlDonate": "",
+    "minimumReviewWorthyActionCount": 3,
     "keyMapTiler": "",
     "mapDefaultZoom": 12.0,
     "mapOfflineMinZoom": 8.0,

@@ -217,8 +217,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           localizations.menuAppReview(),
           style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
-        onTap: () {
-          AppReview.requestReview.then((value) {});
+        onTap: () async {
+          await AppReview.writeReview;
         },
       ),
     );

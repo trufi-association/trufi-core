@@ -1,6 +1,6 @@
 {
   "@@locale": "en_US",
-  "@@last_modified": "2019-10-01T23:27:15.129675",
+  "@@last_modified": "2019-10-05T18:17:10.033380",
   "title": "Trufi App",
   "@title": {
     "description": "The application's name",
@@ -542,6 +542,30 @@
   "followOnInstagram": "Follow us on Instagram",
   "@followOnInstagram": {
     "description": "Instagram menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogTitle": "Enjoying Trufi?",
+  "@appReviewDialogTitle": {
+    "description": "Title of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogContent": "Support us with a review on the Google Play Store.",
+  "@appReviewDialogContent": {
+    "description": "Content of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonDecline": "Not now",
+  "@appReviewDialogButtonDecline": {
+    "description": "Decline button of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonAccept": "Write review",
+  "@appReviewDialogButtonAccept": {
+    "description": "Accept button of the App Review Dialog used on Android",
     "type": "text",
     "placeholders": {}
   }
