@@ -1,6 +1,6 @@
 {
   "@@locale": "en_US",
-  "@@last_modified": "2019-08-18T23:19:00.243676",
+  "@@last_modified": "2019-10-01T23:27:15.129675",
   "title": "Trufi App",
   "@title": {
     "description": "The application's name",
@@ -514,5 +514,35 @@
         "example": "Kamek, Birdo, Toadette, Bowser Jr."
       }
     }
+  },
+  "donate": "Donate",
+  "@donate": {
+    "description": "Donate menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "readOurBlog": "Read our blog",
+  "@readOurBlog": {
+    "description": "Website menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnFacebook": "Follow us on Facebook",
+  "@followOnFacebook": {
+    "description": "Facebook menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnTwitter": "Follow us on Twitter",
+  "@followOnTwitter": {
+    "description": "Twitter menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnInstagram": "Follow us on Instagram",
+  "@followOnInstagram": {
+    "description": "Instagram menu item",
+    "type": "text",
+    "placeholders": {}
   }
 }

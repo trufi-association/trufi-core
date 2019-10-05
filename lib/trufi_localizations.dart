@@ -579,6 +579,41 @@ class TrufiLocalizations {
         "osmContributors": "Kamek, Birdo, Toadette, Bowser Jr.",
       },
     );
+
+  String donate() =>
+    Intl.message(
+      "Donate",
+      name: "donate",
+      desc: "Donate menu item",
+    );
+
+  String readOurBlog() =>
+    Intl.message(
+      "Read our blog",
+      name: "readOurBlog",
+      desc: "Website menu item",
+    );
+
+  String followOnFacebook() =>
+    Intl.message(
+      "Follow us on Facebook",
+      name: "followOnFacebook",
+      desc: "Facebook menu item",
+    );
+
+  String followOnTwitter() =>
+    Intl.message(
+      "Follow us on Twitter",
+      name: "followOnTwitter",
+      desc: "Twitter menu item",
+    );
+
+  String followOnInstagram() =>
+    Intl.message(
+      "Follow us on Instagram",
+      name: "followOnInstagram",
+      desc: "Instagram menu item",
+    );
 }
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
