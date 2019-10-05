@@ -3,11 +3,11 @@
 The mobile app for public transportation.
 Built in [Flutter](https://flutter.dev/) and made by the Trufi Association, a social startup, to provide smartphone apps for informal traffic.
 
-[<img alt="Trufi Logo" src="assets/images/icon_trufi.svg" width="120" />](https://www.trufi-association.org/)
+[<img alt="Trufi Logo" src="trufi.svg" width="120" />](https://www.trufi-association.org/)
 
 Please **[visit the website](https://www.trufi-association.org/)** for more information!
 
-[<img alt="Twitter Logo" src="assets/images/icon_twitter.svg" width="16" /> Follow @TrufiAssoc](https://twitter.com/TrufiAssoc)
+[<img alt="Twitter Logo" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/twitter.svg" width="16" style="padding-right:4px" /> Follow @TrufiAssoc](https://twitter.com/TrufiAssoc)
 
 If you find any issues within this app, please report them at [the issue tracker](https://github.com/trufi-association/trufi-app/issues). Contributions are both encouraged and appreciated.
 
