@@ -458,6 +458,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
+  "@aboutOpenSource": {
+    "description": "A note about open source",
+    "type": "text",
+    "placeholders": {}
+  },
   "teamContent": "Siamo un team internazionale chiamato Trufi Association che ha creato questa app con l'aiuto di molti volontari! Vuoi migliorare l'app Trufi ed essere parte del nostro team? Vi preghiamo di contattarci tramite:",
   "@teamContent": {
     "description": "Text displayed on the team page, followed by a email link",

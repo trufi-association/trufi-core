@@ -458,6 +458,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
+  "@aboutOpenSource": {
+    "description": "A note about open source",
+    "type": "text",
+    "placeholders": {}
+  },
   "teamContent": "Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:",
   "@teamContent": {
     "description": "Text displayed on the team page, followed by a email link",

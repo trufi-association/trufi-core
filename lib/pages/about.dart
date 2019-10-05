@@ -4,6 +4,8 @@ import 'package:package_info/package_info.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/widgets/trufi_drawer.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class AboutPage extends StatefulWidget {
   static const String route = "/about";
 
@@ -29,6 +31,9 @@ class AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+    final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
+
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     Future<PackageInfo> packageInfo = PackageInfo.fromPlatform();
@@ -92,6 +97,16 @@ class AboutPageState extends State<AboutPage> {
                       applicationName: localizations.title(),
                     );
                   },
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0),
+                child: InkWell(
+                  child: new Text(
+                    localizations.aboutOpenSource(),
+                    style: linkStyle,
+                  ),
+                  onTap: () => { launch('https://github.com/trufi-association/trufi-app') }
                 ),
               ),
             ],

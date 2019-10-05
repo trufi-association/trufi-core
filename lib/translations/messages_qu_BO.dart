@@ -60,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static _notInlinedMessages(_) => <String, Function> {
     "aboutContent" : MessageLookupByLibrary.simpleMessage("Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq."),
     "aboutLicenses" : MessageLookupByLibrary.simpleMessage("Licencias"),
+    "aboutOpenSource" : MessageLookupByLibrary.simpleMessage("This app is released as open source on GitHub. Feel free to contribute or bring it to your own city."),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("Kay kiti mana tarikunchu"),
     "chooseLocationPageSubtitle" : MessageLookupByLibrary.simpleMessage("Ñit\'iy mapapi"),
