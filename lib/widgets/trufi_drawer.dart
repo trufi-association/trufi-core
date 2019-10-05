@@ -73,13 +73,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               children: <Widget>[
                 Text(
                   localizations.title(),
-                  style: theme.textTheme.title,
+                  style: theme.primaryTextTheme.title,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
                     localizations.tagline(),
-                    style: theme.textTheme.subhead,
+                    style: theme.primaryTextTheme.subhead,
                   ),
                 ),
               ],

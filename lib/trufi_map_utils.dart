@@ -77,7 +77,7 @@ Marker buildTransferMarker(LatLng point) {
             border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(CircleIcon.circle),
+          child: Icon(CircleIcon.circle, color: Colors.white),
         ),
       );
     },
@@ -179,24 +179,24 @@ Marker buildBusMarker(
     point: point,
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) => GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-            ),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Row(
-                children: <Widget>[
-                  Icon(leg.iconData()),
-                  Text(leg.route),
-                ],
-              ),
-            ),
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(4.0),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            children: <Widget>[
+              Icon(leg.iconData(), color: Colors.white),
+              Text(" " + leg.route, style: TextStyle(color: Colors.white)),
+            ],
           ),
         ),
+      ),
+    ),
   );
 }
 

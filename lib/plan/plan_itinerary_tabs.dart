@@ -105,7 +105,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                 Container(
                   padding: EdgeInsets.only(bottom: 4.0),
                   child: TabPageSelector(
-                    selectedColor: Theme.of(context).iconTheme.color,
+                    selectedColor: Theme.of(context).primaryIconTheme.color,
                     controller: widget.tabController,
                   ),
                 )
@@ -134,6 +134,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     BuildContext context,
     PlanItinerary itinerary,
   ) {
+    final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
     return Container(
       height: _animationDetailHeight.value,
@@ -148,7 +149,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           PlanItineraryLeg leg = itinerary.legs[index];
           return Row(
             children: <Widget>[
-              Icon(leg.iconData()),
+              Icon(leg.iconData(), color: theme.primaryIconTheme.color),
               Expanded(
                 child: Container(
                   padding: EdgeInsets.all(8.0),
@@ -204,28 +205,21 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     final localizations = TrufiLocalizations.of(context);
     return Container(
       height: _animationCostHeight.value,
-      decoration: BoxDecoration(
-        color: theme.primaryColor,
-        boxShadow: <BoxShadow>[
-          BoxShadow(color: theme.primaryColor, blurRadius: 4.0),
-        ],
-      ),
       padding: EdgeInsets.only(left: 16.0, right: 10.0),
       child: Row(
         children: <Widget>[
           Text(
             localizations.instructionDurationMinutes(itinerary.time) + " ",
-            style: theme.textTheme.title,
+            style: theme.primaryTextTheme.title,
           ),
-          itinerary.distance >= 1000
-              ? Text(
-                  "(" + localizations.instructionDistanceKm((itinerary.distance / 1000).ceil()) + ")",
-                  style: theme.textTheme.title.copyWith(color: Colors.grey),
-                )
-              : Text(
-                  "(" + localizations.instructionDistanceMeters(itinerary.distance) + ")",
-                  style: theme.textTheme.title,
-                ),
+          Text(
+            "(" + (
+              itinerary.distance >= 1000
+                  ? localizations.instructionDistanceKm((itinerary.distance / 1000).ceil())
+                  : localizations.instructionDistanceMeters(itinerary.distance)
+            ) + ")",
+            style: theme.primaryTextTheme.title.copyWith(color: Colors.grey),
+          ),
         ],
       ),
     );
@@ -244,17 +238,18 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       children.add(
         Row(
           children: <Widget>[
-            Icon(leg.iconData()),
+            Icon(leg.iconData(), color: theme.primaryIconTheme.color),
             leg.mode == 'BUS'
                 ? Text(
                     " " + leg.route,
-                    style: theme.textTheme.body1.copyWith(
+                    style: theme.primaryTextTheme.body1.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   )
                 : Text(
-                    localizations.instructionDurationMinutes((leg.duration.ceil() / 60).ceil()),
-                    style: theme.textTheme.body1,
+                    localizations.instructionDurationMinutes(
+                        (leg.duration.ceil() / 60).ceil()),
+                    style: theme.primaryTextTheme.body1,
                   ),
             leg != itinerary.legs.last
                 ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
