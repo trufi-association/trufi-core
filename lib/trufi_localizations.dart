@@ -630,6 +630,34 @@ class TrufiLocalizations {
       name: "followOnInstagram",
       desc: "Instagram menu item",
     );
+
+  String appReviewDialogTitle() =>
+    Intl.message(
+      "Enjoying Trufi?",
+      name: "appReviewDialogTitle",
+      desc: "Title of the App Review Dialog used on Android",
+    );
+
+  String appReviewDialogContent() =>
+    Intl.message(
+      "Support us with a review on the Google Play Store.",
+      name: "appReviewDialogContent",
+      desc: "Content of the App Review Dialog used on Android",
+    );
+
+  String appReviewDialogButtonDecline() =>
+    Intl.message(
+      "Not now",
+      name: "appReviewDialogButtonDecline",
+      desc: "Decline button of the App Review Dialog used on Android",
+    );
+
+  String appReviewDialogButtonAccept() =>
+    Intl.message(
+      "Write review",
+      name: "appReviewDialogButtonAccept",
+      desc: "Accept button of the App Review Dialog used on Android",
+    );
 }
 
 class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {

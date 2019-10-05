@@ -560,5 +560,29 @@
     "description": "Instagram menu item",
     "type": "text",
     "placeholders": {}
+  },
+  "appReviewDialogTitle": "Enjoying Trufi?",
+  "@appReviewDialogTitle": {
+    "description": "Title of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogContent": "Support us with a review on the Google Play Store.",
+  "@appReviewDialogContent": {
+    "description": "Content of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonDecline": "Not now",
+  "@appReviewDialogButtonDecline": {
+    "description": "Decline button of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonAccept": "Write review",
+  "@appReviewDialogButtonAccept": {
+    "description": "Accept button of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
   }
 }
