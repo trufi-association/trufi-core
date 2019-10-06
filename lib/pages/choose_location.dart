@@ -27,8 +27,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     super.initState();
 
     final cfg = GlobalConfiguration();
-    final zoom = cfg.getDouble("map.chooseLocationZoom");
-    final centerCoords = List<double>.from(cfg.get("map.centerCoords"));
+    final zoom = cfg.getDouble("mapChooseLocationZoom");
+    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
     final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
 
     _chooseOnMapMarker = buildToMarker(mapCenter);
