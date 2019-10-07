@@ -70,16 +70,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
             maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageTitle(),
-              style: theme.textTheme.body1,
+              style: theme.primaryTextTheme.body1,
             ),
           ),
           RichText(
             maxLines: 2,
             text: TextSpan(
               text: localizations.chooseLocationPageSubtitle(),
-              style: theme.textTheme.caption.copyWith(
-                color: theme.textTheme.body1.color,
-              ),
+              style: theme.primaryTextTheme.caption,
             ),
           ),
         ],
@@ -93,10 +91,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
                 maxLines: 1,
                 text: TextSpan(
                   text: localizations.commonOK(),
-                  style: theme.textTheme.button.copyWith(
-                    color: theme.textTheme.body1.color,
-                    fontSize: theme.textTheme.caption.fontSize,
-                  ),
+                  style: theme.primaryTextTheme.button,
                 ),
               ),
             ),
