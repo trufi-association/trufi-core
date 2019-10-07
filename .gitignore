@@ -22,19 +22,6 @@ app_config.json
 # Visual Studio Code related
 .vscode/
 
-# Flutter repo-specific
-/bin/cache/
-/bin/mingit/
-/dev/benchmarks/mega_gallery/
-/dev/bots/.recipe_deps
-/dev/bots/android_tools/
-/dev/docs/doc/
-/dev/docs/lib/
-/dev/docs/pubspec.yaml
-/packages/flutter/coverage/
-version
-
-
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
@@ -57,7 +44,7 @@ unlinked_spec.ds
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
-**/android/keystore/
+*.jks
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -81,8 +68,8 @@ unlinked_spec.ds
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/app.flx
 **/ios/Flutter/app.zip
-**/ios/Flutter/flutter_export_environment.sh
 **/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
