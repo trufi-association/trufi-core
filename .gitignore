@@ -34,6 +34,7 @@ app_config.json
 /packages/flutter/coverage/
 version
 
+
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
@@ -56,6 +57,7 @@ unlinked_spec.ds
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
+**/android/keystore/
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -79,6 +81,7 @@ unlinked_spec.ds
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/app.flx
 **/ios/Flutter/app.zip
+**/ios/Flutter/flutter_export_environment.sh
 **/ios/Flutter/flutter_assets/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
