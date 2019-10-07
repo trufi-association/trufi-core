@@ -46,15 +46,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Caminar ${duration} (${distance}) hasta\n${location}";
 
-  static m5(representatives) => "Representantes: ${representatives}";
+  static m6(representatives) => "Representantes: ${representatives}";
 
-  static m6(routeContributors, osmContributors) => "Rutas: ${routeContributors} y todos los usuarios que subieron rutas a OpenStreetMap, como ${osmContributors}. ¡Contáctanos si quieres unirte a la comunidad OpenStreetMap!";
+  static m7(routeContributors, osmContributors) => "Rutas: ${routeContributors} y todos los usuarios que subieron rutas a OpenStreetMap, como ${osmContributors}. ¡Contáctanos si quieres unirte a la comunidad OpenStreetMap!";
 
-  static m7(teamMembers) => "Equipo: ${teamMembers}";
+  static m8(teamMembers) => "Equipo: ${teamMembers}";
 
-  static m8(translators) => "Traducciones: ${translators}";
+  static m9(translators) => "Traducciones: ${translators}";
 
-  static m9(version) => "Versión ${version}";
+  static m10(version) => "Versión ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -128,11 +128,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Resultados de búsqueda"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }
