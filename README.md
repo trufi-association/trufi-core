@@ -19,8 +19,8 @@ If you find any issues within this app, please report them at [the issue tracker
 
 The mobile application is currently available for the following cities:
 
-* Cochabamba, Bolivia - [Website](https://www.trufi.app), [Google Play](https://play.google.com/store/apps/details?id=app.trufi.navigator), iOS coming soon
-* Accra, Ghana - [Website](https://www.trotro.app/), [Google Play](https://play.google.com/store/apps/details?id=com.trotro.trotro), iOS coming soon
+* Cochabamba, Bolivia - [Website](https://www.trufi.app), [Google Play](https://play.google.com/store/apps/details?id=app.trufi.navigator), [App Store](https://apps.apple.com/bo/app/trufi/id1471411924)
+* Accra, Ghana - [Website](https://www.trotro.app/), [Google Play](https://play.google.com/store/apps/details?id=com.trotro.trotro), [App Store](https://apps.apple.com/bo/app/trotro/id1478620071)
 
 Please contact the [Trufi Association](mailto:info@trufi-association.org) to get one for your city, too.
 
@@ -28,8 +28,8 @@ Please contact the [Trufi Association](mailto:info@trufi-association.org) to get
 
 If you want to start working on the Trufi App. Get started by reviewing the [Flutter documentation](https://flutter.dev) first. Then you can follow the next steps:
 
-* [Install the enviroment](https://flutter.dev/docs/get-started/install)
-* Close the the source code repository: `$ git clone https://github.com/trufi-association/trufi-app.git`
+* [Install the environment](https://flutter.dev/docs/get-started/install)
+* Clone the source code repository: `$ git clone https://github.com/trufi-association/trufi-app.git`
 * Copy the configuration file: `$ cp assets/cfg/app_config.json.dist assets/cfg/app_config.json`
 * Update the configuration and add your private [MapTiler key](https://cloud.maptiler.com/account/keys)
 * For Android: [Create a key store](https://flutter.dev/docs/deployment/android#signing-the-app) or use an existing key, fill the `android/key.properties` with path and password.
