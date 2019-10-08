@@ -35,6 +35,18 @@ If you want to start working on the Trufi App. Get started by reviewing the [Flu
 * For Android: [Create a key store](https://flutter.dev/docs/deployment/android#signing-the-app) or use an existing key, fill the `android/key.properties` with path and password.
 * Build a test version of the application with `$ flutter run`
 
+## Complementary projects
+
+[osm-search-data-export](https://github.com/trufi-association/osm-search-data-export) - Generates offline search data that includes POIs, streets and street junctions. The app currently uses the json-compact format.
+
+[osm-public-transport-export](https://github.com/trufi-association/osm-public-transport-export) - Fetches OSM data and generates GeoJSON and additional files.
+
+[geojson-to-gtfs](https://github.com/trufi-association/geojson-to-gtfs) - Turns generated GeoJSON and additional data into GTFS.
+
+[gtfs-bolivia-cochabamba](https://github.com/trufi-association/gtfs-bolivia-cochabamba) - Config package that internally uses *osm-public-transport-export* and *geojson-to-gtfs* to generate a GTFS file to be used in OTP. Use this as a template to generate your own GTFS.
+
+[OpenTripPlanner](https://github.com/opentripplanner/OpenTripPlanner) - Trip planning server that uses GTFS feeds for routing.
+
 ## Free Software
 
 Copyright 2019 - [Trufi Association](https://www.trufi-association.org/)
