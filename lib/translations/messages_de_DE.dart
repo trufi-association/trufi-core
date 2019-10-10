@@ -97,7 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorUnknownDestination" : MessageLookupByLibrary.simpleMessage("Das Ziel ist unbekannt. Können Sie ein bisschen genauer sein?"),
     "errorUnknownOrigin" : MessageLookupByLibrary.simpleMessage("Der Startpunkt ist unbekannt. Können Sie ein bisschen genauer sein?"),
     "errorUnknownOriginDestination" : MessageLookupByLibrary.simpleMessage("Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?"),
-    "feedbackContent" : MessageLookupByLibrary.simpleMessage("Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you."),
+    "feedbackContent" : MessageLookupByLibrary.simpleMessage("Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können."),
     "feedbackTitle" : MessageLookupByLibrary.simpleMessage("E-Mail senden"),
     "followOnFacebook" : MessageLookupByLibrary.simpleMessage("Folge uns auf Facebook"),
     "followOnInstagram" : MessageLookupByLibrary.simpleMessage("Folge uns auf Instagram"),

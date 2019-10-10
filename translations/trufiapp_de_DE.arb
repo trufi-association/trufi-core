@@ -450,7 +450,7 @@
       }
     }
   },
-  "feedbackContent": "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",
+  "feedbackContent": "Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.",
   "@feedbackContent": {
     "description": "Text displayed on the feedback page",
     "type": "text",
