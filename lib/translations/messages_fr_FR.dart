@@ -46,15 +46,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Marcher ${duration} (${distance}) vers\n${location}";
 
-  static m5(representatives) => "Représentants: ${representatives}";
+  static m6(representatives) => "Représentants: ${representatives}";
 
-  static m6(routeContributors, osmContributors) => "Itinéraires: ${routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que ${osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!";
+  static m7(routeContributors, osmContributors) => "Itinéraires: ${routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que ${osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!";
 
-  static m7(teamMembers) => "Équipe: ${teamMembers}";
+  static m8(teamMembers) => "Équipe: ${teamMembers}";
 
-  static m8(translators) => "Traductions: ${translators}";
+  static m9(translators) => "Traductions: ${translators}";
 
-  static m9(version) => "Version ${version}";
+  static m10(version) => "Version ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -128,11 +128,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Résultats de la recherche"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transports en commun à Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Nous sommes une équipe internationale appelée Trufi Association qui a créé cette application avec l\'aide de nombreux bénévoles! Voulez-vous améliorer l\'application Trufi et faire partie de notre équipe? Merci de nous contacter via:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }
