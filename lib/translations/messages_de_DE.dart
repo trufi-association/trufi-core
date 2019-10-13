@@ -20,22 +20,6 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'de_DE';
 
-  String lookupMessage(
-      String message_str, String locale, String name, List args, String meaning,
-      {MessageIfAbsent ifAbsent}) {
-    String failedLookup(String message_str, List args) {
-      // If there's no message_str, then we are an internal lookup, e.g. an
-      // embedded plural, and shouldn't fail.
-      if (message_str == null) return null;
-      // ignore: unnecessary_new
-      throw new UnsupportedError(
-          "No translation found for message '$name',\n"
-          "  original text '$message_str'");
-    }
-    return super.lookupMessage(message_str, locale, name, args, meaning,
-        ifAbsent: ifAbsent ?? failedLookup);
-  }
-
   static m0(value) => "${value} km";
 
   static m1(value) => "${value} m";
@@ -46,15 +30,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Gehen Sie ${duration} (${distance}) bis ${location}";
 
-  static m5(representatives) => "Vertreter: ${representatives}";
+  static m5(url) => "Hol\' dir die Trufi, die App für den öffentlichen Nahverkehr in Cochabamba, auf ${url}";
 
-  static m6(routeContributors, osmContributors) => "Routen: ${routeContributors} und alle Benutzer, die Routen zu OpenStreetMap hochgeladen haben, z. B. ${osmContributors}. Kontaktieren Sie uns, wenn Sie der OpenStreetMap-Community beitreten möchten!";
+  static m6(representatives) => "Vertreter: ${representatives}";
 
-  static m7(teamMembers) => "Team: ${teamMembers}";
+  static m7(routeContributors, osmContributors) => "Routen: ${routeContributors} und alle Benutzer, die Routen zu OpenStreetMap hochgeladen haben, z. B. ${osmContributors}. Kontaktieren Sie uns, wenn Sie der OpenStreetMap-Community beitreten möchten!";
 
-  static m8(translators) => "Übersetzungen: ${translators}";
+  static m8(teamMembers) => "Team: ${teamMembers}";
 
-  static m9(version) => "Version ${version}";
+  static m9(translators) => "Übersetzungen: ${translators}";
+
+  static m10(version) => "Version ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -63,6 +49,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "aboutOpenSource" : MessageLookupByLibrary.simpleMessage("Diese App ist Open Source und auf GitHub verfügbar. Zögere nicht, einen Beitrag zu leisten oder bringe sie in Deine Stadt!"),
     "alertLocationServicesDeniedMessage" : MessageLookupByLibrary.simpleMessage("Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind."),
     "alertLocationServicesDeniedTitle" : MessageLookupByLibrary.simpleMessage("Kein Standort"),
+    "appReviewDialogButtonAccept" : MessageLookupByLibrary.simpleMessage("Bewerten"),
+    "appReviewDialogButtonDecline" : MessageLookupByLibrary.simpleMessage("Jetzt nicht"),
+    "appReviewDialogContent" : MessageLookupByLibrary.simpleMessage("Unterstüzte uns mit einer Bewertung im Google Play Store."),
+    "appReviewDialogTitle" : MessageLookupByLibrary.simpleMessage("Magst du Trufi?"),
     "chooseLocationPageSubtitle" : MessageLookupByLibrary.simpleMessage("Karte unter Markierung schwenken und zoomen"),
     "chooseLocationPageTitle" : MessageLookupByLibrary.simpleMessage("Ort auswählen"),
     "commonCancel" : MessageLookupByLibrary.simpleMessage("Abbrechen"),
@@ -76,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Startpunkt"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Unbekannter Fehler"),
     "description" : MessageLookupByLibrary.simpleMessage("Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen."),
+    "donate" : MessageLookupByLibrary.simpleMessage("Spenden"),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
     "errorAmbiguousOrigin" : MessageLookupByLibrary.simpleMessage("Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
     "errorAmbiguousOriginDestination" : MessageLookupByLibrary.simpleMessage("Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an."),
@@ -92,6 +83,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorUnknownOriginDestination" : MessageLookupByLibrary.simpleMessage("Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?"),
     "feedbackContent" : MessageLookupByLibrary.simpleMessage("Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können."),
     "feedbackTitle" : MessageLookupByLibrary.simpleMessage("E-Mail senden"),
+    "followOnFacebook" : MessageLookupByLibrary.simpleMessage("Folge uns auf Facebook"),
+    "followOnInstagram" : MessageLookupByLibrary.simpleMessage("Folge uns auf Instagram"),
+    "followOnTwitter" : MessageLookupByLibrary.simpleMessage("Folge uns auf Twitter"),
     "instructionDistanceKm" : m0,
     "instructionDistanceMeters" : m1,
     "instructionDurationMinutes" : m2,
@@ -108,11 +102,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Verbindungen"),
     "menuFeedback" : MessageLookupByLibrary.simpleMessage("Feedback"),
     "menuOnline" : MessageLookupByLibrary.simpleMessage("Online"),
+    "menuShareApp" : MessageLookupByLibrary.simpleMessage("App weiterempfehlen"),
     "menuTeam" : MessageLookupByLibrary.simpleMessage("Team"),
     "noRouteError" : MessageLookupByLibrary.simpleMessage("Wir konnten leider keine Route finden. Was möchten Sie tun?"),
     "noRouteErrorActionCancel" : MessageLookupByLibrary.simpleMessage("Anderes Ziel auswählen"),
     "noRouteErrorActionReportMissingRoute" : MessageLookupByLibrary.simpleMessage("Fehlende Route melden"),
     "noRouteErrorActionShowCarRoute" : MessageLookupByLibrary.simpleMessage("Auto Route anzeigen"),
+    "readOurBlog" : MessageLookupByLibrary.simpleMessage("Lies in unserem Blog"),
     "searchFailLoadingPlan" : MessageLookupByLibrary.simpleMessage("Fehler beim Laden des Plans."),
     "searchHintDestination" : MessageLookupByLibrary.simpleMessage("Ziel auswählen"),
     "searchHintOrigin" : MessageLookupByLibrary.simpleMessage("Start auswählen"),
@@ -126,13 +122,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Orte"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Zuletzt gesucht"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Suchergebnisse"),
+    "shareAppText" : m5,
     "tagline" : MessageLookupByLibrary.simpleMessage("Öffentliche Verkehrsmittel in Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mit Hilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }

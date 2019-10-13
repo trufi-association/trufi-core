@@ -20,22 +20,6 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'qu_BO';
 
-  String lookupMessage(
-      String message_str, String locale, String name, List args, String meaning,
-      {MessageIfAbsent ifAbsent}) {
-    String failedLookup(String message_str, List args) {
-      // If there's no message_str, then we are an internal lookup, e.g. an
-      // embedded plural, and shouldn't fail.
-      if (message_str == null) return null;
-      // ignore: unnecessary_new
-      throw new UnsupportedError(
-          "No translation found for message '$name',\n"
-          "  original text '$message_str'");
-    }
-    return super.lookupMessage(message_str, locale, name, args, meaning,
-        ifAbsent: ifAbsent ?? failedLookup);
-  }
-
   static m0(value) => "${value} km";
 
   static m1(value) => "${value} m";
@@ -46,15 +30,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy";
 
-  static m5(representatives) => "Umalliqkuna: ${representatives}";
+  static m6(representatives) => "Umalliqkuna: ${representatives}";
 
-  static m6(routeContributors, osmContributors) => "Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!";
+  static m7(routeContributors, osmContributors) => "Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!";
 
-  static m7(teamMembers) => "Yanapaqkuna: ${teamMembers}";
+  static m8(teamMembers) => "Yanapaqkuna: ${teamMembers}";
 
-  static m8(translators) => "Tiqraqkuna: ${translators}";
+  static m9(translators) => "Tiqraqkuna: ${translators}";
 
-  static m9(version) => "Versión ${version}";
+  static m10(version) => "Versión ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -128,11 +112,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Mask\'anakuna riqsichiq"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }

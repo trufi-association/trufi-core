@@ -20,22 +20,6 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'it_IT';
 
-  String lookupMessage(
-      String message_str, String locale, String name, List args, String meaning,
-      {MessageIfAbsent ifAbsent}) {
-    String failedLookup(String message_str, List args) {
-      // If there's no message_str, then we are an internal lookup, e.g. an
-      // embedded plural, and shouldn't fail.
-      if (message_str == null) return null;
-      // ignore: unnecessary_new
-      throw new UnsupportedError(
-          "No translation found for message '$name',\n"
-          "  original text '$message_str'");
-    }
-    return super.lookupMessage(message_str, locale, name, args, meaning,
-        ifAbsent: ifAbsent ?? failedLookup);
-  }
-
   static m0(value) => "${value} km";
 
   static m1(value) => "${value} m";
@@ -46,15 +30,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "A piedi ${duration} (${distance}) verso\n${location}";
 
-  static m5(representatives) => "Rappresentanti: ${representatives}";
+  static m6(representatives) => "Rappresentanti: ${representatives}";
 
-  static m6(routeContributors, osmContributors) => "Rotte: ${routeContributors} e tutti gli utenti che hanno caricato rotte su OpenStreetMap, come ${osmContributors} . Contattaci se vuoi unirti alla comunità OpenStreetMap!";
+  static m7(routeContributors, osmContributors) => "Rotte: ${routeContributors} e tutti gli utenti che hanno caricato rotte su OpenStreetMap, come ${osmContributors} . Contattaci se vuoi unirti alla comunità OpenStreetMap!";
 
-  static m7(teamMembers) => "Team: ${teamMembers}";
+  static m8(teamMembers) => "Team: ${teamMembers}";
 
-  static m8(translators) => "Traduzioni: ${translators}";
+  static m9(translators) => "Traduzioni: ${translators}";
 
-  static m9(version) => "Versione ${version}";
+  static m10(version) => "Versione ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -128,11 +112,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Cerca Risultati"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Trasporto pubblico a Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Siamo un team internazionale chiamato Trufi Association che ha creato questa app con l\'aiuto di molti volontari! Vuoi migliorare l\'app Trufi ed essere parte del nostro team? Vi preghiamo di contattarci tramite:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }

@@ -20,22 +20,6 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en_US';
 
-  String lookupMessage(
-      String message_str, String locale, String name, List args, String meaning,
-      {MessageIfAbsent ifAbsent}) {
-    String failedLookup(String message_str, List args) {
-      // If there's no message_str, then we are an internal lookup, e.g. an
-      // embedded plural, and shouldn't fail.
-      if (message_str == null) return null;
-      // ignore: unnecessary_new
-      throw new UnsupportedError(
-          "No translation found for message '$name',\n"
-          "  original text '$message_str'");
-    }
-    return super.lookupMessage(message_str, locale, name, args, meaning,
-        ifAbsent: ifAbsent ?? failedLookup);
-  }
-
   static m0(value) => "${value} km";
 
   static m1(value) => "${value} m";
@@ -46,17 +30,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(duration, distance, location) => "Walk ${duration} (${distance}) to\n${location}";
 
-  static m10(url) => "Download Trufi App, the public transport app for Cochabamba, at ${url}";
+  static m5(url) => "Download Trufi App, the public transport app for Cochabamba, at ${url}";
 
-  static m5(representatives) => "Representatives: ${representatives}";
+  static m6(representatives) => "Representatives: ${representatives}";
 
-  static m6(routeContributors, osmContributors) => "Routes: ${routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!";
+  static m7(routeContributors, osmContributors) => "Routes: ${routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!";
 
-  static m7(teamMembers) => "Team: ${teamMembers}";
+  static m8(teamMembers) => "Team: ${teamMembers}";
 
-  static m8(translators) => "Translations: ${translators}";
+  static m9(translators) => "Translations: ${translators}";
 
-  static m9(version) => "Version ${version}";
+  static m10(version) => "Version ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -138,14 +122,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Places"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recent"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Search Results"),
-    "shareAppText" : m10,
+    "shareAppText" : m5,
     "tagline" : MessageLookupByLibrary.simpleMessage("Public transportation in Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:"),
-    "teamSectionRepresentatives" : m5,
-    "teamSectionRoutes" : m6,
-    "teamSectionTeam" : m7,
-    "teamSectionTranslations" : m8,
+    "teamSectionRepresentatives" : m6,
+    "teamSectionRoutes" : m7,
+    "teamSectionTeam" : m8,
+    "teamSectionTranslations" : m9,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m9
+    "version" : m10
   };
 }

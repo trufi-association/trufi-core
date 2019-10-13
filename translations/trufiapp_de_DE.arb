@@ -434,6 +434,22 @@
     "type": "text",
     "placeholders": {}
   },
+  "menuShareApp": "App weiterempfehlen",
+  "@menuShareApp": {
+    "description": "Menu item that triggers a native widget to rate the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareAppText": "Hol' dir die Trufi, die App für den öffentlichen Nahverkehr in Cochabamba, auf {url}",
+  "@shareAppText": {
+    "description": "Text with URL that is used when sharing the app.",
+    "type": "text",
+    "placeholders": {
+      "url": {
+        "example": "https://trufi.share.url"
+      }
+    }
+  },
   "feedbackContent": "Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.",
   "@feedbackContent": {
     "description": "Text displayed on the feedback page",
@@ -512,5 +528,59 @@
         "example": "Kamek, Birdo, Toadette, Bowser Jr."
       }
     }
+  },
+  "donate": "Spenden",
+  "@donate": {
+    "description": "Donate menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "readOurBlog": "Lies in unserem Blog",
+  "@readOurBlog": {
+    "description": "Website menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnFacebook": "Folge uns auf Facebook",
+  "@followOnFacebook": {
+    "description": "Facebook menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnTwitter": "Folge uns auf Twitter",
+  "@followOnTwitter": {
+    "description": "Twitter menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "followOnInstagram": "Folge uns auf Instagram",
+  "@followOnInstagram": {
+    "description": "Instagram menu item",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogTitle": "Magst du Trufi?",
+  "@appReviewDialogTitle": {
+    "description": "Title of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogContent": "Unterstüzte uns mit einer Bewertung im Google Play Store.",
+  "@appReviewDialogContent": {
+    "description": "Content of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonDecline": "Jetzt nicht",
+  "@appReviewDialogButtonDecline": {
+    "description": "Decline button of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
+  },
+  "appReviewDialogButtonAccept": "Bewerten",
+  "@appReviewDialogButtonAccept": {
+    "description": "Accept button of the App Review Dialog used on Android",
+    "type": "text",
+    "placeholders": {}
   }
 }
