@@ -150,7 +150,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
   void _handleOnMapPositionChanged(
     MapPosition position,
     bool hasGesture,
-    bool isUserGesture,
   ) {
     setState(() {
       _chooseOnMapMarker = buildToMarker(position.center);

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' as rx;
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
 import 'package:trufi_app/composite_subscription.dart';
@@ -21,7 +21,7 @@ class LocationProviderBloc implements BlocBase {
 
   LocationProvider _locationProvider;
 
-  final _locationUpdateController = BehaviorSubject<LatLng>();
+  final _locationUpdateController = rx.BehaviorSubject<LatLng>();
 
   Sink<LatLng> get _inLocationUpdate => _locationUpdateController.sink;
 

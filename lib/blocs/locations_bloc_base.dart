@@ -27,9 +27,7 @@ abstract class LocationsBlocBase implements BlocBase {
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
   // Locations
-  final _locationsController = BehaviorSubject<List<TrufiLocation>>(
-    seedValue: [],
-  );
+  final _locationsController = BehaviorSubject<List<TrufiLocation>>();
 
   Sink<List<TrufiLocation>> get _inLocations => _locationsController.sink;
 

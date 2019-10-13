@@ -4,7 +4,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' as rx;
 
 import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/composite_subscription.dart';
@@ -21,7 +21,7 @@ class TrufiOnAndOfflineMapController {
 
   final _offlineController = TrufiMapController();
   final _onlineController = TrufiMapController();
-  final _mapReadyController = BehaviorSubject<Null>();
+  final _mapReadyController = rx.BehaviorSubject<Null>();
 
   TrufiOnAndOfflineMapState _state;
 
@@ -174,11 +174,10 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   void _handleOnPositionChanged(
     MapPosition position,
     bool hasGesture,
-    bool isUserGesture,
   ) {
     if (widget.onPositionChanged != null) {
       Future.delayed(Duration.zero, () {
-        widget.onPositionChanged(position, hasGesture, isUserGesture);
+        widget.onPositionChanged(position, hasGesture);
       });
     }
   }

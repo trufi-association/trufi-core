@@ -63,11 +63,10 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   void _handleOnPositionChanged(
     MapPosition position,
     bool hasGesture,
-    bool isUserGesture,
   ) {
     if (widget.onPositionChanged != null) {
       Future.delayed(Duration.zero, () {
-        widget.onPositionChanged(position, hasGesture, isUserGesture);
+        widget.onPositionChanged(position, hasGesture);
       });
     }
   }
