@@ -7,7 +7,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_map: 0.5.6
+  flutter_map: 0.7.3
   #flutter_map:
   #  git:
   #    url: git@github.com:ubilabs/flutter_map.git
