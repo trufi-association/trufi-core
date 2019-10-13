@@ -114,10 +114,13 @@ Widget _buildAlert({
   Widget content,
   List<Widget> actions,
 }) {
+  final theme = Theme.of(context);
   return AlertDialog(
-    backgroundColor: Theme.of(context).primaryColor,
+    backgroundColor: theme.primaryColor,
     title: title,
+    titleTextStyle: theme.primaryTextTheme.title,
     content: content,
+    contentTextStyle: theme.primaryTextTheme.body1,
     actions: actions,
   );
 }
