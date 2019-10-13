@@ -15,7 +15,7 @@ dependencies:
 
   intl: 0.15.8
   intl_translation: 0.17.5
-  app_review: 0.0.9+3
+  app_review: 1.0.0
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
   flare_flutter: 1.5.4
@@ -23,7 +23,7 @@ dependencies:
   flutter_svg: 0.13.1
   geolocator: 2.0.1
   google_api_availability: 1.0.4
-  http: 0.12.0
+  http: 0.12.0+2
   mockito: 3.0.0
   path_provider: 1.1.0
   permission_handler: 2.1.2
@@ -31,8 +31,8 @@ dependencies:
   shared_preferences: 0.4.3
   sprintf: 4.0.0
   synchronized: 2.0.2
-  url_launcher: 4.1.0+1
-  package_info: 0.3.2+1
+  url_launcher: 5.1.6
+  package_info: 0.4.0+6
   global_configuration: 1.2.0
   share: 0.6.2+1
 
