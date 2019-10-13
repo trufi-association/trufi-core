@@ -487,7 +487,7 @@ packages:
       name: share
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.2+1"
+    version: "0.6.2+3"
   shared_preferences:
     dependency: "direct main"
     description:
