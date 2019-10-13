@@ -18,7 +18,7 @@ dependencies:
   app_review: 1.0.0
   cupertino_icons: 0.1.2
   diff_match_patch: 0.3.0
-  flare_flutter: 1.5.4
+  flare_flutter: 1.6.2
   flutter_compass: 0.3.3
   flutter_svg: 0.13.1
   geolocator: 2.0.1

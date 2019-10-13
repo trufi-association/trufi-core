@@ -126,14 +126,14 @@ packages:
       name: flare_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.3"
+    version: "2.2.2"
   flare_flutter:
     dependency: "direct main"
     description:
       name: flare_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.4"
+    version: "1.6.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -698,4 +698,4 @@ packages:
     version: "2.1.15"
 sdks:
   dart: ">=2.3.0 <3.0.0"
-  flutter: ">=1.6.0 <2.0.0"
+  flutter: ">=1.7.8+hotfix.3 <2.0.0"
