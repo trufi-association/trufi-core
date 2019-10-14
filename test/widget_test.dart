@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/pages/home.dart';
-import 'package:trufi_app/trufi_localizations.dart';
+import 'package:core/blocs/bloc_provider.dart';
+import 'package:core/blocs/favorite_locations_bloc.dart';
+import 'package:core/blocs/history_locations_bloc.dart';
+import 'package:core/blocs/location_provider_bloc.dart';
+import 'package:core/location/location_form_field.dart';
+import 'package:core/pages/home.dart';
+import 'package:core/trufi_localizations.dart';
 
 import 'image_tile.dart';
 import 'mock_http_client.dart';

@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:trufi_app/blocs/app_review_bloc.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/blocs/location_search_bloc.dart';
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/pages/about.dart';
-import 'package:trufi_app/pages/feedback.dart';
-import 'package:trufi_app/pages/home.dart';
-import 'package:trufi_app/pages/team.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/widgets/trufi_drawer.dart';
-
-void main() async {
-  await GlobalConfiguration().loadFromAsset("app_config");
-  runApp(TrufiApp());
-}
+import './blocs/app_review_bloc.dart';
+import './blocs/bloc_provider.dart';
+import './blocs/favorite_locations_bloc.dart';
+import './blocs/history_locations_bloc.dart';
+import './blocs/location_provider_bloc.dart';
+import './blocs/location_search_bloc.dart';
+import './blocs/preferences_bloc.dart';
+import './blocs/request_manager_bloc.dart';
+import './pages/about.dart';
+import './pages/feedback.dart';
+import './pages/home.dart';
+import './pages/team.dart';
+import './trufi_localizations.dart';
+import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
   @override

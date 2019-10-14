@@ -4,10 +4,10 @@ import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_search_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../../blocs/favorite_locations_bloc.dart';
+import '../../blocs/location_search_bloc.dart';
+import '../../blocs/request_manager_bloc.dart';
+import '../../trufi_models.dart';
 
 class OfflineRequestManager implements RequestManager {
   Future<List<dynamic>> fetchLocations(

@@ -1,18 +1,18 @@
 import 'dart:io';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_app/custom_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/pages/about.dart';
-import 'package:trufi_app/pages/feedback.dart';
-import 'package:trufi_app/pages/home.dart';
-import 'package:trufi_app/pages/team.dart';
-import 'package:trufi_app/trufi_localizations.dart';
+import '../blocs/preferences_bloc.dart';
+import '../custom_icons.dart';
+import '../pages/about.dart';
+import '../pages/feedback.dart';
+import '../pages/home.dart';
+import '../pages/team.dart';
+import '../trufi_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
   TrufiDrawer(this.currentRoute);

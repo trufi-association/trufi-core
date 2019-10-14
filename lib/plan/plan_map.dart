@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/plan/plan.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/widgets/crop_button.dart';
-import 'package:trufi_app/widgets/trufi_map.dart';
-import 'package:trufi_app/widgets/trufi_online_map.dart';
-import 'package:trufi_app/widgets/your_location_button.dart';
+import '../composite_subscription.dart';
+import '../plan/plan.dart';
+import '../trufi_map_utils.dart';
+import '../trufi_models.dart';
+import '../widgets/crop_button.dart';
+import '../widgets/trufi_map.dart';
+import '../widgets/trufi_online_map.dart';
+import '../widgets/your_location_button.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 

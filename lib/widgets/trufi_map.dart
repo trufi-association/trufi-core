@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/trufi_map_animations.dart';
+import '../blocs/location_provider_bloc.dart';
+import '../trufi_map_utils.dart';
+import '../widgets/alerts.dart';
+import '../widgets/trufi_map_animations.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:package_info/package_info.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/preferences_bloc.dart';
+import '../blocs/bloc_provider.dart';
+import '../blocs/preferences_bloc.dart';
 
 class AppReviewBloc extends BlocBase {
   static AppReviewBloc of(BuildContext context) {
@@ -15,13 +15,12 @@ class AppReviewBloc extends BlocBase {
   final PreferencesBloc preferencesBloc;
 
   @override
-  void dispose() {
-  }
+  void dispose() {}
 
   void incrementReviewWorthyActions() {
     if (this.preferencesBloc.reviewWorthyActionCount != null) {
       this.preferencesBloc.reviewWorthyActionCount =
-        this.preferencesBloc.reviewWorthyActionCount + 1;
+          this.preferencesBloc.reviewWorthyActionCount + 1;
     } else {
       this.preferencesBloc.reviewWorthyActionCount = 1;
     }

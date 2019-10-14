@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/blocs/location_search_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/pages/choose_location.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/favorite_button.dart';
+import '../blocs/favorite_locations_bloc.dart';
+import '../blocs/history_locations_bloc.dart';
+import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_search_bloc.dart';
+import '../blocs/request_manager_bloc.dart';
+import '../pages/choose_location.dart';
+import '../trufi_localizations.dart';
+import '../trufi_models.dart';
+import '../widgets/alerts.dart';
+import '../widgets/favorite_button.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   LocationSearchDelegate({this.currentLocation});

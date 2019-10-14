@@ -1,6 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 
-import 'package:trufi_app/keys.dart' as keys;
+import 'package:core/keys.dart' as keys;
 
 import 'robot.dart';
 import 'home_robot.dart';

@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/widgets/trufi_drawer.dart';
+import '../trufi_localizations.dart';
+import '../widgets/trufi_drawer.dart';
 
 class FeedbackPage extends StatefulWidget {
   static const String route = "/feedback";

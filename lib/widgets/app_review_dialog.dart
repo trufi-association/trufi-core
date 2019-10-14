@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:app_review/app_review.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
+import 'package:app_review/app_review.dart';
+import 'package:flutter/material.dart';
+
+import '../trufi_localizations.dart';
 
 void showAppReviewDialog(BuildContext context) async {
   final localizations = TrufiLocalizations.of(context);

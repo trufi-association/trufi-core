@@ -1,12 +1,12 @@
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/trufi_map.dart';
-import 'package:trufi_app/widgets/trufi_online_map.dart';
+import '../trufi_localizations.dart';
+import '../trufi_map_utils.dart';
+import '../widgets/trufi_map.dart';
+import '../widgets/trufi_online_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPage({this.initialPosition});

@@ -5,8 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/composite_subscription.dart';
+import '../blocs/bloc_provider.dart';
+import '../composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
   static LocationProviderBloc of(BuildContext context) {

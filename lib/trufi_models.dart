@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
+import './trufi_localizations.dart';
+import './trufi_map_utils.dart';
 
 class TrufiLocation {
   TrufiLocation({

@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../../blocs/favorite_locations_bloc.dart';
+import '../../blocs/request_manager_bloc.dart';
+import '../../trufi_localizations.dart';
+import '../../trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
   static const String searchPath = '/geocode';

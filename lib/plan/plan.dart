@@ -2,10 +2,10 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
-import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/plan/plan_itinerary_tabs.dart';
-import 'package:trufi_app/plan/plan_map.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../composite_subscription.dart';
+import '../plan/plan_itinerary_tabs.dart';
+import '../plan/plan_map.dart';
+import '../trufi_models.dart';
 
 class PlanPageController {
   PlanPageController(this.plan) {

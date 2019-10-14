@@ -1,30 +1,30 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:async/async.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/blocs/app_review_bloc.dart';
-import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/keys.dart' as keys;
-import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/plan/plan.dart';
-import 'package:trufi_app/plan/plan_empty.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/trufi_drawer.dart';
-import 'package:trufi_app/widgets/app_review_dialog.dart';
+import '../blocs/app_review_bloc.dart';
+import '../blocs/location_provider_bloc.dart';
+import '../blocs/preferences_bloc.dart';
+import '../blocs/request_manager_bloc.dart';
+import '../composite_subscription.dart';
+import '../keys.dart' as keys;
+import '../location/location_form_field.dart';
+import '../plan/plan.dart';
+import '../plan/plan_empty.dart';
+import '../trufi_localizations.dart';
+import '../trufi_models.dart';
+import '../widgets/alerts.dart';
+import '../widgets/app_review_dialog.dart';
+import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';

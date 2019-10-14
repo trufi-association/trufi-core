@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/trufi_localizations.dart';
+import '../blocs/preferences_bloc.dart';
+import '../trufi_localizations.dart';
 
 Widget buildAlertLocationServicesDenied(BuildContext context) {
   final localizations = TrufiLocalizations.of(context);

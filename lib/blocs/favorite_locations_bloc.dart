@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/locations_bloc_base.dart';
-import 'package:trufi_app/location/location_storage.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../blocs/bloc_provider.dart';
+import '../blocs/locations_bloc_base.dart';
+import '../location/location_storage.dart';
+import '../trufi_models.dart';
 
 class FavoriteLocationsBloc extends LocationsBlocBase {
   static FavoriteLocationsBloc of(BuildContext context) {
