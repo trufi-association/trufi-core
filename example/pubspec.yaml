@@ -1,5 +1,5 @@
-name: core_example
-description: Demonstrates how to use the core plugin.
+name: trufi_core_example
+description: Demonstrates how to use the trufi_core plugin.
 publish_to: 'none'
 
 environment:
@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  core:
+  trufi_core:
     path: ../
 
 # For information on the generic Dart part of this file, see the

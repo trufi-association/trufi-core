@@ -1,4 +1,4 @@
-package app.trufi.core_example
+package app.trufi.trufi_core_example
 
 import android.os.Bundle
 

@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftCorePlugin: NSObject, FlutterPlugin {
+public class SwiftTrufiCorePlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "core", binaryMessenger: registrar.messenger())
-    let instance = SwiftCorePlugin()
+    let channel = FlutterMethodChannel(name: "trufi_core", binaryMessenger: registrar.messenger())
+    let instance = SwiftTrufiCorePlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

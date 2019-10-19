@@ -1,4 +1,4 @@
-package app.trufi.core
+package app.trufi.trufi_core
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -6,12 +6,12 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class CorePlugin: MethodCallHandler {
+class TrufiCorePlugin: MethodCallHandler {
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "core")
-      channel.setMethodCallHandler(CorePlugin())
+      val channel = MethodChannel(registrar.messenger(), "trufi_core")
+      channel.setMethodCallHandler(TrufiCorePlugin())
     }
   }
 

@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:core/trufi_app.dart';
+import 'package:trufi_core/trufi_app.dart';
 
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {

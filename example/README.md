@@ -1,6 +1,6 @@
-# core_example
+# trufi_core_example
 
-Demonstrates how to use the core plugin.
+Demonstrates how to use the trufi_core plugin.
 
 ## Getting Started
 

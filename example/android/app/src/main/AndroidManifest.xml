@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.trufi.core_example">
+    package="app.trufi.trufi_core_example">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="core_example"
+        android:label="trufi_core_example"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

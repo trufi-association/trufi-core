@@ -1,4 +1,4 @@
-group 'app.trufi.core'
+group 'app.trufi.trufi_core'
 version '1.0-SNAPSHOT'
 
 buildscript {
