@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 import '../widgets/trufi_drawer.dart';
 
@@ -28,14 +28,13 @@ class TeamPageState extends State<TeamPage> {
 
   void _loadState() async {
     const joinSep = ", ";
-    final attributions = Map<String, List<dynamic>>
-      .from(GlobalConfiguration().get("attributions"));
+    final attribution = TrufiConfiguration().attribution;
     setState(() {
-      _representatives = attributions["representatives"].join(joinSep);
-      _team = attributions["team"].join(joinSep);
-      _translations = attributions["translations"].join(joinSep);
-      _routes = attributions["routes"].join(joinSep);
-      _osm = attributions["osm"].join(joinSep);
+      _representatives = attribution.representatives.join(joinSep);
+      _team = attribution.team.join(joinSep);
+      _translations = attribution.translations.join(joinSep);
+      _routes = attribution.routes.join(joinSep);
+      _osm = attribution.osm.join(joinSep);
     });
   }
 
@@ -54,10 +53,9 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
-    final emailInfo = GlobalConfiguration().getString("emailInfo");
-    final launchUrl = "mailto:$emailInfo?subject=Contribution";
     return ListView(
       children: <Widget>[
         Container(
@@ -74,14 +72,16 @@ class TeamPageState extends State<TeamPage> {
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(
-                        text: emailInfo,
+                        text: cfg.email.info,
                         style: theme.textTheme.body2.copyWith(
                           color: theme.accentColor,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            launch(launchUrl);
+                            launch(
+                              "mailto:${cfg.email.info}?subject=Contribution",
+                            );
                           },
                       ),
                       TextSpan(

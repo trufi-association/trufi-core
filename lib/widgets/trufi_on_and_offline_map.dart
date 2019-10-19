@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 
 import '../blocs/preferences_bloc.dart';
 import '../composite_subscription.dart';
+import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/trufi_map.dart';
 
@@ -112,23 +112,17 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOnlineMap() {
-    final cfg = GlobalConfiguration();
-    final minZoom = cfg.getDouble("mapOnlineMinZoom");
-    final maxZoom = cfg.getDouble("mapOnlineMaxZoom");
-    final zoom = cfg.getDouble("mapOnlineZoom");
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
-    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
-
+    final cfg = TrufiConfiguration();
     return TrufiMap(
       key: ValueKey("TrufiOnlineMap"),
       controller: widget.controller.online,
       mapOptions: MapOptions(
-        minZoom: minZoom,
-        maxZoom: maxZoom,
-        zoom: zoom,
+        minZoom: cfg.map.onlineMinZoom,
+        maxZoom: cfg.map.onlineMaxZoom,
+        zoom: cfg.map.onlineZoom,
         onTap: widget.onTap,
         onPositionChanged: _handleOnPositionChanged,
-        center: mapCenter,
+        center: cfg.map.center,
       ),
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
@@ -139,29 +133,19 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOfflineMap() {
-    final cfg = GlobalConfiguration();
-    final minZoom = cfg.getDouble("mapOfflineMinZoom");
-    final maxZoom = cfg.getDouble("mapOfflineMaxZoom");
-    final zoom = cfg.getDouble("mapOfflineZoom");
-    final southWestCoords = List<double>.from(cfg.get("mapSouthWestCoordsLatLng"));
-    final northEastCoords = List<double>.from(cfg.get("mapNorthEastCoordsLatLng"));
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
-    final mapSouthWest = LatLng(southWestCoords[0], southWestCoords[1]);
-    final mapNorthEast = LatLng(northEastCoords[0], northEastCoords[1]);
-    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
-
+    final cfg = TrufiConfiguration();
     return TrufiMap(
       key: ValueKey("TrufiOfflineMap"),
       controller: widget.controller.offline,
       mapOptions: MapOptions(
-        minZoom: minZoom,
-        maxZoom: maxZoom,
-        zoom: zoom,
+        minZoom: cfg.map.offlineMinZoom,
+        maxZoom: cfg.map.offlineMaxZoom,
+        zoom: cfg.map.offlineZoom,
         onTap: widget.onTap,
         onPositionChanged: _handleOnPositionChanged,
-        swPanBoundary: mapSouthWest,
-        nePanBoundary: mapNorthEast,
-        center: mapCenter,
+        swPanBoundary: cfg.map.southWest,
+        nePanBoundary: cfg.map.northEast,
+        center: cfg.map.center,
       ),
       layerOptionsBuilder: (context) {
         return <LayerOptions>[

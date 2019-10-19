@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
 import './composite_subscription.dart';
+import './trufi_configuration.dart';
 import './trufi_models.dart';
 
 openStreetMapTileLayerOptions() {
@@ -26,7 +26,7 @@ offlineMapTileLayerOptions() {
 }
 
 tileHostingTileLayerOptions() {
-  final key = GlobalConfiguration().getString("keyMapTiler");
+  final key = TrufiConfiguration().map.mapTilerKey;
   return TileLayerOptions(
     urlTemplate:
         "https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}@2x.png?key={key}",
@@ -44,6 +44,7 @@ Marker buildFromMarker(LatLng point) {
       return Container(
         child: SvgPicture.asset(
           "assets/images/from_marker.svg",
+          package: "trufi_core",
         ),
       );
     },
@@ -58,6 +59,7 @@ Marker buildToMarker(LatLng point) {
       return Container(
         child: SvgPicture.asset(
           "assets/images/to_marker.svg",
+          package: "trufi_core",
         ),
       );
     },

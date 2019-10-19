@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
+import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/trufi_map.dart';
@@ -25,18 +25,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   void initState() {
     super.initState();
-
-    final cfg = GlobalConfiguration();
-    final zoom = cfg.getDouble("mapChooseLocationZoom");
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
-    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
-
-    _chooseOnMapMarker = buildToMarker(mapCenter);
+    final cfg = TrufiConfiguration();
+    _chooseOnMapMarker = buildToMarker(cfg.map.center);
     if (widget.initialPosition != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
           center: widget.initialPosition,
-          zoom: zoom,
+          zoom: cfg.map.chooseLocationZoom,
           tickerProvider: this,
         );
       });

@@ -215,13 +215,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.7"
-  global_configuration:
-    dependency: "direct main"
-    description:
-      name: global_configuration
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
   google_api_availability:
     dependency: "direct main"
     description:

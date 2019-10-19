@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 import '../widgets/trufi_drawer.dart';
 
@@ -84,15 +84,14 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
-    final emailFeedback = GlobalConfiguration().getString("emailFeedback");
-    final launchUrl = "mailto:$emailFeedback?subject=Feedback";
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
-          _launched = _launch(launchUrl);
+          _launched = _launch("mailto:${cfg.email.feedback}?subject=Feedback");
         });
       },
       heroTag: null,

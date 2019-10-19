@@ -6,7 +6,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +19,7 @@ import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
 import '../plan/plan.dart';
 import '../plan/plan_empty.dart';
+import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
@@ -103,14 +103,14 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return AppBar(
       bottom: PreferredSize(
         child: Container(),
-        preferredSize: isPortrait
-            ? Size.fromHeight(45.0)
-            : Size.fromHeight(0.0),
+        preferredSize:
+            isPortrait ? Size.fromHeight(45.0) : Size.fromHeight(0.0),
       ),
       flexibleSpace: isPortrait
           ? _buildFormFieldsPortrait(context)
@@ -135,12 +135,12 @@ class HomePageState extends State<HomePage>
                 localizations.searchHintOrigin(),
                 SvgPicture.asset(
                   "assets/images/from_marker.svg",
+                  package: "trufi_core",
                 ),
                 _setFromPlace,
                 leading: SizedBox.shrink(),
-                trailing: _data.isResettable
-                    ? _buildResetButton(context)
-                    : null,
+                trailing:
+                    _data.isResettable ? _buildResetButton(context) : null,
               ),
               _buildFormField(
                 _toFieldKey,
@@ -149,6 +149,7 @@ class HomePageState extends State<HomePage>
                 localizations.searchHintDestination(),
                 SvgPicture.asset(
                   "assets/images/to_marker.svg",
+                  package: "trufi_core",
                 ),
                 _setToPlace,
                 leading: SizedBox.shrink(),
@@ -178,18 +179,18 @@ class HomePageState extends State<HomePage>
                 child: null,
               ),
               Flexible(
-                flex: 1,
-                child: _buildFormField(
-                  _fromFieldKey,
-                  ValueKey(keys.homePageFromPlaceField),
-                  localizations.searchPleaseSelectOrigin(),
-                  localizations.searchHintOrigin(),
-                  SvgPicture.asset(
-                    "assets/images/from_marker.svg",
-                  ),
-                  _setFromPlace,
-                )
-              ),
+                  flex: 1,
+                  child: _buildFormField(
+                    _fromFieldKey,
+                    ValueKey(keys.homePageFromPlaceField),
+                    localizations.searchPleaseSelectOrigin(),
+                    localizations.searchHintOrigin(),
+                    SvgPicture.asset(
+                      "assets/images/from_marker.svg",
+                      package: "trufi_core",
+                    ),
+                    _setFromPlace,
+                  )),
               SizedBox(
                 width: 40.0,
                 child: _data.isSwappable
@@ -197,23 +198,21 @@ class HomePageState extends State<HomePage>
                     : null,
               ),
               Flexible(
-                flex: 1,
-                child: _buildFormField(
-                  _toFieldKey,
-                  ValueKey(keys.homePageToPlaceField),
-                  localizations.searchPleaseSelectDestination(),
-                  localizations.searchHintDestination(),
-                  SvgPicture.asset(
-                    "assets/images/to_marker.svg",
-                  ),
-                  _setToPlace,
-                )
-              ),
+                  flex: 1,
+                  child: _buildFormField(
+                    _toFieldKey,
+                    ValueKey(keys.homePageToPlaceField),
+                    localizations.searchPleaseSelectDestination(),
+                    localizations.searchHintDestination(),
+                    SvgPicture.asset(
+                      "assets/images/to_marker.svg",
+                      package: "trufi_core",
+                    ),
+                    _setToPlace,
+                  )),
               SizedBox(
                 width: 40.0,
-                child: _data.isResettable
-                    ? _buildResetButton(context)
-                    : null,
+                child: _data.isResettable ? _buildResetButton(context) : null,
               ),
             ],
           ),
@@ -263,59 +262,55 @@ class HomePageState extends State<HomePage>
     final children = <Widget>[];
 
     if (leading != null) {
-      children.add(
-        SizedBox(
-          width: 40.0,
-          child: leading,
-        )
-      );
+      children.add(SizedBox(
+        width: 40.0,
+        child: leading,
+      ));
     }
 
-    children.add(
-      Expanded(
-        key: valueKey,
-        child: LocationFormField(
-          key: key,
-          hintText: hintText,
-          onSaved: onSaved,
-          searchHintText: searchHintText,
-          leadingImage: textLeadingImage,
-        ),
-      )
-    );
+    children.add(Expanded(
+      key: valueKey,
+      child: LocationFormField(
+        key: key,
+        hintText: hintText,
+        onSaved: onSaved,
+        searchHintText: searchHintText,
+        leadingImage: textLeadingImage,
+      ),
+    ));
 
     if (trailing != null) {
-      children.add(
-        SizedBox(
-          width: 40.0,
-          child: trailing,
-        )
-      );
+      children.add(SizedBox(
+        width: 40.0,
+        child: trailing,
+      ));
     }
 
-    return Row(
-      children: children
-    );
+    return Row(children: children);
   }
 
   Widget _buildBody(BuildContext context) {
+    final cfg = TrufiConfiguration();
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
           ? PlanPage(_data.plan)
           : PlanEmptyPage(onLongPress: _handleOnLongPress),
     );
     if (_isFetching) {
-      return Stack(
-        children: <Widget>[
-          Positioned.fill(child: body),
+      final children = <Widget>[
+        Positioned.fill(child: body),
+      ];
+      if (cfg.animation.loading.asset.isNotEmpty) {
+        children.add(
           Positioned.fill(
             child: FlareActor(
-              "assets/images/loading.flr",
-              animation: "Trufi Drive",
+              cfg.animation.loading.asset,
+              animation: cfg.animation.loading.animation,
             ),
           ),
-        ],
-      );
+        );
+      }
+      return Stack(children: children);
     } else {
       return body;
     }
@@ -465,7 +460,8 @@ class HomePageState extends State<HomePage>
         _showOnAndOfflineErrorAlert(localizations.commonNoInternet(), true);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localizations.searchFailLoadingPlan(), true);
+        _showOnAndOfflineErrorAlert(
+            localizations.searchFailLoadingPlan(), true);
       } catch (e) {
         print("Failed to fetch plan: $e");
         _showErrorAlert(e.toString());
@@ -484,10 +480,10 @@ class HomePageState extends State<HomePage>
   }
 
   void _showTransitErrorAlert(String error) async {
+    final cfg = TrufiConfiguration();
     final location = await LocationProviderBloc.of(context).currentLocation;
     final languageCode = TrufiLocalizations.of(context).locale.languageCode;
     final packageInfo = await PackageInfo.fromPlatform();
-    final urlRouteFeedback = GlobalConfiguration().getString("urlRouteFeedback");
     showDialog(
       context: context,
       builder: (context) {
@@ -496,7 +492,7 @@ class HomePageState extends State<HomePage>
           error: error,
           onReportMissingRoute: () {
             launch(
-              "$urlRouteFeedback?lang=$languageCode&geo=${location?.latitude},${location?.longitude}&app=${packageInfo.version}",
+              "${cfg.url.routeFeedback}?lang=$languageCode&geo=${location?.latitude},${location?.longitude}&app=${packageInfo.version}",
             );
           },
           onShowCarRoute: () {

@@ -20,6 +20,8 @@ dev_dependencies:
   trufi_core:
     path: ../
 
+  global_configuration: 1.2.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -43,6 +45,8 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
   assets:
     - assets/cfg/
+    - assets/data/
+    - assets/images/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

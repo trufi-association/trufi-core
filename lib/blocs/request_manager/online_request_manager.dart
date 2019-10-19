@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 
 import '../../blocs/favorite_locations_bloc.dart';
 import '../../blocs/request_manager_bloc.dart';
+import '../../trufi_configuration.dart';
 import '../../trufi_localizations.dart';
 import '../../trufi_models.dart';
 
@@ -21,9 +21,8 @@ class OnlineRequestManager implements RequestManager {
     String query,
     int limit,
   ) async {
-    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
     Uri request = Uri
-      .parse(urlOtpEndpoint + searchPath)
+      .parse(TrufiConfiguration().url.otpEndpoint + searchPath)
       .replace(queryParameters: {
         "query": query,
         "autocomplete": "false",
@@ -93,10 +92,8 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
-
     Uri request = Uri
-      .parse(urlOtpEndpoint + planPath)
+      .parse(TrufiConfiguration().url.otpEndpoint + planPath)
       .replace(queryParameters: {
         "fromPlace": from.toString(),
         "toPlace": to.toString(),

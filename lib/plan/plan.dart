@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:trufi_core/trufi_configuration.dart';
 
 import '../composite_subscription.dart';
 import '../plan/plan_itinerary_tabs.dart';
@@ -87,6 +88,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final children = <Widget>[
       Column(
         children: <Widget>[
@@ -100,12 +102,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ],
       ),
     ];
-    if (_showAnimation) {
+    if (_showAnimation && cfg.animation.success.asset.isNotEmpty) {
       children.add(
         Positioned.fill(
           child: FlareActor(
-            "assets/images/success.flr",
-            animation: "Untitled",
+            cfg.animation.success.asset,
+            animation: cfg.animation.success.animation,
             callback: (animationName) {
               setState(() {
                 _showAnimation = false;

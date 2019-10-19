@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:package_info/package_info.dart';
 
 import '../blocs/bloc_provider.dart';
 import '../blocs/preferences_bloc.dart';
+import '../trufi_configuration.dart';
 
 class AppReviewBloc extends BlocBase {
   static AppReviewBloc of(BuildContext context) {
@@ -27,8 +27,7 @@ class AppReviewBloc extends BlocBase {
   }
 
   Future<bool> isAppReviewAppropriate() async {
-    final config = GlobalConfiguration();
-    final minActionCount = config.getInt("minimumReviewWorthyActionCount");
+    final minActionCount = TrufiConfiguration().minimumReviewWorthyActionCount;
     final currentActionCount = this.preferencesBloc.reviewWorthyActionCount;
 
     if (currentActionCount != null && currentActionCount >= minActionCount) {

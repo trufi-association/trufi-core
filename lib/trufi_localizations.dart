@@ -2,28 +2,26 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
 
 import "./translations/messages_all.dart";
+import './trufi_configuration.dart';
 
-final supportedLanguages = List<Map<String, dynamic>>.from(
-  GlobalConfiguration().get("supportedLanguages"),
-);
+final supportedLanguages = TrufiConfiguration().languages;
 
 final supportedLocales = supportedLanguages
     .map(
-      (lang) => Locale(lang["languageCode"], lang["countryCode"]),
+      (lang) => Locale(lang.languageCode, lang.countryCode),
     )
     .toList();
 
 final defaultLang = supportedLanguages.firstWhere(
-  (lang) => lang["default"] ?? false,
+  (lang) => lang.isDefault,
 );
 
 final defaultLocale = Locale(
-  defaultLang["languageCode"],
-  defaultLang["countryCode"],
+  defaultLang.languageCode,
+  defaultLang.countryCode,
 );
 
 class TrufiLocalizations {

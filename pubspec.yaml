@@ -21,7 +21,6 @@ dependencies:
   flutter_map: 0.7.3
   flutter_svg: 0.14.2
   geolocator: 5.1.4+1
-  global_configuration: 1.2.0
   google_api_availability: 2.0.1
   http: 0.12.0+2
   intl: 0.15.8
@@ -67,7 +66,6 @@ flutter:
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   assets:
-    - assets/data/
     - assets/images/
 
   # To add custom fonts to your plugin package, add a fonts section here,

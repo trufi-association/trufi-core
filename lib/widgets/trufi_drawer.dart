@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,6 +11,7 @@ import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/home.dart';
 import '../pages/team.dart';
+import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
@@ -30,7 +30,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   void initState() {
     super.initState();
 
-    bgImage = AssetImage("assets/images/drawer-bg.jpg");
+    bgImage = AssetImage(TrufiConfiguration().image.drawerBackground);
   }
 
   @override
@@ -44,13 +44,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
-    final cfg = GlobalConfiguration();
-    final urlDonate = cfg.getString("urlDonate");
-    final urlShare = cfg.getString("urlShare");
-    final urlWebsite = cfg.getString("urlWebsite");
-    final urlFacebook = cfg.getString("urlFacebook");
-    final urlTwitter = cfg.getString("urlTwitter");
-    final urlInstagram = cfg.getString("urlInstagram");
+    final cfg = TrufiConfiguration();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -110,32 +104,32 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          _buildAppShareButton(context, urlShare),
-          if (!Platform.isIOS && urlDonate != "") _buildWebLinkItem(
+          _buildAppShareButton(context, cfg.url.share),
+          if (!Platform.isIOS && cfg.url.donate != "") _buildWebLinkItem(
             Icons.monetization_on,
             localizations.donate(),
-            urlDonate,
+            cfg.url.donate,
           ),
           Divider(),
-          if (urlWebsite != "") _buildWebLinkItem(
+          if (cfg.url.website != "") _buildWebLinkItem(
             CustomIcons.trufi,
             localizations.readOurBlog(),
-            urlWebsite,
+            cfg.url.website,
           ),
-          if (urlFacebook != "") _buildWebLinkItem(
+          if (cfg.url.facebook != "") _buildWebLinkItem(
             CustomIcons.facebook,
             localizations.followOnFacebook(),
-            urlFacebook,
+            cfg.url.facebook,
           ),
-          if (urlTwitter != "") _buildWebLinkItem(
+          if (cfg.url.twitter != "") _buildWebLinkItem(
             CustomIcons.twitter,
             localizations.followOnTwitter(),
-            urlTwitter,
+            cfg.url.twitter,
           ),
-          if (urlInstagram != "") _buildWebLinkItem(
+          if (cfg.url.instagram != "") _buildWebLinkItem(
             CustomIcons.instagram,
             localizations.followOnInstagram(),
-            urlInstagram,
+            cfg.url.instagram,
           ),
         ],
       ),
@@ -165,7 +159,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
     final values = supportedLanguages
-      .map((lang) => LanguageDropdownValue(lang["languageCode"], lang["languageString"]))
+      .map((lang) => LanguageDropdownValue(lang.languageCode, lang.displayName))
       .toList();
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
