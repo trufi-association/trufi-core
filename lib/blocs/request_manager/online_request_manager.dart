@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
@@ -118,7 +119,10 @@ class OnlineRequestManager implements RequestManager {
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
-      return await http.get(request);
+      final packageInfo = await PackageInfo.fromPlatform();
+      return await http.get(request, headers: {
+        "User-Agent": "Trufi/" + packageInfo.version,
+      });
     } catch (e) {
       throw FetchOnlineRequestException(e);
     }
