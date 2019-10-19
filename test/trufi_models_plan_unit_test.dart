@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
 
-import 'package:core/trufi_models.dart';
+import 'package:trufi_core/trufi_models.dart';
 
 void main() {
   Plan _plan;

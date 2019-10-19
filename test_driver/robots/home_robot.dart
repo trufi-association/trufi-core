@@ -1,6 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 
-import 'package:core/keys.dart' as keys;
+import 'package:trufi_core/keys.dart' as keys;
 
 import 'robot.dart';
 import 'search_robot.dart';

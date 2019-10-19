@@ -3,8 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:test/test.dart';
 
-import 'package:core/trufi_map_utils.dart';
-import 'package:core/trufi_models.dart';
+import 'package:trufi_core/trufi_map_utils.dart';
+import 'package:trufi_core/trufi_models.dart';
 
 void main() {
   double _latitude = 18.0;
