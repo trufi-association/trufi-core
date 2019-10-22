@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import "./translations/messages_all.dart";
 import './trufi_configuration.dart';
 
 final supportedLanguages = TrufiConfiguration().languages;
@@ -636,9 +635,16 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   }
 }
 
+typedef Future<bool> TrufiLocalizationInitCallback(String localeName);
+
 class TrufiLocalizationsDelegate
     extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
-  TrufiLocalizationsDelegate(String languageCode) : super(languageCode);
+  TrufiLocalizationsDelegate(
+    String languageCode,
+    this.initCallback,
+  ) : super(languageCode);
+
+  final TrufiLocalizationInitCallback initCallback;
 
   @override
   Future<TrufiLocalizations> load(Locale locale) async {
@@ -651,7 +657,9 @@ class TrufiLocalizationsDelegate
     }
 
     final localeString = locale.toLanguageTag();
-    await initializeMessages(localeString);
+
+    await initCallback(localeString);
+
     Intl.defaultLocale = localeString;
 
     return TrufiLocalizations(locale);

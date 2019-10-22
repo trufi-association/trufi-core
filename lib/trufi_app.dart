@@ -13,10 +13,17 @@ import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/home.dart';
 import './pages/team.dart';
+import './translations/messages_all.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
+  TrufiApp({
+    this.localizationInitCallback = initializeMessages,
+  });
+
+  final TrufiLocalizationInitCallback localizationInitCallback;
+
   @override
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc();
@@ -35,7 +42,7 @@ class TrufiApp extends StatelessWidget {
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: AppLifecycleReactor(
-                    child: LocalizedMaterialApp(),
+                    child: LocalizedMaterialApp(localizationInitCallback),
                   ),
                 ),
               ),
@@ -96,6 +103,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
+  LocalizedMaterialApp(this.localizationInitCallback);
+
+  final TrufiLocalizationInitCallback localizationInitCallback;
+
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
 }
@@ -126,7 +137,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             );
           },
           localizationsDelegates: [
-            TrufiLocalizationsDelegate(snapshot.data),
+            TrufiLocalizationsDelegate(
+              snapshot.data,
+              widget.localizationInitCallback,
+            ),
             TrufiMaterialLocalizationsDelegate(snapshot.data),
             GlobalWidgetsLocalizations.delegate,
           ],
