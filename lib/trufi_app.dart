@@ -19,9 +19,11 @@ import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
   TrufiApp({
+    @required this.theme,
     this.localizationInitCallback = initializeMessages,
   });
 
+  final ThemeData theme;
   final TrufiLocalizationInitCallback localizationInitCallback;
 
   @override
@@ -42,7 +44,10 @@ class TrufiApp extends StatelessWidget {
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: AppLifecycleReactor(
-                    child: LocalizedMaterialApp(localizationInitCallback),
+                    child: LocalizedMaterialApp(
+                      theme,
+                      localizationInitCallback,
+                    ),
                   ),
                 ),
               ),
@@ -103,8 +108,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  LocalizedMaterialApp(this.localizationInitCallback);
+  LocalizedMaterialApp(this.theme, this.localizationInitCallback);
 
+  final ThemeData theme;
   final TrufiLocalizationInitCallback localizationInitCallback;
 
   @override
@@ -115,12 +121,6 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
-    final theme = ThemeData(
-      primaryColor: const Color(0xff263238),
-      primaryColorLight: const Color(0xffeceff1),
-      accentColor: const Color(0xffd81b60),
-      backgroundColor: Colors.white,
-    );
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => AboutPage(),
       FeedbackPage.route: (context) => FeedbackPage(),
@@ -146,7 +146,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           ],
           supportedLocales: supportedLocales,
           debugShowCheckedModeBanner: false,
-          theme: theme,
+          theme: widget.theme,
           home: HomePage(),
         );
       },

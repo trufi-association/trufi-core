@@ -122,5 +122,14 @@ void main() async {
   trufiCfg.url.instagram = globalCfg.getString("urlInstagram");
 
   // Run app
-  runApp(TrufiApp());
+  runApp(
+    TrufiApp(
+      theme: ThemeData(
+        primaryColor: const Color(0xff263238),
+        primaryColorLight: const Color(0xffeceff1),
+        accentColor: const Color(0xffd81b60),
+        backgroundColor: Colors.white,
+      ),
+    ),
+  );
 }
