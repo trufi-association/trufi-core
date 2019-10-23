@@ -392,25 +392,17 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstruction(TrufiLocalizations localizations) {
+  String toInstruction(TrufiLocalization localization) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
-      sb.write(
-        localizations.instructionWalk(
-          _durationString(localizations),
-          _distanceString(localizations),
-          _toString(localizations)
-        )
-      );
+      sb.write(localization.instructionWalk(_durationString(localization),
+          _distanceString(localization), _toString(localization)));
     } else {
-      sb.write(
-        localizations.instructionRide(
-          _carTypeString(localizations) + (route.isNotEmpty ? " $route" : ""),
-          _durationString(localizations),
-          _distanceString(localizations),
-          _toString(localizations)
-        )
-      );
+      sb.write(localization.instructionRide(
+          _carTypeString(localization) + (route.isNotEmpty ? " $route" : ""),
+          _durationString(localization),
+          _distanceString(localization),
+          _toString(localization)));
     }
     return sb.toString();
   }
@@ -427,34 +419,34 @@ class PlanItineraryLeg {
     };
   }
 
-  String _carTypeString(TrufiLocalizations localizations) {
+  String _carTypeString(TrufiLocalization localization) {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
-        ? localizations.instructionVehicleCar()
+        ? localization.instructionVehicleCar()
         : carType.contains('trufi')
-            ? localizations.instructionVehicleTrufi()
+            ? localization.instructionVehicleTrufi()
             : carType.contains('micro')
-                ? localizations.instructionVehicleMicro()
+                ? localization.instructionVehicleMicro()
                 : carType.contains('minibus')
-                    ? localizations.instructionVehicleMinibus()
+                    ? localization.instructionVehicleMinibus()
                     : carType.contains('gondola')
-                        ? localizations.instructionVehicleGondola()
-                        : localizations.instructionVehicleBus();
+                        ? localization.instructionVehicleGondola()
+                        : localization.instructionVehicleBus();
   }
 
-  String _distanceString(TrufiLocalizations localizations) {
+  String _distanceString(TrufiLocalization localization) {
     return distance >= 1000
-        ? localizations.instructionDistanceKm(distance.ceil() ~/ 1000)
-        : localizations.instructionDistanceMeters(distance.ceil());
+        ? localization.instructionDistanceKm(distance.ceil() ~/ 1000)
+        : localization.instructionDistanceMeters(distance.ceil());
   }
 
-  String _durationString(TrufiLocalizations localizations) {
+  String _durationString(TrufiLocalization localization) {
     final value = (duration.ceil() / 60).ceil();
-    return localizations.instructionDurationMinutes(value);
+    return localization.instructionDurationMinutes(value);
   }
 
-  String _toString(TrufiLocalizations localizations) {
-    return toName == 'Destination' ? localizations.commonDestination() : toName;
+  String _toString(TrufiLocalization localization) {
+    return toName == 'Destination' ? localization.commonDestination() : toName;
   }
 
   IconData iconData() {

@@ -4,11 +4,11 @@ import '../blocs/preferences_bloc.dart';
 import '../trufi_localizations.dart';
 
 Widget buildAlertLocationServicesDenied(BuildContext context) {
-  final localizations = TrufiLocalizations.of(context);
+  final localization = TrufiLocalizations.of(context).localization;
   return _buildAlert(
     context: context,
-    title: Text(localizations.alertLocationServicesDeniedTitle()),
-    content: Text(localizations.alertLocationServicesDeniedMessage()),
+    title: Text(localization.alertLocationServicesDeniedTitle()),
+    content: Text(localization.alertLocationServicesDeniedMessage()),
     actions: [_buildOKButton(context)],
   );
 }
@@ -17,10 +17,10 @@ Widget buildErrorAlert({
   @required BuildContext context,
   String error,
 }) {
-  final localizations = TrufiLocalizations.of(context);
+  final localization = TrufiLocalizations.of(context).localization;
   return _buildAlert(
     context: context,
-    title: Text(localizations.commonError()),
+    title: Text(localization.commonError()),
     content: Text(error),
     actions: [_buildOKButton(context)],
   );
@@ -32,14 +32,14 @@ Widget buildTransitErrorAlert({
   @required Function onShowCarRoute,
   String error,
 }) {
-  final localizations = TrufiLocalizations.of(context);
+  final localization = TrufiLocalizations.of(context).localization;
   final theme = Theme.of(context);
   final actionTextStyle = theme.textTheme.body1.copyWith(
     color: theme.accentColor,
   );
   return _buildAlert(
     context: context,
-    title: Text(localizations.noRouteError()),
+    title: Text(localization.noRouteError()),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,14 +51,14 @@ Widget buildTransitErrorAlert({
             onReportMissingRoute();
           },
           child: Text(
-            localizations.noRouteErrorActionReportMissingRoute(),
+            localization.noRouteErrorActionReportMissingRoute(),
             style: actionTextStyle,
           ),
         ),
         FlatButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
-            localizations.noRouteErrorActionCancel(),
+            localization.noRouteErrorActionCancel(),
             style: actionTextStyle,
           ),
         ),
@@ -68,7 +68,7 @@ Widget buildTransitErrorAlert({
             onShowCarRoute();
           },
           child: Text(
-            localizations.noRouteErrorActionShowCarRoute(),
+            localization.noRouteErrorActionShowCarRoute(),
             style: actionTextStyle,
           ),
         ),
@@ -96,14 +96,14 @@ Widget buildOnAndOfflineErrorAlert({
 }
 
 Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
-  final localizations = TrufiLocalizations.of(context);
+  final localization = TrufiLocalizations.of(context).localization;
   return FlatButton(
     onPressed: () {
       PreferencesBloc.of(context).inChangeOnline.add(online);
       Navigator.pop(context);
     },
     child: Text(
-      online ? localizations.commonGoOnline() : localizations.commonGoOffline(),
+      online ? localization.commonGoOnline() : localization.commonGoOffline(),
     ),
   );
 }
@@ -126,9 +126,9 @@ Widget _buildAlert({
 }
 
 Widget _buildOKButton(BuildContext context) {
-  final localizations = TrufiLocalizations.of(context);
+  final localization = TrufiLocalizations.of(context).localization;
   return FlatButton(
     onPressed: () => Navigator.pop(context),
-    child: Text(localizations.commonOK()),
+    child: Text(localization.commonOK()),
   );
 }

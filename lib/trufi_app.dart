@@ -13,18 +13,17 @@ import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/home.dart';
 import './pages/team.dart';
-import './translations/messages_all.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
-    this.localizationInitCallback = initializeMessages,
+    this.localization = const TrufiLocalizationDefault(),
   });
 
   final ThemeData theme;
-  final TrufiLocalizationInitCallback localizationInitCallback;
+  final TrufiLocalization localization;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,7 @@ class TrufiApp extends StatelessWidget {
                   child: AppLifecycleReactor(
                     child: LocalizedMaterialApp(
                       theme,
-                      localizationInitCallback,
+                      localization,
                     ),
                   ),
                 ),
@@ -108,10 +107,13 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  LocalizedMaterialApp(this.theme, this.localizationInitCallback);
+  LocalizedMaterialApp(
+    this.theme,
+    this.localization,
+  );
 
   final ThemeData theme;
-  final TrufiLocalizationInitCallback localizationInitCallback;
+  final TrufiLocalization localization;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -139,7 +141,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           localizationsDelegates: [
             TrufiLocalizationsDelegate(
               snapshot.data,
-              widget.localizationInitCallback,
+              widget.localization,
             ),
             TrufiMaterialLocalizationsDelegate(snapshot.data),
             GlobalWidgetsLocalizations.delegate,

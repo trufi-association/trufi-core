@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import './translations/messages_all.dart';
 import './trufi_configuration.dart';
 
 final supportedLanguages = TrufiConfiguration().languages;
@@ -28,9 +29,114 @@ class TrufiLocalizations {
     return Localizations.of<TrufiLocalizations>(context, TrufiLocalizations);
   }
 
-  TrufiLocalizations(this.locale);
+  TrufiLocalizations(this.locale, this.localization);
 
   final Locale locale;
+  final TrufiLocalization localization;
+}
+
+class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
+  static TrufiMaterialLocalizations of(BuildContext context) {
+    return MaterialLocalizations.of(context);
+  }
+
+  TrufiMaterialLocalizations(this.locale);
+
+  final Locale locale;
+  String _searchHintText;
+
+  @override
+  String get searchFieldLabel {
+    return _searchHintText;
+  }
+
+  void setSearchHintText(String searchHintText) {
+    _searchHintText = searchHintText;
+  }
+}
+
+class TrufiLocalizationsDelegate
+    extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
+  TrufiLocalizationsDelegate(
+    String languageCode,
+    this.localization,
+  ) : super(languageCode);
+
+  final TrufiLocalization localization;
+
+  @override
+  Future<TrufiLocalizations> load(Locale locale) async {
+    if (languageCode != null) {
+      locale = localeForLanguageCode(languageCode);
+    }
+
+    if (locale == null) {
+      locale = defaultLocale;
+    }
+
+    final localeString = locale.toLanguageTag();
+
+    await localization.initialize(localeString);
+
+    Intl.defaultLocale = localeString;
+
+    return TrufiLocalizations(locale, localization);
+  }
+}
+
+class TrufiMaterialLocalizationsDelegate
+    extends TrufiLocalizationsDelegateBase<MaterialLocalizations> {
+  TrufiMaterialLocalizationsDelegate(String languageCode) : super(languageCode);
+
+  @override
+  Future<TrufiMaterialLocalizations> load(Locale locale) async {
+    if (languageCode != null) {
+      locale = localeForLanguageCode(languageCode);
+    }
+
+    if (locale == null) {
+      locale = defaultLocale;
+    }
+
+    return SynchronousFuture<TrufiMaterialLocalizations>(
+      TrufiMaterialLocalizations(locale),
+    );
+  }
+}
+
+abstract class TrufiLocalizationsDelegateBase<T>
+    extends LocalizationsDelegate<T> {
+  TrufiLocalizationsDelegateBase(this.languageCode);
+
+  final String languageCode;
+
+  @override
+  bool isSupported(Locale locale) {
+    return supportedLocales.contains(locale);
+  }
+
+  @override
+  bool shouldReload(TrufiLocalizationsDelegateBase<T> old) {
+    return old.languageCode != languageCode;
+  }
+
+  Locale localeForLanguageCode(String languageCode) {
+    for (var locale in supportedLocales) {
+      if (locale.languageCode == languageCode) {
+        return locale;
+      }
+    }
+
+    return null;
+  }
+}
+
+class TrufiLocalizationDefault implements TrufiLocalization {
+  const TrufiLocalizationDefault();
+
+  Future<bool> initialize(String localeName) async {
+    return await initializeMessages(localeName);
+  }
 
   String title() => Intl.message(
         "Trufi App",
@@ -615,100 +721,186 @@ class TrufiLocalizations {
       );
 }
 
-class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
-  static TrufiMaterialLocalizations of(BuildContext context) {
-    return MaterialLocalizations.of(context);
-  }
+abstract class TrufiLocalization {
 
-  TrufiMaterialLocalizations(this.locale);
+  Future<bool> initialize(String localeName);
 
-  final Locale locale;
-  String _searchHintText;
+  String title();
 
-  @override
-  String get searchFieldLabel {
-    return _searchHintText;
-  }
+  String tagline();
 
-  void setSearchHintText(String searchHintText) {
-    _searchHintText = searchHintText;
-  }
-}
+  String description();
 
-typedef Future<bool> TrufiLocalizationInitCallback(String localeName);
+  String version(String version);
 
-class TrufiLocalizationsDelegate
-    extends TrufiLocalizationsDelegateBase<TrufiLocalizations> {
-  TrufiLocalizationsDelegate(
-    String languageCode,
-    this.initCallback,
-  ) : super(languageCode);
+  String alertLocationServicesDeniedTitle();
 
-  final TrufiLocalizationInitCallback initCallback;
+  String alertLocationServicesDeniedMessage();
 
-  @override
-  Future<TrufiLocalizations> load(Locale locale) async {
-    if (languageCode != null) {
-      locale = localeForLanguageCode(languageCode);
-    }
+  String commonOK();
 
-    if (locale == null) {
-      locale = defaultLocale;
-    }
+  String commonCancel();
 
-    final localeString = locale.toLanguageTag();
+  String commonGoOffline();
 
-    await initCallback(localeString);
+  String commonGoOnline();
 
-    Intl.defaultLocale = localeString;
+  String commonDestination();
 
-    return TrufiLocalizations(locale);
-  }
-}
+  String commonOrigin();
 
-class TrufiMaterialLocalizationsDelegate
-    extends TrufiLocalizationsDelegateBase<MaterialLocalizations> {
-  TrufiMaterialLocalizationsDelegate(String languageCode) : super(languageCode);
+  String commonNoInternet();
 
-  @override
-  Future<TrufiMaterialLocalizations> load(Locale locale) async {
-    if (languageCode != null) {
-      locale = localeForLanguageCode(languageCode);
-    }
+  String commonFailLoading();
 
-    if (locale == null) {
-      locale = defaultLocale;
-    }
+  String commonUnknownError();
 
-    return SynchronousFuture<TrufiMaterialLocalizations>(
-      TrufiMaterialLocalizations(locale),
-    );
-  }
-}
+  String commonError();
 
-abstract class TrufiLocalizationsDelegateBase<T>
-    extends LocalizationsDelegate<T> {
-  TrufiLocalizationsDelegateBase(this.languageCode);
+  String noRouteError();
 
-  final String languageCode;
+  String noRouteErrorActionCancel();
 
-  @override
-  bool isSupported(Locale locale) {
-    return supportedLocales.contains(locale);
-  }
+  String noRouteErrorActionReportMissingRoute();
 
-  @override
-  bool shouldReload(TrufiLocalizationsDelegateBase<T> old) {
-    return old.languageCode != languageCode;
-  }
+  String noRouteErrorActionShowCarRoute();
 
-  Locale localeForLanguageCode(String languageCode) {
-    for (var locale in supportedLocales) {
-      if (locale.languageCode == languageCode) {
-        return locale;
-      }
-    }
+  String errorServerUnavailable();
 
-    return null;
-  }
+  String errorOutOfBoundary();
+
+  String errorPathNotFound();
+
+  String errorNoTransitTimes();
+
+  String errorServerTimeout();
+
+  String errorTrivialDistance();
+
+  String errorServerCanNotHandleRequest();
+
+  String errorUnknownOrigin();
+
+  String errorUnknownDestination();
+
+  String errorUnknownOriginDestination();
+
+  String errorNoBarrierFree();
+
+  String errorAmbiguousOrigin();
+
+  String errorAmbiguousDestination();
+
+  String errorAmbiguousOriginDestination();
+
+  String searchHintOrigin();
+
+  String searchHintDestination();
+
+  String searchItemChooseOnMap();
+
+  String searchItemYourLocation();
+
+  String searchItemNoResults();
+
+  String searchTitlePlaces();
+
+  String searchTitleRecent();
+
+  String searchTitleFavorites();
+
+  String searchTitleResults();
+
+  String searchPleaseSelectOrigin();
+
+  String searchPleaseSelectDestination();
+
+  String searchFailLoadingPlan();
+
+  String searchMapMarker();
+
+  String chooseLocationPageTitle();
+
+  String chooseLocationPageSubtitle();
+
+  String instructionWalk(String duration, String distance, String location);
+
+  String instructionRide(
+    String vehicle,
+    String duration,
+    String distance,
+    String location,
+  );
+
+  String instructionVehicleBus();
+
+  String instructionVehicleMicro();
+
+  String instructionVehicleMinibus();
+
+  String instructionVehicleTrufi();
+
+  String instructionVehicleCar();
+
+  String instructionVehicleGondola();
+
+  String instructionDurationMinutes(num value);
+
+  String instructionDistanceKm(num value);
+
+  String instructionDistanceMeters(num value);
+
+  String menuConnections();
+
+  String menuAbout();
+
+  String menuTeam();
+
+  String menuFeedback();
+
+  String menuOnline();
+
+  String menuAppReview();
+
+  String menuShareApp();
+
+  String shareAppText(String url);
+
+  String feedbackContent();
+
+  String feedbackTitle();
+
+  String aboutContent();
+
+  String aboutLicenses();
+
+  String aboutOpenSource();
+
+  String teamContent();
+
+  String teamSectionRepresentatives(String representatives);
+
+  String teamSectionTeam(String teamMembers);
+
+  String teamSectionTranslations(String translators);
+
+  String teamSectionRoutes(String routeContributors, String osmContributors);
+
+  String donate();
+
+  String readOurBlog();
+
+  String followOnFacebook();
+
+  String followOnTwitter();
+
+  String followOnInstagram();
+
+  String appReviewDialogTitle();
+
+  String appReviewDialogContent();
+
+  String appReviewDialogButtonDecline();
+
+  String appReviewDialogButtonAccept();
 }

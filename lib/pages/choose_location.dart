@@ -55,7 +55,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   Widget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return AppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,14 +64,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageTitle(),
+              text: localization.chooseLocationPageTitle(),
               style: theme.primaryTextTheme.body1,
             ),
           ),
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageSubtitle(),
+              text: localization.chooseLocationPageSubtitle(),
               style: theme.primaryTextTheme.caption,
             ),
           ),
@@ -85,7 +85,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
-                  text: localizations.commonOK(),
+                  text: localization.commonOK(),
                   style: theme.primaryTextTheme.button,
                 ),
               ),

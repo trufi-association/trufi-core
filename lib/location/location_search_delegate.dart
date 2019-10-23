@@ -225,43 +225,43 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildYourLocation(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
         appBarTheme,
         () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
-        localizations.searchItemYourLocation(),
+        localization.searchItemYourLocation(),
       ),
     );
   }
 
   Widget _buildChooseOnMap(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
         appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
         Icons.place,
-        localizations.searchItemChooseOnMap(),
+        localization.searchItemChooseOnMap(),
       ),
     );
   }
 
   Widget _buildHistoryList(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return _buildFutureBuilder(
       context,
-      localizations.searchTitleRecent(),
+      localization.searchTitleRecent(),
       historyLocationsBloc.fetchWithLimit(context, 5),
       Icons.history,
     );
   }
 
   Widget _buildFavoritesList(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return StreamBuilder(
       stream: favoriteLocationsBloc.outLocations,
       builder: (
@@ -269,7 +269,7 @@ class _SuggestionList extends StatelessWidget {
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
         return _buildObjectList(
-          localizations.searchTitleFavorites(),
+          localization.searchTitleFavorites(),
           Icons.place,
           favoriteLocationsBloc.locations,
         );
@@ -278,10 +278,10 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildPlacesList(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return _buildFutureBuilder(
       context,
-      localizations.searchTitlePlaces(),
+      localization.searchTitlePlaces(),
       locationSearchBloc.fetchPlaces(context),
       Icons.place,
     );
@@ -289,10 +289,10 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildSearchResultList(BuildContext context) {
     final requestManagerBloc = RequestManagerBloc.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return _buildFutureBuilder(
       context,
-      localizations.searchTitleResults(),
+      localization.searchTitleResults(),
       requestManagerBloc.fetchLocations(context, query, 30),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -313,19 +313,19 @@ class _SuggestionList extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot<List<dynamic>> snapshot,
       ) {
-        final localizations = TrufiLocalizations.of(context);
+        final localization = TrufiLocalizations.of(context).localization;
         // Error
         if (snapshot.hasError) {
           print(snapshot.error);
-          String error = localizations.commonUnknownError();
+          String error = localization.commonUnknownError();
           if (snapshot.error is FetchOfflineRequestException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOfflineResponseException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOnlineRequestException) {
-            error = localizations.commonNoInternet();
+            error = localization.commonNoInternet();
           } else if (snapshot.error is FetchOnlineResponseException) {
-            error = localizations.commonFailLoading();
+            error = localization.commonFailLoading();
           }
           return _buildErrorList(context, title, error);
         }
@@ -344,7 +344,7 @@ class _SuggestionList extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _buildTitle(context, title),
-                _buildErrorItem(context, localizations.searchItemNoResults()),
+                _buildErrorItem(context, localization.searchItemNoResults()),
               ],
             ),
           );
@@ -548,11 +548,11 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnYourLocationTapped(BuildContext context) async {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       _handleOnLatLngTapped(
-        description: localizations.searchMapMarker(),
+        description: localization.searchMapMarker(),
         location: location,
         addToHistory: false,
       );
@@ -565,21 +565,21 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnChooseOnMapTapped(BuildContext context) async {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
         builder: (context) => ChooseLocationPage(
-              initialPosition: currentLocation != null
-                  ? LatLng(
-                      currentLocation.latitude,
-                      currentLocation.longitude,
-                    )
-                  : null,
-            ),
+          initialPosition: currentLocation != null
+              ? LatLng(
+                  currentLocation.latitude,
+                  currentLocation.longitude,
+                )
+              : null,
+        ),
       ),
     );
     _handleOnMapTapped(
-      description: localizations.searchMapMarker(),
+      description: localization.searchMapMarker(),
       location: mapLocation,
     );
   }

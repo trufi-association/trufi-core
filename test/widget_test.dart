@@ -16,7 +16,6 @@ import 'package:trufi_core/blocs/history_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_provider_bloc.dart';
 import 'package:trufi_core/location/location_form_field.dart';
 import 'package:trufi_core/pages/home.dart';
-import 'package:trufi_core/translations/messages_all.dart';
 import 'package:trufi_core/trufi_localizations.dart';
 
 import 'image_tile.dart';
@@ -31,7 +30,7 @@ void main() {
   });
 
   final localName = "en";
-  final localizationInitCallback = initializeMessages;
+  final localization = TrufiLocalizationDefault();
 
   testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
     await tester.pumpWidget(
@@ -50,7 +49,7 @@ void main() {
                   localizationsDelegates: [
                     TrufiLocalizationsDelegate(
                       localName,
-                      localizationInitCallback,
+                      localization,
                     ),
                     TrufiMaterialLocalizationsDelegate(localName),
                     GlobalWidgetsLocalizations.delegate,

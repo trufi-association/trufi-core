@@ -48,14 +48,14 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
-    return AppBar(title: Text(localizations.menuTeam()));
+    final localization = TrufiLocalizations.of(context).localization;
+    return AppBar(title: Text(localization.menuTeam()));
   }
 
   Widget _buildBody(BuildContext context) {
     final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return ListView(
       children: <Widget>[
         Container(
@@ -68,7 +68,7 @@ class TeamPageState extends State<TeamPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: localizations.teamContent() + " ",
+                        text: localization.teamContent() + " ",
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(
@@ -95,28 +95,28 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionRepresentatives(_representatives),
+                  localization.teamSectionRepresentatives(_representatives),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionTeam(_team),
+                  localization.teamSectionTeam(_team),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionTranslations(_translations),
+                  localization.teamSectionTranslations(_translations),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionRoutes(_routes, _osm),
+                  localization.teamSectionRoutes(_routes, _osm),
                   style: theme.textTheme.body2,
                 ),
               ),

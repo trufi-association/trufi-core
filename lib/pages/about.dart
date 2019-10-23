@@ -23,20 +23,16 @@ class AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
-    return AppBar(
-      title: Text(localizations.menuAbout()),
-    );
+    final localization = TrufiLocalizations.of(context).localization;
+    return AppBar(title: Text(localization.menuAbout()));
   }
 
   Widget _buildBody(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final TextStyle linkStyle = themeData.textTheme.body2.copyWith(color: themeData.accentColor);
-
+    final localization = TrufiLocalizations.of(context).localization;
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
-    Future<PackageInfo> packageInfo = PackageInfo.fromPlatform();
-
+    final TextStyle linkStyle = theme.textTheme.body2.copyWith(
+      color: theme.accentColor,
+    );
     return ListView(
       children: <Widget>[
         Container(
@@ -46,7 +42,7 @@ class AboutPageState extends State<AboutPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localizations.title(),
+                  localization.title(),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -54,7 +50,7 @@ class AboutPageState extends State<AboutPage> {
               ),
               Container(
                 child: new FutureBuilder(
-                  future: packageInfo,
+                  future: PackageInfo.fromPlatform(),
                   builder: (
                     BuildContext context,
                     AsyncSnapshot<PackageInfo> snapshot,
@@ -64,7 +60,7 @@ class AboutPageState extends State<AboutPage> {
                       return Text("");
                     }
                     return Text(
-                      localizations.version(snapshot.data.version),
+                      localization.version(snapshot.data.version),
                       style: theme.textTheme.body2,
                     );
                   },
@@ -73,7 +69,7 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.tagline(),
+                  localization.tagline(),
                   style: theme.textTheme.subhead.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -82,18 +78,18 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.aboutContent(),
+                  localization.aboutContent(),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: RaisedButton(
-                  child: Text(localizations.aboutLicenses()),
+                  child: Text(localization.aboutLicenses()),
                   onPressed: () {
                     return showLicensePage(
                       context: context,
-                      applicationName: localizations.title(),
+                      applicationName: localization.title(),
                     );
                   },
                 ),
@@ -102,10 +98,12 @@ class AboutPageState extends State<AboutPage> {
                 padding: EdgeInsets.only(top: 16.0),
                 child: InkWell(
                   child: new Text(
-                    localizations.aboutOpenSource(),
+                    localization.aboutOpenSource(),
                     style: linkStyle,
                   ),
-                  onTap: () => { launch('https://github.com/trufi-association/trufi-app') }
+                  onTap: () {
+                    launch('https://github.com/trufi-association/trufi-app');
+                  },
                 ),
               ),
             ],
