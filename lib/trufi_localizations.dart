@@ -623,15 +623,15 @@ class TrufiMaterialLocalizations extends DefaultMaterialLocalizations {
   TrufiMaterialLocalizations(this.locale);
 
   final Locale locale;
-  String _searchHinText;
+  String _searchHintText;
 
   @override
   String get searchFieldLabel {
-    return _searchHinText;
+    return _searchHintText;
   }
 
   void setSearchHintText(String searchHintText) {
-    _searchHinText = searchHintText;
+    _searchHintText = searchHintText;
   }
 }
 
