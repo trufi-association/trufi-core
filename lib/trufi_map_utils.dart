@@ -324,7 +324,11 @@ class CircleIcon {
 
   static const _kFontFam = 'CircleIcon';
 
-  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam);
+  static const IconData circle = const IconData(
+    0xf111,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
 }
 
 class GondolaIcon {
@@ -332,5 +336,9 @@ class GondolaIcon {
 
   static const _kFontFam = 'GondolaIcon';
 
-  static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam);
+  static const IconData gondola = const IconData(
+    0xe900,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
 }

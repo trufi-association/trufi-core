@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/CustomIcons.ttf
 ///
-/// 
+///
 /// * Font Awesome, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -24,8 +24,24 @@ class CustomIcons {
 
   static const _kFontFam = 'CustomIcons';
 
-  static const IconData trufi = const IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData twitter = const IconData(0xf099, fontFamily: _kFontFam);
-  static const IconData instagram = const IconData(0xf16d, fontFamily: _kFontFam);
-  static const IconData facebook = const IconData(0xf230, fontFamily: _kFontFam);
+  static const IconData trufi = const IconData(
+    0xe801,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
+  static const IconData twitter = const IconData(
+    0xf099,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
+  static const IconData instagram = const IconData(
+    0xf16d,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
+  static const IconData facebook = const IconData(
+    0xf230,
+    fontFamily: _kFontFam,
+    fontPackage: "trufi_core",
+  );
 }
