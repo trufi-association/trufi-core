@@ -26,21 +26,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(value) => "${value} min";
 
-  static m3(vehicle, duration, distance, location) => "Ride ${vehicle} for ${duration} (${distance}) to\n${location}";
+  static m3(street1, street2) => "${street1} and ${street2}";
 
-  static m4(duration, distance, location) => "Walk ${duration} (${distance}) to\n${location}";
+  static m4(vehicle, duration, distance, location) => "Ride ${vehicle} for ${duration} (${distance}) to\n${location}";
 
-  static m5(url) => "Download Trufi App, the public transport app for Cochabamba, at ${url}";
+  static m5(duration, distance, location) => "Walk ${duration} (${distance}) to\n${location}";
 
-  static m6(representatives) => "Representatives: ${representatives}";
+  static m6(url) => "Download Trufi App, the public transport app for Cochabamba, at ${url}";
 
-  static m7(routeContributors, osmContributors) => "Routes: ${routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!";
+  static m7(representatives) => "Representatives: ${representatives}";
 
-  static m8(teamMembers) => "Team: ${teamMembers}";
+  static m8(routeContributors, osmContributors) => "Routes: ${routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!";
 
-  static m9(translators) => "Translations: ${translators}";
+  static m9(teamMembers) => "Team: ${teamMembers}";
 
-  static m10(version) => "Version ${version}";
+  static m10(translators) => "Translations: ${translators}";
+
+  static m11(version) => "Version ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -89,14 +91,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionDistanceKm" : m0,
     "instructionDistanceMeters" : m1,
     "instructionDurationMinutes" : m2,
-    "instructionRide" : m3,
+    "instructionJunction" : m3,
+    "instructionRide" : m4,
     "instructionVehicleBus" : MessageLookupByLibrary.simpleMessage("Bus"),
     "instructionVehicleCar" : MessageLookupByLibrary.simpleMessage("Car"),
     "instructionVehicleGondola" : MessageLookupByLibrary.simpleMessage("Gondola"),
     "instructionVehicleMicro" : MessageLookupByLibrary.simpleMessage("Micro"),
     "instructionVehicleMinibus" : MessageLookupByLibrary.simpleMessage("Minibus"),
     "instructionVehicleTrufi" : MessageLookupByLibrary.simpleMessage("Trufi"),
-    "instructionWalk" : m4,
+    "instructionWalk" : m5,
     "menuAbout" : MessageLookupByLibrary.simpleMessage("About"),
     "menuAppReview" : MessageLookupByLibrary.simpleMessage("Rate the app"),
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Show routes"),
@@ -122,14 +125,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Places"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Recent"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Search Results"),
-    "shareAppText" : m5,
+    "shareAppText" : m6,
     "tagline" : MessageLookupByLibrary.simpleMessage("Public transportation in Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:"),
-    "teamSectionRepresentatives" : m6,
-    "teamSectionRoutes" : m7,
-    "teamSectionTeam" : m8,
-    "teamSectionTranslations" : m9,
+    "teamSectionRepresentatives" : m7,
+    "teamSectionRoutes" : m8,
+    "teamSectionTeam" : m9,
+    "teamSectionTranslations" : m10,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m10
+    "version" : m11
   };
 }

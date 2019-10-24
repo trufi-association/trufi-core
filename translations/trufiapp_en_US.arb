@@ -1,6 +1,6 @@
 {
   "@@locale": "en_US",
-  "@@last_modified": "2019-10-03T19:41:18.706758",
+  "@@last_modified": "2019-10-24T14:23:31.541614",
   "title": "Trufi App",
   "@title": {
     "description": "The application's name",
@@ -298,6 +298,19 @@
     "description": "Page subtitle when choosing a location on the map",
     "type": "text",
     "placeholders": {}
+  },
+  "instructionJunction": "{street1} and {street2}",
+  "@instructionJunction": {
+    "description": "Junction name of two streets",
+    "type": "text",
+    "placeholders": {
+      "street1": {
+        "example": "Av. Blanco Galindo"
+      },
+      "street2": {
+        "example": "Av. 16 de Julio"
+      }
+    }
   },
   "instructionWalk": "Walk {duration} ({distance}) to\n{location}",
   "@instructionWalk": {

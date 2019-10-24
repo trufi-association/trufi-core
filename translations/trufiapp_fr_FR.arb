@@ -297,6 +297,19 @@
     "type": "text",
     "placeholders": {}
   },
+  "instructionJunction": "{street1} & {street2}",
+  "@instructionJunction": {
+    "description": "Junction name of two streets",
+    "type": "text",
+    "placeholders": {
+      "street1": {
+        "example": "Av. Blanco Galindo"
+      },
+      "street2": {
+        "example": "Av. 16 de Julio"
+      }
+    }
+  },
   "instructionWalk": "Marcher {duration} ({distance}) vers\n{location}",
   "@instructionWalk": {
     "description": "Itinerary instruction (walking)",
