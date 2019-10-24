@@ -456,7 +456,22 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Page subtitle when choosing a location on the map",
       );
 
-  String instructionWalk(String duration, String distance, String location) =>
+  String instructionJunction(String street1, String street2) => Intl.message(
+        "$street1 and $street2",
+        name: "instructionJunction",
+        args: [street1, street2],
+        desc: "Junction name of two streets",
+        examples: const {
+          "street1": "Av. Blanco Galindo",
+          "street2": "Av. 16 de Julio",
+        },
+      );
+
+  String instructionWalk(
+    String duration,
+    String distance,
+    String location,
+  ) =>
       Intl.message(
         "Walk $duration ($distance) to\n$location",
         name: "instructionWalk",
@@ -470,7 +485,11 @@ class TrufiLocalizationDefault implements TrufiLocalization {
       );
 
   String instructionRide(
-          String vehicle, String duration, String distance, String location) =>
+    String vehicle,
+    String duration,
+    String distance,
+    String location,
+  ) =>
       Intl.message(
         "Ride $vehicle for $duration ($distance) to\n$location",
         name: "instructionRide",
@@ -722,7 +741,6 @@ class TrufiLocalizationDefault implements TrufiLocalization {
 }
 
 abstract class TrufiLocalization {
-
   Future<bool> initialize(String localeName);
 
   String title();
@@ -822,6 +840,8 @@ abstract class TrufiLocalization {
   String chooseLocationPageTitle();
 
   String chooseLocationPageSubtitle();
+
+  String instructionJunction(String street1, String street2);
 
   String instructionWalk(String duration, String distance, String location);
 

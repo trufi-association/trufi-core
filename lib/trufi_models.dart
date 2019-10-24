@@ -155,12 +155,18 @@ class TrufiStreetJunction {
   final double longitude;
 
   String get description {
-    return "${street1.location.description} y ${street2.location.description}";
+    return "${street1.location.description} & ${street2.location.description}";
   }
 
-  TrufiLocation get location {
+  String displayName(TrufiLocalization localization) =>
+      localization.instructionJunction(
+        street1.displayName,
+        street2.displayName,
+      );
+
+  TrufiLocation location(TrufiLocalization localization) {
     return TrufiLocation(
-      description: description,
+      description: displayName(localization),
       latitude: latitude,
       longitude: longitude,
     );

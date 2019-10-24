@@ -132,6 +132,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   ) {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final historyLocationBloc = HistoryLocationsBloc.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -159,13 +160,21 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             context,
             appBarTheme(context),
             () {
-              historyLocationBloc.inAddLocation.add(junction.location);
-              close(context, junction.location);
+              historyLocationBloc.inAddLocation.add(
+                junction.location(localization),
+              );
+              close(
+                context,
+                junction.location(localization),
+              );
             },
             Icons.label_outline,
-            "... y ${junction.street2.displayName}",
+            localization.instructionJunction(
+              "...",
+              junction.street2.displayName,
+            ),
             trailing: FavoriteButton(
-              location: junction.location,
+              location: junction.location(localization),
               favoritesStream: favoriteLocationsBloc.outLocations,
               color: appBarTheme(context).primaryIconTheme.color,
             ),
