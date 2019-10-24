@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
@@ -17,10 +18,14 @@ void main() async {
   });
 
   // Animation
-  trufiCfg.animation.success.asset = "assets/images/success.flr";
-  trufiCfg.animation.success.animation = "Untitled";
-  trufiCfg.animation.loading.asset = "assets/images/loading.flr";
-  trufiCfg.animation.loading.animation = "Trufi Drive";
+  trufiCfg.animation.loading = FlareActor(
+    "assets/images/loading.flr",
+    animation: "Trufi Drive",
+  );
+  trufiCfg.animation.success = FlareActor(
+    "assets/images/success.flr",
+    animation: "Untitled",
+  );
 
   // Attribution
   trufiCfg.attribution.representatives.addAll([

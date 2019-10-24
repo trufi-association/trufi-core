@@ -302,14 +302,9 @@ class HomePageState extends State<HomePage>
       final children = <Widget>[
         Positioned.fill(child: body),
       ];
-      if (cfg.animation.loading.asset.isNotEmpty) {
+      if (cfg.animation.loading != null) {
         children.add(
-          Positioned.fill(
-            child: FlareActor(
-              cfg.animation.loading.asset,
-              animation: cfg.animation.loading.animation,
-            ),
-          ),
+          Positioned.fill(child: cfg.animation.loading),
         );
       }
       return Stack(children: children);

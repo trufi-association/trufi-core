@@ -102,11 +102,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ],
       ),
     ];
-    if (_showAnimation && cfg.animation.success.asset.isNotEmpty) {
+    if (_showAnimation && cfg.animation.success != null) {
       children.add(
         Positioned.fill(
           child: FlareActor(
-            cfg.animation.success.asset,
+            cfg.animation.success.filename,
             animation: cfg.animation.success.animation,
             callback: (animationName) {
               setState(() {

@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
@@ -23,13 +24,8 @@ class TrufiConfiguration {
 }
 
 class TrufiConfigurationAnimation {
-  final loading = TrufiConfigurationAnimationItem();
-  final success = TrufiConfigurationAnimationItem();
-}
-
-class TrufiConfigurationAnimationItem {
-  var asset = "";
-  var animation = "";
+  FlareActor loading;
+  FlareActor success;
 }
 
 class TrufiConfigurationAttribution {
