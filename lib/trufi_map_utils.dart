@@ -45,6 +45,8 @@ Marker buildFromMarker(LatLng point) {
         child: SvgPicture.asset(
           "assets/images/from_marker.svg",
           package: "trufi_core",
+          color: Theme.of(context).accentColor,
+          colorBlendMode: BlendMode.screen,
         ),
       );
     },
@@ -60,6 +62,8 @@ Marker buildToMarker(LatLng point) {
         child: SvgPicture.asset(
           "assets/images/to_marker.svg",
           package: "trufi_core",
+          color: Theme.of(context).accentColor,
+          colorBlendMode: BlendMode.screen,
         ),
       );
     },
