@@ -64,6 +64,10 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+    _data._selectedColor = theme.accentColor;
+
     if (_mapController.ready) {
       if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
         _trufiMapController.fitBounds(
@@ -154,7 +158,7 @@ class PlanMapPageState extends State<PlanMapPage>
 class PlanMapPageStateData {
   PlanMapPageStateData({
     @required this.plan,
-    @required this.onItineraryTap,
+    @required this.onItineraryTap
   }) {
     if (plan != null) {
       if (plan.from != null) {
@@ -175,6 +179,7 @@ class PlanMapPageStateData {
   final _selectedMarkers = List<Marker>();
   final _selectedPolylines = List<Polyline>();
   final _allPolylines = List<Polyline>();
+  Color _selectedColor = const Color(0xffd81b60);
 
   Marker _fromMarker;
   Marker _toMarker;
@@ -244,6 +249,7 @@ class PlanMapPageStateData {
         plan: plan,
         selectedItinerary: _selectedItinerary,
         onTap: onItineraryTap,
+        selectedColor: _selectedColor
       ),
     );
     _itineraries.forEach((itinerary, polylinesWithMarker) {
@@ -300,6 +306,7 @@ class PlanMapPageStateData {
     @required Plan plan,
     @required PlanItinerary selectedItinerary,
     @required Function(PlanItinerary) onTap,
+    Color selectedColor
   }) {
     Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
     if (plan != null) {
@@ -307,6 +314,8 @@ class PlanMapPageStateData {
         List<Marker> markers = List();
         List<PolylineWithMarkers> polylinesWithMarkers = List();
         bool isSelected = itinerary == selectedItinerary;
+        Color color = isSelected ? selectedColor : Colors.grey;
+
         for (int i = 0; i < itinerary.legs.length; i++) {
           PlanItineraryLeg leg = itinerary.legs[i];
 
@@ -314,10 +323,7 @@ class PlanMapPageStateData {
           List<LatLng> points = decodePolyline(leg.points);
           Polyline polyline = new Polyline(
             points: points,
-            color: isSelected
-                //ToDo: Find a better way to achieve this
-                ? Color(0xffd81b60)
-                : Colors.grey,
+            color: color,
             strokeWidth: isSelected ? 6.0 : 3.0,
             borderStrokeWidth: 0.0,
             isDotted: leg.mode == 'WALK',
@@ -337,10 +343,7 @@ class PlanMapPageStateData {
             markers.add(
               buildBusMarker(
                 midPointForPolyline(polyline),
-                isSelected
-                    ? //ToDo: Find a better way to achieve this
-                    Color(0xffd81b60)
-                    : Colors.grey,
+                color,
                 leg,
                 onTap: () => onTap(itinerary),
               ),
