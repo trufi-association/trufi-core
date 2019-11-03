@@ -6,9 +6,11 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 
 import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_app/blocs/request_manager_bloc.dart';
+import 'package:trufi_app/blocs/preferences_bloc.dart';
 import 'package:trufi_app/trufi_localizations.dart';
 import 'package:trufi_app/trufi_models.dart';
 
@@ -21,6 +23,7 @@ class OnlineRequestManager implements RequestManager {
     String query,
     int limit,
   ) async {
+    final preferences = PreferencesBloc.of(context);
     final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
     Uri request = Uri
       .parse(urlOtpEndpoint + searchPath)
@@ -29,6 +32,7 @@ class OnlineRequestManager implements RequestManager {
         "autocomplete": "false",
         "corners": "true",
         "stops": "false",
+        "correlation": preferences.correlationId,
       });
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final response = await _fetchRequest(request);
@@ -93,16 +97,17 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
+    final preferences = PreferencesBloc.of(context);
     final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
-
     Uri request = Uri
       .parse(urlOtpEndpoint + planPath)
       .replace(queryParameters: {
         "fromPlace": from.toString(),
         "toPlace": to.toString(),
         "date": _todayMonthDayYear(),
-        "numItineraries":"5",
-        "mode": mode
+        "numItineraries": "5",
+        "mode": mode,
+        "correlation": preferences.correlationId,
       });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -114,7 +119,10 @@ class OnlineRequestManager implements RequestManager {
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
-      return await http.get(request);
+      final packageInfo = await PackageInfo.fromPlatform();
+      return await http.get(request, headers: {
+        "User-Agent": "Trufi/" + packageInfo.version,
+      });
     } catch (e) {
       throw FetchOnlineRequestException(e);
     }

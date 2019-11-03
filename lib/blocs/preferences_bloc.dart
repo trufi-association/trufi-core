@@ -5,12 +5,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trufi_app/blocs/bloc_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class PreferencesBloc extends BlocBase {
   static PreferencesBloc of(BuildContext context) {
     return BlocProvider.of<PreferencesBloc>(context);
   }
 
+  static const String correlationIdKey = "correlation_id";
   static const String propertyLanguageCodeKey = "property_language_code";
   static const String propertyOnlineKey = "property_online";
   static const String stateHomePageKey = "state_home_page";
@@ -29,8 +31,19 @@ class PreferencesBloc extends BlocBase {
   }
 
   void _load() {
+    _loadCorrelationId();
     _loadLanguageCode();
     _loadOnline();
+  }
+
+  void _loadCorrelationId() {
+    String correlationId = _preferences.getString(correlationIdKey);
+
+    // Generate new UUID if missing
+    if (correlationId == null) {
+      correlationId = new Uuid().v4();
+      _preferences.setString(correlationIdKey, correlationId);
+    }
   }
 
   void _loadLanguageCode() {
@@ -90,12 +103,16 @@ class PreferencesBloc extends BlocBase {
 
   // Getter
 
+  String get correlationId => _preferences?.getString(correlationIdKey);
   String get stateHomePage => _preferences?.getString(stateHomePageKey);
   int get reviewWorthyActionCount => _preferences?.getInt(reviewWorthyActionCountKey);
   String get lastReviewRequestAppVersion => _preferences?.getString(lastReviewRequestAppVersionKey);
 
   // Setter
 
+  set correlationId(String value) {
+    _preferences?.setString(correlationIdKey, value);
+  }
   set stateHomePage(String value) {
     _preferences?.setString(stateHomePageKey, value);
   }
