@@ -366,6 +366,7 @@ class PlanItineraryLeg {
     this.distance,
     this.duration,
     this.toName,
+    this.agencyName
   });
 
   static const _Distance = "distance";
@@ -377,6 +378,7 @@ class PlanItineraryLeg {
   static const _Route = "route";
   static const _RouteLongName = "routeLongName";
   static const _To = "to";
+  static const _AgencyName = "agencyName";
 
   final String points;
   final String mode;
@@ -385,6 +387,7 @@ class PlanItineraryLeg {
   final double distance;
   final double duration;
   final String toName;
+  final String agencyName;
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
@@ -395,6 +398,7 @@ class PlanItineraryLeg {
       distance: json[_Distance],
       duration: json[_Duration],
       toName: json[_To][_Name],
+      agencyName: json[_AgencyName]
     );
   }
 
@@ -405,7 +409,7 @@ class PlanItineraryLeg {
           _distanceString(localization), _toString(localization)));
     } else {
       sb.write(localization.instructionRide(
-          _carTypeString(localization) + (route.isNotEmpty ? " $route" : ""),
+          _vehicleString(localization),
           _durationString(localization),
           _distanceString(localization),
           _toString(localization)));
@@ -421,7 +425,8 @@ class PlanItineraryLeg {
       _RouteLongName: routeLongName,
       _Distance: distance,
       _Duration: duration,
-      _To: {_Name: toName}
+      _To: {_Name: toName},
+      _AgencyName: agencyName
     };
   }
 
@@ -444,6 +449,24 @@ class PlanItineraryLeg {
     return distance >= 1000
         ? localization.instructionDistanceKm(distance.ceil() ~/ 1000)
         : localization.instructionDistanceMeters(distance.ceil());
+  }
+
+  String _vehicleString(localization) {
+    final String shortAgencyName = _shortAgencyNameString();
+
+    return
+        (shortAgencyName != null ? "$shortAgencyName " : "")
+        + _carTypeString(localization)
+        + (route.isNotEmpty ? " $route" : "");
+  }
+
+  //// Short agency name can be provided in [ ] brackets or undefined
+  String _shortAgencyNameString() {
+    RegExpMatch match = new RegExp(r"\[([^\]]+)\]").firstMatch(agencyName);
+    if (match == null) {
+      return null;
+    }
+    return match.group(1);
   }
 
   String _durationString(TrufiLocalization localization) {
