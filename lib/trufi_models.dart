@@ -366,7 +366,7 @@ class PlanItineraryLeg {
     this.distance,
     this.duration,
     this.toName,
-    this.agencyName
+    this.agencyName,
   });
 
   static const _Distance = "distance";
