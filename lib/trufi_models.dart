@@ -426,7 +426,7 @@ class PlanItineraryLeg {
       _Distance: distance,
       _Duration: duration,
       _To: {_Name: toName},
-      _AgencyName: agencyName
+      _AgencyName: agencyName,
     };
   }
 
