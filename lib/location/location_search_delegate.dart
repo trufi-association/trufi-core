@@ -449,6 +449,9 @@ class _SuggestionList extends StatelessWidget {
 
       case 'amenity:taxi':
         return Icons.local_taxi;
+        
+      case 'public_transport:platform':
+        return Icons.departure_board;
 
       case 'shop:florist':
         return Icons.local_florist;
