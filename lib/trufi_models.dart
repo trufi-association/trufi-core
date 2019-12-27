@@ -378,6 +378,14 @@ class PlanItineraryLeg {
   static const _RouteLongName = "routeLongName";
   static const _To = "to";
 
+  // route name keywords for specfic types of transportation
+  static const type_trufi = "trufi";
+  static const type_micro = "micro";
+  static const type_minibus = "minibus";
+  static const type_gondola = "gondola";
+  static const type_light_rail = "light rail";
+
+
   final String points;
   final String mode;
   final String route;
@@ -429,15 +437,17 @@ class PlanItineraryLeg {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
         ? localization.instructionVehicleCar()
-        : carType.contains('trufi')
+        : carType.contains(type_trufi)
             ? localization.instructionVehicleTrufi()
-            : carType.contains('micro')
+            : carType.contains(type_micro)
                 ? localization.instructionVehicleMicro()
-                : carType.contains('minibus')
+                : carType.contains(type_minibus)
                     ? localization.instructionVehicleMinibus()
-                    : carType.contains('gondola')
+                    : carType.contains(type_gondola)
                         ? localization.instructionVehicleGondola()
-                        : localization.instructionVehicleBus();
+                        : carType.contains(type_light_rail)
+                            ? localization.instructionVehicleLightRail()
+                            : localization.instructionVehicleBus();
   }
 
   String _distanceString(TrufiLocalization localization) {
@@ -461,14 +471,16 @@ class PlanItineraryLeg {
         ? Icons.directions_walk
         : mode == 'CAR'
             ? Icons.drive_eta
-            : carType.contains('trufi')
+            : carType.contains(type_trufi)
                 ? Icons.local_taxi
-                : carType.contains('micro')
+                : carType.contains(type_micro)
                     ? Icons.directions_bus
-                    : carType.contains('minibus')
+                    : carType.contains(type_minibus)
                         ? Icons.airport_shuttle
-                        : carType.contains('gondola')
+                        : carType.contains(type_gondola)
                             ? GondolaIcon.gondola
-                            : Icons.directions_bus;
+                            : carType.contains(type_light_rail)
+                                ? Icons.train
+                                : Icons.directions_bus;
   }
 }
