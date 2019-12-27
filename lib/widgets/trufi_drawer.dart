@@ -112,7 +112,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           Divider(),
           if (cfg.url.website != "")
             _buildWebLinkItem(
-              CustomIcons.trufi,
+              Icons.web,
               localization.readOurBlog(),
               cfg.url.website,
             ),
