@@ -147,7 +147,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: supportedLocales,
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: true,
           theme: widget.theme,
           home: HomePage(),
         );
