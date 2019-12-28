@@ -65,4 +65,15 @@ class OfflineRequestManager implements RequestManager {
       );
     }());
   }
+
+  CancelableOperation<Ad> fetchAd(
+    BuildContext context,
+    TrufiLocation to,
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      throw FetchOfflineRequestException(
+        Exception("Fetch ad offline is not implemented yet."),
+      );
+    }());
+  }
 }

@@ -83,6 +83,7 @@ class TrufiConfigurationUrl {
   var tilesStreetsEndpoint = "";
   var tilesSatelliteEndpoint = "";
   var tilesTerrainEndpoint = "";
+  var adsEndpoint = "";
   var routeFeedback = "";
   var website = "";
   var facebook = "";

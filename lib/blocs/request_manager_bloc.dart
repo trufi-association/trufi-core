@@ -94,6 +94,13 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   ) {
     return _onlineRequestManager.fetchCarPlan(context, from, to);
   }
+
+  CancelableOperation<Ad> fetchAd(
+    BuildContext context,
+    TrufiLocation to,
+  ) {
+    return _onlineRequestManager.fetchAd(context, to);
+  }
 }
 
 // RequestManager
@@ -114,6 +121,11 @@ abstract class RequestManager {
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
     TrufiLocation from,
+    TrufiLocation to,
+  );
+
+  CancelableOperation<Ad> fetchAd(
+    BuildContext context,
     TrufiLocation to,
   );
 }

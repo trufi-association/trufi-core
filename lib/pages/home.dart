@@ -43,6 +43,7 @@ class HomePageState extends State<HomePage>
 
   bool _isFetching = false;
   CancelableOperation<Plan> _currentFetchPlanOperation;
+  CancelableOperation<Ad> _currentFetchAdOperation;
 
   @override
   initState() {
@@ -299,7 +300,7 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
-          ? PlanPage(_data.plan)
+          ? PlanPage(_data.plan, _data.ad)
           : PlanEmptyPage(onLongPress: _handleOnLongPress),
     );
     if (_isFetching) {
@@ -386,6 +387,13 @@ class HomePageState extends State<HomePage>
     });
   }
 
+  void _setAd(Ad ad) {
+    setState(() {
+      _data.ad = ad;
+      _data.save(context);
+    });
+  }
+
   void _swapPlaces() {
     _setPlaces(_data.toPlace, _data.fromPlace);
   }
@@ -431,7 +439,9 @@ class HomePageState extends State<HomePage>
                 _data.fromPlace,
                 _data.toPlace,
               );
+
         Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
+
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {
@@ -469,6 +479,18 @@ class HomePageState extends State<HomePage>
         print("Failed to fetch plan: $e");
         _showErrorAlert(e.toString());
       }
+
+      try {
+        _currentFetchAdOperation =
+            requestManagerBloc.fetchAd(context, _data.toPlace);
+        Ad ad = await _currentFetchAdOperation.valueOrCancellation(null);
+        _setAd(ad);
+      } catch (e, stacktrace) {
+        _setAd(null);
+        print("Failed to fetch ad: $e");
+        print(stacktrace);
+      }
+
       setState(() => _isFetching = false);
     }
   }
@@ -526,12 +548,14 @@ class HomePageStateData {
   static const String _FromPlace = "fromPlace";
   static const String _ToPlace = "toPlace";
   static const String _Plan = "plan";
+  static const String _Ad = "ad";
 
-  HomePageStateData({this.fromPlace, this.toPlace, this.plan});
+  HomePageStateData({this.fromPlace, this.toPlace, this.plan, this.ad});
 
   TrufiLocation fromPlace;
   TrufiLocation toPlace;
   Plan plan;
+  Ad ad;
 
   // Json
 
@@ -540,6 +564,7 @@ class HomePageStateData {
       fromPlace: TrufiLocation.fromJson(json[_FromPlace]),
       toPlace: TrufiLocation.fromJson(json[_ToPlace]),
       plan: Plan.fromJson(json[_Plan]),
+      ad: Ad.fromJson(json[_Ad]),
     );
   }
 
@@ -548,6 +573,7 @@ class HomePageStateData {
       _FromPlace: fromPlace != null ? fromPlace.toJson() : null,
       _ToPlace: toPlace != null ? toPlace.toJson() : null,
       _Plan: plan != null ? plan.toJson() : null,
+      _Ad: ad != null ? ad.toJson() : null,
     };
   }
 
@@ -557,6 +583,7 @@ class HomePageStateData {
     fromPlace = null;
     toPlace = null;
     plan = null;
+    ad = null;
     PreferencesBloc.of(context).stateHomePage = null;
   }
 
@@ -570,6 +597,7 @@ class HomePageStateData {
         fromPlace = data.fromPlace;
         toPlace = data.toPlace;
         plan = data.plan;
+        ad = data.ad;
         return true;
       }
     } catch (e) {
