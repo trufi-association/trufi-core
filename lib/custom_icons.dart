@@ -25,8 +25,8 @@ class CustomIcons {
   static const _kFontFam = 'CustomIcons';
   static const _kFontPkg = 'trufi_core';
 
-  static const IconData bus_stop = const IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData trufi = const IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bus_stop = const IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData twitter = const IconData(0xf099, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam, fontPackage: _kFontPkg);
