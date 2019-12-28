@@ -10,6 +10,7 @@ import 'package:latlong/latlong.dart';
 import './composite_subscription.dart';
 import './trufi_configuration.dart';
 import './trufi_models.dart';
+import './custom_icons.dart';
 
 openStreetMapTileLayerOptions() {
   return TileLayerOptions(
@@ -82,7 +83,7 @@ Marker buildTransferMarker(LatLng point) {
             border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(CircleIcon.circle, color: Colors.white),
+          child: Icon(CustomIcons.circle, color: Colors.white),
         ),
       );
     },
@@ -147,7 +148,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
               ],
             ),
             child: Icon(
-              CircleIcon.circle,
+              CustomIcons.circle,
               color: Theme.of(context).accentColor,
             ),
           ),
@@ -321,28 +322,4 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
-}
-
-class CircleIcon {
-  CircleIcon._();
-
-  static const _kFontFam = 'CircleIcon';
-
-  static const IconData circle = const IconData(
-    0xf111,
-    fontFamily: _kFontFam,
-    fontPackage: "trufi_core",
-  );
-}
-
-class GondolaIcon {
-  GondolaIcon._();
-
-  static const _kFontFam = 'GondolaIcon';
-
-  static const IconData gondola = const IconData(
-    0xe900,
-    fontFamily: _kFontFam,
-    fontPackage: "trufi_core",
-  );
 }

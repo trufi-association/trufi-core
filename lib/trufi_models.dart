@@ -4,7 +4,7 @@ import 'package:latlong/latlong.dart';
 
 import './trufi_configuration.dart';
 import './trufi_localizations.dart';
-import './trufi_map_utils.dart';
+import './custom_icons.dart';
 
 class TrufiLocation {
   TrufiLocation({
@@ -478,7 +478,7 @@ class PlanItineraryLeg {
                     : carType.contains(type_minibus)
                         ? Icons.airport_shuttle
                         : carType.contains(type_gondola)
-                            ? GondolaIcon.gondola
+                            ? CustomIcons.gondola
                             : carType.contains(type_light_rail)
                                 ? Icons.train
                                 : Icons.directions_bus;
