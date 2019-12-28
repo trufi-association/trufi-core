@@ -78,6 +78,7 @@ class TrufiConfigurationUrl {
   final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
   final mapTilerCopyright = "https://www.maptiler.com/copyright";
   var otpEndpoint = "";
+  var adsEndpoint = "";
   var routeFeedback = "";
   var website = "";
   var facebook = "";

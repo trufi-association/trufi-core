@@ -70,6 +70,14 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelablePlan(context, from, to, "CAR,WALK");
   }
 
+  CancelableOperation<Ad> fetchAd(
+    BuildContext context,
+    TrufiLocation to,
+  ) {
+    return _fetchCancelableAd(context, to);
+  }
+
+
   CancelableOperation<Plan> _fetchCancelablePlan(
     BuildContext context,
     TrufiLocation from,
@@ -87,6 +95,16 @@ class OnlineRequestManager implements RequestManager {
         );
       }
       return plan;
+    }());
+  }
+
+  CancelableOperation<Ad> _fetchCancelableAd(
+    BuildContext context,
+    TrufiLocation to,
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      Ad ad = await _fetchAd(context, to);
+      return ad;
     }());
   }
 
@@ -114,6 +132,31 @@ class OnlineRequestManager implements RequestManager {
       throw FetchOnlineResponseException('Failed to load plan');
     }
   }
+
+  Future<Ad> _fetchAd(
+    BuildContext context,
+    TrufiLocation to,
+  ) async {
+    final preferences = PreferencesBloc.of(context);
+
+    if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
+      return null;
+    }
+
+    Uri request = Uri.parse(
+      TrufiConfiguration().url.adsEndpoint,
+    ).replace(queryParameters: {
+      "toPlace": to.toString(),
+      "correlation": preferences.correlationId,
+    });
+    final response = await _fetchRequest(request);
+    if (response.statusCode == 200) {
+      return await compute(_parseAd, utf8.decode(response.bodyBytes));
+    } else {
+      throw FetchOnlineResponseException('Failed to load plan');
+    }
+  }
+
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
@@ -179,4 +222,8 @@ List<TrufiLocation> _parseLocations(String responseBody) {
 
 Plan _parsePlan(String responseBody) {
   return Plan.fromJson(json.decode(responseBody));
+}
+
+Ad _parseAd(String responseBody) {
+  return Ad.fromJson(json.decode(responseBody));
 }

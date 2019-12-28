@@ -484,3 +484,42 @@ class PlanItineraryLeg {
                                 : Icons.directions_bus;
   }
 }
+
+class Ad {
+  Ad({
+    this.text,
+    this.url,
+    this.location,
+  });
+
+  static const _Ad = "ad";
+  static const _Text = "text";
+  static const _Url = "url";
+  static const _Location = "location";
+
+  final String text;
+  final String url;
+  final PlanLocation location;
+
+  factory Ad.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+    Map<String, dynamic> adJson = json[_Ad];
+    return Ad(
+      text: adJson[_Text],
+      url: adJson[_Url] ?? null,
+      location: adJson[_Location].isEmpty ? null : PlanLocation.fromJson(adJson[_Location]),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      _Ad: {
+        _Text: text.toString(),
+        _Url: url.toString(),
+        _Location: location.toJson(),
+      }
+    };
+  }
+}
