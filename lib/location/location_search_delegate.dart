@@ -14,6 +14,7 @@ import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
+import '../custom_icons.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   LocationSearchDelegate({this.currentLocation});
@@ -449,6 +450,9 @@ class _SuggestionList extends StatelessWidget {
 
       case 'amenity:taxi':
         return Icons.local_taxi;
+
+      case 'public_transport:platform':
+        return CustomIcons.bus_stop;
 
       case 'shop:florist':
         return Icons.local_florist;
