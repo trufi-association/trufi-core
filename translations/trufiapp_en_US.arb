@@ -383,6 +383,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "instructionVehicleLightRail": "Light Rail Train",
+  "@instructionVehicleLightRail": {
+    "description": "Vehicle name (Light Rail)",
+    "type": "text",
+    "placeholders": {}
+  },
   "instructionDurationMinutes": "{value} min",
   "@instructionDurationMinutes": {
     "description": "Itinerary leg duration",
