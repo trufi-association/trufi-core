@@ -53,3 +53,7 @@ Copyright 2019 - [Trufi Association](https://www.trufi-association.org/)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU General Public License version 3](./LICENSE) as published by the Free Software Foundation.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+## Shout-outs
+
+Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-5px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
