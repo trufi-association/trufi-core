@@ -152,8 +152,11 @@ class OnlineRequestManager implements RequestManager {
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
       return await compute(_parseAd, utf8.decode(response.bodyBytes));
+    } else if (response.statusCode == 404) {
+      print ("No ads found");
     } else {
-      throw FetchOnlineResponseException('Failed to load plan');
+      print ("Error fetching ads");
+      return null;
     }
   }
 
