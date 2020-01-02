@@ -5,6 +5,7 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
@@ -148,6 +149,7 @@ class OnlineRequestManager implements RequestManager {
     ).replace(queryParameters: {
       "toPlace": to.toString(),
       "correlation": preferences.correlationId,
+      "language": Intl.getCurrentLocale()
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
