@@ -23,7 +23,7 @@ class FeedBackPageState extends State<FeedbackPage> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch';
+      throw 'Could not launch mail app';
     }
   }
 
