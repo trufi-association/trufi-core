@@ -19,11 +19,26 @@ class FeedbackPage extends StatefulWidget {
 class FeedBackPageState extends State<FeedbackPage> {
   Future<Null> _launched;
 
-  Future<Null> _launch(String url) async {
+  Future<Null> _launch(BuildContext context, String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch mail app';
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new Text("Could not open mail app"),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }
+      );
     }
   }
 
@@ -91,7 +106,8 @@ class FeedBackPageState extends State<FeedbackPage> {
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
-          _launched = _launch("mailto:${cfg.email.feedback}?subject=Feedback");
+          final String url = "mailto:${cfg.email.feedback}?subject=Feedback";
+          _launched = _launch(context, url);
         });
       },
       heroTag: null,
