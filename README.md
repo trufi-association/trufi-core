@@ -21,6 +21,7 @@ The mobile application is currently available for the following cities:
 
 * Cochabamba, Bolivia - [Website](https://www.trufi.app), [Google Play](https://play.google.com/store/apps/details?id=app.trufi.navigator), [App Store](https://apps.apple.com/bo/app/trufi/id1471411924)
 * Accra, Ghana - [Website](https://www.trotro.app/), [Google Play](https://play.google.com/store/apps/details?id=com.trotro.trotro), [App Store](https://apps.apple.com/bo/app/trotro/id1478620071)
+* Addis Ababa, Ethiopia  - [Website](https://yeneguzo.app/), [Google Play](https://play.google.com/store/apps/details?id=app.yeneguzo.navigator), [App Store](https://apps.apple.com/app/yeneguzo/id1493441355)
 
 Please contact the [Trufi Association](mailto:info@trufi-association.org) to get one for your city, too.
 
