@@ -22,7 +22,8 @@ class TrufiLocation {
   static const String keyDescription = 'description';
   static const String keyLatitude = 'latitude';
   static const String keyLongitude = 'longitude';
-
+  static const String keyType = 'type';
+  
   final String description;
   final double latitude;
   final double longitude;
@@ -81,6 +82,7 @@ class TrufiLocation {
       description: json[keyDescription],
       latitude: json[keyLatitude],
       longitude: json[keyLongitude],
+      type: json[keyType],
     );
   }
 
@@ -89,6 +91,7 @@ class TrufiLocation {
       keyDescription: description,
       keyLatitude: latitude,
       keyLongitude: longitude,
+      keyType: type,
     };
   }
 
