@@ -50,6 +50,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final List<TrufiLocation> data =
         savedLocationsBloc.locations.reversed.toList();
 
+    _center = map.center;
+    
     final List<String> descriptions = data.map((TrufiLocation location) {
       return location.description;
     }).toList();
@@ -70,7 +72,6 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
           type: 'saved_place:work'));
     }
     setState(() {
-      _center = map.center;
     });
   }
 
