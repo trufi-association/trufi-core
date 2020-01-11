@@ -10,6 +10,7 @@ import '../custom_icons.dart';
 import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/home.dart';
+import '../pages/saved_places.dart';
 import '../pages/team.dart';
 import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
@@ -83,6 +84,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             HomePage.route,
           ),
           _buildListItem(
+            Icons.room,
+            localization.menuYourPlaces(),
+            SavedPlacesPage.route,
+          ),
+          _buildListItem(
             Icons.feedback,
             localization.menuFeedback(),
             FeedbackPage.route,
@@ -151,7 +157,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         ),
         selected: isSelected,
         onTap: () {
-          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));
+          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));        
           if (route != HomePage.route) {
             Navigator.pushNamed(context, route);
           }
