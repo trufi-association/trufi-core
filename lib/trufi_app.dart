@@ -9,9 +9,11 @@ import './blocs/location_provider_bloc.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_bloc.dart';
 import './blocs/request_manager_bloc.dart';
+import './blocs/saved_locations_bloc.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/home.dart';
+import './pages/saved_places.dart';
 import './pages/team.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
@@ -42,10 +44,13 @@ class TrufiApp extends StatelessWidget {
                 bloc: FavoriteLocationsBloc(context),
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
-                  child: AppLifecycleReactor(
-                    child: LocalizedMaterialApp(
-                      theme,
-                      localization,
+                  child: BlocProvider<SavedLocationsBloc>(
+                      bloc: SavedLocationsBloc(context),
+                      child: AppLifecycleReactor(
+                        child: LocalizedMaterialApp(
+                        theme,
+                        localization,
+                      ),
                     ),
                   ),
                 ),
@@ -126,6 +131,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => AboutPage(),
       FeedbackPage.route: (context) => FeedbackPage(),
+      SavedPlacesPage.route: (context) => SavedPlacesPage(),
       TeamPage.route: (context) => TeamPage(),
     };
     return StreamBuilder(
