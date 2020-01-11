@@ -9,6 +9,7 @@ import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
 import '../blocs/location_search_bloc.dart';
 import '../blocs/request_manager_bloc.dart';
+import '../blocs/saved_locations_bloc.dart';
 import '../pages/choose_location.dart';
 import '../trufi_localizations.dart';
 import '../trufi_models.dart';
@@ -76,6 +77,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       locationSearchBloc: LocationSearchBloc.of(context),
+      savedLocationsBloc: SavedLocationsBloc.of(context),
       appBarTheme: appBarTheme(context),
     );
   }
@@ -197,11 +199,13 @@ class _SuggestionList extends StatelessWidget {
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
     @required this.locationSearchBloc,
+    @required this.savedLocationsBloc,
     @required this.appBarTheme,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
+  final SavedLocationsBloc savedLocationsBloc;
   final LocationSearchBloc locationSearchBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -216,6 +220,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
+    slivers.add(_buildYourPlaces(context));
     if (query.isEmpty) {
       slivers.add(_buildHistoryList(context));
       slivers.add(_buildFavoritesList(context));
@@ -257,6 +262,22 @@ class _SuggestionList extends StatelessWidget {
         Icons.place,
         localization.searchItemChooseOnMap(),
       ),
+    );
+  }
+
+  Widget _buildYourPlaces(BuildContext context) {
+    final localization = TrufiLocalizations.of(context).localization;
+    return StreamBuilder(
+      stream: savedLocationsBloc.outLocations,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TrufiLocation>> snapshot,
+      ) {
+        return _buildSavedSimpleList(
+          Icons.map,
+          savedLocationsBloc.locations.reversed.toList(),
+        );
+      },
     );
   }
 
@@ -479,6 +500,22 @@ class _SuggestionList extends StatelessWidget {
       case 'tourism:apartment':
         return Icons.local_hotel;
 
+      // Icons used for the new feature: my places
+      case 'saved_place:fastfood':
+        return Icons.fastfood;
+
+      case 'saved_place:home':
+        return Icons.home;
+
+      case 'saved_place:local_cafe':
+        return Icons.local_cafe;
+
+      case 'saved_place:map':
+        return Icons.map;
+
+      case 'saved_place:work':
+        return Icons.work;
+
       default:
         return null;
     }
@@ -535,6 +572,33 @@ class _SuggestionList extends StatelessWidget {
           }
         },
         childCount: count,
+      ),
+    );
+  }
+
+  Widget _buildSavedSimpleList(
+    IconData iconData,
+    List<TrufiLocation> objects,
+  ) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final TrufiLocation object = objects[index];
+          IconData localIconData = iconData;
+          // Use special type icon if available, fallback to default
+          if (object.type != null) {
+            localIconData = _typeToIconData(object.type) ?? iconData;
+          }
+          return _buildItem(
+            context,
+            appBarTheme,
+            () => _handleOnLocationTapped(object, addToHistory: true),
+            localIconData,
+            object.displayName,
+            subtitle: object.address,
+          );
+        },
+        childCount: objects.length,
       ),
     );
   }
