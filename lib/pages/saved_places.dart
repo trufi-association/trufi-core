@@ -238,7 +238,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                       type: icons.keys.toList()[index],
                     );
                     savedLocationsBloc.inReplaceLocation
-                        .add(<TrufiLocation>[savedPlace, newLocation]);
+                        .add(<String, TrufiLocation>{ 'oldLocation' : savedPlace, 'newLocation': newLocation});
                     setState(() {});
                     Navigator.pop(context);
                   },
@@ -276,7 +276,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       );
 
       savedLocationsBloc.inReplaceLocation
-          .add(<TrufiLocation>[savedPlace, newLocation]);
+          .add(<String, TrufiLocation>{ 'oldLocation' : savedPlace, 'newLocation': newLocation});
       setState(() {});
     }
   }

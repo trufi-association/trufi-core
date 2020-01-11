@@ -11,6 +11,7 @@ abstract class LocationsBlocBase implements BlocBase {
   LocationsBlocBase(BuildContext context, this.locationStorage) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);
+    _replaceLocationController.listen(_handleReplace);
     locationStorage.load(context).then((_) => _notify);
   }
 
@@ -26,6 +27,11 @@ abstract class LocationsBlocBase implements BlocBase {
 
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
+  // ReplaceLocation
+  final _replaceLocationController = BehaviorSubject<Map<String,TrufiLocation>>();
+
+  Sink<Map<String,TrufiLocation>> get inReplaceLocation => _replaceLocationController.sink;
+
   // Locations
   final _locationsController = BehaviorSubject<List<TrufiLocation>>();
 
@@ -39,6 +45,7 @@ abstract class LocationsBlocBase implements BlocBase {
   void dispose() {
     _addLocationController.close();
     _removeLocationController.close();
+    _replaceLocationController.close();
     _locationsController.close();
   }
 
@@ -51,6 +58,11 @@ abstract class LocationsBlocBase implements BlocBase {
 
   void _handleRemove(TrufiLocation value) {
     locationStorage.remove(value);
+    _notify();
+  }
+
+  void _handleReplace(Map<String,TrufiLocation> value) {
+    locationStorage.replace(value);
     _notify();
   }
 
