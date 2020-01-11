@@ -575,6 +575,12 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Menu item that shows the map/planned trip",
       );
 
+  String menuYourPlaces() => Intl.message(
+        "Your places",
+        name: "menuYourPlaces",
+        desc: "Menu item that shows the saved places",
+      );
+
   String menuAbout() => Intl.message(
         "About",
         name: "menuAbout",
@@ -647,6 +653,54 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
         name: "aboutOpenSource",
         desc: "A note about open source",
+      );
+  
+  String savedSectionAddPlace() => Intl.message(
+        "Something else",
+        name: "savedSectionAddPlace",
+        desc: "save a new place",
+      );
+  
+  String savedSectionCancel() => Intl.message(
+        "Cancel",
+        name: "savedSectionCancel",
+        desc: "cancel form",
+      );
+
+  String savedSectionInsertName() => Intl.message(
+        "Insert name",
+        name: "savedSectionInsertName",
+        desc: "title of insert name form",
+      );
+
+  String savedSectionOK() => Intl.message(
+        "Okey",
+        name: "savedSectionOK",
+        desc: "validate form",
+      );
+
+  String savedSectionRemove() => Intl.message(
+        "Remove",
+        name: "savedSectionRemove",
+        desc: "Remove place saved",
+      );
+
+  String savedSectionSetIcon() => Intl.message(
+        "Change icon",
+        name: "savedSectionSetIcon",
+        desc: "change icon of a saved place",
+      );
+
+  String savedSectionSelectIcon() => Intl.message(
+        "Select icon",
+        name: "savedSectionSelectIcon",
+        desc: "title of change icon",
+      );
+
+  String savedSectionSetCoordinate() => Intl.message(
+        "Edit Coordinate",
+        name: "savedSectionSetCoordinate",
+        desc: "change coordinate of saved place",
       );
 
   String teamContent() => Intl.message(
@@ -904,6 +958,8 @@ abstract class TrufiLocalization {
 
   String menuConnections();
 
+  String menuYourPlaces();
+
   String menuAbout();
 
   String menuTeam();
@@ -927,6 +983,22 @@ abstract class TrufiLocalization {
   String aboutLicenses();
 
   String aboutOpenSource();
+
+  String savedSectionAddPlace();
+  
+  String savedSectionCancel();
+
+  String savedSectionInsertName();
+
+  String savedSectionOK();
+
+  String savedSectionRemove();
+
+  String savedSectionSetIcon();
+
+  String savedSectionSelectIcon();
+
+  String savedSectionSetCoordinate();
 
   String teamContent();
 
