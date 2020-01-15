@@ -157,7 +157,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         ),
         selected: isSelected,
         onTap: () {
-          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));        
+          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));
           if (route != HomePage.route) {
             Navigator.pushNamed(context, route);
           }
