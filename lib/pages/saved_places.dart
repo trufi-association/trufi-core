@@ -35,6 +35,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     'saved_place:fastfood': Icons.fastfood,
     'saved_place:local_cafe': Icons.local_cafe,
     'saved_place:map': Icons.map,
+    'saved_place:school': Icons.school,
   };
 
   @override
