@@ -44,35 +44,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   void _loadState() {
-    final SavedLocationsBloc savedLocationsBloc =
-        SavedLocationsBloc.of(context);
     final TrufiConfigurationMap map = TrufiConfiguration().map;
-    final List<TrufiLocation> data =
-        savedLocationsBloc.locations.reversed.toList();
-
     _center = map.center;
-
-    final List<String> descriptions = data.map((TrufiLocation location) {
-      return location.description;
-    }).toList();
-
-    if (!descriptions.contains('Home')) {
-      savedLocationsBloc.inAddLocation.add(TrufiLocation(
-          description: 'Home',
-          latitude: _center.latitude,
-          longitude: _center.longitude,
-          type: 'saved_place:home'));
-    }
-
-    if (!descriptions.contains('Work')) {
-      savedLocationsBloc.inAddLocation.add(TrufiLocation(
-          description: 'Work',
-          latitude: _center.latitude,
-          longitude: _center.longitude,
-          type: 'saved_place:work'));
-    }
-    setState(() {
-    });
   }
 
   @override
@@ -92,31 +65,6 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          Expanded(child: _savedPlaces()),
-        ],
-      ),
-    );
-  }
-
-  Widget _addPlaceBttn() {
-    return FloatingActionButton(
-      onPressed: () async {
-        final LatLng mapLocation = await _selectCoordinate(_center);
-        if (mapLocation != null) {
-          _addDescriptionPlace(mapLocation);
-        }
-      },
-      child: Icon(Icons.add),
-      backgroundColor: Theme.of(context).primaryColor,
-      heroTag: null,
-    );
-  }
-
-  Widget _savedPlaces() {
     final ThemeData theme = Theme.of(context);
     final TrufiLocalization localization =
         TrufiLocalizations.of(context).localization;
@@ -125,12 +73,13 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final List<TrufiLocation> data =
         savedLocationsBloc.locations.reversed.toList();
 
-    final SliverList saveds = SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index) {
           final TrufiLocation savedPlace = data[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 5),
+            margin: EdgeInsets.only(bottom: 5),
             child: RaisedButton(
               onPressed: () {
                 log('bttn');
@@ -179,14 +128,21 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
               ),
             ),
           );
-        },
-        childCount: data.length,
-      ),
-    );
-    final List<Widget> slivers = <Widget>[];
-    slivers.add(saveds);
+        });
+  }
 
-    return CustomScrollView(slivers: slivers);
+  Widget _addPlaceBttn() {
+    return FloatingActionButton(
+      onPressed: () async {
+        final LatLng mapLocation = await _selectCoordinate(_center);
+        if (mapLocation != null) {
+          _addDescriptionPlace(mapLocation);
+        }
+      },
+      child: Icon(Icons.add),
+      backgroundColor: Theme.of(context).primaryColor,
+      heroTag: null,
+    );
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
