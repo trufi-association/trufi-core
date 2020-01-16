@@ -298,6 +298,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         return Icons.local_cafe;
       case 'saved_place:map':
         return Icons.map;
+      case 'saved_place:school':
+        return Icons.school;
       default:
         return Icons.place;
     }
