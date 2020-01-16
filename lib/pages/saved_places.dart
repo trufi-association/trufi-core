@@ -51,7 +51,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         savedLocationsBloc.locations.reversed.toList();
 
     _center = map.center;
-    
+
     final List<String> descriptions = data.map((TrufiLocation location) {
       return location.description;
     }).toList();
@@ -81,6 +81,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
       drawer: TrufiDrawer(SavedPlacesPage.route),
+      floatingActionButton: _addPlaceBttn(),
     );
   }
 
@@ -96,13 +97,24 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       child: Column(
         children: <Widget>[
           Expanded(child: _savedPlaces()),
-          _addPlaceBttn(),
         ],
       ),
     );
   }
 
-  //
+  Widget _addPlaceBttn() {
+    return FloatingActionButton(
+      onPressed: () async {
+        final LatLng mapLocation = await _selectCoordinate(_center);
+        if (mapLocation != null) {
+          _addDescriptionPlace(mapLocation);
+        }
+      },
+      child: Icon(Icons.add),
+      backgroundColor: Theme.of(context).primaryColor,
+      heroTag: null,
+    );
+  }
 
   Widget _savedPlaces() {
     final ThemeData theme = Theme.of(context);
@@ -177,41 +189,6 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     return CustomScrollView(slivers: slivers);
   }
 
-  Widget _addPlaceBttn() {
-    final ThemeData theme = Theme.of(context);
-    final TrufiLocalization localization =
-        TrufiLocalizations.of(context).localization;
-
-    return RaisedButton(
-      onPressed: () async {
-        final LatLng mapLocation = await Navigator.of(context).push(
-          MaterialPageRoute<LatLng>(
-            builder: (BuildContext context) => ChooseLocationPage(
-              initialPosition: _center,
-            ),
-          ),
-        );
-        if (mapLocation != null) {
-          _addPlace(mapLocation);
-        }
-      },
-      color: theme.primaryColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Text(
-            localization.savedSectionAddPlace(),
-            style: theme.primaryTextTheme.body2,
-          ),
-          Icon(
-            Icons.add_to_home_screen,
-            color: theme.backgroundColor,
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
     final TrufiLocalization localization =
         TrufiLocalizations.of(context).localization;
@@ -239,7 +216,10 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                       type: icons.keys.toList()[index],
                     );
                     savedLocationsBloc.inReplaceLocation
-                        .add(<String, TrufiLocation>{ 'oldLocation' : savedPlace, 'newLocation': newLocation});
+                        .add(<String, TrufiLocation>{
+                      'oldLocation': savedPlace,
+                      'newLocation': newLocation
+                    });
                     setState(() {});
                     Navigator.pop(context);
                   },
@@ -256,18 +236,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Future<void> _changeCoordinate(TrufiLocation savedPlace) async {
     final SavedLocationsBloc savedLocationsBloc =
         SavedLocationsBloc.of(context);
-    final LatLng mapLocation = await Navigator.of(context).push(
-      MaterialPageRoute<LatLng>(
-        builder: (BuildContext context) => ChooseLocationPage(
-          initialPosition: savedPlace != null
-              ? LatLng(
-                  savedPlace.latitude,
-                  savedPlace.longitude,
-                )
-              : null,
-        ),
-      ),
-    );
+    final LatLng mapLocation = await _selectCoordinate(
+        LatLng(savedPlace.latitude, savedPlace.longitude));
     if (mapLocation != null) {
       final TrufiLocation newLocation = TrufiLocation(
         description: savedPlace.description,
@@ -276,13 +246,15 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         type: savedPlace.type,
       );
 
-      savedLocationsBloc.inReplaceLocation
-          .add(<String, TrufiLocation>{ 'oldLocation' : savedPlace, 'newLocation': newLocation});
+      savedLocationsBloc.inReplaceLocation.add(<String, TrufiLocation>{
+        'oldLocation': savedPlace,
+        'newLocation': newLocation
+      });
       setState(() {});
     }
   }
 
-  Future<void> _addPlace(LatLng mapLocation) async {
+  Future<void> _addDescriptionPlace(LatLng mapLocation) async {
     final SavedLocationsBloc savedLocationsBloc =
         SavedLocationsBloc.of(context);
     final ThemeData theme = Theme.of(context);
@@ -291,67 +263,68 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
 
     return await showDialog(
       context: context,
-      child: Container(
-        width: 200,
-        child: SimpleDialog(
-          backgroundColor: theme.primaryColor,
-          title: Text(
-            localization.savedSectionInsertName(),
-            style: theme.primaryTextTheme.body2,
+      child: SimpleDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        backgroundColor: theme.primaryColor,
+        title: Text(
+          localization.savedSectionInsertName(),
+          style: TextStyle(
+            fontSize: 20,
+            color: theme.primaryTextTheme.body2.color,
           ),
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(20),
-              height: 35,
-              child: TextField(
-                style: theme.textTheme.body2,
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(5.0)),
-                      borderSide: BorderSide(color: theme.primaryColor)),
-                ),
-                controller: textController,
-                maxLines: 1,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                RaisedButton(
-                  color: theme.backgroundColor,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    localization.savedSectionCancel(),
-                    style: theme.textTheme.body2,
-                  ),
-                ),
-                RaisedButton(
-                  color: theme.backgroundColor,
-                  onPressed: () {
-                    savedLocationsBloc.inAddLocation.add(TrufiLocation(
-                      description: textController.text,
-                      latitude: mapLocation.latitude,
-                      longitude: mapLocation.longitude,
-                      type: 'saved_place:map',
-                    ));
-                    textController.clear();
-                    setState(() {});
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    localization.savedSectionOK(),
-                    style: theme.textTheme.body2,
-                  ),
-                ),
-              ],
-            )
-          ],
         ),
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.all(20),
+            height: 35,
+            child: TextField(
+              style: theme.textTheme.body2,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(color: theme.primaryColor)),
+              ),
+              controller: textController,
+              maxLines: 1,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              RaisedButton(
+                color: theme.backgroundColor,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  localization.savedSectionCancel(),
+                  style: theme.textTheme.body2,
+                ),
+              ),
+              RaisedButton(
+                color: theme.backgroundColor,
+                onPressed: () {
+                  savedLocationsBloc.inAddLocation.add(TrufiLocation(
+                    description: textController.text,
+                    latitude: mapLocation.latitude,
+                    longitude: mapLocation.longitude,
+                    type: 'saved_place:map',
+                  ));
+                  textController.clear();
+                  setState(() {});
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  localization.commonOK(),
+                  style: theme.textTheme.body2,
+                ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -371,5 +344,14 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       default:
         return Icons.place;
     }
+  }
+
+  Future<LatLng> _selectCoordinate(LatLng coordinate) {
+    return Navigator.of(context).push(
+      MaterialPageRoute<LatLng>(
+        builder: (BuildContext context) =>
+            ChooseLocationPage(initialPosition: coordinate),
+      ),
+    );
   }
 }
