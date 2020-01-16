@@ -515,6 +515,8 @@ class _SuggestionList extends StatelessWidget {
 
       case 'saved_place:work':
         return Icons.work;
+      case 'saved_place:school':
+        return Icons.school;
 
       default:
         return null;
