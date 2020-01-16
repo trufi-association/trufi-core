@@ -303,6 +303,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                   localization.savedSectionCancel(),
                   style: theme.textTheme.body2,
                 ),
+<<<<<<< HEAD
               ),
               RaisedButton(
                 color: theme.backgroundColor,
@@ -320,6 +321,25 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                 child: Text(
                   localization.commonOK(),
                   style: theme.textTheme.body2,
+=======
+                RaisedButton(
+                  color: theme.backgroundColor,
+                  onPressed: () {
+                    savedLocationsBloc.inAddLocation.add(TrufiLocation(
+                      description: textController.text,
+                      latitude: mapLocation.latitude,
+                      longitude: mapLocation.longitude,
+                      type: 'saved_place:map',
+                    ));
+                    textController.clear();
+                    setState(() {});
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    localization.commonOK(),
+                    style: theme.textTheme.body2,
+                  ),
+>>>>>>> 1594b31b6d8d9c8a67da8ccf20700d0581c91384
                 ),
               ),
             ],
