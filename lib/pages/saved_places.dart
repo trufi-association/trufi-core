@@ -344,7 +344,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    localization.savedSectionOK(),
+                    localization.commonOK(),
                     style: theme.textTheme.body2,
                   ),
                 ),
