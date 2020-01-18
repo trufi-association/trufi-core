@@ -1,9 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import '../blocs/saved_locations_bloc.dart';
+import '../blocs/location_provider_bloc.dart';
+
+import '../pages/home.dart';
 
 import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
@@ -55,7 +56,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       appBar: _buildAppBar(context),
       body: _buildBody(context),
       drawer: TrufiDrawer(SavedPlacesPage.route),
-      floatingActionButton: _addPlaceBttn(),
+      floatingActionButton: _buildFloatingActionButton(),
     );
   }
 
@@ -82,9 +83,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
           return Container(
             margin: EdgeInsets.only(bottom: 5),
             child: RaisedButton(
-              onPressed: () {
-                log('bttn');
-              },
+              onPressed: () => _showCurrentRoute(savedPlace),
               child: Row(
                 children: <Widget>[
                   Container(
@@ -132,7 +131,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         });
   }
 
-  Widget _addPlaceBttn() {
+  Widget _buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: () async {
         final LatLng mapLocation = await _selectCoordinate(_center);
@@ -144,6 +143,20 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       backgroundColor: Theme.of(context).primaryColor,
       heroTag: null,
     );
+  }
+
+  void _showCurrentRoute(TrufiLocation toLocation) async {
+    HomePageStateData dataRoute = HomePageStateData();
+    final location = await LocationProviderBloc.of(context).currentLocation;
+    TrufiLocation currentLocation = TrufiLocation.fromLatLng(
+      TrufiLocalizations.of(context).localization.searchItemYourLocation(),
+      location,
+    );
+    dataRoute.fromPlace = currentLocation;
+    dataRoute.toPlace = toLocation;
+    dataRoute.plan = null;
+    dataRoute.save(context);
+    Navigator.pushNamed(context, HomePage.route);
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
