@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+
+import '../trufi_localizations.dart';
+
+class SetDescriptionDialog extends StatefulWidget {
+  final String initText;
+  SetDescriptionDialog({this.initText});
+  @override
+  _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
+}
+
+class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
+  TextEditingController textController = TextEditingController();
+  bool _hasInputError = true;
+
+  @override
+  void initState() {
+    textController.text = widget.initText;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final TrufiLocalization localization =
+        TrufiLocalizations.of(context).localization;
+    return SimpleDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+      backgroundColor: theme.primaryColor,
+      title: Text(
+        localization.savedSectionInsertName(),
+        style: TextStyle(
+          fontSize: 20,
+          color: theme.primaryTextTheme.body2.color,
+        ),
+      ),
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.all(20),
+          height: 35,
+          child: TextField(
+            style: theme.textTheme.body2,
+            onChanged: (value) {
+                _hasInputError = !(value.length > 0 && value.contains(RegExp(r"[a-zA-Z0-9]+")));
+            },
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                  borderSide: BorderSide(color: theme.primaryColor)),
+            ),
+            controller: textController,
+            maxLines: 1,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            RaisedButton(
+              color: theme.backgroundColor,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                localization.savedSectionCancel(),
+                style: theme.textTheme.body2,
+              ),
+            ),
+            RaisedButton(
+              color: theme.backgroundColor,
+              onPressed: () {
+                if (!_hasInputError) {
+                  String description = textController.text.trim();
+                  textController.clear();
+                  Navigator.of(context).pop(description);
+                }
+              },
+              child: Text(
+                localization.commonOK(),
+                style: theme.textTheme.body2,
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
