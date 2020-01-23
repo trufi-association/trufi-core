@@ -16,6 +16,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
   @override
   void initState() {
     textController.text = widget.initText;
+    _hasInputError = !_validateInput(widget.initText);
     super.initState();
   }
 
@@ -42,7 +43,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
           child: TextField(
             style: theme.textTheme.body2,
             onChanged: (value) {
-                _hasInputError = !(value.length > 0 && value.contains(RegExp(r"[a-zA-Z0-9]+")));
+                _hasInputError = !_validateInput(value);
             },
             decoration: InputDecoration(
               fillColor: Colors.white,
@@ -86,5 +87,9 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
         )
       ],
     );
+  }
+
+  bool _validateInput(String text){
+    return text.length > 0 && text.contains(RegExp(r"[a-zA-Z0-9]+"));
   }
 }
