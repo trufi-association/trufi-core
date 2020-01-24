@@ -7,6 +7,8 @@ import '../plan/plan.dart';
 import '../trufi_map_utils.dart';
 import '../trufi_models.dart';
 import '../widgets/crop_button.dart';
+import '../widgets/share_locations.dart';
+import '../widgets/share_route_button.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
@@ -112,6 +114,8 @@ class PlanMapPageState extends State<PlanMapPage>
       children: <Widget>[
         CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
         Padding(padding: EdgeInsets.all(4.0)),
+        ShareRouteButton(onPressed: _handleShareRoute),
+        Padding(padding: EdgeInsets.all(4.0)),
         YourLocationButton(onPressed: _handleOnYourLocationPressed),
       ],
     );
@@ -133,6 +137,12 @@ class PlanMapPageState extends State<PlanMapPage>
         !position.bounds.containsBounds(_data.selectedBounds),
       );
     }
+  }
+
+  void _handleShareRoute(){
+    PlanLocation fromLocation = _data.plan.from;
+    PlanLocation toLocation = _data.plan.to;
+    shareRoute(fromLocation, toLocation);
   }
 
   void _handleOnYourLocationPressed() async {
