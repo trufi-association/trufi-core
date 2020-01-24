@@ -673,6 +673,13 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Remove place saved",
       );
 
+  String savedSectionSaveLocation() => Intl.message(
+        "Save location",
+        name: "savedSectionSaveLocation",
+        desc:
+            "Button label to save imported location",
+      );
+
   String savedSectionSetIcon() => Intl.message(
         "Change icon",
         name: "savedSectionSetIcon",
@@ -953,6 +960,8 @@ abstract class TrufiLocalization {
   String savedSectionInsertName();
 
   String savedSectionRemove();
+
+  String savedSectionSaveLocation();
 
   String savedSectionSetIcon();
 

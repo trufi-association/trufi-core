@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "savedSectionCancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "savedSectionInsertName" : MessageLookupByLibrary.simpleMessage("Insert name"),
     "savedSectionRemove" : MessageLookupByLibrary.simpleMessage("Remove"),
+    "savedSectionSaveLocation" : MessageLookupByLibrary.simpleMessage("Save location"),
     "savedSectionSetIcon" : MessageLookupByLibrary.simpleMessage("Change icon"),
     "savedSectionSelectIcon" : MessageLookupByLibrary.simpleMessage("Select icon"),
     "savedSectionSetCoordinate" : MessageLookupByLibrary.simpleMessage("Edit Coordinate"),
