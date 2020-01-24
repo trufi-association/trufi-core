@@ -24,6 +24,7 @@ import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
 import '../widgets/app_review_dialog.dart';
+import '../widgets/import_locations.dart';
 import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -79,16 +80,23 @@ class HomePageState extends State<HomePage>
   }
 
   void _loadState() async {
-    if (await _data.load(context) && _data.toPlace != null) {
-      setState(() {
-        _fromFieldKey.currentState?.didChange(_data.fromPlace);
-        _toFieldKey.currentState?.didChange(_data.toPlace);
-        if (_data.plan == null) {
-          _fetchPlan();
-        }
-      });
-    } else {
-      _setFromPlaceToCurrentPosition();
+    bool existData = await ImportLocations(
+      setFromPlaces: _setFromPlace,
+      setToPlace: _setToPlace,
+      setFromPlaceToCurrentPosition: _setFromPlaceToCurrentPosition,
+    ).importData(context);
+    if (existData != true) {
+      if (await _data.load(context) && _data.toPlace != null) {
+        setState(() {
+          _fromFieldKey.currentState?.didChange(_data.fromPlace);
+          _toFieldKey.currentState?.didChange(_data.toPlace);
+          if (_data.plan == null) {
+            _fetchPlan();
+          }
+        });
+      } else {
+        _setFromPlaceToCurrentPosition();
+      }
     }
   }
 
