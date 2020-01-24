@@ -15,6 +15,7 @@ import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
+import '../widgets/share_locations.dart';
 import '../custom_icons.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
@@ -515,7 +516,7 @@ class _SuggestionList extends StatelessWidget {
 
       case 'saved_place:work':
         return Icons.work;
-        
+
       case 'saved_place:school':
         return Icons.school;
 
@@ -559,6 +560,7 @@ class _SuggestionList extends StatelessWidget {
                 favoritesStream: favoriteLocationsBloc.outLocations,
                 color: appBarTheme.primaryIconTheme.color,
               ),
+              share: () => shareLocation(object),
             );
           } else if (object is TrufiStreet) {
             return _buildItem(
@@ -599,6 +601,7 @@ class _SuggestionList extends StatelessWidget {
             localIconData,
             object.displayName,
             subtitle: object.address,
+            share: () => shareLocation(object),
           );
         },
         childCount: objects.length,
@@ -716,6 +719,7 @@ Widget _buildItem(
   Function onTap,
   IconData iconData,
   String title, {
+  Function share,
   String subtitle,
   Widget trailing,
 }) {
@@ -749,6 +753,7 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
+    onLongPress: share ?? () {},
     child: Container(margin: EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }
