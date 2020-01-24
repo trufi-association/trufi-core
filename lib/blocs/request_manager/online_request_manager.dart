@@ -109,7 +109,14 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return await compute(_parsePlan, utf8.decode(response.bodyBytes));
+      Plan plan = await compute(_parsePlan, utf8.decode(response.bodyBytes));
+      if (plan.error == null) {
+        Map<String, dynamic> planMap = plan.toJson();
+        planMap['plan']['from']['name'] = from.description;
+        planMap['plan']['to']['name'] = to.description;
+        plan = Plan.fromJson(planMap);
+      }
+      return plan;
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
