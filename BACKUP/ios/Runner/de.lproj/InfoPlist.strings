@@ -1,9 +1,0 @@
-/* 
-  InfoPlist.strings
-  Runner
-
-  Created by Raimund Wege on 25.07.19.
-  Copyright © 2019 The Chromium Authors. All rights reserved.
-*/
-
-"NSLocationWhenInUseUsageDescription" = "Trufi nutzt deinen Standort, um ihn auf der Karte darzustellen.";
