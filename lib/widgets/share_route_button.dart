@@ -10,7 +10,7 @@ class ShareRouteButton extends StatelessWidget {
     return FloatingActionButton(
       backgroundColor: Theme.of(context).backgroundColor,
       child: Icon(
-        Icons.mobile_screen_share,
+        Icons.share,
         color: Colors.black,
       ),
       onPressed: onPressed,
