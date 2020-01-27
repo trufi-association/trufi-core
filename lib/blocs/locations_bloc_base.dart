@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/location/location_storage.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../blocs/bloc_provider.dart';
+import '../location/location_storage.dart';
+import '../trufi_models.dart';
 
 abstract class LocationsBlocBase implements BlocBase {
   LocationsBlocBase(BuildContext context, this.locationStorage) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
-import 'package:trufi_app/widgets/vertical_swipe_detector.dart';
+import '../trufi_localizations.dart';
+import '../trufi_models.dart';
+import '../widgets/vertical_swipe_detector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
   PlanItineraryTabPages(
@@ -135,13 +135,13 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     PlanItinerary itinerary,
   ) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return Container(
       height: _animationDetailHeight.value,
       child: ListView.builder(
         padding: EdgeInsets.only(
-          top: _paddingHeight/2,
-          bottom: _paddingHeight/2,
+          top: _paddingHeight / 2,
+          bottom: _paddingHeight / 2,
           left: 10.0,
           right: 32.0,
         ),
@@ -155,7 +155,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                   padding: EdgeInsets.all(8.0),
                   child: RichText(
                     text: TextSpan(
-                      text: leg.toInstruction(localizations),
+                      text: leg.toInstruction(localization),
                     ),
                   ),
                 ),
@@ -174,21 +174,18 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     BuildContext context,
     PlanItinerary itinerary,
   ) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return VerticalSwipeDetector(
       onSwipeUp: () => _setIsExpanded(true),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: _paddingHeight/2),
+        padding: EdgeInsets.symmetric(vertical: _paddingHeight / 2),
         child: Flex(
-          direction: isPortrait
-            ? Axis.vertical
-            : Axis.horizontal,
+          direction: isPortrait ? Axis.vertical : Axis.horizontal,
           children: <Widget>[
             _buildItineraryCost(context, itinerary),
-            Expanded(
-              child: _buildItinerarySummary(context, itinerary)
-            ),
+            Expanded(child: _buildItinerarySummary(context, itinerary)),
           ],
         ),
       ),
@@ -202,22 +199,24 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     PlanItinerary itinerary,
   ) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return Container(
       height: _animationCostHeight.value,
       padding: EdgeInsets.only(left: 16.0, right: 10.0),
       child: Row(
         children: <Widget>[
           Text(
-            localizations.instructionDurationMinutes(itinerary.time) + " ",
+            localization.instructionDurationMinutes(itinerary.time) + " ",
             style: theme.primaryTextTheme.title,
           ),
           Text(
-            "(" + (
-              itinerary.distance >= 1000
-                  ? localizations.instructionDistanceKm((itinerary.distance / 1000).ceil())
-                  : localizations.instructionDistanceMeters(itinerary.distance)
-            ) + ")",
+            "(" +
+                (itinerary.distance >= 1000
+                    ? localization.instructionDistanceKm(
+                        (itinerary.distance / 1000).ceil())
+                    : localization
+                        .instructionDistanceMeters(itinerary.distance)) +
+                ")",
             style: theme.primaryTextTheme.title.copyWith(color: Colors.grey),
           ),
         ],
@@ -232,7 +231,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     PlanItinerary itinerary,
   ) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     final children = List<Widget>();
     itinerary.legs.forEach((leg) {
       children.add(
@@ -247,7 +246,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     ),
                   )
                 : Text(
-                    localizations.instructionDurationMinutes(
+                    localization.instructionDurationMinutes(
                         (leg.duration.ceil() / 60).ceil()),
                     style: theme.primaryTextTheme.body1,
                   ),
@@ -310,11 +309,11 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   // Getter
 
   double get height {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
-    var height =
-      _animationDetailHeight.value +
-      _animationCostHeight.value +
-      _paddingHeight;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    var height = _animationDetailHeight.value +
+        _animationCostHeight.value +
+        _paddingHeight;
 
     if (isPortrait) {
       height += _animationSummaryHeight.value;
@@ -322,5 +321,4 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
 
     return height;
   }
-
 }

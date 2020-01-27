@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/widgets/trufi_drawer.dart';
+import '../trufi_configuration.dart';
+import '../trufi_localizations.dart';
+import '../widgets/trufi_drawer.dart';
 
 class FeedbackPage extends StatefulWidget {
   static const String route = "/feedback";
@@ -19,11 +19,26 @@ class FeedbackPage extends StatefulWidget {
 class FeedBackPageState extends State<FeedbackPage> {
   Future<Null> _launched;
 
-  Future<Null> _launch(String url) async {
+  Future<Null> _launch(BuildContext context, String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch';
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new Text("Could not open mail app"),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        }
+      );
     }
   }
 
@@ -38,13 +53,13 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
-    return AppBar(title: Text(localizations.menuFeedback()));
+    final localization = TrufiLocalizations.of(context).localization;
+    return AppBar(title: Text(localization.menuFeedback()));
   }
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return ListView(
       children: <Widget>[
         Container(
@@ -54,7 +69,7 @@ class FeedBackPageState extends State<FeedbackPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localizations.feedbackTitle(),
+                  localization.feedbackTitle(),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -63,7 +78,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.feedbackContent(),
+                  localization.feedbackContent(),
                   style: theme.textTheme.body2,
                 ),
               ),
@@ -84,15 +99,15 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildFloatingActionButton(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
-    final emailFeedback = GlobalConfiguration().getString("emailFeedback");
-    final launchUrl = "mailto:$emailFeedback?subject=Feedback";
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
-          _launched = _launch(launchUrl);
+          final String url = "mailto:${cfg.email.feedback}?subject=Feedback";
+          _launched = _launch(context, url);
         });
       },
       heroTag: null,

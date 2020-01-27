@@ -26,21 +26,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(value) => "${value} min";
 
-  static m3(vehicle, duration, distance, location) => "Fahren Sie mit ${vehicle} ${duration} (${distance}) bis ${location}";
+  static m3(street1, street2) => "${street1} und ${street2}";
 
-  static m4(duration, distance, location) => "Gehen Sie ${duration} (${distance}) bis ${location}";
+  static m4(vehicle, duration, distance, location) => "Fahren Sie mit ${vehicle} ${duration} (${distance}) bis ${location}";
 
-  static m5(url) => "Hol\' dir die Trufi, die App für den öffentlichen Nahverkehr in Cochabamba, auf ${url}";
+  static m5(duration, distance, location) => "Gehen Sie ${duration} (${distance}) bis ${location}";
 
-  static m6(representatives) => "Vertreter: ${representatives}";
+  static m6(url) => "Hol\' dir die Trufi, die App für den öffentlichen Nahverkehr in Cochabamba, auf ${url}";
 
-  static m7(routeContributors, osmContributors) => "Routen: ${routeContributors} und alle Benutzer, die Routen zu OpenStreetMap hochgeladen haben, z. B. ${osmContributors}. Kontaktieren Sie uns, wenn Sie der OpenStreetMap-Community beitreten möchten!";
+  static m7(representatives) => "Vertreter: ${representatives}";
 
-  static m8(teamMembers) => "Team: ${teamMembers}";
+  static m8(routeContributors, osmContributors) => "Routen: ${routeContributors} und alle Benutzer, die Routen zu OpenStreetMap hochgeladen haben, z. B. ${osmContributors}. Kontaktieren Sie uns, wenn Sie der OpenStreetMap-Community beitreten möchten!";
 
-  static m9(translators) => "Übersetzungen: ${translators}";
+  static m9(teamMembers) => "Team: ${teamMembers}";
 
-  static m10(version) => "Version ${version}";
+  static m10(translators) => "Übersetzungen: ${translators}";
+
+  static m11(version) => "Version ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -89,14 +91,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionDistanceKm" : m0,
     "instructionDistanceMeters" : m1,
     "instructionDurationMinutes" : m2,
-    "instructionRide" : m3,
+    "instructionJunction" : m3,
+    "instructionRide" : m4,
     "instructionVehicleBus" : MessageLookupByLibrary.simpleMessage("dem Bus"),
     "instructionVehicleCar" : MessageLookupByLibrary.simpleMessage("dem Auto"),
     "instructionVehicleGondola" : MessageLookupByLibrary.simpleMessage("der Gondel"),
     "instructionVehicleMicro" : MessageLookupByLibrary.simpleMessage("dem Micro"),
     "instructionVehicleMinibus" : MessageLookupByLibrary.simpleMessage("dem Minibus"),
     "instructionVehicleTrufi" : MessageLookupByLibrary.simpleMessage("der Trufi"),
-    "instructionWalk" : m4,
+    "instructionWalk" : m5,
     "menuAbout" : MessageLookupByLibrary.simpleMessage("Über"),
     "menuAppReview" : MessageLookupByLibrary.simpleMessage("App bewerten"),
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Verbindungen"),
@@ -122,14 +125,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitlePlaces" : MessageLookupByLibrary.simpleMessage("Orte"),
     "searchTitleRecent" : MessageLookupByLibrary.simpleMessage("Zuletzt gesucht"),
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Suchergebnisse"),
-    "shareAppText" : m5,
+    "shareAppText" : m6,
     "tagline" : MessageLookupByLibrary.simpleMessage("Öffentliche Verkehrsmittel in Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mit Hilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:"),
-    "teamSectionRepresentatives" : m6,
-    "teamSectionRoutes" : m7,
-    "teamSectionTeam" : m8,
-    "teamSectionTranslations" : m9,
+    "teamSectionRepresentatives" : m7,
+    "teamSectionRoutes" : m8,
+    "teamSectionTeam" : m9,
+    "teamSectionTranslations" : m10,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m10
+    "version" : m11
   };
 }

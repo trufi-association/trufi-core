@@ -1,5 +1,11 @@
-name: trufi_app
-description: Trufi App
+name: trufi_core
+description: A Flutter Plugin for Public Transport.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -7,35 +13,29 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  flutter_map: 0.7.3
-  #flutter_map:
-  #  git:
-  #    url: git@github.com:ubilabs/flutter_map.git
-  #    ref: feat/map_long_press
-
   app_review: 1.0.0
-  cupertino_icons: 0.1.2
+  cupertino_icons: 0.1.3
   diff_match_patch: 0.3.0
-  flare_flutter: 1.6.2
-  flutter_compass: 0.3.3
-  flutter_svg: 0.14.2
-  geolocator: 5.1.4+1
-  global_configuration: 1.2.0
+  flare_flutter: 1.8.3
+  flutter_compass: 0.3.4
+  flutter_map: 0.8.0
+  flutter_svg: 0.15.0
+  geolocator: 5.1.5
   google_api_availability: 2.0.1
   http: 0.12.0+2
-  intl: 0.15.8
-  intl_translation: 0.17.5
-  mockito: 3.0.0
+  intl: 0.16.0
+  intl_translation: 0.17.7
+  mockito: 4.1.1
   package_info: 0.4.0+6
-  path_provider: 1.3.0
-  permission_handler: 3.2.2
+  path_provider: 1.5.1
+  permission_handler: 4.0.0
   rxdart: 0.22.3
-  share: 0.6.2+3
-  shared_preferences: 0.5.3+4
-  sprintf: 4.0.0
-  synchronized: 2.0.2
-  url_launcher: 5.1.6
-  uuid: 2.0.2
+  share: 0.6.3+5
+  shared_preferences: 0.5.6
+  sprintf: 4.0.2
+  synchronized: 2.1.1
+  url_launcher: 5.4.1
+  uuid: 2.0.4
 
 dev_dependencies:
   flutter_driver:
@@ -43,51 +43,33 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  # This section identifies this Flutter project as a plugin project.
+  # The androidPackage and pluginClass identifiers should not ordinarily
+  # be modified. They are used by the tooling to maintain consistency when
+  # adding or updating assets for this project.
+  plugin:
+    androidPackage: app.trufi.trufi_core
+    pluginClass: TrufiCorePlugin
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
-  uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/cfg/
-    - assets/data/
-    - assets/images/
-    # - assets/tiles/8/
-    # - assets/tiles/9/
-    # - assets/tiles/10/
-    # - assets/tiles/11/
-    # - assets/tiles/12/
-    # - assets/tiles/13/
-    # - assets/tiles/14/
-    # - assets/tiles/15/
-    # - test/assets/tile.png
-
-  fonts:
-  - family: CircleIcon
-    fonts:
-    - asset: fonts/CircleIcon.ttf
-  - family: GondolaIcon
-    fonts:
-    - asset: fonts/GondolaIcon.ttf
-  - family: CustomIcons
-    fonts:
-    - asset: fonts/CustomIcons.ttf
-
+  # To add assets to your plugin package, add an assets section, like this:
+  # assets:
+  #  - images/a_dot_burr.jpeg
+  #  - images/a_dot_ham.jpeg
+  #
+  # For details regarding assets in packages, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  #
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+  assets:
+    - assets/images/
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
+  # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
@@ -104,5 +86,9 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages
+  # For details regarding fonts in packages, see
+  # https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+  - family: CustomIcons
+    fonts:
+    - asset: fonts/CustomIcons/CustomIcons.ttf

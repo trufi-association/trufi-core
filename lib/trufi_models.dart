@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
+import './trufi_configuration.dart';
+import './trufi_localizations.dart';
+import './custom_icons.dart';
 
 class TrufiLocation {
   TrufiLocation({
@@ -106,8 +106,7 @@ class TrufiLocation {
   }
 
   String get displayName {
-    final abbreviations = new Map<String, String>
-      .from(GlobalConfiguration().get("abbreviations"));
+    final abbreviations = TrufiConfiguration().abbreviations;
     return abbreviations.keys.fold<String>(description, (
       description,
       abbreviation,
@@ -156,12 +155,18 @@ class TrufiStreetJunction {
   final double longitude;
 
   String get description {
-    return "${street1.location.description} y ${street2.location.description}";
+    return "${street1.location.description} & ${street2.location.description}";
   }
 
-  TrufiLocation get location {
+  String displayName(TrufiLocalization localization) =>
+      localization.instructionJunction(
+        street1.displayName,
+        street2.displayName,
+      );
+
+  TrufiLocation location(TrufiLocalization localization) {
     return TrufiLocation(
-      description: description,
+      description: displayName(localization),
       latitude: latitude,
       longitude: longitude,
     );
@@ -373,6 +378,14 @@ class PlanItineraryLeg {
   static const _RouteLongName = "routeLongName";
   static const _To = "to";
 
+  // route name keywords for specfic types of transportation
+  static const type_trufi = "trufi";
+  static const type_micro = "micro";
+  static const type_minibus = "minibus";
+  static const type_gondola = "gondola";
+  static const type_light_rail = "light rail";
+
+
   final String points;
   final String mode;
   final String route;
@@ -393,25 +406,17 @@ class PlanItineraryLeg {
     );
   }
 
-  String toInstruction(TrufiLocalizations localizations) {
+  String toInstruction(TrufiLocalization localization) {
     StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
-      sb.write(
-        localizations.instructionWalk(
-          _durationString(localizations),
-          _distanceString(localizations),
-          _toString(localizations)
-        )
-      );
+      sb.write(localization.instructionWalk(_durationString(localization),
+          _distanceString(localization), _toString(localization)));
     } else {
-      sb.write(
-        localizations.instructionRide(
-          _carTypeString(localizations) + (route.isNotEmpty ? " $route" : ""),
-          _durationString(localizations),
-          _distanceString(localizations),
-          _toString(localizations)
-        )
-      );
+      sb.write(localization.instructionRide(
+          _carTypeString(localization) + (route.isNotEmpty ? " $route" : ""),
+          _durationString(localization),
+          _distanceString(localization),
+          _toString(localization)));
     }
     return sb.toString();
   }
@@ -428,34 +433,36 @@ class PlanItineraryLeg {
     };
   }
 
-  String _carTypeString(TrufiLocalizations localizations) {
+  String _carTypeString(TrufiLocalization localization) {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
-        ? localizations.instructionVehicleCar()
-        : carType.contains('trufi')
-            ? localizations.instructionVehicleTrufi()
-            : carType.contains('micro')
-                ? localizations.instructionVehicleMicro()
-                : carType.contains('minibus')
-                    ? localizations.instructionVehicleMinibus()
-                    : carType.contains('gondola')
-                        ? localizations.instructionVehicleGondola()
-                        : localizations.instructionVehicleBus();
+        ? localization.instructionVehicleCar()
+        : carType.contains(type_trufi)
+            ? localization.instructionVehicleTrufi()
+            : carType.contains(type_micro)
+                ? localization.instructionVehicleMicro()
+                : carType.contains(type_minibus)
+                    ? localization.instructionVehicleMinibus()
+                    : carType.contains(type_gondola)
+                        ? localization.instructionVehicleGondola()
+                        : carType.contains(type_light_rail)
+                            ? localization.instructionVehicleLightRail()
+                            : localization.instructionVehicleBus();
   }
 
-  String _distanceString(TrufiLocalizations localizations) {
+  String _distanceString(TrufiLocalization localization) {
     return distance >= 1000
-        ? localizations.instructionDistanceKm(distance.ceil() ~/ 1000)
-        : localizations.instructionDistanceMeters(distance.ceil());
+        ? localization.instructionDistanceKm(distance.ceil() ~/ 1000)
+        : localization.instructionDistanceMeters(distance.ceil());
   }
 
-  String _durationString(TrufiLocalizations localizations) {
+  String _durationString(TrufiLocalization localization) {
     final value = (duration.ceil() / 60).ceil();
-    return localizations.instructionDurationMinutes(value);
+    return localization.instructionDurationMinutes(value);
   }
 
-  String _toString(TrufiLocalizations localizations) {
-    return toName == 'Destination' ? localizations.commonDestination() : toName;
+  String _toString(TrufiLocalization localization) {
+    return toName == 'Destination' ? localization.commonDestination() : toName;
   }
 
   IconData iconData() {
@@ -464,14 +471,16 @@ class PlanItineraryLeg {
         ? Icons.directions_walk
         : mode == 'CAR'
             ? Icons.drive_eta
-            : carType.contains('trufi')
+            : carType.contains(type_trufi)
                 ? Icons.local_taxi
-                : carType.contains('micro')
+                : carType.contains(type_micro)
                     ? Icons.directions_bus
-                    : carType.contains('minibus')
+                    : carType.contains(type_minibus)
                         ? Icons.airport_shuttle
-                        : carType.contains('gondola')
-                            ? GondolaIcon.gondola
-                            : Icons.directions_bus;
+                        : carType.contains(type_gondola)
+                            ? CustomIcons.gondola
+                            : carType.contains(type_light_rail)
+                                ? Icons.train
+                                : Icons.directions_bus;
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:trufi_app/location/location_search_delegate.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../location/location_search_delegate.dart';
+import '../trufi_localizations.dart';
+import '../trufi_models.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
   LocationFormField({

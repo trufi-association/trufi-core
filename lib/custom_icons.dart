@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/CustomIcons.ttf
 ///
-/// 
+///
 /// * Font Awesome, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -23,9 +23,14 @@ class CustomIcons {
   CustomIcons._();
 
   static const _kFontFam = 'CustomIcons';
+  static const _kFontPkg = 'trufi_core';
 
-  static const IconData trufi = const IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData twitter = const IconData(0xf099, fontFamily: _kFontFam);
-  static const IconData instagram = const IconData(0xf16d, fontFamily: _kFontFam);
-  static const IconData facebook = const IconData(0xf230, fontFamily: _kFontFam);
+  static const IconData trufi = const IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bus_stop = const IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData twitter = const IconData(0xf099, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData instagram = const IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circle_outline = const IconData(0xf1db, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook = const IconData(0xf230, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

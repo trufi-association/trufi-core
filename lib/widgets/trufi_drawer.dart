@@ -1,18 +1,18 @@
 import 'dart:io';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_app/custom_icons.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/pages/about.dart';
-import 'package:trufi_app/pages/feedback.dart';
-import 'package:trufi_app/pages/home.dart';
-import 'package:trufi_app/pages/team.dart';
-import 'package:trufi_app/trufi_localizations.dart';
+import '../blocs/preferences_bloc.dart';
+import '../custom_icons.dart';
+import '../pages/about.dart';
+import '../pages/feedback.dart';
+import '../pages/home.dart';
+import '../pages/team.dart';
+import '../trufi_configuration.dart';
+import '../trufi_localizations.dart';
 
 class TrufiDrawer extends StatefulWidget {
   TrufiDrawer(this.currentRoute);
@@ -25,12 +25,13 @@ class TrufiDrawer extends StatefulWidget {
 
 class TrufiDrawerState extends State<TrufiDrawer> {
   AssetImage bgImage;
+  final GlobalKey appShareButtonKey = GlobalKey(debugLabel: "appShareButtonKey");
 
   @override
   void initState() {
     super.initState();
 
-    bgImage = AssetImage("assets/images/drawer-bg.jpg");
+    bgImage = AssetImage(TrufiConfiguration().image.drawerBackground);
   }
 
   @override
@@ -43,14 +44,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
-    final cfg = GlobalConfiguration();
-    final urlDonate = cfg.getString("urlDonate");
-    final urlShare = cfg.getString("urlShare");
-    final urlWebsite = cfg.getString("urlWebsite");
-    final urlFacebook = cfg.getString("urlFacebook");
-    final urlTwitter = cfg.getString("urlTwitter");
-    final urlInstagram = cfg.getString("urlInstagram");
+    final localization = TrufiLocalizations.of(context).localization;
+    final cfg = TrufiConfiguration();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -62,9 +57,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 image: bgImage,
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  const Color.fromRGBO(0, 0, 0, 0.5),
-                  BlendMode.multiply
-                ),
+                    const Color.fromRGBO(0, 0, 0, 0.5), BlendMode.multiply),
               ),
             ),
             child: Column(
@@ -72,13 +65,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  localizations.title(),
+                  localization.title(),
                   style: theme.primaryTextTheme.title,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
-                    localizations.tagline(),
+                    localization.tagline(),
                     style: theme.primaryTextTheme.subhead,
                   ),
                 ),
@@ -87,22 +80,22 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           ),
           _buildListItem(
             Icons.linear_scale,
-            localizations.menuConnections(),
+            localization.menuConnections(),
             HomePage.route,
           ),
           _buildListItem(
             Icons.feedback,
-            localizations.menuFeedback(),
+            localization.menuFeedback(),
             FeedbackPage.route,
           ),
           _buildListItem(
             Icons.people,
-            localizations.menuTeam(),
+            localization.menuTeam(),
             TeamPage.route,
           ),
           _buildListItem(
             Icons.info,
-            localizations.menuAbout(),
+            localization.menuAbout(),
             AboutPage.route,
           ),
           Divider(),
@@ -110,33 +103,38 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          _buildAppShareButton(context, urlShare),
-          if (!Platform.isIOS && urlDonate != "") _buildWebLinkItem(
-            Icons.monetization_on,
-            localizations.donate(),
-            urlDonate,
-          ),
+          _buildAppShareButton(context, cfg.url.share),
+          if (!Platform.isIOS && cfg.url.donate != "")
+            _buildWebLinkItem(
+              Icons.monetization_on,
+              localization.donate(),
+              cfg.url.donate,
+            ),
           Divider(),
-          if (urlWebsite != "") _buildWebLinkItem(
-            CustomIcons.trufi,
-            localizations.readOurBlog(),
-            urlWebsite,
-          ),
-          if (urlFacebook != "") _buildWebLinkItem(
-            CustomIcons.facebook,
-            localizations.followOnFacebook(),
-            urlFacebook,
-          ),
-          if (urlTwitter != "") _buildWebLinkItem(
-            CustomIcons.twitter,
-            localizations.followOnTwitter(),
-            urlTwitter,
-          ),
-          if (urlInstagram != "") _buildWebLinkItem(
-            CustomIcons.instagram,
-            localizations.followOnInstagram(),
-            urlInstagram,
-          ),
+          if (cfg.url.website != "")
+            _buildWebLinkItem(
+              CustomIcons.trufi,
+              localization.readOurBlog(),
+              cfg.url.website,
+            ),
+          if (cfg.url.facebook != "")
+            _buildWebLinkItem(
+              CustomIcons.facebook,
+              localization.followOnFacebook(),
+              cfg.url.facebook,
+            ),
+          if (cfg.url.twitter != "")
+            _buildWebLinkItem(
+              CustomIcons.twitter,
+              localization.followOnTwitter(),
+              cfg.url.twitter,
+            ),
+          if (cfg.url.instagram != "")
+            _buildWebLinkItem(
+              CustomIcons.instagram,
+              localization.followOnInstagram(),
+              cfg.url.instagram,
+            ),
         ],
       ),
     );
@@ -165,8 +163,9 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
     final values = supportedLanguages
-      .map((lang) => LanguageDropdownValue(lang["languageCode"], lang["languageString"]))
-      .toList();
+        .map((lang) =>
+            LanguageDropdownValue(lang.languageCode, lang.displayName))
+        .toList();
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
     final localizations = TrufiLocalizations.of(context);
@@ -195,13 +194,13 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   Widget _buildOfflineToggle(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return StreamBuilder(
       stream: preferencesBloc.outChangeOnline,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         bool isOnline = snapshot.data == true;
         return SwitchListTile(
-          title: Text(localizations.menuOnline()),
+          title: Text(localization.menuOnline()),
           value: isOnline,
           onChanged: preferencesBloc.inChangeOnline.add,
           activeColor: theme.primaryColor,
@@ -212,12 +211,12 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildAppReviewButton(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return Container(
       child: ListTile(
         leading: Icon(Icons.star, color: Colors.grey),
         title: Text(
-          localizations.menuAppReview(),
+          localization.menuAppReview(),
           style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
         onTap: () async {
@@ -227,17 +226,25 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     );
   }
 
+  Rect getAppShareButtonOrigin() {
+    final RenderBox box = appShareButtonKey.currentContext.findRenderObject();
+    return box.localToGlobal(Offset.zero) & box.size;
+  }
+  
   Widget _buildAppShareButton(BuildContext context, String url) {
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return Container(
+      key: appShareButtonKey,
       child: ListTile(
         leading: Icon(Icons.share, color: Colors.grey),
         title: Text(
-          localizations.menuShareApp(),
+          localization.menuShareApp(),
           style: TextStyle(color: Theme.of(context).textTheme.body2.color),
         ),
         onTap: () {
-          Share.share(localizations.shareAppText(url));
+          Share.share(localization.shareAppText(url),
+            sharePositionOrigin: getAppShareButtonOrigin(),
+          );
         },
       ),
     );
@@ -255,7 +262,6 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       ),
     );
   }
-
 }
 
 class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {

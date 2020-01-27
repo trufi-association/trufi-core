@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -8,10 +7,11 @@ import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/alerts.dart';
-import 'package:trufi_app/widgets/trufi_map_animations.dart';
+import '../blocs/location_provider_bloc.dart';
+import '../trufi_configuration.dart';
+import '../trufi_map_utils.dart';
+import '../widgets/alerts.dart';
+import '../widgets/trufi_map_animations.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
@@ -27,10 +27,9 @@ class TrufiMapController {
   set state(TrufiMapState state) {
     _state = state;
     _mapController.onReady.then((_) {
-      final cfg = GlobalConfiguration();
-      final zoom = cfg.getDouble("mapDefaultZoom");
-      final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
-      final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
+      final cfg = TrufiConfiguration();
+      final zoom = cfg.map.defaultZoom;
+      final mapCenter = cfg.map.center;
 
       _mapController.move(mapCenter, zoom);
       _inMapReady.add(null);
@@ -46,8 +45,8 @@ class TrufiMapController {
     @required BuildContext context,
     TickerProvider tickerProvider,
   }) async {
-    final cfg = GlobalConfiguration();
-    final zoom = cfg.getDouble("mapChooseLocationZoom");
+    final cfg = TrufiConfiguration();
+    final zoom = cfg.map.chooseLocationZoom;
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       move(
@@ -133,9 +132,7 @@ class TrufiMapState extends State<TrufiMap> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final locationProviderBloc = LocationProviderBloc.of(context);
-    final cfg = GlobalConfiguration();
-    final urlMapTiler = cfg.getString("urlMapTiler");
-    final urlOpenStreetMap = cfg.getString("urlOpenStreetMap");
+    final cfg = TrufiConfiguration();
     return StreamBuilder<LatLng>(
       stream: locationProviderBloc.outLocationUpdate,
       builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
@@ -167,7 +164,7 @@ class TrufiMapState extends State<TrufiMap> {
                       text: "© MapTiler ",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launch(urlMapTiler);
+                          launch(cfg.url.mapTilerCopyright);
                         },
                     ), 
                     TextSpan(
@@ -177,7 +174,7 @@ class TrufiMapState extends State<TrufiMap> {
                       text: "© OpenStreetMap",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          launch(urlOpenStreetMap);
+                          launch(cfg.url.openStreetMapCopyright);
                         },
                     ),
                     TextSpan(

@@ -1,5 +1,7 @@
 # Trufi App
 
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/trufi-association/trufi-app/issues)
+
 The mobile app for public transportation.
 Built in [Flutter](https://flutter.dev/) and made by the Trufi Association, a social startup, to provide smartphone apps for informal traffic.
 
@@ -56,4 +58,4 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 ## Shout-outs
 
-Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-5px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
+Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.

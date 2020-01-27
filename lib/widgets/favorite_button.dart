@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:meta/meta.dart';
 
-import 'package:trufi_app/blocs/favorite_location_bloc.dart';
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../blocs/favorite_location_bloc.dart';
+import '../blocs/favorite_locations_bloc.dart';
+import '../trufi_models.dart';
 
 class FavoriteButton extends StatefulWidget {
   FavoriteButton({

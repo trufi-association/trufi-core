@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/history_locations_bloc.dart';
-import 'package:trufi_app/blocs/location_provider_bloc.dart';
-import 'package:trufi_app/location/location_form_field.dart';
-import 'package:trufi_app/pages/home.dart';
-import 'package:trufi_app/trufi_localizations.dart';
+import 'package:trufi_core/blocs/bloc_provider.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/history_locations_bloc.dart';
+import 'package:trufi_core/blocs/location_provider_bloc.dart';
+import 'package:trufi_core/location/location_form_field.dart';
+import 'package:trufi_core/pages/home.dart';
+import 'package:trufi_core/trufi_localizations.dart';
 
 import 'image_tile.dart';
 import 'mock_http_client.dart';
@@ -25,25 +25,43 @@ void main() {
   setUp(() async {
     HttpOverrides.global = new TestHttpOverrides({
       Uri.parse('https://maps.tilehosting.com/styles/positron/5/17/tile.png'):
-        dummyImageData
+          dummyImageData
     });
   });
 
+  final localName = "en";
+  final localization = TrufiLocalizationDefault();
+
   testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
     await tester.pumpWidget(
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      return BlocProvider<LocationProviderBloc>(
-          bloc: LocationProviderBloc(),
-          child: BlocProvider<FavoriteLocationsBloc>(
+      StatefulBuilder(
+        builder: (
+          BuildContext context,
+          StateSetter setState,
+        ) {
+          return BlocProvider<LocationProviderBloc>(
+            bloc: LocationProviderBloc(),
+            child: BlocProvider<FavoriteLocationsBloc>(
               bloc: FavoriteLocationsBloc(context),
               child: BlocProvider<HistoryLocationsBloc>(
-                  bloc: HistoryLocationsBloc(context),
-                  child: MaterialApp(localizationsDelegates: [
-                    TrufiLocalizationsDelegate("en"),
-                    TrufiMaterialLocalizationsDelegate("en"),
+                bloc: HistoryLocationsBloc(context),
+                child: MaterialApp(
+                  localizationsDelegates: [
+                    TrufiLocalizationsDelegate(
+                      localName,
+                      localization,
+                    ),
+                    TrufiMaterialLocalizationsDelegate(localName),
                     GlobalWidgetsLocalizations.delegate,
-                  ], home: HomePage()))));
-    }));
+                  ],
+                  home: HomePage(),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
 
     await tester.pump();
     HomeRobot().seesMyLocationFab().seesAppBar().seesFormFields();

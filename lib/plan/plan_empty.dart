@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/widgets/trufi_map.dart';
-import 'package:trufi_app/widgets/trufi_online_map.dart';
+import '../widgets/trufi_map.dart';
+import '../widgets/trufi_online_map.dart';
 
 class PlanEmptyPage extends StatefulWidget {
   PlanEmptyPage({this.initialPosition, this.onLongPress});

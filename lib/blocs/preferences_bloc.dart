@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
+import '../blocs/bloc_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PreferencesBloc extends BlocBase {

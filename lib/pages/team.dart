@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/widgets/trufi_drawer.dart';
+import '../trufi_configuration.dart';
+import '../trufi_localizations.dart';
+import '../widgets/trufi_drawer.dart';
 
 class TeamPage extends StatefulWidget {
   static const String route = "/team";
@@ -28,14 +28,13 @@ class TeamPageState extends State<TeamPage> {
 
   void _loadState() async {
     const joinSep = ", ";
-    final attributions = Map<String, List<dynamic>>
-      .from(GlobalConfiguration().get("attributions"));
+    final attribution = TrufiConfiguration().attribution;
     setState(() {
-      _representatives = attributions["representatives"].join(joinSep);
-      _team = attributions["team"].join(joinSep);
-      _translations = attributions["translations"].join(joinSep);
-      _routes = attributions["routes"].join(joinSep);
-      _osm = attributions["osm"].join(joinSep);
+      _representatives = attribution.representatives.join(joinSep);
+      _team = attribution.team.join(joinSep);
+      _translations = attribution.translations.join(joinSep);
+      _routes = attribution.routes.join(joinSep);
+      _osm = attribution.osm.join(joinSep);
     });
   }
 
@@ -49,15 +48,14 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localizations = TrufiLocalizations.of(context);
-    return AppBar(title: Text(localizations.menuTeam()));
+    final localization = TrufiLocalizations.of(context).localization;
+    return AppBar(title: Text(localization.menuTeam()));
   }
 
   Widget _buildBody(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
-    final emailInfo = GlobalConfiguration().getString("emailInfo");
-    final launchUrl = "mailto:$emailInfo?subject=Contribution";
+    final localization = TrufiLocalizations.of(context).localization;
     return ListView(
       children: <Widget>[
         Container(
@@ -70,18 +68,20 @@ class TeamPageState extends State<TeamPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: localizations.teamContent() + " ",
+                        text: localization.teamContent() + " ",
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(
-                        text: emailInfo,
+                        text: cfg.email.info,
                         style: theme.textTheme.body2.copyWith(
                           color: theme.accentColor,
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            launch(launchUrl);
+                            launch(
+                              "mailto:${cfg.email.info}?subject=Contribution",
+                            );
                           },
                       ),
                       TextSpan(
@@ -95,28 +95,28 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionRepresentatives(_representatives),
+                  localization.teamSectionRepresentatives(_representatives),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionTeam(_team),
+                  localization.teamSectionTeam(_team),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionTranslations(_translations),
+                  localization.teamSectionTranslations(_translations),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localizations.teamSectionRoutes(_routes, _osm),
+                  localization.teamSectionRoutes(_routes, _osm),
                   style: theme.textTheme.body2,
                 ),
               ),

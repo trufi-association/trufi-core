@@ -5,12 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/trufi_models.dart';
+import './composite_subscription.dart';
+import './trufi_configuration.dart';
+import './trufi_models.dart';
+import './custom_icons.dart';
 
 openStreetMapTileLayerOptions() {
   return TileLayerOptions(
@@ -27,7 +27,7 @@ offlineMapTileLayerOptions() {
 }
 
 tileHostingTileLayerOptions() {
-  final key = GlobalConfiguration().getString("keyMapTiler");
+  final key = TrufiConfiguration().map.mapTilerKey;
   return TileLayerOptions(
     urlTemplate:
         "https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}@2x.png?key={key}",
@@ -45,6 +45,9 @@ Marker buildFromMarker(LatLng point) {
       return Container(
         child: SvgPicture.asset(
           "assets/images/from_marker.svg",
+          package: "trufi_core",
+          color: Theme.of(context).accentColor,
+          colorBlendMode: BlendMode.screen,
         ),
       );
     },
@@ -59,6 +62,9 @@ Marker buildToMarker(LatLng point) {
       return Container(
         child: SvgPicture.asset(
           "assets/images/to_marker.svg",
+          package: "trufi_core",
+          color: Theme.of(context).accentColor,
+          colorBlendMode: BlendMode.screen,
         ),
       );
     },
@@ -77,7 +83,7 @@ Marker buildTransferMarker(LatLng point) {
             border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(CircleIcon.circle, color: Colors.white),
+          child: Icon(CustomIcons.circle, color: Colors.white),
         ),
       );
     },
@@ -142,7 +148,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
               ],
             ),
             child: Icon(
-              CircleIcon.circle,
+              CustomIcons.circle,
               color: Theme.of(context).accentColor,
             ),
           ),
@@ -316,20 +322,4 @@ LatLng midPointForPolyline(Polyline polyline) {
     }
   }
   return null;
-}
-
-class CircleIcon {
-  CircleIcon._();
-
-  static const _kFontFam = 'CircleIcon';
-
-  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam);
-}
-
-class GondolaIcon {
-  GondolaIcon._();
-
-  static const _kFontFam = 'GondolaIcon';
-
-  static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam);
 }

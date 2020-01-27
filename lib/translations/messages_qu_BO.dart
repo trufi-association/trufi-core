@@ -26,19 +26,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(value) => "${value} min";
 
-  static m3(vehicle, duration, distance, location) => "Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama";
+  static m3(street1, street2) => "${street1} y ${street2}";
 
-  static m4(duration, distance, location) => "Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy";
+  static m4(vehicle, duration, distance, location) => "Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama";
 
-  static m6(representatives) => "Umalliqkuna: ${representatives}";
+  static m5(duration, distance, location) => "Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy";
 
-  static m7(routeContributors, osmContributors) => "Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!";
+  static m7(representatives) => "Umalliqkuna: ${representatives}";
 
-  static m8(teamMembers) => "Yanapaqkuna: ${teamMembers}";
+  static m8(routeContributors, osmContributors) => "Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!";
 
-  static m9(translators) => "Tiqraqkuna: ${translators}";
+  static m9(teamMembers) => "Yanapaqkuna: ${teamMembers}";
 
-  static m10(version) => "Versión ${version}";
+  static m10(translators) => "Tiqraqkuna: ${translators}";
+
+  static m11(version) => "Versión ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -79,14 +81,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "instructionDistanceKm" : m0,
     "instructionDistanceMeters" : m1,
     "instructionDurationMinutes" : m2,
-    "instructionRide" : m3,
+    "instructionJunction" : m3,
+    "instructionRide" : m4,
     "instructionVehicleBus" : MessageLookupByLibrary.simpleMessage("Bus"),
     "instructionVehicleCar" : MessageLookupByLibrary.simpleMessage("Coche"),
     "instructionVehicleGondola" : MessageLookupByLibrary.simpleMessage("Góndola"),
     "instructionVehicleMicro" : MessageLookupByLibrary.simpleMessage("Micro"),
     "instructionVehicleMinibus" : MessageLookupByLibrary.simpleMessage("Minibus"),
     "instructionVehicleTrufi" : MessageLookupByLibrary.simpleMessage("Trufi"),
-    "instructionWalk" : m4,
+    "instructionWalk" : m5,
     "menuAbout" : MessageLookupByLibrary.simpleMessage("Imamanta yachayta munanki?"),
     "menuAppReview" : MessageLookupByLibrary.simpleMessage("Trufi Appta chaninchay"),
     "menuConnections" : MessageLookupByLibrary.simpleMessage("Ñankunata rikhuchiy"),
@@ -112,11 +115,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchTitleResults" : MessageLookupByLibrary.simpleMessage("Mask\'anakuna riqsichiq"),
     "tagline" : MessageLookupByLibrary.simpleMessage("Transporte público en Cochabamba"),
     "teamContent" : MessageLookupByLibrary.simpleMessage("Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:"),
-    "teamSectionRepresentatives" : m6,
-    "teamSectionRoutes" : m7,
-    "teamSectionTeam" : m8,
-    "teamSectionTranslations" : m9,
+    "teamSectionRepresentatives" : m7,
+    "teamSectionRoutes" : m8,
+    "teamSectionTeam" : m9,
+    "teamSectionTranslations" : m10,
     "title" : MessageLookupByLibrary.simpleMessage("Trufi App"),
-    "version" : m10
+    "version" : m11
   };
 }

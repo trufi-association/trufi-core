@@ -1,12 +1,12 @@
-import 'package:global_configuration/global_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_map_utils.dart';
-import 'package:trufi_app/widgets/trufi_map.dart';
-import 'package:trufi_app/widgets/trufi_online_map.dart';
+import '../trufi_configuration.dart';
+import '../trufi_localizations.dart';
+import '../trufi_map_utils.dart';
+import '../widgets/trufi_map.dart';
+import '../widgets/trufi_online_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPage({this.initialPosition});
@@ -25,18 +25,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   void initState() {
     super.initState();
-
-    final cfg = GlobalConfiguration();
-    final zoom = cfg.getDouble("mapChooseLocationZoom");
-    final centerCoords = List<double>.from(cfg.get("mapCenterCoordsLatLng"));
-    final mapCenter = LatLng(centerCoords[0], centerCoords[1]);
-
-    _chooseOnMapMarker = buildToMarker(mapCenter);
+    final cfg = TrufiConfiguration();
+    _chooseOnMapMarker = buildToMarker(cfg.map.center);
     if (widget.initialPosition != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
           center: widget.initialPosition,
-          zoom: zoom,
+          zoom: cfg.map.chooseLocationZoom,
           tickerProvider: this,
         );
       });
@@ -60,7 +55,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   Widget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
-    final localizations = TrufiLocalizations.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
     return AppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,14 +64,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageTitle(),
+              text: localization.chooseLocationPageTitle(),
               style: theme.primaryTextTheme.body1,
             ),
           ),
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localizations.chooseLocationPageSubtitle(),
+              text: localization.chooseLocationPageSubtitle(),
               style: theme.primaryTextTheme.caption,
             ),
           ),
@@ -90,7 +85,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
-                  text: localizations.commonOK(),
+                  text: localization.commonOK(),
                   style: theme.primaryTextTheme.button,
                 ),
               ),

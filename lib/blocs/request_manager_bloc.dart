@@ -4,12 +4,12 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:synchronized/synchronized.dart';
 
-import 'package:trufi_app/blocs/bloc_provider.dart';
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/blocs/request_manager/offline_request_manager.dart';
-import 'package:trufi_app/blocs/request_manager/online_request_manager.dart';
-import 'package:trufi_app/composite_subscription.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../blocs/bloc_provider.dart';
+import '../blocs/preferences_bloc.dart';
+import '../blocs/request_manager/offline_request_manager.dart';
+import '../blocs/request_manager/online_request_manager.dart';
+import '../composite_subscription.dart';
+import '../trufi_models.dart';
 
 class RequestManagerBloc implements BlocBase, RequestManager {
   static RequestManagerBloc of(BuildContext context) {

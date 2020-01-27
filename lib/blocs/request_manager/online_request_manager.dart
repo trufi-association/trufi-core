@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:global_configuration/global_configuration.dart';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
 
-import 'package:trufi_app/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_app/blocs/request_manager_bloc.dart';
-import 'package:trufi_app/blocs/preferences_bloc.dart';
-import 'package:trufi_app/trufi_localizations.dart';
-import 'package:trufi_app/trufi_models.dart';
+import '../../blocs/favorite_locations_bloc.dart';
+import '../../blocs/request_manager_bloc.dart';
+import '../../blocs/preferences_bloc.dart';
+import '../../trufi_configuration.dart';
+import '../../trufi_localizations.dart';
+import '../../trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
   static const String searchPath = '/geocode';
@@ -24,16 +24,15 @@ class OnlineRequestManager implements RequestManager {
     int limit,
   ) async {
     final preferences = PreferencesBloc.of(context);
-    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
-    Uri request = Uri
-      .parse(urlOtpEndpoint + searchPath)
-      .replace(queryParameters: {
-        "query": query,
-        "autocomplete": "false",
-        "corners": "true",
-        "stops": "false",
-        "correlation": preferences.correlationId,
-      });
+    Uri request = Uri.parse(
+      TrufiConfiguration().url.otpEndpoint + searchPath,
+    ).replace(queryParameters: {
+      "query": query,
+      "autocomplete": "false",
+      "corners": "true",
+      "stops": "false",
+      "correlation": preferences.correlationId,
+    });
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -83,7 +82,7 @@ class OnlineRequestManager implements RequestManager {
         plan = Plan.fromError(
           _localizedErrorForPlanError(
             plan.error,
-            TrufiLocalizations.of(context),
+            TrufiLocalizations.of(context).localization,
           ),
         );
       }
@@ -98,17 +97,16 @@ class OnlineRequestManager implements RequestManager {
     String mode,
   ) async {
     final preferences = PreferencesBloc.of(context);
-    final urlOtpEndpoint = GlobalConfiguration().getString("urlOtpEndpoint");
-    Uri request = Uri
-      .parse(urlOtpEndpoint + planPath)
-      .replace(queryParameters: {
-        "fromPlace": from.toString(),
-        "toPlace": to.toString(),
-        "date": _todayMonthDayYear(),
-        "numItineraries": "5",
-        "mode": mode,
-        "correlation": preferences.correlationId,
-      });
+    Uri request = Uri.parse(
+      TrufiConfiguration().url.otpEndpoint + planPath,
+    ).replace(queryParameters: {
+      "fromPlace": from.toString(),
+      "toPlace": to.toString(),
+      "date": _todayMonthDayYear(),
+      "numItineraries": "5",
+      "mode": mode,
+      "correlation": preferences.correlationId,
+    });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
       return await compute(_parsePlan, utf8.decode(response.bodyBytes));
@@ -130,43 +128,43 @@ class OnlineRequestManager implements RequestManager {
 
   String _todayMonthDayYear() {
     var today = new DateTime.now();
-    return "${today.month.toString().padLeft(2,'0')}-" +
-      "${today.day.toString().padLeft(2,'0')}-" +
-      "${today.year.toString()}";
+    return "${today.month.toString().padLeft(2, '0')}-" +
+        "${today.day.toString().padLeft(2, '0')}-" +
+        "${today.year.toString()}";
   }
 
   String _localizedErrorForPlanError(
     PlanError error,
-    TrufiLocalizations localizations,
+    TrufiLocalization localization,
   ) {
     if (error.id == 500 || error.id == 503) {
-      return localizations.errorServerUnavailable();
+      return localization.errorServerUnavailable();
     } else if (error.id == 400) {
-      return localizations.errorOutOfBoundary();
+      return localization.errorOutOfBoundary();
     } else if (error.id == 404) {
-      return localizations.errorPathNotFound();
+      return localization.errorPathNotFound();
     } else if (error.id == 406) {
-      return localizations.errorNoTransitTimes();
+      return localization.errorNoTransitTimes();
     } else if (error.id == 408) {
-      return localizations.errorServerTimeout();
+      return localization.errorServerTimeout();
     } else if (error.id == 409) {
-      return localizations.errorTrivialDistance();
+      return localization.errorTrivialDistance();
     } else if (error.id == 413) {
-      return localizations.errorServerCanNotHandleRequest();
+      return localization.errorServerCanNotHandleRequest();
     } else if (error.id == 440) {
-      return localizations.errorUnknownOrigin();
+      return localization.errorUnknownOrigin();
     } else if (error.id == 450) {
-      return localizations.errorUnknownDestination();
+      return localization.errorUnknownDestination();
     } else if (error.id == 460) {
-      return localizations.errorUnknownOriginDestination();
+      return localization.errorUnknownOriginDestination();
     } else if (error.id == 470) {
-      return localizations.errorNoBarrierFree();
+      return localization.errorNoBarrierFree();
     } else if (error.id == 340) {
-      return localizations.errorAmbiguousOrigin();
+      return localization.errorAmbiguousOrigin();
     } else if (error.id == 350) {
-      return localizations.errorAmbiguousDestination();
+      return localization.errorAmbiguousDestination();
     } else if (error.id == 360) {
-      return localizations.errorAmbiguousOriginDestination();
+      return localization.errorAmbiguousOriginDestination();
     }
     return error.message;
   }
