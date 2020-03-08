@@ -51,7 +51,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   }
 
   Widget _buildUpperActionButtons(BuildContext context) {
-    return MapTypeButton();
+    return SafeArea(
+      child: MapTypeButton(),
+    );
   }
 
   Widget _buildLowerActionButtons(BuildContext context) {

@@ -113,19 +113,23 @@ class PlanMapPageState extends State<PlanMapPage>
     );
   }
 
-    Widget _buildUpperActionButtons(BuildContext context) {
-    return MapTypeButton();
+  Widget _buildUpperActionButtons(BuildContext context) {
+    return SafeArea(
+      child: MapTypeButton(),
+    );
   }
 
   Widget _buildLowerActionButtons(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
-        Padding(padding: EdgeInsets.all(4.0)),
-        YourLocationButton(onPressed: _handleOnYourLocationPressed),
-      ],
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
+          Padding(padding: EdgeInsets.all(4.0)),
+          YourLocationButton(onPressed: _handleOnYourLocationPressed),
+        ],
+      ),
     );
   }
 
