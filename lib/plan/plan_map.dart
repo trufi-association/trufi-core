@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+import '../trufi_configuration.dart';
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
 import '../trufi_map_utils.dart';
@@ -10,6 +11,7 @@ import '../widgets/crop_button.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
+import '../widgets/map_type_button.dart';
 
 typedef void OnSelected(PlanItinerary itinerary);
 
@@ -64,7 +66,7 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Widget build(BuildContext context) {
-
+    final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
     _data._selectedColor = theme.accentColor;
 
@@ -96,16 +98,26 @@ class PlanMapPageState extends State<PlanMapPage>
             ];
           },
         ),
+        if (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
         Positioned(
-          bottom: 24.0,
+          top: 16.0,
           right: 16.0,
-          child: _buildFloatingActionButtons(context),
+            child: _buildUpperActionButtons(context),
+        ),
+        Positioned(
+          bottom: 16.0,
+          right: 16.0,
+          child: _buildLowerActionButtons(context),
         ),
       ],
     );
   }
 
-  Widget _buildFloatingActionButtons(BuildContext context) {
+    Widget _buildUpperActionButtons(BuildContext context) {
+    return MapTypeButton();
+  }
+
+  Widget _buildLowerActionButtons(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
