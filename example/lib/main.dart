@@ -126,18 +126,20 @@ void main() async {
   trufiCfg.url.donate = globalCfg.getString("urlDonate");
   trufiCfg.url.website = globalCfg.getString("urlWebsite");
   trufiCfg.url.facebook = globalCfg.getString("urlFacebook");
+  trufiCfg.url.twitter = globalCfg.getString("urlTwitter");
   trufiCfg.url.instagram = globalCfg.getString("urlInstagram");
   trufiCfg.url.share = globalCfg.getString("urlShare");
 
+  // Colors
+  final theme = ThemeData(
+    primaryColor: const Color(0xff263238),
+    primaryColorLight: const Color(0xffeceff1),
+    accentColor: const Color(0xffd81b60),
+    backgroundColor: Colors.white,
+  );
+
   // Run app
   runApp(
-    TrufiApp(
-      theme: ThemeData(
-        primaryColor: const Color(0xff263238),
-        primaryColorLight: const Color(0xffeceff1),
-        accentColor: const Color(0xffd81b60),
-        backgroundColor: Colors.white,
-      ),
-    ),
+    TrufiApp(theme: theme)
   );
 }
