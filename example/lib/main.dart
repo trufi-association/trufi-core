@@ -72,7 +72,6 @@ void main() async {
   trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
 
   // Map
-  trufiCfg.map.mapTilerKey = globalCfg.get("keyMapTiler");
   trufiCfg.map.satelliteMapTypeEnabled = true;
   trufiCfg.map.terrainMapTypeEnabled = true;
   trufiCfg.map.defaultZoom = 12.0;
