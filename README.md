@@ -2,7 +2,7 @@
 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/trufi-association/trufi-app/issues)
-![Twitter Follow](https://img.shields.io/twitter/follow/TrufiAssoc?style=social)
+[![Twitter Follow](https://img.shields.io/twitter/follow/TrufiAssoc?style=social)](https://twitter.com/TrufiAssoc)
 
 A cross-plattform multi-modal public transport app based on open data.
 Built in [Flutter](https://flutter.dev/) by the [Trufi Association](https://www.trufi-association.org/), a social startup.
