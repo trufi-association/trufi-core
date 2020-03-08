@@ -61,6 +61,8 @@ class TrufiConfigurationLanguage {
 
 class TrufiConfigurationMap {
   var mapTilerKey = "";
+  var satelliteMapTypeEnabled = false;
+  var terrainMapTypeEnabled = false;
   var defaultZoom = 12.0;
   var offlineZoom = 13.0;
   var offlineMinZoom = 8.0;

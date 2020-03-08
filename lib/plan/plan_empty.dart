@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_localizations.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -24,6 +25,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   @override
   Widget build(BuildContext context) {
+    final cfg = TrufiConfiguration();
     return Stack(children: <Widget>[
       TrufiOnlineMap(
         key: ValueKey("PlanEmptyMap"),
@@ -35,6 +37,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           ];
         },
       ),
+      if (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
       Positioned(
         top: 16.0,
         right: 16.0,
@@ -70,6 +73,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   Widget _buildMapTypeBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
+    final cfg = TrufiConfiguration();
     final preferencesBloc = PreferencesBloc.of(context);
     final localization = TrufiLocalizations.of(context).localization;
     return SafeArea(
@@ -97,6 +101,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
                       },
                       active: snapshot.data == MapStyle.streets || snapshot.data == "",
                     ),
+                    if (cfg.map.satelliteMapTypeEnabled)
                     _buildMapTypeOptionButton(
                       context: context,
                       assetPath: "assets/images/maptype-satellite.png",
@@ -106,6 +111,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
                       },
                       active: snapshot.data == MapStyle.satellite,
                     ),
+                    if (cfg.map.terrainMapTypeEnabled)
                     _buildMapTypeOptionButton(
                       context: context,
                       assetPath: "assets/images/maptype-terrain.png",

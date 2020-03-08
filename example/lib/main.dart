@@ -73,6 +73,8 @@ void main() async {
 
   // Map
   trufiCfg.map.mapTilerKey = globalCfg.get("keyMapTiler");
+  trufiCfg.map.satelliteMapTypeEnabled = true;
+  trufiCfg.map.terrainMapTypeEnabled = true;
   trufiCfg.map.defaultZoom = 12.0;
   trufiCfg.map.offlineMinZoom = 8.0;
   trufiCfg.map.offlineMaxZoom = 14.0;
