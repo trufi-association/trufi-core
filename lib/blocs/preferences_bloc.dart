@@ -15,11 +15,13 @@ class PreferencesBloc extends BlocBase {
   static const String correlationIdKey = "correlation_id";
   static const String propertyLanguageCodeKey = "property_language_code";
   static const String propertyOnlineKey = "property_online";
+  static const String propertyMapTypeKey = "property_map_type";
   static const String stateHomePageKey = "state_home_page";
   static const String reviewWorthyActionCountKey = "review_worthy_action_count";
   static const String lastReviewRequestAppVersionKey = "last_review_request_app_version";
 
   static const bool defaultOnline = true;
+  static const String defaultMapType = "";
 
   PreferencesBloc() {
     _changeLanguageCodeController.listen(_handleChangeLanguageCode);
@@ -34,6 +36,7 @@ class PreferencesBloc extends BlocBase {
     _loadCorrelationId();
     _loadLanguageCode();
     _loadOnline();
+    _loadMapType();
   }
 
   void _loadCorrelationId() {
@@ -56,6 +59,12 @@ class PreferencesBloc extends BlocBase {
   void _loadOnline() {
     inChangeOnline.add(
       _preferences.getBool(propertyOnlineKey) ?? defaultOnline,
+    );
+  }
+
+  void _loadMapType() {
+    inChangeMapType.add(
+      _preferences.getString(propertyMapTypeKey) ?? defaultMapType,
     );
   }
 
@@ -83,12 +92,24 @@ class PreferencesBloc extends BlocBase {
     return _changeOnlineController.stream;
   }
 
+  // Change map type
+  final _changeMapTypeController = BehaviorSubject<String>();
+
+  Sink<String> get inChangeMapType {
+    return _changeMapTypeController.sink;
+  }
+
+  Stream<String> get outChangeMapType {
+    return _changeMapTypeController.stream;
+  }
+
   // Dispose
 
   @override
   void dispose() {
     _changeLanguageCodeController.close();
     _changeOnlineController.close();
+    _changeMapTypeController.close();
   }
 
   // Handle
