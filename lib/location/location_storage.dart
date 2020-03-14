@@ -68,7 +68,7 @@ abstract class LocationStorage {
     _locations.remove(location);
     save();
   }
-// The should contains "oldLocation" and "newLocation"
+
   void replace(Map<String,TrufiLocation> data){
     final TrufiLocation oldLocation = data['oldLocation'];
     final TrufiLocation newLocation = data['newLocation'];
