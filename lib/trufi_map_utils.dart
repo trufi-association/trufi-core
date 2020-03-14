@@ -12,12 +12,6 @@ import './trufi_configuration.dart';
 import './trufi_models.dart';
 import './custom_icons.dart';
 
-openStreetMapTileLayerOptions() {
-  return TileLayerOptions(
-    urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    subdomains: ['a', 'b', 'c'],
-  );
-}
 
 offlineMapTileLayerOptions() {
   return TileLayerOptions(
@@ -26,15 +20,31 @@ offlineMapTileLayerOptions() {
   );
 }
 
-tileHostingTileLayerOptions() {
-  final key = TrufiConfiguration().map.mapTilerKey;
+tileHostingTileLayerOptions(String tilesEndpoint, { String tileProviderKey = "" }) {
+  var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
+  if (tileProviderKey != "") urlTemplate += "?key={key}";
+
   return TileLayerOptions(
-    urlTemplate:
-        "https://api.maptiler.com/maps/streets/256/{z}/{x}/{y}@2x.png?key={key}",
+    urlTemplate: urlTemplate,
     additionalOptions: {
-      'key': key,
+      'key': tileProviderKey,
     },
   );
+}
+
+getTilesEndpointForMapType(String mapType) {
+  final cfg = TrufiConfiguration();
+  switch (mapType) {
+    case MapStyle.satellite:
+      return cfg.url.tilesSatelliteEndpoint;
+
+    case MapStyle.terrain:
+      return cfg.url.tilesTerrainEndpoint;
+
+    case MapStyle.streets:
+    default:
+      return cfg.url.tilesStreetsEndpoint;
+  }
 }
 
 Marker buildFromMarker(LatLng point) {

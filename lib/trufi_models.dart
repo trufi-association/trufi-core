@@ -6,6 +6,12 @@ import './trufi_configuration.dart';
 import './trufi_localizations.dart';
 import './custom_icons.dart';
 
+class MapStyle {
+  static const String streets = 'streets';
+  static const String satellite = 'satellite';
+  static const String terrain = 'terrain';
+}
+
 class TrufiLocation {
   TrufiLocation({
     @required this.description,

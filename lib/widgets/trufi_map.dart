@@ -153,37 +153,33 @@ class TrufiMapState extends State<TrufiMap> {
             left: 0.0,
             bottom: 0.0,
             child: Container(
-              padding: EdgeInsets.all(4.0),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      style: theme.textTheme.caption.copyWith(
-                        color: Colors.black,
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+              child: SafeArea(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        style: theme.textTheme.caption.copyWith(
+                          color: Colors.black,
+                        ),
+                        text: "© MapTiler ",
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launch(cfg.url.mapTilerCopyright);
+                          },
+                      ), 
+                      TextSpan(
+                        style: theme.textTheme.caption.copyWith(
+                          color: Colors.black,
+                        ),
+                        text: "© OpenStreetMap contributors",
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launch(cfg.url.openStreetMapCopyright);
+                          },
                       ),
-                      text: "© MapTiler ",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launch(cfg.url.mapTilerCopyright);
-                        },
-                    ), 
-                    TextSpan(
-                      style: theme.textTheme.caption.copyWith(
-                        color: Colors.black,
-                      ),
-                      text: "© OpenStreetMap",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launch(cfg.url.openStreetMapCopyright);
-                        },
-                    ),
-                    TextSpan(
-                      style: theme.textTheme.caption.copyWith(
-                        color: Colors.black,
-                      ),
-                      text: " contributors",
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

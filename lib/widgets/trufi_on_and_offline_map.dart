@@ -70,12 +70,14 @@ class TrufiOnAndOfflineMap extends StatefulWidget {
     @required this.controller,
     @required this.layerOptionsBuilder,
     this.onTap,
+    this.onLongPress,
     this.onPositionChanged,
   }) : super(key: key);
 
   final TrufiOnAndOfflineMapController controller;
   final LayerOptionsBuilder layerOptionsBuilder;
   final TapCallback onTap;
+  final LongPressCallback onLongPress;
   final PositionCallback onPositionChanged;
 
   @override
@@ -112,22 +114,32 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOnlineMap() {
+    final preferencesBloc = PreferencesBloc.of(context);
     final cfg = TrufiConfiguration();
-    return TrufiMap(
-      key: ValueKey("TrufiOnlineMap"),
-      controller: widget.controller.online,
-      mapOptions: MapOptions(
-        minZoom: cfg.map.onlineMinZoom,
-        maxZoom: cfg.map.onlineMaxZoom,
-        zoom: cfg.map.onlineZoom,
-        onTap: widget.onTap,
-        onPositionChanged: _handleOnPositionChanged,
-        center: cfg.map.center,
-      ),
-      layerOptionsBuilder: (context) {
-        return <LayerOptions>[
-          tileHostingTileLayerOptions(),
-        ]..addAll(widget.layerOptionsBuilder(context));
+    return StreamBuilder(
+      stream: preferencesBloc.outChangeMapType,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return TrufiMap(
+          key: ValueKey("TrufiOnlineMap"),
+          controller: widget.controller.online,
+          mapOptions: MapOptions(
+            minZoom: cfg.map.onlineMinZoom,
+            maxZoom: cfg.map.onlineMaxZoom,
+            zoom: cfg.map.onlineZoom,
+            onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
+            onPositionChanged: _handleOnPositionChanged,
+            center: cfg.map.center,
+          ),
+          layerOptionsBuilder: (context) {
+            return <LayerOptions>[
+              tileHostingTileLayerOptions(
+                getTilesEndpointForMapType(snapshot.data),
+                tileProviderKey: cfg.map.mapTilerKey,
+              ),
+            ]..addAll(widget.layerOptionsBuilder(context));
+          },
+        );
       },
     );
   }

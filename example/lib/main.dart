@@ -72,7 +72,8 @@ void main() async {
   trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
 
   // Map
-  trufiCfg.map.mapTilerKey = globalCfg.get("keyMapTiler");
+  trufiCfg.map.satelliteMapTypeEnabled = true;
+  trufiCfg.map.terrainMapTypeEnabled = true;
   trufiCfg.map.defaultZoom = 12.0;
   trufiCfg.map.offlineMinZoom = 8.0;
   trufiCfg.map.offlineMaxZoom = 14.0;
@@ -81,9 +82,9 @@ void main() async {
   trufiCfg.map.onlineMaxZoom = 19.0;
   trufiCfg.map.onlineZoom = 13.0;
   trufiCfg.map.chooseLocationZoom = 16.0;
-  trufiCfg.map.center = LatLng(5.574558, -0.214656);
-  trufiCfg.map.southWest = LatLng(5.510057, -0.328217);
-  trufiCfg.map.northEast = LatLng(5.726678, 0.071411);
+  trufiCfg.map.center = LatLng(-17.39000, -66.15400);
+  trufiCfg.map.southWest = LatLng(-17.79300, -66.75000);
+  trufiCfg.map.northEast = LatLng(-16.90400, -65.67400);
 
   // Languages
   trufiCfg.languages.addAll([
@@ -122,6 +123,9 @@ void main() async {
 
   // Url
   trufiCfg.url.otpEndpoint = globalCfg.getString("urlOtpEndpoint");
+  trufiCfg.url.tilesStreetsEndpoint = globalCfg.getString("urlTilesStreetsEndpoint");
+  trufiCfg.url.tilesSatelliteEndpoint = globalCfg.getString("urlTilesSatelliteEndpoint");
+  trufiCfg.url.tilesTerrainEndpoint = globalCfg.getString("urlTilesTerrainEndpoint");
   trufiCfg.url.routeFeedback = globalCfg.getString("urlRouteFeedback");
   trufiCfg.url.donate = globalCfg.getString("urlDonate");
   trufiCfg.url.website = globalCfg.getString("urlWebsite");

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
 
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
@@ -32,23 +33,32 @@ class TrufiOnlineMap extends StatefulWidget {
 class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   @override
   Widget build(BuildContext context) {
+    final preferencesBloc = PreferencesBloc.of(context);
     final cfg = TrufiConfiguration();
-    return TrufiMap(
-      key: ValueKey("TrufiOnlineMap"),
-      controller: widget.controller,
-      mapOptions: MapOptions(
-        minZoom: cfg.map.onlineMinZoom,
-        maxZoom: cfg.map.onlineMaxZoom,
-        zoom: cfg.map.onlineZoom,
-        onTap: widget.onTap,
-        onLongPress: widget.onLongPress,
-        onPositionChanged: _handleOnPositionChanged,
-        center: cfg.map.center,
-      ),
-      layerOptionsBuilder: (context) {
-        return <LayerOptions>[
-          tileHostingTileLayerOptions(),
-        ]..addAll(widget.layerOptionsBuilder(context));
+    return StreamBuilder(
+      stream: preferencesBloc.outChangeMapType,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return TrufiMap(
+          key: ValueKey("TrufiOnlineMap"),
+          controller: widget.controller,
+          mapOptions: MapOptions(
+            minZoom: cfg.map.onlineMinZoom,
+            maxZoom: cfg.map.onlineMaxZoom,
+            zoom: cfg.map.onlineZoom,
+            onTap: widget.onTap,
+            onLongPress: widget.onLongPress,
+            onPositionChanged: _handleOnPositionChanged,
+            center: cfg.map.center,
+          ),
+          layerOptionsBuilder: (context) {
+            return <LayerOptions>[
+              tileHostingTileLayerOptions(
+                getTilesEndpointForMapType(snapshot.data),
+                tileProviderKey: cfg.map.mapTilerKey,
+              ),
+            ]..addAll(widget.layerOptionsBuilder(context));
+          },
+        );
       },
     );
   }

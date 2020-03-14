@@ -61,6 +61,8 @@ class TrufiConfigurationLanguage {
 
 class TrufiConfigurationMap {
   var mapTilerKey = "";
+  var satelliteMapTypeEnabled = false;
+  var terrainMapTypeEnabled = false;
   var defaultZoom = 12.0;
   var offlineZoom = 13.0;
   var offlineMinZoom = 8.0;
@@ -76,8 +78,11 @@ class TrufiConfigurationMap {
 
 class TrufiConfigurationUrl {
   final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
-  final mapTilerCopyright = "https://www.maptiler.com/copyright";
+  final mapTilerCopyright = "https://www.maptiler.com/copyright/";
   var otpEndpoint = "";
+  var tilesStreetsEndpoint = "";
+  var tilesSatelliteEndpoint = "";
+  var tilesTerrainEndpoint = "";
   var routeFeedback = "";
   var website = "";
   var facebook = "";

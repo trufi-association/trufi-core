@@ -744,6 +744,30 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         name: "appReviewDialogButtonAccept",
         desc: "Accept button of the App Review Dialog used on Android",
       );
+
+  String mapTypeTitle() => Intl.message(
+      "Map Type",
+      name: "mapTypeLabel",
+      desc: "Section title for choosing map style",
+    );
+
+  String mapTypeStreetsCaption() => Intl.message(
+      "Streets",
+      name: "mapTypeStreetsCaption",
+      desc: "Caption of streets map type",
+    );
+
+  String mapTypeSatelliteCaption() => Intl.message(
+      "Satellite",
+      name: "mapTypeSatelliteCaption",
+      desc: "Caption of satellite map type",
+    );
+
+  String mapTypeTerrainCaption() => Intl.message(
+      "Terrain",
+      name: "mapTypeTerrainCaption",
+      desc: "Caption of terrain map type",
+    );
 }
 
 abstract class TrufiLocalization {
@@ -931,4 +955,12 @@ abstract class TrufiLocalization {
   String appReviewDialogButtonDecline();
 
   String appReviewDialogButtonAccept();
+
+  String mapTypeTitle();
+
+  String mapTypeStreetsCaption();
+
+  String mapTypeSatelliteCaption();
+
+  String mapTypeTerrainCaption();
 }

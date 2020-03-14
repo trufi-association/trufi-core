@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
+import '../trufi_configuration.dart';
+import '../widgets/map_type_button.dart';
+import '../widgets/your_location_button.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
 
@@ -21,6 +24,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   @override
   Widget build(BuildContext context) {
+    final cfg = TrufiConfiguration();
     return Stack(children: <Widget>[
       TrufiOnlineMap(
         key: ValueKey("PlanEmptyMap"),
@@ -32,27 +36,34 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           ];
         },
       ),
+      if (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
+      Positioned(
+        top: 16.0,
+        right: 16.0,
+        child: _buildUpperActionButtons(context),
+      ),
       Positioned(
         bottom: 16.0,
         right: 16.0,
-        child: _buildFloatingActionButton(context),
+        child: _buildLowerActionButtons(context),
       ),
     ]);
   }
 
-  Widget _buildFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: Theme.of(context).backgroundColor,
-      child: Icon(Icons.my_location, color: Colors.black),
-      onPressed: _handleOnYourLocationPressed,
-      heroTag: null,
+  Widget _buildUpperActionButtons(BuildContext context) {
+    return SafeArea(
+      child: MapTypeButton(),
     );
   }
 
-  void _handleOnYourLocationPressed() async {
-    _trufiMapController.moveToYourLocation(
-      context: context,
-      tickerProvider: this,
+  Widget _buildLowerActionButtons(BuildContext context) {
+    return SafeArea(
+      child: YourLocationButton(onPressed: () {
+        _trufiMapController.moveToYourLocation(
+          context: context,
+          tickerProvider: this,
+        );
+      }),
     );
   }
 }
