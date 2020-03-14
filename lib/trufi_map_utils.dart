@@ -21,11 +21,11 @@ offlineMapTileLayerOptions() {
 }
 
 tileHostingTileLayerOptions(String tilesEndpoint, { String tileProviderKey = "" }) {
-  var tpl = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
-  if (tileProviderKey != "") tpl += "?key={key}";
+  var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
+  if (tileProviderKey != "") urlTemplate += "?key={key}";
 
   return TileLayerOptions(
-    urlTemplate: tpl,
+    urlTemplate: urlTemplate,
     additionalOptions: {
       'key': tileProviderKey,
     },

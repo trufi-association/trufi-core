@@ -102,7 +102,7 @@ class PlanMapPageState extends State<PlanMapPage>
         Positioned(
           top: 16.0,
           right: 16.0,
-            child: _buildUpperActionButtons(context),
+          child: _buildUpperActionButtons(context),
         ),
         Positioned(
           bottom: 16.0,
