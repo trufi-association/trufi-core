@@ -654,12 +654,6 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         name: "aboutOpenSource",
         desc: "A note about open source",
       );
-  
-  String savedSectionCancel() => Intl.message(
-        "Cancel",
-        name: "savedSectionCancel",
-        desc: "cancel form",
-      );
 
   String savedSectionInsertName() => Intl.message(
         "Insert name",
@@ -686,7 +680,7 @@ class TrufiLocalizationDefault implements TrufiLocalization {
       );
 
   String savedSectionSetCoordinate() => Intl.message(
-        "Edit Coordinate",
+        "Edit position",
         name: "savedSectionSetCoordinate",
         desc: "change coordinate of saved place",
       );
@@ -971,8 +965,6 @@ abstract class TrufiLocalization {
   String aboutLicenses();
 
   String aboutOpenSource();
-  
-  String savedSectionCancel();
 
   String savedSectionInsertName();
 

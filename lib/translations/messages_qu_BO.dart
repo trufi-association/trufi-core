@@ -101,7 +101,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "noRouteErrorActionCancel" : MessageLookupByLibrary.simpleMessage("Waq kitiwan watiqmanta mask\'ay"),
     "noRouteErrorActionReportMissingRoute" : MessageLookupByLibrary.simpleMessage("Mana rikhurimuq ñanta riqsichiy"),
     "noRouteErrorActionShowCarRoute" : MessageLookupByLibrary.simpleMessage("Autopaq kay ñanta rikhuchiy"),
-    "savedSectionCancel" : MessageLookupByLibrary.simpleMessage("Cancelar"),
     "savedSectionInsertName" : MessageLookupByLibrary.simpleMessage("Insertar nombre"),
     "savedSectionRemove" : MessageLookupByLibrary.simpleMessage("Borrar"),
     "savedSectionSetIcon" : MessageLookupByLibrary.simpleMessage("Cambiar icono"),

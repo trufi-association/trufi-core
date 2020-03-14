@@ -101,7 +101,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "noRouteErrorActionCancel" : MessageLookupByLibrary.simpleMessage("Essayer une autre destination"),
     "noRouteErrorActionReportMissingRoute" : MessageLookupByLibrary.simpleMessage("Signaler un itinéraire manquant"),
     "noRouteErrorActionShowCarRoute" : MessageLookupByLibrary.simpleMessage("Afficher l\'itinéraire en voiture"),
-    "savedSectionCancel" : MessageLookupByLibrary.simpleMessage("Annuler"),
     "savedSectionInsertName" : MessageLookupByLibrary.simpleMessage("Insérer un nom"),
     "savedSectionRemove" : MessageLookupByLibrary.simpleMessage("Retirer"),
     "savedSectionSetIcon" : MessageLookupByLibrary.simpleMessage("Changer d'icône"),

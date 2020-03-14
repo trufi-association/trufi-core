@@ -65,7 +65,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
                 Navigator.pop(context);
               },
               child: Text(
-                localization.savedSectionCancel(),
+                localization.commonCancel(),
                 style: theme.textTheme.body2,
               ),
             ),
