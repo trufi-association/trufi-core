@@ -8,10 +8,12 @@ class PlanItineraryTabPages extends StatefulWidget {
   PlanItineraryTabPages(
     this.tabController,
     this.itineraries,
+    this.ad,
   ) : assert(itineraries != null && itineraries.length > 0);
 
   final TabController tabController;
   final List<PlanItinerary> itineraries;
+  final Ad ad;
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
@@ -98,7 +100,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     children: widget.itineraries.map<Widget>((
                       PlanItinerary itinerary,
                     ) {
-                      return _buildItinerary(context, itinerary);
+                      return _buildItinerary(context, itinerary, widget.ad);
                     }).toList(),
                   ),
                 ),
@@ -122,10 +124,10 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     );
   }
 
-  _buildItinerary(BuildContext context, PlanItinerary itinerary) {
+  _buildItinerary(BuildContext context, PlanItinerary itinerary, Ad ad) {
     return _isExpanded
-        ? _buildItineraryExpanded(context, itinerary)
-        : _buildItineraryCollapsed(context, itinerary);
+        ? _buildItineraryExpanded(context, itinerary, ad)
+        : _buildItineraryCollapsed(context, itinerary, ad);
   }
 
   // Expanded
@@ -133,9 +135,11 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItineraryExpanded(
     BuildContext context,
     PlanItinerary itinerary,
+    Ad ad,
   ) {
     final theme = Theme.of(context);
     final localization = TrufiLocalizations.of(context).localization;
+
     return Container(
       height: _animationDetailHeight.value,
       child: ListView.builder(
@@ -146,6 +150,27 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           right: 32.0,
         ),
         itemBuilder: (BuildContext context, int index) {
+          if (ad != null && index >= itinerary.legs.length) {
+            return Row(
+              children: <Widget>[
+                Icon(Icons.sentiment_very_satisfied, color: Theme.of(context).accentColor),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: RichText(
+                      text: TextSpan(
+                          text: ad.text,
+                          style: TextStyle(
+                            color: Theme.of(context).accentColor
+                          )
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
           PlanItineraryLeg leg = itinerary.legs[index];
           return Row(
             children: <Widget>[
@@ -163,7 +188,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             ],
           );
         },
-        itemCount: itinerary.legs.length,
+        itemCount: itinerary.legs.length + (ad != null ? 1 : 0),
       ),
     );
   }
@@ -173,6 +198,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItineraryCollapsed(
     BuildContext context,
     PlanItinerary itinerary,
+    Ad ad,
   ) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
@@ -185,7 +211,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           direction: isPortrait ? Axis.vertical : Axis.horizontal,
           children: <Widget>[
             _buildItineraryCost(context, itinerary),
-            Expanded(child: _buildItinerarySummary(context, itinerary)),
+            Expanded(child: _buildItinerarySummary(context, itinerary, ad)),
           ],
         ),
       ),
@@ -229,6 +255,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItinerarySummary(
     BuildContext context,
     PlanItinerary itinerary,
+    Ad ad,
   ) {
     final theme = Theme.of(context);
     final localization = TrufiLocalizations.of(context).localization;
@@ -240,23 +267,37 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             Icon(leg.iconData(), color: theme.primaryIconTheme.color),
             leg.mode == 'BUS'
                 ? Text(
-                    " " + leg.route,
-                    style: theme.primaryTextTheme.body1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
+              " " + leg.route,
+              style: theme.primaryTextTheme.body1.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            )
                 : Text(
-                    localization.instructionDurationMinutes(
-                        (leg.duration.ceil() / 60).ceil()),
-                    style: theme.primaryTextTheme.body1,
-                  ),
-            leg != itinerary.legs.last
+              localization.instructionDurationMinutes(
+                  (leg.duration.ceil() / 60).ceil()),
+              style: theme.primaryTextTheme.body1,
+            ),
+            ad != null ||
+                leg != itinerary.legs.last
                 ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
                 : Container(),
           ],
         ),
       );
     });
+
+    if (ad != null) {
+      children.add(
+        Row(
+          children: <Widget>[
+            Icon(Icons.sentiment_very_satisfied, color: Theme
+                .of(context)
+                .accentColor),
+          ],
+        ),
+      );
+    }
+
     return Container(
       height: _animationSummaryHeight.value,
       decoration: BoxDecoration(color: theme.primaryColor),

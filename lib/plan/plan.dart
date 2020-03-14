@@ -9,7 +9,7 @@ import '../plan/plan_map.dart';
 import '../trufi_models.dart';
 
 class PlanPageController {
-  PlanPageController(this.plan) {
+  PlanPageController(this.plan, this.ad) {
     _subscriptions.add(
       _selectedItineraryController.listen((selectedItinerary) {
         _selectedItinerary = selectedItinerary;
@@ -18,6 +18,7 @@ class PlanPageController {
   }
 
   final Plan plan;
+  final Ad ad;
 
   final _selectedItineraryController = rx.BehaviorSubject<PlanItinerary>();
   final _subscriptions = CompositeSubscription();
@@ -42,8 +43,9 @@ class PlanPageController {
 
 class PlanPage extends StatefulWidget {
   final Plan plan;
+  final Ad ad;
 
-  PlanPage(this.plan) : assert(plan != null);
+  PlanPage(this.plan, this.ad) : assert(plan != null);
 
   @override
   PlanPageState createState() => PlanPageState();
@@ -58,7 +60,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _planPageController = PlanPageController(widget.plan);
+    _planPageController = PlanPageController(widget.plan, widget.ad);
     if (_planPageController.plan.itineraries.isNotEmpty) {
       _planPageController.inSelectedItinerary.add(
         _planPageController.plan.itineraries.first,
@@ -98,6 +100,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           PlanItineraryTabPages(
             _tabController,
             _planPageController.plan.itineraries,
+            _planPageController.ad,
           ),
         ],
       ),
