@@ -126,6 +126,7 @@ void main() async {
   trufiCfg.url.tilesStreetsEndpoint = globalCfg.getString("urlTilesStreetsEndpoint");
   trufiCfg.url.tilesSatelliteEndpoint = globalCfg.getString("urlTilesSatelliteEndpoint");
   trufiCfg.url.tilesTerrainEndpoint = globalCfg.getString("urlTilesTerrainEndpoint");
+  trufiCfg.url.adsEndpoint = globalCfg.getString("urlAdsEndpoint");
   trufiCfg.url.routeFeedback = globalCfg.getString("urlRouteFeedback");
   trufiCfg.url.donate = globalCfg.getString("urlDonate");
   trufiCfg.url.website = globalCfg.getString("urlWebsite");
