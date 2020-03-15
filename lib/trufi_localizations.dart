@@ -655,34 +655,40 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "A note about open source",
       );
 
-  String savedSectionInsertName() => Intl.message(
-        "Insert name",
-        name: "savedSectionInsertName",
-        desc: "title of insert name form",
+  String savedPlacesSetNameLabel() => Intl.message(
+        "Edit name",
+        name: "savedPlacesSetNameLabel",
+        desc: "Label of edit name option of a saved place",
       );
 
-  String savedSectionRemove() => Intl.message(
-        "Remove",
-        name: "savedSectionRemove",
-        desc: "Remove place saved",
+  String savedPlacesEnterNameTitle() => Intl.message(
+        "Enter name",
+        name: "savedPlacesEnterNameTitle",
+        desc: "Title of name edit dialog",
       );
 
-  String savedSectionSetIcon() => Intl.message(
-        "Change icon",
-        name: "savedSectionSetIcon",
-        desc: "change icon of a saved place",
+  String savedPlacesRemoveLabel() => Intl.message(
+        "Remove place",
+        name: "savedPlacesRemoveLabel",
+        desc: "Label of remove option of a saved place",
       );
 
-  String savedSectionSelectIcon() => Intl.message(
-        "Select icon",
-        name: "savedSectionSelectIcon",
-        desc: "title of change icon",
+  String savedPlacesSetIconLabel() => Intl.message(
+        "Change symbol",
+        name: "savedPlacesSetIconLabel",
+        desc: "Label of change symbol option of a saved place",
       );
 
-  String savedSectionSetCoordinate() => Intl.message(
+  String savedPlacesSelectIconTitle() => Intl.message(
+        "Select symbol",
+        name: "savedPlacesSelectIconTitle",
+        desc: "Title of symbol change dialog of a saved place",
+      );
+
+  String savedPlacesSetPositionLabel() => Intl.message(
         "Edit position",
-        name: "savedSectionSetCoordinate",
-        desc: "change coordinate of saved place",
+        name: "savedPlacesSetPositionLabel",
+        desc: "Label of edit position option of a saved place",
       );
 
   String teamContent() => Intl.message(
@@ -966,15 +972,17 @@ abstract class TrufiLocalization {
 
   String aboutOpenSource();
 
-  String savedSectionInsertName();
+  String savedPlacesSetNameLabel();
 
-  String savedSectionRemove();
+  String savedPlacesEnterNameTitle();
 
-  String savedSectionSetIcon();
+  String savedPlacesRemoveLabel();
 
-  String savedSectionSelectIcon();
+  String savedPlacesSetIconLabel();
 
-  String savedSectionSetCoordinate();
+  String savedPlacesSelectIconTitle();
+
+  String savedPlacesSetPositionLabel();
 
   String teamContent();
 

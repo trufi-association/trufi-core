@@ -100,15 +100,15 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                     itemBuilder: (BuildContext context) => [
                       PopupMenuItem(
                         value: 1,
-                        child: Text(localization.savedSectionSetIcon()),
+                        child: Text(localization.savedPlacesSetIconLabel()),
                       ),
                       PopupMenuItem(
                         value: 2,
-                        child: Text(localization.savedSectionSetCoordinate()),
+                        child: Text(localization.savedPlacesSetPositionLabel()),
                       ),
                       PopupMenuItem(
                         value: 3,
-                        child: Text(localization.savedSectionRemove()),
+                        child: Text(localization.savedPlacesRemoveLabel()),
                       ),
                     ],
                     onSelected: (int index) async {
@@ -161,7 +161,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     return await showDialog(
       context: context,
       child: SimpleDialog(
-        title: Text(localization.savedSectionSelectIcon()),
+        title: Text(localization.savedPlacesSelectIconTitle()),
         children: <Widget>[
           Container(
             width: 200,

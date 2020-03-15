@@ -30,7 +30,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
           borderRadius: BorderRadius.all(Radius.circular(5.0))),
       backgroundColor: theme.primaryColor,
       title: Text(
-        localization.savedSectionInsertName(),
+        localization.savedPlacesEnterNameTitle(),
         style: TextStyle(
           fontSize: 20,
           color: theme.primaryTextTheme.body2.color,
