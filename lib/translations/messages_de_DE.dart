@@ -66,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonNoInternet" : MessageLookupByLibrary.simpleMessage("Keine Internetverbindung."),
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Startpunkt"),
+    "commonSave" : MessageLookupByLibrary.simpleMessage("Speichern"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Unbekannter Fehler"),
     "description" : MessageLookupByLibrary.simpleMessage("Der beste Weg mit Trufis, Mikros und Bussen durch Cochabamba zu reisen."),
     "donate" : MessageLookupByLibrary.simpleMessage("Spenden"),

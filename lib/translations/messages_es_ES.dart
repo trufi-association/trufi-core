@@ -60,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonNoInternet" : MessageLookupByLibrary.simpleMessage("Sin conexión a internet."),
     "commonOK" : MessageLookupByLibrary.simpleMessage("Aceptar"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Origen"),
+    "commonSave" : MessageLookupByLibrary.simpleMessage("Guardar"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Error desconocido"),
     "description" : MessageLookupByLibrary.simpleMessage("La mejor forma de viajar con trufis, micros y buses a través de Cochabamba."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("El planificador de rutas no está seguro de su destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto."),

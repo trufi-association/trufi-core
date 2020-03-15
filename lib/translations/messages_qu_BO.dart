@@ -60,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonNoInternet" : MessageLookupByLibrary.simpleMessage("Mana internet kanchu"),
     "commonOK" : MessageLookupByLibrary.simpleMessage("Ari"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Maymanta"),
+    "commonSave" : MessageLookupByLibrary.simpleMessage("Guardar"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Mana yachacunchu ima pantay kasqanta chay"),
     "description" : MessageLookupByLibrary.simpleMessage("Trufis, microspi, buspi ima qhuchapampapi aswan sumaq ch’usanapaq."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay."),

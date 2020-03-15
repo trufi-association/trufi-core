@@ -60,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonNoInternet" : MessageLookupByLibrary.simpleMessage("Nessuna connessione internet."),
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Partenza"),
+    "commonSave" : MessageLookupByLibrary.simpleMessage("Salva"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Errore sconosciuto"),
     "description" : MessageLookupByLibrary.simpleMessage("Il miglior modo di viaggiare con trufis, micros e autobus attraverso Cochabamba"),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("L\'organizzatore di viaggio è indeciso sul luogo di arrivo. Per piacere scegli tra le opzioni seguenti o sii più specifico."),

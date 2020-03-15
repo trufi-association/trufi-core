@@ -190,6 +190,12 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Cancel button label",
       );
 
+  String commonSave() => Intl.message(
+        "Save",
+        name: "commonSave",
+        desc: "Save button label",
+      );
+
   String commonGoOffline() => Intl.message(
         "Go offline",
         name: "commonGoOffline",
@@ -830,6 +836,8 @@ abstract class TrufiLocalization {
   String commonOK();
 
   String commonCancel();
+
+  String commonSave();
 
   String commonGoOffline();
 

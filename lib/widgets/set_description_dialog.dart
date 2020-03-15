@@ -25,67 +25,62 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     final ThemeData theme = Theme.of(context);
     final TrufiLocalization localization =
         TrufiLocalizations.of(context).localization;
-    return SimpleDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+    return AlertDialog(
       backgroundColor: theme.primaryColor,
       title: Text(
         localization.savedPlacesEnterNameTitle(),
         style: TextStyle(
-          fontSize: 20,
           color: theme.primaryTextTheme.body2.color,
         ),
       ),
-      children: <Widget>[
-        Container(
-          margin: const EdgeInsets.all(20),
-          height: 35,
-          child: TextField(
-            style: theme.textTheme.body2,
-            onChanged: (value) {
-                _hasInputError = !_validateInput(value);
-            },
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                  borderSide: BorderSide(color: theme.primaryColor)),
+      content: Container(
+        child: TextField(
+          style: theme.primaryTextTheme.body2,
+          decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.accentColor,
+              )
             ),
-            controller: textController,
-            maxLines: 1,
-            autofocus: true,
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.backgroundColor,
+              )
+            ),
+          ),
+          onChanged: (value) {
+              _hasInputError = !_validateInput(value);
+          },
+          controller: textController,
+          maxLines: 1,
+          autofocus: true,
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          color: theme.primaryColor,
+          textColor: theme.accentColor,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(
+            localization.commonCancel().toUpperCase(),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            RaisedButton(
-              color: theme.backgroundColor,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                localization.commonCancel(),
-                style: theme.textTheme.body2,
-              ),
-            ),
-            RaisedButton(
-              color: theme.backgroundColor,
-              onPressed: () {
-                if (!_hasInputError) {
-                  String description = textController.text.trim();
-                  textController.clear();
-                  Navigator.of(context).pop(description);
-                }
-              },
-              child: Text(
-                localization.commonOK(),
-                style: theme.textTheme.body2,
-              ),
-            ),
-          ],
-        )
+        FlatButton(
+          color: theme.primaryColor,
+          textColor: theme.accentColor,
+          onPressed: () {
+            if (!_hasInputError) {
+              String description = textController.text.trim();
+              textController.clear();
+              Navigator.of(context).pop(description);
+            }
+          },
+          child: Text(
+            localization.commonSave().toUpperCase(),
+          ),
+        ),
       ],
     );
   }

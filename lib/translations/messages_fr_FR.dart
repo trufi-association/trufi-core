@@ -60,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "commonNoInternet" : MessageLookupByLibrary.simpleMessage("Pas de connexion Internet."),
     "commonOK" : MessageLookupByLibrary.simpleMessage("OK"),
     "commonOrigin" : MessageLookupByLibrary.simpleMessage("Origine"),
+    "commonSave" : MessageLookupByLibrary.simpleMessage("Sauvegarder"),
     "commonUnknownError" : MessageLookupByLibrary.simpleMessage("Erreur inconnue"),
     "description" : MessageLookupByLibrary.simpleMessage("La meilleure façon de se déplacer en trufis, micros et bus dans Cochabamba."),
     "errorAmbiguousDestination" : MessageLookupByLibrary.simpleMessage("Le planificateur de trajet ne sait pas trop à quelle destination vous souhaitez aller. Veuillez choisir parmi les options suivantes ou être plus précis."),
