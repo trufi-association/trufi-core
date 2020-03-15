@@ -152,6 +152,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
     HomePageStateData dataRoute = HomePageStateData();
     final location = await LocationProviderBloc.of(context).currentLocation;
+    if (location == null) return;
     TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalizations.of(context).localization.searchItemYourLocation(),
       location,
