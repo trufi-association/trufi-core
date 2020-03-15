@@ -71,9 +71,10 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final savedLocationsBloc = SavedLocationsBloc.of(context);
 
     return StreamBuilder(
+      initialData: savedLocationsBloc.locations.reversed.toList(),
       stream: savedLocationsBloc.outLocations,
       builder: (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
-        final data = savedLocationsBloc.locations.reversed.toList();
+        final data = snapshot.data.reversed.toList();
         return ListView.builder(
           padding: const EdgeInsets.all(16.0),
           itemCount: data.length,
