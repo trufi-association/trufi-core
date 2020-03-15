@@ -54,6 +54,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
             ),
             controller: textController,
             maxLines: 1,
+            autofocus: true,
           ),
         ),
         Row(
