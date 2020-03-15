@@ -26,25 +26,15 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     final TrufiLocalization localization =
         TrufiLocalizations.of(context).localization;
     return AlertDialog(
-      backgroundColor: theme.primaryColor,
       title: Text(
         localization.savedPlacesEnterNameTitle(),
-        style: TextStyle(
-          color: theme.primaryTextTheme.body2.color,
-        ),
       ),
       content: Container(
         child: TextField(
-          style: theme.primaryTextTheme.body2,
           decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: theme.accentColor,
-              )
-            ),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: theme.backgroundColor,
               )
             ),
           ),
@@ -58,7 +48,6 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
       ),
       actions: <Widget>[
         FlatButton(
-          color: theme.primaryColor,
           textColor: theme.accentColor,
           onPressed: () {
             Navigator.pop(context);
@@ -68,7 +57,6 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
           ),
         ),
         FlatButton(
-          color: theme.primaryColor,
           textColor: theme.accentColor,
           onPressed: () {
             if (!_hasInputError) {
