@@ -9,7 +9,7 @@ import './blocs/location_provider_bloc.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_bloc.dart';
 import './blocs/request_manager_bloc.dart';
-import './blocs/saved_locations_bloc.dart';
+import './blocs/saved_places_bloc.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/home.dart';
@@ -44,8 +44,8 @@ class TrufiApp extends StatelessWidget {
                 bloc: FavoriteLocationsBloc(context),
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
-                  child: BlocProvider<SavedLocationsBloc>(
-                      bloc: SavedLocationsBloc(context),
+                  child: BlocProvider<SavedPlacesBloc>(
+                      bloc: SavedPlacesBloc(context),
                       child: AppLifecycleReactor(
                         child: LocalizedMaterialApp(
                         theme,

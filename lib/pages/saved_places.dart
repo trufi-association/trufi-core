@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import '../blocs/saved_locations_bloc.dart';
+import '../blocs/saved_places_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
 
 import '../pages/home.dart';
@@ -68,11 +68,11 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalizations.of(context).localization;
-    final savedLocationsBloc = SavedLocationsBloc.of(context);
+    final savedPlacesBloc = SavedPlacesBloc.of(context);
 
     return StreamBuilder(
-      initialData: savedLocationsBloc.locations.reversed.toList(),
-      stream: savedLocationsBloc.outLocations,
+      initialData: savedPlacesBloc.locations.reversed.toList(),
+      stream: savedPlacesBloc.outLocations,
       builder: (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
         final data = snapshot.data.reversed.toList();
         return ListView.builder(
@@ -125,7 +125,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                           _changePosition(savedPlace);
                         } else if (index == 4) {
                           setState(() {
-                            savedLocationsBloc.inRemoveLocation.add(savedPlace);
+                            savedPlacesBloc.inRemoveLocation.add(savedPlace);
                           });
                         }
                       },
@@ -165,10 +165,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
-    final TrufiLocalization localization =
-        TrufiLocalizations.of(context).localization;
-    final SavedLocationsBloc savedLocationsBloc =
-        SavedLocationsBloc.of(context);
+    final localization = TrufiLocalizations.of(context).localization;
+    final savedPlacesBloc = SavedPlacesBloc.of(context);
     return await showDialog(
       context: context,
       child: SimpleDialog(
@@ -190,7 +188,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                       longitude: savedPlace.longitude,
                       type: icons.keys.toList()[index],
                     );
-                    savedLocationsBloc.inReplaceLocation
+                    savedPlacesBloc.inReplaceLocation
                         .add(<String, TrufiLocation>{
                           'oldLocation': savedPlace,
                           'newLocation': newLocation
@@ -209,8 +207,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changeName(TrufiLocation savedPlace) async {
-    final SavedLocationsBloc savedLocationsBloc =
-        SavedLocationsBloc.of(context);
+    final savedPlacesBloc = SavedPlacesBloc.of(context);
     final String description = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -223,7 +220,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         longitude: savedPlace.longitude,
         type: savedPlace.type,
       );
-      savedLocationsBloc.inReplaceLocation.add(<String, TrufiLocation>{
+      savedPlacesBloc.inReplaceLocation.add(<String, TrufiLocation>{
         'oldLocation': savedPlace,
         'newLocation': newPlace
       });
@@ -231,8 +228,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changePosition(TrufiLocation savedPlace) async {
-    final SavedLocationsBloc savedLocationsBloc =
-        SavedLocationsBloc.of(context);
+    final savedPlacesBloc = SavedPlacesBloc.of(context);
     final LatLng mapLocation = await _selectPosition(
         LatLng(savedPlace.latitude, savedPlace.longitude));
     if (mapLocation != null) {
@@ -243,7 +239,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         type: savedPlace.type,
       );
 
-      savedLocationsBloc.inReplaceLocation.add(<String, TrufiLocation>{
+      savedPlacesBloc.inReplaceLocation.add(<String, TrufiLocation>{
         'oldLocation': savedPlace,
         'newLocation': newPlace
       });
@@ -252,8 +248,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _addNewPlace() async {
-    final SavedLocationsBloc savedLocationsBloc =
-        SavedLocationsBloc.of(context);
+    final savedPlacesBloc = SavedPlacesBloc.of(context);
     final LatLng mapLocation = await _selectPosition(_center);
     if (mapLocation != null) {
       final String description = await showDialog(
@@ -262,7 +257,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
             return SetDescriptionDialog();
           });
       if (description != null) {
-        savedLocationsBloc.inAddLocation.add(TrufiLocation(
+        savedPlacesBloc.inAddLocation.add(TrufiLocation(
           description: description,
           latitude: mapLocation.latitude,
           longitude: mapLocation.longitude,

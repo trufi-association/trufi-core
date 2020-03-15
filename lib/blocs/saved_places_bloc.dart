@@ -8,12 +8,12 @@ import '../location/location_storage.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 
-class SavedLocationsBloc extends LocationsBlocBase {
-  static SavedLocationsBloc of(BuildContext context) {
-    return BlocProvider.of<SavedLocationsBloc>(context);
+class SavedPlacesBloc extends LocationsBlocBase {
+  static SavedPlacesBloc of(BuildContext context) {
+    return BlocProvider.of<SavedPlacesBloc>(context);
   }
 
-  SavedLocationsBloc(
+  SavedPlacesBloc(
     BuildContext context,
   ) : super(
     context,

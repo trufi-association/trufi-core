@@ -9,7 +9,7 @@ import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
 import '../blocs/location_search_bloc.dart';
 import '../blocs/request_manager_bloc.dart';
-import '../blocs/saved_locations_bloc.dart';
+import '../blocs/saved_places_bloc.dart';
 import '../pages/choose_location.dart';
 import '../trufi_localizations.dart';
 import '../trufi_models.dart';
@@ -77,7 +77,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       locationSearchBloc: LocationSearchBloc.of(context),
-      savedLocationsBloc: SavedLocationsBloc.of(context),
+      savedPlacesBloc: SavedPlacesBloc.of(context),
       appBarTheme: appBarTheme(context),
     );
   }
@@ -199,13 +199,13 @@ class _SuggestionList extends StatelessWidget {
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
     @required this.locationSearchBloc,
-    @required this.savedLocationsBloc,
+    @required this.savedPlacesBloc,
     @required this.appBarTheme,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
-  final SavedLocationsBloc savedLocationsBloc;
+  final SavedPlacesBloc savedPlacesBloc;
   final LocationSearchBloc locationSearchBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -266,16 +266,15 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildYourPlaces(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
     return StreamBuilder(
-      stream: savedLocationsBloc.outLocations,
+      stream: savedPlacesBloc.outLocations,
       builder: (
         BuildContext context,
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
         return _buildSavedSimpleList(
           Icons.map,
-          savedLocationsBloc.locations.reversed.toList(),
+          savedPlacesBloc.locations.reversed.toList(),
         );
       },
     );
