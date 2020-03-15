@@ -4,7 +4,7 @@ import '../trufi_localizations.dart';
 
 class SetDescriptionDialog extends StatefulWidget {
   final String initText;
-  SetDescriptionDialog({this.initText});
+  SetDescriptionDialog({this.initText = ""});
   @override
   _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
 }
