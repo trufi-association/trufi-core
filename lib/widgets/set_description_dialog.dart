@@ -25,6 +25,13 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     final ThemeData theme = Theme.of(context);
     final TrufiLocalization localization =
         TrufiLocalizations.of(context).localization;
+    final onSave = () {
+      if (!_hasInputError) {
+        String description = textController.text.trim();
+        textController.clear();
+        Navigator.of(context).pop(description);
+      }
+    };
     return AlertDialog(
       title: Text(
         localization.savedPlacesEnterNameTitle(),
@@ -41,6 +48,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
           onChanged: (value) {
               _hasInputError = !_validateInput(value);
           },
+          onEditingComplete: onSave,
           controller: textController,
           maxLines: 1,
           autofocus: true,
@@ -58,13 +66,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
         ),
         FlatButton(
           textColor: theme.accentColor,
-          onPressed: () {
-            if (!_hasInputError) {
-              String description = textController.text.trim();
-              textController.clear();
-              Navigator.of(context).pop(description);
-            }
-          },
+          onPressed: onSave,
           child: Text(
             localization.commonSave().toUpperCase(),
           ),
