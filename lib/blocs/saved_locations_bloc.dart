@@ -16,15 +16,15 @@ class SavedLocationsBloc extends LocationsBlocBase {
   SavedLocationsBloc(
     BuildContext context,
   ) : super(
-          context,
-          SharedPreferencesLocationStorage("saved_locations"),
-        ){
-          initSavedPage();
-        }
+    context,
+    SharedPreferencesLocationStorage("saved_places"),
+  ){
+    initSavedPage();
+  }
 
   void initSavedPage() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.get('init_Saved_Locations') == null) {
+    if (preferences.get('saved_places_initialized') == null) {
       LatLng _center = TrufiConfiguration().map.center;
       this.inAddLocation.add(TrufiLocation(
           description: 'Home',
@@ -37,6 +37,6 @@ class SavedLocationsBloc extends LocationsBlocBase {
           longitude: _center.longitude,
           type: 'saved_place:work'));
     }
-    preferences.setBool('init_Saved_Locations', true);
+    preferences.setBool('saved_places_initialized', true);
   }
 }
