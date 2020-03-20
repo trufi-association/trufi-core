@@ -69,6 +69,14 @@ abstract class LocationStorage {
     save();
   }
 
+  void replace(Map<String,TrufiLocation> data){
+    final TrufiLocation oldLocation = data['oldLocation'];
+    final TrufiLocation newLocation = data['newLocation'];
+    final int indexLocation = _locations.indexOf(oldLocation);
+    _locations[indexLocation] = newLocation;
+    save();
+  }
+
   bool contains(TrufiLocation location) {
     return _locations.contains(location);
   }

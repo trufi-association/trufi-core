@@ -190,6 +190,12 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Cancel button label",
       );
 
+  String commonSave() => Intl.message(
+        "Save",
+        name: "commonSave",
+        desc: "Save button label",
+      );
+
   String commonGoOffline() => Intl.message(
         "Go offline",
         name: "commonGoOffline",
@@ -575,6 +581,12 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Menu item that shows the map/planned trip",
       );
 
+  String menuYourPlaces() => Intl.message(
+        "Your places",
+        name: "menuYourPlaces",
+        desc: "Menu item that shows the saved places",
+      );
+
   String menuAbout() => Intl.message(
         "About",
         name: "menuAbout",
@@ -647,6 +659,42 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
         name: "aboutOpenSource",
         desc: "A note about open source",
+      );
+
+  String savedPlacesSetNameLabel() => Intl.message(
+        "Edit name",
+        name: "savedPlacesSetNameLabel",
+        desc: "Label of edit name option of a saved place",
+      );
+
+  String savedPlacesEnterNameTitle() => Intl.message(
+        "Enter name",
+        name: "savedPlacesEnterNameTitle",
+        desc: "Title of name edit dialog",
+      );
+
+  String savedPlacesRemoveLabel() => Intl.message(
+        "Remove place",
+        name: "savedPlacesRemoveLabel",
+        desc: "Label of remove option of a saved place",
+      );
+
+  String savedPlacesSetIconLabel() => Intl.message(
+        "Change symbol",
+        name: "savedPlacesSetIconLabel",
+        desc: "Label of change symbol option of a saved place",
+      );
+
+  String savedPlacesSelectIconTitle() => Intl.message(
+        "Select symbol",
+        name: "savedPlacesSelectIconTitle",
+        desc: "Title of symbol change dialog of a saved place",
+      );
+
+  String savedPlacesSetPositionLabel() => Intl.message(
+        "Edit position",
+        name: "savedPlacesSetPositionLabel",
+        desc: "Label of edit position option of a saved place",
       );
 
   String teamContent() => Intl.message(
@@ -789,6 +837,8 @@ abstract class TrufiLocalization {
 
   String commonCancel();
 
+  String commonSave();
+
   String commonGoOffline();
 
   String commonGoOnline();
@@ -904,6 +954,8 @@ abstract class TrufiLocalization {
 
   String menuConnections();
 
+  String menuYourPlaces();
+
   String menuAbout();
 
   String menuTeam();
@@ -927,6 +979,18 @@ abstract class TrufiLocalization {
   String aboutLicenses();
 
   String aboutOpenSource();
+
+  String savedPlacesSetNameLabel();
+
+  String savedPlacesEnterNameTitle();
+
+  String savedPlacesRemoveLabel();
+
+  String savedPlacesSetIconLabel();
+
+  String savedPlacesSelectIconTitle();
+
+  String savedPlacesSetPositionLabel();
 
   String teamContent();
 

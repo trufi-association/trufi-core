@@ -10,6 +10,7 @@ import '../custom_icons.dart';
 import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/home.dart';
+import '../pages/saved_places.dart';
 import '../pages/team.dart';
 import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
@@ -82,6 +83,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             Icons.linear_scale,
             localization.menuConnections(),
             HomePage.route,
+          ),
+          _buildListItem(
+            Icons.room,
+            localization.menuYourPlaces(),
+            SavedPlacesPage.route,
           ),
           _buildListItem(
             Icons.feedback,
