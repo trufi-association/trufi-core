@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 import '../blocs/preferences_bloc.dart';
 import '../trufi_localizations.dart';
@@ -9,7 +10,17 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
     context: context,
     title: Text(localization.alertLocationServicesDeniedTitle()),
     content: Text(localization.alertLocationServicesDeniedMessage()),
-    actions: [_buildOKButton(context)],
+    actions: [
+      FlatButton(
+        onPressed: () {
+          Navigator.pop(context);
+          LocationPermissions().requestPermissions(
+            permissionLevel: LocationPermissionLevel.locationWhenInUse,
+          );
+        },
+        child: Text(localization.commonOK()),
+      ),
+    ],
   );
 }
 

@@ -499,7 +499,6 @@ class _SuggestionList extends StatelessWidget {
       case 'tourism:apartment':
         return Icons.local_hotel;
 
-      // Icons used for the new feature: my places
       case 'saved_place:fastfood':
         return Icons.fastfood;
 
@@ -514,7 +513,7 @@ class _SuggestionList extends StatelessWidget {
 
       case 'saved_place:work':
         return Icons.work;
-        
+
       case 'saved_place:school':
         return Icons.school;
 

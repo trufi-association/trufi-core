@@ -83,6 +83,13 @@ class LocationProvider {
   );
 
   start() async {
+    // Check permission status
+    final status = await _geolocator.checkGeolocationPermissionStatus();
+    if (status != GeolocationStatus.granted) {
+      return;
+    }
+
+    // Subscribe to location updates
     _subscriptions.cancel();
     _subscriptions.add(
       (_geolocator.getPositionStream(_locationOptions)).listen(

@@ -47,13 +47,15 @@ class TrufiMapController {
   }) async {
     final cfg = TrufiConfiguration();
     final zoom = cfg.map.chooseLocationZoom;
-    final location = await LocationProviderBloc.of(context).currentLocation;
+    final locationProviderBloc = LocationProviderBloc.of(context);
+    final location = await locationProviderBloc.currentLocation;
     if (location != null) {
       move(
         center: location,
         zoom: zoom,
         tickerProvider: tickerProvider,
       );
+      locationProviderBloc.start();
       return;
     }
     showDialog(
