@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../location/location_search_delegate.dart';
 import '../trufi_localizations.dart';
@@ -11,7 +10,7 @@ class LocationFormField extends FormField<TrufiLocation> {
     FormFieldSetter<TrufiLocation> onSaved,
     String hintText,
     String searchHintText,
-    SvgPicture leadingImage,
+    Widget leadingImage,
   }) : super(
           key: key,
           onSaved: onSaved,

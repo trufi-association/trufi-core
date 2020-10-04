@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/widgets/colored_svg_picture.dart';
+import 'package:trufi_core/widgets/from_marker.dart';
+import 'package:trufi_core/widgets/to_marker.dart';
 
 import './composite_subscription.dart';
 import './trufi_configuration.dart';
@@ -53,12 +55,7 @@ Marker buildFromMarker(LatLng point) {
     anchorPos: AnchorPos.align(AnchorAlign.top),
     builder: (context) {
       return Container(
-        child: SvgPicture.asset(
-          "assets/images/from_marker.svg",
-          package: "trufi_core",
-          color: Theme.of(context).accentColor,
-          colorBlendMode: BlendMode.screen,
-        ),
+        child: FromMarker(),
       );
     },
   );
@@ -70,12 +67,7 @@ Marker buildToMarker(LatLng point) {
     anchorPos: AnchorPos.align(AnchorAlign.top),
     builder: (context) {
       return Container(
-        child: SvgPicture.asset(
-          "assets/images/to_marker.svg",
-          package: "trufi_core",
-          color: Theme.of(context).accentColor,
-          colorBlendMode: BlendMode.screen,
-        ),
+        child: ToMarker(),
       );
     },
   );

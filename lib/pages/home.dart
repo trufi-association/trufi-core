@@ -5,9 +5,11 @@ import 'package:async/async.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/widgets/colored_svg_picture.dart';
+import 'package:trufi_core/widgets/from_marker.dart';
+import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../blocs/app_review_bloc.dart';
@@ -134,12 +136,7 @@ class HomePageState extends State<HomePage>
                 ValueKey(keys.homePageFromPlaceField),
                 localization.searchPleaseSelectOrigin(),
                 localization.searchHintOrigin(),
-                SvgPicture.asset(
-                  "assets/images/from_marker.svg",
-                  package: "trufi_core",
-                  color: Theme.of(context).accentColor,
-                  colorBlendMode: BlendMode.screen,
-                ),
+                FromMarker(),
                 _setFromPlace,
                 leading: SizedBox.shrink(),
                 trailing:
@@ -150,12 +147,7 @@ class HomePageState extends State<HomePage>
                 ValueKey(keys.homePageToPlaceField),
                 localization.searchPleaseSelectDestination(),
                 localization.searchHintDestination(),
-                SvgPicture.asset(
-                  "assets/images/to_marker.svg",
-                  package: "trufi_core",
-                  color: Theme.of(context).accentColor,
-                  colorBlendMode: BlendMode.screen,
-                ),
+                ToMarker(),
                 _setToPlace,
                 leading: SizedBox.shrink(),
                 trailing: _data.isSwappable
@@ -190,10 +182,7 @@ class HomePageState extends State<HomePage>
                   ValueKey(keys.homePageFromPlaceField),
                   localization.searchPleaseSelectOrigin(),
                   localization.searchHintOrigin(),
-                  SvgPicture.asset(
-                    "assets/images/from_marker.svg",
-                    package: "trufi_core",
-                  ),
+                  FromMarker(),
                   _setFromPlace,
                 ),
               ),
@@ -210,10 +199,7 @@ class HomePageState extends State<HomePage>
                   ValueKey(keys.homePageToPlaceField),
                   localization.searchPleaseSelectDestination(),
                   localization.searchHintDestination(),
-                  SvgPicture.asset(
-                    "assets/images/to_marker.svg",
-                    package: "trufi_core",
-                  ),
+                  ToMarker(),
                   _setToPlace,
                 ),
               ),
@@ -260,7 +246,7 @@ class HomePageState extends State<HomePage>
     ValueKey<String> valueKey,
     String hintText,
     String searchHintText,
-    SvgPicture textLeadingImage,
+    Widget textLeadingImage,
     Function(TrufiLocation) onSaved, {
     TrufiLocation initialValue,
     Widget leading,
