@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
@@ -71,6 +72,16 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelablePlan(context, from, to, "CAR,WALK");
   }
 
+  CancelableOperation<Plan> fetchBikePlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return _fetchCancelablePlan(context, from, to, "TRANSIT,BICYCLE", {
+      "maxWalkDistance": "160934", // 100 miles
+    });
+  }
+
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,
@@ -78,15 +89,11 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelableAd(context, to);
   }
 
-
   CancelableOperation<Plan> _fetchCancelablePlan(
-    BuildContext context,
-    TrufiLocation from,
-    TrufiLocation to,
-    String mode,
-  ) {
+      BuildContext context, TrufiLocation from, TrufiLocation to, String mode,
+      [Map<String, String> additionalParams]) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(context, from, to, mode);
+      Plan plan = await _fetchPlan(context, from, to, mode, additionalParams);
       if (plan.hasError) {
         plan = Plan.fromError(
           _localizedErrorForPlanError(
@@ -110,22 +117,24 @@ class OnlineRequestManager implements RequestManager {
   }
 
   Future<Plan> _fetchPlan(
-    BuildContext context,
-    TrufiLocation from,
-    TrufiLocation to,
-    String mode,
-  ) async {
+      BuildContext context, TrufiLocation from, TrufiLocation to, String mode,
+      [Map<String, String> additionalParams]) async {
     final preferences = PreferencesBloc.of(context);
-    Uri request = Uri.parse(
-      TrufiConfiguration().url.otpEndpoint + planPath,
-    ).replace(queryParameters: {
+    final params = {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
-      "date": _todayMonthDayYear(),
+      "date": _todayOtpDate(),
+      "time": _todayOtpTime(),
       "numItineraries": "5",
       "mode": mode,
       "correlation": preferences.correlationId,
-    });
+    };
+    if (additionalParams != null) {
+      params.addAll(additionalParams);
+    }
+    Uri request = Uri.parse(
+      TrufiConfiguration().url.otpEndpoint + planPath,
+    ).replace(queryParameters: params);
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
       return await compute(_parsePlan, utf8.decode(response.bodyBytes));
@@ -155,13 +164,12 @@ class OnlineRequestManager implements RequestManager {
     if (response.statusCode == 200) {
       return await compute(_parseAd, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
-      print ("No ads found");
+      print("No ads found");
     } else {
-      print ("Error fetching ads");
+      print("Error fetching ads");
       return null;
     }
   }
-
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
@@ -174,11 +182,17 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
-  String _todayMonthDayYear() {
-    var today = new DateTime.now();
-    return "${today.month.toString().padLeft(2, '0')}-" +
-        "${today.day.toString().padLeft(2, '0')}-" +
-        "${today.year.toString()}";
+  // e.g. 10-29-2020
+  String _todayOtpDate() {
+    return new DateFormat('M-d-y', 'en_US')
+      .format(new DateTime.now());
+  }
+
+  // e.g. 8:12pm
+  String _todayOtpTime() {
+    return new DateFormat('K:ma', 'en_US')
+        .format(new DateTime.now())
+        .toLowerCase();
   }
 
   String _localizedErrorForPlanError(

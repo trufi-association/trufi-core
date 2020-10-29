@@ -66,6 +66,18 @@ class OfflineRequestManager implements RequestManager {
     }());
   }
 
+  CancelableOperation<Plan> fetchBikePlan(
+    BuildContext context,
+    TrufiLocation from,
+    TrufiLocation to,
+  ) {
+    return CancelableOperation.fromFuture(() async {
+      throw FetchOfflineRequestException(
+        Exception("Fetch plan as bike route offline is not implemented yet."),
+      );
+    }());
+  }
+
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,
