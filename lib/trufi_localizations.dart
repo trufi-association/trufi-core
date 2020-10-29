@@ -551,6 +551,36 @@ class TrufiLocalizationDefault implements TrufiLocalization {
         desc: "Vehicle name (Light Rail Train)",
       );
 
+  String instructionVehicleTrain() => Intl.message(
+        "Train",
+        name: "inctructionVehicleTrain",
+        desc: "Vehicle name (Train)",
+      );
+
+  String instructionVehicleBike() => Intl.message(
+        "Bike",
+        name: "instructionVehicleBike",
+        desc: "Vehicle name (Bike)",
+      );
+
+  String instructionVehicleFerry() => Intl.message(
+        "Ferry",
+        name: "instructionVehicleFerry",
+        desc: "Vehicle name (Ferry)",
+      );
+
+  String instructionVehicleFunicular() => Intl.message(
+        "Funicular",
+        name: "instructionVehicleFunicular",
+        desc: "Vehicle name (Funicular)",
+      );
+
+  String instructionVehicleAirplane() => Intl.message(
+        "Plane",
+        name: "instructionVehicleAirplane",
+        desc: "Vehicle name (Airplane)",
+      );
+
   String instructionDurationMinutes(num value) => Intl.message(
         "$value min",
         name: "instructionDurationMinutes",
@@ -794,28 +824,28 @@ class TrufiLocalizationDefault implements TrufiLocalization {
       );
 
   String mapTypeTitle() => Intl.message(
-      "Map Type",
-      name: "mapTypeLabel",
-      desc: "Section title for choosing map style",
-    );
+        "Map Type",
+        name: "mapTypeLabel",
+        desc: "Section title for choosing map style",
+      );
 
   String mapTypeStreetsCaption() => Intl.message(
-      "Streets",
-      name: "mapTypeStreetsCaption",
-      desc: "Caption of streets map type",
-    );
+        "Streets",
+        name: "mapTypeStreetsCaption",
+        desc: "Caption of streets map type",
+      );
 
   String mapTypeSatelliteCaption() => Intl.message(
-      "Satellite",
-      name: "mapTypeSatelliteCaption",
-      desc: "Caption of satellite map type",
-    );
+        "Satellite",
+        name: "mapTypeSatelliteCaption",
+        desc: "Caption of satellite map type",
+      );
 
   String mapTypeTerrainCaption() => Intl.message(
-      "Terrain",
-      name: "mapTypeTerrainCaption",
-      desc: "Caption of terrain map type",
-    );
+        "Terrain",
+        name: "mapTypeTerrainCaption",
+        desc: "Caption of terrain map type",
+      );
 }
 
 abstract class TrufiLocalization {
@@ -945,6 +975,16 @@ abstract class TrufiLocalization {
   String instructionVehicleGondola();
 
   String instructionVehicleLightRail();
+
+  String instructionVehicleTrain();
+
+  String instructionVehicleBike();
+
+  String instructionVehicleFerry();
+
+  String instructionVehicleFunicular();
+
+  String instructionVehicleAirplane();
 
   String instructionDurationMinutes(num value);
 

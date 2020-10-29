@@ -442,20 +442,44 @@ class PlanItineraryLeg {
   }
 
   String _carTypeString(TrufiLocalization localization) {
-    String carType = routeLongName?.toLowerCase() ?? "";
-    return mode == 'CAR'
-        ? localization.instructionVehicleCar()
-        : carType.contains(type_trufi)
-            ? localization.instructionVehicleTrufi()
-            : carType.contains(type_micro)
-                ? localization.instructionVehicleMicro()
-                : carType.contains(type_minibus)
-                    ? localization.instructionVehicleMinibus()
-                    : carType.contains(type_gondola)
-                        ? localization.instructionVehicleGondola()
-                        : carType.contains(type_light_rail)
-                            ? localization.instructionVehicleLightRail()
-                            : localization.instructionVehicleBus();
+    switch (mode) {
+      case 'BICYCLE':
+        return localization.instructionVehicleBike();
+      case 'FERRY':
+        return localization.instructionVehicleFerry();
+      case 'RAIL':
+      case 'SUBWAY':
+      case 'TRAM':
+      case 'CABLE_CAR':
+      case 'TRANSIT':
+        return localization.instructionVehicleTrain();
+      case 'GONDOLA':
+        return localization.instructionVehicleGondola();
+      case 'FUNICULAR':
+        return localization.instructionVehicleFunicular();
+      case 'AIRPLANE':
+        return localization.instructionVehicleAirplane();
+      case 'CAR':
+        return localization.instructionVehicleCar();
+      default:
+        String carType = routeLongName?.toLowerCase() ?? "";
+        if (carType.contains(type_trufi)) {
+          return localization.instructionVehicleTrufi();
+        }
+        if (carType.contains(type_micro)) {
+          return localization.instructionVehicleMicro();
+        }
+        if (carType.contains(type_minibus)) {
+          return localization.instructionVehicleMinibus();
+        }
+        if (carType.contains(type_gondola)) {
+          return localization.instructionVehicleGondola();
+        }
+        if (carType.contains(type_light_rail)) {
+          return localization.instructionVehicleLightRail();
+        }
+        return localization.instructionVehicleBus();
+    }
   }
 
   String _distanceString(TrufiLocalization localization) {
