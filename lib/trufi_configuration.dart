@@ -19,6 +19,7 @@ class TrufiConfiguration {
   final map = TrufiConfigurationMap();
   final attribution = TrufiConfigurationAttribution();
   final List<TrufiConfigurationLanguage> languages = List();
+  final features = TrufiConfigurationFeatures();
 
   var minimumReviewWorthyActionCount = 3;
 }
@@ -91,4 +92,9 @@ class TrufiConfigurationUrl {
   var twitter = "";
   var donate = "";
   var share = "";
+}
+
+class TrufiConfigurationFeatures {
+  var showCarRouteOnTansitError = true;
+  var useBikeRoutes = false;
 }

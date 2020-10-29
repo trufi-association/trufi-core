@@ -385,6 +385,7 @@ class HomePageState extends State<HomePage>
   }
 
   void _fetchPlan({bool car = false}) async {
+    final features = TrufiConfiguration().features;
     final requestManagerBloc = RequestManagerBloc.of(context);
     // Cancel the last fetch plan operation for replace with the current request
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
@@ -414,27 +415,35 @@ class HomePageState extends State<HomePage>
       // Start fetch
       setState(() => _isFetching = true);
       try {
-        _currentFetchPlanOperation = car
-            ? requestManagerBloc.fetchCarPlan(
-                context,
-                _data.fromPlace,
-                _data.toPlace,
-              )
-            : requestManagerBloc.fetchTransitPlan(
-                context,
-                _data.fromPlace,
-                _data.toPlace,
-              );
+        if (car) {
+          _currentFetchPlanOperation = requestManagerBloc.fetchCarPlan(
+            context,
+            _data.fromPlace,
+            _data.toPlace,
+          );
+        } else if (features.useBikeRoutes) {
+          _currentFetchPlanOperation = requestManagerBloc.fetchBikePlan(
+            context,
+            _data.fromPlace,
+            _data.toPlace,
+          );
+        } else {
+          _currentFetchPlanOperation = requestManagerBloc.fetchTransitPlan(
+            context,
+            _data.fromPlace,
+            _data.toPlace,
+          );
+        }
 
         Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
 
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {
-          if (car) {
-            _showErrorAlert(plan.error.message);
-          } else {
+          if (features.showCarRouteOnTansitError && !car) {
             _showTransitErrorAlert(plan.error.message);
+          } else {
+            _showErrorAlert(plan.error.message);
           }
         } else {
           _setPlan(plan);
