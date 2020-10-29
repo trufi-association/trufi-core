@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/trufi_models.dart';
 
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
@@ -54,6 +55,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
             return <LayerOptions>[
               tileHostingTileLayerOptions(
                 getTilesEndpointForMapType(snapshot.data),
+                fileFormat: snapshot.data == MapStyle.satellite ? 'jpg' : 'png',
                 tileProviderKey: cfg.map.mapTilerKey,
               ),
             ]..addAll(widget.layerOptionsBuilder(context));

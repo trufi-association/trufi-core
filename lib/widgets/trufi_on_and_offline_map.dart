@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:trufi_core/trufi_models.dart';
 
 import '../blocs/preferences_bloc.dart';
 import '../composite_subscription.dart';
@@ -135,6 +136,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
             return <LayerOptions>[
               tileHostingTileLayerOptions(
                 getTilesEndpointForMapType(snapshot.data),
+                fileFormat: snapshot.data == MapStyle.satellite ? 'jpg' : 'png',
                 tileProviderKey: cfg.map.mapTilerKey,
               ),
             ]..addAll(widget.layerOptionsBuilder(context));

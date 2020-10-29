@@ -14,7 +14,6 @@ import './trufi_configuration.dart';
 import './trufi_models.dart';
 import './custom_icons.dart';
 
-
 offlineMapTileLayerOptions() {
   return TileLayerOptions(
     maxZoom: 18.0,
@@ -22,13 +21,18 @@ offlineMapTileLayerOptions() {
   );
 }
 
-tileHostingTileLayerOptions(String tilesEndpoint, { String tileProviderKey = "" }) {
-  var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
+tileHostingTileLayerOptions(
+  String tilesEndpoint, {
+  String fileFormat = "png",
+  String tileProviderKey = "",
+}) {
+  var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.{fileFormat}";
   if (tileProviderKey != "") urlTemplate += "?key={key}";
 
   return TileLayerOptions(
     urlTemplate: urlTemplate,
     additionalOptions: {
+      'fileFormat': fileFormat,
       'key': tileProviderKey,
     },
   );
