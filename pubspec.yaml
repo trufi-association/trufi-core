@@ -30,7 +30,7 @@ dependencies:
   path_provider: 1.6.18
   permission_handler: 4.4.0+hotfix.4
   rxdart: 0.24.1
-  share: 0.6.5+2
+  share: 0.6.5+4
   shared_preferences: 0.5.12
   sprintf: 5.0.0
   synchronized: 2.2.0+2
