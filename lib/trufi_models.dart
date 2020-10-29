@@ -29,7 +29,7 @@ class TrufiLocation {
   static const String keyLatitude = 'latitude';
   static const String keyLongitude = 'longitude';
   static const String keyType = 'type';
-  
+
   final String description;
   final double latitude;
   final double longitude;
@@ -394,7 +394,6 @@ class PlanItineraryLeg {
   static const type_gondola = "gondola";
   static const type_light_rail = "light rail";
 
-
   final String points;
   final String mode;
   final String route;
@@ -475,22 +474,46 @@ class PlanItineraryLeg {
   }
 
   IconData iconData() {
-    String carType = routeLongName?.toLowerCase() ?? "";
-    return mode == 'WALK'
-        ? Icons.directions_walk
-        : mode == 'CAR'
-            ? Icons.drive_eta
-            : carType.contains(type_trufi)
-                ? Icons.local_taxi
-                : carType.contains(type_micro)
-                    ? Icons.directions_bus
-                    : carType.contains(type_minibus)
-                        ? Icons.airport_shuttle
-                        : carType.contains(type_gondola)
-                            ? CustomIcons.gondola
-                            : carType.contains(type_light_rail)
-                                ? Icons.train
-                                : Icons.directions_bus;
+    switch (mode) {
+      case 'WALK':
+        return Icons.directions_walk;
+      case 'BICYCLE':
+        return Icons.directions_bike;
+      case 'FERRY':
+        return Icons.directions_ferry;
+      case 'RAIL':
+      case 'SUBWAY':
+      case 'TRAM':
+      case 'CABLE_CAR':
+        return Icons.directions_transit;
+      case 'GONDOLA':
+      case 'FUNICULAR':
+        return CustomIcons.gondola;
+      case 'TRANSIT':
+        return Icons.directions_transit;
+      case 'AIRPLANE':
+        return Icons.airplanemode_active;
+      case 'CAR':
+        return Icons.directions_car;
+      default:
+        String carType = routeLongName?.toLowerCase() ?? "";
+        if (carType.contains(type_trufi)) {
+          return Icons.local_taxi;
+        }
+        if (carType.contains(type_micro)) {
+          return Icons.directions_bus;
+        }
+        if (carType.contains(type_minibus)) {
+          return Icons.airport_shuttle;
+        }
+        if (carType.contains(type_gondola)) {
+          return CustomIcons.gondola;
+        }
+        if (carType.contains(type_light_rail)) {
+          return Icons.train;
+        }
+        return Icons.directions_bus;
+    }
   }
 }
 
@@ -518,7 +541,9 @@ class Ad {
     return Ad(
       text: adJson[_Text],
       url: adJson[_Url] ?? null,
-      location: adJson[_Location].isEmpty ? null : PlanLocation.fromJson(adJson[_Location]),
+      location: adJson[_Location].isEmpty
+          ? null
+          : PlanLocation.fromJson(adJson[_Location]),
     );
   }
 
