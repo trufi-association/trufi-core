@@ -20,7 +20,7 @@ dependencies:
   flutter_compass: 0.4.3
   flutter_map: 0.10.1+1
   flutter_svg: 0.19.0
-  geolocator: 5.3.2+2
+  geolocator: ^6.1.4+1
   google_api_availability: 2.0.4
   http: 0.12.2
   intl: 0.16.1
