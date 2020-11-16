@@ -50,8 +50,9 @@ class LocationProviderBloc implements BlocBase {
   Future<LatLng> get currentLocation async {
     LatLng location;
     try {
-      GeolocationStatus status = await _locationProvider.status;
-      if (status == GeolocationStatus.granted) {
+      LocationPermission status = await Geolocator.checkPermission();
+      if (status == LocationPermission.always ||
+          status == LocationPermission.whileInUse) {
         location = await _locationProvider.currentLocation;
         if (location == null) {
           print("Location provider: No current location");
@@ -65,7 +66,7 @@ class LocationProviderBloc implements BlocBase {
     return location;
   }
 
-  Future<GeolocationStatus> get status async => _locationProvider.status;
+  Future<LocationPermission> get status async => _locationProvider.status;
 }
 
 class LocationProvider {
@@ -77,22 +78,22 @@ class LocationProvider {
 
   final CompositeSubscription _subscriptions = CompositeSubscription();
   final Geolocator _geolocator = Geolocator();
-  final LocationOptions _locationOptions = LocationOptions(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 10,
-  );
 
   start() async {
     // Check permission status
-    final status = await _geolocator.checkGeolocationPermissionStatus();
-    if (status != GeolocationStatus.granted) {
+    final LocationPermission status = await Geolocator.checkPermission();
+    if (!(status == LocationPermission.always ||
+        status == LocationPermission.whileInUse)) {
       return;
     }
 
     // Subscribe to location updates
     _subscriptions.cancel();
     _subscriptions.add(
-      (_geolocator.getPositionStream(_locationOptions)).listen(
+      (Geolocator.getPositionStream(
+        desiredAccuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      )).listen(
         (position) => _handleOnLocationChanged(position),
       ),
     );
@@ -117,7 +118,7 @@ class LocationProvider {
   // Getter
 
   Future<LatLng> get currentLocation async {
-    Position position = await _geolocator.getCurrentPosition(
+    Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
     return position != null
@@ -125,7 +126,7 @@ class LocationProvider {
         : null;
   }
 
-  Future<GeolocationStatus> get status async {
-    return _geolocator.checkGeolocationPermissionStatus();
+  Future<LocationPermission> get status async {
+    return Geolocator.checkPermission();
   }
 }

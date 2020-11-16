@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:location_permissions/location_permissions.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../blocs/preferences_bloc.dart';
 import '../trufi_localizations.dart';
@@ -14,9 +14,7 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
       FlatButton(
         onPressed: () {
           Navigator.pop(context);
-          LocationPermissions().requestPermissions(
-            permissionLevel: LocationPermissionLevel.locationWhenInUse,
-          );
+          Geolocator.requestPermission();
         },
         child: Text(localization.commonOK()),
       ),
