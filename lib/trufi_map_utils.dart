@@ -52,6 +52,8 @@ getTilesEndpointForMapType(String mapType) {
 Marker buildFromMarker(LatLng point) {
   return Marker(
     point: point,
+    width: 24.0,
+    height: 24.0,
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) {
       return Container(
