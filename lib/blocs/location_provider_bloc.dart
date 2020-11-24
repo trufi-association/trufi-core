@@ -77,7 +77,6 @@ class LocationProvider {
   final ValueChanged<LatLng> onLocationChanged;
 
   final CompositeSubscription _subscriptions = CompositeSubscription();
-  final Geolocator _geolocator = Geolocator();
 
   start() async {
     // Check permission status
