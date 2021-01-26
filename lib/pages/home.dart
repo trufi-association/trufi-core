@@ -30,7 +30,9 @@ import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
+  final Widget Function(Locale locale) customWidget;
 
+  const HomePage({Key key, @required this.customWidget}) : super(key: key);
   @override
   HomePageState createState() => HomePageState();
 }
@@ -286,8 +288,11 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
-          ? PlanPage(_data.plan, _data.ad)
-          : PlanEmptyPage(onLongPress: _handleOnLongPress),
+          ? PlanPage(_data.plan, _data.ad, widget.customWidget)
+          : PlanEmptyPage(
+              onLongPress: _handleOnLongPress,
+              customWidget: widget.customWidget,
+            ),
     );
     if (_isFetching) {
       final children = <Widget>[

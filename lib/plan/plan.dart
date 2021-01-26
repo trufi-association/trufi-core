@@ -44,8 +44,9 @@ class PlanPageController {
 class PlanPage extends StatefulWidget {
   final Plan plan;
   final Ad ad;
+  final Widget Function(Locale locale) customWidget;
 
-  PlanPage(this.plan, this.ad) : assert(plan != null);
+  PlanPage(this.plan, this.ad, this.customWidget) : assert(plan != null);
 
   @override
   PlanPageState createState() => PlanPageState();
@@ -95,7 +96,10 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       Column(
         children: <Widget>[
           Expanded(
-            child: PlanMapPage(planPageController: _planPageController),
+            child: PlanMapPage(
+              planPageController: _planPageController,
+              customWidget: widget.customWidget,
+            ),
           ),
           PlanItineraryTabPages(
             _tabController,

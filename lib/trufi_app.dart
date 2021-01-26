@@ -22,10 +22,12 @@ class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
     this.localization = const TrufiLocalizationDefault(),
+    this.customWidget,
   });
 
   final ThemeData theme;
   final TrufiLocalization localization;
+  final Widget Function(Locale locale) customWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +47,12 @@ class TrufiApp extends StatelessWidget {
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: BlocProvider<SavedPlacesBloc>(
-                      bloc: SavedPlacesBloc(context),
-                      child: AppLifecycleReactor(
-                        child: LocalizedMaterialApp(
+                    bloc: SavedPlacesBloc(context),
+                    child: AppLifecycleReactor(
+                      child: LocalizedMaterialApp(
                         theme,
                         localization,
+                        customWidget,
                       ),
                     ),
                   ),
@@ -115,10 +118,12 @@ class LocalizedMaterialApp extends StatefulWidget {
   LocalizedMaterialApp(
     this.theme,
     this.localization,
+    this.customWidget,
   );
 
   final ThemeData theme;
   final TrufiLocalization localization;
+  final Widget Function(Locale locale) customWidget;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -155,7 +160,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           supportedLocales: supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
-          home: HomePage(),
+          home: HomePage(customWidget: widget.customWidget),
         );
       },
     );

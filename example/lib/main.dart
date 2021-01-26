@@ -123,9 +123,12 @@ void main() async {
 
   // Url
   trufiCfg.url.otpEndpoint = globalCfg.getString("urlOtpEndpoint");
-  trufiCfg.url.tilesStreetsEndpoint = globalCfg.getString("urlTilesStreetsEndpoint");
-  trufiCfg.url.tilesSatelliteEndpoint = globalCfg.getString("urlTilesSatelliteEndpoint");
-  trufiCfg.url.tilesTerrainEndpoint = globalCfg.getString("urlTilesTerrainEndpoint");
+  trufiCfg.url.tilesStreetsEndpoint =
+      globalCfg.getString("urlTilesStreetsEndpoint");
+  trufiCfg.url.tilesSatelliteEndpoint =
+      globalCfg.getString("urlTilesSatelliteEndpoint");
+  trufiCfg.url.tilesTerrainEndpoint =
+      globalCfg.getString("urlTilesTerrainEndpoint");
   trufiCfg.url.adsEndpoint = globalCfg.getString("urlAdsEndpoint");
   trufiCfg.url.routeFeedback = globalCfg.getString("urlRouteFeedback");
   trufiCfg.url.donate = globalCfg.getString("urlDonate");
@@ -145,6 +148,17 @@ void main() async {
 
   // Run app
   runApp(
-    TrufiApp(theme: theme)
+    TrufiApp(
+      theme: theme,
+      customWidget: (Locale locale) => Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(locale.languageCode),
+            Text(locale.countryCode),
+          ],
+        ),
+      ),
+    ),
   );
 }
