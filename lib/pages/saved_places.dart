@@ -71,73 +71,77 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final savedPlacesBloc = SavedPlacesBloc.of(context);
 
     return StreamBuilder(
-      initialData: savedPlacesBloc.locations.reversed.toList(),
-      stream: savedPlacesBloc.outLocations,
-      builder: (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
-        final data = snapshot.data.reversed.toList();
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            final TrufiLocation savedPlace = data[index];
-            return Container(
-              margin: EdgeInsets.only(bottom: 5),
-              child: RaisedButton(
-                onPressed: () => _showCurrentRoute(savedPlace),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        child: Icon(
-                            _typeToIconData(savedPlace.type) ?? Icons.place)),
-                    Expanded(
-                      child: Text(
-                        savedPlace.description,
-                        style: theme.textTheme.body2,
-                        maxLines: 1,
-                      ),
-                    ),
-                    PopupMenuButton<int>(
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                          value: 1,
-                          child: Text(localization.savedPlacesSetIconLabel()),
+        initialData: savedPlacesBloc.locations.reversed.toList(),
+        stream: savedPlacesBloc.outLocations,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<TrufiLocation>> snapshot) {
+          final data = snapshot.data.reversed.toList();
+          return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                final TrufiLocation savedPlace = data[index];
+                return Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: ElevatedButton(
+                    onPressed: () => _showCurrentRoute(savedPlace),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            child: Icon(_typeToIconData(savedPlace.type) ??
+                                Icons.place)),
+                        Expanded(
+                          child: Text(
+                            savedPlace.description,
+                            style: theme.textTheme.bodyText2,
+                            maxLines: 1,
+                          ),
                         ),
-                        PopupMenuItem(
-                          value: 2,
-                          child: Text(localization.savedPlacesSetNameLabel()),
-                        ),
-                        PopupMenuItem(
-                          value: 3,
-                          child: Text(localization.savedPlacesSetPositionLabel()),
-                        ),
-                        PopupMenuItem(
-                          value: 4,
-                          child: Text(localization.savedPlacesRemoveLabel()),
+                        PopupMenuButton<int>(
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem(
+                              value: 1,
+                              child:
+                                  Text(localization.savedPlacesSetIconLabel()),
+                            ),
+                            PopupMenuItem(
+                              value: 2,
+                              child:
+                                  Text(localization.savedPlacesSetNameLabel()),
+                            ),
+                            PopupMenuItem(
+                              value: 3,
+                              child: Text(
+                                  localization.savedPlacesSetPositionLabel()),
+                            ),
+                            PopupMenuItem(
+                              value: 4,
+                              child:
+                                  Text(localization.savedPlacesRemoveLabel()),
+                            ),
+                          ],
+                          onSelected: (int index) async {
+                            if (index == 1) {
+                              _changeIcon(savedPlace);
+                            } else if (index == 2) {
+                              _changeName(savedPlace);
+                            } else if (index == 3) {
+                              _changePosition(savedPlace);
+                            } else if (index == 4) {
+                              setState(() {
+                                savedPlacesBloc.inRemoveLocation
+                                    .add(savedPlace);
+                              });
+                            }
+                          },
                         ),
                       ],
-                      onSelected: (int index) async {
-                        if (index == 1) {
-                          _changeIcon(savedPlace);
-                        } else if (index == 2) {
-                          _changeName(savedPlace);
-                        } else if (index == 3) {
-                          _changePosition(savedPlace);
-                        } else if (index == 4) {
-                          setState(() {
-                            savedPlacesBloc.inRemoveLocation.add(savedPlace);
-                          });
-                        }
-                      },
                     ),
-                  ],
-                ),
-              ),
-            );
-          }
-        );
-      }
-    );
+                  ),
+                );
+              });
+        });
   }
 
   Widget _buildFloatingActionButton() {
@@ -169,7 +173,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final savedPlacesBloc = SavedPlacesBloc.of(context);
     return await showDialog(
       context: context,
-      child: SimpleDialog(
+      builder: (context) => SimpleDialog(
         title: Text(localization.savedPlacesSelectIconTitle()),
         children: <Widget>[
           Container(
@@ -190,9 +194,9 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                     );
                     savedPlacesBloc.inReplaceLocation
                         .add(<String, TrufiLocation>{
-                          'oldLocation': savedPlace,
-                          'newLocation': newLocation
-                        });
+                      'oldLocation': savedPlace,
+                      'newLocation': newLocation
+                    });
                     setState(() {});
                     Navigator.pop(context);
                   },

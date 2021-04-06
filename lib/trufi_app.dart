@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -45,9 +45,9 @@ class TrufiApp extends StatelessWidget {
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: BlocProvider<SavedPlacesBloc>(
-                      bloc: SavedPlacesBloc(context),
-                      child: AppLifecycleReactor(
-                        child: LocalizedMaterialApp(
+                    bloc: SavedPlacesBloc(context),
+                    child: AppLifecycleReactor(
+                      child: LocalizedMaterialApp(
                         theme,
                         localization,
                       ),
@@ -145,11 +145,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             );
           },
           localizationsDelegates: [
-            TrufiLocalizationsDelegate(
-              snapshot.data,
-              widget.localization,
-            ),
-            TrufiMaterialLocalizationsDelegate(snapshot.data),
+            AppLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: supportedLocales,

@@ -4,6 +4,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,8 +66,8 @@ void main() async {
   ]);
 
   // Email
-  trufiCfg.email.feedback = globalCfg.getString("emailFeedback");
-  trufiCfg.email.info = globalCfg.getString("emailInfo");
+  trufiCfg.email.feedback = globalCfg.get("emailFeedback");
+  trufiCfg.email.info = globalCfg.get("emailInfo");
 
   // Image
   trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
@@ -122,29 +123,22 @@ void main() async {
   ]);
 
   // Url
-  trufiCfg.url.otpEndpoint = globalCfg.getString("urlOtpEndpoint");
-  trufiCfg.url.tilesStreetsEndpoint = globalCfg.getString("urlTilesStreetsEndpoint");
-  trufiCfg.url.tilesSatelliteEndpoint = globalCfg.getString("urlTilesSatelliteEndpoint");
-  trufiCfg.url.tilesTerrainEndpoint = globalCfg.getString("urlTilesTerrainEndpoint");
-  trufiCfg.url.adsEndpoint = globalCfg.getString("urlAdsEndpoint");
-  trufiCfg.url.routeFeedback = globalCfg.getString("urlRouteFeedback");
-  trufiCfg.url.donate = globalCfg.getString("urlDonate");
-  trufiCfg.url.website = globalCfg.getString("urlWebsite");
-  trufiCfg.url.facebook = globalCfg.getString("urlFacebook");
-  trufiCfg.url.twitter = globalCfg.getString("urlTwitter");
-  trufiCfg.url.instagram = globalCfg.getString("urlInstagram");
-  trufiCfg.url.share = globalCfg.getString("urlShare");
-
-  // Colors
-  final theme = ThemeData(
-    primaryColor: const Color(0xff263238),
-    primaryColorLight: const Color(0xffeceff1),
-    accentColor: const Color(0xffd81b60),
-    backgroundColor: Colors.white,
-  );
+  trufiCfg.url.otpEndpoint = globalCfg.get("urlOtpEndpoint");
+  trufiCfg.url.tilesStreetsEndpoint =
+      globalCfg.get("urlTilesStreetsEndpoint");
+  trufiCfg.url.tilesSatelliteEndpoint =
+      globalCfg.get("urlTilesSatelliteEndpoint");
+  trufiCfg.url.tilesTerrainEndpoint =
+      globalCfg.get("urlTilesTerrainEndpoint");
+  trufiCfg.url.adsEndpoint = globalCfg.get("urlAdsEndpoint");
+  trufiCfg.url.routeFeedback = globalCfg.get("urlRouteFeedback");
+  trufiCfg.url.donate = globalCfg.get("urlDonate");
+  trufiCfg.url.website = globalCfg.get("urlWebsite");
+  trufiCfg.url.facebook = globalCfg.get("urlFacebook");
+  trufiCfg.url.twitter = globalCfg.get("urlTwitter");
+  trufiCfg.url.instagram = globalCfg.get("urlInstagram");
+  trufiCfg.url.share = globalCfg.get("urlShare");
 
   // Run app
-  runApp(
-    TrufiApp(theme: theme)
-  );
+  runApp(TrufiApp(theme: trufiTheme));
 }

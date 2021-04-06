@@ -1,0 +1,166 @@
+{
+  "@@locale": "en",
+  "aboutContent": "We are a bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
+  "aboutLicenses": "Licenses",
+  "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.",
+  "alertLocationServicesDeniedMessage": "Please make sure your device has GPS and the Location settings are activated.",
+  "alertLocationServicesDeniedTitle": "No location",
+  "appReviewDialogButtonAccept": "Write review",
+  "appReviewDialogButtonDecline": "Not now",
+  "appReviewDialogContent": "Support us with a review on the Google Play Store.",
+  "appReviewDialogTitle": "Enjoying Trufi?",
+  "chooseLocationPageSubtitle": "Pan & zoom map under pin",
+  "chooseLocationPageTitle": "Choose a point",
+  "commonCancel": "Cancel",
+  "commonDestination": "Destination",
+  "commonError": "Error",
+  "commonFailLoading": "Failed to load data",
+  "commonGoOffline": "Go offline",
+  "commonGoOnline": "Go online",
+  "commonNoInternet": "No internet connection.",
+  "commonOK": "OK",
+  "commonOrigin": "Origin",
+  "commonSave": "Save",
+  "commonUnknownError": "Unknown error",
+  "description": "The best way to travel with trufis, micros and busses through Cochabamba.",
+  "donate": "Donate",
+  "errorAmbiguousDestination": "The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.",
+  "errorAmbiguousOrigin": "The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.",
+  "errorAmbiguousOriginDestination": "Both origin and destination are ambiguous. Please select from the following options, or be more specific.",
+  "errorNoBarrierFree": "Both origin and destination are not wheelchair accessible",
+  "errorNoTransitTimes": "No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.",
+  "errorOutOfBoundary": "Trip is not possible. You might be trying to plan a trip outside the map data boundary.",
+  "errorPathNotFound": "Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).",
+  "errorServerCanNotHandleRequest": "The request has errors that the server is not willing or able to process.",
+  "errorServerTimeout": "The trip planner is taking way too long to process your request. Please try again later.",
+  "errorServerUnavailable": "We're sorry. The trip planner is temporarily unavailable. Please try again later.",
+  "errorTrivialDistance": "Origin is within a trivial distance of the destination.",
+  "errorUnknownDestination": "Destination is unknown. Can you be a bit more descriptive?",
+  "errorUnknownOrigin": "Origin is unknown. Can you be a bit more descriptive?",
+  "errorUnknownOriginDestination": "Both origin and destination are unknown. Can you be a bit more descriptive?",
+  "feedbackContent": "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",
+  "feedbackTitle": "Send us an E-mail",
+  "followOnFacebook": "Follow us on Facebook",
+  "followOnInstagram": "Follow us on Instagram",
+  "followOnTwitter": "Follow us on Twitter",
+  "instructionDistanceKm": "{value} km",
+  "@instructionDistanceKm": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "instructionDistanceMeters": "{value} m",
+  "@instructionDistanceMeters": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "instructionDurationMinutes": "{value} min",
+  "@instructionDurationMinutes": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "instructionJunction": "{street1} and {street2}",
+  "@instructionJunction": {
+    "placeholders": {
+      "street1": {},
+      "street2": {}
+    }
+  },
+  "instructionRide": "Ride {vehicle} for {duration} ({distance}) to\n{location}",
+  "@instructionRide": {
+    "placeholders": {
+      "vehicle": {},
+      "duration": {},
+      "distance": {},
+      "location": {}
+    }
+  },
+  "instructionVehicleBus": "Bus",
+  "instructionVehicleCar": "Car",
+  "instructionVehicleGondola": "Gondola",
+  "instructionVehicleLightRail": "Light Rail Train",
+  "instructionVehicleMicro": "Micro",
+  "instructionVehicleMinibus": "Minibus",
+  "instructionVehicleTrufi": "Trufi",
+  "instructionWalk": "Walk ${duration} (${distance}) to\n${location}",
+  "@instructionWalk": {
+    "placeholders": {
+      "duration": {},
+      "distance": {},
+      "location": {}
+    }
+  },
+  "menuAbout": "About",
+  "menuAppReview": "Rate the app",
+  "menuConnections": "Show routes",
+  "menuFeedback": "Send Feedback",
+  "menuOnline": "Online",
+  "menuShareApp": "Share the app",
+  "menuTeam": "Team",
+  "menuYourPlaces": "Your places",
+  "noRouteError": "Sorry, we could not find a route. What do you want to do?",
+  "noRouteErrorActionCancel": "Try another destination",
+  "noRouteErrorActionReportMissingRoute": "Report a missing route",
+  "noRouteErrorActionShowCarRoute": "Show route by car",
+  "readOurBlog": "Read our blog",
+  "savedPlacesSetNameLabel": "Edit name",
+  "savedPlacesEnterNameTitle": "Enter name",
+  "savedPlacesRemoveLabel": "Remove place",
+  "savedPlacesSetIconLabel": "Change symbol",
+  "savedPlacesSelectIconTitle": "Select symbol",
+  "savedPlacesSetPositionLabel": "Edit position",
+  "searchFailLoadingPlan": "Failed to load plan.",
+  "searchHintDestination": "Choose destination",
+  "searchHintOrigin": "Choose starting point",
+  "searchItemChooseOnMap": "Choose on map",
+  "searchItemNoResults": "No results",
+  "searchItemYourLocation": "Your location",
+  "searchMapMarker": "Map Marker",
+  "searchPleaseSelectDestination": "Select destination",
+  "searchPleaseSelectOrigin": "Select origin",
+  "searchTitleFavorites": "Favorites",
+  "searchTitlePlaces": "Places",
+  "searchTitleRecent": "Recent",
+  "searchTitleResults": "Search Results",
+  "shareAppText": "Download Trufi App, the public transport app for Cochabamba, at ${url}",
+  "@shareAppText": {
+    "placeholders": {
+      "url": {}
+    }
+  },
+  "tagline": "Public transportation in Cochabamba",
+  "teamContent": "We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:",
+  "teamSectionRepresentatives": "Representatives: {representatives}",
+  "@teamSectionRepresentatives": {
+    "placeholders": {
+      "representatives": {}
+    }
+  },
+  "teamSectionRoutes": "Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as ${osmContributors}.\nContact us if you want to join the OpenStreetMap community!",
+  "@teamSectionRoutes": {
+    "placeholders": {
+      "routeContributors": {}
+    }
+  },
+  "teamSectionTeam": "Team: {teamMembers}",
+  "@teamSectionTeam": {
+    "placeholders": {
+      "teamMembers": {}
+    }
+  },
+  "teamSectionTranslations": "Translations: {translators}",
+  "@teamSectionTranslations": {
+    "placeholders": {
+      "translators": {}
+    }
+  },
+  "title": "Trufi App",
+  "version": "Version ${version}",
+  "@version": {
+    "placeholders": {
+      "version": {}
+    }
+  }
+}

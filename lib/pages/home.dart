@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/async.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/widgets/colored_svg_picture.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -122,6 +120,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildFormFieldsPortrait(BuildContext context) {
+
     final localization = TrufiLocalizations.of(context).localization;
     return SafeArea(
       child: Container(
@@ -248,7 +247,6 @@ class HomePageState extends State<HomePage>
     String searchHintText,
     Widget textLeadingImage,
     Function(TrufiLocation) onSaved, {
-    TrufiLocation initialValue,
     Widget leading,
     Widget trailing,
   }) {
