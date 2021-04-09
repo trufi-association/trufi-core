@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/async.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/widgets/colored_svg_picture.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +19,7 @@ import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
 import '../plan/plan.dart';
 import '../plan/plan_empty.dart';
+import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_localizations.dart';
 import '../trufi_models.dart';
@@ -30,9 +29,15 @@ import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
-  final Widget Function(Locale locale) customWidget;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
-  const HomePage({Key key, @required this.customWidget}) : super(key: key);
+  const HomePage(
+      {Key key,
+      @required this.customOverlayWidget,
+      @required this.customBetweenFabWidget})
+      : super(key: key);
+
   @override
   HomePageState createState() => HomePageState();
 }
@@ -250,7 +255,6 @@ class HomePageState extends State<HomePage>
     String searchHintText,
     Widget textLeadingImage,
     Function(TrufiLocation) onSaved, {
-    TrufiLocation initialValue,
     Widget leading,
     Widget trailing,
   }) {
@@ -288,11 +292,16 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
-          ? PlanPage(_data.plan, _data.ad, widget.customWidget)
+          ? PlanPage(
+              _data.plan,
+              _data.ad,
+              widget.customOverlayWidget,
+              widget.customBetweenFabWidget,
+            )
           : PlanEmptyPage(
               onLongPress: _handleOnLongPress,
-              customWidget: widget.customWidget,
-            ),
+              customOverlayWidget: widget.customOverlayWidget,
+              customBetweenFabWidget: widget.customBetweenFabWidget),
     );
     if (_isFetching) {
       final children = <Widget>[

@@ -3,22 +3,27 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_localizations.dart';
 
+import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../widgets/map_type_button.dart';
 import '../widgets/your_location_button.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
 
+const double customOverlayWidgetMargin = 80;
+
 class PlanEmptyPage extends StatefulWidget {
   PlanEmptyPage({
     this.initialPosition,
     this.onLongPress,
-    @required this.customWidget,
+    @required this.customOverlayWidget,
+    @required this.customBetweenFabWidget,
   });
 
   final LatLng initialPosition;
   final LongPressCallback onLongPress;
-  final Widget Function(Locale locale) customWidget;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   PlanEmptyPageState createState() => PlanEmptyPageState();
@@ -57,13 +62,26 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       Positioned.fill(
         child: Container(
           margin: EdgeInsets.only(
-            right: 80,
+            right: customOverlayWidgetMargin,
             bottom: 60,
           ),
-          child:
-              widget.customWidget != null ? widget.customWidget(locale) : null,
+          child: widget.customOverlayWidget != null
+              ? widget.customOverlayWidget(context, locale)
+              : null,
         ),
       ),
+      Positioned.fill(
+        child: Container(
+          margin: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width - customOverlayWidgetMargin,
+            bottom: 80,
+            top: 65,
+          ),
+          child: widget.customBetweenFabWidget != null
+              ? widget.customBetweenFabWidget(context)
+              : null,
+        ),
+      )
     ]);
   }
 

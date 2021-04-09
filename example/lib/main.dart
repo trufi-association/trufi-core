@@ -150,15 +150,8 @@ void main() async {
   runApp(
     TrufiApp(
       theme: theme,
-      customWidget: (Locale locale) => Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(locale.languageCode),
-            Text(locale.countryCode),
-          ],
-        ),
-      ),
+      customOverlayWidget: (context, locale) => Placeholder(),
+      customBetweenFabWidget: (context) => Placeholder(),
     ),
   );
 }
