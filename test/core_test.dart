@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/core.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   const MethodChannel channel = MethodChannel('core');
 
   setUp(() {
