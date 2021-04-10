@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -15,13 +15,12 @@ import './pages/feedback.dart';
 import './pages/home.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
-import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
-    this.localization = const TrufiLocalizationDefault(),
+    this.localization,
   });
 
   final ThemeData theme;
@@ -145,10 +144,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             );
           },
           localizationsDelegates: [
-            AppLocalizations.delegate,
+            TrufiLocalization.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: supportedLocales,
+          supportedLocales: TrufiLocalization.supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
           home: HomePage(),

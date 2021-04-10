@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/vertical_swipe_detector.dart';
 
@@ -138,7 +138,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     Ad ad,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
 
     return Container(
       height: _animationDetailHeight.value,
@@ -153,17 +153,16 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           if (ad != null && index >= itinerary.legs.length) {
             return Row(
               children: <Widget>[
-                Icon(Icons.sentiment_very_satisfied, color: Theme.of(context).accentColor),
+                Icon(Icons.sentiment_very_satisfied,
+                    color: Theme.of(context).accentColor),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(8.0),
                     child: RichText(
                       text: TextSpan(
                           text: ad.text,
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor
-                          )
-                      ),
+                          style:
+                              TextStyle(color: Theme.of(context).accentColor)),
                     ),
                   ),
                 ),
@@ -225,7 +224,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     PlanItinerary itinerary,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return Container(
       height: _animationCostHeight.value,
       padding: EdgeInsets.only(left: 16.0, right: 10.0),
@@ -258,7 +257,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     Ad ad,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final children = List<Widget>();
     itinerary.legs.forEach((leg) {
       children.add(
@@ -267,18 +266,17 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             Icon(leg.iconData(), color: theme.primaryIconTheme.color),
             leg.mode == 'BUS'
                 ? Text(
-              " " + leg.route,
-              style: theme.primaryTextTheme.body1.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            )
+                    " " + leg.route,
+                    style: theme.primaryTextTheme.body1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : Text(
-              localization.instructionDurationMinutes(
-                  (leg.duration.ceil() / 60).ceil()),
-              style: theme.primaryTextTheme.body1,
-            ),
-            ad != null ||
-                leg != itinerary.legs.last
+                    localization.instructionDurationMinutes(
+                        (leg.duration.ceil() / 60).ceil()),
+                    style: theme.primaryTextTheme.body1,
+                  ),
+            ad != null || leg != itinerary.legs.last
                 ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
                 : Container(),
           ],
@@ -290,9 +288,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       children.add(
         Row(
           children: <Widget>[
-            Icon(Icons.sentiment_very_satisfied, color: Theme
-                .of(context)
-                .accentColor),
+            Icon(Icons.sentiment_very_satisfied,
+                color: Theme.of(context).accentColor),
           ],
         ),
       );

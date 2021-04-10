@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/saved_places_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
@@ -7,7 +8,6 @@ import '../blocs/location_provider_bloc.dart';
 import '../pages/home.dart';
 
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/trufi_drawer.dart';
 import '../widgets/set_description_dialog.dart';
@@ -60,14 +60,13 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final TrufiLocalization localization =
-        TrufiLocalizations.of(context).localization;
-    return AppBar(title: Text(localization.menuYourPlaces()));
+    final TrufiLocalization localization = TrufiLocalization.of(context);
+    return AppBar(title: Text(localization.menuYourPlaces));
   }
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final savedPlacesBloc = SavedPlacesBloc.of(context);
 
     return StreamBuilder(
@@ -102,23 +101,20 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                           itemBuilder: (BuildContext context) => [
                             PopupMenuItem(
                               value: 1,
-                              child:
-                                  Text(localization.savedPlacesSetIconLabel()),
+                              child: Text(localization.savedPlacesSetIconLabel),
                             ),
                             PopupMenuItem(
                               value: 2,
-                              child:
-                                  Text(localization.savedPlacesSetNameLabel()),
+                              child: Text(localization.savedPlacesSetNameLabel),
                             ),
                             PopupMenuItem(
                               value: 3,
                               child: Text(
-                                  localization.savedPlacesSetPositionLabel()),
+                                  localization.savedPlacesSetPositionLabel),
                             ),
                             PopupMenuItem(
                               value: 4,
-                              child:
-                                  Text(localization.savedPlacesRemoveLabel()),
+                              child: Text(localization.savedPlacesRemoveLabel),
                             ),
                           ],
                           onSelected: (int index) async {
@@ -158,7 +154,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location == null) return;
     TrufiLocation currentLocation = TrufiLocation.fromLatLng(
-      TrufiLocalizations.of(context).localization.searchItemYourLocation(),
+      TrufiLocalization.of(context).searchItemYourLocation,
       location,
     );
     dataRoute.fromPlace = currentLocation;
@@ -169,12 +165,12 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final savedPlacesBloc = SavedPlacesBloc.of(context);
     return await showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: Text(localization.savedPlacesSelectIconTitle()),
+        title: Text(localization.savedPlacesSelectIconTitle),
         children: <Widget>[
           Container(
             width: 200,

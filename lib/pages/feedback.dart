@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../widgets/trufi_drawer.dart';
 
 class FeedbackPage extends StatefulWidget {
@@ -24,21 +24,20 @@ class FeedBackPageState extends State<FeedbackPage> {
       await launch(url);
     } else {
       await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Text("Could not open mail app"),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        }
-      );
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: new Text("Could not open mail app"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     }
   }
 
@@ -53,13 +52,13 @@ class FeedBackPageState extends State<FeedbackPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
-    return AppBar(title: Text(localization.menuFeedback()));
+    final localization = TrufiLocalization.of(context);
+    return AppBar(title: Text(localization.menuFeedback));
   }
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return ListView(
       children: <Widget>[
         Container(
@@ -69,7 +68,7 @@ class FeedBackPageState extends State<FeedbackPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localization.feedbackTitle(),
+                  localization.feedbackTitle,
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -78,7 +77,7 @@ class FeedBackPageState extends State<FeedbackPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.feedbackContent(),
+                  localization.feedbackContent,
                   style: theme.textTheme.body2,
                 ),
               ),

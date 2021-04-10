@@ -1,5 +1,5 @@
 {
-  "@@locale": "en_US",
+  "@@locale": "en",
   "@@last_modified": "2019-10-24T14:23:31.541614",
   "title": "Trufi App",
   "@title": {
@@ -405,7 +405,7 @@
     "type": "text",
     "placeholders": {
       "value": {
-        "example": "10"
+        "example": 10
       }
     }
   },
@@ -415,7 +415,7 @@
     "type": "text",
     "placeholders": {
       "value": {
-        "example": "100"
+        "example": 100
       }
     }
   },
@@ -607,49 +607,5 @@
   "mapTypeLabel": "Map Type",
   "@mapTypeLabel": {
     "description": "Section title for choosing map style"
-  },
-  "mapTypeStreetsCaption": "Streets",
-  "@mapTypeStreetsCaption": {
-    "description": "Caption of streets map type"
-  },
-  "mapTypeSatelliteCaption": "Satellite",
-  "@mapTypeSatelliteCaption": {
-    "description": "Caption of satellite map type"
-  },
-  "mapTypeTerrainCaption": "Terrain",
-  "@mapTypeTerrainCaption": {
-    "description": "Caption of terrain map type"
-  },
-  "menuYourPlaces": "Your places",
-  "@menuYourPlaces": {
-    "description": "Menu item that shows the saved places"
-  },
-  "savedPlacesSetIconLabel": "Change symbol",
-  "@savedPlacesSetIconLabel": {
-    "description": "Label of change symbol option of a saved place"
-  },
-  "savedPlacesSetNameLabel": "Edit name",
-  "@savedPlacesSetNameLabel": {
-    "description": "Label of edit name option of a saved place"
-  },
-  "savedPlacesSetPositionLabel": "Edit position",
-  "@savedPlacesSetPositionLabel": {
-    "description": "Label of edit position option of a saved place"
-  },
-  "savedPlacesRemoveLabel": "Remove place",
-  "@savedPlacesRemoveLabel": {
-    "description": "Label of remove option of a saved place"
-  },
-  "savedPlacesSelectIconTitle": "Select symbol",
-  "@savedPlacesSelectIconTitle": {
-    "description": "Title of symbol change dialog of a saved place"
-  },
-  "savedPlacesEnterNameTitle": "Enter name",
-  "@savedPlacesEnterNameTitle": {
-    "description": "Title of name edit dialog"
-  },
-  "commonSave": "Save",
-  "@commonSave": {
-    "description": "Save button label"
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
@@ -55,7 +55,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
 
   Widget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return AppBar(
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,14 +64,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localization.chooseLocationPageTitle(),
+              text: localization.chooseLocationPageTitle,
               style: theme.primaryTextTheme.body1,
             ),
           ),
           RichText(
             maxLines: 2,
             text: TextSpan(
-              text: localization.chooseLocationPageSubtitle(),
+              text: localization.chooseLocationPageSubtitle,
               style: theme.primaryTextTheme.caption,
             ),
           ),
@@ -85,7 +85,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
               child: RichText(
                 maxLines: 1,
                 text: TextSpan(
-                  text: localization.commonOK(),
+                  text: localization.commonOK,
                   style: theme.primaryTextTheme.button,
                 ),
               ),

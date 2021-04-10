@@ -11,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/location/location_form_field.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
-import 'package:trufi_core/trufi_localizations.dart';
 
 import 'image_tile.dart';
 import 'mock_http_client.dart';
@@ -41,7 +40,6 @@ void main() {
         accentColor: const Color(0xffd81b60),
         backgroundColor: Colors.white,
       ),
-      localization: const TrufiLocalizationDefault(),
     ));
 
     await tester.pumpAndSettle();

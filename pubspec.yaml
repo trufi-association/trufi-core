@@ -13,26 +13,26 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  app_review: 2.1.1
-  cupertino_icons: 1.0.0
+  app_review: ^2.1.1+1
+  cupertino_icons: ^1.0.2
   diff_match_patch: 0.3.0
-  flare_flutter: 2.0.6
-  flutter_compass: 0.4.3
-  flutter_map: 0.10.1+1
-  flutter_svg: 0.19.3
-  geolocator: ^6.1.4+1
-  google_api_availability: 2.0.4
+  flare_flutter: ^3.0.0
+  flutter_compass: ^0.6.0
+  flutter_map: ^0.12.0
+  flutter_svg: ^0.21.0+1
+  geolocator: ^7.0.1
+  google_api_availability: ^3.0.1
   http: 0.13.1
   intl: 0.17.0
-  mockito: 4.1.2
+  mockito: ^4.1.4
   package_info: 2.0.0
-  path_provider: 1.6.18
-  permission_handler: 4.4.0+hotfix.4
-  rxdart: 0.24.1
-  share: 0.6.5+2
-  shared_preferences: 0.5.12
-  sprintf: 5.0.0
-  synchronized: 2.2.0+2
+  path_provider: ^2.0.1
+  permission_handler: ^6.1.1
+  rxdart: ^0.26.0
+  share: ^2.0.1
+  shared_preferences: ^2.0.5
+  sprintf: ^6.0.0
+  synchronized: ^3.0.0
   url_launcher: 6.0.3
   uuid: 2.2.2
 
