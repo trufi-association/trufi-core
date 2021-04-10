@@ -18,16 +18,21 @@ import './pages/team.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
+typedef LocaleWidgetBuilder = Widget Function(
+    BuildContext context, Locale locale);
+
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
     this.localization = const TrufiLocalizationDefault(),
-    this.customWidget,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
   });
 
   final ThemeData theme;
   final TrufiLocalization localization;
-  final Widget Function(Locale locale) customWidget;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,8 @@ class TrufiApp extends StatelessWidget {
                       child: LocalizedMaterialApp(
                         theme,
                         localization,
-                        customWidget,
+                        customOverlayWidget,
+                        customBetweenFabWidget,
                       ),
                     ),
                   ),
@@ -118,12 +124,14 @@ class LocalizedMaterialApp extends StatefulWidget {
   LocalizedMaterialApp(
     this.theme,
     this.localization,
-    this.customWidget,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
   );
 
   final ThemeData theme;
   final TrufiLocalization localization;
-  final Widget Function(Locale locale) customWidget;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -160,7 +168,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           supportedLocales: supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
-          home: HomePage(customWidget: widget.customWidget),
+          home: HomePage(
+            customOverlayWidget: widget.customOverlayWidget,
+            customBetweenFabWidget: widget.customBetweenFabWidget,
+          ),
         );
       },
     );

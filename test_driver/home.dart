@@ -5,5 +5,12 @@ import 'package:trufi_core/trufi_app.dart';
 
 void main() {
   enableFlutterDriverExtension();
-  runApp(TrufiApp());
+  runApp(TrufiApp(
+    theme: ThemeData(
+      primaryColor: const Color(0xff263238),
+      primaryColorLight: const Color(0xffeceff1),
+      accentColor: const Color(0xffd81b60),
+      backgroundColor: Colors.white,
+    ),
+  ));
 }
