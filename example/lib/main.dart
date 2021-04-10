@@ -4,7 +4,6 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
-import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -124,12 +123,10 @@ void main() async {
 
   // Url
   trufiCfg.url.otpEndpoint = globalCfg.get("urlOtpEndpoint");
-  trufiCfg.url.tilesStreetsEndpoint =
-      globalCfg.get("urlTilesStreetsEndpoint");
+  trufiCfg.url.tilesStreetsEndpoint = globalCfg.get("urlTilesStreetsEndpoint");
   trufiCfg.url.tilesSatelliteEndpoint =
       globalCfg.get("urlTilesSatelliteEndpoint");
-  trufiCfg.url.tilesTerrainEndpoint =
-      globalCfg.get("urlTilesTerrainEndpoint");
+  trufiCfg.url.tilesTerrainEndpoint = globalCfg.get("urlTilesTerrainEndpoint");
   trufiCfg.url.adsEndpoint = globalCfg.get("urlAdsEndpoint");
   trufiCfg.url.routeFeedback = globalCfg.get("urlRouteFeedback");
   trufiCfg.url.donate = globalCfg.get("urlDonate");
@@ -139,6 +136,14 @@ void main() async {
   trufiCfg.url.instagram = globalCfg.get("urlInstagram");
   trufiCfg.url.share = globalCfg.get("urlShare");
 
+  // Colors
+  final theme = ThemeData(
+    primaryColor: const Color(0xff263238),
+    primaryColorLight: const Color(0xffeceff1),
+    accentColor: const Color(0xffd81b60),
+    backgroundColor: Colors.white,
+  );
+
   // Run app
-  runApp(TrufiApp(theme: trufiTheme));
+  runApp(TrufiApp(theme: theme));
 }
