@@ -3,6 +3,7 @@
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/trufi-association/trufi-app/issues)
 [![Twitter Follow](https://img.shields.io/twitter/follow/TrufiAssoc?style=social)](https://twitter.com/TrufiAssoc)
+[![Flutter Test](https://github.com/trufi-association/trufi-core/actions/workflows/flutter_test.yml/badge.svg?branch=master)](https://github.com/trufi-association/trufi-core/actions/workflows/flutter_test.yml)
 
 A cross-plattform multi-modal public transport app based on open data.
 Built in [Flutter](https://flutter.dev/) by the [Trufi Association](https://www.trufi-association.org/), a social startup.
@@ -24,7 +25,7 @@ Please contact the [Trufi Association](https://www.trufi-association.org/contact
 
 ## Getting started
 
-Trufi Core is the base dependency used to create your public transport app. Have a look at the [example](example/) implementation that contains further instructions.
+Trufi Core is the base dependency used to create your public transport app. Have a look at the [example](example) implementation that contains further instructions.
 
 ## Complementary projects
 

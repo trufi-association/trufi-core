@@ -7,15 +7,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:trufi_core/blocs/bloc_provider.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_core/blocs/history_locations_bloc.dart';
-import 'package:trufi_core/blocs/location_provider_bloc.dart';
 import 'package:trufi_core/location/location_form_field.dart';
-import 'package:trufi_core/pages/home.dart';
+import 'package:trufi_core/trufi_app.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_localizations.dart';
 
 import 'image_tile.dart';
@@ -29,42 +24,29 @@ void main() {
     });
   });
 
-  final localName = "en";
-  final localization = TrufiLocalizationDefault();
-
   testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      StatefulBuilder(
-        builder: (
-          BuildContext context,
-          StateSetter setState,
-        ) {
-          return BlocProvider<LocationProviderBloc>(
-            bloc: LocationProviderBloc(),
-            child: BlocProvider<FavoriteLocationsBloc>(
-              bloc: FavoriteLocationsBloc(context),
-              child: BlocProvider<HistoryLocationsBloc>(
-                bloc: HistoryLocationsBloc(context),
-                child: MaterialApp(
-                  localizationsDelegates: [
-                    TrufiLocalizationsDelegate(
-                      localName,
-                      localization,
-                    ),
-                    TrufiMaterialLocalizationsDelegate(localName),
-                    GlobalWidgetsLocalizations.delegate,
-                  ],
-                  home: HomePage(),
-                ),
-              ),
-            ),
-          );
-        },
+    final trufiCfg = TrufiConfiguration();
+    trufiCfg.languages.addAll([
+      TrufiConfigurationLanguage(
+        languageCode: "en",
+        countryCode: "US",
+        displayName: "English",
       ),
-    );
+    ]);
 
-    await tester.pump();
-    HomeRobot().seesMyLocationFab().seesAppBar().seesFormFields();
+    await tester.pumpWidget(TrufiApp(
+      theme: ThemeData(
+        primaryColor: const Color(0xff263238),
+        primaryColorLight: const Color(0xffeceff1),
+        accentColor: const Color(0xffd81b60),
+        backgroundColor: Colors.white,
+      ),
+      localization: const TrufiLocalizationDefault(),
+    ));
+
+    await tester.pumpAndSettle();
+    final Finder formField = find.byType(LocationFormField);
+    expect(formField, findsNWidgets(2));
   });
 }
 
