@@ -137,6 +137,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       stream: preferencesBloc.outChangeLanguageCode,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return MaterialApp(
+          locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {
             return new TrufiDrawerRoute(
               builder: routes[settings.name],
@@ -145,6 +146,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           },
           localizationsDelegates: [
             TrufiLocalization.delegate,
+            GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
