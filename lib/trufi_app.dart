@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
@@ -18,13 +19,9 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 
 class TrufiApp extends StatelessWidget {
-  TrufiApp({
-    @required this.theme,
-    this.localization,
-  });
+  TrufiApp({@required this.theme});
 
   final ThemeData theme;
-  final TrufiLocalization localization;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +43,7 @@ class TrufiApp extends StatelessWidget {
                   child: BlocProvider<SavedPlacesBloc>(
                     bloc: SavedPlacesBloc(context),
                     child: AppLifecycleReactor(
-                      child: LocalizedMaterialApp(
-                        theme,
-                        localization,
-                      ),
+                      child: LocalizedMaterialApp(theme),
                     ),
                   ),
                 ),
@@ -111,13 +105,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  LocalizedMaterialApp(
-    this.theme,
-    this.localization,
-  );
+  LocalizedMaterialApp(this.theme);
 
   final ThemeData theme;
-  final TrufiLocalization localization;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -135,6 +125,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
     };
     return StreamBuilder(
       stream: preferencesBloc.outChangeLanguageCode,
+      initialData: "en",
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: snapshot.data),
@@ -147,6 +138,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           localizationsDelegates: [
             TrufiLocalization.delegate,
             GlobalMaterialLocalizations.delegate,
+            QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
