@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/trufi_drawer.dart';
@@ -33,6 +34,9 @@ class AboutPageState extends State<AboutPage> {
     final TextStyle linkStyle = theme.textTheme.body2.copyWith(
       color: theme.accentColor,
     );
+    final customTranslations = TrufiConfiguration().customTranslations;
+    final currentLocale = Localizations.localeOf(context);
+
     return ListView(
       children: <Widget>[
         Container(
@@ -42,7 +46,8 @@ class AboutPageState extends State<AboutPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localization.title,
+                  customTranslations.get(customTranslations.title,
+                      currentLocale, localization.title),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -69,7 +74,8 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.tagline,
+                  customTranslations.get(customTranslations.title,
+                      currentLocale, localization.tagline),
                   style: theme.textTheme.subhead.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -89,7 +95,11 @@ class AboutPageState extends State<AboutPage> {
                   onPressed: () {
                     return showLicensePage(
                       context: context,
-                      applicationName: localization.title,
+                      applicationName: customTranslations.get(
+                        customTranslations.title,
+                        currentLocale,
+                        localization.title,
+                      ),
                     );
                   },
                 ),

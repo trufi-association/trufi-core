@@ -1,9 +1,10 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
 class TrufiConfiguration {
-  static TrufiConfiguration _singleton = new TrufiConfiguration._internal();
+  static TrufiConfiguration _singleton = TrufiConfiguration._internal();
 
   factory TrufiConfiguration() {
     return _singleton;
@@ -18,10 +19,15 @@ class TrufiConfiguration {
   final url = TrufiConfigurationUrl();
   final map = TrufiConfigurationMap();
   final attribution = TrufiConfigurationAttribution();
-  final List<TrufiConfigurationLanguage> languages = List();
+  final customTranslations = TrufiCustomLocalizations();
+
+  // TODO: Could be removed by a Collection of Locale
+  final List<TrufiConfigurationLanguage> languages = [];
 
   var minimumReviewWorthyActionCount = 3;
 }
+
+class TrufiCustomLocalizations extends TrufiCustomLocalization {}
 
 class TrufiConfigurationAnimation {
   FlareActor loading;

@@ -33,6 +33,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   void initState() {
     super.initState();
 
+    // TODO: Should have some kind of fallback image
     bgImage = AssetImage(TrufiConfiguration().image.drawerBackground);
   }
 
@@ -48,6 +49,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final cfg = TrufiConfiguration();
+    final currentLocale = Localizations.localeOf(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -67,13 +70,21 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  localization.title,
+                  cfg.customTranslations.get(
+                    cfg.customTranslations.title,
+                    currentLocale,
+                    localization.title,
+                  ),
                   style: theme.primaryTextTheme.title,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
-                    localization.tagline,
+                    cfg.customTranslations.get(
+                      cfg.customTranslations.tagline,
+                      currentLocale,
+                      localization.tagline,
+                    ),
                     style: theme.primaryTextTheme.subhead,
                   ),
                 ),

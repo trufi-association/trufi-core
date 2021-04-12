@@ -136,6 +136,8 @@ void main() async {
   trufiCfg.url.instagram = globalCfg.get("urlInstagram");
   trufiCfg.url.share = globalCfg.get("urlShare");
 
+  trufiCfg.customTranslations.title = {"en": "Wicked", "de": "Place"};
+
   // Colors
   final theme = ThemeData(
     primaryColor: const Color(0xff263238),
