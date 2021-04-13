@@ -45,4 +45,13 @@ abstract class TrufiCustomLocalization {
   /// In en_US, this message translates to:
   /// **'The best way to travel with trufis, micros and busses through Cochabamba.'**
   Map<Locale, String> description;
+
+  /// Text displayed on the about page
+  ///
+  /// In en_US, this message translates to:
+  /// **'We are a bolivian and international team of people that love and
+  /// support public transport. We have developed this app to make it easy
+  /// for people to use the transport system in Cochabamba and the
+  /// surrounding area.'**
+  Map<Locale, String> aboutContent;
 }
