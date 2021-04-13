@@ -133,7 +133,6 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
               .languageCode ??
           "en",
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        print(snapshot.data);
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {

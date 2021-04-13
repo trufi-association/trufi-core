@@ -269,7 +269,6 @@ class _QuMaterialLocalizationsDelegate
       patterns: quLocaleDatePatterns,
       symbols: intl.DateSymbols.deserializeFromMap(quDateSymbols),
     );
-    print(localeName);
     return SynchronousFuture<MaterialLocalizations>(
       QuMaterialLocalizations(
         // The `intl` library's NumberFormat class is generated from CLDR data
