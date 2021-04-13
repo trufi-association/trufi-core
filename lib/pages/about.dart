@@ -84,7 +84,8 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.aboutContent,
+                  customTranslations.get(customTranslations.aboutContent,
+                      currentLocale, localization.aboutContent),
                   style: theme.textTheme.body2,
                 ),
               ),
