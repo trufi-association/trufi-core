@@ -50,4 +50,4 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
 
 ## Custom Translations for Host App
-If you need to overwrite translations of the Host app checkout the following article [here](https://github.com/trufi-association/trufi-core/wiki/Custom-Translations-from-the-Host-System).
+If you need to overwrite translations of the Host app checkout the following article [here](https://github.com/trufi-association/trufi-core/wiki/Custom-Translations).
