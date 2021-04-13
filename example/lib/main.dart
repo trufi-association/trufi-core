@@ -136,6 +136,8 @@ void main() async {
   trufiCfg.url.instagram = globalCfg.get("urlInstagram");
   trufiCfg.url.share = globalCfg.get("urlShare");
 
+  _setupCustomTrufiLocalization();
+
   // Colors
   final theme = ThemeData(
     primaryColor: const Color(0xff263238),
@@ -146,4 +148,19 @@ void main() async {
 
   // Run app
   runApp(TrufiApp(theme: theme));
+}
+
+/// This is an example on how to customize your application
+/// We override the singleton of [TrufiConfiguration.customTranslations] with
+/// the corresponding Map of Locale to TranslationString
+void _setupCustomTrufiLocalization() {
+  TrufiConfiguration().customTranslations
+    ..title = {
+      Locale("de"): "Trufi App (German)",
+      Locale("en", "US"): "Trufi App (English)"
+    }
+    ..tagline = {
+      Locale("de"): "Tagline (German)",
+      Locale("en", "US"): "Tagline (English)"
+    };
 }
