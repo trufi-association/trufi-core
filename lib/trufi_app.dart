@@ -128,9 +128,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
     return StreamBuilder(
       stream: preferencesBloc.outChangeLanguageCode,
       initialData: TrufiConfiguration()
-          .languages
-          .firstWhere((element) => element.isDefault)
-          .languageCode,
+              .languages
+              .firstWhere((element) => element.isDefault)
+              .languageCode ??
+          "en",
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         print(snapshot.data);
         return MaterialApp(

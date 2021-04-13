@@ -11,10 +11,10 @@ void main() {
 
     trufiCfg.languages.addAll([
       TrufiConfigurationLanguage(
-        languageCode: "en",
-        countryCode: "US",
-        displayName: "English",
-      ),
+          languageCode: "en",
+          countryCode: "US",
+          displayName: "English",
+          isDefault: true,),
     ]);
 
     await mockNetworkImagesFor(() async => await tester.pumpWidget(TrufiApp(
