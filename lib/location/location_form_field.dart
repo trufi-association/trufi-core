@@ -8,7 +8,6 @@ class LocationFormField extends FormField<TrufiLocation> {
     Key key,
     FormFieldSetter<TrufiLocation> onSaved,
     String hintText,
-    String searchHintText,
     Widget leadingImage,
   }) : super(
           key: key,
