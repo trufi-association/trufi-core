@@ -1,0 +1,1058 @@
+{
+    "@@locale": "ee",
+    "@@last_modified": "2021-04-13T10:59:56+02:00",
+    "title": "Trufi dorworfea",
+    "@title": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "The application's name"
+            }
+        ]
+    },
+    "tagline": "hahomorzorzor le Cochabamba",
+    "@tagline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A short marketing sentence that describes the app"
+            }
+        ],
+        "placeholders": {
+            "city": {
+                "example": "Karlsruhe"
+            }
+        }
+    },
+    "description": "morzorzor adoduia le Chombamba yenye lori did kple lori sue wo",
+    "@description": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A sentence that describes the application's purpose"
+            }
+        ],
+        "placeholders": {
+            "cityName": {
+                "example": "Karlsruhe"
+            }
+        }
+    },
+    "version": "nutinya",
+    "@version": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "The application's version"
+            }
+        ],
+        "placeholders": {
+            "version": {
+                "example": "1.0"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{version} example: 1.0",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "alertLocationServicesDeniedTitle": "tefe meli o",
+    "@alertLocationServicesDeniedTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title of dialog that explains that access to location services was denied"
+            }
+        ]
+    },
+    "alertLocationServicesDeniedMessage": "kpor egbor be GPS le wo morfoka dzi",
+    "@alertLocationServicesDeniedMessage": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text of dialog that explains that access to location services was denied"
+            }
+        ]
+    },
+    "commonOK": "enyo",
+    "@commonOK": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "OK button label"
+            }
+        ]
+    },
+    "commonCancel": "tutu",
+    "@commonCancel": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Cancel button label"
+            }
+        ]
+    },
+    "commonGoOffline": "dzo le ka dzi",
+    "@commonGoOffline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Go offline button label"
+            }
+        ]
+    },
+    "commonGoOnline": "va ka dzi",
+    "@commonGoOnline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Go online button label"
+            }
+        ]
+    },
+    "commonDestination": "afisi yim nele",
+    "@commonDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Destination field label"
+            }
+        ]
+    },
+    "commonOrigin": "afisi netso",
+    "@commonOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Origin field label"
+            }
+        ]
+    },
+    "commonNoInternet": "ka meli o",
+    "@commonNoInternet": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when internet connection is lost"
+            }
+        ]
+    },
+    "commonFailLoading": "data meva o",
+    "@commonFailLoading": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when data could not be loaded"
+            }
+        ]
+    },
+    "commonUnknownError": "aforku manyamanya",
+    "@commonUnknownError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when an unknown error has occured"
+            }
+        ]
+    },
+    "commonError": "aforku",
+    "@commonError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when an error has occured"
+            }
+        ]
+    },
+    "noRouteError": "morla meli o. Nuka na wor",
+    "@noRouteError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when no route could be found after a route search"
+            }
+        ]
+    },
+    "noRouteErrorActionCancel": "tsor afisi neyina bubu",
+    "@noRouteErrorActionCancel": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to try another destination when no route could be found"
+            }
+        ]
+    },
+    "noRouteErrorActionReportMissingRoute": "de gbefa morbubu",
+    "@noRouteErrorActionReportMissingRoute": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to report a missing route when no route could be found"
+            }
+        ]
+    },
+    "noRouteErrorActionShowCarRoute": "fia mor kple lori",
+    "@noRouteErrorActionShowCarRoute": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to show the car route when no route could be found"
+            }
+        ]
+    },
+    "errorServerUnavailable": "morzorzordzikporla meli o.woe emegbe",
+    "@errorServerUnavailable": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when the trip planning server was not available"
+            }
+        ]
+    },
+    "errorOutOfBoundary": "morzorzor la matenu ayi o. morzorzorla mele mofiatata dzi o",
+    "@errorOutOfBoundary": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries"
+            }
+        ]
+    },
+    "errorPathNotFound": "morzorzor la matenu adzedzi o. afisi netso alo afisineyina be le dzadze o",
+    "@errorPathNotFound": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible"
+            }
+        ]
+    },
+    "errorNoTransitTimes": "Morzor xeyixi meli o. Nkeke si nedo la vayi alo ele etsor me alo wu melina xeyixi si netia la o.",
+    "@errorNoTransitTimes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time"
+            }
+        ]
+    },
+    "errorServerTimeout": "morzorzordzikporla fe dorworwor mele tsortsorm o.gawoe ake.",
+    "@errorServerTimeout": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the server is taking too long to respond"
+            }
+        ]
+    },
+    "errorTrivialDistance": "afisi netso la tso kpuie nutor",
+    "@errorTrivialDistance": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because origin and destination are too close to each other"
+            }
+        ]
+    },
+    "errorServerCanNotHandleRequest": "nane gble tso wi biabialanu,dorworfea mese egorme o",
+    "@errorServerCanNotHandleRequest": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the request had errors"
+            }
+        ]
+    },
+    "errorUnknownOrigin": "afisi netso la mele nyanya me o,doe do ake",
+    "@errorUnknownOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the origin was not found"
+            }
+        ]
+    },
+    "errorUnknownDestination": "afisi neyina la mele nyanyame o,doe do ake",
+    "@errorUnknownDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the destination was not found"
+            }
+        ]
+    },
+    "errorUnknownOriginDestination": "afisi netso kple afisi neyina la meli o. gbugbor na dorwo do",
+    "@errorUnknownOriginDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
+            }
+        ]
+    },
+    "errorNoBarrierFree": "bafakeke matenu ayi afisi netso kple afisi neyina o",
+    "@errorNoBarrierFree": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible"
+            }
+        ]
+    },
+    "errorAmbiguousOrigin": "morzorzordzikporla la menya afisi yim nele o. tsor esiawo dome tor deka alo de afisi yim nele la gorme nyuie",
+    "@errorAmbiguousOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified origin is ambiguous"
+            }
+        ]
+    },
+    "errorAmbiguousDestination": "morzorzordzikporla la meya afisi yim nele o. tsor le esiawo dome alo nlor bubu",
+    "@errorAmbiguousDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified destination is ambiguous"
+            }
+        ]
+    },
+    "errorAmbiguousOriginDestination": "gormesese melina afisi neyine kple afisi netso o.tso esiawo dome tor deka alo de afisi yim nele la gorme nyuie",
+    "@errorAmbiguousOriginDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+            }
+        ]
+    },
+    "searchHintOrigin": "tsor gorme dzefe",
+    "@searchHintOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the origin field (in search state)"
+            }
+        ]
+    },
+    "searchHintDestination": "tsor afisi neyina",
+    "@searchHintDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the destination field (in search state)"
+            }
+        ]
+    },
+    "searchItemChooseOnMap": "tsor tefea le nutata la dzi",
+    "@searchItemChooseOnMap": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search option that allows to choose a point on the map"
+            }
+        ]
+    },
+    "searchItemYourLocation": "tefe si nele",
+    "@searchItemYourLocation": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search option that allows to use the current user location"
+            }
+        ]
+    },
+    "searchItemNoResults": "nudodo adeke o",
+    "@searchItemNoResults": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when no results were found for the search term that was provided"
+            }
+        ]
+    },
+    "searchTitlePlaces": "tefewo",
+    "@searchTitlePlaces": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for common places"
+            }
+        ]
+    },
+    "searchTitleRecent": "enyide",
+    "@searchTitleRecent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for recent location"
+            }
+        ]
+    },
+    "searchTitleFavorites": "veviwo",
+    "@searchTitleFavorites": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for locations marked as favorites"
+            }
+        ]
+    },
+    "searchTitleResults": "di nudodowo",
+    "@searchTitleResults": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for results found for the provided search term"
+            }
+        ]
+    },
+    "searchPleaseSelectOrigin": "tsor afisi ne tso",
+    "@searchPleaseSelectOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the origin field (in map-visible state)"
+            }
+        ]
+    },
+    "searchPleaseSelectDestination": "tsor afisi neyina",
+    "@searchPleaseSelectDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the destination field (in map-visible state)"
+            }
+        ]
+    },
+    "searchFailLoadingPlan": "mekor dzidzedze o",
+    "@searchFailLoadingPlan": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when the response of the trip planning request could not be received"
+            }
+        ]
+    },
+    "searchMapMarker": "nutata tanu",
+    "@searchMapMarker": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Location name displayed in search fields that represents a location choosen on the map"
+            }
+        ]
+    },
+    "chooseLocationPageTitle": "tsor tefe deka",
+    "@chooseLocationPageTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Page title when choosing a location on the map"
+            }
+        ]
+    },
+    "chooseLocationPageSubtitle": "keke mortata la.",
+    "@chooseLocationPageSubtitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Page subtitle when choosing a location on the map"
+            }
+        ]
+    },
+    "instructionWalk": "zor",
+    "@instructionWalk": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary instruction (walking)"
+            }
+        ],
+        "placeholders": {
+            "distance": {
+                "example": "500 m"
+            },
+            "duration": {
+                "example": "10 min"
+            },
+            "location": {
+                "example": "Avenida Heroínas"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{duration} example: 10 min",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{distance} example: 500 m",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{location} example: Avenida Heroínas",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionRide": "za {vehicle} abe {duration} {distance} yi {location} nkor",
+    "@instructionRide": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary instruction (vehicle)"
+            }
+        ],
+        "placeholders": {
+            "vehicle": {
+                "example": "Bus 100"
+            },
+            "distance": {
+                "example": "500 m"
+            },
+            "duration": {
+                "example": "10 min"
+            },
+            "location": {
+                "example": "Avenida Heroínas"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{vehicle} example: Bus 100",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{duration} example: 10 min",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{distance} example: 500 m",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{location} example: Avenida Heroínas",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionVehicleBus": "lori didi",
+    "@instructionVehicleBus": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Bus)"
+            }
+        ]
+    },
+    "instructionVehicleMicro": "micro",
+    "@instructionVehicleMicro": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Micro)"
+            }
+        ]
+    },
+    "instructionVehicleMinibus": "lori sue",
+    "@instructionVehicleMinibus": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Minibus)"
+            }
+        ]
+    },
+    "instructionVehicleTrufi": "Trufi",
+    "@instructionVehicleTrufi": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Trufi)"
+            }
+        ]
+    },
+    "instructionVehicleCar": "lori",
+    "@instructionVehicleCar": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Car)"
+            }
+        ]
+    },
+    "instructionVehicleGondola": "Gondola",
+    "@instructionVehicleGondola": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Gondola)"
+            }
+        ]
+    },
+    "instructionDurationMinutes": "gafofo",
+    "@instructionDurationMinutes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg duration"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 10",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionDistanceKm": "kilom3ta",
+    "@instructionDistanceKm": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg distance (km)"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 10",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionDistanceMeters": "m3ta",
+    "@instructionDistanceMeters": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg distance (m)"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "100"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 100",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "menuConnections": "fia mor",
+    "@menuConnections": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the map\/planned trip"
+            }
+        ]
+    },
+    "menuAbout": "tso mianu",
+    "@menuAbout": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the about page"
+            }
+        ]
+    },
+    "menuTeam": "haborbor",
+    "@menuTeam": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the team page"
+            }
+        ]
+    },
+    "menuFeedback": "nami susu",
+    "@menuFeedback": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the feedback page"
+            }
+        ]
+    },
+    "menuOnline": "nor kadzi",
+    "@menuOnline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the state of online\/offline routing"
+            }
+        ]
+    },
+    "menuAppReview": "nami numetsotso",
+    "@menuAppReview": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that triggers a native widget to rate the app"
+            }
+        ]
+    },
+    "menuShareApp": "kaka dorworfea",
+    "@menuShareApp": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that triggers a native widget to rate the app"
+            }
+        ]
+    },
+    "shareAppText": "hahomorzorzor le Cochabamba{url}",
+    "@shareAppText": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text with URL that is used when sharing the app."
+            }
+        ],
+        "placeholders": {
+            "url": {
+                "example": "https:\/\/trufi.share.url"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{url} example: https:\/\/trufi.share.url",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "feedbackContent": "dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email",
+    "@feedbackContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the feedback page"
+            }
+        ]
+    },
+    "feedbackTitle": "Do email do da mi",
+    "@feedbackTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title displayed on the feedback page"
+            }
+        ]
+    },
+    "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
+    "@aboutContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the about page"
+            }
+        ]
+    },
+    "aboutLicenses": "nuse",
+    "@aboutLicenses": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to show licenses"
+            }
+        ]
+    },
+    "aboutOpenSource": "na dorworfea na tedenu wo. dorworfea le github",
+    "@aboutOpenSource": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A note about open source"
+            }
+        ]
+    },
+    "teamContent": "dorworfe siame torwo tso dukorvovome.edzibe yea zu miadome tor deka?yormi le kafomorsia dzi",
+    "@teamContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the team page, followed by a email link"
+            }
+        ]
+    },
+    "teamSectionRepresentatives": "tefenorlawo",
+    "@teamSectionRepresentatives": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of representatives"
+            }
+        ],
+        "placeholders": {
+            "representatives": {
+                "example": "Mario, Luigi"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{representatives} example: Mario, Luigi",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionTeam": "haborborme norlawo",
+    "@teamSectionTeam": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of team members"
+            }
+        ],
+        "placeholders": {
+            "teamMembers": {
+                "example": "Peach, Toad, Daisy, Yoshi"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{teamMembers} example: Peach, Toad, Daisy, Yoshi",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionTranslations": "gormedede",
+    "@teamSectionTranslations": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of translators"
+            }
+        ],
+        "placeholders": {
+            "translators": {
+                "example": "Bowser, Koopa, Gumba, Lakitu"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{translators} example: Bowser, Koopa, Gumba, Lakitu",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionRoutes": "morwo kple dorworfea nudorwolawo\nzu miadometor deka",
+    "@teamSectionRoutes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of route contributors"
+            }
+        ],
+        "placeholders": {
+            "osmContributors": {
+                "example": "Kamek, Birdo, Toadette, Bowser Jr."
+            },
+            "routeContributors": {
+                "example": "Wario, Waluigi, Rosalina"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{routeContributors} example: Wario, Waluigi, Rosalina",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{osmContributors} example: Kamek, Birdo, Toadette, Bowser Jr.",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "donate": "naanu",
+    "@donate": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Donate menu item"
+            }
+        ]
+    },
+    "readOurBlog": "xle miafe nu",
+    "@readOurBlog": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Website menu item"
+            }
+        ]
+    },
+    "followOnFacebook": "kplormido le Facebook",
+    "@followOnFacebook": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Facebook menu item"
+            }
+        ]
+    },
+    "followOnTwitter": "kplormido le Twiter",
+    "@followOnTwitter": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Twitter menu item"
+            }
+        ]
+    },
+    "followOnInstagram": "kplormido le instagram",
+    "@followOnInstagram": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Instagram menu item"
+            }
+        ]
+    },
+    "appReviewDialogTitle": "trufi de vi nawoa",
+    "@appReviewDialogTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogContent": "nlor susudede ade nami",
+    "@appReviewDialogContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Content of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogButtonDecline": "menye fifia o",
+    "@appReviewDialogButtonDecline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Decline button of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogButtonAccept": "nlor susud3d3",
+    "@appReviewDialogButtonAccept": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Accept button of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "instructionJunction": "meli o",
+    "@instructionJunction": {
+        "type": "text",
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Junction name of two streets"
+            }
+        ],
+        "placeholders": {
+            "street1": {
+                "example": "Av. Blanco Galindo"
+            },
+            "street2": {
+                "example": "Av. 16 de Julio"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{street1} example: Av. Blanco Galindo",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{street2} example: Av. 16 de Julio",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionVehicleLightRail": "gborlo",
+    "@instructionVehicleLightRail": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Light Rail Train)"
+            }
+        ]
+    },
+    "menuYourPlaces": ""
+}

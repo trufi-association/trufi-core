@@ -1,0 +1,1058 @@
+{
+    "@@locale": "fr",
+    "@@last_modified": "2021-04-13T10:59:56+02:00",
+    "title": "Trufi App",
+    "@title": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "The application's name"
+            }
+        ]
+    },
+    "tagline": "Transports en commun à Cochabamba",
+    "@tagline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A short marketing sentence that describes the app"
+            }
+        ],
+        "placeholders": {
+            "city": {
+                "example": "Karlsruhe"
+            }
+        }
+    },
+    "description": "La meilleure façon de se déplacer en trufis, micros et bus dans Cochabamba.",
+    "@description": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A sentence that describes the application's purpose"
+            }
+        ],
+        "placeholders": {
+            "cityName": {
+                "example": "Karlsruhe"
+            }
+        }
+    },
+    "version": "Version {version}",
+    "@version": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "The application's version"
+            }
+        ],
+        "placeholders": {
+            "version": {
+                "example": "1.0"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{version} example: 1.0",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "alertLocationServicesDeniedTitle": "Pas d'emplacement",
+    "@alertLocationServicesDeniedTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title of dialog that explains that access to location services was denied"
+            }
+        ]
+    },
+    "alertLocationServicesDeniedMessage": "Assurez-vous que votre appareil dispose d'un GPS et que les paramètres de localisation sont activés.",
+    "@alertLocationServicesDeniedMessage": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text of dialog that explains that access to location services was denied"
+            }
+        ]
+    },
+    "commonOK": "OK",
+    "@commonOK": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "OK button label"
+            }
+        ]
+    },
+    "commonCancel": "Annuler",
+    "@commonCancel": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Cancel button label"
+            }
+        ]
+    },
+    "commonGoOffline": "Se déconnecter",
+    "@commonGoOffline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Go offline button label"
+            }
+        ]
+    },
+    "commonGoOnline": "Se connecter",
+    "@commonGoOnline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Go online button label"
+            }
+        ]
+    },
+    "commonDestination": "Destination",
+    "@commonDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Destination field label"
+            }
+        ]
+    },
+    "commonOrigin": "Origine",
+    "@commonOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Origin field label"
+            }
+        ]
+    },
+    "commonNoInternet": "Pas de connexion Internet.",
+    "@commonNoInternet": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when internet connection is lost"
+            }
+        ]
+    },
+    "commonFailLoading": "Échec du chargement des données",
+    "@commonFailLoading": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when data could not be loaded"
+            }
+        ]
+    },
+    "commonUnknownError": "Erreur inconnue",
+    "@commonUnknownError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when an unknown error has occured"
+            }
+        ]
+    },
+    "commonError": "Erreur",
+    "@commonError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when an error has occured"
+            }
+        ]
+    },
+    "noRouteError": "Désolé, nous n'avons pas pu trouver d'itinéraire. Que voulez-vous faire?",
+    "@noRouteError": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message when no route could be found after a route search"
+            }
+        ]
+    },
+    "noRouteErrorActionCancel": "Essayer une autre destination",
+    "@noRouteErrorActionCancel": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to try another destination when no route could be found"
+            }
+        ]
+    },
+    "noRouteErrorActionReportMissingRoute": "Signaler un itinéraire manquant",
+    "@noRouteErrorActionReportMissingRoute": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to report a missing route when no route could be found"
+            }
+        ]
+    },
+    "noRouteErrorActionShowCarRoute": "Afficher l'itinéraire en voiture",
+    "@noRouteErrorActionShowCarRoute": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to show the car route when no route could be found"
+            }
+        ]
+    },
+    "errorServerUnavailable": "Nous sommes désolés. Le planificateur de trajet est temporairement indisponible. Veuillez réessayer plus tard.",
+    "@errorServerUnavailable": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when the trip planning server was not available"
+            }
+        ]
+    },
+    "errorOutOfBoundary": "Le trajet n'est pas possible. Vous essayez peut-être de planifier un trajet en dehors des limites de données cartographiques.",
+    "@errorOutOfBoundary": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries"
+            }
+        ]
+    },
+    "errorPathNotFound": "Le trajet n'est pas possible. Votre point de départ ou d'arrivée peut ne pas être accessible en toute sécurité (par exemple, vous démarrez peut-être dans une rue résidentielle reliée uniquement à une autoroute).",
+    "@errorPathNotFound": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible"
+            }
+        ]
+    },
+    "errorNoTransitTimes": "Pas de temps de transit disponible. La date peut-être dépassée ou trop tard dans le futur ou il peut ne pas y avoir de service de transit pour votre trajet au moment que vous l'avez choisi.",
+    "@errorNoTransitTimes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time"
+            }
+        ]
+    },
+    "errorServerTimeout": "Le planificateur de trajet prend beaucoup trop de temps pour traiter votre demande. Veuillez réessayer plus tard.",
+    "@errorServerTimeout": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the server is taking too long to respond"
+            }
+        ]
+    },
+    "errorTrivialDistance": "L'origine est à une distance insignifiante de la destination.",
+    "@errorTrivialDistance": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because origin and destination are too close to each other"
+            }
+        ]
+    },
+    "errorServerCanNotHandleRequest": "La demande contient des erreurs que le serveur ne veut pas ou ne peut pas traiter.",
+    "@errorServerCanNotHandleRequest": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the request had errors"
+            }
+        ]
+    },
+    "errorUnknownOrigin": "L'origine est inconnue. Pouvez-vous être un peu plus descriptif?",
+    "@errorUnknownOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the origin was not found"
+            }
+        ]
+    },
+    "errorUnknownDestination": "La destination est inconnue. Pouvez-vous être un peu plus descriptif?",
+    "@errorUnknownDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the destination was not found"
+            }
+        ]
+    },
+    "errorUnknownOriginDestination": "L'origine et la destination sont inconnues. Pouvez-vous être un peu plus descriptif?",
+    "@errorUnknownOriginDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
+            }
+        ]
+    },
+    "errorNoBarrierFree": "L'origine et la destination ne sont pas accessibles en fauteuil roulant.",
+    "@errorNoBarrierFree": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible"
+            }
+        ]
+    },
+    "errorAmbiguousOrigin": "Le planificateur de trajet n'est pas sûr du lieu de départ. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "@errorAmbiguousOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified origin is ambiguous"
+            }
+        ]
+    },
+    "errorAmbiguousDestination": "Le planificateur de trajet ne sait pas trop à quelle destination vous souhaitez aller. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "@errorAmbiguousDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified destination is ambiguous"
+            }
+        ]
+    },
+    "errorAmbiguousOriginDestination": "L'origine et la destination sont ambiguës. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "@errorAmbiguousOriginDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+            }
+        ]
+    },
+    "searchHintOrigin": "Choisissez le point de départ",
+    "@searchHintOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the origin field (in search state)"
+            }
+        ]
+    },
+    "searchHintDestination": "Choisissez une destination",
+    "@searchHintDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the destination field (in search state)"
+            }
+        ]
+    },
+    "searchItemChooseOnMap": "Choisissez sur la carte",
+    "@searchItemChooseOnMap": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search option that allows to choose a point on the map"
+            }
+        ]
+    },
+    "searchItemYourLocation": "Votre emplacement",
+    "@searchItemYourLocation": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search option that allows to use the current user location"
+            }
+        ]
+    },
+    "searchItemNoResults": "Aucun résultat",
+    "@searchItemNoResults": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when no results were found for the search term that was provided"
+            }
+        ]
+    },
+    "searchTitlePlaces": "Endroits",
+    "@searchTitlePlaces": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for common places"
+            }
+        ]
+    },
+    "searchTitleRecent": "Récent",
+    "@searchTitleRecent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for recent location"
+            }
+        ]
+    },
+    "searchTitleFavorites": "Favoris",
+    "@searchTitleFavorites": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for locations marked as favorites"
+            }
+        ]
+    },
+    "searchTitleResults": "Résultats de la recherche",
+    "@searchTitleResults": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Search section title for results found for the provided search term"
+            }
+        ]
+    },
+    "searchPleaseSelectOrigin": "Sélectionnez un point de départ",
+    "@searchPleaseSelectOrigin": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the origin field (in map-visible state)"
+            }
+        ]
+    },
+    "searchPleaseSelectDestination": "Sélectionnez la destination",
+    "@searchPleaseSelectDestination": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Placeholder text for the destination field (in map-visible state)"
+            }
+        ]
+    },
+    "searchFailLoadingPlan": "Échec du chargement du plan.",
+    "@searchFailLoadingPlan": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Message that is displayed when the response of the trip planning request could not be received"
+            }
+        ]
+    },
+    "searchMapMarker": "Position dans le plan",
+    "@searchMapMarker": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Location name displayed in search fields that represents a location choosen on the map"
+            }
+        ]
+    },
+    "chooseLocationPageTitle": "Choisissez un point sur le plan",
+    "@chooseLocationPageTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Page title when choosing a location on the map"
+            }
+        ]
+    },
+    "chooseLocationPageSubtitle": "Agrandir et déplacer la carte pour centrer le marqueur",
+    "@chooseLocationPageSubtitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Page subtitle when choosing a location on the map"
+            }
+        ]
+    },
+    "instructionWalk": "Marcher {duration} ({distance}) vers\n{location}",
+    "@instructionWalk": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary instruction (walking)"
+            }
+        ],
+        "placeholders": {
+            "distance": {
+                "example": "500 m"
+            },
+            "duration": {
+                "example": "10 min"
+            },
+            "location": {
+                "example": "Avenida Heroínas"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{duration} example: 10 min",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{distance} example: 500 m",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{location} example: Avenida Heroínas",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionRide": "En {vehicle} pendant {duration} ({distance}) vers\n{location}",
+    "@instructionRide": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary instruction (vehicle)"
+            }
+        ],
+        "placeholders": {
+            "vehicle": {
+                "example": "Bus 100"
+            },
+            "distance": {
+                "example": "500 m"
+            },
+            "duration": {
+                "example": "10 min"
+            },
+            "location": {
+                "example": "Avenida Heroínas"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{vehicle} example: Bus 100",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{duration} example: 10 min",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{distance} example: 500 m",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{location} example: Avenida Heroínas",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionVehicleBus": "Bus",
+    "@instructionVehicleBus": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Bus)"
+            }
+        ]
+    },
+    "instructionVehicleMicro": "Micro",
+    "@instructionVehicleMicro": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Micro)"
+            }
+        ]
+    },
+    "instructionVehicleMinibus": "Minibus",
+    "@instructionVehicleMinibus": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Minibus)"
+            }
+        ]
+    },
+    "instructionVehicleTrufi": "Trufi",
+    "@instructionVehicleTrufi": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Trufi)"
+            }
+        ]
+    },
+    "instructionVehicleCar": "Voiture",
+    "@instructionVehicleCar": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Car)"
+            }
+        ]
+    },
+    "instructionVehicleGondola": "Gondole",
+    "@instructionVehicleGondola": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Gondola)"
+            }
+        ]
+    },
+    "instructionDurationMinutes": "{value} min.",
+    "@instructionDurationMinutes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg duration"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 10",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionDistanceKm": "{value} km.",
+    "@instructionDistanceKm": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg distance (km)"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 10",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionDistanceMeters": "{value} m.",
+    "@instructionDistanceMeters": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Itinerary leg distance (m)"
+            }
+        ],
+        "placeholders": {
+            "value": {
+                "example": "100"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{value} example: 100",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "menuConnections": "Afficher les itinéraires",
+    "@menuConnections": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the map\/planned trip"
+            }
+        ]
+    },
+    "menuAbout": "À propos",
+    "@menuAbout": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the about page"
+            }
+        ]
+    },
+    "menuTeam": "Équipe",
+    "@menuTeam": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the team page"
+            }
+        ]
+    },
+    "menuFeedback": "Envoyer un commentaire",
+    "@menuFeedback": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the feedback page"
+            }
+        ]
+    },
+    "menuOnline": "En ligne",
+    "@menuOnline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that shows the state of online\/offline routing"
+            }
+        ]
+    },
+    "menuAppReview": "Évaluer l'application",
+    "@menuAppReview": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that triggers a native widget to rate the app"
+            }
+        ]
+    },
+    "menuShareApp": "",
+    "@menuShareApp": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Menu item that triggers a native widget to rate the app"
+            }
+        ]
+    },
+    "shareAppText": "",
+    "@shareAppText": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text with URL that is used when sharing the app."
+            }
+        ],
+        "placeholders": {
+            "url": {
+                "example": "https:\/\/trufi.share.url"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{url} example: https:\/\/trufi.share.url",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "feedbackContent": "Avez-vous des suggestions pour notre application ou avez-vous trouvé des erreurs dans les données? Nous aimerions le savoir! Assurez-vous d'ajouter votre adresse électronique ou votre numéro de téléphone pour que nous puissions vous répondre.",
+    "@feedbackContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the feedback page"
+            }
+        ]
+    },
+    "feedbackTitle": "Envoyez-nous un e-mail",
+    "@feedbackTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title displayed on the feedback page"
+            }
+        ]
+    },
+    "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
+    "@aboutContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the about page"
+            }
+        ]
+    },
+    "aboutLicenses": "Licences",
+    "@aboutLicenses": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Button label to show licenses"
+            }
+        ]
+    },
+    "aboutOpenSource": "Cette application est publiée en open source sur GitHub. N'hésitez pas à contribuer ou à l'apporter dans votre propre ville.",
+    "@aboutOpenSource": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "A note about open source"
+            }
+        ]
+    },
+    "teamContent": "Nous sommes une équipe internationale appelée Trufi Association qui a créé cette application avec l'aide de nombreux bénévoles! Voulez-vous améliorer l'application Trufi et faire partie de notre équipe? Merci de nous contacter via:",
+    "@teamContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Text displayed on the team page, followed by a email link"
+            }
+        ]
+    },
+    "teamSectionRepresentatives": "Représentants: {representatives}",
+    "@teamSectionRepresentatives": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of representatives"
+            }
+        ],
+        "placeholders": {
+            "representatives": {
+                "example": "Mario, Luigi"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{representatives} example: Mario, Luigi",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionTeam": "Équipe: {teamMembers}",
+    "@teamSectionTeam": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of team members"
+            }
+        ],
+        "placeholders": {
+            "teamMembers": {
+                "example": "Peach, Toad, Daisy, Yoshi"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{teamMembers} example: Peach, Toad, Daisy, Yoshi",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionTranslations": "Traductions: {translators}",
+    "@teamSectionTranslations": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of translators"
+            }
+        ],
+        "placeholders": {
+            "translators": {
+                "example": "Bowser, Koopa, Gumba, Lakitu"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{translators} example: Bowser, Koopa, Gumba, Lakitu",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "teamSectionRoutes": "Itinéraires: {routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que {osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!",
+    "@teamSectionRoutes": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "List of route contributors"
+            }
+        ],
+        "placeholders": {
+            "osmContributors": {
+                "example": "Kamek, Birdo, Toadette, Bowser Jr."
+            },
+            "routeContributors": {
+                "example": "Wario, Waluigi, Rosalina"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{routeContributors} example: Wario, Waluigi, Rosalina",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{osmContributors} example: Kamek, Birdo, Toadette, Bowser Jr.",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "donate": "",
+    "@donate": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Donate menu item"
+            }
+        ]
+    },
+    "readOurBlog": "",
+    "@readOurBlog": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Website menu item"
+            }
+        ]
+    },
+    "followOnFacebook": "",
+    "@followOnFacebook": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Facebook menu item"
+            }
+        ]
+    },
+    "followOnTwitter": "",
+    "@followOnTwitter": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Twitter menu item"
+            }
+        ]
+    },
+    "followOnInstagram": "",
+    "@followOnInstagram": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Instagram menu item"
+            }
+        ]
+    },
+    "appReviewDialogTitle": "",
+    "@appReviewDialogTitle": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Title of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogContent": "",
+    "@appReviewDialogContent": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Content of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogButtonDecline": "",
+    "@appReviewDialogButtonDecline": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Decline button of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "appReviewDialogButtonAccept": "",
+    "@appReviewDialogButtonAccept": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Accept button of the App Review Dialog used on Android"
+            }
+        ]
+    },
+    "instructionJunction": "",
+    "@instructionJunction": {
+        "type": "text",
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Junction name of two streets"
+            }
+        ],
+        "placeholders": {
+            "street1": {
+                "example": "Av. Blanco Galindo"
+            },
+            "street2": {
+                "example": "Av. 16 de Julio"
+            }
+        },
+        "context-groups": [
+            {
+                "purpose": "informational",
+                "contexts": [
+                    {
+                        "value": "{street1} example: Av. Blanco Galindo",
+                        "context-type": "paramnotes"
+                    },
+                    {
+                        "value": "{street2} example: Av. 16 de Julio",
+                        "context-type": "paramnotes"
+                    }
+                ]
+            }
+        ]
+    },
+    "instructionVehicleLightRail": "",
+    "@instructionVehicleLightRail": {
+        "notes": [
+            {
+                "from": "developer",
+                "value": "Vehicle name (Light Rail Train)"
+            }
+        ]
+    },
+    "menuYourPlaces": ""
+}
