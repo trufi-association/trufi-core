@@ -24,7 +24,7 @@ void main() {
 
     testWidgets("should show the customTranslated Title", (tester) async {
       trufiCfg.customTranslations.title = {
-        "en": "Test Trufi App",
+        Locale("en"): "Test Trufi App",
       };
 
       await tester.pumpWidget(BlocProvider<PreferencesBloc>(

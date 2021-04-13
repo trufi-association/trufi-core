@@ -10,11 +10,11 @@ void main() {
     setUp(() {
       subject = TrufiConfiguration().customTranslations;
       subject.title = {
-        "en": "Trufi App Test en",
-        "de": "Trufi App Test de",
-        "de_DE": "Trufi App Test de_DE",
-        "it": "Trufi App Test it",
-        "it_IT": "Trufi App Test it_IT"
+        Locale("en"): "Trufi App Test en",
+        Locale("de"): "Trufi App Test de",
+        Locale("de", "DE"): "Trufi App Test de_DE",
+        Locale("it"): "Trufi App Test it",
+        Locale("it", "IT"): "Trufi App Test it_IT"
       };
     });
 
