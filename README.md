@@ -47,5 +47,7 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 ## Shout-outs
-
 Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
+
+## Custom Translations for Host App
+If you need to overwrite translations of the Host app checkout the following article [here](https://github.com/trufi-association/trufi-core/wiki/Custom-Translations-from-the-Host-System).
