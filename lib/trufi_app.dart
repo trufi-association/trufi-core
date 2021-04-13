@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -123,10 +124,15 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       SavedPlacesPage.route: (context) => SavedPlacesPage(),
       TeamPage.route: (context) => TeamPage(),
     };
+
     return StreamBuilder(
       stream: preferencesBloc.outChangeLanguageCode,
-      initialData: "en",
+      initialData: TrufiConfiguration()
+          .languages
+          .firstWhere((element) => element.isDefault)
+          .languageCode,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print(snapshot.data);
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {
