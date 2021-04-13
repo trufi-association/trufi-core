@@ -647,6 +647,72 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Your places'**
   String get menuYourPlaces;
+
+  /// No description provided for @savedPlacesSetIconLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change symbol'**
+  String get savedPlacesSetIconLabel;
+
+  /// No description provided for @savedPlacesSetNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get savedPlacesSetNameLabel;
+
+  /// No description provided for @savedPlacesSetPositionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit position'**
+  String get savedPlacesSetPositionLabel;
+
+  /// No description provided for @savedPlacesRemoveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove place'**
+  String get savedPlacesRemoveLabel;
+
+  /// No description provided for @savedPlacesSelectIconTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select symbol'**
+  String get savedPlacesSelectIconTitle;
+
+  /// No description provided for @mapTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Map Type'**
+  String get mapTypeLabel;
+
+  /// No description provided for @mapTypeStreetsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Streets'**
+  String get mapTypeStreetsCaption;
+
+  /// No description provided for @mapTypeSatelliteCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Satellite'**
+  String get mapTypeSatelliteCaption;
+
+  /// No description provided for @mapTypeTerrainCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrain'**
+  String get mapTypeTerrainCaption;
+
+  /// No description provided for @commonSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// No description provided for @savedPlacesEnterNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter name'**
+  String get savedPlacesEnterNameTitle;
 }
 
 class _TrufiLocalizationDelegate extends LocalizationsDelegate<TrufiLocalization> {

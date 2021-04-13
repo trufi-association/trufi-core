@@ -306,4 +306,37 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String get menuYourPlaces => '';
+
+  @override
+  String get savedPlacesSetIconLabel => '';
+
+  @override
+  String get savedPlacesSetNameLabel => '';
+
+  @override
+  String get savedPlacesSetPositionLabel => '';
+
+  @override
+  String get savedPlacesRemoveLabel => '';
+
+  @override
+  String get savedPlacesSelectIconTitle => '';
+
+  @override
+  String get mapTypeLabel => '';
+
+  @override
+  String get mapTypeStreetsCaption => '';
+
+  @override
+  String get mapTypeSatelliteCaption => '';
+
+  @override
+  String get mapTypeTerrainCaption => '';
+
+  @override
+  String get commonSave => '';
+
+  @override
+  String get savedPlacesEnterNameTitle => '';
 }

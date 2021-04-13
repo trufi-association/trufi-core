@@ -20,11 +20,16 @@ class TrufiConfiguration {
   final map = TrufiConfigurationMap();
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();
+  final generalConfiguration = TrufiGeneralConfiguration();
 
   // TODO: Could be removed by a Collection of Locale
   final List<TrufiConfigurationLanguage> languages = [];
 
   var minimumReviewWorthyActionCount = 3;
+}
+
+class TrufiGeneralConfiguration {
+  var appCity = "Cochabamba";
 }
 
 class TrufiCustomLocalizations extends TrufiCustomLocalization {}

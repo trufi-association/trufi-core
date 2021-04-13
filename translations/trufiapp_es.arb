@@ -1,6 +1,6 @@
 {
-    "@@locale": "it",
-    "@@last_modified": "2021-04-13T10:59:56+02:00",
+    "@@locale": "es",
+    "@@last_modified": "2021-04-13T14:58:27+02:00",
     "title": "Trufi App",
     "@title": {
         "notes": [
@@ -10,7 +10,7 @@
             }
         ]
     },
-    "tagline": "Trasporto pubblico a Cochabamba",
+    "tagline": "Transporte público en Cochabamba",
     "@tagline": {
         "notes": [
             {
@@ -24,7 +24,7 @@
             }
         }
     },
-    "description": "Il miglior modo di viaggiare con trufis, micros e autobus attraverso Cochabamba",
+    "description": "La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.",
     "@description": {
         "notes": [
             {
@@ -38,7 +38,7 @@
             }
         }
     },
-    "version": "Versione {version}",
+    "version": "Versión {version}",
     "@version": {
         "notes": [
             {
@@ -63,7 +63,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedTitle": "Nessuna posizione",
+    "alertLocationServicesDeniedTitle": "Sin acceso a la ubicación",
     "@alertLocationServicesDeniedTitle": {
         "notes": [
             {
@@ -72,7 +72,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedMessage": "Assicurati che il tuo device abbia un GPS e geolocalizzazione attivati.",
+    "alertLocationServicesDeniedMessage": "Por favor, asegúrese de que el GPS y las configuraciones de ubicación estén activadas en su dispositivo.",
     "@alertLocationServicesDeniedMessage": {
         "notes": [
             {
@@ -81,7 +81,7 @@
             }
         ]
     },
-    "commonOK": "OK",
+    "commonOK": "Aceptar",
     "@commonOK": {
         "notes": [
             {
@@ -90,7 +90,7 @@
             }
         ]
     },
-    "commonCancel": "Cancella",
+    "commonCancel": "Cancelar",
     "@commonCancel": {
         "notes": [
             {
@@ -99,7 +99,7 @@
             }
         ]
     },
-    "commonGoOffline": "Vai offline",
+    "commonGoOffline": "Salir de línea",
     "@commonGoOffline": {
         "notes": [
             {
@@ -108,7 +108,7 @@
             }
         ]
     },
-    "commonGoOnline": "Vai online",
+    "commonGoOnline": "Ir en línea",
     "@commonGoOnline": {
         "notes": [
             {
@@ -117,7 +117,7 @@
             }
         ]
     },
-    "commonDestination": "Destinazione",
+    "commonDestination": "Destino",
     "@commonDestination": {
         "notes": [
             {
@@ -126,7 +126,7 @@
             }
         ]
     },
-    "commonOrigin": "Partenza",
+    "commonOrigin": "Origen",
     "@commonOrigin": {
         "notes": [
             {
@@ -135,7 +135,7 @@
             }
         ]
     },
-    "commonNoInternet": "Nessuna connessione internet.",
+    "commonNoInternet": "Sin conexión a internet.",
     "@commonNoInternet": {
         "notes": [
             {
@@ -144,7 +144,7 @@
             }
         ]
     },
-    "commonFailLoading": "Caricamento dati fallito",
+    "commonFailLoading": "Error al cargar datos",
     "@commonFailLoading": {
         "notes": [
             {
@@ -153,7 +153,7 @@
             }
         ]
     },
-    "commonUnknownError": "Errore sconosciuto",
+    "commonUnknownError": "Error desconocido",
     "@commonUnknownError": {
         "notes": [
             {
@@ -162,7 +162,7 @@
             }
         ]
     },
-    "commonError": "Errore",
+    "commonError": "Error",
     "@commonError": {
         "notes": [
             {
@@ -171,7 +171,7 @@
             }
         ]
     },
-    "noRouteError": "Scusa, non siamo riusciti a trovare un itinerario. Che cosa vuoi fare?",
+    "noRouteError": "Lo sentimos, no pudimos encontrar una ruta. ¿Qué quiere hacer?",
     "@noRouteError": {
         "notes": [
             {
@@ -180,7 +180,7 @@
             }
         ]
     },
-    "noRouteErrorActionCancel": "Prova un'altra destinazione",
+    "noRouteErrorActionCancel": "Prueba con otro destino",
     "@noRouteErrorActionCancel": {
         "notes": [
             {
@@ -189,7 +189,7 @@
             }
         ]
     },
-    "noRouteErrorActionReportMissingRoute": "Segnala una strada mancante",
+    "noRouteErrorActionReportMissingRoute": "Reportar una ruta faltante",
     "@noRouteErrorActionReportMissingRoute": {
         "notes": [
             {
@@ -198,7 +198,7 @@
             }
         ]
     },
-    "noRouteErrorActionShowCarRoute": "Mostra strada in auto",
+    "noRouteErrorActionShowCarRoute": "Mostrar ruta en auto",
     "@noRouteErrorActionShowCarRoute": {
         "notes": [
             {
@@ -207,7 +207,7 @@
             }
         ]
     },
-    "errorServerUnavailable": "Ci dispiace. L'organizzatore di viaggio è temporaneamente non disponibile. Prova più tardi.",
+    "errorServerUnavailable": "Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.",
     "@errorServerUnavailable": {
         "notes": [
             {
@@ -216,7 +216,7 @@
             }
         ]
     },
-    "errorOutOfBoundary": "Viaggio impossibile. Forse stai pianificando un viaggio fuori dai confini della mappa.",
+    "errorOutOfBoundary": "Viaje no disponible. Puede que esté intentando planificar un viaje fuera de los límites disponibles.",
     "@errorOutOfBoundary": {
         "notes": [
             {
@@ -225,7 +225,7 @@
             }
         ]
     },
-    "errorPathNotFound": "Viaggio impossibile. Il tuo punto di partenza o di arrivo potrebbe non essere accessibile in sicurezza (ad esempio potresti star partendo da una strada residenziale connessa solo con autostrade).",
+    "errorPathNotFound": "Viaje no disponible. Su punto de origen y\/o destino pueden no ser seguros. Seleccione un inicio y final en calles residenciales.",
     "@errorPathNotFound": {
         "notes": [
             {
@@ -234,7 +234,7 @@
             }
         ]
     },
-    "errorNoTransitTimes": "Orari di transito non disponibili. La data può essere passata o troppo lontana nel futuro oppure potrebbero non esserci trasporti per il tuo viaggio nell'orario scelto.",
+    "errorNoTransitTimes": "No hay tiempos de tránsito disponibles. La información podría no ser válida para la fecha actual o no hay rutas disponibles para su viaje.",
     "@errorNoTransitTimes": {
         "notes": [
             {
@@ -243,7 +243,7 @@
             }
         ]
     },
-    "errorServerTimeout": "L'organizzatore di viaggio sta impiegando troppo tempo per processare la tua richiesta. Per piacere prova di nuovo più tardi.",
+    "errorServerTimeout": "El planificador de rutas está tardando demasiado. Por favor, inténtelo más tarde.",
     "@errorServerTimeout": {
         "notes": [
             {
@@ -252,7 +252,7 @@
             }
         ]
     },
-    "errorTrivialDistance": "La partenza si trova ad una distanza insignificante dall'arrivo.",
+    "errorTrivialDistance": "Origen y destino están demasiado cerca.",
     "@errorTrivialDistance": {
         "notes": [
             {
@@ -261,7 +261,7 @@
             }
         ]
     },
-    "errorServerCanNotHandleRequest": "La richiesta presenta errori che il server non vuole o non può processare.",
+    "errorServerCanNotHandleRequest": "La solicitud tiene errores que el servidor no puede procesar.",
     "@errorServerCanNotHandleRequest": {
         "notes": [
             {
@@ -270,7 +270,7 @@
             }
         ]
     },
-    "errorUnknownOrigin": "Partenza sconosciuta. Puoi darci qualche indicazione in più?",
+    "errorUnknownOrigin": "Origen desconocido. ¿Podría ser un poco más preciso?",
     "@errorUnknownOrigin": {
         "notes": [
             {
@@ -279,7 +279,7 @@
             }
         ]
     },
-    "errorUnknownDestination": "Destinazione sconosciuta. Puoi darci qualche indicazione in più?",
+    "errorUnknownDestination": "Destino desconocido. ¿Podría ser un poco más preciso?",
     "@errorUnknownDestination": {
         "notes": [
             {
@@ -288,7 +288,7 @@
             }
         ]
     },
-    "errorUnknownOriginDestination": "Partenza e destinazione sconosciute. Puoi darci qualche indicazione in più?",
+    "errorUnknownOriginDestination": "Origen y destino desconocidos ¿Podría ser un poco más preciso?",
     "@errorUnknownOriginDestination": {
         "notes": [
             {
@@ -297,7 +297,7 @@
             }
         ]
     },
-    "errorNoBarrierFree": "Partenza e destinazione non accessibili in sedia a rotelle.",
+    "errorNoBarrierFree": "Origen y destino no son accesibles a silla de ruedas.",
     "@errorNoBarrierFree": {
         "notes": [
             {
@@ -306,7 +306,7 @@
             }
         ]
     },
-    "errorAmbiguousOrigin": "L'organizzatore di viaggio è indeciso sul luogo di partenza. Per piacere scegli tra le opzioni seguenti o sii più specifico.",
+    "errorAmbiguousOrigin": "El planificador de rutas no está seguro de su origen. Por favor, seleccione una de las siguientes opciones o introduzca un origen más exacto.",
     "@errorAmbiguousOrigin": {
         "notes": [
             {
@@ -315,7 +315,7 @@
             }
         ]
     },
-    "errorAmbiguousDestination": "L'organizzatore di viaggio è indeciso sul luogo di arrivo. Per piacere scegli tra le opzioni seguenti o sii più specifico.",
+    "errorAmbiguousDestination": "El planificador de rutas no está seguro de su destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.",
     "@errorAmbiguousDestination": {
         "notes": [
             {
@@ -324,7 +324,7 @@
             }
         ]
     },
-    "errorAmbiguousOriginDestination": "Partenza e destinazione sono ambigue. Per piacere scegli tra le opzioni seguenti o sii più specifico.",
+    "errorAmbiguousOriginDestination": "Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.",
     "@errorAmbiguousOriginDestination": {
         "notes": [
             {
@@ -333,7 +333,7 @@
             }
         ]
     },
-    "searchHintOrigin": "Scegli un punto di partenza",
+    "searchHintOrigin": "Seleccione punto de origen",
     "@searchHintOrigin": {
         "notes": [
             {
@@ -342,7 +342,7 @@
             }
         ]
     },
-    "searchHintDestination": "Scegli la destinazione",
+    "searchHintDestination": "Seleccione destino",
     "@searchHintDestination": {
         "notes": [
             {
@@ -351,7 +351,7 @@
             }
         ]
     },
-    "searchItemChooseOnMap": "Scegli sulla mappa",
+    "searchItemChooseOnMap": "Seleccionar en el mapa",
     "@searchItemChooseOnMap": {
         "notes": [
             {
@@ -360,7 +360,7 @@
             }
         ]
     },
-    "searchItemYourLocation": "La tua posizione",
+    "searchItemYourLocation": "Su ubicación",
     "@searchItemYourLocation": {
         "notes": [
             {
@@ -369,7 +369,7 @@
             }
         ]
     },
-    "searchItemNoResults": "Nessun risultato",
+    "searchItemNoResults": "Ningún resultado",
     "@searchItemNoResults": {
         "notes": [
             {
@@ -378,7 +378,7 @@
             }
         ]
     },
-    "searchTitlePlaces": "Luoghi",
+    "searchTitlePlaces": "Lugares",
     "@searchTitlePlaces": {
         "notes": [
             {
@@ -387,7 +387,7 @@
             }
         ]
     },
-    "searchTitleRecent": "Recenti",
+    "searchTitleRecent": "Recientes",
     "@searchTitleRecent": {
         "notes": [
             {
@@ -396,7 +396,7 @@
             }
         ]
     },
-    "searchTitleFavorites": "Preferiti",
+    "searchTitleFavorites": "Favoritos",
     "@searchTitleFavorites": {
         "notes": [
             {
@@ -405,7 +405,7 @@
             }
         ]
     },
-    "searchTitleResults": "Cerca Risultati",
+    "searchTitleResults": "Resultados de búsqueda",
     "@searchTitleResults": {
         "notes": [
             {
@@ -414,7 +414,7 @@
             }
         ]
     },
-    "searchPleaseSelectOrigin": "Seleziona partenza",
+    "searchPleaseSelectOrigin": "Seleccione origen",
     "@searchPleaseSelectOrigin": {
         "notes": [
             {
@@ -423,7 +423,7 @@
             }
         ]
     },
-    "searchPleaseSelectDestination": "Seleziona destinazione",
+    "searchPleaseSelectDestination": "Seleccione destino",
     "@searchPleaseSelectDestination": {
         "notes": [
             {
@@ -432,7 +432,7 @@
             }
         ]
     },
-    "searchFailLoadingPlan": "Caricamento itinerario fallito.",
+    "searchFailLoadingPlan": "Error al cargar el itinerario.",
     "@searchFailLoadingPlan": {
         "notes": [
             {
@@ -441,7 +441,7 @@
             }
         ]
     },
-    "searchMapMarker": "Punta sulla Mappa",
+    "searchMapMarker": "Posición en el Mapa",
     "@searchMapMarker": {
         "notes": [
             {
@@ -450,7 +450,7 @@
             }
         ]
     },
-    "chooseLocationPageTitle": "Scegli un punto",
+    "chooseLocationPageTitle": "Elige un punto en el mapa",
     "@chooseLocationPageTitle": {
         "notes": [
             {
@@ -459,7 +459,7 @@
             }
         ]
     },
-    "chooseLocationPageSubtitle": "Pan & zoom spilli segna mappa",
+    "chooseLocationPageSubtitle": "Amplía y mueve el mapa para centrar el marcador",
     "@chooseLocationPageSubtitle": {
         "notes": [
             {
@@ -468,7 +468,7 @@
             }
         ]
     },
-    "instructionWalk": "A piedi {duration} ({distance}) verso\n{location}",
+    "instructionWalk": "Caminar {duration} ({distance}) hasta\n{location}",
     "@instructionWalk": {
         "notes": [
             {
@@ -507,7 +507,7 @@
             }
         ]
     },
-    "instructionRide": "Bicicletta {vehicle} per {duration} ({distance}) verso\n{location}",
+    "instructionRide": "Tomar {vehicle} por {duration} ({distance}) hasta\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -553,7 +553,7 @@
             }
         ]
     },
-    "instructionVehicleBus": "Autobus",
+    "instructionVehicleBus": "Bus",
     "@instructionVehicleBus": {
         "notes": [
             {
@@ -589,7 +589,7 @@
             }
         ]
     },
-    "instructionVehicleCar": "Auto",
+    "instructionVehicleCar": "Coche",
     "@instructionVehicleCar": {
         "notes": [
             {
@@ -598,7 +598,7 @@
             }
         ]
     },
-    "instructionVehicleGondola": "Gondola",
+    "instructionVehicleGondola": "Góndola",
     "@instructionVehicleGondola": {
         "notes": [
             {
@@ -682,7 +682,7 @@
             }
         ]
     },
-    "menuConnections": "Mostra itinerari",
+    "menuConnections": "Muestra rutas",
     "@menuConnections": {
         "notes": [
             {
@@ -691,7 +691,7 @@
             }
         ]
     },
-    "menuAbout": "A proposito",
+    "menuAbout": "Acerca",
     "@menuAbout": {
         "notes": [
             {
@@ -700,7 +700,7 @@
             }
         ]
     },
-    "menuTeam": "Squadra",
+    "menuTeam": "Sobre el equipo",
     "@menuTeam": {
         "notes": [
             {
@@ -709,7 +709,7 @@
             }
         ]
     },
-    "menuFeedback": "Invia Feedback",
+    "menuFeedback": "Enviar comentarios",
     "@menuFeedback": {
         "notes": [
             {
@@ -718,7 +718,7 @@
             }
         ]
     },
-    "menuOnline": "Online",
+    "menuOnline": "En línea",
     "@menuOnline": {
         "notes": [
             {
@@ -727,7 +727,7 @@
             }
         ]
     },
-    "menuAppReview": "Valuta l'app",
+    "menuAppReview": "Valora la aplicación",
     "@menuAppReview": {
         "notes": [
             {
@@ -770,7 +770,7 @@
             }
         ]
     },
-    "feedbackContent": "Hai suggerimenti per la nostra app o hai trovato errori nei dati? Ci piacerebbe avere tue notizie! Ricordati di inserire il tuo indirizzo e-mail o telefono, così potremo risponderti.",
+    "feedbackContent": "¿Tiene sugerencias para nuestra aplicación o ha encontrado algunos errores en los datos? Nos encantaría saberlo! Asegúrese de agregar su dirección de correo electrónico o teléfono para que podamos responderlo.",
     "@feedbackContent": {
         "notes": [
             {
@@ -779,7 +779,7 @@
             }
         ]
     },
-    "feedbackTitle": "Inviaci un'E-mail",
+    "feedbackTitle": "Envíanos un correo electrónico",
     "@feedbackTitle": {
         "notes": [
             {
@@ -788,7 +788,7 @@
             }
         ]
     },
-    "aboutContent": "Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.",
+    "aboutContent": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.",
     "@aboutContent": {
         "notes": [
             {
@@ -797,7 +797,7 @@
             }
         ]
     },
-    "aboutLicenses": "Licenze",
+    "aboutLicenses": "Licencias",
     "@aboutLicenses": {
         "notes": [
             {
@@ -806,7 +806,7 @@
             }
         ]
     },
-    "aboutOpenSource": "Questa applicazione viene rilasciata come open source su GitHub. Sentitevi liberi di contribuire o di portarlo nella vostra città.",
+    "aboutOpenSource": "Esta aplicación está liberada como código abierto en GitHub. Siéntase libre de contribuir o llevarlo a su propia ciudad.",
     "@aboutOpenSource": {
         "notes": [
             {
@@ -815,7 +815,7 @@
             }
         ]
     },
-    "teamContent": "Siamo un team internazionale chiamato Trufi Association che ha creato questa app con l'aiuto di molti volontari! Vuoi migliorare l'app Trufi ed essere parte del nostro team? Vi preghiamo di contattarci tramite:",
+    "teamContent": "Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a:",
     "@teamContent": {
         "notes": [
             {
@@ -824,7 +824,7 @@
             }
         ]
     },
-    "teamSectionRepresentatives": "Rappresentanti: {representatives}",
+    "teamSectionRepresentatives": "Representantes: {representatives}",
     "@teamSectionRepresentatives": {
         "notes": [
             {
@@ -849,7 +849,7 @@
             }
         ]
     },
-    "teamSectionTeam": "Team: {teamMembers}",
+    "teamSectionTeam": "Equipo: {teamMembers}",
     "@teamSectionTeam": {
         "notes": [
             {
@@ -874,7 +874,7 @@
             }
         ]
     },
-    "teamSectionTranslations": "Traduzioni: {translators}",
+    "teamSectionTranslations": "Traducciones: {translators}",
     "@teamSectionTranslations": {
         "notes": [
             {
@@ -899,7 +899,7 @@
             }
         ]
     },
-    "teamSectionRoutes": "Rotte: {routeContributors} e tutti gli utenti che hanno caricato rotte su OpenStreetMap, come {osmContributors} . Contattaci se vuoi unirti alla comunità OpenStreetMap!",
+    "teamSectionRoutes": "Rutas: {routeContributors} y todos los usuarios que subieron rutas a OpenStreetMap, como {osmContributors}. ¡Contáctanos si quieres unirte a la comunidad OpenStreetMap!",
     "@teamSectionRoutes": {
         "notes": [
             {
@@ -1054,5 +1054,16 @@
             }
         ]
     },
-    "menuYourPlaces": ""
+    "menuYourPlaces": "",
+    "savedPlacesSetIconLabel": "",
+    "savedPlacesSetNameLabel": "",
+    "savedPlacesSetPositionLabel": "",
+    "savedPlacesRemoveLabel": "",
+    "savedPlacesSelectIconTitle": "",
+    "mapTypeLabel": "",
+    "mapTypeStreetsCaption": "",
+    "mapTypeSatelliteCaption": "",
+    "mapTypeTerrainCaption": "",
+    "commonSave": "",
+    "savedPlacesEnterNameTitle": ""
 }

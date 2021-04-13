@@ -1,6 +1,6 @@
 {
     "@@locale": "pt",
-    "@@last_modified": "2021-04-13T10:59:56+02:00",
+    "@@last_modified": "2021-04-13T14:58:27+02:00",
     "title": "Trufi App",
     "@title": {
         "notes": [
@@ -1054,5 +1054,16 @@
             }
         ]
     },
-    "menuYourPlaces": ""
+    "menuYourPlaces": "",
+    "savedPlacesSetIconLabel": "",
+    "savedPlacesSetNameLabel": "",
+    "savedPlacesSetPositionLabel": "",
+    "savedPlacesRemoveLabel": "",
+    "savedPlacesSelectIconTitle": "",
+    "mapTypeLabel": "",
+    "mapTypeStreetsCaption": "",
+    "mapTypeSatelliteCaption": "",
+    "mapTypeTerrainCaption": "",
+    "commonSave": "",
+    "savedPlacesEnterNameTitle": ""
 }

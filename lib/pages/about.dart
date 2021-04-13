@@ -34,7 +34,10 @@ class AboutPageState extends State<AboutPage> {
     final TextStyle linkStyle = theme.textTheme.body2.copyWith(
       color: theme.accentColor,
     );
-    final customTranslations = TrufiConfiguration().customTranslations;
+
+    var trufiConfiguration = TrufiConfiguration();
+    final currentCity = trufiConfiguration.generalConfiguration.appCity;
+    final customTranslations = trufiConfiguration.customTranslations;
     final currentLocale = Localizations.localeOf(context);
 
     return ListView(
@@ -74,8 +77,8 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  customTranslations.get(customTranslations.title,
-                      currentLocale, localization.tagline),
+                  customTranslations.get(customTranslations.tagline,
+                      currentLocale, localization.tagline(currentCity)),
                   style: theme.textTheme.subhead.copyWith(
                     color: theme.textTheme.body2.color,
                   ),

@@ -1,7 +1,7 @@
 {
-    "@@locale": "fr",
-    "@@last_modified": "2021-04-13T10:59:56+02:00",
-    "title": "Trufi App",
+    "@@locale": "ee",
+    "@@last_modified": "2021-04-13T14:58:27+02:00",
+    "title": "Trufi dorworfea",
     "@title": {
         "notes": [
             {
@@ -10,7 +10,7 @@
             }
         ]
     },
-    "tagline": "Transports en commun à Cochabamba",
+    "tagline": "hahomorzorzor le Cochabamba",
     "@tagline": {
         "notes": [
             {
@@ -24,7 +24,7 @@
             }
         }
     },
-    "description": "La meilleure façon de se déplacer en trufis, micros et bus dans Cochabamba.",
+    "description": "morzorzor adoduia le Chombamba yenye lori did kple lori sue wo",
     "@description": {
         "notes": [
             {
@@ -38,7 +38,7 @@
             }
         }
     },
-    "version": "Version {version}",
+    "version": "nutinya",
     "@version": {
         "notes": [
             {
@@ -63,7 +63,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedTitle": "Pas d'emplacement",
+    "alertLocationServicesDeniedTitle": "tefe meli o",
     "@alertLocationServicesDeniedTitle": {
         "notes": [
             {
@@ -72,7 +72,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedMessage": "Assurez-vous que votre appareil dispose d'un GPS et que les paramètres de localisation sont activés.",
+    "alertLocationServicesDeniedMessage": "kpor egbor be GPS le wo morfoka dzi",
     "@alertLocationServicesDeniedMessage": {
         "notes": [
             {
@@ -81,7 +81,7 @@
             }
         ]
     },
-    "commonOK": "OK",
+    "commonOK": "enyo",
     "@commonOK": {
         "notes": [
             {
@@ -90,7 +90,7 @@
             }
         ]
     },
-    "commonCancel": "Annuler",
+    "commonCancel": "tutu",
     "@commonCancel": {
         "notes": [
             {
@@ -99,7 +99,7 @@
             }
         ]
     },
-    "commonGoOffline": "Se déconnecter",
+    "commonGoOffline": "dzo le ka dzi",
     "@commonGoOffline": {
         "notes": [
             {
@@ -108,7 +108,7 @@
             }
         ]
     },
-    "commonGoOnline": "Se connecter",
+    "commonGoOnline": "va ka dzi",
     "@commonGoOnline": {
         "notes": [
             {
@@ -117,7 +117,7 @@
             }
         ]
     },
-    "commonDestination": "Destination",
+    "commonDestination": "afisi yim nele",
     "@commonDestination": {
         "notes": [
             {
@@ -126,7 +126,7 @@
             }
         ]
     },
-    "commonOrigin": "Origine",
+    "commonOrigin": "afisi netso",
     "@commonOrigin": {
         "notes": [
             {
@@ -135,7 +135,7 @@
             }
         ]
     },
-    "commonNoInternet": "Pas de connexion Internet.",
+    "commonNoInternet": "ka meli o",
     "@commonNoInternet": {
         "notes": [
             {
@@ -144,7 +144,7 @@
             }
         ]
     },
-    "commonFailLoading": "Échec du chargement des données",
+    "commonFailLoading": "data meva o",
     "@commonFailLoading": {
         "notes": [
             {
@@ -153,7 +153,7 @@
             }
         ]
     },
-    "commonUnknownError": "Erreur inconnue",
+    "commonUnknownError": "aforku manyamanya",
     "@commonUnknownError": {
         "notes": [
             {
@@ -162,7 +162,7 @@
             }
         ]
     },
-    "commonError": "Erreur",
+    "commonError": "aforku",
     "@commonError": {
         "notes": [
             {
@@ -171,7 +171,7 @@
             }
         ]
     },
-    "noRouteError": "Désolé, nous n'avons pas pu trouver d'itinéraire. Que voulez-vous faire?",
+    "noRouteError": "morla meli o. Nuka na wor",
     "@noRouteError": {
         "notes": [
             {
@@ -180,7 +180,7 @@
             }
         ]
     },
-    "noRouteErrorActionCancel": "Essayer une autre destination",
+    "noRouteErrorActionCancel": "tsor afisi neyina bubu",
     "@noRouteErrorActionCancel": {
         "notes": [
             {
@@ -189,7 +189,7 @@
             }
         ]
     },
-    "noRouteErrorActionReportMissingRoute": "Signaler un itinéraire manquant",
+    "noRouteErrorActionReportMissingRoute": "de gbefa morbubu",
     "@noRouteErrorActionReportMissingRoute": {
         "notes": [
             {
@@ -198,7 +198,7 @@
             }
         ]
     },
-    "noRouteErrorActionShowCarRoute": "Afficher l'itinéraire en voiture",
+    "noRouteErrorActionShowCarRoute": "fia mor kple lori",
     "@noRouteErrorActionShowCarRoute": {
         "notes": [
             {
@@ -207,7 +207,7 @@
             }
         ]
     },
-    "errorServerUnavailable": "Nous sommes désolés. Le planificateur de trajet est temporairement indisponible. Veuillez réessayer plus tard.",
+    "errorServerUnavailable": "morzorzordzikporla meli o.woe emegbe",
     "@errorServerUnavailable": {
         "notes": [
             {
@@ -216,7 +216,7 @@
             }
         ]
     },
-    "errorOutOfBoundary": "Le trajet n'est pas possible. Vous essayez peut-être de planifier un trajet en dehors des limites de données cartographiques.",
+    "errorOutOfBoundary": "morzorzor la matenu ayi o. morzorzorla mele mofiatata dzi o",
     "@errorOutOfBoundary": {
         "notes": [
             {
@@ -225,7 +225,7 @@
             }
         ]
     },
-    "errorPathNotFound": "Le trajet n'est pas possible. Votre point de départ ou d'arrivée peut ne pas être accessible en toute sécurité (par exemple, vous démarrez peut-être dans une rue résidentielle reliée uniquement à une autoroute).",
+    "errorPathNotFound": "morzorzor la matenu adzedzi o. afisi netso alo afisineyina be le dzadze o",
     "@errorPathNotFound": {
         "notes": [
             {
@@ -234,7 +234,7 @@
             }
         ]
     },
-    "errorNoTransitTimes": "Pas de temps de transit disponible. La date peut-être dépassée ou trop tard dans le futur ou il peut ne pas y avoir de service de transit pour votre trajet au moment que vous l'avez choisi.",
+    "errorNoTransitTimes": "Morzor xeyixi meli o. Nkeke si nedo la vayi alo ele etsor me alo wu melina xeyixi si netia la o.",
     "@errorNoTransitTimes": {
         "notes": [
             {
@@ -243,7 +243,7 @@
             }
         ]
     },
-    "errorServerTimeout": "Le planificateur de trajet prend beaucoup trop de temps pour traiter votre demande. Veuillez réessayer plus tard.",
+    "errorServerTimeout": "morzorzordzikporla fe dorworwor mele tsortsorm o.gawoe ake.",
     "@errorServerTimeout": {
         "notes": [
             {
@@ -252,7 +252,7 @@
             }
         ]
     },
-    "errorTrivialDistance": "L'origine est à une distance insignifiante de la destination.",
+    "errorTrivialDistance": "afisi netso la tso kpuie nutor",
     "@errorTrivialDistance": {
         "notes": [
             {
@@ -261,7 +261,7 @@
             }
         ]
     },
-    "errorServerCanNotHandleRequest": "La demande contient des erreurs que le serveur ne veut pas ou ne peut pas traiter.",
+    "errorServerCanNotHandleRequest": "nane gble tso wi biabialanu,dorworfea mese egorme o",
     "@errorServerCanNotHandleRequest": {
         "notes": [
             {
@@ -270,7 +270,7 @@
             }
         ]
     },
-    "errorUnknownOrigin": "L'origine est inconnue. Pouvez-vous être un peu plus descriptif?",
+    "errorUnknownOrigin": "afisi netso la mele nyanya me o,doe do ake",
     "@errorUnknownOrigin": {
         "notes": [
             {
@@ -279,7 +279,7 @@
             }
         ]
     },
-    "errorUnknownDestination": "La destination est inconnue. Pouvez-vous être un peu plus descriptif?",
+    "errorUnknownDestination": "afisi neyina la mele nyanyame o,doe do ake",
     "@errorUnknownDestination": {
         "notes": [
             {
@@ -288,7 +288,7 @@
             }
         ]
     },
-    "errorUnknownOriginDestination": "L'origine et la destination sont inconnues. Pouvez-vous être un peu plus descriptif?",
+    "errorUnknownOriginDestination": "afisi netso kple afisi neyina la meli o. gbugbor na dorwo do",
     "@errorUnknownOriginDestination": {
         "notes": [
             {
@@ -297,7 +297,7 @@
             }
         ]
     },
-    "errorNoBarrierFree": "L'origine et la destination ne sont pas accessibles en fauteuil roulant.",
+    "errorNoBarrierFree": "bafakeke matenu ayi afisi netso kple afisi neyina o",
     "@errorNoBarrierFree": {
         "notes": [
             {
@@ -306,7 +306,7 @@
             }
         ]
     },
-    "errorAmbiguousOrigin": "Le planificateur de trajet n'est pas sûr du lieu de départ. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "errorAmbiguousOrigin": "morzorzordzikporla la menya afisi yim nele o. tsor esiawo dome tor deka alo de afisi yim nele la gorme nyuie",
     "@errorAmbiguousOrigin": {
         "notes": [
             {
@@ -315,7 +315,7 @@
             }
         ]
     },
-    "errorAmbiguousDestination": "Le planificateur de trajet ne sait pas trop à quelle destination vous souhaitez aller. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "errorAmbiguousDestination": "morzorzordzikporla la meya afisi yim nele o. tsor le esiawo dome alo nlor bubu",
     "@errorAmbiguousDestination": {
         "notes": [
             {
@@ -324,7 +324,7 @@
             }
         ]
     },
-    "errorAmbiguousOriginDestination": "L'origine et la destination sont ambiguës. Veuillez choisir parmi les options suivantes ou être plus précis.",
+    "errorAmbiguousOriginDestination": "gormesese melina afisi neyine kple afisi netso o.tso esiawo dome tor deka alo de afisi yim nele la gorme nyuie",
     "@errorAmbiguousOriginDestination": {
         "notes": [
             {
@@ -333,7 +333,7 @@
             }
         ]
     },
-    "searchHintOrigin": "Choisissez le point de départ",
+    "searchHintOrigin": "tsor gorme dzefe",
     "@searchHintOrigin": {
         "notes": [
             {
@@ -342,7 +342,7 @@
             }
         ]
     },
-    "searchHintDestination": "Choisissez une destination",
+    "searchHintDestination": "tsor afisi neyina",
     "@searchHintDestination": {
         "notes": [
             {
@@ -351,7 +351,7 @@
             }
         ]
     },
-    "searchItemChooseOnMap": "Choisissez sur la carte",
+    "searchItemChooseOnMap": "tsor tefea le nutata la dzi",
     "@searchItemChooseOnMap": {
         "notes": [
             {
@@ -360,7 +360,7 @@
             }
         ]
     },
-    "searchItemYourLocation": "Votre emplacement",
+    "searchItemYourLocation": "tefe si nele",
     "@searchItemYourLocation": {
         "notes": [
             {
@@ -369,7 +369,7 @@
             }
         ]
     },
-    "searchItemNoResults": "Aucun résultat",
+    "searchItemNoResults": "nudodo adeke o",
     "@searchItemNoResults": {
         "notes": [
             {
@@ -378,7 +378,7 @@
             }
         ]
     },
-    "searchTitlePlaces": "Endroits",
+    "searchTitlePlaces": "tefewo",
     "@searchTitlePlaces": {
         "notes": [
             {
@@ -387,7 +387,7 @@
             }
         ]
     },
-    "searchTitleRecent": "Récent",
+    "searchTitleRecent": "enyide",
     "@searchTitleRecent": {
         "notes": [
             {
@@ -396,7 +396,7 @@
             }
         ]
     },
-    "searchTitleFavorites": "Favoris",
+    "searchTitleFavorites": "veviwo",
     "@searchTitleFavorites": {
         "notes": [
             {
@@ -405,7 +405,7 @@
             }
         ]
     },
-    "searchTitleResults": "Résultats de la recherche",
+    "searchTitleResults": "di nudodowo",
     "@searchTitleResults": {
         "notes": [
             {
@@ -414,7 +414,7 @@
             }
         ]
     },
-    "searchPleaseSelectOrigin": "Sélectionnez un point de départ",
+    "searchPleaseSelectOrigin": "tsor afisi ne tso",
     "@searchPleaseSelectOrigin": {
         "notes": [
             {
@@ -423,7 +423,7 @@
             }
         ]
     },
-    "searchPleaseSelectDestination": "Sélectionnez la destination",
+    "searchPleaseSelectDestination": "tsor afisi neyina",
     "@searchPleaseSelectDestination": {
         "notes": [
             {
@@ -432,7 +432,7 @@
             }
         ]
     },
-    "searchFailLoadingPlan": "Échec du chargement du plan.",
+    "searchFailLoadingPlan": "mekor dzidzedze o",
     "@searchFailLoadingPlan": {
         "notes": [
             {
@@ -441,7 +441,7 @@
             }
         ]
     },
-    "searchMapMarker": "Position dans le plan",
+    "searchMapMarker": "nutata tanu",
     "@searchMapMarker": {
         "notes": [
             {
@@ -450,7 +450,7 @@
             }
         ]
     },
-    "chooseLocationPageTitle": "Choisissez un point sur le plan",
+    "chooseLocationPageTitle": "tsor tefe deka",
     "@chooseLocationPageTitle": {
         "notes": [
             {
@@ -459,7 +459,7 @@
             }
         ]
     },
-    "chooseLocationPageSubtitle": "Agrandir et déplacer la carte pour centrer le marqueur",
+    "chooseLocationPageSubtitle": "keke mortata la.",
     "@chooseLocationPageSubtitle": {
         "notes": [
             {
@@ -468,7 +468,7 @@
             }
         ]
     },
-    "instructionWalk": "Marcher {duration} ({distance}) vers\n{location}",
+    "instructionWalk": "zor",
     "@instructionWalk": {
         "notes": [
             {
@@ -507,7 +507,7 @@
             }
         ]
     },
-    "instructionRide": "En {vehicle} pendant {duration} ({distance}) vers\n{location}",
+    "instructionRide": "za {vehicle} abe {duration} {distance} yi {location} nkor",
     "@instructionRide": {
         "notes": [
             {
@@ -553,7 +553,7 @@
             }
         ]
     },
-    "instructionVehicleBus": "Bus",
+    "instructionVehicleBus": "lori didi",
     "@instructionVehicleBus": {
         "notes": [
             {
@@ -562,7 +562,7 @@
             }
         ]
     },
-    "instructionVehicleMicro": "Micro",
+    "instructionVehicleMicro": "micro",
     "@instructionVehicleMicro": {
         "notes": [
             {
@@ -571,7 +571,7 @@
             }
         ]
     },
-    "instructionVehicleMinibus": "Minibus",
+    "instructionVehicleMinibus": "lori sue",
     "@instructionVehicleMinibus": {
         "notes": [
             {
@@ -589,7 +589,7 @@
             }
         ]
     },
-    "instructionVehicleCar": "Voiture",
+    "instructionVehicleCar": "lori",
     "@instructionVehicleCar": {
         "notes": [
             {
@@ -598,7 +598,7 @@
             }
         ]
     },
-    "instructionVehicleGondola": "Gondole",
+    "instructionVehicleGondola": "Gondola",
     "@instructionVehicleGondola": {
         "notes": [
             {
@@ -607,7 +607,7 @@
             }
         ]
     },
-    "instructionDurationMinutes": "{value} min.",
+    "instructionDurationMinutes": "gafofo",
     "@instructionDurationMinutes": {
         "notes": [
             {
@@ -632,7 +632,7 @@
             }
         ]
     },
-    "instructionDistanceKm": "{value} km.",
+    "instructionDistanceKm": "kilom3ta",
     "@instructionDistanceKm": {
         "notes": [
             {
@@ -657,7 +657,7 @@
             }
         ]
     },
-    "instructionDistanceMeters": "{value} m.",
+    "instructionDistanceMeters": "m3ta",
     "@instructionDistanceMeters": {
         "notes": [
             {
@@ -682,7 +682,7 @@
             }
         ]
     },
-    "menuConnections": "Afficher les itinéraires",
+    "menuConnections": "fia mor",
     "@menuConnections": {
         "notes": [
             {
@@ -691,7 +691,7 @@
             }
         ]
     },
-    "menuAbout": "À propos",
+    "menuAbout": "tso mianu",
     "@menuAbout": {
         "notes": [
             {
@@ -700,7 +700,7 @@
             }
         ]
     },
-    "menuTeam": "Équipe",
+    "menuTeam": "haborbor",
     "@menuTeam": {
         "notes": [
             {
@@ -709,7 +709,7 @@
             }
         ]
     },
-    "menuFeedback": "Envoyer un commentaire",
+    "menuFeedback": "nami susu",
     "@menuFeedback": {
         "notes": [
             {
@@ -718,7 +718,7 @@
             }
         ]
     },
-    "menuOnline": "En ligne",
+    "menuOnline": "nor kadzi",
     "@menuOnline": {
         "notes": [
             {
@@ -727,7 +727,7 @@
             }
         ]
     },
-    "menuAppReview": "Évaluer l'application",
+    "menuAppReview": "nami numetsotso",
     "@menuAppReview": {
         "notes": [
             {
@@ -736,7 +736,7 @@
             }
         ]
     },
-    "menuShareApp": "",
+    "menuShareApp": "kaka dorworfea",
     "@menuShareApp": {
         "notes": [
             {
@@ -745,7 +745,7 @@
             }
         ]
     },
-    "shareAppText": "",
+    "shareAppText": "hahomorzorzor le Cochabamba{url}",
     "@shareAppText": {
         "notes": [
             {
@@ -770,7 +770,7 @@
             }
         ]
     },
-    "feedbackContent": "Avez-vous des suggestions pour notre application ou avez-vous trouvé des erreurs dans les données? Nous aimerions le savoir! Assurez-vous d'ajouter votre adresse électronique ou votre numéro de téléphone pour que nous puissions vous répondre.",
+    "feedbackContent": "dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email",
     "@feedbackContent": {
         "notes": [
             {
@@ -779,7 +779,7 @@
             }
         ]
     },
-    "feedbackTitle": "Envoyez-nous un e-mail",
+    "feedbackTitle": "Do email do da mi",
     "@feedbackTitle": {
         "notes": [
             {
@@ -788,7 +788,7 @@
             }
         ]
     },
-    "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
+    "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "notes": [
             {
@@ -797,7 +797,7 @@
             }
         ]
     },
-    "aboutLicenses": "Licences",
+    "aboutLicenses": "nuse",
     "@aboutLicenses": {
         "notes": [
             {
@@ -806,7 +806,7 @@
             }
         ]
     },
-    "aboutOpenSource": "Cette application est publiée en open source sur GitHub. N'hésitez pas à contribuer ou à l'apporter dans votre propre ville.",
+    "aboutOpenSource": "na dorworfea na tedenu wo. dorworfea le github",
     "@aboutOpenSource": {
         "notes": [
             {
@@ -815,7 +815,7 @@
             }
         ]
     },
-    "teamContent": "Nous sommes une équipe internationale appelée Trufi Association qui a créé cette application avec l'aide de nombreux bénévoles! Voulez-vous améliorer l'application Trufi et faire partie de notre équipe? Merci de nous contacter via:",
+    "teamContent": "dorworfe siame torwo tso dukorvovome.edzibe yea zu miadome tor deka?yormi le kafomorsia dzi",
     "@teamContent": {
         "notes": [
             {
@@ -824,7 +824,7 @@
             }
         ]
     },
-    "teamSectionRepresentatives": "Représentants: {representatives}",
+    "teamSectionRepresentatives": "tefenorlawo",
     "@teamSectionRepresentatives": {
         "notes": [
             {
@@ -849,7 +849,7 @@
             }
         ]
     },
-    "teamSectionTeam": "Équipe: {teamMembers}",
+    "teamSectionTeam": "haborborme norlawo",
     "@teamSectionTeam": {
         "notes": [
             {
@@ -874,7 +874,7 @@
             }
         ]
     },
-    "teamSectionTranslations": "Traductions: {translators}",
+    "teamSectionTranslations": "gormedede",
     "@teamSectionTranslations": {
         "notes": [
             {
@@ -899,7 +899,7 @@
             }
         ]
     },
-    "teamSectionRoutes": "Itinéraires: {routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que {osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!",
+    "teamSectionRoutes": "morwo kple dorworfea nudorwolawo\nzu miadometor deka",
     "@teamSectionRoutes": {
         "notes": [
             {
@@ -931,7 +931,7 @@
             }
         ]
     },
-    "donate": "",
+    "donate": "naanu",
     "@donate": {
         "notes": [
             {
@@ -940,7 +940,7 @@
             }
         ]
     },
-    "readOurBlog": "",
+    "readOurBlog": "xle miafe nu",
     "@readOurBlog": {
         "notes": [
             {
@@ -949,7 +949,7 @@
             }
         ]
     },
-    "followOnFacebook": "",
+    "followOnFacebook": "kplormido le Facebook",
     "@followOnFacebook": {
         "notes": [
             {
@@ -958,7 +958,7 @@
             }
         ]
     },
-    "followOnTwitter": "",
+    "followOnTwitter": "kplormido le Twiter",
     "@followOnTwitter": {
         "notes": [
             {
@@ -967,7 +967,7 @@
             }
         ]
     },
-    "followOnInstagram": "",
+    "followOnInstagram": "kplormido le instagram",
     "@followOnInstagram": {
         "notes": [
             {
@@ -976,7 +976,7 @@
             }
         ]
     },
-    "appReviewDialogTitle": "",
+    "appReviewDialogTitle": "trufi de vi nawoa",
     "@appReviewDialogTitle": {
         "notes": [
             {
@@ -985,7 +985,7 @@
             }
         ]
     },
-    "appReviewDialogContent": "",
+    "appReviewDialogContent": "nlor susudede ade nami",
     "@appReviewDialogContent": {
         "notes": [
             {
@@ -994,7 +994,7 @@
             }
         ]
     },
-    "appReviewDialogButtonDecline": "",
+    "appReviewDialogButtonDecline": "menye fifia o",
     "@appReviewDialogButtonDecline": {
         "notes": [
             {
@@ -1003,7 +1003,7 @@
             }
         ]
     },
-    "appReviewDialogButtonAccept": "",
+    "appReviewDialogButtonAccept": "nlor susud3d3",
     "@appReviewDialogButtonAccept": {
         "notes": [
             {
@@ -1012,7 +1012,7 @@
             }
         ]
     },
-    "instructionJunction": "",
+    "instructionJunction": "meli o",
     "@instructionJunction": {
         "type": "text",
         "notes": [
@@ -1045,7 +1045,7 @@
             }
         ]
     },
-    "instructionVehicleLightRail": "",
+    "instructionVehicleLightRail": "gborlo",
     "@instructionVehicleLightRail": {
         "notes": [
             {
@@ -1054,5 +1054,16 @@
             }
         ]
     },
-    "menuYourPlaces": ""
+    "menuYourPlaces": "",
+    "savedPlacesSetIconLabel": "",
+    "savedPlacesSetNameLabel": "",
+    "savedPlacesSetPositionLabel": "",
+    "savedPlacesRemoveLabel": "",
+    "savedPlacesSelectIconTitle": "",
+    "mapTypeLabel": "",
+    "mapTypeStreetsCaption": "",
+    "mapTypeSatelliteCaption": "",
+    "mapTypeTerrainCaption": "",
+    "commonSave": "",
+    "savedPlacesEnterNameTitle": ""
 }

@@ -1,6 +1,6 @@
 {
-    "@@locale": "es",
-    "@@last_modified": "2021-04-13T10:59:56+02:00",
+    "@@locale": "qu",
+    "@@last_modified": "2021-04-13T14:58:27+02:00",
     "title": "Trufi App",
     "@title": {
         "notes": [
@@ -24,7 +24,7 @@
             }
         }
     },
-    "description": "La mejor forma de viajar con trufis, micros y buses a través de Cochabamba.",
+    "description": "Trufis, microspi, buspi ima qhuchapampapi aswan sumaq ch’usanapaq.",
     "@description": {
         "notes": [
             {
@@ -63,7 +63,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedTitle": "Sin acceso a la ubicación",
+    "alertLocationServicesDeniedTitle": "Kay kiti mana tarikunchu",
     "@alertLocationServicesDeniedTitle": {
         "notes": [
             {
@@ -72,7 +72,7 @@
             }
         ]
     },
-    "alertLocationServicesDeniedMessage": "Por favor, asegúrese de que el GPS y las configuraciones de ubicación estén activadas en su dispositivo.",
+    "alertLocationServicesDeniedMessage": "Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.",
     "@alertLocationServicesDeniedMessage": {
         "notes": [
             {
@@ -81,7 +81,7 @@
             }
         ]
     },
-    "commonOK": "Aceptar",
+    "commonOK": "Ari",
     "@commonOK": {
         "notes": [
             {
@@ -90,7 +90,7 @@
             }
         ]
     },
-    "commonCancel": "Cancelar",
+    "commonCancel": "Mana",
     "@commonCancel": {
         "notes": [
             {
@@ -99,7 +99,7 @@
             }
         ]
     },
-    "commonGoOffline": "Salir de línea",
+    "commonGoOffline": "Offline",
     "@commonGoOffline": {
         "notes": [
             {
@@ -108,7 +108,7 @@
             }
         ]
     },
-    "commonGoOnline": "Ir en línea",
+    "commonGoOnline": "Online",
     "@commonGoOnline": {
         "notes": [
             {
@@ -117,7 +117,7 @@
             }
         ]
     },
-    "commonDestination": "Destino",
+    "commonDestination": "Mayman",
     "@commonDestination": {
         "notes": [
             {
@@ -126,7 +126,7 @@
             }
         ]
     },
-    "commonOrigin": "Origen",
+    "commonOrigin": "Maymanta",
     "@commonOrigin": {
         "notes": [
             {
@@ -135,7 +135,7 @@
             }
         ]
     },
-    "commonNoInternet": "Sin conexión a internet.",
+    "commonNoInternet": "Mana internet kanchu",
     "@commonNoInternet": {
         "notes": [
             {
@@ -144,7 +144,7 @@
             }
         ]
     },
-    "commonFailLoading": "Error al cargar datos",
+    "commonFailLoading": "Mana aticunchu tariyta datusta",
     "@commonFailLoading": {
         "notes": [
             {
@@ -153,7 +153,7 @@
             }
         ]
     },
-    "commonUnknownError": "Error desconocido",
+    "commonUnknownError": "Mana yachacunchu ima pantay kasqanta chay",
     "@commonUnknownError": {
         "notes": [
             {
@@ -162,7 +162,7 @@
             }
         ]
     },
-    "commonError": "Error",
+    "commonError": "Pantay",
     "@commonError": {
         "notes": [
             {
@@ -171,7 +171,7 @@
             }
         ]
     },
-    "noRouteError": "Lo sentimos, no pudimos encontrar una ruta. ¿Qué quiere hacer?",
+    "noRouteError": "Qhispichiwasqayku. Mana achhaykama ñanta tariyta atikunchu. Imata ruwayta munanki?",
     "@noRouteError": {
         "notes": [
             {
@@ -180,7 +180,7 @@
             }
         ]
     },
-    "noRouteErrorActionCancel": "Prueba con otro destino",
+    "noRouteErrorActionCancel": "Waq kitiwan watiqmanta mask'ay",
     "@noRouteErrorActionCancel": {
         "notes": [
             {
@@ -189,7 +189,7 @@
             }
         ]
     },
-    "noRouteErrorActionReportMissingRoute": "Reportar una ruta faltante",
+    "noRouteErrorActionReportMissingRoute": "Mana rikhurimuq ñanta riqsichiy",
     "@noRouteErrorActionReportMissingRoute": {
         "notes": [
             {
@@ -198,7 +198,7 @@
             }
         ]
     },
-    "noRouteErrorActionShowCarRoute": "Mostrar ruta en auto",
+    "noRouteErrorActionShowCarRoute": "Autopaq kay ñanta rikhuchiy",
     "@noRouteErrorActionShowCarRoute": {
         "notes": [
             {
@@ -207,7 +207,7 @@
             }
         ]
     },
-    "errorServerUnavailable": "Lo sentimos. El planificador de ruta está fuera de servicio temporalmente. Inténtelo más tarde.",
+    "errorServerUnavailable": "Qhispichiwasqayku. Kunan pacha, ñan mask’aqqa mana llamk’achkanku. Watiqmanta mask’ay juk ratumanta.",
     "@errorServerUnavailable": {
         "notes": [
             {
@@ -216,7 +216,7 @@
             }
         ]
     },
-    "errorOutOfBoundary": "Viaje no disponible. Puede que esté intentando planificar un viaje fuera de los límites disponibles.",
+    "errorOutOfBoundary": "Kay ch’usana kitiqa mana ruwakuyta atinchu. Manachu kay llaqtapi mana kasqanta kitita machkhanki?",
     "@errorOutOfBoundary": {
         "notes": [
             {
@@ -225,7 +225,7 @@
             }
         ]
     },
-    "errorPathNotFound": "Viaje no disponible. Su punto de origen y\/o destino pueden no ser seguros. Seleccione un inicio y final en calles residenciales.",
+    "errorPathNotFound": "Kay ch’usana kitiqa mana ruwakuyta atikunchu mana ñan tarikusqanrayku, akllay qallariy chanta chayana kititaqa allin riqsisqa ñankunapi.",
     "@errorPathNotFound": {
         "notes": [
             {
@@ -234,7 +234,7 @@
             }
         ]
     },
-    "errorNoTransitTimes": "No hay tiempos de tránsito disponibles. La información podría no ser válida para la fecha actual o no hay rutas disponibles para su viaje.",
+    "errorNoTransitTimes": "Mana llamk’aq phani kanchu. Ichas mana kay p’unchawpi ruwakuyta atikunmanchu, manaqa mana ñan kanmanchu ch’usanaykipaq.",
     "@errorNoTransitTimes": {
         "notes": [
             {
@@ -243,7 +243,7 @@
             }
         ]
     },
-    "errorServerTimeout": "El planificador de rutas está tardando demasiado. Por favor, inténtelo más tarde.",
+    "errorServerTimeout": "Kiti mask’aqqa anchata unaykachkan. Watiqmanta juk ratumanta mask’ay.",
     "@errorServerTimeout": {
         "notes": [
             {
@@ -252,7 +252,7 @@
             }
         ]
     },
-    "errorTrivialDistance": "Origen y destino están demasiado cerca.",
+    "errorTrivialDistance": "Qallariy chanta chayana kitkunaqa ancha qaylla kachkanku.",
     "@errorTrivialDistance": {
         "notes": [
             {
@@ -261,7 +261,7 @@
             }
         ]
     },
-    "errorServerCanNotHandleRequest": "La solicitud tiene errores que el servidor no puede procesar.",
+    "errorServerCanNotHandleRequest": "Mañasqayki kitiqa mana tariyta atikunchu.",
     "@errorServerCanNotHandleRequest": {
         "notes": [
             {
@@ -270,7 +270,7 @@
             }
         ]
     },
-    "errorUnknownOrigin": "Origen desconocido. ¿Podría ser un poco más preciso?",
+    "errorUnknownOrigin": "Qallariy kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.",
     "@errorUnknownOrigin": {
         "notes": [
             {
@@ -279,7 +279,7 @@
             }
         ]
     },
-    "errorUnknownDestination": "Destino desconocido. ¿Podría ser un poco más preciso?",
+    "errorUnknownDestination": "Chayana kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.",
     "@errorUnknownDestination": {
         "notes": [
             {
@@ -288,7 +288,7 @@
             }
         ]
     },
-    "errorUnknownOriginDestination": "Origen y destino desconocidos ¿Podría ser un poco más preciso?",
+    "errorUnknownOriginDestination": "Qallariy chanta chayana kitikunaqa mana riqsisqachu kanku. Kitiykita aswan sut’ita riqsichiy.",
     "@errorUnknownOriginDestination": {
         "notes": [
             {
@@ -297,7 +297,7 @@
             }
         ]
     },
-    "errorNoBarrierFree": "Origen y destino no son accesibles a silla de ruedas.",
+    "errorNoBarrierFree": "Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.",
     "@errorNoBarrierFree": {
         "notes": [
             {
@@ -306,7 +306,7 @@
             }
         ]
     },
-    "errorAmbiguousOrigin": "El planificador de rutas no está seguro de su origen. Por favor, seleccione una de las siguientes opciones o introduzca un origen más exacto.",
+    "errorAmbiguousOrigin": "Ñan wakichiqqa qallariy kitiykiqa mana riqsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.",
     "@errorAmbiguousOrigin": {
         "notes": [
             {
@@ -315,7 +315,7 @@
             }
         ]
     },
-    "errorAmbiguousDestination": "El planificador de rutas no está seguro de su destino. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.",
+    "errorAmbiguousDestination": "Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.",
     "@errorAmbiguousDestination": {
         "notes": [
             {
@@ -324,7 +324,7 @@
             }
         ]
     },
-    "errorAmbiguousOriginDestination": "Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.",
+    "errorAmbiguousOriginDestination": "Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.",
     "@errorAmbiguousOriginDestination": {
         "notes": [
             {
@@ -333,7 +333,7 @@
             }
         ]
     },
-    "searchHintOrigin": "Seleccione punto de origen",
+    "searchHintOrigin": "Qallariy kitita akllay",
     "@searchHintOrigin": {
         "notes": [
             {
@@ -342,7 +342,7 @@
             }
         ]
     },
-    "searchHintDestination": "Seleccione destino",
+    "searchHintDestination": "Chayana kitita akllay",
     "@searchHintDestination": {
         "notes": [
             {
@@ -351,7 +351,7 @@
             }
         ]
     },
-    "searchItemChooseOnMap": "Seleccionar en el mapa",
+    "searchItemChooseOnMap": "Mapa ñisqapi akllay",
     "@searchItemChooseOnMap": {
         "notes": [
             {
@@ -360,7 +360,7 @@
             }
         ]
     },
-    "searchItemYourLocation": "Su ubicación",
+    "searchItemYourLocation": "Kaypi kachkankii",
     "@searchItemYourLocation": {
         "notes": [
             {
@@ -369,7 +369,7 @@
             }
         ]
     },
-    "searchItemNoResults": "Ningún resultado",
+    "searchItemNoResults": "Mana tarikunchu",
     "@searchItemNoResults": {
         "notes": [
             {
@@ -378,7 +378,7 @@
             }
         ]
     },
-    "searchTitlePlaces": "Lugares",
+    "searchTitlePlaces": "Kitikuna",
     "@searchTitlePlaces": {
         "notes": [
             {
@@ -387,7 +387,7 @@
             }
         ]
     },
-    "searchTitleRecent": "Recientes",
+    "searchTitleRecent": "Musuq mask'anakuna",
     "@searchTitleRecent": {
         "notes": [
             {
@@ -396,7 +396,7 @@
             }
         ]
     },
-    "searchTitleFavorites": "Favoritos",
+    "searchTitleFavorites": "Aswan mask'akuqkuna",
     "@searchTitleFavorites": {
         "notes": [
             {
@@ -405,7 +405,7 @@
             }
         ]
     },
-    "searchTitleResults": "Resultados de búsqueda",
+    "searchTitleResults": "Mask'anakuna riqsichiq",
     "@searchTitleResults": {
         "notes": [
             {
@@ -414,7 +414,7 @@
             }
         ]
     },
-    "searchPleaseSelectOrigin": "Seleccione origen",
+    "searchPleaseSelectOrigin": "Qallariy kitita akllay",
     "@searchPleaseSelectOrigin": {
         "notes": [
             {
@@ -423,7 +423,7 @@
             }
         ]
     },
-    "searchPleaseSelectDestination": "Seleccione destino",
+    "searchPleaseSelectDestination": "Chayana kitita akllay",
     "@searchPleaseSelectDestination": {
         "notes": [
             {
@@ -432,7 +432,7 @@
             }
         ]
     },
-    "searchFailLoadingPlan": "Error al cargar el itinerario.",
+    "searchFailLoadingPlan": "Mana tarikunchu mayninta rinata",
     "@searchFailLoadingPlan": {
         "notes": [
             {
@@ -441,7 +441,7 @@
             }
         ]
     },
-    "searchMapMarker": "Posición en el Mapa",
+    "searchMapMarker": "Maypi cashani mapapy",
     "@searchMapMarker": {
         "notes": [
             {
@@ -450,7 +450,7 @@
             }
         ]
     },
-    "chooseLocationPageTitle": "Elige un punto en el mapa",
+    "chooseLocationPageTitle": "Mapapi juk kitita riqsichiy",
     "@chooseLocationPageTitle": {
         "notes": [
             {
@@ -459,7 +459,7 @@
             }
         ]
     },
-    "chooseLocationPageSubtitle": "Amplía y mueve el mapa para centrar el marcador",
+    "chooseLocationPageSubtitle": "Ñit'iy mapapi",
     "@chooseLocationPageSubtitle": {
         "notes": [
             {
@@ -468,7 +468,7 @@
             }
         ]
     },
-    "instructionWalk": "Caminar {duration} ({distance}) hasta\n{location}",
+    "instructionWalk": "Kaymanta puriy {duration} ({distance}) achaykama\n{location} Puriy",
     "@instructionWalk": {
         "notes": [
             {
@@ -507,7 +507,7 @@
             }
         ]
     },
-    "instructionRide": "Tomar {vehicle} por {duration} ({distance}) hasta\n{location}",
+    "instructionRide": "Jap’iy {vehicle} {duration} ({distance})\n{location} kama",
     "@instructionRide": {
         "notes": [
             {
@@ -682,7 +682,7 @@
             }
         ]
     },
-    "menuConnections": "Muestra rutas",
+    "menuConnections": "Ñankunata rikhuchiy",
     "@menuConnections": {
         "notes": [
             {
@@ -691,7 +691,7 @@
             }
         ]
     },
-    "menuAbout": "Acerca",
+    "menuAbout": "Imamanta yachayta munanki?",
     "@menuAbout": {
         "notes": [
             {
@@ -700,7 +700,7 @@
             }
         ]
     },
-    "menuTeam": "Sobre el equipo",
+    "menuTeam": "Ñuqaykumanta",
     "@menuTeam": {
         "notes": [
             {
@@ -709,7 +709,7 @@
             }
         ]
     },
-    "menuFeedback": "Enviar comentarios",
+    "menuFeedback": "Yuyasqayniykita riqsichiwayku",
     "@menuFeedback": {
         "notes": [
             {
@@ -718,7 +718,7 @@
             }
         ]
     },
-    "menuOnline": "En línea",
+    "menuOnline": "Online",
     "@menuOnline": {
         "notes": [
             {
@@ -727,7 +727,7 @@
             }
         ]
     },
-    "menuAppReview": "Valora la aplicación",
+    "menuAppReview": "Trufi Appta chaninchay",
     "@menuAppReview": {
         "notes": [
             {
@@ -770,7 +770,7 @@
             }
         ]
     },
-    "feedbackContent": "¿Tiene sugerencias para nuestra aplicación o ha encontrado algunos errores en los datos? Nos encantaría saberlo! Asegúrese de agregar su dirección de correo electrónico o teléfono para que podamos responderlo.",
+    "feedbackContent": "Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.",
     "@feedbackContent": {
         "notes": [
             {
@@ -779,7 +779,7 @@
             }
         ]
     },
-    "feedbackTitle": "Envíanos un correo electrónico",
+    "feedbackTitle": "Correo electrónico ñiqta yuyasqasniykita apachimuwayku!",
     "@feedbackTitle": {
         "notes": [
             {
@@ -788,7 +788,7 @@
             }
         ]
     },
-    "aboutContent": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.",
+    "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
     "@aboutContent": {
         "notes": [
             {
@@ -806,7 +806,7 @@
             }
         ]
     },
-    "aboutOpenSource": "Esta aplicación está liberada como código abierto en GitHub. Siéntase libre de contribuir o llevarlo a su propia ciudad.",
+    "aboutOpenSource": "",
     "@aboutOpenSource": {
         "notes": [
             {
@@ -815,7 +815,7 @@
             }
         ]
     },
-    "teamContent": "Somos un equipo internacional llamado Trufi Association y hemos desarrollado esta app con la ayuda de muchos voluntarios. ¿Quieres mejorar la Trufi App y ser parte de nuestro equipo? Contáctanos a:",
+    "teamContent": "Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:",
     "@teamContent": {
         "notes": [
             {
@@ -824,7 +824,7 @@
             }
         ]
     },
-    "teamSectionRepresentatives": "Representantes: {representatives}",
+    "teamSectionRepresentatives": "Umalliqkuna: {representatives}",
     "@teamSectionRepresentatives": {
         "notes": [
             {
@@ -849,7 +849,7 @@
             }
         ]
     },
-    "teamSectionTeam": "Equipo: {teamMembers}",
+    "teamSectionTeam": "Yanapaqkuna: {teamMembers}",
     "@teamSectionTeam": {
         "notes": [
             {
@@ -874,7 +874,7 @@
             }
         ]
     },
-    "teamSectionTranslations": "Traducciones: {translators}",
+    "teamSectionTranslations": "Tiqraqkuna: {translators}",
     "@teamSectionTranslations": {
         "notes": [
             {
@@ -899,7 +899,7 @@
             }
         ]
     },
-    "teamSectionRoutes": "Rutas: {routeContributors} y todos los usuarios que subieron rutas a OpenStreetMap, como {osmContributors}. ¡Contáctanos si quieres unirte a la comunidad OpenStreetMap!",
+    "teamSectionRoutes": "Rutas yanapaqkuna: {routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, {osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!",
     "@teamSectionRoutes": {
         "notes": [
             {
@@ -1054,5 +1054,16 @@
             }
         ]
     },
-    "menuYourPlaces": ""
+    "menuYourPlaces": "",
+    "savedPlacesSetIconLabel": "",
+    "savedPlacesSetNameLabel": "",
+    "savedPlacesSetPositionLabel": "",
+    "savedPlacesRemoveLabel": "",
+    "savedPlacesSelectIconTitle": "",
+    "mapTypeLabel": "",
+    "mapTypeStreetsCaption": "",
+    "mapTypeSatelliteCaption": "",
+    "mapTypeTerrainCaption": "",
+    "commonSave": "",
+    "savedPlacesEnterNameTitle": ""
 }

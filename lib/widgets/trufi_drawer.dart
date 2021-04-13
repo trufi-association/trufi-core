@@ -83,7 +83,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                     cfg.customTranslations.get(
                       cfg.customTranslations.tagline,
                       currentLocale,
-                      localization.tagline,
+                      localization.tagline(cfg.generalConfiguration.appCity),
                     ),
                     style: theme.primaryTextTheme.subhead,
                   ),
