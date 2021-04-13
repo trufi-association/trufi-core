@@ -250,6 +250,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildAppShareButton(BuildContext context, String url) {
+    final cfg = TrufiConfiguration();
+    final currentLocale = Localizations.localeOf(context);
     final localization = TrufiLocalization.of(context);
     return Container(
       key: appShareButtonKey,
@@ -261,7 +263,15 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         ),
         onTap: () {
           Share.share(
-            localization.shareAppText(url),
+            localization.shareAppText(
+              url,
+              cfg.customTranslations.get(
+                cfg.customTranslations.title,
+                currentLocale,
+                localization.title,
+              ),
+              cfg.generalConfiguration.appCity,
+            ),
             sharePositionOrigin: getAppShareButtonOrigin(),
           );
         },

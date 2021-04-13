@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "@@last_modified": "2021-04-13T15:13:43+02:00",
+    "@@last_modified": "2021-04-13T17:11:23+02:00",
     "aboutContent": "We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
     "@aboutContent": {
         "notes": [
@@ -986,6 +986,12 @@
         "placeholders": {
             "url": {
                 "example": "https:\/\/trufi.share.url"
+            },
+            "appTitle": {
+                "example": "Trufi App"
+            },
+            "cityName": {
+                "example": "Karlsruhe"
             }
         },
         "context-groups": [

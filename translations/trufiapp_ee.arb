@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-04-13T15:13:43+02:00",
+    "@@last_modified": "2021-04-13T17:11:23+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "notes": [
@@ -986,6 +986,12 @@
         "placeholders": {
             "url": {
                 "example": "https:\/\/trufi.share.url"
+            },
+            "appTitle": {
+                "example": "Trufi App"
+            },
+            "cityName": {
+                "example": "Karlsruhe"
             }
         },
         "context-groups": [

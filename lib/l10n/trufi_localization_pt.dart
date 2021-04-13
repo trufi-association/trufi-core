@@ -300,7 +300,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get searchTitleResults => 'Procurar Resultados';
 
   @override
-  String shareAppText(Object url) {
+  String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em ${url}';
   }
 

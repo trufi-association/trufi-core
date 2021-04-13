@@ -225,7 +225,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get menuTeam => 'Ñuqaykumanta';
 
   @override
-  String get menuYourPlaces => '';
+  String get menuYourPlaces => 'Tus lugares';
 
   @override
   String get noRouteError => 'Qhispichiwasqayku. Mana achhaykama ñanta tariyta atikunchu. Imata ruwayta munanki?';
@@ -300,7 +300,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get searchTitleResults => 'Mask\'anakuna riqsichiq';
 
   @override
-  String shareAppText(Object url) {
+  String shareAppText(Object url, Object appTitle, Object cityName) {
     return '';
   }
 

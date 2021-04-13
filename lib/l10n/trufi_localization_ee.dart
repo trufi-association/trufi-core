@@ -300,7 +300,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get searchTitleResults => 'di nudodowo';
 
   @override
-  String shareAppText(Object url) {
+  String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'hahomorzorzor le Cochabamba${url}';
   }
 

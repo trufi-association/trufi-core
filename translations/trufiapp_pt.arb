@@ -1,6 +1,6 @@
 {
     "@@locale": "pt",
-    "@@last_modified": "2021-04-13T15:13:43+02:00",
+    "@@last_modified": "2021-04-13T17:11:23+02:00",
     "aboutContent": "Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\\n\\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.",
     "@aboutContent": {
         "notes": [
@@ -986,6 +986,12 @@
         "placeholders": {
             "url": {
                 "example": "https:\/\/trufi.share.url"
+            },
+            "appTitle": {
+                "example": "Trufi App"
+            },
+            "cityName": {
+                "example": "Karlsruhe"
             }
         },
         "context-groups": [

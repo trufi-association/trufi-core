@@ -225,7 +225,7 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get menuTeam => 'Squadra';
 
   @override
-  String get menuYourPlaces => '';
+  String get menuYourPlaces => 'I tuoi posti';
 
   @override
   String get noRouteError => 'Scusa, non siamo riusciti a trovare un itinerario. Che cosa vuoi fare?';
@@ -300,7 +300,7 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get searchTitleResults => 'Cerca Risultati';
 
   @override
-  String shareAppText(Object url) {
+  String shareAppText(Object url, Object appTitle, Object cityName) {
     return '';
   }
 

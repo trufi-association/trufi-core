@@ -300,8 +300,8 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get searchTitleResults => 'Search Results';
 
   @override
-  String shareAppText(Object url) {
-    return 'Download {appTitle}, the public transport app for {cityName}, at ${url}';
+  String shareAppText(Object url, Object appTitle, Object cityName) {
+    return 'Download ${appTitle}, the public transport app for ${cityName}, at ${url}';
   }
 
   @override

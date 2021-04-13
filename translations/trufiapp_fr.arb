@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-04-13T15:13:43+02:00",
+    "@@last_modified": "2021-04-13T17:11:23+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "notes": [
@@ -785,7 +785,7 @@
         ],
         "description": "Menu item that shows the team page"
     },
-    "menuYourPlaces": "",
+    "menuYourPlaces": "Vos lieux",
     "@menuYourPlaces": {
         "description": "A menu item that shows the saved places"
     },
@@ -986,6 +986,12 @@
         "placeholders": {
             "url": {
                 "example": "https:\/\/trufi.share.url"
+            },
+            "appTitle": {
+                "example": "Trufi App"
+            },
+            "cityName": {
+                "example": "Karlsruhe"
             }
         },
         "context-groups": [

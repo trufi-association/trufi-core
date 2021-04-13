@@ -664,7 +664,7 @@ abstract class TrufiLocalization {
   ///
   /// In en, this message translates to:
   /// **'Download {appTitle}, the public transport app for {cityName}, at {url}'**
-  String shareAppText(Object url);
+  String shareAppText(Object url, Object appTitle, Object cityName);
 
   /// A short marketing sentence that describes the app
   ///
