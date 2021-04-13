@@ -108,545 +108,461 @@ abstract class TrufiLocalization {
     Locale('qu')
   ];
 
-  /// No description provided for @title.
-  ///
-  /// In en, this message translates to:
-  /// **'Trufi App'**
-  String get title;
-
-  /// No description provided for @tagline.
-  ///
-  /// In en, this message translates to:
-  /// **'Public transportation in {city}'**
-  String tagline(Object city);
-
-  /// No description provided for @description.
-  ///
-  /// In en, this message translates to:
-  /// **'The best way to travel with trufis, micros and buses through {cityName}.'**
-  String description(Object cityName);
-
-  /// No description provided for @version.
-  ///
-  /// In en, this message translates to:
-  /// **'Version {version}'**
-  String version(Object version);
-
-  /// No description provided for @alertLocationServicesDeniedTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No location'**
-  String get alertLocationServicesDeniedTitle;
-
-  /// No description provided for @alertLocationServicesDeniedMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Please make sure your device has GPS and the Location settings are activated.'**
-  String get alertLocationServicesDeniedMessage;
-
-  /// No description provided for @commonOK.
-  ///
-  /// In en, this message translates to:
-  /// **'OK'**
-  String get commonOK;
-
-  /// No description provided for @commonCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get commonCancel;
-
-  /// No description provided for @commonGoOffline.
-  ///
-  /// In en, this message translates to:
-  /// **'Go offline'**
-  String get commonGoOffline;
-
-  /// No description provided for @commonGoOnline.
-  ///
-  /// In en, this message translates to:
-  /// **'Go online'**
-  String get commonGoOnline;
-
-  /// No description provided for @commonDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Destination'**
-  String get commonDestination;
-
-  /// No description provided for @commonOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Origin'**
-  String get commonOrigin;
-
-  /// No description provided for @commonNoInternet.
-  ///
-  /// In en, this message translates to:
-  /// **'No internet connection.'**
-  String get commonNoInternet;
-
-  /// No description provided for @commonFailLoading.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load data'**
-  String get commonFailLoading;
-
-  /// No description provided for @commonUnknownError.
-  ///
-  /// In en, this message translates to:
-  /// **'Unknown error'**
-  String get commonUnknownError;
-
-  /// No description provided for @commonError.
-  ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String get commonError;
-
-  /// No description provided for @noRouteError.
-  ///
-  /// In en, this message translates to:
-  /// **'Sorry, we could not find a route. What do you want to do?'**
-  String get noRouteError;
-
-  /// No description provided for @noRouteErrorActionCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Try another destination'**
-  String get noRouteErrorActionCancel;
-
-  /// No description provided for @noRouteErrorActionReportMissingRoute.
-  ///
-  /// In en, this message translates to:
-  /// **'Report a missing route'**
-  String get noRouteErrorActionReportMissingRoute;
-
-  /// No description provided for @noRouteErrorActionShowCarRoute.
-  ///
-  /// In en, this message translates to:
-  /// **'Show route by car'**
-  String get noRouteErrorActionShowCarRoute;
-
-  /// No description provided for @errorServerUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'We\'re sorry. The trip planner is temporarily unavailable. Please try again later.'**
-  String get errorServerUnavailable;
-
-  /// No description provided for @errorOutOfBoundary.
-  ///
-  /// In en, this message translates to:
-  /// **'Trip is not possible. You might be trying to plan a trip outside the map data boundary.'**
-  String get errorOutOfBoundary;
-
-  /// No description provided for @errorPathNotFound.
-  ///
-  /// In en, this message translates to:
-  /// **'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).'**
-  String get errorPathNotFound;
-
-  /// No description provided for @errorNoTransitTimes.
-  ///
-  /// In en, this message translates to:
-  /// **'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.'**
-  String get errorNoTransitTimes;
-
-  /// No description provided for @errorServerTimeout.
-  ///
-  /// In en, this message translates to:
-  /// **'The trip planner is taking way too long to process your request. Please try again later.'**
-  String get errorServerTimeout;
-
-  /// No description provided for @errorTrivialDistance.
-  ///
-  /// In en, this message translates to:
-  /// **'Origin is within a trivial distance of the destination.'**
-  String get errorTrivialDistance;
-
-  /// No description provided for @errorServerCanNotHandleRequest.
-  ///
-  /// In en, this message translates to:
-  /// **'The request has errors that the server is not willing or able to process.'**
-  String get errorServerCanNotHandleRequest;
-
-  /// No description provided for @errorUnknownOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Origin is unknown. Can you be a bit more descriptive?'**
-  String get errorUnknownOrigin;
-
-  /// No description provided for @errorUnknownDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Destination is unknown. Can you be a bit more descriptive?'**
-  String get errorUnknownDestination;
-
-  /// No description provided for @errorUnknownOriginDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are unknown. Can you be a bit more descriptive?'**
-  String get errorUnknownOriginDestination;
-
-  /// No description provided for @errorNoBarrierFree.
-  ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are not wheelchair accessible'**
-  String get errorNoBarrierFree;
-
-  /// No description provided for @errorAmbiguousOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.'**
-  String get errorAmbiguousOrigin;
-
-  /// No description provided for @errorAmbiguousDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.'**
-  String get errorAmbiguousDestination;
-
-  /// No description provided for @errorAmbiguousOriginDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
-  String get errorAmbiguousOriginDestination;
-
-  /// No description provided for @searchHintOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose starting point'**
-  String get searchHintOrigin;
-
-  /// No description provided for @searchHintDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose destination'**
-  String get searchHintDestination;
-
-  /// No description provided for @searchItemChooseOnMap.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose on map'**
-  String get searchItemChooseOnMap;
-
-  /// No description provided for @searchItemYourLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Your location'**
-  String get searchItemYourLocation;
-
-  /// No description provided for @searchItemNoResults.
-  ///
-  /// In en, this message translates to:
-  /// **'No results'**
-  String get searchItemNoResults;
-
-  /// No description provided for @searchTitlePlaces.
-  ///
-  /// In en, this message translates to:
-  /// **'Places'**
-  String get searchTitlePlaces;
-
-  /// No description provided for @searchTitleRecent.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent'**
-  String get searchTitleRecent;
-
-  /// No description provided for @searchTitleFavorites.
-  ///
-  /// In en, this message translates to:
-  /// **'Favorites'**
-  String get searchTitleFavorites;
-
-  /// No description provided for @searchTitleResults.
-  ///
-  /// In en, this message translates to:
-  /// **'Search Results'**
-  String get searchTitleResults;
-
-  /// No description provided for @searchPleaseSelectOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Select origin'**
-  String get searchPleaseSelectOrigin;
-
-  /// No description provided for @searchPleaseSelectDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Select destination'**
-  String get searchPleaseSelectDestination;
-
-  /// No description provided for @searchFailLoadingPlan.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load plan.'**
-  String get searchFailLoadingPlan;
-
-  /// No description provided for @searchMapMarker.
-  ///
-  /// In en, this message translates to:
-  /// **'Map Marker'**
-  String get searchMapMarker;
-
-  /// No description provided for @chooseLocationPageTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a point'**
-  String get chooseLocationPageTitle;
-
-  /// No description provided for @chooseLocationPageSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Pan & zoom map under pin'**
-  String get chooseLocationPageSubtitle;
-
-  /// No description provided for @instructionWalk.
-  ///
-  /// In en, this message translates to:
-  /// **'Walk {duration} ({distance}) to\n{location}'**
-  String instructionWalk(Object distance, Object duration, Object location);
-
-  /// No description provided for @instructionRide.
-  ///
-  /// In en, this message translates to:
-  /// **'Ride {vehicle} for {duration} ({distance}) to\n{location}'**
-  String instructionRide(Object vehicle, Object distance, Object duration, Object location);
-
-  /// No description provided for @instructionVehicleBus.
-  ///
-  /// In en, this message translates to:
-  /// **'Bus'**
-  String get instructionVehicleBus;
-
-  /// No description provided for @instructionVehicleMicro.
-  ///
-  /// In en, this message translates to:
-  /// **'Micro'**
-  String get instructionVehicleMicro;
-
-  /// No description provided for @instructionVehicleMinibus.
-  ///
-  /// In en, this message translates to:
-  /// **'Minibus'**
-  String get instructionVehicleMinibus;
-
-  /// No description provided for @instructionVehicleTrufi.
-  ///
-  /// In en, this message translates to:
-  /// **'Trufi'**
-  String get instructionVehicleTrufi;
-
-  /// No description provided for @instructionVehicleCar.
-  ///
-  /// In en, this message translates to:
-  /// **'Car'**
-  String get instructionVehicleCar;
-
-  /// No description provided for @instructionVehicleGondola.
-  ///
-  /// In en, this message translates to:
-  /// **'Gondola'**
-  String get instructionVehicleGondola;
-
-  /// No description provided for @instructionDurationMinutes.
-  ///
-  /// In en, this message translates to:
-  /// **'{value} min'**
-  String instructionDurationMinutes(Object value);
-
-  /// No description provided for @instructionDistanceKm.
-  ///
-  /// In en, this message translates to:
-  /// **'{value} km'**
-  String instructionDistanceKm(Object value);
-
-  /// No description provided for @instructionDistanceMeters.
-  ///
-  /// In en, this message translates to:
-  /// **'{value} m'**
-  String instructionDistanceMeters(Object value);
-
-  /// No description provided for @menuConnections.
-  ///
-  /// In en, this message translates to:
-  /// **'Show routes'**
-  String get menuConnections;
-
-  /// No description provided for @menuAbout.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get menuAbout;
-
-  /// No description provided for @menuTeam.
-  ///
-  /// In en, this message translates to:
-  /// **'Team'**
-  String get menuTeam;
-
-  /// No description provided for @menuFeedback.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Feedback'**
-  String get menuFeedback;
-
-  /// No description provided for @menuOnline.
-  ///
-  /// In en, this message translates to:
-  /// **'Online'**
-  String get menuOnline;
-
-  /// No description provided for @menuAppReview.
-  ///
-  /// In en, this message translates to:
-  /// **'Rate the app'**
-  String get menuAppReview;
-
-  /// No description provided for @menuShareApp.
-  ///
-  /// In en, this message translates to:
-  /// **'Share the app'**
-  String get menuShareApp;
-
-  /// No description provided for @shareAppText.
-  ///
-  /// In en, this message translates to:
-  /// **'Download {appTitle}, the public transport app for {cityName}, at {url}'**
-  String shareAppText(Object url);
-
-  /// No description provided for @feedbackContent.
-  ///
-  /// In en, this message translates to:
-  /// **'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.'**
-  String get feedbackContent;
-
-  /// No description provided for @feedbackTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Please e-mail us'**
-  String get feedbackTitle;
-
-  /// No description provided for @aboutContent.
+  /// Text displayed on the about page
   ///
   /// In en, this message translates to:
   /// **'We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.'**
   String get aboutContent;
 
-  /// No description provided for @aboutLicenses.
+  /// Button label to show licenses
   ///
   /// In en, this message translates to:
   /// **'Licenses'**
   String get aboutLicenses;
 
-  /// No description provided for @aboutOpenSource.
+  /// A note about open source
   ///
   /// In en, this message translates to:
   /// **'This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.'**
   String get aboutOpenSource;
 
-  /// No description provided for @teamContent.
+  /// Text of dialog that explains that access to location services was denied
   ///
   /// In en, this message translates to:
-  /// **'We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:'**
-  String get teamContent;
+  /// **'Please make sure your device has GPS and the Location settings are activated.'**
+  String get alertLocationServicesDeniedMessage;
 
-  /// No description provided for @teamSectionRepresentatives.
+  /// Title of dialog that explains that access to location services was denied
   ///
   /// In en, this message translates to:
-  /// **'Representatives: {representatives}'**
-  String teamSectionRepresentatives(Object representatives);
+  /// **'No location'**
+  String get alertLocationServicesDeniedTitle;
 
-  /// No description provided for @teamSectionTeam.
-  ///
-  /// In en, this message translates to:
-  /// **'Team: {teamMembers}'**
-  String teamSectionTeam(Object teamMembers);
-
-  /// No description provided for @teamSectionTranslations.
-  ///
-  /// In en, this message translates to:
-  /// **'Translations: {translators}'**
-  String teamSectionTranslations(Object translators);
-
-  /// No description provided for @teamSectionRoutes.
-  ///
-  /// In en, this message translates to:
-  /// **'Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\nContact us if you want to join the OpenStreetMap community!'**
-  String teamSectionRoutes(Object osmContributors, Object routeContributors);
-
-  /// No description provided for @donate.
-  ///
-  /// In en, this message translates to:
-  /// **'Donate'**
-  String get donate;
-
-  /// No description provided for @readOurBlog.
-  ///
-  /// In en, this message translates to:
-  /// **'Read our blog'**
-  String get readOurBlog;
-
-  /// No description provided for @followOnFacebook.
-  ///
-  /// In en, this message translates to:
-  /// **'Follow us on Facebook'**
-  String get followOnFacebook;
-
-  /// No description provided for @followOnTwitter.
-  ///
-  /// In en, this message translates to:
-  /// **'Follow us on Twitter'**
-  String get followOnTwitter;
-
-  /// No description provided for @followOnInstagram.
-  ///
-  /// In en, this message translates to:
-  /// **'Follow us on Instagram'**
-  String get followOnInstagram;
-
-  /// No description provided for @appReviewDialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Enjoying Trufi?'**
-  String get appReviewDialogTitle;
-
-  /// No description provided for @appReviewDialogContent.
-  ///
-  /// In en, this message translates to:
-  /// **'Support us with a review on the Google Play Store.'**
-  String get appReviewDialogContent;
-
-  /// No description provided for @appReviewDialogButtonDecline.
-  ///
-  /// In en, this message translates to:
-  /// **'Not now'**
-  String get appReviewDialogButtonDecline;
-
-  /// No description provided for @appReviewDialogButtonAccept.
+  /// Accept button of the App Review Dialog used on Android
   ///
   /// In en, this message translates to:
   /// **'Write review'**
   String get appReviewDialogButtonAccept;
 
-  /// No description provided for @instructionJunction.
+  /// Decline button of the App Review Dialog used on Android
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get appReviewDialogButtonDecline;
+
+  /// Content of the App Review Dialog used on Android
+  ///
+  /// In en, this message translates to:
+  /// **'Support us with a review on the Google Play Store.'**
+  String get appReviewDialogContent;
+
+  /// Title of the App Review Dialog used on Android
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoying Trufi?'**
+  String get appReviewDialogTitle;
+
+  /// Page subtitle when choosing a location on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Pan & zoom map under pin'**
+  String get chooseLocationPageSubtitle;
+
+  /// Page title when choosing a location on the map
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a point'**
+  String get chooseLocationPageTitle;
+
+  /// Cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Destination field label
+  ///
+  /// In en, this message translates to:
+  /// **'Destination'**
+  String get commonDestination;
+
+  /// Message when an error has occured
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get commonError;
+
+  /// Message when data could not be loaded
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load data'**
+  String get commonFailLoading;
+
+  /// Go offline button label
+  ///
+  /// In en, this message translates to:
+  /// **'Go offline'**
+  String get commonGoOffline;
+
+  /// Go online button label
+  ///
+  /// In en, this message translates to:
+  /// **'Go online'**
+  String get commonGoOnline;
+
+  /// Message when internet connection is lost
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection.'**
+  String get commonNoInternet;
+
+  /// OK button label
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get commonOK;
+
+  /// Origin field label
+  ///
+  /// In en, this message translates to:
+  /// **'Origin'**
+  String get commonOrigin;
+
+  /// General Save label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// Message when an unknown error has occured
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error'**
+  String get commonUnknownError;
+
+  /// A sentence that describes the application's purpose
+  ///
+  /// In en, this message translates to:
+  /// **'The best way to travel with trufis, micros and buses through {cityName}.'**
+  String description(Object cityName);
+
+  /// Donate menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get donate;
+
+  /// Message that is displayed when a trip could not be planned, because the specified destination is ambiguous
+  ///
+  /// In en, this message translates to:
+  /// **'The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.'**
+  String get errorAmbiguousDestination;
+
+  /// Message that is displayed when a trip could not be planned, because the specified origin is ambiguous
+  ///
+  /// In en, this message translates to:
+  /// **'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.'**
+  String get errorAmbiguousOrigin;
+
+  /// Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous
+  ///
+  /// In en, this message translates to:
+  /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
+  String get errorAmbiguousOriginDestination;
+
+  /// Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible
+  ///
+  /// In en, this message translates to:
+  /// **'Both origin and destination are not wheelchair accessible'**
+  String get errorNoBarrierFree;
+
+  /// Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time
+  ///
+  /// In en, this message translates to:
+  /// **'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.'**
+  String get errorNoTransitTimes;
+
+  /// Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries
+  ///
+  /// In en, this message translates to:
+  /// **'Trip is not possible. You might be trying to plan a trip outside the map data boundary.'**
+  String get errorOutOfBoundary;
+
+  /// Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible
+  ///
+  /// In en, this message translates to:
+  /// **'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).'**
+  String get errorPathNotFound;
+
+  /// Message that is displayed when a trip could not be planned, because the request had errors
+  ///
+  /// In en, this message translates to:
+  /// **'The request has errors that the server is not willing or able to process.'**
+  String get errorServerCanNotHandleRequest;
+
+  /// Message that is displayed when a trip could not be planned, because the server is taking too long to respond
+  ///
+  /// In en, this message translates to:
+  /// **'The trip planner is taking way too long to process your request. Please try again later.'**
+  String get errorServerTimeout;
+
+  /// Message that is displayed when the trip planning server was not available
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re sorry. The trip planner is temporarily unavailable. Please try again later.'**
+  String get errorServerUnavailable;
+
+  /// Message that is displayed when a trip could not be planned, because origin and destination are too close to each other
+  ///
+  /// In en, this message translates to:
+  /// **'Origin is within a trivial distance of the destination.'**
+  String get errorTrivialDistance;
+
+  /// Message that is displayed when a trip could not be planned, because the destination was not found
+  ///
+  /// In en, this message translates to:
+  /// **'Destination is unknown. Can you be a bit more descriptive?'**
+  String get errorUnknownDestination;
+
+  /// Message that is displayed when a trip could not be planned, because the origin was not found
+  ///
+  /// In en, this message translates to:
+  /// **'Origin is unknown. Can you be a bit more descriptive?'**
+  String get errorUnknownOrigin;
+
+  /// Message that is displayed when a trip could not be planned, because both origin and destination were not found
+  ///
+  /// In en, this message translates to:
+  /// **'Both origin and destination are unknown. Can you be a bit more descriptive?'**
+  String get errorUnknownOriginDestination;
+
+  /// Text displayed on the feedback page
+  ///
+  /// In en, this message translates to:
+  /// **'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.'**
+  String get feedbackContent;
+
+  /// Title displayed on the feedback page
+  ///
+  /// In en, this message translates to:
+  /// **'Please e-mail us'**
+  String get feedbackTitle;
+
+  /// Facebook menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Facebook'**
+  String get followOnFacebook;
+
+  /// Instagram menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Instagram'**
+  String get followOnInstagram;
+
+  /// Twitter menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Follow us on Twitter'**
+  String get followOnTwitter;
+
+  /// Itinerary leg distance (km)
+  ///
+  /// In en, this message translates to:
+  /// **'{value} km'**
+  String instructionDistanceKm(Object value);
+
+  /// Itinerary leg distance (m)
+  ///
+  /// In en, this message translates to:
+  /// **'{value} m'**
+  String instructionDistanceMeters(Object value);
+
+  /// Itinerary leg duration
+  ///
+  /// In en, this message translates to:
+  /// **'{value} min'**
+  String instructionDurationMinutes(Object value);
+
+  /// Junction name of two streets
   ///
   /// In en, this message translates to:
   /// **'{street1} and {street2}'**
   String instructionJunction(Object street1, Object street2);
 
-  /// No description provided for @instructionVehicleLightRail.
+  /// Itinerary instruction (vehicle)
+  ///
+  /// In en, this message translates to:
+  /// **'Ride {vehicle} for {duration} ({distance}) to\\n{location}'**
+  String instructionRide(Object vehicle, Object distance, Object duration, Object location);
+
+  /// Vehicle name (Bus)
+  ///
+  /// In en, this message translates to:
+  /// **'Bus'**
+  String get instructionVehicleBus;
+
+  /// Vehicle name (Car)
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get instructionVehicleCar;
+
+  /// Vehicle name (Gondola)
+  ///
+  /// In en, this message translates to:
+  /// **'Gondola'**
+  String get instructionVehicleGondola;
+
+  /// Vehicle name (Light Rail Train)
   ///
   /// In en, this message translates to:
   /// **'Light Rail Train'**
   String get instructionVehicleLightRail;
 
-  /// No description provided for @menuYourPlaces.
+  /// Vehicle name (Micro)
+  ///
+  /// In en, this message translates to:
+  /// **'Micro'**
+  String get instructionVehicleMicro;
+
+  /// Vehicle name (Minibus)
+  ///
+  /// In en, this message translates to:
+  /// **'Minibus'**
+  String get instructionVehicleMinibus;
+
+  /// Vehicle name (Trufi)
+  ///
+  /// In en, this message translates to:
+  /// **'Trufi'**
+  String get instructionVehicleTrufi;
+
+  /// Itinerary instruction (walking)
+  ///
+  /// In en, this message translates to:
+  /// **'Walk {duration} ({distance}) to\\n{location}'**
+  String instructionWalk(Object distance, Object duration, Object location);
+
+  /// Label for the Map types
+  ///
+  /// In en, this message translates to:
+  /// **'Map Type'**
+  String get mapTypeLabel;
+
+  /// Label for the Satellite Map type
+  ///
+  /// In en, this message translates to:
+  /// **'Satellite'**
+  String get mapTypeSatelliteCaption;
+
+  /// Label for the Streets Map type
+  ///
+  /// In en, this message translates to:
+  /// **'Streets'**
+  String get mapTypeStreetsCaption;
+
+  /// Label for the Terrain Map type
+  ///
+  /// In en, this message translates to:
+  /// **'Terrain'**
+  String get mapTypeTerrainCaption;
+
+  /// Menu item that shows the about page
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get menuAbout;
+
+  /// Menu item that triggers a native widget to rate the app
+  ///
+  /// In en, this message translates to:
+  /// **'Rate the app'**
+  String get menuAppReview;
+
+  /// Menu item that shows the map/planned trip
+  ///
+  /// In en, this message translates to:
+  /// **'Show routes'**
+  String get menuConnections;
+
+  /// Menu item that shows the feedback page
+  ///
+  /// In en, this message translates to:
+  /// **'Send Feedback'**
+  String get menuFeedback;
+
+  /// Menu item that shows the state of online/offline routing
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get menuOnline;
+
+  /// Menu item that triggers a native widget to rate the app
+  ///
+  /// In en, this message translates to:
+  /// **'Share the app'**
+  String get menuShareApp;
+
+  /// Menu item that shows the team page
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get menuTeam;
+
+  /// A menu item that shows the saved places
   ///
   /// In en, this message translates to:
   /// **'Your places'**
   String get menuYourPlaces;
+
+  /// Message when no route could be found after a route search
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, we could not find a route. What do you want to do?'**
+  String get noRouteError;
+
+  /// Button label to try another destination when no route could be found
+  ///
+  /// In en, this message translates to:
+  /// **'Try another destination'**
+  String get noRouteErrorActionCancel;
+
+  /// Button label to report a missing route when no route could be found
+  ///
+  /// In en, this message translates to:
+  /// **'Report a missing route'**
+  String get noRouteErrorActionReportMissingRoute;
+
+  /// Button label to show the car route when no route could be found
+  ///
+  /// In en, this message translates to:
+  /// **'Show route by car'**
+  String get noRouteErrorActionShowCarRoute;
+
+  /// Website menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Read our blog'**
+  String get readOurBlog;
+
+  /// No description provided for @savedPlacesEnterNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter name'**
+  String get savedPlacesEnterNameTitle;
+
+  /// No description provided for @savedPlacesRemoveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove place'**
+  String get savedPlacesRemoveLabel;
+
+  /// No description provided for @savedPlacesSelectIconTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select symbol'**
+  String get savedPlacesSelectIconTitle;
 
   /// No description provided for @savedPlacesSetIconLabel.
   ///
@@ -666,53 +582,137 @@ abstract class TrufiLocalization {
   /// **'Edit position'**
   String get savedPlacesSetPositionLabel;
 
-  /// No description provided for @savedPlacesRemoveLabel.
+  /// Message that is displayed when the response of the trip planning request could not be received
   ///
   /// In en, this message translates to:
-  /// **'Remove place'**
-  String get savedPlacesRemoveLabel;
+  /// **'Failed to load plan.'**
+  String get searchFailLoadingPlan;
 
-  /// No description provided for @savedPlacesSelectIconTitle.
+  /// Placeholder text for the destination field (in search state)
   ///
   /// In en, this message translates to:
-  /// **'Select symbol'**
-  String get savedPlacesSelectIconTitle;
+  /// **'Choose destination'**
+  String get searchHintDestination;
 
-  /// No description provided for @mapTypeLabel.
+  /// Placeholder text for the origin field (in search state)
   ///
   /// In en, this message translates to:
-  /// **'Map Type'**
-  String get mapTypeLabel;
+  /// **'Choose starting point'**
+  String get searchHintOrigin;
 
-  /// No description provided for @mapTypeStreetsCaption.
+  /// Search option that allows to choose a point on the map
   ///
   /// In en, this message translates to:
-  /// **'Streets'**
-  String get mapTypeStreetsCaption;
+  /// **'Choose on map'**
+  String get searchItemChooseOnMap;
 
-  /// No description provided for @mapTypeSatelliteCaption.
+  /// Message that is displayed when no results were found for the search term that was provided
   ///
   /// In en, this message translates to:
-  /// **'Satellite'**
-  String get mapTypeSatelliteCaption;
+  /// **'No results'**
+  String get searchItemNoResults;
 
-  /// No description provided for @mapTypeTerrainCaption.
+  /// Search option that allows to use the current user location
   ///
   /// In en, this message translates to:
-  /// **'Terrain'**
-  String get mapTypeTerrainCaption;
+  /// **'Your location'**
+  String get searchItemYourLocation;
 
-  /// No description provided for @commonSave.
+  /// Location name displayed in search fields that represents a location choosen on the map
   ///
   /// In en, this message translates to:
-  /// **'Save'**
-  String get commonSave;
+  /// **'Map Marker'**
+  String get searchMapMarker;
 
-  /// No description provided for @savedPlacesEnterNameTitle.
+  /// Placeholder text for the destination field (in map-visible state)
   ///
   /// In en, this message translates to:
-  /// **'Enter name'**
-  String get savedPlacesEnterNameTitle;
+  /// **'Select destination'**
+  String get searchPleaseSelectDestination;
+
+  /// Placeholder text for the origin field (in map-visible state)
+  ///
+  /// In en, this message translates to:
+  /// **'Select origin'**
+  String get searchPleaseSelectOrigin;
+
+  /// Search section title for locations marked as favorites
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get searchTitleFavorites;
+
+  /// Search section title for common places
+  ///
+  /// In en, this message translates to:
+  /// **'Places'**
+  String get searchTitlePlaces;
+
+  /// Search section title for recent location
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get searchTitleRecent;
+
+  /// Search section title for results found for the provided search term
+  ///
+  /// In en, this message translates to:
+  /// **'Search Results'**
+  String get searchTitleResults;
+
+  /// Text with URL that is used when sharing the app.
+  ///
+  /// In en, this message translates to:
+  /// **'Download {appTitle}, the public transport app for {cityName}, at {url}'**
+  String shareAppText(Object url);
+
+  /// A short marketing sentence that describes the app
+  ///
+  /// In en, this message translates to:
+  /// **'Public transportation in {city}'**
+  String tagline(Object city);
+
+  /// Text displayed on the team page, followed by a email link
+  ///
+  /// In en, this message translates to:
+  /// **'We are an international team called Trufi Association that has created this app with the help of many volunteers! Do you want to improve the Trufi App and be part of our team? Please contact us via:'**
+  String get teamContent;
+
+  /// List of representatives
+  ///
+  /// In en, this message translates to:
+  /// **'Representatives: {representatives}'**
+  String teamSectionRepresentatives(Object representatives);
+
+  /// List of route contributors
+  ///
+  /// In en, this message translates to:
+  /// **'Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\\nContact us if you want to join the OpenStreetMap community!'**
+  String teamSectionRoutes(Object osmContributors, Object routeContributors);
+
+  /// List of team members
+  ///
+  /// In en, this message translates to:
+  /// **'Team: {teamMembers}'**
+  String teamSectionTeam(Object teamMembers);
+
+  /// List of translators
+  ///
+  /// In en, this message translates to:
+  /// **'Translations: {translators}'**
+  String teamSectionTranslations(Object translators);
+
+  /// The application's name
+  ///
+  /// In en, this message translates to:
+  /// **'Trufi App'**
+  String get title;
+
+  /// The application's version
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String version(Object version);
 }
 
 class _TrufiLocalizationDelegate extends LocalizationsDelegate<TrufiLocalization> {
