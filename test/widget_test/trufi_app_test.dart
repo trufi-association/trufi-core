@@ -50,7 +50,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(TrufiApp(
         theme: null,
-        customBetweenFabWidget: (context) => Placeholder(),
+        customBetweenFabBuilder: (context) => Placeholder(),
       ));
 
       await tester.pumpAndSettle();
@@ -63,7 +63,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(TrufiApp(
         theme: null,
-        customOverlayWidget: (context, locale) => Text(
+        customOverlayBuilder: (context, locale) => Text(
           "${locale.countryCode} ${locale.languageCode}",
         ),
       ));

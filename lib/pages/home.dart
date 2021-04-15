@@ -33,9 +33,7 @@ class HomePage extends StatefulWidget {
   final WidgetBuilder customBetweenFabWidget;
 
   const HomePage(
-      {Key key,
-      @required this.customOverlayWidget,
-      @required this.customBetweenFabWidget})
+      {Key key, this.customOverlayWidget, this.customBetweenFabWidget})
       : super(key: key);
 
   @override

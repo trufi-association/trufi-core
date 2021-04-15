@@ -148,10 +148,6 @@ void main() async {
 
   // Run app
   runApp(
-    TrufiApp(
-      theme: theme,
-      customOverlayWidget: (context, locale) => Placeholder(),
-      customBetweenFabWidget: (context) => Placeholder(),
-    ),
+    TrufiApp(theme: theme),
   );
 }

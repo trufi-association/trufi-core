@@ -16,8 +16,8 @@ class PlanEmptyPage extends StatefulWidget {
   PlanEmptyPage({
     this.initialPosition,
     this.onLongPress,
-    @required this.customOverlayWidget,
-    @required this.customBetweenFabWidget,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
   });
 
   final LatLng initialPosition;
