@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -19,10 +20,54 @@ import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 
-class TrufiApp extends StatelessWidget {
-  TrufiApp({@required this.theme});
+/// Signature for a function that creates a widget with the current [Locale],
+/// e.g. [StatelessWidget.build] or [State.build].
+///
+/// See also:
+///
+///  * [IndexedWidgetBuilder], which is similar but also takes an index.
+///  * [TransitionBuilder], which is similar but also takes a child.
+///  * [ValueWidgetBuilder], which is similar but takes a value and a child.
+typedef LocaleWidgetBuilder = Widget Function(
+    BuildContext context, Locale locale);
 
+/// The [TrufiApp] is the main Widget of the application
+///
+/// The [customOverlayBuilder] allows you to add an host controlled overlay
+/// on top of the Trufi Map. It is located from the left side of the screen
+/// until the beginning of the Fab buttons.
+///
+/// Starting from the Fab buttons you are able to add the [customBetweenFabBuilder]
+/// to add a customOverlay between the two Fab Buttons on the right side.
+///
+/// ```dart
+///   @override
+///   Widget build(BuildContext context) {
+///     return TrufiApp(
+///       theme: theme,
+///       customOverlayBuilder: (context, locale) => Placeholder(),
+///       customBetweenFabBuilder: (context) => Placeholder(),
+///     ),
+///   }
+/// ```
+///
+class TrufiApp extends StatelessWidget {
+  TrufiApp({
+    @required this.theme,
+    this.customOverlayBuilder,
+    this.customBetweenFabBuilder,
+  });
+
+  /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
+
+  /// A [customOverlayBuilder] that receives the current language to allow
+  /// a custom overlay on top of the Trufi Core.
+  final LocaleWidgetBuilder customOverlayBuilder;
+
+  /// The [customBetweenFabBuilder] is [Builder] that allows creating a overlay
+  /// in between the Fab buttons of the Trufi Core.
+  final WidgetBuilder customBetweenFabBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +89,11 @@ class TrufiApp extends StatelessWidget {
                   child: BlocProvider<SavedPlacesBloc>(
                     bloc: SavedPlacesBloc(context),
                     child: AppLifecycleReactor(
-                      child: LocalizedMaterialApp(theme),
+                      child: LocalizedMaterialApp(
+                        theme,
+                        customOverlayBuilder,
+                        customBetweenFabBuilder,
+                      ),
                     ),
                   ),
                 ),
@@ -106,9 +155,15 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  LocalizedMaterialApp(this.theme);
+  LocalizedMaterialApp(
+    this.theme,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
+  );
 
   final ThemeData theme;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -132,7 +187,8 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
               .firstWhere((element) => element.isDefault)
               .languageCode ??
           "en",
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        print(snapshot.data);
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {
@@ -150,7 +206,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           supportedLocales: TrufiLocalization.supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
-          home: HomePage(),
+          home: HomePage(
+            customOverlayWidget: widget.customOverlayWidget,
+            customBetweenFabWidget: widget.customBetweenFabWidget,
+          ),
         );
       },
     );

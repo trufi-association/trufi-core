@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../blocs/bloc_provider.dart';
-import 'package:uuid/uuid.dart';
 
 class PreferencesBloc extends BlocBase {
   static PreferencesBloc of(BuildContext context) {
@@ -18,7 +18,8 @@ class PreferencesBloc extends BlocBase {
   static const String propertyMapTypeKey = "property_map_type";
   static const String stateHomePageKey = "state_home_page";
   static const String reviewWorthyActionCountKey = "review_worthy_action_count";
-  static const String lastReviewRequestAppVersionKey = "last_review_request_app_version";
+  static const String lastReviewRequestAppVersionKey =
+      "last_review_request_app_version";
 
   static const bool defaultOnline = true;
   static const String defaultMapType = "";
@@ -126,20 +127,25 @@ class PreferencesBloc extends BlocBase {
 
   String get correlationId => _preferences?.getString(correlationIdKey);
   String get stateHomePage => _preferences?.getString(stateHomePageKey);
-  int get reviewWorthyActionCount => _preferences?.getInt(reviewWorthyActionCountKey);
-  String get lastReviewRequestAppVersion => _preferences?.getString(lastReviewRequestAppVersionKey);
+  int get reviewWorthyActionCount =>
+      _preferences?.getInt(reviewWorthyActionCountKey);
+  String get lastReviewRequestAppVersion =>
+      _preferences?.getString(lastReviewRequestAppVersionKey);
 
   // Setter
 
   set correlationId(String value) {
     _preferences?.setString(correlationIdKey, value);
   }
+
   set stateHomePage(String value) {
     _preferences?.setString(stateHomePageKey, value);
   }
+
   set reviewWorthyActionCount(int count) {
     _preferences?.setInt(reviewWorthyActionCountKey, count);
   }
+
   set lastReviewRequestAppVersion(String version) {
     _preferences?.setString(lastReviewRequestAppVersionKey, version);
   }

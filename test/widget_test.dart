@@ -11,10 +11,11 @@ void main() {
 
     trufiCfg.languages.addAll([
       TrufiConfigurationLanguage(
-          languageCode: "en",
-          countryCode: "US",
-          displayName: "English",
-          isDefault: true,),
+        languageCode: "en",
+        countryCode: "US",
+        displayName: "English",
+        isDefault: true,
+      ),
     ]);
 
     await mockNetworkImagesFor(() async => await tester.pumpWidget(TrufiApp(
@@ -29,6 +30,33 @@ void main() {
     await tester.pumpAndSettle();
     final Finder formField = find.byType(LocationFormField);
     expect(formField, findsNWidgets(2));
+  });
+
+  testWidgets("should display customBetweenFabWidget Widget if provided",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(TrufiApp(
+      theme: ThemeData.light(),
+      customBetweenFabBuilder: (context) => Placeholder(),
+    ));
+
+    await tester.pumpAndSettle();
+
+    Finder findPlaceholder = find.byType(Placeholder);
+    expect(findPlaceholder, findsOneWidget);
+  });
+
+  testWidgets("should display customWidget with Locale Text",
+      (WidgetTester tester) async {
+    await tester.pumpWidget(TrufiApp(
+      theme: ThemeData.light(),
+      customOverlayBuilder: (context, locale) =>
+          Text("${locale.languageCode}_${locale.countryCode}"),
+    ));
+
+    await tester.pumpAndSettle();
+
+    Finder findText = find.text("en_null");
+    expect(findText, findsOneWidget);
   });
 }
 

@@ -6,6 +6,7 @@ import 'package:trufi_core/trufi_configuration.dart';
 import '../composite_subscription.dart';
 import '../plan/plan_itinerary_tabs.dart';
 import '../plan/plan_map.dart';
+import '../trufi_app.dart';
 import '../trufi_models.dart';
 
 class PlanPageController {
@@ -44,8 +45,15 @@ class PlanPageController {
 class PlanPage extends StatefulWidget {
   final Plan plan;
   final Ad ad;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
-  PlanPage(this.plan, this.ad) : assert(plan != null);
+  PlanPage(
+    this.plan,
+    this.ad,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
+  ) : assert(plan != null);
 
   @override
   PlanPageState createState() => PlanPageState();
@@ -95,7 +103,11 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       Column(
         children: <Widget>[
           Expanded(
-            child: PlanMapPage(planPageController: _planPageController),
+            child: PlanMapPage(
+              planPageController: _planPageController,
+              customOverlayWidget: widget.customOverlayWidget,
+              customBetweenFabWidget: widget.customBetweenFabWidget,
+            ),
           ),
           PlanItineraryTabPages(
             _tabController,

@@ -20,6 +20,7 @@ import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
 import '../plan/plan.dart';
 import '../plan/plan_empty.dart';
+import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
@@ -28,6 +29,12 @@ import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
+
+  const HomePage(
+      {Key key, this.customOverlayWidget, this.customBetweenFabWidget})
+      : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
@@ -277,8 +284,16 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
-          ? PlanPage(_data.plan, _data.ad)
-          : PlanEmptyPage(onLongPress: _handleOnLongPress),
+          ? PlanPage(
+              _data.plan,
+              _data.ad,
+              widget.customOverlayWidget,
+              widget.customBetweenFabWidget,
+            )
+          : PlanEmptyPage(
+              onLongPress: _handleOnLongPress,
+              customOverlayWidget: widget.customOverlayWidget,
+              customBetweenFabWidget: widget.customBetweenFabWidget),
     );
     if (_isFetching) {
       final children = <Widget>[
