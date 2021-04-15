@@ -21,18 +21,45 @@ import './widgets/trufi_drawer.dart';
 typedef LocaleWidgetBuilder = Widget Function(
     BuildContext context, Locale locale);
 
+/// The [TrufiApp] is the main Widget of the application
+///
+/// The [customOverlayBuilder] allows you to add an host controlled overlay
+/// on top of the Trufi Map. It is located from the left side of the screen
+/// until the beginning of the Fab buttons.
+///
+/// Starting from the Fab buttons you are able to add the [customBetweenFabBuilder]
+/// to add a customOverlay between the two Fab Buttons on the right side.
+///
+/// ```dart
+///   @override
+///   Widget build(BuildContext context) {
+///     return TrufiApp(
+///       theme: theme,
+///       customOverlayBuilder: (context, locale) => Placeholder(),
+///       customBetweenFabBuilder: (context) => Placeholder(),
+///     ),
+///   }
+/// ```
+///
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
     this.localization = const TrufiLocalizationDefault(),
-    this.customOverlayWidget,
-    this.customBetweenFabWidget,
+    this.customOverlayBuilder,
+    this.customBetweenFabBuilder,
   });
 
+  /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
   final TrufiLocalization localization;
-  final LocaleWidgetBuilder customOverlayWidget;
-  final WidgetBuilder customBetweenFabWidget;
+
+  /// A [customOverlayBuilder] that receives the current language to allow
+  /// a custom overlay on top of the Trufi Core.
+  final LocaleWidgetBuilder customOverlayBuilder;
+
+  /// The [customBetweenFabBuilder] is [Builder] that allows creating a overlay
+  /// in between the Fab buttons of the Trufi Core.
+  final WidgetBuilder customBetweenFabBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +84,8 @@ class TrufiApp extends StatelessWidget {
                       child: LocalizedMaterialApp(
                         theme,
                         localization,
-                        customOverlayWidget,
-                        customBetweenFabWidget,
+                        customOverlayBuilder,
+                        customBetweenFabBuilder,
                       ),
                     ),
                   ),
