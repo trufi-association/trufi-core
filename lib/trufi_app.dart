@@ -18,6 +18,14 @@ import './pages/team.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
+/// Signature for a function that creates a widget with the current [Locale],
+/// e.g. [StatelessWidget.build] or [State.build].
+///
+/// See also:
+///
+///  * [IndexedWidgetBuilder], which is similar but also takes an index.
+///  * [TransitionBuilder], which is similar but also takes a child.
+///  * [ValueWidgetBuilder], which is similar but takes a value and a child.
 typedef LocaleWidgetBuilder = Widget Function(
     BuildContext context, Locale locale);
 
