@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/location_search_bloc.dart';
 
 import '../blocs/bloc_provider.dart';
 import '../blocs/preferences_bloc.dart';
@@ -46,7 +48,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   // Methods
 
   Future<List<dynamic>> fetchLocations(
-    BuildContext context,
+    FavoriteLocationsBloc favoriteLocationsBloc,
+    LocationSearchBloc locationSearchBloc,
+    PreferencesBloc preferencesBloc,
     String query,
     int limit,
   ) {
@@ -66,7 +70,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
                 () {
                   // FIXME: For now we search locations always offline
                   return _offlineRequestManager.fetchLocations(
-                    context,
+                    favoriteLocationsBloc,
+                    locationSearchBloc,
+                    preferencesBloc,
                     query,
                     limit,
                   );
@@ -107,7 +113,9 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
 abstract class RequestManager {
   Future<List<dynamic>> fetchLocations(
-    BuildContext context,
+    FavoriteLocationsBloc favoriteLocationsBloc,
+    LocationSearchBloc locationSearchBloc,
+    PreferencesBloc preferencesBloc,
     String query,
     int limit,
   );

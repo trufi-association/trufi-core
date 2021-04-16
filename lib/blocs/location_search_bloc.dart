@@ -26,17 +26,11 @@ class LocationSearchBloc extends BlocBase {
     return storage.fetchPlaces(context);
   }
 
-  Future<List<LevenshteinObject>> fetchPlacesWithQuery(
-    BuildContext context,
-    String query,
-  ) {
-    return storage.fetchPlacesWithQuery(context, query);
+  Future<List<LevenshteinObject>> fetchPlacesWithQuery(String query) {
+    return storage.fetchPlacesWithQuery(query);
   }
 
-  Future<List<LevenshteinObject>> fetchStreetsWithQuery(
-    BuildContext context,
-    String query,
-  ) {
-    return storage.fetchStreetsWithQuery(context, query);
+  Future<List<LevenshteinObject>> fetchStreetsWithQuery(String query) {
+    return storage.fetchStreetsWithQuery(query);
   }
 }
