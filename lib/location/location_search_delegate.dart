@@ -117,7 +117,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   }
 
   Widget _buildStreetResults(BuildContext context, TrufiStreet street) {
-    List<Widget> slivers = List();
+    List<Widget> slivers = [];
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildStreetResultList(context, street));
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
@@ -217,7 +217,7 @@ class _SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> slivers = List();
+    List<Widget> slivers = [];
     slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
@@ -329,7 +329,7 @@ class _SuggestionList extends StatelessWidget {
         LocationSearchBloc.of(context),
         PreferencesBloc.of(context),
         query,
-        30,
+        limit: 30,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -339,7 +339,7 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildFutureBuilder(
     BuildContext context,
     String title,
-    Future<List<dynamic>> future,
+    Future<List<TrufiPlace>> future,
     IconData iconData, {
     bool isVisibleWhenEmpty = false,
   }) {
@@ -348,7 +348,7 @@ class _SuggestionList extends StatelessWidget {
       initialData: null,
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<dynamic>> snapshot,
+        AsyncSnapshot<List<TrufiPlace>> snapshot,
       ) {
         final localization = TrufiLocalization.of(context);
         // Error
@@ -532,9 +532,8 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildObjectList(
     String title,
     IconData iconData,
-    List<dynamic> objects,
+    List<TrufiPlace> places,
   ) {
-    int count = objects.length > 0 ? objects.length + 1 : 0;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -543,7 +542,7 @@ class _SuggestionList extends StatelessWidget {
             return _buildTitle(context, title);
           }
           // Item
-          final object = objects[index - 1];
+          final object = places[index - 1];
           if (object is TrufiLocation) {
             IconData localIconData = iconData;
 
@@ -578,8 +577,9 @@ class _SuggestionList extends StatelessWidget {
               ),
             );
           }
+          return Container();
         },
-        childCount: count,
+        childCount: places.length > 0 ? places.length + 1 : 0,
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/preferences_bloc.dart';
 import 'package:trufi_core/blocs/request_manager/offline_request_manager.dart';
+import 'package:trufi_core/location/location_search_storage.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 void main() {
@@ -12,6 +13,7 @@ void main() {
     MockFavoriteLocationBloc favoriteLocationBloc;
     MockPreferencesBloc preferencesBloc;
     MockLocationSearchBloc locationSearchBloc;
+    MockLocationSearchStorage locationSearchStorage;
 
     const query = "TestQuery";
 
@@ -22,11 +24,14 @@ void main() {
       preferencesBloc = MockPreferencesBloc();
       locationSearchBloc = MockLocationSearchBloc();
 
-      when(locationSearchBloc.fetchPlacesWithQuery(query)).thenAnswer(
+      locationSearchStorage = MockLocationSearchStorage();
+      when(locationSearchBloc.storage).thenReturn(locationSearchStorage);
+
+      when(locationSearchStorage.fetchPlacesWithQuery(query)).thenAnswer(
         (_) => Future.value(getTrufiLocationList()),
       );
 
-      when(locationSearchBloc.fetchStreetsWithQuery(query)).thenAnswer(
+      when(locationSearchStorage.fetchStreetsWithQuery(query)).thenAnswer(
         (_) => Future.value(getTrufiStreetList()),
       );
 
@@ -36,7 +41,7 @@ void main() {
 
     test("should sort streets first", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query, 30);
+          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
 
       for (var i = 0; i < results.length; i++) {
         if (i == 0)
@@ -53,14 +58,14 @@ void main() {
 
     test("should sort shortest distance first", () async {
       final List<dynamic> results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query, 30);
+          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
 
       for (var i = 0; i < results.length; i++) {
         final result = results[i];
         if (i == 0) expect(result.description, "Favorite");
-        if (i == 1) expect(result.description, "Long Distance");
-        if (i == 2) expect(result.description, "Medium Distance");
-        if (i == 3) expect(result.description, "Short Distance");
+        if (i == 1) expect(result.description, "Streets: Long Distance");
+        if (i == 2) expect(result.description, "Streets: Medium Distance");
+        if (i == 3) expect(result.description, "Streets: Short Distance");
         if (i == 4) expect(result.description, "Location: Shortest Distance");
         if (i == 5) expect(result.description, "Location: Medium Distance");
         if (i == 6) expect(result.description, "Location: Longest Distance");
@@ -69,20 +74,21 @@ void main() {
 
     test("should take the limit into account", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query, 5);
+          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query,
+          limit: 5);
 
       expect(results.length, 5);
     });
   });
 }
 
-List<LevenshteinObject> getTrufiStreetList() {
-  return <LevenshteinObject>[
+List<LevenshteinObject<TrufiStreet>> getTrufiStreetList() {
+  return [
     LevenshteinObject(
       TrufiStreet(
         location: TrufiLocation(
           latitude: 15,
-          description: 'Long Distance',
+          description: 'Streets: Long Distance',
           longitude: 45,
         ),
       ),
@@ -92,7 +98,7 @@ List<LevenshteinObject> getTrufiStreetList() {
       TrufiStreet(
         location: TrufiLocation(
           latitude: 85,
-          description: 'Short Distance',
+          description: 'Streets: Short Distance',
           longitude: 55,
         ),
       ),
@@ -102,7 +108,7 @@ List<LevenshteinObject> getTrufiStreetList() {
       TrufiStreet(
         location: TrufiLocation(
           latitude: 22,
-          description: 'Medium Distance',
+          description: 'Streets: Medium Distance',
           longitude: 79,
         ),
       ),
@@ -111,8 +117,8 @@ List<LevenshteinObject> getTrufiStreetList() {
   ];
 }
 
-List<LevenshteinObject> getTrufiLocationList() {
-  return <LevenshteinObject>[
+List<LevenshteinObject<TrufiLocation>> getTrufiLocationList() {
+  return [
     LevenshteinObject(
       TrufiLocation(
         description: "Location: Medium Distance",
@@ -145,3 +151,5 @@ class MockFavoriteLocationBloc extends Mock implements FavoriteLocationsBloc {}
 class MockPreferencesBloc extends Mock implements PreferencesBloc {}
 
 class MockLocationSearchBloc extends Mock implements LocationSearchBloc {}
+
+class MockLocationSearchStorage extends Mock implements LocationSearchStorage {}

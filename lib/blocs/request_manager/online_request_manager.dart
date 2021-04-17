@@ -24,9 +24,9 @@ class OnlineRequestManager implements RequestManager {
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
     PreferencesBloc preferencesBloc,
-    String query,
-    int limit,
-  ) async {
+    String query, {
+    int limit = 30,
+  }) async {
     Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + searchPath,
     ).replace(queryParameters: {

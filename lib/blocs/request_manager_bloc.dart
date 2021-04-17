@@ -36,6 +36,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _fetchLocationLock = Lock();
 
   CancelableOperation<List<dynamic>> _fetchLocationOperation;
+
+  // TODO: Understand why never used and why it is here
   RequestManager _requestManager;
 
   // Dispose
@@ -47,13 +49,13 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
   // Methods
 
-  Future<List<dynamic>> fetchLocations(
+  Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
     PreferencesBloc preferencesBloc,
-    String query,
-    int limit,
-  ) {
+    String query, {
+    int limit = 30,
+  }) {
     // Cancel running operation
     if (_fetchLocationOperation != null) {
       _fetchLocationOperation.cancel();
@@ -64,19 +66,15 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return (_fetchLocationLock.locked)
         ? Future.value(null)
         : _fetchLocationLock.synchronized(() async {
-            _fetchLocationOperation = CancelableOperation.fromFuture(
-              Future.delayed(
-                Duration.zero,
-                () {
-                  // FIXME: For now we search locations always offline
-                  return _offlineRequestManager.fetchLocations(
-                    favoriteLocationsBloc,
-                    locationSearchBloc,
-                    preferencesBloc,
-                    query,
-                    limit,
-                  );
-                },
+            _fetchLocationOperation =
+                CancelableOperation<List<TrufiPlace>>.fromFuture(
+              // FIXME: For now we search locations always offline
+              _offlineRequestManager.fetchLocations(
+                favoriteLocationsBloc,
+                locationSearchBloc,
+                preferencesBloc,
+                query,
+                limit: limit,
               ),
             );
             return _fetchLocationOperation.valueOrCancellation(null);
@@ -116,9 +114,9 @@ abstract class RequestManager {
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
     PreferencesBloc preferencesBloc,
-    String query,
+    String query, {
     int limit,
-  );
+  });
 
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
