@@ -53,7 +53,7 @@ void main() {
   test('Create a plan from json', () async {
     final file = new File('test/assets/response_plan.json');
     final jsonPlan = json.decode(await file.readAsString());
-    _plan = Plan.fromJson(jsonPlan);
+    _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
 
     expect(_plan.from.name, "Origin");
     expect(_plan.from.latitude, -17.3974935907119);
@@ -100,7 +100,7 @@ void main() {
   test('Create Plan error with fromError', () async {
     final file = new File('test/assets/response_plan_error.json');
     final jsonPlan = json.decode(await file.readAsString());
-    _plan = Plan.fromJson(jsonPlan);
+    _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
 
     expect(_plan.error.message,
         "Trip is not possible.  Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).");

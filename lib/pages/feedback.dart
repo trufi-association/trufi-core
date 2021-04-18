@@ -51,7 +51,7 @@ class FeedBackPageState extends State<FeedbackPage> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuFeedback));
   }

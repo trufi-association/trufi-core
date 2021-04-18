@@ -13,14 +13,14 @@ import './custom_icons.dart';
 import './trufi_configuration.dart';
 import './trufi_models.dart';
 
-offlineMapTileLayerOptions() {
+LayerOptions offlineMapTileLayerOptions() {
   return TileLayerOptions(
     maxZoom: 18.0,
     urlTemplate: "assets/tiles/{z}/{z}-{x}-{y}.png",
   );
 }
 
-tileHostingTileLayerOptions(String tilesEndpoint,
+LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
     {String tileProviderKey = ""}) {
   var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
   if (tileProviderKey != "") urlTemplate += "?key={key}";
@@ -33,7 +33,7 @@ tileHostingTileLayerOptions(String tilesEndpoint,
   );
 }
 
-getTilesEndpointForMapType(String mapType) {
+String getTilesEndpointForMapType(String mapType) {
   final cfg = TrufiConfiguration();
   switch (mapType) {
     case MapStyle.satellite:
@@ -180,7 +180,7 @@ Marker buildBusMarker(
   LatLng point,
   Color color,
   PlanItineraryLeg leg, {
-  Function onTap,
+  VoidCallback onTap,
 }) {
   return Marker(
     width: 50.0,

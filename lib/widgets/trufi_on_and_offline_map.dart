@@ -118,7 +118,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     final cfg = TrufiConfiguration();
     return StreamBuilder(
       stream: preferencesBloc.outChangeMapType,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return TrufiMap(
           key: ValueKey("TrufiOnlineMap"),
           controller: widget.controller.online,
@@ -136,7 +136,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
               tileHostingTileLayerOptions(
                 getTilesEndpointForMapType(snapshot.data),
                 tileProviderKey: cfg.map.mapTilerKey,
-              ),
+              ) as LayerOptions,
             ]..addAll(widget.layerOptionsBuilder(context));
           },
         );

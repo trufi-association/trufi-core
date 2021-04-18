@@ -59,7 +59,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuYourPlaces));
   }

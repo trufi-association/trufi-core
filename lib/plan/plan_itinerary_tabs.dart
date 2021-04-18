@@ -124,7 +124,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     );
   }
 
-  _buildItinerary(BuildContext context, PlanItinerary itinerary, Ad ad) {
+  Widget _buildItinerary(BuildContext context, PlanItinerary itinerary, Ad ad) {
     return _isExpanded
         ? _buildItineraryExpanded(context, itinerary, ad)
         : _buildItineraryCollapsed(context, itinerary, ad);

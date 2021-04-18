@@ -48,21 +48,21 @@ class TrufiLocation {
 
   factory TrufiLocation.fromLocationsJson(Map<String, dynamic> json) {
     return TrufiLocation(
-      description: json['name'],
-      latitude: json['coords']['lat'],
-      longitude: json['coords']['lng'],
+      description: json['name'] as String,
+      latitude: json['coords']['lat'] as double,
+      longitude: json['coords']['lng'] as double,
     );
   }
 
   factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
     return TrufiLocation(
       description: json[0].toString(),
-      alternativeNames: json[1].cast<String>(),
-      localizedNames: json[2].cast<String, String>(),
-      longitude: json[3][0].toDouble(),
-      latitude: json[3][1].toDouble(),
-      address: json[4],
-      type: json[5],
+      alternativeNames: json[1] as List<String>,
+      localizedNames: json[2] as Map<String, String>,
+      longitude: json[3][0].toDouble() as double,
+      latitude: json[3][1].toDouble() as double,
+      address: json[4] as String,
+      type: json[5] as String,
     );
   }
 
@@ -76,19 +76,19 @@ class TrufiLocation {
 
   factory TrufiLocation.fromSearch(Map<String, dynamic> json) {
     return TrufiLocation(
-      description: json['description'],
-      latitude: json['lat'],
-      longitude: json['lng'],
+      description: json['description'] as String,
+      latitude: json['lat'] as double,
+      longitude: json['lng'] as double,
     );
   }
 
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
     return TrufiLocation(
-      description: json[keyDescription],
-      latitude: json[keyLatitude],
-      longitude: json[keyLongitude],
-      type: json[keyType],
+      description: json[keyDescription] as String,
+      latitude: json[keyLatitude] as double,
+      longitude: json[keyLongitude] as double,
+      type: json[keyType] as String,
     );
   }
 
@@ -137,10 +137,10 @@ class TrufiStreet {
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
     return TrufiStreet(
       location: TrufiLocation(
-        description: json[0],
-        alternativeNames: json[1].cast<String>(),
-        longitude: json[2][0].toDouble(),
-        latitude: json[2][1].toDouble(),
+        description: json[0] as String,
+        alternativeNames: json[1] as List<String>,
+        longitude: json[2][0].toDouble() as double,
+        latitude: json[2][1].toDouble() as double,
       ),
     );
   }
@@ -213,18 +213,20 @@ class Plan {
       return null;
     }
     if (json.containsKey(_Error)) {
-      return Plan(error: PlanError.fromJson(json[_Error]));
-    } else {
-      Map<String, dynamic> planJson = json[_Plan];
       return Plan(
-        from: PlanLocation.fromJson(planJson[_From]),
-        to: PlanLocation.fromJson(planJson[_To]),
+          error: PlanError.fromJson(json[_Error] as Map<String, dynamic>));
+    } else {
+      Map<String, dynamic> planJson = json[_Plan] as Map<String, dynamic>;
+      return Plan(
+        from: PlanLocation.fromJson(planJson[_From] as Map<String, dynamic>),
+        to: PlanLocation.fromJson(planJson[_To] as Map<String, dynamic>),
         itineraries: _removePlanItineraryDuplicates(
           planJson[_Itineraries]
               .map<PlanItinerary>(
-                (itineraryJson) => PlanItinerary.fromJson(itineraryJson),
+                (Map<String, dynamic> itineraryJson) =>
+                    PlanItinerary.fromJson(itineraryJson),
               )
-              .toList(),
+              .toList() as List<PlanItinerary>,
         ),
       );
     }
@@ -289,7 +291,7 @@ class PlanError {
   final String message;
 
   factory PlanError.fromJson(Map<String, dynamic> json) {
-    return PlanError(json[_Id], json[_Message]);
+    return PlanError(json[_Id] as int, json[_Message] as String);
   }
 
   factory PlanError.fromError(String error) {
@@ -321,9 +323,9 @@ class PlanLocation {
 
   factory PlanLocation.fromJson(Map<String, dynamic> json) {
     return PlanLocation(
-      name: json[_Name],
-      latitude: json[_Latitude],
-      longitude: json[_Longitude],
+      name: json[_Name] as String,
+      latitude: json[_Latitude] as double,
+      longitude: json[_Longitude] as double,
     );
   }
 
@@ -356,9 +358,10 @@ class PlanItinerary {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-        legs: json[_Legs].map<PlanItineraryLeg>((json) {
-      return PlanItineraryLeg.fromJson(json);
-    }).toList());
+      legs: json[_Legs].map<PlanItineraryLeg>((Map<String, dynamic> json) {
+        return PlanItineraryLeg.fromJson(json);
+      }).toList() as List<PlanItineraryLeg>,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -404,13 +407,13 @@ class PlanItineraryLeg {
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
-      points: json[_LegGeometry][_Points],
-      mode: json[_Mode],
-      route: json[_Route],
-      routeLongName: json[_RouteLongName],
-      distance: json[_Distance],
-      duration: json[_Duration],
-      toName: json[_To][_Name],
+      points: json[_LegGeometry][_Points] as String,
+      mode: json[_Mode] as String,
+      route: json[_Route] as String,
+      routeLongName: json[_RouteLongName] as String,
+      distance: json[_Distance] as double,
+      duration: json[_Duration] as double,
+      toName: json[_To][_Name] as String,
     );
   }
 
@@ -513,13 +516,13 @@ class Ad {
     if (json == null) {
       return null;
     }
-    Map<String, dynamic> adJson = json[_Ad];
+    Map<String, dynamic> adJson = json[_Ad] as Map<String, dynamic>;
     return Ad(
-      text: adJson[_Text],
-      url: adJson[_Url] ?? null,
-      location: adJson[_Location].isEmpty
+      text: adJson[_Text] as String,
+      url: adJson[_Url] as String ?? null,
+      location: (adJson[_Location] as Map<String, dynamic>).isEmpty
           ? null
-          : PlanLocation.fromJson(adJson[_Location]),
+          : PlanLocation.fromJson(adJson[_Location] as Map<String, dynamic>),
     );
   }
 

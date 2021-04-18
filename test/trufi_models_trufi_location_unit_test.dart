@@ -66,8 +66,8 @@ void main() {
     final file = new File('test/assets/response_location.json');
     List<TrufiLocation> _listJsonLocation = json
         .decode(await file.readAsString())
-        .map<TrufiLocation>((json) => new TrufiLocation.fromJson(json))
-        .toList();
+        .map<TrufiLocation>((Map<String, dynamic> json) => new TrufiLocation.fromJson(json))
+        .toList() as List<TrufiLocation>;
 
     expect(
         _listJsonLocation.first.description, "corner road & Calle L. Balzan ");

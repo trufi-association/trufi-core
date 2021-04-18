@@ -44,7 +44,7 @@ class FileStorage {
     try {
       File f = await file;
       return _fileLock.synchronized(() => f.readAsString());
-    } catch (e) {
+    } on Exception catch (e) {
       throw ReadException(e);
     }
   }

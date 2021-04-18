@@ -63,7 +63,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
-        close(context, _result);
+        close(context, _result as TrufiLocation);
       },
       onMapTapped: (TrufiLocation location) {
         _result = location;
@@ -87,11 +87,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     if (_result != null) {
       if (_result is TrufiLocation) {
         Future.delayed(Duration.zero, () {
-          close(context, _result);
+          close(context, _result as TrufiLocation);
         });
       }
       if (_result is TrufiStreet) {
-        return _buildStreetResults(context, _result);
+        return _buildStreetResults(context, _result as TrufiStreet);
       }
     }
     return buildSuggestions(context);
@@ -711,7 +711,7 @@ class _SuggestionList extends StatelessWidget {
 Widget _buildItem(
   BuildContext context,
   ThemeData theme,
-  Function onTap,
+  VoidCallback onTap,
   IconData iconData,
   String title, {
   String subtitle,

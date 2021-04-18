@@ -110,7 +110,7 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
@@ -553,10 +553,10 @@ class HomePageStateData {
 
   factory HomePageStateData.fromJson(Map<String, dynamic> json) {
     return HomePageStateData(
-      fromPlace: TrufiLocation.fromJson(json[_FromPlace]),
-      toPlace: TrufiLocation.fromJson(json[_ToPlace]),
-      plan: Plan.fromJson(json[_Plan]),
-      ad: Ad.fromJson(json[_Ad]),
+      fromPlace: TrufiLocation.fromJson(json[_FromPlace] as Map<String, dynamic>),
+      toPlace: TrufiLocation.fromJson(json[_ToPlace] as Map<String, dynamic>),
+      plan: Plan.fromJson(json[_Plan] as Map<String, dynamic>),
+      ad: Ad.fromJson(json[_Ad] as Map<String, dynamic>),
     );
   }
 
@@ -612,7 +612,7 @@ class HomePageStateData {
 HomePageStateData _parse(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
     try {
-      return HomePageStateData.fromJson(json.decode(encoded));
+      return HomePageStateData.fromJson(json.decode(encoded) as Map<String, dynamic>);
     } catch (e) {
       print("Failed to parse home page state data: $e");
     }

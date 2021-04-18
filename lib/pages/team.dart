@@ -47,7 +47,7 @@ class TeamPageState extends State<TeamPage> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuTeam));
   }

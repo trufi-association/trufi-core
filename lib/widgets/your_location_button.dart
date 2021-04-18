@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class YourLocationButton extends StatelessWidget {
   YourLocationButton({this.onPressed});
 
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {

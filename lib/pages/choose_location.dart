@@ -53,7 +53,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return AppBar(

@@ -245,7 +245,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Rect getAppShareButtonOrigin() {
-    final RenderBox box = appShareButtonKey.currentContext.findRenderObject();
+    final RenderBox box =
+        appShareButtonKey.currentContext.findRenderObject() as RenderBox;
     return box.localToGlobal(Offset.zero) & box.size;
   }
 

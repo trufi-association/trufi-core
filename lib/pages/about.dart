@@ -23,7 +23,7 @@ class AboutPageState extends State<AboutPage> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuAbout));
   }

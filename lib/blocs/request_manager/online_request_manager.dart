@@ -167,7 +167,7 @@ class OnlineRequestManager implements RequestManager {
       return await http.get(request, headers: {
         "User-Agent": "Trufi/" + packageInfo.version,
       });
-    } catch (e) {
+    } on Exception catch (e) {
       throw FetchOnlineRequestException(e);
     }
   }
@@ -219,14 +219,14 @@ class OnlineRequestManager implements RequestManager {
 List<TrufiLocation> _parseLocations(String responseBody) {
   return json
       .decode(responseBody)
-      .map<TrufiLocation>((json) => TrufiLocation.fromSearch(json))
-      .toList();
+      .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
+      .toList() as List<TrufiLocation>;
 }
 
 Plan _parsePlan(String responseBody) {
-  return Plan.fromJson(json.decode(responseBody));
+  return Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }
 
 Ad _parseAd(String responseBody) {
-  return Ad.fromJson(json.decode(responseBody));
+  return Ad.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }

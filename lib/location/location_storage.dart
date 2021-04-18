@@ -185,8 +185,8 @@ List<TrufiLocation> _parseTrufiLocations(String encoded) {
     try {
       return json
           .decode(encoded)
-          .map<TrufiLocation>((json) => TrufiLocation.fromJson(json))
-          .toList();
+          .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromJson(json))
+          .toList() as List<TrufiLocation>;
     } catch (e) {
       print("Failed to parse trufi locations: $e");
     }
@@ -200,9 +200,9 @@ List<TrufiLocation> _parseLocationsJSON(String encoded) {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-            (json) => TrufiLocation.fromLocationsJson(json),
+            (Map<String, dynamic> json) => TrufiLocation.fromLocationsJson(json),
           )
-          .toList();
+          .toList() as List<TrufiLocation>;
     } catch (e) {
       print("Failed to parse locations from JSON: $e");
     }
