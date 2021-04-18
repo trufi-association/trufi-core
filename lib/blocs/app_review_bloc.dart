@@ -18,21 +18,21 @@ class AppReviewBloc extends BlocBase {
   void dispose() {}
 
   void incrementReviewWorthyActions() {
-    if (this.preferencesBloc.reviewWorthyActionCount != null) {
-      this.preferencesBloc.reviewWorthyActionCount =
-          this.preferencesBloc.reviewWorthyActionCount + 1;
+    if (preferencesBloc.reviewWorthyActionCount != null) {
+      preferencesBloc.reviewWorthyActionCount =
+          preferencesBloc.reviewWorthyActionCount + 1;
     } else {
-      this.preferencesBloc.reviewWorthyActionCount = 1;
+      preferencesBloc.reviewWorthyActionCount = 1;
     }
   }
 
   Future<bool> isAppReviewAppropriate() async {
     final minActionCount = TrufiConfiguration().minimumReviewWorthyActionCount;
-    final currentActionCount = this.preferencesBloc.reviewWorthyActionCount;
+    final currentActionCount = preferencesBloc.reviewWorthyActionCount;
 
     if (currentActionCount != null && currentActionCount >= minActionCount) {
       final currentVersion = (await PackageInfo.fromPlatform()).version;
-      final lastVersion = this.preferencesBloc.lastReviewRequestAppVersion;
+      final lastVersion = preferencesBloc.lastReviewRequestAppVersion;
 
       return lastVersion == null || lastVersion != currentVersion;
     }
@@ -40,9 +40,9 @@ class AppReviewBloc extends BlocBase {
     return false;
   }
 
-  void markReviewRequestedForCurrentVersion() async {
+  Future<void> markReviewRequestedForCurrentVersion() async {
     final currentVersion = (await PackageInfo.fromPlatform()).version;
-    this.preferencesBloc.lastReviewRequestAppVersion = currentVersion;
-    this.preferencesBloc.reviewWorthyActionCount = null;
+    preferencesBloc.lastReviewRequestAppVersion = currentVersion;
+    preferencesBloc.reviewWorthyActionCount = null;
   }
 }

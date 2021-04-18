@@ -4,7 +4,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
 class TrufiConfiguration {
-  static TrufiConfiguration _singleton = TrufiConfiguration._internal();
+  static final TrufiConfiguration _singleton = TrufiConfiguration._internal();
 
   factory TrufiConfiguration() {
     return _singleton;
@@ -12,7 +12,7 @@ class TrufiConfiguration {
 
   TrufiConfiguration._internal();
 
-  final abbreviations = Map<String, String>();
+  final abbreviations = <String, String>{};
   final animation = TrufiConfigurationAnimation();
   final email = TrufiConfigurationEmail();
   final image = TrufiConfigurationImage();
@@ -25,11 +25,11 @@ class TrufiConfiguration {
   // TODO: Could be removed by a Collection of Locale
   final List<TrufiConfigurationLanguage> languages = [];
 
-  var minimumReviewWorthyActionCount = 3;
+  int minimumReviewWorthyActionCount = 3;
 }
 
 class TrufiGeneralConfiguration {
-  var appCity = "Cochabamba";
+  String appCity = "Cochabamba";
 }
 
 class TrufiCustomLocalizations extends TrufiCustomLocalization {}
@@ -48,12 +48,12 @@ class TrufiConfigurationAttribution {
 }
 
 class TrufiConfigurationEmail {
-  var feedback = "";
-  var info = "";
+  String feedback = "";
+  String info = "";
 }
 
 class TrufiConfigurationImage {
-  var drawerBackground = "";
+  String drawerBackground = "";
 }
 
 class TrufiConfigurationLanguage {
@@ -71,35 +71,35 @@ class TrufiConfigurationLanguage {
 }
 
 class TrufiConfigurationMap {
-  var mapTilerKey = "";
-  var satelliteMapTypeEnabled = false;
-  var terrainMapTypeEnabled = false;
-  var defaultZoom = 12.0;
-  var offlineZoom = 13.0;
-  var offlineMinZoom = 8.0;
-  var offlineMaxZoom = 14.0;
-  var onlineMinZoom = 1.0;
-  var onlineMaxZoom = 19.0;
-  var onlineZoom = 13.0;
-  var chooseLocationZoom = 16.0;
-  var center = LatLng(5.574558, -0.214656);
-  var southWest = LatLng(5.510057, -0.328217);
-  var northEast = LatLng(5.726678, 0.071411);
+  String mapTilerKey = "";
+  bool satelliteMapTypeEnabled = false;
+  bool terrainMapTypeEnabled = false;
+  double defaultZoom = 12.0;
+  double offlineZoom = 13.0;
+  double offlineMinZoom = 8.0;
+  double offlineMaxZoom = 14.0;
+  double onlineMinZoom = 1.0;
+  double onlineMaxZoom = 19.0;
+  double onlineZoom = 13.0;
+  double chooseLocationZoom = 16.0;
+  LatLng center = LatLng(5.574558, -0.214656);
+  LatLng southWest = LatLng(5.510057, -0.328217);
+  LatLng northEast = LatLng(5.726678, 0.071411);
 }
 
 class TrufiConfigurationUrl {
   final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
   final mapTilerCopyright = "https://www.maptiler.com/copyright/";
-  var otpEndpoint = "";
-  var tilesStreetsEndpoint = "";
-  var tilesSatelliteEndpoint = "";
-  var tilesTerrainEndpoint = "";
-  var adsEndpoint = "";
-  var routeFeedback = "";
-  var website = "";
-  var facebook = "";
-  var instagram = "";
-  var twitter = "";
-  var donate = "";
-  var share = "";
+  String otpEndpoint = "";
+  String tilesStreetsEndpoint = "";
+  String tilesSatelliteEndpoint = "";
+  String tilesTerrainEndpoint = "";
+  String adsEndpoint = "";
+  String routeFeedback = "";
+  String website = "";
+  String facebook = "";
+  String instagram = "";
+  String twitter = "";
+  String donate = "";
+  String share = "";
 }

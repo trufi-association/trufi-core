@@ -12,38 +12,38 @@ void main() {
   PlanLocation _to;
   List<PlanItinerary> _itineraries;
 
-  String _fromName = "from_name";
-  double _fromLatitude = 18.0;
-  double _fromLongitude = 129.0;
+  const String _fromName = "from_name";
+  const double _fromLatitude = 18.0;
+  const double _fromLongitude = 129.0;
 
-  String _toName = "to_name";
-  double _toLatitude = 18.45696;
-  double _toLongitude = 129.826;
+  const String _toName = "to_name";
+  const double _toLatitude = 18.45696;
+  const double _toLongitude = 129.826;
   PlanError _error;
   PlanItineraryLeg _leg;
 
   setUp(() {
-    _from = new PlanLocation(
+    _from = PlanLocation(
         name: _fromName, latitude: _fromLatitude, longitude: _fromLongitude);
-    _to = new PlanLocation(
+    _to = PlanLocation(
         name: _toName, latitude: _toLatitude, longitude: _toLongitude);
 
-    _leg = new PlanItineraryLeg(
+    _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
         route: "route",
         routeLongName: "long_name_route",
         duration: 300.0,
         distance: 2.0);
-    List<PlanItineraryLeg> legs = new List();
+    final List<PlanItineraryLeg> legs = [];
     legs.add(_leg);
-    PlanItinerary itinerary = new PlanItinerary(legs: legs);
-    _itineraries = new List();
+    final PlanItinerary itinerary = PlanItinerary(legs: legs);
+    _itineraries = [];
     _itineraries.add(itinerary);
   });
 
   test('Create a plan', () {
-    _plan = new Plan(from: _from, to: _to, itineraries: _itineraries);
+    _plan = Plan(from: _from, to: _to, itineraries: _itineraries);
 
     expect(_plan.from, _from);
     expect(_plan.to, _to);
@@ -51,7 +51,7 @@ void main() {
   });
 
   test('Create a plan from json', () async {
-    final file = new File('test/assets/response_plan.json');
+    final file = File('test/assets/response_plan.json');
     final jsonPlan = json.decode(await file.readAsString());
     _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
 
@@ -66,21 +66,21 @@ void main() {
   });
 
   test('Plan from error ', () {
-    PlanError planError = new PlanError(1, "error 2");
-    Plan plan = new Plan(error: planError);
+    final PlanError planError = PlanError(1, "error 2");
+    final Plan plan = Plan(error: planError);
     // error id is -1 when generated with fromError.
-    var plan2 = Plan.fromError("error 2");
+    final plan2 = Plan.fromError("error 2");
     // id are different, so check messages
     expect(plan2.error.message, plan.error.message);
   });
 
   test('Plan toJson ', () {
-    _plan = new Plan(from: _from, to: _to, itineraries: _itineraries);
+    _plan = Plan(from: _from, to: _to, itineraries: _itineraries);
     // the create of a new PlanLocation uses "latitude" and "longitude" words
     // but the toJson method, uses "lat" and "lon". It's not possible to compare
     // the objects using:
     // expect(jsonPlan.values.first.entries.containsValue(_from), true).
-    var jsonPlan = _plan.toJson();
+    final jsonPlan = _plan.toJson();
     expect(jsonPlan.length, 1);
     expect(jsonPlan.containsKey("plan"), true);
     expect(jsonPlan.values.first.containsKey("from"), true);
@@ -89,16 +89,16 @@ void main() {
   });
 
   test('Create Plan error fromJson', () {
-    _error = new PlanError(1, "error 2");
-    Plan plan = new Plan(error: _error);
+    _error = PlanError(1, "error 2");
+    final Plan plan = Plan(error: _error);
     // error id is -1 when generated with fromError.
-    var plan2 = Plan.fromError("error 2");
+    final plan2 = Plan.fromError("error 2");
     // id are different, so check messages
     expect(plan2.error.message, plan.error.message);
   });
 
   test('Create Plan error with fromError', () async {
-    final file = new File('test/assets/response_plan_error.json');
+    final file = File('test/assets/response_plan_error.json');
     final jsonPlan = json.decode(await file.readAsString());
     _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
 
@@ -107,7 +107,7 @@ void main() {
   });
 
   test('IconData return correct icon', () async {
-    PlanItineraryLeg _legBus = new PlanItineraryLeg(
+    final PlanItineraryLeg _legBus = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
         route: "route",
@@ -115,7 +115,7 @@ void main() {
         duration: 300.0,
         distance: 2.0);
 
-    PlanItineraryLeg _legMinibus = new PlanItineraryLeg(
+    final PlanItineraryLeg _legMinibus = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
         route: "route",
@@ -123,7 +123,7 @@ void main() {
         duration: 300.0,
         distance: 2.0);
 
-    PlanItineraryLeg _legTrufi = new PlanItineraryLeg(
+    final PlanItineraryLeg _legTrufi = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
         route: "route",
@@ -131,7 +131,7 @@ void main() {
         duration: 300.0,
         distance: 2.0);
 
-    PlanItineraryLeg _legMicro = new PlanItineraryLeg(
+    final PlanItineraryLeg _legMicro = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
         route: "route",

@@ -10,6 +10,7 @@ import '../../blocs/request_manager_bloc.dart';
 import '../../trufi_models.dart';
 
 class OfflineRequestManager implements RequestManager {
+  @override
   Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
@@ -42,6 +43,7 @@ class OfflineRequestManager implements RequestManager {
     return objects;
   }
 
+  @override
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
@@ -54,6 +56,7 @@ class OfflineRequestManager implements RequestManager {
     }());
   }
 
+  @override
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
     TrufiLocation from,
@@ -66,6 +69,7 @@ class OfflineRequestManager implements RequestManager {
     }());
   }
 
+  @override
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,

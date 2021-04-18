@@ -9,27 +9,27 @@ class HomeRobot extends Robot {
   HomeRobot(FlutterDriver driver, Future<void> work) : super(driver, work);
 
   HomeRobot seesFromPlacesField() {
-    work = work.then((_) async => await seesKey(keys.homePageFromPlaceField));
+    work = work.then((_) async => seesKey(keys.homePageFromPlaceField));
     return this;
   }
 
   HomeRobot seesToPlacesField() {
-    work = work.then((_) async => await seesKey(keys.homePageToPlaceField));
+    work = work.then((_) async => seesKey(keys.homePageToPlaceField));
     return this;
   }
 
   HomeRobot seesSwapButton() {
-    work = work.then((_) async => await seesKey(keys.homePageSwapButton));
+    work = work.then((_) async => seesKey(keys.homePageSwapButton));
     return this;
   }
 
   HomeRobot seesNotSwapButton() {
-    work = work.then((_) async => await seesNotKey(keys.homePageSwapButton));
+    work = work.then((_) async => seesNotKey(keys.homePageSwapButton));
     return this;
   }
 
   SearchRobot tapsOnFromPlacesField() {
-    work = work.then((_) async => await tapsOnKey(keys.homePageFromPlaceField));
+    work = work.then((_) async => tapsOnKey(keys.homePageFromPlaceField));
     return SearchRobot(driver, work);
   }
 }

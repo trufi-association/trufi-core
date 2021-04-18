@@ -14,16 +14,16 @@ class LocationFormField extends FormField<TrufiLocation> {
           onSaved: onSaved,
           builder: (FormFieldState<TrufiLocation> state) {
             final theme = Theme.of(state.context);
-            final textStyle = theme.textTheme.body2;
-            final hintStyle = theme.textTheme.body1.copyWith(
+            final textStyle = theme.textTheme.bodyText1;
+            final hintStyle = theme.textTheme.bodyText2.copyWith(
               color: theme.textTheme.caption.color,
             );
             return Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4.0),
               child: GestureDetector(
                 onTap: () async {
                   // Show search
-                  TrufiLocation location = await showSearch(
+                  final TrufiLocation location = await showSearch(
                     context: state.context,
                     delegate: LocationSearchDelegate(
                       currentLocation: state.value,
@@ -36,11 +36,11 @@ class LocationFormField extends FormField<TrufiLocation> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.all(1.0),
-                  decoration: new BoxDecoration(
+                  padding: const EdgeInsets.all(1.0),
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    border: new Border.all(color: Colors.white, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    border: Border.all(color: Colors.white),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   ),
                   child: SizedBox(
                     height: 32.0,
@@ -48,11 +48,11 @@ class LocationFormField extends FormField<TrufiLocation> {
                       alignment: WrapAlignment.center,
                       direction: Axis.vertical,
                       children: <Widget>[
-                        Container(height: 16.0, child: leadingImage),
+                        SizedBox(height: 16.0, child: leadingImage),
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Padding(
-                            padding: EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.all(4.0),
                             child: RichText(
                               text: state.value != null
                                   ? TextSpan(

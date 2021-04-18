@@ -15,14 +15,13 @@ import './trufi_models.dart';
 
 LayerOptions offlineMapTileLayerOptions() {
   return TileLayerOptions(
-    maxZoom: 18.0,
     urlTemplate: "assets/tiles/{z}/{z}-{x}-{y}.png",
   );
 }
 
 LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
     {String tileProviderKey = ""}) {
-  var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
+  var urlTemplate = "$tilesEndpoint/{z}/{x}/{y}@2x.png";
   if (tileProviderKey != "") urlTemplate += "?key={key}";
 
   return TileLayerOptions(
@@ -55,9 +54,7 @@ Marker buildFromMarker(LatLng point) {
     height: 24.0,
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) {
-      return Container(
-        child: FromMarker(),
-      );
+      return const FromMarker();
     },
   );
 }
@@ -67,9 +64,7 @@ Marker buildToMarker(LatLng point) {
     point: point,
     anchorPos: AnchorPos.align(AnchorAlign.top),
     builder: (context) {
-      return Container(
-        child: ToMarker(),
-      );
+      return const ToMarker();
     },
   );
 }
@@ -86,7 +81,7 @@ Marker buildTransferMarker(LatLng point) {
             border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(CustomIcons.circle, color: Colors.white),
+          child: const Icon(CustomIcons.circle, color: Colors.white),
         ),
       );
     },
@@ -99,11 +94,13 @@ Marker buildYourLocationMarker(LatLng point) {
     height: 50.0,
     point: point,
     anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) => MyLocationMarker(),
+    builder: (context) => const MyLocationMarker(),
   );
 }
 
 class MyLocationMarker extends StatefulWidget {
+  const MyLocationMarker({Key key}) : super(key: key);
+
   @override
   MyLocationMarkerState createState() => MyLocationMarkerState();
 }
@@ -133,7 +130,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = <Widget>[
+    final List<Widget> children = <Widget>[
       Center(
         child: Transform.scale(
           scale: 0.5,
@@ -184,23 +181,22 @@ Marker buildBusMarker(
 }) {
   return Marker(
     width: 50.0,
-    height: 30.0,
     point: point,
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) => GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(
             children: <Widget>[
               Icon(leg.iconData(), color: Colors.white),
-              Text(" " + leg.route, style: TextStyle(color: Colors.white)),
+              Text(" ${leg.route}", style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),
@@ -233,7 +229,7 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 }
 
 List<LatLng> decodePolyline(String encoded) {
-  List<LatLng> points = new List<LatLng>();
+  final List<LatLng> points = <LatLng>[];
   int index = 0, len = encoded.length;
   int lat = 0, lng = 0;
   while (index < len) {
@@ -243,7 +239,7 @@ List<LatLng> decodePolyline(String encoded) {
       result |= (b & 0x1f) << shift;
       shift += 5;
     } while (b >= 0x20);
-    int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    final int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
     lat += dlat;
     shift = 0;
     result = 0;
@@ -252,9 +248,9 @@ List<LatLng> decodePolyline(String encoded) {
       result |= (b & 0x1f) << shift;
       shift += 5;
     } while (b >= 0x20);
-    int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    final int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
     lng += dlng;
-    LatLng p = new LatLng(lat / 1E5, lng / 1E5);
+    final LatLng p = LatLng(lat / 1E5, lng / 1E5);
     points.add(p);
   }
   return points;
@@ -265,7 +261,7 @@ Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
   double minDist = double.maxFinite;
   polylines.forEach((p) {
     for (int i = 0; i < p.points.length - 1; i++) {
-      double dist = distToSegment(point, p.points[i], p.points[i + 1]);
+      final double dist = distToSegment(point, p.points[i], p.points[i + 1]);
       if (dist < minDist) {
         minDist = dist;
         minPolyline = p;
@@ -288,7 +284,7 @@ double distToSegment(LatLng p, LatLng v, LatLng w) {
 }
 
 double distToSegmentSquared(LatLng p, LatLng v, LatLng w) {
-  double l2 = dist2(v, w);
+  final double l2 = dist2(v, w);
   if (l2 == 0) return dist2(p, v);
   double t = ((p.longitude - v.longitude) * (w.longitude - v.longitude) +
           (p.latitude - v.latitude) * (w.latitude - v.latitude)) /
@@ -309,18 +305,18 @@ double lengthForPolyline(Polyline polyline) {
 }
 
 LatLng midPointForPolyline(Polyline polyline) {
-  double midPointLength = lengthForPolyline(polyline) / 2;
+  final double midPointLength = lengthForPolyline(polyline) / 2;
   double totalLength = 0.0;
   for (int i = 0; i < polyline.points.length - 1; i++) {
-    LatLng p0 = polyline.points[i];
-    LatLng p1 = polyline.points[i + 1];
-    double segmentLength = dist2(p0, p1);
+    final LatLng p0 = polyline.points[i];
+    final LatLng p1 = polyline.points[i + 1];
+    final double segmentLength = dist2(p0, p1);
     totalLength += segmentLength;
     if (midPointLength < totalLength) {
-      double factor1 = (totalLength - midPointLength) / segmentLength;
-      double factor0 = 1.0 - factor1;
-      double latitude = p0.latitude * factor0 + p1.latitude * factor1;
-      double longitude = p0.longitude * factor0 + p1.longitude * factor1;
+      final double factor1 = (totalLength - midPointLength) / segmentLength;
+      final double factor0 = 1.0 - factor1;
+      final double latitude = p0.latitude * factor0 + p1.latitude * factor1;
+      final double longitude = p0.longitude * factor0 + p1.longitude * factor1;
       return LatLng(latitude, longitude);
     }
   }

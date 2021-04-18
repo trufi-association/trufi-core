@@ -5,15 +5,14 @@ import '../trufi_models.dart';
 import '../widgets/vertical_swipe_detector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
-  PlanItineraryTabPages(
-    this.tabController,
-    this.itineraries,
-    this.ad,
-  ) : assert(itineraries != null && itineraries.length > 0);
-
   final TabController tabController;
   final List<PlanItinerary> itineraries;
   final Ad ad;
+
+  PlanItineraryTabPages(this.tabController, this.itineraries, this.ad,
+      {Key key})
+      : assert(itineraries != null && itineraries.isNotEmpty),
+        super(key: key);
 
   @override
   PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
@@ -93,7 +92,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           children: <Widget>[
             Column(
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: height,
                   child: TabBarView(
                     controller: widget.tabController,
@@ -105,7 +104,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(bottom: 4.0),
+                  padding: const EdgeInsets.only(bottom: 4.0),
                   child: TabPageSelector(
                     selectedColor: Theme.of(context).primaryIconTheme.color,
                     controller: widget.tabController,
@@ -140,10 +139,10 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
 
-    return Container(
+    return SizedBox(
       height: _animationDetailHeight.value,
       child: ListView.builder(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: _paddingHeight / 2,
           bottom: _paddingHeight / 2,
           left: 10.0,
@@ -157,7 +156,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                     color: Theme.of(context).accentColor),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: RichText(
                       text: TextSpan(
                           text: ad.text,
@@ -170,13 +169,13 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             );
           }
 
-          PlanItineraryLeg leg = itinerary.legs[index];
+          final PlanItineraryLeg leg = itinerary.legs[index];
           return Row(
             children: <Widget>[
               Icon(leg.iconData(), color: theme.primaryIconTheme.color),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: RichText(
                     text: TextSpan(
                       text: leg.toInstruction(localization),
@@ -205,7 +204,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     return VerticalSwipeDetector(
       onSwipeUp: () => _setIsExpanded(true),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: _paddingHeight / 2),
+        padding: const EdgeInsets.symmetric(vertical: _paddingHeight / 2),
         child: Flex(
           direction: isPortrait ? Axis.vertical : Axis.horizontal,
           children: <Widget>[
@@ -227,22 +226,17 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     final localization = TrufiLocalization.of(context);
     return Container(
       height: _animationCostHeight.value,
-      padding: EdgeInsets.only(left: 16.0, right: 10.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 10.0),
       child: Row(
         children: <Widget>[
           Text(
-            localization.instructionDurationMinutes(itinerary.time) + " ",
-            style: theme.primaryTextTheme.title,
+            "${localization.instructionDurationMinutes(itinerary.time)} ",
+            style: theme.primaryTextTheme.headline6,
           ),
           Text(
-            "(" +
-                (itinerary.distance >= 1000
-                    ? localization.instructionDistanceKm(
-                        (itinerary.distance / 1000).ceil())
-                    : localization
-                        .instructionDistanceMeters(itinerary.distance)) +
-                ")",
-            style: theme.primaryTextTheme.title.copyWith(color: Colors.grey),
+            "(${itinerary.distance >= 1000 ? localization.instructionDistanceKm((itinerary.distance / 1000).ceil()) : localization.instructionDistanceMeters(itinerary.distance)})",
+            style:
+                theme.primaryTextTheme.headline6.copyWith(color: Colors.grey),
           ),
         ],
       ),
@@ -258,31 +252,33 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   ) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final children = List<Widget>();
-    itinerary.legs.forEach((leg) {
+    final children = <Widget>[];
+    for (final leg in itinerary.legs) {
       children.add(
         Row(
           children: <Widget>[
             Icon(leg.iconData(), color: theme.primaryIconTheme.color),
-            leg.mode == 'BUS'
-                ? Text(
-                    " " + leg.route,
-                    style: theme.primaryTextTheme.body1.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                : Text(
-                    localization.instructionDurationMinutes(
-                        (leg.duration.ceil() / 60).ceil()),
-                    style: theme.primaryTextTheme.body1,
-                  ),
-            ad != null || leg != itinerary.legs.last
-                ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
-                : Container(),
+            if (leg.mode == 'BUS')
+              Text(
+                " ${leg.route}",
+                style: theme.primaryTextTheme.bodyText2.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            else
+              Text(
+                localization.instructionDurationMinutes(
+                    (leg.duration.ceil() / 60).ceil()),
+                style: theme.primaryTextTheme.bodyText2,
+              ),
+            if (ad != null || leg != itinerary.legs.last)
+              const Icon(Icons.keyboard_arrow_right, color: Colors.grey)
+            else
+              Container(),
           ],
         ),
       );
-    });
+    }
 
     if (ad != null) {
       children.add(
@@ -302,7 +298,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
         color: theme.primaryColor,
         child: InkWell(
           child: Container(
-            padding: EdgeInsets.only(left: 12.0, right: 10.0),
+            padding: const EdgeInsets.only(left: 12.0, right: 10.0),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -326,8 +322,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildExpandButton(BuildContext context) {
     return IconButton(
       icon: _isExpanded
-          ? Icon(Icons.keyboard_arrow_down)
-          : Icon(Icons.keyboard_arrow_up),
+          ? const Icon(Icons.keyboard_arrow_down)
+          : const Icon(Icons.keyboard_arrow_up),
       color: Theme.of(context).primaryIconTheme.color,
       onPressed: () => _setIsExpanded(!_isExpanded),
     );

@@ -1,1 +1,6 @@
 include: package:lint/analysis_options_package.yaml
+
+analyzer:
+  exclude:
+    - lib/l10n/**
+    - lib/trufi_map_utils.dart # TODO: Remove if there are tests

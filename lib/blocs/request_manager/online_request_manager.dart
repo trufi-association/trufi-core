@@ -10,8 +10,8 @@ import 'package:package_info/package_info.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
-import '../../blocs/request_manager_bloc.dart';
 import '../../blocs/preferences_bloc.dart';
+import '../../blocs/request_manager_bloc.dart';
 import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
 
@@ -19,13 +19,14 @@ class OnlineRequestManager implements RequestManager {
   static const String searchPath = '/geocode';
   static const String planPath = '/plan';
 
+  @override
   Future<List<dynamic>> fetchLocations(
     BuildContext context,
     String query,
     int limit,
   ) async {
     final preferences = PreferencesBloc.of(context);
-    Uri request = Uri.parse(
+    final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + searchPath,
     ).replace(queryParameters: {
       "query": query,
@@ -55,6 +56,7 @@ class OnlineRequestManager implements RequestManager {
     }
   }
 
+  @override
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
@@ -63,6 +65,7 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelablePlan(context, from, to, "TRANSIT,WALK");
   }
 
+  @override
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
     TrufiLocation from,
@@ -71,6 +74,7 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelablePlan(context, from, to, "CAR,WALK");
   }
 
+  @override
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,
@@ -103,7 +107,7 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
   ) {
     return CancelableOperation.fromFuture(() async {
-      Ad ad = await _fetchAd(context, to);
+      final Ad ad = await _fetchAd(context, to);
       return ad;
     }());
   }
@@ -115,7 +119,7 @@ class OnlineRequestManager implements RequestManager {
     String mode,
   ) async {
     final preferences = PreferencesBloc.of(context);
-    Uri request = Uri.parse(
+    final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + planPath,
     ).replace(queryParameters: {
       "fromPlace": from.toString(),
@@ -127,7 +131,7 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return await compute(_parsePlan, utf8.decode(response.bodyBytes));
+      return compute(_parsePlan, utf8.decode(response.bodyBytes));
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
@@ -143,7 +147,7 @@ class OnlineRequestManager implements RequestManager {
       return null;
     }
 
-    Uri request = Uri.parse(
+    final Uri request = Uri.parse(
       TrufiConfiguration().url.adsEndpoint,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
@@ -152,20 +156,24 @@ class OnlineRequestManager implements RequestManager {
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return await compute(_parseAd, utf8.decode(response.bodyBytes));
+      return compute(_parseAd, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
+      // TODO: Remove Print and replace by proper error handling
+      // ignore: avoid_print
       print("No ads found");
-    } else {
-      print("Error fetching ads");
-      return null;
     }
+    // TODO: remove print and replace by proper error handling
+    // ignore: avoid_print
+    print("Error fetching ads");
+
+    return null;
   }
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       return await http.get(request, headers: {
-        "User-Agent": "Trufi/" + packageInfo.version,
+        "User-Agent": "Trufi/${packageInfo.version}",
       });
     } on Exception catch (e) {
       throw FetchOnlineRequestException(e);
@@ -173,10 +181,10 @@ class OnlineRequestManager implements RequestManager {
   }
 
   String _todayMonthDayYear() {
-    var today = new DateTime.now();
+    final today = DateTime.now();
     return "${today.month.toString().padLeft(2, '0')}-" +
         "${today.day.toString().padLeft(2, '0')}-" +
-        "${today.year.toString()}";
+        today.year.toString();
   }
 
   String _localizedErrorForPlanError(
@@ -219,7 +227,8 @@ class OnlineRequestManager implements RequestManager {
 List<TrufiLocation> _parseLocations(String responseBody) {
   return json
       .decode(responseBody)
-      .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
+      .map<TrufiLocation>(
+          (Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
       .toList() as List<TrufiLocation>;
 }
 

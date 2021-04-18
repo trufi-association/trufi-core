@@ -19,12 +19,12 @@ class TrufiMapController {
   static const int animationDuration = 500;
 
   final _mapController = MapController();
-  final _mapReadyController = BehaviorSubject<Null>();
+  final _mapReadyController = BehaviorSubject<void>();
 
   TrufiMapState _state;
   TrufiMapAnimations _animations;
 
-  set state(TrufiMapState state) {
+  void setState(TrufiMapState state) {
     _state = state;
     _mapController.onReady.then((_) {
       final cfg = TrufiConfiguration();
@@ -41,7 +41,7 @@ class TrufiMapController {
     _mapReadyController.close();
   }
 
-  void moveToYourLocation({
+  Future<void> moveToYourLocation({
     @required BuildContext context,
     TickerProvider tickerProvider,
   }) async {
@@ -96,9 +96,9 @@ class TrufiMapController {
     }
   }
 
-  Sink<Null> get _inMapReady => _mapReadyController.sink;
+  Sink<void> get _inMapReady => _mapReadyController.sink;
 
-  Stream<Null> get outMapReady => _mapReadyController.stream;
+  Stream<void> get outMapReady => _mapReadyController.stream;
 
   MapController get mapController => _mapController;
 
@@ -106,7 +106,7 @@ class TrufiMapController {
 }
 
 class TrufiMap extends StatefulWidget {
-  TrufiMap({
+  const TrufiMap({
     Key key,
     @required this.controller,
     @required this.mapOptions,
@@ -127,7 +127,7 @@ class TrufiMapState extends State<TrufiMap> {
   @override
   void initState() {
     super.initState();
-    widget.controller.state = this;
+    widget.controller.setState(this);
   }
 
   @override
@@ -155,7 +155,8 @@ class TrufiMapState extends State<TrufiMap> {
             left: 0.0,
             bottom: 0.0,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
               child: SafeArea(
                 child: RichText(
                   text: TextSpan(
@@ -169,7 +170,7 @@ class TrufiMapState extends State<TrufiMap> {
                           ..onTap = () {
                             launch(cfg.url.mapTilerCopyright);
                           },
-                      ), 
+                      ),
                       TextSpan(
                         style: theme.textTheme.caption.copyWith(
                           color: Colors.black,

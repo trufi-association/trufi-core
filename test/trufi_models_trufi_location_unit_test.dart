@@ -9,16 +9,16 @@ import 'package:trufi_core/trufi_models.dart';
 void main() {
   TrufiLocation trufiLocation;
   LatLng _latLng;
-  String _description = "trufi_location";
-  double _latitude = 18.0;
-  double _longitude = 129.0;
+  const String _description = "trufi_location";
+  const double _latitude = 18.0;
+  const double _longitude = 129.0;
 
   setUp(() {
-    _latLng = new LatLng(_latitude, _longitude);
+    _latLng = LatLng(_latitude, _longitude);
   });
 
   test('Create a trufi location', () {
-    trufiLocation = new TrufiLocation(
+    trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
     expect(trufiLocation.description, _description);
@@ -52,9 +52,9 @@ void main() {
   });*/
 
   test('Create TrufiLocation from planLocation', () {
-    PlanLocation plan = new PlanLocation(
+    final PlanLocation plan = PlanLocation(
         name: _description, longitude: _longitude, latitude: _latitude);
-    trufiLocation = new TrufiLocation.fromPlanLocation(plan);
+    trufiLocation = TrufiLocation.fromPlanLocation(plan);
 
     expect(trufiLocation.description, _description);
     expect(trufiLocation.latitude, _latitude);
@@ -63,10 +63,10 @@ void main() {
 
   // almost the same test as fromImportantPlacesJson and fromSearchJson but calling fromJson method
   test('Load list<TrufiLocation> from json', () async {
-    final file = new File('test/assets/response_location.json');
-    List<TrufiLocation> _listJsonLocation = json
+    final file = File('test/assets/response_location.json');
+    final List<TrufiLocation> _listJsonLocation = json
         .decode(await file.readAsString())
-        .map<TrufiLocation>((Map<String, dynamic> json) => new TrufiLocation.fromJson(json))
+        .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromJson(json))
         .toList() as List<TrufiLocation>;
 
     expect(
@@ -81,9 +81,9 @@ void main() {
   });
 
   test('trufi location toJson', () {
-    trufiLocation = new TrufiLocation(
+    trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
-    var jsonTrufiLocation = trufiLocation.toJson();
+    final jsonTrufiLocation = trufiLocation.toJson();
 
     expect(jsonTrufiLocation.length, 4);
     expect(jsonTrufiLocation.containsKey("description"), true);
@@ -96,10 +96,10 @@ void main() {
   });
 
   test('trufi locations are equal', () {
-    trufiLocation = new TrufiLocation(
+    trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
-    var trufiLocation2 = new TrufiLocation(
+    final trufiLocation2 = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
     expect(trufiLocation, trufiLocation2);
@@ -107,20 +107,20 @@ void main() {
   });
 
   test('trufi locations are not equal', () {
-    trufiLocation = new TrufiLocation(
+    trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
-    var trufiLocation2 = new TrufiLocation(
+    final trufiLocation2 = TrufiLocation(
         description: "another_description", latitude: 2.0, longitude: 2.0);
 
     expect(trufiLocation == trufiLocation2, false);
   });
 
   test('trufi location to string', () {
-    trufiLocation = new TrufiLocation(
+    trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
     expect(trufiLocation.toString(),
-        _latitude.toString() + "," + _longitude.toString());
+        "$_latitude,$_longitude");
   });
 }

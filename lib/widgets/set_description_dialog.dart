@@ -4,7 +4,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 class SetDescriptionDialog extends StatefulWidget {
   final String initText;
 
-  SetDescriptionDialog({this.initText = ""});
+  const SetDescriptionDialog({this.initText = "", Key key}) : super(key: key);
 
   @override
   _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
@@ -21,41 +21,41 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     super.initState();
   }
 
+  void onSave() {
+    if (!_hasInputError) {
+      final String description = textController.text.trim();
+      textController.clear();
+      Navigator.of(context).pop(description);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TrufiLocalization localization = TrufiLocalization.of(context);
-    final onSave = () {
-      if (!_hasInputError) {
-        String description = textController.text.trim();
-        textController.clear();
-        Navigator.of(context).pop(description);
-      }
-    };
     return AlertDialog(
       title: Text(
         localization.savedPlacesEnterNameTitle,
       ),
-      content: Container(
-        child: TextField(
-          decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-              color: theme.accentColor,
-            )),
-          ),
-          onChanged: (value) {
-            _hasInputError = !_validateInput(value);
-          },
-          onEditingComplete: onSave,
-          controller: textController,
-          maxLines: 1,
-          autofocus: true,
+      content: TextField(
+        decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+            color: theme.accentColor,
+          )),
         ),
+        onChanged: (value) {
+          _hasInputError = !_validateInput(value);
+        },
+        onEditingComplete: onSave,
+        controller: textController,
+        autofocus: true,
       ),
       actions: <Widget>[
-        FlatButton(
-          textColor: theme.accentColor,
+        TextButton(
+          style: TextButton.styleFrom(
+            textStyle: TextStyle(color: theme.accentColor),
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -63,8 +63,10 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
             localization.commonCancel.toUpperCase(),
           ),
         ),
-        FlatButton(
-          textColor: theme.accentColor,
+        TextButton(
+          style: TextButton.styleFrom(
+            textStyle: TextStyle(color: theme.accentColor),
+          ),
           onPressed: onSave,
           child: Text(
             localization.commonSave.toUpperCase(),
@@ -75,6 +77,6 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
   }
 
   bool _validateInput(String text) {
-    return text.length > 0 && text.contains(RegExp(r"[a-zA-Z0-9]+"));
+    return text.isNotEmpty && text.contains(RegExp("[a-zA-Z0-9]+"));
   }
 }

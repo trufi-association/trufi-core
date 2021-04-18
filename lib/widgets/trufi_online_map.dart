@@ -11,7 +11,7 @@ import '../widgets/trufi_map.dart';
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiOnlineMap extends StatefulWidget {
-  TrufiOnlineMap({
+  const TrufiOnlineMap({
     Key key,
     @required this.controller,
     @required this.layerOptionsBuilder,
@@ -39,7 +39,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
       stream: preferencesBloc.outChangeMapType,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return TrufiMap(
-          key: ValueKey("TrufiOnlineMap"),
+          key: const ValueKey("TrufiOnlineMap"),
           controller: widget.controller,
           mapOptions: MapOptions(
             minZoom: cfg.map.onlineMinZoom,
@@ -55,8 +55,8 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
               tileHostingTileLayerOptions(
                 getTilesEndpointForMapType(snapshot.data),
                 tileProviderKey: cfg.map.mapTilerKey,
-              ),
-            ]..addAll(widget.layerOptionsBuilder(context));
+              ), ...widget.layerOptionsBuilder(context),
+            ];
           },
         );
       },

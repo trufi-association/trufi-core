@@ -11,7 +11,7 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
     title: Text(localization.alertLocationServicesDeniedTitle),
     content: Text(localization.alertLocationServicesDeniedMessage),
     actions: [
-      FlatButton(
+      TextButton(
         onPressed: () {
           Navigator.pop(context);
           Geolocator.requestPermission();
@@ -43,7 +43,7 @@ Widget buildTransitErrorAlert({
 }) {
   final localization = TrufiLocalization.of(context);
   final theme = Theme.of(context);
-  final actionTextStyle = theme.textTheme.body1.copyWith(
+  final actionTextStyle = theme.textTheme.bodyText2.copyWith(
     color: theme.accentColor,
   );
   return _buildAlert(
@@ -54,7 +54,7 @@ Widget buildTransitErrorAlert({
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.pop(context);
             onReportMissingRoute();
@@ -64,14 +64,14 @@ Widget buildTransitErrorAlert({
             style: actionTextStyle,
           ),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
             localization.noRouteErrorActionCancel,
             style: actionTextStyle,
           ),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.pop(context);
             onShowCarRoute();
@@ -104,9 +104,11 @@ Widget buildOnAndOfflineErrorAlert({
   );
 }
 
+// TODO: Understand why not implemented and used.
+// ignore: unused_element
 Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
   final localization = TrufiLocalization.of(context);
-  return FlatButton(
+  return TextButton(
     onPressed: () {
       PreferencesBloc.of(context).inChangeOnline.add(online);
       Navigator.pop(context);
@@ -127,16 +129,16 @@ Widget _buildAlert({
   return AlertDialog(
     backgroundColor: theme.primaryColor,
     title: title,
-    titleTextStyle: theme.primaryTextTheme.title,
+    titleTextStyle: theme.primaryTextTheme.headline6,
     content: content,
-    contentTextStyle: theme.primaryTextTheme.body1,
+    contentTextStyle: theme.primaryTextTheme.bodyText2,
     actions: actions,
   );
 }
 
 Widget _buildOKButton(BuildContext context) {
   final localization = TrufiLocalization.of(context);
-  return FlatButton(
+  return TextButton(
     onPressed: () => Navigator.pop(context),
     child: Text(localization.commonOK),
   );

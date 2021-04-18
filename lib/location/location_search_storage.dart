@@ -14,22 +14,18 @@ const String keyStreets = 'streets';
 const String keyStreetJunctions = 'streetJunctions';
 
 class LocationSearchStorage {
-  static final _levenshteinDistanceThreshold = 3;
+  static const _levenshteinDistanceThreshold = 3;
 
   final _diffMatchPatch = DiffMatchPatch();
-  final _places = List<TrufiLocation>();
-  final _streets = List<TrufiStreet>();
+  final _places = <TrufiLocation>[];
+  final _streets = <TrufiStreet>[];
 
-  void load(BuildContext context, String key) async {
+  Future<void> load(BuildContext context, String key) async {
     _places.clear();
     _streets.clear();
-    try {
-      final locationData = await loadFromAssets(context, key);
-      _places.addAll(locationData.places);
-      _streets.addAll(locationData.streets);
-    } on FlutterError catch (e) {
-      print(e);
-    }
+    final locationData = await loadFromAssets(context, key);
+    _places.addAll(locationData.places);
+    _streets.addAll(locationData.streets);
   }
 
   Future<List<TrufiLocation>> fetchPlaces(BuildContext context) async {
@@ -40,13 +36,12 @@ class LocationSearchStorage {
     BuildContext context,
     String query,
   ) async {
-    query = query.toLowerCase();
     return _places.fold<List<LevenshteinObject>>(
-      List<LevenshteinObject>(),
+      <LevenshteinObject>[],
       (locations, location) {
         final distance = _levenshteinDistanceForLocation(
           location,
-          query,
+          query.toLowerCase(),
         );
         if (distance < _levenshteinDistanceThreshold) {
           locations.add(LevenshteinObject(location, distance));
@@ -60,13 +55,12 @@ class LocationSearchStorage {
     BuildContext context,
     String query,
   ) async {
-    query = query.toLowerCase();
     return _streets.fold<List<LevenshteinObject>>(
-      List<LevenshteinObject>(),
+      <LevenshteinObject>[],
       (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
-          query,
+          query.toLowerCase(),
         );
         if (distance < _levenshteinDistanceThreshold) {
           streets.add(LevenshteinObject(street, distance));
@@ -86,15 +80,15 @@ class LocationSearchStorage {
       query,
     );
     // Search in alternative names
-    location.alternativeNames?.forEach((alternativeName) {
+    for (final name in location.alternativeNames) {
       distance = min(
         distance,
         _levenshteinDistanceForString(
-          alternativeName.toLowerCase(),
+          name.toLowerCase(),
           query,
         ),
       );
-    });
+    }
     // Return distance
     return distance;
   }
@@ -166,9 +160,10 @@ LocationSearchData _parseSearchJson(String encoded) {
           )
           .toList() as List<TrufiLocation>;
       // Streets
-      final streets = Map<String, TrufiStreet>();
+      final streets = <String, TrufiStreet>{};
       search[keyStreets].keys.forEach((String key) {
-        streets[key] = TrufiStreet.fromSearchJson(search[keyStreets][key] as List<dynamic>);
+        streets[key] = TrufiStreet.fromSearchJson(
+            search[keyStreets][key] as List<dynamic>);
       });
       // Junctions
       search[keyStreetJunctions].keys.forEach((key) {
@@ -196,8 +191,10 @@ LocationSearchData _parseSearchJson(String encoded) {
       });
       return LocationSearchData(places, streets.values.toList());
     } catch (e) {
+      // TODO: Replace with proper error handling
+      // ignore: avoid_print
       print("Failed to parse locations from JSON: $e");
     }
   }
-  return LocationSearchData(List(), List());
+  return LocationSearchData([], []);
 }

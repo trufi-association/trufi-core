@@ -16,13 +16,15 @@ import '../widgets/your_location_button.dart';
 
 const double customOverlayWidgetMargin = 80.0;
 
-typedef void OnSelected(PlanItinerary itinerary);
+typedef OnSelected = void Function(PlanItinerary itinerary);
 
 class PlanMapPage extends StatefulWidget {
-  PlanMapPage(
+  const PlanMapPage(
       {this.planPageController,
       @required this.customOverlayWidget,
-      @required this.customBetweenFabWidget});
+      @required this.customBetweenFabWidget,
+      Key key})
+      : super(key: key);
 
   final PlanPageController planPageController;
   final LocaleWidgetBuilder customOverlayWidget;
@@ -73,9 +75,10 @@ class PlanMapPageState extends State<PlanMapPage>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
-    Locale locale = Localizations.localeOf(context);
+    final Locale locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
     _data._selectedColor = theme.accentColor;
 
@@ -91,7 +94,7 @@ class PlanMapPageState extends State<PlanMapPage>
     return Stack(
       children: <Widget>[
         TrufiOnlineMap(
-          key: ValueKey("PlanMap"),
+          key: const ValueKey("PlanMap"),
           controller: _trufiMapController,
           onTap: _handleOnMapTap,
           onPositionChanged: _handleOnMapPositionChanged,
@@ -120,7 +123,7 @@ class PlanMapPageState extends State<PlanMapPage>
         ),
         Positioned.fill(
           child: Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               right: customOverlayWidgetMargin,
               bottom: 60,
             ),
@@ -147,7 +150,7 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Widget _buildUpperActionButtons(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: MapTypeButton(),
     );
   }
@@ -159,7 +162,7 @@ class PlanMapPageState extends State<PlanMapPage>
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
-          Padding(padding: EdgeInsets.all(4.0)),
+          const Padding(padding: EdgeInsets.all(4.0)),
           YourLocationButton(onPressed: _handleOnYourLocationPressed),
         ],
       ),
@@ -167,7 +170,7 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   void _handleOnMapTap(LatLng point) {
-    PlanItinerary tappedItinerary = _data.itineraryForPoint(point);
+    final PlanItinerary tappedItinerary = _data.itineraryForPoint(point);
     if (tappedItinerary != null) {
       widget.planPageController.inSelectedItinerary.add(tappedItinerary);
     }
@@ -179,12 +182,12 @@ class PlanMapPageState extends State<PlanMapPage>
   ) {
     if (_data.selectedBounds != null && _data.selectedBounds.isValid) {
       _cropButtonKey.currentState.setVisible(
-        !position.bounds.containsBounds(_data.selectedBounds),
+        visible: !position.bounds.containsBounds(_data.selectedBounds),
       );
     }
   }
 
-  void _handleOnYourLocationPressed() async {
+  void _handleOnYourLocationPressed() {
     _trufiMapController.moveToYourLocation(
       context: context,
       tickerProvider: this,
@@ -219,12 +222,12 @@ class PlanMapPageStateData {
   final Plan plan;
   final ValueChanged<PlanItinerary> onItineraryTap;
 
-  final _itineraries = Map<PlanItinerary, List<PolylineWithMarkers>>();
-  final _unselectedMarkers = List<Marker>();
-  final _unselectedPolylines = List<Polyline>();
-  final _selectedMarkers = List<Marker>();
-  final _selectedPolylines = List<Polyline>();
-  final _allPolylines = List<Polyline>();
+  final _itineraries = <PlanItinerary, List<PolylineWithMarkers>>{};
+  final _unselectedMarkers = <Marker>[];
+  final _unselectedPolylines = <Polyline>[];
+  final _selectedMarkers = <Marker>[];
+  final _selectedPolylines = <Polyline>[];
+  final _allPolylines = <Polyline>[];
   Color _selectedColor = const Color(0xffd81b60);
 
   Marker _fromMarker;
@@ -298,26 +301,26 @@ class PlanMapPageStateData {
           selectedColor: _selectedColor),
     );
     _itineraries.forEach((itinerary, polylinesWithMarker) {
-      bool isSelected = (itinerary == _selectedItinerary);
-      polylinesWithMarker.forEach((polylineWithMarker) {
-        polylineWithMarker.markers.forEach((marker) {
+      final bool isSelected = itinerary == _selectedItinerary;
+      for (final polylineWithMarker in polylinesWithMarker) {
+        for (final marker in polylineWithMarker.markers) {
           if (isSelected) {
             _selectedMarkers.add(marker);
             _selectedBounds.extend(marker.point);
           } else {
             _unselectedMarkers.add(marker);
           }
-        });
+        }
         if (isSelected) {
           _selectedPolylines.add(polylineWithMarker.polyline);
-          polylineWithMarker.polyline.points.forEach((point) {
+          for (final point in polylineWithMarker.polyline.points) {
             _selectedBounds.extend(point);
-          });
+          }
         } else {
           _unselectedPolylines.add(polylineWithMarker.polyline);
         }
         _allPolylines.add(polylineWithMarker.polyline);
-      });
+      }
     });
   }
 
@@ -329,7 +332,7 @@ class PlanMapPageStateData {
 
   PlanItinerary _itineraryForPolyline(Polyline polyline) {
     final entry = _itineraryEntryForPolyline(polyline);
-    return entry != null ? entry.key : null;
+    return entry?.key;
   }
 
   MapEntry<PlanItinerary, List<PolylineWithMarkers>> _itineraryEntryForPolyline(
@@ -352,24 +355,23 @@ class PlanMapPageStateData {
       @required PlanItinerary selectedItinerary,
       @required Function(PlanItinerary) onTap,
       Color selectedColor}) {
-    Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
+    final Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = {};
     if (plan != null) {
-      plan.itineraries.forEach((itinerary) {
-        List<Marker> markers = List();
-        List<PolylineWithMarkers> polylinesWithMarkers = List();
-        bool isSelected = itinerary == selectedItinerary;
-        Color color = isSelected ? selectedColor : Colors.grey;
+      for (final itinerary in plan.itineraries) {
+        final List<Marker> markers = [];
+        final List<PolylineWithMarkers> polylinesWithMarkers = [];
+        final bool isSelected = itinerary == selectedItinerary;
+        final Color color = isSelected ? selectedColor : Colors.grey;
 
         for (int i = 0; i < itinerary.legs.length; i++) {
-          PlanItineraryLeg leg = itinerary.legs[i];
+          final PlanItineraryLeg leg = itinerary.legs[i];
 
           // Polyline
-          List<LatLng> points = decodePolyline(leg.points);
-          Polyline polyline = new Polyline(
+          final List<LatLng> points = decodePolyline(leg.points);
+          final Polyline polyline = Polyline(
             points: points,
             color: color,
             strokeWidth: isSelected ? 6.0 : 3.0,
-            borderStrokeWidth: 0.0,
             isDotted: leg.mode == 'WALK',
           );
 
@@ -396,7 +398,7 @@ class PlanMapPageStateData {
           polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
         }
         itineraries.addAll({itinerary: polylinesWithMarkers});
-      });
+      }
     }
     return itineraries;
   }

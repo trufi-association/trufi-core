@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 enum _VerticalSwipeDirection { none, down, up }
 
 class VerticalSwipeDetector extends StatefulWidget {
-  VerticalSwipeDetector({
+  const VerticalSwipeDetector({
     @required this.child,
     this.onSwipeDown,
     this.onSwipeUp,
-  });
+    Key key
+  }): super(key: key);
 
   final Widget child;
   final Function onSwipeDown;

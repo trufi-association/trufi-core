@@ -45,13 +45,13 @@ class PreferencesBloc extends BlocBase {
 
     // Generate new UUID if missing
     if (correlationId == null) {
-      correlationId = new Uuid().v4();
+      correlationId = Uuid().v4();
       _preferences.setString(correlationIdKey, correlationId);
     }
   }
 
   void _loadLanguageCode() {
-    String languageCode = _preferences.getString(propertyLanguageCodeKey);
+    final String languageCode = _preferences.getString(propertyLanguageCodeKey);
     if (languageCode != null) {
       inChangeLanguageCode.add(languageCode);
     }

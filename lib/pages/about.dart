@@ -9,8 +9,10 @@ import '../widgets/trufi_drawer.dart';
 class AboutPage extends StatefulWidget {
   static const String route = "/about";
 
+  const AboutPage({Key key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => new AboutPageState();
+  State<StatefulWidget> createState() => AboutPageState();
 }
 
 class AboutPageState extends State<AboutPage> {
@@ -19,7 +21,7 @@ class AboutPageState extends State<AboutPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(AboutPage.route),
+      drawer: const TrufiDrawer(AboutPage.route),
     );
   }
 
@@ -31,11 +33,11 @@ class AboutPageState extends State<AboutPage> {
   Widget _buildBody(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
-    final TextStyle linkStyle = theme.textTheme.body2.copyWith(
+    final TextStyle linkStyle = theme.textTheme.bodyText1.copyWith(
       color: theme.accentColor,
     );
 
-    var trufiConfiguration = TrufiConfiguration();
+    final trufiConfiguration = TrufiConfiguration();
     final currentCity = trufiConfiguration.generalConfiguration.appCity;
     final customTranslations = trufiConfiguration.customTranslations;
     final currentLocale = Localizations.localeOf(context);
@@ -43,59 +45,54 @@ class AboutPageState extends State<AboutPage> {
     return ListView(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Container(
-                child: Text(
-                  customTranslations.get(customTranslations.title,
-                      currentLocale, localization.title),
-                  style: theme.textTheme.title.copyWith(
-                    color: theme.textTheme.body2.color,
-                  ),
+              Text(
+                customTranslations.get(customTranslations.title,
+                    currentLocale, localization.title),
+                style: theme.textTheme.headline6.copyWith(
+                  color: theme.textTheme.bodyText1.color,
                 ),
               ),
-              Container(
-                child: new FutureBuilder(
-                  future: PackageInfo.fromPlatform(),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<PackageInfo> snapshot,
-                  ) {
-                    if (snapshot.hasError ||
-                        snapshot.connectionState != ConnectionState.done) {
-                      return Text("");
-                    }
-                    return Text(
-                      localization.version(snapshot.data.version),
-                      style: theme.textTheme.body2,
-                    );
-                  },
-                ),
+              FutureBuilder(
+                future: PackageInfo.fromPlatform(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<PackageInfo> snapshot,
+                ) {
+                  if (snapshot.hasError ||
+                      snapshot.connectionState != ConnectionState.done) {
+                    return const Text("");
+                  }
+                  return Text(
+                    localization.version(snapshot.data.version),
+                    style: theme.textTheme.bodyText1,
+                  );
+                },
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   customTranslations.get(customTranslations.tagline,
                       currentLocale, localization.tagline(currentCity)),
-                  style: theme.textTheme.subhead.copyWith(
-                    color: theme.textTheme.body2.color,
+                  style: theme.textTheme.subtitle1.copyWith(
+                    color: theme.textTheme.bodyText1.color,
                   ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   customTranslations.get(customTranslations.aboutContent,
                       currentLocale, localization.aboutContent),
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
-                child: RaisedButton(
-                  child: Text(localization.aboutLicenses),
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
                   onPressed: () {
                     return showLicensePage(
                       context: context,
@@ -106,18 +103,19 @@ class AboutPageState extends State<AboutPage> {
                       ),
                     );
                   },
+                  child: Text(localization.aboutLicenses),
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: InkWell(
-                  child: new Text(
-                    localization.aboutOpenSource,
-                    style: linkStyle,
-                  ),
                   onTap: () {
                     launch('https://github.com/trufi-association/trufi-app');
                   },
+                  child: Text(
+                    localization.aboutOpenSource,
+                    style: linkStyle,
+                  ),
                 ),
               ),
             ],

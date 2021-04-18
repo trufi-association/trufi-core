@@ -18,7 +18,7 @@ void main() {
       ),
     ]);
 
-    await mockNetworkImagesFor(() async => await tester.pumpWidget(TrufiApp(
+    await mockNetworkImagesFor(() async => tester.pumpWidget(TrufiApp(
           theme: ThemeData(
             primaryColor: const Color(0xff263238),
             primaryColorLight: const Color(0xffeceff1),
@@ -36,12 +36,12 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(TrufiApp(
       theme: ThemeData.light(),
-      customBetweenFabBuilder: (context) => Placeholder(),
+      customBetweenFabBuilder: (context) => const Placeholder(),
     ));
 
     await tester.pumpAndSettle();
 
-    Finder findPlaceholder = find.byType(Placeholder);
+    final Finder findPlaceholder = find.byType(Placeholder);
     expect(findPlaceholder, findsOneWidget);
   });
 
@@ -55,7 +55,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    Finder findText = find.text("en_null");
+    final Finder findText = find.text("en_null");
     expect(findText, findsOneWidget);
   });
 }

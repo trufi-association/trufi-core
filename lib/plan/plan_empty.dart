@@ -12,12 +12,13 @@ import '../widgets/your_location_button.dart';
 const double customOverlayWidgetMargin = 80;
 
 class PlanEmptyPage extends StatefulWidget {
-  PlanEmptyPage({
-    this.initialPosition,
-    this.onLongPress,
-    this.customOverlayWidget,
-    this.customBetweenFabWidget,
-  });
+  const PlanEmptyPage(
+      {this.initialPosition,
+      this.onLongPress,
+      this.customOverlayWidget,
+      this.customBetweenFabWidget,
+      Key key})
+      : super(key: key);
 
   final LatLng initialPosition;
   final LongPressCallback onLongPress;
@@ -35,10 +36,10 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   @override
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
-    Locale locale = Localizations.localeOf(context);
+    final Locale locale = Localizations.localeOf(context);
     return Stack(children: <Widget>[
       TrufiOnlineMap(
-        key: ValueKey("PlanEmptyMap"),
+        key: const ValueKey("PlanEmptyMap"),
         controller: _trufiMapController,
         onLongPress: widget.onLongPress,
         layerOptionsBuilder: (context) {
@@ -60,7 +61,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       ),
       Positioned.fill(
         child: Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             right: customOverlayWidgetMargin,
             bottom: 60,
           ),
@@ -85,7 +86,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   }
 
   Widget _buildUpperActionButtons(BuildContext context) {
-    return SafeArea(
+    return const SafeArea(
       child: MapTypeButton(),
     );
   }

@@ -12,9 +12,9 @@ import '../blocs/favorite_locations_bloc.dart';
 import '../trufi_models.dart';
 
 abstract class LocationStorage {
-  var diffMatchPatch = DiffMatchPatch();
+  DiffMatchPatch diffMatchPatch = DiffMatchPatch();
 
-  final List<TrufiLocation> _locations = List();
+  final List<TrufiLocation> _locations = [];
 
   Future<bool> load(BuildContext context);
 
@@ -42,13 +42,12 @@ abstract class LocationStorage {
     BuildContext context,
     String query,
   ) async {
-    query = query.toLowerCase();
     return _locations.fold<List<LevenshteinObject>>(
-      List<LevenshteinObject>(),
+      <LevenshteinObject>[],
       (locations, location) {
-        int distance = _findMatchAndCalculateStringDistance(
+        final int distance = _findMatchAndCalculateStringDistance(
           location.description.toLowerCase(),
-          query,
+          query.toLowerCase(),
         );
         if (distance < 3) {
           locations.add(LevenshteinObject(location, distance));
@@ -69,7 +68,7 @@ abstract class LocationStorage {
     save();
   }
 
-  void replace(Map<String,TrufiLocation> data){
+  void replace(Map<String, TrufiLocation> data) {
     final TrufiLocation oldLocation = data['oldLocation'];
     final TrufiLocation newLocation = data['newLocation'];
     final int indexLocation = _locations.indexOf(oldLocation);
@@ -83,7 +82,7 @@ abstract class LocationStorage {
 
   int _findMatchAndCalculateStringDistance(String text, String query) {
     // Find match in text similar to query
-    var position = diffMatchPatch.match(text, query, 0);
+    final position = diffMatchPatch.match(text, query, 0);
     // If match found, calculate levenshtein distance
     if (position != -1 && position < text.length) {
       return position + query.length + 1 <= text.length
@@ -122,12 +121,14 @@ class SharedPreferencesLocationStorage extends LocationStorage {
 
   final String key;
 
+  @override
   Future<bool> load(BuildContext context) async {
     _locations.clear();
     _locations.addAll(await loadFromPreferences(key));
     return true;
   }
 
+  @override
   Future<bool> save() async {
     return saveToPreferences(key, _locations);
   }
@@ -138,12 +139,14 @@ class JSONLocationStorage extends LocationStorage {
 
   final String key;
 
+  @override
   Future<bool> load(BuildContext context) async {
     _locations.clear();
     _locations.addAll(await loadFromAssets(context, key));
     return true;
   }
 
+  @override
   Future<bool> save() async {
     return false;
   }
@@ -153,7 +156,7 @@ Future<bool> saveToPreferences(
   String key,
   List<TrufiLocation> locations,
 ) async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
   return preferences.setString(
     key,
     json.encode(locations.map((location) => location.toJson()).toList()),
@@ -161,12 +164,14 @@ Future<bool> saveToPreferences(
 }
 
 Future<List<TrufiLocation>> loadFromPreferences(String key) async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
   try {
     return compute(_parseTrufiLocations, preferences.getString(key));
   } catch (e) {
+    // TODO: replace with error handling
+    // ignore: avoid_print
     print("Failed to read location storage: $e");
-    return Future<List<TrufiLocation>>.value(null);
+    return Future<List<TrufiLocation>>.value();
   }
 }
 
@@ -185,13 +190,16 @@ List<TrufiLocation> _parseTrufiLocations(String encoded) {
     try {
       return json
           .decode(encoded)
-          .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromJson(json))
+          .map<TrufiLocation>(
+              (Map<String, dynamic> json) => TrufiLocation.fromJson(json))
           .toList() as List<TrufiLocation>;
     } catch (e) {
+      // TODO: Replace with proper error handling
+      // ignore: avoid_print
       print("Failed to parse trufi locations: $e");
     }
   }
-  return List();
+  return [];
 }
 
 List<TrufiLocation> _parseLocationsJSON(String encoded) {
@@ -200,12 +208,15 @@ List<TrufiLocation> _parseLocationsJSON(String encoded) {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-            (Map<String, dynamic> json) => TrufiLocation.fromLocationsJson(json),
+            (Map<String, dynamic> json) =>
+                TrufiLocation.fromLocationsJson(json),
           )
           .toList() as List<TrufiLocation>;
     } catch (e) {
+      // TODO: replace with error handling
+      // ignore: avoid_print
       print("Failed to parse locations from JSON: $e");
     }
   }
-  return List();
+  return [];
 }

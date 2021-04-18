@@ -9,6 +9,7 @@ class ReadException implements Exception {
 
   final Exception _innerException;
 
+  @override
   String toString() {
     return "Read exception caused by: ${_innerException.toString()}";
   }
@@ -31,28 +32,23 @@ class FileStorage {
   }
 
   Future<FileSystemEntity> delete() async {
-    File f = await file;
+    final File f = await file;
     return _fileLock.synchronized(() => f.delete());
   }
 
   Future<File> write(String data) async {
-    File f = await file;
+    final File f = await file;
     return _fileLock.synchronized(() => f.writeAsString(data));
   }
 
   Future<String> read() async {
     try {
-      File f = await file;
+      final File f = await file;
       return _fileLock.synchronized(() => f.readAsString());
     } on Exception catch (e) {
       throw ReadException(e);
     }
   }
 
-  Future<File> get file async {
-    if (_file == null) {
-      _file = await localFile(_fileName);
-    }
-    return _file;
-  }
+  Future<File> get file async => _file ??= await localFile(_fileName);
 }

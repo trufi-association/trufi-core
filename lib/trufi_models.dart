@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import './trufi_configuration.dart';
 import './custom_icons.dart';
+import './trufi_configuration.dart';
 
 class MapStyle {
   static const String streets = 'streets';
@@ -101,15 +101,18 @@ class TrufiLocation {
     };
   }
 
-  bool operator ==(o) =>
+  @override
+  bool operator ==(Object o) =>
       o is TrufiLocation &&
       o.description == description &&
       o.latitude == latitude &&
       o.longitude == longitude;
 
+  @override
   int get hashCode =>
       description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
 
+  @override
   String toString() {
     return '$latitude,$longitude';
   }
@@ -132,7 +135,7 @@ class TrufiStreet {
   TrufiStreet({@required this.location});
 
   final TrufiLocation location;
-  final junctions = List<TrufiStreetJunction>();
+  final junctions = <TrufiStreetJunction>[];
 
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
     return TrufiStreet(
@@ -197,11 +200,11 @@ class Plan {
     this.error,
   });
 
-  static const _Error = "error";
-  static const _Itineraries = "itineraries";
-  static const _From = "from";
-  static const _Plan = "plan";
-  static const _To = "to";
+  static const _error = "error";
+  static const _itineraries = "itineraries";
+  static const _from = "from";
+  static const _plan = "plan";
+  static const _to = "to";
 
   final PlanLocation from;
   final PlanLocation to;
@@ -212,16 +215,16 @@ class Plan {
     if (json == null) {
       return null;
     }
-    if (json.containsKey(_Error)) {
+    if (json.containsKey(_error)) {
       return Plan(
-          error: PlanError.fromJson(json[_Error] as Map<String, dynamic>));
+          error: PlanError.fromJson(json[_error] as Map<String, dynamic>));
     } else {
-      Map<String, dynamic> planJson = json[_Plan] as Map<String, dynamic>;
+      final Map<String, dynamic> planJson = json[_plan] as Map<String, dynamic>;
       return Plan(
-        from: PlanLocation.fromJson(planJson[_From] as Map<String, dynamic>),
-        to: PlanLocation.fromJson(planJson[_To] as Map<String, dynamic>),
+        from: PlanLocation.fromJson(planJson[_from] as Map<String, dynamic>),
+        to: PlanLocation.fromJson(planJson[_to] as Map<String, dynamic>),
         itineraries: _removePlanItineraryDuplicates(
-          planJson[_Itineraries]
+          planJson[_itineraries]
               .map<PlanItinerary>(
                 (Map<String, dynamic> itineraryJson) =>
                     PlanItinerary.fromJson(itineraryJson),
@@ -235,10 +238,10 @@ class Plan {
   static List<PlanItinerary> _removePlanItineraryDuplicates(
     List<PlanItinerary> itineraries,
   ) {
-    final usedRoutes = Set<String>();
+    final usedRoutes = <String>{};
     // Fold the itinerary list to build up list without duplicates
     return itineraries.fold<List<PlanItinerary>>(
-      List<PlanItinerary>(),
+      <PlanItinerary>[],
       (itineraries, itinerary) {
         // Get first bus leg
         final firstBusLeg = itinerary.legs.firstWhere(
@@ -267,12 +270,12 @@ class Plan {
 
   Map<String, dynamic> toJson() {
     return error != null
-        ? {_Error: error.toJson()}
+        ? {_error: error.toJson()}
         : {
-            _Plan: {
-              _From: from.toJson(),
-              _To: to.toJson(),
-              _Itineraries:
+            _plan: {
+              _from: from.toJson(),
+              _to: to.toJson(),
+              _itineraries:
                   itineraries.map((itinerary) => itinerary.toJson()).toList()
             }
           };
@@ -284,14 +287,14 @@ class Plan {
 class PlanError {
   PlanError(this.id, this.message);
 
-  static const String _Id = "id";
-  static const String _Message = "msg";
+  static const String _id = "id";
+  static const String _message = "msg";
 
   final int id;
   final String message;
 
   factory PlanError.fromJson(Map<String, dynamic> json) {
-    return PlanError(json[_Id] as int, json[_Message] as String);
+    return PlanError(json[_id] as int, json[_message] as String);
   }
 
   factory PlanError.fromError(String error) {
@@ -300,8 +303,8 @@ class PlanError {
 
   Map<String, dynamic> toJson() {
     return {
-      _Id: id,
-      _Message: message,
+      _id: id,
+      _message: message,
     };
   }
 }
@@ -313,9 +316,9 @@ class PlanLocation {
     this.longitude,
   });
 
-  static const String _Name = "name";
-  static const String _Latitude = "lat";
-  static const String _Longitude = "lon";
+  static const String _name = "name";
+  static const String _latitude = "lat";
+  static const String _longitude = "lon";
 
   final String name;
   final double latitude;
@@ -323,23 +326,23 @@ class PlanLocation {
 
   factory PlanLocation.fromJson(Map<String, dynamic> json) {
     return PlanLocation(
-      name: json[_Name] as String,
-      latitude: json[_Latitude] as double,
-      longitude: json[_Longitude] as double,
+      name: json[_name] as String,
+      latitude: json[_latitude] as double,
+      longitude: json[_longitude] as double,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      _Name: name,
-      _Latitude: latitude,
-      _Longitude: longitude,
+      _name: name,
+      _latitude: latitude,
+      _longitude: longitude,
     };
   }
 }
 
 class PlanItinerary {
-  static const String _Legs = "legs";
+  static const String _legs = "legs";
 
   static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
       legs.fold<int>(0, (distance, leg) => distance += leg.distance.ceil());
@@ -349,8 +352,8 @@ class PlanItinerary {
 
   PlanItinerary({
     this.legs,
-  })  : this.distance = _distanceForLegs(legs),
-        this.time = _timeForLegs(legs);
+  })  : distance = _distanceForLegs(legs),
+        time = _timeForLegs(legs);
 
   final List<PlanItineraryLeg> legs;
   final int distance;
@@ -358,14 +361,14 @@ class PlanItinerary {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-      legs: json[_Legs].map<PlanItineraryLeg>((Map<String, dynamic> json) {
+      legs: json[_legs].map<PlanItineraryLeg>((Map<String, dynamic> json) {
         return PlanItineraryLeg.fromJson(json);
       }).toList() as List<PlanItineraryLeg>,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {_Legs: legs.map((itinerary) => itinerary.toJson()).toList()};
+    return {_legs: legs.map((itinerary) => itinerary.toJson()).toList()};
   }
 }
 
@@ -380,22 +383,22 @@ class PlanItineraryLeg {
     this.toName,
   });
 
-  static const _Distance = "distance";
-  static const _Duration = "duration";
-  static const _LegGeometry = "legGeometry";
-  static const _Points = "points";
-  static const _Mode = "mode";
-  static const _Name = "name";
-  static const _Route = "route";
-  static const _RouteLongName = "routeLongName";
-  static const _To = "to";
+  static const _distance = "distance";
+  static const _duration = "duration";
+  static const _legGeometry = "legGeometry";
+  static const _points = "points";
+  static const _mode = "mode";
+  static const _name = "name";
+  static const _route = "route";
+  static const _routeLongName = "routeLongName";
+  static const _to = "to";
 
   // route name keywords for specfic types of transportation
-  static const type_trufi = "trufi";
-  static const type_micro = "micro";
-  static const type_minibus = "minibus";
-  static const type_gondola = "gondola";
-  static const type_light_rail = "light rail";
+  static const typeTrufi = "trufi";
+  static const typeMicro = "micro";
+  static const typeMinibus = "minibus";
+  static const typeGondola = "gondola";
+  static const typeLightRail = "light rail";
 
   final String points;
   final String mode;
@@ -407,18 +410,18 @@ class PlanItineraryLeg {
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
-      points: json[_LegGeometry][_Points] as String,
-      mode: json[_Mode] as String,
-      route: json[_Route] as String,
-      routeLongName: json[_RouteLongName] as String,
-      distance: json[_Distance] as double,
-      duration: json[_Duration] as double,
-      toName: json[_To][_Name] as String,
+      points: json[_legGeometry][_points] as String,
+      mode: json[_mode] as String,
+      route: json[_route] as String,
+      routeLongName: json[_routeLongName] as String,
+      distance: json[_distance] as double,
+      duration: json[_duration] as double,
+      toName: json[_to][_name] as String,
     );
   }
 
   String toInstruction(TrufiLocalization localization) {
-    StringBuffer sb = StringBuffer();
+    final StringBuffer sb = StringBuffer();
     if (mode == 'WALK') {
       sb.write(localization.instructionWalk(_durationString(localization),
           _distanceString(localization), _toString(localization)));
@@ -434,29 +437,29 @@ class PlanItineraryLeg {
 
   Map<String, dynamic> toJson() {
     return {
-      _LegGeometry: {_Points: points},
-      _Mode: mode,
-      _Route: route,
-      _RouteLongName: routeLongName,
-      _Distance: distance,
-      _Duration: duration,
-      _To: {_Name: toName}
+      _legGeometry: {_points: points},
+      _mode: mode,
+      _route: route,
+      _routeLongName: routeLongName,
+      _distance: distance,
+      _duration: duration,
+      _to: {_name: toName}
     };
   }
 
   String _carTypeString(TrufiLocalization localization) {
-    String carType = routeLongName?.toLowerCase() ?? "";
+    final String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
         ? localization.instructionVehicleCar
-        : carType.contains(type_trufi)
+        : carType.contains(typeTrufi)
             ? localization.instructionVehicleTrufi
-            : carType.contains(type_micro)
+            : carType.contains(typeMicro)
                 ? localization.instructionVehicleMicro
-                : carType.contains(type_minibus)
+                : carType.contains(typeMinibus)
                     ? localization.instructionVehicleMinibus
-                    : carType.contains(type_gondola)
+                    : carType.contains(typeGondola)
                         ? localization.instructionVehicleGondola
-                        : carType.contains(type_light_rail)
+                        : carType.contains(typeLightRail)
                             ? localization.instructionVehicleLightRail
                             : localization.instructionVehicleBus;
   }
@@ -477,20 +480,20 @@ class PlanItineraryLeg {
   }
 
   IconData iconData() {
-    String carType = routeLongName?.toLowerCase() ?? "";
+    final String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'WALK'
         ? Icons.directions_walk
         : mode == 'CAR'
             ? Icons.drive_eta
-            : carType.contains(type_trufi)
+            : carType.contains(typeTrufi)
                 ? Icons.local_taxi
-                : carType.contains(type_micro)
+                : carType.contains(typeMicro)
                     ? Icons.directions_bus
-                    : carType.contains(type_minibus)
+                    : carType.contains(typeMinibus)
                         ? Icons.airport_shuttle
-                        : carType.contains(type_gondola)
+                        : carType.contains(typeGondola)
                             ? CustomIcons.gondola
-                            : carType.contains(type_light_rail)
+                            : carType.contains(typeLightRail)
                                 ? Icons.train
                                 : Icons.directions_bus;
   }
@@ -503,10 +506,10 @@ class Ad {
     this.location,
   });
 
-  static const _Ad = "ad";
-  static const _Text = "text";
-  static const _Url = "url";
-  static const _Location = "location";
+  static const _ad = "ad";
+  static const _text = "text";
+  static const _url = "url";
+  static const _location = "location";
 
   final String text;
   final String url;
@@ -516,22 +519,22 @@ class Ad {
     if (json == null) {
       return null;
     }
-    Map<String, dynamic> adJson = json[_Ad] as Map<String, dynamic>;
+    final Map<String, dynamic> adJson = json[_ad] as Map<String, dynamic>;
     return Ad(
-      text: adJson[_Text] as String,
-      url: adJson[_Url] as String ?? null,
-      location: (adJson[_Location] as Map<String, dynamic>).isEmpty
+      text: adJson[_text] as String,
+      url: adJson[_url] as String,
+      location: (adJson[_location] as Map<String, dynamic>).isEmpty
           ? null
-          : PlanLocation.fromJson(adJson[_Location] as Map<String, dynamic>),
+          : PlanLocation.fromJson(adJson[_location] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      _Ad: {
-        _Text: text.toString(),
-        _Url: url.toString(),
-        _Location: location.toJson(),
+      _ad: {
+        _text: text.toString(),
+        _url: url.toString(),
+        _location: location.toJson(),
       }
     };
   }

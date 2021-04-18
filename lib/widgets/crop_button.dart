@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CropButton extends StatefulWidget {
-  CropButton({
+  const CropButton({
     Key key,
     @required this.onPressed,
   }) : super(key: key);
@@ -38,24 +38,24 @@ class CropButtonState extends State<CropButton>
       scale: _animation,
       child: FloatingActionButton(
         backgroundColor: Theme.of(context).backgroundColor,
-        child: Icon(
+        onPressed: _handleOnPressed,
+        heroTag: null,
+        child: const Icon(
           Icons.crop_free,
           color: Colors.black,
         ),
-        onPressed: _handleOnPressed,
-        heroTag: null,
       ),
     );
   }
 
   void _handleOnPressed() {
     widget.onPressed();
-    setVisible(false);
+    setVisible(visible: false);
   }
 
   bool get isVisible => _visible;
 
-  void setVisible(bool visible) {
+  void setVisible({bool visible}) {
     if (_visible != visible) {
       setState(() {
         _visible = visible;

@@ -1,7 +1,7 @@
 import 'package:flutter_driver/flutter_driver.dart';
 
 class Robot {
-  static final String backButtonTooltip = "Back";
+  static const String backButtonTooltip = "Back";
 
   Robot(this.driver, this.work);
 
@@ -9,48 +9,39 @@ class Robot {
 
   Future<void> work;
 
-  seesKey(String key) async {
-    print("sees key: $key");
+  Future<void> seesKey(String key) async {
     await driver.waitFor(find.byValueKey(key));
   }
 
-  seesText(String text) async {
-    print("sees text: $text");
+  Future<void> seesText(String text) async {
     await driver.waitFor(find.text(text));
   }
 
-  seesTooltip(String tooltip) async {
-    print("sees tooltip: $tooltip");
+  Future<void> seesTooltip(String tooltip) async {
     await driver.waitFor(find.byTooltip(tooltip));
   }
 
-  seesNotKey(String key) async {
-    print("sees not key: $key");
+  Future<void> seesNotKey(String key) async {
     await driver.waitForAbsent(find.byValueKey(key));
   }
 
-  seesNotText(String text) async {
-    print("sees not text: $text");
+  Future<void> seesNotText(String text) async {
     await driver.waitForAbsent(find.text(text));
   }
 
-  seesNotTooltip(String tooltip) async {
-    print("sees not tooltip: $tooltip");
+  Future<void> seesNotTooltip(String tooltip) async {
     await driver.waitForAbsent(find.byTooltip(tooltip));
   }
 
-  tapsOnKey(String key) async {
-    print("taps on key: $key");
+  Future<void> tapsOnKey(String key) async {
     await driver.tap(find.byValueKey(key));
   }
 
-  tapsOnText(String text) async {
-    print("taps on text: $text");
+  Future<void> tapsOnText(String text) async {
     await driver.tap(find.text(text));
   }
 
-  tapsOnTooltip(String tooltip) async {
-    print("taps on tooltip: $tooltip");
+  Future<void> tapsOnTooltip(String tooltip) async {
     await driver.tap(find.byTooltip(tooltip));
   }
 }

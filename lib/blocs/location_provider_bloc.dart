@@ -37,11 +37,11 @@ class LocationProviderBloc implements BlocBase {
 
   // Methods
 
-  void start() async {
+  Future<void> start() async {
     _locationProvider.start();
   }
 
-  void stop() async {
+  Future<void> stop() async {
     _locationProvider.stop();
   }
 
@@ -50,17 +50,23 @@ class LocationProviderBloc implements BlocBase {
   Future<LatLng> get currentLocation async {
     LatLng location;
     try {
-      LocationPermission status = await Geolocator.checkPermission();
+      final LocationPermission status = await Geolocator.checkPermission();
       if (status == LocationPermission.always ||
           status == LocationPermission.whileInUse) {
         location = await _locationProvider.currentLocation;
         if (location == null) {
+          // TODO: Replace by a Exception / Error
+          // ignore: avoid_print
           print("Location provider: No current location");
         }
       } else {
+        // TODO: Replace by a Exception / Error
+        // ignore: avoid_print
         print("Location provider: Permission not granted");
       }
     } catch (e) {
+      // TODO: Replace by a Exception / Error
+      // ignore: avoid_print
       print("Location provider: ${e.toString()}");
     }
     return location;
@@ -78,7 +84,7 @@ class LocationProvider {
 
   final CompositeSubscription _subscriptions = CompositeSubscription();
 
-  start() async {
+  Future<void> start() async {
     // Check permission status
     final LocationPermission status = await Geolocator.checkPermission();
     if (!(status == LocationPermission.always ||
@@ -98,7 +104,7 @@ class LocationProvider {
     );
   }
 
-  stop() async {
+  void stop() {
     _subscriptions.cancel();
   }
 
@@ -110,14 +116,14 @@ class LocationProvider {
 
   // Dispose
 
-  dispose() {
+  void dispose() {
     _subscriptions.cancel();
   }
 
   // Getter
 
   Future<LatLng> get currentLocation async {
-    Position position = await Geolocator.getCurrentPosition(
+    final Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
     return position != null

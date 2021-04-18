@@ -9,7 +9,7 @@ import '../blocs/favorite_locations_bloc.dart';
 import '../trufi_models.dart';
 
 class FavoriteButton extends StatefulWidget {
-  FavoriteButton({
+  const FavoriteButton({
     Key key,
     this.location,
     @required this.favoritesStream,
@@ -21,17 +21,13 @@ class FavoriteButton extends StatefulWidget {
   final Color color;
 
   @override
-  FavoriteButtonState createState() => FavoriteButtonState(color);
+  FavoriteButtonState createState() => FavoriteButtonState();
 }
 
 class FavoriteButtonState extends State<FavoriteButton> {
-  FavoriteButtonState(this.color);
-
   FavoriteLocationBloc _bloc;
 
   StreamSubscription _subscription;
-
-  final Color color;
 
   @override
   void initState() {
@@ -68,12 +64,12 @@ class FavoriteButtonState extends State<FavoriteButton> {
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        bool isFavorite = favoriteLocationsBloc.locations.contains(
+        final bool isFavorite = favoriteLocationsBloc.locations.contains(
           widget.location,
         );
         if (isFavorite == true) {
           return IconButton(
-            icon: Icon(Icons.favorite, color: color),
+            icon: Icon(Icons.favorite, color: widget.color),
             onPressed: () {
               favoriteLocationsBloc.inRemoveLocation.add(
                 widget.location,
@@ -82,7 +78,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
           );
         } else {
           return IconButton(
-            icon: Icon(Icons.favorite_border, color: color),
+            icon: Icon(Icons.favorite_border, color: widget.color),
             onPressed: () {
               favoriteLocationsBloc.inAddLocation.add(
                 widget.location,

@@ -9,7 +9,7 @@ import 'package:trufi_core/widgets/trufi_drawer.dart';
 void main() {
   group("TrufiDrawer", () {
     // TODO: Remove Singleton or make it easier to test, create clean method.
-    var trufiCfg = TrufiConfiguration();
+    final trufiCfg = TrufiConfiguration();
 
     setUpAll(() {
       trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
@@ -24,12 +24,12 @@ void main() {
 
     testWidgets("should show the customTranslated Title", (tester) async {
       trufiCfg.customTranslations.title = {
-        Locale("en"): "Test Trufi App",
+        const Locale("en"): "Test Trufi App",
       };
 
       await tester.pumpWidget(BlocProvider<PreferencesBloc>(
         bloc: PreferencesBloc(),
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
           ],
@@ -38,7 +38,7 @@ void main() {
         ),
       ));
 
-      Finder textFinder = find.text("Test Trufi App");
+      final Finder textFinder = find.text("Test Trufi App");
       expect(textFinder, findsOneWidget);
     });
 
@@ -46,7 +46,7 @@ void main() {
       trufiCfg.customTranslations.title = null;
       await tester.pumpWidget(BlocProvider<PreferencesBloc>(
         bloc: PreferencesBloc(),
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
           ],
@@ -55,7 +55,7 @@ void main() {
         ),
       ));
 
-      Finder textFinder = find.text("Trufi App");
+      final Finder textFinder = find.text("Trufi App");
       expect(textFinder, findsOneWidget);
     });
   });
