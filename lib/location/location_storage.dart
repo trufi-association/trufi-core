@@ -191,7 +191,7 @@ List<TrufiLocation> _parseTrufiLocations(String encoded) {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-              (Map<String, dynamic> json) => TrufiLocation.fromJson(json))
+              (dynamic json) => TrufiLocation.fromJson(json as Map<String, dynamic>))
           .toList() as List<TrufiLocation>;
     } catch (e) {
       // TODO: Replace with proper error handling
@@ -208,8 +208,8 @@ List<TrufiLocation> _parseLocationsJSON(String encoded) {
       return json
           .decode(encoded)
           .map<TrufiLocation>(
-            (Map<String, dynamic> json) =>
-                TrufiLocation.fromLocationsJson(json),
+            (dynamic json) =>
+                TrufiLocation.fromLocationsJson(json as Map<String, dynamic>),
           )
           .toList() as List<TrufiLocation>;
     } catch (e) {

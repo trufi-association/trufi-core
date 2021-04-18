@@ -156,14 +156,16 @@ LocationSearchData _parseSearchJson(String encoded) {
       // Places
       final places = search[keyPlaces]
           .map<TrufiLocation>(
-            (List<dynamic> json) => TrufiLocation.fromSearchPlacesJson(json),
+            (dynamic json) =>
+                TrufiLocation.fromSearchPlacesJson(json as List<dynamic>),
           )
           .toList() as List<TrufiLocation>;
       // Streets
       final streets = <String, TrufiStreet>{};
-      search[keyStreets].keys.forEach((String key) {
-        streets[key] = TrufiStreet.fromSearchJson(
-            search[keyStreets][key] as List<dynamic>);
+      search[keyStreets].keys.forEach((dynamic key) {
+        streets[key as String] = TrufiStreet.fromSearchJson(
+          search[keyStreets][key] as List<dynamic>,
+        );
       });
       // Junctions
       search[keyStreetJunctions].keys.forEach((key) {

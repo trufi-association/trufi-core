@@ -57,8 +57,8 @@ class TrufiLocation {
   factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
     return TrufiLocation(
       description: json[0].toString(),
-      alternativeNames: json[1] as List<String>,
-      localizedNames: json[2] as Map<String, String>,
+      alternativeNames: json[1].cast<String>() as List<String>,
+      localizedNames: json[2].cast<String, String>() as Map<String, String>,
       longitude: json[3][0].toDouble() as double,
       latitude: json[3][1].toDouble() as double,
       address: json[4] as String,
@@ -141,7 +141,7 @@ class TrufiStreet {
     return TrufiStreet(
       location: TrufiLocation(
         description: json[0] as String,
-        alternativeNames: json[1] as List<String>,
+        alternativeNames: json[1].cast<String>() as List<String>,
         longitude: json[2][0].toDouble() as double,
         latitude: json[2][1].toDouble() as double,
       ),
