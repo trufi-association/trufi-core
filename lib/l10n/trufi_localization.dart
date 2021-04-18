@@ -393,7 +393,7 @@ abstract class TrufiLocalization {
   /// Itinerary instruction (vehicle)
   ///
   /// In en, this message translates to:
-  /// **'Ride {vehicle} for {duration} ({distance}) to\\n{location}'**
+  /// **'Ride {vehicle} for {duration} ({distance}) to\n{location}'**
   String instructionRide(Object vehicle, Object distance, Object duration, Object location);
 
   /// Vehicle name (Bus)
@@ -441,7 +441,7 @@ abstract class TrufiLocalization {
   /// Itinerary instruction (walking)
   ///
   /// In en, this message translates to:
-  /// **'Walk {duration} ({distance}) to\\n{location}'**
+  /// **'Walk {duration} ({distance}) to\n{location}'**
   String instructionWalk(Object distance, Object duration, Object location);
 
   /// Label for the Map types
@@ -687,7 +687,7 @@ abstract class TrufiLocalization {
   /// List of route contributors
   ///
   /// In en, this message translates to:
-  /// **'Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\\nContact us if you want to join the OpenStreetMap community!'**
+  /// **'Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\nContact us if you want to join the OpenStreetMap community!'**
   String teamSectionRoutes(Object osmContributors, Object routeContributors);
 
   /// List of team members

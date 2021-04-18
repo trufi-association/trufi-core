@@ -16,7 +16,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get aboutLicenses => 'Licencias';
 
   @override
-  String get aboutOpenSource => '';
+  String get aboutOpenSource => 'This app is released as open source on GitHub. Feel free to contribute or bring it to your own city.';
 
   @override
   String get alertLocationServicesDeniedMessage => 'Celularniyki GPS ñisqayuqchu? Chantapis qhaway Ubicación ñisqa jap’ichisqa kananta.';
@@ -25,16 +25,16 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get alertLocationServicesDeniedTitle => 'Kay kiti mana tarikunchu';
 
   @override
-  String get appReviewDialogButtonAccept => '';
+  String get appReviewDialogButtonAccept => 'Write review';
 
   @override
-  String get appReviewDialogButtonDecline => '';
+  String get appReviewDialogButtonDecline => 'Not now';
 
   @override
-  String get appReviewDialogContent => '';
+  String get appReviewDialogContent => 'Support us with a review on the Google Play Store.';
 
   @override
-  String get appReviewDialogTitle => '';
+  String get appReviewDialogTitle => 'Enjoying Trufi?';
 
   @override
   String get chooseLocationPageSubtitle => 'Ñit\'iy mapapi';
@@ -70,7 +70,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonOrigin => 'Maymanta';
 
   @override
-  String get commonSave => '';
+  String get commonSave => 'Save';
 
   @override
   String get commonUnknownError => 'Mana yachacunchu ima pantay kasqanta chay';
@@ -81,7 +81,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   }
 
   @override
-  String get donate => '';
+  String get donate => 'Donate';
 
   @override
   String get errorAmbiguousDestination => 'Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.';
@@ -132,13 +132,13 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get feedbackTitle => 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!';
 
   @override
-  String get followOnFacebook => '';
+  String get followOnFacebook => 'Follow us on Facebook';
 
   @override
-  String get followOnInstagram => '';
+  String get followOnInstagram => 'Follow us on Instagram';
 
   @override
-  String get followOnTwitter => '';
+  String get followOnTwitter => 'Follow us on Twitter';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -157,12 +157,12 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String instructionJunction(Object street1, Object street2) {
-    return '';
+    return '${street1} and ${street2}';
   }
 
   @override
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
-    return 'Jap’iy ${vehicle} ${duration} (${distance})\\n${location} kama';
+    return 'Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama';
   }
 
   @override
@@ -175,7 +175,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get instructionVehicleGondola => 'Góndola';
 
   @override
-  String get instructionVehicleLightRail => '';
+  String get instructionVehicleLightRail => 'Light Rail Train';
 
   @override
   String get instructionVehicleMicro => 'Micro';
@@ -188,20 +188,20 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
-    return 'Kaymanta puriy ${duration} (${distance}) achaykama\\n${location} Puriy';
+    return 'Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy';
   }
 
   @override
-  String get mapTypeLabel => '';
+  String get mapTypeLabel => 'Map Type';
 
   @override
-  String get mapTypeSatelliteCaption => '';
+  String get mapTypeSatelliteCaption => 'Satellite';
 
   @override
-  String get mapTypeStreetsCaption => '';
+  String get mapTypeStreetsCaption => 'Streets';
 
   @override
-  String get mapTypeTerrainCaption => '';
+  String get mapTypeTerrainCaption => 'Terrain';
 
   @override
   String get menuAbout => 'Imamanta yachayta munanki?';
@@ -219,7 +219,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get menuOnline => 'Online';
 
   @override
-  String get menuShareApp => '';
+  String get menuShareApp => 'Share the app';
 
   @override
   String get menuTeam => 'Ñuqaykumanta';
@@ -240,25 +240,25 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get noRouteErrorActionShowCarRoute => 'Autopaq kay ñanta rikhuchiy';
 
   @override
-  String get readOurBlog => '';
+  String get readOurBlog => 'Read our blog';
 
   @override
-  String get savedPlacesEnterNameTitle => '';
+  String get savedPlacesEnterNameTitle => 'Enter name';
 
   @override
-  String get savedPlacesRemoveLabel => '';
+  String get savedPlacesRemoveLabel => 'Remove place';
 
   @override
-  String get savedPlacesSelectIconTitle => '';
+  String get savedPlacesSelectIconTitle => 'Select symbol';
 
   @override
-  String get savedPlacesSetIconLabel => '';
+  String get savedPlacesSetIconLabel => 'Change symbol';
 
   @override
-  String get savedPlacesSetNameLabel => '';
+  String get savedPlacesSetNameLabel => 'Edit name';
 
   @override
-  String get savedPlacesSetPositionLabel => '';
+  String get savedPlacesSetPositionLabel => 'Edit position';
 
   @override
   String get searchFailLoadingPlan => 'Mana tarikunchu mayninta rinata';
@@ -301,7 +301,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return '';
+    return 'Download ${appTitle}, the public transport app for ${cityName}, at ${url}';
   }
 
   @override
@@ -319,7 +319,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String teamSectionRoutes(Object osmContributors, Object routeContributors) {
-    return 'Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!';
+    return 'Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!';
   }
 
   @override

@@ -201,7 +201,7 @@
         ],
         "description": "Origin field label"
     },
-    "commonSave": "",
+    "commonSave": "Save",
     "@commonSave": {
         "description": "General Save label"
     },
@@ -380,7 +380,7 @@
         ],
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
     },
-    "feedbackContent": "dordordo ade li nele dzidzim be miawo tso dorworfea nua.\\nnami wo kafomor fe dzesiwo kple wo email",
+    "feedbackContent": "dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email",
     "@feedbackContent": {
         "notes": [
             {
@@ -699,19 +699,19 @@
         ],
         "description": "Itinerary instruction (walking)"
     },
-    "mapTypeLabel": "",
+    "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
         "description": "Label for the Map types"
     },
-    "mapTypeSatelliteCaption": "",
+    "mapTypeSatelliteCaption": "Satellite",
     "@mapTypeSatelliteCaption": {
         "description": "Label for the Satellite Map type"
     },
-    "mapTypeStreetsCaption": "",
+    "mapTypeStreetsCaption": "Streets",
     "@mapTypeStreetsCaption": {
         "description": "Label for the Streets Map type"
     },
-    "mapTypeTerrainCaption": "",
+    "mapTypeTerrainCaption": "Terrain",
     "@mapTypeTerrainCaption": {
         "description": "Label for the Terrain Map type"
     },
@@ -785,7 +785,7 @@
         ],
         "description": "Menu item that shows the team page"
     },
-    "menuYourPlaces": "",
+    "menuYourPlaces": "Your places",
     "@menuYourPlaces": {
         "description": "A menu item that shows the saved places"
     },
@@ -839,12 +839,12 @@
         ],
         "description": "Website menu item"
     },
-    "savedPlacesEnterNameTitle": "",
-    "savedPlacesRemoveLabel": "",
-    "savedPlacesSelectIconTitle": "",
-    "savedPlacesSetIconLabel": "",
-    "savedPlacesSetNameLabel": "",
-    "savedPlacesSetPositionLabel": "",
+    "savedPlacesEnterNameTitle": "Enter name",
+    "savedPlacesRemoveLabel": "Remove place",
+    "savedPlacesSelectIconTitle": "Select symbol",
+    "savedPlacesSetIconLabel": "Change symbol",
+    "savedPlacesSetNameLabel": "Edit name",
+    "savedPlacesSetPositionLabel": "Edit position",
     "searchFailLoadingPlan": "mekor dzidzedze o",
     "@searchFailLoadingPlan": {
         "notes": [
@@ -1058,7 +1058,7 @@
         ],
         "description": "List of representatives"
     },
-    "teamSectionRoutes": "morwo kple dorworfea nudorwolawo\\nzu miadometor deka",
+    "teamSectionRoutes": "morwo kple dorworfea nudorwolawo\nzu miadometor deka",
     "@teamSectionRoutes": {
         "notes": [
             {

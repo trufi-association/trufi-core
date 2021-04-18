@@ -51,7 +51,7 @@
         ],
         "description": "Title of dialog that explains that access to location services was denied"
     },
-    "appReviewDialogButtonAccept": "",
+    "appReviewDialogButtonAccept": "Write review",
     "@appReviewDialogButtonAccept": {
         "notes": [
             {
@@ -61,7 +61,7 @@
         ],
         "description": "Accept button of the App Review Dialog used on Android"
     },
-    "appReviewDialogButtonDecline": "",
+    "appReviewDialogButtonDecline": "Not now",
     "@appReviewDialogButtonDecline": {
         "notes": [
             {
@@ -71,7 +71,7 @@
         ],
         "description": "Decline button of the App Review Dialog used on Android"
     },
-    "appReviewDialogContent": "",
+    "appReviewDialogContent": "Support us with a review on the Google Play Store.",
     "@appReviewDialogContent": {
         "notes": [
             {
@@ -81,7 +81,7 @@
         ],
         "description": "Content of the App Review Dialog used on Android"
     },
-    "appReviewDialogTitle": "",
+    "appReviewDialogTitle": "Enjoying Trufi?",
     "@appReviewDialogTitle": {
         "notes": [
             {
@@ -201,7 +201,7 @@
         ],
         "description": "Origin field label"
     },
-    "commonSave": "",
+    "commonSave": "Save",
     "@commonSave": {
         "description": "General Save label"
     },
@@ -230,7 +230,7 @@
         },
         "description": "A sentence that describes the application's purpose"
     },
-    "donate": "",
+    "donate": "Donate",
     "@donate": {
         "notes": [
             {
@@ -400,7 +400,7 @@
         ],
         "description": "Title displayed on the feedback page"
     },
-    "followOnFacebook": "",
+    "followOnFacebook": "Follow us on Facebook",
     "@followOnFacebook": {
         "notes": [
             {
@@ -410,7 +410,7 @@
         ],
         "description": "Facebook menu item"
     },
-    "followOnInstagram": "",
+    "followOnInstagram": "Follow us on Instagram",
     "@followOnInstagram": {
         "notes": [
             {
@@ -420,7 +420,7 @@
         ],
         "description": "Instagram menu item"
     },
-    "followOnTwitter": "",
+    "followOnTwitter": "Follow us on Twitter",
     "@followOnTwitter": {
         "notes": [
             {
@@ -508,7 +508,7 @@
         ],
         "description": "Itinerary leg duration"
     },
-    "instructionJunction": "",
+    "instructionJunction": "{street1} and {street2}",
     "@instructionJunction": {
         "type": "text",
         "notes": [
@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "En {vehicle} pendant {duration} ({distance}) vers\\n{location}",
+    "instructionRide": "En {vehicle} pendant {duration} ({distance}) vers\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -619,7 +619,7 @@
         ],
         "description": "Vehicle name (Gondola)"
     },
-    "instructionVehicleLightRail": "",
+    "instructionVehicleLightRail": "Light Rail Train",
     "@instructionVehicleLightRail": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "Marcher {duration} ({distance}) vers\\n{location}",
+    "instructionWalk": "Marcher {duration} ({distance}) vers\n{location}",
     "@instructionWalk": {
         "notes": [
             {
@@ -699,19 +699,19 @@
         ],
         "description": "Itinerary instruction (walking)"
     },
-    "mapTypeLabel": "",
+    "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
         "description": "Label for the Map types"
     },
-    "mapTypeSatelliteCaption": "",
+    "mapTypeSatelliteCaption": "Satellite",
     "@mapTypeSatelliteCaption": {
         "description": "Label for the Satellite Map type"
     },
-    "mapTypeStreetsCaption": "",
+    "mapTypeStreetsCaption": "Streets",
     "@mapTypeStreetsCaption": {
         "description": "Label for the Streets Map type"
     },
-    "mapTypeTerrainCaption": "",
+    "mapTypeTerrainCaption": "Terrain",
     "@mapTypeTerrainCaption": {
         "description": "Label for the Terrain Map type"
     },
@@ -765,7 +765,7 @@
         ],
         "description": "Menu item that shows the state of online\/offline routing"
     },
-    "menuShareApp": "",
+    "menuShareApp": "Share the app",
     "@menuShareApp": {
         "notes": [
             {
@@ -829,7 +829,7 @@
         ],
         "description": "Button label to show the car route when no route could be found"
     },
-    "readOurBlog": "",
+    "readOurBlog": "Read our blog",
     "@readOurBlog": {
         "notes": [
             {
@@ -839,12 +839,12 @@
         ],
         "description": "Website menu item"
     },
-    "savedPlacesEnterNameTitle": "",
-    "savedPlacesRemoveLabel": "",
-    "savedPlacesSelectIconTitle": "",
-    "savedPlacesSetIconLabel": "",
-    "savedPlacesSetNameLabel": "",
-    "savedPlacesSetPositionLabel": "",
+    "savedPlacesEnterNameTitle": "Enter name",
+    "savedPlacesRemoveLabel": "Remove place",
+    "savedPlacesSelectIconTitle": "Select symbol",
+    "savedPlacesSetIconLabel": "Change symbol",
+    "savedPlacesSetNameLabel": "Edit name",
+    "savedPlacesSetPositionLabel": "Edit position",
     "searchFailLoadingPlan": "Échec du chargement du plan.",
     "@searchFailLoadingPlan": {
         "notes": [
@@ -975,7 +975,7 @@
         ],
         "description": "Search section title for results found for the provided search term"
     },
-    "shareAppText": "",
+    "shareAppText": "Download {appTitle}, the public transport app for {cityName}, at {url}",
     "@shareAppText": {
         "notes": [
             {
@@ -1058,7 +1058,7 @@
         ],
         "description": "List of representatives"
     },
-    "teamSectionRoutes": "Itinéraires: {routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que {osmContributors}.\\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!",
+    "teamSectionRoutes": "Itinéraires: {routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que {osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!",
     "@teamSectionRoutes": {
         "notes": [
             {
