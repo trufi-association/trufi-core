@@ -60,16 +60,13 @@ void main() {
       final List<dynamic> results = await subject.fetchLocations(
           favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
 
-      for (var i = 0; i < results.length; i++) {
-        final result = results[i];
-        if (i == 0) expect(result.description, "Favorite");
-        if (i == 1) expect(result.description, "Streets: Long Distance");
-        if (i == 2) expect(result.description, "Streets: Medium Distance");
-        if (i == 3) expect(result.description, "Streets: Short Distance");
-        if (i == 4) expect(result.description, "Location: Shortest Distance");
-        if (i == 5) expect(result.description, "Location: Medium Distance");
-        if (i == 6) expect(result.description, "Location: Longest Distance");
-      }
+      expect(results[0].description, "Favorite");
+      expect(results[1].description, "Streets: Long Distance");
+      expect(results[2].description, "Streets: Medium Distance");
+      expect(results[3].description, "Streets: Short Distance");
+      expect(results[4].description, "Location: Shortest Distance");
+      expect(results[5].description, "Location: Medium Distance");
+      expect(results[6].description, "Location: Longest Distance");
     });
 
     test("should take the limit into account", () async {
