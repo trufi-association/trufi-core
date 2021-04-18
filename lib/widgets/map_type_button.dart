@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
-import 'package:trufi_core/trufi_localizations.dart';
 import 'package:trufi_core/blocs/preferences_bloc.dart';
 
 class MapTypeButton extends StatelessWidget {
@@ -24,62 +24,62 @@ class MapTypeButton extends StatelessWidget {
     );
   }
 
-   Widget _buildMapTypeBottomSheet(BuildContext context) {
+  Widget _buildMapTypeBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
     final cfg = TrufiConfiguration();
     final preferencesBloc = PreferencesBloc.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: Container(
         height: 140,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: Text(localization.mapTypeTitle(), style: theme.textTheme.body2),
-            ),
-            StreamBuilder(
-              stream: preferencesBloc.outChangeMapType,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _buildMapTypeOptionButton(
-                      context: context,
-                      assetPath: "assets/images/maptype-streets.png",
-                      label: localization.mapTypeStreetsCaption(),
-                      onPressed: () {
-                        preferencesBloc.inChangeMapType.add(MapStyle.streets);
-                      },
-                      active: snapshot.data == MapStyle.streets || snapshot.data == "",
-                    ),
-                    if (cfg.map.satelliteMapTypeEnabled)
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child:
+                Text(localization.mapTypeLabel, style: theme.textTheme.body2),
+          ),
+          StreamBuilder(
+            stream: preferencesBloc.outChangeMapType,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  _buildMapTypeOptionButton(
+                    context: context,
+                    assetPath: "assets/images/maptype-streets.png",
+                    label: localization.mapTypeStreetsCaption,
+                    onPressed: () {
+                      preferencesBloc.inChangeMapType.add(MapStyle.streets);
+                    },
+                    active: snapshot.data == MapStyle.streets ||
+                        snapshot.data == "",
+                  ),
+                  if (cfg.map.satelliteMapTypeEnabled)
                     _buildMapTypeOptionButton(
                       context: context,
                       assetPath: "assets/images/maptype-satellite.png",
-                      label: localization.mapTypeSatelliteCaption(),
+                      label: localization.mapTypeSatelliteCaption,
                       onPressed: () {
                         preferencesBloc.inChangeMapType.add(MapStyle.satellite);
                       },
                       active: snapshot.data == MapStyle.satellite,
                     ),
-                    if (cfg.map.terrainMapTypeEnabled)
+                  if (cfg.map.terrainMapTypeEnabled)
                     _buildMapTypeOptionButton(
                       context: context,
                       assetPath: "assets/images/maptype-terrain.png",
-                      label: localization.mapTypeTerrainCaption(),
+                      label: localization.mapTypeTerrainCaption,
                       onPressed: () {
                         preferencesBloc.inChangeMapType.add(MapStyle.terrain);
                       },
                       active: snapshot.data == MapStyle.terrain,
                     ),
-                  ],
-                );
-              },
-            ),
-          ]
-        ),
+                ],
+              );
+            },
+          ),
+        ]),
       ),
     );
   }
@@ -108,25 +108,20 @@ class MapTypeButton extends StatelessWidget {
               child: Image.asset(assetPath, width: 64, height: 64),
             ),
             decoration: BoxDecoration(
-              border: Border.all(
-                width: 2.0, 
-                color: active
-                  ? theme.accentColor
-                  : Colors.transparent,
-              ),
-              borderRadius: BorderRadius.circular(8.0)
-            ),
+                border: Border.all(
+                  width: 2.0,
+                  color: active ? theme.accentColor : Colors.transparent,
+                ),
+                borderRadius: BorderRadius.circular(8.0)),
           ),
           Container(
             padding: EdgeInsets.all(4.0),
             child: Text(
               label,
               style: TextStyle(
-                fontSize: theme.textTheme.caption.fontSize,
-                color: active
-                  ? theme.accentColor
-                  : theme.textTheme.body1.color
-              ),
+                  fontSize: theme.textTheme.caption.fontSize,
+                  color:
+                      active ? theme.accentColor : theme.textTheme.body1.color),
             ),
           ),
         ],

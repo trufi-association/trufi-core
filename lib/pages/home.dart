@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,6 @@ import '../plan/plan.dart';
 import '../plan/plan_empty.dart';
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
 import '../widgets/app_review_dialog.dart';
@@ -127,7 +127,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildFormFieldsPortrait(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final translations = TrufiLocalization.of(context);
     return SafeArea(
       child: Container(
         padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
@@ -139,8 +139,7 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _fromFieldKey,
                 ValueKey(keys.homePageFromPlaceField),
-                localization.searchPleaseSelectOrigin(),
-                localization.searchHintOrigin(),
+                translations.searchPleaseSelectOrigin,
                 FromMarker(),
                 _setFromPlace,
                 leading: SizedBox.shrink(),
@@ -150,8 +149,7 @@ class HomePageState extends State<HomePage>
               _buildFormField(
                 _toFieldKey,
                 ValueKey(keys.homePageToPlaceField),
-                localization.searchPleaseSelectDestination(),
-                localization.searchHintDestination(),
+                translations.searchPleaseSelectDestination,
                 ToMarker(),
                 _setToPlace,
                 leading: SizedBox.shrink(),
@@ -167,7 +165,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildFormFieldsLandscape(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: Container(
         padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
@@ -185,8 +183,7 @@ class HomePageState extends State<HomePage>
                 child: _buildFormField(
                   _fromFieldKey,
                   ValueKey(keys.homePageFromPlaceField),
-                  localization.searchPleaseSelectOrigin(),
-                  localization.searchHintOrigin(),
+                  localization.searchPleaseSelectOrigin,
                   FromMarker(),
                   _setFromPlace,
                 ),
@@ -202,8 +199,7 @@ class HomePageState extends State<HomePage>
                 child: _buildFormField(
                   _toFieldKey,
                   ValueKey(keys.homePageToPlaceField),
-                  localization.searchPleaseSelectDestination(),
-                  localization.searchHintDestination(),
+                  localization.searchPleaseSelectDestination,
                   ToMarker(),
                   _setToPlace,
                 ),
@@ -250,7 +246,6 @@ class HomePageState extends State<HomePage>
     Key key,
     ValueKey<String> valueKey,
     String hintText,
-    String searchHintText,
     Widget textLeadingImage,
     Function(TrufiLocation) onSaved, {
     Widget leading,
@@ -271,7 +266,6 @@ class HomePageState extends State<HomePage>
         key: key,
         hintText: hintText,
         onSaved: onSaved,
-        searchHintText: searchHintText,
         leadingImage: textLeadingImage,
       ),
     ));
@@ -319,7 +313,7 @@ class HomePageState extends State<HomePage>
   void _handleOnLongPress(LatLng point) {
     _setToPlace(
       TrufiLocation.fromLatLng(
-        TrufiLocalizations.of(context).localization.searchMapMarker(),
+        TrufiLocalization.of(context).searchMapMarker,
         point,
       ),
     );
@@ -356,12 +350,12 @@ class HomePageState extends State<HomePage>
   }
 
   void _setFromPlaceToCurrentPosition() async {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
-          localization.searchItemYourLocation(),
+          localization.searchItemYourLocation,
           location,
         ),
       );
@@ -400,10 +394,10 @@ class HomePageState extends State<HomePage>
     final requestManagerBloc = RequestManagerBloc.of(context);
     // Cancel the last fetch plan operation for replace with the current request
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     if (_data.toPlace != null && _data.fromPlace != null) {
       // Refresh your location
-      final yourLocation = localization.searchItemYourLocation();
+      final yourLocation = localization.searchItemYourLocation;
       final refreshFromPlace = _data.fromPlace.description == yourLocation;
       final refreshToPlace = _data.toPlace.description == yourLocation;
       if (refreshFromPlace || refreshToPlace) {
@@ -466,11 +460,11 @@ class HomePageState extends State<HomePage>
         );
       } on FetchOnlineRequestException catch (e) {
         print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localization.commonNoInternet(), true);
+        _showOnAndOfflineErrorAlert(localization.commonNoInternet, true);
       } on FetchOnlineResponseException catch (e) {
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
-          localization.searchFailLoadingPlan(),
+          localization.searchFailLoadingPlan,
           true,
         );
       } catch (e) {
@@ -505,7 +499,7 @@ class HomePageState extends State<HomePage>
   void _showTransitErrorAlert(String error) async {
     final cfg = TrufiConfiguration();
     final location = await LocationProviderBloc.of(context).currentLocation;
-    final languageCode = TrufiLocalizations.of(context).locale.languageCode;
+    final languageCode = Localizations.localeOf(context).languageCode;
     final packageInfo = await PackageInfo.fromPlatform();
     showDialog(
       context: context,
@@ -527,14 +521,14 @@ class HomePageState extends State<HomePage>
   }
 
   void _showOnAndOfflineErrorAlert(String message, bool online) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     showDialog(
       context: context,
       builder: (context) {
         return buildOnAndOfflineErrorAlert(
           context: context,
           online: online,
-          title: Text(localization.commonError()),
+          title: Text(localization.commonError),
           content: Text(message),
         );
       },

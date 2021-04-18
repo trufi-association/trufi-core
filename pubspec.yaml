@@ -1,8 +1,9 @@
 name: trufi_core
 description: A Flutter Plugin for Public Transport.
-version: 0.0.1
-author:
-homepage: https://github.com/trufi-association/trufi-core
+version: 2.0.0
+author: Trufi Association e.V.
+homepage: https://www.trufi-association.org/
+repository: https://github.com/trufi-association/trufi-core
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -13,28 +14,27 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  app_review: 1.1.2
-  cupertino_icons: 1.0.0
+  app_review: ^2.1.1+1
+  cupertino_icons: ^1.0.2
   diff_match_patch: 0.3.0
-  flare_flutter: 2.0.6
-  flutter_compass: 0.4.3
-  flutter_map: 0.10.1+1
-  flutter_svg: 0.19.0
-  geolocator: ^6.1.4+1
-  google_api_availability: 2.0.4
-  http: 0.12.2
-  intl: 0.16.1
-  intl_translation: 0.17.10+1
-  mockito: 4.1.2
-  package_info: 0.4.3
-  path_provider: 1.6.18
-  permission_handler: 4.4.0+hotfix.4
-  rxdart: 0.24.1
-  share: 0.6.5+2
-  shared_preferences: 0.5.12
-  sprintf: 5.0.0
-  synchronized: 2.2.0+2
-  url_launcher: 5.7.2
+  flare_flutter: ^3.0.0
+  flutter_compass: ^0.6.0
+  flutter_map: ^0.12.0
+  flutter_svg: ^0.21.0+1
+  geolocator: ^7.0.1
+  google_api_availability: ^3.0.1
+  http: 0.13.1
+  intl: 0.17.0
+  mockito: 4.1.4
+  package_info: 2.0.0
+  path_provider: ^2.0.1
+  permission_handler: ^6.1.1
+  rxdart: ^0.26.0
+  share: ^2.0.1
+  shared_preferences: ^2.0.5
+  sprintf: ^6.0.0
+  synchronized: ^3.0.0
+  url_launcher: 6.0.3
   uuid: 2.2.2
 
 dev_dependencies:
@@ -42,6 +42,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
+  network_image_mock: 1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -55,6 +56,8 @@ flutter:
   plugin:
     androidPackage: app.trufi.trufi_core
     pluginClass: TrufiCorePlugin
+
+  generate: true
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
@@ -89,6 +92,6 @@ flutter:
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
   fonts:
-  - family: CustomIcons
-    fonts:
-    - asset: fonts/CustomIcons/CustomIcons.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons/CustomIcons.ttf

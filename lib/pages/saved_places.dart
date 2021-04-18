@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/saved_places_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
@@ -7,7 +8,6 @@ import '../blocs/location_provider_bloc.dart';
 import '../pages/home.dart';
 
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/trufi_drawer.dart';
 import '../widgets/set_description_dialog.dart';
@@ -60,84 +60,84 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final TrufiLocalization localization =
-        TrufiLocalizations.of(context).localization;
-    return AppBar(title: Text(localization.menuYourPlaces()));
+    final TrufiLocalization localization = TrufiLocalization.of(context);
+    return AppBar(title: Text(localization.menuYourPlaces));
   }
 
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final savedPlacesBloc = SavedPlacesBloc.of(context);
 
     return StreamBuilder(
-      initialData: savedPlacesBloc.locations.reversed.toList(),
-      stream: savedPlacesBloc.outLocations,
-      builder: (BuildContext context, AsyncSnapshot<List<TrufiLocation>> snapshot) {
-        final data = snapshot.data.reversed.toList();
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            final TrufiLocation savedPlace = data[index];
-            return Container(
-              margin: EdgeInsets.only(bottom: 5),
-              child: RaisedButton(
-                onPressed: () => _showCurrentRoute(savedPlace),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        child: Icon(
-                            _typeToIconData(savedPlace.type) ?? Icons.place)),
-                    Expanded(
-                      child: Text(
-                        savedPlace.description,
-                        style: theme.textTheme.body2,
-                        maxLines: 1,
-                      ),
-                    ),
-                    PopupMenuButton<int>(
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                          value: 1,
-                          child: Text(localization.savedPlacesSetIconLabel()),
+        initialData: savedPlacesBloc.locations.reversed.toList(),
+        stream: savedPlacesBloc.outLocations,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<TrufiLocation>> snapshot) {
+          final data = snapshot.data.reversed.toList();
+          return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                final TrufiLocation savedPlace = data[index];
+                return Container(
+                  margin: EdgeInsets.only(bottom: 5),
+                  child: ElevatedButton(
+                    onPressed: () => _showCurrentRoute(savedPlace),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            child: Icon(_typeToIconData(savedPlace.type) ??
+                                Icons.place)),
+                        Expanded(
+                          child: Text(
+                            savedPlace.description,
+                            style: theme.textTheme.bodyText2,
+                            maxLines: 1,
+                          ),
                         ),
-                        PopupMenuItem(
-                          value: 2,
-                          child: Text(localization.savedPlacesSetNameLabel()),
-                        ),
-                        PopupMenuItem(
-                          value: 3,
-                          child: Text(localization.savedPlacesSetPositionLabel()),
-                        ),
-                        PopupMenuItem(
-                          value: 4,
-                          child: Text(localization.savedPlacesRemoveLabel()),
+                        PopupMenuButton<int>(
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem(
+                              value: 1,
+                              child: Text(localization.savedPlacesSetIconLabel),
+                            ),
+                            PopupMenuItem(
+                              value: 2,
+                              child: Text(localization.savedPlacesSetNameLabel),
+                            ),
+                            PopupMenuItem(
+                              value: 3,
+                              child: Text(
+                                  localization.savedPlacesSetPositionLabel),
+                            ),
+                            PopupMenuItem(
+                              value: 4,
+                              child: Text(localization.savedPlacesRemoveLabel),
+                            ),
+                          ],
+                          onSelected: (int index) async {
+                            if (index == 1) {
+                              _changeIcon(savedPlace);
+                            } else if (index == 2) {
+                              _changeName(savedPlace);
+                            } else if (index == 3) {
+                              _changePosition(savedPlace);
+                            } else if (index == 4) {
+                              setState(() {
+                                savedPlacesBloc.inRemoveLocation
+                                    .add(savedPlace);
+                              });
+                            }
+                          },
                         ),
                       ],
-                      onSelected: (int index) async {
-                        if (index == 1) {
-                          _changeIcon(savedPlace);
-                        } else if (index == 2) {
-                          _changeName(savedPlace);
-                        } else if (index == 3) {
-                          _changePosition(savedPlace);
-                        } else if (index == 4) {
-                          setState(() {
-                            savedPlacesBloc.inRemoveLocation.add(savedPlace);
-                          });
-                        }
-                      },
                     ),
-                  ],
-                ),
-              ),
-            );
-          }
-        );
-      }
-    );
+                  ),
+                );
+              });
+        });
   }
 
   Widget _buildFloatingActionButton() {
@@ -154,7 +154,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location == null) return;
     TrufiLocation currentLocation = TrufiLocation.fromLatLng(
-      TrufiLocalizations.of(context).localization.searchItemYourLocation(),
+      TrufiLocalization.of(context).searchItemYourLocation,
       location,
     );
     dataRoute.fromPlace = currentLocation;
@@ -165,12 +165,12 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final savedPlacesBloc = SavedPlacesBloc.of(context);
     return await showDialog(
       context: context,
-      child: SimpleDialog(
-        title: Text(localization.savedPlacesSelectIconTitle()),
+      builder: (context) => SimpleDialog(
+        title: Text(localization.savedPlacesSelectIconTitle),
         children: <Widget>[
           Container(
             width: 200,
@@ -190,9 +190,9 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                     );
                     savedPlacesBloc.inReplaceLocation
                         .add(<String, TrufiLocation>{
-                          'oldLocation': savedPlace,
-                          'newLocation': newLocation
-                        });
+                      'oldLocation': savedPlace,
+                      'newLocation': newLocation
+                    });
                     setState(() {});
                     Navigator.pop(context);
                   },

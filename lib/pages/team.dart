@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../trufi_configuration.dart';
-import '../trufi_localizations.dart';
 import '../widgets/trufi_drawer.dart';
 
 class TeamPage extends StatefulWidget {
@@ -48,14 +48,14 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
-    return AppBar(title: Text(localization.menuTeam()));
+    final localization = TrufiLocalization.of(context);
+    return AppBar(title: Text(localization.menuTeam));
   }
 
   Widget _buildBody(BuildContext context) {
     final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return ListView(
       children: <Widget>[
         Container(
@@ -68,7 +68,7 @@ class TeamPageState extends State<TeamPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: localization.teamContent() + " ",
+                        text: localization.teamContent + " ",
                         style: theme.textTheme.body2,
                       ),
                       TextSpan(

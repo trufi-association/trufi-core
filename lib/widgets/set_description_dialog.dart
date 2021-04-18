@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../trufi_localizations.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class SetDescriptionDialog extends StatefulWidget {
   final String initText;
+
   SetDescriptionDialog({this.initText = ""});
+
   @override
   _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
 }
@@ -23,8 +24,7 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final TrufiLocalization localization =
-        TrufiLocalizations.of(context).localization;
+    final TrufiLocalization localization = TrufiLocalization.of(context);
     final onSave = () {
       if (!_hasInputError) {
         String description = textController.text.trim();
@@ -34,19 +34,18 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     };
     return AlertDialog(
       title: Text(
-        localization.savedPlacesEnterNameTitle(),
+        localization.savedPlacesEnterNameTitle,
       ),
       content: Container(
         child: TextField(
           decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: theme.accentColor,
-              )
-            ),
+                borderSide: BorderSide(
+              color: theme.accentColor,
+            )),
           ),
           onChanged: (value) {
-              _hasInputError = !_validateInput(value);
+            _hasInputError = !_validateInput(value);
           },
           onEditingComplete: onSave,
           controller: textController,
@@ -61,21 +60,21 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
             Navigator.pop(context);
           },
           child: Text(
-            localization.commonCancel().toUpperCase(),
+            localization.commonCancel.toUpperCase(),
           ),
         ),
         FlatButton(
           textColor: theme.accentColor,
           onPressed: onSave,
           child: Text(
-            localization.commonSave().toUpperCase(),
+            localization.commonSave.toUpperCase(),
           ),
         ),
       ],
     );
   }
 
-  bool _validateInput(String text){
+  bool _validateInput(String text) {
     return text.length > 0 && text.contains(RegExp(r"[a-zA-Z0-9]+"));
   }
 }

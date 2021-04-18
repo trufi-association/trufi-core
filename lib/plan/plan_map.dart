@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/trufi_localizations.dart';
 
-import '../trufi_app.dart';
-import '../trufi_configuration.dart';
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
+import '../trufi_app.dart';
+import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../trufi_models.dart';
 import '../widgets/crop_button.dart';
+import '../widgets/map_type_button.dart';
 import '../widgets/trufi_map.dart';
 import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
-import '../widgets/map_type_button.dart';
 
 const double customOverlayWidgetMargin = 80.0;
 
@@ -76,7 +75,7 @@ class PlanMapPageState extends State<PlanMapPage>
 
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
-    Locale locale = TrufiLocalizations.of(context).locale;
+    Locale locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
     _data._selectedColor = theme.accentColor;
 

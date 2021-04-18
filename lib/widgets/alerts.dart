@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/preferences_bloc.dart';
-import '../trufi_localizations.dart';
 
 Widget buildAlertLocationServicesDenied(BuildContext context) {
-  final localization = TrufiLocalizations.of(context).localization;
+  final localization = TrufiLocalization.of(context);
   return _buildAlert(
     context: context,
-    title: Text(localization.alertLocationServicesDeniedTitle()),
-    content: Text(localization.alertLocationServicesDeniedMessage()),
+    title: Text(localization.alertLocationServicesDeniedTitle),
+    content: Text(localization.alertLocationServicesDeniedMessage),
     actions: [
       FlatButton(
         onPressed: () {
           Navigator.pop(context);
           Geolocator.requestPermission();
         },
-        child: Text(localization.commonOK()),
+        child: Text(localization.commonOK),
       ),
     ],
   );
@@ -26,10 +26,10 @@ Widget buildErrorAlert({
   @required BuildContext context,
   String error,
 }) {
-  final localization = TrufiLocalizations.of(context).localization;
+  final localization = TrufiLocalization.of(context);
   return _buildAlert(
     context: context,
-    title: Text(localization.commonError()),
+    title: Text(localization.commonError),
     content: Text(error),
     actions: [_buildOKButton(context)],
   );
@@ -41,14 +41,14 @@ Widget buildTransitErrorAlert({
   @required Function onShowCarRoute,
   String error,
 }) {
-  final localization = TrufiLocalizations.of(context).localization;
+  final localization = TrufiLocalization.of(context);
   final theme = Theme.of(context);
   final actionTextStyle = theme.textTheme.body1.copyWith(
     color: theme.accentColor,
   );
   return _buildAlert(
     context: context,
-    title: Text(localization.noRouteError()),
+    title: Text(localization.noRouteError),
     content: Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,14 +60,14 @@ Widget buildTransitErrorAlert({
             onReportMissingRoute();
           },
           child: Text(
-            localization.noRouteErrorActionReportMissingRoute(),
+            localization.noRouteErrorActionReportMissingRoute,
             style: actionTextStyle,
           ),
         ),
         FlatButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
-            localization.noRouteErrorActionCancel(),
+            localization.noRouteErrorActionCancel,
             style: actionTextStyle,
           ),
         ),
@@ -77,7 +77,7 @@ Widget buildTransitErrorAlert({
             onShowCarRoute();
           },
           child: Text(
-            localization.noRouteErrorActionShowCarRoute(),
+            localization.noRouteErrorActionShowCarRoute,
             style: actionTextStyle,
           ),
         ),
@@ -105,14 +105,14 @@ Widget buildOnAndOfflineErrorAlert({
 }
 
 Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
-  final localization = TrufiLocalizations.of(context).localization;
+  final localization = TrufiLocalization.of(context);
   return FlatButton(
     onPressed: () {
       PreferencesBloc.of(context).inChangeOnline.add(online);
       Navigator.pop(context);
     },
     child: Text(
-      online ? localization.commonGoOnline() : localization.commonGoOffline(),
+      online ? localization.commonGoOnline : localization.commonGoOffline,
     ),
   );
 }
@@ -135,9 +135,9 @@ Widget _buildAlert({
 }
 
 Widget _buildOKButton(BuildContext context) {
-  final localization = TrufiLocalizations.of(context).localization;
+  final localization = TrufiLocalization.of(context);
   return FlatButton(
     onPressed: () => Navigator.pop(context),
-    child: Text(localization.commonOK()),
+    child: Text(localization.commonOK),
   );
 }

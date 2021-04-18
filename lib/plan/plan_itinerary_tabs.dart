@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/vertical_swipe_detector.dart';
 
@@ -138,7 +138,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     Ad ad,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
 
     return Container(
       height: _animationDetailHeight.value,
@@ -224,7 +224,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     PlanItinerary itinerary,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return Container(
       height: _animationCostHeight.value,
       padding: EdgeInsets.only(left: 16.0, right: 10.0),
@@ -257,7 +257,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     Ad ad,
   ) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final children = List<Widget>();
     itinerary.legs.forEach((leg) {
       children.add(

@@ -27,6 +27,13 @@ Please contact the [Trufi Association](https://www.trufi-association.org/contact
 
 Trufi Core is the base dependency used to create your public transport app. Have a look at the [example](example) implementation that contains further instructions.
 
+### Translations
+Do not modify the files in [/translations](/translations) they are managed from Lokalise.
+If you need to update the translations checkout the [Translations Update Guide](https://github.com/trufi-association/trufi-core/wiki/Translations-Update-Guide)
+Please reach out to the [Contributers](https://github.com/trufi-association/trufi-core/graphs/contributors) to get access.
+    
+If you need to overwrite translations of the Host app checkout the following article [here](https://github.com/trufi-association/trufi-core/wiki/Custom-Translations).
+
 ## Complementary projects
 
 [osm-search-data-export](https://github.com/trufi-association/osm-search-data-export) - Generates offline search data that includes POIs, streets and street junctions. The app currently uses the json-compact format.
@@ -47,5 +54,4 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 ## Shout-outs
-
 Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.

@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
 import '../../blocs/request_manager_bloc.dart';
 import '../../blocs/preferences_bloc.dart';
 import '../../trufi_configuration.dart';
-import '../../trufi_localizations.dart';
 import '../../trufi_models.dart';
 
 class OnlineRequestManager implements RequestManager {
@@ -78,7 +78,6 @@ class OnlineRequestManager implements RequestManager {
     return _fetchCancelableAd(context, to);
   }
 
-
   CancelableOperation<Plan> _fetchCancelablePlan(
     BuildContext context,
     TrufiLocation from,
@@ -91,7 +90,7 @@ class OnlineRequestManager implements RequestManager {
         plan = Plan.fromError(
           _localizedErrorForPlanError(
             plan.error,
-            TrufiLocalizations.of(context).localization,
+            TrufiLocalization.of(context),
           ),
         );
       }
@@ -155,13 +154,12 @@ class OnlineRequestManager implements RequestManager {
     if (response.statusCode == 200) {
       return await compute(_parseAd, utf8.decode(response.bodyBytes));
     } else if (response.statusCode == 404) {
-      print ("No ads found");
+      print("No ads found");
     } else {
-      print ("Error fetching ads");
+      print("Error fetching ads");
       return null;
     }
   }
-
 
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
@@ -186,33 +184,33 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocalization localization,
   ) {
     if (error.id == 500 || error.id == 503) {
-      return localization.errorServerUnavailable();
+      return localization.errorServerUnavailable;
     } else if (error.id == 400) {
-      return localization.errorOutOfBoundary();
+      return localization.errorOutOfBoundary;
     } else if (error.id == 404) {
-      return localization.errorPathNotFound();
+      return localization.errorPathNotFound;
     } else if (error.id == 406) {
-      return localization.errorNoTransitTimes();
+      return localization.errorNoTransitTimes;
     } else if (error.id == 408) {
-      return localization.errorServerTimeout();
+      return localization.errorServerTimeout;
     } else if (error.id == 409) {
-      return localization.errorTrivialDistance();
+      return localization.errorTrivialDistance;
     } else if (error.id == 413) {
-      return localization.errorServerCanNotHandleRequest();
+      return localization.errorServerCanNotHandleRequest;
     } else if (error.id == 440) {
-      return localization.errorUnknownOrigin();
+      return localization.errorUnknownOrigin;
     } else if (error.id == 450) {
-      return localization.errorUnknownDestination();
+      return localization.errorUnknownDestination;
     } else if (error.id == 460) {
-      return localization.errorUnknownOriginDestination();
+      return localization.errorUnknownOriginDestination;
     } else if (error.id == 470) {
-      return localization.errorNoBarrierFree();
+      return localization.errorNoBarrierFree;
     } else if (error.id == 340) {
-      return localization.errorAmbiguousOrigin();
+      return localization.errorAmbiguousOrigin;
     } else if (error.id == 350) {
-      return localization.errorAmbiguousDestination();
+      return localization.errorAmbiguousDestination;
     } else if (error.id == 360) {
-      return localization.errorAmbiguousOriginDestination();
+      return localization.errorAmbiguousOriginDestination;
     }
     return error.message;
   }

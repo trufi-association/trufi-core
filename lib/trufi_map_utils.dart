@@ -5,15 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/widgets/colored_svg_picture.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
 import './composite_subscription.dart';
+import './custom_icons.dart';
 import './trufi_configuration.dart';
 import './trufi_models.dart';
-import './custom_icons.dart';
-
 
 offlineMapTileLayerOptions() {
   return TileLayerOptions(
@@ -22,7 +20,8 @@ offlineMapTileLayerOptions() {
   );
 }
 
-tileHostingTileLayerOptions(String tilesEndpoint, { String tileProviderKey = "" }) {
+tileHostingTileLayerOptions(String tilesEndpoint,
+    {String tileProviderKey = ""}) {
   var urlTemplate = tilesEndpoint + "/{z}/{x}/{y}@2x.png";
   if (tileProviderKey != "") urlTemplate += "?key={key}";
 
@@ -118,9 +117,9 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
   void initState() {
     super.initState();
     _subscriptions.add(
-      FlutterCompass.events.listen((double direction) {
+      FlutterCompass.events.listen((CompassEvent event) {
         setState(() {
-          _direction = direction;
+          _direction = event.heading;
         });
       }),
     );

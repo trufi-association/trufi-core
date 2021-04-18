@@ -13,7 +13,7 @@ dependencies:
   trufi_core:
     path: ../
 
-  global_configuration: 1.5.0
+  global_configuration: ^2.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:

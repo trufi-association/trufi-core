@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trufi_core/l10n/material_localization_qu.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
@@ -15,7 +18,6 @@ import './pages/feedback.dart';
 import './pages/home.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
-import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
@@ -52,14 +54,12 @@ typedef LocaleWidgetBuilder = Widget Function(
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
-    this.localization = const TrufiLocalizationDefault(),
     this.customOverlayBuilder,
     this.customBetweenFabBuilder,
   });
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
-  final TrufiLocalization localization;
 
   /// A [customOverlayBuilder] that receives the current language to allow
   /// a custom overlay on top of the Trufi Core.
@@ -91,7 +91,6 @@ class TrufiApp extends StatelessWidget {
                     child: AppLifecycleReactor(
                       child: LocalizedMaterialApp(
                         theme,
-                        localization,
                         customOverlayBuilder,
                         customBetweenFabBuilder,
                       ),
@@ -158,13 +157,11 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 class LocalizedMaterialApp extends StatefulWidget {
   LocalizedMaterialApp(
     this.theme,
-    this.localization,
     this.customOverlayWidget,
     this.customBetweenFabWidget,
   );
 
   final ThemeData theme;
-  final TrufiLocalization localization;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
 
@@ -182,10 +179,18 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       SavedPlacesPage.route: (context) => SavedPlacesPage(),
       TeamPage.route: (context) => TeamPage(),
     };
+
     return StreamBuilder(
       stream: preferencesBloc.outChangeLanguageCode,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      initialData: TrufiConfiguration()
+              .languages
+              .firstWhere((element) => element.isDefault)
+              .languageCode ??
+          "en",
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        print(snapshot.data);
         return MaterialApp(
+          locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {
             return new TrufiDrawerRoute(
               builder: routes[settings.name],
@@ -193,14 +198,12 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             );
           },
           localizationsDelegates: [
-            TrufiLocalizationsDelegate(
-              snapshot.data,
-              widget.localization,
-            ),
-            TrufiMaterialLocalizationsDelegate(snapshot.data),
+            TrufiLocalization.delegate,
+            GlobalMaterialLocalizations.delegate,
+            QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: supportedLocales,
+          supportedLocales: TrufiLocalization.supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
           home: HomePage(

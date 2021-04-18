@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../location/location_search_delegate.dart';
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 
 class LocationFormField extends FormField<TrufiLocation> {
@@ -9,7 +8,6 @@ class LocationFormField extends FormField<TrufiLocation> {
     Key key,
     FormFieldSetter<TrufiLocation> onSaved,
     String hintText,
-    String searchHintText,
     Widget leadingImage,
   }) : super(
           key: key,
@@ -24,12 +22,6 @@ class LocationFormField extends FormField<TrufiLocation> {
               padding: EdgeInsets.all(4.0),
               child: GestureDetector(
                 onTap: () async {
-                  // Customize search hint
-                  TrufiMaterialLocalizations.of(
-                    state.context,
-                  ).setSearchHintText(
-                    searchHintText,
-                  );
                   // Show search
                   TrufiLocation location = await showSearch(
                     context: state.context,

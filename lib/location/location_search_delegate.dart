@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
@@ -11,7 +12,6 @@ import '../blocs/location_search_bloc.dart';
 import '../blocs/request_manager_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../pages/choose_location.dart';
-import '../trufi_localizations.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
@@ -135,7 +135,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   ) {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final historyLocationBloc = HistoryLocationsBloc.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -240,27 +240,27 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildYourLocation(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
         appBarTheme,
         () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
-        localization.searchItemYourLocation(),
+        localization.searchItemYourLocation,
       ),
     );
   }
 
   Widget _buildChooseOnMap(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
         appBarTheme,
         () => _handleOnChooseOnMapTapped(context),
         Icons.place,
-        localization.searchItemChooseOnMap(),
+        localization.searchItemChooseOnMap,
       ),
     );
   }
@@ -281,17 +281,17 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildHistoryList(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
-      localization.searchTitleRecent(),
+      localization.searchTitleRecent,
       historyLocationsBloc.fetchWithLimit(context, 5),
       Icons.history,
     );
   }
 
   Widget _buildFavoritesList(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     return StreamBuilder(
       stream: favoriteLocationsBloc.outLocations,
       builder: (
@@ -299,7 +299,7 @@ class _SuggestionList extends StatelessWidget {
         AsyncSnapshot<List<TrufiLocation>> snapshot,
       ) {
         return _buildObjectList(
-          localization.searchTitleFavorites(),
+          localization.searchTitleFavorites,
           Icons.place,
           favoriteLocationsBloc.locations,
         );
@@ -308,10 +308,10 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildPlacesList(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
-      localization.searchTitlePlaces(),
+      localization.searchTitlePlaces,
       locationSearchBloc.fetchPlaces(context),
       Icons.place,
     );
@@ -319,10 +319,10 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildSearchResultList(BuildContext context) {
     final requestManagerBloc = RequestManagerBloc.of(context);
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
-      localization.searchTitleResults(),
+      localization.searchTitleResults,
       requestManagerBloc.fetchLocations(context, query, 30),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -343,19 +343,19 @@ class _SuggestionList extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot<List<dynamic>> snapshot,
       ) {
-        final localization = TrufiLocalizations.of(context).localization;
+        final localization =TrufiLocalization.of(context);
         // Error
         if (snapshot.hasError) {
           print(snapshot.error);
-          String error = localization.commonUnknownError();
+          String error = localization.commonUnknownError;
           if (snapshot.error is FetchOfflineRequestException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOfflineResponseException) {
             error = "Offline mode is not implemented yet";
           } else if (snapshot.error is FetchOnlineRequestException) {
-            error = localization.commonNoInternet();
+            error = localization.commonNoInternet;
           } else if (snapshot.error is FetchOnlineResponseException) {
-            error = localization.commonFailLoading();
+            error = localization.commonFailLoading;
           }
           return _buildErrorList(context, title, error);
         }
@@ -374,7 +374,7 @@ class _SuggestionList extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _buildTitle(context, title),
-                _buildErrorItem(context, localization.searchItemNoResults()),
+                _buildErrorItem(context, localization.searchItemNoResults),
               ],
             ),
           );
@@ -626,11 +626,11 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnYourLocationTapped(BuildContext context) async {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
       _handleOnLatLngTapped(
-        description: localization.searchMapMarker(),
+        description: localization.searchMapMarker,
         location: location,
         addToHistory: false,
       );
@@ -643,7 +643,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   void _handleOnChooseOnMapTapped(BuildContext context) async {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization =TrufiLocalization.of(context);
     LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
         builder: (context) => ChooseLocationPage(
@@ -657,7 +657,7 @@ class _SuggestionList extends StatelessWidget {
       ),
     );
     _handleOnMapTapped(
-      description: localization.searchMapMarker(),
+      description: localization.searchMapMarker,
       location: mapLocation,
     );
   }

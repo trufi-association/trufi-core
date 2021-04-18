@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import './trufi_configuration.dart';
-import './trufi_localizations.dart';
 import './custom_icons.dart';
 
 class MapStyle {
@@ -29,7 +29,7 @@ class TrufiLocation {
   static const String keyLatitude = 'latitude';
   static const String keyLongitude = 'longitude';
   static const String keyType = 'type';
-  
+
   final String description;
   final double latitude;
   final double longitude;
@@ -394,7 +394,6 @@ class PlanItineraryLeg {
   static const type_gondola = "gondola";
   static const type_light_rail = "light rail";
 
-
   final String points;
   final String mode;
   final String route;
@@ -445,18 +444,18 @@ class PlanItineraryLeg {
   String _carTypeString(TrufiLocalization localization) {
     String carType = routeLongName?.toLowerCase() ?? "";
     return mode == 'CAR'
-        ? localization.instructionVehicleCar()
+        ? localization.instructionVehicleCar
         : carType.contains(type_trufi)
-            ? localization.instructionVehicleTrufi()
+            ? localization.instructionVehicleTrufi
             : carType.contains(type_micro)
-                ? localization.instructionVehicleMicro()
+                ? localization.instructionVehicleMicro
                 : carType.contains(type_minibus)
-                    ? localization.instructionVehicleMinibus()
+                    ? localization.instructionVehicleMinibus
                     : carType.contains(type_gondola)
-                        ? localization.instructionVehicleGondola()
+                        ? localization.instructionVehicleGondola
                         : carType.contains(type_light_rail)
-                            ? localization.instructionVehicleLightRail()
-                            : localization.instructionVehicleBus();
+                            ? localization.instructionVehicleLightRail
+                            : localization.instructionVehicleBus;
   }
 
   String _distanceString(TrufiLocalization localization) {
@@ -471,7 +470,7 @@ class PlanItineraryLeg {
   }
 
   String _toString(TrufiLocalization localization) {
-    return toName == 'Destination' ? localization.commonDestination() : toName;
+    return toName == 'Destination' ? localization.commonDestination : toName;
   }
 
   IconData iconData() {
@@ -518,7 +517,9 @@ class Ad {
     return Ad(
       text: adJson[_Text],
       url: adJson[_Url] ?? null,
-      location: adJson[_Location].isEmpty ? null : PlanLocation.fromJson(adJson[_Location]),
+      location: adJson[_Location].isEmpty
+          ? null
+          : PlanLocation.fromJson(adJson[_Location]),
     );
   }
 

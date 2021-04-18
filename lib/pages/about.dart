@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../trufi_localizations.dart';
 import '../widgets/trufi_drawer.dart';
 
 class AboutPage extends StatefulWidget {
@@ -23,16 +24,22 @@ class AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
-    return AppBar(title: Text(localization.menuAbout()));
+    final localization = TrufiLocalization.of(context);
+    return AppBar(title: Text(localization.menuAbout));
   }
 
   Widget _buildBody(BuildContext context) {
-    final localization = TrufiLocalizations.of(context).localization;
+    final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
     final TextStyle linkStyle = theme.textTheme.body2.copyWith(
       color: theme.accentColor,
     );
+
+    var trufiConfiguration = TrufiConfiguration();
+    final currentCity = trufiConfiguration.generalConfiguration.appCity;
+    final customTranslations = trufiConfiguration.customTranslations;
+    final currentLocale = Localizations.localeOf(context);
+
     return ListView(
       children: <Widget>[
         Container(
@@ -42,7 +49,8 @@ class AboutPageState extends State<AboutPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  localization.title(),
+                  customTranslations.get(customTranslations.title,
+                      currentLocale, localization.title),
                   style: theme.textTheme.title.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -69,7 +77,8 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.tagline(),
+                  customTranslations.get(customTranslations.tagline,
+                      currentLocale, localization.tagline(currentCity)),
                   style: theme.textTheme.subhead.copyWith(
                     color: theme.textTheme.body2.color,
                   ),
@@ -78,18 +87,23 @@ class AboutPageState extends State<AboutPage> {
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.aboutContent(),
+                  customTranslations.get(customTranslations.aboutContent,
+                      currentLocale, localization.aboutContent),
                   style: theme.textTheme.body2,
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 16.0),
                 child: RaisedButton(
-                  child: Text(localization.aboutLicenses()),
+                  child: Text(localization.aboutLicenses),
                   onPressed: () {
                     return showLicensePage(
                       context: context,
-                      applicationName: localization.title(),
+                      applicationName: customTranslations.get(
+                        customTranslations.title,
+                        currentLocale,
+                        localization.title,
+                      ),
                     );
                   },
                 ),
@@ -98,7 +112,7 @@ class AboutPageState extends State<AboutPage> {
                 padding: EdgeInsets.only(top: 16.0),
                 child: InkWell(
                   child: new Text(
-                    localization.aboutOpenSource(),
+                    localization.aboutOpenSource,
                     style: linkStyle,
                   ),
                   onTap: () {
