@@ -41,7 +41,6 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  lint: ^1.5.3
   network_image_mock: 1.1.0
 
 # For information on the generic Dart part of this file, see the

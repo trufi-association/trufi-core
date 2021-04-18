@@ -5,7 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final trufiCfg = TrufiConfiguration();
@@ -20,11 +20,11 @@ void main() async {
   });
 
   // Animation
-  trufiCfg.animation.loading = FlareActor(
+  trufiCfg.animation.loading = const FlareActor(
     "assets/images/loading.flr",
     animation: "Trufi Drive",
   );
-  trufiCfg.animation.success = FlareActor(
+  trufiCfg.animation.success = const FlareActor(
     "assets/images/success.flr",
     animation: "Untitled",
   );
@@ -65,8 +65,8 @@ void main() async {
   ]);
 
   // Email
-  trufiCfg.email.feedback = globalCfg.get("emailFeedback");
-  trufiCfg.email.info = globalCfg.get("emailInfo");
+  trufiCfg.email.feedback = globalCfg.getValue<String>("emailFeedback");
+  trufiCfg.email.info = globalCfg.getValue<String>("emailInfo");
 
   // Image
   trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
@@ -122,19 +122,21 @@ void main() async {
   ]);
 
   // Url
-  trufiCfg.url.otpEndpoint = globalCfg.get("urlOtpEndpoint");
-  trufiCfg.url.tilesStreetsEndpoint = globalCfg.get("urlTilesStreetsEndpoint");
+  trufiCfg.url.otpEndpoint = globalCfg.getValue<String>("urlOtpEndpoint");
+  trufiCfg.url.tilesStreetsEndpoint =
+      globalCfg.getValue<String>("urlTilesStreetsEndpoint");
   trufiCfg.url.tilesSatelliteEndpoint =
-      globalCfg.get("urlTilesSatelliteEndpoint");
-  trufiCfg.url.tilesTerrainEndpoint = globalCfg.get("urlTilesTerrainEndpoint");
-  trufiCfg.url.adsEndpoint = globalCfg.get("urlAdsEndpoint");
-  trufiCfg.url.routeFeedback = globalCfg.get("urlRouteFeedback");
-  trufiCfg.url.donate = globalCfg.get("urlDonate");
-  trufiCfg.url.website = globalCfg.get("urlWebsite");
-  trufiCfg.url.facebook = globalCfg.get("urlFacebook");
-  trufiCfg.url.twitter = globalCfg.get("urlTwitter");
-  trufiCfg.url.instagram = globalCfg.get("urlInstagram");
-  trufiCfg.url.share = globalCfg.get("urlShare");
+      globalCfg.getValue<String>("urlTilesSatelliteEndpoint");
+  trufiCfg.url.tilesTerrainEndpoint =
+      globalCfg.getValue<String>("urlTilesTerrainEndpoint");
+  trufiCfg.url.adsEndpoint = globalCfg.getValue<String>("urlAdsEndpoint");
+  trufiCfg.url.routeFeedback = globalCfg.getValue<String>("urlRouteFeedback");
+  trufiCfg.url.donate = globalCfg.getValue<String>("urlDonate");
+  trufiCfg.url.website = globalCfg.getValue<String>("urlWebsite");
+  trufiCfg.url.facebook = globalCfg.getValue<String>("urlFacebook");
+  trufiCfg.url.twitter = globalCfg.getValue<String>("urlTwitter");
+  trufiCfg.url.instagram = globalCfg.getValue<String>("urlInstagram");
+  trufiCfg.url.share = globalCfg.getValue<String>("urlShare");
 
   _setupCustomTrufiLocalization();
 
@@ -156,11 +158,11 @@ void main() async {
 void _setupCustomTrufiLocalization() {
   TrufiConfiguration().customTranslations
     ..title = {
-      Locale("de"): "Trufi App (German)",
-      Locale("en", "US"): "Trufi App (English)"
+      const Locale("de"): "Trufi App (German)",
+      const Locale("en", "US"): "Trufi App (English)"
     }
     ..tagline = {
-      Locale("de"): "Tagline (German)",
-      Locale("en", "US"): "Tagline (English)"
+      const Locale("de"): "Tagline (German)",
+      const Locale("en", "US"): "Tagline (English)"
     };
 }
