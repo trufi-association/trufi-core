@@ -153,17 +153,16 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
           if (ad != null && index >= itinerary.legs.length) {
             return Row(
               children: <Widget>[
-                Icon(Icons.sentiment_very_satisfied, color: Theme.of(context).accentColor),
+                Icon(Icons.sentiment_very_satisfied,
+                    color: Theme.of(context).accentColor),
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.all(8.0),
                     child: RichText(
                       text: TextSpan(
                           text: ad.text,
-                          style: TextStyle(
-                            color: Theme.of(context).accentColor
-                          )
-                      ),
+                          style:
+                              TextStyle(color: Theme.of(context).accentColor)),
                     ),
                   ),
                 ),
@@ -267,18 +266,17 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
             Icon(leg.iconData(), color: theme.primaryIconTheme.color),
             leg.mode == 'BUS'
                 ? Text(
-              " " + leg.route,
-              style: theme.primaryTextTheme.body1.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            )
+                    " " + leg.route,
+                    style: theme.primaryTextTheme.body1.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 : Text(
-              localization.instructionDurationMinutes(
-                  (leg.duration.ceil() / 60).ceil()),
-              style: theme.primaryTextTheme.body1,
-            ),
-            ad != null ||
-                leg != itinerary.legs.last
+                    localization.instructionDurationMinutes(
+                        (leg.duration.ceil() / 60).ceil()),
+                    style: theme.primaryTextTheme.body1,
+                  ),
+            ad != null || leg != itinerary.legs.last
                 ? Icon(Icons.keyboard_arrow_right, color: Colors.grey)
                 : Container(),
           ],
@@ -290,9 +288,8 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       children.add(
         Row(
           children: <Widget>[
-            Icon(Icons.sentiment_very_satisfied, color: Theme
-                .of(context)
-                .accentColor),
+            Icon(Icons.sentiment_very_satisfied,
+                color: Theme.of(context).accentColor),
           ],
         ),
       );

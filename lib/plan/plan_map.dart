@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/trufi_localizations.dart';
 
+import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
@@ -13,12 +15,19 @@ import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
 import '../widgets/map_type_button.dart';
 
+const double customOverlayWidgetMargin = 80.0;
+
 typedef void OnSelected(PlanItinerary itinerary);
 
 class PlanMapPage extends StatefulWidget {
-  PlanMapPage({this.planPageController});
+  PlanMapPage(
+      {this.planPageController,
+      @required this.customOverlayWidget,
+      @required this.customBetweenFabWidget});
 
   final PlanPageController planPageController;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   PlanMapPageState createState() => PlanMapPageState();
@@ -67,6 +76,7 @@ class PlanMapPageState extends State<PlanMapPage>
 
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
+    Locale locale = TrufiLocalizations.of(context).locale;
     final theme = Theme.of(context);
     _data._selectedColor = theme.accentColor;
 
@@ -99,16 +109,40 @@ class PlanMapPageState extends State<PlanMapPage>
           },
         ),
         if (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
-        Positioned(
-          top: 16.0,
-          right: 16.0,
-          child: _buildUpperActionButtons(context),
-        ),
+          Positioned(
+            top: 16.0,
+            right: 16.0,
+            child: _buildUpperActionButtons(context),
+          ),
         Positioned(
           bottom: 16.0,
           right: 16.0,
           child: _buildLowerActionButtons(context),
         ),
+        Positioned.fill(
+          child: Container(
+            margin: EdgeInsets.only(
+              right: customOverlayWidgetMargin,
+              bottom: 60,
+            ),
+            child: widget.customOverlayWidget != null
+                ? widget.customOverlayWidget(context, locale)
+                : null,
+          ),
+        ),
+        Positioned.fill(
+          child: Container(
+            margin: EdgeInsets.only(
+              left:
+                  MediaQuery.of(context).size.width - customOverlayWidgetMargin,
+              bottom: 80,
+              top: 65,
+            ),
+            child: widget.customBetweenFabWidget != null
+                ? widget.customBetweenFabWidget(context)
+                : null,
+          ),
+        )
       ],
     );
   }
@@ -172,10 +206,7 @@ class PlanMapPageState extends State<PlanMapPage>
 }
 
 class PlanMapPageStateData {
-  PlanMapPageStateData({
-    @required this.plan,
-    @required this.onItineraryTap
-  }) {
+  PlanMapPageStateData({@required this.plan, @required this.onItineraryTap}) {
     if (plan != null) {
       if (plan.from != null) {
         _fromMarker = buildFromMarker(createLatLngWithPlanLocation(plan.from));
@@ -262,11 +293,10 @@ class PlanMapPageStateData {
     }
     _itineraries.addAll(
       _createItineraries(
-        plan: plan,
-        selectedItinerary: _selectedItinerary,
-        onTap: onItineraryTap,
-        selectedColor: _selectedColor
-      ),
+          plan: plan,
+          selectedItinerary: _selectedItinerary,
+          onTap: onItineraryTap,
+          selectedColor: _selectedColor),
     );
     _itineraries.forEach((itinerary, polylinesWithMarker) {
       bool isSelected = (itinerary == _selectedItinerary);
@@ -318,12 +348,11 @@ class PlanMapPageStateData {
     );
   }
 
-  Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries({
-    @required Plan plan,
-    @required PlanItinerary selectedItinerary,
-    @required Function(PlanItinerary) onTap,
-    Color selectedColor
-  }) {
+  Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries(
+      {@required Plan plan,
+      @required PlanItinerary selectedItinerary,
+      @required Function(PlanItinerary) onTap,
+      Color selectedColor}) {
     Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = Map();
     if (plan != null) {
       plan.itineraries.forEach((itinerary) {

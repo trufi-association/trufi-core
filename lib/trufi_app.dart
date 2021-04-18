@@ -18,14 +18,56 @@ import './pages/team.dart';
 import './trufi_localizations.dart';
 import './widgets/trufi_drawer.dart';
 
+/// Signature for a function that creates a widget with the current [Locale],
+/// e.g. [StatelessWidget.build] or [State.build].
+///
+/// See also:
+///
+///  * [IndexedWidgetBuilder], which is similar but also takes an index.
+///  * [TransitionBuilder], which is similar but also takes a child.
+///  * [ValueWidgetBuilder], which is similar but takes a value and a child.
+typedef LocaleWidgetBuilder = Widget Function(
+    BuildContext context, Locale locale);
+
+/// The [TrufiApp] is the main Widget of the application
+///
+/// The [customOverlayBuilder] allows you to add an host controlled overlay
+/// on top of the Trufi Map. It is located from the left side of the screen
+/// until the beginning of the Fab buttons.
+///
+/// Starting from the Fab buttons you are able to add the [customBetweenFabBuilder]
+/// to add a customOverlay between the two Fab Buttons on the right side.
+///
+/// ```dart
+///   @override
+///   Widget build(BuildContext context) {
+///     return TrufiApp(
+///       theme: theme,
+///       customOverlayBuilder: (context, locale) => Placeholder(),
+///       customBetweenFabBuilder: (context) => Placeholder(),
+///     ),
+///   }
+/// ```
+///
 class TrufiApp extends StatelessWidget {
   TrufiApp({
     @required this.theme,
     this.localization = const TrufiLocalizationDefault(),
+    this.customOverlayBuilder,
+    this.customBetweenFabBuilder,
   });
 
+  /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
   final TrufiLocalization localization;
+
+  /// A [customOverlayBuilder] that receives the current language to allow
+  /// a custom overlay on top of the Trufi Core.
+  final LocaleWidgetBuilder customOverlayBuilder;
+
+  /// The [customBetweenFabBuilder] is [Builder] that allows creating a overlay
+  /// in between the Fab buttons of the Trufi Core.
+  final WidgetBuilder customBetweenFabBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +87,13 @@ class TrufiApp extends StatelessWidget {
                 child: BlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
                   child: BlocProvider<SavedPlacesBloc>(
-                      bloc: SavedPlacesBloc(context),
-                      child: AppLifecycleReactor(
-                        child: LocalizedMaterialApp(
+                    bloc: SavedPlacesBloc(context),
+                    child: AppLifecycleReactor(
+                      child: LocalizedMaterialApp(
                         theme,
                         localization,
+                        customOverlayBuilder,
+                        customBetweenFabBuilder,
                       ),
                     ),
                   ),
@@ -115,10 +159,14 @@ class LocalizedMaterialApp extends StatefulWidget {
   LocalizedMaterialApp(
     this.theme,
     this.localization,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
   );
 
   final ThemeData theme;
   final TrufiLocalization localization;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
 
   @override
   _LocalizedMaterialAppState createState() => _LocalizedMaterialAppState();
@@ -155,7 +203,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
           supportedLocales: supportedLocales,
           debugShowCheckedModeBanner: true,
           theme: widget.theme,
-          home: HomePage(),
+          home: HomePage(
+            customOverlayWidget: widget.customOverlayWidget,
+            customBetweenFabWidget: widget.customBetweenFabWidget,
+          ),
         );
       },
     );
