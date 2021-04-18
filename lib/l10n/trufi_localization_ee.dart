@@ -70,7 +70,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonOrigin => 'afisi netso';
 
   @override
-  String get commonSave => '';
+  String get commonSave => 'Save';
 
   @override
   String get commonUnknownError => 'aforku manyamanya';
@@ -192,16 +192,16 @@ class TrufiLocalizationEe extends TrufiLocalization {
   }
 
   @override
-  String get mapTypeLabel => '';
+  String get mapTypeLabel => 'Map Type';
 
   @override
-  String get mapTypeSatelliteCaption => '';
+  String get mapTypeSatelliteCaption => 'Satellite';
 
   @override
-  String get mapTypeStreetsCaption => '';
+  String get mapTypeStreetsCaption => 'Streets';
 
   @override
-  String get mapTypeTerrainCaption => '';
+  String get mapTypeTerrainCaption => 'Terrain';
 
   @override
   String get menuAbout => 'tso mianu';
@@ -225,7 +225,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get menuTeam => 'haborbor';
 
   @override
-  String get menuYourPlaces => '';
+  String get menuYourPlaces => 'Your places';
 
   @override
   String get noRouteError => 'morla meli o. Nuka na wor';
@@ -243,22 +243,22 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get readOurBlog => 'xle miafe nu';
 
   @override
-  String get savedPlacesEnterNameTitle => '';
+  String get savedPlacesEnterNameTitle => 'Enter name';
 
   @override
-  String get savedPlacesRemoveLabel => '';
+  String get savedPlacesRemoveLabel => 'Remove place';
 
   @override
-  String get savedPlacesSelectIconTitle => '';
+  String get savedPlacesSelectIconTitle => 'Select symbol';
 
   @override
-  String get savedPlacesSetIconLabel => '';
+  String get savedPlacesSetIconLabel => 'Change symbol';
 
   @override
-  String get savedPlacesSetNameLabel => '';
+  String get savedPlacesSetNameLabel => 'Edit name';
 
   @override
-  String get savedPlacesSetPositionLabel => '';
+  String get savedPlacesSetPositionLabel => 'Edit position';
 
   @override
   String get searchFailLoadingPlan => 'mekor dzidzedze o';

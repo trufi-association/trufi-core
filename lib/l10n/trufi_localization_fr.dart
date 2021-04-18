@@ -25,16 +25,16 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get alertLocationServicesDeniedTitle => 'Pas d\'emplacement';
 
   @override
-  String get appReviewDialogButtonAccept => '';
+  String get appReviewDialogButtonAccept => 'Write review';
 
   @override
-  String get appReviewDialogButtonDecline => '';
+  String get appReviewDialogButtonDecline => 'Not now';
 
   @override
-  String get appReviewDialogContent => '';
+  String get appReviewDialogContent => 'Support us with a review on the Google Play Store.';
 
   @override
-  String get appReviewDialogTitle => '';
+  String get appReviewDialogTitle => 'Enjoying Trufi?';
 
   @override
   String get chooseLocationPageSubtitle => 'Agrandir et déplacer la carte pour centrer le marqueur';
@@ -70,7 +70,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonOrigin => 'Origine';
 
   @override
-  String get commonSave => '';
+  String get commonSave => 'Save';
 
   @override
   String get commonUnknownError => 'Erreur inconnue';
@@ -81,7 +81,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
   }
 
   @override
-  String get donate => '';
+  String get donate => 'Donate';
 
   @override
   String get errorAmbiguousDestination => 'Le planificateur de trajet ne sait pas trop à quelle destination vous souhaitez aller. Veuillez choisir parmi les options suivantes ou être plus précis.';
@@ -132,13 +132,13 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get feedbackTitle => 'Envoyez-nous un e-mail';
 
   @override
-  String get followOnFacebook => '';
+  String get followOnFacebook => 'Follow us on Facebook';
 
   @override
-  String get followOnInstagram => '';
+  String get followOnInstagram => 'Follow us on Instagram';
 
   @override
-  String get followOnTwitter => '';
+  String get followOnTwitter => 'Follow us on Twitter';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -157,7 +157,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String instructionJunction(Object street1, Object street2) {
-    return '';
+    return '${street1} and ${street2}';
   }
 
   @override
@@ -175,7 +175,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get instructionVehicleGondola => 'Gondole';
 
   @override
-  String get instructionVehicleLightRail => '';
+  String get instructionVehicleLightRail => 'Light Rail Train';
 
   @override
   String get instructionVehicleMicro => 'Micro';
@@ -192,16 +192,16 @@ class TrufiLocalizationFr extends TrufiLocalization {
   }
 
   @override
-  String get mapTypeLabel => '';
+  String get mapTypeLabel => 'Map Type';
 
   @override
-  String get mapTypeSatelliteCaption => '';
+  String get mapTypeSatelliteCaption => 'Satellite';
 
   @override
-  String get mapTypeStreetsCaption => '';
+  String get mapTypeStreetsCaption => 'Streets';
 
   @override
-  String get mapTypeTerrainCaption => '';
+  String get mapTypeTerrainCaption => 'Terrain';
 
   @override
   String get menuAbout => 'À propos';
@@ -219,7 +219,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get menuOnline => 'En ligne';
 
   @override
-  String get menuShareApp => '';
+  String get menuShareApp => 'Share the app';
 
   @override
   String get menuTeam => 'Équipe';
@@ -240,25 +240,25 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get noRouteErrorActionShowCarRoute => 'Afficher l\'itinéraire en voiture';
 
   @override
-  String get readOurBlog => '';
+  String get readOurBlog => 'Read our blog';
 
   @override
-  String get savedPlacesEnterNameTitle => '';
+  String get savedPlacesEnterNameTitle => 'Enter name';
 
   @override
-  String get savedPlacesRemoveLabel => '';
+  String get savedPlacesRemoveLabel => 'Remove place';
 
   @override
-  String get savedPlacesSelectIconTitle => '';
+  String get savedPlacesSelectIconTitle => 'Select symbol';
 
   @override
-  String get savedPlacesSetIconLabel => '';
+  String get savedPlacesSetIconLabel => 'Change symbol';
 
   @override
-  String get savedPlacesSetNameLabel => '';
+  String get savedPlacesSetNameLabel => 'Edit name';
 
   @override
-  String get savedPlacesSetPositionLabel => '';
+  String get savedPlacesSetPositionLabel => 'Edit position';
 
   @override
   String get searchFailLoadingPlan => 'Échec du chargement du plan.';
@@ -301,7 +301,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return '';
+    return 'Download ${appTitle}, the public transport app for ${cityName}, at ${url}';
   }
 
   @override

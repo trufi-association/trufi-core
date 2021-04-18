@@ -70,7 +70,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get commonOrigin => 'Origem';
 
   @override
-  String get commonSave => '';
+  String get commonSave => 'Save';
 
   @override
   String get commonUnknownError => 'Erro desconhecido';
@@ -105,7 +105,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get errorPathNotFound => 'Viagem não é possível. Seu ponto inicial ou final pode não estar acessível com segurança (por exemplo, você pode estar começando em uma rua residencial conectada apenas a uma rodovia).';
 
   @override
-  String get errorServerCanNotHandleRequest => '';
+  String get errorServerCanNotHandleRequest => 'The request has errors that the server is not willing or able to process.';
 
   @override
   String get errorServerTimeout => 'O planejador de viagem está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.';
@@ -162,7 +162,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
 
   @override
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
-    return '';
+    return 'Ride ${vehicle} for ${duration} (${distance}) to\n${location}';
   }
 
   @override
@@ -188,20 +188,20 @@ class TrufiLocalizationPt extends TrufiLocalization {
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
-    return '';
+    return 'Walk ${duration} (${distance}) to\n${location}';
   }
 
   @override
-  String get mapTypeLabel => '';
+  String get mapTypeLabel => 'Map Type';
 
   @override
-  String get mapTypeSatelliteCaption => '';
+  String get mapTypeSatelliteCaption => 'Satellite';
 
   @override
-  String get mapTypeStreetsCaption => '';
+  String get mapTypeStreetsCaption => 'Streets';
 
   @override
-  String get mapTypeTerrainCaption => '';
+  String get mapTypeTerrainCaption => 'Terrain';
 
   @override
   String get menuAbout => 'Sobre';
@@ -225,7 +225,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get menuTeam => 'Equipe';
 
   @override
-  String get menuYourPlaces => '';
+  String get menuYourPlaces => 'Your places';
 
   @override
   String get noRouteError => 'Desculpe, não conseguimos encontrar uma rota. O que você quer fazer?';
@@ -243,22 +243,22 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get readOurBlog => 'Leia nosso blog';
 
   @override
-  String get savedPlacesEnterNameTitle => '';
+  String get savedPlacesEnterNameTitle => 'Enter name';
 
   @override
-  String get savedPlacesRemoveLabel => '';
+  String get savedPlacesRemoveLabel => 'Remove place';
 
   @override
-  String get savedPlacesSelectIconTitle => '';
+  String get savedPlacesSelectIconTitle => 'Select symbol';
 
   @override
-  String get savedPlacesSetIconLabel => '';
+  String get savedPlacesSetIconLabel => 'Change symbol';
 
   @override
-  String get savedPlacesSetNameLabel => '';
+  String get savedPlacesSetNameLabel => 'Edit name';
 
   @override
-  String get savedPlacesSetPositionLabel => '';
+  String get savedPlacesSetPositionLabel => 'Edit position';
 
   @override
   String get searchFailLoadingPlan => 'Falha ao carregar o plano.';
