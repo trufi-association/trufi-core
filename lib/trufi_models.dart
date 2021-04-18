@@ -226,8 +226,8 @@ class Plan {
         itineraries: _removePlanItineraryDuplicates(
           planJson[_itineraries]
               .map<PlanItinerary>(
-                (Map<String, dynamic> itineraryJson) =>
-                    PlanItinerary.fromJson(itineraryJson),
+                (dynamic itineraryJson) =>
+                    PlanItinerary.fromJson(itineraryJson as Map<String, dynamic>),
               )
               .toList() as List<PlanItinerary>,
         ),
@@ -361,8 +361,8 @@ class PlanItinerary {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-      legs: json[_legs].map<PlanItineraryLeg>((Map<String, dynamic> json) {
-        return PlanItineraryLeg.fromJson(json);
+      legs: json[_legs].map<PlanItineraryLeg>((dynamic json) {
+        return PlanItineraryLeg.fromJson(json as Map<String, dynamic>);
       }).toList() as List<PlanItineraryLeg>,
     );
   }

@@ -66,7 +66,7 @@ void main() {
     final file = File('test/assets/response_location.json');
     final List<TrufiLocation> _listJsonLocation = json
         .decode(await file.readAsString())
-        .map<TrufiLocation>((Map<String, dynamic> json) => TrufiLocation.fromJson(json))
+        .map<TrufiLocation>((dynamic json) => TrufiLocation.fromJson(json as Map<String, dynamic>))
         .toList() as List<TrufiLocation>;
 
     expect(
