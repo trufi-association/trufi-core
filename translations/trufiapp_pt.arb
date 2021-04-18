@@ -201,7 +201,7 @@
         ],
         "description": "Origin field label"
     },
-    "commonSave": "",
+    "commonSave": "Save",
     "@commonSave": {
         "description": "General Save label"
     },
@@ -310,7 +310,7 @@
         ],
         "description": "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible"
     },
-    "errorServerCanNotHandleRequest": "",
+    "errorServerCanNotHandleRequest": "The request has errors that the server is not willing or able to process.",
     "@errorServerCanNotHandleRequest": {
         "notes": [
             {
@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "",
+    "instructionRide": "Ride {vehicle} for {duration} ({distance}) to\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "",
+    "instructionWalk": "Walk {duration} ({distance}) to\n{location}",
     "@instructionWalk": {
         "notes": [
             {
@@ -699,19 +699,19 @@
         ],
         "description": "Itinerary instruction (walking)"
     },
-    "mapTypeLabel": "",
+    "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
         "description": "Label for the Map types"
     },
-    "mapTypeSatelliteCaption": "",
+    "mapTypeSatelliteCaption": "Satellite",
     "@mapTypeSatelliteCaption": {
         "description": "Label for the Satellite Map type"
     },
-    "mapTypeStreetsCaption": "",
+    "mapTypeStreetsCaption": "Streets",
     "@mapTypeStreetsCaption": {
         "description": "Label for the Streets Map type"
     },
-    "mapTypeTerrainCaption": "",
+    "mapTypeTerrainCaption": "Terrain",
     "@mapTypeTerrainCaption": {
         "description": "Label for the Terrain Map type"
     },
@@ -785,7 +785,7 @@
         ],
         "description": "Menu item that shows the team page"
     },
-    "menuYourPlaces": "",
+    "menuYourPlaces": "Your places",
     "@menuYourPlaces": {
         "description": "A menu item that shows the saved places"
     },
@@ -839,12 +839,12 @@
         ],
         "description": "Website menu item"
     },
-    "savedPlacesEnterNameTitle": "",
-    "savedPlacesRemoveLabel": "",
-    "savedPlacesSelectIconTitle": "",
-    "savedPlacesSetIconLabel": "",
-    "savedPlacesSetNameLabel": "",
-    "savedPlacesSetPositionLabel": "",
+    "savedPlacesEnterNameTitle": "Enter name",
+    "savedPlacesRemoveLabel": "Remove place",
+    "savedPlacesSelectIconTitle": "Select symbol",
+    "savedPlacesSetIconLabel": "Change symbol",
+    "savedPlacesSetNameLabel": "Edit name",
+    "savedPlacesSetPositionLabel": "Edit position",
     "searchFailLoadingPlan": "Falha ao carregar o plano.",
     "@searchFailLoadingPlan": {
         "notes": [
