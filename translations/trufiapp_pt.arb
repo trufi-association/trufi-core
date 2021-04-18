@@ -1,7 +1,7 @@
 {
     "@@locale": "pt",
     "@@last_modified": "2021-04-13T17:11:23+02:00",
-    "aboutContent": "Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\\n\\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.",
+    "aboutContent": "Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\n\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.",
     "@aboutContent": {
         "notes": [
             {
@@ -380,7 +380,7 @@
         ],
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
     },
-    "feedbackContent": "Você tem sugestões para o nosso aplicativo ou encontrou alguns erros nos dados?\\n Gostaríamos muito de ouvir de você!\\nCertifique-se de adicionar seu endereço de e-mail ou telefone, para que possamos responder a você.",
+    "feedbackContent": "Você tem sugestões para o nosso aplicativo ou encontrou alguns erros nos dados?\n Gostaríamos muito de ouvir de você!\nCertifique-se de adicionar seu endereço de e-mail ou telefone, para que possamos responder a você.",
     "@feedbackContent": {
         "notes": [
             {
@@ -1058,7 +1058,7 @@
         ],
         "description": "List of representatives"
     },
-    "teamSectionRoutes": "Rotas: {routeContributors} e todos os usuários que fizeram upload de rotas para o OpenStreetMap, {osmContributors}.\\nEntre em contato conosco se você quiser participar da comunidade OpenStreetMap!",
+    "teamSectionRoutes": "Rotas: {routeContributors} e todos os usuários que fizeram upload de rotas para o OpenStreetMap, {osmContributors}.\nEntre em contato conosco se você quiser participar da comunidade OpenStreetMap!",
     "@teamSectionRoutes": {
         "notes": [
             {

@@ -162,7 +162,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
-    return 'Jap’iy ${vehicle} ${duration} (${distance})\\n${location} kama';
+    return 'Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama';
   }
 
   @override
@@ -188,7 +188,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
-    return 'Kaymanta puriy ${duration} (${distance}) achaykama\\n${location} Puriy';
+    return 'Kaymanta puriy ${duration} (${distance}) achaykama\n${location} Puriy';
   }
 
   @override
@@ -319,7 +319,7 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String teamSectionRoutes(Object osmContributors, Object routeContributors) {
-    return 'Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!';
+    return 'Rutas yanapaqkuna: ${routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, ${osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!';
   }
 
   @override

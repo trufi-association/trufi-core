@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "Bicicletta {vehicle} per {duration} ({distance}) verso\\n{location}",
+    "instructionRide": "Bicicletta {vehicle} per {duration} ({distance}) verso\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "A piedi {duration} ({distance}) verso\\n{location}",
+    "instructionWalk": "A piedi {duration} ({distance}) verso\n{location}",
     "@instructionWalk": {
         "notes": [
             {

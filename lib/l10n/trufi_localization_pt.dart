@@ -10,7 +10,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   TrufiLocalizationPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get aboutContent => 'Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\\n\\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.';
+  String get aboutContent => 'Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\n\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.';
 
   @override
   String get aboutLicenses => 'Licenças';
@@ -126,7 +126,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get errorUnknownOriginDestination => 'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?';
 
   @override
-  String get feedbackContent => 'Você tem sugestões para o nosso aplicativo ou encontrou alguns erros nos dados?\\n Gostaríamos muito de ouvir de você!\\nCertifique-se de adicionar seu endereço de e-mail ou telefone, para que possamos responder a você.';
+  String get feedbackContent => 'Você tem sugestões para o nosso aplicativo ou encontrou alguns erros nos dados?\n Gostaríamos muito de ouvir de você!\nCertifique-se de adicionar seu endereço de e-mail ou telefone, para que possamos responder a você.';
 
   @override
   String get feedbackTitle => 'Envie-nos um e-mail';
@@ -319,7 +319,7 @@ class TrufiLocalizationPt extends TrufiLocalization {
 
   @override
   String teamSectionRoutes(Object osmContributors, Object routeContributors) {
-    return 'Rotas: ${routeContributors} e todos os usuários que fizeram upload de rotas para o OpenStreetMap, ${osmContributors}.\\nEntre em contato conosco se você quiser participar da comunidade OpenStreetMap!';
+    return 'Rotas: ${routeContributors} e todos os usuários que fizeram upload de rotas para o OpenStreetMap, ${osmContributors}.\nEntre em contato conosco se você quiser participar da comunidade OpenStreetMap!';
   }
 
   @override

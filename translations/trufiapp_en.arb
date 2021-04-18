@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "Ride {vehicle} for {duration} ({distance}) to\\n{location}",
+    "instructionRide": "Ride {vehicle} for {duration} ({distance}) to\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "Walk {duration} ({distance}) to\\n{location}",
+    "instructionWalk": "Walk {duration} ({distance}) to\n{location}",
     "@instructionWalk": {
         "notes": [
             {
@@ -1058,7 +1058,7 @@
         ],
         "description": "List of representatives"
     },
-    "teamSectionRoutes": "Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\\nContact us if you want to join the OpenStreetMap community!",
+    "teamSectionRoutes": "Routes: {routeContributors} and all users that uploaded routes to OpenStreetMap, such as {osmContributors}.\nContact us if you want to join the OpenStreetMap community!",
     "@teamSectionRoutes": {
         "notes": [
             {

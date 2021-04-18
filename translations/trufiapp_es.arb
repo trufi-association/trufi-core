@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "Tomar {vehicle} por {duration} ({distance}) hasta\\n{location}",
+    "instructionRide": "Tomar {vehicle} por {duration} ({distance}) hasta\n{location}",
     "@instructionRide": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "Caminar {duration} ({distance}) hasta\\n{location}",
+    "instructionWalk": "Caminar {duration} ({distance}) hasta\n{location}",
     "@instructionWalk": {
         "notes": [
             {

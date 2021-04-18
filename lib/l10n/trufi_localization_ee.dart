@@ -126,7 +126,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get errorUnknownOriginDestination => 'afisi netso kple afisi neyina la meli o. gbugbor na dorwo do';
 
   @override
-  String get feedbackContent => 'dordordo ade li nele dzidzim be miawo tso dorworfea nua.\\nnami wo kafomor fe dzesiwo kple wo email';
+  String get feedbackContent => 'dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email';
 
   @override
   String get feedbackTitle => 'Do email do da mi';
@@ -319,7 +319,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
 
   @override
   String teamSectionRoutes(Object osmContributors, Object routeContributors) {
-    return 'morwo kple dorworfea nudorwolawo\\nzu miadometor deka';
+    return 'morwo kple dorworfea nudorwolawo\nzu miadometor deka';
   }
 
   @override

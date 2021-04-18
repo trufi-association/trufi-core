@@ -162,7 +162,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
-    return 'En ${vehicle} pendant ${duration} (${distance}) vers\\n${location}';
+    return 'En ${vehicle} pendant ${duration} (${distance}) vers\n${location}';
   }
 
   @override
@@ -188,7 +188,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
-    return 'Marcher ${duration} (${distance}) vers\\n${location}';
+    return 'Marcher ${duration} (${distance}) vers\n${location}';
   }
 
   @override
@@ -319,7 +319,7 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String teamSectionRoutes(Object osmContributors, Object routeContributors) {
-    return 'Itinéraires: ${routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que ${osmContributors}.\\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!';
+    return 'Itinéraires: ${routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que ${osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!';
   }
 
   @override

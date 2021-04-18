@@ -162,7 +162,7 @@ class TrufiLocalizationIt extends TrufiLocalization {
 
   @override
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
-    return 'Bicicletta ${vehicle} per ${duration} (${distance}) verso\\n${location}';
+    return 'Bicicletta ${vehicle} per ${duration} (${distance}) verso\n${location}';
   }
 
   @override
@@ -188,7 +188,7 @@ class TrufiLocalizationIt extends TrufiLocalization {
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
-    return 'A piedi ${duration} (${distance}) verso\\n${location}';
+    return 'A piedi ${duration} (${distance}) verso\n${location}';
   }
 
   @override

@@ -542,7 +542,7 @@
         ],
         "description": "Junction name of two streets"
     },
-    "instructionRide": "Jap’iy {vehicle} {duration} ({distance})\\n{location} kama",
+    "instructionRide": "Jap’iy {vehicle} {duration} ({distance})\n{location} kama",
     "@instructionRide": {
         "notes": [
             {
@@ -659,7 +659,7 @@
         ],
         "description": "Vehicle name (Trufi)"
     },
-    "instructionWalk": "Kaymanta puriy {duration} ({distance}) achaykama\\n{location} Puriy",
+    "instructionWalk": "Kaymanta puriy {duration} ({distance}) achaykama\n{location} Puriy",
     "@instructionWalk": {
         "notes": [
             {
@@ -1058,7 +1058,7 @@
         ],
         "description": "List of representatives"
     },
-    "teamSectionRoutes": "Rutas yanapaqkuna: {routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, {osmContributors}.\\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!",
+    "teamSectionRoutes": "Rutas yanapaqkuna: {routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, {osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!",
     "@teamSectionRoutes": {
         "notes": [
             {
