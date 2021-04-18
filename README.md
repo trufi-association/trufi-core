@@ -1,6 +1,7 @@
 # Trufi Core
 
 [![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/trufi-association/trufi-app/issues)
 [![Twitter Follow](https://img.shields.io/twitter/follow/TrufiAssoc?style=social)](https://twitter.com/TrufiAssoc)
 [![Flutter Test](https://github.com/trufi-association/trufi-core/actions/workflows/flutter_test.yml/badge.svg?branch=master)](https://github.com/trufi-association/trufi-core/actions/workflows/flutter_test.yml)
