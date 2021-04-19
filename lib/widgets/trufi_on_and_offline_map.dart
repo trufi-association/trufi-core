@@ -21,10 +21,11 @@ class TrufiOnAndOfflineMapController {
 
   final _offlineController = TrufiMapController();
   final _onlineController = TrufiMapController();
-  final _mapReadyController = rx.BehaviorSubject<Null>();
+  final _mapReadyController = rx.BehaviorSubject<void>();
 
   TrufiOnAndOfflineMapState _state;
 
+  // ignore: avoid_setters_without_getters
   set state(TrufiOnAndOfflineMapState state) {
     _state = state;
   }
@@ -47,9 +48,9 @@ class TrufiOnAndOfflineMapController {
     );
   }
 
-  Sink<Null> get _inMapReady => _mapReadyController.sink;
+  Sink<void> get _inMapReady => _mapReadyController.sink;
 
-  Stream<Null> get outMapReady => _mapReadyController.stream;
+  Stream<void> get outMapReady => _mapReadyController.stream;
 
   TrufiMapController get offline => _offlineController;
 
@@ -65,7 +66,7 @@ class TrufiOnAndOfflineMapController {
 }
 
 class TrufiOnAndOfflineMap extends StatefulWidget {
-  TrufiOnAndOfflineMap({
+  const TrufiOnAndOfflineMap({
     Key key,
     @required this.controller,
     @required this.layerOptionsBuilder,
@@ -118,9 +119,9 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     final cfg = TrufiConfiguration();
     return StreamBuilder(
       stream: preferencesBloc.outChangeMapType,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return TrufiMap(
-          key: ValueKey("TrufiOnlineMap"),
+          key: const ValueKey("TrufiOnlineMap"),
           controller: widget.controller.online,
           mapOptions: MapOptions(
             minZoom: cfg.map.onlineMinZoom,
@@ -137,7 +138,8 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
                 getTilesEndpointForMapType(snapshot.data),
                 tileProviderKey: cfg.map.mapTilerKey,
               ),
-            ]..addAll(widget.layerOptionsBuilder(context));
+              ...widget.layerOptionsBuilder(context),
+            ];
           },
         );
       },
@@ -147,7 +149,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   Widget _buildOfflineMap() {
     final cfg = TrufiConfiguration();
     return TrufiMap(
-      key: ValueKey("TrufiOfflineMap"),
+      key: const ValueKey("TrufiOfflineMap"),
       controller: widget.controller.offline,
       mapOptions: MapOptions(
         minZoom: cfg.map.offlineMinZoom,
@@ -162,7 +164,8 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
           offlineMapTileLayerOptions(),
-        ]..addAll(widget.layerOptionsBuilder(context));
+          ...widget.layerOptionsBuilder(context),
+        ];
       },
     );
   }

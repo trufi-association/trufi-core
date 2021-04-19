@@ -18,7 +18,7 @@ void main() {
     });
 
     test('home', () async {
-      HomeRobot robot = HomeRobot(driver, Future.value(null));
+      final HomeRobot robot = HomeRobot(driver, Future.value());
       await robot
           .seesFromPlacesField()
           .seesToPlacesField()

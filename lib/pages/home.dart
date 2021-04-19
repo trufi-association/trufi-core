@@ -53,7 +53,7 @@ class HomePageState extends State<HomePage>
   CancelableOperation<Ad> _currentFetchAdOperation;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _subscriptions.add(
@@ -76,7 +76,7 @@ class HomePageState extends State<HomePage>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       final appReviewBloc = AppReviewBloc.of(context);
       if (await appReviewBloc.isAppReviewAppropriate()) {
@@ -86,7 +86,7 @@ class HomePageState extends State<HomePage>
     }
   }
 
-  void _loadState() async {
+  Future<void> _loadState() async {
     if (await _data.load(context) && _data.toPlace != null) {
       setState(() {
         _fromFieldKey.currentState?.didChange(_data.fromPlace);
@@ -103,22 +103,23 @@ class HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ValueKey(keys.homePage),
+      key: const ValueKey(keys.homePage),
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(HomePage.route),
+      drawer: const TrufiDrawer(HomePage.route),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
     return AppBar(
       bottom: PreferredSize(
+        preferredSize: isPortrait
+            ? const Size.fromHeight(45.0)
+            : const Size.fromHeight(0.0),
         child: Container(),
-        preferredSize:
-            isPortrait ? Size.fromHeight(45.0) : Size.fromHeight(0.0),
       ),
       flexibleSpace: isPortrait
           ? _buildFormFieldsPortrait(context)
@@ -130,7 +131,7 @@ class HomePageState extends State<HomePage>
     final translations = TrufiLocalization.of(context);
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
+        padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -138,21 +139,21 @@ class HomePageState extends State<HomePage>
             children: <Widget>[
               _buildFormField(
                 _fromFieldKey,
-                ValueKey(keys.homePageFromPlaceField),
+                const ValueKey(keys.homePageFromPlaceField),
                 translations.searchPleaseSelectOrigin,
-                FromMarker(),
+                const FromMarker(),
                 _setFromPlace,
-                leading: SizedBox.shrink(),
+                leading: const SizedBox.shrink(),
                 trailing:
                     _data.isResettable ? _buildResetButton(context) : null,
               ),
               _buildFormField(
                 _toFieldKey,
-                ValueKey(keys.homePageToPlaceField),
+                const ValueKey(keys.homePageToPlaceField),
                 translations.searchPleaseSelectDestination,
-                ToMarker(),
+                const ToMarker(),
                 _setToPlace,
-                leading: SizedBox.shrink(),
+                leading: const SizedBox.shrink(),
                 trailing: _data.isSwappable
                     ? _buildSwapButton(context, Orientation.portrait)
                     : null,
@@ -168,23 +169,21 @@ class HomePageState extends State<HomePage>
     final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
+        padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
         child: Form(
           key: _formKey,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 width: 40.0,
-                child: null,
               ),
               Flexible(
-                flex: 1,
                 child: _buildFormField(
                   _fromFieldKey,
-                  ValueKey(keys.homePageFromPlaceField),
+                  const ValueKey(keys.homePageFromPlaceField),
                   localization.searchPleaseSelectOrigin,
-                  FromMarker(),
+                  const FromMarker(),
                   _setFromPlace,
                 ),
               ),
@@ -195,12 +194,11 @@ class HomePageState extends State<HomePage>
                     : null,
               ),
               Flexible(
-                flex: 1,
                 child: _buildFormField(
                   _toFieldKey,
-                  ValueKey(keys.homePageToPlaceField),
+                  const ValueKey(keys.homePageToPlaceField),
                   localization.searchPleaseSelectDestination,
-                  ToMarker(),
+                  const ToMarker(),
                   _setToPlace,
                 ),
               ),
@@ -218,7 +216,7 @@ class HomePageState extends State<HomePage>
   Widget _buildSwapButton(BuildContext context, Orientation orientation) {
     return FittedBox(
       child: IconButton(
-        key: ValueKey(keys.homePageSwapButton),
+        key: const ValueKey(keys.homePageSwapButton),
         icon: Icon(
           orientation == Orientation.portrait
               ? Icons.swap_vert
@@ -282,7 +280,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildBody(BuildContext context) {
     final cfg = TrufiConfiguration();
-    Widget body = Container(
+    final Widget body = Container(
       child: _data.plan != null && _data.plan.error == null
           ? PlanPage(
               _data.plan,
@@ -339,7 +337,7 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  void _setFromPlace(TrufiLocation fromPlace) async {
+  Future<void> _setFromPlace(TrufiLocation fromPlace) async {
     setState(() {
       _data.plan = null;
       _data.fromPlace = fromPlace;
@@ -349,7 +347,7 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  void _setFromPlaceToCurrentPosition() async {
+  Future<void> _setFromPlaceToCurrentPosition() async {
     final localization = TrufiLocalization.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
@@ -390,7 +388,7 @@ class HomePageState extends State<HomePage>
     _setPlaces(_data.toPlace, _data.fromPlace);
   }
 
-  void _fetchPlan({bool car = false}) async {
+  Future<void> _fetchPlan({bool car = false}) async {
     final requestManagerBloc = RequestManagerBloc.of(context);
     // Cancel the last fetch plan operation for replace with the current request
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
@@ -432,7 +430,8 @@ class HomePageState extends State<HomePage>
                 _data.toPlace,
               );
 
-        Plan plan = await _currentFetchPlanOperation.valueOrCancellation(null);
+        final Plan plan =
+            await _currentFetchPlanOperation.valueOrCancellation(null);
 
         if (plan == null) {
           throw "Canceled by user";
@@ -447,27 +446,37 @@ class HomePageState extends State<HomePage>
           AppReviewBloc.of(context).incrementReviewWorthyActions();
         }
       } on FetchOfflineRequestException catch (e) {
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
           "Offline mode is not implemented yet.",
           false,
         );
       } on FetchOfflineResponseException catch (e) {
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
           "Offline mode is not implemented yet.",
           false,
         );
       } on FetchOnlineRequestException catch (e) {
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(localization.commonNoInternet, true);
       } on FetchOnlineResponseException catch (e) {
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch plan: $e");
         _showOnAndOfflineErrorAlert(
           localization.searchFailLoadingPlan,
           true,
         );
       } catch (e) {
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch plan: $e");
         _showErrorAlert(e.toString());
       }
@@ -475,11 +484,14 @@ class HomePageState extends State<HomePage>
       try {
         _currentFetchAdOperation =
             requestManagerBloc.fetchAd(context, _data.toPlace);
-        Ad ad = await _currentFetchAdOperation.valueOrCancellation(null);
+        final Ad ad = await _currentFetchAdOperation.valueOrCancellation(null);
         _setAd(ad);
       } catch (e, stacktrace) {
         _setAd(null);
+        // TODO: Replace by proper error handling
+        // ignore: avoid_print
         print("Failed to fetch ad: $e");
+        // ignore: avoid_print
         print(stacktrace);
       }
 
@@ -496,7 +508,7 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  void _showTransitErrorAlert(String error) async {
+  Future<void> _showTransitErrorAlert(String error) async {
     final cfg = TrufiConfiguration();
     final location = await LocationProviderBloc.of(context).currentLocation;
     final languageCode = Localizations.localeOf(context).languageCode;
@@ -537,10 +549,10 @@ class HomePageState extends State<HomePage>
 }
 
 class HomePageStateData {
-  static const String _FromPlace = "fromPlace";
-  static const String _ToPlace = "toPlace";
-  static const String _Plan = "plan";
-  static const String _Ad = "ad";
+  static const String _fromPlace = "fromPlace";
+  static const String _toPlace = "toPlace";
+  static const String _plan = "plan";
+  static const String _ad = "ad";
 
   HomePageStateData({this.fromPlace, this.toPlace, this.plan, this.ad});
 
@@ -553,25 +565,25 @@ class HomePageStateData {
 
   factory HomePageStateData.fromJson(Map<String, dynamic> json) {
     return HomePageStateData(
-      fromPlace: TrufiLocation.fromJson(json[_FromPlace]),
-      toPlace: TrufiLocation.fromJson(json[_ToPlace]),
-      plan: Plan.fromJson(json[_Plan]),
-      ad: Ad.fromJson(json[_Ad]),
+      fromPlace:
+          TrufiLocation.fromJson(json[_fromPlace] as Map<String, dynamic>),
+      toPlace: TrufiLocation.fromJson(json[_toPlace] as Map<String, dynamic>),
+      plan: Plan.fromJson(json[_plan] as Map<String, dynamic>),
+      ad: Ad.fromJson(json[_ad] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      _FromPlace: fromPlace != null ? fromPlace.toJson() : null,
-      _ToPlace: toPlace != null ? toPlace.toJson() : null,
-      _Plan: plan != null ? plan.toJson() : null,
-      _Ad: ad != null ? ad.toJson() : null,
+      _fromPlace: fromPlace?.toJson(),
+      _toPlace: toPlace?.toJson(),
+      _plan: plan?.toJson(),
+      _ad: ad?.toJson(),
     };
   }
 
   // Methods
-
-  void reset(BuildContext context) async {
+  void reset(BuildContext context) {
     fromPlace = null;
     toPlace = null;
     plan = null;
@@ -581,7 +593,7 @@ class HomePageStateData {
 
   Future<bool> load(BuildContext context) async {
     try {
-      HomePageStateData data = await compute(
+      final HomePageStateData data = await compute(
         _parse,
         PreferencesBloc.of(context).stateHomePage,
       );
@@ -593,12 +605,14 @@ class HomePageStateData {
         return true;
       }
     } catch (e) {
+      // TODO: Replace by proper error handling
+      // ignore: avoid_print
       print("Failed to load plan: $e");
     }
     return false;
   }
 
-  void save(BuildContext context) async {
+  void save(BuildContext context) {
     PreferencesBloc.of(context).stateHomePage = json.encode(toJson());
   }
 
@@ -612,8 +626,11 @@ class HomePageStateData {
 HomePageStateData _parse(String encoded) {
   if (encoded != null && encoded.isNotEmpty) {
     try {
-      return HomePageStateData.fromJson(json.decode(encoded));
+      return HomePageStateData.fromJson(
+          json.decode(encoded) as Map<String, dynamic>);
     } catch (e) {
+      // TODO: Replace by proper error handling
+      // ignore: avoid_print
       print("Failed to parse home page state data: $e");
     }
   }

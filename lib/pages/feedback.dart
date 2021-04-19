@@ -10,16 +10,16 @@ import '../widgets/trufi_drawer.dart';
 class FeedbackPage extends StatefulWidget {
   static const String route = "/feedback";
 
-  FeedbackPage({Key key}) : super(key: key);
+  const FeedbackPage({Key key}) : super(key: key);
 
   @override
-  FeedBackPageState createState() => new FeedBackPageState();
+  FeedBackPageState createState() => FeedBackPageState();
 }
 
 class FeedBackPageState extends State<FeedbackPage> {
-  Future<Null> _launched;
+  Future<void> _launched;
 
-  Future<Null> _launch(BuildContext context, String url) async {
+  Future<void> _launch(BuildContext context, String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -27,13 +27,13 @@ class FeedBackPageState extends State<FeedbackPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              content: new Text("Could not open mail app"),
+              content: const Text("Could not open mail app"),
               actions: <Widget>[
-                new FlatButton(
-                  child: new Text("Close"),
+                TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
+                  child: const Text("Close"),
                 )
               ],
             );
@@ -46,12 +46,12 @@ class FeedBackPageState extends State<FeedbackPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(FeedbackPage.route),
+      drawer: const TrufiDrawer(FeedbackPage.route),
       floatingActionButton: _buildFloatingActionButton(context),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuFeedback));
   }
@@ -62,28 +62,26 @@ class FeedBackPageState extends State<FeedbackPage> {
     return ListView(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Container(
-                child: Text(
-                  localization.feedbackTitle,
-                  style: theme.textTheme.title.copyWith(
-                    color: theme.textTheme.body2.color,
-                  ),
+              Text(
+                localization.feedbackTitle,
+                style: theme.textTheme.headline6.copyWith(
+                  color: theme.textTheme.bodyText1.color,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   localization.feedbackContent,
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
-                child: FutureBuilder<Null>(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: FutureBuilder<void>(
                   future: _launched,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return Text(snapshot.hasError ? "${snapshot.error}" : "");
@@ -102,7 +100,6 @@ class FeedBackPageState extends State<FeedbackPage> {
     final theme = Theme.of(context);
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
-      child: Icon(Icons.email, color: theme.primaryIconTheme.color),
       onPressed: () {
         setState(() {
           final String url = "mailto:${cfg.email.feedback}?subject=Feedback";
@@ -110,6 +107,7 @@ class FeedBackPageState extends State<FeedbackPage> {
         });
       },
       heroTag: null,
+      child: Icon(Icons.email, color: theme.primaryIconTheme.color),
     );
   }
 }

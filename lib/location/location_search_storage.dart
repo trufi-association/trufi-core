@@ -14,20 +14,22 @@ const String keyStreets = 'streets';
 const String keyStreetJunctions = 'streetJunctions';
 
 class LocationSearchStorage {
-  static final _levenshteinDistanceThreshold = 3;
+  static const _levenshteinDistanceThreshold = 3;
 
   final _diffMatchPatch = DiffMatchPatch();
   final _places = <TrufiLocation>[];
   final _streets = <TrufiStreet>[];
 
-  void load(BuildContext context, String key) async {
+  Future<void> load(BuildContext context, String key) async {
     _places.clear();
     _streets.clear();
     try {
       final locationData = await loadFromAssets(context, key);
       _places.addAll(locationData.places);
       _streets.addAll(locationData.streets);
-    } on FlutterError catch (e) {
+    } catch(e){
+      // TODO: Fix the test properly
+      // ignore: avoid_print
       print(e);
     }
   }
@@ -40,7 +42,7 @@ class LocationSearchStorage {
       String query) async {
     return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
       [],
-      (streets, street) {
+          (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
           query.toLowerCase(),
@@ -57,7 +59,7 @@ class LocationSearchStorage {
       String query) async {
     return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
       [],
-      (locations, location) {
+          (locations, location) {
         final distance = _levenshteinDistanceForLocation(
           location,
           query.toLowerCase(),
@@ -80,15 +82,15 @@ class LocationSearchStorage {
       query,
     );
     // Search in alternative names
-    location.alternativeNames?.forEach((alternativeName) {
+    for (final name in location.alternativeNames) {
       distance = min(
         distance,
         _levenshteinDistanceForString(
-          alternativeName.toLowerCase(),
+          name.toLowerCase(),
           query,
         ),
       );
-    });
+    }
     // Return distance
     return distance;
   }
@@ -156,13 +158,16 @@ LocationSearchData _parseSearchJson(String encoded) {
       // Places
       final places = search[keyPlaces]
           .map<TrufiLocation>(
-            (json) => TrufiLocation.fromSearchPlacesJson(json),
+            (dynamic json) =>
+                TrufiLocation.fromSearchPlacesJson(json as List<dynamic>),
           )
-          .toList();
+          .toList() as List<TrufiLocation>;
       // Streets
-      final streets = Map<String, TrufiStreet>();
-      search[keyStreets].keys.forEach((key) {
-        streets[key] = TrufiStreet.fromSearchJson(search[keyStreets][key]);
+      final streets = <String, TrufiStreet>{};
+      search[keyStreets].keys.forEach((dynamic key) {
+        streets[key as String] = TrufiStreet.fromSearchJson(
+          search[keyStreets][key] as List<dynamic>,
+        );
       });
       // Junctions
       search[keyStreetJunctions].keys.forEach((key) {
@@ -175,8 +180,8 @@ LocationSearchData _parseSearchJson(String encoded) {
                 TrufiStreetJunction(
                   street1: street1,
                   street2: street2,
-                  longitude: junction[1][0].toDouble(),
-                  latitude: junction[1][1].toDouble(),
+                  longitude: junction[1][0].toDouble() as double,
+                  latitude: junction[1][1].toDouble() as double,
                 ),
               );
             }
@@ -190,6 +195,8 @@ LocationSearchData _parseSearchJson(String encoded) {
       });
       return LocationSearchData(places, streets.values.toList());
     } catch (e) {
+      // TODO: Replace with proper error handling
+      // ignore: avoid_print
       print("Failed to parse locations from JSON: $e");
     }
   }

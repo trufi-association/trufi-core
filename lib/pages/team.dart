@@ -9,8 +9,10 @@ import '../widgets/trufi_drawer.dart';
 class TeamPage extends StatefulWidget {
   static const String route = "/team";
 
+  const TeamPage({Key key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => new TeamPageState();
+  State<StatefulWidget> createState() => TeamPageState();
 }
 
 class TeamPageState extends State<TeamPage> {
@@ -26,7 +28,7 @@ class TeamPageState extends State<TeamPage> {
     _loadState();
   }
 
-  void _loadState() async {
+  void _loadState() {
     const joinSep = ", ";
     final attribution = TrufiConfiguration().attribution;
     setState(() {
@@ -43,11 +45,11 @@ class TeamPageState extends State<TeamPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(TeamPage.route),
+      drawer: const TrufiDrawer(TeamPage.route),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuTeam));
   }
@@ -59,65 +61,63 @@ class TeamPageState extends State<TeamPage> {
     return ListView(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Container(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: localization.teamContent + " ",
-                        style: theme.textTheme.body2,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "${localization.teamContent} ",
+                      style: theme.textTheme.bodyText1,
+                    ),
+                    TextSpan(
+                      text: cfg.email.info,
+                      style: theme.textTheme.bodyText1.copyWith(
+                        color: theme.accentColor,
+                        decoration: TextDecoration.underline,
                       ),
-                      TextSpan(
-                        text: cfg.email.info,
-                        style: theme.textTheme.body2.copyWith(
-                          color: theme.accentColor,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            launch(
-                              "mailto:${cfg.email.info}?subject=Contribution",
-                            );
-                          },
-                      ),
-                      TextSpan(
-                        text: ".",
-                        style: theme.textTheme.body2,
-                      ),
-                    ],
-                  ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launch(
+                            "mailto:${cfg.email.info}?subject=Contribution",
+                          );
+                        },
+                    ),
+                    TextSpan(
+                      text: ".",
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ],
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   localization.teamSectionRepresentatives(_representatives),
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   localization.teamSectionTeam(_team),
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   localization.teamSectionTranslations(_translations),
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 16.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
                   localization.teamSectionRoutes(_routes, _osm),
-                  style: theme.textTheme.body2,
+                  style: theme.textTheme.bodyText1,
                 ),
               ),
             ],

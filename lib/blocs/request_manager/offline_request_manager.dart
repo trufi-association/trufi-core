@@ -12,6 +12,7 @@ import '../../blocs/request_manager_bloc.dart';
 import '../../trufi_models.dart';
 
 class OfflineRequestManager implements RequestManager {
+  @override
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
@@ -21,11 +22,11 @@ class OfflineRequestManager implements RequestManager {
   }) async {
     final LocationSearchStorage storage = locationSearchBloc.storage;
 
-    var queryPlaces = await storage.fetchPlacesWithQuery(query);
-    var queryStreets = await storage.fetchStreetsWithQuery(query);
+    final queryPlaces = await storage.fetchPlacesWithQuery(query);
+    final queryStreets = await storage.fetchStreetsWithQuery(query);
 
     // Combine Places and Street sort by distance
-    List<LevenshteinObject<TrufiPlace>> sortedLevenshteinObjects = [
+    final List<LevenshteinObject<TrufiPlace>> sortedLevenshteinObjects = [
       ...queryPlaces, // High priority
       ...queryStreets // Low priority
     ]..sort((a, b) => a.distance.compareTo(b.distance));
@@ -47,6 +48,7 @@ class OfflineRequestManager implements RequestManager {
     return trufiPlaces;
   }
 
+  @override
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
@@ -59,6 +61,7 @@ class OfflineRequestManager implements RequestManager {
     }());
   }
 
+  @override
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
     TrufiLocation from,
@@ -71,6 +74,7 @@ class OfflineRequestManager implements RequestManager {
     }());
   }
 
+  @override
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,

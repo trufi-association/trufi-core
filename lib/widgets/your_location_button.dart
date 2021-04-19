@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class YourLocationButton extends StatelessWidget {
-  YourLocationButton({this.onPressed});
+  const YourLocationButton({this.onPressed, Key key}): super(key: key);
 
-  final Function onPressed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: Theme.of(context).backgroundColor,
-      child: Icon(
+      onPressed: onPressed,
+      heroTag: null,
+      child: const Icon(
         Icons.my_location,
         color: Colors.black,
       ),
-      onPressed: onPressed,
-      heroTag: null,
     );
   }
 }

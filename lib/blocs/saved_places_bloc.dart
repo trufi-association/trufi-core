@@ -22,16 +22,16 @@ class SavedPlacesBloc extends LocationsBlocBase {
     initSavedPage();
   }
 
-  void initSavedPage() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+  Future<void> initSavedPage() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     if (preferences.get('saved_places_initialized') == null) {
-      LatLng _center = TrufiConfiguration().map.center;
-      this.inAddLocation.add(TrufiLocation(
+      final LatLng _center = TrufiConfiguration().map.center;
+      inAddLocation.add(TrufiLocation(
           description: 'Home',
           latitude: _center.latitude,
           longitude: _center.longitude,
           type: 'saved_place:home'));
-      this.inAddLocation.add(TrufiLocation(
+      inAddLocation.add(TrufiLocation(
           description: 'Work',
           latitude: _center.latitude,
           longitude: _center.longitude,

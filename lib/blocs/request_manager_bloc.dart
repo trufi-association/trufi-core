@@ -35,9 +35,10 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _onlineRequestManager = OnlineRequestManager();
   final _fetchLocationLock = Lock();
 
-  CancelableOperation<List<dynamic>> _fetchLocationOperation;
+  CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
 
-  // TODO: Understand why never used and why it is here
+  // TODO: Check what purpose this requestManager served and why it is necassery
+  // ignore: unused_field
   RequestManager _requestManager;
 
   // Dispose
@@ -49,6 +50,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
   // Methods
 
+  @override
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
@@ -64,7 +66,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 
     // Allow only one running request
     return (_fetchLocationLock.locked)
-        ? Future.value(null)
+        ? Future.value()
         : _fetchLocationLock.synchronized(() async {
             _fetchLocationOperation =
                 CancelableOperation<List<TrufiPlace>>.fromFuture(
@@ -81,6 +83,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
           });
   }
 
+  @override
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
     TrufiLocation from,
@@ -91,6 +94,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return _onlineRequestManager.fetchTransitPlan(context, from, to);
   }
 
+  @override
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
     TrufiLocation from,
@@ -99,6 +103,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     return _onlineRequestManager.fetchCarPlan(context, from, to);
   }
 
+  @override
   CancelableOperation<Ad> fetchAd(
     BuildContext context,
     TrufiLocation to,
@@ -143,6 +148,7 @@ class FetchOfflineRequestException implements Exception {
 
   final Exception _innerException;
 
+  @override
   String toString() {
     return "Fetch offline request exception caused by: ${_innerException.toString()}";
   }
@@ -164,6 +170,7 @@ class FetchOnlineRequestException implements Exception {
 
   final Exception _innerException;
 
+  @override
   String toString() {
     return "Fetch online request exception caused by: ${_innerException.toString()}";
   }

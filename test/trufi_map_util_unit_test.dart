@@ -7,13 +7,13 @@ import 'package:trufi_core/trufi_map_utils.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 void main() {
-  double _latitude = 18.0;
-  double _longitude = 129.0;
-  LatLng _point = new LatLng(_latitude, _longitude);
+  const double _latitude = 18.0;
+  const double _longitude = 129.0;
+  final LatLng _point = LatLng(_latitude, _longitude);
   PlanItineraryLeg _leg;
   
   setUp((){
-    _leg = new PlanItineraryLeg(
+    _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
         route: "123",
@@ -23,25 +23,25 @@ void main() {
   });
 
   test('Build from Marker', () {
-    Marker marker = buildFromMarker(_point);
+    final Marker marker = buildFromMarker(_point);
     expect(marker, isNotNull);
     expect(marker.point, _point);
   });
 
   test('Build to Marker', () {
-    Marker marker = buildToMarker(_point);
+    final Marker marker = buildToMarker(_point);
     expect(marker, isNotNull);
     expect(marker.point, _point);
   });
 
   test('Build Your location Marker', () {
-    Marker marker = buildYourLocationMarker(_point);
+    final Marker marker = buildYourLocationMarker(_point);
     expect(marker, isNotNull);
     expect(marker.point, _point);
   });
 
   test('Build bus Marker', () {
-    Marker marker = buildBusMarker(_point, Colors.black, _leg);
+    final Marker marker = buildBusMarker(_point, Colors.black, _leg);
     expect(marker, isNotNull);
     expect(marker.point, _point);
   });

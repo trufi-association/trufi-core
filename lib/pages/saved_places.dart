@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import '../blocs/saved_places_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
-
+import '../blocs/saved_places_bloc.dart';
 import '../pages/home.dart';
-
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
-import '../widgets/trufi_drawer.dart';
 import '../widgets/set_description_dialog.dart';
-
+import '../widgets/trufi_drawer.dart';
 import 'choose_location.dart';
 
 class SavedPlacesPage extends StatefulWidget {
   static const String route = '/places';
+
+  const SavedPlacesPage({Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => SavedPlacesPageState();
@@ -54,12 +53,12 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     return Scaffold(
       appBar: _buildAppBar(context),
       body: _buildBody(context),
-      drawer: TrufiDrawer(SavedPlacesPage.route),
+      drawer: const TrufiDrawer(SavedPlacesPage.route),
       floatingActionButton: _buildFloatingActionButton(),
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     return AppBar(title: Text(localization.menuYourPlaces));
   }
@@ -81,7 +80,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
               itemBuilder: (BuildContext context, int index) {
                 final TrufiLocation savedPlace = data[index];
                 return Container(
-                  margin: EdgeInsets.only(bottom: 5),
+                  margin: const EdgeInsets.only(bottom: 5),
                   child: ElevatedButton(
                     onPressed: () => _showCurrentRoute(savedPlace),
                     child: Row(
@@ -143,17 +142,17 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: _addNewPlace,
-      child: Icon(Icons.add),
       backgroundColor: Theme.of(context).primaryColor,
       heroTag: null,
+      child: const Icon(Icons.add),
     );
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    HomePageStateData dataRoute = HomePageStateData();
+    final HomePageStateData dataRoute = HomePageStateData();
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location == null) return;
-    TrufiLocation currentLocation = TrufiLocation.fromLatLng(
+    final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,
       location,
     );
@@ -167,12 +166,12 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
     final localization = TrufiLocalization.of(context);
     final savedPlacesBloc = SavedPlacesBloc.of(context);
-    return await showDialog(
+    return showDialog(
       context: context,
       builder: (context) => SimpleDialog(
         title: Text(localization.savedPlacesSelectIconTitle),
         children: <Widget>[
-          Container(
+          SizedBox(
             width: 200,
             height: 200,
             child: GridView.builder(
@@ -254,7 +253,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       final String description = await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return SetDescriptionDialog();
+            return const SetDescriptionDialog();
           });
       if (description != null) {
         savedPlacesBloc.inAddLocation.add(TrufiLocation(

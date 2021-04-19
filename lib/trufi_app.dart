@@ -52,11 +52,12 @@ typedef LocaleWidgetBuilder = Widget Function(
 /// ```
 ///
 class TrufiApp extends StatelessWidget {
-  TrufiApp({
-    @required this.theme,
-    this.customOverlayBuilder,
-    this.customBetweenFabBuilder,
-  });
+  const TrufiApp(
+      {@required this.theme,
+      this.customOverlayBuilder,
+      this.customBetweenFabBuilder,
+      Key key})
+      : super(key: key);
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
@@ -137,7 +138,6 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final locationProviderBloc = LocationProviderBloc.of(context);
-    print("AppLifecycleState: $state");
     setState(() {
       _notification = state;
       if (_notification == AppLifecycleState.resumed) {
@@ -155,11 +155,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  LocalizedMaterialApp(
-    this.theme,
-    this.customOverlayWidget,
-    this.customBetweenFabWidget,
-  );
+  const LocalizedMaterialApp(
+      this.theme, this.customOverlayWidget, this.customBetweenFabWidget,
+      {Key key})
+      : super(key: key);
 
   final ThemeData theme;
   final LocaleWidgetBuilder customOverlayWidget;
@@ -174,10 +173,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc.of(context);
     final routes = <String, WidgetBuilder>{
-      AboutPage.route: (context) => AboutPage(),
-      FeedbackPage.route: (context) => FeedbackPage(),
-      SavedPlacesPage.route: (context) => SavedPlacesPage(),
-      TeamPage.route: (context) => TeamPage(),
+      AboutPage.route: (context) => const AboutPage(),
+      FeedbackPage.route: (context) => const FeedbackPage(),
+      SavedPlacesPage.route: (context) => const SavedPlacesPage(),
+      TeamPage.route: (context) => const TeamPage(),
     };
 
     return StreamBuilder(
@@ -188,23 +187,21 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
               .languageCode ??
           "en",
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        print(snapshot.data);
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: snapshot.data),
           onGenerateRoute: (settings) {
-            return new TrufiDrawerRoute(
+            return TrufiDrawerRoute(
               builder: routes[settings.name],
               settings: settings,
             );
           },
-          localizationsDelegates: [
+          localizationsDelegates: const [
             TrufiLocalization.delegate,
             GlobalMaterialLocalizations.delegate,
             QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
-          debugShowCheckedModeBanner: true,
           theme: widget.theme,
           home: HomePage(
             customOverlayWidget: widget.customOverlayWidget,

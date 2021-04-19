@@ -4,7 +4,7 @@ import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-void showAppReviewDialog(BuildContext context) async {
+Future<void> showAppReviewDialog(BuildContext context) async {
   final localization = TrufiLocalization.of(context);
   if (Platform.isIOS) {
     // Show native app review dialog for iOS users
@@ -18,18 +18,18 @@ void showAppReviewDialog(BuildContext context) async {
           title: Text(localization.appReviewDialogTitle),
           content: Text(localization.appReviewDialogContent),
           actions: <Widget>[
-            FlatButton(
-              child: Text(localization.appReviewDialogButtonDecline),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: Text(localization.appReviewDialogButtonDecline),
             ),
-            FlatButton(
-              child: Text(localization.appReviewDialogButtonAccept),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 AppReview.writeReview;
               },
+              child: Text(localization.appReviewDialogButtonAccept),
             ),
           ],
         );

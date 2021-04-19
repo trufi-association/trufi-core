@@ -25,12 +25,12 @@ class CustomIcons {
   static const _kFontFam = 'CustomIcons';
   static const _kFontPkg = 'trufi_core';
 
-  static const IconData trufi = const IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bus_stop = const IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData gondola = const IconData(0xe900, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData twitter = const IconData(0xf099, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData circle = const IconData(0xf111, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData instagram = const IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData circle_outline = const IconData(0xf1db, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData facebook = const IconData(0xf230, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData trufi = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData busStop = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData gondola = IconData(0xe900, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData twitter = IconData(0xf099, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circle = IconData(0xf111, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData instagram = IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData circleOutline = IconData(0xf1db, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook = IconData(0xf230, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -33,9 +33,12 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       primaryColorBrightness: Brightness.light,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: theme.primaryTextTheme.copyWith(
-        title: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
-        body1: theme.primaryTextTheme.body1.copyWith(color: Colors.black),
-        body2: theme.primaryTextTheme.body2.copyWith(color: theme.accentColor),
+        headline6:
+            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
+        bodyText2:
+            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
+        bodyText1:
+            theme.primaryTextTheme.bodyText1.copyWith(color: theme.accentColor),
       ),
     );
   }
@@ -64,7 +67,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
-        close(context, _result);
+        close(context, _result as TrufiLocation);
       },
       onMapTapped: (TrufiLocation location) {
         _result = location;
@@ -88,11 +91,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     if (_result != null) {
       if (_result is TrufiLocation) {
         Future.delayed(Duration.zero, () {
-          close(context, _result);
+          close(context, _result as TrufiLocation);
         });
       }
       if (_result is TrufiStreet) {
-        return _buildStreetResults(context, _result);
+        return _buildStreetResults(context, _result as TrufiStreet);
       }
     }
     return buildSuggestions(context);
@@ -101,30 +104,31 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
-      query.isEmpty
-          ? IconButton(
-              icon: const Icon(null),
-              onPressed: () {},
-            )
-          : IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () {
-                query = '';
-                showSuggestions(context);
-              },
-            ),
+      if (query.isEmpty)
+        IconButton(
+          icon: const Icon(null),
+          onPressed: () {},
+        )
+      else
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            query = '';
+            showSuggestions(context);
+          },
+        ),
     ];
   }
 
   Widget _buildStreetResults(BuildContext context, TrufiStreet street) {
-    List<Widget> slivers = [];
-    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    final List<Widget> slivers = [];
+    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildStreetResultList(context, street));
-    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       bottom: false,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: CustomScrollView(slivers: slivers),
       ),
     );
@@ -191,7 +195,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 }
 
 class _SuggestionList extends StatelessWidget {
-  _SuggestionList({
+  const _SuggestionList({
     this.query,
     this.onSelected,
     this.onMapTapped,
@@ -217,8 +221,8 @@ class _SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> slivers = [];
-    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    final List<Widget> slivers = [];
+    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
     slivers.add(_buildYourPlaces(context));
@@ -229,12 +233,12 @@ class _SuggestionList extends StatelessWidget {
     } else {
       slivers.add(_buildSearchResultList(context));
     }
-    slivers.add(SliverPadding(padding: EdgeInsets.all(4.0)));
+    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       top: false,
       bottom: false,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: CustomScrollView(slivers: slivers),
       ),
     );
@@ -329,7 +333,6 @@ class _SuggestionList extends StatelessWidget {
         LocationSearchBloc.of(context),
         PreferencesBloc.of(context),
         query,
-        limit: 30,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -353,7 +356,6 @@ class _SuggestionList extends StatelessWidget {
         final localization = TrufiLocalization.of(context);
         // Error
         if (snapshot.hasError) {
-          print(snapshot.error);
           String error = localization.commonUnknownError;
           if (snapshot.error is FetchOfflineRequestException) {
             error = "Offline mode is not implemented yet";
@@ -375,7 +377,8 @@ class _SuggestionList extends StatelessWidget {
           );
         }
         // No results
-        int count = snapshot.data.length > 0 ? snapshot.data.length + 1 : 0;
+        final int count =
+            snapshot.data.isNotEmpty ? snapshot.data.length + 1 : 0;
         if (count == 0 && isVisibleWhenEmpty) {
           return SliverToBoxAdapter(
             child: Column(
@@ -479,7 +482,7 @@ class _SuggestionList extends StatelessWidget {
         return Icons.local_taxi;
 
       case 'public_transport:platform':
-        return CustomIcons.bus_stop;
+        return CustomIcons.busStop;
 
       case 'shop:florist':
         return Icons.local_florist;
@@ -579,7 +582,7 @@ class _SuggestionList extends StatelessWidget {
           }
           return Container();
         },
-        childCount: places.length > 0 ? places.length + 1 : 0,
+        childCount: places.isNotEmpty ? places.length + 1 : 0,
       ),
     );
   }
@@ -613,14 +616,14 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildTitle(BuildContext context, String title) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
       child: Row(
         children: <Widget>[
-          Container(padding: EdgeInsets.all(4.0)),
+          Container(padding: const EdgeInsets.all(4.0)),
           RichText(
             text: TextSpan(
               text: title.toUpperCase(),
-              style: appBarTheme.textTheme.body2,
+              style: appBarTheme.textTheme.bodyText1,
             ),
           ),
         ],
@@ -632,7 +635,7 @@ class _SuggestionList extends StatelessWidget {
     return _buildItem(context, appBarTheme, null, Icons.error, title);
   }
 
-  void _handleOnYourLocationTapped(BuildContext context) async {
+  Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
@@ -649,9 +652,9 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  void _handleOnChooseOnMapTapped(BuildContext context) async {
+  Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
-    LatLng mapLocation = await Navigator.of(context).push(
+    final LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
         builder: (context) => ChooseLocationPage(
           initialPosition: currentLocation != null
@@ -718,25 +721,24 @@ class _SuggestionList extends StatelessWidget {
 Widget _buildItem(
   BuildContext context,
   ThemeData theme,
-  Function onTap,
+  VoidCallback onTap,
   IconData iconData,
   String title, {
   String subtitle,
   Widget trailing,
 }) {
-  Row row = Row(
+  final Row row = Row(
     children: <Widget>[
       Icon(iconData, color: theme.primaryIconTheme.color),
-      Container(width: 32.0, height: 48.0),
+      const SizedBox(width: 32.0, height: 48.0),
       Expanded(
         child: RichText(
           maxLines: 1,
-          overflow: TextOverflow.clip,
           text: TextSpan(
-            style: theme.textTheme.body1,
+            style: theme.textTheme.bodyText2,
             children: <TextSpan>[
               TextSpan(text: title),
-              TextSpan(text: "     "),
+              const TextSpan(text: "     "),
               TextSpan(
                 text: subtitle,
                 style: TextStyle(
@@ -754,6 +756,6 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
-    child: Container(margin: EdgeInsets.symmetric(horizontal: 8.0), child: row),
+    child: Container(margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }

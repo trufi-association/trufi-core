@@ -98,16 +98,20 @@ abstract class LocationsBlocBase implements BlocBase {
 }
 
 int sortByLocations(dynamic a, dynamic b, List<TrufiLocation> locations) {
-  bool aIsAvailable = (a is TrufiLocation)
+  final bool aIsAvailable = (a is TrufiLocation)
       ? locations.contains(a)
+      // TODO: Fix Linting problem with tests
+      // ignore: avoid_bool_literals_in_conditional_expressions
       : (a is TrufiStreet)
           ? a.junctions.fold<bool>(
               false,
               (result, j) => result |= locations.contains(j.location),
             )
           : false;
-  bool bIsAvailable = (b is TrufiLocation)
+  final bool bIsAvailable = (b is TrufiLocation)
       ? locations.contains(b)
+      // TODO: Fix Linting problem with tests
+      // ignore: avoid_bool_literals_in_conditional_expressions
       : (b is TrufiStreet)
           ? b.junctions.fold<bool>(
               false,
