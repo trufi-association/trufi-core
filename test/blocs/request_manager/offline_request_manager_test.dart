@@ -44,15 +44,18 @@ void main() {
           favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
 
       for (var i = 0; i < results.length; i++) {
-        if (i == 0)
+        if (i == 0) {
           expect(results[i] is TrufiLocation, true,
               reason: "This is our Favorite");
-        if (i != 0 && i < 4)
+        }
+        if (i != 0 && i < 4) {
           expect(results[i] is TrufiStreet, true,
               reason: "Second result is not TrufiStreet");
-        if (i >= 4)
+        }
+        if (i >= 4) {
           expect(results[i] is TrufiLocation, true,
               reason: "Second result is not TrufiLocation");
+        }
       }
     });
 

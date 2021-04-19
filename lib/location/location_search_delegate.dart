@@ -333,7 +333,6 @@ class _SuggestionList extends StatelessWidget {
         LocationSearchBloc.of(context),
         PreferencesBloc.of(context),
         query,
-        limit: 30,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,

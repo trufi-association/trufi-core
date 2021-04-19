@@ -35,7 +35,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   final _onlineRequestManager = OnlineRequestManager();
   final _fetchLocationLock = Lock();
 
-  CancelableOperation<List<dynamic>> _fetchLocationOperation;
+  CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
+
   // TODO: Check what purpose this requestManager served and why it is necassery
   // ignore: unused_field
   RequestManager _requestManager;

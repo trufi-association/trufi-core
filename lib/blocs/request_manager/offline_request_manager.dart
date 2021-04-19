@@ -22,11 +22,11 @@ class OfflineRequestManager implements RequestManager {
   }) async {
     final LocationSearchStorage storage = locationSearchBloc.storage;
 
-    var queryPlaces = await storage.fetchPlacesWithQuery(query);
-    var queryStreets = await storage.fetchStreetsWithQuery(query);
+    final queryPlaces = await storage.fetchPlacesWithQuery(query);
+    final queryStreets = await storage.fetchStreetsWithQuery(query);
 
     // Combine Places and Street sort by distance
-    List<LevenshteinObject<TrufiPlace>> sortedLevenshteinObjects = [
+    final List<LevenshteinObject<TrufiPlace>> sortedLevenshteinObjects = [
       ...queryPlaces, // High priority
       ...queryStreets // Low priority
     ]..sort((a, b) => a.distance.compareTo(b.distance));
