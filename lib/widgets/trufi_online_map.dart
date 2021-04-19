@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
+import 'package:trufi_core/models/preferences.dart';
 
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
@@ -33,11 +35,11 @@ class TrufiOnlineMap extends StatefulWidget {
 class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = TrufiPreferencesBloc.of(context);
+    final test = BlocProvider.of<PreferencesBloc>(context).stream;
     final cfg = TrufiConfiguration();
     return StreamBuilder(
-      stream: preferencesBloc.outChangeMapType,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      stream: test,
+      builder: (BuildContext context, AsyncSnapshot<Preference> snapshot) {
         return TrufiMap(
           key: const ValueKey("TrufiOnlineMap"),
           controller: widget.controller,
@@ -53,9 +55,10 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
           layerOptionsBuilder: (context) {
             return <LayerOptions>[
               tileHostingTileLayerOptions(
-                getTilesEndpointForMapType(snapshot.data),
+                getTilesEndpointForMapType(snapshot.data.currentMapType),
                 tileProviderKey: cfg.map.mapTilerKey,
-              ), ...widget.layerOptionsBuilder(context),
+              ),
+              ...widget.layerOptionsBuilder(context),
             ];
           },
         );

@@ -4,10 +4,12 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
+import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
@@ -119,7 +121,7 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final preferences = TrufiPreferencesBloc.of(context);
+    final preferences = BlocProvider.of<PreferencesBloc>(context).state;
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + planPath,
     ).replace(queryParameters: {
