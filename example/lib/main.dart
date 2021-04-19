@@ -14,6 +14,8 @@ Future<void> main() async {
   final globalCfg = GlobalConfiguration();
   await globalCfg.loadFromAsset("app_config");
 
+  trufiCfg.map.mapTilerKey = globalCfg.getValue<String>("mapTilerKey");
+
   // Abbreviations
   trufiCfg.abbreviations.addAll({
     "Avenida": "Av.",

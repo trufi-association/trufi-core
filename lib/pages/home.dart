@@ -577,8 +577,8 @@ class HomePageStateData {
     return {
       _fromPlace: fromPlace?.toJson(),
       _toPlace: toPlace?.toJson(),
-      _plan: plan.toJson(),
-      _ad: ad.toJson(),
+      _plan: plan?.toJson(),
+      _ad: ad?.toJson(),
     };
   }
 
