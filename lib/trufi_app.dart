@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/models/preferences.dart';
 
 import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
@@ -176,7 +176,7 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = TrufiPreferencesBloc.of(context);
+    final preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
@@ -184,16 +184,12 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       TeamPage.route: (context) => const TeamPage(),
     };
 
-    return StreamBuilder(
-      stream: preferencesBloc.outChangeLanguageCode,
-      initialData: TrufiConfiguration()
-              .languages
-              .firstWhere((element) => element.isDefault)
-              .languageCode ??
-          "en",
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    return StreamBuilder<Preference>(
+      stream: preferencesBloc.stream,
+      initialData: preferencesBloc.state,
+      builder: (BuildContext context, AsyncSnapshot<Preference> snapshot) {
         return MaterialApp(
-          locale: Locale.fromSubtags(languageCode: snapshot.data),
+          locale: Locale.fromSubtags(languageCode: snapshot.data.languageCode),
           onGenerateRoute: (settings) {
             return TrufiDrawerRoute(
               builder: routes[settings.name],
