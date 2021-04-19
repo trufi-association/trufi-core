@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import './trufi_configuration.dart';
 import './custom_icons.dart';
+import './trufi_configuration.dart';
 
 class MapStyle {
   static const String streets = 'streets';
@@ -12,7 +12,9 @@ class MapStyle {
   static const String terrain = 'terrain';
 }
 
-class TrufiLocation {
+abstract class TrufiPlace {}
+
+class TrufiLocation implements TrufiPlace {
   TrufiLocation({
     @required this.description,
     @required this.latitude,
@@ -128,11 +130,11 @@ class TrufiLocation {
   }
 }
 
-class TrufiStreet {
+class TrufiStreet implements TrufiPlace {
   TrufiStreet({@required this.location});
 
   final TrufiLocation location;
-  final junctions = List<TrufiStreetJunction>();
+  final List<TrufiStreetJunction> junctions = [];
 
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
     return TrufiStreet(
@@ -182,10 +184,10 @@ class TrufiStreetJunction {
   }
 }
 
-class LevenshteinObject {
+class LevenshteinObject<T> {
   LevenshteinObject(this.object, this.distance);
 
-  final dynamic object;
+  final T object;
   final int distance;
 }
 
@@ -236,7 +238,7 @@ class Plan {
     final usedRoutes = Set<String>();
     // Fold the itinerary list to build up list without duplicates
     return itineraries.fold<List<PlanItinerary>>(
-      List<PlanItinerary>(),
+      <PlanItinerary>[],
       (itineraries, itinerary) {
         // Get first bus leg
         final firstBusLeg = itinerary.legs.firstWhere(

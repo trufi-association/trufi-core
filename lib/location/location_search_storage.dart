@@ -17,8 +17,8 @@ class LocationSearchStorage {
   static final _levenshteinDistanceThreshold = 3;
 
   final _diffMatchPatch = DiffMatchPatch();
-  final _places = List<TrufiLocation>();
-  final _streets = List<TrufiStreet>();
+  final _places = <TrufiLocation>[];
+  final _streets = <TrufiStreet>[];
 
   void load(BuildContext context, String key) async {
     _places.clear();
@@ -36,42 +36,36 @@ class LocationSearchStorage {
     return _sortedByFavorites(_places.toList(), context);
   }
 
-  Future<List<LevenshteinObject>> fetchPlacesWithQuery(
-    BuildContext context,
-    String query,
-  ) async {
-    query = query.toLowerCase();
-    return _places.fold<List<LevenshteinObject>>(
-      List<LevenshteinObject>(),
-      (locations, location) {
-        final distance = _levenshteinDistanceForLocation(
-          location,
-          query,
-        );
-        if (distance < _levenshteinDistanceThreshold) {
-          locations.add(LevenshteinObject(location, distance));
-        }
-        return locations;
-      },
-    );
-  }
-
-  Future<List<LevenshteinObject>> fetchStreetsWithQuery(
-    BuildContext context,
-    String query,
-  ) async {
-    query = query.toLowerCase();
-    return _streets.fold<List<LevenshteinObject>>(
-      List<LevenshteinObject>(),
+  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(
+      String query) async {
+    return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
+      [],
       (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
-          query,
+          query.toLowerCase(),
         );
         if (distance < _levenshteinDistanceThreshold) {
           streets.add(LevenshteinObject(street, distance));
         }
         return streets;
+      },
+    );
+  }
+
+  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(
+      String query) async {
+    return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
+      [],
+      (locations, location) {
+        final distance = _levenshteinDistanceForLocation(
+          location,
+          query.toLowerCase(),
+        );
+        if (distance < _levenshteinDistanceThreshold) {
+          locations.add(LevenshteinObject(location, distance));
+        }
+        return locations;
       },
     );
   }
@@ -199,5 +193,5 @@ LocationSearchData _parseSearchJson(String encoded) {
       print("Failed to parse locations from JSON: $e");
     }
   }
-  return LocationSearchData(List(), List());
+  return LocationSearchData([], []);
 }

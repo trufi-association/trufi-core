@@ -28,9 +28,11 @@ abstract class LocationsBlocBase implements BlocBase {
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
   // ReplaceLocation
-  final _replaceLocationController = BehaviorSubject<Map<String,TrufiLocation>>();
+  final _replaceLocationController =
+      BehaviorSubject<Map<String, TrufiLocation>>();
 
-  Sink<Map<String,TrufiLocation>> get inReplaceLocation => _replaceLocationController.sink;
+  Sink<Map<String, TrufiLocation>> get inReplaceLocation =>
+      _replaceLocationController.sink;
 
   // Locations
   final _locationsController = BehaviorSubject<List<TrufiLocation>>();
@@ -61,7 +63,7 @@ abstract class LocationsBlocBase implements BlocBase {
     _notify();
   }
 
-  void _handleReplace(Map<String,TrufiLocation> value) {
+  void _handleReplace(Map<String, TrufiLocation> value) {
     locationStorage.replace(value);
     _notify();
   }
@@ -95,11 +97,7 @@ abstract class LocationsBlocBase implements BlocBase {
   }
 }
 
-int sortByLocations(
-  dynamic a,
-  dynamic b,
-  List<TrufiLocation> locations,
-) {
+int sortByLocations(dynamic a, dynamic b, List<TrufiLocation> locations) {
   bool aIsAvailable = (a is TrufiLocation)
       ? locations.contains(a)
       : (a is TrufiStreet)
@@ -116,5 +114,9 @@ int sortByLocations(
               (result, j) => result |= locations.contains(j.location),
             )
           : false;
-  return aIsAvailable == bIsAvailable ? 0 : aIsAvailable ? -1 : 1;
+  return aIsAvailable == bIsAvailable
+      ? 0
+      : aIsAvailable
+          ? -1
+          : 1;
 }

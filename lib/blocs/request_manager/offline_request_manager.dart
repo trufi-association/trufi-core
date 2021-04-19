@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/location/location_search_storage.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
 import '../../blocs/location_search_bloc.dart';
@@ -10,36 +12,39 @@ import '../../blocs/request_manager_bloc.dart';
 import '../../trufi_models.dart';
 
 class OfflineRequestManager implements RequestManager {
-  Future<List<dynamic>> fetchLocations(
-    BuildContext context,
-    String query,
-    int limit,
-  ) async {
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    final locationSearchBloc = LocationSearchBloc.of(context);
-    // Search in places and streets
-    final levenshteinObjects = (await Future.wait([
-      locationSearchBloc.fetchPlacesWithQuery(context, query), // High priority
-      locationSearchBloc.fetchStreetsWithQuery(context, query), // Low priority
-    ]))
-        .expand((levenshteinObjects) => levenshteinObjects) // Concat lists
+  Future<List<TrufiPlace>> fetchLocations(
+    FavoriteLocationsBloc favoriteLocationsBloc,
+    LocationSearchBloc locationSearchBloc,
+    PreferencesBloc preferencesBloc,
+    String query, {
+    int limit = 30,
+  }) async {
+    final LocationSearchStorage storage = locationSearchBloc.storage;
+
+    var queryPlaces = await storage.fetchPlacesWithQuery(query);
+    var queryStreets = await storage.fetchStreetsWithQuery(query);
+
+    // Combine Places and Street sort by distance
+    List<LevenshteinObject<TrufiPlace>> sortedLevenshteinObjects = [
+      ...queryPlaces, // High priority
+      ...queryStreets // Low priority
+    ]..sort((a, b) => a.distance.compareTo(b.distance));
+
+    // Remove levenshteinObject
+    final List<TrufiPlace> trufiPlaces = sortedLevenshteinObjects
+        .take(limit)
+        .map((LevenshteinObject<TrufiPlace> l) => l.object)
         .toList();
-    // Sort by levenshtein
-    levenshteinObjects.sort((a, b) => a.distance.compareTo(b.distance));
-    // Cutoff by limit
-    if (levenshteinObjects.length > limit) {
-      levenshteinObjects.removeRange(limit, levenshteinObjects.length);
-    }
-    // Remove levenshtein
-    final objects = levenshteinObjects.map((l) => l.object).toList();
+
     // sort with street priority
-    mergeSort(objects, compare: (a, b) => (a is TrufiStreet) ? -1 : 1);
+    mergeSort(trufiPlaces, compare: (a, b) => (a is TrufiStreet) ? -1 : 1);
+
     // Favorites to the top
-    mergeSort(objects, compare: (a, b) {
+    mergeSort(trufiPlaces, compare: (a, b) {
       return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
     });
-    // Return result
-    return objects;
+
+    return trufiPlaces;
   }
 
   CancelableOperation<Plan> fetchTransitPlan(
