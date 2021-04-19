@@ -5,6 +5,8 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 
+// TODO: Remove the async GlobalConfig load
+// https://github.com/trufi-association/trufi-core/pull/419#discussion_r615767538
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
