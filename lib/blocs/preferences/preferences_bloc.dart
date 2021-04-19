@@ -26,6 +26,10 @@ class PreferencesBloc extends Cubit<Preference> {
     load();
   }
 
+  void updateMapType(String mapType) => emit(
+        state.copyWith(currentMapType: mapType),
+      );
+
   void updateLanguage(String languageCode) => emit(
         state.copyWith(languageCode: languageCode),
       );

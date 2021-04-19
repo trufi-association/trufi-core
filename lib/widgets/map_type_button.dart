@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
 
 class MapTypeButton extends StatelessWidget {
   const MapTypeButton({Key key}) : super(key: key);
@@ -27,7 +29,7 @@ class MapTypeButton extends StatelessWidget {
   Widget _buildMapTypeBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
     final cfg = TrufiConfiguration();
-    final preferencesBloc = TrufiPreferencesBloc.of(context);
+    final preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
     final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: SizedBox(
@@ -41,8 +43,9 @@ class MapTypeButton extends StatelessWidget {
                     style: theme.textTheme.bodyText1),
               ),
               StreamBuilder(
-                stream: preferencesBloc.outChangeMapType,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                stream: preferencesBloc.stream,
+                builder:
+                    (BuildContext context, AsyncSnapshot<Preference> snapshot) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -51,10 +54,11 @@ class MapTypeButton extends StatelessWidget {
                         assetPath: "assets/images/maptype-streets.png",
                         label: localization.mapTypeStreetsCaption,
                         onPressed: () {
-                          preferencesBloc.inChangeMapType.add(MapStyle.streets);
+                          preferencesBloc.updateMapType(MapStyle.streets);
                         },
-                        active: snapshot.data == MapStyle.streets ||
-                            snapshot.data == "",
+                        active:
+                            snapshot.data.currentMapType == MapStyle.streets ||
+                                snapshot.data.currentMapType == "",
                       ),
                       if (cfg.map.satelliteMapTypeEnabled)
                         _buildMapTypeOptionButton(
@@ -62,10 +66,10 @@ class MapTypeButton extends StatelessWidget {
                           assetPath: "assets/images/maptype-satellite.png",
                           label: localization.mapTypeSatelliteCaption,
                           onPressed: () {
-                            preferencesBloc.inChangeMapType
-                                .add(MapStyle.satellite);
+                            preferencesBloc.updateMapType(MapStyle.satellite);
                           },
-                          active: snapshot.data == MapStyle.satellite,
+                          active: snapshot.data.currentMapType ==
+                              MapStyle.satellite,
                         ),
                       if (cfg.map.terrainMapTypeEnabled)
                         _buildMapTypeOptionButton(
@@ -73,10 +77,10 @@ class MapTypeButton extends StatelessWidget {
                           assetPath: "assets/images/maptype-terrain.png",
                           label: localization.mapTypeTerrainCaption,
                           onPressed: () {
-                            preferencesBloc.inChangeMapType
-                                .add(MapStyle.terrain);
+                            preferencesBloc.updateMapType(MapStyle.terrain);
                           },
-                          active: snapshot.data == MapStyle.terrain,
+                          active:
+                              snapshot.data.currentMapType == MapStyle.terrain,
                         ),
                     ],
                   );
