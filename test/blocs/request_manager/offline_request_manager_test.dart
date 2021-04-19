@@ -2,13 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/request_manager/offline_request_manager.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
+import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 void main() {
-  group("OfflineRequestManager", () {
-    OfflineRequestManager subject;
+  group("OfflineRepository", () {
+    OfflineRepository subject;
     MockFavoriteLocationBloc favoriteLocationBloc;
     MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
@@ -16,7 +16,7 @@ void main() {
     const query = "TestQuery";
 
     setUp(() {
-      subject = OfflineRequestManager();
+      subject = OfflineRepository();
 
       favoriteLocationBloc = MockFavoriteLocationBloc();
       locationSearchBloc = MockLocationSearchBloc();

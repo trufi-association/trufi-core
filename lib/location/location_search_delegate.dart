@@ -4,14 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/preferences/preferences.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'file:///C:/Users/weber/StudioProjects/trufi_core/lib/blocs/request_manager_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
 import '../blocs/location_search_bloc.dart';
-import '../blocs/request_manager_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/choose_location.dart';
@@ -324,7 +325,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildSearchResultList(BuildContext context) {
-    final requestManagerBloc = RequestManagerBloc.of(context);
+    final requestManagerBloc = BlocProvider.of<RequestManagerBloc>(context);
     final localization = TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,

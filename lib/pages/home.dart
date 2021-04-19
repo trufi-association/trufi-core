@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
+import 'package:trufi_core/blocs/app_review_bloc.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/request_manager_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../blocs/app_review_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
-import '../blocs/preferences_bloc.dart';
-import '../blocs/request_manager_bloc.dart';
 import '../composite_subscription.dart';
 import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
@@ -82,7 +82,7 @@ class HomePageState extends State<HomePage>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      final appReviewBloc = AppReviewBloc.of(context);
+      final appReviewBloc = BlocProvider.of<AppReviewBloc>(context);
       if (await appReviewBloc.isAppReviewAppropriate()) {
         showAppReviewDialog(context);
         appReviewBloc.markReviewRequestedForCurrentVersion();
@@ -393,7 +393,7 @@ class HomePageState extends State<HomePage>
   }
 
   Future<void> _fetchPlan({bool car = false}) async {
-    final requestManagerBloc = RequestManagerBloc.of(context);
+    final requestManagerBloc = BlocProvider.of<RequestManagerBloc>(context);
     // Cancel the last fetch plan operation for replace with the current request
     if (_currentFetchPlanOperation != null) _currentFetchPlanOperation.cancel();
     final localization = TrufiLocalization.of(context);
@@ -447,7 +447,8 @@ class HomePageState extends State<HomePage>
           }
         } else {
           _setPlan(plan);
-          AppReviewBloc.of(context).incrementReviewWorthyActions();
+          BlocProvider.of<AppReviewBloc>(context)
+              .incrementReviewWorthyActions();
         }
       } on FetchOfflineRequestException catch (e) {
         // TODO: Replace by proper error handling
@@ -592,17 +593,18 @@ class HomePageStateData {
     toPlace = null;
     plan = null;
     ad = null;
-    // TODO: Remove stateHomePage from Preferences
-    TrufiPreferencesBloc.of(context).stateHomePage = null;
+    BlocProvider.of<PreferencesBloc>(context).updateStateHomePage(null);
   }
 
   Future<bool> load(BuildContext context) async {
     try {
-      final HomePageStateData data = await compute(
-        _parse,
-        TrufiPreferencesBloc.of(context).stateHomePage,
-      );
-      if (data != null) {
+      final String stateHomePageJsonString =
+          BlocProvider.of<PreferencesBloc>(context).state.stateHomePage;
+
+      final HomePageStateData data =
+          await compute(_parse, stateHomePageJsonString);
+
+      if (stateHomePageJsonString != null) {
         fromPlace = data.fromPlace;
         toPlace = data.toPlace;
         plan = data.plan;
@@ -618,7 +620,9 @@ class HomePageStateData {
   }
 
   void save(BuildContext context) {
-    TrufiPreferencesBloc.of(context).stateHomePage = json.encode(toJson());
+    BlocProvider.of<PreferencesBloc>(context).updateStateHomePage(
+      json.encode(toJson()),
+    );
   }
 
   // Getter

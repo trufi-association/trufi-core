@@ -1,38 +1,26 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 
-import '../blocs/bloc_provider.dart';
-import '../blocs/preferences_bloc.dart';
-import '../trufi_configuration.dart';
+class AppReviewBloc extends Cubit<int> {
+  SharedPreferencesRepository sharedPreferencesRepository;
 
-class AppReviewBloc extends BlocBase {
-  static AppReviewBloc of(BuildContext context) {
-    return TrufiBlocProvider.of<AppReviewBloc>(context);
-  }
-
-  AppReviewBloc(this.preferencesBloc);
-
-  final TrufiPreferencesBloc preferencesBloc;
-
-  @override
-  void dispose() {}
+  AppReviewBloc(this.sharedPreferencesRepository) : super(1);
 
   void incrementReviewWorthyActions() {
-    if (preferencesBloc.reviewWorthyActionCount != null) {
-      preferencesBloc.reviewWorthyActionCount =
-          preferencesBloc.reviewWorthyActionCount + 1;
-    } else {
-      preferencesBloc.reviewWorthyActionCount = 1;
-    }
+    emit(state + 1);
   }
 
   Future<bool> isAppReviewAppropriate() async {
     final minActionCount = TrufiConfiguration().minimumReviewWorthyActionCount;
-    final currentActionCount = preferencesBloc.reviewWorthyActionCount;
+    final currentActionCount = state;
 
-    if (currentActionCount != null && currentActionCount >= minActionCount) {
+    if (currentActionCount >= minActionCount) {
       final currentVersion = (await PackageInfo.fromPlatform()).version;
-      final lastVersion = preferencesBloc.lastReviewRequestAppVersion;
+
+      final lastVersion =
+      await sharedPreferencesRepository.getLastReviewRequestAppVersionKey();
 
       return lastVersion == null || lastVersion != currentVersion;
     }
@@ -42,7 +30,7 @@ class AppReviewBloc extends BlocBase {
 
   Future<void> markReviewRequestedForCurrentVersion() async {
     final currentVersion = (await PackageInfo.fromPlatform()).version;
-    preferencesBloc.lastReviewRequestAppVersion = currentVersion;
-    preferencesBloc.reviewWorthyActionCount = null;
+    sharedPreferencesRepository.saveLastReviewRequestAppVersion(currentVersion);
+    sharedPreferencesRepository.saveReviewWorthyActionCount(0);
   }
 }

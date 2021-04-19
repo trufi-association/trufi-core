@@ -1,152 +1,82 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/trufi_models.dart';
 import 'package:uuid/uuid.dart';
 
-import '../blocs/bloc_provider.dart';
-
-class TrufiPreferencesBloc extends BlocBase {
-  static TrufiPreferencesBloc of(BuildContext context) {
-    return TrufiBlocProvider.of<TrufiPreferencesBloc>(context);
-  }
-
-  static const String correlationIdKey = "correlation_id";
-  static const String propertyLanguageCodeKey = "property_language_code";
-  static const String propertyOnlineKey = "property_online";
-  static const String propertyMapTypeKey = "property_map_type";
-  static const String stateHomePageKey = "state_home_page";
-  static const String reviewWorthyActionCountKey = "review_worthy_action_count";
-  static const String lastReviewRequestAppVersionKey =
-      "last_review_request_app_version";
-
+class PreferencesBloc extends Cubit<Preference> {
+  SharedPreferencesRepository sharedPreferencesRepository;
   static const bool defaultOnline = true;
-  static const String defaultMapType = "";
+  static const String defaultMapType = MapStyle.streets;
+  static const String defaultLanguageCode = "en";
 
-  TrufiPreferencesBloc() {
-    _changeLanguageCodeController.listen(_handleChangeLanguageCode);
-    _changeOnlineController.listen(_handleChangeOnline);
-    SharedPreferences.getInstance().then((preferences) {
-      _preferences = preferences;
-      _load();
-    });
+  PreferencesBloc(this.sharedPreferencesRepository)
+      : super(const Preference(defaultLanguageCode, "", defaultMapType,
+            loadOnline: defaultOnline)) {
+    load();
   }
 
-  void _load() {
-    _loadCorrelationId();
-    _loadLanguageCode();
-    _loadOnline();
-    _loadMapType();
+  void updateMapType(String mapType) {
+    emit(state.copyWith(currentMapType: mapType));
   }
 
-  void _loadCorrelationId() {
-    String correlationId = _preferences.getString(correlationIdKey);
+  Future<void> updateLanguage(String languageCode) async {
+    sharedPreferencesRepository.saveLanguageCode(languageCode);
+    emit(state.copyWith(languageCode: languageCode));
+  }
+
+  Future<void> updateOnline({bool loadOnline = false}) async {
+    sharedPreferencesRepository.saveUseOnline(loadOnline: loadOnline);
+    emit(state.copyWith(loadOnline: loadOnline));
+  }
+
+  Future<void> updateStateHomePage(String stateHomePage) async {
+    await sharedPreferencesRepository.saveStateHomePage(stateHomePage);
+    emit(state.copyWith(stateHomePage: stateHomePage));
+  }
+
+  Future<void> _loadCorrelationId() async {
+    String correlationId = await sharedPreferencesRepository.getCorrelationId();
 
     // Generate new UUID if missing
     if (correlationId == null) {
       correlationId = Uuid().v4();
-      _preferences.setString(correlationIdKey, correlationId);
+      sharedPreferencesRepository.saveCorrelationId(correlationId);
     }
   }
 
-  void _loadLanguageCode() {
-    final String languageCode = _preferences.getString(propertyLanguageCodeKey);
+  Future<void> _loadLanguageCode() async {
+    final String languageCode =
+        await sharedPreferencesRepository.getLanguageCode();
     if (languageCode != null) {
-      inChangeLanguageCode.add(languageCode);
+      emit(state.copyWith(languageCode: languageCode));
     }
   }
 
-  void _loadOnline() {
-    inChangeOnline.add(
-      _preferences.getBool(propertyOnlineKey) ?? defaultOnline,
+  Future<void> _loadOnline() async {
+    emit(
+      state.copyWith(
+        loadOnline:
+            await sharedPreferencesRepository.getOnline() ?? defaultOnline,
+      ),
     );
   }
 
-  void _loadMapType() {
-    inChangeMapType.add(
-      _preferences.getString(propertyMapTypeKey) ?? defaultMapType,
+  Future<void> _loadMapType() async {
+    emit(
+      state.copyWith(
+        currentMapType:
+            await sharedPreferencesRepository.getMapType() ?? defaultMapType,
+      ),
     );
   }
 
-  SharedPreferences _preferences;
-
-  // Change language code
-  final _changeLanguageCodeController = BehaviorSubject<String>();
-
-  Sink<String> get inChangeLanguageCode {
-    return _changeLanguageCodeController.sink;
-  }
-
-  Stream<String> get outChangeLanguageCode {
-    return _changeLanguageCodeController.stream;
-  }
-
-  // Change online
-  final _changeOnlineController = BehaviorSubject<bool>();
-
-  Sink<bool> get inChangeOnline {
-    return _changeOnlineController.sink;
-  }
-
-  Stream<bool> get outChangeOnline {
-    return _changeOnlineController.stream;
-  }
-
-  // Change map type
-  final _changeMapTypeController = BehaviorSubject<String>();
-
-  Sink<String> get inChangeMapType {
-    return _changeMapTypeController.sink;
-  }
-
-  Stream<String> get outChangeMapType {
-    return _changeMapTypeController.stream;
-  }
-
-  // Dispose
-
-  @override
-  void dispose() {
-    _changeLanguageCodeController.close();
-    _changeOnlineController.close();
-    _changeMapTypeController.close();
-  }
-
-  // Handle
-
-  void _handleChangeOnline(bool value) {
-    _preferences.setBool(propertyOnlineKey, value);
-  }
-
-  void _handleChangeLanguageCode(String value) {
-    _preferences.setString(propertyLanguageCodeKey, value);
-  }
-
-  // Getter
-
-  String get correlationId => _preferences?.getString(correlationIdKey);
-  String get stateHomePage => _preferences?.getString(stateHomePageKey);
-  int get reviewWorthyActionCount =>
-      _preferences?.getInt(reviewWorthyActionCountKey);
-  String get lastReviewRequestAppVersion =>
-      _preferences?.getString(lastReviewRequestAppVersionKey);
-
-  // Setter
-
-  set correlationId(String value) {
-    _preferences?.setString(correlationIdKey, value);
-  }
-
-  set stateHomePage(String value) {
-    _preferences?.setString(stateHomePageKey, value);
-  }
-
-  set reviewWorthyActionCount(int count) {
-    _preferences?.setInt(reviewWorthyActionCountKey, count);
-  }
-
-  set lastReviewRequestAppVersion(String version) {
-    _preferences?.setString(lastReviewRequestAppVersionKey, version);
+  void load() {
+    _loadCorrelationId();
+    _loadLanguageCode();
+    _loadOnline();
+    _loadMapType();
   }
 }

@@ -8,16 +8,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
+import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/trufi_models.dart';
 
-import '../../blocs/favorite_locations_bloc.dart';
-import '../../blocs/request_manager_bloc.dart';
-import '../../trufi_configuration.dart';
-import '../../trufi_models.dart';
-
-class OnlineRequestManager implements RequestManager {
+class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
   static const String planPath = '/plan';
 

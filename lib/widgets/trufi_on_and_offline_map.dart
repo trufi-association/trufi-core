@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:rxdart/rxdart.dart' as rx;
-import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
 import 'package:trufi_core/models/preferences.dart';
 
 import '../trufi_configuration.dart';
