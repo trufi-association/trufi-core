@@ -97,11 +97,7 @@ abstract class LocationsBlocBase implements BlocBase {
   }
 }
 
-int sortByLocations(
-  dynamic a,
-  dynamic b,
-  List<TrufiLocation> locations,
-) {
+int sortByLocations(dynamic a, dynamic b, List<TrufiLocation> locations) {
   final bool aIsAvailable = (a is TrufiLocation)
       ? locations.contains(a)
       // TODO: Fix Linting problem with tests

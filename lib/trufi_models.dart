@@ -12,7 +12,9 @@ class MapStyle {
   static const String terrain = 'terrain';
 }
 
-class TrufiLocation {
+abstract class TrufiPlace {}
+
+class TrufiLocation implements TrufiPlace {
   TrufiLocation({
     @required this.description,
     @required this.latitude,
@@ -131,11 +133,11 @@ class TrufiLocation {
   }
 }
 
-class TrufiStreet {
+class TrufiStreet implements TrufiPlace {
   TrufiStreet({@required this.location});
 
   final TrufiLocation location;
-  final junctions = <TrufiStreetJunction>[];
+  final List<TrufiStreetJunction> junctions = [];
 
   factory TrufiStreet.fromSearchJson(List<dynamic> json) {
     return TrufiStreet(
@@ -185,10 +187,10 @@ class TrufiStreetJunction {
   }
 }
 
-class LevenshteinObject {
+class LevenshteinObject<T> {
   LevenshteinObject(this.object, this.distance);
 
-  final dynamic object;
+  final T object;
   final int distance;
 }
 

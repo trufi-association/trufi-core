@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
@@ -21,11 +22,12 @@ class OnlineRequestManager implements RequestManager {
 
   @override
   Future<List<dynamic>> fetchLocations(
-    BuildContext context,
-    String query,
-    int limit,
-  ) async {
-    final preferences = PreferencesBloc.of(context);
+    FavoriteLocationsBloc favoriteLocationsBloc,
+    LocationSearchBloc locationSearchBloc,
+    PreferencesBloc preferencesBloc,
+    String query, {
+    int limit = 30,
+  }) async {
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + searchPath,
     ).replace(queryParameters: {
@@ -33,9 +35,8 @@ class OnlineRequestManager implements RequestManager {
       "autocomplete": "false",
       "corners": "true",
       "stops": "false",
-      "correlation": preferences.correlationId,
+      "correlation": preferencesBloc.correlationId,
     });
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
       final locations = await compute(

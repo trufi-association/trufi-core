@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
@@ -327,7 +328,13 @@ class _SuggestionList extends StatelessWidget {
     return _buildFutureBuilder(
       context,
       localization.searchTitleResults,
-      requestManagerBloc.fetchLocations(context, query, 30),
+      requestManagerBloc.fetchLocations(
+        FavoriteLocationsBloc.of(context),
+        LocationSearchBloc.of(context),
+        PreferencesBloc.of(context),
+        query,
+        limit: 30,
+      ),
       Icons.place,
       isVisibleWhenEmpty: true,
     );
@@ -336,7 +343,7 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildFutureBuilder(
     BuildContext context,
     String title,
-    Future<List<dynamic>> future,
+    Future<List<TrufiPlace>> future,
     IconData iconData, {
     bool isVisibleWhenEmpty = false,
   }) {
@@ -345,7 +352,7 @@ class _SuggestionList extends StatelessWidget {
       initialData: null,
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<dynamic>> snapshot,
+        AsyncSnapshot<List<TrufiPlace>> snapshot,
       ) {
         final localization = TrufiLocalization.of(context);
         // Error
@@ -529,9 +536,8 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildObjectList(
     String title,
     IconData iconData,
-    List<dynamic> objects,
+    List<TrufiPlace> places,
   ) {
-    final int count = objects.isNotEmpty ? objects.length + 1 : 0;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -540,7 +546,7 @@ class _SuggestionList extends StatelessWidget {
             return _buildTitle(context, title);
           }
           // Item
-          final object = objects[index - 1];
+          final object = places[index - 1];
           if (object is TrufiLocation) {
             IconData localIconData = iconData;
 
@@ -577,7 +583,7 @@ class _SuggestionList extends StatelessWidget {
           }
           return Container();
         },
-        childCount: count,
+        childCount: places.isNotEmpty ? places.length + 1 : 0,
       ),
     );
   }

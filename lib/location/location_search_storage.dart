@@ -38,32 +38,11 @@ class LocationSearchStorage {
     return _sortedByFavorites(_places.toList(), context);
   }
 
-  Future<List<LevenshteinObject>> fetchPlacesWithQuery(
-    BuildContext context,
-    String query,
-  ) async {
-    return _places.fold<List<LevenshteinObject>>(
-      <LevenshteinObject>[],
-      (locations, location) {
-        final distance = _levenshteinDistanceForLocation(
-          location,
-          query.toLowerCase(),
-        );
-        if (distance < _levenshteinDistanceThreshold) {
-          locations.add(LevenshteinObject(location, distance));
-        }
-        return locations;
-      },
-    );
-  }
-
-  Future<List<LevenshteinObject>> fetchStreetsWithQuery(
-    BuildContext context,
-    String query,
-  ) async {
-    return _streets.fold<List<LevenshteinObject>>(
-      <LevenshteinObject>[],
-      (streets, street) {
+  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(
+      String query) async {
+    return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
+      [],
+          (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
           query.toLowerCase(),
@@ -72,6 +51,23 @@ class LocationSearchStorage {
           streets.add(LevenshteinObject(street, distance));
         }
         return streets;
+      },
+    );
+  }
+
+  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(
+      String query) async {
+    return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
+      [],
+          (locations, location) {
+        final distance = _levenshteinDistanceForLocation(
+          location,
+          query.toLowerCase(),
+        );
+        if (distance < _levenshteinDistanceThreshold) {
+          locations.add(LevenshteinObject(location, distance));
+        }
+        return locations;
       },
     );
   }
