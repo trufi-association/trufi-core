@@ -12,6 +12,7 @@ dependencies:
   app_review: ^2.1.1+1
   cupertino_icons: ^1.0.2
   diff_match_patch: 0.3.0
+  equatable: ^2.0.0
   flare_flutter: ^3.0.0
   flutter:
     sdk: flutter

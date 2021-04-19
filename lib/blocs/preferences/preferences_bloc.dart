@@ -1,17 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
+import 'package:trufi_core/blocs/preferences/preferences_state.dart';
+import 'package:trufi_core/models/preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../blocs/bloc_provider.dart';
-
-class TrufiPreferencesBloc extends BlocBase {
-  static TrufiPreferencesBloc of(BuildContext context) {
-    return TrufiBlocProvider.of<TrufiPreferencesBloc>(context);
-  }
-
+class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
   static const String correlationIdKey = "correlation_id";
   static const String propertyLanguageCodeKey = "property_language_code";
   static const String propertyOnlineKey = "property_online";
@@ -24,23 +21,66 @@ class TrufiPreferencesBloc extends BlocBase {
   static const bool defaultOnline = true;
   static const String defaultMapType = "";
 
-  TrufiPreferencesBloc() {
-    _changeLanguageCodeController.listen(_handleChangeLanguageCode);
-    _changeOnlineController.listen(_handleChangeOnline);
-    SharedPreferences.getInstance().then((preferences) {
-      _preferences = preferences;
-      _load();
-    });
+  SharedPreferences _preferences;
+
+  PreferencesBloc() : super(PreferencesLoading());
+
+  @override
+  Stream<PreferencesState> mapEventToState(PreferencesEvent event) async* {
+    if (event is PreferencesLoadSuccess) {
+      yield* _mapPreferencesSuccess();
+    }
+
+    if (event is UpdatePreferences) {
+      yield* _mapPreferenceUpdatedToState(event);
+    }
+
+    if (event is UpdateOnline) {
+      yield* _mapUpdatedOnlineToState(event);
+    }
   }
 
-  void _load() {
-    _loadCorrelationId();
-    _loadLanguageCode();
-    _loadOnline();
-    _loadMapType();
+  Stream<PreferencesState> _mapPreferencesSuccess() async* {
+    try {
+      await SharedPreferences.getInstance().then((preferences) {
+        _preferences = preferences;
+      });
+
+      final correlationId = _loadCorrelationId();
+      final langCode = _loadLanguageCode();
+      final loadOnline = _loadOnline();
+      final currentMapType = _loadMapType();
+
+      yield PreferencesLoadSuccess(Preference(
+        langCode,
+        correlationId,
+        currentMapType,
+        loadOnline: loadOnline,
+      ));
+    } catch (_) {
+      yield PreferencesLoadFailure();
+    }
   }
 
-  void _loadCorrelationId() {
+  Stream<PreferencesState> _mapPreferenceUpdatedToState(
+      UpdatePreferences event) async* {
+    if (state is PreferencesLoadSuccess) {
+      yield PreferencesLoadSuccess(event.preference);
+    }
+  }
+
+  Stream<PreferencesState> _mapUpdatedOnlineToState(UpdateOnline event) async* {
+    if (state is PreferencesLoadSuccess) {
+      final PreferencesLoadSuccess updatedState =
+          (state as PreferencesLoadSuccess)
+            ..preference.copyWith(
+              loadOnline: event.isOnline,
+            );
+      yield updatedState;
+    }
+  }
+
+  String _loadCorrelationId() {
     String correlationId = _preferences.getString(correlationIdKey);
 
     // Generate new UUID if missing
@@ -48,28 +88,21 @@ class TrufiPreferencesBloc extends BlocBase {
       correlationId = Uuid().v4();
       _preferences.setString(correlationIdKey, correlationId);
     }
+
+    return correlationId;
   }
 
-  void _loadLanguageCode() {
-    final String languageCode = _preferences.getString(propertyLanguageCodeKey);
-    if (languageCode != null) {
-      inChangeLanguageCode.add(languageCode);
-    }
+  String _loadLanguageCode() {
+    return _preferences.getString(propertyLanguageCodeKey);
   }
 
-  void _loadOnline() {
-    inChangeOnline.add(
-      _preferences.getBool(propertyOnlineKey) ?? defaultOnline,
-    );
+  bool _loadOnline() {
+    return _preferences.getBool(propertyOnlineKey) ?? defaultOnline;
   }
 
-  void _loadMapType() {
-    inChangeMapType.add(
-      _preferences.getString(propertyMapTypeKey) ?? defaultMapType,
-    );
+  String _loadMapType() {
+    return _preferences.getString(propertyMapTypeKey) ?? defaultMapType;
   }
-
-  SharedPreferences _preferences;
 
   // Change language code
   final _changeLanguageCodeController = BehaviorSubject<String>();
@@ -113,22 +146,15 @@ class TrufiPreferencesBloc extends BlocBase {
     _changeMapTypeController.close();
   }
 
-  // Handle
-
-  void _handleChangeOnline(bool value) {
-    _preferences.setBool(propertyOnlineKey, value);
-  }
-
-  void _handleChangeLanguageCode(String value) {
-    _preferences.setString(propertyLanguageCodeKey, value);
-  }
-
   // Getter
 
   String get correlationId => _preferences?.getString(correlationIdKey);
+
   String get stateHomePage => _preferences?.getString(stateHomePageKey);
+
   int get reviewWorthyActionCount =>
       _preferences?.getInt(reviewWorthyActionCountKey);
+
   String get lastReviewRequestAppVersion =>
       _preferences?.getString(lastReviewRequestAppVersionKey);
 

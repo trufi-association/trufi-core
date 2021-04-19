@@ -27,7 +27,7 @@ class MapTypeButton extends StatelessWidget {
   Widget _buildMapTypeBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
     final cfg = TrufiConfiguration();
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: SizedBox(

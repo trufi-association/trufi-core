@@ -12,7 +12,7 @@ class AppReviewBloc extends BlocBase {
 
   AppReviewBloc(this.preferencesBloc);
 
-  final PreferencesBloc preferencesBloc;
+  final TrufiPreferencesBloc preferencesBloc;
 
   @override
   void dispose() {}

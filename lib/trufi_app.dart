@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/trufi_configuration.dart';
@@ -72,28 +74,31 @@ class TrufiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = PreferencesBloc();
-    return TrufiBlocProvider<PreferencesBloc>(
-      bloc: preferencesBloc,
-      child: TrufiBlocProvider<AppReviewBloc>(
-        bloc: AppReviewBloc(preferencesBloc),
-        child: TrufiBlocProvider<RequestManagerBloc>(
-          bloc: RequestManagerBloc(preferencesBloc),
-          child: TrufiBlocProvider<LocationProviderBloc>(
-            bloc: LocationProviderBloc(),
-            child: TrufiBlocProvider<LocationSearchBloc>(
-              bloc: LocationSearchBloc(context),
-              child: TrufiBlocProvider<FavoriteLocationsBloc>(
-                bloc: FavoriteLocationsBloc(context),
-                child: TrufiBlocProvider<HistoryLocationsBloc>(
-                  bloc: HistoryLocationsBloc(context),
-                  child: TrufiBlocProvider<SavedPlacesBloc>(
-                    bloc: SavedPlacesBloc(context),
-                    child: AppLifecycleReactor(
-                      child: LocalizedMaterialApp(
-                        theme,
-                        customOverlayBuilder,
-                        customBetweenFabBuilder,
+    final preferencesBloc = TrufiPreferencesBloc();
+    return BlocProvider<PreferencesBloc>(
+      create: (BuildContext context) => PreferencesBloc(),
+      child: TrufiBlocProvider<TrufiPreferencesBloc>(
+        bloc: preferencesBloc,
+        child: TrufiBlocProvider<AppReviewBloc>(
+          bloc: AppReviewBloc(preferencesBloc),
+          child: TrufiBlocProvider<RequestManagerBloc>(
+            bloc: RequestManagerBloc(preferencesBloc),
+            child: TrufiBlocProvider<LocationProviderBloc>(
+              bloc: LocationProviderBloc(),
+              child: TrufiBlocProvider<LocationSearchBloc>(
+                bloc: LocationSearchBloc(context),
+                child: TrufiBlocProvider<FavoriteLocationsBloc>(
+                  bloc: FavoriteLocationsBloc(context),
+                  child: TrufiBlocProvider<HistoryLocationsBloc>(
+                    bloc: HistoryLocationsBloc(context),
+                    child: TrufiBlocProvider<SavedPlacesBloc>(
+                      bloc: SavedPlacesBloc(context),
+                      child: AppLifecycleReactor(
+                        child: LocalizedMaterialApp(
+                          theme,
+                          customOverlayBuilder,
+                          customBetweenFabBuilder,
+                        ),
                       ),
                     ),
                   ),
@@ -171,7 +176,7 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),

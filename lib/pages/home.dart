@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _subscriptions.add(
-      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+      TrufiPreferencesBloc.of(context).outChangeOnline.listen((online) {
         if (_data.plan == null) {
           _fetchPlan();
         }
@@ -588,14 +588,14 @@ class HomePageStateData {
     toPlace = null;
     plan = null;
     ad = null;
-    PreferencesBloc.of(context).stateHomePage = null;
+    TrufiPreferencesBloc.of(context).stateHomePage = null;
   }
 
   Future<bool> load(BuildContext context) async {
     try {
       final HomePageStateData data = await compute(
         _parse,
-        PreferencesBloc.of(context).stateHomePage,
+        TrufiPreferencesBloc.of(context).stateHomePage,
       );
       if (data != null) {
         fromPlace = data.fromPlace;
@@ -613,7 +613,7 @@ class HomePageStateData {
   }
 
   void save(BuildContext context) {
-    PreferencesBloc.of(context).stateHomePage = json.encode(toJson());
+    TrufiPreferencesBloc.of(context).stateHomePage = json.encode(toJson());
   }
 
   // Getter

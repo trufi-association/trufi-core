@@ -331,7 +331,7 @@ class _SuggestionList extends StatelessWidget {
       requestManagerBloc.fetchLocations(
         FavoriteLocationsBloc.of(context),
         LocationSearchBloc.of(context),
-        PreferencesBloc.of(context),
+        TrufiPreferencesBloc.of(context),
         query,
       ),
       Icons.place,

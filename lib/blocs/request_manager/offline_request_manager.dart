@@ -16,7 +16,7 @@ class OfflineRequestManager implements RequestManager {
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
+    TrufiPreferencesBloc preferencesBloc,
     String query, {
     int limit = 30,
   }) async {

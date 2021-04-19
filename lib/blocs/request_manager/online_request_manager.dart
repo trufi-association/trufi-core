@@ -24,7 +24,7 @@ class OnlineRequestManager implements RequestManager {
   Future<List<dynamic>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
+    TrufiPreferencesBloc preferencesBloc,
     String query, {
     int limit = 30,
   }) async {
@@ -119,7 +119,7 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final preferences = PreferencesBloc.of(context);
+    final preferences = TrufiPreferencesBloc.of(context);
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + planPath,
     ).replace(queryParameters: {
@@ -142,7 +142,7 @@ class OnlineRequestManager implements RequestManager {
     BuildContext context,
     TrufiLocation to,
   ) async {
-    final preferences = PreferencesBloc.of(context);
+    final preferences = TrufiPreferencesBloc.of(context);
 
     if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
       return null;

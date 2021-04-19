@@ -189,7 +189,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         .map((lang) =>
         LanguageDropdownValue(lang.languageCode, lang.displayName))
         .toList();
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final theme = Theme.of(context);
     final languageCode = Localizations
         .localeOf(context)
@@ -218,7 +218,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   // TODO: Understand why it is not used anymore
   // ignore: unused_element
   Widget _buildOfflineToggle(BuildContext context) {
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return StreamBuilder(

@@ -33,7 +33,7 @@ class TrufiOnlineMap extends StatefulWidget {
 class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final cfg = TrufiConfiguration();
     return StreamBuilder(
       stream: preferencesBloc.outChangeMapType,

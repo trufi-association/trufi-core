@@ -148,7 +148,7 @@ List<LevenshteinObject<TrufiLocation>> getTrufiLocationList() {
 
 class MockFavoriteLocationBloc extends Mock implements FavoriteLocationsBloc {}
 
-class MockPreferencesBloc extends Mock implements PreferencesBloc {}
+class MockPreferencesBloc extends Mock implements TrufiPreferencesBloc {}
 
 class MockLocationSearchBloc extends Mock implements LocationSearchBloc {}
 

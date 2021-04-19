@@ -110,7 +110,7 @@ Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
   final localization = TrufiLocalization.of(context);
   return TextButton(
     onPressed: () {
-      PreferencesBloc.of(context).inChangeOnline.add(online);
+      TrufiPreferencesBloc.of(context).inChangeOnline.add(online);
       Navigator.pop(context);
     },
     child: Text(

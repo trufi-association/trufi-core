@@ -28,7 +28,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
     );
   }
 
-  final PreferencesBloc preferencesBloc;
+  final TrufiPreferencesBloc preferencesBloc;
 
   final _subscriptions = CompositeSubscription();
   final _offlineRequestManager = OfflineRequestManager();
@@ -54,7 +54,7 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
+    TrufiPreferencesBloc preferencesBloc,
     String query, {
     int limit = 30,
   }) {
@@ -118,7 +118,7 @@ abstract class RequestManager {
   Future<List<dynamic>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
+    TrufiPreferencesBloc preferencesBloc,
     String query, {
     int limit,
   });

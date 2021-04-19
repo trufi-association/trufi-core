@@ -27,8 +27,8 @@ void main() {
         const Locale("en"): "Test Trufi App",
       };
 
-      await tester.pumpWidget(TrufiBlocProvider<PreferencesBloc>(
-        bloc: PreferencesBloc(),
+      await tester.pumpWidget(TrufiBlocProvider<TrufiPreferencesBloc>(
+        bloc: TrufiPreferencesBloc(),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
@@ -44,8 +44,8 @@ void main() {
 
     testWidgets("should show the real Title", (tester) async {
       trufiCfg.customTranslations.title = null;
-      await tester.pumpWidget(TrufiBlocProvider<PreferencesBloc>(
-        bloc: PreferencesBloc(),
+      await tester.pumpWidget(TrufiBlocProvider<TrufiPreferencesBloc>(
+        bloc: TrufiPreferencesBloc(),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,

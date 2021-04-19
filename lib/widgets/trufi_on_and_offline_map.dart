@@ -95,7 +95,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     super.initState();
     widget.controller.state = this;
     _subscriptions.add(
-      PreferencesBloc.of(context).outChangeOnline.listen((online) {
+      TrufiPreferencesBloc.of(context).outChangeOnline.listen((online) {
         setState(() {
           _online = online;
         });
@@ -115,7 +115,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
   }
 
   Widget _buildOnlineMap() {
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = TrufiPreferencesBloc.of(context);
     final cfg = TrufiConfiguration();
     return StreamBuilder(
       stream: preferencesBloc.outChangeMapType,
