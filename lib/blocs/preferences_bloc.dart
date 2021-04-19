@@ -9,7 +9,7 @@ import '../blocs/bloc_provider.dart';
 
 class PreferencesBloc extends BlocBase {
   static PreferencesBloc of(BuildContext context) {
-    return BlocProvider.of<PreferencesBloc>(context);
+    return TrufiBlocProvider.of<PreferencesBloc>(context);
   }
 
   static const String correlationIdKey = "correlation_id";

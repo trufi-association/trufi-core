@@ -6,7 +6,7 @@ import '../location/location_storage.dart';
 
 class HistoryLocationsBloc extends LocationsBlocBase {
   static HistoryLocationsBloc of(BuildContext context) {
-    return BlocProvider.of<HistoryLocationsBloc>(context);
+    return TrufiBlocProvider.of<HistoryLocationsBloc>(context);
   }
 
   HistoryLocationsBloc(

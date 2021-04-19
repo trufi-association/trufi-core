@@ -73,21 +73,21 @@ class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final preferencesBloc = PreferencesBloc();
-    return BlocProvider<PreferencesBloc>(
+    return TrufiBlocProvider<PreferencesBloc>(
       bloc: preferencesBloc,
-      child: BlocProvider<AppReviewBloc>(
+      child: TrufiBlocProvider<AppReviewBloc>(
         bloc: AppReviewBloc(preferencesBloc),
-        child: BlocProvider<RequestManagerBloc>(
+        child: TrufiBlocProvider<RequestManagerBloc>(
           bloc: RequestManagerBloc(preferencesBloc),
-          child: BlocProvider<LocationProviderBloc>(
+          child: TrufiBlocProvider<LocationProviderBloc>(
             bloc: LocationProviderBloc(),
-            child: BlocProvider<LocationSearchBloc>(
+            child: TrufiBlocProvider<LocationSearchBloc>(
               bloc: LocationSearchBloc(context),
-              child: BlocProvider<FavoriteLocationsBloc>(
+              child: TrufiBlocProvider<FavoriteLocationsBloc>(
                 bloc: FavoriteLocationsBloc(context),
-                child: BlocProvider<HistoryLocationsBloc>(
+                child: TrufiBlocProvider<HistoryLocationsBloc>(
                   bloc: HistoryLocationsBloc(context),
-                  child: BlocProvider<SavedPlacesBloc>(
+                  child: TrufiBlocProvider<SavedPlacesBloc>(
                     bloc: SavedPlacesBloc(context),
                     child: AppLifecycleReactor(
                       child: LocalizedMaterialApp(

@@ -15,7 +15,7 @@ import '../trufi_models.dart';
 
 class RequestManagerBloc implements BlocBase, RequestManager {
   static RequestManagerBloc of(BuildContext context) {
-    return BlocProvider.of<RequestManagerBloc>(context);
+    return TrufiBlocProvider.of<RequestManagerBloc>(context);
   }
 
   RequestManagerBloc(this.preferencesBloc) {

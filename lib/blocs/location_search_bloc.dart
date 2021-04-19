@@ -6,7 +6,7 @@ import '../trufi_models.dart';
 
 class LocationSearchBloc extends BlocBase {
   static LocationSearchBloc of(BuildContext context) {
-    return BlocProvider.of<LocationSearchBloc>(context);
+    return TrufiBlocProvider.of<LocationSearchBloc>(context);
   }
 
   LocationSearchBloc(BuildContext context) {

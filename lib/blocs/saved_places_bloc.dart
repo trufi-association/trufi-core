@@ -10,7 +10,7 @@ import '../trufi_models.dart';
 
 class SavedPlacesBloc extends LocationsBlocBase {
   static SavedPlacesBloc of(BuildContext context) {
-    return BlocProvider.of<SavedPlacesBloc>(context);
+    return TrufiBlocProvider.of<SavedPlacesBloc>(context);
   }
 
   SavedPlacesBloc(

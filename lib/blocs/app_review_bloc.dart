@@ -7,7 +7,7 @@ import '../trufi_configuration.dart';
 
 class AppReviewBloc extends BlocBase {
   static AppReviewBloc of(BuildContext context) {
-    return BlocProvider.of<AppReviewBloc>(context);
+    return TrufiBlocProvider.of<AppReviewBloc>(context);
   }
 
   AppReviewBloc(this.preferencesBloc);
