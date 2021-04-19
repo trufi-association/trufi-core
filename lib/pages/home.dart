@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
@@ -56,8 +58,10 @@ class HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    // TODO: What happens here?
     _subscriptions.add(
-      TrufiPreferencesBloc.of(context).outChangeOnline.listen((online) {
+      BlocProvider.of<PreferencesBloc>(context).stream.listen((_) {
         if (_data.plan == null) {
           _fetchPlan();
         }
@@ -588,6 +592,7 @@ class HomePageStateData {
     toPlace = null;
     plan = null;
     ad = null;
+    // TODO: Remove stateHomePage from Preferences
     TrufiPreferencesBloc.of(context).stateHomePage = null;
   }
 

@@ -13,7 +13,6 @@ import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../blocs/favorite_locations_bloc.dart';
-import '../../blocs/preferences_bloc.dart';
 import '../../blocs/request_manager_bloc.dart';
 import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
@@ -23,11 +22,11 @@ class OnlineRequestManager implements RequestManager {
   static const String planPath = '/plan';
 
   @override
-  Future<List<dynamic>> fetchLocations(
+  Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    TrufiPreferencesBloc preferencesBloc,
     String query, {
+    String correlationId,
     int limit = 30,
   }) async {
     final Uri request = Uri.parse(
@@ -37,7 +36,7 @@ class OnlineRequestManager implements RequestManager {
       "autocomplete": "false",
       "corners": "true",
       "stops": "false",
-      "correlation": preferencesBloc.correlationId,
+      "correlation": correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -144,7 +143,7 @@ class OnlineRequestManager implements RequestManager {
     BuildContext context,
     TrufiLocation to,
   ) async {
-    final preferences = TrufiPreferencesBloc.of(context);
+    final preferences = BlocProvider.of<PreferencesBloc>(context).state;
 
     if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
       return null;

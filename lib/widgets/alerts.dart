@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:trufi_core/blocs/preferences/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-
-import '../blocs/preferences_bloc.dart';
 
 Widget buildAlertLocationServicesDenied(BuildContext context) {
   final localization = TrufiLocalization.of(context);
@@ -110,7 +110,8 @@ Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
   final localization = TrufiLocalization.of(context);
   return TextButton(
     onPressed: () {
-      TrufiPreferencesBloc.of(context).inChangeOnline.add(online);
+      BlocProvider.of<PreferencesBloc>(context)
+          .updateOnline(loadOnline: online);
       Navigator.pop(context);
     },
     child: Text(

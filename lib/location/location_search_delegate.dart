@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
@@ -331,8 +332,9 @@ class _SuggestionList extends StatelessWidget {
       requestManagerBloc.fetchLocations(
         FavoriteLocationsBloc.of(context),
         LocationSearchBloc.of(context),
-        TrufiPreferencesBloc.of(context),
         query,
+        correlationId:
+            BlocProvider.of<PreferencesBloc>(context).state.correlationId,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -756,6 +758,7 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
-    child: Container(margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
+    child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }

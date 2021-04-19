@@ -54,8 +54,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    TrufiPreferencesBloc preferencesBloc,
     String query, {
+    String correlationId,
     int limit = 30,
   }) {
     // Cancel running operation
@@ -72,12 +72,8 @@ class RequestManagerBloc implements BlocBase, RequestManager {
                 CancelableOperation<List<TrufiPlace>>.fromFuture(
               // FIXME: For now we search locations always offline
               _offlineRequestManager.fetchLocations(
-                favoriteLocationsBloc,
-                locationSearchBloc,
-                preferencesBloc,
-                query,
-                limit: limit,
-              ),
+                  favoriteLocationsBloc, locationSearchBloc, query,
+                  limit: limit, correlationId: correlationId),
             );
             return _fetchLocationOperation.valueOrCancellation(null);
           });
@@ -115,12 +111,12 @@ class RequestManagerBloc implements BlocBase, RequestManager {
 // RequestManager
 
 abstract class RequestManager {
-  Future<List<dynamic>> fetchLocations(
+  Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    TrufiPreferencesBloc preferencesBloc,
     String query, {
     int limit,
+    String correlationId,
   });
 
   CancelableOperation<Plan> fetchTransitPlan(

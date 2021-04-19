@@ -26,13 +26,20 @@ class PreferencesBloc extends Cubit<Preference> {
     load();
   }
 
-  void updateMapType(String mapType) => emit(
-        state.copyWith(currentMapType: mapType),
-      );
+  Future<void> updateMapType(String mapType) async {
+    await _preferences?.setString(propertyMapTypeKey, mapType);
+    emit(state.copyWith(currentMapType: mapType));
+  }
 
-  void updateLanguage(String languageCode) => emit(
-        state.copyWith(languageCode: languageCode),
-      );
+  Future<void> updateLanguage(String languageCode) async {
+    await _preferences?.setString(propertyLanguageCodeKey, languageCode);
+    emit(state.copyWith(languageCode: languageCode));
+  }
+
+  Future<void> updateOnline({bool loadOnline = false}) async {
+    await _preferences?.setBool(propertyOnlineKey, loadOnline);
+    emit(state.copyWith(loadOnline: loadOnline));
+  }
 
   void _loadCorrelationId() {
     String correlationId = _preferences.getString(correlationIdKey);
