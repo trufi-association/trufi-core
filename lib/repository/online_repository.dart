@@ -120,7 +120,6 @@ class OnlineRepository implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final preferences = BlocProvider.of<PreferencesBloc>(context).state;
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + planPath,
     ).replace(queryParameters: {
@@ -129,7 +128,7 @@ class OnlineRepository implements RequestManager {
       "date": _todayMonthDayYear(),
       "numItineraries": "5",
       "mode": mode,
-      "correlation": preferences.correlationId,
+      "correlation": context.read<PreferencesBloc>().state.correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -143,8 +142,6 @@ class OnlineRepository implements RequestManager {
     BuildContext context,
     TrufiLocation to,
   ) async {
-    final preferences = BlocProvider.of<PreferencesBloc>(context).state;
-
     if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
       return null;
     }
@@ -153,7 +150,7 @@ class OnlineRepository implements RequestManager {
       TrufiConfiguration().url.adsEndpoint,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
-      "correlation": preferences.correlationId,
+      "correlation": context.read<PreferencesBloc>().state.correlationId,
       "language": Intl.getCurrentLocale()
     });
     final response = await _fetchRequest(request);

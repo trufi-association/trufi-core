@@ -202,7 +202,6 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = BlocProvider.of<PreferencesBloc>(context);
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
@@ -210,12 +209,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       TeamPage.route: (context) => const TeamPage(),
     };
 
-    return StreamBuilder<Preference>(
-      stream: preferencesBloc.stream,
-      initialData: preferencesBloc.state,
-      builder: (BuildContext context, AsyncSnapshot<Preference> snapshot) {
+    return BlocBuilder<PreferencesBloc, Preference>(
+      builder: (BuildContext context, state) {
         return MaterialApp(
-          locale: Locale.fromSubtags(languageCode: snapshot.data.languageCode),
+          locale: Locale.fromSubtags(languageCode: state.languageCode),
           onGenerateRoute: (settings) {
             return TrufiDrawerRoute(
               builder: routes[settings.name],
