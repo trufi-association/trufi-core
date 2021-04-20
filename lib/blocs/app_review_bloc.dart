@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 
 class AppReviewBloc extends Cubit<int> {
-  SharedPreferencesRepository sharedPreferencesRepository;
+  LocalRepository localRepository;
 
-  AppReviewBloc(this.sharedPreferencesRepository) : super(1);
+  AppReviewBloc(this.localRepository) : super(1);
 
   void incrementReviewWorthyActions() {
     emit(state + 1);
@@ -20,7 +20,7 @@ class AppReviewBloc extends Cubit<int> {
       final currentVersion = (await PackageInfo.fromPlatform()).version;
 
       final lastVersion =
-      await sharedPreferencesRepository.getLastReviewRequestAppVersionKey();
+          await localRepository.getLastReviewRequestAppVersionKey();
 
       return lastVersion == null || lastVersion != currentVersion;
     }
@@ -30,7 +30,7 @@ class AppReviewBloc extends Cubit<int> {
 
   Future<void> markReviewRequestedForCurrentVersion() async {
     final currentVersion = (await PackageInfo.fromPlatform()).version;
-    sharedPreferencesRepository.saveLastReviewRequestAppVersion(currentVersion);
-    sharedPreferencesRepository.saveReviewWorthyActionCount(0);
+    localRepository.saveLastReviewRequestAppVersion(currentVersion);
+    localRepository.saveReviewWorthyActionCount(0);
   }
 }

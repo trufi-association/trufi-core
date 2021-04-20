@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/preferences_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/trufi_drawer.dart';
@@ -30,7 +31,9 @@ void main() {
       };
 
       await tester.pumpWidget(BlocProvider<PreferencesBloc>(
-        create: (context) => PreferencesBloc(MockSharedPreferencesRepository()),
+        create: (context) => PreferencesBloc(
+          MockSharedPreferencesRepository() as LocalRepository,
+        ),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
@@ -47,7 +50,8 @@ void main() {
     testWidgets("should show the real Title", (tester) async {
       trufiCfg.customTranslations.title = null;
       await tester.pumpWidget(BlocProvider<PreferencesBloc>(
-        create: (context) => PreferencesBloc(MockSharedPreferencesRepository()),
+        create: (context) => PreferencesBloc(
+            MockSharedPreferencesRepository() as LocalRepository),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,

@@ -92,8 +92,10 @@ class TrufiApp extends StatelessWidget {
           create: (context) => AppReviewBloc(sharedPreferencesRepository),
         ),
         BlocProvider<RequestManagerBloc>(
-          create: (context) =>
-              RequestManagerBloc(OfflineRepository(), OnlineRepository()),
+          create: (context) => RequestManagerBloc(
+            OfflineRepository(),
+            OnlineRepository(),
+          ),
         )
       ],
       child: TrufiBlocProvider<LocationProviderBloc>(

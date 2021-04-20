@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/preferences.dart';
-import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/trufi_models.dart';
 import 'package:uuid/uuid.dart';
 
 class PreferencesBloc extends Cubit<Preference> {
-  SharedPreferencesRepository sharedPreferencesRepository;
+  LocalRepository localRepository;
   static const bool defaultOnline = true;
   static const String defaultMapType = MapStyle.streets;
   static const String defaultLanguageCode = "en";
 
-  PreferencesBloc(this.sharedPreferencesRepository)
+  PreferencesBloc(this.localRepository)
       : super(const Preference(defaultLanguageCode, "", defaultMapType,
             loadOnline: defaultOnline)) {
     load();
@@ -23,37 +23,36 @@ class PreferencesBloc extends Cubit<Preference> {
   }
 
   Future<void> updateLanguage(String languageCode) async {
-    sharedPreferencesRepository.saveLanguageCode(languageCode);
+    localRepository.saveLanguageCode(languageCode);
     emit(state.copyWith(languageCode: languageCode));
   }
 
   Future<void> updateOnline({bool loadOnline = false}) async {
-    sharedPreferencesRepository.saveUseOnline(loadOnline: loadOnline);
+    localRepository.saveUseOnline(loadOnline: loadOnline);
     emit(state.copyWith(loadOnline: loadOnline));
   }
 
   Future<void> updateStateHomePage(String stateHomePage) async {
     if (stateHomePage == null) {
-      await sharedPreferencesRepository.deleteStateHomePage();
+      await localRepository.deleteStateHomePage();
     } else {
-      await sharedPreferencesRepository.saveStateHomePage(stateHomePage);
+      await localRepository.saveStateHomePage(stateHomePage);
     }
     emit(state.copyWith(stateHomePage: stateHomePage));
   }
 
   Future<void> _loadCorrelationId() async {
-    String correlationId = await sharedPreferencesRepository.getCorrelationId();
+    String correlationId = await localRepository.getCorrelationId();
 
     // Generate new UUID if missing
     if (correlationId == null) {
       correlationId = Uuid().v4();
-      await sharedPreferencesRepository.saveCorrelationId(correlationId);
+      await localRepository.saveCorrelationId(correlationId);
     }
   }
 
   Future<void> _loadLanguageCode() async {
-    final String languageCode =
-        await sharedPreferencesRepository.getLanguageCode();
+    final String languageCode = await localRepository.getLanguageCode();
     if (languageCode != null) {
       emit(state.copyWith(languageCode: languageCode));
     }
@@ -62,8 +61,7 @@ class PreferencesBloc extends Cubit<Preference> {
   Future<void> _loadOnline() async {
     emit(
       state.copyWith(
-        loadOnline:
-            await sharedPreferencesRepository.getOnline() ?? defaultOnline,
+        loadOnline: await localRepository.getOnline() ?? defaultOnline,
       ),
     );
   }
@@ -71,8 +69,7 @@ class PreferencesBloc extends Cubit<Preference> {
   Future<void> _loadMapType() async {
     emit(
       state.copyWith(
-        currentMapType:
-            await sharedPreferencesRepository.getMapType() ?? defaultMapType,
+        currentMapType: await localRepository.getMapType() ?? defaultMapType,
       ),
     );
   }
