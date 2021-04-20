@@ -9,6 +9,8 @@ import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/trufi_observer.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -56,12 +58,16 @@ typedef LocaleWidgetBuilder = Widget Function(
 /// ```
 ///
 class TrufiApp extends StatelessWidget {
-  const TrufiApp(
+  TrufiApp(
       {@required this.theme,
       this.customOverlayBuilder,
       this.customBetweenFabBuilder,
       Key key})
-      : super(key: key);
+      : super(key: key) {
+    if (TrufiConfiguration().generalConfiguration.debug) {
+      Bloc.observer = TrufiObserver();
+    }
+  }
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;

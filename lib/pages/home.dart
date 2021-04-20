@@ -365,6 +365,8 @@ class HomePageState extends State<HomePage>
   }
 
   void _setToPlace(TrufiLocation toPlace) {
+    print("setToPlaces");
+
     setState(() {
       _data.plan = null;
       _data.toPlace = toPlace;

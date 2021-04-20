@@ -33,7 +33,11 @@ class PreferencesBloc extends Cubit<Preference> {
   }
 
   Future<void> updateStateHomePage(String stateHomePage) async {
-    await sharedPreferencesRepository.saveStateHomePage(stateHomePage);
+    if (stateHomePage == null) {
+      await sharedPreferencesRepository.deleteStateHomePage();
+    } else {
+      await sharedPreferencesRepository.saveStateHomePage(stateHomePage);
+    }
     emit(state.copyWith(stateHomePage: stateHomePage));
   }
 
@@ -43,7 +47,7 @@ class PreferencesBloc extends Cubit<Preference> {
     // Generate new UUID if missing
     if (correlationId == null) {
       correlationId = Uuid().v4();
-      sharedPreferencesRepository.saveCorrelationId(correlationId);
+      await sharedPreferencesRepository.saveCorrelationId(correlationId);
     }
   }
 
