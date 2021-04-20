@@ -184,6 +184,7 @@ class HomePageState extends State<HomePage>
         ),
         onPressed: () {
           context.read<HomePageBloc>().swapLocations();
+          _fetchPlan();
         },
       ),
     );
