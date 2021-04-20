@@ -10,7 +10,7 @@ const String _actionCountKey = "review_worthy_action_count";
 const String _lastReviewRequestAppVersionKey =
     "last_review_request_app_version";
 
-class SharedPreferencesRepository extends LocalRepository {
+class SharedPreferencesRepository implements LocalRepository {
   Future<SharedPreferences> _sharedPreferences;
 
   SharedPreferencesRepository() {
@@ -87,5 +87,11 @@ class SharedPreferencesRepository extends LocalRepository {
   Future<void> deleteStateHomePage() async {
     final preference = await _sharedPreferences;
     preference.remove(_stateHomePageKey);
+  }
+
+  @override
+  Future<String> getStateHomePage() async {
+    final preference = await _sharedPreferences;
+    return preference.getString(_stateHomePageKey);
   }
 }

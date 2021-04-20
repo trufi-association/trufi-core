@@ -22,4 +22,6 @@ abstract class LocalRepository {
   Future<String> getLastReviewRequestAppVersionKey();
 
   Future<void> deleteStateHomePage();
+
+  Future<String> getStateHomePage();
 }

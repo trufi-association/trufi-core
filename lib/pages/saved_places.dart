@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/map_route_state.dart';
+import 'package:trufi_core/pages/home_page.dart';
 
 import '../blocs/location_provider_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
-import '../pages/home.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 import '../widgets/set_description_dialog.dart';
@@ -149,7 +150,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    final HomePageStateData dataRoute = HomePageStateData();
+    final MapRouteState dataRoute = MapRouteState();
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(

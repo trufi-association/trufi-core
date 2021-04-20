@@ -49,9 +49,12 @@ class PlanPage extends StatefulWidget {
   final WidgetBuilder customBetweenFabWidget;
 
   const PlanPage(
-      this.plan, this.ad, this.customOverlayWidget, this.customBetweenFabWidget,
-      {Key key})
-      : assert(plan != null),
+    this.plan,
+    this.ad,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget, {
+    Key key,
+  })  : assert(plan != null),
         super(key: key);
 
   @override

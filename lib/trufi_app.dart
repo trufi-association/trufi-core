@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_bloc.dart';
+import 'package:trufi_core/blocs/home_page_bloc.dart';
 import 'package:trufi_core/blocs/request_manager_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/pages/home_page.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
+import 'package:trufi_core/widgets/app_review_dialog.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -21,7 +24,6 @@ import './blocs/preferences_bloc.dart';
 import './blocs/saved_places_bloc.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
-import './pages/home.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
@@ -96,6 +98,9 @@ class TrufiApp extends StatelessWidget {
             OfflineRepository(),
             OnlineRepository(),
           ),
+        ),
+        BlocProvider<HomePageBloc>(
+          create: (context) => HomePageBloc(sharedPreferencesRepository),
         )
       ],
       child: TrufiBlocProvider<LocationProviderBloc>(
@@ -153,8 +158,17 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   AppLifecycleState _notification;
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final locationProviderBloc = LocationProviderBloc.of(context);
+
+    if (state == AppLifecycleState.resumed) {
+      final appReviewBloc = BlocProvider.of<AppReviewBloc>(context);
+      if (await appReviewBloc.isAppReviewAppropriate()) {
+        showAppReviewDialog(context);
+        appReviewBloc.markReviewRequestedForCurrentVersion();
+      }
+    }
+
     setState(() {
       _notification = state;
       if (_notification == AppLifecycleState.resumed) {
