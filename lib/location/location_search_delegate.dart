@@ -325,7 +325,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildSearchResultList(BuildContext context) {
-    final requestManagerBloc = BlocProvider.of<RequestManagerBloc>(context);
+    final requestManagerBloc = context.read<RequestManagerBloc>();
     final localization = TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
@@ -334,8 +334,7 @@ class _SuggestionList extends StatelessWidget {
         FavoriteLocationsBloc.of(context),
         LocationSearchBloc.of(context),
         query,
-        correlationId:
-            BlocProvider.of<PreferencesBloc>(context).state.correlationId,
+        correlationId: context.watch<PreferencesBloc>().state.correlationId,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,
