@@ -35,11 +35,11 @@ class HomePageBloc extends Cubit<MapRouteState> {
 
   void swapLocations() {
     emit(
-      // TODO: Null prevents the map from double cycling
-      // ignore: avoid_redundant_argument_values
       state.copyWith(
         fromPlace: state.toPlace,
         toPlace: state.fromPlace,
+        // TODO: Null prevents the map from double cycling
+        // ignore: avoid_redundant_argument_values
         plan: null,
       ),
     );
