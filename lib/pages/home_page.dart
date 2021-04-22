@@ -14,7 +14,6 @@ import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../blocs/location_provider_bloc.dart';
 import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
@@ -44,8 +43,6 @@ class HomePageState extends State<HomePage>
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
-
-  bool _isFetching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -182,9 +179,11 @@ class HomePageState extends State<HomePage>
               : Icons.swap_horiz,
           color: Theme.of(context).primaryIconTheme.color,
         ),
-        onPressed: () {
-          context.read<HomePageBloc>().swapLocations();
-          _fetchPlan();
+        onPressed: () async {
+          final bloc = context.read<HomePageBloc>();
+          bloc.swapLocations();
+          final plan = await _fetchPlan(bloc.state);
+          bloc.setPlan(plan);
         },
       ),
     );
@@ -236,7 +235,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildBody(BuildContext context) {
     final cfg = TrufiConfiguration();
-    final homePageState = context.watch<HomePageBloc>().state;
+    final homePageState = context.read<HomePageBloc>().state;
     final Widget body = Container(
       child: homePageState.plan != null && homePageState.plan.error == null
           ? PlanPage(
@@ -251,7 +250,7 @@ class HomePageState extends State<HomePage>
               customBetweenFabWidget: widget.customBetweenFabWidget,
             ),
     );
-    if (_isFetching) {
+    if (homePageState.isFetching) {
       final children = <Widget>[
         Positioned.fill(child: body),
       ];
@@ -285,11 +284,12 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setFromPlace(TrufiLocation fromPlace) async {
     final homePageBloc = context.read<HomePageBloc>();
-    homePageBloc.updateHomePageStateData(
-        // It is a copyWith but we want to have it null
-        // ignore: avoid_redundant_argument_values
-        homePageBloc.state.copyWith(fromPlace: fromPlace, plan: null));
-    _fetchPlan();
+
+    homePageBloc.setFromPlace(fromPlace);
+
+    final Plan plan = await _fetchPlan(homePageBloc.state);
+
+    homePageBloc.setPlan(plan);
   }
 
   Future<void> _setFromPlaceToCurrentPosition() async {
@@ -305,22 +305,11 @@ class HomePageState extends State<HomePage>
     }
   }
 
-  void _setToPlace(TrufiLocation toPlace) {
+  Future<void> _setToPlace(TrufiLocation toPlace) async {
     final homePageBloc = context.read<HomePageBloc>();
-    homePageBloc.updateHomePageStateData(
-      homePageBloc.state
-        ..plan = null
-        ..toPlace = toPlace,
-    );
-
-    _fetchPlan();
-  }
-
-  void _setPlan(Plan plan) {
-    final homePageBloc = context.read<HomePageBloc>();
-    homePageBloc.updateHomePageStateData(
-      homePageBloc.state.copyWith(plan: plan),
-    );
+    homePageBloc.setToPlace(toPlace);
+    final plan = await _fetchPlan(homePageBloc.state);
+    homePageBloc.setPlan(plan);
   }
 
   void _setAd(Ad ad) {
@@ -356,7 +345,7 @@ class HomePageState extends State<HomePage>
             );
           },
           onShowCarRoute: () {
-            _fetchPlan(car: true);
+            _fetchPlan(context.read<HomePageBloc>().state, car: true);
           },
         );
       },
@@ -378,29 +367,29 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  Future<void> _fetchPlan({bool car = false}) async {
-    final homePageState = context.read<HomePageBloc>().state;
+  Future<Plan> _fetchPlan(MapRouteState mapRouteState,
+      {bool car = false}) async {
     final requestManagerBloc = BlocProvider.of<RequestManagerBloc>(context);
     // Cancel the last fetch plan operation for replace with the current request
-    if (homePageState.currentFetchPlanOperation != null) {
-      homePageState.currentFetchPlanOperation.cancel();
+    if (mapRouteState.currentFetchPlanOperation != null) {
+      await mapRouteState.currentFetchPlanOperation.cancel();
     }
     final localization = TrufiLocalization.of(context);
-    if (homePageState.toPlace != null && homePageState.fromPlace != null) {
+    if (mapRouteState.toPlace != null && mapRouteState.fromPlace != null) {
       // Refresh your location
       final yourLocation = localization.searchItemYourLocation;
       final refreshFromPlace =
-          homePageState.fromPlace.description == yourLocation;
-      final refreshToPlace = homePageState.toPlace.description == yourLocation;
+          mapRouteState.fromPlace.description == yourLocation;
+      final refreshToPlace = mapRouteState.toPlace.description == yourLocation;
       if (refreshFromPlace || refreshToPlace) {
         final location = await LocationProviderBloc.of(context).currentLocation;
         if (location != null) {
           if (refreshFromPlace) {
-            homePageState.fromPlace =
+            mapRouteState.fromPlace =
                 TrufiLocation.fromLatLng(yourLocation, location);
           }
           if (refreshToPlace) {
-            homePageState.toPlace =
+            mapRouteState.toPlace =
                 TrufiLocation.fromLatLng(yourLocation, location);
           }
         } else {
@@ -408,25 +397,24 @@ class HomePageState extends State<HomePage>
             context: context,
             builder: (context) => buildAlertLocationServicesDenied(context),
           );
-          return; // Cancel fetch
+          return null; // Cancel fetch
         }
       }
-      // Start fetch
-      setState(() => _isFetching = true);
+
       try {
-        homePageState.currentFetchPlanOperation = car
+        mapRouteState.currentFetchPlanOperation = car
             ? requestManagerBloc.fetchCarPlan(
                 context,
-                homePageState.fromPlace,
-                homePageState.toPlace,
+                mapRouteState.fromPlace,
+                mapRouteState.toPlace,
               )
             : requestManagerBloc.fetchTransitPlan(
                 context,
-                homePageState.fromPlace,
-                homePageState.toPlace,
+                mapRouteState.fromPlace,
+                mapRouteState.toPlace,
               );
 
-        final Plan plan = await homePageState.currentFetchPlanOperation
+        final Plan plan = await mapRouteState.currentFetchPlanOperation
             .valueOrCancellation(null);
 
         if (plan == null) {
@@ -438,9 +426,9 @@ class HomePageState extends State<HomePage>
             _showTransitErrorAlert(plan.error.message);
           }
         } else {
-          _setPlan(plan);
           BlocProvider.of<AppReviewBloc>(context)
               .incrementReviewWorthyActions();
+          return plan;
         }
       } on FetchOfflineRequestException catch (e) {
         // TODO: Replace by proper error handling
@@ -479,9 +467,11 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        homePageState.currentFetchAdOperation =
-            requestManagerBloc.fetchAd(context, homePageState.toPlace);
-        final Ad ad = await homePageState.currentFetchAdOperation
+        mapRouteState.currentFetchAdOperation = requestManagerBloc.fetchAd(
+          context,
+          mapRouteState.toPlace,
+        );
+        final Ad ad = await mapRouteState.currentFetchAdOperation
             .valueOrCancellation(null);
         _setAd(ad);
       } catch (e, stacktrace) {
@@ -492,8 +482,7 @@ class HomePageState extends State<HomePage>
         // ignore: avoid_print
         print(stacktrace);
       }
-
-      setState(() => _isFetching = false);
     }
+    return null;
   }
 }

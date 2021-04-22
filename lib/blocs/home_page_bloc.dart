@@ -4,15 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/trufi_models.dart';
 
 class HomePageBloc extends Cubit<MapRouteState> {
-  LocalRepository sharedPreferencesRepository;
+  LocalRepository localRepository;
   RequestManager requestManager;
 
-  HomePageBloc(this.sharedPreferencesRepository) : super(MapRouteState());
+  HomePageBloc(this.localRepository)
+      : super(MapRouteState(
+          isFetching: false,
+          showSuccessAnimation: false,
+        ));
 
   Future<void> loadFromSharedPreferences() async {
-    final jsonString = await sharedPreferencesRepository.getStateHomePage();
+    final jsonString = await localRepository.getStateHomePage();
 
     if (jsonString != null && jsonString.isNotEmpty) {
       emit(MapRouteState.fromJson(
@@ -21,27 +26,48 @@ class HomePageBloc extends Cubit<MapRouteState> {
   }
 
   void reset() {
-    emit(MapRouteState());
-    sharedPreferencesRepository.deleteStateHomePage();
+    emit(MapRouteState(
+      isFetching: false,
+      showSuccessAnimation: false,
+    ));
+    localRepository.deleteStateHomePage();
   }
 
   void updateHomePageStateData(MapRouteState newState) {
-    sharedPreferencesRepository.saveStateHomePage(
+    localRepository.saveStateHomePage(
       jsonEncode(newState.toJson()),
     );
 
     emit(newState);
   }
 
+  void setFromPlace(TrufiLocation fromPlace) {
+    updateHomePageStateData(state.copyWith(fromPlace: fromPlace));
+  }
+
+  void setPlan(Plan plan) {
+    updateHomePageStateData(state.copyWith(
+      plan: plan,
+      isFetching: false,
+      showSuccessAnimation: true,
+    ));
+  }
+
   void swapLocations() {
-    emit(
+    updateHomePageStateData(
       state.copyWith(
         fromPlace: state.toPlace,
         toPlace: state.fromPlace,
-        // TODO: Null prevents the map from double cycling
-        // ignore: avoid_redundant_argument_values
-        plan: null,
+        isFetching: true,
       ),
     );
+  }
+
+  void setToPlace(TrufiLocation toPlace) {
+    updateHomePageStateData(state.copyWith(toPlace: toPlace, isFetching: true));
+  }
+
+  void configSuccessAnimation({bool show}) {
+    updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
   }
 }

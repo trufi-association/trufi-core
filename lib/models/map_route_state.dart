@@ -17,6 +17,8 @@ class MapRouteState {
     this.toPlace,
     this.plan,
     this.ad,
+    this.isFetching,
+    this.showSuccessAnimation,
     this.currentFetchAdOperation,
     this.currentFetchPlanOperation,
   });
@@ -25,6 +27,8 @@ class MapRouteState {
   TrufiLocation toPlace;
   Plan plan;
   Ad ad;
+  bool isFetching;
+  bool showSuccessAnimation;
   CancelableOperation<Plan> currentFetchPlanOperation;
   CancelableOperation<Ad> currentFetchAdOperation;
 
@@ -33,6 +37,8 @@ class MapRouteState {
     TrufiLocation toPlace,
     Plan plan,
     Ad ad,
+    bool isFetching,
+    bool showSuccessAnimation,
     CancelableOperation<Plan> currentFetchPlanOperation,
     CancelableOperation<Ad> currentFetchAdOperation,
   }) {
@@ -41,6 +47,8 @@ class MapRouteState {
       toPlace: toPlace ?? this.toPlace,
       plan: plan ?? this.plan,
       ad: ad ?? this.ad,
+      isFetching: isFetching ?? this.isFetching,
+      showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
       currentFetchAdOperation:
           currentFetchAdOperation ?? this.currentFetchAdOperation,
       currentFetchPlanOperation:
@@ -81,6 +89,6 @@ class MapRouteState {
 
   @override
   String toString() {
-    return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}";
+    return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, isFetching $isFetching, showSuccessAnimation $showSuccessAnimation";
   }
 }
