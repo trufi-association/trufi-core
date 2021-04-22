@@ -33,28 +33,28 @@ class HomePageBloc extends Cubit<MapRouteState> {
     localRepository.deleteStateHomePage();
   }
 
-  void updateHomePageStateData(MapRouteState newState) {
-    localRepository.saveStateHomePage(
+  Future<void> updateHomePageStateData(MapRouteState newState) async {
+    await localRepository.saveStateHomePage(
       jsonEncode(newState.toJson()),
     );
 
     emit(newState);
   }
 
-  void setFromPlace(TrufiLocation fromPlace) {
-    updateHomePageStateData(state.copyWith(fromPlace: fromPlace));
+  Future<void> setFromPlace(TrufiLocation fromPlace) async {
+    await updateHomePageStateData(state.copyWith(fromPlace: fromPlace));
   }
 
-  void setPlan(Plan plan) {
-    updateHomePageStateData(state.copyWith(
+  Future<void> setPlan(Plan plan) async {
+    await updateHomePageStateData(state.copyWith(
       plan: plan,
       isFetching: false,
       showSuccessAnimation: true,
     ));
   }
 
-  void swapLocations() {
-    updateHomePageStateData(
+  Future<void> swapLocations() async {
+    await updateHomePageStateData(
       state.copyWith(
         fromPlace: state.toPlace,
         toPlace: state.fromPlace,
@@ -63,11 +63,12 @@ class HomePageBloc extends Cubit<MapRouteState> {
     );
   }
 
-  void setToPlace(TrufiLocation toPlace) {
-    updateHomePageStateData(state.copyWith(toPlace: toPlace, isFetching: true));
+  Future<void> setToPlace(TrufiLocation toPlace) async {
+    await updateHomePageStateData(
+        state.copyWith(toPlace: toPlace, isFetching: true));
   }
 
-  void configSuccessAnimation({bool show}) {
-    updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
+  Future<void> configSuccessAnimation({bool show}) async {
+    await updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
   }
 }

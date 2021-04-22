@@ -180,10 +180,10 @@ class HomePageState extends State<HomePage>
           color: Theme.of(context).primaryIconTheme.color,
         ),
         onPressed: () async {
-          final bloc = context.read<HomePageBloc>();
-          bloc.swapLocations();
-          final plan = await _fetchPlan(bloc.state);
-          bloc.setPlan(plan);
+          final homePageBloc = context.read<HomePageBloc>();
+          await homePageBloc.swapLocations();
+          final plan = await _fetchPlan(homePageBloc.state);
+          await homePageBloc.setPlan(plan);
         },
       ),
     );
@@ -285,11 +285,11 @@ class HomePageState extends State<HomePage>
   Future<void> _setFromPlace(TrufiLocation fromPlace) async {
     final homePageBloc = context.read<HomePageBloc>();
 
-    homePageBloc.setFromPlace(fromPlace);
+    await homePageBloc.setFromPlace(fromPlace);
 
     final Plan plan = await _fetchPlan(homePageBloc.state);
 
-    homePageBloc.setPlan(plan);
+    await homePageBloc.setPlan(plan);
   }
 
   Future<void> _setFromPlaceToCurrentPosition() async {
@@ -307,14 +307,15 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setToPlace(TrufiLocation toPlace) async {
     final homePageBloc = context.read<HomePageBloc>();
-    homePageBloc.setToPlace(toPlace);
+    await homePageBloc.setToPlace(toPlace);
     final plan = await _fetchPlan(homePageBloc.state);
-    homePageBloc.setPlan(plan);
+    await homePageBloc.setPlan(plan);
+    setState(() {});
   }
 
-  void _setAd(Ad ad) {
+  Future<void> _setAd(Ad ad) async {
     final homePageBloc = context.read<HomePageBloc>();
-    homePageBloc.updateHomePageStateData(
+    await homePageBloc.updateHomePageStateData(
       homePageBloc.state.copyWith(ad: ad),
     );
   }
