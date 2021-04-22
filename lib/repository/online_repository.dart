@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/request_manager.dart';

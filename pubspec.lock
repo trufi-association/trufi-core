@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "7.0.0"
   bloc_test:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: bloc_test
       url: "https://pub.dartlang.org"
@@ -417,7 +417,7 @@ packages:
     source: hosted
     version: "1.0.0"
   mockito:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: mockito
       url: "https://pub.dartlang.org"

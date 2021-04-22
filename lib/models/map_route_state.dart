@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class MapRouteState {

@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/blocs/app_review_bloc.dart';
+import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 
 import '../mocks/local_repository_mock.dart';
