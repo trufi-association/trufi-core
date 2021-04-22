@@ -52,10 +52,11 @@ class PreferencesCubit extends Cubit<Preference> {
   }
 
   Future<void> _loadLanguageCode() async {
-    final String languageCode = await localRepository.getLanguageCode();
-    if (languageCode != null) {
-      emit(state.copyWith(languageCode: languageCode));
-    }
+    emit(
+      state.copyWith(
+          languageCode:
+              await localRepository.getLanguageCode() ?? defaultLanguageCode),
+    );
   }
 
   Future<void> _loadOnline() async {

@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:async/async.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class MapRouteState {
@@ -76,11 +72,7 @@ class MapRouteState {
     };
   }
 
-  void save(BuildContext context) {
-    BlocProvider.of<PreferencesCubit>(context).updateStateHomePage(
-      json.encode(toJson()),
-    );
-  }
+  void save(BuildContext context) {}
 
   // Getter
   bool get isSwappable => fromPlace != null && toPlace != null;

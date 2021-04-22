@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/home_page_bloc.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';

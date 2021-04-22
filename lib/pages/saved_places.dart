@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home_page.dart';
@@ -160,7 +164,10 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     dataRoute.fromPlace = currentLocation;
     dataRoute.toPlace = toLocation;
     dataRoute.plan = null;
-    dataRoute.save(context);
+    await context
+        .read<PreferencesCubit>()
+        .updateStateHomePage(jsonEncode(dataRoute.toJson()));
+
     Navigator.pushNamed(context, HomePage.route);
   }
 
