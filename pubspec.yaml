@@ -43,8 +43,8 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  network_image_mock: 1.1.0
   mockito: 4.1.4
+  network_image_mock: 1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
