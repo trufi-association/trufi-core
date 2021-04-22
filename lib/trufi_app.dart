@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_bloc.dart';
 import 'package:trufi_core/blocs/home_page_bloc.dart';
 import 'package:trufi_core/blocs/request_manager_bloc.dart';
@@ -90,8 +91,8 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<PreferencesBloc>(
           create: (context) => PreferencesBloc(sharedPreferencesRepository),
         ),
-        BlocProvider<AppReviewBloc>(
-          create: (context) => AppReviewBloc(sharedPreferencesRepository),
+        BlocProvider<AppReviewCubit>(
+          create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
         BlocProvider<RequestManagerBloc>(
           create: (context) => RequestManagerBloc(
@@ -162,10 +163,11 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
     final locationProviderBloc = LocationProviderBloc.of(context);
 
     if (state == AppLifecycleState.resumed) {
-      final appReviewBloc = BlocProvider.of<AppReviewBloc>(context);
-      if (await appReviewBloc.isAppReviewAppropriate()) {
+      final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
+      final packageInfo = await PackageInfo.fromPlatform();
+      if (await appReviewBloc.isAppReviewAppropriate(packageInfo)) {
         showAppReviewDialog(context);
-        appReviewBloc.markReviewRequestedForCurrentVersion();
+        appReviewBloc.markReviewRequestedForCurrentVersion(packageInfo);
       }
     }
 

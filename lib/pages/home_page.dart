@@ -427,7 +427,7 @@ class HomePageState extends State<HomePage>
             _showTransitErrorAlert(plan.error.message);
           }
         } else {
-          BlocProvider.of<AppReviewBloc>(context)
+          BlocProvider.of<AppReviewCubit>(context)
               .incrementReviewWorthyActions();
           return plan;
         }
