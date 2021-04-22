@@ -6,13 +6,13 @@ import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/trufi_models.dart';
 import 'package:uuid/uuid.dart';
 
-class PreferencesBloc extends Cubit<Preference> {
+class PreferencesCubit extends Cubit<Preference> {
   LocalRepository localRepository;
   static const bool defaultOnline = true;
   static const String defaultMapType = MapStyle.streets;
   static const String defaultLanguageCode = "en";
 
-  PreferencesBloc(this.localRepository)
+  PreferencesCubit(this.localRepository)
       : super(const Preference(defaultLanguageCode, "", defaultMapType,
             loadOnline: defaultOnline)) {
     load();

@@ -3,8 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_bloc.dart';
-import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+
+import '../mocks/local_repository_mock.dart';
 
 void main() {
   group("AppReviewCubit", () {
@@ -14,20 +15,20 @@ void main() {
 
     blocTest(
       "emits [] when nothing is added",
-      build: () => AppReviewCubit(MockRepository()),
+      build: () => AppReviewCubit(MockLocalRepository()),
       expect: () => [],
     );
 
     blocTest(
       "emits [2] when incrementReviewWorthyActions is added",
-      build: () => AppReviewCubit(MockRepository()),
+      build: () => AppReviewCubit(MockLocalRepository()),
       act: (AppReviewCubit cubit) => cubit.incrementReviewWorthyActions(),
       expect: () => [2],
     );
 
     group("isAppReviewAppropriate", () {
       final mockPackageInfo = MockPackageInfo();
-      final localRepository = MockRepository();
+      final localRepository = MockLocalRepository();
 
       setUp(() {
         TestWidgetsFlutterBinding.ensureInitialized();
@@ -80,7 +81,5 @@ void main() {
     });
   });
 }
-
-class MockRepository extends Mock implements LocalRepository {}
 
 class MockPackageInfo extends Mock implements PackageInfo {}

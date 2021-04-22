@@ -334,7 +334,7 @@ class _SuggestionList extends StatelessWidget {
         FavoriteLocationsBloc.of(context),
         LocationSearchBloc.of(context),
         query,
-        correlationId: context.watch<PreferencesBloc>().state.correlationId,
+        correlationId: context.watch<PreferencesCubit>().state.correlationId,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,

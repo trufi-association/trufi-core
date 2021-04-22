@@ -40,7 +40,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
   @override
   Widget build(BuildContext context) {
     final currentMapType =
-        context.watch<PreferencesBloc>().state.currentMapType;
+        context.watch<PreferencesCubit>().state.currentMapType;
     final cfg = TrufiConfiguration();
     return BlocBuilder<HomePageBloc, MapRouteState>(
       builder: (context, state) => TrufiMap(

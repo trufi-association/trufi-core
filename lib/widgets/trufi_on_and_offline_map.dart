@@ -56,7 +56,7 @@ class TrufiOnAndOfflineMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PreferencesBloc, Preference>(
+    return BlocBuilder<PreferencesCubit, Preference>(
       builder: (context, state) =>
           state.loadOnline ? _buildOnlineMap(state) : _buildOfflineMap(),
     );

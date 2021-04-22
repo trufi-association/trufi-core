@@ -41,8 +41,8 @@ class MapTypeButton extends StatelessWidget {
                 child: Text(localization.mapTypeLabel,
                     style: theme.textTheme.bodyText1),
               ),
-              BlocBuilder<PreferencesBloc, Preference>(
-                bloc: BlocProvider.of<PreferencesBloc>(context),
+              BlocBuilder<PreferencesCubit, Preference>(
+                bloc: BlocProvider.of<PreferencesCubit>(context),
                 builder: (context, state) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -51,7 +51,7 @@ class MapTypeButton extends StatelessWidget {
                       assetPath: "assets/images/maptype-streets.png",
                       label: localization.mapTypeStreetsCaption,
                       onPressed: () {
-                        BlocProvider.of<PreferencesBloc>(context)
+                        BlocProvider.of<PreferencesCubit>(context)
                             .updateMapType(MapStyle.streets);
                       },
                       active: state.currentMapType == MapStyle.streets ||
@@ -63,7 +63,7 @@ class MapTypeButton extends StatelessWidget {
                         assetPath: "assets/images/maptype-satellite.png",
                         label: localization.mapTypeSatelliteCaption,
                         onPressed: () {
-                          BlocProvider.of<PreferencesBloc>(context)
+                          BlocProvider.of<PreferencesCubit>(context)
                               .updateMapType(MapStyle.satellite);
                         },
                         active: state.currentMapType == MapStyle.satellite,
@@ -74,7 +74,7 @@ class MapTypeButton extends StatelessWidget {
                         assetPath: "assets/images/maptype-terrain.png",
                         label: localization.mapTypeTerrainCaption,
                         onPressed: () {
-                          BlocProvider.of<PreferencesBloc>(context)
+                          BlocProvider.of<PreferencesCubit>(context)
                               .updateMapType(MapStyle.terrain);
                         },
                         active: state.currentMapType == MapStyle.terrain,

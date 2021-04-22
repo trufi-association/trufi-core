@@ -128,7 +128,7 @@ class OnlineRepository implements RequestManager {
       "date": _todayMonthDayYear(),
       "numItineraries": "5",
       "mode": mode,
-      "correlation": context.read<PreferencesBloc>().state.correlationId,
+      "correlation": context.read<PreferencesCubit>().state.correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -150,7 +150,7 @@ class OnlineRepository implements RequestManager {
       TrufiConfiguration().url.adsEndpoint,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
-      "correlation": context.read<PreferencesBloc>().state.correlationId,
+      "correlation": context.read<PreferencesCubit>().state.correlationId,
       "language": Intl.getCurrentLocale()
     });
     final response = await _fetchRequest(request);

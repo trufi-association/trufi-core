@@ -77,7 +77,7 @@ class MapRouteState {
   }
 
   void save(BuildContext context) {
-    BlocProvider.of<PreferencesBloc>(context).updateStateHomePage(
+    BlocProvider.of<PreferencesCubit>(context).updateStateHomePage(
       json.encode(toJson()),
     );
   }

@@ -88,8 +88,8 @@ class TrufiApp extends StatelessWidget {
     final sharedPreferencesRepository = SharedPreferencesRepository();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PreferencesBloc>(
-          create: (context) => PreferencesBloc(sharedPreferencesRepository),
+        BlocProvider<PreferencesCubit>(
+          create: (context) => PreferencesCubit(sharedPreferencesRepository),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
@@ -211,7 +211,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       TeamPage.route: (context) => const TeamPage(),
     };
 
-    return BlocBuilder<PreferencesBloc, Preference>(
+    return BlocBuilder<PreferencesCubit, Preference>(
       builder: (BuildContext context, state) {
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: state.languageCode),
