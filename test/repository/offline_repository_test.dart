@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/trufi_models.dart';
 
+import '../mocks/favorite_locations_bloc.dart';
+import '../mocks/location_search_bloc.dart';
+
 void main() {
   group("OfflineRepository", () {
     OfflineRepository subject;
-    MockFavoriteLocationBloc favoriteLocationBloc;
+    MockFavoriteLocationsBloc favoriteLocationBloc;
     MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
 
@@ -18,7 +19,7 @@ void main() {
     setUp(() {
       subject = OfflineRepository();
 
-      favoriteLocationBloc = MockFavoriteLocationBloc();
+      favoriteLocationBloc = MockFavoriteLocationsBloc();
       locationSearchBloc = MockLocationSearchBloc();
 
       locationSearchStorage = MockLocationSearchStorage();
@@ -142,9 +143,5 @@ List<LevenshteinObject<TrufiLocation>> getTrufiLocationList() {
         TrufiLocation(description: "Favorite", longitude: 5, latitude: 8), 30)
   ];
 }
-
-class MockFavoriteLocationBloc extends Mock implements FavoriteLocationsBloc {}
-
-class MockLocationSearchBloc extends Mock implements LocationSearchBloc {}
 
 class MockLocationSearchStorage extends Mock implements LocationSearchStorage {}

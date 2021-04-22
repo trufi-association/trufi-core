@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_bloc.dart';
+import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
@@ -15,6 +15,7 @@ import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
 import 'package:trufi_core/widgets/app_review_dialog.dart';
+import 'package:uuid/uuid.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
@@ -89,13 +90,13 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) => PreferencesCubit(sharedPreferencesRepository),
+          create: (context) => PreferencesCubit(sharedPreferencesRepository, Uuid()),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
-        BlocProvider<RequestManagerBloc>(
-          create: (context) => RequestManagerBloc(
+        BlocProvider<RequestManagerCubit>(
+          create: (context) => RequestManagerCubit(
             OfflineRepository(),
             OnlineRepository(),
           ),

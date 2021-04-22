@@ -9,12 +9,14 @@ import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-class RequestManagerBloc extends Cubit<void> implements RequestManager {
+// TODO: This is actually not a Cubit it is just a service / controller
+//  there is no state that it contains
+class RequestManagerCubit extends Cubit<void> implements RequestManager {
   final RequestManager _offlineRequestManager;
   final RequestManager _onlineRequestManager;
   final _fetchLocationLock = Lock();
 
-  RequestManagerBloc(this._offlineRequestManager, this._onlineRequestManager)
+  RequestManagerCubit(this._offlineRequestManager, this._onlineRequestManager)
       : super(null);
 
   CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
@@ -48,6 +50,7 @@ class RequestManagerBloc extends Cubit<void> implements RequestManager {
           });
   }
 
+  // TODO: Remove the context pollution
   @override
   CancelableOperation<Plan> fetchTransitPlan(
     BuildContext context,
@@ -59,6 +62,7 @@ class RequestManagerBloc extends Cubit<void> implements RequestManager {
     return _onlineRequestManager.fetchTransitPlan(context, from, to);
   }
 
+  // TODO: Remove the context pollution
   @override
   CancelableOperation<Plan> fetchCarPlan(
     BuildContext context,
@@ -68,6 +72,7 @@ class RequestManagerBloc extends Cubit<void> implements RequestManager {
     return _onlineRequestManager.fetchCarPlan(context, from, to);
   }
 
+  // TODO: Remove the context pollution
   @override
   CancelableOperation<Ad> fetchAd(
     BuildContext context,

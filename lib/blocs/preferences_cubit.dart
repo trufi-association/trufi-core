@@ -8,11 +8,13 @@ import 'package:uuid/uuid.dart';
 
 class PreferencesCubit extends Cubit<Preference> {
   LocalRepository localRepository;
+  Uuid uuid;
+
   static const bool defaultOnline = true;
   static const String defaultMapType = MapStyle.streets;
   static const String defaultLanguageCode = "en";
 
-  PreferencesCubit(this.localRepository)
+  PreferencesCubit(this.localRepository, this.uuid)
       : super(const Preference(defaultLanguageCode, "", defaultMapType,
             loadOnline: defaultOnline)) {
     load();
@@ -41,46 +43,23 @@ class PreferencesCubit extends Cubit<Preference> {
     emit(state.copyWith(stateHomePage: stateHomePage));
   }
 
-  Future<void> _loadCorrelationId() async {
+  Future<void> load() async {
     String correlationId = await localRepository.getCorrelationId();
 
     // Generate new UUID if missing
     if (correlationId == null) {
-      correlationId = Uuid().v4();
+      correlationId = uuid.v4();
       await localRepository.saveCorrelationId(correlationId);
     }
 
-    emit(state.copyWith(correlationId: correlationId));
-  }
-
-  Future<void> _loadLanguageCode() async {
     emit(
       state.copyWith(
-          languageCode:
-              await localRepository.getLanguageCode() ?? defaultLanguageCode),
-    );
-  }
-
-  Future<void> _loadOnline() async {
-    emit(
-      state.copyWith(
+        correlationId: correlationId,
+        currentMapType: await localRepository.getMapType() ?? defaultMapType,
+        languageCode:
+            await localRepository.getLanguageCode() ?? defaultLanguageCode,
         loadOnline: await localRepository.getOnline() ?? defaultOnline,
       ),
     );
-  }
-
-  Future<void> _loadMapType() async {
-    emit(
-      state.copyWith(
-        currentMapType: await localRepository.getMapType() ?? defaultMapType,
-      ),
-    );
-  }
-
-  void load() {
-    _loadCorrelationId();
-    _loadLanguageCode();
-    _loadOnline();
-    _loadMapType();
   }
 }

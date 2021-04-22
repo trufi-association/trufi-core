@@ -8,6 +8,8 @@ import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/trufi_drawer.dart';
 
+import '../mocks/uuid_mock.dart';
+
 void main() {
   group("TrufiDrawer", () {
     // TODO: Remove Singleton or make it easier to test, create clean method.
@@ -30,7 +32,8 @@ void main() {
       };
 
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
-        create: (context) => PreferencesCubit(MockSharedPreferencesRepository()),
+        create: (context) =>
+            PreferencesCubit(MockSharedPreferencesRepository(), MockUuid()),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
@@ -47,7 +50,8 @@ void main() {
     testWidgets("should show the real Title", (tester) async {
       trufiCfg.customTranslations.title = null;
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
-        create: (context) => PreferencesCubit(MockSharedPreferencesRepository()),
+        create: (context) =>
+            PreferencesCubit(MockSharedPreferencesRepository(), MockUuid()),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,

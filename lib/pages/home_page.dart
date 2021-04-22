@@ -7,7 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_bloc.dart';
+import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -370,7 +370,7 @@ class HomePageState extends State<HomePage>
 
   Future<Plan> _fetchPlan(MapRouteState mapRouteState,
       {bool car = false}) async {
-    final requestManagerBloc = BlocProvider.of<RequestManagerBloc>(context);
+    final requestManagerBloc = BlocProvider.of<RequestManagerCubit>(context);
     // Cancel the last fetch plan operation for replace with the current request
     if (mapRouteState.currentFetchPlanOperation != null) {
       await mapRouteState.currentFetchPlanOperation.cancel();
@@ -468,10 +468,8 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        mapRouteState.currentFetchAdOperation = requestManagerBloc.fetchAd(
-          context,
-          mapRouteState.toPlace,
-        );
+        mapRouteState.currentFetchAdOperation =
+            requestManagerBloc.fetchAd(context, mapRouteState.toPlace);
         final Ad ad = await mapRouteState.currentFetchAdOperation
             .valueOrCancellation(null);
         _setAd(ad);

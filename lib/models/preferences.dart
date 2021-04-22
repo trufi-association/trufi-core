@@ -10,17 +10,20 @@ class Preference extends Equatable {
   final String currentMapType;
   final bool loadOnline;
 
-  Preference copyWith(
-      {String stateHomePage,
-      String languageCode,
-      String correlationId,
-      String currentMapType,
-      bool loadOnline}) {
+  Preference copyWith({
+    String languageCode,
+    String correlationId,
+    String currentMapType,
+    String stateHomePage,
+    bool loadOnline,
+  }) {
     return Preference(
-        languageCode ?? this.languageCode,
-        correlationId ?? this.correlationId,
-        currentMapType ?? this.currentMapType,
-        loadOnline: loadOnline ?? this.loadOnline);
+      languageCode ?? this.languageCode,
+      correlationId ?? this.correlationId,
+      currentMapType ?? this.currentMapType,
+      loadOnline: loadOnline ?? this.loadOnline,
+      stateHomePage: stateHomePage ?? this.stateHomePage,
+    );
   }
 
   @override
@@ -29,6 +32,6 @@ class Preference extends Equatable {
 
   @override
   String toString() {
-    return "Preference {languageCode: $languageCode, correlationId: $correlationId, currentMapType: $currentMapType, loadOnline: $loadOnline}";
+    return "Preference {languageCode: $languageCode, correlationId: $correlationId, currentMapType: $currentMapType, loadOnline: $loadOnline, stateHomePage $stateHomePage}";
   }
 }
