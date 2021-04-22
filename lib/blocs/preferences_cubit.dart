@@ -49,6 +49,8 @@ class PreferencesCubit extends Cubit<Preference> {
       correlationId = Uuid().v4();
       await localRepository.saveCorrelationId(correlationId);
     }
+
+    emit(state.copyWith(correlationId: correlationId));
   }
 
   Future<void> _loadLanguageCode() async {
