@@ -29,44 +29,6 @@ void main() {
     );
 
     blocTest(
-      "updateStateHomePage should be calling save on LocalRepository",
-      build: () => PreferencesCubit(mockLocalRepository, mockUuid),
-      act: (PreferencesCubit cubit) =>
-          cubit.updateStateHomePage("TestStateHomePage"),
-      verify: (_) =>
-          verify(mockLocalRepository.saveStateHomePage("TestStateHomePage")),
-    );
-
-    blocTest(
-      "updateStateHomePage should be calling delete on LocalRepository",
-      build: () => PreferencesCubit(mockLocalRepository, mockUuid),
-      act: (PreferencesCubit cubit) => cubit.updateStateHomePage(null),
-      verify: (_) => verify(mockLocalRepository.deleteStateHomePage()),
-    );
-
-    blocTest(
-      "updateStateHomePage should be calling delete on null",
-      build: () {
-        when(mockLocalRepository.saveStateHomePage(any))
-            .thenAnswer((realInvocation) => null);
-
-        when(mockLocalRepository.deleteStateHomePage())
-            .thenAnswer((realInvocation) => null);
-        return PreferencesCubit(mockLocalRepository, mockUuid);
-      },
-      act: (PreferencesCubit cubit) =>
-          cubit..updateStateHomePage(null)..updateStateHomePage("TestState"),
-      wait: const Duration(milliseconds: 300),
-      expect: () => [
-        const Preference("en", "", "streets", loadOnline: true),
-        const Preference("en", "", "streets",
-            loadOnline: true, stateHomePage: "TestState"),
-        const Preference("en", "5", "streets",
-            loadOnline: true, stateHomePage: "TestState"),
-      ],
-    );
-
-    blocTest(
       "updateOnline should emit online true && call LocalRepository setOnline",
       build: () => PreferencesCubit(mockLocalRepository, mockUuid),
       act: (PreferencesCubit cubit) => cubit.updateOnline(),

@@ -34,15 +34,6 @@ class PreferencesCubit extends Cubit<Preference> {
     emit(state.copyWith(loadOnline: loadOnline));
   }
 
-  Future<void> updateStateHomePage(String stateHomePage) async {
-    if (stateHomePage == null) {
-      await localRepository.deleteStateHomePage();
-    } else {
-      await localRepository.saveStateHomePage(stateHomePage);
-    }
-    emit(state.copyWith(stateHomePage: stateHomePage));
-  }
-
   Future<void> _load() async {
     String correlationId = await localRepository.getCorrelationId();
 
@@ -59,7 +50,6 @@ class PreferencesCubit extends Cubit<Preference> {
         languageCode:
             await localRepository.getLanguageCode() ?? defaultLanguageCode,
         loadOnline: await localRepository.getOnline() ?? defaultOnline,
-        stateHomePage: await localRepository.getStateHomePage(),
       ),
     );
   }

@@ -2,9 +2,8 @@ import 'package:equatable/equatable.dart';
 
 class Preference extends Equatable {
   const Preference(this.languageCode, this.correlationId, this.currentMapType,
-      {this.loadOnline, this.stateHomePage});
+      {this.loadOnline});
 
-  final String stateHomePage;
   final String languageCode;
   final String correlationId;
   final String currentMapType;
@@ -14,7 +13,6 @@ class Preference extends Equatable {
     String languageCode,
     String correlationId,
     String currentMapType,
-    String stateHomePage,
     bool loadOnline,
   }) {
     return Preference(
@@ -22,16 +20,15 @@ class Preference extends Equatable {
       correlationId ?? this.correlationId,
       currentMapType ?? this.currentMapType,
       loadOnline: loadOnline ?? this.loadOnline,
-      stateHomePage: stateHomePage ?? this.stateHomePage,
     );
   }
 
   @override
   List<Object> get props =>
-      [languageCode, correlationId, currentMapType, loadOnline, stateHomePage];
+      [languageCode, correlationId, currentMapType, loadOnline];
 
   @override
   String toString() {
-    return "Preference {languageCode: $languageCode, correlationId: $correlationId, currentMapType: $currentMapType, loadOnline: $loadOnline, stateHomePage $stateHomePage}";
+    return "Preference {languageCode: $languageCode, correlationId: $correlationId, currentMapType: $currentMapType, loadOnline: $loadOnline}";
   }
 }

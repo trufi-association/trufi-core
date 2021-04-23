@@ -5,16 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
-import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import '../blocs/location_provider_bloc.dart';
 import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
@@ -23,7 +21,6 @@ import '../plan/plan_empty.dart';
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
-import '../widgets/alerts.dart';
 import '../widgets/trufi_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -186,8 +183,7 @@ class HomePageState extends State<HomePage>
         onPressed: () async {
           final homePageBloc = context.read<HomePageCubit>();
           await homePageBloc.swapLocations();
-          final plan = await _fetchPlan(homePageBloc);
-          await homePageBloc.setPlan(plan);
+          _callFetchPlan();
         },
       ),
     );
@@ -288,12 +284,8 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setFromPlace(TrufiLocation fromPlace) async {
     final homePageBloc = context.read<HomePageCubit>();
-
     await homePageBloc.setFromPlace(fromPlace);
-
-    final Plan plan = await _fetchPlan(homePageBloc);
-
-    await homePageBloc.setPlan(plan);
+    await _callFetchPlan();
   }
 
   Future<void> _setFromPlaceToCurrentPosition() async {
@@ -312,182 +304,22 @@ class HomePageState extends State<HomePage>
   Future<void> _setToPlace(TrufiLocation toPlace) async {
     final homePageBloc = context.read<HomePageCubit>();
     await homePageBloc.setToPlace(toPlace);
-    final plan = await _fetchPlan(homePageBloc);
-    await homePageBloc.setPlan(plan);
-    setState(() {});
+    await _callFetchPlan();
   }
 
-  Future<void> _setAd(Ad ad) async {
-    final homePageBloc = context.read<HomePageCubit>();
-    await homePageBloc.updateMapRouteState(
-      homePageBloc.state.copyWith(ad: ad),
-    );
-  }
+  Future<void> _callFetchPlan({bool isCar = false}) async {
+    final homePageCubit = context.read<HomePageCubit>();
+    final requestManagerCubit = context.read<RequestManagerCubit>();
+    final appReviewCubit = context.read<AppReviewCubit>();
+    final currentLocation =
+        await LocationProviderBloc.of(context).currentLocation;
 
-  void _showErrorAlert(String error) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return buildErrorAlert(context: context, error: error);
-      },
-    );
-  }
-
-  Future<void> _showTransitErrorAlert(String error) async {
-    final cfg = TrufiConfiguration();
-    final location = await LocationProviderBloc.of(context).currentLocation;
-    final languageCode = Localizations.localeOf(context).languageCode;
-    final packageInfo = await PackageInfo.fromPlatform();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return buildTransitErrorAlert(
-          context: context,
-          error: error,
-          onReportMissingRoute: () {
-            launch(
-              "${cfg.url.routeFeedback}?lang=$languageCode&geo=${location?.latitude},${location?.longitude}&app=${packageInfo.version}",
-            );
-          },
-          onShowCarRoute: () {
-            _fetchPlan(context.read<HomePageCubit>(), car: true);
-          },
-        );
-      },
-    );
-  }
-
-  void _showOnAndOfflineErrorAlert(String message, bool online) {
-    final localization = TrufiLocalization.of(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return buildOnAndOfflineErrorAlert(
-          context: context,
-          online: online,
-          title: Text(localization.commonError),
-          content: Text(message),
-        );
-      },
-    );
-  }
-
-  Future<Plan> _fetchPlan(HomePageCubit homePageCubit,
-      {bool car = false}) async {
-    final requestManagerBloc = BlocProvider.of<RequestManagerCubit>(context);
-    // Cancel the last fetch plan operation for replace with the current request
-    if (currentFetchPlanOperation != null) {
-      await currentFetchPlanOperation.cancel();
-    }
-    final localization = TrufiLocalization.of(context);
-    if (homePageCubit.state.toPlace != null &&
-        homePageCubit.state.fromPlace != null) {
-      // Refresh your location
-      final yourLocation = localization.searchItemYourLocation;
-      final refreshFromPlace =
-          homePageCubit.state.fromPlace.description == yourLocation;
-      final refreshToPlace =
-          homePageCubit.state.toPlace.description == yourLocation;
-      if (refreshFromPlace || refreshToPlace) {
-        final location = await LocationProviderBloc.of(context).currentLocation;
-        if (location != null) {
-          if (refreshFromPlace) {
-            homePageCubit
-                .setFromPlace(TrufiLocation.fromLatLng(yourLocation, location));
-          }
-          if (refreshToPlace) {
-            homePageCubit
-                .setToPlace(TrufiLocation.fromLatLng(yourLocation, location));
-          }
-        } else {
-          showDialog(
-            context: context,
-            builder: (context) => buildAlertLocationServicesDenied(context),
-          );
-          return null; // Cancel fetch
-        }
-      }
-
-      try {
-        currentFetchPlanOperation = car
-            ? requestManagerBloc.fetchCarPlan(
-                context,
-                homePageCubit.state.fromPlace,
-                homePageCubit.state.toPlace,
-              )
-            : requestManagerBloc.fetchTransitPlan(
-                context,
-                homePageCubit.state.fromPlace,
-                homePageCubit.state.toPlace,
-              );
-
-        final Plan plan =
-            await currentFetchPlanOperation.valueOrCancellation(null);
-
-        if (plan == null) {
-          throw "Canceled by user";
-        } else if (plan.hasError) {
-          if (car) {
-            _showErrorAlert(plan.error.message);
-          } else {
-            _showTransitErrorAlert(plan.error.message);
-          }
-        } else {
-          BlocProvider.of<AppReviewCubit>(context)
-              .incrementReviewWorthyActions();
-          return plan;
-        }
-      } on FetchOfflineRequestException catch (e) {
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet.",
-          false,
-        );
-      } on FetchOfflineResponseException catch (e) {
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(
-          "Offline mode is not implemented yet.",
-          false,
-        );
-      } on FetchOnlineRequestException catch (e) {
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(localization.commonNoInternet, true);
-      } on FetchOnlineResponseException catch (e) {
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch plan: $e");
-        _showOnAndOfflineErrorAlert(
-          localization.searchFailLoadingPlan,
-          true,
-        );
-      } catch (e) {
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch plan: $e");
-        _showErrorAlert(e.toString());
-      }
-
-      try {
-        currentFetchAdOperation =
-            requestManagerBloc.fetchAd(context, homePageCubit.state.toPlace);
-
-        final Ad ad = await currentFetchAdOperation.valueOrCancellation(null);
-        _setAd(ad);
-      } catch (e, stacktrace) {
-        _setAd(null);
-        // TODO: Replace by proper error handling
-        // ignore: avoid_print
-        print("Failed to fetch ad: $e");
-        // ignore: avoid_print
-        print(stacktrace);
-      }
-    }
-    return null;
+    await homePageCubit.fetchPlan(
+        context,
+        requestManagerCubit,
+        appReviewCubit,
+        TrufiLocalization.of(context),
+        currentLocation,
+        car: isCar);
   }
 }

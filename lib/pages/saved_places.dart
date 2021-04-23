@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home_page.dart';
 
 import '../blocs/location_provider_bloc.dart';
@@ -155,22 +153,23 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    const MapRouteState dataRoute = MapRouteState();
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,
       location,
     );
-    await context
-        .read<HomePageCubit>()
-        .updateCurrentRoute(currentLocation, toLocation);
 
-    await context
-        .read<PreferencesCubit>()
-        .updateStateHomePage(jsonEncode(dataRoute.toJson()));
+    final homePageCubit = context.read<HomePageCubit>();
+    await homePageCubit.updateCurrentRoute(currentLocation, toLocation);
+
+    final requestManagerCubit = context.read<RequestManagerCubit>();
+    final appReviewCubit = context.read<AppReviewCubit>();
 
     Navigator.pushNamed(context, HomePage.route);
+
+    homePageCubit.fetchPlan(context, requestManagerCubit, appReviewCubit,
+        TrufiLocalization.of(context), location);
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {

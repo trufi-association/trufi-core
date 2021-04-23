@@ -137,11 +137,8 @@ void main() {
         build: () => HomePageCubit(mockLocalRepository),
         act: (HomePageCubit cubit) async {
           await cubit.updateMapRouteState(MapRouteState(
-            plan: Plan(
-              itineraries: [],
-              from: PlanLocation(),
-              to: PlanLocation(),
-            ),
+            plan:
+                Plan(itineraries: [], from: PlanLocation(), to: PlanLocation()),
           ));
           await cubit.updateCurrentRoute(
             TrufiLocation(description: "Test1", longitude: 1.0, latitude: 1.0),
