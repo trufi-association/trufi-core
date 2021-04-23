@@ -182,7 +182,7 @@ class HomePageState extends State<HomePage>
         onPressed: () async {
           final homePageBloc = context.read<HomePageCubit>();
           await homePageBloc.swapLocations();
-          final plan = await _fetchPlan(homePageBloc.state);
+          final plan = await _fetchPlan(homePageBloc);
           await homePageBloc.setPlan(plan);
         },
       ),
@@ -287,7 +287,7 @@ class HomePageState extends State<HomePage>
 
     await homePageBloc.setFromPlace(fromPlace);
 
-    final Plan plan = await _fetchPlan(homePageBloc.state);
+    final Plan plan = await _fetchPlan(homePageBloc);
 
     await homePageBloc.setPlan(plan);
   }
@@ -308,7 +308,7 @@ class HomePageState extends State<HomePage>
   Future<void> _setToPlace(TrufiLocation toPlace) async {
     final homePageBloc = context.read<HomePageCubit>();
     await homePageBloc.setToPlace(toPlace);
-    final plan = await _fetchPlan(homePageBloc.state);
+    final plan = await _fetchPlan(homePageBloc);
     await homePageBloc.setPlan(plan);
     setState(() {});
   }
@@ -346,7 +346,7 @@ class HomePageState extends State<HomePage>
             );
           },
           onShowCarRoute: () {
-            _fetchPlan(context.read<HomePageCubit>().state, car: true);
+            _fetchPlan(context.read<HomePageCubit>(), car: true);
           },
         );
       },
@@ -368,30 +368,32 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  Future<Plan> _fetchPlan(MapRouteState mapRouteState,
+  Future<Plan> _fetchPlan(HomePageCubit homePageCubit,
       {bool car = false}) async {
     final requestManagerBloc = BlocProvider.of<RequestManagerCubit>(context);
     // Cancel the last fetch plan operation for replace with the current request
-    if (mapRouteState.currentFetchPlanOperation != null) {
-      await mapRouteState.currentFetchPlanOperation.cancel();
+    if (homePageCubit.state.currentFetchPlanOperation != null) {
+      await homePageCubit.state.currentFetchPlanOperation.cancel();
     }
     final localization = TrufiLocalization.of(context);
-    if (mapRouteState.toPlace != null && mapRouteState.fromPlace != null) {
+    if (homePageCubit.state.toPlace != null &&
+        homePageCubit.state.fromPlace != null) {
       // Refresh your location
       final yourLocation = localization.searchItemYourLocation;
       final refreshFromPlace =
-          mapRouteState.fromPlace.description == yourLocation;
-      final refreshToPlace = mapRouteState.toPlace.description == yourLocation;
+          homePageCubit.state.fromPlace.description == yourLocation;
+      final refreshToPlace =
+          homePageCubit.state.toPlace.description == yourLocation;
       if (refreshFromPlace || refreshToPlace) {
         final location = await LocationProviderBloc.of(context).currentLocation;
         if (location != null) {
           if (refreshFromPlace) {
-            mapRouteState.fromPlace =
-                TrufiLocation.fromLatLng(yourLocation, location);
+            homePageCubit
+                .setFromPlace(TrufiLocation.fromLatLng(yourLocation, location));
           }
           if (refreshToPlace) {
-            mapRouteState.toPlace =
-                TrufiLocation.fromLatLng(yourLocation, location);
+            homePageCubit
+                .setToPlace(TrufiLocation.fromLatLng(yourLocation, location));
           }
         } else {
           showDialog(
@@ -403,19 +405,21 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        mapRouteState.currentFetchPlanOperation = car
+        final cancelableOperation = car
             ? requestManagerBloc.fetchCarPlan(
                 context,
-                mapRouteState.fromPlace,
-                mapRouteState.toPlace,
+                homePageCubit.state.fromPlace,
+                homePageCubit.state.toPlace,
               )
             : requestManagerBloc.fetchTransitPlan(
                 context,
-                mapRouteState.fromPlace,
-                mapRouteState.toPlace,
+                homePageCubit.state.fromPlace,
+                homePageCubit.state.toPlace,
               );
 
-        final Plan plan = await mapRouteState.currentFetchPlanOperation
+        await homePageCubit.setCurrentFetchPlanOperation(cancelableOperation);
+
+        final Plan plan = await homePageCubit.state.currentFetchPlanOperation
             .valueOrCancellation(null);
 
         if (plan == null) {
@@ -468,9 +472,10 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        mapRouteState.currentFetchAdOperation =
-            requestManagerBloc.fetchAd(context, mapRouteState.toPlace);
-        final Ad ad = await mapRouteState.currentFetchAdOperation
+        await homePageCubit.setCurrentFetchAdOperation(
+          requestManagerBloc.fetchAd(context, homePageCubit.state.toPlace),
+        );
+        final Ad ad = await homePageCubit.state.currentFetchAdOperation
             .valueOrCancellation(null);
         _setAd(ad);
       } catch (e, stacktrace) {

@@ -1,7 +1,8 @@
 import 'package:async/async.dart';
+import 'package:equatable/equatable.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-class MapRouteState {
+class MapRouteState extends Equatable {
   static const String _fromPlace = "fromPlace";
   static const String _toPlace = "toPlace";
   static const String _plan = "plan";
@@ -9,25 +10,25 @@ class MapRouteState {
   static const String _showSuccessAnimation = "animation";
   static const String _isFetching = "fetching";
 
-  MapRouteState({
+  const MapRouteState({
     this.fromPlace,
     this.toPlace,
     this.plan,
     this.ad,
-    this.isFetching,
-    this.showSuccessAnimation,
+    this.isFetching = false,
+    this.showSuccessAnimation = false,
     this.currentFetchAdOperation,
     this.currentFetchPlanOperation,
   });
 
-  TrufiLocation fromPlace;
-  TrufiLocation toPlace;
-  Plan plan;
-  Ad ad;
-  bool isFetching;
-  bool showSuccessAnimation;
-  CancelableOperation<Plan> currentFetchPlanOperation;
-  CancelableOperation<Ad> currentFetchAdOperation;
+  final TrufiLocation fromPlace;
+  final TrufiLocation toPlace;
+  final Plan plan;
+  final Ad ad;
+  final bool isFetching;
+  final bool showSuccessAnimation;
+  final CancelableOperation<Plan> currentFetchPlanOperation;
+  final CancelableOperation<Ad> currentFetchAdOperation;
 
   MapRouteState copyWith({
     TrufiLocation fromPlace,
@@ -61,8 +62,8 @@ class MapRouteState {
       toPlace: TrufiLocation.fromJson(json[_toPlace] as Map<String, dynamic>),
       plan: Plan.fromJson(json[_plan] as Map<String, dynamic>),
       ad: Ad.fromJson(json[_ad] as Map<String, dynamic>),
-      isFetching: json[_isFetching] as bool,
-      showSuccessAnimation: json[_showSuccessAnimation] as bool,
+      isFetching: json[_isFetching] as bool ?? false,
+      showSuccessAnimation: json[_showSuccessAnimation] as bool ?? false,
     );
   }
 
@@ -84,6 +85,11 @@ class MapRouteState {
 
   @override
   String toString() {
-    return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, isFetching $isFetching, showSuccessAnimation $showSuccessAnimation";
+    return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, "
+        "isFetching $isFetching, showSuccessAnimation $showSuccessAnimation";
   }
+
+  @override
+  List<Object> get props =>
+      [fromPlace, toPlace, isFetching, showSuccessAnimation];
 }

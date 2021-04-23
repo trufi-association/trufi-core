@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/local_repository.dart';
@@ -10,11 +11,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
   RequestManager requestManager;
 
-  HomePageCubit(this.localRepository)
-      : super(MapRouteState(
-          isFetching: false,
-          showSuccessAnimation: false,
-        )) {
+  HomePageCubit(this.localRepository) : super(const MapRouteState()) {
     _load();
   }
 
@@ -29,10 +26,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   void reset() {
-    emit(MapRouteState(
-      isFetching: false,
-      showSuccessAnimation: false,
-    ));
+    emit(const MapRouteState());
     localRepository.deleteStateHomePage();
   }
 
@@ -71,5 +65,27 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
   Future<void> configSuccessAnimation({bool show}) async {
     await updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
+  }
+
+  Future<void> setCurrentFetchPlanOperation(
+      CancelableOperation<Plan> currentFetchPlanOperation) async {
+    await updateHomePageStateData(
+      state.copyWith(currentFetchPlanOperation: currentFetchPlanOperation),
+    );
+  }
+
+  Future<void> setCurrentFetchAdOperation(
+      CancelableOperation<Ad> fetchAd) async {
+    await updateHomePageStateData(
+      state.copyWith(currentFetchAdOperation: fetchAd),
+    );
+  }
+
+  Future<void> updateCurrentRoute(
+      TrufiLocation fromLocation, TrufiLocation toLocation) async {
+    emit(
+      // ignore: avoid_redundant_argument_values
+      state.copyWith(fromPlace: fromLocation, toPlace: toLocation, plan: null),
+    );
   }
 }
