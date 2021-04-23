@@ -67,20 +67,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
   }
 
-  Future<void> setCurrentFetchPlanOperation(
-      CancelableOperation<Plan> currentFetchPlanOperation) async {
-    await updateHomePageStateData(
-      state.copyWith(currentFetchPlanOperation: currentFetchPlanOperation),
-    );
-  }
-
-  Future<void> setCurrentFetchAdOperation(
-      CancelableOperation<Ad> fetchAd) async {
-    await updateHomePageStateData(
-      state.copyWith(currentFetchAdOperation: fetchAd),
-    );
-  }
-
   Future<void> updateCurrentRoute(
       TrufiLocation fromLocation, TrufiLocation toLocation) async {
     emit(

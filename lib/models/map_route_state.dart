@@ -17,8 +17,6 @@ class MapRouteState extends Equatable {
     this.ad,
     this.isFetching = false,
     this.showSuccessAnimation = false,
-    this.currentFetchAdOperation,
-    this.currentFetchPlanOperation,
   });
 
   final TrufiLocation fromPlace;
@@ -27,8 +25,6 @@ class MapRouteState extends Equatable {
   final Ad ad;
   final bool isFetching;
   final bool showSuccessAnimation;
-  final CancelableOperation<Plan> currentFetchPlanOperation;
-  final CancelableOperation<Ad> currentFetchAdOperation;
 
   MapRouteState copyWith({
     TrufiLocation fromPlace,
@@ -47,10 +43,6 @@ class MapRouteState extends Equatable {
       ad: ad ?? this.ad,
       isFetching: isFetching ?? this.isFetching,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
-      currentFetchAdOperation:
-          currentFetchAdOperation ?? this.currentFetchAdOperation,
-      currentFetchPlanOperation:
-          currentFetchPlanOperation ?? this.currentFetchPlanOperation,
     );
   }
 

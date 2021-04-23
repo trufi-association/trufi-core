@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,9 @@ class HomePageState extends State<HomePage>
   final _formKey = GlobalKey<FormState>();
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
+
+  CancelableOperation<Plan> currentFetchPlanOperation;
+  CancelableOperation<Ad> currentFetchAdOperation;
 
   @override
   Widget build(BuildContext context) {
@@ -372,8 +376,8 @@ class HomePageState extends State<HomePage>
       {bool car = false}) async {
     final requestManagerBloc = BlocProvider.of<RequestManagerCubit>(context);
     // Cancel the last fetch plan operation for replace with the current request
-    if (homePageCubit.state.currentFetchPlanOperation != null) {
-      await homePageCubit.state.currentFetchPlanOperation.cancel();
+    if (currentFetchPlanOperation != null) {
+      await currentFetchPlanOperation.cancel();
     }
     final localization = TrufiLocalization.of(context);
     if (homePageCubit.state.toPlace != null &&
@@ -405,7 +409,7 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        final cancelableOperation = car
+        currentFetchPlanOperation = car
             ? requestManagerBloc.fetchCarPlan(
                 context,
                 homePageCubit.state.fromPlace,
@@ -417,10 +421,8 @@ class HomePageState extends State<HomePage>
                 homePageCubit.state.toPlace,
               );
 
-        await homePageCubit.setCurrentFetchPlanOperation(cancelableOperation);
-
-        final Plan plan = await homePageCubit.state.currentFetchPlanOperation
-            .valueOrCancellation(null);
+        final Plan plan =
+            await currentFetchPlanOperation.valueOrCancellation(null);
 
         if (plan == null) {
           throw "Canceled by user";
@@ -472,11 +474,10 @@ class HomePageState extends State<HomePage>
       }
 
       try {
-        await homePageCubit.setCurrentFetchAdOperation(
-          requestManagerBloc.fetchAd(context, homePageCubit.state.toPlace),
-        );
-        final Ad ad = await homePageCubit.state.currentFetchAdOperation
-            .valueOrCancellation(null);
+        currentFetchAdOperation =
+            requestManagerBloc.fetchAd(context, homePageCubit.state.toPlace);
+
+        final Ad ad = await currentFetchAdOperation.valueOrCancellation(null);
         _setAd(ad);
       } catch (e, stacktrace) {
         _setAd(null);

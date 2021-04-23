@@ -162,10 +162,9 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
       TrufiLocalization.of(context).searchItemYourLocation,
       location,
     );
-    await context.read<HomePageCubit>().updateCurrentRoute(
-          currentLocation,
-          toLocation,
-        );
+    await context
+        .read<HomePageCubit>()
+        .updateCurrentRoute(currentLocation, toLocation);
 
     await context
         .read<PreferencesCubit>()
