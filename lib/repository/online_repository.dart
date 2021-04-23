@@ -142,7 +142,8 @@ class OnlineRepository implements RequestManager {
     BuildContext context,
     TrufiLocation to,
   ) async {
-    if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
+    final adEndpoint = TrufiConfiguration().url.adsEndpoint;
+    if (adEndpoint == null || adEndpoint.isEmpty) {
       return null;
     }
 

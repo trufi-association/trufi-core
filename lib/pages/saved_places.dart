@@ -166,10 +166,9 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final requestManagerCubit = context.read<RequestManagerCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
 
-    Navigator.pushNamed(context, HomePage.route);
-
-    homePageCubit.fetchPlan(context, requestManagerCubit, appReviewCubit,
+    await homePageCubit.fetchPlan(context, requestManagerCubit, appReviewCubit,
         TrufiLocalization.of(context), location);
+    Navigator.pushNamed(context, HomePage.route);
   }
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {

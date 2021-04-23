@@ -315,11 +315,12 @@ class HomePageState extends State<HomePage>
         await LocationProviderBloc.of(context).currentLocation;
 
     await homePageCubit.fetchPlan(
-        context,
-        requestManagerCubit,
-        appReviewCubit,
-        TrufiLocalization.of(context),
-        currentLocation,
-        car: isCar);
+      context,
+      requestManagerCubit,
+      appReviewCubit,
+      TrufiLocalization.of(context),
+      currentLocation,
+      car: isCar,
+    );
   }
 }
