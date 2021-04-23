@@ -17,7 +17,7 @@ class PreferencesCubit extends Cubit<Preference> {
   PreferencesCubit(this.localRepository, this.uuid)
       : super(const Preference(defaultLanguageCode, "", defaultMapType,
             loadOnline: defaultOnline)) {
-    load();
+    _load();
   }
 
   void updateMapType(String mapType) {
@@ -43,7 +43,7 @@ class PreferencesCubit extends Cubit<Preference> {
     emit(state.copyWith(stateHomePage: stateHomePage));
   }
 
-  Future<void> load() async {
+  Future<void> _load() async {
     String correlationId = await localRepository.getCorrelationId();
 
     // Generate new UUID if missing
@@ -59,6 +59,7 @@ class PreferencesCubit extends Cubit<Preference> {
         languageCode:
             await localRepository.getLanguageCode() ?? defaultLanguageCode,
         loadOnline: await localRepository.getOnline() ?? defaultOnline,
+        stateHomePage: await localRepository.getStateHomePage(),
       ),
     );
   }

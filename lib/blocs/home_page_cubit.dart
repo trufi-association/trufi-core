@@ -6,24 +6,25 @@ import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-class HomePageBloc extends Cubit<MapRouteState> {
+class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
   RequestManager requestManager;
 
-  HomePageBloc(this.localRepository)
-      : super(
-          MapRouteState(
-            isFetching: false,
-            showSuccessAnimation: false,
-          ),
-        );
+  HomePageCubit(this.localRepository)
+      : super(MapRouteState(
+          isFetching: false,
+          showSuccessAnimation: false,
+        )) {
+    _load();
+  }
 
-  Future<void> loadFromSharedPreferences() async {
+  Future<void> _load() async {
     final jsonString = await localRepository.getStateHomePage();
 
     if (jsonString != null && jsonString.isNotEmpty) {
-      emit(MapRouteState.fromJson(
-          jsonDecode(jsonString) as Map<String, dynamic>));
+      emit(
+        MapRouteState.fromJson(jsonDecode(jsonString) as Map<String, dynamic>),
+      );
     }
   }
 

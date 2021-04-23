@@ -42,7 +42,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
     final currentMapType =
         context.watch<PreferencesCubit>().state.currentMapType;
     final cfg = TrufiConfiguration();
-    return BlocBuilder<HomePageBloc, MapRouteState>(
+    return BlocBuilder<HomePageCubit, MapRouteState>(
       builder: (context, state) => TrufiMap(
         key: const ValueKey("TrufiOnlineMap"),
         controller: widget.controller,

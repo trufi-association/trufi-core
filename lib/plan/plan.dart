@@ -116,7 +116,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ],
       ),
     ];
-    final homePageBloc = context.read<HomePageBloc>();
+    final homePageBloc = context.read<HomePageCubit>();
     if (homePageBloc.state.showSuccessAnimation &&
         cfg.animation.success != null) {
       children.add(

@@ -46,7 +46,7 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    context.watch<HomePageBloc>().stream.listen((value) {
+    context.watch<HomePageCubit>().stream.listen((value) {
       _toFieldKey.currentState.didChange(value.toPlace);
       _fromFieldKey.currentState.didChange(value.fromPlace);
     });
@@ -83,7 +83,7 @@ class HomePageState extends State<HomePage>
         padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
         child: Form(
           key: _formKey,
-          child: BlocBuilder<HomePageBloc, MapRouteState>(
+          child: BlocBuilder<HomePageCubit, MapRouteState>(
             builder: (context, state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -120,7 +120,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildFormFieldsLandscape(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final homePageState = context.watch<HomePageBloc>().state;
+    final homePageState = context.watch<HomePageCubit>().state;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
@@ -180,7 +180,7 @@ class HomePageState extends State<HomePage>
           color: Theme.of(context).primaryIconTheme.color,
         ),
         onPressed: () async {
-          final homePageBloc = context.read<HomePageBloc>();
+          final homePageBloc = context.read<HomePageCubit>();
           await homePageBloc.swapLocations();
           final plan = await _fetchPlan(homePageBloc.state);
           await homePageBloc.setPlan(plan);
@@ -235,7 +235,7 @@ class HomePageState extends State<HomePage>
 
   Widget _buildBody(BuildContext context) {
     final cfg = TrufiConfiguration();
-    final homePageState = context.read<HomePageBloc>().state;
+    final homePageState = context.read<HomePageCubit>().state;
     final Widget body = Container(
       child: homePageState.plan != null && homePageState.plan.error == null
           ? PlanPage(
@@ -276,14 +276,14 @@ class HomePageState extends State<HomePage>
 
   void _reset() {
     setState(() {
-      context.read<HomePageBloc>().reset();
+      context.read<HomePageCubit>().reset();
       _formKey.currentState.reset();
       _setFromPlaceToCurrentPosition();
     });
   }
 
   Future<void> _setFromPlace(TrufiLocation fromPlace) async {
-    final homePageBloc = context.read<HomePageBloc>();
+    final homePageBloc = context.read<HomePageCubit>();
 
     await homePageBloc.setFromPlace(fromPlace);
 
@@ -306,7 +306,7 @@ class HomePageState extends State<HomePage>
   }
 
   Future<void> _setToPlace(TrufiLocation toPlace) async {
-    final homePageBloc = context.read<HomePageBloc>();
+    final homePageBloc = context.read<HomePageCubit>();
     await homePageBloc.setToPlace(toPlace);
     final plan = await _fetchPlan(homePageBloc.state);
     await homePageBloc.setPlan(plan);
@@ -314,7 +314,7 @@ class HomePageState extends State<HomePage>
   }
 
   Future<void> _setAd(Ad ad) async {
-    final homePageBloc = context.read<HomePageBloc>();
+    final homePageBloc = context.read<HomePageCubit>();
     await homePageBloc.updateHomePageStateData(
       homePageBloc.state.copyWith(ad: ad),
     );
@@ -346,7 +346,7 @@ class HomePageState extends State<HomePage>
             );
           },
           onShowCarRoute: () {
-            _fetchPlan(context.read<HomePageBloc>().state, car: true);
+            _fetchPlan(context.read<HomePageCubit>().state, car: true);
           },
         );
       },

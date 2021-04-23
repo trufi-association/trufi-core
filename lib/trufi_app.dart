@@ -101,8 +101,8 @@ class TrufiApp extends StatelessWidget {
             OnlineRepository(),
           ),
         ),
-        BlocProvider<HomePageBloc>(
-          create: (context) => HomePageBloc(sharedPreferencesRepository),
+        BlocProvider<HomePageCubit>(
+          create: (context) => HomePageCubit(sharedPreferencesRepository),
         )
       ],
       child: TrufiBlocProvider<LocationProviderBloc>(
