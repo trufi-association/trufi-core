@@ -1,5 +1,4 @@
 import 'package:async/async.dart';
-import 'package:flutter/widgets.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class MapRouteState {
@@ -7,6 +6,8 @@ class MapRouteState {
   static const String _toPlace = "toPlace";
   static const String _plan = "plan";
   static const String _ad = "ad";
+  static const String _showSuccessAnimation = "animation";
+  static const String _isFetching = "fetching";
 
   MapRouteState({
     this.fromPlace,
@@ -60,6 +61,8 @@ class MapRouteState {
       toPlace: TrufiLocation.fromJson(json[_toPlace] as Map<String, dynamic>),
       plan: Plan.fromJson(json[_plan] as Map<String, dynamic>),
       ad: Ad.fromJson(json[_ad] as Map<String, dynamic>),
+      isFetching: json[_isFetching] as bool,
+      showSuccessAnimation: json[_showSuccessAnimation] as bool,
     );
   }
 
@@ -69,10 +72,10 @@ class MapRouteState {
       _toPlace: toPlace?.toJson(),
       _plan: plan?.toJson(),
       _ad: ad?.toJson(),
+      _isFetching: isFetching ?? false,
+      _showSuccessAnimation: showSuccessAnimation ?? false,
     };
   }
-
-  void save(BuildContext context) {}
 
   // Getter
   bool get isSwappable => fromPlace != null && toPlace != null;

@@ -11,10 +11,12 @@ class HomePageBloc extends Cubit<MapRouteState> {
   RequestManager requestManager;
 
   HomePageBloc(this.localRepository)
-      : super(MapRouteState(
-          isFetching: false,
-          showSuccessAnimation: false,
-        ));
+      : super(
+          MapRouteState(
+            isFetching: false,
+            showSuccessAnimation: false,
+          ),
+        );
 
   Future<void> loadFromSharedPreferences() async {
     final jsonString = await localRepository.getStateHomePage();
@@ -34,9 +36,7 @@ class HomePageBloc extends Cubit<MapRouteState> {
   }
 
   Future<void> updateHomePageStateData(MapRouteState newState) async {
-    await localRepository.saveStateHomePage(
-      jsonEncode(newState.toJson()),
-    );
+    await localRepository.saveStateHomePage(jsonEncode(newState.toJson()));
 
     emit(newState);
   }
