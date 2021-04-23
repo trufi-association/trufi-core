@@ -319,7 +319,7 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setAd(Ad ad) async {
     final homePageBloc = context.read<HomePageCubit>();
-    await homePageBloc.updateHomePageStateData(
+    await homePageBloc.updateMapRouteState(
       homePageBloc.state.copyWith(ad: ad),
     );
   }

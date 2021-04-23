@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/local_repository.dart';
@@ -25,23 +24,23 @@ class HomePageCubit extends Cubit<MapRouteState> {
     }
   }
 
-  void reset() {
+  Future<void> reset() async {
     emit(const MapRouteState());
-    localRepository.deleteStateHomePage();
+    await localRepository.deleteStateHomePage();
   }
 
-  Future<void> updateHomePageStateData(MapRouteState newState) async {
+  Future<void> updateMapRouteState(MapRouteState newState) async {
     await localRepository.saveStateHomePage(jsonEncode(newState.toJson()));
 
     emit(newState);
   }
 
   Future<void> setFromPlace(TrufiLocation fromPlace) async {
-    await updateHomePageStateData(state.copyWith(fromPlace: fromPlace));
+    await updateMapRouteState(state.copyWith(fromPlace: fromPlace));
   }
 
   Future<void> setPlan(Plan plan) async {
-    await updateHomePageStateData(state.copyWith(
+    await updateMapRouteState(state.copyWith(
       plan: plan,
       isFetching: false,
       showSuccessAnimation: true,
@@ -49,7 +48,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> swapLocations() async {
-    await updateHomePageStateData(
+    await updateMapRouteState(
       state.copyWith(
         fromPlace: state.toPlace,
         toPlace: state.fromPlace,
@@ -59,19 +58,24 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> setToPlace(TrufiLocation toPlace) async {
-    await updateHomePageStateData(
+    await updateMapRouteState(
         state.copyWith(toPlace: toPlace, isFetching: true));
   }
 
   Future<void> configSuccessAnimation({bool show}) async {
-    await updateHomePageStateData(state.copyWith(showSuccessAnimation: show));
+    await updateMapRouteState(state.copyWith(showSuccessAnimation: show));
   }
 
   Future<void> updateCurrentRoute(
       TrufiLocation fromLocation, TrufiLocation toLocation) async {
-    emit(
-      // ignore: avoid_redundant_argument_values
-      state.copyWith(fromPlace: fromLocation, toPlace: toLocation, plan: null),
+    await updateMapRouteState(
+      MapRouteState(
+        fromPlace: fromLocation,
+        toPlace: toLocation,
+        showSuccessAnimation: state.showSuccessAnimation,
+        isFetching: state.isFetching,
+        ad: state.ad,
+      ),
     );
   }
 }

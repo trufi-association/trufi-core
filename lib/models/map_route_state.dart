@@ -78,7 +78,7 @@ class MapRouteState extends Equatable {
   @override
   String toString() {
     return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, "
-        "isFetching $isFetching, showSuccessAnimation $showSuccessAnimation";
+        "isFetching $isFetching, showSuccessAnimation $showSuccessAnimation, plan ${plan != null}";
   }
 
   @override
