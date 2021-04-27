@@ -10,7 +10,7 @@ import '../composite_subscription.dart';
 
 class LocationProviderBloc implements BlocBase {
   static LocationProviderBloc of(BuildContext context) {
-    return BlocProvider.of<LocationProviderBloc>(context);
+    return TrufiBlocProvider.of<LocationProviderBloc>(context);
   }
 
   LocationProviderBloc() {

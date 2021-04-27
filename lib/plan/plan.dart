@@ -1,7 +1,9 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../composite_subscription.dart';
 import '../plan/plan_itinerary_tabs.dart';
@@ -62,8 +64,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   PlanPageController _planPageController;
   TabController _tabController;
 
-  var _showAnimation = true;
-
   @override
   void initState() {
     super.initState();
@@ -116,17 +116,15 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
         ],
       ),
     ];
-    if (_showAnimation && cfg.animation.success != null) {
+    final homePageBloc = context.read<HomePageCubit>();
+    if (homePageBloc.state.showSuccessAnimation &&
+        cfg.animation.success != null) {
       children.add(
         Positioned.fill(
           child: FlareActor(
             cfg.animation.success.filename,
             animation: cfg.animation.success.animation,
-            callback: (animationName) {
-              setState(() {
-                _showAnimation = false;
-              });
-            },
+            callback: (t) => homePageBloc.configSuccessAnimation(show: false),
           ),
         ),
       );

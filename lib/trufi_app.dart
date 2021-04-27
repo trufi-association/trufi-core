@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/repository/offline_repository.dart';
+import 'package:trufi_core/repository/online_repository.dart';
+import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/trufi_observer.dart';
+import 'package:trufi_core/widgets/app_review_dialog.dart';
+import 'package:uuid/uuid.dart';
 
-import './blocs/app_review_bloc.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
 import './blocs/history_locations_bloc.dart';
 import './blocs/location_provider_bloc.dart';
 import './blocs/location_search_bloc.dart';
-import './blocs/preferences_bloc.dart';
-import './blocs/request_manager_bloc.dart';
+import './blocs/preferences_cubit.dart';
 import './blocs/saved_places_bloc.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
-import './pages/home.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
@@ -52,12 +62,16 @@ typedef LocaleWidgetBuilder = Widget Function(
 /// ```
 ///
 class TrufiApp extends StatelessWidget {
-  const TrufiApp(
+  TrufiApp(
       {@required this.theme,
       this.customOverlayBuilder,
       this.customBetweenFabBuilder,
       Key key})
-      : super(key: key);
+      : super(key: key) {
+    if (TrufiConfiguration().generalConfiguration.debug) {
+      Bloc.observer = TrufiObserver();
+    }
+  }
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
@@ -72,30 +86,40 @@ class TrufiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = PreferencesBloc();
-    return BlocProvider<PreferencesBloc>(
-      bloc: preferencesBloc,
-      child: BlocProvider<AppReviewBloc>(
-        bloc: AppReviewBloc(preferencesBloc),
-        child: BlocProvider<RequestManagerBloc>(
-          bloc: RequestManagerBloc(preferencesBloc),
-          child: BlocProvider<LocationProviderBloc>(
-            bloc: LocationProviderBloc(),
-            child: BlocProvider<LocationSearchBloc>(
-              bloc: LocationSearchBloc(context),
-              child: BlocProvider<FavoriteLocationsBloc>(
-                bloc: FavoriteLocationsBloc(context),
-                child: BlocProvider<HistoryLocationsBloc>(
-                  bloc: HistoryLocationsBloc(context),
-                  child: BlocProvider<SavedPlacesBloc>(
-                    bloc: SavedPlacesBloc(context),
-                    child: AppLifecycleReactor(
-                      child: LocalizedMaterialApp(
-                        theme,
-                        customOverlayBuilder,
-                        customBetweenFabBuilder,
-                      ),
-                    ),
+    final sharedPreferencesRepository = SharedPreferencesRepository();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PreferencesCubit>(
+          create: (context) => PreferencesCubit(sharedPreferencesRepository, Uuid()),
+        ),
+        BlocProvider<AppReviewCubit>(
+          create: (context) => AppReviewCubit(sharedPreferencesRepository),
+        ),
+        BlocProvider<RequestManagerCubit>(
+          create: (context) => RequestManagerCubit(
+            OfflineRepository(),
+            OnlineRepository(),
+          ),
+        ),
+        BlocProvider<HomePageCubit>(
+          create: (context) => HomePageCubit(sharedPreferencesRepository),
+        )
+      ],
+      child: TrufiBlocProvider<LocationProviderBloc>(
+        bloc: LocationProviderBloc(),
+        child: TrufiBlocProvider<LocationSearchBloc>(
+          bloc: LocationSearchBloc(context),
+          child: TrufiBlocProvider<FavoriteLocationsBloc>(
+            bloc: FavoriteLocationsBloc(context),
+            child: TrufiBlocProvider<HistoryLocationsBloc>(
+              bloc: HistoryLocationsBloc(context),
+              child: TrufiBlocProvider<SavedPlacesBloc>(
+                bloc: SavedPlacesBloc(context),
+                child: AppLifecycleReactor(
+                  child: LocalizedMaterialApp(
+                    theme,
+                    customOverlayBuilder,
+                    customBetweenFabBuilder,
                   ),
                 ),
               ),
@@ -136,8 +160,18 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   AppLifecycleState _notification;
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final locationProviderBloc = LocationProviderBloc.of(context);
+
+    if (state == AppLifecycleState.resumed) {
+      final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
+      final packageInfo = await PackageInfo.fromPlatform();
+      if (await appReviewBloc.isAppReviewAppropriate(packageInfo)) {
+        showAppReviewDialog(context);
+        appReviewBloc.markReviewRequestedForCurrentVersion(packageInfo);
+      }
+    }
+
     setState(() {
       _notification = state;
       if (_notification == AppLifecycleState.resumed) {
@@ -171,7 +205,6 @@ class LocalizedMaterialApp extends StatefulWidget {
 class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    final preferencesBloc = PreferencesBloc.of(context);
     final routes = <String, WidgetBuilder>{
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
@@ -179,16 +212,10 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
       TeamPage.route: (context) => const TeamPage(),
     };
 
-    return StreamBuilder(
-      stream: preferencesBloc.outChangeLanguageCode,
-      initialData: TrufiConfiguration()
-              .languages
-              .firstWhere((element) => element.isDefault)
-              .languageCode ??
-          "en",
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    return BlocBuilder<PreferencesCubit, Preference>(
+      builder: (BuildContext context, state) {
         return MaterialApp(
-          locale: Locale.fromSubtags(languageCode: snapshot.data),
+          locale: Locale.fromSubtags(languageCode: state.languageCode),
           onGenerateRoute: (settings) {
             return TrufiDrawerRoute(
               builder: routes[settings.name],

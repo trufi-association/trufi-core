@@ -1,27 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
-import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
-import 'package:trufi_core/blocs/request_manager/offline_request_manager.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
+import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/trufi_models.dart';
 
+import '../mocks/favorite_locations_bloc.dart';
+import '../mocks/location_search_bloc.dart';
+
 void main() {
-  group("OfflineRequestManager", () {
-    OfflineRequestManager subject;
-    MockFavoriteLocationBloc favoriteLocationBloc;
-    MockPreferencesBloc preferencesBloc;
+  group("OfflineRepository", () {
+    OfflineRepository subject;
+    MockFavoriteLocationsBloc favoriteLocationBloc;
     MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
 
     const query = "TestQuery";
 
     setUp(() {
-      subject = OfflineRequestManager();
+      subject = OfflineRepository();
 
-      favoriteLocationBloc = MockFavoriteLocationBloc();
-      preferencesBloc = MockPreferencesBloc();
+      favoriteLocationBloc = MockFavoriteLocationsBloc();
       locationSearchBloc = MockLocationSearchBloc();
 
       locationSearchStorage = MockLocationSearchStorage();
@@ -41,7 +39,7 @@ void main() {
 
     test("should sort streets first", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
+          favoriteLocationBloc, locationSearchBloc, query);
 
       for (var i = 0; i < results.length; i++) {
         if (i == 0) {
@@ -61,7 +59,7 @@ void main() {
 
     test("should sort shortest distance first", () async {
       final List<dynamic> results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query);
+          favoriteLocationBloc, locationSearchBloc, query);
 
       expect(results[0].description, "Favorite");
       expect(results[1].description, "Streets: Long Distance");
@@ -74,7 +72,7 @@ void main() {
 
     test("should take the limit into account", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, preferencesBloc, query,
+          favoriteLocationBloc, locationSearchBloc, query,
           limit: 5);
 
       expect(results.length, 5);
@@ -145,11 +143,5 @@ List<LevenshteinObject<TrufiLocation>> getTrufiLocationList() {
         TrufiLocation(description: "Favorite", longitude: 5, latitude: 8), 30)
   ];
 }
-
-class MockFavoriteLocationBloc extends Mock implements FavoriteLocationsBloc {}
-
-class MockPreferencesBloc extends Mock implements PreferencesBloc {}
-
-class MockLocationSearchBloc extends Mock implements LocationSearchBloc {}
 
 class MockLocationSearchStorage extends Mock implements LocationSearchStorage {}

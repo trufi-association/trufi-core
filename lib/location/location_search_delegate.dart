@@ -2,15 +2,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_bloc.dart';
 import '../blocs/location_search_bloc.dart';
-import '../blocs/request_manager_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/choose_location.dart';
@@ -323,7 +325,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildSearchResultList(BuildContext context) {
-    final requestManagerBloc = RequestManagerBloc.of(context);
+    final requestManagerBloc = context.read<RequestManagerCubit>();
     final localization = TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
@@ -331,8 +333,8 @@ class _SuggestionList extends StatelessWidget {
       requestManagerBloc.fetchLocations(
         FavoriteLocationsBloc.of(context),
         LocationSearchBloc.of(context),
-        PreferencesBloc.of(context),
         query,
+        correlationId: context.watch<PreferencesCubit>().state.correlationId,
       ),
       Icons.place,
       isVisibleWhenEmpty: true,
@@ -756,6 +758,7 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
-    child: Container(margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
+    child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }

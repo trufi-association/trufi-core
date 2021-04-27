@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/models/preferences.dart';
 
-import '../blocs/preferences_bloc.dart';
-import '../composite_subscription.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/trufi_map.dart';
@@ -23,29 +23,10 @@ class TrufiOnAndOfflineMapController {
   final _onlineController = TrufiMapController();
   final _mapReadyController = rx.BehaviorSubject<void>();
 
-  TrufiOnAndOfflineMapState _state;
-
-  // ignore: avoid_setters_without_getters
-  set state(TrufiOnAndOfflineMapState state) {
-    _state = state;
-  }
-
   void dispose() {
     _offlineController.dispose();
     _onlineController.dispose();
     _mapReadyController.close();
-  }
-
-  void moveToYourLocation(BuildContext context, TickerProvider tickerProvider) {
-    active.moveToYourLocation(context: context, tickerProvider: tickerProvider);
-  }
-
-  void move(LatLng center, double zoom, TickerProvider tickerProvider) {
-    active.move(
-      center: center,
-      zoom: zoom,
-      tickerProvider: tickerProvider,
-    );
   }
 
   Sink<void> get _inMapReady => _mapReadyController.sink;
@@ -55,17 +36,9 @@ class TrufiOnAndOfflineMapController {
   TrufiMapController get offline => _offlineController;
 
   TrufiMapController get online => _onlineController;
-
-  TrufiMapController get active => _isOnline ? online : offline;
-
-  MapController get mapController => active.mapController;
-
-  LayerOptions get yourLocationLayer => active.yourLocationLayer;
-
-  bool get _isOnline => _state?.isOnline ?? false;
 }
 
-class TrufiOnAndOfflineMap extends StatefulWidget {
+class TrufiOnAndOfflineMap extends StatelessWidget {
   const TrufiOnAndOfflineMap({
     Key key,
     @required this.controller,
@@ -82,66 +55,35 @@ class TrufiOnAndOfflineMap extends StatefulWidget {
   final PositionCallback onPositionChanged;
 
   @override
-  TrufiOnAndOfflineMapState createState() => TrufiOnAndOfflineMapState();
-}
-
-class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
-  final _subscriptions = CompositeSubscription();
-
-  bool _online = false;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.state = this;
-    _subscriptions.add(
-      PreferencesBloc.of(context).outChangeOnline.listen((online) {
-        setState(() {
-          _online = online;
-        });
-      }),
+  Widget build(BuildContext context) {
+    return BlocBuilder<PreferencesCubit, Preference>(
+      builder: (context, state) =>
+          state.loadOnline ? _buildOnlineMap(state) : _buildOfflineMap(),
     );
   }
 
-  @override
-  void dispose() {
-    _subscriptions.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _online ? _buildOnlineMap() : _buildOfflineMap();
-  }
-
-  Widget _buildOnlineMap() {
-    final preferencesBloc = PreferencesBloc.of(context);
+  Widget _buildOnlineMap(Preference state) {
     final cfg = TrufiConfiguration();
-    return StreamBuilder(
-      stream: preferencesBloc.outChangeMapType,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        return TrufiMap(
-          key: const ValueKey("TrufiOnlineMap"),
-          controller: widget.controller.online,
-          mapOptions: MapOptions(
-            minZoom: cfg.map.onlineMinZoom,
-            maxZoom: cfg.map.onlineMaxZoom,
-            zoom: cfg.map.onlineZoom,
-            onTap: widget.onTap,
-            onLongPress: widget.onLongPress,
-            onPositionChanged: _handleOnPositionChanged,
-            center: cfg.map.center,
+    return TrufiMap(
+      key: const ValueKey("TrufiOnlineMap"),
+      controller: controller.online,
+      mapOptions: MapOptions(
+        minZoom: cfg.map.onlineMinZoom,
+        maxZoom: cfg.map.onlineMaxZoom,
+        zoom: cfg.map.onlineZoom,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        onPositionChanged: _handleOnPositionChanged,
+        center: cfg.map.center,
+      ),
+      layerOptionsBuilder: (context) {
+        return <LayerOptions>[
+          tileHostingTileLayerOptions(
+            getTilesEndpointForMapType(state.currentMapType),
+            tileProviderKey: cfg.map.mapTilerKey,
           ),
-          layerOptionsBuilder: (context) {
-            return <LayerOptions>[
-              tileHostingTileLayerOptions(
-                getTilesEndpointForMapType(snapshot.data),
-                tileProviderKey: cfg.map.mapTilerKey,
-              ),
-              ...widget.layerOptionsBuilder(context),
-            ];
-          },
-        );
+          ...layerOptionsBuilder(context),
+        ];
       },
     );
   }
@@ -150,12 +92,12 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     final cfg = TrufiConfiguration();
     return TrufiMap(
       key: const ValueKey("TrufiOfflineMap"),
-      controller: widget.controller.offline,
+      controller: controller.offline,
       mapOptions: MapOptions(
         minZoom: cfg.map.offlineMinZoom,
         maxZoom: cfg.map.offlineMaxZoom,
         zoom: cfg.map.offlineZoom,
-        onTap: widget.onTap,
+        onTap: onTap,
         onPositionChanged: _handleOnPositionChanged,
         swPanBoundary: cfg.map.southWest,
         nePanBoundary: cfg.map.northEast,
@@ -164,7 +106,7 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
       layerOptionsBuilder: (context) {
         return <LayerOptions>[
           offlineMapTileLayerOptions(),
-          ...widget.layerOptionsBuilder(context),
+          ...layerOptionsBuilder(context),
         ];
       },
     );
@@ -174,14 +116,10 @@ class TrufiOnAndOfflineMapState extends State<TrufiOnAndOfflineMap> {
     MapPosition position,
     bool hasGesture,
   ) {
-    if (widget.onPositionChanged != null) {
+    if (onPositionChanged != null) {
       Future.delayed(Duration.zero, () {
-        widget.onPositionChanged(position, hasGesture);
+        onPositionChanged(position, hasGesture);
       });
     }
   }
-
-  // Getter
-
-  bool get isOnline => _online;
 }

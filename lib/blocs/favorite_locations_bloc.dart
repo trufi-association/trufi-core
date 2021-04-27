@@ -7,7 +7,7 @@ import '../trufi_models.dart';
 
 class FavoriteLocationsBloc extends LocationsBlocBase {
   static FavoriteLocationsBloc of(BuildContext context) {
-    return BlocProvider.of<FavoriteLocationsBloc>(context);
+    return TrufiBlocProvider.of<FavoriteLocationsBloc>(context);
   }
 
   FavoriteLocationsBloc(

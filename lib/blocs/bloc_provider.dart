@@ -4,8 +4,8 @@ abstract class BlocBase {
   void dispose();
 }
 
-class BlocProvider<T extends BlocBase> extends StatefulWidget {
-  const BlocProvider({
+class TrufiBlocProvider<T extends BlocBase> extends StatefulWidget {
+  const TrufiBlocProvider({
     Key key,
     @required this.child,
     @required this.bloc,
@@ -15,16 +15,16 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
   final Widget child;
 
   @override
-  _BlocProviderState<T> createState() => _BlocProviderState<T>();
+  _TrufiBlocProviderState<T> createState() => _TrufiBlocProviderState<T>();
 
   static T of<T extends BlocBase>(BuildContext context) {
-    final BlocProvider<T> provider =
-        context.findAncestorWidgetOfExactType<BlocProvider<T>>();
+    final TrufiBlocProvider<T> provider =
+        context.findAncestorWidgetOfExactType<TrufiBlocProvider<T>>();
     return provider.bloc;
   }
 }
 
-class _BlocProviderState<T> extends State<BlocProvider<BlocBase>> {
+class _TrufiBlocProviderState<T> extends State<TrufiBlocProvider<BlocBase>> {
   @override
   void dispose() {
     widget.bloc.dispose();

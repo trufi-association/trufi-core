@@ -2,21 +2,23 @@ import 'dart:io';
 
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share/share.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/pages/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../blocs/preferences_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/about.dart';
 import '../pages/feedback.dart';
-import '../pages/home.dart';
 import '../pages/saved_places.dart';
 import '../pages/team.dart';
 import '../trufi_configuration.dart';
 
 class TrufiDrawer extends StatefulWidget {
-  const TrufiDrawer(this.currentRoute, {Key key}) :super(key: key);
+  const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
 
   final String currentRoute;
 
@@ -27,7 +29,7 @@ class TrufiDrawer extends StatefulWidget {
 class TrufiDrawerState extends State<TrufiDrawer> {
   AssetImage bgImage;
   final GlobalKey appShareButtonKey =
-  GlobalKey(debugLabel: "appShareButtonKey");
+      GlobalKey(debugLabel: "appShareButtonKey");
 
   @override
   void initState() {
@@ -166,11 +168,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         leading: Icon(iconData, color: isSelected ? Colors.black : Colors.grey),
         title: Text(
           title,
-          style: TextStyle(color: Theme
-              .of(context)
-              .textTheme
-              .bodyText1
-              .color),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
         ),
         selected: isSelected,
         onTap: () {
@@ -187,20 +185,18 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final values = TrufiConfiguration()
         .languages
         .map((lang) =>
-        LanguageDropdownValue(lang.languageCode, lang.displayName))
+            LanguageDropdownValue(lang.languageCode, lang.displayName))
         .toList();
-    final preferencesBloc = PreferencesBloc.of(context);
     final theme = Theme.of(context);
-    final languageCode = Localizations
-        .localeOf(context)
-        .languageCode;
+    final languageCode = Localizations.localeOf(context).languageCode;
     return ListTile(
       leading: const Icon(Icons.language),
       title: DropdownButton<LanguageDropdownValue>(
         style: theme.textTheme.bodyText1,
         value: values.firstWhere((value) => value.languageCode == languageCode),
         onChanged: (LanguageDropdownValue value) {
-          preferencesBloc.inChangeLanguageCode.add(value.languageCode);
+          BlocProvider.of<PreferencesCubit>(context)
+              .updateLanguage(value.languageCode);
         },
         items: values.map((LanguageDropdownValue value) {
           return DropdownMenuItem<LanguageDropdownValue>(
@@ -218,19 +214,20 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   // TODO: Understand why it is not used anymore
   // ignore: unused_element
   Widget _buildOfflineToggle(BuildContext context) {
-    final preferencesBloc = PreferencesBloc.of(context);
+    final preferencesBloc = BlocProvider.of<PreferencesCubit>(context);
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return StreamBuilder(
-      stream: preferencesBloc.outChangeOnline,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        final bool isOnline = snapshot.data == true;
+      stream: preferencesBloc.stream,
+      builder: (BuildContext context, AsyncSnapshot<Preference> snapshot) {
         return SwitchListTile(
           title: Text(localization.menuOnline),
-          value: isOnline,
-          onChanged: preferencesBloc.inChangeOnline.add,
+          value: snapshot.data.loadOnline,
+          onChanged: (bool value) =>
+              preferencesBloc.updateOnline(loadOnline: value),
           activeColor: theme.primaryColor,
-          secondary: Icon(isOnline ? Icons.cloud : Icons.cloud_off),
+          secondary: Icon(
+              snapshot.data.loadOnline == true ? Icons.cloud : Icons.cloud_off),
         );
       },
     );
@@ -242,11 +239,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       leading: const Icon(Icons.star, color: Colors.grey),
       title: Text(
         localization.menuAppReview,
-        style: TextStyle(color: Theme
-            .of(context)
-            .textTheme
-            .bodyText1
-            .color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onTap: () async {
         await AppReview.writeReview;
@@ -256,7 +249,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
   Rect getAppShareButtonOrigin() {
     final RenderBox box =
-    appShareButtonKey.currentContext.findRenderObject() as RenderBox;
+        appShareButtonKey.currentContext.findRenderObject() as RenderBox;
     return box.localToGlobal(Offset.zero) & box.size;
   }
 
@@ -270,11 +263,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
         leading: const Icon(Icons.share, color: Colors.grey),
         title: Text(
           localization.menuShareApp,
-          style: TextStyle(color: Theme
-              .of(context)
-              .textTheme
-              .bodyText1
-              .color),
+          style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
         ),
         onTap: () {
           Share.share(
@@ -299,11 +288,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
       leading: Icon(iconData, color: Colors.grey),
       title: Text(
         title,
-        style: TextStyle(color: Theme
-            .of(context)
-            .textTheme
-            .bodyText1
-            .color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
       ),
       onTap: () => launch(url),
     );
@@ -317,10 +302,12 @@ class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {
   }) : super(builder: builder, settings: settings);
 
   @override
-  Widget buildTransitions(BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child,) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return child;
   }
 }

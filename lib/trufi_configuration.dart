@@ -30,6 +30,7 @@ class TrufiConfiguration {
 
 class TrufiGeneralConfiguration {
   String appCity = "Cochabamba";
+  bool debug = false;
 }
 
 class TrufiCustomLocalizations extends TrufiCustomLocalization {}

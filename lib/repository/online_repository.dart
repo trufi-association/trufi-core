@@ -4,28 +4,29 @@ import 'dart:convert';
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
+import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/trufi_models.dart';
 
-import '../../blocs/favorite_locations_bloc.dart';
-import '../../blocs/preferences_bloc.dart';
-import '../../blocs/request_manager_bloc.dart';
-import '../../trufi_configuration.dart';
-import '../../trufi_models.dart';
-
-class OnlineRequestManager implements RequestManager {
+class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
   static const String planPath = '/plan';
 
   @override
-  Future<List<dynamic>> fetchLocations(
+  Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
     String query, {
+    String correlationId,
     int limit = 30,
   }) async {
     final Uri request = Uri.parse(
@@ -35,7 +36,7 @@ class OnlineRequestManager implements RequestManager {
       "autocomplete": "false",
       "corners": "true",
       "stops": "false",
-      "correlation": preferencesBloc.correlationId,
+      "correlation": correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -119,7 +120,6 @@ class OnlineRequestManager implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final preferences = PreferencesBloc.of(context);
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint + planPath,
     ).replace(queryParameters: {
@@ -128,7 +128,7 @@ class OnlineRequestManager implements RequestManager {
       "date": _todayMonthDayYear(),
       "numItineraries": "5",
       "mode": mode,
-      "correlation": preferences.correlationId,
+      "correlation": context.read<PreferencesCubit>().state.correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -142,9 +142,8 @@ class OnlineRequestManager implements RequestManager {
     BuildContext context,
     TrufiLocation to,
   ) async {
-    final preferences = PreferencesBloc.of(context);
-
-    if (TrufiConfiguration().url.adsEndpoint.isEmpty) {
+    final adEndpoint = TrufiConfiguration().url.adsEndpoint;
+    if (adEndpoint == null || adEndpoint.isEmpty) {
       return null;
     }
 
@@ -152,7 +151,7 @@ class OnlineRequestManager implements RequestManager {
       TrufiConfiguration().url.adsEndpoint,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
-      "correlation": preferences.correlationId,
+      "correlation": context.read<PreferencesCubit>().state.correlationId,
       "language": Intl.getCurrentLocale()
     });
     final response = await _fetchRequest(request);

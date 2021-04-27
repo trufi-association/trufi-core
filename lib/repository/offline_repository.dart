@@ -3,21 +3,20 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
+import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/trufi_models.dart';
 
-import '../../blocs/favorite_locations_bloc.dart';
-import '../../blocs/location_search_bloc.dart';
-import '../../blocs/request_manager_bloc.dart';
-import '../../trufi_models.dart';
-
-class OfflineRequestManager implements RequestManager {
+class OfflineRepository implements RequestManager {
   @override
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
-    PreferencesBloc preferencesBloc,
     String query, {
+    String correlationId,
     int limit = 30,
   }) async {
     final LocationSearchStorage storage = locationSearchBloc.storage;

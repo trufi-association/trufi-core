@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
-import 'package:trufi_core/blocs/preferences_bloc.dart';
 
 class MapTypeButton extends StatelessWidget {
   const MapTypeButton({Key key}) : super(key: key);
@@ -27,7 +29,6 @@ class MapTypeButton extends StatelessWidget {
   Widget _buildMapTypeBottomSheet(BuildContext context) {
     final theme = Theme.of(context);
     final cfg = TrufiConfiguration();
-    final preferencesBloc = PreferencesBloc.of(context);
     final localization = TrufiLocalization.of(context);
     return SafeArea(
       child: SizedBox(
@@ -40,47 +41,46 @@ class MapTypeButton extends StatelessWidget {
                 child: Text(localization.mapTypeLabel,
                     style: theme.textTheme.bodyText1),
               ),
-              StreamBuilder(
-                stream: preferencesBloc.outChangeMapType,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
+              BlocBuilder<PreferencesCubit, Preference>(
+                bloc: BlocProvider.of<PreferencesCubit>(context),
+                builder: (context, state) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    _buildMapTypeOptionButton(
+                      context: context,
+                      assetPath: "assets/images/maptype-streets.png",
+                      label: localization.mapTypeStreetsCaption,
+                      onPressed: () {
+                        BlocProvider.of<PreferencesCubit>(context)
+                            .updateMapType(MapStyle.streets);
+                      },
+                      active: state.currentMapType == MapStyle.streets ||
+                          state.currentMapType == "",
+                    ),
+                    if (cfg.map.satelliteMapTypeEnabled)
                       _buildMapTypeOptionButton(
                         context: context,
-                        assetPath: "assets/images/maptype-streets.png",
-                        label: localization.mapTypeStreetsCaption,
+                        assetPath: "assets/images/maptype-satellite.png",
+                        label: localization.mapTypeSatelliteCaption,
                         onPressed: () {
-                          preferencesBloc.inChangeMapType.add(MapStyle.streets);
+                          BlocProvider.of<PreferencesCubit>(context)
+                              .updateMapType(MapStyle.satellite);
                         },
-                        active: snapshot.data == MapStyle.streets ||
-                            snapshot.data == "",
+                        active: state.currentMapType == MapStyle.satellite,
                       ),
-                      if (cfg.map.satelliteMapTypeEnabled)
-                        _buildMapTypeOptionButton(
-                          context: context,
-                          assetPath: "assets/images/maptype-satellite.png",
-                          label: localization.mapTypeSatelliteCaption,
-                          onPressed: () {
-                            preferencesBloc.inChangeMapType
-                                .add(MapStyle.satellite);
-                          },
-                          active: snapshot.data == MapStyle.satellite,
-                        ),
-                      if (cfg.map.terrainMapTypeEnabled)
-                        _buildMapTypeOptionButton(
-                          context: context,
-                          assetPath: "assets/images/maptype-terrain.png",
-                          label: localization.mapTypeTerrainCaption,
-                          onPressed: () {
-                            preferencesBloc.inChangeMapType
-                                .add(MapStyle.terrain);
-                          },
-                          active: snapshot.data == MapStyle.terrain,
-                        ),
-                    ],
-                  );
-                },
+                    if (cfg.map.terrainMapTypeEnabled)
+                      _buildMapTypeOptionButton(
+                        context: context,
+                        assetPath: "assets/images/maptype-terrain.png",
+                        label: localization.mapTypeTerrainCaption,
+                        onPressed: () {
+                          BlocProvider.of<PreferencesCubit>(context)
+                              .updateMapType(MapStyle.terrain);
+                        },
+                        active: state.currentMapType == MapStyle.terrain,
+                      ),
+                  ],
+                ),
               ),
             ]),
       ),
