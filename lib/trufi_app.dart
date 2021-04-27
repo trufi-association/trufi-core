@@ -10,7 +10,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home_page.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
-import 'package:trufi_core/repository/online_repository.dart';
+import 'package:trufi_core/repository/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
@@ -98,7 +98,10 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<RequestManagerCubit>(
           create: (context) => RequestManagerCubit(
             OfflineRepository(),
-            OnlineRepository(),
+            // OnlineRepository(),
+            OnlineGraphQLRepository(
+              preferences: sharedPreferencesRepository,
+            ),
           ),
         ),
         BlocProvider<HomePageCubit>(

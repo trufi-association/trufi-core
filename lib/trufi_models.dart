@@ -414,7 +414,9 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      route: json[_route] as String,
+      // TODO route no match with other Itineraries(Map and String)
+      // route: json[_route] as String,
+      route: '',
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
       duration: json[_duration] as double,
