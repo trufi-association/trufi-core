@@ -1,6 +1,6 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/models/theme_state.dart';
 
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit(ThemeData activeTheme, ThemeData searchTheme)
@@ -28,18 +28,4 @@ class ThemeCubit extends Cubit<ThemeState> {
       ),
     );
   }
-}
-
-class ThemeState extends Equatable {
-  final ThemeData activeTheme;
-  final ThemeData searchTheme;
-
-  const ThemeState({this.activeTheme, this.searchTheme});
-
-  @override
-  List<Object> get props => [activeTheme, searchTheme];
-
-  @override
-  String toString() =>
-      "ThemeState: {activeTheme $activeTheme, searchTheme $searchTheme}";
 }
