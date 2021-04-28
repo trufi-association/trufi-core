@@ -24,11 +24,15 @@ void main() {
       LocationPermission.denied,
       LocationPermission.deniedForever,
     ]) {
-      test("getCurrentLocation should return null for $testCase", () async {
+      test("getCurrentLocation should throw for $testCase", () async {
         when(Geolocator.checkPermission())
             .thenAnswer((realInvocation) async => testCase);
 
-        expect(await subject.getCurrentLocation(), null);
+        expect(
+          () async => subject.getCurrentLocation(),
+          throwsA(const PermissionDeniedException(
+              "No Permissions to use the current Location")),
+        );
       });
     }
 
