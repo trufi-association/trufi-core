@@ -11,7 +11,7 @@ import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
@@ -639,18 +639,20 @@ class _SuggestionList extends StatelessWidget {
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
-    final location = await LocationProviderBloc.of(context).currentLocation;
-    if (location != null) {
-      _handleOnLatLngTapped(
-        description: localization.searchMapMarker,
-        location: location,
-        addToHistory: false,
+    final location =
+        await context.read<LocationProviderCubit>().getCurrentLocation();
+
+    if (location == null) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlertLocationServicesDenied(context),
       );
-      return;
     }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
+
+    _handleOnLatLngTapped(
+      description: localization.searchItemYourLocation,
+      location: location,
+      addToHistory: false,
     );
   }
 
