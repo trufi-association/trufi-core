@@ -110,6 +110,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     if (state.toPlace != null && state.fromPlace != null) {
       // Refresh your location
       final yourLocation = localization.searchItemYourLocation;
+
       final refreshFromPlace = state.fromPlace.description == yourLocation;
       final refreshToPlace = state.toPlace.description == yourLocation;
       if (refreshFromPlace || refreshToPlace) {
@@ -128,7 +129,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
           );
         }
       }
-
       try {
         currentFetchPlanOperation = car
             ? requestManagerCubit.fetchCarPlan(

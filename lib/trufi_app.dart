@@ -5,6 +5,7 @@ import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
@@ -64,6 +65,7 @@ typedef LocaleWidgetBuilder = Widget Function(
 class TrufiApp extends StatelessWidget {
   TrufiApp(
       {@required this.theme,
+      this.searchTheme,
       this.customOverlayBuilder,
       this.customBetweenFabBuilder,
       Key key})
@@ -75,6 +77,9 @@ class TrufiApp extends StatelessWidget {
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
+
+  /// The used ThemeData for the SearchDelegate
+  final ThemeData searchTheme;
 
   /// A [customOverlayBuilder] that receives the current language to allow
   /// a custom overlay on top of the Trufi Core.
@@ -90,7 +95,8 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) => PreferencesCubit(sharedPreferencesRepository, Uuid()),
+          create: (context) =>
+              PreferencesCubit(sharedPreferencesRepository, Uuid()),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
@@ -103,6 +109,9 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(sharedPreferencesRepository),
+        ),
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(theme, searchTheme),
         )
       ],
       child: TrufiBlocProvider<LocationProviderBloc>(

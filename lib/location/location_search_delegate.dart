@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
@@ -28,22 +29,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.copyWith(
-      primaryColor: Colors.white,
-      primaryColorBrightness: Brightness.light,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
-      textTheme: theme.primaryTextTheme.copyWith(
-        headline6:
-            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
-        bodyText2:
-            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
-        bodyText1:
-            theme.primaryTextTheme.bodyText1.copyWith(color: theme.accentColor),
-      ),
-    );
-  }
+  ThemeData appBarTheme(BuildContext context) =>
+      context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
