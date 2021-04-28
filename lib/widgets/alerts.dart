@@ -43,7 +43,7 @@ Widget buildTransitErrorAlert({
   String error,
 }) {
   final localization = TrufiLocalization.of(context);
-  final theme = Theme.of(context);
+  final theme = context.read<ThemeCubit>().state.activeTheme;
   final actionTextStyle = theme.textTheme.bodyText2.copyWith(
     color: theme.accentColor,
   );
