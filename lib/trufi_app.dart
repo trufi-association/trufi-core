@@ -154,7 +154,7 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final locationProviderBloc = context.read<LocationProviderCubit>();
+    final locationProviderCubit = context.read<LocationProviderCubit>();
 
     if (state == AppLifecycleState.resumed) {
       final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
@@ -163,9 +163,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
         showAppReviewDialog(context);
         appReviewBloc.markReviewRequestedForCurrentVersion(packageInfo);
       }
-      locationProviderBloc.start();
+      locationProviderCubit.start();
     } else {
-      locationProviderBloc.stop();
+      locationProviderCubit.stop();
     }
   }
 
