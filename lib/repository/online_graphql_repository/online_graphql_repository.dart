@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:graphql/client.dart';
 
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
@@ -17,6 +15,12 @@ import 'package:trufi_core/trufi_models.dart';
 class OnlineGraphQLRepository implements RequestManager {
   static const String planPath = '/plan';
   final LocalRepository preferences;
+  final graphQLClient = GraphQLClient(
+    cache: GraphQLCache(),
+    link: HttpLink(
+      TrufiConfiguration().url.otpEndpoint,
+    ),
+  );
 
   OnlineGraphQLRepository({
     @required this.preferences,
@@ -76,26 +80,98 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String mode,
   ) async {
-    final Uri request = Uri.parse(
-      TrufiConfiguration().url.otpEndpoint,
+    final _client = QueryOptions(
+      document: gql(
+        r'''
+          query FetchPlan($fromLat: Float!, $fromLon: Float!, $toLat: Float!,$toLon: Float!){
+            plan(
+              from: {lat: $fromLat, lon:  $fromLon}
+              to: {lat: $toLat, lon:  $toLon}
+              numItineraries: 3
+              ) {
+                date,
+                from{
+                  name,
+                  lon,
+                  lat,
+                  vertexType
+                },
+                to{
+                  name,
+                  lon,
+                  lat,
+                  vertexType,
+                },
+                itineraries {
+                  duration,
+                  startTime,
+                  endTime,
+                  walkTime,
+                  waitingTime,
+                  walkDistance,
+                  elevationLost,
+                  elevationGained,
+                  legs{
+                    startTime,
+                    endTime,
+                    departureDelay,
+                    arrivalDelay,
+                    realTime,
+                    distance,
+                    mode,
+                    route{
+                      url
+                    },
+                    interlineWithPreviousLeg,
+                    from{
+                  		name,
+                  		lon,
+                  		lat,
+                  		vertexType,
+                  		departureTime,
+                    },
+                    to{
+                  		name,
+                  		lon,
+                  		lat,
+                  		vertexType,
+                  		departureTime,
+                    },
+                    legGeometry{
+                    	points,
+                      length
+                    },
+                    rentedBike,
+                    transitLeg,
+                    duration,
+                    steps{
+                      distance,
+                      lon,
+                      lat,
+                      elevationProfile{
+                        distance,
+                        elevation
+                      }
+                    },
+                  },
+                }
+              }
+          }
+        ''',
+      ),
+      variables: {
+        'fromLat': from.latitude,
+        'fromLon': from.longitude,
+        'toLat': to.latitude,
+        'toLon': to.longitude,
+      },
     );
-    final queryPlan = queries.getPlan(
-      fromLat: from.latitude,
-      fromLon: from.longitude,
-      toLat: to.latitude,
-      toLon: to.longitude,
-    );
-    final body = {
-      "query": '''
-        query {
-          $queryPlan
-        }
-      '''
-    };
 
-    final response = await _fetchRequest(request, body);
-    if (response.statusCode == 200) {
-      return compute(_parsePlan, utf8.decode(response.bodyBytes));
+    final queryResult = await graphQLClient.query(_client);
+
+    // final response = await _fetchRequest(request, body);
+    if (!queryResult.hasException) {
+      return compute(_parsePlan, queryResult.data);
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
@@ -106,20 +182,8 @@ class OnlineGraphQLRepository implements RequestManager {
   ) async {
     return null;
   }
-
-  Future<http.Response> _fetchRequest(Uri request, Map<String, String> body) async {
-    try {
-      return await http.post(request,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(body));
-    } on Exception catch (e) {
-      throw FetchOnlineRequestException(e);
-    }
-  }
 }
 
-Plan _parsePlan(String responseBody) {
-  return Plan.fromJson(json.decode(responseBody)["data"] as Map<String, dynamic>);
+Plan _parsePlan(Map<String, dynamic> responseBody) {
+  return Plan.fromJson(responseBody);
 }
