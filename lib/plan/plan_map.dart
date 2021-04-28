@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/location_provider_cubit.dart';
+import 'package:trufi_core/widgets/alerts.dart';
 
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
@@ -190,12 +192,20 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Future<void> _handleOnYourLocationPressed() async {
-    _trufiMapController.moveToYourLocation(
-      context: context,
-      tickerProvider: this,
-      location:
-          await context.read<LocationProviderCubit>().getCurrentLocation(),
-    );
+    try {
+      final location =
+          await context.read<LocationProviderCubit>().getCurrentLocation();
+      _trufiMapController.moveToYourLocation(
+        location: location,
+        context: context,
+        tickerProvider: this,
+      );
+    } on PermissionDeniedException catch (_) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlertLocationServicesDenied(context),
+      );
+    }
   }
 
   void _handleOnCropPressed() {
