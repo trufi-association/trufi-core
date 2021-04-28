@@ -414,7 +414,8 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      route: json[_route] as String,
+      // FIXME the route parameter does not match(sometimes it's Map and sometimes it's String)
+      route: '',
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
       duration: json[_duration] as double,
