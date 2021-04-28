@@ -647,13 +647,13 @@ class _SuggestionList extends StatelessWidget {
         context: context,
         builder: (context) => buildAlertLocationServicesDenied(context),
       );
+    } else {
+      _handleOnLatLngTapped(
+        description: localization.searchItemYourLocation,
+        location: location,
+        addToHistory: false,
+      );
     }
-
-    _handleOnLatLngTapped(
-      description: localization.searchItemYourLocation,
-      location: location,
-      addToHistory: false,
-    );
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
