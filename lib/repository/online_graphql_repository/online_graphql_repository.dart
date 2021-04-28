@@ -7,7 +7,6 @@ import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
-import 'package:trufi_core/repository/online_graphql_repository/queries.dart' as queries;
 import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
@@ -57,7 +56,7 @@ class OnlineGraphQLRepository implements RequestManager {
     String mode,
   ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(from, to, mode);
+      final plan = await _fetchPlan(from, to, mode);
       if (plan.hasError) {
         throw FetchOnlineResponseException('GraphQL error: ${plan.error.toString()}');
       }
