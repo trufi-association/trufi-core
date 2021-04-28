@@ -38,8 +38,7 @@ import './widgets/trufi_drawer.dart';
 ///  * [IndexedWidgetBuilder], which is similar but also takes an index.
 ///  * [TransitionBuilder], which is similar but also takes a child.
 ///  * [ValueWidgetBuilder], which is similar but takes a value and a child.
-typedef LocaleWidgetBuilder = Widget Function(
-    BuildContext context, Locale locale);
+typedef LocaleWidgetBuilder = Widget Function(BuildContext context, Locale locale);
 
 /// The [TrufiApp] is the main Widget of the application
 ///
@@ -62,11 +61,7 @@ typedef LocaleWidgetBuilder = Widget Function(
 /// ```
 ///
 class TrufiApp extends StatelessWidget {
-  TrufiApp(
-      {@required this.theme,
-      this.customOverlayBuilder,
-      this.customBetweenFabBuilder,
-      Key key})
+  TrufiApp({@required this.theme, this.customOverlayBuilder, this.customBetweenFabBuilder, Key key})
       : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -144,8 +139,7 @@ class AppLifecycleReactor extends StatefulWidget {
   _AppLifecycleReactorState createState() => _AppLifecycleReactorState();
 }
 
-class _AppLifecycleReactorState extends State<AppLifecycleReactor>
-    with WidgetsBindingObserver {
+class _AppLifecycleReactorState extends State<AppLifecycleReactor> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -190,8 +184,7 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 }
 
 class LocalizedMaterialApp extends StatefulWidget {
-  const LocalizedMaterialApp(
-      this.theme, this.customOverlayWidget, this.customBetweenFabWidget,
+  const LocalizedMaterialApp(this.theme, this.customOverlayWidget, this.customBetweenFabWidget,
       {Key key})
       : super(key: key);
 
