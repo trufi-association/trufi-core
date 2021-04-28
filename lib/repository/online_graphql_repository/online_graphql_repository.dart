@@ -53,9 +53,10 @@ class OnlineGraphQLRepository implements RequestManager {
     String mode,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final plan = await _fetchPlan(from, to, mode);
+      Plan plan = await _fetchPlan(from, to, mode);
       if (plan.hasError) {
-        throw FetchOnlineResponseException('GraphQL error: ${plan.error.toString()}');
+        // TODO implement translate for other errors 
+         plan = Plan.fromError('GraphQL error: ${plan.error.toString()}');
       }
       return plan;
     }());
