@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:trufi_core/models/location_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/alerts.dart';
@@ -43,19 +45,19 @@ class TrufiMapController {
 
   Future<void> moveToYourLocation({
     @required BuildContext context,
+    @required LatLng location,
     TickerProvider tickerProvider,
   }) async {
     final cfg = TrufiConfiguration();
     final zoom = cfg.map.chooseLocationZoom;
-    final locationProviderBloc = LocationProviderBloc.of(context);
-    final location = await locationProviderBloc.currentLocation;
+
     if (location != null) {
       move(
         center: location,
         zoom: zoom,
         tickerProvider: tickerProvider,
       );
-      locationProviderBloc.start();
+      context.read<LocationProviderCubit>().start();
       return;
     }
     showDialog(
@@ -133,14 +135,12 @@ class TrufiMapState extends State<TrufiMap> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locationProviderBloc = LocationProviderBloc.of(context);
     final cfg = TrufiConfiguration();
-    return StreamBuilder<LatLng>(
-      stream: locationProviderBloc.outLocationUpdate,
-      builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+    return BlocBuilder<LocationProviderCubit, LocationState>(
+      builder: (context, state) {
         yourLocationLayer = MarkerLayerOptions(
-          markers: snapshot.data != null
-              ? <Marker>[buildYourLocationMarker(snapshot.data)]
+          markers: state != null
+              ? <Marker>[buildYourLocationMarker(state.currentLocation)]
               : <Marker>[],
         );
         return Stack(children: [

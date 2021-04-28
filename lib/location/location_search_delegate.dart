@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_cubit.dart';
@@ -11,7 +12,7 @@ import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
@@ -639,19 +640,21 @@ class _SuggestionList extends StatelessWidget {
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
-    final location = await LocationProviderBloc.of(context).currentLocation;
-    if (location != null) {
+    try {
+      final currentLocation =
+          await context.read<LocationProviderCubit>().getCurrentLocation();
+
       _handleOnLatLngTapped(
-        description: localization.searchMapMarker,
-        location: location,
+        description: localization.searchItemYourLocation,
+        location: currentLocation,
         addToHistory: false,
       );
-      return;
+    } on PermissionDeniedException catch (_) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlertLocationServicesDenied(context),
+      );
     }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {

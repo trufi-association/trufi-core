@@ -13,7 +13,7 @@ import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
 import '../plan/plan.dart';
@@ -183,7 +183,7 @@ class HomePageState extends State<HomePage>
         onPressed: () async {
           final homePageBloc = context.read<HomePageCubit>();
           await homePageBloc.swapLocations();
-          _callFetchPlan();
+          await _callFetchPlan();
         },
       ),
     );
@@ -277,6 +277,7 @@ class HomePageState extends State<HomePage>
   void _reset() {
     setState(() {
       context.read<HomePageCubit>().reset();
+      context.read<LocationProviderCubit>().stop();
       _formKey.currentState.reset();
       _setFromPlaceToCurrentPosition();
     });
@@ -290,7 +291,8 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setFromPlaceToCurrentPosition() async {
     final localization = TrufiLocalization.of(context);
-    final location = await LocationProviderBloc.of(context).currentLocation;
+    final location =
+        await context.read<LocationProviderCubit>().getCurrentLocation();
     if (location != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
@@ -311,15 +313,16 @@ class HomePageState extends State<HomePage>
     final homePageCubit = context.read<HomePageCubit>();
     final requestManagerCubit = context.read<RequestManagerCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
-    final currentLocation =
-        await LocationProviderBloc.of(context).currentLocation;
+    final locationProviderCubit = context.read<LocationProviderCubit>();
+
+    locationProviderCubit.start();
 
     await homePageCubit.fetchPlan(
       context,
       requestManagerCubit,
       appReviewCubit,
       TrufiLocalization.of(context),
-      currentLocation,
+      await locationProviderCubit.getCurrentLocation(),
       car: isCar,
     );
   }
