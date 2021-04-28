@@ -4,10 +4,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-Widget buildAlertLocationServicesDenied(BuildContext context) {
+Widget buildAlertLocationServicesDenied(BuildContext context, ThemeData theme) {
   final localization = TrufiLocalization.of(context);
   return _buildAlert(
-    context: context,
+    theme: theme,
     title: Text(localization.alertLocationServicesDeniedTitle),
     content: Text(localization.alertLocationServicesDeniedMessage),
     actions: [
@@ -24,14 +24,19 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
 
 Widget buildErrorAlert({
   @required BuildContext context,
+  @required TrufiLocalization localization,
+  @required ThemeData theme,
   String error,
 }) {
-  final localization = TrufiLocalization.of(context);
   return _buildAlert(
-    context: context,
+    theme: theme,
     title: Text(localization.commonError),
     content: Text(error),
-    actions: [_buildOKButton(context)],
+    actions: [
+      TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(localization.commonOK))
+    ],
   );
 }
 
@@ -47,7 +52,7 @@ Widget buildTransitErrorAlert({
     color: theme.accentColor,
   );
   return _buildAlert(
-    context: context,
+    theme: theme,
     title: Text(localization.noRouteError),
     content: Column(
       mainAxisSize: MainAxisSize.min,
@@ -89,17 +94,22 @@ Widget buildTransitErrorAlert({
 Widget buildOnAndOfflineErrorAlert({
   @required BuildContext context,
   @required bool online,
+  @required TrufiLocalization localization,
   Widget title,
   Widget content,
 }) {
+  final theme = Theme.of(context);
   return _buildAlert(
-    context: context,
+    theme: theme,
     title: title,
     content: content,
     actions: [
       //TODO: re-add when offline mode is implemented
       //_buildOnAndOfflineButton(context, !online),
-      _buildOKButton(context),
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text(localization.commonOK),
+      ),
     ],
   );
 }
@@ -120,12 +130,11 @@ Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
 }
 
 Widget _buildAlert({
-  @required BuildContext context,
+  @required ThemeData theme,
   Widget title,
   Widget content,
   List<Widget> actions,
 }) {
-  final theme = Theme.of(context);
   return AlertDialog(
     backgroundColor: theme.primaryColor,
     title: title,
@@ -133,13 +142,5 @@ Widget _buildAlert({
     content: content,
     contentTextStyle: theme.primaryTextTheme.bodyText2,
     actions: actions,
-  );
-}
-
-Widget _buildOKButton(BuildContext context) {
-  final localization = TrufiLocalization.of(context);
-  return TextButton(
-    onPressed: () => Navigator.pop(context),
-    child: Text(localization.commonOK),
   );
 }

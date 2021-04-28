@@ -49,6 +49,7 @@ class TrufiMapController {
     final zoom = cfg.map.chooseLocationZoom;
     final locationProviderBloc = LocationProviderBloc.of(context);
     final location = await locationProviderBloc.currentLocation;
+    final theme = Theme.of(context);
     if (location != null) {
       move(
         center: location,
@@ -60,7 +61,7 @@ class TrufiMapController {
     }
     showDialog(
       context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
+      builder: (context) => buildAlertLocationServicesDenied(context, theme),
     );
   }
 

@@ -124,7 +124,10 @@ class HomePageCubit extends Cubit<MapRouteState> {
         } else {
           showDialog(
             context: context,
-            builder: (context) => buildAlertLocationServicesDenied(context),
+            builder: (context) => buildAlertLocationServicesDenied(
+              context,
+              Theme.of(context),
+            ),
           );
         }
       }
@@ -153,7 +156,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
               context: context,
               builder: (context) {
                 return buildErrorAlert(
-                    context: context, error: plan.error.message);
+                  theme: Theme.of(context),
+                  context: context,
+                  error: plan.error.message,
+                  localization: TrufiLocalization.of(context),
+                );
               },
             );
           } else {
@@ -256,6 +263,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           online: online,
           title: Text(commonErrorMessage),
           content: Text(message),
+          localization: TrufiLocalization.of(context),
         );
       },
     );
@@ -265,7 +273,12 @@ class HomePageCubit extends Cubit<MapRouteState> {
     showDialog(
       context: context,
       builder: (context) {
-        return buildErrorAlert(context: context, error: error);
+        return buildErrorAlert(
+          localization: TrufiLocalization.of(context),
+          context: context,
+          error: error,
+          theme: Theme.of(context),
+        );
       },
     );
   }

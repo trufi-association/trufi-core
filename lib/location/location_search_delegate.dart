@@ -65,7 +65,10 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final theme = Theme.of(context);
+
     return _SuggestionList(
+      theme: theme,
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
@@ -208,6 +211,7 @@ class _SuggestionList extends StatelessWidget {
     @required this.locationSearchBloc,
     @required this.savedPlacesBloc,
     @required this.appBarTheme,
+    @required this.theme,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
@@ -220,12 +224,13 @@ class _SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiStreet> onStreetTapped;
   final TrufiLocation currentLocation;
   final ThemeData appBarTheme;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> slivers = [];
     slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
-    slivers.add(_buildYourLocation(context));
+    slivers.add(_buildYourLocation(context, theme));
     slivers.add(_buildChooseOnMap(context));
     slivers.add(_buildYourPlaces(context));
     if (query.isEmpty) {
@@ -246,13 +251,14 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildYourLocation(BuildContext context) {
+  Widget _buildYourLocation(BuildContext context, ThemeData theme) {
     final localization = TrufiLocalization.of(context);
+
     return SliverToBoxAdapter(
       child: _buildItem(
         context,
         appBarTheme,
-        () => _handleOnYourLocationTapped(context),
+        () => _handleOnYourLocationTapped(context, theme),
         Icons.gps_fixed,
         localization.searchItemYourLocation,
       ),
@@ -637,7 +643,10 @@ class _SuggestionList extends StatelessWidget {
     return _buildItem(context, appBarTheme, null, Icons.error, title);
   }
 
-  Future<void> _handleOnYourLocationTapped(BuildContext context) async {
+  Future<void> _handleOnYourLocationTapped(
+    BuildContext context,
+    ThemeData theme,
+  ) async {
     final localization = TrufiLocalization.of(context);
     final location = await LocationProviderBloc.of(context).currentLocation;
     if (location != null) {
@@ -650,7 +659,7 @@ class _SuggestionList extends StatelessWidget {
     }
     showDialog(
       context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
+      builder: (context) => buildAlertLocationServicesDenied(context, theme),
     );
   }
 
