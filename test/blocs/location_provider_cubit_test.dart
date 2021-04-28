@@ -121,6 +121,7 @@ void main() {
 
         return LocationProviderCubit();
       },
+      wait: const Duration(milliseconds: 1),
       act: (LocationProviderCubit cubit) => cubit.start(),
       expect: () => [isA<LocationState>(), isA<LocationState>()],
     );
