@@ -2,6 +2,7 @@
     "emailFeedback": "",
     "emailInfo": "",
     "urlOtpEndpoint": "",
+    "isOtpGraphQL": false,
     "urlTilesStreetsEndpoint": "",
     "urlTilesSatelliteEndpoint": "",
     "urlTilesTerrainEndpoint": "",

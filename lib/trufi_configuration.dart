@@ -103,4 +103,5 @@ class TrufiConfigurationUrl {
   String twitter = "";
   String donate = "";
   String share = "";
+  bool   isOtpGraphQL = false;
 }
