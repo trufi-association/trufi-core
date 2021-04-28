@@ -148,6 +148,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
         if (plan == null) {
           throw "Canceled by user";
         } else if (plan.hasError) {
+          updateMapRouteState(state.copyWith(isFetching: false));
           if (car) {
             showDialog(
               context: context,
