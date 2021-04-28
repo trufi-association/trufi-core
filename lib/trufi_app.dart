@@ -95,8 +95,8 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) =>
-              PreferencesCubit(sharedPreferencesRepository, Uuid())),
+            create: (context) =>
+                PreferencesCubit(sharedPreferencesRepository, Uuid())),
         BlocProvider<AppReviewCubit>(
             create: (context) => AppReviewCubit(sharedPreferencesRepository)),
         BlocProvider<RequestManagerCubit>(
@@ -121,7 +121,6 @@ class TrufiApp extends StatelessWidget {
               bloc: SavedPlacesBloc(context),
               child: AppLifecycleReactor(
                 child: LocalizedMaterialApp(
-                  theme,
                   customOverlayBuilder,
                   customBetweenFabBuilder,
                 ),
@@ -185,11 +184,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
 class LocalizedMaterialApp extends StatefulWidget {
   const LocalizedMaterialApp(
-      this.theme, this.customOverlayWidget, this.customBetweenFabWidget,
+      this.customOverlayWidget, this.customBetweenFabWidget,
       {Key key})
       : super(key: key);
 
-  final ThemeData theme;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
 
@@ -224,7 +222,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
-          theme: widget.theme,
+          theme: context.watch<ThemeCubit>().state.activeTheme,
           home: HomePage(
             customOverlayWidget: widget.customOverlayWidget,
             customBetweenFabWidget: widget.customBetweenFabWidget,

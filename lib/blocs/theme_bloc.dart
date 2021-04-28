@@ -38,4 +38,8 @@ class ThemeState extends Equatable {
 
   @override
   List<Object> get props => [activeTheme, searchTheme];
+
+  @override
+  String toString() =>
+      "ThemeState: {activeTheme $activeTheme, searchTheme $searchTheme}";
 }
