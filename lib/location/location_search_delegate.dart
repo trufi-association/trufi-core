@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_manager_cubit.dart';
@@ -639,21 +640,21 @@ class _SuggestionList extends StatelessWidget {
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
-    final location =
-        await context.read<LocationProviderCubit>().getCurrentLocation();
+    try {
+      final currentLocation =
+          await context.read<LocationProviderCubit>().getCurrentLocation();
 
-    if (location == null) {
+      _handleOnLatLngTapped(
+        description: localization.searchItemYourLocation,
+        location: currentLocation,
+        addToHistory: false,
+      );
+    } on PermissionDeniedException catch (_) {
       showDialog(
         context: context,
         builder: (context) => buildAlertLocationServicesDenied(context),
       );
     }
-
-    _handleOnLatLngTapped(
-      description: localization.searchItemYourLocation,
-      location: location,
-      addToHistory: false,
-    );
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {

@@ -32,8 +32,6 @@ class LocationProviderCubit extends Cubit<LocationState> {
     }
   }
 
-  // Getter
-
   Future<LatLng> getCurrentLocation() async {
     final LocationPermission status = await Geolocator.checkPermission();
 
@@ -42,11 +40,11 @@ class LocationProviderCubit extends Cubit<LocationState> {
       final Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      return position != null
-          ? LatLng(position.latitude, position.longitude)
-          : null;
+      return LatLng(position.latitude, position.longitude);
+    } else {
+      throw const PermissionDeniedException(
+        "No Permissions to use the current Location",
+      );
     }
-
-    return null;
   }
 }
