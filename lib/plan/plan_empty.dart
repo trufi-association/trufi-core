@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/location_provider_cubit.dart';
+import 'package:trufi_core/widgets/alerts.dart';
 
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
@@ -93,12 +97,24 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   Widget _buildLowerActionButtons(BuildContext context) {
     return SafeArea(
-      child: YourLocationButton(onPressed: () {
-        _trufiMapController.moveToYourLocation(
-          context: context,
-          tickerProvider: this,
-        );
-      }),
+      child: YourLocationButton(onPressed: _handleOnYourLocationPressed),
     );
+  }
+
+  Future<void> _handleOnYourLocationPressed() async {
+    try {
+      final location =
+          await context.read<LocationProviderCubit>().getCurrentLocation();
+      _trufiMapController.moveToYourLocation(
+        location: location,
+        context: context,
+        tickerProvider: this,
+      );
+    } on PermissionDeniedException catch (_) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlertLocationServicesDenied(context),
+      );
+    }
   }
 }

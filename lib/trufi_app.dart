@@ -21,7 +21,7 @@ import 'package:uuid/uuid.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
 import './blocs/history_locations_bloc.dart';
-import './blocs/location_provider_bloc.dart';
+import './blocs/location_provider_cubit.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_cubit.dart';
 import './blocs/saved_places_bloc.dart';
@@ -96,40 +96,34 @@ class TrufiApp extends StatelessWidget {
       providers: [
         BlocProvider<PreferencesCubit>(
           create: (context) =>
-              PreferencesCubit(sharedPreferencesRepository, Uuid()),
-        ),
+              PreferencesCubit(sharedPreferencesRepository, Uuid())),
         BlocProvider<AppReviewCubit>(
-          create: (context) => AppReviewCubit(sharedPreferencesRepository),
-        ),
+            create: (context) => AppReviewCubit(sharedPreferencesRepository)),
         BlocProvider<RequestManagerCubit>(
-          create: (context) => RequestManagerCubit(
-            OfflineRepository(),
-            OnlineRepository(),
-          ),
+          create: (context) =>
+              RequestManagerCubit(OfflineRepository(), OnlineRepository()),
         ),
         BlocProvider<HomePageCubit>(
-          create: (context) => HomePageCubit(sharedPreferencesRepository),
-        ),
+            create: (context) => HomePageCubit(sharedPreferencesRepository)),
+        BlocProvider<LocationProviderCubit>(
+            create: (context) => LocationProviderCubit()),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         )
       ],
-      child: TrufiBlocProvider<LocationProviderBloc>(
-        bloc: LocationProviderBloc(),
-        child: TrufiBlocProvider<LocationSearchBloc>(
-          bloc: LocationSearchBloc(context),
-          child: TrufiBlocProvider<FavoriteLocationsBloc>(
-            bloc: FavoriteLocationsBloc(context),
-            child: TrufiBlocProvider<HistoryLocationsBloc>(
-              bloc: HistoryLocationsBloc(context),
-              child: TrufiBlocProvider<SavedPlacesBloc>(
-                bloc: SavedPlacesBloc(context),
-                child: AppLifecycleReactor(
-                  child: LocalizedMaterialApp(
-                    theme,
-                    customOverlayBuilder,
-                    customBetweenFabBuilder,
-                  ),
+      child: TrufiBlocProvider<LocationSearchBloc>(
+        bloc: LocationSearchBloc(context),
+        child: TrufiBlocProvider<FavoriteLocationsBloc>(
+          bloc: FavoriteLocationsBloc(context),
+          child: TrufiBlocProvider<HistoryLocationsBloc>(
+            bloc: HistoryLocationsBloc(context),
+            child: TrufiBlocProvider<SavedPlacesBloc>(
+              bloc: SavedPlacesBloc(context),
+              child: AppLifecycleReactor(
+                child: LocalizedMaterialApp(
+                  theme,
+                  customOverlayBuilder,
+                  customBetweenFabBuilder,
                 ),
               ),
             ),
@@ -166,11 +160,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
     super.dispose();
   }
 
-  AppLifecycleState _notification;
-
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
+    final locationProviderCubit = context.read<LocationProviderCubit>();
 
     if (state == AppLifecycleState.resumed) {
       final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
@@ -179,16 +171,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
         showAppReviewDialog(context);
         appReviewBloc.markReviewRequestedForCurrentVersion(packageInfo);
       }
+      locationProviderCubit.start();
+    } else {
+      locationProviderCubit.stop();
     }
-
-    setState(() {
-      _notification = state;
-      if (_notification == AppLifecycleState.resumed) {
-        locationProviderBloc.start();
-      } else {
-        locationProviderBloc.stop();
-      }
-    });
   }
 
   @override

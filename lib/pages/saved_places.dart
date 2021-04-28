@@ -7,7 +7,7 @@ import 'package:trufi_core/blocs/request_manager_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home_page.dart';
 
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
@@ -153,7 +153,8 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    final location = await LocationProviderBloc.of(context).currentLocation;
+    final location =
+        await context.read<LocationProviderCubit>().getCurrentLocation();
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,
