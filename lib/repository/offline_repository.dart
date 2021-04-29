@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
@@ -49,9 +48,9 @@ class OfflineRepository implements RequestManager {
 
   @override
   CancelableOperation<Plan> fetchTransitPlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
+    String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
       throw FetchOfflineRequestException(
@@ -62,9 +61,9 @@ class OfflineRepository implements RequestManager {
 
   @override
   CancelableOperation<Plan> fetchCarPlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
+    String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
       throw FetchOfflineRequestException(
@@ -75,8 +74,8 @@ class OfflineRepository implements RequestManager {
 
   @override
   CancelableOperation<Ad> fetchAd(
-    BuildContext context,
     TrufiLocation to,
+    String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
       throw FetchOfflineRequestException(
