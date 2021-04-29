@@ -9,6 +9,7 @@ import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
+import 'package:trufi_core/repository/online_graphql_repository/plan_graphql_model.dart';
 import 'package:trufi_core/repository/online_graphql_repository/queries.dart' as queries;
 import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_configuration.dart';
@@ -55,8 +56,7 @@ class OnlineGraphQLRepository implements RequestManager {
     return CancelableOperation.fromFuture(() async {
       Plan plan = await _fetchPlan(from, to, mode);
       if (plan.hasError) {
-        // TODO implement translate for other errors 
-         plan = Plan.fromError('GraphQL error: ${plan.error.toString()}');
+        plan = Plan.fromError(plan.error.message);
       }
       return plan;
     }());
@@ -80,7 +80,7 @@ class OnlineGraphQLRepository implements RequestManager {
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint,
     );
-    final queryPlan = queries.getPlan(
+    final queryPlan = queries.getPlanComplete(
       fromLat: from.latitude,
       fromLon: from.longitude,
       toLat: to.latitude,
@@ -96,7 +96,7 @@ class OnlineGraphQLRepository implements RequestManager {
 
     final response = await _fetchRequest(request, body);
     if (response.statusCode == 200) {
-      return compute(_parsePlan, utf8.decode(response.bodyBytes));
+      return _parsePlan(utf8.decode(response.bodyBytes));
     } else {
       throw FetchOnlineResponseException('Failed to load plan');
     }
@@ -119,8 +119,11 @@ class OnlineGraphQLRepository implements RequestManager {
       throw FetchOnlineRequestException(e);
     }
   }
-}
 
-Plan _parsePlan(String responseBody) {
-  return Plan.fromJson(json.decode(responseBody)["data"] as Map<String, dynamic>);
+  Plan _parsePlan(String body) {
+    final planGraphQL = PlanGraphQl.fromJson(
+      json.decode(body)["data"]["plan"] as Map<String, dynamic>,
+    );
+    return planGraphQL.toPlan();
+  }
 }

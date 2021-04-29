@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-String getPlan({
+String getPlanComplete({
   @required double fromLat,
   @required double fromLon,
   @required double toLat,
@@ -10,6 +10,7 @@ String getPlan({
   plan(
     from: {lat: $fromLat, lon:  $fromLon}
     to: {lat: $toLat, lon:  $toLon}
+    transportModes: [{mode:WALK},{mode:TRANSIT}]
     numItineraries: 3
   ) {
     date,
@@ -42,6 +43,9 @@ String getPlan({
         realTime,
         distance,
         mode,
+        agency{
+          name,
+        },
         route{
           url
         },
