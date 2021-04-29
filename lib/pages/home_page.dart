@@ -7,9 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
+import 'package:trufi_core/widgets/fetchErrorHandler.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
@@ -237,7 +238,9 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     final homePageState = context.read<HomePageCubit>().state;
     final Widget body = Container(
-      child: homePageState.plan != null && homePageState.plan.error == null
+      child: homePageState.plan != null &&
+              homePageState.plan.error == null &&
+              !homePageState.isFetching
           ? PlanPage(
               homePageState.plan,
               homePageState.ad,
@@ -309,21 +312,15 @@ class HomePageState extends State<HomePage>
     await _callFetchPlan();
   }
 
-  Future<void> _callFetchPlan({bool isCar = false}) async {
+  Future<void> _callFetchPlan() async {
     final homePageCubit = context.read<HomePageCubit>();
-    final requestManagerCubit = context.read<RequestManagerCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
     final locationProviderCubit = context.read<LocationProviderCubit>();
-
     locationProviderCubit.start();
-
-    await homePageCubit.fetchPlan(
-      context,
-      requestManagerCubit,
-      appReviewCubit,
-      TrufiLocalization.of(context),
-      await locationProviderCubit.getCurrentLocation(),
-      car: isCar,
-    );
+    final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    await homePageCubit
+        .fetchPlan(correlationId)
+        .then((value) => appReviewCubit.incrementReviewWorthyActions())
+        .catchError((error) => onFetchError(context, error));
   }
 }

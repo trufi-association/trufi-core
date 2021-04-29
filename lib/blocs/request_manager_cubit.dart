@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
@@ -11,17 +10,14 @@ import 'package:trufi_core/trufi_models.dart';
 
 // TODO: This is actually not a Cubit it is just a service / controller
 //  there is no state that it contains
-class RequestManagerCubit extends Cubit<void> implements RequestManager {
+class RequestManagerCubit extends Cubit<void> {
   final RequestManager _offlineRequestManager;
-  final RequestManager _onlineRequestManager;
   final _fetchLocationLock = Lock();
 
-  RequestManagerCubit(this._offlineRequestManager, this._onlineRequestManager)
-      : super(null);
+  RequestManagerCubit(this._offlineRequestManager) : super(null);
 
   CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
 
-  @override
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsBloc favoriteLocationsBloc,
     LocationSearchBloc locationSearchBloc,
@@ -48,36 +44,5 @@ class RequestManagerCubit extends Cubit<void> implements RequestManager {
             );
             return _fetchLocationOperation.valueOrCancellation(null);
           });
-  }
-
-  // TODO: Remove the context pollution
-  @override
-  CancelableOperation<Plan> fetchTransitPlan(
-    BuildContext context,
-    TrufiLocation from,
-    TrufiLocation to,
-  ) {
-    // FIXME: For now we fetch plans always online
-    // _requestManager.fetchPlan(context, from, to);
-    return _onlineRequestManager.fetchTransitPlan(context, from, to);
-  }
-
-  // TODO: Remove the context pollution
-  @override
-  CancelableOperation<Plan> fetchCarPlan(
-    BuildContext context,
-    TrufiLocation from,
-    TrufiLocation to,
-  ) {
-    return _onlineRequestManager.fetchCarPlan(context, from, to);
-  }
-
-  // TODO: Remove the context pollution
-  @override
-  CancelableOperation<Ad> fetchAd(
-    BuildContext context,
-    TrufiLocation to,
-  ) {
-    return _onlineRequestManager.fetchAd(context, to);
   }
 }
