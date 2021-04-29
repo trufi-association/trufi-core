@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
+enum ServerType { defaultServer, graphQLServer }
+
 class TrufiConfiguration {
   static final TrufiConfiguration _singleton = TrufiConfiguration._internal();
 
@@ -30,6 +32,7 @@ class TrufiConfiguration {
 
 class TrufiGeneralConfiguration {
   String appCity = "Cochabamba";
+  ServerType typeServer = ServerType.defaultServer;
   bool debug = false;
 }
 
