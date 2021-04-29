@@ -3,23 +3,23 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/request_manager.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
   static const String planPath = '/plan';
+  final String otpEndpoint;
+  final String adsEndpoint;
+
+  OnlineRepository({@required this.otpEndpoint, this.adsEndpoint});
 
   @override
   Future<List<TrufiPlace>> fetchLocations(
@@ -30,7 +30,7 @@ class OnlineRepository implements RequestManager {
     int limit = 30,
   }) async {
     final Uri request = Uri.parse(
-      TrufiConfiguration().url.otpEndpoint + searchPath,
+      otpEndpoint + searchPath,
     ).replace(queryParameters: {
       "query": query,
       "autocomplete": "false",
@@ -60,75 +60,67 @@ class OnlineRepository implements RequestManager {
 
   @override
   CancelableOperation<Plan> fetchTransitPlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
+    String correlationId,
   ) {
-    return _fetchCancelablePlan(context, from, to, "TRANSIT,WALK");
+    return _fetchCancelablePlan(from, to, "TRANSIT,WALK", correlationId);
   }
 
   @override
   CancelableOperation<Plan> fetchCarPlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
+    String correlationId,
   ) {
-    return _fetchCancelablePlan(context, from, to, "CAR,WALK");
+    return _fetchCancelablePlan(from, to, "CAR,WALK", correlationId);
   }
 
   @override
   CancelableOperation<Ad> fetchAd(
-    BuildContext context,
     TrufiLocation to,
+    String correlationId,
   ) {
-    return _fetchCancelableAd(context, to);
+    return _fetchCancelableAd(to, correlationId);
   }
 
   CancelableOperation<Plan> _fetchCancelablePlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
     String mode,
+    String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(context, from, to, mode);
-      if (plan.hasError) {
-        plan = Plan.fromError(
-          _localizedErrorForPlanError(
-            plan.error,
-            TrufiLocalization.of(context),
-          ),
-        );
-      }
+      final Plan plan = await _fetchPlan(from, to, mode, correlationId);
       return plan;
     }());
   }
 
   CancelableOperation<Ad> _fetchCancelableAd(
-    BuildContext context,
     TrufiLocation to,
+    String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final Ad ad = await _fetchAd(context, to);
+      final Ad ad = await _fetchAd(to, correlationId);
       return ad;
     }());
   }
 
   Future<Plan> _fetchPlan(
-    BuildContext context,
     TrufiLocation from,
     TrufiLocation to,
     String mode,
+    String correlationId,
   ) async {
     final Uri request = Uri.parse(
-      TrufiConfiguration().url.otpEndpoint + planPath,
+      otpEndpoint + planPath,
     ).replace(queryParameters: {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": _todayMonthDayYear(),
       "numItineraries": "5",
       "mode": mode,
-      "correlation": context.read<PreferencesCubit>().state.correlationId,
+      "correlation": correlationId,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
@@ -139,19 +131,19 @@ class OnlineRepository implements RequestManager {
   }
 
   Future<Ad> _fetchAd(
-    BuildContext context,
     TrufiLocation to,
+    String correlationId,
   ) async {
-    final adEndpoint = TrufiConfiguration().url.adsEndpoint;
+    final adEndpoint = adsEndpoint;
     if (adEndpoint == null || adEndpoint.isEmpty) {
       return null;
     }
 
     final Uri request = Uri.parse(
-      TrufiConfiguration().url.adsEndpoint,
+      adsEndpoint,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
-      "correlation": context.read<PreferencesCubit>().state.correlationId,
+      "correlation": correlationId,
       "language": Intl.getCurrentLocale()
     });
     final response = await _fetchRequest(request);
@@ -187,6 +179,8 @@ class OnlineRepository implements RequestManager {
         today.year.toString();
   }
 
+// TODO link again with localization error
+  // ignore: unused_element
   String _localizedErrorForPlanError(
     PlanError error,
     TrufiLocalization localization,

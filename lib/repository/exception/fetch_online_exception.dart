@@ -43,3 +43,36 @@ class FetchOnlineResponseException implements Exception {
     return "Fetch online response exception: $_message";
   }
 }
+
+class FetchCanceledByUserException implements Exception {
+  FetchCanceledByUserException(this._message);
+
+  final String _message;
+
+  @override
+  String toString() {
+    return "Canceled by user: $_message";
+  }
+}
+
+class FetchOnlineCarException implements Exception {
+  FetchOnlineCarException(this._message);
+
+  final String _message;
+
+  @override
+  String toString() {
+    return "Canceled by user: $_message";
+  }
+}
+
+class FetchOnlinePlanException implements Exception {
+  FetchOnlinePlanException(this._message);
+
+  final String _message;
+
+  @override
+  String toString() {
+    return "Canceled by user: $_message";
+  }
+}

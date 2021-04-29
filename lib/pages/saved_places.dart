@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../blocs/location_provider_cubit.dart';
 import '../blocs/saved_places_bloc.dart';
@@ -163,12 +164,13 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
 
     final homePageCubit = context.read<HomePageCubit>();
     await homePageCubit.updateCurrentRoute(currentLocation, toLocation);
-
-    final requestManagerCubit = context.read<RequestManagerCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
 
-    await homePageCubit.fetchPlan(context, requestManagerCubit, appReviewCubit,
-        TrufiLocalization.of(context), location);
+    final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    await homePageCubit
+        .fetchPlan(correlationId)
+        .then((value) => appReviewCubit.incrementReviewWorthyActions())
+        .catchError((Exception error) => onFetchError(context, error));
     Navigator.pushNamed(context, HomePage.route);
   }
 
