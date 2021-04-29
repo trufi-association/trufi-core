@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/models/utils_models.dart';
 import 'package:trufi_core/trufi_models.dart';
+
+enum _Mode { walk, rail, bus }
+
+final _modeValues = EnumValues(
+  {"BUS": _Mode.bus, "RAIL": _Mode.rail, "WALK": _Mode.walk},
+);
 
 class PlanGraphQl {
   PlanGraphQl({
@@ -190,21 +197,4 @@ class _Route {
   Map<String, dynamic> toJson() => {
         "url": url,
       };
-}
-
-enum _Mode { walk, rail, bus }
-
-final _modeValues = _EnumValues(
-  {"BUS": _Mode.bus, "RAIL": _Mode.rail, "WALK": _Mode.walk},
-);
-
-class _EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  _EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    return reverseMap ??= map.map((k, v) => MapEntry(v, k));
-  }
 }
