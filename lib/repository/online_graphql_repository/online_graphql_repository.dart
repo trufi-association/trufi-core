@@ -24,14 +24,20 @@ class OnlineGraphQLRepository implements RequestManager {
   });
 
   @override
-  CancelableOperation<Ad> fetchAd(BuildContext context, TrufiLocation to) {
-    return _fetchCancelableAd(context, to);
+  CancelableOperation<Ad> fetchAd(
+    TrufiLocation to,
+    String correlationId,
+  ) {
+    return _fetchCancelableAd(to);
   }
 
   @override
   CancelableOperation<Plan> fetchCarPlan(
-      BuildContext context, TrufiLocation from, TrufiLocation to) {
-    return _fetchCancelablePlan(from, to, [TransportMode.car,TransportMode.walk]);
+    TrufiLocation from,
+    TrufiLocation to,
+    String correlationId,
+  ) {
+    return _fetchCancelablePlan(from, to, [TransportMode.car, TransportMode.walk]);
   }
 
   @override
@@ -44,8 +50,11 @@ class OnlineGraphQLRepository implements RequestManager {
 
   @override
   CancelableOperation<Plan> fetchTransitPlan(
-      BuildContext context, TrufiLocation from, TrufiLocation to) {
-    return _fetchCancelablePlan(from, to, [TransportMode.transit,TransportMode.walk]);
+    TrufiLocation from,
+    TrufiLocation to,
+    String correlationId,
+  ) {
+    return _fetchCancelablePlan(from, to, [TransportMode.transit, TransportMode.walk]);
   }
 
   CancelableOperation<Plan> _fetchCancelablePlan(
@@ -63,7 +72,6 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   CancelableOperation<Ad> _fetchCancelableAd(
-    BuildContext context,
     TrufiLocation to,
   ) {
     return CancelableOperation.fromFuture(() async {
