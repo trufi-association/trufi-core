@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,8 +107,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
       final Plan plan = await currentFetchPlanOperation.valueOrCancellation(
         null,
       );
-
-      if (plan == null) {
+      if (plan != null && !plan.hasError) {
+        setPlan(plan);
+      } else if (plan == null) {
         throw FetchCanceledByUserException("Cancelled by User");
       } else if (plan.hasError) {
         updateMapRouteState(state.copyWith(isFetching: false));
@@ -117,7 +119,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
           throw FetchOnlinePlanException(plan.error.message);
         }
       } else {
-        setPlan(plan);
+        // should never happened
+        throw Exception("Unknown Error");
       }
     }
   }
