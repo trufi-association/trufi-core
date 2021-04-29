@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
+enum TypeServer { defaultServer, graphQLServer }
+
 class TrufiConfiguration {
   static final TrufiConfiguration _singleton = TrufiConfiguration._internal();
 
@@ -30,6 +32,7 @@ class TrufiConfiguration {
 
 class TrufiGeneralConfiguration {
   String appCity = "Cochabamba";
+  TypeServer typeServer = TypeServer.defaultServer;
   bool debug = false;
 }
 
@@ -103,5 +106,4 @@ class TrufiConfigurationUrl {
   String twitter = "";
   String donate = "";
   String share = "";
-  bool   isOtpGraphQL = false;
 }
