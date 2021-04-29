@@ -170,7 +170,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     await homePageCubit
         .fetchPlan(correlationId)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
-        .catchError((error) => onFetchError(context, error));
+        .catchError((Exception error) => onFetchError(context, error));
     Navigator.pushNamed(context, HomePage.route);
   }
 

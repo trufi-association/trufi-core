@@ -12,7 +12,7 @@ import 'package:package_info/package_info.dart';
 import 'package:latlong/latlong.dart';
 import 'alerts.dart';
 
-Future<void> onFetchError(BuildContext context, dynamic exception) async {
+Future<void> onFetchError(BuildContext context, Exception exception) async {
   final TrufiLocalization localization = TrufiLocalization.of(context);
   switch (exception.runtimeType) {
     case FetchOfflineRequestException:
@@ -80,7 +80,9 @@ Future<void> onFetchError(BuildContext context, dynamic exception) async {
                   .fetchPlan(correlationId, car: true)
                   .then(
                       (value) => appReviewCubit.incrementReviewWorthyActions())
-                  .catchError((error) => onFetchError(context, error));
+                  .catchError(
+                    (Exception error) => onFetchError(context, error),
+                  );
             },
           );
         },
