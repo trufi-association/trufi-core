@@ -8,19 +8,17 @@ import 'package:http/http.dart' as http;
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/online_graphql_repository/plan_graphql_model.dart';
 import 'package:trufi_core/repository/online_graphql_repository/queries.dart' as queries;
 import 'package:trufi_core/repository/request_manager.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class OnlineGraphQLRepository implements RequestManager {
   static const String planPath = '/plan';
-  final LocalRepository preferences;
+  final String graphQLEndPoint;
 
   OnlineGraphQLRepository({
-    @required this.preferences,
+    @required this.graphQLEndPoint,
   });
 
   @override
@@ -86,7 +84,7 @@ class OnlineGraphQLRepository implements RequestManager {
     List<TransportMode> transportModes,
   ) async {
     final Uri request = Uri.parse(
-      TrufiConfiguration().url.otpEndpoint,
+      graphQLEndPoint,
     );
     final queryPlan = queries.getCustomPlan(
       fromLat: from.latitude,
