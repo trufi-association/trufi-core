@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:trufi_core/repository/online_graphql_repository/plan_graphql_model.dart';
 
 String getPlanComplete({
   @required double fromLat,
@@ -86,17 +87,19 @@ String getPlanComplete({
 ''';
 }
 
-String getPlanSimple({
+String getCustomPlan({
   @required double fromLat,
   @required double fromLon,
   @required double toLat,
   @required double toLon,
+  List<TransportMode> transportModes = const [TransportMode.transit, TransportMode.walk],
 }) {
+  final transportMode = _parseTransportModes(transportModes);
   return '''
     plan(
       from: {lat: $fromLat, lon:  $fromLon}
       to: {lat: $toLat, lon:  $toLon}
-      transportModes: [{mode:WALK},{mode:TRANSIT}]
+      transportModes: $transportMode
       numItineraries: 3
     ) {
       from{
@@ -138,4 +141,9 @@ String getPlanSimple({
       }
     }
 ''';
+}
+
+String _parseTransportModes(List<TransportMode> transportModes) {
+  final modes = transportModes.map((e) => '{mode:${e.name}}').join(',');
+  return '[$modes]';
 }

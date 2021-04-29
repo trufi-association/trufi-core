@@ -1,12 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/models/utils_models.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-enum _Mode { walk, rail, bus }
+enum TransportMode { walk, rail, bus, transit, car }
 
-final _modeValues = EnumValues(
-  {"BUS": _Mode.bus, "RAIL": _Mode.rail, "WALK": _Mode.walk},
-);
+TransportMode _getEnumMode(String enumS) {
+  switch (enumS) {
+    case 'WALK':
+      return TransportMode.walk;
+    case 'BUS':
+      return TransportMode.bus;
+    case 'CAR':
+      return TransportMode.car;
+    case 'RAIL':
+      return TransportMode.rail;
+    default:
+      return TransportMode.walk;
+  }
+}
+
+extension TransportModeExtension on TransportMode {
+  String get name {
+    switch (this) {
+      case TransportMode.walk:
+        return 'WALK';
+      case TransportMode.bus:
+        return 'BUS';
+      case TransportMode.car:
+        return 'CAR';
+      case TransportMode.rail:
+        return 'LIGHT RAIL';
+      case TransportMode.transit:
+        return 'TRANSIT';
+      default:
+        return 'WALK';
+    }
+  }
+}
 
 class PlanGraphQl {
   PlanGraphQl({
@@ -121,7 +150,7 @@ class _ItineraryLeg {
   final double distance;
   final double duration;
   final String agencyName;
-  final _Mode mode;
+  final TransportMode mode;
   final _Route route;
   final _Location from;
   final _Location to;
@@ -131,7 +160,7 @@ class _ItineraryLeg {
         distance: json["distance"] as double,
         duration: json["duration"] as double,
         agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
-        mode: _modeValues.map[json["mode"]],
+        mode: _getEnumMode(json["mode"] as String),
         route: json["route"] == null
             ? _Route(url: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),
@@ -143,7 +172,7 @@ class _ItineraryLeg {
   Map<String, dynamic> toJson() => {
         "distance": distance,
         "duration": duration,
-        "mode": _modeValues.reverse[mode],
+        "mode": mode.name,
         "route": route.toJson(),
         "from": from.toJson(),
         "to": to.toJson(),
@@ -153,11 +182,11 @@ class _ItineraryLeg {
   PlanItineraryLeg toPlanItineraryLeg() {
     return PlanItineraryLeg(
       points: legGeometry.points,
-      mode: (mode == _Mode.rail) ? 'light rail' : _modeValues.reverse[mode] ?? '',
+      mode: mode.name,
       route: agencyName,
       distance: distance,
       duration: duration,
-      routeLongName: (mode == _Mode.rail) ? 'light rail' : _modeValues.reverse[mode] ?? '',
+      routeLongName: mode.name,
       toName: to.name,
     );
   }

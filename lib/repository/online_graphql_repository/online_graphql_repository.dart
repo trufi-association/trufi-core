@@ -31,7 +31,7 @@ class OnlineGraphQLRepository implements RequestManager {
   @override
   CancelableOperation<Plan> fetchCarPlan(
       BuildContext context, TrufiLocation from, TrufiLocation to) {
-    return _fetchCancelablePlan(from, to, "TRANSIT,WALK");
+    return _fetchCancelablePlan(from, to, [TransportMode.car,TransportMode.walk]);
   }
 
   @override
@@ -45,16 +45,16 @@ class OnlineGraphQLRepository implements RequestManager {
   @override
   CancelableOperation<Plan> fetchTransitPlan(
       BuildContext context, TrufiLocation from, TrufiLocation to) {
-    return _fetchCancelablePlan(from, to, "TRANSIT,WALK");
+    return _fetchCancelablePlan(from, to, [TransportMode.transit,TransportMode.walk]);
   }
 
   CancelableOperation<Plan> _fetchCancelablePlan(
     TrufiLocation from,
     TrufiLocation to,
-    String mode,
+    List<TransportMode> transportModes,
   ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(from, to, mode);
+      Plan plan = await _fetchPlan(from, to, transportModes);
       if (plan.hasError) {
         plan = Plan.fromError(plan.error.message);
       }
@@ -75,16 +75,17 @@ class OnlineGraphQLRepository implements RequestManager {
   Future<Plan> _fetchPlan(
     TrufiLocation from,
     TrufiLocation to,
-    String mode,
+    List<TransportMode> transportModes,
   ) async {
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint,
     );
-    final queryPlan = queries.getPlanSimple(
+    final queryPlan = queries.getCustomPlan(
       fromLat: from.latitude,
       fromLon: from.longitude,
       toLat: to.latitude,
       toLon: to.longitude,
+      transportModes: transportModes,
     );
     final body = {
       "query": '''
