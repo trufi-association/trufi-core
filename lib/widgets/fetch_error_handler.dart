@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/location_provider_cubit.dart';
@@ -8,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:package_info/package_info.dart';
 import 'package:latlong/latlong.dart';
 import 'alerts.dart';
