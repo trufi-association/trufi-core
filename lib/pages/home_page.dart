@@ -7,13 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
+import 'package:trufi_core/widgets/fetch_error_handler.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../keys.dart' as keys;
 import '../location/location_form_field.dart';
 import '../plan/plan.dart';
@@ -183,7 +184,7 @@ class HomePageState extends State<HomePage>
         onPressed: () async {
           final homePageBloc = context.read<HomePageCubit>();
           await homePageBloc.swapLocations();
-          _callFetchPlan();
+          await _callFetchPlan();
         },
       ),
     );
@@ -237,7 +238,9 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     final homePageState = context.read<HomePageCubit>().state;
     final Widget body = Container(
-      child: homePageState.plan != null && homePageState.plan.error == null
+      child: homePageState.plan != null &&
+              homePageState.plan.error == null &&
+              !homePageState.isFetching
           ? PlanPage(
               homePageState.plan,
               homePageState.ad,
@@ -277,6 +280,7 @@ class HomePageState extends State<HomePage>
   void _reset() {
     setState(() {
       context.read<HomePageCubit>().reset();
+      context.read<LocationProviderCubit>().stop();
       _formKey.currentState.reset();
       _setFromPlaceToCurrentPosition();
     });
@@ -290,7 +294,8 @@ class HomePageState extends State<HomePage>
 
   Future<void> _setFromPlaceToCurrentPosition() async {
     final localization = TrufiLocalization.of(context);
-    final location = await LocationProviderBloc.of(context).currentLocation;
+    final location =
+        await context.read<LocationProviderCubit>().getCurrentLocation();
     if (location != null) {
       _setFromPlace(
         TrufiLocation.fromLatLng(
@@ -307,20 +312,15 @@ class HomePageState extends State<HomePage>
     await _callFetchPlan();
   }
 
-  Future<void> _callFetchPlan({bool isCar = false}) async {
+  Future<void> _callFetchPlan() async {
     final homePageCubit = context.read<HomePageCubit>();
-    final requestManagerCubit = context.read<RequestManagerCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
-    final currentLocation =
-        await LocationProviderBloc.of(context).currentLocation;
-
-    await homePageCubit.fetchPlan(
-      context,
-      requestManagerCubit,
-      appReviewCubit,
-      TrufiLocalization.of(context),
-      currentLocation,
-      car: isCar,
-    );
+    final locationProviderCubit = context.read<LocationProviderCubit>();
+    locationProviderCubit.start();
+    final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    await homePageCubit
+        .fetchPlan(correlationId)
+        .then((value) => appReviewCubit.incrementReviewWorthyActions())
+        .catchError((Exception error) => onFetchError(context, error));
   }
 }

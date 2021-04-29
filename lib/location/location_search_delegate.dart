@@ -3,15 +3,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
+import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
-import '../blocs/location_provider_bloc.dart';
+import '../blocs/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
@@ -28,22 +30,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) {
-    final theme = Theme.of(context);
-    return theme.copyWith(
-      primaryColor: Colors.white,
-      primaryColorBrightness: Brightness.light,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.black54),
-      textTheme: theme.primaryTextTheme.copyWith(
-        headline6:
-            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
-        bodyText2:
-            theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
-        bodyText1:
-            theme.primaryTextTheme.bodyText1.copyWith(color: theme.accentColor),
-      ),
-    );
-  }
+  ThemeData appBarTheme(BuildContext context) =>
+      context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -325,7 +313,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildSearchResultList(BuildContext context) {
-    final requestManagerBloc = context.read<RequestManagerCubit>();
+    final requestManagerBloc = context.read<RequestSearchManagerCubit>();
     final localization = TrufiLocalization.of(context);
     return _buildFutureBuilder(
       context,
@@ -639,19 +627,21 @@ class _SuggestionList extends StatelessWidget {
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
-    final location = await LocationProviderBloc.of(context).currentLocation;
-    if (location != null) {
+    try {
+      final currentLocation =
+          await context.read<LocationProviderCubit>().getCurrentLocation();
+
       _handleOnLatLngTapped(
-        description: localization.searchMapMarker,
-        location: location,
+        description: localization.searchItemYourLocation,
+        location: currentLocation,
         addToHistory: false,
       );
-      return;
+    } on PermissionDeniedException catch (_) {
+      showDialog(
+        context: context,
+        builder: (context) => buildAlertLocationServicesDenied(context),
+      );
     }
-    showDialog(
-      context: context,
-      builder: (context) => buildAlertLocationServicesDenied(context),
-    );
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {

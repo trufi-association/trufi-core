@@ -8,10 +8,12 @@ import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 import '../mocks/local_repository_mock.dart';
+import '../mocks/request_manager_mock.dart';
 
 void main() {
   group("HomePageCubit", () {
     final mockLocalRepository = MockLocalRepository();
+    final mockRequestManager = MockRequestManager();
 
     setUp(() {});
 
@@ -21,7 +23,7 @@ void main() {
         when(mockLocalRepository.getStateHomePage()).thenAnswer(
           (realInvocation) async => "{}",
         );
-        return HomePageCubit(mockLocalRepository);
+        return HomePageCubit(mockLocalRepository, mockRequestManager);
       },
       verify: (_) => verify(mockLocalRepository.getStateHomePage()),
       expect: () => [const MapRouteState()],
@@ -29,7 +31,7 @@ void main() {
 
     blocTest(
       "should reset from and toPlace",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async {
         await cubit.updateMapRouteState(const MapRouteState(isFetching: true));
         await cubit.reset();
@@ -44,7 +46,7 @@ void main() {
 
     blocTest(
       "updateHomePageStateData should emit new state and call localStorage",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       verify: (_) => verify(
         mockLocalRepository.saveStateHomePage(
           jsonEncode(const MapRouteState(isFetching: true).toJson()),
@@ -57,7 +59,7 @@ void main() {
 
     blocTest(
       "setFromPlace should emit new state and call localStorage",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async => cubit.setFromPlace(
           TrufiLocation(description: "Test", latitude: 1.0, longitude: 0.9)),
       expect: () => [
@@ -70,7 +72,7 @@ void main() {
 
     blocTest(
       "setToPlace should emit new state and call localStorage",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async => cubit.setToPlace(
           TrufiLocation(description: "Test", latitude: 1.0, longitude: 0.9)),
       expect: () => [
@@ -85,7 +87,7 @@ void main() {
 
     blocTest(
       "setPlan should emit new state and call localStorage",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async => cubit.setPlan(
         Plan(from: PlanLocation(), to: PlanLocation(), itineraries: []),
       ),
@@ -100,7 +102,7 @@ void main() {
 
     blocTest(
       "swapLocations should do something",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async {
         await cubit.updateMapRouteState(MapRouteState(
           toPlace: TrufiLocation(
@@ -124,7 +126,7 @@ void main() {
 
     blocTest(
       "configSuccessAnimation should emit animation true",
-      build: () => HomePageCubit(mockLocalRepository),
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async =>
           cubit.configSuccessAnimation(show: true),
       expect: () => [
@@ -134,7 +136,7 @@ void main() {
     );
 
     blocTest("updateCurrentRoute should remove the current plan",
-        build: () => HomePageCubit(mockLocalRepository),
+        build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
         act: (HomePageCubit cubit) async {
           await cubit.updateMapRouteState(MapRouteState(
             plan:

@@ -4,13 +4,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
+import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home_page.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
-import 'package:trufi_core/repository/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
@@ -21,7 +21,7 @@ import 'package:uuid/uuid.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
 import './blocs/history_locations_bloc.dart';
-import './blocs/location_provider_bloc.dart';
+import './blocs/location_provider_cubit.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_cubit.dart';
 import './blocs/saved_places_bloc.dart';
@@ -65,6 +65,7 @@ typedef LocaleWidgetBuilder = Widget Function(
 class TrufiApp extends StatelessWidget {
   TrufiApp(
       {@required this.theme,
+      this.searchTheme,
       this.customOverlayBuilder,
       this.customBetweenFabBuilder,
       Key key})
@@ -77,6 +78,9 @@ class TrufiApp extends StatelessWidget {
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
 
+  /// The used ThemeData for the SearchDelegate
+  final ThemeData searchTheme;
+
   /// A [customOverlayBuilder] that receives the current language to allow
   /// a custom overlay on top of the Trufi Core.
   final LocaleWidgetBuilder customOverlayBuilder;
@@ -88,42 +92,41 @@ class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
+    final trufiConfiguration = TrufiConfiguration();
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) => PreferencesCubit(sharedPreferencesRepository, Uuid()),
-        ),
+            create: (context) =>
+                PreferencesCubit(sharedPreferencesRepository, Uuid())),
         BlocProvider<AppReviewCubit>(
-          create: (context) => AppReviewCubit(sharedPreferencesRepository),
-        ),
-        BlocProvider<RequestManagerCubit>(
-          create: (context) => RequestManagerCubit(
-            OfflineRepository(),
-            TrufiConfiguration().generalConfiguration.typeServer == ServerType.defaultServer
-                ? OnlineRepository()
-                : OnlineGraphQLRepository(preferences: sharedPreferencesRepository),
-          ),
+            create: (context) => AppReviewCubit(sharedPreferencesRepository)),
+        BlocProvider<RequestSearchManagerCubit>(
+          create: (context) => RequestSearchManagerCubit(OfflineRepository()),
         ),
         BlocProvider<HomePageCubit>(
-          create: (context) => HomePageCubit(sharedPreferencesRepository),
+            create: (context) => HomePageCubit(
+                sharedPreferencesRepository,
+                OnlineRepository(
+                  otpEndpoint: trufiConfiguration.url.otpEndpoint,
+                ))),
+        BlocProvider<LocationProviderCubit>(
+            create: (context) => LocationProviderCubit()),
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(theme, searchTheme),
         )
       ],
-      child: TrufiBlocProvider<LocationProviderBloc>(
-        bloc: LocationProviderBloc(),
-        child: TrufiBlocProvider<LocationSearchBloc>(
-          bloc: LocationSearchBloc(context),
-          child: TrufiBlocProvider<FavoriteLocationsBloc>(
-            bloc: FavoriteLocationsBloc(context),
-            child: TrufiBlocProvider<HistoryLocationsBloc>(
-              bloc: HistoryLocationsBloc(context),
-              child: TrufiBlocProvider<SavedPlacesBloc>(
-                bloc: SavedPlacesBloc(context),
-                child: AppLifecycleReactor(
-                  child: LocalizedMaterialApp(
-                    theme,
-                    customOverlayBuilder,
-                    customBetweenFabBuilder,
-                  ),
+      child: TrufiBlocProvider<LocationSearchBloc>(
+        bloc: LocationSearchBloc(context),
+        child: TrufiBlocProvider<FavoriteLocationsBloc>(
+          bloc: FavoriteLocationsBloc(context),
+          child: TrufiBlocProvider<HistoryLocationsBloc>(
+            bloc: HistoryLocationsBloc(context),
+            child: TrufiBlocProvider<SavedPlacesBloc>(
+              bloc: SavedPlacesBloc(context),
+              child: AppLifecycleReactor(
+                child: LocalizedMaterialApp(
+                  customOverlayBuilder,
+                  customBetweenFabBuilder,
                 ),
               ),
             ),
@@ -160,11 +163,9 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
     super.dispose();
   }
 
-  AppLifecycleState _notification;
-
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    final locationProviderBloc = LocationProviderBloc.of(context);
+    final locationProviderCubit = context.read<LocationProviderCubit>();
 
     if (state == AppLifecycleState.resumed) {
       final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
@@ -173,16 +174,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
         showAppReviewDialog(context);
         appReviewBloc.markReviewRequestedForCurrentVersion(packageInfo);
       }
+      locationProviderCubit.start();
+    } else {
+      locationProviderCubit.stop();
     }
-
-    setState(() {
-      _notification = state;
-      if (_notification == AppLifecycleState.resumed) {
-        locationProviderBloc.start();
-      } else {
-        locationProviderBloc.stop();
-      }
-    });
   }
 
   @override
@@ -193,11 +188,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
 
 class LocalizedMaterialApp extends StatefulWidget {
   const LocalizedMaterialApp(
-      this.theme, this.customOverlayWidget, this.customBetweenFabWidget,
+      this.customOverlayWidget, this.customBetweenFabWidget,
       {Key key})
       : super(key: key);
 
-  final ThemeData theme;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
 
@@ -232,7 +226,7 @@ class _LocalizedMaterialAppState extends State<LocalizedMaterialApp> {
             GlobalWidgetsLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
-          theme: widget.theme,
+          theme: context.watch<ThemeCubit>().state.activeTheme,
           home: HomePage(
             customOverlayWidget: widget.customOverlayWidget,
             customBetweenFabWidget: widget.customBetweenFabWidget,

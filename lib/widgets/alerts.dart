@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 Widget buildAlertLocationServicesDenied(BuildContext context) {
@@ -42,7 +43,7 @@ Widget buildTransitErrorAlert({
   String error,
 }) {
   final localization = TrufiLocalization.of(context);
-  final theme = Theme.of(context);
+  final theme = context.read<ThemeCubit>().state.activeTheme;
   final actionTextStyle = theme.textTheme.bodyText2.copyWith(
     color: theme.accentColor,
   );
@@ -125,7 +126,7 @@ Widget _buildAlert({
   Widget content,
   List<Widget> actions,
 }) {
-  final theme = Theme.of(context);
+  final theme = context.read<ThemeCubit>().state.activeTheme;
   return AlertDialog(
     backgroundColor: theme.primaryColor,
     title: title,
