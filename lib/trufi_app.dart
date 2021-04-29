@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/request_manager_cubit.dart';
+import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -100,8 +100,8 @@ class TrufiApp extends StatelessWidget {
                 PreferencesCubit(sharedPreferencesRepository, Uuid())),
         BlocProvider<AppReviewCubit>(
             create: (context) => AppReviewCubit(sharedPreferencesRepository)),
-        BlocProvider<RequestManagerCubit>(
-          create: (context) => RequestManagerCubit(OfflineRepository()),
+        BlocProvider<RequestSearchManagerCubit>(
+          create: (context) => RequestSearchManagerCubit(OfflineRepository()),
         ),
         BlocProvider<HomePageCubit>(
             create: (context) => HomePageCubit(

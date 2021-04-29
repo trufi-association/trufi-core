@@ -10,11 +10,11 @@ import 'package:trufi_core/trufi_models.dart';
 
 // TODO: This is actually not a Cubit it is just a service / controller
 //  there is no state that it contains
-class RequestManagerCubit extends Cubit<void> {
+class RequestSearchManagerCubit extends Cubit<void> {
   final RequestManager _offlineRequestManager;
   final _fetchLocationLock = Lock();
 
-  RequestManagerCubit(this._offlineRequestManager) : super(null);
+  RequestSearchManagerCubit(this._offlineRequestManager) : super(null);
 
   CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
 
