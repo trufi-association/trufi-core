@@ -14,7 +14,6 @@ import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class OnlineGraphQLRepository implements RequestManager {
-  static const String planPath = '/plan';
   final String graphQLEndPoint;
 
   OnlineGraphQLRepository({
