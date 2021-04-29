@@ -141,7 +141,6 @@ Future<void> main() async {
   trufiCfg.url.twitter = globalCfg.getValue<String>("urlTwitter");
   trufiCfg.url.instagram = globalCfg.getValue<String>("urlInstagram");
   trufiCfg.url.share = globalCfg.getValue<String>("urlShare");
-  trufiCfg.url.isOtpGraphQL = globalCfg.getValue<bool>("isOtpGraphQL");
   trufiCfg.generalConfiguration.debug = true;
 
   _setupCustomTrufiLocalization();
