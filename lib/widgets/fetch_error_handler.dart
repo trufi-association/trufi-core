@@ -12,11 +12,11 @@ import 'package:package_info/package_info.dart';
 import 'package:latlong/latlong.dart';
 import 'alerts.dart';
 
-void onFetchError(BuildContext context, dynamic exception) {
+Future<void> onFetchError(BuildContext context, dynamic exception) async {
   final TrufiLocalization localization = TrufiLocalization.of(context);
   switch (exception.runtimeType) {
     case FetchOfflineRequestException:
-      _showOnAndOfflineErrorAlert(
+      return _showOnAndOfflineErrorAlert(
         context,
         "Offline mode is not implemented yet.",
         false,
@@ -24,7 +24,7 @@ void onFetchError(BuildContext context, dynamic exception) {
       );
       break;
     case FetchOfflineResponseException:
-      _showOnAndOfflineErrorAlert(
+      return _showOnAndOfflineErrorAlert(
         context,
         "Offline mode is not implemented yet.",
         false,
@@ -32,7 +32,7 @@ void onFetchError(BuildContext context, dynamic exception) {
       );
       break;
     case FetchOnlineRequestException:
-      _showOnAndOfflineErrorAlert(
+      return _showOnAndOfflineErrorAlert(
         context,
         localization.commonNoInternet,
         true,
@@ -40,7 +40,7 @@ void onFetchError(BuildContext context, dynamic exception) {
       );
       break;
     case FetchOnlineResponseException:
-      _showOnAndOfflineErrorAlert(
+      return _showOnAndOfflineErrorAlert(
         context,
         localization.searchFailLoadingPlan,
         true,
@@ -50,56 +50,55 @@ void onFetchError(BuildContext context, dynamic exception) {
     case FetchOnlinePlanException:
       final cfg = TrufiConfiguration();
       final languageCode = Localizations.localeOf(context).languageCode;
-      PackageInfo.fromPlatform().then((packageInfo) => {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return buildTransitErrorAlert(
-                  context: context,
-                  error: exception.toString(),
-                  onReportMissingRoute: () async {
-                    final LatLng currentLocation = await context
-                        .read<LocationProviderCubit>()
-                        .getCurrentLocation()
-                        .catchError((error) => null);
-                    launch(
-                      "${cfg.url.routeFeedback}?lang=$languageCode&geo=${currentLocation?.latitude},"
-                      "${currentLocation?.longitude}&app=${packageInfo.version}",
-                    );
-                  },
-                  onShowCarRoute: () {
-                    // TODO: improve onShowCarRoute action
-                    final homePageCubit = context.read<HomePageCubit>();
-                    final appReviewCubit = context.read<AppReviewCubit>();
-                    homePageCubit.updateMapRouteState(
-                      homePageCubit.state.copyWith(isFetching: true),
-                    );
-                    final correlationId =
-                        context.read<PreferencesCubit>().state.correlationId;
-                    homePageCubit
-                        .fetchPlan(correlationId, car: true)
-                        .then((value) =>
-                            appReviewCubit.incrementReviewWorthyActions())
-                        .catchError((error) => onFetchError(context, error));
-                  },
-                );
-              },
-            )
-          });
+      final packageInfo = await PackageInfo.fromPlatform();
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return buildTransitErrorAlert(
+            context: context,
+            error: exception.toString(),
+            onReportMissingRoute: () async {
+              final LatLng currentLocation = await context
+                  .read<LocationProviderCubit>()
+                  .getCurrentLocation()
+                  .catchError((error) => null);
+              launch(
+                "${cfg.url.routeFeedback}?lang=$languageCode&geo=${currentLocation?.latitude},"
+                "${currentLocation?.longitude}&app=${packageInfo.version}",
+              );
+            },
+            onShowCarRoute: () {
+              // TODO: improve onShowCarRoute action
+              final homePageCubit = context.read<HomePageCubit>();
+              final appReviewCubit = context.read<AppReviewCubit>();
+              homePageCubit.updateMapRouteState(
+                homePageCubit.state.copyWith(isFetching: true),
+              );
+              final correlationId =
+                  context.read<PreferencesCubit>().state.correlationId;
+              homePageCubit
+                  .fetchPlan(correlationId, car: true)
+                  .then(
+                      (value) => appReviewCubit.incrementReviewWorthyActions())
+                  .catchError((error) => onFetchError(context, error));
+            },
+          );
+        },
+      );
       break;
 
     default:
-      _showErrorAlert(context, exception.toString());
+      return _showErrorAlert(context, exception.toString());
   }
 }
 
-void _showOnAndOfflineErrorAlert(
+Future<void> _showOnAndOfflineErrorAlert(
   BuildContext context,
   String message,
   bool online,
   String commonErrorMessage,
 ) {
-  showDialog(
+  return showDialog(
     context: context,
     builder: (context) {
       return buildOnAndOfflineErrorAlert(
@@ -112,8 +111,8 @@ void _showOnAndOfflineErrorAlert(
   );
 }
 
-void _showErrorAlert(BuildContext context, String error) {
-  showDialog(
+Future<void> _showErrorAlert(BuildContext context, String error) {
+  return showDialog(
     context: context,
     builder: (context) {
       return buildErrorAlert(context: context, error: error);
