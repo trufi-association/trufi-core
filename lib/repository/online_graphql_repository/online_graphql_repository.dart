@@ -80,7 +80,7 @@ class OnlineGraphQLRepository implements RequestManager {
     final Uri request = Uri.parse(
       TrufiConfiguration().url.otpEndpoint,
     );
-    final queryPlan = queries.getPlanComplete(
+    final queryPlan = queries.getPlanSimple(
       fromLat: from.latitude,
       fromLon: from.longitude,
       toLat: to.latitude,
@@ -93,7 +93,6 @@ class OnlineGraphQLRepository implements RequestManager {
         }
       '''
     };
-
     final response = await _fetchRequest(request, body);
     if (response.statusCode == 200) {
       return _parsePlan(utf8.decode(response.bodyBytes));
