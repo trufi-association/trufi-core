@@ -97,12 +97,8 @@ class TrufiApp extends StatelessWidget {
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
         BlocProvider<RequestManagerCubit>(
-          create: (context) => RequestManagerCubit(
-            OfflineRepository(),
-            (TrufiConfiguration().generalConfiguration.typeServer == TypeServer.defaultServer)
-                ? OnlineRepository()
-                : OnlineGraphQLRepository(preferences: sharedPreferencesRepository),
-          ),
+          create: (context) =>
+              RequestManagerCubit(OfflineRepository(), OnlineRepository()),
         ),
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(sharedPreferencesRepository),
