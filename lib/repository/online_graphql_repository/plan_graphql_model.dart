@@ -3,39 +3,27 @@ import 'package:trufi_core/trufi_models.dart';
 
 enum TransportMode { walk, rail, bus, transit, car }
 
-TransportMode _getEnumMode(String enumS) {
-  switch (enumS) {
-    case 'WALK':
-      return TransportMode.walk;
-    case 'BUS':
-      return TransportMode.bus;
-    case 'CAR':
-      return TransportMode.car;
-    case 'RAIL':
-      return TransportMode.rail;
-    default:
-      return TransportMode.walk;
-  }
+extension TransportModeExtension on TransportMode {
+  static const names = {
+    TransportMode.walk: 'WALK',
+    TransportMode.bus: 'BUS',
+    TransportMode.car: 'CAR',
+    TransportMode.rail: 'LIGHT RAIL',
+    TransportMode.transit: 'TRANSIT',
+  };
+  String get name => names[this] ?? 'WALK';
 }
 
-extension TransportModeExtension on TransportMode {
-  String get name {
-    switch (this) {
-      case TransportMode.walk:
-        return 'WALK';
-      case TransportMode.bus:
-        return 'BUS';
-      case TransportMode.car:
-        return 'CAR';
-      case TransportMode.rail:
-        return 'LIGHT RAIL';
-      case TransportMode.transit:
-        return 'TRANSIT';
-      default:
-        return 'WALK';
-    }
-  }
-}
+const transportModeMap= {
+  'WALK': TransportMode.walk,
+  'BUS': TransportMode.bus,
+  'CAR': TransportMode.car,
+  'RAIL': TransportMode.rail,
+  'TRANSIT': TransportMode.transit,
+};
+
+TransportMode _getTransportMode(String enumText) 
+  => transportModeMap[enumText] ?? TransportMode.walk;
 
 class PlanGraphQl {
   PlanGraphQl({
@@ -160,7 +148,7 @@ class _ItineraryLeg {
         distance: json["distance"] as double,
         duration: json["duration"] as double,
         agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
-        mode: _getEnumMode(json["mode"] as String),
+        mode: _getTransportMode(json["mode"] as String),
         route: json["route"] == null
             ? _Route(url: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),
