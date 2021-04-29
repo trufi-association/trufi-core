@@ -85,3 +85,57 @@ String getPlanComplete({
   }
 ''';
 }
+
+String getPlanSimple({
+  @required double fromLat,
+  @required double fromLon,
+  @required double toLat,
+  @required double toLon,
+}) {
+  return '''
+    plan(
+      from: {lat: $fromLat, lon:  $fromLon}
+      to: {lat: $toLat, lon:  $toLon}
+      transportModes: [{mode:WALK},{mode:TRANSIT}]
+      numItineraries: 3
+    ) {
+      from{
+        name,
+        lat,
+        lon,
+      },
+      to{
+        name,
+        lon,
+        lat,
+      },
+      itineraries {
+        legs{
+          duration
+          distance,
+          mode,
+          agency{
+            name
+          }
+          route{
+            url
+          },
+          from{
+        		name,
+        		lon,
+        		lat,
+          },
+          to{
+        		name,
+        		lon,
+        		lat,
+          },
+          legGeometry{
+          	points,
+            length
+          },
+        },
+      }
+    }
+''';
+}
