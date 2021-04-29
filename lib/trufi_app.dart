@@ -92,6 +92,7 @@ class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
+    final trufiConfiguration = TrufiConfiguration();
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
@@ -100,11 +101,14 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<AppReviewCubit>(
             create: (context) => AppReviewCubit(sharedPreferencesRepository)),
         BlocProvider<RequestManagerCubit>(
-          create: (context) =>
-              RequestManagerCubit(OfflineRepository(), OnlineRepository()),
+          create: (context) => RequestManagerCubit(OfflineRepository()),
         ),
         BlocProvider<HomePageCubit>(
-            create: (context) => HomePageCubit(sharedPreferencesRepository)),
+            create: (context) => HomePageCubit(
+                sharedPreferencesRepository,
+                OnlineRepository(
+                  otpEndpoint: trufiConfiguration.url.otpEndpoint,
+                ))),
         BlocProvider<LocationProviderCubit>(
             create: (context) => LocationProviderCubit()),
         BlocProvider<ThemeCubit>(
