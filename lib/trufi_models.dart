@@ -222,16 +222,6 @@ class Plan {
           error: PlanError.fromJson(json[_error] as Map<String, dynamic>));
     } else {
       final Map<String, dynamic> planJson = json[_plan] as Map<String, dynamic>;
-      // TODO combine of error of standtnaviServer and trufiServer
-      // request graphql send itineraries empty 
-      if ((planJson[_itineraries] as List).isEmpty) {
-        return Plan(
-          error: PlanError.fromJson({
-            "id": 404,
-            "msg": "PATH_NOT_FOUND",
-          }),
-        );
-      }
       return Plan(
         from: PlanLocation.fromJson(planJson[_from] as Map<String, dynamic>),
         to: PlanLocation.fromJson(planJson[_to] as Map<String, dynamic>),
@@ -424,8 +414,7 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      // FIXME the route parameter does not match(sometimes it's Map and sometimes it's String)
-      route: '',
+      route: json[_route] as String,
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
       duration: json[_duration] as double,
