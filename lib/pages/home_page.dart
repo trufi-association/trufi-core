@@ -237,7 +237,7 @@ class HomePageState extends State<HomePage>
     final cfg = TrufiConfiguration();
     final homePageState = context.read<HomePageCubit>().state;
     final Widget body = Container(
-      child: homePageState.plan != null && homePageState.plan.error == null
+      child: !homePageState.isFetching && homePageState.plan != null && homePageState.plan.error == null
           ? PlanPage(
               homePageState.plan,
               homePageState.ad,
