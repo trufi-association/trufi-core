@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
@@ -13,7 +14,6 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../blocs/favorite_locations_bloc.dart';
-import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../custom_icons.dart';
@@ -68,9 +68,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       currentLocation: currentLocation,
-      historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       locationSearchBloc: LocationSearchBloc.of(context),
+      historyLocationsCubit: context.read<HistoryLocationsCubit>(),
       appBarTheme: appBarTheme(context),
     );
   }
@@ -128,7 +128,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     TrufiStreet street,
   ) {
     final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    final historyLocationBloc = HistoryLocationsBloc.of(context);
+    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -139,7 +139,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               context,
               appBarTheme(context),
               () {
-                historyLocationBloc.inAddLocation.add(street.location);
+                historyLocationsCubit.inAddLocation(street.location);
                 close(context, street.location);
               },
               Icons.label,
@@ -157,7 +157,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             context,
             appBarTheme(context),
             () {
-              historyLocationBloc.inAddLocation.add(
+              historyLocationsCubit.inAddLocation(
                 junction.location(localization),
               );
               close(
@@ -190,13 +190,13 @@ class _SuggestionList extends StatelessWidget {
     this.onMapTapped,
     this.onStreetTapped,
     this.currentLocation,
-    @required this.historyLocationsBloc,
+    @required this.historyLocationsCubit,
     @required this.favoriteLocationsBloc,
     @required this.locationSearchBloc,
     @required this.appBarTheme,
   });
 
-  final HistoryLocationsBloc historyLocationsBloc;
+  final HistoryLocationsCubit historyLocationsCubit;
   final FavoriteLocationsBloc favoriteLocationsBloc;
   final LocationSearchBloc locationSearchBloc;
   final String query;
@@ -273,7 +273,7 @@ class _SuggestionList extends StatelessWidget {
     return _buildFutureBuilder(
       context,
       localization.searchTitleRecent,
-      historyLocationsBloc.fetchWithLimit(context, 5),
+      historyLocationsCubit.fetchWithLimit(FavoriteLocationsBloc.of(context), 5),
       Icons.history,
     );
   }
@@ -678,7 +678,7 @@ class _SuggestionList extends StatelessWidget {
   }) {
     if (value != null) {
       if (addToHistory) {
-        historyLocationsBloc.inAddLocation.add(value);
+        historyLocationsCubit.inAddLocation(value);
       }
       if (onSelected != null) {
         onSelected(value);

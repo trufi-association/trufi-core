@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -22,7 +23,6 @@ import 'package:uuid/uuid.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/favorite_locations_bloc.dart';
-import './blocs/history_locations_bloc.dart';
 import './blocs/location_provider_cubit.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_cubit.dart';
@@ -121,14 +121,19 @@ class TrufiApp extends StatelessWidget {
               "saved_places",
             ),
           ),
+        ),
+        BlocProvider<HistoryLocationsCubit>(
+          create: (context) => HistoryLocationsCubit(
+            locationStorage: SharedPreferencesLocationStorage(
+              "history_locations",
+            ),
+          ),
         )
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
         bloc: LocationSearchBloc(context),
         child: TrufiBlocProvider<FavoriteLocationsBloc>(
           bloc: FavoriteLocationsBloc(),
-          child: TrufiBlocProvider<HistoryLocationsBloc>(
-            bloc: HistoryLocationsBloc(),
             child: AppLifecycleReactor(
               child: LocalizedMaterialApp(
                 customOverlayBuilder,
@@ -137,7 +142,6 @@ class TrufiApp extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }
