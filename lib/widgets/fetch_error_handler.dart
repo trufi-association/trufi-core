@@ -53,12 +53,12 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
       final packageInfo = await PackageInfo.fromPlatform();
       return showDialog(
         context: context,
-        builder: (context) {
+        builder: (dialogContext) {
           return buildTransitErrorAlert(
-            context: context,
+            context: dialogContext,
             error: exception.toString(),
             onReportMissingRoute: () async {
-              final LatLng currentLocation = await context
+              final LatLng currentLocation = await dialogContext
                   .read<LocationProviderCubit>()
                   .getCurrentLocation()
                   .catchError((error) => null);
@@ -69,13 +69,13 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
             },
             onShowCarRoute: () {
               // TODO: improve onShowCarRoute action
-              final homePageCubit = context.read<HomePageCubit>();
-              final appReviewCubit = context.read<AppReviewCubit>();
+              final homePageCubit = dialogContext.read<HomePageCubit>();
+              final appReviewCubit = dialogContext.read<AppReviewCubit>();
               homePageCubit.updateMapRouteState(
                 homePageCubit.state.copyWith(isFetching: true),
               );
               final correlationId =
-                  context.read<PreferencesCubit>().state.correlationId;
+                  dialogContext.read<PreferencesCubit>().state.correlationId;
               homePageCubit
                   .fetchPlan(correlationId, car: true)
                   .then(
