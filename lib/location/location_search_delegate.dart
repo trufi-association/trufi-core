@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
-import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -257,7 +257,7 @@ class _SuggestionList extends StatelessWidget {
   }
 
   Widget _buildYourPlaces() {
-    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationState>(
+    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
       builder: (_, state) {
         return _buildSavedSimpleList(
           Icons.map,

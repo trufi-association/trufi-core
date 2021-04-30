@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home_page.dart';
@@ -73,7 +73,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final localization = TrufiLocalization.of(context);
     final locationsCubit = context.read<SavedPLacesLocationsCubit>();
     
-    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationState>(
+    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
       builder: (contextBuilder, state) {
         final data = state.locations.reversed.toList();
         return ListView.builder(
