@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trufi_core/repository/location_storage_repository/shared_preferences_location_storage.dart';
 
 import '../blocs/bloc_provider.dart';
 import '../blocs/locations_bloc_base.dart';
-import '../location/location_storage.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 
@@ -14,9 +14,7 @@ class SavedPlacesBloc extends LocationsBlocBase {
   }
 
   SavedPlacesBloc(
-    BuildContext context,
   ) : super(
-    context,
     SharedPreferencesLocationStorage("saved_places"),
   ){
     initSavedPage();

@@ -2,20 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/repository/location_storage_repository/i_location_storage.dart';
 
 import '../blocs/bloc_provider.dart';
-import '../location/location_storage.dart';
 import '../trufi_models.dart';
 
 abstract class LocationsBlocBase implements BlocBase {
-  LocationsBlocBase(BuildContext context, this.locationStorage) {
+  LocationsBlocBase(this.locationStorage) {
     _addLocationController.listen(_handleAdd);
     _removeLocationController.listen(_handleRemove);
     _replaceLocationController.listen(_handleReplace);
-    locationStorage.load(context).then((_) => _notify);
+    locationStorage.load().then((_) => _notify);
   }
 
-  final LocationStorage locationStorage;
+  final ILocationStorage locationStorage;
 
   // AddLocation
   final _addLocationController = BehaviorSubject<TrufiLocation>();
@@ -28,11 +29,9 @@ abstract class LocationsBlocBase implements BlocBase {
   Sink<TrufiLocation> get inRemoveLocation => _removeLocationController.sink;
 
   // ReplaceLocation
-  final _replaceLocationController =
-      BehaviorSubject<Map<String, TrufiLocation>>();
+  final _replaceLocationController = BehaviorSubject<Map<String, TrufiLocation>>();
 
-  Sink<Map<String, TrufiLocation>> get inReplaceLocation =>
-      _replaceLocationController.sink;
+  Sink<Map<String, TrufiLocation>> get inReplaceLocation => _replaceLocationController.sink;
 
   // Locations
   final _locationsController = BehaviorSubject<List<TrufiLocation>>();
@@ -54,17 +53,17 @@ abstract class LocationsBlocBase implements BlocBase {
   // Handle
 
   void _handleAdd(TrufiLocation value) {
-    locationStorage.add(value);
+    locationStorage.addLocation(value);
     _notify();
   }
 
   void _handleRemove(TrufiLocation value) {
-    locationStorage.remove(value);
+    locationStorage.removeLocation(value);
     _notify();
   }
 
   void _handleReplace(Map<String, TrufiLocation> value) {
-    locationStorage.replace(value);
+    locationStorage.replaceLocation(value);
     _notify();
   }
 
@@ -74,26 +73,26 @@ abstract class LocationsBlocBase implements BlocBase {
 
   // Getter
 
-  List<TrufiLocation> get locations => locationStorage.unmodifiableListView;
+  List<TrufiLocation> get locations => locationStorage.getUnmodifiableListView();
 
   // Fetch
 
-  Future<List<TrufiLocation>> fetch(BuildContext context) {
-    return locationStorage.fetchLocations(context);
+  Future<List<TrufiLocation>> fetch(BuildContext context) async {
+    return locationStorage.fetchLocations(FavoriteLocationsBloc.of(context));
   }
 
   Future<List<LevenshteinObject>> fetchWithQuery(
     BuildContext context,
     String query,
-  ) {
-    return locationStorage.fetchLocationsWithQuery(context, query);
+  ) async {
+    return locationStorage.fetchLocationsWithQuery(query);
   }
 
   Future<List<TrufiLocation>> fetchWithLimit(
     BuildContext context,
     int limit,
-  ) {
-    return locationStorage.fetchLocationsWithLimit(context, limit);
+  ) async  {
+    return locationStorage.fetchLocationsWithLimit(limit,FavoriteLocationsBloc.of(context));
   }
 }
 

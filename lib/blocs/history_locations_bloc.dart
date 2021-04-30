@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/repository/location_storage_repository/shared_preferences_location_storage.dart';
 
 import '../blocs/bloc_provider.dart';
 import '../blocs/locations_bloc_base.dart';
-import '../location/location_storage.dart';
 
 class HistoryLocationsBloc extends LocationsBlocBase {
   static HistoryLocationsBloc of(BuildContext context) {
@@ -10,9 +10,7 @@ class HistoryLocationsBloc extends LocationsBlocBase {
   }
 
   HistoryLocationsBloc(
-    BuildContext context,
   ) : super(
-          context,
           SharedPreferencesLocationStorage("history_locations"),
         );
 }
