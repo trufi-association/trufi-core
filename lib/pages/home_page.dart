@@ -321,6 +321,6 @@ class HomePageState extends State<HomePage>
     await homePageCubit
         .fetchPlan(correlationId)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
-        .catchError((Exception error) => onFetchError(context, error));
+        .catchError((error) => onFetchError(context, error as Exception));
   }
 }

@@ -81,7 +81,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
                   .then(
                       (value) => appReviewCubit.incrementReviewWorthyActions())
                   .catchError(
-                    (Exception error) => onFetchError(context, error),
+                    (error) => onFetchError(context, error as Exception),
                   );
             },
           );
