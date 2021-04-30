@@ -4,12 +4,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info/package_info.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/repository/location_storage_repository/shared_preferences_location_storage.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
@@ -24,7 +26,6 @@ import './blocs/history_locations_bloc.dart';
 import './blocs/location_provider_cubit.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences_cubit.dart';
-import './blocs/saved_places_bloc.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/saved_places.dart';
@@ -113,21 +114,25 @@ class TrufiApp extends StatelessWidget {
             create: (context) => LocationProviderCubit()),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
+        ),
+        BlocProvider<SavedPLacesLocationsCubit>(
+          create: (context) => SavedPLacesLocationsCubit(
+            locationStorage: SharedPreferencesLocationStorage(
+              "saved_places",
+            ),
+          ),
         )
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
         bloc: LocationSearchBloc(context),
         child: TrufiBlocProvider<FavoriteLocationsBloc>(
-          bloc: FavoriteLocationsBloc(context),
+          bloc: FavoriteLocationsBloc(),
           child: TrufiBlocProvider<HistoryLocationsBloc>(
-            bloc: HistoryLocationsBloc(context),
-            child: TrufiBlocProvider<SavedPlacesBloc>(
-              bloc: SavedPlacesBloc(context),
-              child: AppLifecycleReactor(
-                child: LocalizedMaterialApp(
-                  customOverlayBuilder,
-                  customBetweenFabBuilder,
-                ),
+            bloc: HistoryLocationsBloc(),
+            child: AppLifecycleReactor(
+              child: LocalizedMaterialApp(
+                customOverlayBuilder,
+                customBetweenFabBuilder,
               ),
             ),
           ),

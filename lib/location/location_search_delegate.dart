@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -15,7 +16,6 @@ import '../blocs/favorite_locations_bloc.dart';
 import '../blocs/history_locations_bloc.dart';
 import '../blocs/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
-import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/choose_location.dart';
 import '../trufi_models.dart';
@@ -71,7 +71,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       historyLocationsBloc: HistoryLocationsBloc.of(context),
       favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
       locationSearchBloc: LocationSearchBloc.of(context),
-      savedPlacesBloc: SavedPlacesBloc.of(context),
       appBarTheme: appBarTheme(context),
     );
   }
@@ -194,13 +193,11 @@ class _SuggestionList extends StatelessWidget {
     @required this.historyLocationsBloc,
     @required this.favoriteLocationsBloc,
     @required this.locationSearchBloc,
-    @required this.savedPlacesBloc,
     @required this.appBarTheme,
   });
 
   final HistoryLocationsBloc historyLocationsBloc;
   final FavoriteLocationsBloc favoriteLocationsBloc;
-  final SavedPlacesBloc savedPlacesBloc;
   final LocationSearchBloc locationSearchBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -215,7 +212,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
-    slivers.add(_buildYourPlaces(context));
+    slivers.add(_buildYourPlaces());
     if (query.isEmpty) {
       slivers.add(_buildHistoryList(context));
       slivers.add(_buildFavoritesList(context));
@@ -260,16 +257,12 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildYourPlaces(BuildContext context) {
-    return StreamBuilder(
-      stream: savedPlacesBloc.outLocations,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiLocation>> snapshot,
-      ) {
+  Widget _buildYourPlaces() {
+    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationState>(
+      builder: (_, state) {
         return _buildSavedSimpleList(
           Icons.map,
-          savedPlacesBloc.locations.reversed.toList(),
+          state.locations.reversed.toList(),
         );
       },
     );
