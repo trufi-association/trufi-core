@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
-import 'package:trufi_core/repository/location_storage_repository/i_location_storage.dart';
+import 'package:trufi_core/repository/location_storage_repository/i_location_storage_repository.dart';
 
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
@@ -14,7 +14,7 @@ import 'package:equatable/equatable.dart';
 part 'saved_places_locations_state.dart';
 
 class SavedPLacesLocationsCubit extends Cubit<SavedPlacesLocationsState> {
-  final ILocationStorage locationStorage;
+  final ILocationStorageRepository locationStorage;
 
   SavedPLacesLocationsCubit({
     @required this.locationStorage,

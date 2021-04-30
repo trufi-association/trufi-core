@@ -6,9 +6,9 @@ import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-import 'i_location_storage.dart';
+import 'i_location_storage_repository.dart';
 
-abstract class LocationStorage implements ILocationStorage {
+abstract class LocationStorage implements ILocationStorageRepository {
   LocationStorage();
 
   DiffMatchPatch diffMatchPatch = DiffMatchPatch();
