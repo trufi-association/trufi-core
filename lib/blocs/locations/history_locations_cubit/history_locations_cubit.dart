@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/repository/location_storage_repository/i_location_storage.dart';
 
 import 'package:trufi_core/trufi_models.dart';
@@ -47,7 +47,7 @@ class HistoryLocationsCubit extends Cubit<HistoryLocationsState> {
 
   // Fetch
 
-  Future<List<TrufiLocation>> fetch(FavoriteLocationsBloc favoriteLocation) async {
+  Future<List<TrufiLocation>> fetch(FavoriteLocationsCubit favoriteLocation) async {
     return locationStorage.fetchLocations(favoriteLocation);
   }
 
@@ -58,7 +58,7 @@ class HistoryLocationsCubit extends Cubit<HistoryLocationsState> {
   }
 
   Future<List<TrufiLocation>> fetchWithLimit(
-    FavoriteLocationsBloc favoriteLocation,
+    FavoriteLocationsCubit favoriteLocation,
     int limit,
   ) async {
     return locationStorage.fetchLocationsWithLimit(limit, favoriteLocation);

@@ -1,45 +1,40 @@
 import 'package:meta/meta.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:trufi_core/repository/location_storage_repository/i_location_storage.dart';
 
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_models.dart';
 import 'package:equatable/equatable.dart';
 
-import 'favorite_locations_cubit/favorite_locations_cubit.dart';
+part 'favorite_locations_state.dart';
 
-part 'saved_places_location_state.dart';
-
-class SavedPLacesLocationsCubit extends Cubit<SavedPlacesLocationState> {
+class FavoriteLocationsCubit extends Cubit<FavoriteLocationsState> {
   final ILocationStorage locationStorage;
-
-  SavedPLacesLocationsCubit({
+  FavoriteLocationsCubit({
     @required this.locationStorage,
-  }) : super(const SavedPlacesLocationState(locations: [])) {
-    _initSavedPage();
+  }) : super(const FavoriteLocationsState(locations: [])) {
+    _initLoad();
   }
 
-  Future<void> _initSavedPage() async {
+
+  // Locations
+  final _locationsController = BehaviorSubject<List<TrufiLocation>>();
+
+  Sink<List<TrufiLocation>> get _inLocations => _locationsController.sink;
+
+  Stream<List<TrufiLocation>> get outLocations => _locationsController.stream;
+
+  // Dispose
+
+  @override
+  void dispose() {
+    _locationsController.close();
+  }
+
+  Future<void> _initLoad() async {
     await locationStorage.load();
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (preferences.get('saved_places_initialized') == null) {
-      final LatLng _center = TrufiConfiguration().map.center;
-      locationStorage.addLocation(TrufiLocation(
-          description: 'Home',
-          latitude: _center.latitude,
-          longitude: _center.longitude,
-          type: 'saved_place:home'));
-      locationStorage.addLocation(TrufiLocation(
-          description: 'Work',
-          latitude: _center.latitude,
-          longitude: _center.longitude,
-          type: 'saved_place:work'));
-    }
-    emit(SavedPlacesLocationState(locations: [...locations]));
-    preferences.setBool('saved_places_initialized', true);
+    emit(FavoriteLocationsState(locations: [...locations]));
   }
 
   void _setLocations(List<TrufiLocation> location) {

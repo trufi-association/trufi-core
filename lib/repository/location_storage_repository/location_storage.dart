@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:diff_match_patch/diff_match_patch.dart';
 
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 import 'i_location_storage.dart';
@@ -37,19 +37,19 @@ abstract class LocationStorage implements ILocationStorage {
 
   @override
   Future<List<TrufiLocation>> fetchLocations(
-    FavoriteLocationsBloc favoriteLocationsBloc,
+    FavoriteLocationsCubit favoriteLocationsCubit,
   ) async {
-    return _sortedByFavorites(locations.toList(), favoriteLocationsBloc);
+    return _sortedByFavorites(locations.toList(), favoriteLocationsCubit);
   }
 
   @override
   Future<List<TrufiLocation>> fetchLocationsWithLimit(
     int limit,
-    FavoriteLocationsBloc favoriteLocationsBloc,
+    FavoriteLocationsCubit favoriteLocationsCubit,
   ) async {
     return _sortedByFavorites(
       locations.sublist(0, min(locations.length, limit)),
-      favoriteLocationsBloc,
+      favoriteLocationsCubit,
     );
   }
 
@@ -117,13 +117,14 @@ abstract class LocationStorage implements ILocationStorage {
 
   List<TrufiLocation> _sortedByFavorites(
     List<TrufiLocation> locations,
-    FavoriteLocationsBloc favoriteLocationsBloc,
+    FavoriteLocationsCubit favoriteLocationsCubit,
   ) {
     locations.sort((a, b) {
-      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+      return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
     });
     return locations;
   }
+}
 
   int sortByFavoriteLocations(dynamic a, dynamic b, List<TrufiLocation> favorites) {
     return sortByLocations(a, b, favorites);
@@ -156,4 +157,3 @@ abstract class LocationStorage implements ILocationStorage {
             ? -1
             : 1;
   }
-}

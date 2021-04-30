@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 
 import '../blocs/favorite_location_bloc.dart';
-import '../blocs/favorite_locations_bloc.dart';
 import '../trufi_models.dart';
 
 class FavoriteButton extends StatefulWidget {
@@ -60,18 +61,18 @@ class FavoriteButtonState extends State<FavoriteButton> {
 
   @override
   Widget build(BuildContext context) {
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
     return StreamBuilder(
       stream: _bloc.outIsFavorite,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        final bool isFavorite = favoriteLocationsBloc.locations.contains(
+        final bool isFavorite = favoriteLocationsCubit.locations.contains(
           widget.location,
         );
         if (isFavorite == true) {
           return IconButton(
             icon: Icon(Icons.favorite, color: widget.color),
             onPressed: () {
-              favoriteLocationsBloc.inRemoveLocation.add(
+              favoriteLocationsCubit.inRemoveLocation(
                 widget.location,
               );
             },
@@ -80,7 +81,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
           return IconButton(
             icon: Icon(Icons.favorite_border, color: widget.color),
             onPressed: () {
-              favoriteLocationsBloc.inAddLocation.add(
+              favoriteLocationsCubit.inAddLocation(
                 widget.location,
               );
             },

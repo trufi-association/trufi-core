@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/online_graphql_repository/plan_graphql_model.dart';
 import 'package:trufi_core/repository/online_graphql_repository/queries.dart' as queries;
@@ -38,7 +38,7 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   @override
-  Future<List<TrufiPlace>> fetchLocations(FavoriteLocationsBloc favoriteLocationsBloc,
+  Future<List<TrufiPlace>> fetchLocations(FavoriteLocationsCubit favoriteLocationsCubit,
       LocationSearchBloc locationSearchBloc, String query,
       {int limit, String correlationId}) {
     // TODO: implement fetchLocations

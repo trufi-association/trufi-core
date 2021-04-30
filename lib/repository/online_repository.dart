@@ -6,12 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
+
+import 'location_storage_repository/location_storage.dart';
 
 class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
@@ -23,7 +25,7 @@ class OnlineRepository implements RequestManager {
 
   @override
   Future<List<TrufiPlace>> fetchLocations(
-    FavoriteLocationsBloc favoriteLocationsBloc,
+    FavoriteLocationsCubit favoriteLocationsCubit,
     LocationSearchBloc locationSearchBloc,
     String query, {
     String correlationId,
@@ -46,7 +48,7 @@ class OnlineRepository implements RequestManager {
       );
       // Favorites to the top
       locations.sort((a, b) {
-        return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+        return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
       });
       // Cutoff by limit
       if (locations.length > limit) {
