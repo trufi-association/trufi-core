@@ -150,7 +150,7 @@ class _ItineraryLeg {
         agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
         mode: _getTransportMode(json["mode"] as String),
         route: json["route"] == null
-            ? _Route(url: '')
+            ? _Route(url: '',routeShortName: '',routeLongName: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),
         from: _Location.fromJson(json["from"] as Map<String, dynamic>),
         to: _Location.fromJson(json["to"] as Map<String, dynamic>),
@@ -171,10 +171,10 @@ class _ItineraryLeg {
     return PlanItineraryLeg(
       points: legGeometry.points,
       mode: mode.name,
-      route: agencyName,
+      route: route.routeShortName,
       distance: distance,
       duration: duration,
-      routeLongName: mode.name,
+      routeLongName: route.routeLongName,
       toName: to.name,
     );
   }
@@ -203,15 +203,23 @@ class _LegGeometry {
 class _Route {
   _Route({
     @required this.url,
+    @required this.routeShortName,
+    @required this.routeLongName,
   });
 
-  final dynamic url;
+  final String url;
+  final String routeShortName;
+  final String routeLongName;
 
   factory _Route.fromJson(Map<String, dynamic> json) => _Route(
-        url: json["url"],
+        url: json["url"] as String,
+        routeShortName: json["shortName"] as String,
+        routeLongName: json["longName"] as String,
       );
 
   Map<String, dynamic> toJson() => {
         "url": url,
+        "shortName": url,
+        "longName": url,
       };
 }
