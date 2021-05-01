@@ -73,7 +73,6 @@ class OfflineRequestManager implements RequestManager {
   ) {
     return CancelableOperation.fromFuture(() async {
       throw UnimplementedError("Fetch plan as bike route offline is not implemented yet.");
-        Exception("Fetch plan as bike route offline is not implemented yet."),
       );
     }());
   }
