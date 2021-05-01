@@ -21,15 +21,12 @@ class FavoriteLocationsCubit extends Cubit<FavoriteLocationsState> {
   // Locations
   final _locationsController = BehaviorSubject<List<TrufiLocation>>();
 
-  Sink<List<TrufiLocation>> get _inLocations => _locationsController.sink;
-
   Stream<List<TrufiLocation>> get outLocations => _locationsController.stream;
 
   // Dispose
 
-  @override
   void dispose() {
-    _locationsController.close();
+    _locationsController?.close();
   }
 
   Future<void> _initLoad() async {
