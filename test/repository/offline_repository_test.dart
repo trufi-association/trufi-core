@@ -10,7 +10,7 @@ import '../mocks/location_search_bloc.dart';
 void main() {
   group("OfflineRepository", () {
     OfflineRepository subject;
-    MockFavoriteLocationsBloc favoriteLocationBloc;
+    MockFavoriteLocationsCubit favoriteLocationCubit;
     MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
 
@@ -19,7 +19,7 @@ void main() {
     setUp(() {
       subject = OfflineRepository();
 
-      favoriteLocationBloc = MockFavoriteLocationsBloc();
+      favoriteLocationCubit = MockFavoriteLocationsCubit();
       locationSearchBloc = MockLocationSearchBloc();
 
       locationSearchStorage = MockLocationSearchStorage();
@@ -33,13 +33,13 @@ void main() {
         (_) => Future.value(getTrufiStreetList()),
       );
 
-      when(favoriteLocationBloc.locations).thenReturn(
+      when(favoriteLocationCubit.locations).thenReturn(
           [TrufiLocation(description: "Favorite", longitude: 5, latitude: 8)]);
     });
 
     test("should sort streets first", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, query);
+          favoriteLocationCubit, locationSearchBloc, query);
 
       for (var i = 0; i < results.length; i++) {
         if (i == 0) {
@@ -59,7 +59,7 @@ void main() {
 
     test("should sort shortest distance first", () async {
       final List<dynamic> results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, query);
+          favoriteLocationCubit, locationSearchBloc, query);
 
       expect(results[0].description, "Favorite");
       expect(results[1].description, "Streets: Long Distance");
@@ -72,7 +72,7 @@ void main() {
 
     test("should take the limit into account", () async {
       final results = await subject.fetchLocations(
-          favoriteLocationBloc, locationSearchBloc, query,
+          favoriteLocationCubit, locationSearchBloc, query,
           limit: 5);
 
       expect(results.length, 5);
