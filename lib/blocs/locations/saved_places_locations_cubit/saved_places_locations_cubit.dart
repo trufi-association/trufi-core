@@ -51,12 +51,12 @@ class SavedPLacesLocationsCubit extends Cubit<SavedPlacesLocationsState> {
     _setLocations(locations);
   }
 
-  Future<void> inRemoveLocation(TrufiLocation location) async {
+  void inRemoveLocation(TrufiLocation location) {
     locationStorage.removeLocation(location);
     _setLocations(locations);
   }
 
-  Future<void> inReplaceLocation(Map<String, TrufiLocation> value) async {
+  void inReplaceLocation(Map<String, TrufiLocation> value) {
     locationStorage.replaceLocation(value);
     _setLocations(locations);
   }
