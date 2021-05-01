@@ -1,11 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core/repository/online_graphql_repository/queries.dart'
-    as queries;
+import 'package:trufi_core/services/plan_request/online_graphql_repository/queries.dart';
 
 void main() {
   group("Queries", () {
     test("should return the query with the given parameters", () {
-      final String result = queries.getCustomPlan(
+      final String result = getCustomPlan(
         fromLat: 1.2,
         fromLon: 88.1,
         toLat: 99.1,

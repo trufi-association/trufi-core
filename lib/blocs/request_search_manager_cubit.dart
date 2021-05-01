@@ -5,13 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
-import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/services/search_location/search_location_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 // TODO: This is actually not a Cubit it is just a service / controller
 //  there is no state that it contains
 class RequestSearchManagerCubit extends Cubit<void> {
-  final RequestManager _offlineRequestManager;
+  final SearchLocationManager _offlineRequestManager;
   final _fetchLocationLock = Lock();
 
   RequestSearchManagerCubit(this._offlineRequestManager) : super(null);

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
-import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class HomePageCubit extends Cubit<MapRouteState> {

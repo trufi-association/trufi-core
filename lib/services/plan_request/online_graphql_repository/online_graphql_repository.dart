@@ -4,14 +4,14 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/repository/online_graphql_repository/plan_graphql_model.dart';
-import 'package:trufi_core/repository/online_graphql_repository/queries.dart' as queries;
-import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
+
+import '../request_manager.dart';
+import 'plan_graphql_model.dart';
+import 'queries.dart' as queries;
 
 class OnlineGraphQLRepository implements RequestManager {
   final String graphQLEndPoint;
@@ -34,13 +34,17 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
   ) {
-    return _fetchCancelablePlan(from, to, [TransportMode.car, TransportMode.walk]);
+    return _fetchCancelablePlan(
+        from, to, [TransportMode.car, TransportMode.walk]);
   }
 
   @override
-  Future<List<TrufiPlace>> fetchLocations(FavoriteLocationsCubit favoriteLocationsCubit,
-      LocationSearchBloc locationSearchBloc, String query,
-      {int limit, String correlationId}) {
+  Future<List<TrufiPlace>> fetchLocations(
+      FavoriteLocationsCubit favoriteLocationsCubit,
+      LocationSearchBloc locationSearchBloc,
+      String query,
+      {int limit,
+      String correlationId}) {
     // TODO: implement fetchLocations
     throw UnimplementedError();
   }
@@ -51,7 +55,8 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
   ) {
-    return _fetchCancelablePlan(from, to, [TransportMode.transit, TransportMode.walk]);
+    return _fetchCancelablePlan(
+        from, to, [TransportMode.transit, TransportMode.walk]);
   }
 
   CancelableOperation<Plan> _fetchCancelablePlan(
@@ -113,7 +118,8 @@ class OnlineGraphQLRepository implements RequestManager {
     return null;
   }
 
-  Future<http.Response> _fetchRequest(Uri request, Map<String, String> body) async {
+  Future<http.Response> _fetchRequest(
+      Uri request, Map<String, String> body) async {
     try {
       return await http.post(request,
           headers: {

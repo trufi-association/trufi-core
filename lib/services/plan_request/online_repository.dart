@@ -6,14 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-import 'location_storage_repository/location_storage.dart';
+import 'request_manager.dart';
 
 class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
@@ -22,43 +19,6 @@ class OnlineRepository implements RequestManager {
   final String adsEndpoint;
 
   OnlineRepository({@required this.otpEndpoint, this.adsEndpoint});
-
-  @override
-  Future<List<TrufiPlace>> fetchLocations(
-    FavoriteLocationsCubit favoriteLocationsCubit,
-    LocationSearchBloc locationSearchBloc,
-    String query, {
-    String correlationId,
-    int limit = 30,
-  }) async {
-    final Uri request = Uri.parse(
-      otpEndpoint + searchPath,
-    ).replace(queryParameters: {
-      "query": query,
-      "autocomplete": "false",
-      "corners": "true",
-      "stops": "false",
-      "correlation": correlationId,
-    });
-    final response = await _fetchRequest(request);
-    if (response.statusCode == 200) {
-      final locations = await compute(
-        _parseLocations,
-        utf8.decode(response.bodyBytes),
-      );
-      // Favorites to the top
-      locations.sort((a, b) {
-        return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
-      });
-      // Cutoff by limit
-      if (locations.length > limit) {
-        locations.removeRange(limit, locations.length);
-      }
-      return locations;
-    } else {
-      throw FetchOnlineResponseException('Failed to load locations');
-    }
-  }
 
   @override
   CancelableOperation<Plan> fetchTransitPlan(

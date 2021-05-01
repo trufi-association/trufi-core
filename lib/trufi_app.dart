@@ -13,8 +13,6 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home_page.dart';
 import 'package:trufi_core/repository/location_storage_repository/shared_preferences_location_storage.dart';
-import 'package:trufi_core/repository/offline_repository.dart';
-import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
@@ -31,6 +29,8 @@ import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
+import 'services/plan_request/online_repository.dart';
+import 'services/search_location/offline_search_location.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
 /// e.g. [StatelessWidget.build] or [State.build].
@@ -97,19 +97,27 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-            create: (context) =>
-                PreferencesCubit(sharedPreferencesRepository, Uuid())),
+          create: (context) => PreferencesCubit(
+            sharedPreferencesRepository,
+            Uuid(),
+          ),
+        ),
         BlocProvider<AppReviewCubit>(
-            create: (context) => AppReviewCubit(sharedPreferencesRepository)),
+          create: (context) => AppReviewCubit(sharedPreferencesRepository),
+        ),
         BlocProvider<RequestSearchManagerCubit>(
-          create: (context) => RequestSearchManagerCubit(OfflineRepository()),
+          create: (context) => RequestSearchManagerCubit(
+            OfflineSearchLocation(),
+          ),
         ),
         BlocProvider<HomePageCubit>(
-            create: (context) => HomePageCubit(
-                sharedPreferencesRepository,
-                OnlineRepository(
-                  otpEndpoint: trufiConfiguration.url.otpEndpoint,
-                ))),
+          create: (context) => HomePageCubit(
+            sharedPreferencesRepository,
+            OnlineRepository(
+              otpEndpoint: trufiConfiguration.url.otpEndpoint,
+            ),
+          ),
+        ),
         BlocProvider<LocationProviderCubit>(
             create: (context) => LocationProviderCubit()),
         BlocProvider<ThemeCubit>(
