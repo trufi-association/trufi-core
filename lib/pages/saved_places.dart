@@ -6,7 +6,7 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../blocs/location_provider_cubit.dart';
