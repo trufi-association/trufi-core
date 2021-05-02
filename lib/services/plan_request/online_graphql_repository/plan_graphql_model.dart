@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 class PlanGraphQl {
   PlanGraphQl({

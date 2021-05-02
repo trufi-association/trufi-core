@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 
 void main() {

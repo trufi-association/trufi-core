@@ -4,7 +4,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import './trufi_configuration.dart';
-import 'entities/plan_entities/plan_entity.dart';
+import 'entities/plan_entity/plan_entity.dart';
 
 class MapStyle {
   static const String streets = 'streets';

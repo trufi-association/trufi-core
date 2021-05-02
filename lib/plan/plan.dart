@@ -2,7 +2,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

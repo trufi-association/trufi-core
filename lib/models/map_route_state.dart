@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
-import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class MapRouteState extends Equatable {
