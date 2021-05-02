@@ -8,11 +8,11 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import 'entities/plan_entities/map_entity.dart';
-import './composite_subscription.dart';
-import './custom_icons.dart';
-import './trufi_configuration.dart';
-import './trufi_models.dart';
+import 'composite_subscription.dart';
+import 'custom_icons.dart';
+import 'trufi_configuration.dart';
+import 'trufi_models.dart';
+import 'entities/plan_entity/plan_entity.dart';
 
 LayerOptions offlineMapTileLayerOptions() {
   return TileLayerOptions(
