@@ -15,19 +15,17 @@ class LocationProviderCubit extends Cubit<LocationState> {
         status == LocationPermission.whileInUse)) {
       return;
     }
-    if (_locationStreamSubscription != null) {
-      _locationStreamSubscription = Geolocator.getPositionStream(
-        desiredAccuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      ).listen((position) {
-        emit(state.copyWith(
-          currentLocation: LatLng(
-            position.latitude,
-            position.longitude,
-          ),
-        ));
-      });
-    }
+    _locationStreamSubscription ??= Geolocator.getPositionStream(
+      desiredAccuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+    ).listen((position) {
+      emit(state.copyWith(
+        currentLocation: LatLng(
+          position.latitude,
+          position.longitude,
+        ),
+      ));
+    });
   }
 
   void stop() {
