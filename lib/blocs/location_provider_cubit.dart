@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/models/location_state.dart';
 
 class LocationProviderCubit extends Cubit<LocationState> {
+  StreamSubscription<Position> _locationStreamSubscription;
   LocationProviderCubit() : super(const LocationState());
 
   Future<void> start() async {
@@ -14,21 +15,25 @@ class LocationProviderCubit extends Cubit<LocationState> {
         status == LocationPermission.whileInUse)) {
       return;
     }
-
-    emit(state.copyWith(
-      locationStreamSubscription: Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.high, distanceFilter: 10)
-          .listen((position) {
+    if (_locationStreamSubscription != null) {
+      _locationStreamSubscription = Geolocator.getPositionStream(
+        desiredAccuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      ).listen((position) {
         emit(state.copyWith(
-          currentLocation: LatLng(position.latitude, position.longitude),
+          currentLocation: LatLng(
+            position.latitude,
+            position.longitude,
+          ),
         ));
-      }),
-    ));
+      });
+    }
   }
 
   void stop() {
-    if (state.locationStreamSubscription != null) {
-      state.locationStreamSubscription.cancel();
+    if (_locationStreamSubscription != null) {
+      _locationStreamSubscription.cancel();
+      _locationStreamSubscription = null;
     }
   }
 

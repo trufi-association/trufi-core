@@ -6,24 +6,21 @@ import 'package:latlong/latlong.dart';
 
 class LocationState extends Equatable {
   final LatLng currentLocation;
-  final StreamSubscription<Position> locationStreamSubscription;
 
-  const LocationState({this.currentLocation, this.locationStreamSubscription});
-
-  @override
-  List<Object> get props => [currentLocation, locationStreamSubscription];
+  const LocationState({this.currentLocation});
 
   @override
-  String toString() =>
-      "LocationState {currentLocation: $currentLocation, locationStreamSubscription: $locationStreamSubscription}";
+  List<Object> get props => [currentLocation];
 
-  LocationState copyWith(
-      {LatLng currentLocation,
-      StreamSubscription<Position> locationStreamSubscription}) {
+  @override
+  String toString() => "LocationState {currentLocation: $currentLocation";
+
+  LocationState copyWith({
+    LatLng currentLocation,
+    StreamSubscription<Position> locationStreamSubscription,
+  }) {
     return LocationState(
       currentLocation: currentLocation ?? this.currentLocation,
-      locationStreamSubscription:
-          locationStreamSubscription ?? this.locationStreamSubscription,
     );
   }
 }
