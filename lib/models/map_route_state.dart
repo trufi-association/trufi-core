@@ -1,5 +1,6 @@
 import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -23,7 +24,7 @@ class MapRouteState extends Equatable {
   final TrufiLocation fromPlace;
   final TrufiLocation toPlace;
   final PlanEntity plan;
-  final Ad ad;
+  final AdEntity ad;
   final bool isFetching;
   final bool showSuccessAnimation;
 
@@ -31,11 +32,11 @@ class MapRouteState extends Equatable {
     TrufiLocation fromPlace,
     TrufiLocation toPlace,
     PlanEntity plan,
-    Ad ad,
+    AdEntity ad,
     bool isFetching,
     bool showSuccessAnimation,
     CancelableOperation<PlanEntity> currentFetchPlanOperation,
-    CancelableOperation<Ad> currentFetchAdOperation,
+    CancelableOperation<AdEntity> currentFetchAdOperation,
   }) {
     return MapRouteState(
       fromPlace: fromPlace ?? this.fromPlace,
@@ -54,7 +55,7 @@ class MapRouteState extends Equatable {
           TrufiLocation.fromJson(json[_fromPlace] as Map<String, dynamic>),
       toPlace: TrufiLocation.fromJson(json[_toPlace] as Map<String, dynamic>),
       plan: PlanEntity.fromJson(json[_plan] as Map<String, dynamic>),
-      ad: Ad.fromJson(json[_ad] as Map<String, dynamic>),
+      ad: AdEntity.fromJson(json[_ad] as Map<String, dynamic>),
       isFetching: json[_isFetching] as bool ?? false,
       showSuccessAnimation: json[_showSuccessAnimation] as bool ?? false,
     );

@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -40,7 +41,7 @@ class OnlineRepository implements RequestManager {
   }
 
   @override
-  CancelableOperation<Ad> fetchAd(
+  CancelableOperation<AdEntity> fetchAd(
     TrufiLocation to,
     String correlationId,
   ) {
@@ -59,12 +60,12 @@ class OnlineRepository implements RequestManager {
     }());
   }
 
-  CancelableOperation<Ad> _fetchCancelableAd(
+  CancelableOperation<AdEntity> _fetchCancelableAd(
     TrufiLocation to,
     String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final Ad ad = await _fetchAd(to, correlationId);
+      final AdEntity ad = await _fetchAd(to, correlationId);
       return ad;
     }());
   }
@@ -93,7 +94,7 @@ class OnlineRepository implements RequestManager {
     }
   }
 
-  Future<Ad> _fetchAd(
+  Future<AdEntity> _fetchAd(
     TrufiLocation to,
     String correlationId,
   ) async {
@@ -193,6 +194,6 @@ PlanEntity _parsePlan(String responseBody) {
   return PlanEntity.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }
 
-Ad _parseAd(String responseBody) {
-  return Ad.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+AdEntity _parseAd(String responseBody) {
+  return AdEntity.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }

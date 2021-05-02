@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -14,7 +15,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
   final RequestManager requestManager;
   CancelableOperation<PlanEntity> currentFetchPlanOperation;
-  CancelableOperation<Ad> currentFetchAdOperation;
+  CancelableOperation<AdEntity> currentFetchAdOperation;
 
   HomePageCubit(
     this.localRepository,
@@ -133,7 +134,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
         correlationId,
       );
 
-      final Ad ad = await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad = await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );

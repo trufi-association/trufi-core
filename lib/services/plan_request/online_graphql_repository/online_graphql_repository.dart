@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
@@ -22,7 +23,7 @@ class OnlineGraphQLRepository implements RequestManager {
   });
 
   @override
-  CancelableOperation<Ad> fetchAd(
+  CancelableOperation<AdEntity> fetchAd(
     TrufiLocation to,
     String correlationId,
   ) {
@@ -74,11 +75,11 @@ class OnlineGraphQLRepository implements RequestManager {
     }());
   }
 
-  CancelableOperation<Ad> _fetchCancelableAd(
+  CancelableOperation<AdEntity> _fetchCancelableAd(
     TrufiLocation to,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final Ad ad = await _fetchAd(to);
+      final AdEntity ad = await _fetchAd(to);
       return ad;
     }());
   }
@@ -113,7 +114,7 @@ class OnlineGraphQLRepository implements RequestManager {
     }
   }
 
-  Future<Ad> _fetchAd(
+  Future<AdEntity> _fetchAd(
     TrufiLocation to,
   ) async {
     return null;
