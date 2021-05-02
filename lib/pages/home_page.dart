@@ -8,6 +8,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
@@ -43,7 +44,7 @@ class HomePageState extends State<HomePage>
   final _fromFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
   final _toFieldKey = GlobalKey<FormFieldState<TrufiLocation>>();
 
-  CancelableOperation<Plan> currentFetchPlanOperation;
+  CancelableOperation<PlanEntity> currentFetchPlanOperation;
   CancelableOperation<Ad> currentFetchAdOperation;
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import '../trufi_models.dart';
 import '../widgets/vertical_swipe_detector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {

@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/trufi_models.dart';
 
+import '../../../trufi_models.dart';
 import '../request_manager.dart';
 import 'plan_graphql_model.dart';
 import 'queries.dart' as queries;
@@ -29,7 +30,7 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   @override
-  CancelableOperation<Plan> fetchCarPlan(
+  CancelableOperation<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,
     String correlationId,
@@ -50,7 +51,7 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   @override
-  CancelableOperation<Plan> fetchTransitPlan(
+  CancelableOperation<PlanEntity> fetchTransitPlan(
     TrufiLocation from,
     TrufiLocation to,
     String correlationId,
@@ -59,15 +60,15 @@ class OnlineGraphQLRepository implements RequestManager {
         from, to, [TransportMode.transit, TransportMode.walk]);
   }
 
-  CancelableOperation<Plan> _fetchCancelablePlan(
+  CancelableOperation<PlanEntity> _fetchCancelablePlan(
     TrufiLocation from,
     TrufiLocation to,
     List<TransportMode> transportModes,
   ) {
     return CancelableOperation.fromFuture(() async {
-      Plan plan = await _fetchPlan(from, to, transportModes);
+      PlanEntity plan = await _fetchPlan(from, to, transportModes);
       if (plan.hasError) {
-        plan = Plan.fromError(plan.error.message);
+        plan = PlanEntity.fromError(plan.error.message);
       }
       return plan;
     }());
@@ -82,7 +83,7 @@ class OnlineGraphQLRepository implements RequestManager {
     }());
   }
 
-  Future<Plan> _fetchPlan(
+  Future<PlanEntity> _fetchPlan(
     TrufiLocation from,
     TrufiLocation to,
     List<TransportMode> transportModes,
@@ -131,7 +132,7 @@ class OnlineGraphQLRepository implements RequestManager {
     }
   }
 
-  Plan _parsePlan(String body) {
+  PlanEntity _parsePlan(String body) {
     final planGraphQL = PlanGraphQl.fromJson(
       json.decode(body)["data"]["plan"] as Map<String, dynamic>,
     );

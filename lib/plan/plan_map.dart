@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/location_provider_cubit.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 import 'package:trufi_core/widgets/alerts.dart';
 
 import '../composite_subscription.dart';
@@ -11,7 +12,6 @@ import '../plan/plan.dart';
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
-import '../trufi_models.dart';
 import '../widgets/crop_button.dart';
 import '../widgets/map_type_button.dart';
 import '../widgets/trufi_map.dart';
@@ -233,7 +233,7 @@ class PlanMapPageStateData {
     }
   }
 
-  final Plan plan;
+  final PlanEntity plan;
   final ValueChanged<PlanItinerary> onItineraryTap;
 
   final _itineraries = <PlanItinerary, List<PolylineWithMarkers>>{};
@@ -365,7 +365,7 @@ class PlanMapPageStateData {
   }
 
   Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries(
-      {@required Plan plan,
+      {@required PlanEntity plan,
       @required PlanItinerary selectedItinerary,
       @required Function(PlanItinerary) onTap,
       Color selectedColor}) {

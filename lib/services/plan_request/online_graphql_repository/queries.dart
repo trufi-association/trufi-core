@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'plan_graphql_model.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 
 String getPlanComplete({
   @required double fromLat,

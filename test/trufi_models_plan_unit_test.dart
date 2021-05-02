@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trufi_core/entities/plan_entities/plan_entity.dart';
 
-import 'package:trufi_core/trufi_models.dart';
 
 void main() {
-  Plan _plan;
+  PlanEntity _plan;
   PlanLocation _from;
   PlanLocation _to;
   List<PlanItinerary> _itineraries;
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('Create a plan', () {
-    _plan = Plan(from: _from, to: _to, itineraries: _itineraries);
+    _plan = PlanEntity(from: _from, to: _to, itineraries: _itineraries);
 
     expect(_plan.from, _from);
     expect(_plan.to, _to);
@@ -53,7 +53,7 @@ void main() {
   test('Create a plan from json', () async {
     final file = File('test/assets/response_plan.json');
     final jsonPlan = json.decode(await file.readAsString());
-    _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
+    _plan = PlanEntity.fromJson(jsonPlan as Map<String, dynamic>);
 
     expect(_plan.from.name, "Origin");
     expect(_plan.from.latitude, -17.3974935907119);
@@ -67,15 +67,15 @@ void main() {
 
   test('Plan from error ', () {
     final PlanError planError = PlanError(1, "error 2");
-    final Plan plan = Plan(error: planError);
+    final PlanEntity plan = PlanEntity(error: planError);
     // error id is -1 when generated with fromError.
-    final plan2 = Plan.fromError("error 2");
+    final plan2 = PlanEntity.fromError("error 2");
     // id are different, so check messages
     expect(plan2.error.message, plan.error.message);
   });
 
   test('Plan toJson ', () {
-    _plan = Plan(from: _from, to: _to, itineraries: _itineraries);
+    _plan = PlanEntity(from: _from, to: _to, itineraries: _itineraries);
     // the create of a new PlanLocation uses "latitude" and "longitude" words
     // but the toJson method, uses "lat" and "lon". It's not possible to compare
     // the objects using:
@@ -90,9 +90,9 @@ void main() {
 
   test('Create Plan error fromJson', () {
     _error = PlanError(1, "error 2");
-    final Plan plan = Plan(error: _error);
+    final PlanEntity plan = PlanEntity(error: _error);
     // error id is -1 when generated with fromError.
-    final plan2 = Plan.fromError("error 2");
+    final plan2 = PlanEntity.fromError("error 2");
     // id are different, so check messages
     expect(plan2.error.message, plan.error.message);
   });
@@ -100,7 +100,7 @@ void main() {
   test('Create Plan error with fromError', () async {
     final file = File('test/assets/response_plan_error.json');
     final jsonPlan = json.decode(await file.readAsString());
-    _plan = Plan.fromJson(jsonPlan as Map<String, dynamic>);
+    _plan = PlanEntity.fromJson(jsonPlan as Map<String, dynamic>);
 
     expect(_plan.error.message,
         "Trip is not possible.  Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).");
