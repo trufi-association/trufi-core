@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
@@ -108,7 +109,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
               state.toPlace,
               correlationId,
             );
-      final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
+      final PlanEntity plan =
+          await currentFetchPlanOperation.valueOrCancellation(
         null,
       );
       if (plan != null && !plan.hasError) {
@@ -137,7 +139,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
         correlationId,
       );
 
-      final AdEntity ad = await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad =
+          await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );
@@ -155,6 +158,24 @@ class HomePageCubit extends Cubit<MapRouteState> {
       print("Failed to fetch ad: $e");
       // ignore: avoid_print
       print(stacktrace);
+    }
+  }
+
+  Future<void> mapLongPress(LatLng point) async {
+    if (state.fromPlace == null) {
+      setFromPlace(
+        TrufiLocation.fromLatLng(
+          "Map pressed from",
+          point,
+        ),
+      );
+    } else if (state.toPlace == null) {
+      setToPlace(
+        TrufiLocation.fromLatLng(
+          "Map pressed to",
+          point,
+        ),
+      );
     }
   }
 }
