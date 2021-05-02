@@ -13,7 +13,7 @@ String getPlanComplete({
     from: {lat: $fromLat, lon:  $fromLon}
     to: {lat: $toLat, lon:  $toLon}
     transportModes: [{mode:WALK},{mode:TRANSIT}]
-    numItineraries: 3
+    numItineraries: 5
   ) {
     date,
     from{
@@ -50,6 +50,8 @@ String getPlanComplete({
         },
         route{
           url
+          shortName
+          longName
         },
         interlineWithPreviousLeg,
         from{
@@ -104,7 +106,7 @@ String getCustomPlan({
       from: {lat: $fromLat, lon:  $fromLon}
       to: {lat: $toLat, lon:  $toLon}
       transportModes: $transportMode
-      numItineraries: 3
+      numItineraries: 5
     ) {
       from{
         name,
@@ -126,6 +128,8 @@ String getCustomPlan({
           }
           route{
             url
+            shortName
+            longName
           },
           from{
         		name,
