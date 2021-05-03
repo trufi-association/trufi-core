@@ -7,7 +7,7 @@ import 'package:share/share.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
-import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../custom_icons.dart';

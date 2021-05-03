@@ -6,10 +6,10 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
-import '../blocs/location_provider_cubit.dart';
+import '../blocs/gps_location/location_provider_cubit.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 import '../widgets/set_description_dialog.dart';
@@ -72,7 +72,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final locationsCubit = context.read<SavedPLacesLocationsCubit>();
-    
+
     return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
       builder: (contextBuilder, state) {
         final data = state.locations.reversed.toList();
@@ -150,8 +150,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    final location =
-        await context.read<LocationProviderCubit>().getCurrentLocation();
+    final location = context.read<LocationProviderCubit>().getCurrentLocation();
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,

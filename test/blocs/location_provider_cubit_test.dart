@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/location_provider_cubit.dart';
-import 'package:trufi_core/models/location_state.dart';
+import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
+import 'package:trufi_core/blocs/gps_location/location_state.dart';
 
 import '../mocks/geolocator_mock.dart';
 
@@ -59,7 +59,7 @@ void main() {
               speedAccuracy: 0.0),
         );
 
-        expect(await subject.getCurrentLocation(), LatLng(88.0, 88.0));
+        expect(subject.getCurrentLocation(), LatLng(88.0, 88.0));
       });
     }
 

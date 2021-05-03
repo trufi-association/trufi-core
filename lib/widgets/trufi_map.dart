@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:trufi_core/models/location_state.dart';
+import 'package:trufi_core/blocs/gps_location/location_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../blocs/location_provider_cubit.dart';
+import '../blocs/gps_location/location_provider_cubit.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/alerts.dart';
