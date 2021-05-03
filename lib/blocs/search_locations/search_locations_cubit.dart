@@ -2,7 +2,8 @@ import 'package:meta/meta.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synchronized/synchronized.dart';
-// import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/repository/places_store_repository/places_storage.dart';
+import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 import 'package:trufi_core/services/search_location/search_location_manager.dart';
 
 import 'package:async/async.dart';
@@ -13,48 +14,13 @@ import '../location_search_bloc.dart';
 
 part 'search_locations_state.dart';
 
-abstract class PlacesStorage {
-  final String id;
-
-  PlacesStorage(this.id);
-
-  Future<void> insert(TrufiLocation location);
-  Future<void> delete(TrufiLocation location);
-  Future<void> update(TrufiLocation old, TrufiLocation location);
-  Future<List<TrufiLocation>> all();
-}
-
-class RamPlaceStorage extends PlacesStorage {
-  final List<TrufiLocation> _places = [];
-
-  RamPlaceStorage(String id) : super(id);
-
-  @override
-  Future<void> delete(TrufiLocation location) async {
-    _places.remove(location);
-  }
-
-  @override
-  Future<void> insert(TrufiLocation location) async {
-    _places.add(location);
-  }
-
-  @override
-  Future<void> update(TrufiLocation old, TrufiLocation location) async {
-    _places.remove(location);
-    _places.add(location);
-  }
-
-  @override
-  Future<List<TrufiLocation>> all() async {
-    return _places.toList();
-  }
-}
-
 class SearchLocationsCubit extends Cubit<SearchLocationsState> {
-  final PlacesStorage myPlacesStorage = RamPlaceStorage("");
-  final PlacesStorage historyPlacesStorage = RamPlaceStorage("");
-  final PlacesStorage favoritePlacesStorage = RamPlaceStorage("");
+  final PlacesStorage myPlacesStorage =
+      SharedPreferencesPlaceStorage("myPlacesStorage");
+  final PlacesStorage historyPlacesStorage =
+      SharedPreferencesPlaceStorage("historyPlacesStorage");
+  final PlacesStorage favoritePlacesStorage =
+      SharedPreferencesPlaceStorage("favoritePlacesStorage");
 
   final SearchLocationManager _offlineRequestManager;
   final _fetchLocationLock = Lock();
