@@ -25,7 +25,6 @@ import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
-import 'blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_repository.dart';
@@ -121,20 +120,6 @@ class TrufiApp extends StatelessWidget {
             create: (context) => LocationProviderCubit()),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
-        ),
-        BlocProvider<SavedPLacesLocationsCubit>(
-          create: (context) => SavedPLacesLocationsCubit(
-            locationStorage: SharedPreferencesLocationStorage(
-              "saved_places",
-            ),
-          ),
-        ),
-        BlocProvider<HistoryLocationsCubit>(
-          create: (context) => HistoryLocationsCubit(
-            locationStorage: SharedPreferencesLocationStorage(
-              "history_locations",
-            ),
-          ),
         ),
         BlocProvider<FavoriteLocationsCubit>(
           create: (context) => FavoriteLocationsCubit(

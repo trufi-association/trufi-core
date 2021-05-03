@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
-import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -113,8 +112,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     TrufiStreet street,
   ) {
     final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
-    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
 
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -123,7 +122,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
           if (index == 0) {
             return _BuildItem(
               () {
-                historyLocationsCubit.inAddLocation(street.location);
+                searchLocationsCubit.insertHistoryPlace(street.location);
                 close(context, street.location);
               },
               Icons.label,
@@ -139,7 +138,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
           final junction = street.junctions[index - 1];
           return _BuildItem(
             () {
-              historyLocationsCubit.inAddLocation(
+              searchLocationsCubit.insertHistoryPlace(
                 junction.location(localization),
               );
               close(
@@ -181,7 +180,8 @@ class _SuggestionList extends StatelessWidget {
     final locationSearchBloc = LocationSearchBloc.of(context);
     final requestManagerBloc = context.read<SearchLocationsCubit>();
     final favoriteLocationsCubit = context.watch<FavoriteLocationsCubit>();
-    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
+
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return SafeArea(
       top: false,
       bottom: false,
@@ -203,10 +203,7 @@ class _SuggestionList extends StatelessWidget {
           if (query.isEmpty)
             _BuildFutureBuilder(
               title: localization.searchTitleRecent,
-              future: historyLocationsCubit.fetchWithLimit(
-                favoriteLocationsCubit,
-                5,
-              ),
+              future: searchLocationsCubit.getHistoryList(limit: 5),
               iconData: Icons.history,
               onSelected: onSelected,
               onStreetTapped: onStreetTapped,
@@ -387,8 +384,6 @@ class _BuildYourPlaces extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
-
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     final List<TrufiLocation> locations =
         searchLocationsCubit.state.myPlaces.reversed.toList();
@@ -403,7 +398,7 @@ class _BuildYourPlaces extends StatelessWidget {
           return _BuildItem(
             () {
               if (location != null) {
-                historyLocationsCubit.inAddLocation(location);
+                searchLocationsCubit.insertHistoryPlace(location);
                 if (onSelected != null) {
                   onSelected(location);
                 }
@@ -439,7 +434,7 @@ class _BuildObjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().state.searchTheme;
     final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
-    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -460,7 +455,7 @@ class _BuildObjectList extends StatelessWidget {
             return _BuildItem(
               () {
                 if (object != null) {
-                  historyLocationsCubit.inAddLocation(object);
+                  searchLocationsCubit.insertHistoryPlace(object);
                   if (onSelected != null) {
                     onSelected(object);
                   }

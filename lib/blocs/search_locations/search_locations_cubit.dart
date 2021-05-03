@@ -123,6 +123,10 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     favoritePlacesStorage.delete(location);
   }
 
+  Future<List<TrufiPlace>> getHistoryList({int limit}) async {
+    return state.historyPlaces.toList();
+  }
+
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsCubit favoriteLocationsCubit,
     LocationSearchBloc locationSearchBloc,
