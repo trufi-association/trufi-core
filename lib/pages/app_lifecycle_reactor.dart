@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info/package_info.dart';
@@ -23,6 +25,10 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (duration) => {context.read<LocationProviderCubit>().start()},
+    );
   }
 
   @override
@@ -34,7 +40,7 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     final locationProviderCubit = context.read<LocationProviderCubit>();
-
+    log(state.toString());
     if (state == AppLifecycleState.resumed) {
       final appReviewBloc = BlocProvider.of<AppReviewCubit>(context);
       final packageInfo = await PackageInfo.fromPlatform();
