@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+// import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/services/search_location/search_location_manager.dart';
 
 import 'package:async/async.dart';
@@ -119,7 +119,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   void deleteFavoritePlace(TrufiLocation location) {
     state.favoritePlaces.remove(location);
-    emit(state.copyWith(favoritePlaces: [...state.favoritePlaces]));
+    emit(state.copyWith(favoritePlaces: []));
     favoritePlacesStorage.delete(location);
   }
 
@@ -128,7 +128,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   Future<List<TrufiPlace>> fetchLocations(
-    FavoriteLocationsCubit favoriteLocationsCubit,
+    // FavoriteLocationsCubit favoriteLocationsCubit,
     LocationSearchBloc locationSearchBloc,
     String query, {
     String correlationId,
@@ -147,8 +147,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             _fetchLocationOperation =
                 CancelableOperation<List<TrufiPlace>>.fromFuture(
               // FIXME: For now we search locations always offline
-              _offlineRequestManager.fetchLocations(
-                  favoriteLocationsCubit, locationSearchBloc, query,
+              _offlineRequestManager.fetchLocations(locationSearchBloc, query,
                   limit: limit, correlationId: correlationId),
             );
             return _fetchLocationOperation.valueOrCancellation(null);

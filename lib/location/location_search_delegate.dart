@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -111,7 +110,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     BuildContext context,
     TrufiStreet street,
   ) {
-    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
+    // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
 
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     final localization = TrufiLocalization.of(context);
@@ -129,7 +128,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               street.displayName,
               trailing: FavoriteButton(
                 location: street.location,
-                favoritesStream: favoriteLocationsCubit.outLocations,
                 color: appBarTheme(context).primaryIconTheme.color,
               ),
             );
@@ -153,7 +151,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             ),
             trailing: FavoriteButton(
               location: junction.location(localization),
-              favoritesStream: favoriteLocationsCubit.outLocations,
               color: appBarTheme(context).primaryIconTheme.color,
             ),
           );
@@ -178,10 +175,8 @@ class _SuggestionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final locationSearchBloc = LocationSearchBloc.of(context);
-    final requestManagerBloc = context.read<SearchLocationsCubit>();
-    final favoriteLocationsCubit = context.watch<FavoriteLocationsCubit>();
 
-    final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SafeArea(
       top: false,
       bottom: false,
@@ -196,7 +191,7 @@ class _SuggestionList extends StatelessWidget {
             _BuildObjectList(
               localization.searchTitleFavorites,
               Icons.place,
-              favoriteLocationsCubit.locations,
+              searchLocationsCubit.state.favoritePlaces,
               onSelected,
               onStreetTapped,
             ),
@@ -219,12 +214,11 @@ class _SuggestionList extends StatelessWidget {
           if (query.isNotEmpty)
             _BuildFutureBuilder(
               title: localization.searchTitleResults,
-              future: requestManagerBloc.fetchLocations(
-                favoriteLocationsCubit,
+              future: searchLocationsCubit.fetchLocations(
                 LocationSearchBloc.of(context),
                 query,
                 correlationId:
-                    context.watch<PreferencesCubit>().state.correlationId,
+                    context.read<PreferencesCubit>().state.correlationId,
               ),
               iconData: Icons.place,
               isVisibleWhenEmpty: true,
@@ -433,8 +427,8 @@ class _BuildObjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().state.searchTheme;
-    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
-    final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
+    final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -466,7 +460,6 @@ class _BuildObjectList extends StatelessWidget {
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
-                favoritesStream: favoriteLocationsCubit.outLocations,
                 color: theme.primaryIconTheme.color,
               ),
             );

@@ -5,9 +5,6 @@ import 'dart:math';
 import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
-import 'package:trufi_core/repository/location_storage_repository/location_storage.dart';
 
 import '../trufi_models.dart';
 
@@ -126,10 +123,10 @@ class LocationSearchStorage {
     List<TrufiLocation> locations,
     BuildContext context,
   ) async {
-    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
-    locations.sort((a, b) {
-      return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
-    });
+    // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
+    // locations.sort((a, b) {
+    //   return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
+    // });
     return locations;
   }
 }

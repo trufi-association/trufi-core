@@ -4,8 +4,6 @@ import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -38,17 +36,6 @@ class OnlineGraphQLRepository implements RequestManager {
   ) {
     return _fetchCancelablePlan(
         from, to, [TransportMode.car, TransportMode.walk]);
-  }
-
-  @override
-  Future<List<TrufiPlace>> fetchLocations(
-      FavoriteLocationsCubit favoriteLocationsCubit,
-      LocationSearchBloc locationSearchBloc,
-      String query,
-      {int limit,
-      String correlationId}) {
-    // TODO: implement fetchLocations
-    throw UnimplementedError();
   }
 
   @override

@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
-import 'package:trufi_core/repository/location_storage_repository/shared_preferences_location_storage.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
@@ -120,13 +118,6 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
-        BlocProvider<FavoriteLocationsCubit>(
-          create: (context) => FavoriteLocationsCubit(
-            locationStorage: SharedPreferencesLocationStorage(
-              "favorite_locations",
-            ),
-          ),
-        )
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
         bloc: LocationSearchBloc(context),
