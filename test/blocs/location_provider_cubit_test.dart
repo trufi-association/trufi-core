@@ -13,13 +13,6 @@ import '../mocks/geolocator_mock.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   group("LocationProviderCubit", () {
-    LocationProviderCubit subject;
-
-    setUp(() {
-      GeolocatorPlatform.instance = MockGeolocatorPlatform();
-      subject = LocationProviderCubit();
-    });
-
     for (final testCase in [
       LocationPermission.denied,
       LocationPermission.deniedForever,
