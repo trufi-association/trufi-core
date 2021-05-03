@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,7 @@ class FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchLocationsCubit = context.watch<SearchLocationsCubit>();
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     final bool isFavorite = searchLocationsCubit.state.favoritePlaces.contains(
       location,
     );

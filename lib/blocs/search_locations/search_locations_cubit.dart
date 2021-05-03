@@ -47,7 +47,7 @@ class RamPlaceStorage extends PlacesStorage {
 
   @override
   Future<List<TrufiLocation>> all() async {
-    return _places;
+    return _places.toList();
   }
 }
 
@@ -91,35 +91,51 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   void updateMyPlace(TrufiLocation old, TrufiLocation location) {
-    emit(state.copyWith(myPlaces: [...state.myPlaces, location]));
+    emit(
+      state.copyWith(
+          myPlaces: [..._deleteItem(state.myPlaces, location), location]),
+    );
     myPlacesStorage.update(old, location);
   }
 
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {
-    emit(state.copyWith(historyPlaces: [...state.historyPlaces, location]));
+    emit(
+      state.copyWith(historyPlaces: [
+        ..._deleteItem(state.historyPlaces, location),
+        location
+      ]),
+    );
     historyPlacesStorage.update(old, location);
   }
 
   void updateFavoritePlace(TrufiLocation old, TrufiLocation location) {
-    emit(state.copyWith(favoritePlaces: [...state.favoritePlaces, location]));
+    emit(
+      state.copyWith(favoritePlaces: [
+        ..._deleteItem(state.favoritePlaces, location),
+        location
+      ]),
+    );
     favoritePlacesStorage.update(old, location);
   }
 
   void deleteMyPlace(TrufiLocation location) {
-    state.myPlaces.remove(location);
-    emit(state.copyWith(myPlaces: [...state.myPlaces]));
+    emit(state.copyWith(
+      myPlaces: _deleteItem(state.myPlaces, location),
+    ));
     myPlacesStorage.delete(location);
   }
 
   void deleteHistoryPlace(TrufiLocation location) {
-    state.historyPlaces.remove(location);
-    emit(state.copyWith(historyPlaces: [...state.historyPlaces]));
+    emit(state.copyWith(
+      historyPlaces: _deleteItem(state.historyPlaces, location),
+    ));
     historyPlacesStorage.delete(location);
   }
 
   void deleteFavoritePlace(TrufiLocation location) {
-    state.favoritePlaces.remove(location);
-    emit(state.copyWith(favoritePlaces: []));
+    emit(state.copyWith(
+      favoritePlaces: _deleteItem(state.favoritePlaces, location),
+    ));
     favoritePlacesStorage.delete(location);
   }
 
@@ -152,5 +168,12 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             );
             return _fetchLocationOperation.valueOrCancellation(null);
           });
+  }
+
+  List<TrufiLocation> _deleteItem(
+      List<TrufiLocation> list, TrufiLocation location) {
+    final tempList = [...state.favoritePlaces];
+    tempList.remove(location);
+    return tempList;
   }
 }

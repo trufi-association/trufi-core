@@ -112,7 +112,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   ) {
     // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
 
-    final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -427,7 +427,6 @@ class _BuildObjectList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().state.searchTheme;
-    // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
