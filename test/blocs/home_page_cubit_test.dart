@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -89,12 +90,12 @@ void main() {
       "setPlan should emit new state and call localStorage",
       build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
       act: (HomePageCubit cubit) async => cubit.setPlan(
-        Plan(from: PlanLocation(), to: PlanLocation(), itineraries: []),
+        PlanEntity(from: PlanLocation(), to: PlanLocation(), itineraries: []),
       ),
       expect: () => [
         const MapRouteState(),
         MapRouteState(
-          plan: Plan(from: PlanLocation(), to: PlanLocation(), itineraries: []),
+          plan: PlanEntity(from: PlanLocation(), to: PlanLocation(), itineraries: []),
           showSuccessAnimation: true,
         )
       ],
@@ -140,7 +141,7 @@ void main() {
         act: (HomePageCubit cubit) async {
           await cubit.updateMapRouteState(MapRouteState(
             plan:
-                Plan(itineraries: [], from: PlanLocation(), to: PlanLocation()),
+                PlanEntity(itineraries: [], from: PlanLocation(), to: PlanLocation()),
           ));
           await cubit.updateCurrentRoute(
             TrufiLocation(description: "Test1", longitude: 1.0, latitude: 1.0),

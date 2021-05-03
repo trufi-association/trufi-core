@@ -14,7 +14,7 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
-import '../blocs/location_provider_cubit.dart';
+import '../blocs/gps_location/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/choose_location.dart';
@@ -627,7 +627,7 @@ class _SuggestionList extends StatelessWidget {
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     try {
-      final currentLocation = await context.read<LocationProviderCubit>().getCurrentLocation();
+      final currentLocation = context.read<LocationProviderCubit>().getCurrentLocation();
 
       _handleOnLatLngTapped(
         description: localization.searchItemYourLocation,
