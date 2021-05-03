@@ -6,14 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
-import 'package:trufi_core/blocs/location_search_bloc.dart';
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/repository/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-import 'location_storage_repository/location_storage.dart';
+import 'request_manager.dart';
 
 class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
@@ -24,44 +23,7 @@ class OnlineRepository implements RequestManager {
   OnlineRepository({@required this.otpEndpoint, this.adsEndpoint});
 
   @override
-  Future<List<TrufiPlace>> fetchLocations(
-    FavoriteLocationsCubit favoriteLocationsCubit,
-    LocationSearchBloc locationSearchBloc,
-    String query, {
-    String correlationId,
-    int limit = 30,
-  }) async {
-    final Uri request = Uri.parse(
-      otpEndpoint + searchPath,
-    ).replace(queryParameters: {
-      "query": query,
-      "autocomplete": "false",
-      "corners": "true",
-      "stops": "false",
-      "correlation": correlationId,
-    });
-    final response = await _fetchRequest(request);
-    if (response.statusCode == 200) {
-      final locations = await compute(
-        _parseLocations,
-        utf8.decode(response.bodyBytes),
-      );
-      // Favorites to the top
-      locations.sort((a, b) {
-        return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
-      });
-      // Cutoff by limit
-      if (locations.length > limit) {
-        locations.removeRange(limit, locations.length);
-      }
-      return locations;
-    } else {
-      throw FetchOnlineResponseException('Failed to load locations');
-    }
-  }
-
-  @override
-  CancelableOperation<Plan> fetchTransitPlan(
+  CancelableOperation<PlanEntity> fetchTransitPlan(
     TrufiLocation from,
     TrufiLocation to,
     String correlationId,
@@ -70,7 +32,7 @@ class OnlineRepository implements RequestManager {
   }
 
   @override
-  CancelableOperation<Plan> fetchCarPlan(
+  CancelableOperation<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,
     String correlationId,
@@ -79,36 +41,36 @@ class OnlineRepository implements RequestManager {
   }
 
   @override
-  CancelableOperation<Ad> fetchAd(
+  CancelableOperation<AdEntity> fetchAd(
     TrufiLocation to,
     String correlationId,
   ) {
     return _fetchCancelableAd(to, correlationId);
   }
 
-  CancelableOperation<Plan> _fetchCancelablePlan(
+  CancelableOperation<PlanEntity> _fetchCancelablePlan(
     TrufiLocation from,
     TrufiLocation to,
     String mode,
     String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final Plan plan = await _fetchPlan(from, to, mode, correlationId);
+      final PlanEntity plan = await _fetchPlan(from, to, mode, correlationId);
       return plan;
     }());
   }
 
-  CancelableOperation<Ad> _fetchCancelableAd(
+  CancelableOperation<AdEntity> _fetchCancelableAd(
     TrufiLocation to,
     String correlationId,
   ) {
     return CancelableOperation.fromFuture(() async {
-      final Ad ad = await _fetchAd(to, correlationId);
+      final AdEntity ad = await _fetchAd(to, correlationId);
       return ad;
     }());
   }
 
-  Future<Plan> _fetchPlan(
+  Future<PlanEntity> _fetchPlan(
     TrufiLocation from,
     TrufiLocation to,
     String mode,
@@ -132,7 +94,7 @@ class OnlineRepository implements RequestManager {
     }
   }
 
-  Future<Ad> _fetchAd(
+  Future<AdEntity> _fetchAd(
     TrufiLocation to,
     String correlationId,
   ) async {
@@ -228,10 +190,10 @@ List<TrufiLocation> _parseLocations(String responseBody) {
       .toList() as List<TrufiLocation>;
 }
 
-Plan _parsePlan(String responseBody) {
-  return Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+PlanEntity _parsePlan(String responseBody) {
+  return PlanEntity.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }
 
-Ad _parseAd(String responseBody) {
-  return Ad.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+AdEntity _parseAd(String responseBody) {
+  return AdEntity.fromJson(json.decode(responseBody) as Map<String, dynamic>);
 }

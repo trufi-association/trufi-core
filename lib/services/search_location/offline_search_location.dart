@@ -1,17 +1,15 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
-import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/repository/location_storage_repository/location_storage.dart';
 import 'package:trufi_core/trufi_models.dart';
 
-import 'location_storage_repository/location_storage.dart';
+import 'search_location_manager.dart';
 
-class OfflineRepository implements RequestManager {
+class OfflineSearchLocation implements SearchLocationManager {
   @override
   Future<List<TrufiPlace>> fetchLocations(
     FavoriteLocationsCubit favoriteLocationsCubit,
@@ -46,43 +44,5 @@ class OfflineRepository implements RequestManager {
     });
 
     return trufiPlaces;
-  }
-
-  @override
-  CancelableOperation<Plan> fetchTransitPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return CancelableOperation.fromFuture(() async {
-      throw FetchOfflineRequestException(
-        Exception("Fetch plan offline is not implemented yet."),
-      );
-    }());
-  }
-
-  @override
-  CancelableOperation<Plan> fetchCarPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return CancelableOperation.fromFuture(() async {
-      throw FetchOfflineRequestException(
-        Exception("Fetch plan as car route offline is not implemented yet."),
-      );
-    }());
-  }
-
-  @override
-  CancelableOperation<Ad> fetchAd(
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return CancelableOperation.fromFuture(() async {
-      throw FetchOfflineRequestException(
-        Exception("Fetch ad offline is not implemented yet."),
-      );
-    }());
   }
 }

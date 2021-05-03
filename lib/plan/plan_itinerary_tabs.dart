@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import '../trufi_models.dart';
 import '../widgets/vertical_swipe_detector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
-  final Ad ad;
+  final AdEntity ad;
 
   PlanItineraryTabPages(this.tabController, this.itineraries, this.ad,
       {Key key})
@@ -123,7 +124,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     );
   }
 
-  Widget _buildItinerary(BuildContext context, PlanItinerary itinerary, Ad ad) {
+  Widget _buildItinerary(BuildContext context, PlanItinerary itinerary, AdEntity ad) {
     return _isExpanded
         ? _buildItineraryExpanded(context, itinerary, ad)
         : _buildItineraryCollapsed(context, itinerary, ad);
@@ -134,7 +135,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItineraryExpanded(
     BuildContext context,
     PlanItinerary itinerary,
-    Ad ad,
+    AdEntity ad,
   ) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
@@ -196,7 +197,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItineraryCollapsed(
     BuildContext context,
     PlanItinerary itinerary,
-    Ad ad,
+    AdEntity ad,
   ) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
@@ -248,7 +249,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   Widget _buildItinerarySummary(
     BuildContext context,
     PlanItinerary itinerary,
-    Ad ad,
+    AdEntity ad,
   ) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);

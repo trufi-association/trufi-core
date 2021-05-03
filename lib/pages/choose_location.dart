@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/location_provider_cubit.dart';
+import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/alerts.dart';
 
@@ -137,7 +137,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
   Future<void> _handleOnYourLocationPressed() async {
     try {
       final location =
-          await context.read<LocationProviderCubit>().getCurrentLocation();
+          context.read<LocationProviderCubit>().getCurrentLocation();
       _trufiMapController.moveToYourLocation(
         location: location,
         context: context,

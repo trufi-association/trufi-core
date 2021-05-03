@@ -1,6 +1,6 @@
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/location_provider_cubit.dart';
+import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +58,9 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
             context: dialogContext,
             error: exception.toString(),
             onReportMissingRoute: () async {
-              final LatLng currentLocation = await dialogContext
+              final LatLng currentLocation = dialogContext
                   .read<LocationProviderCubit>()
-                  .getCurrentLocation()
-                  .catchError((error) => null);
+                  .getCurrentLocation();
               launch(
                 "${cfg.url.routeFeedback}?lang=$languageCode&geo=${currentLocation?.latitude},"
                 "${currentLocation?.longitude}&app=${packageInfo.version}",
