@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
-import '../blocs/favorite_locations_bloc.dart';
-import '../blocs/history_locations_bloc.dart';
-import '../blocs/location_provider_cubit.dart';
+import '../blocs/gps_location/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
-import '../blocs/saved_places_bloc.dart';
 import '../custom_icons.dart';
 import '../pages/choose_location.dart';
 import '../trufi_models.dart';
@@ -30,8 +30,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) =>
-      context.read<ThemeCubit>().state.searchTheme;
+  ThemeData appBarTheme(BuildContext context) => context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -68,10 +67,9 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         showResults(context);
       },
       currentLocation: currentLocation,
-      historyLocationsBloc: HistoryLocationsBloc.of(context),
-      favoriteLocationsBloc: FavoriteLocationsBloc.of(context),
+      favoriteLocationsCubit: context.read<FavoriteLocationsCubit>(),
       locationSearchBloc: LocationSearchBloc.of(context),
-      savedPlacesBloc: SavedPlacesBloc.of(context),
+      historyLocationsCubit: context.read<HistoryLocationsCubit>(),
       appBarTheme: appBarTheme(context),
     );
   }
@@ -128,8 +126,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     BuildContext context,
     TrufiStreet street,
   ) {
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
-    final historyLocationBloc = HistoryLocationsBloc.of(context);
+    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
+    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -140,14 +138,14 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
               context,
               appBarTheme(context),
               () {
-                historyLocationBloc.inAddLocation.add(street.location);
+                historyLocationsCubit.inAddLocation(street.location);
                 close(context, street.location);
               },
               Icons.label,
               street.displayName,
               trailing: FavoriteButton(
                 location: street.location,
-                favoritesStream: favoriteLocationsBloc.outLocations,
+                favoritesStream: favoriteLocationsCubit.outLocations,
                 color: appBarTheme(context).primaryIconTheme.color,
               ),
             );
@@ -158,7 +156,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             context,
             appBarTheme(context),
             () {
-              historyLocationBloc.inAddLocation.add(
+              historyLocationsCubit.inAddLocation(
                 junction.location(localization),
               );
               close(
@@ -173,7 +171,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             ),
             trailing: FavoriteButton(
               location: junction.location(localization),
-              favoritesStream: favoriteLocationsBloc.outLocations,
+              favoritesStream: favoriteLocationsCubit.outLocations,
               color: appBarTheme(context).primaryIconTheme.color,
             ),
           );
@@ -191,16 +189,14 @@ class _SuggestionList extends StatelessWidget {
     this.onMapTapped,
     this.onStreetTapped,
     this.currentLocation,
-    @required this.historyLocationsBloc,
-    @required this.favoriteLocationsBloc,
+    @required this.historyLocationsCubit,
+    @required this.favoriteLocationsCubit,
     @required this.locationSearchBloc,
-    @required this.savedPlacesBloc,
     @required this.appBarTheme,
   });
 
-  final HistoryLocationsBloc historyLocationsBloc;
-  final FavoriteLocationsBloc favoriteLocationsBloc;
-  final SavedPlacesBloc savedPlacesBloc;
+  final HistoryLocationsCubit historyLocationsCubit;
+  final FavoriteLocationsCubit favoriteLocationsCubit;
   final LocationSearchBloc locationSearchBloc;
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
@@ -215,7 +211,7 @@ class _SuggestionList extends StatelessWidget {
     slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     slivers.add(_buildYourLocation(context));
     slivers.add(_buildChooseOnMap(context));
-    slivers.add(_buildYourPlaces(context));
+    slivers.add(_buildYourPlaces());
     if (query.isEmpty) {
       slivers.add(_buildHistoryList(context));
       slivers.add(_buildFavoritesList(context));
@@ -260,16 +256,12 @@ class _SuggestionList extends StatelessWidget {
     );
   }
 
-  Widget _buildYourPlaces(BuildContext context) {
-    return StreamBuilder(
-      stream: savedPlacesBloc.outLocations,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiLocation>> snapshot,
-      ) {
+  Widget _buildYourPlaces() {
+    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
+      builder: (_, state) {
         return _buildSavedSimpleList(
           Icons.map,
-          savedPlacesBloc.locations.reversed.toList(),
+          state.locations.reversed.toList(),
         );
       },
     );
@@ -280,23 +272,20 @@ class _SuggestionList extends StatelessWidget {
     return _buildFutureBuilder(
       context,
       localization.searchTitleRecent,
-      historyLocationsBloc.fetchWithLimit(context, 5),
+      historyLocationsCubit.fetchWithLimit(favoriteLocationsCubit, 5),
       Icons.history,
     );
   }
 
   Widget _buildFavoritesList(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    return StreamBuilder(
-      stream: favoriteLocationsBloc.outLocations,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiLocation>> snapshot,
-      ) {
+    // TODO Improve the way you repaint the list
+    return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
+      builder: (_, state) {
         return _buildObjectList(
           localization.searchTitleFavorites,
           Icons.place,
-          favoriteLocationsBloc.locations,
+          favoriteLocationsCubit.locations,
         );
       },
     );
@@ -304,28 +293,38 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildPlacesList(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    return _buildFutureBuilder(
-      context,
-      localization.searchTitlePlaces,
-      locationSearchBloc.fetchPlaces(context),
-      Icons.place,
+    // TODO Improve the way you repaint the list
+    return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
+      builder: (_, state) {
+        return _buildFutureBuilder(
+          context,
+          localization.searchTitlePlaces,
+          locationSearchBloc.fetchPlaces(context),
+          Icons.place,
+        );
+      },
     );
   }
 
   Widget _buildSearchResultList(BuildContext context) {
     final requestManagerBloc = context.read<RequestSearchManagerCubit>();
     final localization = TrufiLocalization.of(context);
-    return _buildFutureBuilder(
-      context,
-      localization.searchTitleResults,
-      requestManagerBloc.fetchLocations(
-        FavoriteLocationsBloc.of(context),
-        LocationSearchBloc.of(context),
-        query,
-        correlationId: context.watch<PreferencesCubit>().state.correlationId,
-      ),
-      Icons.place,
-      isVisibleWhenEmpty: true,
+    // TODO Improve the way you repaint the list
+    return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
+      builder: (_, state) {
+        return _buildFutureBuilder(
+          context,
+          localization.searchTitleResults,
+          requestManagerBloc.fetchLocations(
+            favoriteLocationsCubit,
+            LocationSearchBloc.of(context),
+            query,
+            correlationId: context.watch<PreferencesCubit>().state.correlationId,
+          ),
+          Icons.place,
+          isVisibleWhenEmpty: true,
+        );
+      },
     );
   }
 
@@ -553,7 +552,7 @@ class _SuggestionList extends StatelessWidget {
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
-                favoritesStream: favoriteLocationsBloc.outLocations,
+                favoritesStream: favoriteLocationsCubit.outLocations,
                 color: appBarTheme.primaryIconTheme.color,
               ),
             );
@@ -628,8 +627,7 @@ class _SuggestionList extends StatelessWidget {
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     try {
-      final currentLocation =
-          await context.read<LocationProviderCubit>().getCurrentLocation();
+      final currentLocation = context.read<LocationProviderCubit>().state.currentLocation;
 
       _handleOnLatLngTapped(
         description: localization.searchItemYourLocation,
@@ -685,7 +683,7 @@ class _SuggestionList extends StatelessWidget {
   }) {
     if (value != null) {
       if (addToHistory) {
-        historyLocationsBloc.inAddLocation.add(value);
+        historyLocationsCubit.inAddLocation(value);
       }
       if (onSelected != null) {
         onSelected(value);
@@ -748,7 +746,6 @@ Widget _buildItem(
   }
   return InkWell(
     onTap: onTap,
-    child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
+    child: Container(margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
   );
 }

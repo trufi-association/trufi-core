@@ -1,29 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/trufi_models.dart';
 
-enum TransportMode { walk, rail, bus, transit, car }
-
-extension TransportModeExtension on TransportMode {
-  static const names = {
-    TransportMode.walk: 'WALK',
-    TransportMode.bus: 'BUS',
-    TransportMode.car: 'CAR',
-    TransportMode.rail: 'LIGHT RAIL',
-    TransportMode.transit: 'TRANSIT',
-  };
-  String get name => names[this] ?? 'WALK';
-}
-
-const transportModeMap= {
-  'WALK': TransportMode.walk,
-  'BUS': TransportMode.bus,
-  'CAR': TransportMode.car,
-  'RAIL': TransportMode.rail,
-  'TRANSIT': TransportMode.transit,
-};
-
-TransportMode _getTransportMode(String enumText) 
-  => transportModeMap[enumText] ?? TransportMode.walk;
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 class PlanGraphQl {
   PlanGraphQl({
@@ -52,8 +29,8 @@ class PlanGraphQl {
         "itineraries": List<dynamic>.from(itineraries.map((x) => x.toJson())),
       };
 
-  Plan toPlan() {
-    return Plan(
+  PlanEntity toPlan() {
+    return PlanEntity(
       to: to.toPlanLocation(),
       from: from.toPlanLocation(),
       itineraries: itineraries
@@ -148,7 +125,7 @@ class _ItineraryLeg {
         distance: json["distance"] as double,
         duration: json["duration"] as double,
         agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
-        mode: _getTransportMode(json["mode"] as String),
+        mode: getTransportMode(mode: json["mode"] as String),
         route: json["route"] == null
             ? _Route(url: '',routeShortName: '',routeLongName: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),

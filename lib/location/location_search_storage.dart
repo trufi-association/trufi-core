@@ -5,8 +5,10 @@ import 'dart:math';
 import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/repository/location_storage_repository/location_storage.dart';
 
-import '../blocs/favorite_locations_bloc.dart';
 import '../trufi_models.dart';
 
 const String keyPlaces = 'pois';
@@ -27,7 +29,7 @@ class LocationSearchStorage {
       final locationData = await loadFromAssets(context, key);
       _places.addAll(locationData.places);
       _streets.addAll(locationData.streets);
-    } catch(e){
+    } catch (e) {
       // TODO: Fix the test properly
       // ignore: avoid_print
       print(e);
@@ -38,11 +40,10 @@ class LocationSearchStorage {
     return _sortedByFavorites(_places.toList(), context);
   }
 
-  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(
-      String query) async {
+  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(String query) async {
     return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
       [],
-          (streets, street) {
+      (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
           query.toLowerCase(),
@@ -55,11 +56,10 @@ class LocationSearchStorage {
     );
   }
 
-  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(
-      String query) async {
+  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(String query) async {
     return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
       [],
-          (locations, location) {
+      (locations, location) {
         final distance = _levenshteinDistanceForLocation(
           location,
           query.toLowerCase(),
@@ -126,9 +126,9 @@ class LocationSearchStorage {
     List<TrufiLocation> locations,
     BuildContext context,
   ) async {
-    final favoriteLocationsBloc = FavoriteLocationsBloc.of(context);
+    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
     locations.sort((a, b) {
-      return sortByFavoriteLocations(a, b, favoriteLocationsBloc.locations);
+      return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
     });
     return locations;
   }
@@ -158,8 +158,7 @@ LocationSearchData _parseSearchJson(String encoded) {
       // Places
       final places = search[keyPlaces]
           .map<TrufiLocation>(
-            (dynamic json) =>
-                TrufiLocation.fromSearchPlacesJson(json as List<dynamic>),
+            (dynamic json) => TrufiLocation.fromSearchPlacesJson(json as List<dynamic>),
           )
           .toList() as List<TrufiLocation>;
       // Streets

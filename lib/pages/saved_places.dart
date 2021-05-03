@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
-import '../blocs/location_provider_cubit.dart';
-import '../blocs/saved_places_bloc.dart';
+import '../blocs/gps_location/location_provider_cubit.dart';
 import '../trufi_configuration.dart';
 import '../trufi_models.dart';
 import '../widgets/set_description_dialog.dart';
@@ -71,77 +71,73 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   Widget _buildBody(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final savedPlacesBloc = SavedPlacesBloc.of(context);
+    final locationsCubit = context.read<SavedPLacesLocationsCubit>();
 
-    return StreamBuilder(
-        initialData: savedPlacesBloc.locations.reversed.toList(),
-        stream: savedPlacesBloc.outLocations,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<TrufiLocation>> snapshot) {
-          final data = snapshot.data.reversed.toList();
-          return ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                final TrufiLocation savedPlace = data[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  child: ElevatedButton(
-                    onPressed: () => _showCurrentRoute(savedPlace),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                            margin: const EdgeInsets.only(right: 5),
-                            child: Icon(_typeToIconData(savedPlace.type) ??
-                                Icons.place)),
-                        Expanded(
-                          child: Text(
-                            savedPlace.description,
-                            style: theme.textTheme.bodyText2,
-                            maxLines: 1,
-                          ),
+    return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
+      builder: (contextBuilder, state) {
+        final data = state.locations.reversed.toList();
+        return ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index) {
+            final TrufiLocation savedPlace = data[index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 5),
+              child: ElevatedButton(
+                onPressed: () => _showCurrentRoute(savedPlace),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        child: Icon(
+                          _typeToIconData(savedPlace.type) ?? Icons.place,
+                        )),
+                    Expanded(
+                      child: Text(
+                        savedPlace.description,
+                        style: theme.textTheme.bodyText2,
+                        maxLines: 1,
+                      ),
+                    ),
+                    PopupMenuButton<int>(
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem(
+                          value: 1,
+                          child: Text(localization.savedPlacesSetIconLabel),
                         ),
-                        PopupMenuButton<int>(
-                          itemBuilder: (BuildContext context) => [
-                            PopupMenuItem(
-                              value: 1,
-                              child: Text(localization.savedPlacesSetIconLabel),
-                            ),
-                            PopupMenuItem(
-                              value: 2,
-                              child: Text(localization.savedPlacesSetNameLabel),
-                            ),
-                            PopupMenuItem(
-                              value: 3,
-                              child: Text(
-                                  localization.savedPlacesSetPositionLabel),
-                            ),
-                            PopupMenuItem(
-                              value: 4,
-                              child: Text(localization.savedPlacesRemoveLabel),
-                            ),
-                          ],
-                          onSelected: (int index) async {
-                            if (index == 1) {
-                              _changeIcon(savedPlace);
-                            } else if (index == 2) {
-                              _changeName(savedPlace);
-                            } else if (index == 3) {
-                              _changePosition(savedPlace);
-                            } else if (index == 4) {
-                              setState(() {
-                                savedPlacesBloc.inRemoveLocation
-                                    .add(savedPlace);
-                              });
-                            }
-                          },
+                        PopupMenuItem(
+                          value: 2,
+                          child: Text(localization.savedPlacesSetNameLabel),
+                        ),
+                        PopupMenuItem(
+                          value: 3,
+                          child: Text(localization.savedPlacesSetPositionLabel),
+                        ),
+                        PopupMenuItem(
+                          value: 4,
+                          child: Text(localization.savedPlacesRemoveLabel),
                         ),
                       ],
+                      onSelected: (int index) async {
+                        if (index == 1) {
+                          _changeIcon(savedPlace);
+                        } else if (index == 2) {
+                          _changeName(savedPlace);
+                        } else if (index == 3) {
+                          _changePosition(savedPlace);
+                        } else if (index == 4) {
+                          locationsCubit.inRemoveLocation(savedPlace);
+                        }
+                      },
                     ),
-                  ),
-                );
-              });
-        });
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildFloatingActionButton() {
@@ -154,8 +150,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    final location =
-        await context.read<LocationProviderCubit>().getCurrentLocation();
+    final location = context.read<LocationProviderCubit>().state.currentLocation;
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,
@@ -176,7 +171,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
 
   Future<void> _changeIcon(TrufiLocation savedPlace) async {
     final localization = TrufiLocalization.of(context);
-    final savedPlacesBloc = SavedPlacesBloc.of(context);
+    final locationsCubit = context.read<SavedPLacesLocationsCubit>();
     return showDialog(
       context: context,
       builder: (context) => SimpleDialog(
@@ -198,12 +193,10 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
                       longitude: savedPlace.longitude,
                       type: icons.keys.toList()[index],
                     );
-                    savedPlacesBloc.inReplaceLocation
-                        .add(<String, TrufiLocation>{
+                    locationsCubit.inReplaceLocation(<String, TrufiLocation>{
                       'oldLocation': savedPlace,
                       'newLocation': newLocation
                     });
-                    setState(() {});
                     Navigator.pop(context);
                   },
                   child: Icon(icons.values.toList()[index]),
@@ -217,7 +210,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _changeName(TrufiLocation savedPlace) async {
-    final savedPlacesBloc = SavedPlacesBloc.of(context);
+    final locationsCubit = context.read<SavedPLacesLocationsCubit>();
     final String description = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -230,15 +223,15 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         longitude: savedPlace.longitude,
         type: savedPlace.type,
       );
-      savedPlacesBloc.inReplaceLocation.add(<String, TrufiLocation>{
+      locationsCubit.inReplaceLocation(<String, TrufiLocation>{
         'oldLocation': savedPlace,
-        'newLocation': newPlace
+        'newLocation': newPlace,
       });
     }
   }
 
   Future<void> _changePosition(TrufiLocation savedPlace) async {
-    final savedPlacesBloc = SavedPlacesBloc.of(context);
+    final locationsCubit = context.read<SavedPLacesLocationsCubit>();
     final LatLng mapLocation = await _selectPosition(
         LatLng(savedPlace.latitude, savedPlace.longitude));
     if (mapLocation != null) {
@@ -249,16 +242,15 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         type: savedPlace.type,
       );
 
-      savedPlacesBloc.inReplaceLocation.add(<String, TrufiLocation>{
+      locationsCubit.inReplaceLocation(<String, TrufiLocation>{
         'oldLocation': savedPlace,
         'newLocation': newPlace
       });
-      setState(() {});
     }
   }
 
   Future<void> _addNewPlace() async {
-    final savedPlacesBloc = SavedPlacesBloc.of(context);
+    final locationsCubit = context.read<SavedPLacesLocationsCubit>();
     final LatLng mapLocation = await _selectPosition(_center);
     if (mapLocation != null) {
       final String description = await showDialog(
@@ -267,7 +259,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
             return const SetDescriptionDialog();
           });
       if (description != null) {
-        savedPlacesBloc.inAddLocation.add(TrufiLocation(
+        locationsCubit.inAddLocation(TrufiLocation(
           description: description,
           latitude: mapLocation.latitude,
           longitude: mapLocation.longitude,
@@ -275,7 +267,6 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
         ));
       }
     }
-    setState(() {});
   }
 
   IconData _typeToIconData(String type) {

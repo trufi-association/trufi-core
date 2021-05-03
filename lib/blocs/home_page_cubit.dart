@@ -2,18 +2,21 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
-import 'package:trufi_core/repository/request_manager.dart';
+import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
 
   final RequestManager requestManager;
-  CancelableOperation<Plan> currentFetchPlanOperation;
-  CancelableOperation<Ad> currentFetchAdOperation;
+  CancelableOperation<PlanEntity> currentFetchPlanOperation;
+  CancelableOperation<AdEntity> currentFetchAdOperation;
 
   HomePageCubit(
     this.localRepository,
@@ -50,7 +53,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(state.copyWith(fromPlace: fromPlace));
   }
 
-  Future<void> setPlan(Plan plan) async {
+  Future<void> setPlan(PlanEntity plan) async {
     await updateMapRouteState(state.copyWith(
       plan: plan,
       isFetching: false,
@@ -106,7 +109,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
               state.toPlace,
               correlationId,
             );
-      final Plan plan = await currentFetchPlanOperation.valueOrCancellation(
+      final PlanEntity plan =
+          await currentFetchPlanOperation.valueOrCancellation(
         null,
       );
       if (plan != null && !plan.hasError) {
@@ -135,7 +139,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
         correlationId,
       );
 
-      final Ad ad = await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad =
+          await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );
@@ -153,6 +158,24 @@ class HomePageCubit extends Cubit<MapRouteState> {
       print("Failed to fetch ad: $e");
       // ignore: avoid_print
       print(stacktrace);
+    }
+  }
+
+  Future<void> mapLongPress(LatLng point) async {
+    if (state.fromPlace == null) {
+      setFromPlace(
+        TrufiLocation.fromLatLng(
+          "Map pressed from",
+          point,
+        ),
+      );
+    } else if (state.toPlace == null) {
+      setToPlace(
+        TrufiLocation.fromLatLng(
+          "Map pressed to",
+          point,
+        ),
+      );
     }
   }
 }

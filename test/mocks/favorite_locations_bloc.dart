@@ -1,4 +1,4 @@
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/favorite_locations_bloc.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 
-class MockFavoriteLocationsBloc extends Mock implements FavoriteLocationsBloc{}
+class MockFavoriteLocationsCubit extends Mock implements FavoriteLocationsCubit{}

@@ -27,7 +27,7 @@ class FormFieldsLandscape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final homePageState = context.watch<HomePageCubit>().state;
+    final homePageState = context.read<HomePageCubit>().state;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
