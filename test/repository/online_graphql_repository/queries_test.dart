@@ -15,7 +15,7 @@ void main() {
       expect(result, contains("lon:  88.1}"));
       expect(result, contains("to: {lat: 99.1"));
       expect(result, contains("lon:  99.9}"));
-      expect(result.length, 711);
+      expect(result.length, 754);
     });
   });
 }
