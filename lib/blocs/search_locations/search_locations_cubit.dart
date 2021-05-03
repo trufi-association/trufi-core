@@ -171,8 +171,10 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   List<TrufiLocation> _deleteItem(
-      List<TrufiLocation> list, TrufiLocation location) {
-    final tempList = [...state.favoritePlaces];
+    List<TrufiLocation> list,
+    TrufiLocation location,
+  ) {
+    final tempList = [...list];
     tempList.remove(location);
     return tempList;
   }
