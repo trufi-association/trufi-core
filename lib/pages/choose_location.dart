@@ -137,7 +137,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
   Future<void> _handleOnYourLocationPressed() async {
     try {
       final location =
-          context.read<LocationProviderCubit>().getCurrentLocation();
+          context.read<LocationProviderCubit>().state.currentLocation;
       _trufiMapController.moveToYourLocation(
         location: location,
         context: context,

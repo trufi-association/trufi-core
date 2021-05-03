@@ -24,110 +24,75 @@ void main() {
       LocationPermission.denied,
       LocationPermission.deniedForever,
     ]) {
-      test("getCurrentLocation should throw for $testCase", () async {
-        when(Geolocator.checkPermission())
-            .thenAnswer((realInvocation) async => testCase);
+      blocTest(
+        "start without permission should not start $testCase",
+        build: () {
+          GeolocatorPlatform.instance = MockGeolocatorPlatform();
+          when(Geolocator.checkPermission()).thenAnswer(
+            (realInvocation) async => testCase,
+          );
 
-        expect(
-          () async => subject.getCurrentLocation(),
-          throwsA(const PermissionDeniedException(
-              "No Permissions to use the current Location")),
-        );
-      });
+          when(
+            Geolocator.getPositionStream(
+                desiredAccuracy: LocationAccuracy.high, distanceFilter: 10),
+          ).thenAnswer(
+            (_) => Stream<Position>.periodic(const Duration(milliseconds: 1), (int count) {
+              return Position(
+                heading: 0.0,
+                latitude: 88,
+                longitude: 88,
+                speed: 0,
+                accuracy: 0,
+                altitude: 0,
+                timestamp: DateTime.now(),
+                speedAccuracy: 0.0,
+              );
+            }),
+          );
+
+          return LocationProviderCubit();
+        },
+        act: (LocationProviderCubit cubit) => cubit.start(),
+        expect: () => [],
+      );
     }
 
     for (final testCase in [
       LocationPermission.always,
       LocationPermission.whileInUse,
     ]) {
-      test("getCurrentLocation should return currentLocation if $testCase",
-          () async {
-        when(Geolocator.checkPermission())
-            .thenAnswer((realInvocation) async => testCase);
+      blocTest(
+        "start should emit [LocationState, LocationState] with $testCase",
+        build: () {
+          GeolocatorPlatform.instance = MockGeolocatorPlatform();
+          when(Geolocator.checkPermission()).thenAnswer(
+            (realInvocation) async => testCase,
+          );
 
-        when(
-          Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high),
-        ).thenAnswer(
-          (realInvocation) async => Position(
-              heading: 0.0,
-              latitude: 88,
-              longitude: 88,
-              speed: 0,
-              accuracy: 0,
-              altitude: 0,
-              timestamp: DateTime(2021),
-              speedAccuracy: 0.0),
-        );
+          when(
+            Geolocator.getPositionStream(
+                desiredAccuracy: LocationAccuracy.high, distanceFilter: 10),
+          ).thenAnswer(
+            (_) => Stream<Position>.periodic(const Duration(milliseconds: 1), (int count) {
+              return Position(
+                heading: 0.0,
+                latitude: 88,
+                longitude: 88,
+                speed: 0,
+                accuracy: 0,
+                altitude: 0,
+                timestamp: DateTime.now(),
+                speedAccuracy: 0.0,
+              );
+            }),
+          );
 
-        expect(subject.getCurrentLocation(), LatLng(88.0, 88.0));
-      });
+          return LocationProviderCubit();
+        },
+        wait: const Duration(milliseconds: 1),
+        act: (LocationProviderCubit cubit) => cubit.start(),
+        expect: () => [LocationState(currentLocation: LatLng(88, 88))],
+      );
     }
-
-    blocTest(
-      "start without permission should not start",
-      build: () {
-        GeolocatorPlatform.instance = MockGeolocatorPlatform();
-        when(Geolocator.checkPermission()).thenAnswer(
-          (realInvocation) async => LocationPermission.denied,
-        );
-
-        when(
-          Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.high, distanceFilter: 10),
-        ).thenAnswer(
-          (_) => Stream<Position>.periodic(const Duration(milliseconds: 1),
-              (int count) {
-            return Position(
-              heading: 0.0,
-              latitude: 88,
-              longitude: 88,
-              speed: 0,
-              accuracy: 0,
-              altitude: 0,
-              timestamp: DateTime.now(),
-              speedAccuracy: 0.0,
-            );
-          }),
-        );
-
-        return LocationProviderCubit();
-      },
-      act: (LocationProviderCubit cubit) => cubit.start(),
-      expect: () => [],
-    );
-
-    blocTest(
-      "start should emit [LocationState, LocationState]",
-      build: () {
-        GeolocatorPlatform.instance = MockGeolocatorPlatform();
-        when(Geolocator.checkPermission()).thenAnswer(
-          (realInvocation) async => LocationPermission.always,
-        );
-
-        when(
-          Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.high, distanceFilter: 10),
-        ).thenAnswer(
-          (_) => Stream<Position>.periodic(const Duration(milliseconds: 1),
-              (int count) {
-            return Position(
-              heading: 0.0,
-              latitude: 88,
-              longitude: 88,
-              speed: 0,
-              accuracy: 0,
-              altitude: 0,
-              timestamp: DateTime.now(),
-              speedAccuracy: 0.0,
-            );
-          }),
-        );
-
-        return LocationProviderCubit();
-      },
-      wait: const Duration(milliseconds: 1),
-      act: (LocationProviderCubit cubit) => cubit.start(),
-      expect: () => [isA<LocationState>(), isA<LocationState>()],
-    );
   });
 }

@@ -627,7 +627,7 @@ class _SuggestionList extends StatelessWidget {
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     try {
-      final currentLocation = context.read<LocationProviderCubit>().getCurrentLocation();
+      final currentLocation = context.read<LocationProviderCubit>().state.currentLocation;
 
       _handleOnLatLngTapped(
         description: localization.searchItemYourLocation,
