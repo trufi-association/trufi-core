@@ -35,6 +35,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
   Future<void> reset() async {
     emit(const MapRouteState());
     await localRepository.deleteStateHomePage();
+    if (currentFetchPlanOperation != null) {
+      await currentFetchPlanOperation.cancel();
+    }
   }
 
   Future<void> updateMapRouteState(MapRouteState newState) async {

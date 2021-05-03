@@ -9,7 +9,7 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
-import 'package:trufi_core/pages/home_page.dart';
+import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/repository/offline_repository.dart';
 import 'package:trufi_core/repository/online_repository.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
