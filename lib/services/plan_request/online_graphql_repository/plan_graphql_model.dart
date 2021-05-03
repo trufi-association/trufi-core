@@ -125,7 +125,7 @@ class _ItineraryLeg {
         distance: json["distance"] as double,
         duration: json["duration"] as double,
         agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
-        mode: getTransportMode(json["mode"] as String),
+        mode: getTransportMode(mode: json["mode"] as String),
         route: json["route"] == null
             ? _Route(url: '',routeShortName: '',routeLongName: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),
