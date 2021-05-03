@@ -292,7 +292,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     return Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
         builder: (BuildContext context) =>
-            ChooseLocationPage(initialPosition: coordinate),
+            ChooseLocationPage(),
       ),
     );
   }

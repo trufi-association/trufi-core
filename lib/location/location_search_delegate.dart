@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/favorite_location_bloc.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
@@ -30,7 +31,8 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) => context.read<ThemeCubit>().state.searchTheme;
+  ThemeData appBarTheme(BuildContext context) =>
+      context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -40,12 +42,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       ),
       tooltip: "Back",
       onPressed: () {
-        if (_result != null) {
-          _result = null;
-          showSuggestions(context);
-        } else {
-          close(context, null);
-        }
+        close(context, null);
       },
     );
   }
@@ -134,9 +131,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         (context, index) {
           // Center
           if (index == 0) {
-            return _buildItem(
-              context,
-              appBarTheme(context),
+            return _BuildItem(
               () {
                 historyLocationsCubit.inAddLocation(street.location);
                 close(context, street.location);
@@ -152,9 +147,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
           }
           // Junctions
           final junction = street.junctions[index - 1];
-          return _buildItem(
-            context,
-            appBarTheme(context),
+          return _BuildItem(
             () {
               historyLocationsCubit.inAddLocation(
                 junction.location(localization),
@@ -207,25 +200,22 @@ class _SuggestionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> slivers = [];
-    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
-    slivers.add(_buildYourLocation(context));
-    slivers.add(_buildChooseOnMap(context));
-    slivers.add(_buildYourPlaces());
-    if (query.isEmpty) {
-      slivers.add(_buildHistoryList(context));
-      slivers.add(_buildFavoritesList(context));
-      slivers.add(_buildPlacesList(context));
-    } else {
-      slivers.add(_buildSearchResultList(context));
-    }
-    slivers.add(const SliverPadding(padding: EdgeInsets.all(4.0)));
     return SafeArea(
       top: false,
       bottom: false,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: CustomScrollView(slivers: slivers),
+        child: CustomScrollView(slivers: [
+          const SliverPadding(padding: EdgeInsets.all(4.0)),
+          _buildYourLocation(context),
+          _buildChooseOnMap(context),
+          if (query.isEmpty) _buildYourPlaces(),
+          if (query.isEmpty) _buildHistoryList(context),
+          if (query.isEmpty) _buildFavoritesList(context),
+          if (query.isEmpty) _buildPlacesList(context),
+          if (query.isNotEmpty) _buildSearchResultList(context),
+          const SliverPadding(padding: EdgeInsets.all(4.0))
+        ]),
       ),
     );
   }
@@ -233,9 +223,7 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildYourLocation(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return SliverToBoxAdapter(
-      child: _buildItem(
-        context,
-        appBarTheme,
+      child: _BuildItem(
         () => _handleOnYourLocationTapped(context),
         Icons.gps_fixed,
         localization.searchItemYourLocation,
@@ -246,9 +234,7 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildChooseOnMap(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return SliverToBoxAdapter(
-      child: _buildItem(
-        context,
-        appBarTheme,
+      child: _BuildItem(
         () => _handleOnChooseOnMapTapped(context),
         Icons.place,
         localization.searchItemChooseOnMap,
@@ -259,9 +245,10 @@ class _SuggestionList extends StatelessWidget {
   Widget _buildYourPlaces() {
     return BlocBuilder<SavedPLacesLocationsCubit, SavedPlacesLocationsState>(
       builder: (_, state) {
-        return _buildSavedSimpleList(
+        return _BuildSavedSimpleList(
           Icons.map,
           state.locations.reversed.toList(),
+          onSelected,
         );
       },
     );
@@ -269,11 +256,12 @@ class _SuggestionList extends StatelessWidget {
 
   Widget _buildHistoryList(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    return _buildFutureBuilder(
-      context,
+    return _BuildFutureBuilder(
       localization.searchTitleRecent,
       historyLocationsCubit.fetchWithLimit(favoriteLocationsCubit, 5),
       Icons.history,
+      onSelected: onSelected,
+      onStreetTapped: onStreetTapped,
     );
   }
 
@@ -282,10 +270,12 @@ class _SuggestionList extends StatelessWidget {
     // TODO Improve the way you repaint the list
     return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
       builder: (_, state) {
-        return _buildObjectList(
+        return _BuildObjectList(
           localization.searchTitleFavorites,
           Icons.place,
           favoriteLocationsCubit.locations,
+          onSelected,
+          onStreetTapped,
         );
       },
     );
@@ -296,11 +286,12 @@ class _SuggestionList extends StatelessWidget {
     // TODO Improve the way you repaint the list
     return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
       builder: (_, state) {
-        return _buildFutureBuilder(
-          context,
+        return _BuildFutureBuilder(
           localization.searchTitlePlaces,
           locationSearchBloc.fetchPlaces(context),
           Icons.place,
+          onSelected: onSelected,
+          onStreetTapped: onStreetTapped,
         );
       },
     );
@@ -312,322 +303,131 @@ class _SuggestionList extends StatelessWidget {
     // TODO Improve the way you repaint the list
     return BlocBuilder<FavoriteLocationsCubit, FavoriteLocationsState>(
       builder: (_, state) {
-        return _buildFutureBuilder(
-          context,
+        return _BuildFutureBuilder(
           localization.searchTitleResults,
           requestManagerBloc.fetchLocations(
             favoriteLocationsCubit,
             LocationSearchBloc.of(context),
             query,
-            correlationId: context.watch<PreferencesCubit>().state.correlationId,
+            correlationId:
+                context.watch<PreferencesCubit>().state.correlationId,
           ),
           Icons.place,
           isVisibleWhenEmpty: true,
+          onSelected: onSelected,
+          onStreetTapped: onStreetTapped,
         );
       },
     );
   }
 
-  Widget _buildFutureBuilder(
-    BuildContext context,
-    String title,
-    Future<List<TrufiPlace>> future,
-    IconData iconData, {
-    bool isVisibleWhenEmpty = false,
-  }) {
-    return FutureBuilder(
-      future: future,
-      initialData: null,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiPlace>> snapshot,
-      ) {
-        final localization = TrufiLocalization.of(context);
-        // Error
-        if (snapshot.hasError) {
-          String error = localization.commonUnknownError;
-          if (snapshot.error is FetchOfflineRequestException) {
-            error = "Offline mode is not implemented yet";
-          } else if (snapshot.error is FetchOfflineResponseException) {
-            error = "Offline mode is not implemented yet";
-          } else if (snapshot.error is FetchOnlineRequestException) {
-            error = localization.commonNoInternet;
-          } else if (snapshot.error is FetchOnlineResponseException) {
-            error = localization.commonFailLoading;
-          }
-          return _buildErrorList(context, title, error);
-        }
-        // Loading
-        if (snapshot.data == null) {
-          return SliverToBoxAdapter(
-            child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
-            ),
-          );
-        }
-        // No results
-        final int count =
-            snapshot.data.isNotEmpty ? snapshot.data.length + 1 : 0;
-        if (count == 0 && isVisibleWhenEmpty) {
-          return SliverToBoxAdapter(
-            child: Column(
-              children: <Widget>[
-                _buildTitle(context, title),
-                _buildErrorItem(context, localization.searchItemNoResults),
-              ],
-            ),
-          );
-        }
-        // Items
-        return _buildObjectList(title, iconData, snapshot.data);
-      },
-    );
-  }
+  // Widget _buildFutureBuilder(
+  //   BuildContext context,
+  //   String title,
+  //   Future<List<TrufiPlace>> future,
+  //   IconData iconData, {
+  //   bool isVisibleWhenEmpty = false,
+  // }) {
+  //   return FutureBuilder(
+  //     future: future,
+  //     initialData: null,
+  //     builder: (
+  //       BuildContext context,
+  //       AsyncSnapshot<List<TrufiPlace>> snapshot,
+  //     ) {
+  //       final localization = TrufiLocalization.of(context);
+  //       // Error
+  //       if (snapshot.hasError) {
+  //         String error = localization.commonUnknownError;
+  //         if (snapshot.error is FetchOfflineRequestException) {
+  //           error = "Offline mode is not implemented yet";
+  //         } else if (snapshot.error is FetchOfflineResponseException) {
+  //           error = "Offline mode is not implemented yet";
+  //         } else if (snapshot.error is FetchOnlineRequestException) {
+  //           error = localization.commonNoInternet;
+  //         } else if (snapshot.error is FetchOnlineResponseException) {
+  //           error = localization.commonFailLoading;
+  //         }
+  //         return _BuildErrorList(title: title, error: error);
+  //       }
+  //       // Loading
+  //       if (snapshot.data == null) {
+  //         return SliverToBoxAdapter(
+  //           child: LinearProgressIndicator(
+  //             valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
+  //           ),
+  //         );
+  //       }
+  //       // No results
+  //       final int count =
+  //           snapshot.data.isNotEmpty ? snapshot.data.length + 1 : 0;
+  //       if (count == 0 && isVisibleWhenEmpty) {
+  //         return SliverToBoxAdapter(
+  //           child: Column(
+  //             children: <Widget>[
+  //               _BuildTitle(title: title),
+  //               _BuildErrorItem(title: localization.searchItemNoResults),
+  //             ],
+  //           ),
+  //         );
+  //       }
+  //       // Items
+  //       return _BuildObjectList(
+  //         title,
+  //         iconData,
+  //         snapshot.data,
+  //         onSelected,
+  //         onStreetTapped,
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget _buildErrorList(BuildContext context, String title, String error) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          _buildTitle(context, title),
-          _buildErrorItem(context, error),
-        ],
-      ),
-    );
-  }
+  // Widget _BuildErrorList(BuildContext context, String title, String error) {
+  //   return SliverToBoxAdapter(
+  //     child: Column(
+  //       children: [
+  //         _BuildTitle(title: title),
+  //         _BuildErrorItem(title: error),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  IconData _typeToIconData(String type) {
-    switch (type) {
-      case 'amenity:bar':
-      case 'amenity:pub':
-      case 'amenity:biergarten':
-      case 'amenity:nightclub':
-        return Icons.local_bar;
+  // Widget _buildSavedSimpleList(
+  //   IconData iconData,
+  //   List<TrufiLocation> objects,
+  // ) {
+  //   return SliverList(
+  //     delegate: SliverChildBuilderDelegate(
+  //       (context, index) {
+  //         final TrufiLocation object = objects[index];
+  //         IconData localIconData = iconData;
+  //         // Use special type icon if available, fallback to default
+  //         if (object.type != null) {
+  //           localIconData = _typeToIconData(object.type) ?? iconData;
+  //         }
+  //         return _BuildItem(
+  //           () => _handleOnLocationTapped(object, addToHistory: true),
+  //           localIconData,
+  //           object.displayName,
+  //           subtitle: object.address,
+  //         );
+  //       },
+  //       childCount: objects.length,
+  //     ),
+  //   );
+  // }
 
-      case 'amenity:cafe':
-        return Icons.local_cafe;
-
-      case 'amenity:cinema':
-        return Icons.local_movies;
-
-      case 'amenity:pharmacy':
-        return Icons.local_pharmacy;
-
-      case 'amenity:fast_food':
-        return Icons.fastfood;
-
-      case 'amenity:food_court':
-      case 'amenity:restaurant':
-        return Icons.restaurant;
-
-      case 'amenity:theatre':
-        return Icons.local_play;
-
-      case 'amenity:parking':
-        return Icons.local_parking;
-
-      case 'amenity:doctors':
-      case 'amenity:dentist':
-      case 'amenity:veterinary':
-      case 'amenity:clinic':
-      case 'amenity:hospital':
-        return Icons.local_hospital;
-
-      case 'amenity:library':
-        return Icons.local_library;
-
-      case 'amenity:car_wash':
-        return Icons.local_car_wash;
-
-      case 'amenity:university':
-      case 'amenity:school':
-      case 'amenity:college':
-        return Icons.school;
-
-      case 'amenity:post_office':
-        return Icons.local_post_office;
-
-      case 'amenity:atm':
-        return Icons.local_atm;
-
-      case 'amenity:convenience':
-        return Icons.local_convenience_store;
-
-      case 'amenity:telephone':
-        return Icons.local_phone;
-
-      case 'amenity:internet_cafe':
-        return Icons.alternate_email;
-
-      case 'amenity:drinking_water':
-        return Icons.local_drink;
-
-      case 'amenity:charging_station':
-        return Icons.ev_station;
-
-      case 'amenity:fuel':
-        return Icons.local_gas_station;
-
-      case 'amenity:taxi':
-        return Icons.local_taxi;
-
-      case 'public_transport:platform':
-        return CustomIcons.busStop;
-
-      case 'shop:florist':
-        return Icons.local_florist;
-
-      case 'shop:convenience':
-        return Icons.local_convenience_store;
-
-      case 'shop:supermarket':
-        return Icons.local_grocery_store;
-
-      case 'shop:laundry':
-        return Icons.local_laundry_service;
-
-      case 'shop:copyshop':
-        return Icons.local_printshop;
-
-      case 'shop:mall':
-        return Icons.local_mall;
-
-      case 'tourism:hotel':
-      case 'tourism:hostel':
-      case 'tourism:guest_house':
-      case 'tourism:motel':
-      case 'tourism:apartment':
-        return Icons.local_hotel;
-
-      case 'saved_place:fastfood':
-        return Icons.fastfood;
-
-      case 'saved_place:home':
-        return Icons.home;
-
-      case 'saved_place:local_cafe':
-        return Icons.local_cafe;
-
-      case 'saved_place:map':
-        return Icons.map;
-
-      case 'saved_place:work':
-        return Icons.work;
-
-      case 'saved_place:school':
-        return Icons.school;
-
-      default:
-        return null;
-    }
-  }
-
-  Widget _buildObjectList(
-    String title,
-    IconData iconData,
-    List<TrufiPlace> places,
-  ) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          // Title
-          if (index == 0) {
-            return _buildTitle(context, title);
-          }
-          // Item
-          final object = places[index - 1];
-          if (object is TrufiLocation) {
-            IconData localIconData = iconData;
-
-            // Use special type icon if available, fallback to default
-            if (object.type != null) {
-              localIconData = _typeToIconData(object.type) ?? iconData;
-            }
-
-            return _buildItem(
-              context,
-              appBarTheme,
-              () => _handleOnLocationTapped(object, addToHistory: true),
-              localIconData,
-              object.displayName,
-              subtitle: object.address,
-              trailing: FavoriteButton(
-                location: object,
-                favoritesStream: favoriteLocationsCubit.outLocations,
-                color: appBarTheme.primaryIconTheme.color,
-              ),
-            );
-          } else if (object is TrufiStreet) {
-            return _buildItem(
-              context,
-              appBarTheme,
-              () => _handleOnStreetTapped(object),
-              Icons.label,
-              object.displayName,
-              trailing: Icon(
-                Icons.keyboard_arrow_right,
-                color: appBarTheme.primaryIconTheme.color,
-              ),
-            );
-          }
-          return Container();
-        },
-        childCount: places.isNotEmpty ? places.length + 1 : 0,
-      ),
-    );
-  }
-
-  Widget _buildSavedSimpleList(
-    IconData iconData,
-    List<TrufiLocation> objects,
-  ) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final TrufiLocation object = objects[index];
-          IconData localIconData = iconData;
-          // Use special type icon if available, fallback to default
-          if (object.type != null) {
-            localIconData = _typeToIconData(object.type) ?? iconData;
-          }
-          return _buildItem(
-            context,
-            appBarTheme,
-            () => _handleOnLocationTapped(object, addToHistory: true),
-            localIconData,
-            object.displayName,
-            subtitle: object.address,
-          );
-        },
-        childCount: objects.length,
-      ),
-    );
-  }
-
-  Widget _buildTitle(BuildContext context, String title) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
-      child: Row(
-        children: <Widget>[
-          Container(padding: const EdgeInsets.all(4.0)),
-          RichText(
-            text: TextSpan(
-              text: title.toUpperCase(),
-              style: appBarTheme.textTheme.bodyText1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildErrorItem(BuildContext context, String title) {
-    return _buildItem(context, appBarTheme, null, Icons.error, title);
-  }
+  // Widget _BuildErrorItem(BuildContext context, String title) {
+  //   return _BuildItem(null, Icons.error, title);
+  // }
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     try {
-      final currentLocation = context.read<LocationProviderCubit>().getCurrentLocation();
+      final currentLocation =
+          context.read<LocationProviderCubit>().getCurrentLocation();
 
       _handleOnLatLngTapped(
         description: localization.searchItemYourLocation,
@@ -646,14 +446,7 @@ class _SuggestionList extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
-        builder: (context) => ChooseLocationPage(
-          initialPosition: currentLocation != null
-              ? LatLng(
-                  currentLocation.latitude,
-                  currentLocation.longitude,
-                )
-              : null,
-        ),
+        builder: (context) => ChooseLocationPage(),
       ),
     );
     _handleOnMapTapped(
@@ -698,54 +491,468 @@ class _SuggestionList extends StatelessWidget {
       }
     }
   }
+}
 
-  void _handleOnStreetTapped(TrufiStreet street) {
-    if (street != null) {
-      if (onStreetTapped != null) {
-        onStreetTapped(street);
-      }
-    }
+// Widget _BuildItem(
+//   BuildContext context,
+//   ThemeData theme,
+//   VoidCallback onTap,
+//   IconData iconData,
+//   String title, {
+//   String subtitle,
+//   Widget trailing,
+// }) {
+//   return InkWell(
+//     onTap: onTap,
+//     child: Container(
+//       margin: const EdgeInsets.symmetric(horizontal: 8.0),
+//       child: Row(
+//         children: <Widget>[
+//           Icon(iconData, color: theme.primaryIconTheme.color),
+//           const SizedBox(width: 32.0, height: 48.0),
+//           Expanded(
+//             child: RichText(
+//               maxLines: 1,
+//               text: TextSpan(
+//                 style: theme.textTheme.bodyText2,
+//                 children: <TextSpan>[
+//                   TextSpan(text: title),
+//                   const TextSpan(text: "     "),
+//                   TextSpan(
+//                     text: subtitle,
+//                     style: TextStyle(
+//                       color: theme.hintColor,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           if (trailing != null) trailing
+//         ],
+//       ),
+//     ),
+//   );
+// }
+//
+
+class _BuildFutureBuilder extends StatelessWidget {
+  final String title;
+  final Future<List<TrufiPlace>> future;
+  final IconData iconData;
+  final bool isVisibleWhenEmpty;
+
+  final ValueChanged<TrufiLocation> onSelected;
+  final ValueChanged<TrufiStreet> onStreetTapped;
+  const _BuildFutureBuilder(this.title, this.future, this.iconData,
+      {this.isVisibleWhenEmpty = false, this.onSelected, this.onStreetTapped});
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: future,
+      initialData: null,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TrufiPlace>> snapshot,
+      ) {
+        final localization = TrufiLocalization.of(context);
+        // Error
+        if (snapshot.hasError) {
+          String error = localization.commonUnknownError;
+          if (snapshot.error is FetchOfflineRequestException) {
+            error = "Offline mode is not implemented yet";
+          } else if (snapshot.error is FetchOfflineResponseException) {
+            error = "Offline mode is not implemented yet";
+          } else if (snapshot.error is FetchOnlineRequestException) {
+            error = localization.commonNoInternet;
+          } else if (snapshot.error is FetchOnlineResponseException) {
+            error = localization.commonFailLoading;
+          }
+          return _BuildErrorList(title: title, error: error);
+        }
+        // Loading
+        if (snapshot.data == null) {
+          return SliverToBoxAdapter(
+            child: LinearProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
+            ),
+          );
+        }
+        // No results
+        final int count =
+            snapshot.data.isNotEmpty ? snapshot.data.length + 1 : 0;
+        if (count == 0 && isVisibleWhenEmpty) {
+          return SliverToBoxAdapter(
+            child: Column(
+              children: <Widget>[
+                _BuildTitle(title: title),
+                _BuildErrorItem(title: localization.searchItemNoResults),
+              ],
+            ),
+          );
+        }
+        // Items
+        return _BuildObjectList(
+          title,
+          iconData,
+          snapshot.data,
+          onSelected,
+          onStreetTapped,
+        );
+      },
+    );
   }
 }
 
-Widget _buildItem(
-  BuildContext context,
-  ThemeData theme,
-  VoidCallback onTap,
-  IconData iconData,
-  String title, {
-  String subtitle,
-  Widget trailing,
-}) {
-  final Row row = Row(
-    children: <Widget>[
-      Icon(iconData, color: theme.primaryIconTheme.color),
-      const SizedBox(width: 32.0, height: 48.0),
-      Expanded(
-        child: RichText(
-          maxLines: 1,
-          text: TextSpan(
-            style: theme.textTheme.bodyText2,
-            children: <TextSpan>[
-              TextSpan(text: title),
-              const TextSpan(text: "     "),
-              TextSpan(
-                text: subtitle,
-                style: TextStyle(
-                  color: theme.hintColor,
+class _BuildSavedSimpleList extends StatelessWidget {
+  final IconData iconData;
+  final List<TrufiLocation> objects;
+
+  final ValueChanged<TrufiLocation> onSelected;
+  const _BuildSavedSimpleList(this.iconData, this.objects, this.onSelected);
+  @override
+  Widget build(BuildContext context) {
+    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final TrufiLocation object = objects[index];
+          IconData localIconData = iconData;
+          // Use special type icon if available, fallback to default
+          if (object.type != null) {
+            localIconData = _typeToIconData(object.type) ?? iconData;
+          }
+          return _BuildItem(
+            () {
+              if (object != null) {
+                historyLocationsCubit.inAddLocation(object);
+                if (onSelected != null) {
+                  onSelected(object);
+                }
+              }
+            },
+            localIconData,
+            object.displayName,
+            subtitle: object.address,
+          );
+        },
+        childCount: objects.length,
+      ),
+    );
+  }
+}
+
+class _BuildObjectList extends StatelessWidget {
+  final String title;
+  final IconData iconData;
+  final List<TrufiPlace> places;
+
+  final ValueChanged<TrufiLocation> onSelected;
+
+  final ValueChanged<TrufiStreet> onStreetTapped;
+  const _BuildObjectList(
+    this.title,
+    this.iconData,
+    this.places,
+    this.onSelected,
+    this.onStreetTapped,
+  );
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.watch<ThemeCubit>().state.searchTheme;
+    final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
+    final historyLocationsCubit = context.read<HistoryLocationsCubit>();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          // Title
+          if (index == 0) {
+            return _BuildTitle(title: title);
+          }
+          // Item
+          final object = places[index - 1];
+          if (object is TrufiLocation) {
+            IconData localIconData = iconData;
+
+            // Use special type icon if available, fallback to default
+            if (object.type != null) {
+              localIconData = _typeToIconData(object.type) ?? iconData;
+            }
+
+            return _BuildItem(
+              () {
+                if (object != null) {
+                  historyLocationsCubit.inAddLocation(object);
+                  if (onSelected != null) {
+                    onSelected(object);
+                  }
+                }
+              },
+              localIconData,
+              object.displayName,
+              subtitle: object.address,
+              trailing: FavoriteButton(
+                location: object,
+                favoritesStream: favoriteLocationsCubit.outLocations,
+                color: theme.primaryIconTheme.color,
+              ),
+            );
+          } else if (object is TrufiStreet) {
+            return _BuildItem(
+              () {
+                if (object != null) {
+                  if (onStreetTapped != null) {
+                    onStreetTapped(object);
+                  }
+                }
+              },
+              Icons.label,
+              object.displayName,
+              trailing: Icon(
+                Icons.keyboard_arrow_right,
+                color: theme.primaryIconTheme.color,
+              ),
+            );
+          }
+          return Container();
+        },
+        childCount: places.isNotEmpty ? places.length + 1 : 0,
+      ),
+    );
+  }
+}
+
+class _BuildErrorList extends StatelessWidget {
+  final String title;
+  final String error;
+
+  const _BuildErrorList({
+    Key key,
+    @required this.title,
+    @required this.error,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          _BuildTitle(title: title),
+          _BuildErrorItem(title: error),
+        ],
+      ),
+    );
+  }
+}
+
+class _BuildTitle extends StatelessWidget {
+  final String title;
+
+  const _BuildTitle({Key key, @required this.title}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.watch<ThemeCubit>().state.searchTheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+      child: Row(
+        children: <Widget>[
+          Container(padding: const EdgeInsets.all(4.0)),
+          RichText(
+            text: TextSpan(
+              text: title.toUpperCase(),
+              style: theme.textTheme.bodyText1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BuildErrorItem extends StatelessWidget {
+  final String title;
+
+  const _BuildErrorItem({
+    Key key,
+    @required this.title,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return _BuildItem(null, Icons.error, title);
+  }
+}
+
+class _BuildItem extends StatelessWidget {
+  final void Function() onTap;
+  final IconData iconData;
+  final String title;
+  final String subtitle;
+  final Widget trailing;
+  const _BuildItem(
+    this.onTap,
+    this.iconData,
+    this.title, {
+    this.subtitle,
+    this.trailing,
+  });
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.watch<ThemeCubit>().state.searchTheme;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          children: <Widget>[
+            Icon(iconData, color: theme.primaryIconTheme.color),
+            const SizedBox(width: 32.0, height: 48.0),
+            Expanded(
+              child: RichText(
+                maxLines: 1,
+                text: TextSpan(
+                  style: theme.textTheme.bodyText2,
+                  children: <TextSpan>[
+                    TextSpan(text: title),
+                    const TextSpan(text: "     "),
+                    TextSpan(
+                      text: subtitle,
+                      style: TextStyle(
+                        color: theme.hintColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            if (trailing != null) trailing
+          ],
         ),
       ),
-    ],
-  );
-  if (trailing != null) {
-    row.children.add(trailing);
+    );
   }
-  return InkWell(
-    onTap: onTap,
-    child: Container(margin: const EdgeInsets.symmetric(horizontal: 8.0), child: row),
-  );
+}
+
+IconData _typeToIconData(String type) {
+  switch (type) {
+    case 'amenity:bar':
+    case 'amenity:pub':
+    case 'amenity:biergarten':
+    case 'amenity:nightclub':
+      return Icons.local_bar;
+
+    case 'amenity:cafe':
+      return Icons.local_cafe;
+
+    case 'amenity:cinema':
+      return Icons.local_movies;
+
+    case 'amenity:pharmacy':
+      return Icons.local_pharmacy;
+
+    case 'amenity:fast_food':
+      return Icons.fastfood;
+
+    case 'amenity:food_court':
+    case 'amenity:restaurant':
+      return Icons.restaurant;
+
+    case 'amenity:theatre':
+      return Icons.local_play;
+
+    case 'amenity:parking':
+      return Icons.local_parking;
+
+    case 'amenity:doctors':
+    case 'amenity:dentist':
+    case 'amenity:veterinary':
+    case 'amenity:clinic':
+    case 'amenity:hospital':
+      return Icons.local_hospital;
+
+    case 'amenity:library':
+      return Icons.local_library;
+
+    case 'amenity:car_wash':
+      return Icons.local_car_wash;
+
+    case 'amenity:university':
+    case 'amenity:school':
+    case 'amenity:college':
+      return Icons.school;
+
+    case 'amenity:post_office':
+      return Icons.local_post_office;
+
+    case 'amenity:atm':
+      return Icons.local_atm;
+
+    case 'amenity:convenience':
+      return Icons.local_convenience_store;
+
+    case 'amenity:telephone':
+      return Icons.local_phone;
+
+    case 'amenity:internet_cafe':
+      return Icons.alternate_email;
+
+    case 'amenity:drinking_water':
+      return Icons.local_drink;
+
+    case 'amenity:charging_station':
+      return Icons.ev_station;
+
+    case 'amenity:fuel':
+      return Icons.local_gas_station;
+
+    case 'amenity:taxi':
+      return Icons.local_taxi;
+
+    case 'public_transport:platform':
+      return CustomIcons.busStop;
+
+    case 'shop:florist':
+      return Icons.local_florist;
+
+    case 'shop:convenience':
+      return Icons.local_convenience_store;
+
+    case 'shop:supermarket':
+      return Icons.local_grocery_store;
+
+    case 'shop:laundry':
+      return Icons.local_laundry_service;
+
+    case 'shop:copyshop':
+      return Icons.local_printshop;
+
+    case 'shop:mall':
+      return Icons.local_mall;
+
+    case 'tourism:hotel':
+    case 'tourism:hostel':
+    case 'tourism:guest_house':
+    case 'tourism:motel':
+    case 'tourism:apartment':
+      return Icons.local_hotel;
+
+    case 'saved_place:fastfood':
+      return Icons.fastfood;
+
+    case 'saved_place:home':
+      return Icons.home;
+
+    case 'saved_place:local_cafe':
+      return Icons.local_cafe;
+
+    case 'saved_place:map':
+      return Icons.map;
+
+    case 'saved_place:work':
+      return Icons.work;
+
+    case 'saved_place:school':
+      return Icons.school;
+
+    default:
+      return null;
+  }
 }

@@ -46,6 +46,7 @@ class TrufiOnlineMapState extends State<TrufiOnlineMap> {
       builder: (context, state) => TrufiMap(
         key: const ValueKey("TrufiOnlineMap"),
         controller: widget.controller,
+        
         mapOptions: MapOptions(
           minZoom: cfg.map.onlineMinZoom,
           maxZoom: cfg.map.onlineMaxZoom,

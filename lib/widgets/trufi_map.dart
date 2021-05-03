@@ -145,7 +145,7 @@ class TrufiMapState extends State<TrufiMap> {
         );
         return Stack(children: [
           Positioned.fill(
-            child: FlutterMap(
+            child: FlutterMap(              
               mapController: widget.controller.mapController,
               options: widget.mapOptions,
               layers: widget.layerOptionsBuilder(context),
