@@ -181,7 +181,8 @@ class OnlineRepository implements RequestManager {
     return error.message;
   }
 }
-
+// TODO: clean code
+// ignore: unused_element
 List<TrufiLocation> _parseLocations(String responseBody) {
   return json
       .decode(responseBody)
