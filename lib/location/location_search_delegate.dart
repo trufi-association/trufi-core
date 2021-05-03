@@ -66,13 +66,12 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   @override
   Widget buildResults(BuildContext context) {
     if (_result != null) {
-      if (_result is TrufiLocation) {
+      if (_result is TrufiStreet) {
+        return _buildStreetResults(context, _result as TrufiStreet);
+      } else {
         Future.delayed(Duration.zero, () {
           close(context, _result as TrufiLocation);
         });
-      }
-      if (_result is TrufiStreet) {
-        return _buildStreetResults(context, _result as TrufiStreet);
       }
     }
     return buildSuggestions(context);
