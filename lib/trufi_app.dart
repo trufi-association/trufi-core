@@ -5,7 +5,6 @@ import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
-import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -27,6 +26,7 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
+import 'blocs/search_locations/search_locations_cubit.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
@@ -104,8 +104,8 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
-        BlocProvider<RequestSearchManagerCubit>(
-          create: (context) => RequestSearchManagerCubit(
+        BlocProvider<SearchLocationsCubit>(
+          create: (context) => SearchLocationsCubit(
             OfflineSearchLocation(),
           ),
         ),
@@ -156,8 +156,6 @@ class TrufiApp extends StatelessWidget {
     );
   }
 }
-
-
 
 class LocalizedMaterialApp extends StatelessWidget {
   const LocalizedMaterialApp(

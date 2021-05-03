@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
-import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
-import 'package:trufi_core/blocs/request_search_manager_cubit.dart';
+import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -115,6 +114,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   ) {
     final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
     final historyLocationsCubit = context.read<HistoryLocationsCubit>();
+
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -179,7 +179,7 @@ class _SuggestionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final locationSearchBloc = LocationSearchBloc.of(context);
-    final requestManagerBloc = context.read<RequestSearchManagerCubit>();
+    final requestManagerBloc = context.read<SearchLocationsCubit>();
     final favoriteLocationsCubit = context.watch<FavoriteLocationsCubit>();
     final historyLocationsCubit = context.read<HistoryLocationsCubit>();
     return SafeArea(
@@ -389,9 +389,9 @@ class _BuildYourPlaces extends StatelessWidget {
   Widget build(BuildContext context) {
     final historyLocationsCubit = context.read<HistoryLocationsCubit>();
 
-    final savedLocations = context.read<SavedPLacesLocationsCubit>().state;
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     final List<TrufiLocation> locations =
-        savedLocations.locations.reversed.toList();
+        searchLocationsCubit.state.myPlaces.reversed.toList();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
