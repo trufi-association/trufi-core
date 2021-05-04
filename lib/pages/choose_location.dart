@@ -107,12 +107,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
   }
 
   Future<void> _handleOnYourLocationPressed() async {
-    final location = context.read<LocationProviderCubit>().getCurrentLocation();
-    await _trufiMapController.moveToYourLocation(
-      location: location,
-      context: context,
-      tickerProvider: this,
-    );
+      final location =
+          context.read<LocationProviderCubit>().state.currentLocation;
+      _trufiMapController.moveToYourLocation(
+        location: location,
+        context: context,
+        tickerProvider: this,
+      );
   }
 
   void _handleOnConfirmationPressed() {

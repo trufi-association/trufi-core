@@ -34,8 +34,4 @@ class LocationProviderCubit extends Cubit<LocationState> {
       _locationStreamSubscription = null;
     }
   }
-
-  LatLng getCurrentLocation() {
-    return state.currentLocation;
-  }
 }

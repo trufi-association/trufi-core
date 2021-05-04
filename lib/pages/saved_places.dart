@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -148,7 +149,7 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
   }
 
   Future<void> _showCurrentRoute(TrufiLocation toLocation) async {
-    final location = context.read<LocationProviderCubit>().getCurrentLocation();
+    final location = context.read<LocationProviderCubit>().state.currentLocation;
     if (location == null) return;
     final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
       TrufiLocalization.of(context).searchItemYourLocation,

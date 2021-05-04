@@ -181,14 +181,15 @@ class OnlineRepository implements RequestManager {
     return error.message;
   }
 }
-
-// List<TrufiLocation> _parseLocations(String responseBody) {
-//   return json
-//       .decode(responseBody)
-//       .map<TrufiLocation>(
-//           (Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
-//       .toList() as List<TrufiLocation>;
-// }
+// TODO: clean code
+// ignore: unused_element
+List<TrufiLocation> _parseLocations(String responseBody) {
+  return json
+      .decode(responseBody)
+      .map<TrufiLocation>(
+          (Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
+      .toList() as List<TrufiLocation>;
+}
 
 PlanEntity _parsePlan(String responseBody) {
   return PlanEntity.fromJson(json.decode(responseBody) as Map<String, dynamic>);

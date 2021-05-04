@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/history_locations_cubit/history_locations_cubit.dart';
+import 'package:trufi_core/blocs/locations/saved_places_locations_cubit/saved_places_locations_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -26,8 +29,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) =>
-      context.read<ThemeCubit>().state.searchTheme;
+  ThemeData appBarTheme(BuildContext context) => context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -324,7 +326,7 @@ class _BuildYourLocation extends StatelessWidget {
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
     final localization = TrufiLocalization.of(context);
     final currentLocation =
-        context.read<LocationProviderCubit>().getCurrentLocation();
+        context.read<LocationProviderCubit>().state.currentLocation;
     if (currentLocation != null) {
       final TrufiLocation value = TrufiLocation(
         description: localization.searchItemYourLocation,

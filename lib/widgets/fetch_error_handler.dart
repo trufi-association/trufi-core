@@ -60,7 +60,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
             onReportMissingRoute: () async {
               final LatLng currentLocation = dialogContext
                   .read<LocationProviderCubit>()
-                  .getCurrentLocation();
+                  .state.currentLocation;
               launch(
                 "${cfg.url.routeFeedback}?lang=$languageCode&geo=${currentLocation?.latitude},"
                 "${currentLocation?.longitude}&app=${packageInfo.version}",
