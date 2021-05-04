@@ -35,15 +35,11 @@ void main() {
       final results = await subject.fetchLocations(locationSearchBloc, query);
 
       for (var i = 0; i < results.length; i++) {
-        if (i == 0) {
-          expect(results[i] is TrufiLocation, false,
-              reason: "This is our Favorite");
-        }
-        if (i != 0 && i < 4) {
-          expect(results[i] is TrufiStreet, true,
+        if (i == 0 && i < 3) {
+          expect(results[i] is  TrufiStreet, true,
               reason: "Second result is not TrufiStreet");
         }
-        if (i >= 4) {
+        if (i >= 3) {
           expect(results[i] is TrufiLocation, true,
               reason: "Second result is not TrufiLocation");
         }
@@ -54,11 +50,11 @@ void main() {
       final List<dynamic> results =
           await subject.fetchLocations(locationSearchBloc, query);
 
-      expect(results[0].description, "Favorite");
-      expect(results[1].description, "Streets: Long Distance");
-      expect(results[2].description, "Streets: Medium Distance");
-      expect(results[3].description, "Streets: Short Distance");
-      expect(results[4].description, "Location: Shortest Distance");
+      expect(results[0].description, "Streets: Long Distance");
+      expect(results[1].description, "Streets: Medium Distance");
+      expect(results[2].description, "Streets: Short Distance");
+      expect(results[3].description, "Location: Shortest Distance");
+      expect(results[4].description, "Favorite");
       expect(results[5].description, "Location: Medium Distance");
       expect(results[6].description, "Location: Longest Distance");
     });
