@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
-import 'package:trufi_core/widgets/alerts.dart';
+import 'package:trufi_core/widgets/map/map_copyright.dart';
+import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
+import '../widgets/map/trufi_online_map.dart';
 import '../widgets/map_type_button.dart';
-import '../widgets/trufi_map.dart';
-import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
 
 const double customOverlayWidgetMargin = 80;
@@ -48,20 +45,22 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
         onLongPress: widget.onLongPress,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
-            _trufiMapController.yourLocationLayer,
+            // _trufiMapController.yourLocationLayer,
           ];
         },
       ),
       if (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
-        Positioned(
+        const Positioned(
           top: 16.0,
           right: 16.0,
-          child: _buildUpperActionButtons(context),
+          child: MapTypeButton(),
         ),
       Positioned(
         bottom: 16.0,
         right: 16.0,
-        child: _buildLowerActionButtons(context),
+        child: YourLocationButton(
+          trufiMapController: _trufiMapController,
+        ),
       ),
       Positioned.fill(
         child: Container(
@@ -73,6 +72,11 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
               ? widget.customOverlayWidget(context, locale)
               : null,
         ),
+      ),
+      Positioned(
+        bottom: 0,
+        left: 0,
+        child: SafeArea(child: MapCopyright()),
       ),
       Positioned.fill(
         child: Container(
@@ -87,34 +91,5 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
         ),
       )
     ]);
-  }
-
-  Widget _buildUpperActionButtons(BuildContext context) {
-    return const SafeArea(
-      child: MapTypeButton(),
-    );
-  }
-
-  Widget _buildLowerActionButtons(BuildContext context) {
-    return SafeArea(
-      child: YourLocationButton(onPressed: _handleOnYourLocationPressed),
-    );
-  }
-
-  Future<void> _handleOnYourLocationPressed() async {
-    try {
-      final location =
-          context.read<LocationProviderCubit>().state.currentLocation;
-      _trufiMapController.moveToYourLocation(
-        location: location,
-        context: context,
-        tickerProvider: this,
-      );
-    } on PermissionDeniedException catch (_) {
-      showDialog(
-        context: context,
-        builder: (context) => buildAlertLocationServicesDenied(context),
-      );
-    }
   }
 }

@@ -89,13 +89,28 @@ Marker buildTransferMarker(LatLng point) {
   );
 }
 
-Marker buildYourLocationMarker(LatLng point) {
-  return Marker(
-    width: 50.0,
-    height: 50.0,
-    point: point,
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) => const MyLocationMarker(),
+// Marker buildYourLocationMarker(LatLng point) {
+//   return Marker(
+//     width: 50.0,
+//     height: 50.0,
+//     point: point,
+//     anchorPos: AnchorPos.align(AnchorAlign.center),
+//     builder: (context) => const MyLocationMarker(),
+//   );
+// }
+
+MarkerLayerOptions buildYourLocationMarkerOption(LatLng point) {
+  return MarkerLayerOptions(
+    markers: [
+      if (point != null)
+        Marker(
+          width: 50.0,
+          height: 50.0,
+          point: point,
+          anchorPos: AnchorPos.align(AnchorAlign.center),
+          builder: (context) => const MyLocationMarker(),
+        )
+    ],
   );
 }
 
@@ -197,7 +212,8 @@ Marker buildBusMarker(
           child: Row(
             children: <Widget>[
               Icon(leg.iconData(), color: Colors.white),
-              Text(" ${leg.route}", style: const TextStyle(color: Colors.white)),
+              Text(" ${leg.route}",
+                  style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),

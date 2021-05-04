@@ -6,6 +6,8 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/alerts.dart';
+import 'package:trufi_core/widgets/map/map_copyright.dart';
+import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
@@ -13,9 +15,8 @@ import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
 import '../widgets/crop_button.dart';
+import '../widgets/map/trufi_online_map.dart';
 import '../widgets/map_type_button.dart';
-import '../widgets/trufi_map.dart';
-import '../widgets/trufi_online_map.dart';
 import '../widgets/your_location_button.dart';
 
 const double customOverlayWidgetMargin = 80.0;
@@ -109,7 +110,7 @@ class PlanMapPageState extends State<PlanMapPage>
               _data.fromMarkerLayer,
               _data.selectedPolylinesLayer,
               _data.selectedMarkersLayer,
-              _trufiMapController.yourLocationLayer,
+              // _trufiMapController.yourLocationLayer,
               _data.toMarkerLayer,
             ];
           },
@@ -120,6 +121,11 @@ class PlanMapPageState extends State<PlanMapPage>
             right: 16.0,
             child: _buildUpperActionButtons(context),
           ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          child: MapCopyright(),
+        ),
         Positioned(
           bottom: 16.0,
           right: 16.0,
@@ -160,16 +166,16 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Widget _buildLowerActionButtons(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
-          const Padding(padding: EdgeInsets.all(4.0)),
-          YourLocationButton(onPressed: _handleOnYourLocationPressed),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
+        const Padding(padding: EdgeInsets.all(4.0)),
+        YourLocationButton(
+          trufiMapController: _trufiMapController,
+        ),
+      ],
     );
   }
 
@@ -187,23 +193,6 @@ class PlanMapPageState extends State<PlanMapPage>
     if (_data.selectedBounds != null && _data.selectedBounds.isValid) {
       _cropButtonKey.currentState.setVisible(
         visible: !position.bounds.containsBounds(_data.selectedBounds),
-      );
-    }
-  }
-
-  Future<void> _handleOnYourLocationPressed() async {
-    try {
-      final location =
-          context.read<LocationProviderCubit>().state.currentLocation;
-      _trufiMapController.moveToYourLocation(
-        location: location,
-        context: context,
-        tickerProvider: this,
-      );
-    } on PermissionDeniedException catch (_) {
-      showDialog(
-        context: context,
-        builder: (context) => buildAlertLocationServicesDenied(context),
       );
     }
   }

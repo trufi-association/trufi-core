@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
-import '../widgets/trufi_map.dart';
-import '../widgets/trufi_online_map.dart';
+import '../widgets/map/trufi_online_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   @override
@@ -79,7 +79,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         onPositionChanged: _handleOnMapPositionChanged,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
-            _trufiMapController.yourLocationLayer,
+            // _trufiMapController.yourLocationLayer,
             MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
           ];
         },
