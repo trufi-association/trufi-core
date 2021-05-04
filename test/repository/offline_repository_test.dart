@@ -9,7 +9,6 @@ import '../mocks/location_search_bloc.dart';
 void main() {
   group("OfflineRepository", () {
     OfflineSearchLocation subject;
-    MockFavoriteLocationsCubit favoriteLocationCubit;
     MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
 
@@ -18,7 +17,6 @@ void main() {
     setUp(() {
       subject = OfflineSearchLocation();
 
-      favoriteLocationCubit = MockFavoriteLocationsCubit();
       locationSearchBloc = MockLocationSearchBloc();
 
       locationSearchStorage = MockLocationSearchStorage();
@@ -31,18 +29,14 @@ void main() {
       when(locationSearchStorage.fetchStreetsWithQuery(query)).thenAnswer(
         (_) => Future.value(getTrufiStreetList()),
       );
-
-      when(favoriteLocationCubit.locations).thenReturn(
-          [TrufiLocation(description: "Favorite", longitude: 5, latitude: 8)]);
     });
 
     test("should sort streets first", () async {
-      final results = await subject.fetchLocations(
-          favoriteLocationCubit, locationSearchBloc, query);
+      final results = await subject.fetchLocations(locationSearchBloc, query);
 
       for (var i = 0; i < results.length; i++) {
         if (i == 0) {
-          expect(results[i] is TrufiLocation, true,
+          expect(results[i] is TrufiLocation, false,
               reason: "This is our Favorite");
         }
         if (i != 0 && i < 4) {
@@ -57,8 +51,8 @@ void main() {
     });
 
     test("should sort shortest distance first", () async {
-      final List<dynamic> results = await subject.fetchLocations(
-          favoriteLocationCubit, locationSearchBloc, query);
+      final List<dynamic> results =
+          await subject.fetchLocations(locationSearchBloc, query);
 
       expect(results[0].description, "Favorite");
       expect(results[1].description, "Streets: Long Distance");
@@ -70,9 +64,8 @@ void main() {
     });
 
     test("should take the limit into account", () async {
-      final results = await subject.fetchLocations(
-          favoriteLocationCubit, locationSearchBloc, query,
-          limit: 5);
+      final results =
+          await subject.fetchLocations(locationSearchBloc, query, limit: 5);
 
       expect(results.length, 5);
     });
