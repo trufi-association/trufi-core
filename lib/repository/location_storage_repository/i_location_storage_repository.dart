@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
+// import 'package:trufi_core/blocs/locations/favorite_locations_cubit/favorite_locations_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 
 abstract class ILocationStorageRepository {
@@ -12,12 +12,12 @@ abstract class ILocationStorageRepository {
   UnmodifiableListView<TrufiLocation> getUnmodifiableListView();
 
   Future<List<TrufiLocation>> fetchLocations(
-    FavoriteLocationsCubit favoriteLocationsCubit,
+    // FavoriteLocationsCubit favoriteLocationsCubit,
   );
 
   Future<List<TrufiLocation>> fetchLocationsWithLimit(
     int limit,
-    FavoriteLocationsCubit favoriteLocationsCubit,
+    // FavoriteLocationsCubit favoriteLocationsCubit,
   );
 
   Future<List<LevenshteinObject>> fetchLocationsWithQuery(
