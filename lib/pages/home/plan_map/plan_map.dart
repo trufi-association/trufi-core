@@ -13,7 +13,7 @@ import 'package:trufi_core/widgets/map/trufi_online_map.dart';
 
 import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
-import '../../../trufi_map_utils.dart';
+import '../../../widgets/map/utils/trufi_map_utils.dart';
 import './plan.dart';
 const double customOverlayWidgetMargin = 80.0;
 

@@ -2,23 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import 'composite_subscription.dart';
-import 'custom_icons.dart';
-import 'trufi_configuration.dart';
-import 'trufi_models.dart';
-import 'entities/plan_entity/plan_entity.dart';
-
-LayerOptions offlineMapTileLayerOptions() {
-  return TileLayerOptions(
-    urlTemplate: "assets/tiles/{z}/{z}-{x}-{y}.png",
-  );
-}
+import '../../../custom_icons.dart';
+import '../../../trufi_configuration.dart';
+import '../../../trufi_models.dart';
+import 'your_location_marker.dart';
 
 LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
     {String tileProviderKey = ""}) {
@@ -89,16 +82,6 @@ Marker buildTransferMarker(LatLng point) {
   );
 }
 
-// Marker buildYourLocationMarker(LatLng point) {
-//   return Marker(
-//     width: 50.0,
-//     height: 50.0,
-//     point: point,
-//     anchorPos: AnchorPos.align(AnchorAlign.center),
-//     builder: (context) => const MyLocationMarker(),
-//   );
-// }
-
 MarkerLayerOptions buildYourLocationMarkerOption(LatLng point) {
   return MarkerLayerOptions(
     markers: [
@@ -112,81 +95,6 @@ MarkerLayerOptions buildYourLocationMarkerOption(LatLng point) {
         )
     ],
   );
-}
-
-class MyLocationMarker extends StatefulWidget {
-  const MyLocationMarker({Key key}) : super(key: key);
-
-  @override
-  MyLocationMarkerState createState() => MyLocationMarkerState();
-}
-
-class MyLocationMarkerState extends State<MyLocationMarker> {
-  final _subscriptions = CompositeSubscription();
-
-  double _direction;
-
-  @override
-  void initState() {
-    super.initState();
-    _subscriptions.add(
-      FlutterCompass.events.listen((CompassEvent event) {
-        setState(() {
-          _direction = event.heading;
-        });
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscriptions.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> children = <Widget>[
-      Center(
-        child: Transform.scale(
-          scale: 0.5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              border: Border.all(color: Colors.white, width: 3.5),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).accentColor,
-                  spreadRadius: 8.0,
-                  blurRadius: 30.0,
-                ),
-              ],
-            ),
-            child: Icon(
-              CustomIcons.circle,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
-      ),
-    ];
-    if (_direction != null) {
-      children.add(
-        Transform.rotate(
-          angle: (pi / 180.0) * _direction,
-          child: Container(
-            alignment: Alignment.topCenter,
-            child: Icon(
-              Icons.arrow_drop_up,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
-      );
-    }
-    return Stack(children: children);
-  }
 }
 
 Marker buildBusMarker(
