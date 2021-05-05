@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/custom_layers/custom_layer.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
@@ -21,11 +25,15 @@ import './pages/feedback.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
+import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
+import 'models/custom_layers/bus_stop_layer.dart';
+import 'models/custom_layers/toiles_layer.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
+import 'widgets/map/utils/your_location_marker.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
 /// e.g. [StatelessWidget.build] or [State.build].
@@ -87,6 +95,7 @@ class TrufiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cfg = TrufiConfiguration();
     final sharedPreferencesRepository = SharedPreferencesRepository();
     final trufiConfiguration = TrufiConfiguration();
     return MultiBlocProvider(
@@ -95,6 +104,14 @@ class TrufiApp extends StatelessWidget {
           create: (context) => PreferencesCubit(
             sharedPreferencesRepository,
             Uuid(),
+          ),
+        ),
+        BlocProvider<CustomLayersCubit>(
+          create: (context) => CustomLayersCubit(
+            [
+              BusStopLayer(),
+              ToilesLayer(),
+            ],
           ),
         ),
         BlocProvider<AppReviewCubit>(
@@ -114,7 +131,8 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<LocationProviderCubit>(
-            create: (context) => LocationProviderCubit()),
+          create: (context) => LocationProviderCubit(),
+        ),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
