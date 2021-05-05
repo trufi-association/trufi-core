@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_configuration.dart';
@@ -14,8 +13,7 @@ class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPageState createState() => ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage>
-    with TickerProviderStateMixin {
+class ChooseLocationPageState extends State<ChooseLocationPage> {
   final _trufiMapController = TrufiMapController();
 
   Marker _chooseOnMapMarker;
@@ -79,41 +77,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         onPositionChanged: _handleOnMapPositionChanged,
         layerOptionsBuilder: (context) {
           return <LayerOptions>[
-            // _trufiMapController.yourLocationLayer,
             MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
           ];
         },
       ),
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          SizedBox(
-            height: 70.0,
-            width: 56.0,
-            child: FloatingActionButton(
-              backgroundColor: Theme.of(context).backgroundColor,
-              onPressed: _handleOnYourLocationPressed,
-              heroTag: null,
-              child: Icon(
-                Icons.my_location,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-        ],
+      floatingActionButton: YourLocationButton(
+        trufiMapController: _trufiMapController,
       ),
     );
-  }
-
-  Future<void> _handleOnYourLocationPressed() async {
-      final location =
-          context.read<LocationProviderCubit>().state.currentLocation;
-      _trufiMapController.moveToYourLocation(
-        location: location,
-        context: context,
-        tickerProvider: this,
-      );
   }
 
   void _handleOnConfirmationPressed() {
