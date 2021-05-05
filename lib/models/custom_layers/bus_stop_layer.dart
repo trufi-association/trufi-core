@@ -38,7 +38,43 @@ class BusStopLayer extends CustomLayer {
             child: const Icon(Icons.bus_alert),
           ),
         ),
-      )
+      ),
+      Marker(
+        width: 30,
+        height: 30,
+        point: LatLng(-17.34000, -66.18400),
+        anchorPos: AnchorPos.align(AnchorAlign.center),
+        builder: (context) => GestureDetector(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(
+                30,
+              ),
+            ),
+            child: const Icon(Icons.business),
+          ),
+        ),
+      ),
+      Marker(
+        width: 30,
+        height: 30,
+        point: LatLng(-17.38000, -66.14400),
+        anchorPos: AnchorPos.align(AnchorAlign.center),
+        builder: (context) => GestureDetector(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(
+                30,
+              ),
+            ),
+            child: const Icon(Icons.bus_alert),
+          ),
+        ),
+      ),
     ];
     loop();
   }
