@@ -7,13 +7,13 @@ import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 
 import '../../trufi_configuration.dart';
-import 'utils/trufi_map_utils.dart';
 import 'trufi_map_controller.dart';
+import 'utils/trufi_map_utils.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
-class TrufiOnlineMap extends StatelessWidget {
-  const TrufiOnlineMap({
+class TrufiMap extends StatelessWidget {
+  const TrufiMap({
     Key key,
     @required this.controller,
     @required this.layerOptionsBuilder,

@@ -5,7 +5,7 @@ import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
-import 'package:trufi_core/widgets/map/trufi_online_map.dart';
+import 'package:trufi_core/widgets/map/trufi_map.dart';
 
 import '../../../trufi_app.dart';
 
@@ -38,7 +38,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     final Locale locale = Localizations.localeOf(context);
     return Stack(
       children: <Widget>[
-        TrufiOnlineMap(
+        TrufiMap(
           key: const ValueKey("PlanEmptyMap"),
           controller: _trufiMapController,
           onLongPress: widget.onLongPress,

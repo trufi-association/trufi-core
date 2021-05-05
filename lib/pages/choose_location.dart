@@ -6,7 +6,7 @@ import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_configuration.dart';
 import '../widgets/map/utils/trufi_map_utils.dart';
-import '../widgets/map/trufi_online_map.dart';
+import '../widgets/map/trufi_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   @override
@@ -72,7 +72,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           )
         ],
       ),
-      body: TrufiOnlineMap(
+      body: TrufiMap(
         controller: _trufiMapController,
         onPositionChanged: _handleOnMapPositionChanged,
         layerOptionsBuilder: (context) {

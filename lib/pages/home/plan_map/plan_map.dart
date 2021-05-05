@@ -9,7 +9,7 @@ import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
-import 'package:trufi_core/widgets/map/trufi_online_map.dart';
+import 'package:trufi_core/widgets/map/trufi_map.dart';
 
 import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
@@ -94,7 +94,7 @@ class PlanMapPageState extends State<PlanMapPage>
     }
     return Stack(
       children: <Widget>[
-        TrufiOnlineMap(
+        TrufiMap(
           key: const ValueKey("PlanMap"),
           controller: _trufiMapController,
           onTap: _handleOnMapTap,
