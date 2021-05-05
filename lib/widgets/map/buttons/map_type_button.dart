@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/custom_layer/custom_layers_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
@@ -19,7 +20,7 @@ class MapTypeButton extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                builder: (context) => _buildMapTypeBottomSheet(context),
+                builder: (context) => _BuildMapTypeBottomSheet(),
                 backgroundColor: Theme.of(context).backgroundColor,
               );
             },
@@ -28,82 +29,118 @@ class MapTypeButton extends StatelessWidget {
           )
         : Container();
   }
+}
 
-  Widget _buildMapTypeBottomSheet(BuildContext context) {
+class _MapItemsSelector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final customLayersCubit = context.watch<CustomLayersCubit>();
+    return Container(
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        children: customLayersCubit.state.layers
+            .map(
+              (customLayer) => CheckboxListTile(
+                title: Text(customLayer.id),
+                subtitle: Text(customLayer.id),
+                value: customLayersCubit.state.layersSatus[customLayer.id],
+                onChanged: (bool value) {
+                  customLayersCubit.changeCustomMapLayerState(
+                    customLayer: customLayer,
+                    newState: value,
+                  );
+                },
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+}
+
+class _BuildMapTypeBottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cfg = TrufiConfiguration();
     final localization = TrufiLocalization.of(context);
     return SafeArea(
-      child: SizedBox(
-        height: 140,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(localization.mapTypeLabel,
-                    style: theme.textTheme.bodyText1),
-              ),
-              BlocBuilder<PreferencesCubit, Preference>(
-                bloc: BlocProvider.of<PreferencesCubit>(context),
-                builder: (context, state) => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _buildMapTypeOptionButton(
-                      context: context,
-                      assetPath: "assets/images/maptype-streets.png",
-                      label: localization.mapTypeStreetsCaption,
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Text("What should be shown on the map?",
+                  style: theme.textTheme.bodyText1),
+            ),
+            _MapItemsSelector(),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(localization.mapTypeLabel,
+                  style: theme.textTheme.bodyText1),
+            ),
+            BlocBuilder<PreferencesCubit, Preference>(
+              bloc: BlocProvider.of<PreferencesCubit>(context),
+              builder: (context, state) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  _BuildMapTypeOptionButton(
+                    assetPath: "assets/images/maptype-streets.png",
+                    label: localization.mapTypeStreetsCaption,
+                    onPressed: () {
+                      BlocProvider.of<PreferencesCubit>(context)
+                          .updateMapType(MapStyle.streets);
+                    },
+                    active: state.currentMapType == MapStyle.streets ||
+                        state.currentMapType == "",
+                  ),
+                  if (cfg.map.satelliteMapTypeEnabled)
+                    _BuildMapTypeOptionButton(
+                      assetPath: "assets/images/maptype-satellite.png",
+                      label: localization.mapTypeSatelliteCaption,
                       onPressed: () {
                         BlocProvider.of<PreferencesCubit>(context)
-                            .updateMapType(MapStyle.streets);
+                            .updateMapType(MapStyle.satellite);
                       },
-                      active: state.currentMapType == MapStyle.streets ||
-                          state.currentMapType == "",
+                      active: state.currentMapType == MapStyle.satellite,
                     ),
-                    if (cfg.map.satelliteMapTypeEnabled)
-                      _buildMapTypeOptionButton(
-                        context: context,
-                        assetPath: "assets/images/maptype-satellite.png",
-                        label: localization.mapTypeSatelliteCaption,
-                        onPressed: () {
-                          BlocProvider.of<PreferencesCubit>(context)
-                              .updateMapType(MapStyle.satellite);
-                        },
-                        active: state.currentMapType == MapStyle.satellite,
-                      ),
-                    if (cfg.map.terrainMapTypeEnabled)
-                      _buildMapTypeOptionButton(
-                        context: context,
-                        assetPath: "assets/images/maptype-terrain.png",
-                        label: localization.mapTypeTerrainCaption,
-                        onPressed: () {
-                          BlocProvider.of<PreferencesCubit>(context)
-                              .updateMapType(MapStyle.terrain);
-                        },
-                        active: state.currentMapType == MapStyle.terrain,
-                      ),
-                  ],
-                ),
+                  if (cfg.map.terrainMapTypeEnabled)
+                    _BuildMapTypeOptionButton(
+                      assetPath: "assets/images/maptype-terrain.png",
+                      label: localization.mapTypeTerrainCaption,
+                      onPressed: () {
+                        BlocProvider.of<PreferencesCubit>(context)
+                            .updateMapType(MapStyle.terrain);
+                      },
+                      active: state.currentMapType == MapStyle.terrain,
+                    ),
+                ],
               ),
-            ]),
-      ),
+            ),
+          ]),
     );
   }
+}
 
-  Widget _buildMapTypeOptionButton({
-    @required BuildContext context,
-    @required String assetPath,
-    @required String label,
-    VoidCallback onPressed,
-    bool active = false,
-  }) {
+class _BuildMapTypeOptionButton extends StatelessWidget {
+  final String assetPath;
+  final String label;
+  final VoidCallback onPressed;
+  final bool active;
+
+  const _BuildMapTypeOptionButton({
+    Key key,
+    this.assetPath,
+    this.label,
+    this.onPressed,
+    this.active = false,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // TODO: Fix with TextButton and ButtonStyle
-    // ignore: deprecated_member_use
-    return FlatButton(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      onPressed: onPressed,
+    return GestureDetector(
+      onTap: onPressed,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

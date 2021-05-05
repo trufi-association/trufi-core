@@ -10,7 +10,7 @@ import 'custom_layer.dart';
 
 class ToilesLayer extends CustomLayer {
   List<Marker> markers = [];
-  ToilesLayer() : super("BusStopLayer") {
+  ToilesLayer() : super("Toilets Stop Layer") {
     loop();
   }
   Future<void> loop() async {

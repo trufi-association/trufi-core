@@ -11,7 +11,7 @@ import 'custom_layer.dart';
 
 class BusStopLayer extends CustomLayer {
   List<Marker> markers = [];
-  BusStopLayer() : super("BusStopLayer") {
+  BusStopLayer() : super("Bus Stop Layer") {
     loop();
   }
   Future<void> loop() async {
