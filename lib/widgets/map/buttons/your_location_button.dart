@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/widgets/alerts.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
-import 'map/trufi_map_controller.dart';
+import '../trufi_map_controller.dart';
 
 class YourLocationButton extends StatefulWidget {
   const YourLocationButton({@required this.trufiMapController});

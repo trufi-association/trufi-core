@@ -6,9 +6,9 @@ import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
+import '../widgets/map/buttons/map_type_button.dart';
+import '../widgets/map/buttons/your_location_button.dart';
 import '../widgets/map/trufi_online_map.dart';
-import '../widgets/map_type_button.dart';
-import '../widgets/your_location_button.dart';
 
 const double customOverlayWidgetMargin = 80;
 

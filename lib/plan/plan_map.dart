@@ -1,11 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/widgets/alerts.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
@@ -14,10 +12,10 @@ import '../plan/plan.dart';
 import '../trufi_app.dart';
 import '../trufi_configuration.dart';
 import '../trufi_map_utils.dart';
-import '../widgets/crop_button.dart';
+import '../widgets/map/buttons/crop_button.dart';
+import '../widgets/map/buttons/map_type_button.dart';
+import '../widgets/map/buttons/your_location_button.dart';
 import '../widgets/map/trufi_online_map.dart';
-import '../widgets/map_type_button.dart';
-import '../widgets/your_location_button.dart';
 
 const double customOverlayWidgetMargin = 80.0;
 
@@ -56,6 +54,7 @@ class PlanMapPageState extends State<PlanMapPage>
     );
     _subscriptions.add(
       _trufiMapController.outMapReady.listen((_) {
+        log("outMapReady");
         setState(() {
           _data.needsCameraUpdate = true;
         });
@@ -129,7 +128,17 @@ class PlanMapPageState extends State<PlanMapPage>
         Positioned(
           bottom: 16.0,
           right: 16.0,
-          child: _buildLowerActionButtons(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
+              const Padding(padding: EdgeInsets.all(4.0)),
+              YourLocationButton(
+                trufiMapController: _trufiMapController,
+              ),
+            ],
+          ),
         ),
         Positioned.fill(
           child: Container(
@@ -162,20 +171,6 @@ class PlanMapPageState extends State<PlanMapPage>
   Widget _buildUpperActionButtons(BuildContext context) {
     return const SafeArea(
       child: MapTypeButton(),
-    );
-  }
-
-  Widget _buildLowerActionButtons(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        CropButton(key: _cropButtonKey, onPressed: _handleOnCropPressed),
-        const Padding(padding: EdgeInsets.all(4.0)),
-        YourLocationButton(
-          trufiMapController: _trufiMapController,
-        ),
-      ],
     );
   }
 
