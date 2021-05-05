@@ -11,19 +11,22 @@ class MapTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      mini: true,
-      backgroundColor: Theme.of(context).backgroundColor,
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => _buildMapTypeBottomSheet(context),
-          backgroundColor: Theme.of(context).backgroundColor,
-        );
-      },
-      heroTag: null,
-      child: const Icon(Icons.layers, color: Colors.black),
-    );
+    final cfg = TrufiConfiguration();
+    return (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
+        ? FloatingActionButton(
+            mini: true,
+            backgroundColor: Theme.of(context).backgroundColor,
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => _buildMapTypeBottomSheet(context),
+                backgroundColor: Theme.of(context).backgroundColor,
+              );
+            },
+            heroTag: null,
+            child: const Icon(Icons.layers, color: Colors.black),
+          )
+        : Container();
   }
 
   Widget _buildMapTypeBottomSheet(BuildContext context) {

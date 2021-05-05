@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/widgets/vertical_swipe_detector.dart';
 
-import '../widgets/vertical_swipe_detector.dart';
 
 class PlanItineraryTabPages extends StatefulWidget {
   final TabController tabController;
@@ -332,7 +332,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
 
   void _setIsExpanded(bool isExpanded) {
     setState(() {
-      _isExpanded = !_isExpanded;
+      _isExpanded = isExpanded;
       if (_isExpanded) {
         _animationController.forward();
       } else {

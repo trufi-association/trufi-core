@@ -7,10 +7,10 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../composite_subscription.dart';
-import '../plan/plan_itinerary_tabs.dart';
-import '../plan/plan_map.dart';
-import '../trufi_app.dart';
+import '../../../composite_subscription.dart';
+import '../../../trufi_app.dart';
+import './plan_itinerary_tabs.dart';
+import './plan_map.dart';
 
 class PlanPageController {
   PlanPageController(this.plan, this.ad) {
