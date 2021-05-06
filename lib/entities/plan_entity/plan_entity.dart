@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import '../../custom_icons.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 
 part 'plan_location.dart';
 part 'plan_error.dart';

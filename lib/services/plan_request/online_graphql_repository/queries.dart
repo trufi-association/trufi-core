@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 
 String getPlanComplete({
   @required double fromLat,
@@ -154,7 +153,6 @@ String getPlanAdvanced({
   @required double fromLon,
   @required double toLat,
   @required double toLon,
-  // Research about use
   double bikeSpeed,
   bool avoidWalking,
   bool arriveBy = false,
@@ -180,7 +178,6 @@ String getPlanAdvanced({
   final dataBikeRentalNetwork = _parseBikeRentalNetworks(bikeRentalNetworks);
   bikeSpeed ??= BikingSpeed.average.value;
   date ??= _todayMonthDayYear();
-  // ignore: parameter_assignments
   final bool disableRemainingWeightHeuristic =
       transportModes.map((e) => e.name).contains("BICYCLE_RENT");
   final double walkReluctance = avoidWalking ? 5 : 2;

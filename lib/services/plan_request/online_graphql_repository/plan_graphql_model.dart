@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 
 class PlanGraphQl {
   PlanGraphQl({

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
-
-import '../../../../entities/plan_entity/plan_entity.dart';
 
 import 'setting_panel_cubit.dart';
 

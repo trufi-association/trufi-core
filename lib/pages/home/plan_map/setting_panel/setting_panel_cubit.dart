@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 
