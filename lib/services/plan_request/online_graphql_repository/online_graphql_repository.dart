@@ -108,7 +108,7 @@ class OnlineGraphQLRepository implements RequestManager {
           ? WalkBoardCost.walkBoardCostHigh
           : WalkBoardCost.defaultCost,
       optimize: advancedOptions.includeBikeSuggestions ? OptimizeType.triangle : OptimizeType.quick,
-      bikeSpeed: advancedOptions.typeBikingSpeed.value,
+      bikeSpeed: advancedOptions.typeBikingSpeed,
       wheelchair: advancedOptions.wheelchair,
     );
     

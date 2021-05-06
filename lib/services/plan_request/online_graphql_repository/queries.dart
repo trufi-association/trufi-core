@@ -2,93 +2,93 @@ import 'package:meta/meta.dart';
 
 import 'package:trufi_core/models/enums/plan_enums.dart';
 
-String getPlanComplete({
-  @required double fromLat,
-  @required double fromLon,
-  @required double toLat,
-  @required double toLon,
-}) {
-  return '''
-  plan(
-    from: {lat: $fromLat, lon:  $fromLon}
-    to: {lat: $toLat, lon:  $toLon}
-    transportModes: [{mode:WALK},{mode:TRANSIT}]
-    numItineraries: 5
-  ) {
-    date,
-    from{
-      name,
-      lon,
-      lat,
-      vertexType
-    },
-    to{
-      name,
-      lon,
-      lat,
-      vertexType,
-    },
-    itineraries {
-      duration,
-      startTime,
-      endTime,
-      walkTime,
-      waitingTime,
-      walkDistance,
-      elevationLost,
-      elevationGained,
-      legs{
-        startTime,
-        endTime,
-        departureDelay,
-        arrivalDelay,
-        realTime,
-        distance,
-        mode,
-        agency{
-          name,
-        },
-        route{
-          url
-          shortName
-          longName
-        },
-        interlineWithPreviousLeg,
-        from{
-      		name,
-      		lon,
-      		lat,
-      		vertexType,
-      		departureTime,
-        },
-        to{
-      		name,
-      		lon,
-      		lat,
-      		vertexType,
-      		departureTime,
-        },
-        legGeometry{
-        	points,
-          length
-        },
-        rentedBike,
-        transitLeg,
-        duration,
-        steps{
-          distance,
-          lon,
-          lat,
-          elevationProfile{
-            distance,
-            elevation
-          }
-        },
-      },
-    }
-  }
-''';
-}
+// String getPlanComplete({
+//   @required double fromLat,
+//   @required double fromLon,
+//   @required double toLat,
+//   @required double toLon,
+// }) {
+//   return '''
+//   plan(
+//     from: {lat: $fromLat, lon:  $fromLon}
+//     to: {lat: $toLat, lon:  $toLon}
+//     transportModes: [{mode:WALK},{mode:TRANSIT}]
+//     numItineraries: 5
+//   ) {
+//     date,
+//     from{
+//       name,
+//       lon,
+//       lat,
+//       vertexType
+//     },
+//     to{
+//       name,
+//       lon,
+//       lat,
+//       vertexType,
+//     },
+//     itineraries {
+//       duration,
+//       startTime,
+//       endTime,
+//       walkTime,
+//       waitingTime,
+//       walkDistance,
+//       elevationLost,
+//       elevationGained,
+//       legs{
+//         startTime,
+//         endTime,
+//         departureDelay,
+//         arrivalDelay,
+//         realTime,
+//         distance,
+//         mode,
+//         agency{
+//           name,
+//         },
+//         route{
+//           url
+//           shortName
+//           longName
+//         },
+//         interlineWithPreviousLeg,
+//         from{
+//       		name,
+//       		lon,
+//       		lat,
+//       		vertexType,
+//       		departureTime,
+//         },
+//         to{
+//       		name,
+//       		lon,
+//       		lat,
+//       		vertexType,
+//       		departureTime,
+//         },
+//         legGeometry{
+//         	points,
+//           length
+//         },
+//         rentedBike,
+//         transitLeg,
+//         duration,
+//         steps{
+//           distance,
+//           lon,
+//           lat,
+//           elevationProfile{
+//             distance,
+//             elevation
+//           }
+//         },
+//       },
+//     }
+//   }
+// ''';
+// }
 
 String getCustomPlan({
   @required double fromLat,
@@ -153,43 +153,41 @@ String getPlanAdvanced({
   @required double fromLon,
   @required double toLat,
   @required double toLon,
-  double bikeSpeed,
-  bool avoidWalking,
+  bool avoidWalking = false,
   bool arriveBy = false,
+  bool wheelchair = false,
   double itineraryFiltering = 1.5,
   double maxWalkDistance = 15000,
   int minTransferTime = 120,
   int transferPenalty = 0,
-  String date,
-  bool wheelchair = false,
-  String time,
   String locale = "en",
-  OptimizeType optimize = OptimizeType.quick,
   List<TransportMode> transportModes = const [TransportMode.transit, TransportMode.walk],
   List<BikeRentalNetwork> bikeRentalNetworks = const [
     BikeRentalNetwork.regioRad,
     BikeRentalNetwork.taxi,
     BikeRentalNetwork.carSharing,
   ],
+  OptimizeType optimize = OptimizeType.quick,
   WalkBoardCost walkBoardCost = WalkBoardCost.defaultCost,
   WalkingSpeed walkingSpeed = WalkingSpeed.fast,
+  BikingSpeed bikeSpeed = BikingSpeed.average,
+  String date,
+  String time,
 }) {
   final dataTransportModes = _parseTransportModes(transportModes);
   final dataBikeRentalNetwork = _parseBikeRentalNetworks(bikeRentalNetworks);
-  bikeSpeed ??= BikingSpeed.average.value;
-  date ??= _todayMonthDayYear();
   final bool disableRemainingWeightHeuristic =
       transportModes.map((e) => e.name).contains("BICYCLE_RENT");
   final double walkReluctance = avoidWalking ? 5 : 2;
-
   final triangleOption = optimize == OptimizeType.triangle
       ? "triangle: {safetyFactor: 0.4, slopeFactor: 0.3, timeFactor: 0.3}"
       : '';
+  date ??= _todayMonthDayYear();
   return '''
     plan(
-      allowedBikeRentalNetworks:$dataBikeRentalNetwork
+      allowedBikeRentalNetworks: $dataBikeRentalNetwork
       arriveBy: $arriveBy
-      bikeSpeed: $bikeSpeed
+      bikeSpeed: ${bikeSpeed.value}
       date: $date
       disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic
       from: {lat: $fromLat, lon:  $fromLon}
