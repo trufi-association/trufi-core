@@ -43,9 +43,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
         TrufiMap(
           key: const ValueKey("PlanEmptyMap"),
           controller: _trufiMapController,
-          layerOptionsBuilder: (context) {
-            return <LayerOptions>[];
-          },
+          layerOptionsBuilder: (context) => [],
         ),
         const Positioned(
           top: 16.0,
