@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +17,9 @@ class TrufiMapController {
 
   final _mapController = MapController();
   final _mapReadyController = BehaviorSubject<void>();
+
 TrufiMapController(){
     _mapController.onReady.then((_) {
-      log("onReady");
       final cfg = TrufiConfiguration();
       final zoom = cfg.map.defaultZoom;
       final mapCenter = cfg.map.center;
@@ -30,22 +29,7 @@ TrufiMapController(){
     });
     _animations = TrufiMapAnimations(_mapController);
 }
-  // TrufiMapState _state;
   TrufiMapAnimations _animations;
-
-  // void setState(TrufiMapState state) {
-  //   // _state = state;
-  //   _mapController.onReady.then((_) {
-  //     log("onReady");
-  //     final cfg = TrufiConfiguration();
-  //     final zoom = cfg.map.defaultZoom;
-  //     final mapCenter = cfg.map.center;
-
-  //     _mapController.move(mapCenter, zoom);
-  //     _inMapReady.add(null);
-  //   });
-  //   _animations = TrufiMapAnimations(_mapController);
-  // }
 
   void dispose() {
     _mapReadyController.close();
@@ -112,6 +96,5 @@ TrufiMapController(){
 
   MapController get mapController => _mapController;
 
-  // LayerOptions get yourLocationLayer => _state.yourLocationLayer;
 }
 

@@ -5,8 +5,8 @@ import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../trufi_configuration.dart';
-import '../widgets/map/utils/trufi_map_utils.dart';
 import '../widgets/map/trufi_map.dart';
+import '../widgets/map/utils/trufi_map_utils.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   @override

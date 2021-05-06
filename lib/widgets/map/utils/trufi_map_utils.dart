@@ -155,7 +155,8 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 
 List<LatLng> decodePolyline(String encoded) {
   final List<LatLng> points = <LatLng>[];
-  int index = 0, len = encoded.length;
+  int index = 0;
+  final int len = encoded.length;
   int lat = 0, lng = 0;
   while (index < len) {
     int b, shift = 0, result = 0;
@@ -164,16 +165,17 @@ List<LatLng> decodePolyline(String encoded) {
       result |= (b & 0x1f) << shift;
       shift += 5;
     } while (b >= 0x20);
-    final int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    final int dlat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
     lat += dlat;
     shift = 0;
     result = 0;
+    const compare = 0x20;
     do {
       b = encoded.codeUnitAt(index++) - 63;
       result |= (b & 0x1f) << shift;
       shift += 5;
-    } while (b >= 0x20);
-    final int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    } while (b >= compare);
+    final int dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
     lng += dlng;
     final LatLng p = LatLng(lat / 1E5, lng / 1E5);
     points.add(p);
@@ -184,7 +186,7 @@ List<LatLng> decodePolyline(String encoded) {
 Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
   Polyline minPolyline;
   double minDist = double.maxFinite;
-  polylines.forEach((p) {
+  for (final Polyline p in polylines) {
     for (int i = 0; i < p.points.length - 1; i++) {
       final double dist = distToSegment(point, p.points[i], p.points[i + 1]);
       if (dist < minDist) {
@@ -192,7 +194,7 @@ Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
         minPolyline = p;
       }
     }
-  });
+  }
   return minPolyline;
 }
 

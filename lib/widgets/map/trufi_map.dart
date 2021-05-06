@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +41,7 @@ class TrufiMap extends StatelessWidget {
     return FlutterMap(
       mapController: controller.mapController,
       options: MapOptions(
+        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         minZoom: cfg.map.onlineMinZoom,
         maxZoom: cfg.map.onlineMaxZoom,
         zoom: cfg.map.onlineZoom,
@@ -60,16 +60,14 @@ class TrufiMap extends StatelessWidget {
         },
       ),
       layers: [
-            tileHostingTileLayerOptions(
-              getTilesEndpointForMapType(currentMapType),
-              tileProviderKey: cfg.map.mapTilerKey,
-            ),
-          ] +
-          activeCustomLayers +
-          [
-            buildYourLocationMarkerOption(currentLocation),
-          ] +
-          layerOptionsBuilder(context),
+        tileHostingTileLayerOptions(
+          getTilesEndpointForMapType(currentMapType),
+          tileProviderKey: cfg.map.mapTilerKey,
+        ),
+        ...activeCustomLayers,
+        buildYourLocationMarkerOption(currentLocation),
+        ...layerOptionsBuilder(context)
+      ],
     );
   }
 }

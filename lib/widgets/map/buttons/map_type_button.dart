@@ -41,8 +41,10 @@ class _MapItemsSelector extends StatelessWidget {
         children: customLayersCubit.state.layers
             .map(
               (customLayer) => CheckboxListTile(
-                title: Text(customLayer.id),
-                subtitle: Text(customLayer.id),
+                title: Text(
+                  customLayer.id,
+                  style: const TextStyle(color: Colors.black),
+                ),
                 value: customLayersCubit.state.layersSatus[customLayer.id],
                 onChanged: (bool value) {
                   customLayersCubit.changeCustomMapLayerState(
@@ -65,9 +67,9 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
     final cfg = TrufiConfiguration();
     final localization = TrufiLocalization.of(context);
     return SafeArea(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+      child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(16.0),
