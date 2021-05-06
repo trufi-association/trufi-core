@@ -6,6 +6,7 @@ const String _propertyLanguageCodeKey = "property_language_code";
 const String _propertyOnlineKey = "property_online";
 const String _propertyMapTypeKey = "property_map_type";
 const String _stateHomePageKey = "state_home_page";
+const String _stateSettingPanelKey = "state_setting_panel";
 const String _actionCountKey = "review_worthy_action_count";
 const String _lastReviewRequestAppVersionKey =
     "last_review_request_app_version";
@@ -93,5 +94,17 @@ class SharedPreferencesRepository implements LocalRepository {
   Future<String> getStateHomePage() async {
     final preference = await _sharedPreferences;
     return preference.getString(_stateHomePageKey);
+  }
+
+  @override
+  Future<String> getStateSettingPanel()async {
+    final preference = await _sharedPreferences;
+    return preference.getString(_stateSettingPanelKey);
+  }
+
+  @override
+  Future<void> saveStateSettingPanel(String stateSettingPanel) async {
+    final preference = await _sharedPreferences;
+    preference.setString(_stateSettingPanelKey, stateSettingPanel);
   }
 }
