@@ -59,7 +59,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateMyPlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(
-          myPlaces: [..._deleteItem(state.myPlaces, location), location]),
+          myPlaces: [..._deleteItem(state.myPlaces, old), location]),
     );
     myPlacesStorage.update(old, location);
   }
@@ -67,7 +67,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(historyPlaces: [
-        ..._deleteItem(state.historyPlaces, location),
+        ..._deleteItem(state.historyPlaces, old),
         location
       ]),
     );
@@ -77,7 +77,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateFavoritePlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(favoritePlaces: [
-        ..._deleteItem(state.favoritePlaces, location),
+        ..._deleteItem(state.favoritePlaces, old),
         location
       ]),
     );
