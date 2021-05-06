@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 
-import '../../entities/plan_entity/plan_entity.dart';
+import '../../../../entities/plan_entity/plan_entity.dart';
 
 part 'setting_panel_state.dart';
 

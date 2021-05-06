@@ -7,7 +7,6 @@ import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
-import 'package:trufi_core/plan/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../blocs/gps_location/location_provider_cubit.dart';
@@ -16,6 +15,7 @@ import '../trufi_models.dart';
 import '../widgets/set_description_dialog.dart';
 import '../widgets/trufi_drawer.dart';
 import 'choose_location.dart';
+import 'home/plan_map/setting_panel/setting_panel_cubit.dart';
 
 class SavedPlacesPage extends StatefulWidget {
   static const String route = '/places';

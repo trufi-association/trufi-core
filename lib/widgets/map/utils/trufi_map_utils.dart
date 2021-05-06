@@ -2,23 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import 'composite_subscription.dart';
-import 'custom_icons.dart';
-import 'trufi_configuration.dart';
-import 'trufi_models.dart';
-import 'entities/plan_entity/plan_entity.dart';
-
-LayerOptions offlineMapTileLayerOptions() {
-  return TileLayerOptions(
-    urlTemplate: "assets/tiles/{z}/{z}-{x}-{y}.png",
-  );
-}
+import '../../../custom_icons.dart';
+import '../../../trufi_configuration.dart';
+import '../../../trufi_models.dart';
+import 'your_location_marker.dart';
 
 LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
     {String tileProviderKey = ""}) {
@@ -89,89 +82,19 @@ Marker buildTransferMarker(LatLng point) {
   );
 }
 
-Marker buildYourLocationMarker(LatLng point) {
-  return Marker(
-    width: 50.0,
-    height: 50.0,
-    point: point,
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) => const MyLocationMarker(),
+MarkerLayerOptions buildYourLocationMarkerOption(LatLng point) {
+  return MarkerLayerOptions(
+    markers: [
+      if (point != null)
+        Marker(
+          width: 50.0,
+          height: 50.0,
+          point: point,
+          anchorPos: AnchorPos.align(AnchorAlign.center),
+          builder: (context) => const MyLocationMarker(),
+        )
+    ],
   );
-}
-
-class MyLocationMarker extends StatefulWidget {
-  const MyLocationMarker({Key key}) : super(key: key);
-
-  @override
-  MyLocationMarkerState createState() => MyLocationMarkerState();
-}
-
-class MyLocationMarkerState extends State<MyLocationMarker> {
-  final _subscriptions = CompositeSubscription();
-
-  double _direction;
-
-  @override
-  void initState() {
-    super.initState();
-    _subscriptions.add(
-      FlutterCompass.events.listen((CompassEvent event) {
-        setState(() {
-          _direction = event.heading;
-        });
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    _subscriptions.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> children = <Widget>[
-      Center(
-        child: Transform.scale(
-          scale: 0.5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              border: Border.all(color: Colors.white, width: 3.5),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).accentColor,
-                  spreadRadius: 8.0,
-                  blurRadius: 30.0,
-                ),
-              ],
-            ),
-            child: Icon(
-              CustomIcons.circle,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
-      ),
-    ];
-    if (_direction != null) {
-      children.add(
-        Transform.rotate(
-          angle: (pi / 180.0) * _direction,
-          child: Container(
-            alignment: Alignment.topCenter,
-            child: Icon(
-              Icons.arrow_drop_up,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
-      );
-    }
-    return Stack(children: children);
-  }
 }
 
 Marker buildBusMarker(
@@ -197,7 +120,8 @@ Marker buildBusMarker(
           child: Row(
             children: <Widget>[
               Icon(leg.iconData(), color: Colors.white),
-              Text(" ${leg.route}", style: const TextStyle(color: Colors.white)),
+              Text(" ${leg.route}",
+                  style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),
@@ -231,7 +155,8 @@ LatLng createLatLngWithPlanLocation(PlanLocation location) {
 
 List<LatLng> decodePolyline(String encoded) {
   final List<LatLng> points = <LatLng>[];
-  int index = 0, len = encoded.length;
+  int index = 0;
+  final int len = encoded.length;
   int lat = 0, lng = 0;
   while (index < len) {
     int b, shift = 0, result = 0;
@@ -240,16 +165,17 @@ List<LatLng> decodePolyline(String encoded) {
       result |= (b & 0x1f) << shift;
       shift += 5;
     } while (b >= 0x20);
-    final int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    final int dlat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
     lat += dlat;
     shift = 0;
     result = 0;
+    const compare = 0x20;
     do {
       b = encoded.codeUnitAt(index++) - 63;
       result |= (b & 0x1f) << shift;
       shift += 5;
-    } while (b >= 0x20);
-    final int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+    } while (b >= compare);
+    final int dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
     lng += dlng;
     final LatLng p = LatLng(lat / 1E5, lng / 1E5);
     points.add(p);
@@ -260,7 +186,7 @@ List<LatLng> decodePolyline(String encoded) {
 Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
   Polyline minPolyline;
   double minDist = double.maxFinite;
-  polylines.forEach((p) {
+  for (final Polyline p in polylines) {
     for (int i = 0; i < p.points.length - 1; i++) {
       final double dist = distToSegment(point, p.points[i], p.points[i + 1]);
       if (dist < minDist) {
@@ -268,7 +194,7 @@ Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
         minPolyline = p;
       }
     }
-  });
+  }
   return minPolyline;
 }
 

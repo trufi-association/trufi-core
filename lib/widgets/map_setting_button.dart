@@ -4,8 +4,8 @@ import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 
 import 'package:trufi_core/blocs/preferences_cubit.dart';
-import 'package:trufi_core/plan/setting_panel/setting_panel.dart';
-import 'package:trufi_core/plan/setting_panel/setting_panel_cubit.dart';
+import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel.dart';
+import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'fetch_error_handler.dart';
 
 class MapSettingButton extends StatelessWidget {
