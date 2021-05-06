@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/alerts.dart';
+import 'package:trufi_core/widgets/map_setting_button.dart';
 
 import '../composite_subscription.dart';
 import '../plan/plan.dart';
@@ -154,8 +155,13 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   Widget _buildUpperActionButtons(BuildContext context) {
-    return const SafeArea(
-      child: MapTypeButton(),
+    return SafeArea(
+      child: Column(
+        children: [
+          const MapTypeButton(),
+          const MapSettingButton(),
+        ],
+      ),
     );
   }
 
