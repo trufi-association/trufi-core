@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -41,7 +43,6 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
         TrufiMap(
           key: const ValueKey("PlanEmptyMap"),
           controller: _trufiMapController,
-          onLongPress: widget.onLongPress,
           layerOptionsBuilder: (context) {
             return <LayerOptions>[];
           },
