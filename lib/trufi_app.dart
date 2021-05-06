@@ -24,6 +24,8 @@ import './widgets/trufi_drawer.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'pages/app_lifecycle_reactor.dart';
+import 'plan/setting_panel/setting_panel.dart';
+import 'plan/setting_panel/setting_panel_cubit.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
 
@@ -118,6 +120,10 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
+        BlocProvider<SettingPanelCubit>(
+          create: (context) => SettingPanelCubit(sharedPreferencesRepository),
+          lazy: false,
+        ),
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
         bloc: LocationSearchBloc(context),
@@ -148,6 +154,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
       TeamPage.route: (context) => const TeamPage(),
+      SettingPanel.route: (context) => const SettingPanel(),
     };
 
     return BlocBuilder<PreferencesCubit, Preference>(
