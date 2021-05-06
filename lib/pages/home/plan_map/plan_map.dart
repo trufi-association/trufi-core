@@ -14,6 +14,7 @@ import 'package:trufi_core/widgets/map_setting_button.dart';
 
 import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
+import '../../../trufi_configuration.dart';
 import '../../../widgets/map/utils/trufi_map_utils.dart';
 import './plan.dart';
 
@@ -118,7 +119,10 @@ class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin 
           child: Column(
             children: [
               const MapTypeButton(),
-              const MapSettingButton(),
+              if (TrufiConfiguration().generalConfiguration.typeServer == ServerType.graphQLServer)
+                const MapSettingButton()
+              else
+                Container(),
             ],
           ),
         ),
