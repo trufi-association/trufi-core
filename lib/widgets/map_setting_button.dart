@@ -17,19 +17,19 @@ class MapSettingButton extends StatelessWidget {
       mini: true,
       backgroundColor: Theme.of(context).backgroundColor,
       onPressed: () async {
-        final oldSettingPanelCubit = context.read<SettingPanelCubit>().state.copyWith();
+        final oldSettingPanelState = context.read<SettingPanelCubit>().state;
         final correlationId = context.read<PreferencesCubit>().state.correlationId;
-        final SettingPanelState newSettingPanelCubit = await Navigator.of(context).push(
+        final SettingPanelState newSettingPanelState = await Navigator.of(context).push(
           MaterialPageRoute<SettingPanelState>(
             builder: (BuildContext context) => const SettingPanel(),
           ),
         );
-        if (oldSettingPanelCubit != newSettingPanelCubit) {
+        if (oldSettingPanelState != newSettingPanelState) {
           final homePageCubit = context.read<HomePageCubit>();
           await homePageCubit.refreshCurrentRoute();
           final appReviewCubit = context.read<AppReviewCubit>();
           await homePageCubit
-              .fetchPlan(correlationId, advancedOptions: newSettingPanelCubit)
+              .fetchPlan(correlationId, advancedOptions: newSettingPanelState)
               .then((value) => appReviewCubit.incrementReviewWorthyActions())
               .catchError((error) => onFetchError(context, error as Exception));
         }

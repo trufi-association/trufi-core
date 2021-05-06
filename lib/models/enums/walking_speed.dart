@@ -26,4 +26,26 @@ extension WalkingSpeedExtension on WalkingSpeed {
   };
   double get value => values[this] ?? 1.2;
   String get name => names[this] ?? "slow";
+  String translateValue (TrufiLocalization localization){
+    // TODO translate
+    switch (this) {
+      case WalkingSpeed.slow:
+        return 'Slow';
+        break;
+      case WalkingSpeed.calm:
+        return 'Calm';
+        break;
+      case WalkingSpeed.average:
+        return 'Average';
+        break;
+      case WalkingSpeed.prompt:
+        return 'Prompt';
+        break;
+      case WalkingSpeed.fast:
+        return 'Fast';
+        break;
+      default:
+        return 'not translate';
+    }
+  }
 }

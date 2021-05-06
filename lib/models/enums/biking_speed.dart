@@ -2,9 +2,9 @@ part of 'plan_enums.dart';
 
 enum BikingSpeed { slow, calm, average, prompt, fast }
 
-BikingSpeed getBikingSpeed(String key) {
-  return BikingSpeedExtension.names.keys.firstWhere(
-    (keyE) => keyE.name == key,
+BikingSpeed getBikingSpeed(double key) {
+  return BikingSpeedExtension.values.keys.firstWhere(
+    (keyE) => keyE.value == key,
     orElse: () => BikingSpeed.average,
   );
 }
@@ -17,13 +17,29 @@ extension BikingSpeedExtension on BikingSpeed {
     BikingSpeed.prompt: 6.94,
     BikingSpeed.fast: 8.33,
   };
-  static const names = <BikingSpeed, String>{
-    BikingSpeed.slow: '10 Km/h',
-    BikingSpeed.calm: '15 Km/h',
-    BikingSpeed.average: '20 Km/h',
-    BikingSpeed.prompt: '25 Km/h',
-    BikingSpeed.fast: '30 Km/h',
-  };
+
   double get value => values[this] ?? 5.55;
-  String get name => names[this] ?? "10 Km/h";
+
+  String translateValue (TrufiLocalization localization){
+    // TODO translate
+    switch (this) {
+      case BikingSpeed.slow:
+        return '10 Km/h';
+        break;
+      case BikingSpeed.calm:
+        return '15 Km/h';
+        break;
+      case BikingSpeed.average:
+        return '20 Km/h';
+        break;
+      case BikingSpeed.prompt:
+        return '25 Km/h';
+        break;
+      case BikingSpeed.fast:
+        return '30 Km/h';
+        break;
+      default:
+        return 'not translate';
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/plan_enums.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
@@ -13,8 +14,7 @@ class SettingPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // TODO to add all translates this widget
-    // final localization = TrufiLocalization.of(context);
+    final localization = TrufiLocalization.of(context);
 
     final settingPanelCubit = context.read<SettingPanelCubit>();
     return Scaffold(
@@ -36,33 +36,16 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomExpansionTile(
                   title: "Walking speed",
-                  options: const [
-                    'Slow',
-                    'Calm',
-                    'Average',
-                    'Prompt',
-                    'Fast',
-                  ],
-                  textSelected: _getTextWalkingSelect(context, state.typeWalkingSpeed),
+                  options: WalkingSpeed.values
+                      .map(
+                        (e) => e.translateValue(localization),
+                      )
+                      .toList(),
+                  textSelected: state.typeWalkingSpeed.translateValue(localization),
                   onChanged: (value) {
-                    switch (value) {
-                      case 'Slow':
-                        settingPanelCubit.setWalkingSpeed(WalkingSpeed.slow);
-                        break;
-                      case 'Calm':
-                        settingPanelCubit.setWalkingSpeed(WalkingSpeed.calm);
-                        break;
-                      case 'Average':
-                        settingPanelCubit.setWalkingSpeed(WalkingSpeed.average);
-                        break;
-                      case 'Prompt':
-                        settingPanelCubit.setWalkingSpeed(WalkingSpeed.prompt);
-                        break;
-                      case 'Fast':
-                        settingPanelCubit.setWalkingSpeed(WalkingSpeed.fast);
-                        break;
-                      default:
-                    }
+                    final WalkingSpeed selected = WalkingSpeed.values
+                        .firstWhere((element) => element.translateValue(localization) == value);
+                    settingPanelCubit.setWalkingSpeed(selected);
                   },
                 ),
                 const Divider(thickness: 2),
@@ -195,33 +178,16 @@ class SettingPanel extends StatelessWidget {
                     ),
                     child: CustomExpansionTile(
                       title: "Biking speed",
-                      options: const [
-                        '10 Km/h',
-                        '15 Km/h',
-                        '20 Km/h',
-                        '25 Km/h',
-                        '30 Km/h',
-                      ],
-                      textSelected: state.typeBikingSpeed.name,
+                      options: BikingSpeed.values
+                          .map(
+                            (e) => e.translateValue(localization),
+                          )
+                          .toList(),
+                      textSelected: state.typeBikingSpeed.translateValue(localization),
                       onChanged: (value) {
-                        switch (value) {
-                          case '10 Km/h':
-                            settingPanelCubit.setBikingSpeed(BikingSpeed.slow);
-                            break;
-                          case '15 Km/h':
-                            settingPanelCubit.setBikingSpeed(BikingSpeed.calm);
-                            break;
-                          case '20 Km/h':
-                            settingPanelCubit.setBikingSpeed(BikingSpeed.average);
-                            break;
-                          case '25 Km/h':
-                            settingPanelCubit.setBikingSpeed(BikingSpeed.prompt);
-                            break;
-                          case '30 Km/h':
-                            settingPanelCubit.setBikingSpeed(BikingSpeed.fast);
-                            break;
-                          default:
-                        }
+                        final BikingSpeed selected = BikingSpeed.values
+                            .firstWhere((element) => element.translateValue(localization) == value);
+                        settingPanelCubit.setBikingSpeed(selected);
                       },
                     ),
                   )
@@ -259,27 +225,5 @@ class SettingPanel extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getTextWalkingSelect(BuildContext context, WalkingSpeed selected) {
-    switch (selected) {
-      case WalkingSpeed.slow:
-        return 'Slow';
-        break;
-      case WalkingSpeed.calm:
-        return 'Calm';
-        break;
-      case WalkingSpeed.average:
-        return 'Average';
-        break;
-      case WalkingSpeed.prompt:
-        return 'Prompt';
-        break;
-      case WalkingSpeed.fast:
-        return 'Fast';
-        break;
-      default:
-        return 'Fast';
-    }
   }
 }
