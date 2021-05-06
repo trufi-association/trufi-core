@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:trufi_core/models/custom_layers/custom_layer.dart';
+import 'package:trufi_core/models/custom_layer.dart';
 
 part 'custom_layers_state.dart';
 
@@ -17,6 +15,7 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
             layers: layers,
           ),
         ) {
+    /// listen changes called by on [onRefresh] from each [CustomLayer] for request refresh the current [CustomLayersState]
     for (final CustomLayer layer in layers) {
       layer.onRefresh = () {
         emit(state.copyWith());

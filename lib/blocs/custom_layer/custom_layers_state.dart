@@ -16,5 +16,11 @@ class CustomLayersState extends Equatable {
   }
 
   @override
-  List<Object> get props => [layersSatus, layers]+layers.map((e) => e.layerOptions).toList();
+  List<Object> get props => [
+        layersSatus,
+        layers,
+
+        /// the state should be refreshed if the [LayerOptions] has been changed
+        ...layers.map((e) => e.layerOptions).toList(),
+      ];
 }
