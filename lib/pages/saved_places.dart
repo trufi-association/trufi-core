@@ -7,6 +7,7 @@ import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
+import 'package:trufi_core/plan/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../blocs/gps_location/location_provider_cubit.dart';
@@ -158,10 +159,11 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final homePageCubit = context.read<HomePageCubit>();
     await homePageCubit.updateCurrentRoute(currentLocation, toLocation);
     final appReviewCubit = context.read<AppReviewCubit>();
+    final settingPanelCubit = context.read<SettingPanelCubit>();
 
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(correlationId)
+        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
     Navigator.pushNamed(context, HomePage.route);

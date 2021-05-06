@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/plan/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../../keys.dart' as keys;
@@ -104,9 +105,10 @@ class HomePage extends StatelessWidget {
   Future<void> _callFetchPlan(BuildContext context) async {
     final homePageCubit = context.read<HomePageCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
+    final settingPanelCubit = context.read<SettingPanelCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(correlationId)
+        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }

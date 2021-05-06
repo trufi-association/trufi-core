@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -9,6 +8,7 @@ import 'package:package_info/package_info.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/plan/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -23,51 +23,35 @@ class OnlineRepository implements RequestManager {
   OnlineRepository({@required this.otpEndpoint, this.adsEndpoint});
 
   @override
-  CancelableOperation<PlanEntity> fetchTransitPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return _fetchCancelablePlan(from, to, "TRANSIT,WALK", correlationId);
+  Future<PlanEntity> fetchAdvancedPlan({
+    @required TrufiLocation from,
+    @required TrufiLocation to,
+    @required String correlationId,
+    SettingPanelState advancedOptions,
+  }) {
+    if (advancedOptions == null) {
+      return _fetchPlan(from, to, "TRANSIT,WALK", correlationId);
+    } else {
+      // TODO implement fetchAdvancedPlan
+      return _fetchPlan(from, to, "TRANSIT,WALK", correlationId);
+    }
   }
 
   @override
-  CancelableOperation<PlanEntity> fetchCarPlan(
+  Future<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,
     String correlationId,
   ) {
-    return _fetchCancelablePlan(from, to, "CAR,WALK", correlationId);
+    return _fetchPlan(from, to, "CAR,WALK", correlationId);
   }
 
   @override
-  CancelableOperation<AdEntity> fetchAd(
+  Future<AdEntity> fetchAd(
     TrufiLocation to,
     String correlationId,
   ) {
-    return _fetchCancelableAd(to, correlationId);
-  }
-
-  CancelableOperation<PlanEntity> _fetchCancelablePlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String mode,
-    String correlationId,
-  ) {
-    return CancelableOperation.fromFuture(() async {
-      final PlanEntity plan = await _fetchPlan(from, to, mode, correlationId);
-      return plan;
-    }());
-  }
-
-  CancelableOperation<AdEntity> _fetchCancelableAd(
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return CancelableOperation.fromFuture(() async {
-      final AdEntity ad = await _fetchAd(to, correlationId);
-      return ad;
-    }());
+    return _fetchAd(to, correlationId);
   }
 
   Future<PlanEntity> _fetchPlan(
