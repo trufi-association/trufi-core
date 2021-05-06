@@ -268,8 +268,7 @@ String _parseBikeRentalNetworks(List<BikeRentalNetwork> list) {
 
 String _todayMonthDayYear() {
   final today = DateTime.now();
-  final dataDate = today.year.toString() +
-      "-${today.month.toString().padLeft(2, '0')}" +
-      "-${today.day.toString().padLeft(2, '0')}";
+  final dataDate =
+      "${today.year}${"-${today.month.toString().padLeft(2, '0')}"}${"-${today.day.toString().padLeft(2, '0')}"}";
   return '"$dataDate"';
 }

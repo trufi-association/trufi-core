@@ -96,7 +96,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
       MapRouteState(
         fromPlace: state.fromPlace,
         toPlace: state.toPlace,
-        showSuccessAnimation: false,
         isFetching: true,
         ad: state.ad,
       ),

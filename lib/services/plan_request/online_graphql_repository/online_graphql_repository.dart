@@ -94,7 +94,7 @@ class OnlineGraphQLRepository implements RequestManager {
     final Uri request = Uri.parse(
       graphQLEndPoint,
     );
-    final queryPlan2 = queries.getPlanAdvanced(
+    final queryPlan = queries.getPlanAdvanced(
       fromLat: from.latitude,
       fromLon: from.longitude,
       toLat: to.latitude,
@@ -110,18 +110,11 @@ class OnlineGraphQLRepository implements RequestManager {
       bikeSpeed: advancedOptions.typeBikingSpeed.value,
       wheelchair: advancedOptions.wheelchair,
     );
-
-    final queryPlan = queries.getCustomPlan(
-      fromLat: from.latitude,
-      fromLon: from.longitude,
-      toLat: to.latitude,
-      toLon: to.longitude,
-      transportModes: [TransportMode.transit, TransportMode.walk],
-    );
+    
     final body = {
       "query": '''
         query {
-          $queryPlan2
+          $queryPlan
         }
       '''
     };

@@ -157,9 +157,9 @@ class PlanMapPageState extends State<PlanMapPage>
   Widget _buildUpperActionButtons(BuildContext context) {
     return SafeArea(
       child: Column(
-        children: [
-          const MapTypeButton(),
-          const MapSettingButton(),
+        children: const [
+          MapTypeButton(),
+          MapSettingButton(),
         ],
       ),
     );
