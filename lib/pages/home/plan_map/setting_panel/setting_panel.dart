@@ -9,6 +9,9 @@ import 'setting_panel_cubit.dart';
 
 class SettingPanel extends StatelessWidget {
   static const String route = "/setting-panel";
+  static const Divider _divider = Divider(thickness: 2);
+  static const Divider _dividerWeight = Divider(thickness: 10);
+
   const SettingPanel({Key key}) : super(key: key);
 
   @override
@@ -48,13 +51,13 @@ class SettingPanel extends StatelessWidget {
                     settingPanelCubit.setWalkingSpeed(selected);
                   },
                 ),
-                const Divider(thickness: 2),
+                _divider,
                 CustomSwitchTile(
                   title: 'Avoid walking',
                   value: state.avoidWalking,
                   onChanged: (value) => settingPanelCubit.setAvoidWalking(avoidWalking: value),
                 ),
-                const Divider(thickness: 10),
+                _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Transport modes', style: theme.textTheme.bodyText1),
@@ -67,10 +70,7 @@ class SettingPanel extends StatelessWidget {
                     settingPanelCubit.setTransportMode(TransportMode.bus);
                   },
                 ),
-                const Divider(
-                  thickness: 2,
-                  endIndent: 16,
-                ),
+                _divider,
                 CustomSwitchTile(
                   title: 'Commuter train',
                   secondary: Icon(TransportMode.rail.icon),
@@ -79,10 +79,7 @@ class SettingPanel extends StatelessWidget {
                     settingPanelCubit.setTransportMode(TransportMode.rail);
                   },
                 ),
-                const Divider(
-                  thickness: 2,
-                  endIndent: 16,
-                ),
+                _divider,
                 CustomSwitchTile(
                   title: 'Metro',
                   secondary: Icon(TransportMode.subway.icon),
@@ -91,10 +88,7 @@ class SettingPanel extends StatelessWidget {
                     settingPanelCubit.setTransportMode(TransportMode.subway);
                   },
                 ),
-                const Divider(
-                  thickness: 2,
-                  endIndent: 16,
-                ),
+                _divider,
                 CustomSwitchTile(
                   title: 'Carpool',
                   secondary: Icon(TransportMode.car.icon),
@@ -103,10 +97,7 @@ class SettingPanel extends StatelessWidget {
                     settingPanelCubit.setTransportMode(TransportMode.car);
                   },
                 ),
-                const Divider(
-                  thickness: 2,
-                  endIndent: 16,
-                ),
+                _divider,
                 CustomSwitchTile(
                   title: 'Sharing',
                   secondary: Icon(TransportMode.bicycle.icon),
@@ -159,7 +150,7 @@ class SettingPanel extends StatelessWidget {
                   value: state.avoidTransfers,
                   onChanged: (value) => settingPanelCubit.setAvoidTransfers(avoidTransfers: value),
                 ),
-                const Divider(thickness: 10),
+                _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('My modes of transport', style: theme.textTheme.bodyText1),
@@ -193,7 +184,7 @@ class SettingPanel extends StatelessWidget {
                   )
                 else
                   Container(),
-                const Divider(thickness: 2),
+                _divider,
                 CustomSwitchTile(
                   title: 'Park and Ride',
                   secondary: Icon(TransportMode.bicycle.icon),
@@ -207,7 +198,7 @@ class SettingPanel extends StatelessWidget {
                   onChanged: (value) =>
                       settingPanelCubit.setIncludeCarSuggestions(includeCarSuggestions: value),
                 ),
-                const Divider(thickness: 10),
+                _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Text('Accessibility', style: theme.textTheme.bodyText1),
