@@ -84,6 +84,5 @@ class MapRouteState extends Equatable {
   }
 
   @override
-  List<Object> get props =>
-      [fromPlace, toPlace, isFetching, showSuccessAnimation, plan];
+  List<Object> get props => [fromPlace, toPlace, isFetching, showSuccessAnimation];
 }
