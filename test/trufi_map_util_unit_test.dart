@@ -4,14 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/trufi_map_utils.dart';
+import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
+
 void main() {
   const double _latitude = 18.0;
   const double _longitude = 129.0;
   final LatLng _point = LatLng(_latitude, _longitude);
   PlanItineraryLeg _leg;
-  
-  setUp((){
+
+  setUp(() {
     _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
@@ -29,12 +30,6 @@ void main() {
 
   test('Build to Marker', () {
     final Marker marker = buildToMarker(_point);
-    expect(marker, isNotNull);
-    expect(marker.point, _point);
-  });
-
-  test('Build Your location Marker', () {
-    final Marker marker = buildYourLocationMarker(_point);
     expect(marker, isNotNull);
     expect(marker.point, _point);
   });

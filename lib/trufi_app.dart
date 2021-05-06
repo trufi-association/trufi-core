@@ -21,10 +21,12 @@ import './pages/feedback.dart';
 import './pages/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
+import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
+import 'models/custom_layer.dart';
 import 'pages/app_lifecycle_reactor.dart';
-import 'services/plan_request/online_repository.dart';
+import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/search_location/offline_search_location.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
@@ -59,13 +61,14 @@ typedef LocaleWidgetBuilder = Widget Function(
 /// ```
 ///
 class TrufiApp extends StatelessWidget {
-  TrufiApp(
-      {@required this.theme,
-      this.searchTheme,
-      this.customOverlayBuilder,
-      this.customBetweenFabBuilder,
-      Key key})
-      : super(key: key) {
+  TrufiApp({
+    @required this.theme,
+    this.searchTheme,
+    this.customOverlayBuilder,
+    this.customBetweenFabBuilder,
+    Key key,
+    this.customLayers = const [],
+  }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
     }
@@ -85,6 +88,9 @@ class TrufiApp extends StatelessWidget {
   /// in between the Fab buttons of the Trufi Core.
   final WidgetBuilder customBetweenFabBuilder;
 
+  /// List of [CustomLayer] implementations
+  final List<CustomLayer> customLayers;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -97,6 +103,9 @@ class TrufiApp extends StatelessWidget {
             Uuid(),
           ),
         ),
+        BlocProvider<CustomLayersCubit>(
+          create: (context) => CustomLayersCubit(customLayers),
+        ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
@@ -108,13 +117,14 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            OnlineRepository(
-              otpEndpoint: trufiConfiguration.url.otpEndpoint,
+            OnlineGraphQLRepository(
+              graphQLEndPoint: trufiConfiguration.url.otpEndpoint,
             ),
           ),
         ),
         BlocProvider<LocationProviderCubit>(
-            create: (context) => LocationProviderCubit()),
+          create: (context) => LocationProviderCubit(),
+        ),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),

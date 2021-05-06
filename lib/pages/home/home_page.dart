@@ -7,11 +7,11 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/pages/home/plan_map/plan.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../../keys.dart' as keys;
-import '../../plan/plan.dart';
-import '../../plan/plan_empty.dart';
 import '../../trufi_app.dart';
 import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
