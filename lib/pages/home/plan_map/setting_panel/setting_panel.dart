@@ -44,7 +44,7 @@ class SettingPanel extends StatelessWidget {
                     'Prompt',
                     'Fast',
                   ],
-                  textSelected: _getTextWalkingSelect(context,state.typeWalkingSpeed),
+                  textSelected: _getTextWalkingSelect(context, state.typeWalkingSpeed),
                   onChanged: (value) {
                     switch (value) {
                       case 'Slow':
@@ -70,7 +70,7 @@ class SettingPanel extends StatelessWidget {
                 CustomSwitchTile(
                   title: 'Avoid walking',
                   value: state.avoidWalking,
-                  onChanged: settingPanelCubit.setAvoidWalking,
+                  onChanged: (value) => settingPanelCubit.setAvoidWalking(avoidWalking: value),
                 ),
                 const Divider(thickness: 10),
                 Container(
@@ -175,7 +175,7 @@ class SettingPanel extends StatelessWidget {
                 CustomSwitchTile(
                   title: 'Avoid transfers',
                   value: state.avoidTransfers,
-                  onChanged: settingPanelCubit.setAvoidTransfers,
+                  onChanged: (value) => settingPanelCubit.setAvoidTransfers(avoidTransfers: value),
                 ),
                 const Divider(thickness: 10),
                 Container(
@@ -186,7 +186,8 @@ class SettingPanel extends StatelessWidget {
                   title: 'Bike',
                   secondary: Icon(TransportMode.bicycle.icon),
                   value: state.includeBikeSuggestions,
-                  onChanged: settingPanelCubit.setIncludeBikeSuggestions,
+                  onChanged: (value) =>
+                      settingPanelCubit.setIncludeBikeSuggestions(includeBikeSuggestions: value),
                 ),
                 if (state.includeBikeSuggestions)
                   Container(
@@ -232,13 +233,14 @@ class SettingPanel extends StatelessWidget {
                   title: 'Park and Ride',
                   secondary: Icon(TransportMode.bicycle.icon),
                   value: state.includeParkAndRideSuggestions,
-                  onChanged: settingPanelCubit.setParkRide,
+                  onChanged: (value) => settingPanelCubit.setParkRide(parkRide: value),
                 ),
                 CustomSwitchTile(
                   title: 'Car',
                   secondary: Icon(TransportMode.car.icon),
                   value: state.includeCarSuggestions,
-                  onChanged: settingPanelCubit.setIncludeCarSuggestions,
+                  onChanged: (value) =>
+                      settingPanelCubit.setIncludeCarSuggestions(includeCarSuggestions: value),
                 ),
                 const Divider(thickness: 10),
                 Container(
@@ -249,7 +251,7 @@ class SettingPanel extends StatelessWidget {
                   title: 'Wheelchair',
                   secondary: Icon(TransportMode.car.icon),
                   value: state.wheelchair,
-                  onChanged: settingPanelCubit.setWheelChair,
+                  onChanged: (value) => settingPanelCubit.setWheelChair(wheelchair: value),
                 ),
                 const SizedBox(height: 10),
               ],

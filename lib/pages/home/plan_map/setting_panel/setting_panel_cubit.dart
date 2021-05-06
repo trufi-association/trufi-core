@@ -58,23 +58,19 @@ class SettingPanelCubit extends Cubit<SettingPanelState> {
     await updateMapRouteState(state.copyWith(typeWalkingSpeed: walkingSpeed));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setAvoidWalking(bool avoidWalking) async {
+  Future<void> setAvoidWalking({@required bool avoidWalking}) async {
     await updateMapRouteState(state.copyWith(avoidWalking: avoidWalking));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setAvoidTransfers(bool avoidTransfers) async {
+  Future<void> setAvoidTransfers({@required bool avoidTransfers}) async {
     await updateMapRouteState(state.copyWith(avoidTransfers: avoidTransfers));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setIncludeBikeSuggestions(bool includeBikeSuggestions) async {
+  Future<void> setIncludeBikeSuggestions({@required bool includeBikeSuggestions}) async {
     await updateMapRouteState(state.copyWith(includeBikeSuggestions: includeBikeSuggestions));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setParkRide(bool parkRide) async {
+  Future<void> setParkRide({@required bool parkRide}) async {
     await updateMapRouteState(state.copyWith(includeParkAndRideSuggestions: parkRide));
   }
 
@@ -82,13 +78,11 @@ class SettingPanelCubit extends Cubit<SettingPanelState> {
     await updateMapRouteState(state.copyWith(typeBikingSpeed: bikingSpeed));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setIncludeCarSuggestions(bool includeCarSuggestions) async {
+  Future<void> setIncludeCarSuggestions({@required bool includeCarSuggestions}) async {
     await updateMapRouteState(state.copyWith(includeCarSuggestions: includeCarSuggestions));
   }
 
-  // ignore: avoid_positional_boolean_parameters
-  Future<void> setWheelChair(bool wheelchair) async {
+  Future<void> setWheelChair({@required bool wheelchair}) async {
     await updateMapRouteState(state.copyWith(wheelchair: wheelchair));
   }
 }
