@@ -39,7 +39,7 @@ class PlanEntity {
       return PlanEntity(
         from: PlanLocation.fromJson(planJson[_from] as Map<String, dynamic>),
         to: PlanLocation.fromJson(planJson[_to] as Map<String, dynamic>),
-        itineraries: _removePlanItineraryDuplicates(
+        itineraries: removePlanItineraryDuplicates(
           planJson[_itineraries]
               .map<PlanItinerary>(
                 (dynamic itineraryJson) =>
@@ -51,7 +51,7 @@ class PlanEntity {
     }
   }
 
-  static List<PlanItinerary> _removePlanItineraryDuplicates(
+  static List<PlanItinerary> removePlanItineraryDuplicates(
     List<PlanItinerary> itineraries,
   ) {
     final usedRoutes = <String>{};

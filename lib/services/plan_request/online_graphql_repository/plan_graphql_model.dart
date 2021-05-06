@@ -34,11 +34,11 @@ class PlanGraphQl {
     return PlanEntity(
       to: to.toPlanLocation(),
       from: from.toPlanLocation(),
-      itineraries: itineraries
+      itineraries: PlanEntity.removePlanItineraryDuplicates(itineraries
           .map(
             (itinerary) => itinerary.toPlanItinerary(),
           )
-          .toList(),
+          .toList()),
       error: itineraries.isEmpty ? PlanError(404, 'Not found routes') : null,
     );
   }
