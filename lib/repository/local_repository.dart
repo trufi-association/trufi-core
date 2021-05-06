@@ -26,7 +26,7 @@ abstract class LocalRepository {
   Future<String> getStateHomePage();
 
   // Operations about StateSettingPanel 
-  Future<void> saveStateSettingPanel(String stateHomePage);
+  Future<void> saveStateSettingPanel(String stateSettingJson);
 
   Future<String> getStateSettingPanel();
 }
