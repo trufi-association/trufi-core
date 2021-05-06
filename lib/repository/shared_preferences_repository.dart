@@ -97,7 +97,7 @@ class SharedPreferencesRepository implements LocalRepository {
   }
 
   @override
-  Future<String> getStateSettingPanel()async {
+  Future<String> getStateSettingPanel() async {
     final preference = await _sharedPreferences;
     return preference.getString(_stateSettingPanelKey);
   }
