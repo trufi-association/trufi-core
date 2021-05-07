@@ -40,6 +40,26 @@ class TrufiLocation implements TrufiPlace {
   final String address;
   final String type;
 
+  TrufiLocation copyWith({
+    String description,
+    double latitude,
+    double longitude,
+    List<String> alternativeNames,
+    Map<String, String> localizedNames,
+    String address,
+    String type,
+  }) {
+    return TrufiLocation(
+      description: description ?? this.description,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      alternativeNames: alternativeNames ?? this.alternativeNames,
+      localizedNames: localizedNames ?? this.localizedNames,
+      address: address ?? this.address,
+      type: type ?? this.type,
+    );
+  }
+
   factory TrufiLocation.fromLatLng(String description, LatLng point) {
     return TrufiLocation(
       description: description,
@@ -108,7 +128,8 @@ class TrufiLocation implements TrufiPlace {
       o is TrufiLocation &&
       o.description == description &&
       o.latitude == latitude &&
-      o.longitude == longitude;
+      o.longitude == longitude&&
+      o.type == type;
 
   @override
   int get hashCode =>
