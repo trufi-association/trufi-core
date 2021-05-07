@@ -120,7 +120,7 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.typeServer == ServerType.defaultServer
+            trufiConfiguration.generalConfiguration.serverType == ServerType.defaultServer
                 ? OnlineRepository(
                     otpEndpoint: trufiConfiguration.url.otpEndpoint,
                   )

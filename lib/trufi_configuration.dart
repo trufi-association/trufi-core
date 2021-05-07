@@ -32,7 +32,7 @@ class TrufiConfiguration {
 
 class TrufiGeneralConfiguration {
   String appCity = "Cochabamba";
-  ServerType typeServer = ServerType.defaultServer;
+  ServerType serverType = ServerType.defaultServer;
   bool debug = false;
 }
 
