@@ -15,6 +15,7 @@ import '../trufi_models.dart';
 import '../widgets/set_description_dialog.dart';
 import '../widgets/trufi_drawer.dart';
 import 'choose_location.dart';
+import 'home/plan_map/setting_panel/setting_panel_cubit.dart';
 
 class SavedPlacesPage extends StatefulWidget {
   static const String route = '/places';
@@ -158,10 +159,11 @@ class SavedPlacesPageState extends State<SavedPlacesPage> {
     final homePageCubit = context.read<HomePageCubit>();
     await homePageCubit.updateCurrentRoute(currentLocation, toLocation);
     final appReviewCubit = context.read<AppReviewCubit>();
+    final settingPanelCubit = context.read<SettingPanelCubit>();
 
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(correlationId)
+        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
     Navigator.pushNamed(context, HomePage.route);

@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
+import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
@@ -72,16 +73,14 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> setToPlace(TrufiLocation toPlace) async {
-    await updateMapRouteState(
-        state.copyWith(toPlace: toPlace, isFetching: true));
+    await updateMapRouteState(state.copyWith(toPlace: toPlace, isFetching: true));
   }
 
   Future<void> configSuccessAnimation({bool show}) async {
     await updateMapRouteState(state.copyWith(showSuccessAnimation: show));
   }
 
-  Future<void> updateCurrentRoute(
-      TrufiLocation fromLocation, TrufiLocation toLocation) async {
+  Future<void> updateCurrentRoute(TrufiLocation fromLocation, TrufiLocation toLocation) async {
     await updateMapRouteState(
       MapRouteState(
         fromPlace: fromLocation,
@@ -92,25 +91,44 @@ class HomePageCubit extends Cubit<MapRouteState> {
       ),
     );
   }
+  Future<void> refreshCurrentRoute() async {
+    await updateMapRouteState(
+      MapRouteState(
+        fromPlace: state.fromPlace,
+        toPlace: state.toPlace,
+        isFetching: true,
+        ad: state.ad,
+      ),
+    );
+  }
 
-  Future<void> fetchPlan(String correlationId, {bool car = false}) async {
+  Future<void> fetchPlan(
+    String correlationId, {
+    bool car = false,
+    SettingPanelState advancedOptions,
+  }) async {
     if (currentFetchPlanOperation != null) {
       await currentFetchPlanOperation.cancel();
     }
     if (state.toPlace != null && state.fromPlace != null) {
       currentFetchPlanOperation = car
-          ? requestManager.fetchCarPlan(
-              state.fromPlace,
-              state.toPlace,
-              correlationId,
-            )
-          : requestManager.fetchTransitPlan(
-              state.fromPlace,
-              state.toPlace,
-              correlationId,
+          ? CancelableOperation.fromFuture(() async {
+              return requestManager.fetchCarPlan(
+                state.fromPlace,
+                state.toPlace,
+                correlationId,
+              );
+            }())
+          : CancelableOperation.fromFuture(
+              () async {
+                return requestManager.fetchAdvancedPlan(
+                    from: state.fromPlace,
+                    to: state.toPlace,
+                    correlationId: correlationId,
+                    advancedOptions: advancedOptions);
+              }(),
             );
-      final PlanEntity plan =
-          await currentFetchPlanOperation.valueOrCancellation(
+      final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
         null,
       );
       if (plan != null && !plan.hasError) {
@@ -134,13 +152,15 @@ class HomePageCubit extends Cubit<MapRouteState> {
 // TODO: investigate how works this functions and know why we need it
   Future<void> fetchAd(String correlationId) async {
     try {
-      currentFetchAdOperation = requestManager.fetchAd(
-        state.toPlace,
-        correlationId,
+      currentFetchAdOperation = CancelableOperation.fromFuture(
+        () async {
+          return requestManager.fetchAd(
+            state.toPlace,
+            correlationId,
+          );
+        }(),
       );
-
-      final AdEntity ad =
-          await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad = await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );
