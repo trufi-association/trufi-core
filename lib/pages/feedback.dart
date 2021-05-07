@@ -98,16 +98,25 @@ class FeedBackPageState extends State<FeedbackPage> {
   Widget _buildFloatingActionButton(BuildContext context) {
     final cfg = TrufiConfiguration();
     final theme = Theme.of(context);
+    final bool hasEmailFeedBack = cfg.email.feedback != null && cfg.email.feedback.isNotEmpty;
     return FloatingActionButton(
       backgroundColor: theme.primaryColor,
       onPressed: () {
+        String url = '';
+        if (hasEmailFeedBack) {
+          url = "mailto:${cfg.email.feedback}?subject=Feedback";
+        } else {
+          url = cfg.url.routeFeedback;
+        }
         setState(() {
-          final String url = "mailto:${cfg.email.feedback}?subject=Feedback";
           _launched = _launch(context, url);
         });
       },
       heroTag: null,
-      child: Icon(Icons.email, color: theme.primaryIconTheme.color),
+      child: Icon(
+        hasEmailFeedBack ? Icons.email : Icons.feedback,
+        color: theme.primaryIconTheme.color,
+      ),
     );
   }
 }
