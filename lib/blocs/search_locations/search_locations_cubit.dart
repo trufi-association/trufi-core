@@ -59,7 +59,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateMyPlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(
-          myPlaces: [..._deleteItem(state.myPlaces, old), location]),
+          myPlaces: [..._updateItem(state.myPlaces, old,location)]),
     );
     myPlacesStorage.update(old, location);
   }
@@ -67,8 +67,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(historyPlaces: [
-        ..._deleteItem(state.historyPlaces, old),
-        location
+        ..._updateItem(state.historyPlaces, old,location)
       ]),
     );
     historyPlacesStorage.update(old, location);
@@ -77,8 +76,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateFavoritePlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(favoritePlaces: [
-        ..._deleteItem(state.favoritePlaces, old),
-        location
+        ..._updateItem(state.favoritePlaces, old,location)
       ]),
     );
     favoritePlacesStorage.update(old, location);
@@ -134,6 +132,19 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             );
             return _fetchLocationOperation.valueOrCancellation(null);
           });
+  }
+
+  List<TrufiLocation> _updateItem(
+    List<TrufiLocation> list,
+    TrufiLocation oldLocation,
+    TrufiLocation newLocation,
+  ) {
+    final tempList = [...list];
+    final int index = tempList.indexOf(oldLocation);
+    if (index != -1) {
+      tempList.replaceRange(index, index + 1, [newLocation]);
+    }
+    return tempList;
   }
 
   List<TrufiLocation> _deleteItem(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,8 +25,10 @@ class SharedPreferencesPlaceStorage extends PlacesStorage {
 
   @override
   Future<void> update(TrufiLocation old, TrufiLocation location) async {
-    _places.remove(location);
-    _places.add(location);
+    final int index = _places.indexOf(old);
+    if (index != -1) {
+      _places.replaceRange(index, index + 1, [location]);
+    }
     await _save();
   }
 
