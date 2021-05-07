@@ -81,7 +81,7 @@ class SettingPanelState extends Equatable {
       avoidTransfers: json[_avoidTransfers] as bool,
       avoidWalking: json[_avoidWalking] as bool,
       includeBikeSuggestions: json[_includeBikeSuggestions] as bool,
-      typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as double),
+      typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as String),
       includeParkAndRideSuggestions: json[_includeParkAndRideSuggestions] as bool,
       includeCarSuggestions: json[_includeCarSuggestions] as bool,
       wheelchair: json[_wheelchair] as bool,
@@ -117,4 +117,8 @@ class SettingPanelState extends Equatable {
         includeCarSuggestions,
         wheelchair,
       ];
+}
+
+class JsonSerializable {
+  const JsonSerializable();
 }
