@@ -71,6 +71,7 @@ class TrufiApp extends StatelessWidget {
     this.customBetweenFabBuilder,
     Key key,
     this.customLayers = const [],
+    this.feedBack,
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -94,10 +95,15 @@ class TrufiApp extends StatelessWidget {
   /// List of [CustomLayer] implementations
   final List<CustomLayer> customLayers;
 
+  /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
+  /// if the FeedBack is null, the comment page is not created.
+  final DefinitionFeedBack feedBack;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
     final trufiConfiguration = TrufiConfiguration();
+    trufiConfiguration.configurationDrawer.definitionFeedBack = feedBack;
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(

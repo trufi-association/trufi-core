@@ -23,6 +23,7 @@ class TrufiConfiguration {
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();
   final generalConfiguration = TrufiGeneralConfiguration();
+  final configurationDrawer = TrufiConfigurationDrawer();
 
   // TODO: Could be removed by a Collection of Locale
   final List<TrufiConfigurationLanguage> languages = [];
@@ -106,4 +107,23 @@ class TrufiConfigurationUrl {
   String twitter = "";
   String donate = "";
   String share = "";
+}
+
+class TrufiConfigurationDrawer {
+  DefinitionFeedBack definitionFeedBack;
+}
+
+enum FeedBackType { email, url }
+
+class DefinitionFeedBack {
+  /// You can selected the type feedback with enum
+  /// [type] parameter support {email and url} 
+  final FeedBackType type;
+  /// [body] is you url or email for feedback.
+  final String body;
+
+  DefinitionFeedBack({
+    @required this.type,
+    @required this.body,
+  });
 }
