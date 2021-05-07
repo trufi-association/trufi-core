@@ -36,14 +36,17 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     return AlertDialog(
       title: Text(
         localization.savedPlacesEnterNameTitle,
+        style: theme.textTheme.bodyText1,
       ),
       content: TextField(
         decoration: InputDecoration(
           focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            color: theme.accentColor,
-          )),
+            borderSide: BorderSide(
+              color: theme.accentColor,
+            ),
+          ),
         ),
+        style: theme.textTheme.bodyText1,
         onChanged: (value) {
           _hasInputError = !_validateInput(value);
         },
@@ -53,23 +56,19 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          style: TextButton.styleFrom(
-            textStyle: TextStyle(color: theme.accentColor),
-          ),
           onPressed: () {
             Navigator.pop(context);
           },
           child: Text(
             localization.commonCancel.toUpperCase(),
+            style: TextStyle(color: theme.primaryColor),
           ),
         ),
         TextButton(
-          style: TextButton.styleFrom(
-            textStyle: TextStyle(color: theme.accentColor),
-          ),
           onPressed: onSave,
           child: Text(
             localization.commonSave.toUpperCase(),
+            style: TextStyle(color: theme.primaryColor),
           ),
         ),
       ],
