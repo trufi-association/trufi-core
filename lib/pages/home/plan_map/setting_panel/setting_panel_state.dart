@@ -97,7 +97,7 @@ class SettingPanelState extends Equatable {
           bikeRentalNetworks.map((bikeRentalNetwork) => bikeRentalNetwork.name).toList(),
       _avoidTransfers: avoidTransfers,
       _includeBikeSuggestions: includeBikeSuggestions,
-      _typeBikingSpeed: typeBikingSpeed.value,
+      _typeBikingSpeed: typeBikingSpeed.name,
       _includeParkAndRideSuggestions: includeParkAndRideSuggestions,
       _includeCarSuggestions: includeCarSuggestions,
       _wheelchair: wheelchair,
