@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/enums/plan_enums.dart';
 
 class PlanGraphQl {
   PlanGraphQl({
@@ -33,11 +34,11 @@ class PlanGraphQl {
     return PlanEntity(
       to: to.toPlanLocation(),
       from: from.toPlanLocation(),
-      itineraries: itineraries
+      itineraries: PlanEntity.removePlanItineraryDuplicates(itineraries
           .map(
             (itinerary) => itinerary.toPlanItinerary(),
           )
-          .toList(),
+          .toList()),
       error: itineraries.isEmpty ? PlanError(404, 'Not found routes') : null,
     );
   }

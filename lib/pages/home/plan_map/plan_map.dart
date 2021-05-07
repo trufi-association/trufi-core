@@ -10,11 +10,14 @@ import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
+import 'package:trufi_core/widgets/map_setting_button.dart';
 
 import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
+import '../../../trufi_configuration.dart';
 import '../../../widgets/map/utils/trufi_map_utils.dart';
 import './plan.dart';
+
 const double customOverlayWidgetMargin = 80.0;
 
 typedef OnSelected = void Function(PlanItinerary itinerary);
@@ -35,8 +38,7 @@ class PlanMapPage extends StatefulWidget {
   PlanMapPageState createState() => PlanMapPageState();
 }
 
-class PlanMapPageState extends State<PlanMapPage>
-    with TickerProviderStateMixin {
+class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin {
   final _cropButtonKey = GlobalKey<CropButtonState>();
   final _subscriptions = CompositeSubscription();
   final _trufiMapController = TrufiMapController();
@@ -111,10 +113,18 @@ class PlanMapPageState extends State<PlanMapPage>
             ];
           },
         ),
-        const Positioned(
+        Positioned(
           top: 16.0,
           right: 16.0,
-          child: MapTypeButton(),
+          child: Column(
+            children: [
+              const MapTypeButton(),
+              if (TrufiConfiguration().generalConfiguration.typeServer == ServerType.graphQLServer)
+                const MapSettingButton()
+              else
+                Container(),
+            ],
+          ),
         ),
         Positioned(
           bottom: 0,
@@ -150,8 +160,7 @@ class PlanMapPageState extends State<PlanMapPage>
         Positioned.fill(
           child: Container(
             margin: EdgeInsets.only(
-              left:
-                  MediaQuery.of(context).size.width - customOverlayWidgetMargin,
+              left: MediaQuery.of(context).size.width - customOverlayWidgetMargin,
               bottom: 80,
               top: 65,
             ),
