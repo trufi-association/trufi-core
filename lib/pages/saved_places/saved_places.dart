@@ -74,11 +74,12 @@ class SavedPlacesPage extends StatelessWidget {
                                 ).toList(),
                               );
                             }),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 16.0),
-                              // TODO translate
-                              child: Text('Custom Places', style: theme.textTheme.bodyText1),
-                            ),
+                            if (searchLocationsCubit.state.myPlaces.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                // TODO translate
+                                child: Text('Custom Places', style: theme.textTheme.bodyText1),
+                              ),
                             Column(
                               children: searchLocationsCubit.state.myPlaces
                                   .map(
