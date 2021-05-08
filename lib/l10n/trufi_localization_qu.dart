@@ -93,6 +93,9 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get errorAmbiguousOriginDestination => 'Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.';
 
   @override
+  String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
+
+  @override
   String get errorNoBarrierFree => 'Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.';
 
   @override

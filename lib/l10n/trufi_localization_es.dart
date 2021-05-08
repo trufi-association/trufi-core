@@ -93,6 +93,9 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String get errorAmbiguousOriginDestination => 'Origen y destino son ambiguos. Por favor, seleccione una de las siguientes opciones o introduzca un destino más exacto.';
 
   @override
+  String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
+
+  @override
   String get errorNoBarrierFree => 'Origen y destino no son accesibles a silla de ruedas.';
 
   @override

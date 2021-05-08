@@ -270,6 +270,12 @@ abstract class TrufiLocalization {
   /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
   String get errorAmbiguousOriginDestination;
 
+  /// Error Dialog in the Feedback Form
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open mail feedback app, the URL or email is incorrect'**
+  String get errorEmailFeedback;
+
   /// Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible
   ///
   /// In en, this message translates to:
