@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-class SetDescriptionDialog extends StatefulWidget {
+class DialogEditText extends StatefulWidget {
   final String initText;
 
-  const SetDescriptionDialog({this.initText = "", Key key}) : super(key: key);
+  const DialogEditText({this.initText = "", Key key}) : super(key: key);
 
   @override
-  _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
+  _DialogEditTextState createState() => _DialogEditTextState();
 }
 
-class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
+class _DialogEditTextState extends State<DialogEditText> {
   TextEditingController textController = TextEditingController();
   bool _hasInputError = true;
 

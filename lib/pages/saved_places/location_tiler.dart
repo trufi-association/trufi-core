@@ -12,21 +12,13 @@ import 'package:trufi_core/trufi_models.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
 import 'package:trufi_core/widgets/alerts.dart';
+import 'package:trufi_core/widgets/dialog_edit_text.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
-import 'package:trufi_core/widgets/set_description_dialog.dart';
 
 import '../choose_location.dart';
+import 'dialog_select_icon.dart';
 
 class LocationTiler extends StatelessWidget {
-  static const icons = <String, IconData>{
-    'saved_place:home': Icons.home,
-    'saved_place:work': Icons.work,
-    'saved_place:fastfood': Icons.fastfood,
-    'saved_place:local_cafe': Icons.local_cafe,
-    'saved_place:map': Icons.map,
-    'saved_place:school': Icons.school,
-  };
-
   const LocationTiler({
     Key key,
     @required this.location,
@@ -55,7 +47,7 @@ class LocationTiler extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if (location.isLatLngDefined) {
-            _showCurrentRoute(context);
+            _getRoute(context);
           } else {
             _changePosition(context);
           }
@@ -82,9 +74,7 @@ class LocationTiler extends StatelessWidget {
                         localization.savedPlacesSetIconLabel,
                         style: theme.textTheme.bodyText1,
                       ),
-                    )
-                  else
-                    null,
+                    ),
                   if (enableSetName)
                     PopupMenuItem(
                       value: 2,
@@ -92,9 +82,7 @@ class LocationTiler extends StatelessWidget {
                         localization.savedPlacesSetNameLabel,
                         style: theme.textTheme.bodyText1,
                       ),
-                    )
-                  else
-                    null,
+                    ),
                   if (enableSetPosition)
                     PopupMenuItem(
                       value: 3,
@@ -102,9 +90,7 @@ class LocationTiler extends StatelessWidget {
                         localization.savedPlacesSetPositionLabel,
                         style: theme.textTheme.bodyText1,
                       ),
-                    )
-                  else
-                    null,
+                    ),
                   if (removeLocation != null || location.isLatLngDefined)
                     PopupMenuItem(
                       value: 4,
@@ -112,9 +98,7 @@ class LocationTiler extends StatelessWidget {
                         localization.savedPlacesRemoveLabel,
                         style: theme.textTheme.bodyText1,
                       ),
-                    )
-                  else
-                    null,
+                    ),
                 ],
                 onSelected: (int index) async {
                   if (index == 1) {
@@ -150,7 +134,7 @@ class LocationTiler extends StatelessWidget {
     );
   }
 
-  Future<void> _showCurrentRoute(BuildContext context) async {
+  Future<void> _getRoute(BuildContext context) async {
     final locationProviderCubit = context.read<LocationProviderCubit>();
     if (locationProviderCubit.state.currentLocation == null) {
       await showDialog(
@@ -178,46 +162,20 @@ class LocationTiler extends StatelessWidget {
   }
 
   Future<void> _changeIcon(BuildContext context) async {
-    final localization = TrufiLocalization.of(context);
-    await showDialog(
+    final type = await showDialog<String>(
       context: context,
-      builder: (context) => SimpleDialog(
-        title: Text(localization.savedPlacesSelectIconTitle),
-        children: <Widget>[
-          SizedBox(
-            width: 200,
-            height: 200,
-            child: GridView.builder(
-              itemCount: icons.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-              itemBuilder: (BuildContext builderContext, int index) {
-                return InkWell(
-                  onTap: () {
-                    updateLocation(location, location.copyWith(type: icons.keys.toList()[index]));
-                    Navigator.pop(builderContext);
-                  },
-                  child: Icon(icons.values.toList()[index]),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+      builder: (context) => const DialogSelectIcon(),
     );
+    updateLocation(location, location.copyWith(type: type));
   }
 
   Future<void> _changeName(BuildContext context) async {
     final String description = await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return SetDescriptionDialog(initText: location.description);
+          return DialogEditText(initText: location.description);
         });
-    if (description != null) {
-      updateLocation(
-        location,
-        location.copyWith(description: description),
-      );
-    }
+    updateLocation(location, location.copyWith(description: description));
   }
 
   Future<void> _changePosition(BuildContext context) async {
@@ -225,14 +183,9 @@ class LocationTiler extends StatelessWidget {
       context,
       position: location.isLatLngDefined ? LatLng(location.latitude, location.longitude) : null,
     );
-    if (mapLocation != null) {
-      updateLocation(
-        location,
-        location.copyWith(
-          longitude: mapLocation.longitude,
-          latitude: mapLocation.latitude,
-        ),
-      );
-    }
+    updateLocation(
+      location,
+      location.copyWith(longitude: mapLocation.longitude, latitude: mapLocation.latitude),
+    );
   }
 }

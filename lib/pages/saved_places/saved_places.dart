@@ -5,9 +5,9 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/saved_places/location_tiler.dart';
+import 'package:trufi_core/widgets/dialog_edit_text.dart';
 
 import '../../trufi_models.dart';
-import '../../widgets/set_description_dialog.dart';
 import '../../widgets/trufi_drawer.dart';
 import '../choose_location.dart';
 
@@ -138,7 +138,7 @@ class SavedPlacesPage extends StatelessWidget {
       final String description = await showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const SetDescriptionDialog();
+          return const DialogEditText();
         },
       );
       if (description != null) {
