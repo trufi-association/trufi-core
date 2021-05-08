@@ -86,7 +86,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
         fromPlace: fromLocation,
         toPlace: toLocation,
         showSuccessAnimation: state.showSuccessAnimation,
-        isFetching: state.isFetching,
+        isFetching: true,
         ad: state.ad,
       ),
     );

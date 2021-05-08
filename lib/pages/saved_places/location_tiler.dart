@@ -7,7 +7,6 @@ import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
-import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -20,25 +19,27 @@ import '../choose_location.dart';
 
 class LocationTiler extends StatelessWidget {
   static const icons = <String, IconData>{
-        'saved_place:home': Icons.home,
-        'saved_place:work': Icons.work,
-        'saved_place:fastfood': Icons.fastfood,
-        'saved_place:local_cafe': Icons.local_cafe,
-        'saved_place:map': Icons.map,
-        'saved_place:school': Icons.school,
-      };
+    'saved_place:home': Icons.home,
+    'saved_place:work': Icons.work,
+    'saved_place:fastfood': Icons.fastfood,
+    'saved_place:local_cafe': Icons.local_cafe,
+    'saved_place:map': Icons.map,
+    'saved_place:school': Icons.school,
+  };
 
   const LocationTiler({
     Key key,
     @required this.location,
-    @required this.removeLocation,
     @required this.updateLocation,
+    this.removeLocation,
+    this.isDefaultLocation = false,
     this.enableSetIcon = false,
     this.enableSetName = false,
     this.enableSetPosition = false,
   }) : super(key: key);
 
   final TrufiLocation location;
+  final bool isDefaultLocation;
   final bool enableSetIcon;
   final bool enableSetName;
   final bool enableSetPosition;
@@ -52,83 +53,102 @@ class LocationTiler extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       child: ElevatedButton(
-        onPressed: null,
-        onLongPress: () {
-          _showCurrentRoute(context);
+        onPressed: () {
+          if (location.isLatLngDefined) {
+            _showCurrentRoute(context);
+          } else {
+            _changePosition(context);
+          }
         },
         child: Row(
           children: <Widget>[
             Container(
                 margin: const EdgeInsets.only(right: 15),
-                child: Icon(typeToIconData(location.type)??Icons.place)),
+                child: Icon(typeToIconData(location.type) ?? Icons.place)),
             Expanded(
               child: Text(
-                location.description,
+                location.translateValue(localization),
                 style: theme.textTheme.bodyText1,
                 maxLines: 1,
               ),
             ),
-            PopupMenuButton<int>(
-              itemBuilder: (BuildContext context) => [
-                if (enableSetIcon)
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text(
-                      localization.savedPlacesSetIconLabel,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  )
-                else
-                  null,
-                if (enableSetName)
-                  PopupMenuItem(
-                    value: 2,
-                    child: Text(
-                      localization.savedPlacesSetNameLabel,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  )
-                else
-                  null,
-                if (enableSetPosition)
-                  PopupMenuItem(
-                    value: 3,
-                    child: Text(
-                      localization.savedPlacesSetPositionLabel,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  )
-                else
-                  null,
-                if (removeLocation != null)
-                  PopupMenuItem(
-                    value: 4,
-                    child: Text(
-                      localization.savedPlacesRemoveLabel,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  )
-                else
-                  null,
-              ],
-              onSelected: (int index) async {
-                if (index == 1) {
-                  await _changeIcon(context);
-                } else if (index == 2) {
-                  await _changeName(context);
-                } else if (index == 3) {
-                  await _changePosition(context);
-                } else if (index == 4) {
-                  removeLocation(location);
-                }
-              },
-            ),
+            if (location.isLatLngDefined)
+              PopupMenuButton<int>(
+                itemBuilder: (BuildContext context) => [
+                  if (enableSetIcon)
+                    PopupMenuItem(
+                      value: 1,
+                      child: Text(
+                        localization.savedPlacesSetIconLabel,
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    )
+                  else
+                    null,
+                  if (enableSetName)
+                    PopupMenuItem(
+                      value: 2,
+                      child: Text(
+                        localization.savedPlacesSetNameLabel,
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    )
+                  else
+                    null,
+                  if (enableSetPosition)
+                    PopupMenuItem(
+                      value: 3,
+                      child: Text(
+                        localization.savedPlacesSetPositionLabel,
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    )
+                  else
+                    null,
+                  if (removeLocation != null || location.isLatLngDefined)
+                    PopupMenuItem(
+                      value: 4,
+                      child: Text(
+                        localization.savedPlacesRemoveLabel,
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    )
+                  else
+                    null,
+                ],
+                onSelected: (int index) async {
+                  if (index == 1) {
+                    await _changeIcon(context);
+                  } else if (index == 2) {
+                    await _changeName(context);
+                  } else if (index == 3) {
+                    await _changePosition(context);
+                  } else if (index == 4) {
+                    if (isDefaultLocation && location.isLatLngDefined) {
+                      updateLocation(
+                        location,
+                        location.copyWith(
+                          longitude: 0,
+                          latitude: 0,
+                        ),
+                      );
+                    } else {
+                      if (removeLocation != null) {
+                        removeLocation(location);
+                      }
+                    }
+                  }
+                },
+              )
+            else
+              Container(
+                height: 45,
+              ),
           ],
         ),
       ),
     );
   }
-
 
   Future<void> _showCurrentRoute(BuildContext context) async {
     final locationProviderCubit = context.read<LocationProviderCubit>();
@@ -149,12 +169,12 @@ class LocationTiler extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     final settingPanelCubit = context.read<SettingPanelCubit>();
-    await homePageCubit.updateCurrentRoute(currentLocation, location);
-    await homePageCubit
-        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
+    homePageCubit.updateCurrentRoute(currentLocation, location);
+    homePageCubit
+        .fetchPlan(correlationId, advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
-    Navigator.pushNamed(context, HomePage.route);
+    Navigator.pop(context);
   }
 
   Future<void> _changeIcon(BuildContext context) async {
@@ -173,7 +193,7 @@ class LocationTiler extends StatelessWidget {
               itemBuilder: (BuildContext builderContext, int index) {
                 return InkWell(
                   onTap: () {
-                     updateLocation(location, location.copyWith(type: icons.keys.toList()[index]));
+                    updateLocation(location, location.copyWith(type: icons.keys.toList()[index]));
                     Navigator.pop(builderContext);
                   },
                   child: Icon(icons.values.toList()[index]),

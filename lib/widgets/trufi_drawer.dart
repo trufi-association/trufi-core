@@ -10,12 +10,12 @@ import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../utils/util_icons/custom_icons.dart';
 import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/saved_places/saved_places.dart';
 import '../pages/team.dart';
 import '../trufi_configuration.dart';
+import '../utils/util_icons/custom_icons.dart';
 
 class TrufiDrawer extends StatefulWidget {
   const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);

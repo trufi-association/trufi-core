@@ -1,7 +1,9 @@
 import 'package:meta/meta.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:trufi_core/models/enums/defaults_location.dart';
 import 'package:trufi_core/repository/places_store_repository/places_storage.dart';
 import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 import 'package:trufi_core/services/search_location/search_location_manager.dart';
@@ -15,10 +17,10 @@ import '../location_search_bloc.dart';
 part 'search_locations_state.dart';
 
 class SearchLocationsCubit extends Cubit<SearchLocationsState> {
-  final PlacesStorage myPlacesStorage =
-      SharedPreferencesPlaceStorage("myPlacesStorage");
-  final PlacesStorage historyPlacesStorage =
-      SharedPreferencesPlaceStorage("historyPlacesStorage");
+  final PlacesStorage myPlacesStorage = SharedPreferencesPlaceStorage("myPlacesStorage");
+  final PlacesStorage myDefaultPlacesStorage =
+      SharedPreferencesPlaceStorage("myDefaultPlacesStorage");
+  final PlacesStorage historyPlacesStorage = SharedPreferencesPlaceStorage("historyPlacesStorage");
   final PlacesStorage favoritePlacesStorage =
       SharedPreferencesPlaceStorage("favoritePlacesStorage");
 
@@ -29,16 +31,27 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   SearchLocationsCubit(
     this._offlineRequestManager,
   ) : super(const SearchLocationsState(
-            myPlaces: [], favoritePlaces: [], historyPlaces: [])) {
+            myPlaces: [], myDefaultPlaces: [], favoritePlaces: [], historyPlaces: [])) {
     _initLoad();
   }
 
   Future<void> _initLoad() async {
     emit(state.copyWith(
       myPlaces: await myPlacesStorage.all(),
+      myDefaultPlaces: await _initDefaultPlaces(),
       historyPlaces: await historyPlacesStorage.all(),
       favoritePlaces: await favoritePlacesStorage.all(),
     ));
+  }
+
+  Future<List<TrufiLocation>> _initDefaultPlaces() async {
+    final preferences = await SharedPreferences.getInstance();
+    if (preferences.get('saved_places_initialized') == null) {
+      myDefaultPlacesStorage.insert(DefaultLocation.defaultHome.initLocation);
+      myDefaultPlacesStorage.insert(DefaultLocation.defaultWork.initLocation);
+    }
+    preferences.setBool('saved_places_initialized', true);
+    return myDefaultPlacesStorage.all();
   }
 
   void insertMyPlace(TrufiLocation location) {
@@ -62,6 +75,13 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
           myPlaces: [..._updateItem(state.myPlaces, old,location)]),
     );
     myPlacesStorage.update(old, location);
+  }
+
+  void updateMyDefaultPlace(TrufiLocation old, TrufiLocation location) {
+    emit(
+      state.copyWith(myDefaultPlaces: [..._updateItem(state.myDefaultPlaces, old, location)]),
+    );
+    myDefaultPlacesStorage.update(old, location);
   }
 
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {

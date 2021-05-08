@@ -5,6 +5,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import './trufi_configuration.dart';
 import 'entities/plan_entity/plan_entity.dart';
+import 'models/enums/defaults_location.dart';
 
 class MapStyle {
   static const String streets = 'streets';
@@ -128,12 +129,11 @@ class TrufiLocation implements TrufiPlace {
       o is TrufiLocation &&
       o.description == description &&
       o.latitude == latitude &&
-      o.longitude == longitude&&
+      o.longitude == longitude &&
       o.type == type;
 
   @override
-  int get hashCode =>
-      description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
+  int get hashCode => description.hashCode ^ latitude.hashCode ^ longitude.hashCode;
 
   @override
   String toString() {
@@ -151,6 +151,22 @@ class TrufiLocation implements TrufiPlace {
         abbreviations[abbreviation],
       );
     });
+  }
+
+  bool get isLatLngDefined {
+    return latitude != 0 && longitude != 0;
+  }
+
+  String translateValue(TrufiLocalization localization) {
+    String translate = displayName;
+    if (DefaultLocation.defaultHome.keyLocation == description) {
+    // TODO translate
+      translate = isLatLngDefined ? "Home" : "ADD HOME";
+    } else if (DefaultLocation.defaultWork.keyLocation == description) {
+    // TODO translate
+      translate = isLatLngDefined ? "Work" : "ADD WORK";
+    }
+    return translate;
   }
 }
 
@@ -193,8 +209,7 @@ class TrufiStreetJunction {
     return "${street1.location.description} & ${street2.location.description}";
   }
 
-  String displayName(TrufiLocalization localization) =>
-      localization.instructionJunction(
+  String displayName(TrufiLocalization localization) => localization.instructionJunction(
         street1.displayName,
         street2.displayName,
       );

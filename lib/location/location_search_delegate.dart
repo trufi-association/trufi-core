@@ -184,7 +184,15 @@ class _SuggestionList extends StatelessWidget {
           const SliverPadding(padding: EdgeInsets.all(4.0)),
           _BuildYourLocation(onSelected),
           _BuildChooseOnMap(onSelected),
-          if (query.isEmpty) _BuildYourPlaces(onSelected: onSelected),
+          if (query.isEmpty)
+            _BuildYourPlaces(
+                onSelected: onSelected,
+                locations: searchLocationsCubit.state.myDefaultPlaces
+                    .where((element) => element.isLatLngDefined)
+                    .toList()),
+          if (query.isEmpty)
+            _BuildYourPlaces(
+                onSelected: onSelected, locations: searchLocationsCubit.state.myPlaces),
           if (query.isEmpty)
             _BuildObjectList(
               localization.searchTitleFavorites,
@@ -372,13 +380,15 @@ class _BuildYourPlaces extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   const _BuildYourPlaces({
     @required this.onSelected,
+    @required this.locations,
   });
+
+  final List<TrufiLocation> locations;
 
   @override
   Widget build(BuildContext context) {
+    final localization = TrufiLocalization.of(context);
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final List<TrufiLocation> locations =
-        searchLocationsCubit.state.myPlaces.reversed.toList();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -397,7 +407,7 @@ class _BuildYourPlaces extends StatelessWidget {
               }
             },
             localIconData,
-            location.displayName,
+            location.translateValue(localization),
             subtitle: location.address,
           );
         },
@@ -424,6 +434,7 @@ class _BuildObjectList extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    final localization = TrufiLocalization.of(context);
     final theme = context.watch<ThemeCubit>().state.searchTheme;
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SliverList(
@@ -453,7 +464,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               localIconData,
-              object.displayName,
+              object.translateValue(localization),
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,

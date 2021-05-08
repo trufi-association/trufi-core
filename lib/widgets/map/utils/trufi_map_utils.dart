@@ -8,9 +8,9 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../../../utils/util_icons/custom_icons.dart';
 import '../../../trufi_configuration.dart';
 import '../../../trufi_models.dart';
+import '../../../utils/util_icons/custom_icons.dart';
 import 'your_location_marker.dart';
 
 LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,

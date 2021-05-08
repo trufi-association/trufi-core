@@ -18,61 +18,87 @@ class SavedPlacesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TrufiLocalization localization = TrufiLocalization.of(context);
-    final theme = Theme.of(context);
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    final localization = TrufiLocalization.of(context);
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(localization.menuYourPlaces)),
       body: DefaultTabController(
         length: 2,
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             TabBar(
               tabs: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Text(
+                    // TODO translate
                     "Saved places",
                     style: theme.textTheme.bodyText1,
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Text(
+                    // TODO translate
                     "Favorite places",
                     style: theme.textTheme.bodyText1,
+                    maxLines: 2,
                   ),
                 )
               ],
             ),
+            const SizedBox(height: 5),
             Expanded(
               child: TabBarView(
                 children: [
                   Scaffold(
                     body: BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                       builder: (context, state) {
-                        final List<TrufiLocation> data = searchLocationsCubit.state.myPlaces;
-                        return ListView.builder(
-                          padding: const EdgeInsets.all(16.0),
-                          itemCount: data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return LocationTiler(
-                                location: data[index],
-                                enableSetIcon: true,
-                                enableSetName: true,
-                                enableSetPosition: true,
-                                updateLocation: searchLocationsCubit.updateMyPlace,
-                                removeLocation: searchLocationsCubit.deleteMyPlace);
-                          },
+                        return ListView(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          children: [
+                            const SizedBox(height: 10),
+                            Builder(builder: (_) {
+                              return Column(
+                                children: searchLocationsCubit.state.myDefaultPlaces.map(
+                                  (place) {
+                                    return LocationTiler(
+                                      location: place,
+                                      enableSetPosition: true,
+                                      isDefaultLocation: true,
+                                      updateLocation: searchLocationsCubit.updateMyDefaultPlace,
+                                    );
+                                  },
+                                ).toList(),
+                              );
+                            }),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 16.0),
+                              // TODO translate
+                              child: Text('Custom Places', style: theme.textTheme.bodyText1),
+                            ),
+                            Column(
+                              children: searchLocationsCubit.state.myPlaces
+                                  .map(
+                                    (place) => LocationTiler(
+                                        location: place,
+                                        enableSetIcon: true,
+                                        enableSetName: true,
+                                        enableSetPosition: true,
+                                        updateLocation: searchLocationsCubit.updateMyPlace,
+                                        removeLocation: searchLocationsCubit.deleteMyPlace),
+                                  )
+                                  .toList(),
+                            )
+                          ],
                         );
                       },
                     ),
                     floatingActionButton: FloatingActionButton(
                       onPressed: () {
-                        // _addNewPlace(context);
+                        _addNewPlace(context);
                       },
                       backgroundColor: Theme.of(context).primaryColor,
                       heroTag: null,
@@ -81,16 +107,12 @@ class SavedPlacesPage extends StatelessWidget {
                   ),
                   BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                     builder: (context, state) {
-                      final List<TrufiLocation> data = [
-                        // ...searchLocationsCubit.state.myPlaces.reversed.toList(),
-                        ...state.favoritePlaces
-                      ];
                       return ListView.builder(
                         padding: const EdgeInsets.all(16.0),
-                        itemCount: data.length,
+                        itemCount: state.favoritePlaces.length,
                         itemBuilder: (BuildContext context, int index) {
                           return LocationTiler(
-                            location: data[index],
+                            location: state.favoritePlaces[index],
                             enableSetIcon: true,
                             updateLocation: searchLocationsCubit.updateFavoritePlace,
                             removeLocation: searchLocationsCubit.deleteFavoritePlace,
