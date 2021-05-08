@@ -169,7 +169,7 @@ class LocationTiler extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     final settingPanelCubit = context.read<SettingPanelCubit>();
-    homePageCubit.updateCurrentRoute(currentLocation, location);
+    await homePageCubit.updateCurrentRoute(currentLocation, location);
     homePageCubit
         .fetchPlan(correlationId, advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
@@ -221,7 +221,10 @@ class LocationTiler extends StatelessWidget {
   }
 
   Future<void> _changePosition(BuildContext context) async {
-    final LatLng mapLocation = await ChooseLocationPage.selectPosition(context);
+    final LatLng mapLocation = await ChooseLocationPage.selectPosition(
+      context,
+      position: location.isLatLngDefined ? LatLng(location.latitude, location.longitude) : null,
+    );
     if (mapLocation != null) {
       updateLocation(
         location,
