@@ -204,7 +204,7 @@ class _SuggestionList extends StatelessWidget {
           if (query.isEmpty)
             _BuildFutureBuilder(
               title: localization.searchTitleRecent,
-              future: searchLocationsCubit.getHistoryList(limit: 5),
+              future: searchLocationsCubit.getHistoryListWithLimit(limit: 5),
               iconData: Icons.history,
               onSelected: onSelected,
               onStreetTapped: onStreetTapped,
