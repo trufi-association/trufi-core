@@ -93,6 +93,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get errorAmbiguousOriginDestination => 'gormesese melina afisi neyine kple afisi netso o.tso esiawo dome tor deka alo de afisi yim nele la gorme nyuie';
 
   @override
+  String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
+
+  @override
   String get errorNoBarrierFree => 'bafakeke matenu ayi afisi netso kple afisi neyina o';
 
   @override

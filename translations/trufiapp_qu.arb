@@ -1,6 +1,6 @@
 {
     "@@locale": "qu",
-    "@@last_modified": "2021-04-13T17:11:23+02:00",
+    "@@last_modified": "2021-05-08T19:16:44+02:00",
     "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
     "@aboutContent": {
         "notes": [
@@ -269,6 +269,10 @@
             }
         ],
         "description": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+    },
+    "errorEmailFeedback": "Could not open mail feedback app, the URL or email is incorrect",
+    "@errorEmailFeedback": {
+        "description": "Error Dialog in the Feedback Form"
     },
     "errorNoBarrierFree": "Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.",
     "@errorNoBarrierFree": {
