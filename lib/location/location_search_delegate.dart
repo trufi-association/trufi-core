@@ -388,7 +388,6 @@ class _BuildYourPlaces extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
