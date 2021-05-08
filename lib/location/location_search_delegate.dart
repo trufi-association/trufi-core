@@ -399,11 +399,8 @@ class _BuildYourPlaces extends StatelessWidget {
           }
           return _BuildItem(
             () {
-              if (location != null) {
-                searchLocationsCubit.insertHistoryPlace(location);
-                if (onSelected != null) {
+              if (location != null && onSelected != null) {
                   onSelected(location);
-                }
               }
             },
             localIconData,
