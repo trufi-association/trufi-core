@@ -104,10 +104,7 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<CustomLayersCubit>(
-          create: (context) => CustomLayersCubit(
-            customLayers,
-            trufiConfiguration.map.defaultZoom.round(),
-          ),
+          create: (context) => CustomLayersCubit(customLayers),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
