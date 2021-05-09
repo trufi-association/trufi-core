@@ -36,8 +36,7 @@ class TrufiMap extends StatelessWidget {
         context.watch<PreferencesCubit>().state.currentMapType;
     final currentLocation =
         context.watch<LocationProviderCubit>().state.currentLocation;
-    final activeCustomLayers =
-        context.watch<CustomLayersCubit>().activeCustomLayers;
+    final customLayersCubit = context.watch<CustomLayersCubit>();
     return FlutterMap(
       mapController: controller.mapController,
       options: MapOptions(
@@ -52,6 +51,7 @@ class TrufiMap extends StatelessWidget {
           MapPosition position,
           bool hasGesture,
         ) {
+          customLayersCubit.changeMapZoom(position.zoom);
           if (onPositionChanged != null) {
             Future.delayed(Duration.zero, () {
               onPositionChanged(position, hasGesture);
@@ -64,7 +64,7 @@ class TrufiMap extends StatelessWidget {
           getTilesEndpointForMapType(currentMapType),
           tileProviderKey: cfg.map.mapTilerKey,
         ),
-        ...activeCustomLayers,
+        ...customLayersCubit.activeCustomLayers,
         buildYourLocationMarkerOption(currentLocation),
         ...layerOptionsBuilder(context)
       ],

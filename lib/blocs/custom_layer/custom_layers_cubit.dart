@@ -10,12 +10,13 @@ part 'custom_layers_state.dart';
 
 class CustomLayersCubit extends Cubit<CustomLayersState> {
   final LocalStorage _localStorage = LocalStorage();
-  CustomLayersCubit(List<CustomLayer> layers)
+  CustomLayersCubit(List<CustomLayer> layers, int defaultZoom)
       : super(
           CustomLayersState(
             layersSatus:
                 layers.asMap().map((key, value) => MapEntry(value.id, true)),
             layers: layers,
+            mapZom: defaultZoom,
           ),
         ) {
     /// listen changes called by on [onRefresh] from each [CustomLayer] for request refresh the current [CustomLayersState]
@@ -41,8 +42,12 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
     _localStorage.save(state.layersSatus);
   }
 
+  void changeMapZoom(double zoom) {
+    emit(state.copyWith(mapZom: zoom.round()));
+  }
+
   List<LayerOptions> get activeCustomLayers => state.layers
       .where((element) => state.layersSatus[element.id])
-      .map((element) => element.layerOptions)
+      .map((element) => element.buildLayerOptions(state.mapZom))
       .toList();
 }
