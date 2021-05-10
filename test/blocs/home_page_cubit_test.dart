@@ -95,7 +95,8 @@ void main() {
       expect: () => [
         const MapRouteState(),
         MapRouteState(
-          plan: PlanEntity(from: PlanLocation(), to: PlanLocation(), itineraries: []),
+          plan: PlanEntity(
+              from: PlanLocation(), to: PlanLocation(), itineraries: []),
           showSuccessAnimation: true,
         )
       ],
@@ -135,25 +136,5 @@ void main() {
         const MapRouteState(showSuccessAnimation: true)
       ],
     );
-
-    blocTest("updateCurrentRoute should remove the current plan",
-        build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
-        act: (HomePageCubit cubit) async {
-          await cubit.updateMapRouteState(MapRouteState(
-            plan:
-                PlanEntity(itineraries: [], from: PlanLocation(), to: PlanLocation()),
-          ));
-          return cubit;
-        },
-        skip: 1,
-        expect: () => [
-              MapRouteState(
-                fromPlace: TrufiLocation(
-                    description: "Test1", longitude: 1.0, latitude: 1.0),
-                toPlace: TrufiLocation(
-                    description: "Test2", longitude: 2.0, latitude: 2.0),
-                isFetching: true,
-              ),
-            ]);
   });
 }
