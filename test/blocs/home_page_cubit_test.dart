@@ -156,6 +156,7 @@ void main() {
                     description: "Test1", longitude: 1.0, latitude: 1.0),
                 toPlace: TrufiLocation(
                     description: "Test2", longitude: 2.0, latitude: 2.0),
+                isFetching: true,
               ),
             ]);
   });
