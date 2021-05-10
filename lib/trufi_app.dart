@@ -25,6 +25,7 @@ import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
+import 'models/definition_feedback.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
@@ -71,6 +72,7 @@ class TrufiApp extends StatelessWidget {
     this.customBetweenFabBuilder,
     Key key,
     this.customLayers = const [],
+    this.feedBack,
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -94,10 +96,15 @@ class TrufiApp extends StatelessWidget {
   /// List of [CustomLayer] implementations
   final List<CustomLayer> customLayers;
 
+  /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
+  /// if the FeedBack is null, the comment page is not created.
+  final DefinitionFeedBack feedBack;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
     final trufiConfiguration = TrufiConfiguration();
+    trufiConfiguration.configurationDrawer.definitionFeedBack = feedBack;
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
@@ -120,7 +127,7 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.typeServer == ServerType.defaultServer
+            trufiConfiguration.generalConfiguration.serverType == ServerType.defaultServer
                 ? OnlineRepository(
                     otpEndpoint: trufiConfiguration.url.otpEndpoint,
                   )

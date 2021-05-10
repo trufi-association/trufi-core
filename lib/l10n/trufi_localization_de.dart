@@ -93,6 +93,9 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get errorAmbiguousOriginDestination => 'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
 
   @override
+  String get errorEmailFeedback => 'Die Feedback App konnte nicht geöffnet werden, die URL oder die E-Mail ist nicht korrekt.';
+
+  @override
   String get errorNoBarrierFree => 'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.';
 
   @override
