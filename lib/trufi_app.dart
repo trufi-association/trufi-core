@@ -25,6 +25,7 @@ import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
+import 'models/definition_feedback.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';

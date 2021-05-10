@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
+import 'models/definition_feedback.dart';
+
 enum ServerType { defaultServer, graphQLServer }
 
 class TrufiConfiguration {
@@ -111,19 +113,4 @@ class TrufiConfigurationUrl {
 
 class TrufiConfigurationDrawer {
   DefinitionFeedBack definitionFeedBack;
-}
-
-enum FeedBackType { email, url }
-
-class DefinitionFeedBack {
-  /// You can selected the type feedback with enum
-  /// [type] parameter support {email and url} 
-  final FeedBackType type;
-  /// [body] is you url or email for feedback.
-  final String body;
-
-  DefinitionFeedBack({
-    @required this.type,
-    @required this.body,
-  });
 }

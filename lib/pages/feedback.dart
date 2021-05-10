@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
