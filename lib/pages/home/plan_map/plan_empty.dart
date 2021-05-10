@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
@@ -36,6 +37,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   @override
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
+    final trufiConfiguration = TrufiConfiguration();
     return Stack(
       children: <Widget>[
         TrufiMap(
@@ -68,8 +70,10 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
         ),
         Positioned(
           bottom: 0,
-          left: 0,
-          child: SafeArea(child: MapCopyright()),
+          left: 10,
+          child: SafeArea(
+            child: trufiConfiguration.map.buildMapAttribution(context),
+          ),
         ),
         Positioned.fill(
           child: Container(

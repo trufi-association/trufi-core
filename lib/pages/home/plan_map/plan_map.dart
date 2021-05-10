@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/map/buttons/crop_button.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
@@ -15,6 +16,7 @@ import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
 import '../../../widgets/map/utils/trufi_map_utils.dart';
 import './plan.dart';
+
 const double customOverlayWidgetMargin = 80.0;
 
 typedef OnSelected = void Function(PlanItinerary itinerary);
@@ -52,7 +54,6 @@ class PlanMapPageState extends State<PlanMapPage>
     );
     _subscriptions.add(
       _trufiMapController.outMapReady.listen((_) {
-        log("outMapReady");
         setState(() {
           _data.needsCameraUpdate = true;
         });
@@ -81,6 +82,8 @@ class PlanMapPageState extends State<PlanMapPage>
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
+
+    final trufiConfiguration = TrufiConfiguration();
     _data._selectedColor = theme.accentColor;
 
     if (_mapController.ready) {
@@ -117,9 +120,9 @@ class PlanMapPageState extends State<PlanMapPage>
           child: MapTypeButton(),
         ),
         Positioned(
-          bottom: 0,
-          left: 0,
-          child: MapCopyright(),
+          bottom: 10,
+          left: 10,
+          child: trufiConfiguration.map.buildMapAttribution(context),
         ),
         Positioned(
           bottom: 16.0,
