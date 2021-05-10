@@ -29,9 +29,9 @@ class DialogSelectIcon extends StatelessWidget {
             itemBuilder: (BuildContext builderContext, int index) {
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).pop(icons.keys.toList()[index]);
+                  Navigator.of(context).pop(icons.keys.elementAt(index));
                 },
-                child: Icon(icons.values.toList()[index]),
+                child: Icon(icons.values.elementAt(index)),
               );
             },
           ),
