@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
+import 'widgets/map/map_copyright.dart';
+
 enum ServerType { defaultServer, graphQLServer }
 
 class TrufiConfiguration {
@@ -89,6 +91,8 @@ class TrufiConfigurationMap {
   LatLng center = LatLng(5.574558, -0.214656);
   LatLng southWest = LatLng(5.510057, -0.328217);
   LatLng northEast = LatLng(5.726678, 0.071411);
+  // ignore: prefer_function_declarations_over_variables
+  WidgetBuilder buildMapAttribution = (context) => MapTileAndOSMCopyright();
 }
 
 class TrufiConfigurationUrl {

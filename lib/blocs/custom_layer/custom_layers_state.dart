@@ -3,7 +3,10 @@ part of 'custom_layers_cubit.dart';
 class CustomLayersState extends Equatable {
   final Map<String, bool> layersSatus;
   final List<CustomLayer> layers;
-  const CustomLayersState({this.layersSatus, this.layers});
+  const CustomLayersState({
+    this.layersSatus,
+    this.layers,
+  });
 
   CustomLayersState copyWith({
     Map<String, bool> layersSatus,
@@ -19,8 +22,5 @@ class CustomLayersState extends Equatable {
   List<Object> get props => [
         layersSatus,
         layers,
-
-        /// the state should be refreshed if the [LayerOptions] has been changed
-        ...layers.map((e) => e.layerOptions).toList(),
       ];
 }

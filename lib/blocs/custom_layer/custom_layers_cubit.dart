@@ -21,7 +21,10 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
     /// listen changes called by on [onRefresh] from each [CustomLayer] for request refresh the current [CustomLayersState]
     for (final CustomLayer layer in layers) {
       layer.onRefresh = () {
-        emit(state.copyWith());
+        // TODO: improve state refresh
+        final tempLayers = state.layers;
+        emit(state.copyWith(layers: []));
+        emit(state.copyWith(layers: tempLayers));
       };
     }
     _loadSavedStatus();
@@ -41,8 +44,8 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
     _localStorage.save(state.layersSatus);
   }
 
-  List<LayerOptions> get activeCustomLayers => state.layers
+  List<LayerOptions> activeCustomLayers(int zoom) => state.layers
       .where((element) => state.layersSatus[element.id])
-      .map((element) => element.layerOptions)
+      .map((element) => element.buildLayerOptions(zoom))
       .toList();
 }
