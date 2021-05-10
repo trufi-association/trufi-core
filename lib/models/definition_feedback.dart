@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 enum FeedBackType { email, url }
 
 class DefinitionFeedBack {
@@ -10,8 +8,8 @@ class DefinitionFeedBack {
   /// [body] is you url or email for feedback.
   final String body;
 
-  DefinitionFeedBack({
-    @required this.type,
-    @required this.body,
-  });
+  DefinitionFeedBack(
+    this.type,
+    this.body,
+  );
 }
