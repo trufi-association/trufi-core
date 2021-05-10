@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -27,7 +27,7 @@ class OnlineRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required String correlationId,
-    SettingPanelState advancedOptions,
+    PayloadDataPlanState advancedOptions,
   }) {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, "TRANSIT,WALK", correlationId);
@@ -165,6 +165,7 @@ class OnlineRepository implements RequestManager {
     return error.message;
   }
 }
+
 // TODO: clean code
 // ignore: unused_element
 List<TrufiLocation> _parseLocations(String responseBody) {

@@ -7,15 +7,16 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 
-part 'setting_panel_state.dart';
+part 'payload_data_plan_state.dart';
 
-class SettingPanelCubit extends Cubit<SettingPanelState> {
+class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
   final LocalRepository localRepository;
 
   final SharedPreferencesPlaceStorage myPlacesStorage =
       SharedPreferencesPlaceStorage("myPlacesStorage");
 
-  SettingPanelCubit(this.localRepository) : super(const SettingPanelState()) {
+  PayloadDataPlanCubit(this.localRepository)
+      : super(const PayloadDataPlanState()) {
     _load();
   }
 
@@ -23,12 +24,13 @@ class SettingPanelCubit extends Cubit<SettingPanelState> {
     final jsonString = await localRepository.getStateSettingPanel();
     if (jsonString != null && jsonString.isNotEmpty) {
       emit(
-        SettingPanelState.fromJson(jsonDecode(jsonString) as Map<String, dynamic>),
+        PayloadDataPlanState.fromJson(
+            jsonDecode(jsonString) as Map<String, dynamic>),
       );
     }
   }
 
-  Future<void> updateMapRouteState(SettingPanelState newState) async {
+  Future<void> updateMapRouteState(PayloadDataPlanState newState) async {
     await localRepository.saveStateSettingPanel(jsonEncode(newState.toJson()));
     emit(newState);
   }
@@ -65,20 +67,25 @@ class SettingPanelCubit extends Cubit<SettingPanelState> {
     await updateMapRouteState(state.copyWith(avoidTransfers: avoidTransfers));
   }
 
-  Future<void> setIncludeBikeSuggestions({@required bool includeBikeSuggestions}) async {
-    await updateMapRouteState(state.copyWith(includeBikeSuggestions: includeBikeSuggestions));
+  Future<void> setIncludeBikeSuggestions(
+      {@required bool includeBikeSuggestions}) async {
+    await updateMapRouteState(
+        state.copyWith(includeBikeSuggestions: includeBikeSuggestions));
   }
 
   Future<void> setParkRide({@required bool parkRide}) async {
-    await updateMapRouteState(state.copyWith(includeParkAndRideSuggestions: parkRide));
+    await updateMapRouteState(
+        state.copyWith(includeParkAndRideSuggestions: parkRide));
   }
 
   Future<void> setBikingSpeed(BikingSpeed bikingSpeed) async {
     await updateMapRouteState(state.copyWith(typeBikingSpeed: bikingSpeed));
   }
 
-  Future<void> setIncludeCarSuggestions({@required bool includeCarSuggestions}) async {
-    await updateMapRouteState(state.copyWith(includeCarSuggestions: includeCarSuggestions));
+  Future<void> setIncludeCarSuggestions(
+      {@required bool includeCarSuggestions}) async {
+    await updateMapRouteState(
+        state.copyWith(includeCarSuggestions: includeCarSuggestions));
   }
 
   Future<void> setWheelChair({@required bool wheelchair}) async {

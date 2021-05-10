@@ -6,11 +6,12 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
+
+import 'payload_data_plan/payload_data_plan_cubit.dart';
 
 class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
@@ -73,7 +74,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> setToPlace(TrufiLocation toPlace) async {
-    await updateMapRouteState(state.copyWith(toPlace: toPlace, isFetching: true));
+    await updateMapRouteState(
+        state.copyWith(toPlace: toPlace, isFetching: true));
   }
 
   Future<void> configSuccessAnimation({bool show}) async {
@@ -91,7 +93,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
   Future<void> fetchPlan(
     String correlationId, {
     bool car = false,
-    SettingPanelState advancedOptions,
+    PayloadDataPlanState advancedOptions,
   }) async {
     if (currentFetchPlanOperation != null) {
       await currentFetchPlanOperation.cancel();
@@ -114,7 +116,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
                     advancedOptions: advancedOptions);
               }(),
             );
-      final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
+      final PlanEntity plan =
+          await currentFetchPlanOperation.valueOrCancellation(
         null,
       );
       if (plan != null && !plan.hasError) {
@@ -146,7 +149,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
           );
         }(),
       );
-      final AdEntity ad = await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad =
+          await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );

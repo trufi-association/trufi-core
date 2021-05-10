@@ -1,7 +1,7 @@
-part of 'setting_panel_cubit.dart';
+part of 'payload_data_plan_cubit.dart';
 
 @immutable
-class SettingPanelState extends Equatable {
+class PayloadDataPlanState extends Equatable {
   static const String _typeWalkingSpeed = "typeWalkingSpeed";
   static const String _avoidWalking = "avoidWalking";
   static const String _transportModes = "transportModes";
@@ -9,11 +9,12 @@ class SettingPanelState extends Equatable {
   static const String _avoidTransfers = "avoidTransfers";
   static const String _includeBikeSuggestions = "includeBikeSuggestions";
   static const String _typeBikingSpeed = "typeBikingSpeed";
-  static const String _includeParkAndRideSuggestions = "includeParkAndRideSuggestions";
+  static const String _includeParkAndRideSuggestions =
+      "includeParkAndRideSuggestions";
   static const String _includeCarSuggestions = "includeCarSuggestions";
   static const String _wheelchair = "wheelchair";
 
-  const SettingPanelState({
+  const PayloadDataPlanState({
     this.typeWalkingSpeed = WalkingSpeed.average,
     this.avoidWalking = false,
     this.transportModes = defaultTransportModes,
@@ -37,7 +38,7 @@ class SettingPanelState extends Equatable {
   final bool includeCarSuggestions;
   final bool wheelchair;
 
-  SettingPanelState copyWith({
+  PayloadDataPlanState copyWith({
     WalkingSpeed typeWalkingSpeed,
     List<TransportMode> transportModes,
     List<BikeRentalNetwork> bikeRentalNetworks,
@@ -49,24 +50,26 @@ class SettingPanelState extends Equatable {
     bool includeCarSuggestions,
     bool wheelchair,
   }) {
-    return SettingPanelState(
+    return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
       transportModes: transportModes ?? this.transportModes,
       bikeRentalNetworks: bikeRentalNetworks ?? this.bikeRentalNetworks,
       avoidTransfers: avoidTransfers ?? this.avoidTransfers,
       avoidWalking: avoidWalking ?? this.avoidWalking,
-      includeBikeSuggestions: includeBikeSuggestions ?? this.includeBikeSuggestions,
+      includeBikeSuggestions:
+          includeBikeSuggestions ?? this.includeBikeSuggestions,
       typeBikingSpeed: typeBikingSpeed ?? this.typeBikingSpeed,
       includeParkAndRideSuggestions:
           includeParkAndRideSuggestions ?? this.includeParkAndRideSuggestions,
-      includeCarSuggestions: includeCarSuggestions ?? this.includeCarSuggestions,
+      includeCarSuggestions:
+          includeCarSuggestions ?? this.includeCarSuggestions,
       wheelchair: wheelchair ?? this.wheelchair,
     );
   }
 
   // Json
-  factory SettingPanelState.fromJson(Map<String, dynamic> json) {
-    return SettingPanelState(
+  factory PayloadDataPlanState.fromJson(Map<String, dynamic> json) {
+    return PayloadDataPlanState(
       typeWalkingSpeed: getWalkingSpeed(json[_typeWalkingSpeed] as String),
       transportModes: json[_transportModes]
           .map<TransportMode>(
@@ -82,7 +85,8 @@ class SettingPanelState extends Equatable {
       avoidWalking: json[_avoidWalking] as bool,
       includeBikeSuggestions: json[_includeBikeSuggestions] as bool,
       typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as String),
-      includeParkAndRideSuggestions: json[_includeParkAndRideSuggestions] as bool,
+      includeParkAndRideSuggestions:
+          json[_includeParkAndRideSuggestions] as bool,
       includeCarSuggestions: json[_includeCarSuggestions] as bool,
       wheelchair: json[_wheelchair] as bool,
     );
@@ -92,9 +96,11 @@ class SettingPanelState extends Equatable {
     return {
       _typeWalkingSpeed: typeWalkingSpeed.name,
       _avoidWalking: avoidWalking,
-      _transportModes: transportModes.map((transportMode) => transportMode.name).toList(),
-      _bikeRentalNetworks:
-          bikeRentalNetworks.map((bikeRentalNetwork) => bikeRentalNetwork.name).toList(),
+      _transportModes:
+          transportModes.map((transportMode) => transportMode.name).toList(),
+      _bikeRentalNetworks: bikeRentalNetworks
+          .map((bikeRentalNetwork) => bikeRentalNetwork.name)
+          .toList(),
       _avoidTransfers: avoidTransfers,
       _includeBikeSuggestions: includeBikeSuggestions,
       _typeBikingSpeed: typeBikingSpeed.name,

@@ -23,12 +23,12 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
+import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/definition_feedback.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel.dart';
-import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
@@ -127,7 +127,8 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.serverType == ServerType.defaultServer
+            trufiConfiguration.generalConfiguration.serverType ==
+                    ServerType.defaultServer
                 ? OnlineRepository(
                     otpEndpoint: trufiConfiguration.url.otpEndpoint,
                   )
@@ -142,8 +143,9 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
-        BlocProvider<SettingPanelCubit>(
-          create: (context) => SettingPanelCubit(sharedPreferencesRepository),
+        BlocProvider<PayloadDataPlanCubit>(
+          create: (context) =>
+              PayloadDataPlanCubit(sharedPreferencesRepository),
           lazy: false,
         ),
       ],
@@ -194,6 +196,7 @@ class LocalizedMaterialApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
           theme: context.watch<ThemeCubit>().state.activeTheme,
