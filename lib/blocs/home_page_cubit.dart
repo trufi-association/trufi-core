@@ -80,14 +80,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(state.copyWith(showSuccessAnimation: show));
   }
 
-  Future<void> updateCurrentRoute(TrufiLocation fromLocation, TrufiLocation toLocation) async {
-    await updateMapRouteState(state.copyWith(
-      fromPlace: fromLocation,
-      toPlace: toLocation,
-      isFetching: true,
-    ));
-  }
-
   Future<void> refreshCurrentRoute() async {
     await updateMapRouteState(
       state.copyWith(

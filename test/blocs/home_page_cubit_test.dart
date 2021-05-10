@@ -143,10 +143,6 @@ void main() {
             plan:
                 PlanEntity(itineraries: [], from: PlanLocation(), to: PlanLocation()),
           ));
-          await cubit.updateCurrentRoute(
-            TrufiLocation(description: "Test1", longitude: 1.0, latitude: 1.0),
-            TrufiLocation(description: "Test2", longitude: 2.0, latitude: 2.0),
-          );
           return cubit;
         },
         skip: 1,
