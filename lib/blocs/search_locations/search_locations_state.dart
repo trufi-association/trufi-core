@@ -1,7 +1,6 @@
 part of 'search_locations_cubit.dart';
 
 class SearchLocationsState extends Equatable {
-
   final List<TrufiLocation> myPlaces;
   final List<TrufiLocation> myDefaultPlaces;
   final List<TrufiLocation> historyPlaces;
@@ -29,5 +28,5 @@ class SearchLocationsState extends Equatable {
   }
 
   @override
-  List<Object> get props => [myPlaces, myDefaultPlaces,historyPlaces, favoritePlaces];
+  List<Object> get props => [myPlaces, myDefaultPlaces, historyPlaces, favoritePlaces];
 }
