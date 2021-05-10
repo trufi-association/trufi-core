@@ -106,7 +106,6 @@ class FeedBackPageState extends State<FeedbackPage> {
           _launched = _launch(context, url);
         });
       },
-      heroTag: null,
       child: Icon(Icons.email, color: theme.primaryIconTheme.color),
     );
   }

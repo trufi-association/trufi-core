@@ -27,11 +27,10 @@ class SavedPlacesPage extends StatelessWidget {
         length: 2,
         child: Column(
           children: [
-            const SizedBox(height: 10),
             TabBar(
               tabs: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
                     // TODO translate
                     "Saved places",
@@ -39,7 +38,7 @@ class SavedPlacesPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
                     // TODO translate
                     "Favorite places",
@@ -53,15 +52,15 @@ class SavedPlacesPage extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  Scaffold(
-                    body: BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
-                      builder: (context, state) {
-                        return ListView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          children: [
-                            const SizedBox(height: 10),
-                            Builder(builder: (_) {
-                              return Column(
+                  Stack(
+                    children: [
+                      BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
+                        builder: (context, state) {
+                          return ListView(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            children: [
+                              const SizedBox(height: 10),
+                              Column(
                                 children: searchLocationsCubit.state.myDefaultPlaces.map(
                                   (place) {
                                     return LocationTiler(
@@ -72,39 +71,42 @@ class SavedPlacesPage extends StatelessWidget {
                                     );
                                   },
                                 ).toList(),
-                              );
-                            }),
-                            if (searchLocationsCubit.state.myPlaces.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                                // TODO translate
-                                child: Text('Custom Places', style: theme.textTheme.bodyText1),
                               ),
-                            Column(
-                              children: searchLocationsCubit.state.myPlaces
-                                  .map(
-                                    (place) => LocationTiler(
-                                        location: place,
-                                        enableSetIcon: true,
-                                        enableSetName: true,
-                                        enableSetPosition: true,
-                                        updateLocation: searchLocationsCubit.updateMyPlace,
-                                        removeLocation: searchLocationsCubit.deleteMyPlace),
-                                  )
-                                  .toList(),
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () {
-                        _addNewPlace(context);
-                      },
-                      backgroundColor: Theme.of(context).primaryColor,
-                      heroTag: null,
-                      child: const Icon(Icons.add),
-                    ),
+                              if (searchLocationsCubit.state.myPlaces.isNotEmpty)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  // TODO translate
+                                  child: Text('Custom Places', style: theme.textTheme.bodyText1),
+                                ),
+                              Column(
+                                children: searchLocationsCubit.state.myPlaces
+                                    .map(
+                                      (place) => LocationTiler(
+                                          location: place,
+                                          enableSetIcon: true,
+                                          enableSetName: true,
+                                          enableSetPosition: true,
+                                          updateLocation: searchLocationsCubit.updateMyPlace,
+                                          removeLocation: searchLocationsCubit.deleteMyPlace),
+                                    )
+                                    .toList(),
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                      Positioned(
+                        right: 15,
+                        bottom: 15,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            _addNewPlace(context);
+                          },
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: const Icon(Icons.add),
+                        ),
+                      ),
+                    ],
                   ),
                   BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                     builder: (context, state) {
