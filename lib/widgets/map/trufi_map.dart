@@ -13,7 +13,7 @@ import 'utils/trufi_map_utils.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
-class TrufiMap extends StatelessWidget {
+class TrufiMap extends StatefulWidget {
   const TrufiMap({
     Key key,
     @required this.controller,
@@ -30,33 +30,43 @@ class TrufiMap extends StatelessWidget {
   final PositionCallback onPositionChanged;
 
   @override
+  _TrufiMapState createState() => _TrufiMapState();
+}
+
+class _TrufiMapState extends State<TrufiMap> {
+  int mapZoom;
+  @override
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
     final currentMapType =
         context.watch<PreferencesCubit>().state.currentMapType;
     final currentLocation =
         context.watch<LocationProviderCubit>().state.currentLocation;
-    final activeCustomLayers =
-        context.watch<CustomLayersCubit>().activeCustomLayers;
+    final customLayersCubit = context.watch<CustomLayersCubit>();
     return FlutterMap(
-      mapController: controller.mapController,
+      mapController: widget.controller.mapController,
       options: MapOptions(
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         minZoom: cfg.map.onlineMinZoom,
         maxZoom: cfg.map.onlineMaxZoom,
         zoom: cfg.map.onlineZoom,
-        onTap: onTap,
-        onLongPress: onLongPress,
+        onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
         center: cfg.map.center,
         onPositionChanged: (
           MapPosition position,
           bool hasGesture,
         ) {
-          if (onPositionChanged != null) {
+          if (widget.onPositionChanged != null) {
             Future.delayed(Duration.zero, () {
-              onPositionChanged(position, hasGesture);
+              widget.onPositionChanged(position, hasGesture);
             });
           }
+          // fix render issue
+          Future.delayed(Duration.zero, () {
+            final int zoom = position.zoom.round();
+            if (mapZoom != zoom) setState(() => mapZoom = zoom);
+          });
         },
       ),
       layers: [
@@ -64,9 +74,9 @@ class TrufiMap extends StatelessWidget {
           getTilesEndpointForMapType(currentMapType),
           tileProviderKey: cfg.map.mapTilerKey,
         ),
-        ...activeCustomLayers,
+        ...customLayersCubit.activeCustomLayers(mapZoom),
         buildYourLocationMarkerOption(currentLocation),
-        ...layerOptionsBuilder(context)
+        ...widget.layerOptionsBuilder(context)
       ],
     );
   }
