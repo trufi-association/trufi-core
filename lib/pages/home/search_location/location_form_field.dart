@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/location/location_search_delegate.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import '../../../trufi_models.dart';
 
@@ -23,6 +24,7 @@ class LocationFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     final textStyle = theme.textTheme.bodyText1;
     final hintStyle = theme.textTheme.bodyText2.copyWith(
       color: theme.textTheme.caption.color,
@@ -73,7 +75,7 @@ class LocationFormField extends StatelessWidget {
                             text: value != null
                                 ? TextSpan(
                                     style: textStyle,
-                                    text: value.displayName,
+                                    text: value.translateValue(localization),
                                   )
                                 : TextSpan(
                                     style: hintStyle,

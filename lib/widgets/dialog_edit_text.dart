@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-class SetDescriptionDialog extends StatefulWidget {
+class DialogEditText extends StatefulWidget {
   final String initText;
 
-  const SetDescriptionDialog({this.initText = "", Key key}) : super(key: key);
+  const DialogEditText({this.initText = "", Key key}) : super(key: key);
 
   @override
-  _SetDescriptionDialogState createState() => _SetDescriptionDialogState();
+  _DialogEditTextState createState() => _DialogEditTextState();
 }
 
-class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
+class _DialogEditTextState extends State<DialogEditText> {
   TextEditingController textController = TextEditingController();
   bool _hasInputError = true;
 
@@ -36,14 +36,17 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
     return AlertDialog(
       title: Text(
         localization.savedPlacesEnterNameTitle,
+        style: theme.textTheme.bodyText1,
       ),
       content: TextField(
         decoration: InputDecoration(
           focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            color: theme.accentColor,
-          )),
+            borderSide: BorderSide(
+              color: theme.accentColor,
+            ),
+          ),
         ),
+        style: theme.textTheme.bodyText1,
         onChanged: (value) {
           _hasInputError = !_validateInput(value);
         },
@@ -53,23 +56,19 @@ class _SetDescriptionDialogState extends State<SetDescriptionDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          style: TextButton.styleFrom(
-            textStyle: TextStyle(color: theme.accentColor),
-          ),
           onPressed: () {
             Navigator.pop(context);
           },
           child: Text(
             localization.commonCancel.toUpperCase(),
+            style: TextStyle(color: theme.primaryColor),
           ),
         ),
         TextButton(
-          style: TextButton.styleFrom(
-            textStyle: TextStyle(color: theme.accentColor),
-          ),
           onPressed: onSave,
           child: Text(
             localization.commonSave.toUpperCase(),
+            style: TextStyle(color: theme.primaryColor),
           ),
         ),
       ],

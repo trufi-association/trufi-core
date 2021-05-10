@@ -14,16 +14,16 @@ class SettingPanelState extends Equatable {
   static const String _wheelchair = "wheelchair";
 
   const SettingPanelState({
-    this.typeWalkingSpeed = WalkingSpeed.fast,
+    this.typeWalkingSpeed = WalkingSpeed.average,
     this.avoidWalking = false,
     this.transportModes = defaultTransportModes,
     this.bikeRentalNetworks = defaultBikeRentalNetworks,
     this.avoidTransfers = false,
     this.includeBikeSuggestions = true,
-    this.typeBikingSpeed = BikingSpeed.fast,
+    this.typeBikingSpeed = BikingSpeed.average,
     this.includeParkAndRideSuggestions = true,
     this.includeCarSuggestions = true,
-    this.wheelchair = true,
+    this.wheelchair = false,
   });
 
   final WalkingSpeed typeWalkingSpeed;
@@ -97,7 +97,7 @@ class SettingPanelState extends Equatable {
           bikeRentalNetworks.map((bikeRentalNetwork) => bikeRentalNetwork.name).toList(),
       _avoidTransfers: avoidTransfers,
       _includeBikeSuggestions: includeBikeSuggestions,
-      _typeBikingSpeed: typeBikingSpeed.value,
+      _typeBikingSpeed: typeBikingSpeed.name,
       _includeParkAndRideSuggestions: includeParkAndRideSuggestions,
       _includeCarSuggestions: includeCarSuggestions,
       _wheelchair: wheelchair,

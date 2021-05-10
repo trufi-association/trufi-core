@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
@@ -9,6 +11,20 @@ import '../widgets/map/trufi_map.dart';
 import '../widgets/map/utils/trufi_map_utils.dart';
 
 class ChooseLocationPage extends StatefulWidget {
+  static Future<LatLng> selectPosition(BuildContext context, {LatLng position}) {
+    return Navigator.of(context).push(
+      MaterialPageRoute<LatLng>(
+        builder: (BuildContext context) => ChooseLocationPage(
+          position: position,
+        ),
+      ),
+    );
+  }
+
+  const ChooseLocationPage({Key key, this.position}) : super(key: key);
+
+  final LatLng position;
+
   @override
   ChooseLocationPageState createState() => ChooseLocationPageState();
 }
@@ -23,6 +39,14 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     super.initState();
     final cfg = TrufiConfiguration();
     _chooseOnMapMarker = buildToMarker(cfg.map.center);
+    if (widget.position != null) {
+      _trufiMapController.outMapReady.listen((_) {
+        _trufiMapController.move(
+          center: widget.position,
+          zoom: cfg.map.chooseLocationZoom,
+        );
+      });
+    }
   }
 
   @override
