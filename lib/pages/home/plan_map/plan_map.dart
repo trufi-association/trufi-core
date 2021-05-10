@@ -119,7 +119,7 @@ class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin 
           child: Column(
             children: [
               const MapTypeButton(),
-              if (TrufiConfiguration().generalConfiguration.typeServer == ServerType.graphQLServer)
+              if (TrufiConfiguration().generalConfiguration.serverType == ServerType.graphQLServer)
                 const MapSettingButton()
               else
                 Container(),
