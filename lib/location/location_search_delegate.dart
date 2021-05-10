@@ -367,7 +367,7 @@ class _BuildChooseOnMap extends StatelessWidget {
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
     final LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
-        builder: (context) => ChooseLocationPage(),
+        builder: (context) => const ChooseLocationPage(),
       ),
     );
     if (mapLocation != null && onMapTapped != null) {
