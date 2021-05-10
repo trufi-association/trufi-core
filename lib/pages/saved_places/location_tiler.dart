@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/app_review_cubit.dart';
 
-import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
-import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/trufi_models.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
-import 'package:trufi_core/widgets/alerts.dart';
 import 'package:trufi_core/widgets/dialog_edit_text.dart';
-import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../choose_location.dart';
 import 'dialog_select_icon.dart';
@@ -65,13 +57,6 @@ class LocationTiler extends StatelessWidget {
             if (location.isLatLngDefined)
               PopupMenuButton<int>(
                 itemBuilder: (BuildContext context) => [
-                  PopupMenuItem(
-                    value: 0,
-                    child: Text(
-                      "Show route",
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  ),
                   if (enableSetIcon)
                     PopupMenuItem(
                       value: 1,
@@ -106,9 +91,7 @@ class LocationTiler extends StatelessWidget {
                     ),
                 ],
                 onSelected: (int index) async {
-                  if (index == 0) {
-                    await _getRoute(context);
-                  } else if (index == 1) {
+                  if (index == 1) {
                     await _changeIcon(context);
                   } else if (index == 2) {
                     await _changeName(context);
@@ -141,33 +124,6 @@ class LocationTiler extends StatelessWidget {
     );
   }
 
-  Future<void> _getRoute(BuildContext context) async {
-    final locationProviderCubit = context.read<LocationProviderCubit>();
-    if (locationProviderCubit.state.currentLocation == null) {
-      await showDialog(
-        context: context,
-        builder: (context) => buildAlertLocationServicesDenied(context),
-      );
-    }
-    if (locationProviderCubit.state.currentLocation == null) return;
-
-    final TrufiLocation currentLocation = TrufiLocation.fromLatLng(
-      TrufiLocalization.of(context).searchItemYourLocation,
-      locationProviderCubit.state.currentLocation,
-    );
-
-    final homePageCubit = context.read<HomePageCubit>();
-    final appReviewCubit = context.read<AppReviewCubit>();
-    final correlationId = context.read<PreferencesCubit>().state.correlationId;
-    final settingPanelCubit = context.read<SettingPanelCubit>();
-    await homePageCubit.updateCurrentRoute(currentLocation, location);
-    homePageCubit
-        .fetchPlan(correlationId, advancedOptions: settingPanelCubit.state)
-        .then((value) => appReviewCubit.incrementReviewWorthyActions())
-        .catchError((error) => onFetchError(context, error as Exception));
-    Navigator.pop(context);
-  }
-
   Future<void> _changeIcon(BuildContext context) async {
     final type = await showDialog<String>(
       context: context,
@@ -188,11 +144,16 @@ class LocationTiler extends StatelessWidget {
   Future<void> _changePosition(BuildContext context) async {
     final LatLng mapLocation = await ChooseLocationPage.selectPosition(
       context,
-      position: location.isLatLngDefined ? LatLng(location.latitude, location.longitude) : null,
+      position: location.isLatLngDefined
+          ? LatLng(location.latitude, location.longitude)
+          : null,
     );
-    updateLocation(
-      location,
-      location.copyWith(longitude: mapLocation.longitude, latitude: mapLocation.latitude),
-    );
+    if (mapLocation != null) {
+      updateLocation(
+        location,
+        location.copyWith(
+            longitude: mapLocation.longitude, latitude: mapLocation.latitude),
+      );
+    }
   }
 }
