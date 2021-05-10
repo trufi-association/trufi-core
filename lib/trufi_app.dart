@@ -26,7 +26,10 @@ import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'pages/app_lifecycle_reactor.dart';
+import 'pages/home/plan_map/setting_panel/setting_panel.dart';
+import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
+import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
@@ -117,9 +120,13 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            OnlineGraphQLRepository(
-              graphQLEndPoint: trufiConfiguration.url.otpEndpoint,
-            ),
+            trufiConfiguration.generalConfiguration.typeServer == ServerType.defaultServer
+                ? OnlineRepository(
+                    otpEndpoint: trufiConfiguration.url.otpEndpoint,
+                  )
+                : OnlineGraphQLRepository(
+                    graphQLEndPoint: trufiConfiguration.url.otpEndpoint,
+                  ),
           ),
         ),
         BlocProvider<LocationProviderCubit>(
@@ -127,6 +134,10 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
+        ),
+        BlocProvider<SettingPanelCubit>(
+          create: (context) => SettingPanelCubit(sharedPreferencesRepository),
+          lazy: false,
         ),
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
@@ -158,6 +169,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
       TeamPage.route: (context) => const TeamPage(),
+      SettingPanel.route: (context) => const SettingPanel(),
     };
 
     return BlocBuilder<PreferencesCubit, Preference>(

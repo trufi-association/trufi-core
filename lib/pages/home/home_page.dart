@@ -18,6 +18,7 @@ import '../../trufi_models.dart';
 import '../../widgets/trufi_drawer.dart';
 import 'form_fields_landscape.dart';
 import 'form_fields_portrait.dart';
+import 'plan_map/setting_panel/setting_panel_cubit.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
@@ -104,9 +105,10 @@ class HomePage extends StatelessWidget {
   Future<void> _callFetchPlan(BuildContext context) async {
     final homePageCubit = context.read<HomePageCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
+    final settingPanelCubit = context.read<SettingPanelCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(correlationId)
+        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }
