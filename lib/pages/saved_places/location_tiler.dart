@@ -46,9 +46,7 @@ class LocationTiler extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 5),
       child: ElevatedButton(
         onPressed: () {
-          if (location.isLatLngDefined) {
-            _getRoute(context);
-          } else {
+          if (!location.isLatLngDefined) {
             _changePosition(context);
           }
         },
@@ -67,6 +65,13 @@ class LocationTiler extends StatelessWidget {
             if (location.isLatLngDefined)
               PopupMenuButton<int>(
                 itemBuilder: (BuildContext context) => [
+                  PopupMenuItem(
+                    value: 0,
+                    child: Text(
+                      "Show route",
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ),
                   if (enableSetIcon)
                     PopupMenuItem(
                       value: 1,
@@ -101,7 +106,9 @@ class LocationTiler extends StatelessWidget {
                     ),
                 ],
                 onSelected: (int index) async {
-                  if (index == 1) {
+                  if (index == 0) {
+                    await _getRoute(context);
+                  } else if (index == 1) {
                     await _changeIcon(context);
                   } else if (index == 2) {
                     await _changeName(context);
