@@ -60,9 +60,8 @@ class FeedbackPage extends StatelessWidget {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  // TODO translate
                   content: Text(
-                    "Could not open mail feedback app, the url or email is incorrect",
+                    localization.errorEmailFeedback,
                     style: theme.textTheme.bodyText1,
                   ),
                   actions: <Widget>[

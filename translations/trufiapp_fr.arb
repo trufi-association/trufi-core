@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-04-13T17:11:23+02:00",
+    "@@last_modified": "2021-05-08T19:16:44+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "notes": [
@@ -269,6 +269,10 @@
             }
         ],
         "description": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+    },
+    "errorEmailFeedback": "Could not open mail feedback app, the URL or email is incorrect",
+    "@errorEmailFeedback": {
+        "description": "Error Dialog in the Feedback Form"
     },
     "errorNoBarrierFree": "L'origine et la destination ne sont pas accessibles en fauteuil roulant.",
     "@errorNoBarrierFree": {
