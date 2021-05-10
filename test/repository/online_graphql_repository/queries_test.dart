@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core/models/enums/plan_enums.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/queries.dart';
 
 void main() {

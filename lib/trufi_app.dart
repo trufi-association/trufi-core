@@ -18,7 +18,7 @@ import './blocs/location_search_bloc.dart';
 import './blocs/preferences_cubit.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
-import './pages/saved_places.dart';
+import './pages/saved_places/saved_places.dart';
 import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
