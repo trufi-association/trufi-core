@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-04-13T17:11:23+02:00",
+    "@@last_modified": "2021-05-08T19:16:44+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "notes": [
@@ -269,6 +269,10 @@
             }
         ],
         "description": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+    },
+    "errorEmailFeedback": "Could not open mail feedback app, the URL or email is incorrect",
+    "@errorEmailFeedback": {
+        "description": "Error Dialog in the Feedback Form"
     },
     "errorNoBarrierFree": "bafakeke matenu ayi afisi netso kple afisi neyina o",
     "@errorNoBarrierFree": {

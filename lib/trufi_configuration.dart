@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
+import 'models/definition_feedback.dart';
+import 'widgets/map/map_copyright.dart';
+
 enum ServerType { defaultServer, graphQLServer }
 
 class TrufiConfiguration {
@@ -23,6 +26,7 @@ class TrufiConfiguration {
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();
   final generalConfiguration = TrufiGeneralConfiguration();
+  final configurationDrawer = TrufiConfigurationDrawer();
 
   // TODO: Could be removed by a Collection of Locale
   final List<TrufiConfigurationLanguage> languages = [];
@@ -32,7 +36,7 @@ class TrufiConfiguration {
 
 class TrufiGeneralConfiguration {
   String appCity = "Cochabamba";
-  ServerType typeServer = ServerType.defaultServer;
+  ServerType serverType = ServerType.defaultServer;
   bool debug = false;
 }
 
@@ -89,6 +93,8 @@ class TrufiConfigurationMap {
   LatLng center = LatLng(5.574558, -0.214656);
   LatLng southWest = LatLng(5.510057, -0.328217);
   LatLng northEast = LatLng(5.726678, 0.071411);
+  // ignore: prefer_function_declarations_over_variables
+  WidgetBuilder buildMapAttribution = (context) => MapTileAndOSMCopyright();
 }
 
 class TrufiConfigurationUrl {
@@ -106,4 +112,8 @@ class TrufiConfigurationUrl {
   String twitter = "";
   String donate = "";
   String share = "";
+}
+
+class TrufiConfigurationDrawer {
+  DefinitionFeedBack definitionFeedBack;
 }

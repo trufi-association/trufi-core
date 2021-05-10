@@ -103,11 +103,12 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localization.menuYourPlaces,
             SavedPlacesPage.route,
           ),
-          _buildListItem(
-            Icons.feedback,
-            localization.menuFeedback,
-            FeedbackPage.route,
-          ),
+          if (cfg.configurationDrawer.definitionFeedBack != null)
+            _buildListItem(
+              Icons.feedback,
+              localization.menuFeedback,
+              FeedbackPage.route,
+            ),
           _buildListItem(
             Icons.people,
             localization.menuTeam,

@@ -35,6 +35,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final trufiConfiguration = TrufiConfiguration();
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -72,14 +73,25 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
           )
         ],
       ),
-      body: TrufiMap(
-        controller: _trufiMapController,
-        onPositionChanged: _handleOnMapPositionChanged,
-        layerOptionsBuilder: (context) {
-          return <LayerOptions>[
-            MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
-          ];
-        },
+      body: Stack(
+        children: [
+          TrufiMap(
+            controller: _trufiMapController,
+            onPositionChanged: _handleOnMapPositionChanged,
+            layerOptionsBuilder: (context) {
+              return <LayerOptions>[
+                MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
+              ];
+            },
+          ),
+          Positioned(
+            bottom: 0,
+            left: 10,
+            child: SafeArea(
+              child: trufiConfiguration.map.buildMapAttribution(context),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: YourLocationButton(
         trufiMapController: _trufiMapController,
