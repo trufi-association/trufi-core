@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/widgets/map_setting_button.dart';
 
-import 'itinerary_date_selector.dart';
+import 'date_time_picker/itinerary_date_selector.dart';
+import 'setting_panel/map_setting_button.dart';
 
 class SettingPayload extends StatelessWidget {
   const SettingPayload({Key key, @required this.onFetchPlan}) : super(key: key);

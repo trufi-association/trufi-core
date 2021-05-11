@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel.dart';
+import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 
 class MapSettingButton extends StatelessWidget {
   const MapSettingButton({Key key, @required this.onFetchPlan})
