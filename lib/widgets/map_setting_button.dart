@@ -1,43 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel.dart';
-import 'fetch_error_handler.dart';
 
 class MapSettingButton extends StatelessWidget {
-  const MapSettingButton({Key key}) : super(key: key);
+  const MapSettingButton({Key key, @required this.onFetchPlan})
+      : super(key: key);
+
+  final void Function() onFetchPlan;
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      mini: true,
-      backgroundColor: Theme.of(context).backgroundColor,
-      onPressed: () async {
-        final oldPayloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
-        final correlationId =
-            context.read<PreferencesCubit>().state.correlationId;
-        final PayloadDataPlanState newPayloadDataPlanState =
-            await Navigator.of(context).push(
-          MaterialPageRoute<PayloadDataPlanState>(
-            builder: (BuildContext context) => const SettingPanel(),
-          ),
-        );
-        if (oldPayloadDataPlanState != newPayloadDataPlanState) {
-          final homePageCubit = context.read<HomePageCubit>();
-          await homePageCubit.refreshCurrentRoute();
-          final appReviewCubit = context.read<AppReviewCubit>();
-          await homePageCubit
-              .fetchPlan(correlationId, advancedOptions: newPayloadDataPlanState)
-              .then((value) => appReviewCubit.incrementReviewWorthyActions())
-              .catchError((error) => onFetchError(context, error as Exception));
-        }
-      },
-      heroTag: null,
-      child: const Icon(Icons.tune, color: Colors.black),
+    final theme = Theme.of(context);
+    return Container(
+      height: 37,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+      child: InkWell(
+        onTap: () async {
+          final oldPayloadDataPlanState =
+              context.read<PayloadDataPlanCubit>().state;
+
+          final PayloadDataPlanState newPayloadDataPlanState =
+              await Navigator.of(context).push(
+            MaterialPageRoute<PayloadDataPlanState>(
+              builder: (BuildContext context) => const SettingPanel(),
+            ),
+          );
+
+          if (oldPayloadDataPlanState != newPayloadDataPlanState) {
+            onFetchPlan();
+          }
+        },
+        child: Row(
+          children: [
+            Icon(Icons.tune, color: theme.backgroundColor),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: Text(
+                "Settings",
+                style: theme.textTheme.subtitle1,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

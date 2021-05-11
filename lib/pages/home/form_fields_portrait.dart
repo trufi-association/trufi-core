@@ -6,7 +6,9 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
+import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
+import 'date_time_picker/setting_payload.dart';
 import 'home_buttons.dart';
 import 'search_location/location_form_field.dart';
 
@@ -15,12 +17,14 @@ class FormFieldsPortrait extends StatelessWidget {
     Key key,
     @required this.onSaveFrom,
     @required this.onSaveTo,
+    @required this.onFetchPlan,
     @required this.onReset,
     @required this.onSwap,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
   final void Function(TrufiLocation) onSaveTo;
+  final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
 
@@ -57,6 +61,9 @@ class FormFieldsPortrait extends StatelessWidget {
                   : null,
               value: homePageState.toPlace,
             ),
+            if (TrufiConfiguration().generalConfiguration.serverType ==
+                ServerType.graphQLServer)
+              SettingPayload(onFetchPlan: onFetchPlan),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -95,7 +96,10 @@ String getCustomPlan({
   @required double fromLon,
   @required double toLat,
   @required double toLon,
-  List<TransportMode> transportModes = const [TransportMode.transit, TransportMode.walk],
+  List<TransportMode> transportModes = const [
+    TransportMode.transit,
+    TransportMode.walk
+  ],
 }) {
   final transportMode = _parseTransportModes(transportModes);
   return '''
@@ -161,7 +165,10 @@ String getPlanAdvanced({
   int minTransferTime = 120,
   int transferPenalty = 0,
   String locale = "en",
-  List<TransportMode> transportModes = const [TransportMode.transit, TransportMode.walk],
+  List<TransportMode> transportModes = const [
+    TransportMode.transit,
+    TransportMode.walk
+  ],
   List<BikeRentalNetwork> bikeRentalNetworks = const [
     BikeRentalNetwork.regioRad,
     BikeRentalNetwork.taxi,
@@ -171,8 +178,7 @@ String getPlanAdvanced({
   WalkBoardCost walkBoardCost = WalkBoardCost.defaultCost,
   WalkingSpeed walkingSpeed = WalkingSpeed.fast,
   BikingSpeed bikeSpeed = BikingSpeed.average,
-  String date,
-  String time,
+  DateTime date,
 }) {
   final dataTransportModes = _parseTransportModes(transportModes);
   final dataBikeRentalNetwork = _parseBikeRentalNetworks(bikeRentalNetworks);
@@ -182,13 +188,14 @@ String getPlanAdvanced({
   final triangleOption = optimize == OptimizeType.triangle
       ? "triangle: {safetyFactor: 0.4, slopeFactor: 0.3, timeFactor: 0.3}"
       : '';
-  date ??= _todayMonthDayYear();
+  final dateValue = _parseDate(date);
+  final timeValue = _parseTime(date);
   return '''
     plan(
       allowedBikeRentalNetworks: $dataBikeRentalNetwork
       arriveBy: $arriveBy
       bikeSpeed: ${bikeSpeed.value}
-      date: $date
+      date: $dateValue
       disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic
       from: {lat: $fromLat, lon:  $fromLon}
       intermediatePlaces: []
@@ -200,6 +207,7 @@ String getPlanAdvanced({
       numItineraries: 5
       optimize: ${optimize.name}
       $triangleOption
+      time: $timeValue
       to: {lat: $toLat, lon:  $toLon}
       transferPenalty: $transferPenalty
       unpreferred: {useUnpreferredRoutesPenalty: 1200}
@@ -261,9 +269,12 @@ String _parseBikeRentalNetworks(List<BikeRentalNetwork> list) {
   return '[$dataParse]';
 }
 
-String _todayMonthDayYear() {
-  final today = DateTime.now();
-  final dataDate =
-      "${today.year}${"-${today.month.toString().padLeft(2, '0')}"}${"-${today.day.toString().padLeft(2, '0')}"}";
-  return '"$dataDate"';
+String _parseDate(DateTime date) {
+  final tempDate = date ?? DateTime.now();
+  return '"${DateFormat('yyyy-MM-dd').format(tempDate)}"';
+}
+
+String _parseTime(DateTime date) {
+  final tempDate = date ?? DateTime.now();
+  return '"${DateFormat('kk:mm:ss').format(tempDate)}"';
 }

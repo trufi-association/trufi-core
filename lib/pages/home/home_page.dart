@@ -36,19 +36,29 @@ class HomePage extends StatelessWidget {
 
     final cfg = TrufiConfiguration();
     final homePageCubit = context.watch<HomePageCubit>();
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
+    final isGraphQlEndpoint =
+        TrufiConfiguration().generalConfiguration.serverType ==
+            ServerType.graphQLServer;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(
         bottom: PreferredSize(
           preferredSize: isPortrait
-              ? const Size.fromHeight(45.0)
-              : const Size.fromHeight(0.0),
+              ? Size.fromHeight(isGraphQlEndpoint ? 77.0 : 45.0)
+              : Size.fromHeight(isGraphQlEndpoint ? 33.0 : 0.0),
           child: Container(),
         ),
         flexibleSpace: isPortrait
             ? FormFieldsPortrait(
-                onReset: () => homePageCubit.reset(),
+                onFetchPlan: () {
+                  _callFetchPlan(context);
+                },
+                onReset: () async {
+                  await homePageCubit.reset();
+                  await payloadDataPlanCubit.resetDataDate();
+                },
                 onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
                     .setFromPlace(fromPlace)
                     .then((value) => _callFetchPlan(context)),
@@ -60,6 +70,9 @@ class HomePage extends StatelessWidget {
                     .then((value) => _callFetchPlan(context)),
               )
             : FormFieldsLandscape(
+                onFetchPlan: () {
+                  _callFetchPlan(context);
+                },
                 onReset: () => homePageCubit.reset(),
                 onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
                     .setFromPlace(fromPlace)
@@ -107,6 +120,7 @@ class HomePage extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    await homePageCubit.refreshCurrentRoute();
     await homePageCubit
         .fetchPlan(correlationId, advancedOptions: payloadDataPlanCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
