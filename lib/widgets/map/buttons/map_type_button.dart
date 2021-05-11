@@ -3,29 +3,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/custom_layer/custom_layers_cubit.dart';
 import 'package:trufi_core/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 
 class MapTypeButton extends StatelessWidget {
   const MapTypeButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final cfg = TrufiConfiguration();
-    return (cfg.map.satelliteMapTypeEnabled || cfg.map.terrainMapTypeEnabled)
-        ? FloatingActionButton(
-            mini: true,
-            backgroundColor: Theme.of(context).backgroundColor,
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => _BuildMapTypeBottomSheet(),
-                backgroundColor: Theme.of(context).backgroundColor,
-              );
-            },
-            heroTag: null,
-            child: const Icon(Icons.layers, color: Colors.black),
-          )
-        : Container();
+    return FloatingActionButton(
+      mini: true,
+      backgroundColor: Theme.of(context).backgroundColor,
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => _BuildMapTypeBottomSheet(),
+          backgroundColor: Theme.of(context).backgroundColor,
+        );
+      },
+      heroTag: null,
+      child: const Icon(Icons.layers, color: Colors.black),
+    );
   }
 }
 
@@ -83,39 +79,36 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final mapTileProviderCubit = context.watch<MapTileProviderCubit>();
     return SafeArea(
-      child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            _MapItemsSelector(),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(localization.mapTypeLabel,
-                  style: theme.textTheme.bodyText1),
-            ),
-            SizedBox(
-              height: 100,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: mapTileProviderCubit.mapTileProviders
-                    .map(
-                      (mapTileProvider) => _BuildMapTypeOptionButton(
-                        image: mapTileProvider.imageBuilder(context),
-                        label: mapTileProvider.id,
-                        onPressed: () {
-                          mapTileProviderCubit
-                              .changeMapTileProvider(mapTileProvider);
-                        },
-                        active:
-                            mapTileProviderCubit.state.currentMapTileProvider ==
-                                mapTileProvider,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ]),
+      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        _MapItemsSelector(),
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          child:
+              Text(localization.mapTypeLabel, style: theme.textTheme.bodyText1),
+        ),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: mapTileProviderCubit.mapTileProviders
+                .map(
+                  (mapTileProvider) => _BuildMapTypeOptionButton(
+                    image: mapTileProvider.imageBuilder(context),
+                    label: mapTileProvider.id,
+                    onPressed: () {
+                      mapTileProviderCubit
+                          .changeMapTileProvider(mapTileProvider);
+                    },
+                    active: mapTileProviderCubit.state.currentMapTileProvider ==
+                        mapTileProvider,
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ]),
     );
   }
 }

@@ -102,6 +102,9 @@ class TrufiApp extends StatelessWidget {
   /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
   /// if the FeedBack is null, the comment page is not created.
   final DefinitionFeedBack feedBack;
+
+  /// List of Map Tile Provider
+  /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
   final List<MapTileProvider> mapTileProviders;
   @override
   Widget build(BuildContext context) {
@@ -121,7 +124,10 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<MapTileProviderCubit>(
           create: (context) => MapTileProviderCubit(
-            mapTileProviders: mapTileProviders ?? [OSMDefaultMapTile()],
+            mapTileProviders:
+                mapTileProviders != null && mapTileProviders.isNotEmpty
+                    ? mapTileProviders
+                    : [OSMDefaultMapTile()],
           ),
         ),
         BlocProvider<AppReviewCubit>(

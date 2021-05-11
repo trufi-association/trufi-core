@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 class Preference extends Equatable {
-  const Preference(this.languageCode, this.correlationId, this.currentMapType,
-      {this.loadOnline});
+  const Preference(
+    this.languageCode,
+    this.correlationId, {
+    this.loadOnline,
+  });
 
   final String languageCode;
   final String correlationId;
-  final String currentMapType;
   final bool loadOnline;
 
   Preference copyWith({
@@ -18,17 +20,15 @@ class Preference extends Equatable {
     return Preference(
       languageCode ?? this.languageCode,
       correlationId ?? this.correlationId,
-      currentMapType ?? this.currentMapType,
       loadOnline: loadOnline ?? this.loadOnline,
     );
   }
 
   @override
-  List<Object> get props =>
-      [languageCode, correlationId, currentMapType, loadOnline];
+  List<Object> get props => [languageCode, correlationId, loadOnline];
 
   @override
   String toString() {
-    return "Preference {languageCode: $languageCode, correlationId: $correlationId, currentMapType: $currentMapType, loadOnline: $loadOnline}";
+    return "Preference {languageCode: $languageCode, correlationId: $correlationId, loadOnline: $loadOnline}";
   }
 }
