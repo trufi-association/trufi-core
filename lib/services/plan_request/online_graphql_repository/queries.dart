@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import 'package:trufi_core/models/enums/plan_enums.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 // String getPlanComplete({
 //   @required double fromLat,

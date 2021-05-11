@@ -1,4 +1,4 @@
-part of 'plan_enums.dart';
+part of 'enums_plan.dart';
 
 enum WalkingSpeed { slow, calm, average, prompt, fast }
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 
 import '../../../composite_subscription.dart';
-import '../../../custom_icons.dart';
+import '../../../utils/util_icons/custom_icons.dart';
 
 class MyLocationMarker extends StatefulWidget {
   const MyLocationMarker({Key key}) : super(key: key);

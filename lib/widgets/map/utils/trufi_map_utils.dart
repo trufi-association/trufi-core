@@ -8,10 +8,8 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../../../custom_icons.dart';
+import '../../../utils/util_icons/custom_icons.dart';
 import 'your_location_marker.dart';
-
-
 
 Marker buildFromMarker(LatLng point) {
   return Marker(

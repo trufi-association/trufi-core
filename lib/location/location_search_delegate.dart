@@ -9,10 +9,10 @@ import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
+import 'package:trufi_core/utils/util_icons/icons.dart';
 
 import '../blocs/gps_location/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
-import '../custom_icons.dart';
 import '../pages/choose_location.dart';
 import '../trufi_models.dart';
 import '../widgets/alerts.dart';
@@ -184,7 +184,15 @@ class _SuggestionList extends StatelessWidget {
           const SliverPadding(padding: EdgeInsets.all(4.0)),
           _BuildYourLocation(onSelected),
           _BuildChooseOnMap(onSelected),
-          if (query.isEmpty) _BuildYourPlaces(onSelected: onSelected),
+          if (query.isEmpty)
+            _BuildYourPlaces(
+                onSelected: onSelected,
+                locations: searchLocationsCubit.state.myDefaultPlaces
+                    .where((element) => element.isLatLngDefined)
+                    .toList()),
+          if (query.isEmpty)
+            _BuildYourPlaces(
+                onSelected: onSelected, locations: searchLocationsCubit.state.myPlaces),
           if (query.isEmpty)
             _BuildObjectList(
               localization.searchTitleFavorites,
@@ -196,7 +204,7 @@ class _SuggestionList extends StatelessWidget {
           if (query.isEmpty)
             _BuildFutureBuilder(
               title: localization.searchTitleRecent,
-              future: searchLocationsCubit.getHistoryList(limit: 5),
+              future: searchLocationsCubit.getHistoryListWithLimit(limit: 5),
               iconData: Icons.history,
               onSelected: onSelected,
               onStreetTapped: onStreetTapped,
@@ -359,7 +367,7 @@ class _BuildChooseOnMap extends StatelessWidget {
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
     final LatLng mapLocation = await Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
-        builder: (context) => ChooseLocationPage(),
+        builder: (context) => const ChooseLocationPage(),
       ),
     );
     if (mapLocation != null && onMapTapped != null) {
@@ -372,32 +380,30 @@ class _BuildYourPlaces extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   const _BuildYourPlaces({
     @required this.onSelected,
+    @required this.locations,
   });
+
+  final List<TrufiLocation> locations;
 
   @override
   Widget build(BuildContext context) {
-    final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final List<TrufiLocation> locations =
-        searchLocationsCubit.state.myPlaces.reversed.toList();
+    final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
           final TrufiLocation location = locations[index];
           IconData localIconData = Icons.map;
           if (location.type != null) {
-            localIconData = _typeToIconData(location.type) ?? localIconData;
+            localIconData = typeToIconData(location.type) ?? localIconData;
           }
           return _BuildItem(
             () {
-              if (location != null) {
-                searchLocationsCubit.insertHistoryPlace(location);
-                if (onSelected != null) {
+              if (location != null && onSelected != null) {
                   onSelected(location);
-                }
               }
             },
             localIconData,
-            location.displayName,
+            location.translateValue(localization),
             subtitle: location.address,
           );
         },
@@ -424,6 +430,7 @@ class _BuildObjectList extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    final localization = TrufiLocalization.of(context);
     final theme = context.watch<ThemeCubit>().state.searchTheme;
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SliverList(
@@ -440,7 +447,7 @@ class _BuildObjectList extends StatelessWidget {
 
             // Use special type icon if available, fallback to default
             if (object.type != null) {
-              localIconData = _typeToIconData(object.type) ?? iconData;
+              localIconData = typeToIconData(object.type) ?? iconData;
             }
 
             return _BuildItem(
@@ -453,7 +460,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               localIconData,
-              object.displayName,
+              object.translateValue(localization),
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
@@ -591,131 +598,5 @@ class _BuildItem extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-IconData _typeToIconData(String type) {
-  switch (type) {
-    case 'amenity:bar':
-    case 'amenity:pub':
-    case 'amenity:biergarten':
-    case 'amenity:nightclub':
-      return Icons.local_bar;
-
-    case 'amenity:cafe':
-      return Icons.local_cafe;
-
-    case 'amenity:cinema':
-      return Icons.local_movies;
-
-    case 'amenity:pharmacy':
-      return Icons.local_pharmacy;
-
-    case 'amenity:fast_food':
-      return Icons.fastfood;
-
-    case 'amenity:food_court':
-    case 'amenity:restaurant':
-      return Icons.restaurant;
-
-    case 'amenity:theatre':
-      return Icons.local_play;
-
-    case 'amenity:parking':
-      return Icons.local_parking;
-
-    case 'amenity:doctors':
-    case 'amenity:dentist':
-    case 'amenity:veterinary':
-    case 'amenity:clinic':
-    case 'amenity:hospital':
-      return Icons.local_hospital;
-
-    case 'amenity:library':
-      return Icons.local_library;
-
-    case 'amenity:car_wash':
-      return Icons.local_car_wash;
-
-    case 'amenity:university':
-    case 'amenity:school':
-    case 'amenity:college':
-      return Icons.school;
-
-    case 'amenity:post_office':
-      return Icons.local_post_office;
-
-    case 'amenity:atm':
-      return Icons.local_atm;
-
-    case 'amenity:convenience':
-      return Icons.local_convenience_store;
-
-    case 'amenity:telephone':
-      return Icons.local_phone;
-
-    case 'amenity:internet_cafe':
-      return Icons.alternate_email;
-
-    case 'amenity:drinking_water':
-      return Icons.local_drink;
-
-    case 'amenity:charging_station':
-      return Icons.ev_station;
-
-    case 'amenity:fuel':
-      return Icons.local_gas_station;
-
-    case 'amenity:taxi':
-      return Icons.local_taxi;
-
-    case 'public_transport:platform':
-      return CustomIcons.busStop;
-
-    case 'shop:florist':
-      return Icons.local_florist;
-
-    case 'shop:convenience':
-      return Icons.local_convenience_store;
-
-    case 'shop:supermarket':
-      return Icons.local_grocery_store;
-
-    case 'shop:laundry':
-      return Icons.local_laundry_service;
-
-    case 'shop:copyshop':
-      return Icons.local_printshop;
-
-    case 'shop:mall':
-      return Icons.local_mall;
-
-    case 'tourism:hotel':
-    case 'tourism:hostel':
-    case 'tourism:guest_house':
-    case 'tourism:motel':
-    case 'tourism:apartment':
-      return Icons.local_hotel;
-
-    case 'saved_place:fastfood':
-      return Icons.fastfood;
-
-    case 'saved_place:home':
-      return Icons.home;
-
-    case 'saved_place:local_cafe':
-      return Icons.local_cafe;
-
-    case 'saved_place:map':
-      return Icons.map;
-
-    case 'saved_place:work':
-      return Icons.work;
-
-    case 'saved_place:school':
-      return Icons.school;
-
-    default:
-      return null;
   }
 }
