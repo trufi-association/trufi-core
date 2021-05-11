@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
@@ -14,14 +13,12 @@ const double customOverlayWidgetMargin = 80;
 class PlanEmptyPage extends StatefulWidget {
   const PlanEmptyPage(
       {this.initialPosition,
-      this.onLongPress,
       this.customOverlayWidget,
       this.customBetweenFabWidget,
       Key key})
       : super(key: key);
 
   final LatLng initialPosition;
-  final LongPressCallback onLongPress;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
 

@@ -8,6 +8,7 @@ import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
+import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
@@ -24,13 +25,12 @@ import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
 import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
+import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/definition_feedback.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
-import 'pages/home/plan_map/setting_panel/setting_panel.dart';
-import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
@@ -157,8 +157,9 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
-        BlocProvider<SettingPanelCubit>(
-          create: (context) => SettingPanelCubit(sharedPreferencesRepository),
+        BlocProvider<PayloadDataPlanCubit>(
+          create: (context) =>
+              PayloadDataPlanCubit(sharedPreferencesRepository),
           lazy: false,
         ),
       ],
@@ -209,6 +210,7 @@ class LocalizedMaterialApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
           theme: context.watch<ThemeCubit>().state.activeTheme,

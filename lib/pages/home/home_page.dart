@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
@@ -18,7 +18,6 @@ import '../../trufi_models.dart';
 import '../../widgets/trufi_drawer.dart';
 import 'form_fields_landscape.dart';
 import 'form_fields_portrait.dart';
-import 'plan_map/setting_panel/setting_panel_cubit.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
@@ -36,19 +35,29 @@ class HomePage extends StatelessWidget {
 
     final cfg = TrufiConfiguration();
     final homePageCubit = context.watch<HomePageCubit>();
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
+    final isGraphQlEndpoint =
+        TrufiConfiguration().generalConfiguration.serverType ==
+            ServerType.graphQLServer;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(
         bottom: PreferredSize(
           preferredSize: isPortrait
-              ? const Size.fromHeight(45.0)
-              : const Size.fromHeight(0.0),
+              ? Size.fromHeight(isGraphQlEndpoint ? 77.0 : 45.0)
+              : Size.fromHeight(isGraphQlEndpoint ? 33.0 : 0.0),
           child: Container(),
         ),
         flexibleSpace: isPortrait
             ? FormFieldsPortrait(
-                onReset: () => homePageCubit.reset(),
+                onFetchPlan: () {
+                  _callFetchPlan(context);
+                },
+                onReset: () async {
+                  await homePageCubit.reset();
+                  await payloadDataPlanCubit.resetDataDate();
+                },
                 onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
                     .setFromPlace(fromPlace)
                     .then((value) => _callFetchPlan(context)),
@@ -60,6 +69,9 @@ class HomePage extends StatelessWidget {
                     .then((value) => _callFetchPlan(context)),
               )
             : FormFieldsLandscape(
+                onFetchPlan: () {
+                  _callFetchPlan(context);
+                },
                 onReset: () => homePageCubit.reset(),
                 onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
                     .setFromPlace(fromPlace)
@@ -86,9 +98,6 @@ class HomePage extends StatelessWidget {
                       customBetweenFabWidget,
                     )
                   : PlanEmptyPage(
-                      onLongPress: (LatLng point) => homePageCubit
-                          .mapLongPress(point)
-                          .then((value) => _callFetchPlan(context)),
                       customOverlayWidget: customOverlayWidget,
                       customBetweenFabWidget: customBetweenFabWidget,
                     ),
@@ -105,10 +114,10 @@ class HomePage extends StatelessWidget {
   Future<void> _callFetchPlan(BuildContext context) async {
     final homePageCubit = context.read<HomePageCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
-    final settingPanelCubit = context.read<SettingPanelCubit>();
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(correlationId,advancedOptions: settingPanelCubit.state)
+        .fetchPlan(correlationId, advancedOptions: payloadDataPlanCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }

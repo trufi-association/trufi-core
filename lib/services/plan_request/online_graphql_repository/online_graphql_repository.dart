@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../../../trufi_models.dart';
@@ -27,7 +27,7 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required String correlationId,
-    SettingPanelState advancedOptions,
+    PayloadDataPlanState advancedOptions,
   }) async {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, [TransportMode.transit, TransportMode.walk]);
@@ -90,12 +90,14 @@ class OnlineGraphQLRepository implements RequestManager {
   Future<PlanEntity> _fetchPlanAdvanced({
     @required TrufiLocation from,
     @required TrufiLocation to,
-    @required SettingPanelState advancedOptions,
+    @required PayloadDataPlanState advancedOptions,
   }) async {
     final Uri request = Uri.parse(
       graphQLEndPoint,
     );
     final queryPlan = queries.getPlanAdvanced(
+      arriveBy: advancedOptions.arriveBy,
+      date: advancedOptions.date,
       fromLat: from.latitude,
       fromLon: from.longitude,
       toLat: to.latitude,
@@ -107,11 +109,13 @@ class OnlineGraphQLRepository implements RequestManager {
       walkBoardCost: advancedOptions.avoidTransfers
           ? WalkBoardCost.walkBoardCostHigh
           : WalkBoardCost.defaultCost,
-      optimize: advancedOptions.includeBikeSuggestions ? OptimizeType.triangle : OptimizeType.quick,
+      optimize: advancedOptions.includeBikeSuggestions
+          ? OptimizeType.triangle
+          : OptimizeType.quick,
       bikeSpeed: advancedOptions.typeBikingSpeed,
       wheelchair: advancedOptions.wheelchair,
     );
-    
+
     final body = {
       "query": '''
         query {
@@ -134,7 +138,8 @@ class OnlineGraphQLRepository implements RequestManager {
     return null;
   }
 
-  Future<http.Response> _fetchRequest(Uri request, Map<String, String> body) async {
+  Future<http.Response> _fetchRequest(
+      Uri request, Map<String, String> body) async {
     try {
       return await http.post(request,
           headers: {

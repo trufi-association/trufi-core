@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
-
-import 'setting_panel_cubit.dart';
 
 class SettingPanel extends StatelessWidget {
   static const String route = "/setting-panel";
@@ -19,18 +18,18 @@ class SettingPanel extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
 
-    final settingPanelCubit = context.read<SettingPanelCubit>();
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
         leading: BackButton(
           onPressed: () {
-            Navigator.of(context).pop(settingPanelCubit.state);
+            Navigator.of(context).pop(payloadDataPlanCubit.state);
           },
         ),
       ),
       body: SafeArea(
-        child: BlocBuilder<SettingPanelCubit, SettingPanelState>(
+        child: BlocBuilder<PayloadDataPlanCubit, PayloadDataPlanState>(
           builder: (blocContext, state) {
             return ListView(
               children: <Widget>[
@@ -44,30 +43,34 @@ class SettingPanel extends StatelessWidget {
                         (e) => e.translateValue(localization),
                       )
                       .toList(),
-                  textSelected: state.typeWalkingSpeed.translateValue(localization),
+                  textSelected:
+                      state.typeWalkingSpeed.translateValue(localization),
                   onChanged: (value) {
                     final WalkingSpeed selected = WalkingSpeed.values
-                        .firstWhere((element) => element.translateValue(localization) == value);
-                    settingPanelCubit.setWalkingSpeed(selected);
+                        .firstWhere((element) =>
+                            element.translateValue(localization) == value);
+                    payloadDataPlanCubit.setWalkingSpeed(selected);
                   },
                 ),
                 _divider,
                 CustomSwitchTile(
                   title: 'Avoid walking',
                   value: state.avoidWalking,
-                  onChanged: (value) => settingPanelCubit.setAvoidWalking(avoidWalking: value),
+                  onChanged: (value) =>
+                      payloadDataPlanCubit.setAvoidWalking(avoidWalking: value),
                 ),
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('Transport modes', style: theme.textTheme.bodyText1),
+                  child:
+                      Text('Transport modes', style: theme.textTheme.bodyText1),
                 ),
                 CustomSwitchTile(
                   title: 'Bus',
                   secondary: Icon(TransportMode.bus.icon),
                   value: state.transportModes.contains(TransportMode.bus),
                   onChanged: (_) {
-                    settingPanelCubit.setTransportMode(TransportMode.bus);
+                    payloadDataPlanCubit.setTransportMode(TransportMode.bus);
                   },
                 ),
                 _divider,
@@ -76,7 +79,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: Icon(TransportMode.rail.icon),
                   value: state.transportModes.contains(TransportMode.rail),
                   onChanged: (_) {
-                    settingPanelCubit.setTransportMode(TransportMode.rail);
+                    payloadDataPlanCubit.setTransportMode(TransportMode.rail);
                   },
                 ),
                 _divider,
@@ -85,7 +88,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: Icon(TransportMode.subway.icon),
                   value: state.transportModes.contains(TransportMode.subway),
                   onChanged: (_) {
-                    settingPanelCubit.setTransportMode(TransportMode.subway);
+                    payloadDataPlanCubit.setTransportMode(TransportMode.subway);
                   },
                 ),
                 _divider,
@@ -94,7 +97,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: Icon(TransportMode.car.icon),
                   value: state.transportModes.contains(TransportMode.car),
                   onChanged: (_) {
-                    settingPanelCubit.setTransportMode(TransportMode.car);
+                    payloadDataPlanCubit.setTransportMode(TransportMode.car);
                   },
                 ),
                 _divider,
@@ -103,7 +106,8 @@ class SettingPanel extends StatelessWidget {
                   secondary: Icon(TransportMode.bicycle.icon),
                   value: state.transportModes.contains(TransportMode.bicycle),
                   onChanged: (_) {
-                    settingPanelCubit.setTransportMode(TransportMode.bicycle);
+                    payloadDataPlanCubit
+                        .setTransportMode(TransportMode.bicycle);
                   },
                 ),
                 if (state.transportModes.contains(TransportMode.bicycle))
@@ -113,31 +117,39 @@ class SettingPanel extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5),
-                          child: Text('Citybikes', style: theme.textTheme.bodyText1),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 5),
+                          child: Text('Citybikes',
+                              style: theme.textTheme.bodyText1),
                         ),
                         CustomSwitchTile(
                           title: 'RegioRad',
                           secondary: Icon(TransportMode.bicycle.icon),
-                          value: state.bikeRentalNetworks.contains(BikeRentalNetwork.regioRad),
+                          value: state.bikeRentalNetworks
+                              .contains(BikeRentalNetwork.regioRad),
                           onChanged: (_) {
-                            settingPanelCubit.setBikeRentalNetwork(BikeRentalNetwork.regioRad);
+                            payloadDataPlanCubit.setBikeRentalNetwork(
+                                BikeRentalNetwork.regioRad);
                           },
                         ),
                         CustomSwitchTile(
                           title: 'Taxi',
                           secondary: Icon(TransportMode.bicycle.icon),
-                          value: state.bikeRentalNetworks.contains(BikeRentalNetwork.taxi),
+                          value: state.bikeRentalNetworks
+                              .contains(BikeRentalNetwork.taxi),
                           onChanged: (_) {
-                            settingPanelCubit.setBikeRentalNetwork(BikeRentalNetwork.taxi);
+                            payloadDataPlanCubit
+                                .setBikeRentalNetwork(BikeRentalNetwork.taxi);
                           },
                         ),
                         CustomSwitchTile(
                           title: 'CarSharing',
                           secondary: Icon(TransportMode.bicycle.icon),
-                          value: state.bikeRentalNetworks.contains(BikeRentalNetwork.carSharing),
+                          value: state.bikeRentalNetworks
+                              .contains(BikeRentalNetwork.carSharing),
                           onChanged: (_) {
-                            settingPanelCubit.setBikeRentalNetwork(BikeRentalNetwork.carSharing);
+                            payloadDataPlanCubit.setBikeRentalNetwork(
+                                BikeRentalNetwork.carSharing);
                           },
                         ),
                       ],
@@ -148,19 +160,21 @@ class SettingPanel extends StatelessWidget {
                 CustomSwitchTile(
                   title: 'Avoid transfers',
                   value: state.avoidTransfers,
-                  onChanged: (value) => settingPanelCubit.setAvoidTransfers(avoidTransfers: value),
+                  onChanged: (value) => payloadDataPlanCubit.setAvoidTransfers(
+                      avoidTransfers: value),
                 ),
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('My modes of transport', style: theme.textTheme.bodyText1),
+                  child: Text('My modes of transport',
+                      style: theme.textTheme.bodyText1),
                 ),
                 CustomSwitchTile(
                   title: 'Bike',
                   secondary: Icon(TransportMode.bicycle.icon),
                   value: state.includeBikeSuggestions,
-                  onChanged: (value) =>
-                      settingPanelCubit.setIncludeBikeSuggestions(includeBikeSuggestions: value),
+                  onChanged: (value) => payloadDataPlanCubit
+                      .setIncludeBikeSuggestions(includeBikeSuggestions: value),
                 ),
                 if (state.includeBikeSuggestions)
                   Container(
@@ -174,11 +188,13 @@ class SettingPanel extends StatelessWidget {
                             (e) => e.translateValue(localization),
                           )
                           .toList(),
-                      textSelected: state.typeBikingSpeed.translateValue(localization),
+                      textSelected:
+                          state.typeBikingSpeed.translateValue(localization),
                       onChanged: (value) {
                         final BikingSpeed selected = BikingSpeed.values
-                            .firstWhere((element) => element.translateValue(localization) == value);
-                        settingPanelCubit.setBikingSpeed(selected);
+                            .firstWhere((element) =>
+                                element.translateValue(localization) == value);
+                        payloadDataPlanCubit.setBikingSpeed(selected);
                       },
                     ),
                   )
@@ -189,25 +205,28 @@ class SettingPanel extends StatelessWidget {
                   title: 'Park and Ride',
                   secondary: Icon(TransportMode.bicycle.icon),
                   value: state.includeParkAndRideSuggestions,
-                  onChanged: (value) => settingPanelCubit.setParkRide(parkRide: value),
+                  onChanged: (value) =>
+                      payloadDataPlanCubit.setParkRide(parkRide: value),
                 ),
                 CustomSwitchTile(
                   title: 'Car',
                   secondary: Icon(TransportMode.car.icon),
                   value: state.includeCarSuggestions,
-                  onChanged: (value) =>
-                      settingPanelCubit.setIncludeCarSuggestions(includeCarSuggestions: value),
+                  onChanged: (value) => payloadDataPlanCubit
+                      .setIncludeCarSuggestions(includeCarSuggestions: value),
                 ),
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('Accessibility', style: theme.textTheme.bodyText1),
+                  child:
+                      Text('Accessibility', style: theme.textTheme.bodyText1),
                 ),
                 CustomSwitchTile(
                   title: 'Wheelchair',
                   secondary: Icon(TransportMode.car.icon),
                   value: state.wheelchair,
-                  onChanged: (value) => settingPanelCubit.setWheelChair(wheelchair: value),
+                  onChanged: (value) =>
+                      payloadDataPlanCubit.setWheelChair(wheelchair: value),
                 ),
                 const SizedBox(height: 10),
               ],
