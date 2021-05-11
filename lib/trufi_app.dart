@@ -121,14 +121,7 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<MapTileProviderCubit>(
           create: (context) => MapTileProviderCubit(
-            mapTileProviders: mapTileProviders ??
-                [
-                  OSMDefaultMapTile(),
-                  OSMDefaultMapTile(),
-                  OSMDefaultMapTile(),
-                  OSMDefaultMapTile(),
-                  OSMDefaultMapTile(),
-                ],
+            mapTileProviders: mapTileProviders ?? [OSMDefaultMapTile()],
           ),
         ),
         BlocProvider<AppReviewCubit>(
