@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -9,7 +8,6 @@ import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
-import 'package:trufi_core/widgets/map_setting_button.dart';
 
 import '../../../composite_subscription.dart';
 import '../../../trufi_app.dart';
@@ -37,7 +35,8 @@ class PlanMapPage extends StatefulWidget {
   PlanMapPageState createState() => PlanMapPageState();
 }
 
-class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin {
+class PlanMapPageState extends State<PlanMapPage>
+    with TickerProviderStateMixin {
   final _cropButtonKey = GlobalKey<CropButtonState>();
   final _subscriptions = CompositeSubscription();
   final _trufiMapController = TrufiMapController();
@@ -113,18 +112,10 @@ class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin 
             ];
           },
         ),
-        Positioned(
+        const Positioned(
           top: 16.0,
           right: 16.0,
-          child: Column(
-            children: [
-              const MapTypeButton(),
-              if (TrufiConfiguration().generalConfiguration.serverType == ServerType.graphQLServer)
-                const MapSettingButton()
-              else
-                Container(),
-            ],
-          ),
+          child: MapTypeButton(),
         ),
         Positioned(
           bottom: 10,
@@ -160,7 +151,8 @@ class PlanMapPageState extends State<PlanMapPage> with TickerProviderStateMixin 
         Positioned.fill(
           child: Container(
             margin: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width - customOverlayWidgetMargin,
+              left:
+                  MediaQuery.of(context).size.width - customOverlayWidgetMargin,
               bottom: 80,
               top: 65,
             ),
