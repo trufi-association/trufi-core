@@ -1,5 +1,20 @@
 part of 'payload_data_plan_cubit.dart';
 
+final initPayloadDataPlanState = PayloadDataPlanState(
+  typeWalkingSpeed: WalkingSpeed.average,
+  avoidWalking: false,
+  transportModes: defaultTransportModes,
+  bikeRentalNetworks: defaultBikeRentalNetworks,
+  avoidTransfers: false,
+  includeBikeSuggestions: true,
+  typeBikingSpeed: BikingSpeed.average,
+  includeParkAndRideSuggestions: true,
+  includeCarSuggestions: true,
+  wheelchair: false,
+  arriveBy: false,
+  date: DateTime.now(),
+);
+
 @immutable
 class PayloadDataPlanState extends Equatable {
   static const String _typeWalkingSpeed = "typeWalkingSpeed";
@@ -13,18 +28,22 @@ class PayloadDataPlanState extends Equatable {
       "includeParkAndRideSuggestions";
   static const String _includeCarSuggestions = "includeCarSuggestions";
   static const String _wheelchair = "wheelchair";
+  static const String _date = "date-key";
+  static const String _arriveBy = "arriveBy";
 
   const PayloadDataPlanState({
-    this.typeWalkingSpeed = WalkingSpeed.average,
-    this.avoidWalking = false,
-    this.transportModes = defaultTransportModes,
-    this.bikeRentalNetworks = defaultBikeRentalNetworks,
-    this.avoidTransfers = false,
-    this.includeBikeSuggestions = true,
-    this.typeBikingSpeed = BikingSpeed.average,
-    this.includeParkAndRideSuggestions = true,
-    this.includeCarSuggestions = true,
-    this.wheelchair = false,
+    @required this.typeWalkingSpeed,
+    @required this.avoidWalking,
+    @required this.transportModes,
+    @required this.bikeRentalNetworks,
+    @required this.avoidTransfers,
+    @required this.includeBikeSuggestions,
+    @required this.typeBikingSpeed,
+    @required this.includeParkAndRideSuggestions,
+    @required this.includeCarSuggestions,
+    @required this.wheelchair,
+    @required this.arriveBy,
+    @required this.date,
   });
 
   final WalkingSpeed typeWalkingSpeed;
@@ -37,6 +56,8 @@ class PayloadDataPlanState extends Equatable {
   final bool includeParkAndRideSuggestions;
   final bool includeCarSuggestions;
   final bool wheelchair;
+  final bool arriveBy;
+  final DateTime date;
 
   PayloadDataPlanState copyWith({
     WalkingSpeed typeWalkingSpeed,
@@ -49,6 +70,8 @@ class PayloadDataPlanState extends Equatable {
     bool includeParkAndRideSuggestions,
     bool includeCarSuggestions,
     bool wheelchair,
+    bool arriveBy,
+    DateTime date,
   }) {
     return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
@@ -64,6 +87,28 @@ class PayloadDataPlanState extends Equatable {
       includeCarSuggestions:
           includeCarSuggestions ?? this.includeCarSuggestions,
       wheelchair: wheelchair ?? this.wheelchair,
+      arriveBy: arriveBy ?? this.arriveBy,
+      date: date ?? this.date,
+    );
+  }
+
+  PayloadDataPlanState copyWithDateNull({
+    bool arriveBy,
+    DateTime date,
+  }) {
+    return PayloadDataPlanState(
+      typeWalkingSpeed: typeWalkingSpeed,
+      transportModes: transportModes,
+      bikeRentalNetworks: bikeRentalNetworks,
+      avoidTransfers: avoidTransfers,
+      avoidWalking: avoidWalking,
+      includeBikeSuggestions: includeBikeSuggestions,
+      typeBikingSpeed: typeBikingSpeed,
+      includeParkAndRideSuggestions: includeParkAndRideSuggestions,
+      includeCarSuggestions: includeCarSuggestions,
+      wheelchair: wheelchair,
+      arriveBy: arriveBy ?? this.arriveBy,
+      date: date,
     );
   }
 
@@ -89,6 +134,8 @@ class PayloadDataPlanState extends Equatable {
           json[_includeParkAndRideSuggestions] as bool,
       includeCarSuggestions: json[_includeCarSuggestions] as bool,
       wheelchair: json[_wheelchair] as bool,
+      arriveBy: json[_arriveBy] as bool,
+      date: json[_date] != null ? DateTime.parse(json[_date] as String) : null,
     );
   }
 
@@ -107,6 +154,8 @@ class PayloadDataPlanState extends Equatable {
       _includeParkAndRideSuggestions: includeParkAndRideSuggestions,
       _includeCarSuggestions: includeCarSuggestions,
       _wheelchair: wheelchair,
+      _arriveBy: arriveBy,
+      _date: date?.toIso8601String(),
     };
   }
 
@@ -122,9 +171,7 @@ class PayloadDataPlanState extends Equatable {
         includeParkAndRideSuggestions,
         includeCarSuggestions,
         wheelchair,
+        date,
+        arriveBy
       ];
-}
-
-class JsonSerializable {
-  const JsonSerializable();
 }

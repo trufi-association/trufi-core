@@ -15,8 +15,7 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
   final SharedPreferencesPlaceStorage myPlacesStorage =
       SharedPreferencesPlaceStorage("myPlacesStorage");
 
-  PayloadDataPlanCubit(this.localRepository)
-      : super(const PayloadDataPlanState()) {
+  PayloadDataPlanCubit(this.localRepository) : super(initPayloadDataPlanState) {
     _load();
   }
 
@@ -28,6 +27,10 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
             jsonDecode(jsonString) as Map<String, dynamic>),
       );
     }
+  }
+
+  Future<void> resetDataDate() async {
+    await updateMapRouteState(state.copyWithDateNull(arriveBy: false));
   }
 
   Future<void> updateMapRouteState(PayloadDataPlanState newState) async {
@@ -90,5 +93,10 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
 
   Future<void> setWheelChair({@required bool wheelchair}) async {
     await updateMapRouteState(state.copyWith(wheelchair: wheelchair));
+  }
+
+  Future<void> setDataDate({DateTime date, bool arriveBy}) async {
+    await updateMapRouteState(
+        state.copyWithDateNull(date: date, arriveBy: arriveBy));
   }
 }
