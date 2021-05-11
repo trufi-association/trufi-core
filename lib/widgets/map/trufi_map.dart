@@ -69,7 +69,7 @@ class _TrufiMapState extends State<TrufiMap> {
         },
       ),
       layers: [
-        currentMapType.currentMapTileProvider.buildTileLayerOptions(),
+        ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
         // tileHostingTileLayerOptions(
         //   getTilesEndpointForMapType(currentMapType),
         //   tileProviderKey: cfg.map.mapTilerKey,

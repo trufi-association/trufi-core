@@ -3,18 +3,22 @@ import 'package:flutter_map/flutter_map.dart';
 
 abstract class MapTileProvider {
   String get id;
-  /// The image will be used for show on the Map Type Selector 
+
+  /// The image will be used for show on the Map Type Selector
   WidgetBuilder get imageBuilder;
-  /// Build your own custom MapTiles 
-  TileLayerOptions buildTileLayerOptions();
+
+  /// Build your own custom MapTiles
+  List<LayerOptions> buildTileLayerOptions();
 }
 
 class OSMDefaultMapTile extends MapTileProvider {
   @override
-  TileLayerOptions buildTileLayerOptions() {
-    return TileLayerOptions(
-      urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    );
+  List<LayerOptions> buildTileLayerOptions() {
+    return [
+      TileLayerOptions(
+        urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      ),
+    ];
   }
 
   @override
