@@ -4,7 +4,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/trufi_models.dart';
 
@@ -82,22 +81,6 @@ void main() {
           isFetching: true,
           toPlace:
               TrufiLocation(description: "Test", latitude: 1.0, longitude: 0.9),
-        )
-      ],
-    );
-
-    blocTest(
-      "setPlan should emit new state and call localStorage",
-      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
-      act: (HomePageCubit cubit) async => cubit.setPlan(
-        PlanEntity(from: PlanLocation(), to: PlanLocation(), itineraries: []),
-      ),
-      expect: () => [
-        const MapRouteState(),
-        MapRouteState(
-          plan: PlanEntity(
-              from: PlanLocation(), to: PlanLocation(), itineraries: []),
-          showSuccessAnimation: true,
         )
       ],
     );

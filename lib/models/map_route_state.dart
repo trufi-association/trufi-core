@@ -72,10 +72,7 @@ class MapRouteState extends Equatable {
     };
   }
 
-  // Getter
-  bool get isSwappable => fromPlace != null && toPlace != null;
-
-  bool get isResettable => toPlace != null || plan != null;
+  bool get isPlacesDefined => fromPlace != null && toPlace != null;
 
   @override
   String toString() {
@@ -84,5 +81,11 @@ class MapRouteState extends Equatable {
   }
 
   @override
-  List<Object> get props => [fromPlace, toPlace, isFetching, showSuccessAnimation];
+  List<Object> get props => [
+        fromPlace,
+        toPlace,
+        plan,
+        isFetching,
+        showSuccessAnimation,
+      ];
 }

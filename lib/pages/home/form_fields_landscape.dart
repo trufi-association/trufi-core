@@ -55,7 +55,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   ),
                   SizedBox(
                     width: 40.0,
-                    child: homePageState.isSwappable
+                    child: homePageState.isPlacesDefined
                         ? SwapButton(
                             orientation: Orientation.landscape,
                             onSwap: onSwap,
@@ -72,7 +72,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   ),
                   SizedBox(
                     width: 40.0,
-                    child: homePageState.isResettable
+                    child: homePageState.isPlacesDefined
                         ? ResetButton(onReset: onReset)
                         : null,
                   ),

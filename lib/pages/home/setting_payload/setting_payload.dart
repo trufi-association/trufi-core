@@ -25,9 +25,9 @@ class SettingPayload extends StatelessWidget {
               onFetchPlan: onFetchPlan,
             ),
           ),
-          if (homePageState.isSwappable)
+          if (homePageState.isPlacesDefined)
             Container(width: 1, height: 25, color: theme.backgroundColor),
-          if (homePageState.isSwappable)
+          if (homePageState.isPlacesDefined)
             MapSettingButton(onFetchPlan: onFetchPlan)
           else
             const SizedBox(width: 100),

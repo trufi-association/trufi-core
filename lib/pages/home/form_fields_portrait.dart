@@ -43,7 +43,7 @@ class FormFieldsPortrait extends StatelessWidget {
               hintText: translations.searchPleaseSelectOrigin,
               textLeadingImage: const FromMarker(),
               leading: const SizedBox.shrink(),
-              trailing: homePageState.isResettable
+              trailing: homePageState.isPlacesDefined
                   ? ResetButton(onReset: onReset)
                   : null,
               value: homePageState.fromPlace,
@@ -53,7 +53,7 @@ class FormFieldsPortrait extends StatelessWidget {
               hintText: translations.searchPleaseSelectDestination,
               textLeadingImage: const ToMarker(),
               leading: const SizedBox.shrink(),
-              trailing: homePageState.isSwappable
+              trailing: homePageState.isPlacesDefined
                   ? SwapButton(
                       orientation: Orientation.portrait,
                       onSwap: onSwap,
