@@ -13,7 +13,7 @@ import '../../../trufi_configuration.dart';
 import '../../../trufi_models.dart';
 import 'your_location_marker.dart';
 
-LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
+TileLayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
     {String tileProviderKey = ""}) {
   var urlTemplate = "$tilesEndpoint/{z}/{x}/{y}@2x.png";
   if (tileProviderKey != "") urlTemplate += "?key={key}";

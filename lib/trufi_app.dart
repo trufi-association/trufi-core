@@ -23,9 +23,11 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
+import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/definition_feedback.dart';
+import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel.dart';
 import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
@@ -73,6 +75,7 @@ class TrufiApp extends StatelessWidget {
     Key key,
     this.customLayers = const [],
     this.feedBack,
+    this.mapTileProviders,
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -99,7 +102,7 @@ class TrufiApp extends StatelessWidget {
   /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
   /// if the FeedBack is null, the comment page is not created.
   final DefinitionFeedBack feedBack;
-
+  final List<MapTileProvider> mapTileProviders;
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -116,6 +119,18 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<CustomLayersCubit>(
           create: (context) => CustomLayersCubit(customLayers),
         ),
+        BlocProvider<MapTileProviderCubit>(
+          create: (context) => MapTileProviderCubit(
+            mapTileProviders: mapTileProviders ??
+                [
+                  OSMDefaultMapTile(),
+                  OSMDefaultMapTile(),
+                  OSMDefaultMapTile(),
+                  OSMDefaultMapTile(),
+                  OSMDefaultMapTile(),
+                ],
+          ),
+        ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
@@ -127,7 +142,8 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.serverType == ServerType.defaultServer
+            trufiConfiguration.generalConfiguration.serverType ==
+                    ServerType.defaultServer
                 ? OnlineRepository(
                     otpEndpoint: trufiConfiguration.url.otpEndpoint,
                   )
