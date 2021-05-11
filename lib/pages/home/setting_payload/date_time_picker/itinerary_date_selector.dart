@@ -40,9 +40,9 @@ class ItineraryDateSelector extends StatelessWidget {
           if (tempPickedDate != null) {
             await payloadDataPlanCubit.setDataDate(
                 arriveBy: tempPickedDate.isArriveBy, date: tempPickedDate.date);
-          }
-          if (homePageState.isSwappable) {
-            onFetchPlan();
+            if (homePageState.isSwappable) {
+              onFetchPlan();
+            }
           }
         },
         child: Row(
