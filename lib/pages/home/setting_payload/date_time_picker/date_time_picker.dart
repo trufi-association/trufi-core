@@ -87,7 +87,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       });
                     },
                     child: Text(
-                      "Deperture",
+                      "Departure",
                       style: _styleOptions.copyWith(
                         color: tempDateConf.isArriveBy
                             ? theme.textTheme.bodyText1.color
