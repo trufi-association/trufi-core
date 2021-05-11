@@ -78,7 +78,6 @@ void main() {
       expect: () => [
         const MapRouteState(),
         MapRouteState(
-          isFetching: true,
           toPlace:
               TrufiLocation(description: "Test", latitude: 1.0, longitude: 0.9),
         )
@@ -100,7 +99,6 @@ void main() {
       skip: 2,
       expect: () => [
         MapRouteState(
-          isFetching: true,
           fromPlace: TrufiLocation(
               longitude: 1.0, latitude: 1.0, description: "Test 1"),
           toPlace: TrufiLocation(
