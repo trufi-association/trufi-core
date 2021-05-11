@@ -3,7 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 
 abstract class MapTileProvider {
   String get id;
+  /// The image will be used for show on the Map Type Selector 
   WidgetBuilder get imageBuilder;
+  /// Build your own custom MapTiles 
   TileLayerOptions buildTileLayerOptions();
 }
 
