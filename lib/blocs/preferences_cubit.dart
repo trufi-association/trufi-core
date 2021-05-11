@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/models/preferences.dart';
 import 'package:trufi_core/repository/local_repository.dart';
-import 'package:trufi_core/trufi_models.dart';
 import 'package:uuid/uuid.dart';
 
 class PreferencesCubit extends Cubit<Preference> {
@@ -11,12 +10,14 @@ class PreferencesCubit extends Cubit<Preference> {
   Uuid uuid;
 
   static const bool defaultOnline = true;
-  static const String defaultMapType = MapStyle.streets;
   static const String defaultLanguageCode = "en";
 
   PreferencesCubit(this.localRepository, this.uuid)
-      : super(const Preference(defaultLanguageCode, "", defaultMapType,
-            loadOnline: defaultOnline)) {
+      : super(const Preference(
+          defaultLanguageCode,
+          "",
+          loadOnline: defaultOnline,
+        )) {
     _load();
   }
 
@@ -46,7 +47,6 @@ class PreferencesCubit extends Cubit<Preference> {
     emit(
       state.copyWith(
         correlationId: correlationId,
-        currentMapType: await localRepository.getMapType() ?? defaultMapType,
         languageCode:
             await localRepository.getLanguageCode() ?? defaultLanguageCode,
         loadOnline: await localRepository.getOnline() ?? defaultOnline,

@@ -8,38 +8,8 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../../../trufi_configuration.dart';
-import '../../../trufi_models.dart';
 import '../../../utils/util_icons/custom_icons.dart';
 import 'your_location_marker.dart';
-
-LayerOptions tileHostingTileLayerOptions(String tilesEndpoint,
-    {String tileProviderKey = ""}) {
-  var urlTemplate = "$tilesEndpoint/{z}/{x}/{y}@2x.png";
-  if (tileProviderKey != "") urlTemplate += "?key={key}";
-
-  return TileLayerOptions(
-    urlTemplate: urlTemplate,
-    additionalOptions: {
-      'key': tileProviderKey,
-    },
-  );
-}
-
-String getTilesEndpointForMapType(String mapType) {
-  final cfg = TrufiConfiguration();
-  switch (mapType) {
-    case MapStyle.satellite:
-      return cfg.url.tilesSatelliteEndpoint;
-
-    case MapStyle.terrain:
-      return cfg.url.tilesTerrainEndpoint;
-
-    case MapStyle.streets:
-    default:
-      return cfg.url.tilesStreetsEndpoint;
-  }
-}
 
 Marker buildFromMarker(LatLng point) {
   return Marker(

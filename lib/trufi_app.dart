@@ -24,10 +24,12 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
+import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/definition_feedback.dart';
+import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
@@ -73,6 +75,7 @@ class TrufiApp extends StatelessWidget {
     Key key,
     this.customLayers = const [],
     this.feedBack,
+    this.mapTileProviders,
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -100,6 +103,9 @@ class TrufiApp extends StatelessWidget {
   /// if the FeedBack is null, the comment page is not created.
   final DefinitionFeedBack feedBack;
 
+  /// List of Map Tile Provider
+  /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
+  final List<MapTileProvider> mapTileProviders;
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -115,6 +121,14 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<CustomLayersCubit>(
           create: (context) => CustomLayersCubit(customLayers),
+        ),
+        BlocProvider<MapTileProviderCubit>(
+          create: (context) => MapTileProviderCubit(
+            mapTileProviders:
+                mapTileProviders != null && mapTileProviders.isNotEmpty
+                    ? mapTileProviders
+                    : [OSMDefaultMapTile()],
+          ),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),

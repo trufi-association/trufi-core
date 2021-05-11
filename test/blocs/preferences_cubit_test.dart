@@ -23,8 +23,8 @@ void main() {
       build: () => PreferencesCubit(mockLocalRepository, mockUuid),
       act: (PreferencesCubit cubit) => cubit..updateMapType("TestMapTyle"),
       expect: () => [
-        const Preference("en", "", "TestMapTyle", loadOnline: true),
-        const Preference("en", "5", "streets", loadOnline: true),
+        const Preference("en", "", loadOnline: true),
+        const Preference("en", "5", loadOnline: true),
       ],
     );
 
@@ -35,8 +35,8 @@ void main() {
       verify: (_) =>
           verify(mockLocalRepository.saveUseOnline(loadOnline: false)),
       expect: () => [
-        const Preference("en", "", "streets", loadOnline: false),
-        const Preference("en", "5", "streets", loadOnline: true),
+        const Preference("en", "", loadOnline: false),
+        const Preference("en", "5", loadOnline: true),
       ],
     );
 
@@ -46,8 +46,8 @@ void main() {
       act: (PreferencesCubit cubit) => cubit.updateLanguage("de"),
       verify: (_) => verify(mockLocalRepository.saveLanguageCode("de")),
       expect: () => [
-        const Preference("de", "", "streets", loadOnline: true),
-        const Preference("en", "5", "streets", loadOnline: true),
+        const Preference("de", "", loadOnline: true),
+        const Preference("en", "5", loadOnline: true),
       ],
     );
   });

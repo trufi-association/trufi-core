@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:trufi_core/blocs/custom_layer/custom_layers_cubit.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 
 import '../../trufi_configuration.dart';
 import 'trufi_map_controller.dart';
@@ -38,8 +38,7 @@ class _TrufiMapState extends State<TrufiMap> {
   @override
   Widget build(BuildContext context) {
     final cfg = TrufiConfiguration();
-    final currentMapType =
-        context.watch<PreferencesCubit>().state.currentMapType;
+    final currentMapType = context.watch<MapTileProviderCubit>().state;
     final currentLocation =
         context.watch<LocationProviderCubit>().state.currentLocation;
     final customLayersCubit = context.watch<CustomLayersCubit>();
@@ -70,10 +69,11 @@ class _TrufiMapState extends State<TrufiMap> {
         },
       ),
       layers: [
-        tileHostingTileLayerOptions(
-          getTilesEndpointForMapType(currentMapType),
-          tileProviderKey: cfg.map.mapTilerKey,
-        ),
+        ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
+        // tileHostingTileLayerOptions(
+        //   getTilesEndpointForMapType(currentMapType),
+        //   tileProviderKey: cfg.map.mapTilerKey,
+        // ),
         ...customLayersCubit.activeCustomLayers(mapZoom),
         buildYourLocationMarkerOption(currentLocation),
         ...widget.layerOptionsBuilder(context)
