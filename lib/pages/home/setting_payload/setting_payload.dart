@@ -17,7 +17,7 @@ class SettingPayload extends StatelessWidget {
     final theme = Theme.of(context);
     final homePageState = context.watch<HomePageCubit>().state;
     return Container(
-      margin: const EdgeInsets.only(left: 36, right: 7),
+      margin: const EdgeInsets.only(left: 36, right: 8),
       child: Row(
         children: [
           Expanded(
