@@ -34,6 +34,7 @@ import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
+import 'services/search_location/search_location_manager.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
 /// e.g. [StatelessWidget.build] or [State.build].
@@ -76,6 +77,7 @@ class TrufiApp extends StatelessWidget {
     this.customLayers = const [],
     this.feedBack,
     this.mapTileProviders,
+    this.searchLocationManager,
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -106,6 +108,8 @@ class TrufiApp extends StatelessWidget {
   /// List of Map Tile Provider
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
   final List<MapTileProvider> mapTileProviders;
+
+  final SearchLocationManager searchLocationManager;
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -135,7 +139,7 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<SearchLocationsCubit>(
           create: (context) => SearchLocationsCubit(
-            OfflineSearchLocation(),
+            searchLocationManager ?? OfflineSearchLocation(),
           ),
         ),
         BlocProvider<HomePageCubit>(
