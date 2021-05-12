@@ -208,14 +208,6 @@ class _SuggestionList extends StatelessWidget {
               onSelected,
               onStreetTapped,
             ),
-          // if (query.isEmpty)
-          //   _BuildFutureBuilder(
-          //     title: localization.searchTitlePlaces,
-          //     future: locationSearchBloc.fetchPlaces(context),
-          //     iconData: Icons.place,
-          //     onSelected: onSelected,
-          //     onStreetTapped: onStreetTapped,
-          //   ),
           if (query.isNotEmpty)
             _BuildFutureBuilder(
               title: localization.searchTitleResults,
