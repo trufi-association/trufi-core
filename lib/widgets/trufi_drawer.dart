@@ -4,18 +4,17 @@ import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share/share.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/models/social_media/donate_social_media.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:trufi_core/widgets/social_media/social_media.dart';
 
 import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/saved_places/saved_places.dart';
 import '../pages/team.dart';
 import '../trufi_configuration.dart';
-import '../utils/util_icons/custom_icons.dart';
 
 class TrufiDrawer extends StatefulWidget {
   const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
@@ -52,7 +51,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final localization = TrufiLocalization.of(context);
     final cfg = TrufiConfiguration();
     final currentLocale = Localizations.localeOf(context);
-
+    final socialMediaItems = context.read<PreferencesCubit>().socialMediaItems;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -126,36 +125,17 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           _buildAppReviewButton(context),
           _buildAppShareButton(context, cfg.url.share),
           if (!Platform.isIOS && cfg.url.donate != "")
-            _buildWebLinkItem(
-              Icons.monetization_on,
-              localization.donate,
-              cfg.url.donate,
+            SocialMediaButton(
+              socialMediaItem: DonateSocialMedia(cfg.url.donate),
             ),
           const Divider(),
-          if (cfg.url.website != "")
-            _buildWebLinkItem(
-              CustomIcons.trufi,
-              localization.readOurBlog,
-              cfg.url.website,
-            ),
-          if (cfg.url.facebook != "")
-            _buildWebLinkItem(
-              CustomIcons.facebook,
-              localization.followOnFacebook,
-              cfg.url.facebook,
-            ),
-          if (cfg.url.twitter != "")
-            _buildWebLinkItem(
-              CustomIcons.twitter,
-              localization.followOnTwitter,
-              cfg.url.twitter,
-            ),
-          if (cfg.url.instagram != "")
-            _buildWebLinkItem(
-              CustomIcons.instagram,
-              localization.followOnInstagram,
-              cfg.url.instagram,
-            ),
+          ...socialMediaItems
+              .map(
+                (socialMediaItem) => SocialMediaButton(
+                  socialMediaItem: socialMediaItem,
+                ),
+              )
+              .toList(),
         ],
       ),
     );
@@ -212,28 +192,6 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     );
   }
 
-  // TODO: Understand why it is not used anymore
-  // ignore: unused_element
-  Widget _buildOfflineToggle(BuildContext context) {
-    final preferencesBloc = BlocProvider.of<PreferencesCubit>(context);
-    final theme = Theme.of(context);
-    final localization = TrufiLocalization.of(context);
-    return StreamBuilder(
-      stream: preferencesBloc.stream,
-      builder: (BuildContext context, AsyncSnapshot<Preference> snapshot) {
-        return SwitchListTile(
-          title: Text(localization.menuOnline),
-          value: snapshot.data.loadOnline,
-          onChanged: (bool value) =>
-              preferencesBloc.updateOnline(loadOnline: value),
-          activeColor: theme.primaryColor,
-          secondary: Icon(
-              snapshot.data.loadOnline == true ? Icons.cloud : Icons.cloud_off),
-        );
-      },
-    );
-  }
-
   Widget _buildAppReviewButton(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return ListTile(
@@ -281,17 +239,6 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildWebLinkItem(IconData iconData, String title, String url) {
-    return ListTile(
-      leading: Icon(iconData, color: Colors.grey),
-      title: Text(
-        title,
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-      ),
-      onTap: () => launch(url),
     );
   }
 }
