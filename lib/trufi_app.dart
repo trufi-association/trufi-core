@@ -3,20 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/models/social_media/social_media_item.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
-import 'package:uuid/uuid.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/location_search_bloc.dart';
-import './blocs/preferences_cubit.dart';
+import './blocs/preferences/preferences_cubit.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/saved_places/saved_places.dart';
@@ -76,6 +76,7 @@ class TrufiApp extends StatelessWidget {
     this.customLayers = const [],
     this.feedBack,
     this.mapTileProviders,
+    this.socialMediaItem = const [],
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -103,9 +104,15 @@ class TrufiApp extends StatelessWidget {
   /// if the FeedBack is null, the comment page is not created.
   final DefinitionFeedBack feedBack;
 
+  ///List of [SocialMediaItem] implementations
+  ///By defaul [Trufi-Core] has some implementation what you can use:
+  /// [FacebookSocialMedia] [InstagramSocialMedia] [TwitterSocialMedia]
+  final List<SocialMediaItem> socialMediaItem;
+
   /// List of Map Tile Provider
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
   final List<MapTileProvider> mapTileProviders;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -114,10 +121,7 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) => PreferencesCubit(
-            sharedPreferencesRepository,
-            Uuid(),
-          ),
+          create: (context) => PreferencesCubit(socialMediaItem),
         ),
         BlocProvider<CustomLayersCubit>(
           create: (context) => CustomLayersCubit(customLayers),
@@ -195,7 +199,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       SettingPanel.route: (context) => const SettingPanel(),
     };
 
-    return BlocBuilder<PreferencesCubit, Preference>(
+    return BlocBuilder<PreferencesCubit, PreferenceState>(
       builder: (BuildContext context, state) {
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: state.languageCode),
