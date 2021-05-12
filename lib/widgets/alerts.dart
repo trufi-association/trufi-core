@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
@@ -105,20 +104,6 @@ Widget buildOnAndOfflineErrorAlert({
   );
 }
 
-// TODO: Understand why not implemented and used.
-// ignore: unused_element
-Widget _buildOnAndOfflineButton(BuildContext context, bool online) {
-  final localization = TrufiLocalization.of(context);
-  return TextButton(
-    onPressed: () {
-      context.read<PreferencesCubit>().updateOnline(loadOnline: online);
-      Navigator.pop(context);
-    },
-    child: Text(
-      online ? localization.commonGoOnline : localization.commonGoOffline,
-    ),
-  );
-}
 
 Widget _buildAlert({
   @required BuildContext context,

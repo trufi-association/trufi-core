@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
