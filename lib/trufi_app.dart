@@ -102,13 +102,16 @@ class TrufiApp extends StatelessWidget {
   final List<CustomLayer> customLayers;
 
   /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
-  /// if the FeedBack is null, the comment page is not created.
+  /// if the FeedBack is null, the feedback page is not created.
   final DefinitionFeedBack feedBack;
 
   /// List of Map Tile Provider
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
   final List<MapTileProvider> mapTileProviders;
 
+  ///You can provider a [SearchLocationManager]
+  ///By defaul [Trufi-Core] has implementation
+  /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
   @override
   Widget build(BuildContext context) {
