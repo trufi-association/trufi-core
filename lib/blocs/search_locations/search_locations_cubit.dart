@@ -17,21 +17,26 @@ import '../location_search_bloc.dart';
 part 'search_locations_state.dart';
 
 class SearchLocationsCubit extends Cubit<SearchLocationsState> {
-  final PlacesStorage myPlacesStorage = SharedPreferencesPlaceStorage("myPlacesStorage");
+  final PlacesStorage myPlacesStorage =
+      SharedPreferencesPlaceStorage("myPlacesStorage");
   final PlacesStorage myDefaultPlacesStorage =
       SharedPreferencesPlaceStorage("myDefaultPlacesStorage");
-  final PlacesStorage historyPlacesStorage = SharedPreferencesPlaceStorage("historyPlacesStorage");
+  final PlacesStorage historyPlacesStorage =
+      SharedPreferencesPlaceStorage("historyPlacesStorage");
   final PlacesStorage favoritePlacesStorage =
       SharedPreferencesPlaceStorage("favoritePlacesStorage");
 
-  final SearchLocationManager _offlineRequestManager;
+  final SearchLocationManager _searchLocationManager;
   final _fetchLocationLock = Lock();
   CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
 
   SearchLocationsCubit(
-    this._offlineRequestManager,
+    this._searchLocationManager,
   ) : super(const SearchLocationsState(
-            myPlaces: [], myDefaultPlaces: [], favoritePlaces: [], historyPlaces: [])) {
+            myPlaces: [],
+            myDefaultPlaces: [],
+            favoritePlaces: [],
+            historyPlaces: [])) {
     _initLoad();
   }
 
@@ -78,14 +83,17 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   void updateMyDefaultPlace(TrufiLocation old, TrufiLocation location) {
     emit(
-      state.copyWith(myDefaultPlaces: [..._updateItem(state.myDefaultPlaces, old, location)]),
+      state.copyWith(myDefaultPlaces: [
+        ..._updateItem(state.myDefaultPlaces, old, location)
+      ]),
     );
     myDefaultPlacesStorage.update(old, location);
   }
 
   void updateHistoryPlace(TrufiLocation old, TrufiLocation location) {
     emit(
-      state.copyWith(historyPlaces: [..._updateItem(state.historyPlaces, old, location)]),
+      state.copyWith(
+          historyPlaces: [..._updateItem(state.historyPlaces, old, location)]),
     );
     historyPlacesStorage.update(old, location);
   }
@@ -93,7 +101,11 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   void updateFavoritePlace(TrufiLocation old, TrufiLocation location) {
     emit(
       state.copyWith(favoritePlaces: [
-        ..._updateItem(state.favoritePlaces, old, location,)
+        ..._updateItem(
+          state.favoritePlaces,
+          old,
+          location,
+        )
       ]),
     );
     favoritePlacesStorage.update(old, location);
@@ -120,17 +132,16 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     favoritePlacesStorage.delete(location);
   }
 
-  Future<List<TrufiPlace>> getHistoryListWithLimit({int limit}) async {
+  List<TrufiPlace> getHistoryListWithLimit({int limit}) {
     return state.historyPlaces.reversed.take(limit).toList();
   }
 
   Future<List<TrufiPlace>> fetchLocations(
-    // FavoriteLocationsCubit favoriteLocationsCubit,
     LocationSearchBloc locationSearchBloc,
     String query, {
     String correlationId,
     int limit = 30,
-  }) {
+  }) async {
     // Cancel running operation
     if (_fetchLocationOperation != null) {
       _fetchLocationOperation.cancel();
@@ -143,12 +154,24 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         : _fetchLocationLock.synchronized(() async {
             _fetchLocationOperation =
                 CancelableOperation<List<TrufiPlace>>.fromFuture(
-              // FIXME: For now we search locations always offline
-              _offlineRequestManager.fetchLocations(locationSearchBloc, query,
-                  limit: limit, correlationId: correlationId),
+              _searchLocationManager.fetchLocations(
+                locationSearchBloc,
+                query,
+                limit: limit,
+                correlationId: correlationId,
+              ),
             );
             return _fetchLocationOperation.valueOrCancellation(null);
           });
+  }
+
+  List<TrufiPlace> sortedByFavorites(
+    List<TrufiPlace> locations,
+  ) {
+    locations.sort((a, b) {
+      return _sortByFavoriteLocations(a, b, state.favoritePlaces);
+    });
+    return locations;
   }
 
   List<TrufiLocation> _updateItem(
@@ -171,5 +194,42 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     final tempList = [...list];
     tempList.remove(location);
     return tempList;
+  }
+
+  int _sortByFavoriteLocations(
+    TrufiPlace a,
+    TrufiPlace b,
+    List<TrufiLocation> favorites,
+  ) {
+    return _sortByLocations(a, b, favorites);
+  }
+
+  int _sortByLocations(
+      TrufiPlace a, TrufiPlace b, List<TrufiLocation> locations) {
+    final bool aIsAvailable = (a is TrufiLocation)
+        ? locations.contains(a)
+        // TODO: Fix Linting problem with tests
+        // ignore: avoid_bool_literals_in_conditional_expressions
+        : (a is TrufiStreet)
+            ? a.junctions.fold<bool>(
+                false,
+                (result, j) => result |= locations.contains(j.location),
+              )
+            : false;
+    final bool bIsAvailable = (b is TrufiLocation)
+        ? locations.contains(b)
+        // TODO: Fix Linting problem with tests
+        // ignore: avoid_bool_literals_in_conditional_expressions
+        : (b is TrufiStreet)
+            ? b.junctions.fold<bool>(
+                false,
+                (result, j) => result |= locations.contains(j.location),
+              )
+            : false;
+    return aIsAvailable == bIsAvailable
+        ? 0
+        : aIsAvailable
+            ? -1
+            : 1;
   }
 }

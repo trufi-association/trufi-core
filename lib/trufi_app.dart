@@ -34,6 +34,7 @@ import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
+import 'services/search_location/search_location_manager.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
 /// e.g. [StatelessWidget.build] or [State.build].
@@ -76,6 +77,7 @@ class TrufiApp extends StatelessWidget {
     this.customLayers = const [],
     this.feedBack,
     this.mapTileProviders,
+    this.searchLocationManager,
     this.socialMediaItem = const [],
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
@@ -101,7 +103,7 @@ class TrufiApp extends StatelessWidget {
   final List<CustomLayer> customLayers;
 
   /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
-  /// if the FeedBack is null, the comment page is not created.
+  /// if the FeedBack is null, the feedback page is not created.
   final DefinitionFeedBack feedBack;
 
   ///List of [SocialMediaItem] implementations
@@ -113,6 +115,10 @@ class TrufiApp extends StatelessWidget {
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
   final List<MapTileProvider> mapTileProviders;
 
+  ///You can provider a [SearchLocationManager]
+  ///By defaul [Trufi-Core] has implementation
+  /// [OfflineSearchLocation] that used the assets/data/search.json
+  final SearchLocationManager searchLocationManager;
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -139,7 +145,7 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<SearchLocationsCubit>(
           create: (context) => SearchLocationsCubit(
-            OfflineSearchLocation(),
+            searchLocationManager ?? OfflineSearchLocation(),
           ),
         ),
         BlocProvider<HomePageCubit>(
