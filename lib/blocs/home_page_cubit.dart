@@ -77,7 +77,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     PayloadDataPlanState advancedOptions,
   }) async {
     if (state.toPlace != null && state.fromPlace != null) {
-      await updateMapRouteState(state.copyWith(isFetching: true));
+      await updateMapRouteState(state.copyWithoutMap(isFetching: true));
       final PlanEntity planEntity = await _fetchPlan(
         correlationId,
         car: car,

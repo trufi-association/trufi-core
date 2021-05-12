@@ -46,6 +46,24 @@ class MapRouteState extends Equatable {
       isFetching: isFetching ?? this.isFetching,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
     );
+  }  
+  
+  MapRouteState copyWithoutMap({
+    TrufiLocation fromPlace,
+    TrufiLocation toPlace,
+    AdEntity ad,
+    bool isFetching,
+    bool showSuccessAnimation,
+    CancelableOperation<PlanEntity> currentFetchPlanOperation,
+    CancelableOperation<AdEntity> currentFetchAdOperation,
+  }) {
+    return MapRouteState(
+      fromPlace: fromPlace ?? this.fromPlace,
+      toPlace: toPlace ?? this.toPlace,
+      ad: ad ?? this.ad,
+      isFetching: isFetching ?? this.isFetching,
+      showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
+    );
   }
 
   // Json
