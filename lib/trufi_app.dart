@@ -30,7 +30,6 @@ import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
-import 'models/definition_feedback.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
@@ -78,7 +77,6 @@ class TrufiApp extends StatelessWidget {
     this.customBetweenFabBuilder,
     Key key,
     this.customLayers = const [],
-    this.feedBack,
     this.mapTileProviders,
     this.searchLocationManager,
     this.socialMediaItem = const [],
@@ -111,10 +109,6 @@ class TrufiApp extends StatelessWidget {
   /// List of [CustomLayer] implementations
   final List<CustomLayer> customLayers;
 
-  /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
-  /// if the FeedBack is null, the feedback page is not created.
-  final DefinitionFeedBack feedBack;
-
   ///List of [SocialMediaItem] implementations
   ///By defaul [Trufi-Core] has some implementation what you can use:
   /// [FacebookSocialMedia] [InstagramSocialMedia] [TwitterSocialMedia]
@@ -132,8 +126,7 @@ class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
-    final trufiConfiguration = TrufiConfiguration();
-    trufiConfiguration.configurationDrawer.definitionFeedBack = feedBack;
+    final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return MultiBlocProvider(
       providers: [
         BlocProvider<ConfigurationCubit>(
@@ -164,13 +157,12 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.serverType ==
-                    ServerType.defaultServer
+            trufiConfiguration.serverType == ServerType.defaultServer
                 ? OnlineRepository(
-                    otpEndpoint: trufiConfiguration.url.otpEndpoint,
+                    otpEndpoint: trufiConfiguration.urls.openTripPlannerUrl,
                   )
                 : OnlineGraphQLRepository(
-                    graphQLEndPoint: trufiConfiguration.url.otpEndpoint,
+                    graphQLEndPoint: trufiConfiguration.urls.openTripPlannerUrl,
                   ),
           ),
         ),

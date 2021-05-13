@@ -2,6 +2,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
+import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
@@ -36,7 +37,10 @@ class Configuration {
   /// All languages that the Host app should support
   final List<TrufiConfigurationLanguage> supportedLanguages;
 
+  final FeedbackDefinition feedbackDefinition;
+
   Configuration({
+    this.feedbackDefinition,
     this.supportedLanguages = const [],
     this.serverType,
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
