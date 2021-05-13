@@ -51,12 +51,11 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
-        showResults(context);
-        // close(context, suggestion);
+        close(context, suggestion);
       },
       onStreetTapped: (TrufiStreet street) {
         _result = street;
-        showResults(context);
+        close(context, street.location);
       },
     );
   }
