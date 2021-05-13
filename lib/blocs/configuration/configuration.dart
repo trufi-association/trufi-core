@@ -18,19 +18,19 @@ class Configuration {
   final String drawerBackgroundAssetPath;
 
   /// Contains all Urls that can be configured inside of Trufi
-  UrlCollection urls = UrlCollection();
+  final UrlCollection urls;
 
   /// Everyone who is involved creating the application
-  Attribution attribution = Attribution();
+  final Attribution attribution;
 
   /// All map related configurations for the Trufi Core
-  MapConfiguration map = MapConfiguration();
+  final MapConfiguration map;
 
   /// TODO: Add Documentation
   final Map<String, String> abbreviations;
 
   /// Loading and Success Animation
-  AnimationConfiguration animations = AnimationConfiguration();
+  final AnimationConfiguration animations;
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -40,10 +40,9 @@ class Configuration {
   final List<LanguageConfiguration> supportedLanguages;
 
   /// Custom Translations
-  TrufiCustomLocalizations customTranslations = TrufiCustomLocalizations();
+  final TrufiCustomLocalizations customTranslations;
 
   /// Definition of the feedback if it is a URL or a Email
-  /// Could be not set
   final FeedbackDefinition feedbackDefinition;
 
   /// City where the App is used
