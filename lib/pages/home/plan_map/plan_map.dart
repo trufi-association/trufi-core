@@ -365,7 +365,9 @@ class PlanMapPageStateData {
           );
 
           // Transfer marker
-          if (isSelected && i < itinerary.legs.length - 1) {
+          if (isSelected &&
+              i < itinerary.legs.length - 1 &&
+              polyline.points.isNotEmpty) {
             markers.add(
               buildTransferMarker(
                 polyline.points[polyline.points.length - 1],
