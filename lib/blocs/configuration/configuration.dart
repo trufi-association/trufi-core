@@ -1,4 +1,4 @@
-import 'package:flare_flutter/flare_actor.dart';
+import 'package:trufi_core/blocs/configuration/models/animation_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
@@ -18,19 +18,19 @@ class Configuration {
   final String drawerBackgroundAssetPath;
 
   /// Contains all Urls that can be configured inside of Trufi
-  final UrlCollection urls;
+  UrlCollection urls = UrlCollection();
 
   /// Everyone who is involved creating the application
-  final Attribution attribution;
+  Attribution attribution = Attribution();
 
   /// All map related configurations for the Trufi Core
-  final MapConfiguration map;
+  MapConfiguration map = MapConfiguration();
 
   /// TODO: Add Documentation
   final Map<String, String> abbreviations;
 
   /// Loading and Success Animation
-  final AnimationConfiguration animations;
+  AnimationConfiguration animations = AnimationConfiguration();
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -43,6 +43,7 @@ class Configuration {
   TrufiCustomLocalizations customTranslations = TrufiCustomLocalizations();
 
   /// Definition of the feedback if it is a URL or a Email
+  /// Could be not set
   final FeedbackDefinition feedbackDefinition;
 
   /// City where the App is used
@@ -54,28 +55,21 @@ class Configuration {
   final int minimumReviewWorthyActionCount;
 
   Configuration({
+    this.teamInformationEmail = "",
     this.minimumReviewWorthyActionCount = 3,
     this.debug = false,
     this.serverType = ServerType.defaultServer,
     this.appCity = "Cochabamba",
-    this.customTranslations,
-    this.feedbackDefinition,
     this.supportedLanguages = const [],
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
+    this.customTranslations,
+    this.feedbackDefinition,
     this.animations,
     this.abbreviations,
     this.map,
     this.urls,
-    this.teamInformationEmail,
     this.attribution,
   });
-}
-
-class AnimationConfiguration {
-  final FlareActor loading;
-  final FlareActor success;
-
-  AnimationConfiguration({this.loading, this.success});
 }
 
 class TrufiCustomLocalizations extends TrufiCustomLocalization {}

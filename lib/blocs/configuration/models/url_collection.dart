@@ -13,9 +13,9 @@ class UrlCollection {
   final String shareUrl;
 
   UrlCollection({
-    this.routeFeedbackUrl,
-    this.openTripPlannerUrl,
-    this.donationUrl,
-    this.shareUrl,
+    this.routeFeedbackUrl = "",
+    this.openTripPlannerUrl = "",
+    this.donationUrl = "",
+    this.shareUrl = "",
   });
 }

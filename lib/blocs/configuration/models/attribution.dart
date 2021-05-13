@@ -15,10 +15,10 @@ class Attribution {
   final List<String> openStreetMap;
 
   Attribution({
-    this.representatives,
-    this.team,
-    this.translators,
-    this.routes,
-    this.openStreetMap,
+    this.representatives = const [],
+    this.team = const [],
+    this.translators = const [],
+    this.routes = const [],
+    this.openStreetMap = const [],
   });
 }
