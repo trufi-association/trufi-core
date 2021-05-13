@@ -71,7 +71,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         return _buildStreetResults(context, _result as TrufiStreet);
       } else {
         Future.delayed(Duration.zero, () {
-          close(context, _result as TrufiLocation);
+          close(context, _result);
         });
       }
     }
