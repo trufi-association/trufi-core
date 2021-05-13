@@ -3,44 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/widgets/trufi_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../trufi_configuration.dart';
-import '../widgets/trufi_drawer.dart';
+const joinSep = ", ";
 
-class TeamPage extends StatefulWidget {
+class TeamPage extends StatelessWidget {
   static const String route = "/team";
-
-  const TeamPage({Key key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => TeamPageState();
-}
-
-class TeamPageState extends State<TeamPage> {
-  String _representatives;
-  String _team;
-  String _translations;
-  String _routes;
-  String _osm;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadState();
-  }
-
-  void _loadState() {
-    const joinSep = ", ";
-    final attribution = TrufiConfiguration().attribution;
-    setState(() {
-      _representatives = attribution.representatives.join(joinSep);
-      _team = attribution.team.join(joinSep);
-      _translations = attribution.translations.join(joinSep);
-      _routes = attribution.routes.join(joinSep);
-      _osm = attribution.osm.join(joinSep);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,28 +66,37 @@ class TeamPageState extends State<TeamPage> {
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.teamSectionRepresentatives(_representatives),
+                  localization.teamSectionRepresentatives(
+                    cfg.attribution.representatives.join(joinSep),
+                  ),
                   style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.teamSectionTeam(_team),
+                  localization.teamSectionTeam(
+                    cfg.attribution.team.join(joinSep),
+                  ),
                   style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.teamSectionTranslations(_translations),
+                  localization.teamSectionTranslations(
+                    cfg.attribution.translators.join(joinSep),
+                  ),
                   style: theme.textTheme.bodyText1,
                 ),
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  localization.teamSectionRoutes(_routes, _osm),
+                  localization.teamSectionRoutes(
+                    cfg.attribution.routes.join(joinSep),
+                    cfg.attribution.osm.join(joinSep),
+                  ),
                   style: theme.textTheme.bodyText1,
                 ),
               ),

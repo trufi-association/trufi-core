@@ -214,7 +214,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
-      TeamPage.route: (context) => const TeamPage(),
+      TeamPage.route: (context) => TeamPage(),
       SettingPanel.route: (context) => const SettingPanel(),
     };
 
