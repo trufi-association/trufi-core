@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/custom_layer/custom_layers_cubit.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 
-import '../../trufi_configuration.dart';
 import 'trufi_map_controller.dart';
 import 'utils/trufi_map_utils.dart';
 
@@ -35,9 +35,10 @@ class TrufiMap extends StatefulWidget {
 
 class _TrufiMapState extends State<TrufiMap> {
   int mapZoom;
+
   @override
   Widget build(BuildContext context) {
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final currentMapType = context.watch<MapTileProviderCubit>().state;
     final currentLocation =
         context.watch<LocationProviderCubit>().state.currentLocation;

@@ -125,11 +125,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          _buildAppShareButton(context, cfg2.urlConfiguration.shareUrl),
-          if (!Platform.isIOS && cfg2.urlConfiguration.donationUrl != "")
+          _buildAppShareButton(context, cfg2.urls.shareUrl),
+          if (!Platform.isIOS && cfg2.urls.donationUrl != "")
             SocialMediaButton(
-              socialMediaItem:
-                  DonateSocialMedia(cfg2.urlConfiguration.donationUrl),
+              socialMediaItem: DonateSocialMedia(cfg2.urls.donationUrl),
             ),
           const Divider(),
           ...socialMediaItems
