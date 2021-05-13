@@ -4,6 +4,7 @@ import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share/share.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/social_media/donate_social_media.dart';
@@ -50,6 +51,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final cfg = TrufiConfiguration();
+    final cfg2 = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final socialMediaItems = context.read<PreferencesCubit>().socialMediaItems;
     return Drawer(
@@ -123,10 +125,11 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          _buildAppShareButton(context, cfg.url.share),
-          if (!Platform.isIOS && cfg.url.donate != "")
+          _buildAppShareButton(context, cfg2.urlConfiguration.shareUrl),
+          if (!Platform.isIOS && cfg2.urlConfiguration.donationUrl != "")
             SocialMediaButton(
-              socialMediaItem: DonateSocialMedia(cfg.url.donate),
+              socialMediaItem:
+                  DonateSocialMedia(cfg2.urlConfiguration.donationUrl),
             ),
           const Divider(),
           ...socialMediaItems

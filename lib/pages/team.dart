@@ -95,7 +95,7 @@ class TeamPage extends StatelessWidget {
                 child: Text(
                   localization.teamSectionRoutes(
                     cfg.attribution.routes.join(joinSep),
-                    cfg.attribution.osm.join(joinSep),
+                    cfg.attribution.openStreetMap.join(joinSep),
                   ),
                   style: theme.textTheme.bodyText1,
                 ),
