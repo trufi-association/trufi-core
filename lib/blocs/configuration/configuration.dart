@@ -3,6 +3,7 @@ import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
+import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
@@ -38,9 +39,14 @@ class Configuration {
   /// All languages that the Host app should support
   final List<LanguageConfiguration> supportedLanguages;
 
+  /// Custom Translations
+  TrufiCustomLocalizations customTranslations = TrufiCustomLocalizations();
+
+  /// Definition of the feedback if it is a URL or a Email
   final FeedbackDefinition feedbackDefinition;
 
   Configuration({
+    this.customTranslations,
     this.feedbackDefinition,
     this.supportedLanguages = const [],
     this.serverType,
@@ -60,3 +66,5 @@ class AnimationConfiguration {
 
   AnimationConfiguration({this.loading, this.success});
 }
+
+class TrufiCustomLocalizations extends TrufiCustomLocalization {}

@@ -75,8 +75,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  cfg.customTranslations.get(
-                    cfg.customTranslations.title,
+                  cfg2.customTranslations.get(
+                    cfg2.customTranslations.title,
                     currentLocale,
                     localization.title,
                   ),
@@ -85,8 +85,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 Container(
                   padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
-                    cfg.customTranslations.get(
-                      cfg.customTranslations.tagline,
+                    cfg2.customTranslations.get(
+                      cfg2.customTranslations.tagline,
                       currentLocale,
                       localization.tagline(cfg.generalConfiguration.appCity),
                     ),
@@ -217,7 +217,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildAppShareButton(BuildContext context, String url) {
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final localization = TrufiLocalization.of(context);
     return Container(
@@ -237,7 +237,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 currentLocale,
                 localization.title,
               ),
-              cfg.generalConfiguration.appCity,
+              TrufiConfiguration().generalConfiguration.appCity,
             ),
             sharePositionOrigin: getAppShareButtonOrigin(),
           );

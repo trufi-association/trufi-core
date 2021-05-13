@@ -21,10 +21,6 @@ void main() {
     });
 
     testWidgets("should show the customTranslated Title", (tester) async {
-      trufiCfg.customTranslations.title = {
-        const Locale("en"): "Test Trufi App",
-      };
-
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
         create: (context) => PreferencesCubit([]),
         child: const MaterialApp(
@@ -41,7 +37,6 @@ void main() {
     });
 
     testWidgets("should show the real Title", (tester) async {
-      trufiCfg.customTranslations.title = null;
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
         create: (context) => PreferencesCubit([]),
         child: const MaterialApp(
