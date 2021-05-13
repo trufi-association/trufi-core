@@ -79,7 +79,6 @@ class TrufiConfigurationLanguage {
 }
 
 class TrufiConfigurationMap {
-  String mapTilerKey = "";
   double defaultZoom = 12.0;
   double offlineZoom = 13.0;
   double offlineMinZoom = 8.0;

@@ -10,6 +10,7 @@ import '../../blocs/gps_location/location_provider_cubit.dart';
 import '../../trufi_configuration.dart';
 import '../../widgets/alerts.dart';
 import '../../widgets/trufi_map_animations.dart';
+
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiMapController {
@@ -18,17 +19,10 @@ class TrufiMapController {
   final _mapController = MapController();
   final _mapReadyController = BehaviorSubject<void>();
 
-TrufiMapController(){
-    _mapController.onReady.then((_) {
-      final cfg = TrufiConfiguration();
-      final zoom = cfg.map.defaultZoom;
-      final mapCenter = cfg.map.center;
-
-      _mapController.move(mapCenter, zoom);
-      _inMapReady.add(null);
-    });
+  TrufiMapController() {
     _animations = TrufiMapAnimations(_mapController);
-}
+  }
+
   TrufiMapAnimations _animations;
 
   void dispose() {
@@ -90,11 +84,9 @@ TrufiMapController(){
     }
   }
 
-  Sink<void> get _inMapReady => _mapReadyController.sink;
+  Sink<void> get inMapReady => _mapReadyController.sink;
 
   Stream<void> get outMapReady => _mapReadyController.stream;
 
   MapController get mapController => _mapController;
-
 }
-
