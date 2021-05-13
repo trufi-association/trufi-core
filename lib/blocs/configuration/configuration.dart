@@ -5,9 +5,9 @@ import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
+import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 
 /// A collection of all important configurations
 class Configuration {
