@@ -1,6 +1,5 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 
 import 'models/definition_feedback.dart';
@@ -79,17 +78,6 @@ class TrufiConfigurationLanguage {
 }
 
 class TrufiConfigurationMap {
-  double defaultZoom = 12.0;
-  double offlineZoom = 13.0;
-  double offlineMinZoom = 8.0;
-  double offlineMaxZoom = 14.0;
-  double onlineMinZoom = 1.0;
-  double onlineMaxZoom = 19.0;
-  double onlineZoom = 13.0;
-  double chooseLocationZoom = 16.0;
-  LatLng center = LatLng(5.574558, -0.214656);
-  LatLng southWest = LatLng(5.510057, -0.328217);
-  LatLng northEast = LatLng(5.726678, 0.071411);
   // ignore: prefer_function_declarations_over_variables
   WidgetBuilder buildMapAttribution = (context) => MapTileAndOSMCopyright();
 }

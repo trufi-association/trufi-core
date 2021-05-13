@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import '../../blocs/gps_location/location_provider_cubit.dart';
-import '../../trufi_configuration.dart';
 import '../../widgets/alerts.dart';
 import '../../widgets/trufi_map_animations.dart';
 
@@ -34,7 +34,7 @@ class TrufiMapController {
     @required LatLng location,
     TickerProvider tickerProvider,
   }) async {
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final zoom = cfg.map.chooseLocationZoom;
 
     if (location != null) {
