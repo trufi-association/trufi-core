@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/trufi_app.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
@@ -43,7 +42,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     });
 
     final Locale locale = Localizations.localeOf(context);
-    final trufiConfiguration = TrufiConfiguration();
+    final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return Stack(
       children: <Widget>[
         TrufiMap(
@@ -78,7 +77,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           bottom: 0,
           left: 10,
           child: SafeArea(
-            child: trufiConfiguration.map.buildMapAttribution(context),
+            child: trufiConfiguration.map.mapAttributionBuilder(context),
           ),
         ),
         Positioned.fill(

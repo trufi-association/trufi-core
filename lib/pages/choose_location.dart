@@ -7,7 +7,6 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
-import '../trufi_configuration.dart';
 import '../widgets/map/trufi_map.dart';
 import '../widgets/map/utils/trufi_map_utils.dart';
 
@@ -62,7 +61,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final trufiConfiguration = TrufiConfiguration();
+    final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -115,7 +114,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             bottom: 0,
             left: 10,
             child: SafeArea(
-              child: trufiConfiguration.map.buildMapAttribution(context),
+              child: trufiConfiguration.map.mapAttributionBuilder(context),
             ),
           ),
         ],

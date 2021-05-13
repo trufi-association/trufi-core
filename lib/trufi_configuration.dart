@@ -21,7 +21,6 @@ class TrufiConfiguration {
   final email = TrufiConfigurationEmail();
   final image = TrufiConfigurationImage();
   final url = TrufiConfigurationUrl();
-  final map = TrufiConfigurationMap();
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();
   final generalConfiguration = TrufiGeneralConfiguration();

@@ -1,41 +1,46 @@
+import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/widgets/map/map_copyright.dart';
 
 // TODO: Add some documentation that makes sense
 // -> Why do we need NorthEast, SouthWest and Center
 // -> Why do we need so many zoom levels
 class MapConfiguration {
   /// Default Zoom level of the map on start
-  double defaultZoom;
+  final double defaultZoom;
 
   /// Offline Zoom level of the map on start
-  double offlineZoom;
+  final double offlineZoom;
 
   /// Offline Minimal Zoom
-  double offlineMinZoom;
+  final double offlineMinZoom;
 
   /// Offline Maximal Zoom
-  double offlineMaxZoom;
+  final double offlineMaxZoom;
 
   /// Online Minimal Zoom
-  double onlineMinZoom;
+  final double onlineMinZoom;
 
   /// Online Maximal Zoom Level
-  double onlineMaxZoom;
+  final double onlineMaxZoom;
 
   /// Online Default Zoom
-  double onlineZoom;
+  final double onlineZoom;
 
   /// Choose Location Zoom
-  double chooseLocationZoom;
+  final double chooseLocationZoom;
 
   /// Center of the map
-  LatLng center = LatLng(5.574558, -0.214656);
+  LatLng center;
 
   /// SouthWest of the map
-  LatLng southWest = LatLng(5.510057, -0.328217);
+  LatLng southWest;
 
   /// NorthEast of the map
-  LatLng northEast = LatLng(5.726678, 0.071411);
+  LatLng northEast;
+
+  /// This widgetBuilder creates the Attribution Texts on top of the map
+  WidgetBuilder mapAttributionBuilder;
 
   MapConfiguration({
     this.defaultZoom = 12.0,
@@ -49,5 +54,14 @@ class MapConfiguration {
     this.center,
     this.southWest,
     this.northEast,
-  });
+    this.mapAttributionBuilder,
+  }) {
+    mapAttributionBuilder = mapAttributionBuilder ??
+        (context) {
+          return MapTileAndOSMCopyright();
+        };
+    center = center ?? LatLng(5.574558, -0.214656);
+    southWest = southWest ?? LatLng(5.510057, -0.328217);
+    northEast = northEast ?? LatLng(5.726678, 0.071411);
+  }
 }

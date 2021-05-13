@@ -13,6 +13,7 @@ class Configuration {
   /// Everyone who is involved creating the application
   final Attribution attribution;
 
+  /// All map related configurations for the Trufi Core
   final MapConfiguration map;
 
   Configuration({
