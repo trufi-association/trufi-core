@@ -43,12 +43,3 @@ class TrufiConfigurationAttribution {
   final routes = [];
   final osm = [];
 }
-
-class TrufiConfigurationEmail {
-  String feedback = "";
-  String info = "";
-}
-
-class TrufiConfigurationImage {
-  String drawerBackground = "";
-}
