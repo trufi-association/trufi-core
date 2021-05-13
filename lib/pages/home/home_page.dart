@@ -34,11 +34,11 @@ class HomePage extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final cfg = context.read<ConfigurationCubit>().state;
+    final config = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
-    final isGraphQlEndpoint = cfg.serverType == ServerType.graphQLServer;
+    final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(
@@ -102,8 +102,8 @@ class HomePage extends StatelessWidget {
                     ),
             ),
           ),
-          if (cfg.animations.loading != null && homePageState.isFetching)
-            Positioned.fill(child: cfg.animations.loading)
+          if (config.animations.loading != null && homePageState.isFetching)
+            Positioned.fill(child: config.animations.loading)
         ],
       ),
       drawer: const TrufiDrawer(HomePage.route),

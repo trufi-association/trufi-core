@@ -126,7 +126,8 @@ class TrufiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
-    final trufiConfiguration = context.read<ConfigurationCubit>().state;
+    final openTripPlannerUrl = configuration.urls.openTripPlannerUrl;
+    final serverType = configuration.serverType;
     return MultiBlocProvider(
       providers: [
         BlocProvider<ConfigurationCubit>(
@@ -158,16 +159,18 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<HomePageCubit>(
-          create: (context) => HomePageCubit(
-            sharedPreferencesRepository,
-            trufiConfiguration.serverType == ServerType.defaultServer
-                ? OnlineRepository(
-                    otpEndpoint: trufiConfiguration.urls.openTripPlannerUrl,
-                  )
-                : OnlineGraphQLRepository(
-                    graphQLEndPoint: trufiConfiguration.urls.openTripPlannerUrl,
-                  ),
-          ),
+          create: (context) {
+            return HomePageCubit(
+              sharedPreferencesRepository,
+              serverType == ServerType.defaultServer
+                  ? OnlineRepository(
+                      otpEndpoint: openTripPlannerUrl,
+                    )
+                  : OnlineGraphQLRepository(
+                      graphQLEndPoint: openTripPlannerUrl,
+                    ),
+            );
+          },
         ),
         BlocProvider<LocationProviderCubit>(
           create: (context) => LocationProviderCubit(),
