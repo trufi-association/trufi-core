@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
@@ -32,6 +33,7 @@ class FormFieldsPortrait extends StatelessWidget {
   Widget build(BuildContext context) {
     final translations = TrufiLocalization.of(context);
     final homePageState = context.read<HomePageCubit>().state;
+    final config = context.read<ConfigurationCubit>().state;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
@@ -61,8 +63,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   : null,
               value: homePageState.toPlace,
             ),
-            if (TrufiConfiguration().generalConfiguration.serverType ==
-                ServerType.graphQLServer)
+            if (config.serverType == ServerType.graphQLServer)
               SettingPayload(onFetchPlan: onFetchPlan),
           ],
         ),

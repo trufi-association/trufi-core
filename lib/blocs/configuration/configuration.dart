@@ -45,11 +45,22 @@ class Configuration {
   /// Definition of the feedback if it is a URL or a Email
   final FeedbackDefinition feedbackDefinition;
 
+  /// City where the App is used
+  final String appCity;
+
+  /// Development support for verbose state changes
+  final bool debug;
+
+  final int minimumReviewWorthyActionCount;
+
   Configuration({
+    this.minimumReviewWorthyActionCount = 3,
+    this.debug = false,
+    this.serverType = ServerType.defaultServer,
+    this.appCity = "Cochabamba",
     this.customTranslations,
     this.feedbackDefinition,
     this.supportedLanguages = const [],
-    this.serverType,
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
     this.animations,
     this.abbreviations,

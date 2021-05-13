@@ -38,9 +38,7 @@ class HomePage extends StatelessWidget {
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
-    final isGraphQlEndpoint =
-        TrufiConfiguration().generalConfiguration.serverType ==
-            ServerType.graphQLServer;
+    final isGraphQlEndpoint = cfg.serverType == ServerType.graphQLServer;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(

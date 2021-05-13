@@ -83,7 +83,7 @@ class TrufiApp extends StatelessWidget {
   })  : assert(configuration != null, "Configuration cannot be empty"),
         assert(theme != null, "Theme cannot be empty"),
         super(key: key) {
-    if (TrufiConfiguration().generalConfiguration.debug) {
+    if (configuration.debug) {
       Bloc.observer = TrufiObserver();
     }
   }
@@ -147,7 +147,10 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<AppReviewCubit>(
-          create: (context) => AppReviewCubit(sharedPreferencesRepository),
+          create: (context) => AppReviewCubit(
+            configuration.minimumReviewWorthyActionCount,
+            sharedPreferencesRepository,
+          ),
         ),
         BlocProvider<SearchLocationsCubit>(
           create: (context) => SearchLocationsCubit(

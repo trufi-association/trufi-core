@@ -2,24 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/trufi_drawer.dart';
 
 void main() {
   group("TrufiDrawer", () {
-    // TODO: Remove Singleton or make it easier to test, create clean method.
-    final trufiCfg = TrufiConfiguration();
-
-    setUpAll(() {
-      trufiCfg.languages.add(
-        LanguageConfiguration("en", "", "English"),
-      );
-    });
-
     testWidgets("should show the customTranslated Title", (tester) async {
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
         create: (context) => PreferencesCubit([]),
