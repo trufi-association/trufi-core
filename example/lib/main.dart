@@ -5,6 +5,10 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 
+import 'package:trufi_core/models/social_media/facebook_social_media.dart';
+import 'package:trufi_core/models/social_media/instagram_social_media.dart';
+import 'package:trufi_core/models/social_media/twitter_social_media.dart';
+import 'package:trufi_core/models/social_media/website_social_media.dart';
 // TODO: Remove the async GlobalConfig load
 // https://github.com/trufi-association/trufi-core/pull/419#discussion_r615767538
 Future<void> main() async {
@@ -76,8 +80,6 @@ Future<void> main() async {
   trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
 
   // Map
-  trufiCfg.map.satelliteMapTypeEnabled = true;
-  trufiCfg.map.terrainMapTypeEnabled = true;
   trufiCfg.map.defaultZoom = 12.0;
   trufiCfg.map.offlineMinZoom = 8.0;
   trufiCfg.map.offlineMaxZoom = 14.0;
@@ -127,12 +129,6 @@ Future<void> main() async {
 
   // Url
   trufiCfg.url.otpEndpoint = globalCfg.getValue<String>("urlOtpEndpoint");
-  trufiCfg.url.tilesStreetsEndpoint =
-      globalCfg.getValue<String>("urlTilesStreetsEndpoint");
-  trufiCfg.url.tilesSatelliteEndpoint =
-      globalCfg.getValue<String>("urlTilesSatelliteEndpoint");
-  trufiCfg.url.tilesTerrainEndpoint =
-      globalCfg.getValue<String>("urlTilesTerrainEndpoint");
   trufiCfg.url.adsEndpoint = globalCfg.getValue<String>("urlAdsEndpoint");
   trufiCfg.url.routeFeedback = globalCfg.getValue<String>("urlRouteFeedback");
   trufiCfg.url.donate = globalCfg.getValue<String>("urlDonate");
@@ -154,7 +150,15 @@ Future<void> main() async {
   );
 
   // Run app
-  runApp(TrufiApp(theme: theme));
+  runApp(TrufiApp(
+    theme: theme,
+    socialMediaItem: [
+      FacebookSocialMedia("https://www.facebook.com/trufiapp"),
+      InstagramSocialMedia("https://www.instagram.com/trufi.app"),
+      TwitterSocialMedia("https://twitter.com/TrufiAssoc"),
+      WebSiteSocialMedia("https://www.trufi.app/blog/"),
+    ],
+  ));
 }
 
 /// This is an example on how to customize your application

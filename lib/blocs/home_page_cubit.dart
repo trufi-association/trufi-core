@@ -2,15 +2,15 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
-import 'package:trufi_core/pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_models.dart';
+
+import 'payload_data_plan/payload_data_plan_cubit.dart';
 
 class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
@@ -54,84 +54,87 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(state.copyWith(fromPlace: fromPlace));
   }
 
-  Future<void> setPlan(PlanEntity plan) async {
-    await updateMapRouteState(state.copyWith(
-      plan: plan,
-      isFetching: false,
-      showSuccessAnimation: true,
-    ));
-  }
-
   Future<void> swapLocations() async {
     await updateMapRouteState(
       state.copyWith(
         fromPlace: state.toPlace,
         toPlace: state.fromPlace,
-        isFetching: true,
       ),
     );
   }
 
   Future<void> setToPlace(TrufiLocation toPlace) async {
-    await updateMapRouteState(state.copyWith(toPlace: toPlace, isFetching: true));
+    await updateMapRouteState(state.copyWith(toPlace: toPlace));
   }
 
   Future<void> configSuccessAnimation({bool show}) async {
     await updateMapRouteState(state.copyWith(showSuccessAnimation: show));
   }
 
-  Future<void> refreshCurrentRoute() async {
-    await updateMapRouteState(
-      state.copyWith(
-        isFetching: true,
-      ),
-    );
-  }
-
   Future<void> fetchPlan(
     String correlationId, {
     bool car = false,
-    SettingPanelState advancedOptions,
+    PayloadDataPlanState advancedOptions,
+  }) async {
+    if (state.toPlace != null && state.fromPlace != null) {
+      await updateMapRouteState(state.copyWithoutMap(isFetching: true));
+      final PlanEntity planEntity = await _fetchPlan(
+        correlationId,
+        car: car,
+        advancedOptions: advancedOptions,
+      ).catchError((error) async {
+        await updateMapRouteState(state.copyWith(isFetching: false));
+        throw error;
+      });
+      await updateMapRouteState(state.copyWith(
+        plan: planEntity,
+        isFetching: false,
+        showSuccessAnimation: true,
+      ));
+    }
+  }
+
+  Future<PlanEntity> _fetchPlan(
+    String correlationId, {
+    bool car = false,
+    PayloadDataPlanState advancedOptions,
   }) async {
     if (currentFetchPlanOperation != null) {
       await currentFetchPlanOperation.cancel();
     }
-    if (state.toPlace != null && state.fromPlace != null) {
-      currentFetchPlanOperation = car
-          ? CancelableOperation.fromFuture(() async {
-              return requestManager.fetchCarPlan(
-                state.fromPlace,
-                state.toPlace,
-                correlationId,
-              );
-            }())
-          : CancelableOperation.fromFuture(
-              () async {
-                return requestManager.fetchAdvancedPlan(
-                    from: state.fromPlace,
-                    to: state.toPlace,
-                    correlationId: correlationId,
-                    advancedOptions: advancedOptions);
-              }(),
+    currentFetchPlanOperation = car
+        ? CancelableOperation.fromFuture(() async {
+            return requestManager.fetchCarPlan(
+              state.fromPlace,
+              state.toPlace,
+              correlationId,
             );
-      final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
-        null,
-      );
-      if (plan != null && !plan.hasError) {
-        setPlan(plan);
-      } else if (plan == null) {
-        throw FetchCanceledByUserException("Cancelled by User");
-      } else if (plan.hasError) {
-        updateMapRouteState(state.copyWith(isFetching: false));
-        if (car) {
-          throw FetchOnlineCarException(plan.error.message);
-        } else {
-          throw FetchOnlinePlanException(plan.error.message);
-        }
+          }())
+        : CancelableOperation.fromFuture(
+            () async {
+              return requestManager.fetchAdvancedPlan(
+                  from: state.fromPlace,
+                  to: state.toPlace,
+                  correlationId: correlationId,
+                  advancedOptions: advancedOptions);
+            }(),
+          );
+    final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
+      null,
+    );
+    if (plan != null && !plan.hasError) {
+      return plan;
+    } else if (plan == null) {
+      throw FetchCanceledByUserException("Cancelled by User");
+    } else if (plan.hasError) {
+      if (car) {
+        throw FetchOnlineCarException(plan.error.message);
       } else {
-        // should never happened
-        throw Exception("Unknown Error");
+        throw FetchOnlinePlanException(plan.error.message);
       }
+    } else {
+      // should never happened
+      throw Exception("Unknown Error");
     }
   }
 
@@ -146,7 +149,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
           );
         }(),
       );
-      final AdEntity ad = await currentFetchAdOperation.valueOrCancellation(null);
+      final AdEntity ad =
+          await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),
       );
@@ -164,24 +168,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
       print("Failed to fetch ad: $e");
       // ignore: avoid_print
       print(stacktrace);
-    }
-  }
-
-  Future<void> mapLongPress(LatLng point) async {
-    if (state.fromPlace == null) {
-      setFromPlace(
-        TrufiLocation.fromLatLng(
-          "Map pressed from",
-          point,
-        ),
-      );
-    } else if (state.toPlace == null) {
-      setToPlace(
-        TrufiLocation.fromLatLng(
-          "Map pressed to",
-          point,
-        ),
-      );
     }
   }
 }

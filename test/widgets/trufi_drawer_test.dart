@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/widgets/trufi_drawer.dart';
-
-import '../mocks/uuid_mock.dart';
 
 void main() {
   group("TrufiDrawer", () {
@@ -32,8 +30,7 @@ void main() {
       };
 
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
-        create: (context) =>
-            PreferencesCubit(MockSharedPreferencesRepository(), MockUuid()),
+        create: (context) => PreferencesCubit([]),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,
@@ -50,8 +47,7 @@ void main() {
     testWidgets("should show the real Title", (tester) async {
       trufiCfg.customTranslations.title = null;
       await tester.pumpWidget(BlocProvider<PreferencesCubit>(
-        create: (context) =>
-            PreferencesCubit(MockSharedPreferencesRepository(), MockUuid()),
+        create: (context) => PreferencesCubit([]),
         child: const MaterialApp(
           localizationsDelegates: [
             TrufiLocalization.delegate,

@@ -80,8 +80,6 @@ class TrufiConfigurationLanguage {
 
 class TrufiConfigurationMap {
   String mapTilerKey = "";
-  bool satelliteMapTypeEnabled = false;
-  bool terrainMapTypeEnabled = false;
   double defaultZoom = 12.0;
   double offlineZoom = 13.0;
   double offlineMinZoom = 8.0;
@@ -101,9 +99,6 @@ class TrufiConfigurationUrl {
   final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
   final mapTilerCopyright = "https://www.maptiler.com/copyright/";
   String otpEndpoint = "";
-  String tilesStreetsEndpoint = "";
-  String tilesSatelliteEndpoint = "";
-  String tilesTerrainEndpoint = "";
   String adsEndpoint = "";
   String routeFeedback = "";
   String website = "";

@@ -44,9 +44,7 @@ class LocationFormField extends StatelessWidget {
                 // Show search
                 final TrufiLocation location = await showSearch(
                   context: context,
-                  delegate: LocationSearchDelegate(
-                    currentLocation: value,
-                  ),
+                  delegate: LocationSearchDelegate(),
                 );
                 // Check result
                 if (location != null) {

@@ -1,7 +1,22 @@
-part of 'setting_panel_cubit.dart';
+part of 'payload_data_plan_cubit.dart';
+
+final initPayloadDataPlanState = PayloadDataPlanState(
+  typeWalkingSpeed: WalkingSpeed.average,
+  avoidWalking: false,
+  transportModes: defaultTransportModes,
+  bikeRentalNetworks: defaultBikeRentalNetworks,
+  avoidTransfers: false,
+  includeBikeSuggestions: true,
+  typeBikingSpeed: BikingSpeed.average,
+  includeParkAndRideSuggestions: true,
+  includeCarSuggestions: true,
+  wheelchair: false,
+  arriveBy: false,
+  date: DateTime.now(),
+);
 
 @immutable
-class SettingPanelState extends Equatable {
+class PayloadDataPlanState extends Equatable {
   static const String _typeWalkingSpeed = "typeWalkingSpeed";
   static const String _avoidWalking = "avoidWalking";
   static const String _transportModes = "transportModes";
@@ -9,21 +24,26 @@ class SettingPanelState extends Equatable {
   static const String _avoidTransfers = "avoidTransfers";
   static const String _includeBikeSuggestions = "includeBikeSuggestions";
   static const String _typeBikingSpeed = "typeBikingSpeed";
-  static const String _includeParkAndRideSuggestions = "includeParkAndRideSuggestions";
+  static const String _includeParkAndRideSuggestions =
+      "includeParkAndRideSuggestions";
   static const String _includeCarSuggestions = "includeCarSuggestions";
   static const String _wheelchair = "wheelchair";
+  static const String _date = "date-key";
+  static const String _arriveBy = "arriveBy";
 
-  const SettingPanelState({
-    this.typeWalkingSpeed = WalkingSpeed.average,
-    this.avoidWalking = false,
-    this.transportModes = defaultTransportModes,
-    this.bikeRentalNetworks = defaultBikeRentalNetworks,
-    this.avoidTransfers = false,
-    this.includeBikeSuggestions = true,
-    this.typeBikingSpeed = BikingSpeed.average,
-    this.includeParkAndRideSuggestions = true,
-    this.includeCarSuggestions = true,
-    this.wheelchair = false,
+  const PayloadDataPlanState({
+    @required this.typeWalkingSpeed,
+    @required this.avoidWalking,
+    @required this.transportModes,
+    @required this.bikeRentalNetworks,
+    @required this.avoidTransfers,
+    @required this.includeBikeSuggestions,
+    @required this.typeBikingSpeed,
+    @required this.includeParkAndRideSuggestions,
+    @required this.includeCarSuggestions,
+    @required this.wheelchair,
+    @required this.arriveBy,
+    @required this.date,
   });
 
   final WalkingSpeed typeWalkingSpeed;
@@ -36,8 +56,10 @@ class SettingPanelState extends Equatable {
   final bool includeParkAndRideSuggestions;
   final bool includeCarSuggestions;
   final bool wheelchair;
+  final bool arriveBy;
+  final DateTime date;
 
-  SettingPanelState copyWith({
+  PayloadDataPlanState copyWith({
     WalkingSpeed typeWalkingSpeed,
     List<TransportMode> transportModes,
     List<BikeRentalNetwork> bikeRentalNetworks,
@@ -48,25 +70,51 @@ class SettingPanelState extends Equatable {
     bool includeParkAndRideSuggestions,
     bool includeCarSuggestions,
     bool wheelchair,
+    bool arriveBy,
+    DateTime date,
   }) {
-    return SettingPanelState(
+    return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
       transportModes: transportModes ?? this.transportModes,
       bikeRentalNetworks: bikeRentalNetworks ?? this.bikeRentalNetworks,
       avoidTransfers: avoidTransfers ?? this.avoidTransfers,
       avoidWalking: avoidWalking ?? this.avoidWalking,
-      includeBikeSuggestions: includeBikeSuggestions ?? this.includeBikeSuggestions,
+      includeBikeSuggestions:
+          includeBikeSuggestions ?? this.includeBikeSuggestions,
       typeBikingSpeed: typeBikingSpeed ?? this.typeBikingSpeed,
       includeParkAndRideSuggestions:
           includeParkAndRideSuggestions ?? this.includeParkAndRideSuggestions,
-      includeCarSuggestions: includeCarSuggestions ?? this.includeCarSuggestions,
+      includeCarSuggestions:
+          includeCarSuggestions ?? this.includeCarSuggestions,
       wheelchair: wheelchair ?? this.wheelchair,
+      arriveBy: arriveBy ?? this.arriveBy,
+      date: date ?? this.date,
+    );
+  }
+
+  PayloadDataPlanState copyWithDateNull({
+    bool arriveBy,
+    DateTime date,
+  }) {
+    return PayloadDataPlanState(
+      typeWalkingSpeed: typeWalkingSpeed,
+      transportModes: transportModes,
+      bikeRentalNetworks: bikeRentalNetworks,
+      avoidTransfers: avoidTransfers,
+      avoidWalking: avoidWalking,
+      includeBikeSuggestions: includeBikeSuggestions,
+      typeBikingSpeed: typeBikingSpeed,
+      includeParkAndRideSuggestions: includeParkAndRideSuggestions,
+      includeCarSuggestions: includeCarSuggestions,
+      wheelchair: wheelchair,
+      arriveBy: arriveBy ?? this.arriveBy,
+      date: date,
     );
   }
 
   // Json
-  factory SettingPanelState.fromJson(Map<String, dynamic> json) {
-    return SettingPanelState(
+  factory PayloadDataPlanState.fromJson(Map<String, dynamic> json) {
+    return PayloadDataPlanState(
       typeWalkingSpeed: getWalkingSpeed(json[_typeWalkingSpeed] as String),
       transportModes: json[_transportModes]
           .map<TransportMode>(
@@ -82,9 +130,12 @@ class SettingPanelState extends Equatable {
       avoidWalking: json[_avoidWalking] as bool,
       includeBikeSuggestions: json[_includeBikeSuggestions] as bool,
       typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as String),
-      includeParkAndRideSuggestions: json[_includeParkAndRideSuggestions] as bool,
+      includeParkAndRideSuggestions:
+          json[_includeParkAndRideSuggestions] as bool,
       includeCarSuggestions: json[_includeCarSuggestions] as bool,
       wheelchair: json[_wheelchair] as bool,
+      arriveBy: json[_arriveBy] as bool,
+      date: json[_date] != null ? DateTime.parse(json[_date] as String) : null,
     );
   }
 
@@ -92,15 +143,19 @@ class SettingPanelState extends Equatable {
     return {
       _typeWalkingSpeed: typeWalkingSpeed.name,
       _avoidWalking: avoidWalking,
-      _transportModes: transportModes.map((transportMode) => transportMode.name).toList(),
-      _bikeRentalNetworks:
-          bikeRentalNetworks.map((bikeRentalNetwork) => bikeRentalNetwork.name).toList(),
+      _transportModes:
+          transportModes.map((transportMode) => transportMode.name).toList(),
+      _bikeRentalNetworks: bikeRentalNetworks
+          .map((bikeRentalNetwork) => bikeRentalNetwork.name)
+          .toList(),
       _avoidTransfers: avoidTransfers,
       _includeBikeSuggestions: includeBikeSuggestions,
       _typeBikingSpeed: typeBikingSpeed.name,
       _includeParkAndRideSuggestions: includeParkAndRideSuggestions,
       _includeCarSuggestions: includeCarSuggestions,
       _wheelchair: wheelchair,
+      _arriveBy: arriveBy,
+      _date: date?.toIso8601String(),
     };
   }
 
@@ -116,9 +171,7 @@ class SettingPanelState extends Equatable {
         includeParkAndRideSuggestions,
         includeCarSuggestions,
         wheelchair,
+        date,
+        arriveBy
       ];
-}
-
-class JsonSerializable {
-  const JsonSerializable();
 }

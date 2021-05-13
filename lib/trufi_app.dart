@@ -3,19 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/preferences.dart';
+import 'package:trufi_core/models/social_media/social_media_item.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
+import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
-import 'package:uuid/uuid.dart';
 
 import './blocs/bloc_provider.dart';
 import './blocs/location_search_bloc.dart';
-import './blocs/preferences_cubit.dart';
+import './blocs/preferences/preferences_cubit.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/saved_places/saved_places.dart';
@@ -23,15 +24,17 @@ import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
+import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
+import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/definition_feedback.dart';
+import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
-import 'pages/home/plan_map/setting_panel/setting_panel.dart';
-import 'pages/home/plan_map/setting_panel/setting_panel_cubit.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
+import 'services/search_location/search_location_manager.dart';
 
 /// Signature for a function that creates a widget with the current [Locale],
 /// e.g. [StatelessWidget.build] or [State.build].
@@ -73,6 +76,9 @@ class TrufiApp extends StatelessWidget {
     Key key,
     this.customLayers = const [],
     this.feedBack,
+    this.mapTileProviders,
+    this.searchLocationManager,
+    this.socialMediaItem = const [],
   }) : super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
@@ -97,9 +103,22 @@ class TrufiApp extends StatelessWidget {
   final List<CustomLayer> customLayers;
 
   /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
-  /// if the FeedBack is null, the comment page is not created.
+  /// if the FeedBack is null, the feedback page is not created.
   final DefinitionFeedBack feedBack;
 
+  ///List of [SocialMediaItem] implementations
+  ///By defaul [Trufi-Core] has some implementation what you can use:
+  /// [FacebookSocialMedia] [InstagramSocialMedia] [TwitterSocialMedia]
+  final List<SocialMediaItem> socialMediaItem;
+
+  /// List of Map Tile Provider
+  /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
+  final List<MapTileProvider> mapTileProviders;
+
+  ///You can provider a [SearchLocationManager]
+  ///By defaul [Trufi-Core] has implementation
+  /// [OfflineSearchLocation] that used the assets/data/search.json
+  final SearchLocationManager searchLocationManager;
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -108,26 +127,32 @@ class TrufiApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<PreferencesCubit>(
-          create: (context) => PreferencesCubit(
-            sharedPreferencesRepository,
-            Uuid(),
-          ),
+          create: (context) => PreferencesCubit(socialMediaItem),
         ),
         BlocProvider<CustomLayersCubit>(
           create: (context) => CustomLayersCubit(customLayers),
+        ),
+        BlocProvider<MapTileProviderCubit>(
+          create: (context) => MapTileProviderCubit(
+            mapTileProviders:
+                mapTileProviders != null && mapTileProviders.isNotEmpty
+                    ? mapTileProviders
+                    : [OSMDefaultMapTile()],
+          ),
         ),
         BlocProvider<AppReviewCubit>(
           create: (context) => AppReviewCubit(sharedPreferencesRepository),
         ),
         BlocProvider<SearchLocationsCubit>(
           create: (context) => SearchLocationsCubit(
-            OfflineSearchLocation(),
+            searchLocationManager ?? OfflineSearchLocation(),
           ),
         ),
         BlocProvider<HomePageCubit>(
           create: (context) => HomePageCubit(
             sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.serverType == ServerType.defaultServer
+            trufiConfiguration.generalConfiguration.serverType ==
+                    ServerType.defaultServer
                 ? OnlineRepository(
                     otpEndpoint: trufiConfiguration.url.otpEndpoint,
                   )
@@ -142,8 +167,9 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(theme, searchTheme),
         ),
-        BlocProvider<SettingPanelCubit>(
-          create: (context) => SettingPanelCubit(sharedPreferencesRepository),
+        BlocProvider<PayloadDataPlanCubit>(
+          create: (context) =>
+              PayloadDataPlanCubit(sharedPreferencesRepository),
           lazy: false,
         ),
       ],
@@ -179,7 +205,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       SettingPanel.route: (context) => const SettingPanel(),
     };
 
-    return BlocBuilder<PreferencesCubit, Preference>(
+    return BlocBuilder<PreferencesCubit, PreferenceState>(
       builder: (BuildContext context, state) {
         return MaterialApp(
           locale: Locale.fromSubtags(languageCode: state.languageCode),
@@ -194,6 +220,7 @@ class LocalizedMaterialApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             QuMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
           theme: context.watch<ThemeCubit>().state.activeTheme,

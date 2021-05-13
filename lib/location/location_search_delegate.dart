@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/preferences_cubit.dart';
+import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -19,14 +19,13 @@ import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
-  LocationSearchDelegate({this.currentLocation});
-
-  final TrufiLocation currentLocation;
+  LocationSearchDelegate();
 
   dynamic _result;
 
   @override
-  ThemeData appBarTheme(BuildContext context) => context.read<ThemeCubit>().state.searchTheme;
+  ThemeData appBarTheme(BuildContext context) =>
+      context.read<ThemeCubit>().state.searchTheme;
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -172,7 +171,6 @@ class _SuggestionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final locationSearchBloc = LocationSearchBloc.of(context);
 
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SafeArea(
@@ -192,7 +190,8 @@ class _SuggestionList extends StatelessWidget {
                     .toList()),
           if (query.isEmpty)
             _BuildYourPlaces(
-                onSelected: onSelected, locations: searchLocationsCubit.state.myPlaces),
+                onSelected: onSelected,
+                locations: searchLocationsCubit.state.myPlaces),
           if (query.isEmpty)
             _BuildObjectList(
               localization.searchTitleFavorites,
@@ -202,20 +201,12 @@ class _SuggestionList extends StatelessWidget {
               onStreetTapped,
             ),
           if (query.isEmpty)
-            _BuildFutureBuilder(
-              title: localization.searchTitleRecent,
-              future: searchLocationsCubit.getHistoryListWithLimit(limit: 5),
-              iconData: Icons.history,
-              onSelected: onSelected,
-              onStreetTapped: onStreetTapped,
-            ),
-          if (query.isEmpty)
-            _BuildFutureBuilder(
-              title: localization.searchTitlePlaces,
-              future: locationSearchBloc.fetchPlaces(context),
-              iconData: Icons.place,
-              onSelected: onSelected,
-              onStreetTapped: onStreetTapped,
+            _BuildObjectList(
+              localization.searchTitleRecent,
+              Icons.history,
+              searchLocationsCubit.getHistoryListWithLimit(limit: 5),
+              onSelected,
+              onStreetTapped,
             ),
           if (query.isNotEmpty)
             _BuildFutureBuilder(
@@ -303,7 +294,7 @@ class _BuildFutureBuilder extends StatelessWidget {
         return _BuildObjectList(
           title,
           iconData,
-          snapshot.data,
+          context.read<SearchLocationsCubit>().sortedByFavorites(snapshot.data),
           onSelected,
           onStreetTapped,
         );
@@ -399,7 +390,7 @@ class _BuildYourPlaces extends StatelessWidget {
           return _BuildItem(
             () {
               if (location != null && onSelected != null) {
-                  onSelected(location);
+                onSelected(location);
               }
             },
             localIconData,
