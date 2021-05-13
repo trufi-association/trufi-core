@@ -54,9 +54,10 @@ void main() {
       });
 
       test(
-          "should return false if the minimum amount of relevant clicks are not there",
+          "should return true if the minimum amount of relevant clicks has been reached",
           () async {
         final subject = AppReviewCubit(3, localRepository)
+          ..incrementReviewWorthyActions()
           ..incrementReviewWorthyActions();
 
         when(mockPackageInfo.version).thenReturn("1.0.5");
