@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
-import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/trufi_configuration.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
@@ -43,7 +41,6 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     final Locale locale = Localizations.localeOf(context);
     final trufiConfiguration = TrufiConfiguration();
     final homePageCubit = context.read<HomePageCubit>();
-    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>().state;
     return Stack(
       children: <Widget>[
         TrufiMap(
@@ -58,10 +55,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
             ]),
           ],
           onLongPress: (location) async {
-            final correlationId =
-                context.read<PreferencesCubit>().state.correlationId;
-            await homePageCubit.setTappingPlace(location, correlationId,
-                advancedOptions: payloadDataPlanCubit);
+            await homePageCubit.setTappingPlace(location);
             widget.onFetchPlan();
           },
         ),

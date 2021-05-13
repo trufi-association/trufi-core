@@ -51,8 +51,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
-  Future<void> setTappingPlace(LatLng latLng, String correlationId,
-      {PayloadDataPlanState advancedOptions}) async {
+  Future<void> setTappingPlace(LatLng latLng) async {
     if (state.fromPlace == null) {
       await updateMapRouteState(state.copyWith(
           fromPlace: TrufiLocation.fromLatLng("Map Marker", latLng)));
