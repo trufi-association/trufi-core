@@ -2,13 +2,13 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/trufi_app.dart';
-import 'package:trufi_core/trufi_configuration.dart';
-
 import 'package:trufi_core/models/social_media/facebook_social_media.dart';
 import 'package:trufi_core/models/social_media/instagram_social_media.dart';
 import 'package:trufi_core/models/social_media/twitter_social_media.dart';
 import 'package:trufi_core/models/social_media/website_social_media.dart';
+import 'package:trufi_core/trufi_app.dart';
+import 'package:trufi_core/trufi_configuration.dart';
+
 // TODO: Remove the async GlobalConfig load
 // https://github.com/trufi-association/trufi-core/pull/419#discussion_r615767538
 Future<void> main() async {

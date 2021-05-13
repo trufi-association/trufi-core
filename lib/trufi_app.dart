@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -69,6 +71,7 @@ typedef LocaleWidgetBuilder = Widget Function(
 ///
 class TrufiApp extends StatelessWidget {
   TrufiApp({
+    @required this.configuration,
     @required this.theme,
     this.searchTheme,
     this.customOverlayBuilder,
@@ -79,11 +82,17 @@ class TrufiApp extends StatelessWidget {
     this.mapTileProviders,
     this.searchLocationManager,
     this.socialMediaItem = const [],
-  }) : super(key: key) {
+  })  : assert(configuration != null, "Configuration cannot be empty"),
+        assert(theme != null, "Theme cannot be empty"),
+        super(key: key) {
     if (TrufiConfiguration().generalConfiguration.debug) {
       Bloc.observer = TrufiObserver();
     }
   }
+
+  /// Main Configurations for the TrufiCore it contains information about
+  /// Feedback, Emails and Contributors.
+  final Configuration configuration;
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
@@ -119,6 +128,7 @@ class TrufiApp extends StatelessWidget {
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -126,6 +136,9 @@ class TrufiApp extends StatelessWidget {
     trufiConfiguration.configurationDrawer.definitionFeedBack = feedBack;
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ConfigurationCubit>(
+          create: (context) => ConfigurationCubit(configuration),
+        ),
         BlocProvider<PreferencesCubit>(
           create: (context) => PreferencesCubit(socialMediaItem),
         ),

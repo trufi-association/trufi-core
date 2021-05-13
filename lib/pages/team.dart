@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,7 +57,7 @@ class TeamPageState extends State<TeamPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return ListView(
@@ -73,7 +75,7 @@ class TeamPageState extends State<TeamPage> {
                       style: theme.textTheme.bodyText1,
                     ),
                     TextSpan(
-                      text: cfg.email.info,
+                      text: cfg.teamInformationEmail,
                       style: theme.textTheme.bodyText1.copyWith(
                         color: theme.accentColor,
                         decoration: TextDecoration.underline,
@@ -81,7 +83,7 @@ class TeamPageState extends State<TeamPage> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           launch(
-                            "mailto:${cfg.email.info}?subject=Contribution",
+                            "mailto:${cfg.teamInformationEmail}?subject=Contribution",
                           );
                         },
                     ),

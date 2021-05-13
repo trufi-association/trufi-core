@@ -99,12 +99,7 @@ class TrufiConfigurationUrl {
   final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
   final mapTilerCopyright = "https://www.maptiler.com/copyright/";
   String otpEndpoint = "";
-  String adsEndpoint = "";
   String routeFeedback = "";
-  String website = "";
-  String facebook = "";
-  String instagram = "";
-  String twitter = "";
   String donate = "";
   String share = "";
 }
