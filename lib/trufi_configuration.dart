@@ -16,7 +16,6 @@ class TrufiConfiguration {
   TrufiConfiguration._internal();
 
   final abbreviations = <String, String>{};
-  final url = TrufiConfigurationUrl();
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();
   final generalConfiguration = TrufiGeneralConfiguration();
@@ -74,13 +73,4 @@ class TrufiConfigurationLanguage {
 class TrufiConfigurationMap {
   // ignore: prefer_function_declarations_over_variables
   WidgetBuilder buildMapAttribution = (context) => MapTileAndOSMCopyright();
-}
-
-class TrufiConfigurationUrl {
-  final openStreetMapCopyright = "https://www.openstreetmap.org/copyright";
-  final mapTilerCopyright = "https://www.maptiler.com/copyright/";
-  String otpEndpoint = "";
-  String routeFeedback = "";
-  String donate = "";
-  String share = "";
 }
