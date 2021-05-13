@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
@@ -103,8 +104,8 @@ class HomePage extends StatelessWidget {
                     ),
             ),
           ),
-          if (cfg.animation.loading != null && homePageState.isFetching)
-            Positioned.fill(child: cfg.animation.loading)
+          if (cfg.animations.loading != null && homePageState.isFetching)
+            Positioned.fill(child: cfg.animations.loading)
         ],
       ),
       drawer: const TrufiDrawer(HomePage.route),

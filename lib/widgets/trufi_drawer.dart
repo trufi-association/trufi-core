@@ -36,7 +36,9 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     super.initState();
 
     // TODO: Should have some kind of fallback image
-    bgImage = AssetImage(TrufiConfiguration().image.drawerBackground);
+    bgImage = AssetImage(
+      context.read<ConfigurationCubit>().state.drawerBackgroundAssetPath,
+    );
   }
 
   @override

@@ -1,16 +1,15 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart' as rx;
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/trufi_configuration.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../composite_subscription.dart';
-import '../../../trufi_app.dart';
-import './plan_itinerary_tabs.dart';
-import './plan_map.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
+import 'package:trufi_core/trufi_app.dart';
 
 class PlanPageController {
   PlanPageController(this.plan, this.ad) {
@@ -98,7 +97,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final cfg = TrufiConfiguration();
+    final cfg = context.read<ConfigurationCubit>().state;
     final children = <Widget>[
       Column(
         children: <Widget>[
@@ -119,12 +118,12 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     ];
     final homePageBloc = context.read<HomePageCubit>();
     if (homePageBloc.state.showSuccessAnimation &&
-        cfg.animation.success != null) {
+        cfg.animations.success != null) {
       children.add(
         Positioned.fill(
           child: FlareActor(
-            cfg.animation.success.filename,
-            animation: cfg.animation.success.animation,
+            cfg.animations.success.filename,
+            animation: cfg.animations.success.animation,
             callback: (t) => homePageBloc.configSuccessAnimation(show: false),
           ),
         ),

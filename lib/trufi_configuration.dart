@@ -17,9 +17,6 @@ class TrufiConfiguration {
   TrufiConfiguration._internal();
 
   final abbreviations = <String, String>{};
-  final animation = TrufiConfigurationAnimation();
-  final email = TrufiConfigurationEmail();
-  final image = TrufiConfigurationImage();
   final url = TrufiConfigurationUrl();
   final attribution = TrufiConfigurationAttribution();
   final customTranslations = TrufiCustomLocalizations();

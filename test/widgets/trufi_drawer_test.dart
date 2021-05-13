@@ -14,7 +14,6 @@ void main() {
     final trufiCfg = TrufiConfiguration();
 
     setUpAll(() {
-      trufiCfg.image.drawerBackground = "assets/images/drawer-bg.jpg";
       trufiCfg.languages.add(
         TrufiConfigurationLanguage(
           languageCode: "en",
