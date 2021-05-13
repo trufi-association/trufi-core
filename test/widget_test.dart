@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/pages/home/search_location/location_form_field.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_configuration.dart';
@@ -10,10 +11,10 @@ void main() {
     final trufiCfg = TrufiConfiguration();
 
     trufiCfg.languages.addAll([
-      TrufiConfigurationLanguage(
-        languageCode: "en",
-        countryCode: "US",
-        displayName: "English",
+      LanguageConfiguration(
+        "en",
+        "US",
+        "English",
         isDefault: true,
       ),
     ]);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
@@ -15,11 +16,7 @@ void main() {
 
     setUpAll(() {
       trufiCfg.languages.add(
-        TrufiConfigurationLanguage(
-          languageCode: "en",
-          countryCode: "",
-          displayName: "English",
-        ),
+        LanguageConfiguration("en", "", "English"),
       );
     });
 

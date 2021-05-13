@@ -1,5 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:trufi_core/blocs/configuration/models/attribution.dart';
+import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
@@ -35,7 +36,7 @@ class Configuration {
   final ServerType serverType;
 
   /// All languages that the Host app should support
-  final List<TrufiConfigurationLanguage> supportedLanguages;
+  final List<LanguageConfiguration> supportedLanguages;
 
   final FeedbackDefinition feedbackDefinition;
 
