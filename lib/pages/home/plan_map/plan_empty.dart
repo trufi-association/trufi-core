@@ -40,7 +40,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
     final trufiConfiguration = TrufiConfiguration();
-    final homePageCubit = context.read<HomePageCubit>();
+    final homePageCubit = context.read<HomePageCubit>().state;
     return Stack(
       children: <Widget>[
         TrufiMap(
