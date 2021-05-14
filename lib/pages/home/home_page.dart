@@ -97,6 +97,9 @@ class HomePage extends StatelessWidget {
                       customBetweenFabWidget,
                     )
                   : PlanEmptyPage(
+                      onFetchPlan: () {
+                        _callFetchPlan(context);
+                      },
                       customOverlayWidget: customOverlayWidget,
                       customBetweenFabWidget: customBetweenFabWidget,
                     ),

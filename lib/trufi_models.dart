@@ -156,6 +156,10 @@ class TrufiLocation implements TrufiPlace {
     return latitude != 0 && longitude != 0;
   }
 
+  LatLng get latLng {
+    return LatLng(latitude, longitude);
+  }
+
   String translateValue(
     Map<String, String> abbreviations,
     TrufiLocalization localization,

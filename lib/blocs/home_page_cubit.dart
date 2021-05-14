@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/map_route_state.dart';
@@ -48,6 +49,16 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await localRepository.saveStateHomePage(jsonEncode(newState.toJson()));
 
     emit(newState);
+  }
+
+  Future<void> setTappingPlace(LatLng latLng) async {
+    if (state.fromPlace == null) {
+      await updateMapRouteState(state.copyWith(
+          fromPlace: TrufiLocation.fromLatLng("Map Marker", latLng)));
+    } else if (state.toPlace == null) {
+      await updateMapRouteState(state.copyWith(
+          toPlace: TrufiLocation.fromLatLng("Map Marker", latLng)));
+    }
   }
 
   Future<void> setFromPlace(TrufiLocation fromPlace) async {
