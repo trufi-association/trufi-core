@@ -21,7 +21,7 @@ import '../widgets/favorite_button.dart';
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   LocationSearchDelegate();
 
-  dynamic _result;
+  TrufiLocation _result;
 
   @override
   ThemeData appBarTheme(BuildContext context) =>
@@ -51,12 +51,15 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
       query: query,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
+        close(context, suggestion);
+      },
+      onSelectedMap: (TrufiLocation suggestion) {
+        _result = suggestion;
         showResults(context);
-        // close(context, suggestion);
       },
       onStreetTapped: (TrufiStreet street) {
-        _result = street;
-        showResults(context);
+        _result = street.location;
+        close(context, street.location);
       },
     );
   }
@@ -68,7 +71,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         return _buildStreetResults(context, _result as TrufiStreet);
       } else {
         Future.delayed(Duration.zero, () {
-          close(context, _result as TrufiLocation);
+          close(context, _result);
         });
       }
     }
@@ -162,10 +165,12 @@ class _SuggestionList extends StatelessWidget {
   const _SuggestionList({
     this.query,
     this.onSelected,
+    this.onSelectedMap,
     this.onStreetTapped,
   });
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
+  final ValueChanged<TrufiLocation> onSelectedMap;
   final ValueChanged<TrufiStreet> onStreetTapped;
 
   @override
@@ -181,7 +186,7 @@ class _SuggestionList extends StatelessWidget {
         child: CustomScrollView(slivers: [
           const SliverPadding(padding: EdgeInsets.all(4.0)),
           _BuildYourLocation(onSelected),
-          _BuildChooseOnMap(onSelected),
+          _BuildChooseOnMap(onSelectedMap),
           if (query.isEmpty)
             _BuildYourPlaces(
                 onSelected: onSelected,

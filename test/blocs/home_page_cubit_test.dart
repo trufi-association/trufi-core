@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:latlong/latlong.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -115,6 +116,38 @@ void main() {
       expect: () => [
         const MapRouteState(),
         const MapRouteState(showSuccessAnimation: true)
+      ],
+    );
+
+    blocTest(
+      "setTappingPlace for define fromPlace ",
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
+      act: (HomePageCubit cubit) async {
+        await cubit.setTappingPlace(LatLng(1.0, 1.0));
+      },
+      skip: 1,
+      expect: () => [
+        MapRouteState(
+          fromPlace: TrufiLocation(
+              longitude: 1.0, latitude: 1.0, description: "Map Marker"),
+        )
+      ],
+    );
+    blocTest(
+      "setTappingPlace for define toPlace ",
+      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
+      act: (HomePageCubit cubit) async {
+        await cubit.setTappingPlace(LatLng(1.0, 1.0));
+        await cubit.setTappingPlace(LatLng(2.0, 2.0));
+      },
+      skip: 2,
+      expect: () => [
+        MapRouteState(
+          fromPlace: TrufiLocation(
+              longitude: 1.0, latitude: 1.0, description: "Map Marker"),
+          toPlace: TrufiLocation(
+              longitude: 2.0, latitude: 2.0, description: "Map Marker"),
+        )
       ],
     );
   });
