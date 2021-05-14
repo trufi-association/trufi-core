@@ -51,7 +51,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
               if (homePageCubit.state.fromPlace != null)
                 buildFromMarker(homePageCubit.fromPlace.latLng),
               if (homePageCubit.state.toPlace != null)
-                buildToMarker(homePageCubit.state.toPlace.latLng),
+                buildToMarker(homePageCubit.toPlace.latLng),
             ]),
           ],
           onLongPress: (location) async {
