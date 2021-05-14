@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/trufi_configuration.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
+import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import '../../../trufi_app.dart';
 
 const double customOverlayWidgetMargin = 80;
 
 class PlanEmptyPage extends StatefulWidget {
-  const PlanEmptyPage(
-      {this.initialPosition,
-      this.customOverlayWidget,
-      this.customBetweenFabWidget,
-      Key key})
-      : super(key: key);
+  const PlanEmptyPage({
+    Key key,
+    @required this.onFetchPlan,
+    this.initialPosition,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
+  }) : super(key: key);
 
   final LatLng initialPosition;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
+  final void Function() onFetchPlan;
 
   @override
   PlanEmptyPageState createState() => PlanEmptyPageState();
@@ -34,12 +40,24 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
     final trufiConfiguration = TrufiConfiguration();
+    final homePageCubit = context.read<HomePageCubit>();
     return Stack(
       children: <Widget>[
         TrufiMap(
           key: const ValueKey("PlanEmptyMap"),
           controller: _trufiMapController,
-          layerOptionsBuilder: (context) => [],
+          layerOptionsBuilder: (context) => [
+            MarkerLayerOptions(markers: [
+              if (homePageCubit.state.fromPlace != null)
+                buildFromMarker(homePageCubit.state.fromPlace.latLng),
+              if (homePageCubit.state.toPlace != null)
+                buildToMarker(homePageCubit.state.toPlace.latLng),
+            ]),
+          ],
+          onLongPress: (location) async {
+            await homePageCubit.setTappingPlace(location);
+            widget.onFetchPlan();
+          },
         ),
         const Positioned(
           top: 16.0,

@@ -42,7 +42,7 @@ class LocationFormField extends StatelessWidget {
             child: GestureDetector(
               onTap: () async {
                 // Show search
-                final TrufiLocation location = await showSearch(
+                final TrufiLocation location = await showSearch<TrufiLocation>(
                   context: context,
                   delegate: LocationSearchDelegate(),
                 );
