@@ -40,7 +40,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
     final trufiConfiguration = TrufiConfiguration();
-    final homePageCubit = context.read<HomePageCubit>().state;
+    final homePageCubit = context.read<HomePageCubit>();
     return Stack(
       children: <Widget>[
         TrufiMap(
@@ -49,9 +49,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           layerOptionsBuilder: (context) => [
             MarkerLayerOptions(markers: [
               if (homePageCubit.state.fromPlace != null)
-                buildFromMarker(homePageCubit.fromPlace.latLng),
+                buildFromMarker(homePageCubit.state.fromPlace.latLng),
               if (homePageCubit.state.toPlace != null)
-                buildToMarker(homePageCubit.toPlace.latLng),
+                buildToMarker(homePageCubit.state.toPlace.latLng),
             ]),
           ],
           onLongPress: (location) async {
