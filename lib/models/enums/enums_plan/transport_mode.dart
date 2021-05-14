@@ -107,6 +107,30 @@ extension TransportModeExtension on TransportMode {
     TransportMode.miniBus: Icons.airport_shuttle,
     TransportMode.lightRail: Icons.train,
   };
+
+  static final colors = <TransportMode, Color>{
+    TransportMode.airplane: null,
+    TransportMode.bicycle: Colors.blue,
+    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.cableCar: null,
+    TransportMode.car: null,
+    TransportMode.ferry: null,
+    TransportMode.flexible: null,
+    TransportMode.funicular: null,
+    TransportMode.gondola: null,
+    TransportMode.legSwitch: null,
+    TransportMode.rail: const Color(0xff83b23b),
+    TransportMode.subway: Colors.blueAccent[700],
+    TransportMode.tram: null,
+    TransportMode.transit: null,
+    TransportMode.walk: Colors.grey[850],
+    // route icons for specific types of transportation
+    TransportMode.trufi: const Color(0xffff260c),
+    TransportMode.micro: const Color(0xffff260c),
+    TransportMode.miniBus: const Color(0xffff260c),
+    TransportMode.lightRail: const Color(0xff83b23b),
+  };
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
+  Color get color => colors[this] ?? Colors.grey;
 }
