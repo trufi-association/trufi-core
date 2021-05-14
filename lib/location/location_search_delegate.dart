@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -113,6 +114,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
 
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
+    final config = context.read<ConfigurationCubit>().state;
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -125,7 +127,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
                 close(context, street.location);
               },
               Icons.label,
-              street.displayName,
+              street.displayName(config.abbreviations),
               trailing: FavoriteButton(
                 location: street.location,
                 color: appBarTheme(context).primaryIconTheme.color,
@@ -168,6 +170,7 @@ class _SuggestionList extends StatelessWidget {
     this.onSelectedMap,
     this.onStreetTapped,
   });
+
   final String query;
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onSelectedMap;
@@ -242,6 +245,7 @@ class _BuildFutureBuilder extends StatelessWidget {
 
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiStreet> onStreetTapped;
+
   const _BuildFutureBuilder({
     @required this.title,
     @required this.future,
@@ -250,6 +254,7 @@ class _BuildFutureBuilder extends StatelessWidget {
     this.onSelected,
     this.onStreetTapped,
   });
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -312,6 +317,7 @@ class _BuildYourLocation extends StatelessWidget {
   final ValueChanged<TrufiLocation> onMapTapped;
 
   const _BuildYourLocation(this.onMapTapped);
+
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
@@ -348,6 +354,7 @@ class _BuildChooseOnMap extends StatelessWidget {
   final ValueChanged<TrufiLocation> onMapTapped;
 
   const _BuildChooseOnMap(this.onMapTapped);
+
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
@@ -374,6 +381,7 @@ class _BuildChooseOnMap extends StatelessWidget {
 
 class _BuildYourPlaces extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
+
   const _BuildYourPlaces({
     @required this.onSelected,
     @required this.locations,
@@ -384,6 +392,7 @@ class _BuildYourPlaces extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
+    final config = context.read<ConfigurationCubit>().state;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -399,7 +408,7 @@ class _BuildYourPlaces extends StatelessWidget {
               }
             },
             localIconData,
-            location.translateValue(localization),
+            location.translateValue(config.abbreviations, localization),
             subtitle: location.address,
           );
         },
@@ -417,6 +426,7 @@ class _BuildObjectList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
 
   final ValueChanged<TrufiStreet> onStreetTapped;
+
   const _BuildObjectList(
     this.title,
     this.iconData,
@@ -424,11 +434,13 @@ class _BuildObjectList extends StatelessWidget {
     this.onSelected,
     this.onStreetTapped,
   );
+
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final theme = context.watch<ThemeCubit>().state.searchTheme;
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
+    final config = context.watch<ConfigurationCubit>().state;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -437,7 +449,7 @@ class _BuildObjectList extends StatelessWidget {
             return _BuildTitle(title: title);
           }
           // Item
-          final object = places[index - 1];
+          final TrufiPlace object = places[index - 1];
           if (object is TrufiLocation) {
             IconData localIconData = iconData;
 
@@ -456,7 +468,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               localIconData,
-              object.translateValue(localization),
+              object.translateValue(config.abbreviations, localization),
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
@@ -473,7 +485,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               Icons.label,
-              object.displayName,
+              object.displayName(config.abbreviations),
               trailing: Icon(
                 Icons.keyboard_arrow_right,
                 color: theme.primaryIconTheme.color,
@@ -497,6 +509,7 @@ class _BuildErrorList extends StatelessWidget {
     @required this.title,
     @required this.error,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -514,6 +527,7 @@ class _BuildTitle extends StatelessWidget {
   final String title;
 
   const _BuildTitle({Key key, @required this.title}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().state.searchTheme;
@@ -541,6 +555,7 @@ class _BuildErrorItem extends StatelessWidget {
     Key key,
     @required this.title,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return _BuildItem(null, Icons.error, title);
@@ -553,6 +568,7 @@ class _BuildItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final Widget trailing;
+
   const _BuildItem(
     this.onTap,
     this.iconData,
@@ -560,6 +576,7 @@ class _BuildItem extends StatelessWidget {
     this.subtitle,
     this.trailing,
   });
+
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().state.searchTheme;

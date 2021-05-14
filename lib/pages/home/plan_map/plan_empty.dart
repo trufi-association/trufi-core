@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/trufi_configuration.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
-import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
 import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
-import '../../../trufi_app.dart';
+import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 const double customOverlayWidgetMargin = 80;
 
@@ -38,8 +38,17 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   @override
   Widget build(BuildContext context) {
+    _trufiMapController.mapController.onReady.then((value) {
+      final cfg = context.read<ConfigurationCubit>().state;
+      final zoom = cfg.map.defaultZoom;
+      final mapCenter = cfg.map.center;
+
+      _trufiMapController.mapController.move(mapCenter, zoom);
+      _trufiMapController.inMapReady.add(null);
+    });
+
     final Locale locale = Localizations.localeOf(context);
-    final trufiConfiguration = TrufiConfiguration();
+    final trufiConfiguration = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.read<HomePageCubit>();
     return Stack(
       children: <Widget>[
@@ -86,7 +95,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           bottom: 0,
           left: 10,
           child: SafeArea(
-            child: trufiConfiguration.map.buildMapAttribution(context),
+            child: trufiConfiguration.map.mapAttributionBuilder(context),
           ),
         ),
         Positioned.fill(

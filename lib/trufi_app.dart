@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/models/social_media/social_media_item.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
 import './blocs/bloc_provider.dart';
@@ -28,7 +30,6 @@ import 'blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
-import 'models/definition_feedback.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
@@ -69,21 +70,27 @@ typedef LocaleWidgetBuilder = Widget Function(
 ///
 class TrufiApp extends StatelessWidget {
   TrufiApp({
+    @required this.configuration,
     @required this.theme,
     this.searchTheme,
     this.customOverlayBuilder,
     this.customBetweenFabBuilder,
     Key key,
     this.customLayers = const [],
-    this.feedBack,
     this.mapTileProviders,
     this.searchLocationManager,
     this.socialMediaItem = const [],
-  }) : super(key: key) {
-    if (TrufiConfiguration().generalConfiguration.debug) {
+  })  : assert(configuration != null, "Configuration cannot be empty"),
+        assert(theme != null, "Theme cannot be empty"),
+        super(key: key) {
+    if (configuration.debug) {
       Bloc.observer = TrufiObserver();
     }
   }
+
+  /// Main Configurations for the TrufiCore it contains information about
+  /// Feedback, Emails and Contributors.
+  final Configuration configuration;
 
   /// The used [ThemeData] used for the whole Trufi App
   final ThemeData theme;
@@ -102,10 +109,6 @@ class TrufiApp extends StatelessWidget {
   /// List of [CustomLayer] implementations
   final List<CustomLayer> customLayers;
 
-  /// You can provider a [DefinitionDataFeedBack] for add the feedbackPage
-  /// if the FeedBack is null, the feedback page is not created.
-  final DefinitionFeedBack feedBack;
-
   ///List of [SocialMediaItem] implementations
   ///By defaul [Trufi-Core] has some implementation what you can use:
   /// [FacebookSocialMedia] [InstagramSocialMedia] [TwitterSocialMedia]
@@ -119,13 +122,17 @@ class TrufiApp extends StatelessWidget {
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
-    final trufiConfiguration = TrufiConfiguration();
-    trufiConfiguration.configurationDrawer.definitionFeedBack = feedBack;
+    final openTripPlannerUrl = configuration.urls.openTripPlannerUrl;
+    final serverType = configuration.serverType;
     return MultiBlocProvider(
       providers: [
+        BlocProvider<ConfigurationCubit>(
+          create: (context) => ConfigurationCubit(configuration),
+        ),
         BlocProvider<PreferencesCubit>(
           create: (context) => PreferencesCubit(socialMediaItem),
         ),
@@ -141,7 +148,10 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<AppReviewCubit>(
-          create: (context) => AppReviewCubit(sharedPreferencesRepository),
+          create: (context) => AppReviewCubit(
+            configuration.minimumReviewWorthyActionCount,
+            sharedPreferencesRepository,
+          ),
         ),
         BlocProvider<SearchLocationsCubit>(
           create: (context) => SearchLocationsCubit(
@@ -149,17 +159,18 @@ class TrufiApp extends StatelessWidget {
           ),
         ),
         BlocProvider<HomePageCubit>(
-          create: (context) => HomePageCubit(
-            sharedPreferencesRepository,
-            trufiConfiguration.generalConfiguration.serverType ==
-                    ServerType.defaultServer
-                ? OnlineRepository(
-                    otpEndpoint: trufiConfiguration.url.otpEndpoint,
-                  )
-                : OnlineGraphQLRepository(
-                    graphQLEndPoint: trufiConfiguration.url.otpEndpoint,
-                  ),
-          ),
+          create: (context) {
+            return HomePageCubit(
+              sharedPreferencesRepository,
+              serverType == ServerType.defaultServer
+                  ? OnlineRepository(
+                      otpEndpoint: openTripPlannerUrl,
+                    )
+                  : OnlineGraphQLRepository(
+                      graphQLEndPoint: openTripPlannerUrl,
+                    ),
+            );
+          },
         ),
         BlocProvider<LocationProviderCubit>(
           create: (context) => LocationProviderCubit(),
@@ -201,7 +212,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
-      TeamPage.route: (context) => const TeamPage(),
+      TeamPage.route: (context) => TeamPage(),
       SettingPanel.route: (context) => const SettingPanel(),
     };
 

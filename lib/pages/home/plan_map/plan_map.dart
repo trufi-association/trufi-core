@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/pages/home/plan_map/plan.dart';
+import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/crop_button.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
-import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
+import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
-import '../../../composite_subscription.dart';
-import '../../../trufi_app.dart';
-import '../../../trufi_configuration.dart';
 import '../../../widgets/map/utils/trufi_map_utils.dart';
-import './plan.dart';
 
 const double customOverlayWidgetMargin = 80.0;
 
@@ -81,7 +81,7 @@ class PlanMapPageState extends State<PlanMapPage>
     final Locale locale = Localizations.localeOf(context);
     final theme = Theme.of(context);
 
-    final trufiConfiguration = TrufiConfiguration();
+    final trufiConfiguration = context.read<ConfigurationCubit>().state;
     _data._selectedColor = theme.accentColor;
 
     if (_mapController.ready) {
@@ -120,7 +120,7 @@ class PlanMapPageState extends State<PlanMapPage>
         Positioned(
           bottom: 10,
           left: 10,
-          child: trufiConfiguration.map.buildMapAttribution(context),
+          child: trufiConfiguration.map.mapAttributionBuilder(context),
         ),
         Positioned(
           bottom: 16.0,
