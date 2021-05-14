@@ -65,8 +65,13 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   void insertHistoryPlace(TrufiLocation location) {
-    emit(state.copyWith(historyPlaces: [...state.historyPlaces, location]));
-    historyPlacesStorage.insert(location);
+    emit(state.copyWith(historyPlaces: [
+      ..._deleteItem(state.historyPlaces, location),
+      location
+    ]));
+    historyPlacesStorage.delete(location).then(
+          (value) => historyPlacesStorage.insert(location),
+        );
   }
 
   void insertFavoritePlace(TrufiLocation location) {
