@@ -137,8 +137,8 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     favoritePlacesStorage.delete(location);
   }
 
-  List<TrufiPlace> getHistoryListWithLimit({int limit}) {
-    return state.historyPlaces.reversed.take(limit).toList();
+  List<TrufiPlace> getHistoryList() {
+    return state.historyPlaces.reversed.toList();
   }
 
   Future<List<TrufiPlace>> fetchLocations(
