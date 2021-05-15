@@ -5,8 +5,8 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/widgets/from_marker.dart';
-import 'package:trufi_core/widgets/to_marker.dart';
+import 'package:trufi_core/widgets/from_marker_default.dart';
+import 'package:trufi_core/widgets/to_marker_default.dart';
 
 import '../../trufi_models.dart';
 import 'home_buttons.dart';
@@ -43,7 +43,7 @@ class FormFieldsPortrait extends StatelessWidget {
             LocationFormField(
               onSaved: onSaveFrom,
               hintText: translations.searchPleaseSelectOrigin,
-              textLeadingImage: const FromMarker(),
+              textLeadingImage: const FromMarkerDefault(),
               leading: const SizedBox.shrink(),
               trailing: homePageState.isPlacesDefined
                   ? ResetButton(onReset: onReset)
@@ -53,7 +53,7 @@ class FormFieldsPortrait extends StatelessWidget {
             LocationFormField(
               onSaved: onSaveTo,
               hintText: translations.searchPleaseSelectDestination,
-              textLeadingImage: const ToMarker(),
+              textLeadingImage: const ToMarkerDefault(),
               leading: const SizedBox.shrink(),
               trailing: homePageState.isPlacesDefined
                   ? SwapButton(

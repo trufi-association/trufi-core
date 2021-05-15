@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/widgets/from_marker.dart';
-import 'package:trufi_core/widgets/to_marker.dart';
 
 import '../../../utils/util_icons/custom_icons.dart';
+import '../../from_marker_default.dart';
+import '../../to_marker_default.dart';
 import 'your_location_marker.dart';
 
 Marker buildFromMarker(LatLng point) {
@@ -18,7 +18,7 @@ Marker buildFromMarker(LatLng point) {
     height: 24.0,
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) {
-      return const FromMarker();
+      return const FromMarkerDefault();
     },
   );
 }
@@ -28,7 +28,7 @@ Marker buildToMarker(LatLng point) {
     point: point,
     anchorPos: AnchorPos.align(AnchorAlign.top),
     builder: (context) {
-      return const ToMarker();
+      return const ToMarkerDefault();
     },
   );
 }
