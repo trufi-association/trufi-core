@@ -9,6 +9,8 @@ import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
 
+import 'models/marker_configuration.dart';
+
 /// A collection of all important configurations
 class Configuration {
   /// Email that is shown inside of the Team Screen
@@ -31,6 +33,9 @@ class Configuration {
 
   /// Loading and Success Animation
   final AnimationConfiguration animations;
+
+  /// To and From Marker
+  final MarkerConfiguration markers;
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -63,6 +68,7 @@ class Configuration {
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
     this.customTranslations,
     this.feedbackDefinition,
+    this.markers = const MarkerConfiguration(),
     this.animations,
     this.abbreviations,
     this.map,
