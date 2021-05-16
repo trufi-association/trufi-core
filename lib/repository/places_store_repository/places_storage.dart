@@ -7,6 +7,7 @@ abstract class PlacesStorage {
 
   Future<void> insert(TrufiLocation location);
   Future<void> delete(TrufiLocation location);
+  Future<void> replace(TrufiLocation location);
   Future<void> update(TrufiLocation old, TrufiLocation location);
   Future<List<TrufiLocation>> all();
 }

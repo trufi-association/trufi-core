@@ -212,7 +212,7 @@ class _SuggestionList extends StatelessWidget {
             _BuildObjectList(
               localization.searchTitleRecent,
               Icons.history,
-              searchLocationsCubit.getHistoryListWithLimit(limit: 5),
+              searchLocationsCubit.getHistoryList(),
               onSelected,
               onStreetTapped,
             ),
