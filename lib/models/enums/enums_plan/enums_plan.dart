@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import '../../../utils/util_icons/custom_icons.dart';

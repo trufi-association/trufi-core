@@ -71,10 +71,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: SvgPicture.asset(
-                      "assets/images/transport_modes/icon-icon_bus-live-red.svg",
-                      package: "trufi_core",
-                    ),
+                    child: TransportMode.bus.image,
                   ),
                   value: state.transportModes.contains(TransportMode.bus),
                   onChanged: (_) {
@@ -87,10 +84,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: SvgPicture.asset(
-                      "assets/images/transport_modes/icon-icon_bus-live-green.svg",
-                      package: "trufi_core",
-                    ),
+                    child: TransportMode.rail.image,
                   ),
                   value: state.transportModes.contains(TransportMode.rail),
                   onChanged: (_) {
@@ -103,10 +97,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: SvgPicture.asset(
-                      "assets/images/transport_modes/icon-icon_subway.svg",
-                      package: "trufi_core",
-                    ),
+                    child: TransportMode.subway.image,
                   ),
                   value: state.transportModes.contains(TransportMode.subway),
                   onChanged: (_) {
@@ -119,10 +110,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: SvgPicture.asset(
-                      "assets/images/transport_modes/icon-icon_stop_carpool.svg",
-                      package: "trufi_core",
-                    ),
+                    child: TransportMode.car.image,
                   ),
                   value: state.transportModes.contains(TransportMode.car),
                   onChanged: (_) {
@@ -135,10 +123,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: SvgPicture.asset(
-                      "assets/images/transport_modes/icon-icon_citybike.svg",
-                      package: "trufi_core",
-                    ),
+                    child: TransportMode.bicycle.image,
                   ),
                   value: state.transportModes.contains(TransportMode.bicycle),
                   onChanged: (_) {

@@ -108,6 +108,39 @@ extension TransportModeExtension on TransportMode {
     TransportMode.lightRail: Icons.train,
   };
 
+  static final images = <TransportMode, SvgPicture>{
+    TransportMode.airplane: null,
+    TransportMode.bicycle: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_citybike.svg",
+        package: "trufi_core"),
+    TransportMode.bus: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_bus-live-red.svg",
+        package: "trufi_core"),
+    TransportMode.cableCar: null,
+    TransportMode.car: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_stop_carpool.svg",
+        package: "trufi_core"),
+    TransportMode.ferry: null,
+    TransportMode.flexible: null,
+    TransportMode.funicular: null,
+    TransportMode.gondola: null,
+    TransportMode.legSwitch: null,
+    TransportMode.rail: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_bus-live-green.svg",
+        package: "trufi_core"),
+    TransportMode.subway: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_subway.svg",
+        package: "trufi_core"),
+    TransportMode.tram: null,
+    TransportMode.transit: null,
+    TransportMode.walk: null,
+    // route icons for specific types of transportation
+    TransportMode.trufi: null,
+    TransportMode.micro: null,
+    TransportMode.miniBus: null,
+    TransportMode.lightRail: null,
+  };
+
   static final colors = <TransportMode, Color>{
     TransportMode.airplane: null,
     TransportMode.bicycle: Colors.blue,
@@ -133,4 +166,10 @@ extension TransportModeExtension on TransportMode {
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
   Color get color => colors[this] ?? Colors.grey;
+  SvgPicture get image =>
+      images[this] ??
+      SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_bus-live-green.svg",
+        package: "trufi_core",
+      );
 }
