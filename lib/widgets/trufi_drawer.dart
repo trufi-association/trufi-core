@@ -4,6 +4,7 @@ import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share/share.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/social_media/donate_social_media.dart';
@@ -14,7 +15,6 @@ import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/saved_places/saved_places.dart';
 import '../pages/team.dart';
-import '../trufi_configuration.dart';
 
 class TrufiDrawer extends StatefulWidget {
   const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
@@ -35,7 +35,9 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     super.initState();
 
     // TODO: Should have some kind of fallback image
-    bgImage = AssetImage(TrufiConfiguration().image.drawerBackground);
+    bgImage = AssetImage(
+      context.read<ConfigurationCubit>().state.drawerBackgroundAssetPath,
+    );
   }
 
   @override
@@ -49,7 +51,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final cfg = TrufiConfiguration();
+    final config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final socialMediaItems = context.read<PreferencesCubit>().socialMediaItems;
     return Drawer(
@@ -71,8 +73,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  cfg.customTranslations.get(
-                    cfg.customTranslations.title,
+                  config.customTranslations.get(
+                    config.customTranslations.title,
                     currentLocale,
                     localization.title,
                   ),
@@ -81,10 +83,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                 Container(
                   padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
                   child: Text(
-                    cfg.customTranslations.get(
-                      cfg.customTranslations.tagline,
+                    config.customTranslations.get(
+                      config.customTranslations.tagline,
                       currentLocale,
-                      localization.tagline(cfg.generalConfiguration.appCity),
+                      localization.tagline(config.appCity),
                     ),
                     style: theme.primaryTextTheme.subtitle1,
                   ),
@@ -102,7 +104,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
             localization.menuYourPlaces,
             SavedPlacesPage.route,
           ),
-          if (cfg.configurationDrawer.definitionFeedBack != null)
+          if (config.feedbackDefinition != null)
             _buildListItem(
               Icons.feedback,
               localization.menuFeedback,
@@ -123,10 +125,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           //_buildOfflineToggle(context),
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
-          _buildAppShareButton(context, cfg.url.share),
-          if (!Platform.isIOS && cfg.url.donate != "")
+          _buildAppShareButton(context, config.urls.shareUrl),
+          if (!Platform.isIOS && config.urls.donationUrl != "")
             SocialMediaButton(
-              socialMediaItem: DonateSocialMedia(cfg.url.donate),
+              socialMediaItem: DonateSocialMedia(config.urls.donationUrl),
             ),
           const Divider(),
           ...socialMediaItems
@@ -163,8 +165,10 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildLanguageDropdownButton(BuildContext context) {
-    final values = TrufiConfiguration()
-        .languages
+    final values = context
+        .read<ConfigurationCubit>()
+        .state
+        .supportedLanguages
         .map((lang) =>
             LanguageDropdownValue(lang.languageCode, lang.displayName))
         .toList();
@@ -213,7 +217,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   }
 
   Widget _buildAppShareButton(BuildContext context, String url) {
-    final cfg = TrufiConfiguration();
+    final config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final localization = TrufiLocalization.of(context);
     return Container(
@@ -228,12 +232,12 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           Share.share(
             localization.shareAppText(
               url,
-              cfg.customTranslations.get(
-                cfg.customTranslations.title,
+              config.customTranslations.get(
+                config.customTranslations.title,
                 currentLocale,
                 localization.title,
               ),
-              cfg.generalConfiguration.appCity,
+              config.appCity,
             ),
             sharePositionOrigin: getAppShareButtonOrigin(),
           );

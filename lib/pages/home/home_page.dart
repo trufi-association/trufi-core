@@ -4,16 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
+import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../../keys.dart' as keys;
 import '../../trufi_app.dart';
-import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
 import '../../widgets/trufi_drawer.dart';
 import 'form_fields_landscape.dart';
@@ -33,13 +34,11 @@ class HomePage extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final cfg = TrufiConfiguration();
+    final config = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
-    final isGraphQlEndpoint =
-        TrufiConfiguration().generalConfiguration.serverType ==
-            ServerType.graphQLServer;
+    final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(
@@ -106,8 +105,8 @@ class HomePage extends StatelessWidget {
                     ),
             ),
           ),
-          if (cfg.animation.loading != null && homePageState.isFetching)
-            Positioned.fill(child: cfg.animation.loading)
+          if (config.animations.loading != null && homePageState.isFetching)
+            Positioned.fill(child: config.animations.loading)
         ],
       ),
       drawer: const TrufiDrawer(HomePage.route),

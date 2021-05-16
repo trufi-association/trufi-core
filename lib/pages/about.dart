@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/trufi_drawer.dart';
@@ -37,9 +38,9 @@ class AboutPageState extends State<AboutPage> {
       color: theme.accentColor,
     );
 
-    final trufiConfiguration = TrufiConfiguration();
-    final currentCity = trufiConfiguration.generalConfiguration.appCity;
-    final customTranslations = trufiConfiguration.customTranslations;
+    final config = context.read<ConfigurationCubit>().state;
+    final currentCity = config.appCity;
+    final customTranslations = config.customTranslations;
     final currentLocale = Localizations.localeOf(context);
 
     return ListView(
@@ -50,8 +51,8 @@ class AboutPageState extends State<AboutPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                customTranslations.get(customTranslations.title,
-                    currentLocale, localization.title),
+                customTranslations.get(customTranslations.title, currentLocale,
+                    localization.title),
                 style: theme.textTheme.headline6.copyWith(
                   color: theme.textTheme.bodyText1.color,
                 ),

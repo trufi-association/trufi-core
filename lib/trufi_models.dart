@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import './trufi_configuration.dart';
 import 'entities/plan_entity/plan_entity.dart';
 import 'models/enums/defaults_location.dart';
 
@@ -144,8 +143,7 @@ class TrufiLocation implements TrufiPlace {
     return '$latitude,$longitude';
   }
 
-  String get displayName {
-    final abbreviations = TrufiConfiguration().abbreviations;
+  String displayName(Map<String, String> abbreviations) {
     return abbreviations.keys.fold<String>(description, (
       description,
       abbreviation,
@@ -165,8 +163,11 @@ class TrufiLocation implements TrufiPlace {
     return LatLng(latitude, longitude);
   }
 
-  String translateValue(TrufiLocalization localization) {
-    String translate = displayName;
+  String translateValue(
+    Map<String, String> abbreviations,
+    TrufiLocalization localization,
+  ) {
+    String translate = displayName(abbreviations);
     if (DefaultLocation.defaultHome.keyLocation == description) {
       // TODO translate
       translate = isLatLngDefined ? "Home" : "ADD HOME";
@@ -197,7 +198,8 @@ class TrufiStreet implements TrufiPlace {
 
   String get description => location.description;
 
-  String get displayName => location.displayName;
+  String displayName(Map<String, String> abbreviations) =>
+      location.displayName(abbreviations);
 }
 
 class TrufiStreetJunction {
@@ -219,8 +221,8 @@ class TrufiStreetJunction {
 
   String displayName(TrufiLocalization localization) =>
       localization.instructionJunction(
-        street1.displayName,
-        street2.displayName,
+        street1.location?.displayName,
+        street2.location?.displayName,
       );
 
   TrufiLocation location(TrufiLocalization localization) {

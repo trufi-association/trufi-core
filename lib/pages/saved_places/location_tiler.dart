@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/trufi_models.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
 import 'package:trufi_core/widgets/dialog_edit_text.dart';
 
@@ -34,6 +34,7 @@ class LocationTiler extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final config = context.read<ConfigurationCubit>().state;
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       child: ElevatedButton(
@@ -49,7 +50,7 @@ class LocationTiler extends StatelessWidget {
                 child: Icon(typeToIconData(location.type) ?? Icons.place)),
             Expanded(
               child: Text(
-                location.translateValue(localization),
+                location.translateValue(config.abbreviations, localization),
                 style: theme.textTheme.bodyText1,
                 maxLines: 1,
               ),

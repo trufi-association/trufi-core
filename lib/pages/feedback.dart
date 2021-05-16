@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/trufi_drawer.dart';
@@ -15,7 +16,8 @@ class FeedbackPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final feedBack = TrufiConfiguration().configurationDrawer.definitionFeedBack;
+    final feedBack =
+        context.read<ConfigurationCubit>().state.feedbackDefinition;
     return Scaffold(
       appBar: AppBar(title: Text(localization.menuFeedback)),
       body: ListView(

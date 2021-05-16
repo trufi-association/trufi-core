@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
+import 'package:trufi_core/blocs/configuration/models/animation_configuration.dart';
+import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
+import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 import 'package:trufi_core/pages/home/search_location/location_form_field.dart';
 import 'package:trufi_core/trufi_app.dart';
-import 'package:trufi_core/trufi_configuration.dart';
+import 'package:trufi_core/widgets/map/map_copyright.dart';
 
 void main() {
   testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
-    final trufiCfg = TrufiConfiguration();
-
-    trufiCfg.languages.addAll([
-      TrufiConfigurationLanguage(
-        languageCode: "en",
-        countryCode: "US",
-        displayName: "English",
-        isDefault: true,
-      ),
-    ]);
-
-    await mockNetworkImagesFor(() async => tester.pumpWidget(TrufiApp(
+    await mockNetworkImagesFor(
+      () async => tester.pumpWidget(
+        TrufiApp(
           theme: ThemeData(
             primaryColor: const Color(0xff263238),
             primaryColorLight: const Color(0xffeceff1),
             accentColor: const Color(0xffd81b60),
             backgroundColor: Colors.white,
           ),
-        )));
+          configuration: Configuration(
+            urls: UrlCollection(),
+            animations: AnimationConfiguration(),
+            map: MapConfiguration(
+              mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
+            ),
+          ),
+        ),
+      ),
+    );
 
     await tester.pumpAndSettle();
     final Finder formField = find.byType(LocationFormField);
@@ -35,6 +39,13 @@ void main() {
   testWidgets("should display customBetweenFabWidget Widget if provided",
       (WidgetTester tester) async {
     await tester.pumpWidget(TrufiApp(
+      configuration: Configuration(
+        urls: UrlCollection(),
+        animations: AnimationConfiguration(),
+        map: MapConfiguration(
+          mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
+        ),
+      ),
       theme: ThemeData.light(),
       customBetweenFabBuilder: (context) => const Placeholder(),
     ));
@@ -48,6 +59,13 @@ void main() {
   testWidgets("should display customWidget with Locale Text",
       (WidgetTester tester) async {
     await tester.pumpWidget(TrufiApp(
+      configuration: Configuration(
+        urls: UrlCollection(),
+        animations: AnimationConfiguration(),
+        map: MapConfiguration(
+          mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
+        ),
+      ),
       theme: ThemeData.light(),
       customOverlayBuilder: (context, locale) =>
           Text("${locale.languageCode}_${locale.countryCode}"),

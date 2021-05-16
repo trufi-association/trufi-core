@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/widgets/from_marker.dart';
 import 'package:trufi_core/widgets/to_marker.dart';
 
-import '../../trufi_configuration.dart';
 import '../../trufi_models.dart';
 import 'home_buttons.dart';
 import 'search_location/location_form_field.dart';
@@ -32,6 +33,7 @@ class FormFieldsLandscape extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final homePageState = context.read<HomePageCubit>().state;
+    final config = context.read<ConfigurationCubit>().state;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
@@ -78,8 +80,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   ),
                 ],
               ),
-              if (TrufiConfiguration().generalConfiguration.serverType ==
-                  ServerType.graphQLServer)
+              if (config.serverType == ServerType.graphQLServer)
                 SettingPayload(
                   onFetchPlan: onFetchPlan,
                 ),

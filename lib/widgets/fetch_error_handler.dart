@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/trufi_configuration.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:provider/provider.dart';
-import 'package:package_info/package_info.dart';
-import 'package:latlong/latlong.dart';
+
 import 'alerts.dart';
 
 Future<void> onFetchError(BuildContext context, Exception exception) async {
@@ -48,9 +49,10 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
       );
       break;
     case FetchOnlinePlanException:
-      final cfg = TrufiConfiguration();
       final languageCode = Localizations.localeOf(context).languageCode;
       final packageInfo = await PackageInfo.fromPlatform();
+      final routeFeedbackUrl =
+          context.read<ConfigurationCubit>().state.urls.routeFeedbackUrl;
       return showDialog(
         context: context,
         builder: (dialogContext) {
@@ -60,9 +62,10 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
             onReportMissingRoute: () async {
               final LatLng currentLocation = dialogContext
                   .read<LocationProviderCubit>()
-                  .state.currentLocation;
+                  .state
+                  .currentLocation;
               launch(
-                "${cfg.url.routeFeedback}?lang=$languageCode&geo=${currentLocation?.latitude},"
+                "$routeFeedbackUrl?lang=$languageCode&geo=${currentLocation?.latitude},"
                 "${currentLocation?.longitude}&app=${packageInfo.version}",
               );
             },
