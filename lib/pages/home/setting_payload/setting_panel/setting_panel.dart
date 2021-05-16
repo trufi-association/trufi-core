@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/widgets/colored_svg_picture.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
 
@@ -67,7 +69,14 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: 'Bus',
-                  secondary: Icon(TransportMode.bus.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: SvgPicture.asset(
+                      "assets/images/transport_modes/icon-icon_bus-live-red.svg",
+                      package: "trufi_core",
+                    ),
+                  ),
                   value: state.transportModes.contains(TransportMode.bus),
                   onChanged: (_) {
                     payloadDataPlanCubit.setTransportMode(TransportMode.bus);
@@ -76,7 +85,14 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Commuter train',
-                  secondary: Icon(TransportMode.rail.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: SvgPicture.asset(
+                      "assets/images/transport_modes/icon-icon_bus-live-green.svg",
+                      package: "trufi_core",
+                    ),
+                  ),
                   value: state.transportModes.contains(TransportMode.rail),
                   onChanged: (_) {
                     payloadDataPlanCubit.setTransportMode(TransportMode.rail);
@@ -85,7 +101,14 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Metro',
-                  secondary: Icon(TransportMode.subway.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: SvgPicture.asset(
+                      "assets/images/transport_modes/icon-icon_subway.svg",
+                      package: "trufi_core",
+                    ),
+                  ),
                   value: state.transportModes.contains(TransportMode.subway),
                   onChanged: (_) {
                     payloadDataPlanCubit.setTransportMode(TransportMode.subway);
@@ -94,7 +117,14 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Carpool',
-                  secondary: Icon(TransportMode.car.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: SvgPicture.asset(
+                      "assets/images/transport_modes/icon-icon_stop_carpool.svg",
+                      package: "trufi_core",
+                    ),
+                  ),
                   value: state.transportModes.contains(TransportMode.car),
                   onChanged: (_) {
                     payloadDataPlanCubit.setTransportMode(TransportMode.car);
@@ -103,7 +133,14 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Sharing',
-                  secondary: Icon(TransportMode.bicycle.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: SvgPicture.asset(
+                      "assets/images/transport_modes/icon-icon_citybike.svg",
+                      package: "trufi_core",
+                    ),
+                  ),
                   value: state.transportModes.contains(TransportMode.bicycle),
                   onChanged: (_) {
                     payloadDataPlanCubit
