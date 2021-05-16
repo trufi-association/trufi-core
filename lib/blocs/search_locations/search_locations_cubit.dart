@@ -69,9 +69,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
       ..._deleteItem(state.historyPlaces, location),
       location
     ]));
-    historyPlacesStorage.delete(location).then(
-          (value) => historyPlacesStorage.insert(location),
-        );
+    historyPlacesStorage.replace(location);
   }
 
   void insertFavoritePlace(TrufiLocation location) {
