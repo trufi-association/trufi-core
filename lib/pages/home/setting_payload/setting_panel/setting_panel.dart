@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
-import 'package:trufi_core/widgets/colored_svg_picture.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
 
