@@ -58,9 +58,11 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           layerOptionsBuilder: (context) => [
             MarkerLayerOptions(markers: [
               if (homePageCubit.state.fromPlace != null)
-                buildFromMarker(homePageCubit.state.fromPlace.latLng),
+                trufiConfiguration.markers
+                    .buildFromMarker(homePageCubit.state.fromPlace.latLng),
               if (homePageCubit.state.toPlace != null)
-                buildToMarker(homePageCubit.state.toPlace.latLng),
+                trufiConfiguration.markers
+                    .buildToMarker(homePageCubit.state.toPlace.latLng),
             ]),
           ],
           onLongPress: (location) async {

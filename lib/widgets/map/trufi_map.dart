@@ -78,7 +78,7 @@ class _TrufiMapState extends State<TrufiMap> {
         //   tileProviderKey: cfg.map.mapTilerKey,
         // ),
         ...customLayersCubit.activeCustomLayers(mapZoom),
-        buildYourLocationMarkerOption(currentLocation),
+        cfg.markers.buildYourLocationMarkerLayerOptions(currentLocation),
         ...widget.layerOptionsBuilder(context)
       ],
     );

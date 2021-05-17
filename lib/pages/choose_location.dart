@@ -4,11 +4,11 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/markers/marker_configuration.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import '../widgets/map/trufi_map.dart';
-import '../widgets/map/utils/trufi_map_utils.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   static Future<LatLng> selectPosition(BuildContext context,
@@ -39,8 +39,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   void initState() {
     super.initState();
     final cfg = context.read<ConfigurationCubit>().state;
-
-    _chooseOnMapMarker = buildToMarker(cfg.map.center);
+    _chooseOnMapMarker = cfg.markers.buildToMarker(cfg.map.center);
     if (widget.position != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
@@ -61,6 +60,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final cfg = context.read<ConfigurationCubit>().state;
     final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return Scaffold(
       appBar: AppBar(
@@ -103,7 +103,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         children: [
           TrufiMap(
             controller: _trufiMapController,
-            onPositionChanged: _handleOnMapPositionChanged,
+            onPositionChanged: (mapPosition, hasGesture) {
+              _handleOnMapPositionChanged(mapPosition, hasGesture, cfg.markers);
+            },
             layerOptionsBuilder: (context) {
               return <LayerOptions>[
                 MarkerLayerOptions(markers: <Marker>[_chooseOnMapMarker]),
@@ -129,12 +131,10 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     Navigator.of(context).pop(_chooseOnMapMarker.point);
   }
 
-  void _handleOnMapPositionChanged(
-    MapPosition position,
-    bool hasGesture,
-  ) {
+  void _handleOnMapPositionChanged(MapPosition position, bool hasGesture,
+      MarkerConfiguration markerConfiguration) {
     setState(() {
-      _chooseOnMapMarker = buildToMarker(position.center);
+      _chooseOnMapMarker = markerConfiguration.buildToMarker(position.center);
     });
   }
 }

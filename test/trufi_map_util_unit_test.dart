@@ -25,13 +25,14 @@ void main() {
   });
 
   test('Build from Marker', () {
-    final MarkerLayerOptions marker = markers.buildFromMarkerLayer(_point);
+    final MarkerLayerOptions marker =
+        markers.buildFromMarkerLayerOptions(_point);
     expect(marker, isNotNull);
     expect(marker.markers[0].point, _point);
   });
 
   test('Build to Marker', () {
-    final MarkerLayerOptions marker = markers.buildToMarkerLayer(_point);
+    final MarkerLayerOptions marker = markers.buildToMarkerLayerOptions(_point);
     expect(marker, isNotNull);
     expect(marker.markers[0].point, _point);
   });

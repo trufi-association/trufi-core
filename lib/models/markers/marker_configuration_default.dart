@@ -12,10 +12,10 @@ class MarkerConfigurationDefault implements MarkerConfiguration {
   const MarkerConfigurationDefault();
 
   @override
-  Widget get fromMarker => const ToMarkerDefault();
+  Widget get fromMarker => const FromMarkerDefault();
 
   @override
-  Widget get toMarker => const FromMarkerDefault();
+  Widget get toMarker => const ToMarkerDefault();
 
   @override
   Widget get yourLocationMarker => const MyLocationMarker();

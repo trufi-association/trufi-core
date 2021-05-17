@@ -5,6 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/markers/marker_configuration.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/crop_button.dart';
@@ -20,16 +21,18 @@ const double customOverlayWidgetMargin = 80.0;
 typedef OnSelected = void Function(PlanItinerary itinerary);
 
 class PlanMapPage extends StatefulWidget {
-  const PlanMapPage(
-      {this.planPageController,
-      @required this.customOverlayWidget,
-      @required this.customBetweenFabWidget,
-      Key key})
-      : super(key: key);
+  const PlanMapPage({
+    Key key,
+    @required this.customOverlayWidget,
+    @required this.customBetweenFabWidget,
+    @required this.markerConfiguration,
+    this.planPageController,
+  }) : super(key: key);
 
   final PlanPageController planPageController;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
+  final MarkerConfiguration markerConfiguration;
 
   @override
   PlanMapPageState createState() => PlanMapPageState();
@@ -49,6 +52,7 @@ class PlanMapPageState extends State<PlanMapPage>
     _data = PlanMapPageStateData(
       plan: widget.planPageController.plan,
       onItineraryTap: widget.planPageController.inSelectedItinerary.add,
+      markerConfiguration: widget.markerConfiguration,
     );
     _subscriptions.add(
       _trufiMapController.outMapReady.listen((_) {
@@ -197,19 +201,26 @@ class PlanMapPageState extends State<PlanMapPage>
 }
 
 class PlanMapPageStateData {
-  PlanMapPageStateData({@required this.plan, @required this.onItineraryTap}) {
+  PlanMapPageStateData({
+    @required this.plan,
+    @required this.onItineraryTap,
+    @required this.markerConfiguration,
+  }) {
     if (plan != null) {
       if (plan.from != null) {
-        _fromMarker = buildFromMarker(createLatLngWithPlanLocation(plan.from));
+        _fromMarker = markerConfiguration
+            .buildFromMarker(createLatLngWithPlanLocation(plan.from));
       }
       if (plan.to != null) {
-        _toMarker = buildToMarker(createLatLngWithPlanLocation(plan.to));
+        _toMarker = markerConfiguration
+            .buildToMarker(createLatLngWithPlanLocation(plan.to));
       }
     }
   }
 
   final PlanEntity plan;
   final ValueChanged<PlanItinerary> onItineraryTap;
+  final MarkerConfiguration markerConfiguration;
 
   final _itineraries = <PlanItinerary, List<PolylineWithMarkers>>{};
   final _unselectedMarkers = <Marker>[];

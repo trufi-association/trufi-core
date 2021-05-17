@@ -5,8 +5,6 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/widgets/from_marker_default.dart';
-import 'package:trufi_core/widgets/to_marker_default.dart';
 
 import '../../trufi_models.dart';
 import 'home_buttons.dart';
@@ -50,7 +48,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   Flexible(
                     child: LocationFormField(
                       hintText: localization.searchPleaseSelectOrigin,
-                      textLeadingImage: const FromMarkerDefault(),
+                      textLeadingImage: config.markers.fromMarker,
                       onSaved: onSaveFrom,
                       value: homePageState.fromPlace,
                     ),
@@ -67,7 +65,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   Flexible(
                     child: LocationFormField(
                       hintText: localization.searchPleaseSelectDestination,
-                      textLeadingImage: const ToMarkerDefault(),
+                      textLeadingImage: config.markers.toMarker,
                       onSaved: onSaveTo,
                       value: homePageState.toPlace,
                     ),
