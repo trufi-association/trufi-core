@@ -12,55 +12,63 @@ class MarkerConfigurationDefault implements MarkerConfiguration {
   const MarkerConfigurationDefault();
 
   @override
-  Widget get toMarker => const FromMarkerDefault();
+  Widget get fromMarker => const ToMarkerDefault();
 
   @override
-  Widget get fromMarker => const ToMarkerDefault();
+  Widget get toMarker => const FromMarkerDefault();
 
   @override
   Widget get yourLocationMarker => const MyLocationMarker();
 
   @override
-  MarkerLayerOptions buildToMarkerLayer(LatLng point) {
-    return MarkerLayerOptions(markers: [
-      Marker(
-        point: point,
-        anchorPos: AnchorPos.align(AnchorAlign.top),
-        builder: (context) {
-          return toMarker;
-        },
-      )
-    ]);
+  Marker buildFromMarker(LatLng point) {
+    return Marker(
+      point: point,
+      width: 24.0,
+      height: 24.0,
+      anchorPos: AnchorPos.align(AnchorAlign.center),
+      builder: (context) {
+        return fromMarker;
+      },
+    );
   }
 
   @override
-  MarkerLayerOptions buildFromMarkerLayer(LatLng point) {
-    return MarkerLayerOptions(markers: [
-      Marker(
-        point: point,
-        width: 24.0,
-        height: 24.0,
-        anchorPos: AnchorPos.align(AnchorAlign.center),
-        builder: (context) {
-          return fromMarker;
-        },
-      )
-    ]);
+  Marker buildToMarker(LatLng point) {
+    return Marker(
+      point: point,
+      anchorPos: AnchorPos.align(AnchorAlign.top),
+      builder: (context) {
+        return toMarker;
+      },
+    );
   }
 
   @override
-  MarkerLayerOptions buildYourLocationMarkerLayer(LatLng point) {
-    return MarkerLayerOptions(
-      markers: [
-        if (point != null)
-          Marker(
+  Marker buildYourLocationMarker(LatLng point) {
+    return (point != null)
+        ? Marker(
             width: 50.0,
             height: 50.0,
             point: point,
             anchorPos: AnchorPos.align(AnchorAlign.center),
             builder: (context) => const MyLocationMarker(),
           )
-      ],
-    );
+        : Marker(width: 0, height: 0);
+  }
+
+  @override
+  MarkerLayerOptions buildFromMarkerLayerOptions(LatLng point) {
+    return MarkerLayerOptions(markers: [buildFromMarker(point)]);
+  }
+
+  @override
+  MarkerLayerOptions buildToMarkerLayerOptions(LatLng point) {
+    return MarkerLayerOptions(markers: [buildToMarker(point)]);
+  }
+
+  @override
+  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng point) {
+    return MarkerLayerOptions(markers: [buildYourLocationMarker(point)]);
   }
 }

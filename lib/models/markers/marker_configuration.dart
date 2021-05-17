@@ -7,7 +7,11 @@ abstract class MarkerConfiguration {
   Widget get fromMarker;
   Widget get yourLocationMarker;
 
-  MarkerLayerOptions buildToMarkerLayer(LatLng point);
-  MarkerLayerOptions buildFromMarkerLayer(LatLng point);
-  MarkerLayerOptions buildYourLocationMarkerLayer(LatLng point);
+  Marker buildToMarker(LatLng point);
+  Marker buildFromMarker(LatLng point);
+  Marker buildYourLocationMarker(LatLng point);
+
+  MarkerLayerOptions buildToMarkerLayerOptions(LatLng point);
+  MarkerLayerOptions buildFromMarkerLayerOptions(LatLng point);
+  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng point);
 }
