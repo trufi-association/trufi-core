@@ -1,7 +1,5 @@
 import 'package:flutter_svg/svg.dart';
 
-// import 'icons_bike_rental_network.dart';
-
 const String bike = """
 <svg id="icon-icon_park-and-ride" viewBox="0 0 24 12" enable-background="new 0 0 24 12">
       <path fill="#007AC9" d="M22.5,12h-21C0.672,12,0,11.328,0,10.5v-9C0,0.672,0.672,0,1.5,0h21C23.328,0,24,0.672,24,1.5v9   C24,11.328,23.328,12,22.5,12z"></path>
