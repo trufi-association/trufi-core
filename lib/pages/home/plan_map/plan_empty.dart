@@ -40,10 +40,18 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   Widget build(BuildContext context) {
     _trufiMapController.mapController.onReady.then((value) {
       final cfg = context.read<ConfigurationCubit>().state;
-      final zoom = cfg.map.defaultZoom;
-      final mapCenter = cfg.map.center;
-
-      _trufiMapController.mapController.move(mapCenter, zoom);
+      final mapRouteState = context.read<HomePageCubit>().state;
+      final chooseZoom = cfg.map.chooseLocationZoom;
+      if (mapRouteState.toPlace != null) {
+        _trufiMapController.mapController
+            .move(mapRouteState.toPlace.latLng, chooseZoom);
+      } else if (mapRouteState.fromPlace != null) {
+        _trufiMapController.mapController
+            .move(mapRouteState.fromPlace.latLng, chooseZoom);
+      } else {
+        _trufiMapController.mapController
+            .move(cfg.map.center, cfg.map.defaultZoom);
+      }
       _trufiMapController.inMapReady.add(null);
     });
 
