@@ -31,6 +31,7 @@ class TrufiLocation implements TrufiPlace {
   static const String keyLatitude = 'latitude';
   static const String keyLongitude = 'longitude';
   static const String keyType = 'type';
+  static const String keyAddress = 'address';
 
   final String description;
   final double latitude;
@@ -111,6 +112,7 @@ class TrufiLocation implements TrufiPlace {
       latitude: json[keyLatitude] as double,
       longitude: json[keyLongitude] as double,
       type: json[keyType] as String,
+      address: json[keyAddress] != null ? json[keyAddress] as String : '',
     );
   }
 
@@ -120,6 +122,7 @@ class TrufiLocation implements TrufiPlace {
       keyLatitude: latitude,
       keyLongitude: longitude,
       keyType: type,
+      keyAddress: address ?? ''
     };
   }
 

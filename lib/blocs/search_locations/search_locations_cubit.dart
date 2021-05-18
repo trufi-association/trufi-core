@@ -65,8 +65,11 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   void insertHistoryPlace(TrufiLocation location) {
-    emit(state.copyWith(historyPlaces: [...state.historyPlaces, location]));
-    historyPlacesStorage.insert(location);
+    emit(state.copyWith(historyPlaces: [
+      ..._deleteAllItem(state.historyPlaces, location),
+      location,
+    ]));
+    historyPlacesStorage.replace(location);
   }
 
   void insertFavoritePlace(TrufiLocation location) {
@@ -132,8 +135,8 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     favoritePlacesStorage.delete(location);
   }
 
-  List<TrufiPlace> getHistoryListWithLimit({int limit}) {
-    return state.historyPlaces.reversed.take(limit).toList();
+  List<TrufiPlace> getHistoryList() {
+    return state.historyPlaces.reversed.toList();
   }
 
   Future<List<TrufiPlace>> fetchLocations(
@@ -194,6 +197,14 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     final tempList = [...list];
     tempList.remove(location);
     return tempList;
+  }
+
+  List<TrufiLocation> _deleteAllItem(
+    List<TrufiLocation> list,
+    TrufiLocation location,
+  ) {
+    final tempList = [...list];
+    return tempList.where((value) => value != location).toList();
   }
 
   int _sortByFavoriteLocations(

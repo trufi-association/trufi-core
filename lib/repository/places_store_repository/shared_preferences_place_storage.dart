@@ -23,6 +23,13 @@ class SharedPreferencesPlaceStorage extends PlacesStorage {
   }
 
   @override
+  Future<void> replace(TrufiLocation location) async {
+    _places = _places.where((value) => value != location).toList();
+    _places.add(location);
+    await _save();
+  }
+
+  @override
   Future<void> update(TrufiLocation old, TrufiLocation location) async {
     final int index = _places.indexOf(old);
     if (index != -1) {

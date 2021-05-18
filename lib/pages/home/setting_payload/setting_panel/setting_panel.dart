@@ -109,11 +109,12 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.car.image,
+                    child: TransportMode.carPool.image,
                   ),
-                  value: state.transportModes.contains(TransportMode.car),
+                  value: state.transportModes.contains(TransportMode.carPool),
                   onChanged: (_) {
-                    payloadDataPlanCubit.setTransportMode(TransportMode.car);
+                    payloadDataPlanCubit
+                        .setTransportMode(TransportMode.carPool);
                   },
                 ),
                 _divider,

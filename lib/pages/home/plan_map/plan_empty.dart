@@ -8,7 +8,6 @@ import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
-import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
@@ -40,10 +39,18 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   Widget build(BuildContext context) {
     _trufiMapController.mapController.onReady.then((value) {
       final cfg = context.read<ConfigurationCubit>().state;
-      final zoom = cfg.map.defaultZoom;
-      final mapCenter = cfg.map.center;
-
-      _trufiMapController.mapController.move(mapCenter, zoom);
+      final mapRouteState = context.read<HomePageCubit>().state;
+      final chooseZoom = cfg.map.chooseLocationZoom;
+      if (mapRouteState.toPlace != null) {
+        _trufiMapController.mapController
+            .move(mapRouteState.toPlace.latLng, chooseZoom);
+      } else if (mapRouteState.fromPlace != null) {
+        _trufiMapController.mapController
+            .move(mapRouteState.fromPlace.latLng, chooseZoom);
+      } else {
+        _trufiMapController.mapController
+            .move(cfg.map.center, cfg.map.defaultZoom);
+      }
       _trufiMapController.inMapReady.add(null);
     });
 
@@ -58,9 +65,11 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
           layerOptionsBuilder: (context) => [
             MarkerLayerOptions(markers: [
               if (homePageCubit.state.fromPlace != null)
-                buildFromMarker(homePageCubit.state.fromPlace.latLng),
+                trufiConfiguration.markers
+                    .buildFromMarker(homePageCubit.state.fromPlace.latLng),
               if (homePageCubit.state.toPlace != null)
-                buildToMarker(homePageCubit.state.toPlace.latLng),
+                trufiConfiguration.markers
+                    .buildToMarker(homePageCubit.state.toPlace.latLng),
             ]),
           ],
           onLongPress: (location) async {

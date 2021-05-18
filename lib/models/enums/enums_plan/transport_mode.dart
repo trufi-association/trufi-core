@@ -6,6 +6,7 @@ enum TransportMode {
   bus,
   cableCar,
   car,
+  carPool,
   ferry,
   flexible,
   funicular,
@@ -68,6 +69,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bus: "BUS",
     TransportMode.cableCar: "CABLE_CAR",
     TransportMode.car: "CAR",
+    TransportMode.carPool: "CARPOOL",
     TransportMode.ferry: "FERRY",
     TransportMode.flexible: "FLEXIBLE",
     TransportMode.funicular: "FUNICULAR",
@@ -91,6 +93,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bus: Icons.directions_bus,
     TransportMode.cableCar: CustomIcons.gondola,
     TransportMode.car: Icons.drive_eta,
+    TransportMode.carPool: Icons.drive_eta,
     TransportMode.ferry: Icons.directions_ferry,
     TransportMode.flexible: Icons.warning,
     TransportMode.funicular: CustomIcons.gondola,
@@ -118,6 +121,9 @@ extension TransportModeExtension on TransportMode {
         package: "trufi_core"),
     TransportMode.cableCar: null,
     TransportMode.car: SvgPicture.asset(
+        "assets/images/transport_modes/icon-icon_stop_carpool.svg",
+        package: "trufi_core"),
+    TransportMode.carPool: SvgPicture.asset(
         "assets/images/transport_modes/icon-icon_stop_carpool.svg",
         package: "trufi_core"),
     TransportMode.ferry: null,
@@ -163,6 +169,10 @@ extension TransportModeExtension on TransportMode {
     TransportMode.miniBus: const Color(0xffff260c),
     TransportMode.lightRail: const Color(0xff83b23b),
   };
+  static const qualifiers = <TransportMode, String>{
+    TransportMode.bicycle: "RENT",
+  };
+
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
   Color get color => colors[this] ?? Colors.grey;
@@ -172,4 +182,5 @@ extension TransportModeExtension on TransportMode {
         "assets/images/transport_modes/icon-icon_bus-live-green.svg",
         package: "trufi_core",
       );
+  String get qualifier => qualifiers[this] ?? "";
 }

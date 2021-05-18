@@ -67,7 +67,8 @@ void main() {
     final file = File('test/assets/response_location.json');
     final List<TrufiLocation> _listJsonLocation = json
         .decode(await file.readAsString())
-        .map<TrufiLocation>((dynamic json) => TrufiLocation.fromJson(json as Map<String, dynamic>))
+        .map<TrufiLocation>((dynamic json) =>
+            TrufiLocation.fromJson(json as Map<String, dynamic>))
         .toList() as List<TrufiLocation>;
 
     expect(
@@ -86,11 +87,12 @@ void main() {
         description: _description, latitude: _latitude, longitude: _longitude);
     final jsonTrufiLocation = trufiLocation.toJson();
 
-    expect(jsonTrufiLocation.length, 4);
+    expect(jsonTrufiLocation.length, 5);
     expect(jsonTrufiLocation.containsKey("description"), true);
     expect(jsonTrufiLocation.containsKey("latitude"), true);
     expect(jsonTrufiLocation.containsKey('longitude'), true);
     expect(jsonTrufiLocation.containsKey('type'), true);
+    expect(jsonTrufiLocation.containsKey('address'), true);
     expect(jsonTrufiLocation.containsValue(_description), true);
     expect(jsonTrufiLocation.containsValue(_latitude), true);
     expect(jsonTrufiLocation.containsValue(_longitude), true);
@@ -121,7 +123,6 @@ void main() {
     trufiLocation = TrufiLocation(
         description: _description, latitude: _latitude, longitude: _longitude);
 
-    expect(trufiLocation.toString(),
-        "$_latitude,$_longitude");
+    expect(trufiLocation.toString(), "$_latitude,$_longitude");
   });
 }
