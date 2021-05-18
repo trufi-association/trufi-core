@@ -39,6 +39,7 @@ class FormFieldsPortrait extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             LocationFormField(
+              isOrigin: true,
               onSaved: onSaveFrom,
               hintText: translations.searchPleaseSelectOrigin,
               textLeadingImage: config.markers.fromMarker,
@@ -49,6 +50,7 @@ class FormFieldsPortrait extends StatelessWidget {
               value: homePageState.fromPlace,
             ),
             LocationFormField(
+              isOrigin: false,
               onSaved: onSaveTo,
               hintText: translations.searchPleaseSelectDestination,
               textLeadingImage: config.markers.toMarker,

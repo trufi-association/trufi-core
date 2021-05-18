@@ -47,6 +47,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   ),
                   Flexible(
                     child: LocationFormField(
+                      isOrigin: true,
                       hintText: localization.searchPleaseSelectOrigin,
                       textLeadingImage: config.markers.fromMarker,
                       onSaved: onSaveFrom,
@@ -64,6 +65,7 @@ class FormFieldsLandscape extends StatelessWidget {
                   ),
                   Flexible(
                     child: LocationFormField(
+                      isOrigin: false,
                       hintText: localization.searchPleaseSelectDestination,
                       textLeadingImage: config.markers.toMarker,
                       onSaved: onSaveTo,

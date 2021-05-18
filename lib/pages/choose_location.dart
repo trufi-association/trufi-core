@@ -12,19 +12,22 @@ import '../widgets/map/trufi_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
   static Future<LatLng> selectPosition(BuildContext context,
-      {LatLng position}) {
+      {LatLng position, bool isOrigin}) {
     return Navigator.of(context).push(
       MaterialPageRoute<LatLng>(
         builder: (BuildContext context) => ChooseLocationPage(
           position: position,
+          isOrigin: isOrigin,
         ),
       ),
     );
   }
 
-  const ChooseLocationPage({Key key, this.position}) : super(key: key);
+  const ChooseLocationPage({Key key, this.position, this.isOrigin = false})
+      : super(key: key);
 
   final LatLng position;
+  final bool isOrigin;
 
   @override
   ChooseLocationPageState createState() => ChooseLocationPageState();
@@ -39,7 +42,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   void initState() {
     super.initState();
     final cfg = context.read<ConfigurationCubit>().state;
-    _chooseOnMapMarker = cfg.markers.buildToMarker(cfg.map.center);
+    final markerConfiguration = cfg.markers;
+    _chooseOnMapMarker = _selectedMarker(cfg.map.center, markerConfiguration);
     if (widget.position != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
@@ -134,7 +138,17 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   void _handleOnMapPositionChanged(MapPosition position, bool hasGesture,
       MarkerConfiguration markerConfiguration) {
     setState(() {
-      _chooseOnMapMarker = markerConfiguration.buildToMarker(position.center);
+      _chooseOnMapMarker =
+          _selectedMarker(position.center, markerConfiguration);
     });
+  }
+
+  Marker _selectedMarker(
+    LatLng location,
+    MarkerConfiguration markerConfiguration,
+  ) {
+    return widget.isOrigin
+        ? markerConfiguration.buildFromMarker(location)
+        : markerConfiguration.buildToMarker(location);
   }
 }
