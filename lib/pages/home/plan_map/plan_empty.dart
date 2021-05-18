@@ -8,7 +8,6 @@ import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map.dart';
-import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 

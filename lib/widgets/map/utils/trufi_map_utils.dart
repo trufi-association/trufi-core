@@ -2,10 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 import '../../../utils/util_icons/custom_icons.dart';
