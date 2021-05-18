@@ -75,7 +75,6 @@ flutter:
   # https://flutter.dev/assets-and-images/#resolution-aware.
   assets:
     - assets/images/
-    - assets/images/transport_modes/
 
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
