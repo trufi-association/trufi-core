@@ -183,7 +183,7 @@ String getPlanAdvanced({
   final dataTransportModes = _parseTransportModes(transportModes);
   final dataBikeRentalNetwork = _parseBikeRentalNetworks(bikeRentalNetworks);
   final bool disableRemainingWeightHeuristic =
-      transportModes.map((e) => e.name).contains("BICYCLE_RENT");
+      transportModes.map((e) => e.name).contains("BICYCLE");
   final double walkReluctance = avoidWalking ? 5 : 2;
   final triangleOption = optimize == OptimizeType.triangle
       ? "triangle: {safetyFactor: 0.4, slopeFactor: 0.3, timeFactor: 0.3}"
@@ -260,8 +260,18 @@ String getPlanAdvanced({
 }
 
 String _parseTransportModes(List<TransportMode> list) {
-  final dataParse = list.map((e) => '{mode:${e.name}}').join(',');
+  final dataParse = list
+      .map((e) => '{mode:${e.name}${_parseQualifier(e.qualifier)}}')
+      .join(',');
   return '[$dataParse]';
+}
+
+String _parseQualifier(String qualifier) {
+  String tempAualifier = qualifier;
+  if (tempAualifier != "") {
+    tempAualifier = ', qualifier:$tempAualifier';
+  }
+  return tempAualifier;
 }
 
 String _parseBikeRentalNetworks(List<BikeRentalNetwork> list) {

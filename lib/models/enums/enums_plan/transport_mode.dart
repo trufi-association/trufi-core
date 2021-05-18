@@ -6,6 +6,7 @@ enum TransportMode {
   bus,
   cableCar,
   car,
+  carPool,
   ferry,
   flexible,
   funicular,
@@ -68,6 +69,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bus: "BUS",
     TransportMode.cableCar: "CABLE_CAR",
     TransportMode.car: "CAR",
+    TransportMode.carPool: "CARPOOL",
     TransportMode.ferry: "FERRY",
     TransportMode.flexible: "FLEXIBLE",
     TransportMode.funicular: "FUNICULAR",
@@ -91,6 +93,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bus: Icons.directions_bus,
     TransportMode.cableCar: CustomIcons.gondola,
     TransportMode.car: Icons.drive_eta,
+    TransportMode.carPool: Icons.drive_eta,
     TransportMode.ferry: Icons.directions_ferry,
     TransportMode.flexible: Icons.warning,
     TransportMode.funicular: CustomIcons.gondola,
@@ -107,6 +110,10 @@ extension TransportModeExtension on TransportMode {
     TransportMode.miniBus: Icons.airport_shuttle,
     TransportMode.lightRail: Icons.train,
   };
+  static const qualifiers = <TransportMode, String>{
+    TransportMode.bicycle: "RENT",
+  };
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
+  String get qualifier => qualifiers[this] ?? "";
 }

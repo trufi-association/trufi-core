@@ -94,10 +94,11 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Carpool',
-                  secondary: Icon(TransportMode.car.icon),
-                  value: state.transportModes.contains(TransportMode.car),
+                  secondary: Icon(TransportMode.carPool.icon),
+                  value: state.transportModes.contains(TransportMode.carPool),
                   onChanged: (_) {
-                    payloadDataPlanCubit.setTransportMode(TransportMode.car);
+                    payloadDataPlanCubit
+                        .setTransportMode(TransportMode.carPool);
                   },
                 ),
                 _divider,
@@ -134,7 +135,7 @@ class SettingPanel extends StatelessWidget {
                         ),
                         CustomSwitchTile(
                           title: 'Taxi',
-                          secondary: const Icon(Icons.local_taxi),
+                          secondary: Icon(TransportMode.bicycle.icon),
                           value: state.bikeRentalNetworks
                               .contains(BikeRentalNetwork.taxi),
                           onChanged: (_) {
@@ -144,7 +145,7 @@ class SettingPanel extends StatelessWidget {
                         ),
                         CustomSwitchTile(
                           title: 'CarSharing',
-                          secondary: const Icon(Icons.taxi_alert),
+                          secondary: Icon(TransportMode.bicycle.icon),
                           value: state.bikeRentalNetworks
                               .contains(BikeRentalNetwork.carSharing),
                           onChanged: (_) {
@@ -203,7 +204,7 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Park and Ride',
-                  secondary: const Icon(Icons.call_to_action_rounded),
+                  secondary: Icon(TransportMode.bicycle.icon),
                   value: state.includeParkAndRideSuggestions,
                   onChanged: (value) =>
                       payloadDataPlanCubit.setParkRide(parkRide: value),
@@ -223,7 +224,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: 'Wheelchair',
-                  secondary: const Icon(Icons.wheelchair_pickup),
+                  secondary: Icon(TransportMode.car.icon),
                   value: state.wheelchair,
                   onChanged: (value) =>
                       payloadDataPlanCubit.setWheelChair(wheelchair: value),
