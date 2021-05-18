@@ -15,7 +15,16 @@ extension BikeRentalNetworkExtension on BikeRentalNetwork {
     BikeRentalNetwork.carSharing: 'car-sharing',
     BikeRentalNetwork.regioRad: 'regiorad',
   };
+
+  static final images = <BikeRentalNetwork, SvgPicture>{
+    BikeRentalNetwork.taxi: SvgPicture.string(taxi ?? ""),
+    BikeRentalNetwork.carSharing: SvgPicture.string(carSharing ?? ""),
+    BikeRentalNetwork.regioRad: SvgPicture.string(regioRad ?? ""),
+  };
+
   String get name => values[this] ?? 'car-sharing';
+
+  SvgPicture get image => images[this] ?? SvgPicture.string(carSharing ?? "");
 }
 
 const defaultBikeRentalNetworks = <BikeRentalNetwork>[

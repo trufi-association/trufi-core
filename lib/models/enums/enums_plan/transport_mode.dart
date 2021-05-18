@@ -113,30 +113,18 @@ extension TransportModeExtension on TransportMode {
 
   static final images = <TransportMode, SvgPicture>{
     TransportMode.airplane: null,
-    TransportMode.bicycle: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_citybike.svg",
-        package: "trufi_core"),
-    TransportMode.bus: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_bus-live-red.svg",
-        package: "trufi_core"),
+    TransportMode.bicycle: SvgPicture.string(citybike ?? ""),
+    TransportMode.bus: SvgPicture.string(bus ?? ""),
     TransportMode.cableCar: null,
-    TransportMode.car: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_stop_carpool.svg",
-        package: "trufi_core"),
-    TransportMode.carPool: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_stop_carpool.svg",
-        package: "trufi_core"),
+    TransportMode.car: SvgPicture.string(carpool ?? ""),
+    TransportMode.carPool: SvgPicture.string(carpool ?? ""),
     TransportMode.ferry: null,
     TransportMode.flexible: null,
     TransportMode.funicular: null,
     TransportMode.gondola: null,
     TransportMode.legSwitch: null,
-    TransportMode.rail: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_bus-live-green.svg",
-        package: "trufi_core"),
-    TransportMode.subway: SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_subway.svg",
-        package: "trufi_core"),
+    TransportMode.rail: SvgPicture.string(rail ?? ""),
+    TransportMode.subway: SvgPicture.string(subway ?? ""),
     TransportMode.tram: null,
     TransportMode.transit: null,
     TransportMode.walk: null,

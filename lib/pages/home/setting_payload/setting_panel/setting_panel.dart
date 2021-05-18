@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
 
@@ -145,7 +146,11 @@ class SettingPanel extends StatelessWidget {
                         ),
                         CustomSwitchTile(
                           title: 'RegioRad',
-                          secondary: Icon(TransportMode.bicycle.icon),
+                          secondary: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: BikeRentalNetwork.regioRad.image,
+                          ),
                           value: state.bikeRentalNetworks
                               .contains(BikeRentalNetwork.regioRad),
                           onChanged: (_) {
@@ -155,7 +160,11 @@ class SettingPanel extends StatelessWidget {
                         ),
                         CustomSwitchTile(
                           title: 'Taxi',
-                          secondary: Icon(TransportMode.bicycle.icon),
+                          secondary: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: BikeRentalNetwork.taxi.image,
+                          ),
                           value: state.bikeRentalNetworks
                               .contains(BikeRentalNetwork.taxi),
                           onChanged: (_) {
@@ -165,7 +174,11 @@ class SettingPanel extends StatelessWidget {
                         ),
                         CustomSwitchTile(
                           title: 'CarSharing',
-                          secondary: Icon(TransportMode.bicycle.icon),
+                          secondary: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: BikeRentalNetwork.carSharing.image,
+                          ),
                           value: state.bikeRentalNetworks
                               .contains(BikeRentalNetwork.carSharing),
                           onChanged: (_) {
@@ -192,7 +205,11 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: 'Bike',
-                  secondary: Icon(TransportMode.bicycle.icon),
+                  secondary: const SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: Icon(Icons.pedal_bike),
+                  ),
                   value: state.includeBikeSuggestions,
                   onChanged: (value) => payloadDataPlanCubit
                       .setIncludeBikeSuggestions(includeBikeSuggestions: value),
@@ -224,14 +241,22 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: 'Park and Ride',
-                  secondary: Icon(TransportMode.bicycle.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: parkRideSvg,
+                  ),
                   value: state.includeParkAndRideSuggestions,
                   onChanged: (value) =>
                       payloadDataPlanCubit.setParkRide(parkRide: value),
                 ),
                 CustomSwitchTile(
                   title: 'Car',
-                  secondary: Icon(TransportMode.car.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: carSvg,
+                  ),
                   value: state.includeCarSuggestions,
                   onChanged: (value) => payloadDataPlanCubit
                       .setIncludeCarSuggestions(includeCarSuggestions: value),
@@ -244,7 +269,11 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: 'Wheelchair',
-                  secondary: Icon(TransportMode.car.icon),
+                  secondary: SizedBox(
+                    height: 35,
+                    width: 35,
+                    child: wheelChairSvg,
+                  ),
                   value: state.wheelchair,
                   onChanged: (value) =>
                       payloadDataPlanCubit.setWheelChair(wheelchair: value),
