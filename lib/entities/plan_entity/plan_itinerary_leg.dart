@@ -10,7 +10,8 @@ class PlanItineraryLeg {
     this.duration,
     this.toName,
   }) {
-    transportMode = getTransportMode(mode: mode, specificTransport: routeLongName);
+    transportMode =
+        getTransportMode(mode: mode, specificTransport: routeLongName);
   }
 
   static const _distance = "distance";
@@ -59,8 +60,8 @@ class PlanItineraryLeg {
   String toInstruction(TrufiLocalization localization) {
     final StringBuffer sb = StringBuffer();
     if (transportMode == TransportMode.walk) {
-      sb.write(localization.instructionWalk(
-          _durationString(localization), _distanceString(localization), _toString(localization)));
+      sb.write(localization.instructionWalk(_durationString(localization),
+          _distanceString(localization), _toString(localization)));
     } else {
       sb.write(localization.instructionRide(
           _carTypeString(localization) + (route.isNotEmpty ? " $route" : ""),
@@ -89,6 +90,10 @@ class PlanItineraryLeg {
         carType = localization.instructionVehicleGondola;
         break;
       case TransportMode.car:
+        carType = localization.instructionVehicleCar;
+        break;
+      // TODO translate
+      case TransportMode.carPool:
         carType = localization.instructionVehicleCar;
         break;
       // TODO translate
