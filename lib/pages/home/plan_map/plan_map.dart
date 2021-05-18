@@ -108,9 +108,9 @@ class PlanMapPageState extends State<PlanMapPage>
             return <LayerOptions>[
               _data.unselectedPolylinesLayer,
               _data.unselectedMarkersLayer,
-              _data.fromMarkerLayer,
               _data.selectedPolylinesLayer,
               _data.selectedMarkersLayer,
+              _data.fromMarkerLayer,
               // _trufiMapController.yourLocationLayer,
               _data.toMarkerLayer,
             ];
