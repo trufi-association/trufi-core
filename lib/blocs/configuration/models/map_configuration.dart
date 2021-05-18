@@ -50,7 +50,7 @@ class MapConfiguration {
     this.onlineMinZoom = 1.0,
     this.onlineMaxZoom = 19.0,
     this.onlineZoom = 13.0,
-    this.chooseLocationZoom = 16.0,
+    this.chooseLocationZoom = 15.0,
     this.center,
     this.southWest,
     this.northEast,

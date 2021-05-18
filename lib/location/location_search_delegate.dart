@@ -9,6 +9,7 @@ import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/pages/home/search_location/location_form_field.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
 
@@ -368,11 +369,8 @@ class _BuildChooseOnMap extends StatelessWidget {
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
-    final LatLng mapLocation = await Navigator.of(context).push(
-      MaterialPageRoute<LatLng>(
-        builder: (context) => const ChooseLocationPage(),
-      ),
-    );
+    final LatLng mapLocation = await ChooseLocationPage.selectPosition(context,
+        isOrigin: TypeLocationForm().isOrigin);
     if (mapLocation != null && onMapTapped != null) {
       onMapTapped(TrufiLocation.fromLatLng("Map Marker", mapLocation));
     }

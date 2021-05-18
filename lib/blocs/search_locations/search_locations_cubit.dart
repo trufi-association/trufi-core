@@ -66,8 +66,8 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   void insertHistoryPlace(TrufiLocation location) {
     emit(state.copyWith(historyPlaces: [
-      ..._deleteItem(state.historyPlaces, location),
-      location
+      ..._deleteAllItem(state.historyPlaces, location),
+      location,
     ]));
     historyPlacesStorage.replace(location);
   }
@@ -197,6 +197,14 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     final tempList = [...list];
     tempList.remove(location);
     return tempList;
+  }
+
+  List<TrufiLocation> _deleteAllItem(
+    List<TrufiLocation> list,
+    TrufiLocation location,
+  ) {
+    final tempList = [...list];
+    return tempList.where((value) => value != location).toList();
   }
 
   int _sortByFavoriteLocations(
