@@ -7,7 +7,7 @@ import 'package:trufi_core/location/location_search_delegate.dart';
 import '../../../trufi_models.dart';
 
 class LocationFormField extends StatelessWidget {
-  LocationFormField({
+  const LocationFormField({
     Key key,
     @required this.hintText,
     @required this.textLeadingImage,
