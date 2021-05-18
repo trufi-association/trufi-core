@@ -24,7 +24,7 @@ class SharedPreferencesPlaceStorage extends PlacesStorage {
 
   @override
   Future<void> replace(TrufiLocation location) async {
-    _places.remove(location);
+    _places = _places.where((value) => value != location).toList();
     _places.add(location);
     await _save();
   }
