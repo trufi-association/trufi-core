@@ -5,6 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/markers/marker_configuration.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/trufi_app.dart';
@@ -83,10 +84,8 @@ class PlanMapPageState extends State<PlanMapPage>
   @override
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
-    final theme = Theme.of(context);
 
     final trufiConfiguration = context.read<ConfigurationCubit>().state;
-    _data._selectedColor = theme.accentColor;
 
     if (_mapController.ready) {
       if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
@@ -228,7 +227,6 @@ class PlanMapPageStateData {
   final _selectedMarkers = <Marker>[];
   final _selectedPolylines = <Polyline>[];
   final _allPolylines = <Polyline>[];
-  Color _selectedColor = const Color(0xffd81b60);
 
   Marker _fromMarker;
   Marker _toMarker;
@@ -295,10 +293,10 @@ class PlanMapPageStateData {
     }
     _itineraries.addAll(
       _createItineraries(
-          plan: plan,
-          selectedItinerary: _selectedItinerary,
-          onTap: onItineraryTap,
-          selectedColor: _selectedColor),
+        plan: plan,
+        selectedItinerary: _selectedItinerary,
+        onTap: onItineraryTap,
+      ),
     );
     _itineraries.forEach((itinerary, polylinesWithMarker) {
       final bool isSelected = itinerary == _selectedItinerary;
@@ -350,29 +348,29 @@ class PlanMapPageStateData {
     );
   }
 
-  Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries(
-      {@required PlanEntity plan,
-      @required PlanItinerary selectedItinerary,
-      @required Function(PlanItinerary) onTap,
-      Color selectedColor}) {
+  Map<PlanItinerary, List<PolylineWithMarkers>> _createItineraries({
+    @required PlanEntity plan,
+    @required PlanItinerary selectedItinerary,
+    @required Function(PlanItinerary) onTap,
+  }) {
     final Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = {};
     if (plan != null) {
       for (final itinerary in plan.itineraries) {
         final List<Marker> markers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
-        final Color color = isSelected ? selectedColor : Colors.grey;
 
         for (int i = 0; i < itinerary.legs.length; i++) {
           final PlanItineraryLeg leg = itinerary.legs[i];
-
           // Polyline
           final List<LatLng> points = decodePolyline(leg.points);
+          final Color color =
+              isSelected ? leg.transportMode.color : Colors.grey;
           final Polyline polyline = Polyline(
             points: points,
             color: color,
             strokeWidth: isSelected ? 6.0 : 3.0,
-            isDotted: leg.mode == 'WALK',
+            isDotted: leg.transportMode == TransportMode.walk,
           );
 
           // Transfer marker
@@ -387,7 +385,7 @@ class PlanMapPageStateData {
           }
 
           // Bus marker
-          if (leg.mode != 'WALK') {
+          if (leg.transportMode != TransportMode.walk) {
             markers.add(
               buildBusMarker(
                 midPointForPolyline(polyline),
