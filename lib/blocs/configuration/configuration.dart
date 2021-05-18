@@ -6,6 +6,8 @@ import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/models/markers/marker_configuration.dart';
+import 'package:trufi_core/models/markers/marker_configuration_default.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
 
@@ -31,6 +33,9 @@ class Configuration {
 
   /// Loading and Success Animation
   final AnimationConfiguration animations;
+
+  /// To, From and yourLocation Marker
+  final MarkerConfiguration markers;
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -63,6 +68,7 @@ class Configuration {
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
     this.customTranslations,
     this.feedbackDefinition,
+    this.markers = const MarkerConfigurationDefault(),
     this.animations,
     this.abbreviations,
     this.map,

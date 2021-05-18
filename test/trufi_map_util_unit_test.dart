@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/markers/marker_configuration.dart';
+import 'package:trufi_core/models/markers/marker_configuration_default.dart';
 import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 void main() {
@@ -11,7 +13,7 @@ void main() {
   const double _longitude = 129.0;
   final LatLng _point = LatLng(_latitude, _longitude);
   PlanItineraryLeg _leg;
-
+  const MarkerConfiguration markers = MarkerConfigurationDefault();
   setUp(() {
     _leg = PlanItineraryLeg(
         points: "points",
@@ -23,15 +25,16 @@ void main() {
   });
 
   test('Build from Marker', () {
-    final Marker marker = buildFromMarker(_point);
+    final MarkerLayerOptions marker =
+        markers.buildFromMarkerLayerOptions(_point);
     expect(marker, isNotNull);
-    expect(marker.point, _point);
+    expect(marker.markers[0].point, _point);
   });
 
   test('Build to Marker', () {
-    final Marker marker = buildToMarker(_point);
+    final MarkerLayerOptions marker = markers.buildToMarkerLayerOptions(_point);
     expect(marker, isNotNull);
-    expect(marker.point, _point);
+    expect(marker.markers[0].point, _point);
   });
 
   test('Build bus Marker', () {

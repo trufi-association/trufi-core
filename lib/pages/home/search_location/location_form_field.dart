@@ -12,11 +12,13 @@ class LocationFormField extends StatelessWidget {
     @required this.hintText,
     @required this.textLeadingImage,
     @required this.onSaved,
+    @required this.isOrigin,
     this.leading,
     this.trailing,
     @required this.value,
   }) : super(key: key);
 
+  final bool isOrigin;
   final String hintText;
   final Widget textLeadingImage;
   final Function(TrufiLocation) onSaved;
@@ -45,6 +47,7 @@ class LocationFormField extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: GestureDetector(
               onTap: () async {
+                TypeLocationForm().isOrigin = isOrigin;
                 // Show search
                 final TrufiLocation location = await showSearch<TrufiLocation>(
                   context: context,
@@ -104,4 +107,14 @@ class LocationFormField extends StatelessWidget {
       ],
     );
   }
+}
+
+class TypeLocationForm {
+  static final TypeLocationForm _singleton = TypeLocationForm._internal();
+
+  factory TypeLocationForm() => _singleton;
+
+  TypeLocationForm._internal();
+
+  bool isOrigin = false;
 }
