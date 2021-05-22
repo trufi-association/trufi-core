@@ -78,6 +78,6 @@ class ItineraryDateSelector extends StatelessWidget {
 
 extension on DateTime {
   String customFormat(String languageCode) {
-    return DateFormat('E. dd.MM.  kk:mm', languageCode).format(this);
+    return DateFormat('E. dd.MM.  HH:mm', languageCode).format(this);
   }
 }
