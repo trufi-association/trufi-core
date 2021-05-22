@@ -37,8 +37,7 @@ class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPageState createState() => ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage>
-    with TickerProviderStateMixin {
+class ChooseLocationPageState extends State<ChooseLocationPage> {
   final _trufiMapController = TrufiMapController();
 
   Marker _chooseOnMapMarker;
@@ -52,9 +51,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     if (widget.position != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
-            center: widget.position,
-            zoom: cfg.map.chooseLocationZoom,
-            tickerProvider: this);
+          center: widget.position,
+          zoom: cfg.map.chooseLocationZoom,
+        );
       });
     }
   }
