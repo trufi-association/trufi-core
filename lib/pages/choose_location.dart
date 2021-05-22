@@ -49,12 +49,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     final markerConfiguration = cfg.markers;
     _chooseOnMapMarker = _selectedMarker(cfg.map.center, markerConfiguration);
     if (widget.position != null) {
-      _trufiMapController.outMapReady.listen((_) {
-        _trufiMapController.move(
+      _trufiMapController.mapController.onReady.then(
+        (value) => _trufiMapController.move(
           center: widget.position,
           zoom: cfg.map.chooseLocationZoom,
-        );
-      });
+        ),
+      );
     }
   }
 
