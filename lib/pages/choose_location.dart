@@ -17,14 +17,18 @@ class ChooseLocationPage extends StatefulWidget {
       MaterialPageRoute<LatLng>(
         builder: (BuildContext context) => ChooseLocationPage(
           position: position,
-          isOrigin: isOrigin,
+          isOrigin: isOrigin ?? false,
         ),
       ),
     );
   }
 
-  const ChooseLocationPage({Key key, this.position, this.isOrigin = false})
-      : super(key: key);
+  const ChooseLocationPage({
+    Key key,
+    @required this.isOrigin,
+    this.position,
+  })  : assert(isOrigin != null),
+        super(key: key);
 
   final LatLng position;
   final bool isOrigin;
@@ -33,7 +37,8 @@ class ChooseLocationPage extends StatefulWidget {
   ChooseLocationPageState createState() => ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage> {
+class ChooseLocationPageState extends State<ChooseLocationPage>
+    with TickerProviderStateMixin {
   final _trufiMapController = TrufiMapController();
 
   Marker _chooseOnMapMarker;
@@ -47,9 +52,9 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     if (widget.position != null) {
       _trufiMapController.outMapReady.listen((_) {
         _trufiMapController.move(
-          center: widget.position,
-          zoom: cfg.map.chooseLocationZoom,
-        );
+            center: widget.position,
+            zoom: cfg.map.chooseLocationZoom,
+            tickerProvider: this);
       });
     }
   }
