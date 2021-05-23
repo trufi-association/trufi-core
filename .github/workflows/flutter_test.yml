@@ -24,8 +24,8 @@ jobs:
         with:
           flutter-version: '2.0.6'
       - name: Flutter get Dependencies
-      - run: flutter pub get
+        run: flutter pub get
       - name: Run Flutter tests
-      - run: flutter test test
+        run: flutter test test
       - name: Run Flutter Analyze
-      - run: flutter analyze
+        run: flutter analyze
