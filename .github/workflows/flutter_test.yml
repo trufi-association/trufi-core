@@ -12,7 +12,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test_and_analyze:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the project
