@@ -286,5 +286,5 @@ String _parseDate(DateTime date) {
 
 String _parseTime(DateTime date) {
   final tempDate = date ?? DateTime.now();
-  return '"${DateFormat('kk:mm:ss').format(tempDate)}"';
+  return '"${DateFormat('HH:mm:ss').format(tempDate)}"';
 }
