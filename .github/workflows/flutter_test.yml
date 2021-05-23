@@ -24,8 +24,10 @@ jobs:
           flutter-version: '2.0.6'
       - run: flutter pub get
   analyze:
+    runs-on: ubuntu-latest
     steps:
       - run: flutter analyze
   test:
+    runs-on: ubuntu-latest
     steps:
       - run: flutter test test
