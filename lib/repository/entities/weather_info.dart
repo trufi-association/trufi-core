@@ -4,4 +4,9 @@ class WeatherInfo {
   final String weatherSymbol;
 
   WeatherInfo(this.temperature, this.windSpeed, this.weatherSymbol);
+
+  @override
+  String toString() {
+    return "WeatherInfo: { temperature: $temperature, windSpeed: $windSpeed, weatherSymbol: $weatherSymbol }";
+  }
 }

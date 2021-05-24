@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
@@ -18,7 +19,7 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<PreferencesCubit>(
-              create: (context) => PreferencesCubit([]),
+              create: (context) => PreferencesCubit([], LatLng(0, 0)),
             ),
             BlocProvider<ConfigurationCubit>(
               create: (context) => ConfigurationCubit(
@@ -51,7 +52,7 @@ void main() {
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<PreferencesCubit>(
-            create: (context) => PreferencesCubit([]),
+            create: (context) => PreferencesCubit([], LatLng(0, 0)),
           ),
           BlocProvider<ConfigurationCubit>(
             create: (context) => ConfigurationCubit(
