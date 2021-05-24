@@ -25,6 +25,7 @@ class WFSWeatherDataRepository extends WeatherData {
     final String newURL =
         "$url&latlon=${currentLocation.latitude},${currentLocation.longitude}&starttime=${currentTime}Z&endtime=${currentTime}Z";
 
+    print(newURL);
     final http.Response result = await client.get(Uri.parse(newURL));
 
     if (result.statusCode == 200) {
