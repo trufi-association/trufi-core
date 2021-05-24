@@ -19,18 +19,20 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<PreferencesCubit>(
-              create: (context) => PreferencesCubit([], LatLng(0, 0)),
+              create: (context) =>
+                  PreferencesCubit([], LatLng(0, 0), showWeather: false),
             ),
             BlocProvider<ConfigurationCubit>(
               create: (context) => ConfigurationCubit(
                 Configuration(
-                    supportedLanguages: [
-                      LanguageConfiguration("en", "", "English",
-                          isDefault: true),
-                    ],
-                    customTranslations: TrufiCustomLocalizations()
-                      ..title = {const Locale("en"): "Test Trufi App"},
-                    urls: UrlCollection()),
+                  supportedLanguages: [
+                    LanguageConfiguration("en", "", "English", isDefault: true),
+                  ],
+                  customTranslations: TrufiCustomLocalizations()
+                    ..title = {const Locale("en"): "Test Trufi App"},
+                  urls: UrlCollection(),
+                  showWeather: false,
+                ),
               ),
             )
           ],
@@ -52,16 +54,19 @@ void main() {
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<PreferencesCubit>(
-            create: (context) => PreferencesCubit([], LatLng(0, 0)),
+            create: (context) =>
+                PreferencesCubit([], LatLng(0, 0), showWeather: false),
           ),
           BlocProvider<ConfigurationCubit>(
             create: (context) => ConfigurationCubit(
               Configuration(
-                  supportedLanguages: [
-                    LanguageConfiguration("en", "", "English", isDefault: true),
-                  ],
-                  customTranslations: TrufiCustomLocalizations()..title = null,
-                  urls: UrlCollection()),
+                supportedLanguages: [
+                  LanguageConfiguration("en", "", "English", isDefault: true),
+                ],
+                customTranslations: TrufiCustomLocalizations()..title = null,
+                urls: UrlCollection(),
+                showWeather: false,
+              ),
             ),
           )
         ],

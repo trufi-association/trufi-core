@@ -16,8 +16,8 @@ class PreferencesCubit extends Cubit<PreferenceState> {
   final List<SocialMediaItem> socialMediaItems;
   final bool showWeather;
 
-  PreferencesCubit(
-      this.socialMediaItems, this.currentLocation, this.showWeather)
+  PreferencesCubit(this.socialMediaItems, this.currentLocation,
+      {this.showWeather})
       : super(const PreferenceState(languageCode: "en")) {
     _load();
   }
