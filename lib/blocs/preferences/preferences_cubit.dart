@@ -14,16 +14,22 @@ class PreferencesCubit extends Cubit<PreferenceState> {
   LocalRepository localRepository = SharedPreferencesRepository();
   final LatLng currentLocation;
   final List<SocialMediaItem> socialMediaItems;
+  final bool showWeather;
 
-  PreferencesCubit(this.socialMediaItems, this.currentLocation)
+  PreferencesCubit(
+      this.socialMediaItems, this.currentLocation, this.showWeather)
       : super(const PreferenceState(languageCode: "en")) {
     _load();
   }
 
   Future<void> _load() async {
     String correlationId = await localRepository.getCorrelationId();
-    final WeatherInfo weatherInfo = await WFSWeatherDataRepository()
-        .getCurrentWeatherAtLocation(DateTime.now(), currentLocation);
+    WeatherInfo weatherInfo;
+
+    if (showWeather) {
+      weatherInfo = await WFSWeatherDataRepository()
+          .getCurrentWeatherAtLocation(DateTime.now(), currentLocation);
+    }
 
     // Generate new UUID if missing
     if (correlationId == null) {
@@ -33,9 +39,10 @@ class PreferencesCubit extends Cubit<PreferenceState> {
 
     emit(
       state.copyWith(
-          correlationId: correlationId,
-          languageCode: await localRepository.getLanguageCode(),
-          weatherInfo: weatherInfo),
+        correlationId: correlationId,
+        languageCode: await localRepository.getLanguageCode(),
+        weatherInfo: weatherInfo,
+      ),
     );
   }
 

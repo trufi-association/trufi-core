@@ -75,19 +75,21 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/weather/${weatherInfo.weatherSymbol.split(".")[0]}.svg",
-                      package: "trufi_core",
-                      width: 25.0,
-                    ),
-                    Text(
-                      "${weatherInfo.temperature} °C",
-                      style: theme.primaryTextTheme.overline,
-                    ),
-                  ],
-                ),
+                if (config.showWeather)
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/weather/${weatherInfo.weatherSymbol.split(".")[0]}.svg",
+                        package: "trufi_core",
+                        width: 25.0,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "${weatherInfo.temperature} °C",
+                        style: theme.primaryTextTheme.overline,
+                      ),
+                    ],
+                  ),
                 Text(
                   config.customTranslations.get(
                     config.customTranslations.title,

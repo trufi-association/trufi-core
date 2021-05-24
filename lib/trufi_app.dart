@@ -134,8 +134,8 @@ class TrufiApp extends StatelessWidget {
           create: (context) => ConfigurationCubit(configuration),
         ),
         BlocProvider<PreferencesCubit>(
-          create: (context) =>
-              PreferencesCubit(socialMediaItem, configuration.map.center),
+          create: (context) => PreferencesCubit(socialMediaItem,
+              configuration.map.center, configuration.showWeather),
         ),
         BlocProvider<CustomLayersCubit>(
           create: (context) => CustomLayersCubit(customLayers),
