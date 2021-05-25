@@ -58,6 +58,9 @@ class Configuration {
 
   final int minimumReviewWorthyActionCount;
 
+  /// Show the weather in the drawer from FMI - Finnish Meteorological Institute
+  final bool showWeather;
+
   Configuration({
     this.teamInformationEmail = "",
     this.minimumReviewWorthyActionCount = 3,
@@ -74,6 +77,7 @@ class Configuration {
     this.map,
     this.urls,
     this.attribution,
+    this.showWeather = true,
   });
 }
 

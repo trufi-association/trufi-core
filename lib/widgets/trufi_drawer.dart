@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share/share.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
@@ -53,7 +54,9 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final localization = TrufiLocalization.of(context);
     final config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
-    final socialMediaItems = context.read<PreferencesCubit>().socialMediaItems;
+    final preferencesCubit = context.read<PreferencesCubit>();
+    final socialMediaItems = preferencesCubit.socialMediaItems;
+    final weatherInfo = preferencesCubit.state.weatherInfo;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -72,6 +75,21 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                if (config.showWeather && weatherInfo != null)
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/weather/${weatherInfo.weatherSymbol.split(".")[0]}.svg",
+                        package: "trufi_core",
+                        width: 25.0,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "${weatherInfo.temperature} °C",
+                        style: theme.primaryTextTheme.overline,
+                      ),
+                    ],
+                  ),
                 Text(
                   config.customTranslations.get(
                     config.customTranslations.title,

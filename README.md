@@ -56,3 +56,4 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 ## Shout-outs
 Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
+Thanks to the [FMI - Finnish Meteorological Institute](https://en.ilmatieteenlaitos.fi/open-data) for the Open Weather Data

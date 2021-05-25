@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/repository/entities/weather_info.dart';
 import 'package:trufi_core/repository/weather_data.dart';
-
-import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 
 class WFSWeatherDataRepository extends WeatherData {
