@@ -75,7 +75,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                if (config.showWeather)
+                if (config.showWeather && weatherInfo != null)
                   Row(
                     children: [
                       SvgPicture.asset(
