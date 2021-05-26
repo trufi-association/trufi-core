@@ -53,7 +53,9 @@ class LegOverview extends StatelessWidget {
             children: <Widget>[
               Icon(
                 leg.iconData,
-                color: leg.transportMode.color,
+                color: leg.transportMode == TransportMode.walk
+                    ? Colors.white
+                    : leg.transportMode.color,
               ),
               Expanded(
                 child: Container(
