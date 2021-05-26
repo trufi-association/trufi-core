@@ -25,8 +25,10 @@ void main() {
       final String result = getPlanAdvanced(
         fromLat: 1.2,
         fromLon: 88.1,
+        fromPlace: "Hafen",
         toLat: 99.1,
         toLon: 99.9,
+        toPlace: "Herrenber",
         avoidWalking: true,
         arriveBy: true,
         itineraryFiltering: 2.5,
@@ -42,10 +44,8 @@ void main() {
         date: DateTime(2021, 05, 12, 4, 30),
       );
 
-      expect(result, contains("{lat: 1.2"));
-      expect(result, contains("lon:  88.1}"));
-      expect(result, contains("to: {lat: 99.1"));
-      expect(result, contains("lon:  99.9}"));
+      expect(result, contains("Hafen::1.2,88.1"));
+      expect(result, contains("Herrenber::99.1,99.9"));
       expect(result, contains('date: "2021-05-12"'));
       expect(result, contains('time: "04:30:00"'));
       expect(result, contains("arriveBy: true"));
@@ -65,7 +65,7 @@ void main() {
       expect(result,
           contains("walkBoardCost: ${WalkBoardCost.walkBoardCostHigh.value}"));
       expect(result, contains("walkSpeed: ${WalkingSpeed.calm.value}"));
-      expect(result.length, 1333);
+      expect(result.length, 1739);
     });
   });
 }

@@ -98,8 +98,10 @@ class OnlineGraphQLRepository implements RequestManager {
     final queryPlan = queries.getPlanAdvanced(
       arriveBy: advancedOptions.arriveBy,
       date: advancedOptions.date,
+      fromPlace: from.description,
       fromLat: from.latitude,
       fromLon: from.longitude,
+      toPlace: to.description,
       toLat: to.latitude,
       toLon: to.longitude,
       walkingSpeed: advancedOptions.typeWalkingSpeed,

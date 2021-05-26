@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
-
 void main() {
   PlanEntity _plan;
   PlanLocation _from;
@@ -139,10 +138,10 @@ void main() {
         duration: 300.0,
         distance: 2.0);
 
-    expect(_leg.iconData(), Icons.directions_walk);
-    expect(_legBus.iconData(), Icons.directions_bus);
-    expect(_legMicro.iconData(), Icons.directions_bus);
-    expect(_legMinibus.iconData(), Icons.airport_shuttle);
-    expect(_legTrufi.iconData(), Icons.local_taxi);
+    expect(_leg.iconData, Icons.directions_walk);
+    expect(_legBus.iconData, Icons.directions_bus);
+    expect(_legMicro.iconData, Icons.directions_bus);
+    expect(_legMinibus.iconData, Icons.airport_shuttle);
+    expect(_legTrufi.iconData, Icons.local_taxi);
   });
 }

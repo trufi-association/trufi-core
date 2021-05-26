@@ -153,8 +153,10 @@ String getCustomPlan({
 }
 
 String getPlanAdvanced({
+  @required String fromPlace,
   @required double fromLat,
   @required double fromLon,
+  @required String toPlace,
   @required double toLat,
   @required double toLon,
   bool avoidWalking = false,
@@ -197,7 +199,7 @@ String getPlanAdvanced({
       bikeSpeed: ${bikeSpeed.value}
       date: $dateValue
       disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic
-      from: {lat: $fromLat, lon:  $fromLon}
+      fromPlace: "$fromPlace::$fromLat,$fromLon"
       intermediatePlaces: []
       itineraryFiltering: $itineraryFiltering
       locale: "$locale"
@@ -208,7 +210,7 @@ String getPlanAdvanced({
       optimize: ${optimize.name}
       $triangleOption
       time: $timeValue
-      to: {lat: $toLat, lon:  $toLon}
+      toPlace: "$toPlace::$toLat,$toLon"
       transferPenalty: $transferPenalty
       unpreferred: {useUnpreferredRoutesPenalty: 1200}
       walkBoardCost: ${walkBoardCost.value}
@@ -227,8 +229,15 @@ String getPlanAdvanced({
         lat,
       },
       itineraries {
+        startTime,
+        endTime,
+        duration,
+        walkTime,
+        walkDistance,
         legs{
           duration
+          startTime,
+          endTime,
           distance,
           mode,
           agency{
@@ -253,6 +262,19 @@ String getPlanAdvanced({
           	points,
             length
           },
+          intermediatePlaces{
+            arrivalTime,
+            stop {
+              gtfsId,
+              lat,
+              lon,
+              name,
+              code,
+              platformCode,
+              zoneId,
+              id,
+            }
+          }
         },
       }
     }

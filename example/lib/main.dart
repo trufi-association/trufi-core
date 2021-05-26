@@ -6,6 +6,8 @@ import 'package:trufi_core/models/social_media/website_social_media.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core_example/configuration_service.dart';
 
+import 'theme/theme.dart';
+
 void main() {
   // Colors
   final theme = ThemeData(
@@ -19,6 +21,7 @@ void main() {
   runApp(TrufiApp(
     configuration: setupExampleConfiguration(),
     theme: theme,
+    bottomBarTheme: bottomBarTheme,
     socialMediaItem: [
       FacebookSocialMedia("https://www.facebook.com/trufiapp"),
       InstagramSocialMedia("https://www.instagram.com/trufi.app"),

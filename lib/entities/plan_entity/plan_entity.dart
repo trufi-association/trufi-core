@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:trufi_core/entities/plan_entity/place_entity.dart';
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
+import 'plan_entity_utils.dart';
 part 'plan_location.dart';
 part 'plan_error.dart';
 part 'plan_itinerary.dart';
@@ -42,8 +45,8 @@ class PlanEntity {
         itineraries: removePlanItineraryDuplicates(
           planJson[_itineraries]
               .map<PlanItinerary>(
-                (dynamic itineraryJson) =>
-                    PlanItinerary.fromJson(itineraryJson as Map<String, dynamic>),
+                (dynamic itineraryJson) => PlanItinerary.fromJson(
+                    itineraryJson as Map<String, dynamic>),
               )
               .toList() as List<PlanItinerary>,
         ),

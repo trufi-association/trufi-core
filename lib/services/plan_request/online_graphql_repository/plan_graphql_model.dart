@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/entities/plan_entity/place_entity.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 class PlanGraphQl {
@@ -78,9 +80,19 @@ class _Location {
 class _Itinerary {
   _Itinerary({
     this.legs,
+    this.startTime,
+    this.endTime,
+    this.duration,
+    this.walkTime,
+    this.walkDistance,
   });
 
   final List<_ItineraryLeg> legs;
+  final int startTime;
+  final int endTime;
+  final int duration;
+  final int walkTime;
+  final double walkDistance;
 
   factory _Itinerary.fromJson(Map<String, dynamic> json) => _Itinerary(
         legs: List<_ItineraryLeg>.from(
@@ -88,15 +100,35 @@ class _Itinerary {
             (x) => _ItineraryLeg.fromJson(x as Map<String, dynamic>),
           ),
         ),
+        startTime: int.tryParse(json["startTime"].toString()) ?? 0,
+        endTime: int.tryParse(json["endTime"].toString()) ?? 0,
+        duration: int.tryParse(json["duration"].toString()) ?? 0,
+        walkTime: int.tryParse(json["walkTime"].toString()) ?? 0,
+        walkDistance: double.tryParse(json["walkDistance"].toString()) ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
         "legs": List<dynamic>.from(legs.map((x) => x.toJson())),
+        "startTime": startTime,
+        "endTime": endTime,
+        "duration": duration,
+        "walkTime": walkTime,
+        "walkDistance": walkDistance,
       };
 
   PlanItinerary toPlanItinerary() {
     return PlanItinerary(
-      legs: legs.map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg()).toList(),
+      legs: legs
+          .map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
+          .toList(),
+      startTime: startTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(startTime)
+          : null,
+      endTime:
+          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
+      durationTrip: duration != null ? Duration(seconds: duration) : null,
+      walkDistance: walkDistance,
+      walkTime: walkTime != null ? Duration(seconds: walkTime) : null,
     );
   }
 }
@@ -106,43 +138,66 @@ class _ItineraryLeg {
     @required this.distance,
     @required this.duration,
     @required this.agencyName,
+    @required this.startTime,
+    @required this.endTime,
     @required this.mode,
     @required this.route,
     @required this.from,
     @required this.to,
     @required this.legGeometry,
+    @required this.intermediatePlaces,
   });
 
   final double distance;
   final double duration;
   final String agencyName;
+  final int startTime;
+  final int endTime;
+
   final TransportMode mode;
   final _Route route;
   final _Location from;
   final _Location to;
   final _LegGeometry legGeometry;
+  final List<Place> intermediatePlaces;
 
   factory _ItineraryLeg.fromJson(Map<String, dynamic> json) => _ItineraryLeg(
         distance: json["distance"] as double,
         duration: json["duration"] as double,
-        agencyName: (json["agency"] != null) ? json["agency"]["name"] as String : '',
+        agencyName:
+            (json["agency"] != null) ? json["agency"]["name"] as String : '',
+        startTime: int.tryParse(json["startTime"].toString()) ?? 0,
+        endTime: int.tryParse(json["endTime"].toString()) ?? 0,
         mode: getTransportMode(mode: json["mode"] as String),
         route: json["route"] == null
-            ? _Route(url: '',routeShortName: '',routeLongName: '')
+            ? _Route(url: '', routeShortName: '', routeLongName: '')
             : _Route.fromJson(json["route"] as Map<String, dynamic>),
         from: _Location.fromJson(json["from"] as Map<String, dynamic>),
         to: _Location.fromJson(json["to"] as Map<String, dynamic>),
-        legGeometry: _LegGeometry.fromJson(json["legGeometry"] as Map<String, dynamic>),
+        legGeometry:
+            _LegGeometry.fromJson(json["legGeometry"] as Map<String, dynamic>),
+        intermediatePlaces: json["intermediatePlaces"] != null
+            ? List<Place>.from(
+                (json["intermediatePlaces"] as List<dynamic>).map(
+                  (x) => Place.fromJson(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
         "distance": distance,
         "duration": duration,
+        "startTime": startTime,
+        "endTime": endTime,
         "mode": mode.name,
         "route": route.toJson(),
         "from": from.toJson(),
         "to": to.toJson(),
         "legGeometry": legGeometry.toJson(),
+        "intermediatePlaces": intermediatePlaces != null
+            ? List<dynamic>.from(intermediatePlaces.map((x) => x.toJson()))
+            : null,
       };
 
   PlanItineraryLeg toPlanItineraryLeg() {
@@ -150,10 +205,20 @@ class _ItineraryLeg {
       points: legGeometry.points,
       mode: mode.name,
       route: route.routeShortName,
+      startTime: startTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(startTime)
+          : null,
+      endTime:
+          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
       distance: distance,
       duration: duration,
       routeLongName: route.routeLongName,
       toName: to.name,
+      fromName: from.name,
+      // ignore: prefer_null_aware_operators
+      intermediatePlaces: intermediatePlaces != null
+          ? intermediatePlaces.map((x) => x.toPlaceEntity()).toList()
+          : null,
     );
   }
 }
@@ -200,4 +265,90 @@ class _Route {
         "shortName": url,
         "longName": url,
       };
+}
+
+class Place {
+  final int arrivalTime;
+  final Stop stop;
+
+  const Place({
+    this.arrivalTime,
+    this.stop,
+  });
+
+  factory Place.fromJson(Map<String, dynamic> json) => Place(
+        arrivalTime: int.tryParse(json["arrivalTime"].toString()) ?? 0,
+        stop: json['stop'] != null
+            ? Stop.fromJson(json['stop'] as Map<String, dynamic>)
+            : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'arrivalTime': arrivalTime,
+        'stop': stop?.toJson(),
+      };
+
+  PlaceEntity toPlaceEntity() {
+    return PlaceEntity(
+      arrivalTime: arrivalTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(arrivalTime)
+          : null,
+      stopEntity: stop?.toPlaceEntity(),
+    );
+  }
+}
+
+class Stop {
+  final String gtfsId;
+  final double lat;
+  final double lon;
+  final String name;
+  final String code;
+  final String platformCode;
+  final String zoneId;
+  final String id;
+
+  const Stop({
+    this.gtfsId,
+    this.lat,
+    this.lon,
+    this.name,
+    this.code,
+    this.platformCode,
+    this.zoneId,
+    this.id,
+  });
+
+  factory Stop.fromJson(Map<String, dynamic> json) => Stop(
+        id: json['id'] as String,
+        gtfsId: json['gtfsId'] as String,
+        name: json['name'] as String,
+        lat: double.tryParse(json['lat'].toString()) ?? 0,
+        lon: double.tryParse(json['lon'].toString()) ?? 0,
+        code: json['code'] as String,
+        zoneId: json['zoneId'] as String,
+        platformCode: json['platformCode'] as String,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "gtfsId": gtfsId,
+        "name": name,
+        "lat": lat,
+        "lon": lon,
+        "code": code,
+        "zoneId": zoneId,
+        "platformCode": platformCode,
+      };
+
+  StopEntity toPlaceEntity() {
+    return StopEntity(
+        id: id,
+        gtfsId: gtfsId,
+        lat: lat,
+        name: name,
+        code: code,
+        platformCode: platformCode,
+        zoneId: zoneId);
+  }
 }

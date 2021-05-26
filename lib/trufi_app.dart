@@ -73,6 +73,7 @@ class TrufiApp extends StatelessWidget {
     @required this.configuration,
     @required this.theme,
     this.searchTheme,
+    this.bottomBarTheme,
     this.customOverlayBuilder,
     this.customBetweenFabBuilder,
     Key key,
@@ -97,6 +98,9 @@ class TrufiApp extends StatelessWidget {
 
   /// The used ThemeData for the SearchDelegate
   final ThemeData searchTheme;
+
+  /// The used ThemeData for the BottomBarTheme
+  final ThemeData bottomBarTheme;
 
   /// A [customOverlayBuilder] that receives the current language to allow
   /// a custom overlay on top of the Trufi Core.
@@ -178,7 +182,7 @@ class TrufiApp extends StatelessWidget {
           create: (context) => LocationProviderCubit(),
         ),
         BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit(theme, searchTheme),
+          create: (context) => ThemeCubit(theme, searchTheme, bottomBarTheme),
         ),
         BlocProvider<PayloadDataPlanCubit>(
           create: (context) =>
