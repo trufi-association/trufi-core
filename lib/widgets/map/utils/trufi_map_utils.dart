@@ -49,7 +49,7 @@ Marker buildBusMarker(
           fit: BoxFit.scaleDown,
           child: Row(
             children: <Widget>[
-              Icon(leg.iconData(), color: Colors.white),
+              Icon(leg.iconData, color: Colors.white),
               Text(" ${leg.route}",
                   style: const TextStyle(color: Colors.white)),
             ],
