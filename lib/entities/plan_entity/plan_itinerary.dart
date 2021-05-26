@@ -58,7 +58,7 @@ class PlanItinerary {
   Map<String, dynamic> toJson() {
     return {
       _legs: legs.map((itinerary) => itinerary.toJson()).toList(),
-      _startTime: startTime.millisecondsSinceEpoch,
+      _startTime: startTime?.millisecondsSinceEpoch,
       _endTime: endTime?.millisecondsSinceEpoch,
       _walkTime: walkTime?.inSeconds,
       _durationTrip: durationTrip?.inSeconds,
