@@ -22,7 +22,6 @@ import './blocs/preferences/preferences_cubit.dart';
 import './pages/about.dart';
 import './pages/feedback.dart';
 import './pages/saved_places/saved_places.dart';
-import './pages/team.dart';
 import './widgets/trufi_drawer.dart';
 import 'blocs/custom_layer/custom_layers_cubit.dart';
 import 'blocs/gps_location/location_provider_cubit.dart';
@@ -218,7 +217,6 @@ class LocalizedMaterialApp extends StatelessWidget {
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
-      TeamPage.route: (context) => TeamPage(),
       SettingPanel.route: (context) => const SettingPanel(),
     };
 
