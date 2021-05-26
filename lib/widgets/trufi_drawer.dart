@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +7,12 @@ import 'package:share/share.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/social_media/donate_social_media.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/widgets/social_media/social_media.dart';
 
 import '../pages/about.dart';
 import '../pages/feedback.dart';
 import '../pages/saved_places/saved_places.dart';
-import '../pages/team.dart';
 
 class TrufiDrawer extends StatefulWidget {
   const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
@@ -129,11 +126,6 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               FeedbackPage.route,
             ),
           _buildListItem(
-            Icons.people,
-            localization.menuTeam,
-            TeamPage.route,
-          ),
-          _buildListItem(
             Icons.info,
             localization.menuAbout,
             AboutPage.route,
@@ -144,10 +136,6 @@ class TrufiDrawerState extends State<TrufiDrawer> {
           _buildLanguageDropdownButton(context),
           _buildAppReviewButton(context),
           _buildAppShareButton(context, config.urls.shareUrl),
-          if (!Platform.isIOS && config.urls.donationUrl != "")
-            SocialMediaButton(
-              socialMediaItem: DonateSocialMedia(config.urls.donationUrl),
-            ),
           const Divider(),
           ...socialMediaItems
               .map(
