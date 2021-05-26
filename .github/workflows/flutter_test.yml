@@ -14,15 +14,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - name: Checkout the project
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-      - uses: subosito/flutter-action@v1
+      - name: Install Flutter Actions
+        uses: subosito/flutter-action@v1
         with:
-          channel: stable
-      - run: flutter pub get
-      - run: flutter analyze
-      - run: flutter test test
+          flutter-version: '2.0.6'
+      - name: Flutter get Dependencies
+        run: flutter pub get
+      - name: Run Flutter tests
+        run: flutter test test
+      - name: Run Flutter Analyze
+        run: flutter analyze
