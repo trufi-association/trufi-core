@@ -35,23 +35,25 @@ class LocationTiler extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final config = context.read<ConfigurationCubit>().state;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5),
-      child: ElevatedButton(
-        onPressed: () {
-          if (!location.isLatLngDefined) {
-            _changePosition(context);
-          }
-        },
+    return GestureDetector(
+      onTap: () {
+        if (!location.isLatLngDefined) {
+          _changePosition(context);
+        }
+      },
+      child: Card(
         child: Row(
           children: <Widget>[
             Container(
-                margin: const EdgeInsets.only(right: 15),
-                child: Icon(typeToIconData(location.type) ?? Icons.place)),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(
+                  typeToIconData(location.type) ?? Icons.place,
+                )),
             Expanded(
               child: Text(
                 location.translateValue(config.abbreviations, localization),
-                style: theme.textTheme.bodyText1,
+                style: theme.textTheme.bodyText1
+                    .copyWith(color: theme.primaryColor),
                 maxLines: 1,
               ),
             ),
