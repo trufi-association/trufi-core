@@ -169,11 +169,13 @@ class TrufiLocation implements TrufiPlace {
   ) {
     String translate = displayName(abbreviations);
     if (DefaultLocation.defaultHome.keyLocation == description) {
-      // TODO translate
-      translate = isLatLngDefined ? "Home" : "ADD HOME";
+      translate = isLatLngDefined
+          ? localization.defaultLocationHome
+          : localization.defaultLocationAdd(localization.defaultLocationHome);
     } else if (DefaultLocation.defaultWork.keyLocation == description) {
-      // TODO translate
-      translate = isLatLngDefined ? "Work" : "ADD WORK";
+      translate = isLatLngDefined
+          ? localization.defaultLocationWork
+          : localization.defaultLocationAdd(localization.defaultLocationWork);
     }
     return translate;
   }
@@ -216,7 +218,7 @@ class TrufiStreetJunction {
   final double longitude;
 
   String get description {
-    return "${street1.location.description} & ${street2.location.description}";
+    return '${street1.location.description} & ${street2.location.description}';
   }
 
   String displayName(TrufiLocalization localization) =>

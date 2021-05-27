@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 // ignore: unused_import
@@ -68,7 +67,8 @@ import 'trufi_localization_qu.dart';
 /// be consistent with the languages listed in the TrufiLocalization.supportedLocales
 /// property.
 abstract class TrufiLocalization {
-  TrufiLocalization(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  TrufiLocalization(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   // ignore: unused_field
   final String localeName;
@@ -77,7 +77,8 @@ abstract class TrufiLocalization {
     return Localizations.of<TrufiLocalization>(context, TrufiLocalization);
   }
 
-  static const LocalizationsDelegate<TrufiLocalization> delegate = _TrufiLocalizationDelegate();
+  static const LocalizationsDelegate<TrufiLocalization> delegate =
+      _TrufiLocalizationDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -89,7 +90,8 @@ abstract class TrufiLocalization {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -174,11 +176,35 @@ abstract class TrufiLocalization {
   /// **'Choose a point'**
   String get chooseLocationPageTitle;
 
+  /// General Arrival label
+  ///
+  /// In en, this message translates to:
+  /// **'Arrival'**
+  String get commonArrival;
+
   /// Cancel button label
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get commonCancel;
+
+  /// General Citybikes label
+  ///
+  /// In en, this message translates to:
+  /// **'Citybikes'**
+  String get commonCitybikes;
+
+  /// General CustomPlaces label
+  ///
+  /// In en, this message translates to:
+  /// **'Custom places'**
+  String get commonCustomPlaces;
+
+  /// General Departure label
+  ///
+  /// In en, this message translates to:
+  /// **'Departure'**
+  String get commonDeparture;
 
   /// Destination field label
   ///
@@ -198,6 +224,12 @@ abstract class TrufiLocalization {
   /// **'Failed to load data'**
   String get commonFailLoading;
 
+  /// General Favorite places label
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite places'**
+  String get commonFavoritePlaces;
+
   /// Go offline button label
   ///
   /// In en, this message translates to:
@@ -209,6 +241,12 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Go online'**
   String get commonGoOnline;
+
+  /// General Leaving now label
+  ///
+  /// In en, this message translates to:
+  /// **'Leaving now'**
+  String get commonLeavingNow;
 
   /// Message when internet connection is lost
   ///
@@ -234,11 +272,53 @@ abstract class TrufiLocalization {
   /// **'Save'**
   String get commonSave;
 
+  /// General Settings label
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get commonSettings;
+
+  /// General Show on map tilers label
+  ///
+  /// In en, this message translates to:
+  /// **'Show on map'**
+  String get commonShowMap;
+
   /// Message when an unknown error has occured
   ///
   /// In en, this message translates to:
   /// **'Unknown error'**
   String get commonUnknownError;
+
+  /// General wait label
+  ///
+  /// In en, this message translates to:
+  /// **'Wait'**
+  String get commonWait;
+
+  /// General Walk label
+  ///
+  /// In en, this message translates to:
+  /// **'Walk'**
+  String get commonWalk;
+
+  /// The name Add for {defaultLocation}
+  ///
+  /// In en, this message translates to:
+  /// **'Add {defaultLocation}'**
+  String defaultLocationAdd(Object defaultLocation);
+
+  /// The default location name Home
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get defaultLocationHome;
+
+  /// The default location name Work
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get defaultLocationWork;
 
   /// A sentence that describes the application's purpose
   ///
@@ -269,6 +349,12 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
   String get errorAmbiguousOriginDestination;
+
+  /// The error when the user cancels the service
+  ///
+  /// In en, this message translates to:
+  /// **'Canceled by user'**
+  String get errorCancelledByUser;
 
   /// Error Dialog in the Feedback Form
   ///
@@ -384,6 +470,12 @@ abstract class TrufiLocalization {
   /// **'{value} m'**
   String instructionDistanceMeters(Object value);
 
+  /// Itinerary leg duration in hours
+  ///
+  /// In en, this message translates to:
+  /// **'{value} h'**
+  String instructionDurationHours(Object value);
+
   /// Itinerary leg duration
   ///
   /// In en, this message translates to:
@@ -400,7 +492,8 @@ abstract class TrufiLocalization {
   ///
   /// In en, this message translates to:
   /// **'Ride {vehicle} for {duration} ({distance}) to\n{location}'**
-  String instructionRide(Object vehicle, Object distance, Object duration, Object location);
+  String instructionRide(
+      Object vehicle, Object distance, Object duration, Object location);
 
   /// Vehicle name (Bus)
   ///
@@ -414,6 +507,18 @@ abstract class TrufiLocalization {
   /// **'Car'**
   String get instructionVehicleCar;
 
+  /// Vehicle name (Carpool)
+  ///
+  /// In en, this message translates to:
+  /// **'Carpool'**
+  String get instructionVehicleCarpool;
+
+  /// Vehicle name (Commuter train)
+  ///
+  /// In en, this message translates to:
+  /// **'Commuter train'**
+  String get instructionVehicleCommuterTrain;
+
   /// Vehicle name (Gondola)
   ///
   /// In en, this message translates to:
@@ -426,6 +531,12 @@ abstract class TrufiLocalization {
   /// **'Light Rail Train'**
   String get instructionVehicleLightRail;
 
+  /// Vehicle name (Metro)
+  ///
+  /// In en, this message translates to:
+  /// **'Metro'**
+  String get instructionVehicleMetro;
+
   /// Vehicle name (Micro)
   ///
   /// In en, this message translates to:
@@ -437,6 +548,30 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Minibus'**
   String get instructionVehicleMinibus;
+
+  /// Vehicle name (Sharing)
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing'**
+  String get instructionVehicleSharing;
+
+  /// Vehicle name (Car sharing)
+  ///
+  /// In en, this message translates to:
+  /// **'Car sharing'**
+  String get instructionVehicleSharingCarSharing;
+
+  /// Vehicle name (RegioRad)
+  ///
+  /// In en, this message translates to:
+  /// **'RegioRad'**
+  String get instructionVehicleSharingRegioRad;
+
+  /// Vehicle name (Taxi)
+  ///
+  /// In en, this message translates to:
+  /// **'Taxi'**
+  String get instructionVehicleSharingTaxi;
 
   /// Vehicle name (Trufi)
   ///
@@ -666,6 +801,66 @@ abstract class TrufiLocalization {
   /// **'Search Results'**
   String get searchTitleResults;
 
+  /// Accessibility configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get settingPanelAccessibility;
+
+  /// Avoid Transfers configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid transfers'**
+  String get settingPanelAvoidTransfers;
+
+  /// Avoid Walking configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid walking'**
+  String get settingPanelAvoidWalking;
+
+  /// Travel Speed configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Biking speed'**
+  String get settingPanelBikingSpeed;
+
+  /// My modes of transport configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'My modes of transport'**
+  String get settingPanelMyModesTransport;
+
+  /// Bike configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get settingPanelMyModesTransportBike;
+
+  /// Park and Ride configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Park and Ride'**
+  String get settingPanelMyModesTransportParkRide;
+
+  /// Transport Modes configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Transport modes'**
+  String get settingPanelTransportModes;
+
+  /// Walking Speed configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Walking speed'**
+  String get settingPanelWalkingSpeed;
+
+  /// Wheelchair configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Wheelchair'**
+  String get settingPanelWheelchair;
+
   /// Text with URL that is used when sharing the app.
   ///
   /// In en, this message translates to:
@@ -714,6 +909,36 @@ abstract class TrufiLocalization {
   /// **'Trufi App'**
   String get title;
 
+  /// Average speed type
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get typeSpeedAverage;
+
+  /// Calm speed type
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get typeSpeedCalm;
+
+  /// Fast speed type
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get typeSpeedFast;
+
+  /// Prompt speed type
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt'**
+  String get typeSpeedPrompt;
+
+  /// Slow speed type
+  ///
+  /// In en, this message translates to:
+  /// **'Slow'**
+  String get typeSpeedSlow;
+
   /// The application's version
   ///
   /// In en, this message translates to:
@@ -721,42 +946,56 @@ abstract class TrufiLocalization {
   String version(Object version);
 }
 
-class _TrufiLocalizationDelegate extends LocalizationsDelegate<TrufiLocalization> {
+class _TrufiLocalizationDelegate
+    extends LocalizationsDelegate<TrufiLocalization> {
   const _TrufiLocalizationDelegate();
 
   @override
   Future<TrufiLocalization> load(Locale locale) {
-    return SynchronousFuture<TrufiLocalization>(_lookupTrufiLocalization(locale));
+    return SynchronousFuture<TrufiLocalization>(
+        _lookupTrufiLocalization(locale));
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'ee', 'en', 'es', 'fr', 'it', 'pt', 'qu'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+        'de',
+        'ee',
+        'en',
+        'es',
+        'fr',
+        'it',
+        'pt',
+        'qu'
+      ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_TrufiLocalizationDelegate old) => false;
 }
 
 TrufiLocalization _lookupTrufiLocalization(Locale locale) {
-  
-
-
 // Lookup logic when only language code is specified.
-switch (locale.languageCode) {
-  case 'de': return TrufiLocalizationDe();
-    case 'ee': return TrufiLocalizationEe();
-    case 'en': return TrufiLocalizationEn();
-    case 'es': return TrufiLocalizationEs();
-    case 'fr': return TrufiLocalizationFr();
-    case 'it': return TrufiLocalizationIt();
-    case 'pt': return TrufiLocalizationPt();
-    case 'qu': return TrufiLocalizationQu();
-}
-
+  switch (locale.languageCode) {
+    case 'de':
+      return TrufiLocalizationDe();
+    case 'ee':
+      return TrufiLocalizationEe();
+    case 'en':
+      return TrufiLocalizationEn();
+    case 'es':
+      return TrufiLocalizationEs();
+    case 'fr':
+      return TrufiLocalizationFr();
+    case 'it':
+      return TrufiLocalizationIt();
+    case 'pt':
+      return TrufiLocalizationPt();
+    case 'qu':
+      return TrufiLocalizationQu();
+  }
 
   throw FlutterError(
-    'TrufiLocalization.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'TrufiLocalization.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

@@ -29,8 +29,7 @@ extension BikingSpeedExtension on BikingSpeed {
   double get value => values[this] ?? 5.55;
   String get name => names[this] ?? "average";
 
-  String translateValue (TrufiLocalization localization){
-    // TODO translate
+  String translateValue(TrufiLocalization localization) {
     switch (this) {
       case BikingSpeed.slow:
         return '10 Km/h';
@@ -48,7 +47,7 @@ extension BikingSpeedExtension on BikingSpeed {
         return '30 Km/h';
         break;
       default:
-        return 'not translate';
+        return localization.commonError;
     }
   }
 }

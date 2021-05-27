@@ -22,7 +22,7 @@ class SettingPanel extends StatelessWidget {
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: Text(localization.commonSettings),
         leading: BackButton(
           onPressed: () {
             Navigator.of(context).pop(payloadDataPlanCubit.state);
@@ -38,7 +38,7 @@ class SettingPanel extends StatelessWidget {
                   height: 10,
                 ),
                 CustomExpansionTile(
-                  title: "Walking speed",
+                  title: localization.settingPanelWalkingSpeed,
                   options: WalkingSpeed.values
                       .map(
                         (e) => e.translateValue(localization),
@@ -55,7 +55,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Avoid walking',
+                  title: localization.settingPanelAvoidWalking,
                   value: state.avoidWalking,
                   onChanged: (value) =>
                       payloadDataPlanCubit.setAvoidWalking(avoidWalking: value),
@@ -63,11 +63,13 @@ class SettingPanel extends StatelessWidget {
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child:
-                      Text('Transport modes', style: theme.textTheme.bodyText1),
+                  child: Text(
+                    localization.settingPanelTransportModes,
+                    style: theme.textTheme.bodyText1,
+                  ),
                 ),
                 CustomSwitchTile(
-                  title: 'Bus',
+                  title: localization.instructionVehicleBus,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -80,7 +82,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Commuter train',
+                  title: localization.instructionVehicleCommuterTrain,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -93,7 +95,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Metro',
+                  title: localization.instructionVehicleMetro,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -106,7 +108,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Carpool',
+                  title: localization.instructionVehicleCarpool,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -120,7 +122,7 @@ class SettingPanel extends StatelessWidget {
                 ),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Sharing',
+                  title: localization.instructionVehicleSharing,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -141,11 +143,11 @@ class SettingPanel extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 5),
-                          child: Text('Citybikes',
+                          child: Text(localization.commonCitybikes,
                               style: theme.textTheme.bodyText1),
                         ),
                         CustomSwitchTile(
-                          title: 'RegioRad',
+                          title: localization.instructionVehicleSharingRegioRad,
                           secondary: SizedBox(
                             height: 35,
                             width: 35,
@@ -159,7 +161,7 @@ class SettingPanel extends StatelessWidget {
                           },
                         ),
                         CustomSwitchTile(
-                          title: 'Taxi',
+                          title: localization.instructionVehicleSharingTaxi,
                           secondary: SizedBox(
                             height: 35,
                             width: 35,
@@ -173,7 +175,8 @@ class SettingPanel extends StatelessWidget {
                           },
                         ),
                         CustomSwitchTile(
-                          title: 'CarSharing',
+                          title:
+                              localization.instructionVehicleSharingCarSharing,
                           secondary: SizedBox(
                             height: 35,
                             width: 35,
@@ -192,7 +195,7 @@ class SettingPanel extends StatelessWidget {
                 else
                   Container(),
                 CustomSwitchTile(
-                  title: 'Avoid transfers',
+                  title: localization.settingPanelAvoidTransfers,
                   value: state.avoidTransfers,
                   onChanged: (value) => payloadDataPlanCubit.setAvoidTransfers(
                       avoidTransfers: value),
@@ -200,11 +203,11 @@ class SettingPanel extends StatelessWidget {
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text('My modes of transport',
+                  child: Text(localization.settingPanelMyModesTransport,
                       style: theme.textTheme.bodyText1),
                 ),
                 CustomSwitchTile(
-                  title: 'Bike',
+                  title: localization.settingPanelMyModesTransportBike,
                   secondary: const SizedBox(
                     height: 35,
                     width: 35,
@@ -220,7 +223,7 @@ class SettingPanel extends StatelessWidget {
                       left: 55,
                     ),
                     child: CustomExpansionTile(
-                      title: "Biking speed",
+                      title: localization.settingPanelBikingSpeed,
                       options: BikingSpeed.values
                           .map(
                             (e) => e.translateValue(localization),
@@ -240,7 +243,7 @@ class SettingPanel extends StatelessWidget {
                   Container(),
                 _divider,
                 CustomSwitchTile(
-                  title: 'Park and Ride',
+                  title: localization.settingPanelMyModesTransportParkRide,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -251,7 +254,7 @@ class SettingPanel extends StatelessWidget {
                       payloadDataPlanCubit.setParkRide(parkRide: value),
                 ),
                 CustomSwitchTile(
-                  title: 'Car',
+                  title: localization.instructionVehicleCar,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
@@ -264,11 +267,11 @@ class SettingPanel extends StatelessWidget {
                 _dividerWeight,
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  child:
-                      Text('Accessibility', style: theme.textTheme.bodyText1),
+                  child: Text(localization.settingPanelAccessibility,
+                      style: theme.textTheme.bodyText1),
                 ),
                 CustomSwitchTile(
-                  title: 'Wheelchair',
+                  title: localization.settingPanelWheelchair,
                   secondary: SizedBox(
                     height: 35,
                     width: 35,

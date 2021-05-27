@@ -43,7 +43,19 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get chooseLocationPageTitle => 'Ort auswählen';
 
   @override
+  String get commonArrival => 'Ankunft';
+
+  @override
   String get commonCancel => 'Abbrechen';
+
+  @override
+  String get commonCitybikes => 'Leihräder und Scooter';
+
+  @override
+  String get commonCustomPlaces => 'Benutzerdefinierte Orte';
+
+  @override
+  String get commonDeparture => 'Abfahrt';
 
   @override
   String get commonDestination => 'Fahrtziel';
@@ -55,10 +67,16 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonFailLoading => 'Fehler beim Laden der Daten';
 
   @override
+  String get commonFavoritePlaces => 'Lieblingsplätze';
+
+  @override
   String get commonGoOffline => 'Offline gehen';
 
   @override
   String get commonGoOnline => 'Online gehen';
+
+  @override
+  String get commonLeavingNow => 'Abfahrt jetzt';
 
   @override
   String get commonNoInternet => 'Keine Internetverbindung.';
@@ -73,7 +91,30 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonSave => 'Speichern';
 
   @override
+  String get commonSettings => 'Einstellungen';
+
+  @override
+  String get commonShowMap => 'Was soll auf der Karte angezeigt werden?';
+
+  @override
   String get commonUnknownError => 'Unbekannter Fehler';
+
+  @override
+  String get commonWait => 'Wartezeit';
+
+  @override
+  String get commonWalk => 'Gehen';
+
+  @override
+  String defaultLocationAdd(Object defaultLocation) {
+    return 'Hinzufügen ${defaultLocation}';
+  }
+
+  @override
+  String get defaultLocationHome => 'Zuhause';
+
+  @override
+  String get defaultLocationWork => 'Arbeit';
 
   @override
   String description(Object cityName) {
@@ -91,6 +132,9 @@ class TrufiLocalizationDe extends TrufiLocalization {
 
   @override
   String get errorAmbiguousOriginDestination => 'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
+
+  @override
+  String get errorCancelledByUser => 'Vom Benutzer abgebrochen';
 
   @override
   String get errorEmailFeedback => 'Die Feedback App konnte nicht geöffnet werden, die URL oder die E-Mail ist nicht korrekt.';
@@ -154,6 +198,11 @@ class TrufiLocalizationDe extends TrufiLocalization {
   }
 
   @override
+  String instructionDurationHours(Object value) {
+    return '${value} h';
+  }
+
+  @override
   String instructionDurationMinutes(Object value) {
     return '${value} min';
   }
@@ -169,10 +218,16 @@ class TrufiLocalizationDe extends TrufiLocalization {
   }
 
   @override
-  String get instructionVehicleBus => 'dem Bus';
+  String get instructionVehicleBus => 'Bus';
 
   @override
-  String get instructionVehicleCar => 'dem Auto';
+  String get instructionVehicleCar => 'Auto';
+
+  @override
+  String get instructionVehicleCarpool => 'Fahrgemeinschaft';
+
+  @override
+  String get instructionVehicleCommuterTrain => 'Zug';
 
   @override
   String get instructionVehicleGondola => 'der Gondel';
@@ -181,10 +236,25 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get instructionVehicleLightRail => 'Stadtbahn';
 
   @override
+  String get instructionVehicleMetro => 'U-Bahn';
+
+  @override
   String get instructionVehicleMicro => 'dem Micro';
 
   @override
   String get instructionVehicleMinibus => 'dem Minibus';
+
+  @override
+  String get instructionVehicleSharing => 'Sharing angebote';
+
+  @override
+  String get instructionVehicleSharingCarSharing => 'Fahrgemeinschaft';
+
+  @override
+  String get instructionVehicleSharingRegioRad => 'RegioRad';
+
+  @override
+  String get instructionVehicleSharingTaxi => 'Taxi';
 
   @override
   String get instructionVehicleTrufi => 'der Trufi';
@@ -228,7 +298,7 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get menuTeam => 'Team';
 
   @override
-  String get menuYourPlaces => 'Deine Plätze';
+  String get menuYourPlaces => 'Favoriten';
 
   @override
   String get noRouteError => 'Wir konnten leider keine Route finden. Was möchten Sie tun?';
@@ -303,6 +373,36 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get searchTitleResults => 'Suchergebnisse';
 
   @override
+  String get settingPanelAccessibility => 'Barrierefreiheit';
+
+  @override
+  String get settingPanelAvoidTransfers => 'Umstiege vermeiden';
+
+  @override
+  String get settingPanelAvoidWalking => 'Gehen vermeiden';
+
+  @override
+  String get settingPanelBikingSpeed => 'Geschwindigkeit mit dem Fahrrad';
+
+  @override
+  String get settingPanelMyModesTransport => 'Meine Reiseoptionen';
+
+  @override
+  String get settingPanelMyModesTransportBike => 'Fahrrad';
+
+  @override
+  String get settingPanelMyModesTransportParkRide => 'Park and Ride';
+
+  @override
+  String get settingPanelTransportModes => 'Verkehrsmittel auswählen';
+
+  @override
+  String get settingPanelWalkingSpeed => 'Laufgeschwindigkeit';
+
+  @override
+  String get settingPanelWheelchair => 'Rollstuhlgerecht';
+
+  @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Hol\' dir die ${appTitle}, die App für den öffentlichen Nahverkehr in ${cityName}, auf ${url}';
   }
@@ -337,6 +437,21 @@ class TrufiLocalizationDe extends TrufiLocalization {
 
   @override
   String get title => 'Trufi App';
+
+  @override
+  String get typeSpeedAverage => 'Standard';
+
+  @override
+  String get typeSpeedCalm => 'Weniger';
+
+  @override
+  String get typeSpeedFast => 'Am meisten';
+
+  @override
+  String get typeSpeedPrompt => 'Mehr';
+
+  @override
+  String get typeSpeedSlow => 'Am wenigsten';
 
   @override
   String version(Object version) {

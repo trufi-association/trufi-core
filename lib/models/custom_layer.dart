@@ -1,5 +1,5 @@
 import 'package:flutter_map/flutter_map.dart';
-
+import 'package:flutter/material.dart';
 abstract class CustomLayer {
   final String id;
   Function onRefresh;
@@ -10,4 +10,6 @@ abstract class CustomLayer {
   }
 
   LayerOptions buildLayerOptions(int zoom);
+
+  String name(BuildContext context);
 }

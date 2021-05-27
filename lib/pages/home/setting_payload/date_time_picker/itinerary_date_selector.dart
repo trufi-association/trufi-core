@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 
@@ -18,6 +19,7 @@ class ItineraryDateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageCode = Localizations.localeOf(context).languageCode;
+    final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
     final homePageState = context.watch<HomePageCubit>().state;
     final payloadDataPlanCubit = context.watch<PayloadDataPlanCubit>();
@@ -55,10 +57,10 @@ class ItineraryDateSelector extends StatelessWidget {
             Expanded(
               child: Text(
                 payloadDataPlanCubit.state.date == null
-                    ? "Leaving now"
+                    ? localization.commonLeavingNow
                     : payloadDataPlanCubit.state.arriveBy
-                        ? "Arrival ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
-                        : "Deperture ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
+                        ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
+                        : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
                 style: theme.textTheme.subtitle1.copyWith(fontSize: 15),
                 textAlign: TextAlign.center,
                 maxLines: 1,

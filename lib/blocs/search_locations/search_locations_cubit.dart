@@ -52,10 +52,12 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   Future<List<TrufiLocation>> _initDefaultPlaces() async {
     final preferences = await SharedPreferences.getInstance();
     if (preferences.get('saved_places_initialized') == null) {
-      myDefaultPlacesStorage.insert(DefaultLocation.defaultHome.initLocation);
-      myDefaultPlacesStorage.insert(DefaultLocation.defaultWork.initLocation);
+      await myDefaultPlacesStorage
+          .insert(DefaultLocation.defaultHome.initLocation);
+      await myDefaultPlacesStorage
+          .insert(DefaultLocation.defaultWork.initLocation);
     }
-    preferences.setBool('saved_places_initialized', true);
+    await preferences.setBool('saved_places_initialized', true);
     return myDefaultPlacesStorage.all();
   }
 

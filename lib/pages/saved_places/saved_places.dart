@@ -32,16 +32,14 @@ class SavedPlacesPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    // TODO translate
-                    "Saved places",
+                    localization.menuYourPlaces,
                     style: theme.textTheme.bodyText1,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    // TODO translate
-                    "Favorite places",
+                    localization.commonFavoritePlaces,
                     style: theme.textTheme.bodyText1,
                     maxLines: 2,
                   ),
@@ -80,8 +78,7 @@ class SavedPlacesPage extends StatelessWidget {
                                   const Divider(),
                                   Container(
                                     padding: const EdgeInsets.only(left: 10),
-                                    // TODO translate
-                                    child: Text('Custom Places',
+                                    child: Text(localization.commonCustomPlaces,
                                         style: theme.textTheme.bodyText1),
                                   ),
                                 ],

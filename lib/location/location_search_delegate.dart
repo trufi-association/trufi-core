@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,11 +30,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(
-        Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-      ),
-      tooltip: "Back",
+    return BackButton(
       onPressed: () {
         if (_result != null) {
           _result = null;
@@ -369,10 +364,12 @@ class _BuildChooseOnMap extends StatelessWidget {
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
+    final localization = TrufiLocalization.of(context);
     final LatLng mapLocation = await ChooseLocationPage.selectPosition(context,
         isOrigin: TypeLocationForm().isOrigin);
     if (mapLocation != null && onMapTapped != null) {
-      onMapTapped(TrufiLocation.fromLatLng("Map Marker", mapLocation));
+      onMapTapped(
+          TrufiLocation.fromLatLng(localization.searchMapMarker, mapLocation));
     }
   }
 }
