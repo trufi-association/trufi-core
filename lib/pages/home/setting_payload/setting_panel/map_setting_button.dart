@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 
 class MapSettingButton extends StatelessWidget {
@@ -14,6 +15,7 @@ class MapSettingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     return Container(
       height: 37,
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
@@ -41,7 +43,7 @@ class MapSettingButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 5),
               child: Text(
-                "Settings",
+                localization.commonSettings,
                 style: theme.textTheme.subtitle1,
               ),
             ),

@@ -26,26 +26,25 @@ extension WalkingSpeedExtension on WalkingSpeed {
   };
   double get value => values[this] ?? 1.2;
   String get name => names[this] ?? "slow";
-  String translateValue (TrufiLocalization localization){
-    // TODO translate
+  String translateValue(TrufiLocalization localization) {
     switch (this) {
       case WalkingSpeed.slow:
-        return 'Slow';
+        return localization.typeSpeedSlow;
         break;
       case WalkingSpeed.calm:
-        return 'Calm';
+        return localization.typeSpeedCalm;
         break;
       case WalkingSpeed.average:
-        return 'Average';
+        return localization.typeSpeedAverage;
         break;
       case WalkingSpeed.prompt:
-        return 'Prompt';
+        return localization.typeSpeedPrompt;
         break;
       case WalkingSpeed.fast:
-        return 'Fast';
+        return localization.typeSpeedFast;
         break;
       default:
-        return 'not translate';
+        return localization.commonError;
     }
   }
 }

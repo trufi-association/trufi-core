@@ -22,7 +22,7 @@ class CustomExpansionTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: theme.textTheme.bodyText1),
+          Expanded(child: Text(title, style: theme.textTheme.bodyText1)),
           Text(
             textSelected,
             style: TextStyle(
@@ -34,7 +34,8 @@ class CustomExpansionTile extends StatelessWidget {
       children: options
           .map(
             (option) => Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
               child: ListTile(
                 tileColor: theme.textTheme.bodyText1.color.withOpacity(0.05),
                 visualDensity: VisualDensity.compact,
@@ -51,7 +52,7 @@ class CustomExpansionTile extends StatelessWidget {
                       )
                     : null,
                 onTap: () {
-                    onChanged(option);
+                  onChanged(option);
                 },
               ),
             ),

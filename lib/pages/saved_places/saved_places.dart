@@ -32,16 +32,14 @@ class SavedPlacesPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    // TODO translate
-                    "Saved places",
+                    localization.menuYourPlaces,
                     style: theme.textTheme.bodyText1,
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    // TODO translate
-                    "Favorite places",
+                    localization.commonFavoritePlaces,
                     style: theme.textTheme.bodyText1,
                     maxLines: 2,
                   ),
@@ -57,26 +55,32 @@ class SavedPlacesPage extends StatelessWidget {
                       BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                         builder: (context, state) {
                           return ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             children: [
                               const SizedBox(height: 10),
                               Column(
-                                children: searchLocationsCubit.state.myDefaultPlaces.map(
+                                children: searchLocationsCubit
+                                    .state.myDefaultPlaces
+                                    .map(
                                   (place) {
                                     return LocationTiler(
                                       location: place,
                                       enableSetPosition: true,
                                       isDefaultLocation: true,
-                                      updateLocation: searchLocationsCubit.updateMyDefaultPlace,
+                                      updateLocation: searchLocationsCubit
+                                          .updateMyDefaultPlace,
                                     );
                                   },
                                 ).toList(),
                               ),
-                              if (searchLocationsCubit.state.myPlaces.isNotEmpty)
+                              if (searchLocationsCubit
+                                  .state.myPlaces.isNotEmpty)
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                                  // TODO translate
-                                  child: Text('Custom Places', style: theme.textTheme.bodyText1),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0),
+                                  child: Text(localization.commonCustomPlaces,
+                                      style: theme.textTheme.bodyText1),
                                 ),
                               Column(
                                 children: searchLocationsCubit.state.myPlaces
@@ -86,8 +90,10 @@ class SavedPlacesPage extends StatelessWidget {
                                           enableSetIcon: true,
                                           enableSetName: true,
                                           enableSetPosition: true,
-                                          updateLocation: searchLocationsCubit.updateMyPlace,
-                                          removeLocation: searchLocationsCubit.deleteMyPlace),
+                                          updateLocation: searchLocationsCubit
+                                              .updateMyPlace,
+                                          removeLocation: searchLocationsCubit
+                                              .deleteMyPlace),
                                     )
                                     .toList(),
                               )
@@ -117,8 +123,10 @@ class SavedPlacesPage extends StatelessWidget {
                           return LocationTiler(
                             location: state.favoritePlaces[index],
                             enableSetIcon: true,
-                            updateLocation: searchLocationsCubit.updateFavoritePlace,
-                            removeLocation: searchLocationsCubit.deleteFavoritePlace,
+                            updateLocation:
+                                searchLocationsCubit.updateFavoritePlace,
+                            removeLocation:
+                                searchLocationsCubit.deleteFavoritePlace,
                           );
                         },
                       );

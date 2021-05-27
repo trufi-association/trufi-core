@@ -43,7 +43,19 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get chooseLocationPageTitle => 'Scegli un punto';
 
   @override
+  String get commonArrival => 'Arrival';
+
+  @override
   String get commonCancel => 'Cancella';
+
+  @override
+  String get commonCitybikes => 'Citybikes';
+
+  @override
+  String get commonCustomPlaces => 'Custom places';
+
+  @override
+  String get commonDeparture => 'Departure';
 
   @override
   String get commonDestination => 'Destinazione';
@@ -55,10 +67,16 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get commonFailLoading => 'Caricamento dati fallito';
 
   @override
+  String get commonFavoritePlaces => 'Favorite places';
+
+  @override
   String get commonGoOffline => 'Vai offline';
 
   @override
   String get commonGoOnline => 'Vai online';
+
+  @override
+  String get commonLeavingNow => 'Leaving now';
 
   @override
   String get commonNoInternet => 'Nessuna connessione internet.';
@@ -73,7 +91,27 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get commonSave => 'Save';
 
   @override
+  String get commonSettings => 'Settings';
+
+  @override
+  String get commonShowMap => 'Show on map';
+
+  @override
   String get commonUnknownError => 'Errore sconosciuto';
+
+  @override
+  String get commonWait => 'Wait';
+
+  @override
+  String defaultLocationAdd(Object defaultLocation) {
+    return 'Versione {version}';
+  }
+
+  @override
+  String get defaultLocationHome => 'Home';
+
+  @override
+  String get defaultLocationWork => 'Work';
 
   @override
   String description(Object cityName) {
@@ -91,6 +129,9 @@ class TrufiLocalizationIt extends TrufiLocalization {
 
   @override
   String get errorAmbiguousOriginDestination => 'Partenza e destinazione sono ambigue. Per piacere scegli tra le opzioni seguenti o sii più specifico.';
+
+  @override
+  String get errorCancelledByUser => 'Canceled by user';
 
   @override
   String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
@@ -154,6 +195,11 @@ class TrufiLocalizationIt extends TrufiLocalization {
   }
 
   @override
+  String instructionDurationHours(Object value) {
+    return '${value} min';
+  }
+
+  @override
   String instructionDurationMinutes(Object value) {
     return '${value} min';
   }
@@ -175,16 +221,37 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get instructionVehicleCar => 'Auto';
 
   @override
+  String get instructionVehicleCarpool => 'Autobus';
+
+  @override
+  String get instructionVehicleCommuterTrain => 'Autobus';
+
+  @override
   String get instructionVehicleGondola => 'Gondola';
 
   @override
   String get instructionVehicleLightRail => 'Light Rail Train';
 
   @override
+  String get instructionVehicleMetro => 'Autobus';
+
+  @override
   String get instructionVehicleMicro => 'Micro';
 
   @override
   String get instructionVehicleMinibus => 'Minibus';
+
+  @override
+  String get instructionVehicleSharing => 'Autobus';
+
+  @override
+  String get instructionVehicleSharingCarSharing => 'Autobus';
+
+  @override
+  String get instructionVehicleSharingRegioRad => 'Autobus';
+
+  @override
+  String get instructionVehicleSharingTaxi => 'Autobus';
 
   @override
   String get instructionVehicleTrufi => 'Trufi';
@@ -303,6 +370,36 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get searchTitleResults => 'Cerca Risultati';
 
   @override
+  String get settingPanelAccessibility => 'Accessibility';
+
+  @override
+  String get settingPanelAvoidTransfers => 'Avoid transfers';
+
+  @override
+  String get settingPanelAvoidWalking => 'Avoid walking';
+
+  @override
+  String get settingPanelBikingSpeed => 'Biking speed';
+
+  @override
+  String get settingPanelMyModesTransport => 'My modes of transport';
+
+  @override
+  String get settingPanelMyModesTransportBike => 'Bike';
+
+  @override
+  String get settingPanelMyModesTransportParkRide => 'Park and Ride';
+
+  @override
+  String get settingPanelTransportModes => 'Transport modes';
+
+  @override
+  String get settingPanelWalkingSpeed => 'Walking speed';
+
+  @override
+  String get settingPanelWheelchair => 'Wheelchair';
+
+  @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Download ${appTitle}, the public transport app for ${cityName}, at ${url}';
   }
@@ -337,6 +434,21 @@ class TrufiLocalizationIt extends TrufiLocalization {
 
   @override
   String get title => 'Trufi App';
+
+  @override
+  String get typeSpeedAverage => 'Average';
+
+  @override
+  String get typeSpeedCalm => 'Calm';
+
+  @override
+  String get typeSpeedFast => 'Fast';
+
+  @override
+  String get typeSpeedPrompt => 'Prompt';
+
+  @override
+  String get typeSpeedSlow => 'Slow';
 
   @override
   String version(Object version) {

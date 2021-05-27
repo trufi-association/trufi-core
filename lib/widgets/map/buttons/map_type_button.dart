@@ -29,6 +29,7 @@ class _MapItemsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     final customLayersCubit = context.watch<CustomLayersCubit>();
     return Container(
       child: (customLayersCubit.state.layers.isNotEmpty)
@@ -40,7 +41,7 @@ class _MapItemsSelector extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        "What should be shown on the map?",
+                        localization.commonShowMap,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyText1,
                       ),

@@ -109,7 +109,7 @@ class WaitDash extends StatelessWidget {
           color: Colors.grey,
           separator: const SizedBox(height: 20),
           child: Text(
-              " Wait (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+              "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
         ),
       ],
     );
@@ -197,9 +197,11 @@ class DashLinePlace extends StatelessWidget {
           )
         else
           child,
-        Text(
-          location,
-          style: theme.primaryTextTheme.bodyText1,
+        Expanded(
+          child: Text(
+            location,
+            style: theme.primaryTextTheme.bodyText1,
+          ),
         ),
       ],
     );

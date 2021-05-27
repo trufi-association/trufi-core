@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
@@ -51,13 +52,16 @@ class HomePageCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
-  Future<void> setTappingPlace(LatLng latLng) async {
+  Future<void> setTappingPlace(
+      LatLng latLng, TrufiLocalization localization) async {
     if (state.fromPlace == null) {
       await updateMapRouteState(state.copyWith(
-          fromPlace: TrufiLocation.fromLatLng("Map Marker", latLng)));
+          fromPlace:
+              TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
     } else if (state.toPlace == null) {
       await updateMapRouteState(state.copyWith(
-          toPlace: TrufiLocation.fromLatLng("Map Marker", latLng)));
+          toPlace:
+              TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
     }
   }
 
@@ -83,7 +87,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> fetchPlan(
-    String correlationId, {
+    String correlationId,
+    TrufiLocalization localization, {
     bool car = false,
     PayloadDataPlanState advancedOptions,
   }) async {
@@ -91,6 +96,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
       await updateMapRouteState(state.copyWithoutMap(isFetching: true));
       final PlanEntity planEntity = await _fetchPlan(
         correlationId,
+        localization,
         car: car,
         advancedOptions: advancedOptions,
       ).catchError((error) async {
@@ -106,7 +112,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<PlanEntity> _fetchPlan(
-    String correlationId, {
+    String correlationId,
+    TrufiLocalization localization, {
     bool car = false,
     PayloadDataPlanState advancedOptions,
   }) async {
@@ -136,7 +143,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     if (plan != null && !plan.hasError) {
       return plan;
     } else if (plan == null) {
-      throw FetchCanceledByUserException("Cancelled by User");
+      throw FetchCanceledByUserException(localization.errorCancelledByUser);
     } else if (plan.hasError) {
       if (car) {
         throw FetchOnlineCarException(plan.error.message);
@@ -145,7 +152,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
       }
     } else {
       // should never happened
-      throw Exception("Unknown Error");
+      throw Exception(localization.commonUnknownError);
     }
   }
 

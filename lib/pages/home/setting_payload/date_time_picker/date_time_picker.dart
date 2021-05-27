@@ -28,7 +28,6 @@ class _DateTimePickerState extends State<DateTimePicker> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    // TODO translate the 3 text elements
     return Container(
       height: MediaQuery.of(context).size.height *
           (MediaQuery.of(context).orientation == Orientation.portrait
@@ -53,8 +52,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
                 onPressed: () {
                   Navigator.of(context).pop(const DateTimeConf(null));
                 },
-                child: const Text(
-                  "Leaving now",
+                child: Text(
+                  localization.commonLeavingNow,
                 ),
               ),
               CupertinoButton(
@@ -87,7 +86,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       });
                     },
                     child: Text(
-                      "Departure",
+                      localization.commonDeparture,
                       style: _styleOptions.copyWith(
                         color: tempDateConf.isArriveBy
                             ? theme.textTheme.bodyText1.color
@@ -117,7 +116,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       });
                     },
                     child: Text(
-                      "Arrival",
+                      localization.commonArrival,
                       style: _styleOptions.copyWith(
                         color: !tempDateConf.isArriveBy
                             ? theme.textTheme.bodyText1.color

@@ -79,7 +79,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
               final correlationId =
                   dialogContext.read<PreferencesCubit>().state.correlationId;
               homePageCubit
-                  .fetchPlan(correlationId, car: true)
+                  .fetchPlan(correlationId, localization, car: true)
                   .then(
                       (value) => appReviewCubit.incrementReviewWorthyActions())
                   .catchError(

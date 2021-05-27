@@ -109,12 +109,11 @@ class PlanItineraryLeg {
 
   String _carTypeString(TrufiLocalization localization) {
     String carType = "";
+    // TODO translate other instructionVehicle
     switch (transportMode) {
       case TransportMode.airplane:
-        // TODO translate
         carType = localization.instructionVehicleBus;
         break;
-      // TODO translate
       case TransportMode.bicycle:
         carType = localization.instructionVehicleBus;
         break;
@@ -127,15 +126,12 @@ class PlanItineraryLeg {
       case TransportMode.car:
         carType = localization.instructionVehicleCar;
         break;
-      // TODO translate
       case TransportMode.carPool:
-        carType = localization.instructionVehicleCar;
+        carType = localization.instructionVehicleCarpool;
         break;
-      // TODO translate
       case TransportMode.ferry:
-        carType = localization.instructionVehicleBus;
+        carType = localization.instructionVehicleMetro;
         break;
-      // TODO translate
       case TransportMode.flexible:
         carType = localization.instructionVehicleBus;
         break;
@@ -145,20 +141,17 @@ class PlanItineraryLeg {
       case TransportMode.gondola:
         carType = localization.instructionVehicleGondola;
         break;
-      // TODO translate
       case TransportMode.legSwitch:
         carType = localization.instructionVehicleBus;
         break;
       case TransportMode.rail:
         carType = localization.instructionVehicleLightRail;
         break;
-      // TODO translate
       case TransportMode.subway:
-        carType = localization.instructionVehicleLightRail;
+        carType = localization.instructionVehicleMetro;
         break;
-      // TODO translate
       case TransportMode.tram:
-        carType = localization.instructionVehicleLightRail;
+        carType = localization.instructionVehicleCommuterTrain;
         break;
       case TransportMode.transit:
         carType = localization.instructionVehicleBus;

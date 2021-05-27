@@ -43,7 +43,19 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get chooseLocationPageTitle => 'Mapapi juk kitita riqsichiy';
 
   @override
+  String get commonArrival => 'Arrival';
+
+  @override
   String get commonCancel => 'Mana';
+
+  @override
+  String get commonCitybikes => 'Citybikes';
+
+  @override
+  String get commonCustomPlaces => 'Custom places';
+
+  @override
+  String get commonDeparture => 'Departure';
 
   @override
   String get commonDestination => 'Mayman';
@@ -55,10 +67,16 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonFailLoading => 'Mana aticunchu tariyta datusta';
 
   @override
+  String get commonFavoritePlaces => 'Favorite places';
+
+  @override
   String get commonGoOffline => 'Offline';
 
   @override
   String get commonGoOnline => 'Online';
+
+  @override
+  String get commonLeavingNow => 'Leaving now';
 
   @override
   String get commonNoInternet => 'Mana internet kanchu';
@@ -73,7 +91,27 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonSave => 'Save';
 
   @override
+  String get commonSettings => 'Settings';
+
+  @override
+  String get commonShowMap => 'Show on map';
+
+  @override
   String get commonUnknownError => 'Mana yachacunchu ima pantay kasqanta chay';
+
+  @override
+  String get commonWait => 'Wait';
+
+  @override
+  String defaultLocationAdd(Object defaultLocation) {
+    return 'Versión {version}';
+  }
+
+  @override
+  String get defaultLocationHome => 'Home';
+
+  @override
+  String get defaultLocationWork => 'Work';
 
   @override
   String description(Object cityName) {
@@ -91,6 +129,9 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String get errorAmbiguousOriginDestination => 'Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.';
+
+  @override
+  String get errorCancelledByUser => 'Canceled by user';
 
   @override
   String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
@@ -154,6 +195,11 @@ class TrufiLocalizationQu extends TrufiLocalization {
   }
 
   @override
+  String instructionDurationHours(Object value) {
+    return '${value} min';
+  }
+
+  @override
   String instructionDurationMinutes(Object value) {
     return '${value} min';
   }
@@ -175,16 +221,37 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get instructionVehicleCar => 'Coche';
 
   @override
+  String get instructionVehicleCarpool => 'Bus';
+
+  @override
+  String get instructionVehicleCommuterTrain => 'Bus';
+
+  @override
   String get instructionVehicleGondola => 'Góndola';
 
   @override
   String get instructionVehicleLightRail => 'Light Rail Train';
 
   @override
+  String get instructionVehicleMetro => 'Bus';
+
+  @override
   String get instructionVehicleMicro => 'Micro';
 
   @override
   String get instructionVehicleMinibus => 'Minibus';
+
+  @override
+  String get instructionVehicleSharing => 'Bus';
+
+  @override
+  String get instructionVehicleSharingCarSharing => 'Bus';
+
+  @override
+  String get instructionVehicleSharingRegioRad => 'Bus';
+
+  @override
+  String get instructionVehicleSharingTaxi => 'Bus';
 
   @override
   String get instructionVehicleTrufi => 'Trufi';
@@ -303,6 +370,36 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get searchTitleResults => 'Mask\'anakuna riqsichiq';
 
   @override
+  String get settingPanelAccessibility => 'Accessibility';
+
+  @override
+  String get settingPanelAvoidTransfers => 'Avoid transfers';
+
+  @override
+  String get settingPanelAvoidWalking => 'Avoid walking';
+
+  @override
+  String get settingPanelBikingSpeed => 'Biking speed';
+
+  @override
+  String get settingPanelMyModesTransport => 'My modes of transport';
+
+  @override
+  String get settingPanelMyModesTransportBike => 'Bike';
+
+  @override
+  String get settingPanelMyModesTransportParkRide => 'Park and Ride';
+
+  @override
+  String get settingPanelTransportModes => 'Transport modes';
+
+  @override
+  String get settingPanelWalkingSpeed => 'Walking speed';
+
+  @override
+  String get settingPanelWheelchair => 'Wheelchair';
+
+  @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Download ${appTitle}, the public transport app for ${cityName}, at ${url}';
   }
@@ -337,6 +434,21 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String get title => 'Trufi App';
+
+  @override
+  String get typeSpeedAverage => 'Average';
+
+  @override
+  String get typeSpeedCalm => 'Calm';
+
+  @override
+  String get typeSpeedFast => 'Fast';
+
+  @override
+  String get typeSpeedPrompt => 'Prompt';
+
+  @override
+  String get typeSpeedSlow => 'Slow';
 
   @override
   String version(Object version) {
