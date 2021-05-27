@@ -94,7 +94,7 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonSettings => 'Einstellungen';
 
   @override
-  String get commonShowMap => 'Lieblingsplätze';
+  String get commonShowMap => 'Was soll auf der Karte angezeigt werden?';
 
   @override
   String get commonUnknownError => 'Unbekannter Fehler';
