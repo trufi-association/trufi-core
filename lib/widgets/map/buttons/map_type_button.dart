@@ -158,7 +158,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
                     fontSize: theme.textTheme.caption.fontSize,
                     color: active
                         ? theme.accentColor
-                        : theme.textTheme.bodyText2.color),
+                        : Colors.grey),
               ),
             ),
           ],
