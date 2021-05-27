@@ -16,7 +16,10 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
           Navigator.pop(context);
           Geolocator.requestPermission();
         },
-        child: Text(localization.commonOK),
+        child: Text(
+          localization.commonOK,
+          style: const TextStyle(color: Colors.black),
+        ),
       ),
     ],
   );
@@ -104,7 +107,6 @@ Widget buildOnAndOfflineErrorAlert({
   );
 }
 
-
 Widget _buildAlert({
   @required BuildContext context,
   Widget title,
@@ -113,11 +115,14 @@ Widget _buildAlert({
 }) {
   final theme = context.read<ThemeCubit>().state.activeTheme;
   return AlertDialog(
-    backgroundColor: theme.primaryColor,
     title: title,
-    titleTextStyle: theme.primaryTextTheme.headline6,
+    titleTextStyle: theme.primaryTextTheme.headline6.copyWith(
+      color: Colors.red,
+      fontWeight: FontWeight.bold,
+    ),
     content: content,
-    contentTextStyle: theme.primaryTextTheme.bodyText2,
+    contentTextStyle:
+        theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
     actions: actions,
   );
 }
