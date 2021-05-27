@@ -9,6 +9,8 @@ abstract class MapTileProvider {
 
   /// Build your own custom MapTiles
   List<LayerOptions> buildTileLayerOptions();
+
+  String name(BuildContext context);
 }
 
 class OSMDefaultMapTile extends MapTileProvider {
@@ -30,4 +32,9 @@ class OSMDefaultMapTile extends MapTileProvider {
         package: "trufi_core",
         fit: BoxFit.cover,
       );
+
+  @override
+  String name(BuildContext context) {
+    return id;
+  }
 }

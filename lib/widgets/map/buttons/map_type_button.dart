@@ -101,7 +101,7 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
                 .map(
                   (mapTileProvider) => _BuildMapTypeOptionButton(
                     image: mapTileProvider.imageBuilder(context),
-                    label: mapTileProvider.id,
+                    label: mapTileProvider.name(context),
                     onPressed: () {
                       mapTileProviderCubit
                           .changeMapTileProvider(mapTileProvider);
