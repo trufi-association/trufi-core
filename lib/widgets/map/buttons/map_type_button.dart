@@ -43,14 +43,15 @@ class _MapItemsSelector extends StatelessWidget {
                       child: Text(
                         localization.commonShowMap,
                         textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyText1,
+                        style: theme.textTheme.bodyText1
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     ...customLayersCubit.state.layers
                         .map(
                           (customLayer) => CheckboxListTile(
                             title: Text(
-                              customLayer.id,
+                              customLayer.name(context),
                               style: const TextStyle(color: Colors.black),
                             ),
                             value: customLayersCubit
@@ -84,8 +85,11 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
         _MapItemsSelector(),
         Container(
           padding: const EdgeInsets.all(16.0),
-          child:
-              Text(localization.mapTypeLabel, style: theme.textTheme.bodyText1),
+          child: Text(
+            localization.mapTypeLabel,
+            style:
+                theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
         SizedBox(
           height: 100,
@@ -157,9 +161,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
                 label,
                 style: TextStyle(
                     fontSize: theme.textTheme.caption.fontSize,
-                    color: active
-                        ? theme.accentColor
-                        : Colors.grey),
+                    color: active ? theme.accentColor : Colors.grey),
               ),
             ),
           ],
