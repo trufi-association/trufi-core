@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-05-27T05:52:32+02:00",
+    "@@last_modified": "2021-05-27T06:05:05+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -124,6 +124,10 @@
     "commonWait": "Wait",
     "@commonWait": {
         "description": "General wait label"
+    },
+    "commonWalk": "Walk",
+    "@commonWalk": {
+        "description": "General Walk label"
     },
     "defaultLocationAdd": "nutinya",
     "@defaultLocationAdd": {

@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-05-27T05:52:32+02:00",
+    "@@last_modified": "2021-05-27T06:05:05+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -124,6 +124,10 @@
     "commonWait": "Wait",
     "@commonWait": {
         "description": "General wait label"
+    },
+    "commonWalk": "Walk",
+    "@commonWalk": {
+        "description": "General Walk label"
     },
     "defaultLocationAdd": "Version {version}",
     "@defaultLocationAdd": {

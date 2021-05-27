@@ -103,6 +103,9 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get commonWait => 'Wait';
 
   @override
+  String get commonWalk => 'Walk';
+
+  @override
   String defaultLocationAdd(Object defaultLocation) {
     return 'Versão {version}';
   }

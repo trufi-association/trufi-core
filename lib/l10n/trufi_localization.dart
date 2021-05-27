@@ -296,6 +296,12 @@ abstract class TrufiLocalization {
   /// **'Wait'**
   String get commonWait;
 
+  /// General Walk label
+  ///
+  /// In en, this message translates to:
+  /// **'Walk'**
+  String get commonWalk;
+
   /// The name Add for {defaultLocation}
   ///
   /// In en, this message translates to:

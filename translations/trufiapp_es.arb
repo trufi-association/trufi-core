@@ -1,6 +1,6 @@
 {
     "@@locale": "es",
-    "@@last_modified": "2021-05-27T05:52:32+02:00",
+    "@@last_modified": "2021-05-27T06:05:05+02:00",
     "aboutContent": "Somos un equipo boliviano e internacional de personas que amamos y apoyamos el transporte público. Desarrollamos esta aplicación para facilitar el uso del transporte en la región de Cochabamba.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -124,6 +124,10 @@
     "commonWait": "Wait",
     "@commonWait": {
         "description": "General wait label"
+    },
+    "commonWalk": "Walk",
+    "@commonWalk": {
+        "description": "General Walk label"
     },
     "defaultLocationAdd": "Versión {version}",
     "@defaultLocationAdd": {

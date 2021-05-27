@@ -83,7 +83,7 @@ class WalkDash extends StatelessWidget {
             color: TransportMode.walk.color,
           ),
           child: Text(
-              ' Walk ${leg.durationInHours(localization)} (${leg.distanceString(localization)})'),
+              ' ${localization.commonWalk} ${leg.durationInHours(localization)} (${leg.distanceString(localization)})'),
         ),
       ],
     );

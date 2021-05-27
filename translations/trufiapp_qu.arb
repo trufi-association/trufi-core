@@ -1,6 +1,6 @@
 {
     "@@locale": "qu",
-    "@@last_modified": "2021-05-27T05:52:32+02:00",
+    "@@last_modified": "2021-05-27T06:05:05+02:00",
     "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -124,6 +124,10 @@
     "commonWait": "Wait",
     "@commonWait": {
         "description": "General wait label"
+    },
+    "commonWalk": "Walk",
+    "@commonWalk": {
+        "description": "General Walk label"
     },
     "defaultLocationAdd": "Versión {version}",
     "@defaultLocationAdd": {
