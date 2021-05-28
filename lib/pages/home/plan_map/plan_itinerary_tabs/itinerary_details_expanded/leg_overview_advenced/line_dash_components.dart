@@ -34,14 +34,7 @@ class TransportDash extends StatelessWidget {
           color: leg.transportMode.color,
           child: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                decoration: BoxDecoration(
-                  color: leg.transportMode.color,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: LegTransportIcon(leg: leg),
-              ),
+              LegTransportIcon(leg: leg),
               Text(
                 '  ${leg.durationInHours(localization).toString()}',
                 style: theme.primaryTextTheme.bodyText1,

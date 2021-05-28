@@ -112,14 +112,7 @@ class _ItinerarySummary extends StatelessWidget {
                     final PlanItineraryLeg leg = itinerary.legs[index];
                     return Row(
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          decoration: BoxDecoration(
-                            color: leg.transportMode.color,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: LegTransportIcon(leg: leg),
-                        ),
+                        LegTransportIcon(leg: leg),
                         if (ad != null || leg != itinerary.legs.last)
                           Icon(Icons.keyboard_arrow_right,
                               color: theme.primaryIconTheme.color),
