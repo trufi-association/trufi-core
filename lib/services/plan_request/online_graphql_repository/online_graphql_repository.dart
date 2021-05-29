@@ -1,22 +1,19 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
-import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import '../../../trufi_models.dart';
 import '../request_manager.dart';
+import 'graphql_plan_repository.dart';
 import 'plan_graphql_model.dart';
-import 'queries.dart' as queries;
 
 class OnlineGraphQLRepository implements RequestManager {
   final String graphQLEndPoint;
+  final GraphQLPlanRepository _graphQLPlanRepository = GraphQLPlanRepository();
 
   OnlineGraphQLRepository({
     @required this.graphQLEndPoint,
@@ -41,14 +38,6 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   @override
-  Future<AdEntity> fetchAd(
-    TrufiLocation to,
-    String correlationId,
-  ) {
-    return _fetchAd(to);
-  }
-
-  @override
   Future<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,
@@ -57,34 +46,23 @@ class OnlineGraphQLRepository implements RequestManager {
     return _fetchPlan(from, to, [TransportMode.car, TransportMode.walk]);
   }
 
+  @override
+  Future<AdEntity> fetchAd(TrufiLocation to, String correlationId) {
+    // TODO: implement fetchAd
+    throw UnimplementedError();
+  }
+
   Future<PlanEntity> _fetchPlan(
     TrufiLocation from,
     TrufiLocation to,
     List<TransportMode> transportModes,
   ) async {
-    final Uri request = Uri.parse(
-      graphQLEndPoint,
+    final planEntityData = await _graphQLPlanRepository.fetchPlanSimple(
+      fromLocation: from,
+      toLocation: to,
+      transportsMode: transportModes,
     );
-    final queryPlan = queries.getCustomPlan(
-      fromLat: from.latitude,
-      fromLon: from.longitude,
-      toLat: to.latitude,
-      toLon: to.longitude,
-      transportModes: transportModes,
-    );
-    final body = {
-      "query": '''
-        query {
-          $queryPlan
-        }
-      '''
-    };
-    final response = await _fetchRequest(request, body);
-    if (response.statusCode == 200) {
-      return _parsePlan(utf8.decode(response.bodyBytes));
-    } else {
-      throw FetchOnlineResponseException('Failed to load plan');
-    }
+    return planEntityData.toPlan();
   }
 
   Future<PlanEntity> _fetchPlanAdvanced({
@@ -92,71 +70,19 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
   }) async {
-    final Uri request = Uri.parse(
-      graphQLEndPoint,
+    PlanGraphQl planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+      fromLocation: from,
+      toLocation: to,
+      advancedOptions: advancedOptions,
     );
-    final queryPlan = queries.getPlanAdvanced(
-      arriveBy: advancedOptions.arriveBy,
-      date: advancedOptions.date,
-      fromPlace: from.description,
-      fromLat: from.latitude,
-      fromLon: from.longitude,
-      toPlace: to.description,
-      toLat: to.latitude,
-      toLon: to.longitude,
-      walkingSpeed: advancedOptions.typeWalkingSpeed,
-      avoidWalking: advancedOptions.avoidWalking,
-      transportModes: advancedOptions.transportModes,
-      bikeRentalNetworks: advancedOptions.bikeRentalNetworks,
-      walkBoardCost: advancedOptions.avoidTransfers
-          ? WalkBoardCost.walkBoardCostHigh
-          : WalkBoardCost.defaultCost,
-      optimize: advancedOptions.includeBikeSuggestions
-          ? OptimizeType.triangle
-          : OptimizeType.quick,
-      bikeSpeed: advancedOptions.typeBikingSpeed,
-      wheelchair: advancedOptions.wheelchair,
-    );
-
-    final body = {
-      "query": '''
-        query {
-          $queryPlan
-        }
-      '''
-    };
-    final response = await _fetchRequest(request, body);
-    if (response.statusCode == 200) {
-      return _parsePlan(utf8.decode(response.bodyBytes));
-    } else {
-      log(response.body);
-      throw FetchOnlineResponseException('Failed to load plan');
+    if (planEntityData.itineraries.isEmpty) {
+      planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+        fromLocation: from,
+        toLocation: to,
+        advancedOptions: advancedOptions,
+        defaultFecth: true,
+      );
     }
-  }
-
-  Future<AdEntity> _fetchAd(
-    TrufiLocation to,
-  ) async {
-    return null;
-  }
-
-  Future<http.Response> _fetchRequest(
-      Uri request, Map<String, String> body) async {
-    try {
-      return await http.post(request,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: json.encode(body));
-    } on Exception catch (e) {
-      throw FetchOnlineRequestException(e);
-    }
-  }
-
-  PlanEntity _parsePlan(String body) {
-    final planGraphQL = PlanGraphQl.fromJson(
-      json.decode(body)["data"]["plan"] as Map<String, dynamic>,
-    );
-    return planGraphQL.toPlan();
+    return planEntityData.toPlan();
   }
 }

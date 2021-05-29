@@ -41,7 +41,7 @@ class PlanGraphQl {
             (itinerary) => itinerary.toPlanItinerary(),
           )
           .toList()),
-      error: itineraries.isEmpty ? PlanError(404, 'Not found routes') : null,
+      error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
     );
   }
 }

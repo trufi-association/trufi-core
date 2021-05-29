@@ -170,5 +170,5 @@ extension TransportModeExtension on TransportMode {
         "assets/images/transport_modes/icon-icon_bus-live-green.svg",
         package: "trufi_core",
       );
-  String get qualifier => qualifiers[this] ?? "";
+  String get qualifier => qualifiers[this];
 }
