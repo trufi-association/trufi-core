@@ -15,7 +15,6 @@ class TransportSelector extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final modesTransport = context.watch<HomePageCubit>().state.modesTransport;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       color: Colors.grey[100],
       height: 50,
       child: ListView(
