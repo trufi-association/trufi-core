@@ -7,6 +7,27 @@ String parsePlace(TrufiLocation location) {
   return "${location.description}::${location.latitude},${location.longitude}";
 }
 
+List<Map<String, String>> parseBikeAndPublicModes(List<TransportMode> list) {
+  final dataParse = list
+      .map((e) => <String, String>{
+            'mode': e.name,
+          })
+      .where((e) => e['mode'] != TransportMode.walk.name)
+      .toList();
+  dataParse.add({"mode": TransportMode.bicycle.name});
+  return dataParse;
+}
+
+List<Map<String, String>> parsebikeParkModes(List<TransportMode> list) {
+  final dataParse = list
+      .map((e) => <String, String>{
+            'mode': e.name,
+          })
+      .toList();
+  dataParse.add({"mode": TransportMode.bicycle.name, 'qualifier': 'PARK'});
+  return dataParse;
+}
+
 List<Map<String, String>> parseTransportModes(List<TransportMode> list) {
   final dataParse = list
       .map((e) => <String, String>{

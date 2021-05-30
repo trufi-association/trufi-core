@@ -208,10 +208,10 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: localization.settingPanelMyModesTransportBike,
-                  secondary: const SizedBox(
+                  secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: Icon(Icons.pedal_bike),
+                    child: bikeSvg,
                   ),
                   value: state.includeBikeSuggestions,
                   onChanged: (value) => payloadDataPlanCubit

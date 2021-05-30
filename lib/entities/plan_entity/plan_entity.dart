@@ -10,6 +10,7 @@ part 'plan_location.dart';
 part 'plan_error.dart';
 part 'plan_itinerary.dart';
 part 'plan_itinerary_leg.dart';
+part 'modes_transport_entity.dart';
 
 class PlanEntity {
   PlanEntity({

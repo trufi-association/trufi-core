@@ -140,7 +140,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bicycle: Colors.blue,
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
-    TransportMode.car: null,
+    TransportMode.car: Colors.black,
     TransportMode.ferry: null,
     TransportMode.flexible: null,
     TransportMode.funicular: null,

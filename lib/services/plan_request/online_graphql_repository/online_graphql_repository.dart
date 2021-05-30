@@ -38,6 +38,20 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   @override
+  Future<ModesTransportEntity> fetchTransportModePlan({
+    TrufiLocation from,
+    TrufiLocation to,
+    String correlationId,
+    PayloadDataPlanState advancedOptions,
+  }) {
+    return _fetchTransportModePlan(
+      from: from,
+      to: to,
+      advancedOptions: advancedOptions,
+    );
+  }
+
+  @override
   Future<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,
@@ -84,5 +98,19 @@ class OnlineGraphQLRepository implements RequestManager {
       );
     }
     return planEntityData.toPlan();
+  }
+
+  Future<ModesTransportEntity> _fetchTransportModePlan({
+    @required TrufiLocation from,
+    @required TrufiLocation to,
+    @required PayloadDataPlanState advancedOptions,
+  }) async {
+    final ModesTransport planEntityData =
+        await _graphQLPlanRepository.fetchWalkBikePlanQuery(
+      fromLocation: from,
+      toLocation: to,
+      advancedOptions: advancedOptions,
+    );
+    return planEntityData.toModesTransport();
   }
 }
