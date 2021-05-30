@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
@@ -34,7 +32,6 @@ class LocationTiler extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final config = context.read<ConfigurationCubit>().state;
     return GestureDetector(
       onTap: () {
         if (!location.isLatLngDefined) {
@@ -51,7 +48,7 @@ class LocationTiler extends StatelessWidget {
                 )),
             Expanded(
               child: Text(
-                location.translateValue(config.abbreviations, localization),
+                location.translateValue(localization),
                 style: theme.textTheme.bodyText1
                     .copyWith(color: theme.primaryColor),
                 maxLines: 1,

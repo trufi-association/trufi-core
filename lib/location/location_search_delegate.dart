@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong/latlong.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -14,8 +13,8 @@ import 'package:trufi_core/utils/util_icons/icons.dart';
 
 import '../blocs/gps_location/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
-import '../pages/choose_location.dart';
 import '../models/trufi_place.dart';
+import '../pages/choose_location.dart';
 import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
 
@@ -110,7 +109,6 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
     // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
 
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
-    final config = context.read<ConfigurationCubit>().state;
     final localization = TrufiLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -123,7 +121,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
                 close(context, street.location);
               },
               Icons.label,
-              street.displayName(config.abbreviations),
+              street.displayName(),
               trailing: FavoriteButton(
                 location: street.location,
                 color: appBarTheme(context).primaryIconTheme.color,
@@ -387,7 +385,6 @@ class _BuildYourPlaces extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final config = context.read<ConfigurationCubit>().state;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -403,7 +400,7 @@ class _BuildYourPlaces extends StatelessWidget {
               }
             },
             localIconData,
-            location.translateValue(config.abbreviations, localization),
+            location.translateValue( localization),
             subtitle: location.address,
           );
         },
@@ -435,7 +432,6 @@ class _BuildObjectList extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final theme = context.watch<ThemeCubit>().state.searchTheme;
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
-    final config = context.watch<ConfigurationCubit>().state;
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
@@ -463,7 +459,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               localIconData,
-              object.translateValue(config.abbreviations, localization),
+              object.translateValue(localization),
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
@@ -480,7 +476,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               Icons.label,
-              object.displayName(config.abbreviations),
+              object.displayName(),
               trailing: Icon(
                 Icons.keyboard_arrow_right,
                 color: theme.primaryIconTheme.color,

@@ -98,7 +98,7 @@ class TrufiLocation implements TrufiPlace {
       longitude: json['lng'] as double,
     );
   }
-  
+
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
     return TrufiLocation(
@@ -137,16 +137,8 @@ class TrufiLocation implements TrufiPlace {
     return '$latitude,$longitude';
   }
 
-  String displayName(Map<String, String> abbreviations) {
-    return abbreviations.keys.fold<String>(description, (
-      description,
-      abbreviation,
-    ) {
-      return description.replaceAll(
-        abbreviation,
-        abbreviations[abbreviation],
-      );
-    });
+  String displayName() {
+    return description;
   }
 
   bool get isLatLngDefined {
@@ -158,10 +150,9 @@ class TrufiLocation implements TrufiPlace {
   }
 
   String translateValue(
-    Map<String, String> abbreviations,
     TrufiLocalization localization,
   ) {
-    String translate = displayName(abbreviations);
+    String translate = displayName();
     if (DefaultLocation.defaultHome.keyLocation == description) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
@@ -194,8 +185,7 @@ class TrufiStreet implements TrufiPlace {
 
   String get description => location.description;
 
-  String displayName(Map<String, String> abbreviations) =>
-      location.displayName(abbreviations);
+  String displayName() => location.displayName();
 }
 
 class TrufiStreetJunction {

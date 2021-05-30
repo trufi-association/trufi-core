@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/location/location_search_delegate.dart';
 
@@ -30,7 +28,6 @@ class LocationFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final config = context.read<ConfigurationCubit>().state;
     final textStyle = theme.textTheme.bodyText1;
     final hintStyle = theme.textTheme.bodyText2.copyWith(
       color: theme.textTheme.caption.color,
@@ -81,7 +78,6 @@ class LocationFormField extends StatelessWidget {
                                 ? TextSpan(
                                     style: textStyle,
                                     text: value.translateValue(
-                                      config.abbreviations,
                                       localization,
                                     ),
                                   )
