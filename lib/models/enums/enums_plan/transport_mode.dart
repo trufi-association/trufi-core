@@ -141,6 +141,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
     TransportMode.car: null,
+    TransportMode.carPool: const Color(0xff9fc726),
     TransportMode.ferry: null,
     TransportMode.flexible: null,
     TransportMode.funicular: null,
@@ -158,8 +159,38 @@ extension TransportModeExtension on TransportMode {
     TransportMode.lightRail: const Color(0xff83b23b),
   };
   static const qualifiers = <TransportMode, String>{
-    TransportMode.bicycle: "RENT",
+    TransportMode.bicycle: 'RENT',
   };
+
+  static String translates(TransportMode mode, TrufiLocalization localization) {
+    return {
+      TransportMode.airplane: null,
+      // TODO translate
+      TransportMode.bicycle: "Bike",
+      TransportMode.bus: localization.instructionVehicleBus,
+      TransportMode.cableCar: localization.instructionVehicleGondola,
+      TransportMode.car: localization.instructionVehicleCar,
+      TransportMode.carPool: localization.instructionVehicleCarpool,
+      TransportMode.ferry: localization.instructionVehicleMetro,
+      TransportMode.flexible: null,
+      TransportMode.funicular: null,
+      TransportMode.gondola: localization.instructionVehicleGondola,
+      TransportMode.legSwitch: null,
+      TransportMode.rail: localization.instructionVehicleLightRail,
+      TransportMode.subway: localization.instructionVehicleMetro,
+      TransportMode.tram: localization.instructionVehicleCommuterTrain,
+      TransportMode.transit: null,
+      TransportMode.walk: localization.instructionVehicleBus,
+      // route icons for specific types of transportation
+      TransportMode.trufi: localization.instructionVehicleTrufi,
+      TransportMode.micro: localization.instructionVehicleMicro,
+      TransportMode.miniBus: localization.instructionVehicleMinibus,
+      TransportMode.lightRail: localization.instructionVehicleLightRail,
+    }[mode];
+  }
+
+  String getTranslate(TrufiLocalization localization) =>
+      translates(this, localization) ?? 'No translate';
 
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
