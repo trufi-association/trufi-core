@@ -99,83 +99,13 @@ class PlanItineraryLeg {
           distanceString(localization), _toString(localization)));
     } else {
       sb.write(localization.instructionRide(
-          _carTypeString(localization) + (route.isNotEmpty ? " $route" : ""),
+          transportMode.getTranslate(localization) +
+              (route.isNotEmpty ? " $route" : ""),
           _durationString(localization),
           distanceString(localization),
           _toString(localization)));
     }
     return sb.toString();
-  }
-
-  String _carTypeString(TrufiLocalization localization) {
-    String carType = "";
-    // TODO translate other instructionVehicle
-    switch (transportMode) {
-      case TransportMode.airplane:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.bicycle:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.bus:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.cableCar:
-        carType = localization.instructionVehicleGondola;
-        break;
-      case TransportMode.car:
-        carType = localization.instructionVehicleCar;
-        break;
-      case TransportMode.carPool:
-        carType = localization.instructionVehicleCarpool;
-        break;
-      case TransportMode.ferry:
-        carType = localization.instructionVehicleMetro;
-        break;
-      case TransportMode.flexible:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.funicular:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.gondola:
-        carType = localization.instructionVehicleGondola;
-        break;
-      case TransportMode.legSwitch:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.rail:
-        carType = localization.instructionVehicleLightRail;
-        break;
-      case TransportMode.subway:
-        carType = localization.instructionVehicleMetro;
-        break;
-      case TransportMode.tram:
-        carType = localization.instructionVehicleCommuterTrain;
-        break;
-      case TransportMode.transit:
-        carType = localization.instructionVehicleBus;
-        break;
-      case TransportMode.walk:
-        carType = localization.instructionVehicleBus;
-        break;
-      // route name keywords for specific types of transportation
-      case TransportMode.trufi:
-        carType = localization.instructionVehicleTrufi;
-        break;
-      case TransportMode.micro:
-        carType = localization.instructionVehicleMicro;
-        break;
-      case TransportMode.miniBus:
-        carType = localization.instructionVehicleMinibus;
-        break;
-      case TransportMode.lightRail:
-        carType = localization.instructionVehicleLightRail;
-        break;
-      default:
-        carType = localization.instructionVehicleBus;
-    }
-    return carType;
   }
 
   String distanceString(TrufiLocalization localization) => getDistance(
