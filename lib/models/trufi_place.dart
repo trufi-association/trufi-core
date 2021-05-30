@@ -6,12 +6,6 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import '../entities/plan_entity/plan_entity.dart';
 import 'enums/defaults_location.dart';
 
-class MapStyle {
-  static const String streets = 'streets';
-  static const String satellite = 'satellite';
-  static const String terrain = 'terrain';
-}
-
 abstract class TrufiPlace {}
 
 class TrufiLocation implements TrufiPlace {
