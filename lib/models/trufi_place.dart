@@ -27,12 +27,6 @@ class TrufiLocation implements TrufiPlace {
         assert(latitude != null),
         assert(longitude != null);
 
-  static const String keyDescription = 'description';
-  static const String keyLatitude = 'latitude';
-  static const String keyLongitude = 'longitude';
-  static const String keyType = 'type';
-  static const String keyAddress = 'address';
-
   final String description;
   final double latitude;
   final double longitude;
@@ -104,25 +98,25 @@ class TrufiLocation implements TrufiPlace {
       longitude: json['lng'] as double,
     );
   }
-
+  
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
     return TrufiLocation(
-      description: json[keyDescription] as String,
-      latitude: json[keyLatitude] as double,
-      longitude: json[keyLongitude] as double,
-      type: json[keyType] as String,
-      address: json[keyAddress] != null ? json[keyAddress] as String : '',
+      description: json["description"] as String,
+      latitude: json["latitude"] as double,
+      longitude: json["longitude"] as double,
+      type: json["type"] as String,
+      address: json["address"] != null ? json["address"] as String : '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      keyDescription: description,
-      keyLatitude: latitude,
-      keyLongitude: longitude,
-      keyType: type,
-      keyAddress: address ?? ''
+      "description": description,
+      "latitude": latitude,
+      "longitude": longitude,
+      "type": type,
+      "address": address ?? ''
     };
   }
 
