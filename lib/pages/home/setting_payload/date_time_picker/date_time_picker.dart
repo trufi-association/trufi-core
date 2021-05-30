@@ -135,11 +135,12 @@ class _DateTimePickerState extends State<DateTimePicker> {
                 tempDateConf = tempDateConf.copyWith(date: picked);
               },
               use24hFormat: true,
-              initialDateTime: tempDateConf.date != null
+              initialDateTime: tempDateConf.date != null &&
+                      tempDateConf.date.isAfter(_nowDate)
                   ? tempDateConf.date
                       .roundDown(delta: const Duration(minutes: 15))
                   : _nowDate,
-              minimumDate: _nowDate.subtract(const Duration(minutes: 15)),
+              minimumDate: _nowDate,
               maximumDate: _nowDate.add(const Duration(days: 30)),
               minuteInterval: 15,
             ),
