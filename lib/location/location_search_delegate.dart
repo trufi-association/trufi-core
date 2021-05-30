@@ -121,7 +121,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
                 close(context, street.location);
               },
               Icons.label,
-              street.displayName(),
+              street.displayName(localization),
               trailing: FavoriteButton(
                 location: street.location,
                 color: appBarTheme(context).primaryIconTheme.color,
@@ -400,7 +400,7 @@ class _BuildYourPlaces extends StatelessWidget {
               }
             },
             localIconData,
-            location.translateValue( localization),
+            location.displayName(localization),
             subtitle: location.address,
           );
         },
@@ -459,7 +459,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               localIconData,
-              object.translateValue(localization),
+              object.displayName(localization),
               subtitle: object.address,
               trailing: FavoriteButton(
                 location: object,
@@ -476,7 +476,7 @@ class _BuildObjectList extends StatelessWidget {
                 }
               },
               Icons.label,
-              object.displayName(),
+              object.displayName(localization),
               trailing: Icon(
                 Icons.keyboard_arrow_right,
                 color: theme.primaryIconTheme.color,

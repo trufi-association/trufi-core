@@ -77,7 +77,7 @@ class LocationFormField extends StatelessWidget {
                             text: value != null
                                 ? TextSpan(
                                     style: textStyle,
-                                    text: value.translateValue(
+                                    text: value.displayName(
                                       localization,
                                     ),
                                   )

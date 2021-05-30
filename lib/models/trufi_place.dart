@@ -131,8 +131,20 @@ class TrufiLocation implements TrufiPlace {
     return '$latitude,$longitude';
   }
 
-  String displayName() {
-    return description;
+  String displayName(
+    TrufiLocalization localization,
+  ) {
+    String translate = description;
+    if (type == DefaultLocation.defaultHome.initLocation.type) {
+      translate = isLatLngDefined
+          ? localization.defaultLocationHome
+          : localization.defaultLocationAdd(localization.defaultLocationHome);
+    } else if (type == DefaultLocation.defaultWork.initLocation.type) {
+      translate = isLatLngDefined
+          ? localization.defaultLocationWork
+          : localization.defaultLocationAdd(localization.defaultLocationWork);
+    }
+    return translate;
   }
 
   bool get isLatLngDefined {
@@ -141,22 +153,6 @@ class TrufiLocation implements TrufiPlace {
 
   LatLng get latLng {
     return LatLng(latitude, longitude);
-  }
-
-  String translateValue(
-    TrufiLocalization localization,
-  ) {
-    String translate = displayName();
-    if (DefaultLocation.defaultHome.keyLocation == description) {
-      translate = isLatLngDefined
-          ? localization.defaultLocationHome
-          : localization.defaultLocationAdd(localization.defaultLocationHome);
-    } else if (DefaultLocation.defaultWork.keyLocation == description) {
-      translate = isLatLngDefined
-          ? localization.defaultLocationWork
-          : localization.defaultLocationAdd(localization.defaultLocationWork);
-    }
-    return translate;
   }
 }
 
@@ -179,7 +175,8 @@ class TrufiStreet implements TrufiPlace {
 
   String get description => location.description;
 
-  String displayName() => location.displayName();
+  String displayName(TrufiLocalization localization) =>
+      location.displayName(localization);
 }
 
 class TrufiStreetJunction {

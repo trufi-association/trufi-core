@@ -48,7 +48,7 @@ class LocationTiler extends StatelessWidget {
                 )),
             Expanded(
               child: Text(
-                location.translateValue(localization),
+                location.displayName(localization),
                 style: theme.textTheme.bodyText1
                     .copyWith(color: theme.primaryColor),
                 maxLines: 1,
