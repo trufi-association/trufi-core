@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../blocs/bloc_provider.dart';
 import '../location/location_search_storage.dart';
-import '../trufi_models.dart';
+import '../models/trufi_place.dart';
 
 class LocationSearchBloc extends BlocBase {
   static LocationSearchBloc of(BuildContext context) {

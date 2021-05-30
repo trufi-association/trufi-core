@@ -10,7 +10,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
-import '../../../trufi_models.dart';
+import '../../../models/trufi_place.dart';
 import '../request_manager.dart';
 import 'plan_graphql_model.dart';
 import 'queries.dart' as queries;

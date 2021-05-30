@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 void main() {
   TrufiLocation trufiLocation;

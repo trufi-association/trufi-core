@@ -4,7 +4,7 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/location/location_search_delegate.dart';
 
-import '../../../trufi_models.dart';
+import '../../../models/trufi_place.dart';
 
 class LocationFormField extends StatelessWidget {
   const LocationFormField({

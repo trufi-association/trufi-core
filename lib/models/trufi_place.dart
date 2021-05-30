@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import 'entities/plan_entity/plan_entity.dart';
-import 'models/enums/defaults_location.dart';
+import '../entities/plan_entity/plan_entity.dart';
+import 'enums/defaults_location.dart';
 
 class MapStyle {
   static const String streets = 'streets';

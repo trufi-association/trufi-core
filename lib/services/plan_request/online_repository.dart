@@ -10,7 +10,7 @@ import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import 'request_manager.dart';
 

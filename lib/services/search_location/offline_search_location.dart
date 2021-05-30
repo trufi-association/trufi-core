@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import 'search_location_manager.dart';
 

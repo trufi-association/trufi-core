@@ -15,7 +15,7 @@ import 'package:trufi_core/utils/util_icons/icons.dart';
 import '../blocs/gps_location/location_provider_cubit.dart';
 import '../blocs/location_search_bloc.dart';
 import '../pages/choose_location.dart';
-import '../trufi_models.dart';
+import '../models/trufi_place.dart';
 import '../widgets/alerts.dart';
 import '../widgets/favorite_button.dart';
 

@@ -6,7 +6,7 @@ import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../trufi_models.dart';
+import '../models/trufi_place.dart';
 
 const String keyPlaces = 'pois';
 const String keyStreets = 'streets';

@@ -9,7 +9,7 @@ import 'package:trufi_core/repository/places_store_repository/shared_preferences
 import 'package:trufi_core/services/search_location/search_location_manager.dart';
 
 import 'package:async/async.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 import 'package:equatable/equatable.dart';
 
 import '../location_search_bloc.dart';

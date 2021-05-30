@@ -7,7 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/l10n/trufi_localization_en.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import '../mocks/local_repository_mock.dart';
 import '../mocks/request_manager_mock.dart';
