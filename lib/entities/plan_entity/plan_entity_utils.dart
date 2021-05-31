@@ -5,7 +5,7 @@ String parseDurationTime(
   Duration duration,
 ) {
   if (duration.inHours > 0) {
-    return '${localization.instructionDurationHours(duration?.inHours)} h ${localization.instructionDurationMinutes(duration?.inMinutes?.remainder(60))}';
+    return '${localization.instructionDurationHours(duration?.inHours)} ${localization.instructionDurationMinutes(duration?.inMinutes?.remainder(60))}';
   }
   if (duration.inMinutes == 0) {
     return localization.instructionDurationMinutes(1);

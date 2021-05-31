@@ -164,6 +164,17 @@ class OnlineRepository implements RequestManager {
     }
     return error.message;
   }
+
+  @override
+  Future<ModesTransportEntity> fetchTransportModePlan({
+    TrufiLocation from,
+    TrufiLocation to,
+    String correlationId,
+    PayloadDataPlanState advancedOptions,
+  }) {
+    // TODO: implement fetchMytransportModePlan
+    throw UnimplementedError();
+  }
 }
 
 // TODO: clean code

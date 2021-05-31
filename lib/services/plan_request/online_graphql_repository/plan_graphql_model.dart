@@ -5,6 +5,66 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
+class ModesTransport {
+  final PlanGraphQl walkPlan;
+  final PlanGraphQl bikePlan;
+  final PlanGraphQl bikeAndPublicPlan;
+  final PlanGraphQl bikeParkPlan;
+  final PlanGraphQl carPlan;
+  final PlanGraphQl parkRidePlan;
+
+  ModesTransport({
+    this.walkPlan,
+    this.bikePlan,
+    this.bikeAndPublicPlan,
+    this.bikeParkPlan,
+    this.carPlan,
+    this.parkRidePlan,
+  });
+
+  factory ModesTransport.fromJson(Map<String, dynamic> json) => ModesTransport(
+        walkPlan: json["walkPlan"] != null
+            ? PlanGraphQl.fromJson(json["walkPlan"] as Map<String, dynamic>)
+            : null,
+        bikePlan: json["bikePlan"] != null
+            ? PlanGraphQl.fromJson(json["bikePlan"] as Map<String, dynamic>)
+            : null,
+        bikeAndPublicPlan: json["bikeAndPublicPlan"] != null
+            ? PlanGraphQl.fromJson(
+                json["bikeAndPublicPlan"] as Map<String, dynamic>)
+            : null,
+        bikeParkPlan: json["bikeParkPlan"] != null
+            ? PlanGraphQl.fromJson(json["bikeParkPlan"] as Map<String, dynamic>)
+            : null,
+        carPlan: json["carPlan"] != null
+            ? PlanGraphQl.fromJson(json["carPlan"] as Map<String, dynamic>)
+            : null,
+        parkRidePlan: json["parkRidePlan"] != null
+            ? PlanGraphQl.fromJson(json["parkRidePlan"] as Map<String, dynamic>)
+            : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'walkPlan': walkPlan?.toJson(),
+        'bikePlan': bikePlan?.toJson(),
+        'bikeAndPublicPlan': bikeAndPublicPlan?.toJson(),
+        'bikeParkPlan': bikeParkPlan?.toJson(),
+        'carPlan': carPlan?.toJson(),
+        'parkRidePlan': parkRidePlan?.toJson(),
+      };
+
+  ModesTransportEntity toModesTransport() {
+    return ModesTransportEntity(
+      walkPlan: walkPlan?.toPlan(),
+      bikePlan: bikePlan?.toPlan(),
+      bikeAndPublicPlan: bikeAndPublicPlan?.toPlan(),
+      bikeParkPlan: bikeParkPlan?.toPlan(),
+      carPlan: carPlan?.toPlan(),
+      parkRidePlan: parkRidePlan?.toPlan(),
+    );
+  }
+}
+
 class PlanGraphQl {
   PlanGraphQl({
     this.from,
@@ -17,13 +77,19 @@ class PlanGraphQl {
   final List<_Itinerary> itineraries;
 
   factory PlanGraphQl.fromJson(Map<String, dynamic> json) => PlanGraphQl(
-        from: _Location.fromJson(json["from"] as Map<String, dynamic>),
-        to: _Location.fromJson(json["to"] as Map<String, dynamic>),
-        itineraries: List<_Itinerary>.from(
-          (json["itineraries"] as List<dynamic>).map(
-            (x) => _Itinerary.fromJson(x as Map<String, dynamic>),
-          ),
-        ),
+        from: json["from"] != null
+            ? _Location.fromJson(json["from"] as Map<String, dynamic>)
+            : null,
+        to: json["to"] != null
+            ? _Location.fromJson(json["to"] as Map<String, dynamic>)
+            : null,
+        itineraries: json["itineraries"] != null
+            ? List<_Itinerary>.from(
+                (json["itineraries"] as List<dynamic>).map(
+                  (x) => _Itinerary.fromJson(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +107,7 @@ class PlanGraphQl {
             (itinerary) => itinerary.toPlanItinerary(),
           )
           .toList()),
-      error: itineraries.isEmpty ? PlanError(404, 'Not found routes') : null,
+      error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
     );
   }
 }
