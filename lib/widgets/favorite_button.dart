@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
-import '../trufi_models.dart';
+import '../models/trufi_place.dart';
 
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({

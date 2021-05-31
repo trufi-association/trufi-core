@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../trufi_models.dart';
+import '../../models/trufi_place.dart';
 import 'places_storage.dart';
 
 class SharedPreferencesPlaceStorage extends PlacesStorage {

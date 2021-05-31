@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:latlong/latlong.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/models/map_route_state.dart';
-import 'package:trufi_core/l10n/trufi_localization_en.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import '../mocks/local_repository_mock.dart';
 import '../mocks/request_manager_mock.dart';
@@ -16,7 +14,6 @@ void main() {
   group("HomePageCubit", () {
     final mockLocalRepository = MockLocalRepository();
     final mockRequestManager = MockRequestManager();
-    final localization = TrufiLocalizationEn();
 
     setUp(() {});
 
@@ -118,38 +115,6 @@ void main() {
       expect: () => [
         const MapRouteState(),
         const MapRouteState(showSuccessAnimation: true)
-      ],
-    );
-
-    blocTest(
-      "setTappingPlace for define fromPlace ",
-      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
-      act: (HomePageCubit cubit) async {
-        await cubit.setTappingPlace(LatLng(1.0, 1.0), localization);
-      },
-      skip: 1,
-      expect: () => [
-        MapRouteState(
-          fromPlace: TrufiLocation(
-              longitude: 1.0, latitude: 1.0, description: "Map Marker"),
-        )
-      ],
-    );
-    blocTest(
-      "setTappingPlace for define toPlace ",
-      build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
-      act: (HomePageCubit cubit) async {
-        await cubit.setTappingPlace(LatLng(1.0, 1.0), localization);
-        await cubit.setTappingPlace(LatLng(2.0, 2.0), localization);
-      },
-      skip: 2,
-      expect: () => [
-        MapRouteState(
-          fromPlace: TrufiLocation(
-              longitude: 1.0, latitude: 1.0, description: "Map Marker"),
-          toPlace: TrufiLocation(
-              longitude: 2.0, latitude: 2.0, description: "Map Marker"),
-        )
       ],
     );
   });

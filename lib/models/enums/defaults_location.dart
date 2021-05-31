@@ -1,4 +1,4 @@
-import '../../trufi_models.dart';
+import '../trufi_place.dart';
 
 enum DefaultLocation {
   defaultHome,

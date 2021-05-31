@@ -5,8 +5,8 @@ import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
-import '../../../trufi_models.dart';
 import 'graphql_client/graphql_client.dart';
 import 'graphql_client/graphql_utils.dart';
 import 'graphql_operation/fragments/utils_summary_plan_fragments.dart'

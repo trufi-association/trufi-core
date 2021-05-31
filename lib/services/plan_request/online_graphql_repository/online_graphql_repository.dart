@@ -6,7 +6,7 @@ import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
-import '../../../trufi_models.dart';
+import '../../../models/trufi_place.dart';
 import '../request_manager.dart';
 import 'graphql_plan_repository.dart';
 import 'plan_graphql_model.dart';

@@ -7,12 +7,6 @@ import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 
 Configuration setupExampleConfiguration() {
-  // Abbreviations
-  final abbreviations = {
-    "Avenida": "Av.",
-    "Calle": "C.",
-    "Camino": "C.º",
-  };
 
   // Attribution
   final attribution = Attribution(
@@ -80,7 +74,6 @@ Configuration setupExampleConfiguration() {
   return Configuration(
     customTranslations: customTranslations,
     supportedLanguages: languages,
-    abbreviations: abbreviations,
     teamInformationEmail: "info@trufi.app",
     attribution: attribution,
     animations: AnimationConfiguration(),

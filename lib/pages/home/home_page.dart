@@ -15,8 +15,8 @@ import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../../keys.dart' as keys;
+import '../../models/trufi_place.dart';
 import '../../trufi_app.dart';
-import '../../trufi_models.dart';
 import '../../widgets/trufi_drawer.dart';
 import 'form_fields_landscape.dart';
 import 'form_fields_portrait.dart';

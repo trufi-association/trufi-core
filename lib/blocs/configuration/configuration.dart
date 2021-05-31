@@ -29,9 +29,6 @@ class Configuration {
   /// All map related configurations for the Trufi Core
   final MapConfiguration map;
 
-  /// TODO: Add Documentation
-  final Map<String, String> abbreviations;
-
   /// Loading and Success Animation
   final AnimationConfiguration animations;
 
@@ -79,7 +76,6 @@ class Configuration {
     this.aboutSection,
     this.markers = const MarkerConfigurationDefault(),
     this.animations,
-    this.abbreviations,
     this.map,
     this.urls,
     this.attribution,
