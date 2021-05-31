@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
-import '../../../../trufi_models.dart';
 
 String parsePlace(TrufiLocation location) {
   return "${location.description}::${location.latitude},${location.longitude}";

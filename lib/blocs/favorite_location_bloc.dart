@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../blocs/bloc_provider.dart';
-import '../trufi_models.dart';
+import '../models/trufi_place.dart';
 
 class FavoriteLocationBloc implements BlocBase {
   static FavoriteLocationBloc of(BuildContext context) {

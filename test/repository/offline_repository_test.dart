@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
 import 'package:trufi_core/services/search_location/offline_search_location.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import '../mocks/location_search_bloc.dart';
 

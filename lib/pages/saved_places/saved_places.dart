@@ -7,7 +7,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/saved_places/location_tiler.dart';
 import 'package:trufi_core/widgets/dialog_edit_text.dart';
 
-import '../../trufi_models.dart';
+import '../../models/trufi_place.dart';
 import '../../widgets/trufi_drawer.dart';
 import '../choose_location.dart';
 

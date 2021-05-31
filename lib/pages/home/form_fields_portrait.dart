@@ -5,7 +5,8 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import '../../trufi_models.dart';
+
+import '../../models/trufi_place.dart';
 import 'home_buttons.dart';
 import 'search_location/location_form_field.dart';
 import 'setting_payload/setting_payload.dart';

@@ -3,14 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-import 'entities/plan_entity/plan_entity.dart';
-import 'models/enums/defaults_location.dart';
-
-class MapStyle {
-  static const String streets = 'streets';
-  static const String satellite = 'satellite';
-  static const String terrain = 'terrain';
-}
+import '../entities/plan_entity/plan_entity.dart';
+import 'enums/defaults_location.dart';
 
 abstract class TrufiPlace {}
 
@@ -26,12 +20,6 @@ class TrufiLocation implements TrufiPlace {
   })  : assert(description != null),
         assert(latitude != null),
         assert(longitude != null);
-
-  static const String keyDescription = 'description';
-  static const String keyLatitude = 'latitude';
-  static const String keyLongitude = 'longitude';
-  static const String keyType = 'type';
-  static const String keyAddress = 'address';
 
   final String description;
   final double latitude;
@@ -108,21 +96,21 @@ class TrufiLocation implements TrufiPlace {
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
     return TrufiLocation(
-      description: json[keyDescription] as String,
-      latitude: json[keyLatitude] as double,
-      longitude: json[keyLongitude] as double,
-      type: json[keyType] as String,
-      address: json[keyAddress] != null ? json[keyAddress] as String : '',
+      description: json["description"] as String,
+      latitude: json["latitude"] as double,
+      longitude: json["longitude"] as double,
+      type: json["type"] as String,
+      address: json["address"] != null ? json["address"] as String : '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      keyDescription: description,
-      keyLatitude: latitude,
-      keyLongitude: longitude,
-      keyType: type,
-      keyAddress: address ?? ''
+      "description": description,
+      "latitude": latitude,
+      "longitude": longitude,
+      "type": type,
+      "address": address ?? ''
     };
   }
 
@@ -143,16 +131,20 @@ class TrufiLocation implements TrufiPlace {
     return '$latitude,$longitude';
   }
 
-  String displayName(Map<String, String> abbreviations) {
-    return abbreviations.keys.fold<String>(description, (
-      description,
-      abbreviation,
-    ) {
-      return description.replaceAll(
-        abbreviation,
-        abbreviations[abbreviation],
-      );
-    });
+  String displayName(
+    TrufiLocalization localization,
+  ) {
+    String translate = description;
+    if (type == DefaultLocation.defaultHome.initLocation.type) {
+      translate = isLatLngDefined
+          ? localization.defaultLocationHome
+          : localization.defaultLocationAdd(localization.defaultLocationHome);
+    } else if (type == DefaultLocation.defaultWork.initLocation.type) {
+      translate = isLatLngDefined
+          ? localization.defaultLocationWork
+          : localization.defaultLocationAdd(localization.defaultLocationWork);
+    }
+    return translate;
   }
 
   bool get isLatLngDefined {
@@ -161,23 +153,6 @@ class TrufiLocation implements TrufiPlace {
 
   LatLng get latLng {
     return LatLng(latitude, longitude);
-  }
-
-  String translateValue(
-    Map<String, String> abbreviations,
-    TrufiLocalization localization,
-  ) {
-    String translate = displayName(abbreviations);
-    if (DefaultLocation.defaultHome.keyLocation == description) {
-      translate = isLatLngDefined
-          ? localization.defaultLocationHome
-          : localization.defaultLocationAdd(localization.defaultLocationHome);
-    } else if (DefaultLocation.defaultWork.keyLocation == description) {
-      translate = isLatLngDefined
-          ? localization.defaultLocationWork
-          : localization.defaultLocationAdd(localization.defaultLocationWork);
-    }
-    return translate;
   }
 }
 
@@ -200,8 +175,8 @@ class TrufiStreet implements TrufiPlace {
 
   String get description => location.description;
 
-  String displayName(Map<String, String> abbreviations) =>
-      location.displayName(abbreviations);
+  String displayName(TrufiLocalization localization) =>
+      location.displayName(localization);
 }
 
 class TrufiStreetJunction {

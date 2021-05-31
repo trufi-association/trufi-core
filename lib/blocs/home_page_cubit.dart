@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:async/async.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -10,7 +9,7 @@ import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
-import 'package:trufi_core/trufi_models.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 
 import 'payload_data_plan/payload_data_plan_cubit.dart';
 
@@ -50,19 +49,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await localRepository.saveStateHomePage(jsonEncode(newState.toJson()));
 
     emit(newState);
-  }
-
-  Future<void> setTappingPlace(
-      LatLng latLng, TrufiLocalization localization) async {
-    if (state.fromPlace == null) {
-      await updateMapRouteState(state.copyWith(
-          fromPlace:
-              TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
-    } else if (state.toPlace == null) {
-      await updateMapRouteState(state.copyWith(
-          toPlace:
-              TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
-    }
   }
 
   Future<void> setFromPlace(TrufiLocation fromPlace) async {

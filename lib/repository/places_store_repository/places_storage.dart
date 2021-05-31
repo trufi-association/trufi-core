@@ -1,4 +1,4 @@
-import '../../trufi_models.dart';
+import '../../models/trufi_place.dart';
 
 abstract class PlacesStorage {
   final String id;
