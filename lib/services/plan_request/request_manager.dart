@@ -13,6 +13,13 @@ abstract class RequestManager {
     PayloadDataPlanState advancedOptions,
   });
 
+  Future<ModesTransportEntity> fetchTransportModePlan({
+    @required TrufiLocation from,
+    @required TrufiLocation to,
+    @required String correlationId,
+    PayloadDataPlanState advancedOptions,
+  });
+
   Future<PlanEntity> fetchCarPlan(
     TrufiLocation from,
     TrufiLocation to,

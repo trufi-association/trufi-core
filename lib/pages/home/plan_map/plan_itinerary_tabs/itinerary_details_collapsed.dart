@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/vertical_swipe_detector.dart';
 
@@ -112,14 +111,7 @@ class _ItinerarySummary extends StatelessWidget {
                     final PlanItineraryLeg leg = itinerary.legs[index];
                     return Row(
                       children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          decoration: BoxDecoration(
-                            color: leg.transportMode.color,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: LegTransportIcon(leg: leg),
-                        ),
+                        LegTransportIcon(leg: leg),
                         if (ad != null || leg != itinerary.legs.last)
                           Icon(Icons.keyboard_arrow_right,
                               color: theme.primaryIconTheme.color),

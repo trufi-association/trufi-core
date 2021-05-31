@@ -103,8 +103,19 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await updateMapRouteState(state.copyWith(isFetching: false));
         throw error;
       });
+      final modesTransportEntity = await requestManager
+          .fetchTransportModePlan(
+              from: state.fromPlace,
+              to: state.toPlace,
+              correlationId: correlationId,
+              advancedOptions: advancedOptions)
+          .catchError((error) async {
+        await updateMapRouteState(state.copyWith(isFetching: false));
+        throw error;
+      });
       await updateMapRouteState(state.copyWith(
         plan: planEntity,
+        modesTransport: modesTransportEntity,
         isFetching: false,
         showSuccessAnimation: true,
       ));

@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^0.22.0
   geolocator: ^7.0.1
   google_api_availability: ^3.0.1
+  graphql: ^4.0.1
   http: 0.13.1
   intl: 0.17.0
   package_info: 2.0.0

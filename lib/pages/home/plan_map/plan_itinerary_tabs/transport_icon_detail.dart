@@ -15,24 +15,33 @@ class LegTransportIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    return Row(
-      children: [
-        Icon(leg.transportMode.icon, color: Colors.white),
-        if (leg.transportMode != TransportMode.walk)
-          Text(
-            " ${leg.route}",
-            style: theme.primaryTextTheme.headline6.copyWith(
-              fontWeight: FontWeight.w600,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+        color: leg.transportMode.color,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        children: [
+          Icon(leg.transportMode.icon, color: Colors.white),
+          if (leg.transportMode != TransportMode.walk)
+            Padding(
+              padding: EdgeInsets.only(right: leg.route.isEmpty ? 0 : 2),
+              child: Text(
+                leg.route.toString(),
+                style: theme.primaryTextTheme.headline6.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            )
+          else
+            Text(
+              localization.instructionDurationMinutes(
+                  (leg.duration.ceil() / 60).ceil()),
+              style: theme.primaryTextTheme.headline6,
             ),
-          )
-        else
-          Text(
-            localization
-                .instructionDurationMinutes((leg.duration.ceil() / 60).ceil()),
-            style: theme.primaryTextTheme.headline6,
-          ),
-        const SizedBox(width: 4)
-      ],
+        ],
+      ),
     );
   }
 }
