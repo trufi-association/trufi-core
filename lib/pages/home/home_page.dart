@@ -45,7 +45,9 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         bottom: PreferredSize(
           preferredSize: isPortrait
-              ? Size.fromHeight(isGraphQlEndpoint ? 77.0 : 45.0)
+              ? Size.fromHeight(isGraphQlEndpoint
+                  ? (77.0 + (homePageState.hastModesTransport ? 50 : 0))
+                  : 45.0)
               : Size.fromHeight(isGraphQlEndpoint ? 33.0 : 0.0),
           child: Container(),
         ),

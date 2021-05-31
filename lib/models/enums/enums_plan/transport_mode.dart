@@ -140,7 +140,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bicycle: Colors.blue,
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
-    TransportMode.car: null,
+    TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
     TransportMode.ferry: null,
     TransportMode.flexible: null,
@@ -201,5 +201,5 @@ extension TransportModeExtension on TransportMode {
         "assets/images/transport_modes/icon-icon_bus-live-green.svg",
         package: "trufi_core",
       );
-  String get qualifier => qualifiers[this] ?? "";
+  String get qualifier => qualifiers[this];
 }
