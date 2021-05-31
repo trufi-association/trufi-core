@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
 import 'package:trufi_core/models/trufi_place.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 
 import 'search_location_manager.dart';
 
@@ -43,4 +45,11 @@ class OfflineSearchLocation implements SearchLocationManager {
 
     return trufiPlaces;
   }
+
+  @override
+  Future<LocationDetail> reverseGeodecoding(LatLng location) {
+    // TODO: implement reverseGeodecoding
+    throw UnimplementedError();
+  }
+
 }

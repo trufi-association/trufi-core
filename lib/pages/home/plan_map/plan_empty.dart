@@ -5,7 +5,8 @@ import 'package:latlong/latlong.dart';
 
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
@@ -56,7 +57,6 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     });
 
     final Locale locale = Localizations.localeOf(context);
-    final localization = TrufiLocalization.of(context);
     final trufiConfiguration = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.read<HomePageCubit>();
     return Stack(
@@ -74,10 +74,14 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
                     .buildToMarker(homePageCubit.state.toPlace.latLng),
             ]),
           ],
-          onLongPress: (location) async {
-            await homePageCubit.setTappingPlace(location, localization);
-            widget.onFetchPlan();
-          },
+          onTap: (location) => _showBottomMarkerModal(
+            context: context,
+            location: location,
+          ),
+          onLongPress: (location) => _showBottomMarkerModal(
+            context: context,
+            location: location,
+          ),
         ),
         const Positioned(
           top: 16.0,
@@ -125,4 +129,176 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       ],
     );
   }
+
+  void _showBottomMarkerModal({
+    BuildContext context,
+    LatLng location,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      builder: (buildContext) => _LoadLocation(
+        location: location,
+        onFetchPlan: widget.onFetchPlan,
+      ),
+    );
+  }
+}
+
+class _LoadLocation extends StatefulWidget {
+  final LatLng location;
+  final void Function() onFetchPlan;
+  const _LoadLocation(
+      {Key key, @required this.location, @required this.onFetchPlan})
+      : super(key: key);
+  @override
+  __LoadLocationState createState() => __LoadLocationState();
+}
+
+class __LoadLocationState extends State<_LoadLocation> {
+  bool loading = true;
+  String fetchError;
+  LocationDetail locationData;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      loadData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textStyle = theme.textTheme.bodyText1.copyWith(fontSize: 17);
+    final hintStyle = theme.textTheme.bodyText2.copyWith(
+      color: theme.textTheme.caption.color,
+    );
+    final homePageCubit = context.read<HomePageCubit>();
+    return Card(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (loading)
+                LinearProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor),
+                )
+              else if (locationData != null) ...[
+                Text(
+                  locationData.description,
+                  style: textStyle,
+                ),
+                Text(
+                  locationData.street,
+                  style: hintStyle,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          await homePageCubit.setFromPlace(
+                            TrufiLocation(
+                              description: locationData.description,
+                              address: locationData.street,
+                              latitude: widget.location.latitude,
+                              longitude: widget.location.longitude,
+                            ),
+                          );
+                          widget.onFetchPlan();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          // TODO translation
+                          "Origin",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          await homePageCubit.setToPlace(
+                            TrufiLocation(
+                              description: locationData.description,
+                              address: locationData.street,
+                              latitude: widget.location.latitude,
+                              longitude: widget.location.longitude,
+                            ),
+                          );
+                          widget.onFetchPlan();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          // TODO translation
+                          "Destination",
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+              ] else
+                Text(
+                  fetchError,
+                  style: const TextStyle(color: Colors.red),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> loadData() async {
+    if (!mounted) return;
+    setState(() {
+      fetchError = null;
+      loading = true;
+    });
+    await _fetchData().then((value) {
+      if (mounted) {
+        setState(() {
+          locationData = value;
+          loading = false;
+        });
+      }
+    }).catchError((error) {
+      if (mounted) {
+        setState(() {
+          fetchError = "$error";
+          loading = false;
+        });
+      }
+    });
+  }
+
+  Future<LocationDetail> _fetchData() async {
+    final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    return searchLocationsCubit.reverseGeodecoding(widget.location).catchError(
+      () {
+        return LocationDetail("unknown place", "");
+      },
+    );
+  }
+}
+
+class LocationDetail {
+  final String description;
+  final String street;
+
+  LocationDetail(this.description, this.street);
 }
