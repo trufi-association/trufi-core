@@ -289,7 +289,7 @@ class __LoadLocationState extends State<_LoadLocation> {
   Future<LocationDetail> _fetchData() async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return searchLocationsCubit.reverseGeodecoding(widget.location).catchError(
-      () {
+      (error) {
         return LocationDetail("unknown place", "");
       },
     );
