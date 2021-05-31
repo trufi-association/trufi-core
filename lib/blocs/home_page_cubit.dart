@@ -51,19 +51,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
-  // Future<void> setTappingPlace(
-  //     LatLng latLng, TrufiLocalization localization) async {
-  //   if (state.fromPlace == null) {
-  //     await updateMapRouteState(state.copyWith(
-  //         fromPlace:
-  //             TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
-  //   } else if (state.toPlace == null) {
-  //     await updateMapRouteState(state.copyWith(
-  //         toPlace:
-  //             TrufiLocation.fromLatLng(localization.searchMapMarker, latLng)));
-  //   }
-  // }
-
   Future<void> setFromPlace(TrufiLocation fromPlace) async {
     await updateMapRouteState(state.copyWith(fromPlace: fromPlace));
   }
