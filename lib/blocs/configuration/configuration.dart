@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/models/animation_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
@@ -47,6 +48,10 @@ class Configuration {
   /// Definition of the feedback if it is a URL or a Email
   final FeedbackDefinition feedbackDefinition;
 
+  /// The [aboutSection] is [Builder] that allows you to add information
+  /// in the About page.
+  final WidgetBuilder aboutSection;
+
   /// City where the App is used
   final String appCity;
 
@@ -68,6 +73,7 @@ class Configuration {
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
     this.customTranslations,
     this.feedbackDefinition,
+    this.aboutSection,
     this.markers = const MarkerConfigurationDefault(),
     this.animations,
     this.map,

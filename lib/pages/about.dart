@@ -42,6 +42,7 @@ class AboutPageState extends State<AboutPage> {
     final currentCity = config.appCity;
     final customTranslations = config.customTranslations;
     final currentLocale = Localizations.localeOf(context);
+    final aboutSection = context.read<ConfigurationCubit>().state.aboutSection;
 
     return ListView(
       children: <Widget>[
@@ -56,22 +57,6 @@ class AboutPageState extends State<AboutPage> {
                 style: theme.textTheme.headline6.copyWith(
                   color: theme.textTheme.bodyText1.color,
                 ),
-              ),
-              FutureBuilder(
-                future: PackageInfo.fromPlatform(),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<PackageInfo> snapshot,
-                ) {
-                  if (snapshot.hasError ||
-                      snapshot.connectionState != ConnectionState.done) {
-                    return const Text("");
-                  }
-                  return Text(
-                    localization.version(snapshot.data.version),
-                    style: theme.textTheme.bodyText1,
-                  );
-                },
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
@@ -91,6 +76,11 @@ class AboutPageState extends State<AboutPage> {
                   style: theme.textTheme.bodyText1,
                 ),
               ),
+              if (aboutSection != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: aboutSection(context),
+                ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ElevatedButton(
@@ -106,6 +96,27 @@ class AboutPageState extends State<AboutPage> {
                   },
                   child: Text(localization.aboutLicenses),
                 ),
+              ),
+              FutureBuilder(
+                future: PackageInfo.fromPlatform(),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<PackageInfo> snapshot,
+                ) {
+                  if (snapshot.hasError ||
+                      snapshot.connectionState != ConnectionState.done) {
+                    return const Text("");
+                  }
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        localization.version(snapshot.data.version),
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    ],
+                  );
+                },
               ),
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
