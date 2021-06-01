@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -362,12 +361,15 @@ class _BuildChooseOnMap extends StatelessWidget {
   }
 
   Future<void> _handleOnChooseOnMapTapped(BuildContext context) async {
-    final localization = TrufiLocalization.of(context);
-    final LatLng mapLocation = await ChooseLocationPage.selectPosition(context,
-        isOrigin: TypeLocationForm().isOrigin);
-    if (mapLocation != null && onMapTapped != null) {
+    final ChooseLocationDetail chooseLocationDetail =
+        await ChooseLocationPage.selectPosition(
+      context,
+      isOrigin: TypeLocationForm().isOrigin,
+    );
+    if (chooseLocationDetail != null && onMapTapped != null) {
       onMapTapped(
-          TrufiLocation.fromLatLng(localization.searchMapMarker, mapLocation));
+        TrufiLocation.fromChooseLocationDetail(chooseLocationDetail),
+      );
     }
   }
 }

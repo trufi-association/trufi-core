@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/pages/choose_location.dart';
 
 import '../entities/plan_entity/plan_entity.dart';
 import 'enums/defaults_location.dart';
@@ -49,11 +50,14 @@ class TrufiLocation implements TrufiPlace {
     );
   }
 
-  factory TrufiLocation.fromLatLng(String description, LatLng point) {
+  factory TrufiLocation.fromChooseLocationDetail(
+    ChooseLocationDetail chooseLocationDetail,
+  ) {
     return TrufiLocation(
-      description: description,
-      latitude: point.latitude,
-      longitude: point.longitude,
+      description: chooseLocationDetail.description,
+      address: chooseLocationDetail.street,
+      latitude: chooseLocationDetail.location.latitude,
+      longitude: chooseLocationDetail.location.longitude,
     );
   }
 

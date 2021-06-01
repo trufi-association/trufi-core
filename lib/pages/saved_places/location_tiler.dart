@@ -142,17 +142,20 @@ class LocationTiler extends StatelessWidget {
   }
 
   Future<void> _changePosition(BuildContext context) async {
-    final LatLng mapLocation = await ChooseLocationPage.selectPosition(
+    final ChooseLocationDetail chooseLocationDetail =
+        await ChooseLocationPage.selectPosition(
       context,
       position: location.isLatLngDefined
           ? LatLng(location.latitude, location.longitude)
           : null,
     );
-    if (mapLocation != null) {
+    if (chooseLocationDetail != null) {
       updateLocation(
         location,
         location.copyWith(
-            longitude: mapLocation.longitude, latitude: mapLocation.latitude),
+          longitude: chooseLocationDetail.location.longitude,
+          latitude: chooseLocationDetail.location.latitude,
+        ),
       );
     }
   }
