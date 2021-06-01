@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
 
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/saved_places/location_tiler.dart';
-import 'package:trufi_core/widgets/dialog_edit_text.dart';
 
 import '../../models/trufi_place.dart';
 import '../../widgets/trufi_drawer.dart';
@@ -144,22 +142,18 @@ class SavedPlacesPage extends StatelessWidget {
 
   Future<void> _addNewPlace(BuildContext context) async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final LatLng mapLocation = await ChooseLocationPage.selectPosition(context);
-    if (mapLocation != null) {
-      final String description = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return const DialogEditText();
-        },
-      );
-      if (description != null) {
-        searchLocationsCubit.insertMyPlace(TrufiLocation(
-          description: description,
-          latitude: mapLocation.latitude,
-          longitude: mapLocation.longitude,
-          type: 'saved_place:map',
-        ));
-      }
+    final ChooseLocationDetail chooseLocationDetail =
+        await ChooseLocationPage.selectPosition(
+      context,
+    );
+    if (chooseLocationDetail != null) {
+      searchLocationsCubit.insertMyPlace(TrufiLocation(
+        description: chooseLocationDetail.description,
+        address: chooseLocationDetail.street,
+        latitude: chooseLocationDetail.location.latitude,
+        longitude: chooseLocationDetail.location.longitude,
+        type: 'saved_place:map',
+      ));
     }
   }
 }
