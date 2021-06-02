@@ -43,30 +43,34 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
               height: animationCostHeight.value,
               padding: const EdgeInsets.only(left: 12.0, right: 45.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   if (itinerary.hasAdvencedData)
-                    Expanded(
-                      child: Text(
-                        "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
-                        style: theme.textTheme.bodyText1
-                            .copyWith(fontWeight: FontWeight.w500),
+                    Text(
+                      "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
+                      style: theme.textTheme.bodyText1
+                          .copyWith(fontWeight: FontWeight.w500),
+                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      if (itinerary.hasAdvencedData)
+                        Text(
+                          "${itinerary.durationTripString(localization)} ",
+                          style: theme.textTheme.bodyText1
+                              .copyWith(fontWeight: FontWeight.w500),
+                        )
+                      else
+                        Text(
+                          "${localization.instructionDurationMinutes(itinerary.time)} ",
+                          style: theme.textTheme.bodyText1
+                              .copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      Text(
+                        "(${itinerary.getDistanceString(localization)})",
+                        style: theme.textTheme.bodyText2,
                       ),
-                    ),
-                  if (itinerary.hasAdvencedData)
-                    Text(
-                      "${itinerary.durationTripString(localization)} ",
-                      style: theme.textTheme.bodyText1
-                          .copyWith(fontWeight: FontWeight.w500),
-                    )
-                  else
-                    Text(
-                      "${localization.instructionDurationMinutes(itinerary.time)} ",
-                      style: theme.textTheme.bodyText1
-                          .copyWith(fontWeight: FontWeight.w500),
-                    ),
-                  Text(
-                    "(${itinerary.getDistanceString(localization)})",
-                    style: theme.textTheme.bodyText2,
+                    ],
                   ),
                 ],
               ),
