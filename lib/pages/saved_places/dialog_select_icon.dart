@@ -18,14 +18,20 @@ class DialogSelectIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return SimpleDialog(
-      title: Text(localization.savedPlacesSelectIconTitle),
+      title: Text(
+        localization.savedPlacesSelectIconTitle,
+        style: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
       children: <Widget>[
         SizedBox(
           width: 200,
           height: 200,
           child: GridView.builder(
             itemCount: icons.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4),
             itemBuilder: (BuildContext builderContext, int index) {
               return InkWell(
                 onTap: () {
