@@ -4,6 +4,7 @@ import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
@@ -63,6 +64,10 @@ class Configuration {
   /// Show the weather in the drawer from FMI - Finnish Meteorological Institute
   final bool showWeather;
 
+  /// PlanItineraryLeg injection extra option
+  final Widget Function(BuildContext context, PlanItineraryLeg planItineraryLeg)
+      planItineraryLegBuilder;
+
   Configuration({
     this.teamInformationEmail = "",
     this.minimumReviewWorthyActionCount = 3,
@@ -80,6 +85,7 @@ class Configuration {
     this.urls,
     this.attribution,
     this.showWeather = true,
+    this.planItineraryLegBuilder,
   });
 }
 
