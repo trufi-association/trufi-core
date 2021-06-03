@@ -36,8 +36,8 @@ class TransportDash extends StatelessWidget {
         SeparatorPlace(
           color: leg.transportMode.color,
           child: Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.min,
