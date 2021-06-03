@@ -125,6 +125,7 @@ class TrufiApp extends StatelessWidget {
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -137,7 +138,13 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<PreferencesCubit>(
           create: (context) => PreferencesCubit(
-              socialMediaItem, configuration.map.center,
+              PreferenceState(
+                languageCode: configuration.supportedLanguages
+                    .firstWhere((element) => element.isDefault)
+                    .languageCode,
+              ),
+              socialMediaItem,
+              configuration.map.center,
               showWeather: configuration.showWeather),
         ),
         BlocProvider<CustomLayersCubit>(
