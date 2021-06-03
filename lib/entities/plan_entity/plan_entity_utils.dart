@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 String parseDurationTime(
@@ -19,7 +20,14 @@ String getDistance(
   TrufiLocalization localization,
   double distance,
 ) {
-  return distance >= 1000
-      ? localization.instructionDistanceKm((distance / 1000).toStringAsFixed(1))
-      : localization.instructionDistanceMeters(distance.toStringAsFixed(0));
+  if (distance >= 1000) {
+    final result = (distance / 1000).toStringAsFixed(1);
+    final localizedDecimalPattern =
+        NumberFormat.decimalPattern(localization.localeName)
+            .format(double.parse(result));
+
+    return localization.instructionDistanceKm(localizedDecimalPattern);
+  } else {
+    return localization.instructionDistanceMeters(distance.toStringAsFixed(0));
+  }
 }
