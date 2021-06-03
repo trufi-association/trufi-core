@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -140,7 +141,10 @@ class TrufiApp extends StatelessWidget {
           create: (context) => PreferencesCubit(
               PreferenceState(
                 languageCode: configuration.supportedLanguages
-                    .firstWhere((element) => element.isDefault)
+                    .firstWhere(
+                      (element) => element.isDefault,
+                      orElse: () => LanguageConfiguration("en", "", "English"),
+                    )
                     .languageCode,
               ),
               socialMediaItem,

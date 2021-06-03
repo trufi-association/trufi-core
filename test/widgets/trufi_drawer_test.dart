@@ -7,6 +7,7 @@ import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
+import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
@@ -19,8 +20,9 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider<PreferencesCubit>(
-              create: (context) =>
-                  PreferencesCubit([], LatLng(0, 0), showWeather: false),
+              create: (context) => PreferencesCubit(
+                  const PreferenceState(languageCode: "en"), [], LatLng(0, 0),
+                  showWeather: false),
             ),
             BlocProvider<ConfigurationCubit>(
               create: (context) => ConfigurationCubit(
@@ -54,8 +56,9 @@ void main() {
       await tester.pumpWidget(MultiBlocProvider(
         providers: [
           BlocProvider<PreferencesCubit>(
-            create: (context) =>
-                PreferencesCubit([], LatLng(0, 0), showWeather: false),
+            create: (context) => PreferencesCubit(
+                const PreferenceState(languageCode: 'de'), [], LatLng(0, 0),
+                showWeather: false),
           ),
           BlocProvider<ConfigurationCubit>(
             create: (context) => ConfigurationCubit(
