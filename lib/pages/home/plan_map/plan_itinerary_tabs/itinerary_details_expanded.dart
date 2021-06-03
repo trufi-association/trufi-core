@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
 
 import 'itinerary_details_expanded/leg_overview.dart';
-import 'itinerary_details_expanded/leg_overview_advenced/leg_overview_advanced.dart';
 
 class ItineraryDetailsExpanded extends StatelessWidget {
   final Animation<double> animationDetailHeight;
