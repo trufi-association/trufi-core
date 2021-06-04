@@ -30,7 +30,7 @@ class TransportDash extends StatelessWidget {
       children: [
         DashLinePlace(
           date: leg.startTimeString.toString(),
-          location: leg.fromName.toString(),
+          location: leg.fromPlace.name.toString(),
           color: leg.transportMode.color,
         ),
         SeparatorPlace(
@@ -44,7 +44,7 @@ class TransportDash extends StatelessWidget {
                   children: [
                     LegTransportIcon(leg: leg),
                     Text(
-                      '  ${leg.durationInHours(localization).toString()}',
+                      '  ${leg.durationLeg(localization).toString()}',
                       style: theme.primaryTextTheme.bodyText1,
                     ),
                     Text(
@@ -62,7 +62,7 @@ class TransportDash extends StatelessWidget {
         if (isNextTransport)
           DashLinePlace(
             date: leg.endTimeString.toString(),
-            location: leg.toName,
+            location: leg.fromPlace.name.toString(),
             color: leg.transportMode.color,
           ),
       ],
@@ -89,7 +89,7 @@ class WalkDash extends StatelessWidget {
             color: TransportMode.walk.color,
           ),
           child: Text(
-              ' ${localization.commonWalk} ${leg.durationInHours(localization)} (${leg.distanceString(localization)})'),
+              ' ${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
         ),
       ],
     );
@@ -108,7 +108,7 @@ class WaitDash extends StatelessWidget {
       children: [
         DashLinePlace(
           date: legBefore.endTimeString.toString(),
-          location: legBefore.toName,
+          location: legBefore.toPlace.name,
           color: Colors.grey,
         ),
         SeparatorPlace(

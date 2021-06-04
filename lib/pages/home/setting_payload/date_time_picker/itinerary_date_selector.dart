@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import 'date_time_picker.dart';
 
@@ -80,6 +79,6 @@ class ItineraryDateSelector extends StatelessWidget {
 
 extension on DateTime {
   String customFormat(String languageCode) {
-    return DateFormat('E. dd.MM.  HH:mm', languageCode).format(this);
+    return DateFormat('E dd.MM.  HH:mm', languageCode).format(this);
   }
 }

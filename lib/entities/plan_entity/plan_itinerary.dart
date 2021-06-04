@@ -66,6 +66,99 @@ class PlanItinerary {
     };
   }
 
+  PlanItinerary copyWith({
+    List<PlanItineraryLeg> legs,
+    DateTime startTime,
+    DateTime endTime,
+    Duration walkTime,
+    Duration durationTrip,
+    double walkDistance,
+  }) {
+    return PlanItinerary(
+      legs: legs ?? this.legs,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      walkTime: walkTime ?? this.walkTime,
+      durationTrip: durationTrip ?? this.durationTrip,
+      walkDistance: walkDistance ?? this.walkDistance,
+    );
+  }
+
+  List<PlanItineraryLeg> get compressLegs {
+    final usingOwnBicycle = legs.any(
+      (leg) =>
+          leg.transportMode == TransportMode.bicycle && leg.rentedBike == false,
+    );
+    final compressedLegs = <PlanItineraryLeg>[];
+    if (legs.isNotEmpty) {
+      PlanItineraryLeg compressedLeg = legs[0].copyWith();
+      for (final PlanItineraryLeg currentLeg in legs) {
+        if (currentLeg.intermediatePlaces != null) {
+          compressedLegs.add(compressedLeg);
+          compressedLeg = currentLeg.copyWith();
+          continue;
+        }
+
+        if (usingOwnBicycle && continueWithBicycle(compressedLeg, currentLeg)) {
+          final newBikePark = compressedLeg?.toPlace?.bikeParkEntity ??
+              currentLeg?.toPlace?.bikeParkEntity;
+          compressedLeg = compressedLeg.copyWith(
+            duration: compressedLeg.duration + currentLeg.duration,
+            distance: compressedLeg.distance + currentLeg.distance,
+            toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
+            endTime: currentLeg.endTime,
+            mode: TransportMode.bicycle.name,
+          );
+          continue;
+        }
+
+        if (currentLeg.rentedBike != null &&
+            continueWithRentedBicycle(compressedLeg, currentLeg) &&
+            !bikingEnded(currentLeg)) {
+          compressedLeg = compressedLeg.copyWith(
+            duration: compressedLeg.duration + currentLeg.duration,
+            distance: compressedLeg.distance + currentLeg.distance,
+            toPlace: currentLeg.toPlace,
+            endTime: currentLeg.endTime,
+            mode: TransportMode.bicycle.name,
+          );
+          continue;
+        }
+
+        if (usingOwnBicycle &&
+            getLegModeByKey(compressedLeg.mode) == LegMode.walk) {
+          compressedLeg = compressedLeg.copyWith(
+            mode: LegMode.bicycleWalk.name,
+          );
+        }
+
+        compressedLegs.add(compressedLeg);
+        compressedLeg = currentLeg.copyWith();
+
+        if (usingOwnBicycle &&
+            getLegModeByKey(currentLeg.mode) == LegMode.walk) {
+          compressedLeg = compressedLeg.copyWith(
+            mode: LegMode.bicycleWalk.name,
+          );
+        }
+      }
+      compressedLegs.add(compressedLeg);
+    }
+    return compressedLegs;
+  }
+
+  String futureText(String languageCode) {
+    final nowDate = DateTime.now();
+    if (startTime.difference(nowDate).inDays == 0) {
+      return '';
+    }
+    if (startTime.difference(nowDate).inDays == 1) {
+      // TODO translate
+      return "Tomorrow";
+    }
+    return DateFormat('E dd.MM.', languageCode).format(startTime);
+  }
+
   bool get hasAdvencedData =>
       startTime != null &&
       endTime != null &&
@@ -73,23 +166,29 @@ class PlanItinerary {
       durationTrip != null &&
       walkDistance != null;
 
-  String get startTimeHHmm => DateFormat(' HH:mm').format(startTime);
+  String get startTimeHHmm => durationToHHmm(startTime);
 
-  String startTimeComplete(String languageCode) {
-    return DateFormat('E dd.MM.  HH:mm', languageCode).format(startTime);
-  }
-
-  String get endTimeHHmm => DateFormat('HH:mm').format(endTime);
-
-  String durationTripString(TrufiLocalization localization) =>
-      parseDurationTime(localization, durationTrip);
-
-  String walkTimeHHmm(TrufiLocalization localization) =>
-      parseDurationTime(localization, walkTime);
+  String get endTimeHHmm => durationToHHmm(endTime);
 
   String getDistanceString(TrufiLocalization localization) =>
-      getDistance(localization, distance.toDouble());
+      displayDistanceWithLocale(localization, distance.toDouble());
+
+  String durationTripString(TrufiLocalization localization) =>
+      durationToString(localization, durationTrip);
 
   String getWalkDistanceString(TrufiLocalization localization) =>
-      getDistance(localization, walkDistance.toDouble());
+      displayDistanceWithLocale(localization, walkDistance.toDouble());
+
+  double get totalDistance => sumDistances(legs);
+
+  double get totalWalkingDistance =>
+      getTotalWalkingDistance(compressLegs ?? []);
+
+  double get totalBikingDistance => getTotalBikingDistance(compressLegs ?? []);
+
+  Duration get totalWalkingDuration =>
+      Duration(seconds: getTotalWalkingDuration(compressLegs ?? []).toInt());
+
+  Duration get totalBikingDuration =>
+      Duration(seconds: getTotalBikingDuration(compressLegs ?? []).toInt());
 }
