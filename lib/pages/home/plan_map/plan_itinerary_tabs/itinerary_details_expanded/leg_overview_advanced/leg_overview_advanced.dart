@@ -42,22 +42,30 @@ class LegOverviewAdvanced extends StatelessWidget {
                     color: Colors.black,
                   ),
                   if (itineraryLeg.transportMode == TransportMode.walk)
-                    DashLinePlace(
-                      date: itinerary.startTimeHHmm.toString(),
-                      location: _getDisplayName(
-                          itineraryLeg.fromPlace.name, localization),
-                      child: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: FittedBox(child: config.markers.fromMarker),
-                      ),
+                    Column(
+                      children: [
+                        DashLinePlace(
+                          date: itinerary.startTimeHHmm.toString(),
+                          location: _getDisplayName(
+                              itineraryLeg.fromPlace.name, localization),
+                          child: SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: FittedBox(child: config.markers.fromMarker),
+                          ),
+                        ),
+                        WalkDash(
+                          leg: itineraryLeg,
+                        ),
+                      ],
                     )
-                  else
+                  else if (itinerary.legs.length > 1)
                     TransportDash(
                       leg: itineraryLeg,
+                      isFirstTransport: true,
                       isNextTransport: itineraryLeg.endTimeString ==
                           itinerary.legs[index + 1].startTimeString,
-                    ),
+                    )
                 ],
               )
             else if (itineraryLeg.transportMode == TransportMode.walk &&

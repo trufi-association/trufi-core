@@ -98,19 +98,21 @@ class OnlineGraphQLRepository implements RequestManager {
       );
     }
     final planEntity = planEntityData.toPlan();
-    final itinerariesTrasnport = planEntity.itineraries
-        .where(
-          (itinerary) => !itinerary.legs
-              .every((leg) => leg.transportMode == TransportMode.walk),
-        )
-        .toList();
+    // TODO For the moment We do not need clean the itineraries with only mode Walk
+    // final itinerariesTrasnport = planEntity.itineraries
+    //     .where(
+    //       (itinerary) => !itinerary.legs
+    //           .every((leg) => leg.transportMode == TransportMode.walk),
+    //     )
+    //     .toList();
 
-    return planEntity.copyWith(
-      itineraries: itinerariesTrasnport,
-      error: itinerariesTrasnport.isEmpty
-          ? PlanError(404, "Not found routes")
-          : null,
-    );
+    // return planEntity.copyWith(
+    //   itineraries: itinerariesTrasnport,
+    //   error: itinerariesTrasnport.isEmpty
+    //       ? PlanError(404, "Not found routes")
+    //       : null,
+    // );
+    return planEntity;
   }
 
   Future<ModesTransportEntity> _fetchTransportModePlan({
