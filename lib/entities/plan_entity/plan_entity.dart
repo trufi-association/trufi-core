@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/place_entity.dart';
-
+import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
-import 'plan_entity_utils.dart';
-part 'plan_location.dart';
+import 'enum/leg_mode.dart';
+import 'utils/modes_transport_utils.dart';
+import 'utils/plan_itinerary_leg_utils.dart';
+import 'utils/time_utils.dart';
+
+part 'modes_transport_entity.dart';
 part 'plan_error.dart';
 part 'plan_itinerary.dart';
 part 'plan_itinerary_leg.dart';
-part 'modes_transport_entity.dart';
+part 'plan_location.dart';
 
 class PlanEntity {
   PlanEntity({
@@ -55,6 +60,20 @@ class PlanEntity {
     }
   }
 
+  PlanEntity copyWith({
+    PlanLocation from,
+    PlanLocation to,
+    List<PlanItinerary> itineraries,
+    PlanError error,
+  }) {
+    return PlanEntity(
+      from: from ?? this.from,
+      to: to ?? this.to,
+      itineraries: itineraries ?? this.itineraries,
+      error: error ?? this.error,
+    );
+  }
+
   static List<PlanItinerary> removePlanItineraryDuplicates(
     List<PlanItinerary> itineraries,
   ) {
@@ -73,9 +92,11 @@ class PlanEntity {
           itineraries.add(itinerary);
         } else {
           // If a bus leg exist and the first route isn't used yet just add the itinerary
-          if (!usedRoutes.contains(firstBusLeg.route)) {
+          final startTime = firstBusLeg.startTime?.millisecondsSinceEpoch ?? 0;
+          final endTime = firstBusLeg.endTime?.millisecondsSinceEpoch ?? 0;
+          if (!usedRoutes.contains('${firstBusLeg.route}$startTime$endTime')) {
             itineraries.add(itinerary);
-            usedRoutes.add(firstBusLeg.route);
+            usedRoutes.add('${firstBusLeg.route}$startTime$endTime');
           }
         }
         // Return current list
