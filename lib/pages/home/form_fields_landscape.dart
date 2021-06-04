@@ -5,6 +5,7 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/pages/home/transport_selector/transport_selector.dart';
 
 import '../../models/trufi_place.dart';
 import 'home_buttons.dart';
@@ -33,60 +34,65 @@ class FormFieldsLandscape extends StatelessWidget {
     final homePageState = context.read<HomePageCubit>().state;
     final config = context.read<ConfigurationCubit>().state;
     return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
-        child: Form(
-          // key: _formKey,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const SizedBox(
-                    width: 40.0,
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(12.0, 4.0, 4.0, 4.0),
+            child: Form(
+              // key: _formKey,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      const SizedBox(
+                        width: 40.0,
+                      ),
+                      Flexible(
+                        child: LocationFormField(
+                          isOrigin: true,
+                          hintText: localization.searchPleaseSelectOrigin,
+                          textLeadingImage: config.markers.fromMarker,
+                          onSaved: onSaveFrom,
+                          value: homePageState.fromPlace,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40.0,
+                        child: homePageState.isPlacesDefined
+                            ? SwapButton(
+                                orientation: Orientation.landscape,
+                                onSwap: onSwap,
+                              )
+                            : null,
+                      ),
+                      Flexible(
+                        child: LocationFormField(
+                          isOrigin: false,
+                          hintText: localization.searchPleaseSelectDestination,
+                          textLeadingImage: config.markers.toMarker,
+                          onSaved: onSaveTo,
+                          value: homePageState.toPlace,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40.0,
+                        child: homePageState.isPlacesDefined
+                            ? ResetButton(onReset: onReset)
+                            : null,
+                      ),
+                    ],
                   ),
-                  Flexible(
-                    child: LocationFormField(
-                      isOrigin: true,
-                      hintText: localization.searchPleaseSelectOrigin,
-                      textLeadingImage: config.markers.fromMarker,
-                      onSaved: onSaveFrom,
-                      value: homePageState.fromPlace,
+                  if (config.serverType == ServerType.graphQLServer)
+                    SettingPayload(
+                      onFetchPlan: onFetchPlan,
                     ),
-                  ),
-                  SizedBox(
-                    width: 40.0,
-                    child: homePageState.isPlacesDefined
-                        ? SwapButton(
-                            orientation: Orientation.landscape,
-                            onSwap: onSwap,
-                          )
-                        : null,
-                  ),
-                  Flexible(
-                    child: LocationFormField(
-                      isOrigin: false,
-                      hintText: localization.searchPleaseSelectDestination,
-                      textLeadingImage: config.markers.toMarker,
-                      onSaved: onSaveTo,
-                      value: homePageState.toPlace,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 40.0,
-                    child: homePageState.isPlacesDefined
-                        ? ResetButton(onReset: onReset)
-                        : null,
-                  ),
                 ],
               ),
-              if (config.serverType == ServerType.graphQLServer)
-                SettingPayload(
-                  onFetchPlan: onFetchPlan,
-                ),
-            ],
+            ),
           ),
-        ),
+          if (homePageState.hastModesTransport) const TransportSelector(),
+        ],
       ),
     );
   }

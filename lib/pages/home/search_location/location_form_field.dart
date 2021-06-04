@@ -40,57 +40,51 @@ class LocationFormField extends StatelessWidget {
             child: leading,
           ),
         Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(4.0),
-            child: GestureDetector(
-              onTap: () async {
-                TypeLocationForm().isOrigin = isOrigin;
-                // Show search
-                final TrufiLocation location = await showSearch<TrufiLocation>(
-                  context: context,
-                  delegate: LocationSearchDelegate(),
-                );
-                // Check result
-                if (location != null) {
-                  onSaved(location);
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(1.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                child: SizedBox(
-                  height: 32.0,
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    direction: Axis.vertical,
-                    children: <Widget>[
-                      SizedBox(height: 16.0, child: textLeadingImage),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: RichText(
-                            text: value != null
-                                ? TextSpan(
-                                    style: textStyle,
-                                    text: value.displayName(
-                                      localization,
-                                    ),
-                                  )
-                                : TextSpan(
-                                    style: hintStyle,
-                                    text: hintText,
-                                  ),
-                          ),
-                        ),
+          child: GestureDetector(
+            onTap: () async {
+              TypeLocationForm().isOrigin = isOrigin;
+              // Show search
+              final TrufiLocation location = await showSearch<TrufiLocation>(
+                context: context,
+                delegate: LocationSearchDelegate(),
+              );
+              // Check result
+              if (location != null) {
+                onSaved(location);
+              }
+            },
+            child: Container(
+              height: 36,
+              margin: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.white),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(height: 16.0, child: textLeadingImage),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      child: RichText(
+                        maxLines: 1,
+                        text: value != null
+                            ? TextSpan(
+                                style: textStyle,
+                                text: value.displayName(
+                                  localization,
+                                ),
+                              )
+                            : TextSpan(
+                                style: hintStyle,
+                                text: hintText,
+                              ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

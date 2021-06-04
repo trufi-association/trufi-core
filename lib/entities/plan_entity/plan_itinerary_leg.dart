@@ -2,14 +2,15 @@ part of 'plan_entity.dart';
 
 class PlanItineraryLeg {
   PlanItineraryLeg({
+    this.rentedBike,
     this.points,
     this.mode,
     this.route,
     this.routeLongName,
     this.distance,
     this.duration,
-    this.toName,
-    this.fromName,
+    this.toPlace,
+    this.fromPlace,
     this.startTime,
     this.endTime,
     this.intermediatePlaces,
@@ -23,11 +24,10 @@ class PlanItineraryLeg {
   static const _legGeometry = "legGeometry";
   static const _points = "points";
   static const _mode = "mode";
-  static const _name = "name";
   static const _route = "route";
   static const _routeLongName = "routeLongName";
-  static const _to = "to";
-  static const _from = "from";
+  static const _toPlace = "to";
+  static const _fromPlace = "from";
   static const _startTime = "startTime";
   static const _endTime = "endTime";
   static const _intermediatePlaces = "intermediatePlaces";
@@ -38,11 +38,13 @@ class PlanItineraryLeg {
   final String routeLongName;
   final double distance;
   final double duration;
-  final String toName;
-  final String fromName;
+  final PlaceEntity toPlace;
+  final PlaceEntity fromPlace;
   final DateTime startTime;
   final DateTime endTime;
+  // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
   TransportMode transportMode;
+  final bool rentedBike;
 
   final List<PlaceEntity> intermediatePlaces;
 
@@ -54,8 +56,12 @@ class PlanItineraryLeg {
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
       duration: json[_duration] as double,
-      toName: json[_to][_name] as String,
-      fromName: json[_from][_name] as String,
+      toPlace: json[_toPlace] != null
+          ? PlaceEntity.fromMap(json[_toPlace] as Map<String, dynamic>)
+          : null,
+      fromPlace: json[_fromPlace] != null
+          ? PlaceEntity.fromMap(json[_fromPlace] as Map<String, dynamic>)
+          : null,
       startTime: json[_startTime] != null
           ? DateTime.fromMillisecondsSinceEpoch(
               int.tryParse(json[_startTime].toString()) ?? 0)
@@ -67,7 +73,7 @@ class PlanItineraryLeg {
       intermediatePlaces: json[_intermediatePlaces] != null
           ? List<PlaceEntity>.from(
               (json[_intermediatePlaces] as List<dynamic>).map(
-                (x) => PlaceEntity.fromJson(x as Map<String, dynamic>),
+                (x) => PlaceEntity.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -82,14 +88,44 @@ class PlanItineraryLeg {
       _routeLongName: routeLongName,
       _distance: distance,
       _duration: duration,
-      _to: {_name: toName},
-      _from: {_name: fromName},
+      _toPlace: toPlace?.toMap(),
+      _fromPlace: fromPlace?.toMap(),
       _startTime: startTime?.millisecondsSinceEpoch,
       _endTime: endTime?.millisecondsSinceEpoch,
       _intermediatePlaces: intermediatePlaces != null
-          ? List<dynamic>.from(intermediatePlaces.map((x) => x.toJson()))
+          ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
           : null,
     };
+  }
+
+  PlanItineraryLeg copyWith({
+    String points,
+    String mode,
+    String route,
+    String routeLongName,
+    double distance,
+    double duration,
+    PlaceEntity toPlace,
+    PlaceEntity fromPlace,
+    DateTime startTime,
+    DateTime endTime,
+    bool rentedBike,
+    List<PlaceEntity> intermediatePlaces,
+  }) {
+    return PlanItineraryLeg(
+      points: points ?? this.points,
+      mode: mode ?? this.mode,
+      route: route ?? this.route,
+      routeLongName: routeLongName ?? this.routeLongName,
+      distance: distance ?? this.distance,
+      duration: duration ?? this.duration,
+      toPlace: toPlace ?? this.toPlace,
+      fromPlace: fromPlace ?? this.fromPlace,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      rentedBike: rentedBike ?? this.rentedBike,
+      intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
+    );
   }
 
   String toInstruction(TrufiLocalization localization) {
@@ -108,25 +144,28 @@ class PlanItineraryLeg {
     return sb.toString();
   }
 
-  String distanceString(TrufiLocalization localization) => getDistance(
+  String distanceString(TrufiLocalization localization) =>
+      displayDistanceWithLocale(
         localization,
         distance,
       );
 
+  String get startTimeString => durationToHHmm(startTime);
+
+  String get endTimeString => durationToHHmm(endTime);
+
+  String durationLeg(TrufiLocalization localization) =>
+      durationToString(localization, Duration(seconds: duration.toInt()));
+
+  String _toString(TrufiLocalization localization) {
+    return toPlace?.name == 'Destination'
+        ? localization.commonDestination
+        : toPlace?.name;
+  }
+
   String _durationString(TrufiLocalization localization) {
     final value = (duration.ceil() / 60).ceil();
     return localization.instructionDurationMinutes(value);
-  }
-
-  String get startTimeString => DateFormat('HH:mm').format(startTime);
-
-  String get endTimeString => DateFormat('HH:mm').format(endTime);
-
-  String durationInHours(TrufiLocalization localization) =>
-      parseDurationTime(localization, Duration(seconds: duration.toInt()));
-
-  String _toString(TrufiLocalization localization) {
-    return toName == 'Destination' ? localization.commonDestination : toName;
   }
 
   IconData get iconData => transportMode.icon;
