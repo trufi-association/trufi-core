@@ -63,7 +63,7 @@ class ModesTransportEntity {
 
   bool get existWalkPlan =>
       (walkPlan?.itineraries?.isNotEmpty ?? false) &&
-      walkPlan.itineraries[0].walkDistance >
+      walkPlan.itineraries[0].walkDistance <
           PayloadDataPlanState.maxWalkDistance;
 
   bool get existBikePlan =>
