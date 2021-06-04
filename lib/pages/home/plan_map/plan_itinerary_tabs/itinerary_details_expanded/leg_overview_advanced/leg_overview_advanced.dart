@@ -52,9 +52,10 @@ class LegOverviewAdvanced extends StatelessWidget {
                         child: FittedBox(child: config.markers.fromMarker),
                       ),
                     )
-                  else
+                  else if (itinerary.legs.length > 1)
                     TransportDash(
                       leg: itineraryLeg,
+                      isFirstTransport: true,
                       isNextTransport: itineraryLeg.endTimeString ==
                           itinerary.legs[index + 1].startTimeString,
                     ),

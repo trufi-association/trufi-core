@@ -64,7 +64,8 @@ class TransportDash extends StatelessWidget {
                   ],
                 ),
                 if (configuration.planItineraryLegBuilder != null)
-                  configuration.planItineraryLegBuilder(context, leg),
+                  configuration.planItineraryLegBuilder(context, leg) ??
+                      Container(),
               ],
             ),
           ),
