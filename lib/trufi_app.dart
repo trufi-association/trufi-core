@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -125,6 +126,7 @@ class TrufiApp extends StatelessWidget {
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
+
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
@@ -137,7 +139,16 @@ class TrufiApp extends StatelessWidget {
         ),
         BlocProvider<PreferencesCubit>(
           create: (context) => PreferencesCubit(
-              socialMediaItem, configuration.map.center,
+              PreferenceState(
+                languageCode: configuration.supportedLanguages
+                    .firstWhere(
+                      (element) => element.isDefault,
+                      orElse: () => LanguageConfiguration("en", "", "English"),
+                    )
+                    .languageCode,
+              ),
+              socialMediaItem,
+              configuration.map.center,
               showWeather: configuration.showWeather),
         ),
         BlocProvider<CustomLayersCubit>(
