@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/duration_component.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/walk_distance.dart';
@@ -14,7 +15,7 @@ class BarItineraryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageCode = Localizations.localeOf(context).languageCode;
+    final localization = TrufiLocalization.of(context);
     return Container(
       height: 40,
       padding: const EdgeInsets.only(right: 15),
@@ -25,7 +26,7 @@ class BarItineraryDetails extends StatelessWidget {
             duration: itinerary.durationTrip,
             startTime: itinerary.startTime,
             endTime: itinerary.endTime,
-            futureText: itinerary.futureText(languageCode),
+            futureText: itinerary.futureText(localization),
           ),
           Row(
             children: [

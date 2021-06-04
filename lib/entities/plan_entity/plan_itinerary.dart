@@ -152,16 +152,15 @@ class PlanItinerary {
     return compressedLegs;
   }
 
-  String futureText(String languageCode) {
+  String futureText(TrufiLocalization localization) {
     final nowDate = DateTime.now();
     if (startTime.difference(nowDate).inDays == 0) {
       return '';
     }
     if (startTime.difference(nowDate).inDays == 1) {
-      // TODO translate
-      return "Tomorrow";
+      return localization.commonTomorrow;
     }
-    return DateFormat('E dd.MM.', languageCode).format(startTime);
+    return DateFormat('E dd.MM.', localization.localeName).format(startTime);
   }
 
   bool get hasAdvencedData =>

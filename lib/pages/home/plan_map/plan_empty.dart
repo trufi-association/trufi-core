@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
@@ -171,6 +172,7 @@ class __LoadLocationState extends State<_LoadLocation> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     final textStyle = theme.textTheme.bodyText1.copyWith(fontSize: 17);
     final hintStyle = theme.textTheme.bodyText2.copyWith(
       color: theme.textTheme.caption.color,
@@ -218,8 +220,7 @@ class __LoadLocationState extends State<_LoadLocation> {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          // TODO translation
-                          "Origin",
+                          localization.commonOrigin,
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
@@ -241,8 +242,7 @@ class __LoadLocationState extends State<_LoadLocation> {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          // TODO translation
-                          "Destination",
+                          localization.commonDestination,
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),

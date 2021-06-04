@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "@@last_modified": "2021-05-27T06:34:08+02:00",
+    "@@last_modified": "2021-06-04T23:44:34+02:00",
     "aboutContent": "We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -57,6 +57,10 @@
     "@commonCitybikes": {
         "description": "General Citybikes label"
     },
+    "commonConfirmLocation": "Confirm location",
+    "@commonConfirmLocation": {
+        "description": "General Confirm location label"
+    },
     "commonCustomPlaces": "Custom places",
     "@commonCustomPlaces": {
         "description": "General CustomPlaces label"
@@ -93,6 +97,10 @@
     "@commonLeavingNow": {
         "description": "General Leaving now label"
     },
+    "commonLoading": "Loading...",
+    "@commonLoading": {
+        "description": "General Loading label"
+    },
     "commonNoInternet": "No internet connection.",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
@@ -117,9 +125,17 @@
     "@commonShowMap": {
         "description": "General Show on map tilers label"
     },
+    "commonTomorrow": "Tomorrow",
+    "@commonTomorrow": {
+        "description": "General Tomorrow label"
+    },
     "commonUnknownError": "Unknown error",
     "@commonUnknownError": {
         "description": "Message when an unknown error has occured"
+    },
+    "commonUnkownPlace": "Unkown place",
+    "@commonUnkownPlace": {
+        "description": "General Unkown place label"
     },
     "commonWait": "Wait",
     "@commonWait": {
@@ -309,6 +325,10 @@
             }
         },
         "description": "Itinerary instruction (vehicle)"
+    },
+    "instructionVehicleBike": "Bike",
+    "@instructionVehicleBike": {
+        "description": "Vehicle name (Bike)"
     },
     "instructionVehicleBus": "Bus",
     "@instructionVehicleBus": {

@@ -189,8 +189,7 @@ extension TransportModeExtension on TransportMode {
   static String translates(TransportMode mode, TrufiLocalization localization) {
     return {
       TransportMode.airplane: null,
-      // TODO translate
-      TransportMode.bicycle: "Bike",
+      TransportMode.bicycle: localization.instructionVehicleBike,
       TransportMode.bus: localization.instructionVehicleBus,
       TransportMode.cableCar: localization.instructionVehicleGondola,
       TransportMode.car: localization.instructionVehicleCar,
