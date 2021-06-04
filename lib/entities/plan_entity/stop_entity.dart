@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class StopEntity {
   final String gtfsId;
   final double lat;
@@ -19,25 +21,34 @@ class StopEntity {
     this.id,
   });
 
-  factory StopEntity.fromJson(Map<String, dynamic> json) => StopEntity(
-        id: json['id'] as String,
-        gtfsId: json['gtfsId'] as String,
-        name: json['name'] as String,
-        lat: double.tryParse(json['lat'].toString()) ?? 0,
-        lon: double.tryParse(json['lon'].toString()) ?? 0,
-        code: json['code'] as String,
-        zoneId: json['zoneId'] as String,
-        platformCode: json['platformCode'] as String,
-      );
+  Map<String, dynamic> toMap() {
+    return {
+      'gtfsId': gtfsId,
+      'lat': lat,
+      'lon': lon,
+      'name': name,
+      'code': code,
+      'platformCode': platformCode,
+      'zoneId': zoneId,
+      'id': id,
+    };
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "gtfsId": gtfsId,
-        "name": name,
-        "lat": lat,
-        "lon": lon,
-        "code": code,
-        "zoneId": zoneId,
-        "platformCode": platformCode,
-      };
+  factory StopEntity.fromMap(Map<String, dynamic> map) {
+    return StopEntity(
+      id: map['id'] as String,
+      gtfsId: map['gtfsId'] as String,
+      name: map['name'] as String,
+      lat: double.tryParse(map['lat'].toString()) ?? 0,
+      lon: double.tryParse(map['lon'].toString()) ?? 0,
+      code: map['code'] as String,
+      zoneId: map['zoneId'] as String,
+      platformCode: map['platformCode'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory StopEntity.fromJson(String source) =>
+      StopEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 }

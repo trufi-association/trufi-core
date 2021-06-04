@@ -102,11 +102,11 @@ class PlanGraphQl {
     return PlanEntity(
       to: to.toPlanLocation(),
       from: from.toPlanLocation(),
-      itineraries: PlanEntity.removePlanItineraryDuplicates(itineraries
+      itineraries: itineraries
           .map(
             (itinerary) => itinerary.toPlanItinerary(),
           )
-          .toList()),
+          .toList(),
       error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
     );
   }
@@ -139,6 +139,14 @@ class _Location {
       name: name,
       longitude: lon,
       latitude: lat,
+    );
+  }
+
+  PlaceEntity toPlaceEntity() {
+    return PlaceEntity(
+      name: name,
+      lat: lat,
+      lon: lon,
     );
   }
 }
@@ -279,8 +287,8 @@ class _ItineraryLeg {
       distance: distance,
       duration: duration,
       routeLongName: route.routeLongName,
-      toName: to.name,
-      fromName: from.name,
+      toPlace: to.toPlaceEntity(),
+      fromPlace: from.toPlaceEntity(),
       // ignore: prefer_null_aware_operators
       intermediatePlaces: intermediatePlaces != null
           ? intermediatePlaces.map((x) => x.toPlaceEntity()).toList()

@@ -56,18 +56,54 @@ class ModesTransportEntity {
         _parkRidePlan: parkRidePlan?.toJson(),
       };
 
-  bool get existBikeAndPublicPlan =>
-      bikeAndPublicPlan?.itineraries?.isNotEmpty ?? false;
+  PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
+        ...bikeParkPlan?.itineraries ?? [],
+        ...bikeAndPublicPlan?.itineraries ?? []
+      ]);
 
-  bool get existBikeParkPlan => bikeParkPlan?.itineraries?.isNotEmpty ?? false;
+  bool get existWalkPlan =>
+      (walkPlan?.itineraries?.isNotEmpty ?? false) &&
+      walkPlan.itineraries[0].walkDistance <
+          PayloadDataPlanState.maxWalkDistance;
+
+  bool get existBikePlan =>
+      (bikePlan?.itineraries?.isNotEmpty ?? false) &&
+      !bikePlan.itineraries.every((itinerary) => itinerary.legs
+          .every((leg) => leg.transportMode == TransportMode.walk)) &&
+      bikePlan.itineraries[0].totalBikingDistance <
+          PayloadDataPlanState.suggestBikeMaxDistance;
+
+  bool get existBikeAndVehicle =>
+      _bikeAndPublicPlanHasItineraries || _bikeParkPlanHasItineraries;
 
   bool get existCarPlan => carPlan?.itineraries?.isNotEmpty ?? false;
 
   bool get existParkRidePlan => parkRidePlan?.itineraries?.isNotEmpty ?? false;
 
   bool get availableModesTransport =>
-      existBikeAndPublicPlan ||
-      existBikeParkPlan ||
+      existWalkPlan ||
+      existBikePlan ||
+      existBikeAndVehicle ||
       existCarPlan ||
       existParkRidePlan;
+
+  Widget getIconBikePublic() {
+    final publicModes = bikeParkPlan.itineraries[0].legs
+        .where(
+          (element) =>
+              element.transportMode != TransportMode.walk &&
+              element.transportMode != TransportMode.bicycle,
+        )
+        .toList();
+    if (publicModes.isNotEmpty) {
+      return publicModes[0].transportMode.image;
+    }
+    return Container();
+  }
+
+  bool get _bikeAndPublicPlanHasItineraries =>
+      hasItinerariesContainingPublicTransit(bikeAndPublicPlan);
+
+  bool get _bikeParkPlanHasItineraries =>
+      hasItinerariesContainingPublicTransit(bikeParkPlan);
 }
