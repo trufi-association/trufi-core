@@ -17,3 +17,11 @@ bool hasItinerariesContainingPublicTransit(PlanEntity bikeAndPublicPlan) {
   }
   return false;
 }
+
+List<PlanItinerary> filterOnlyBikeAndWalk(List<PlanItinerary> itineraries) {
+  return itineraries
+      .where((itinerary) => !itinerary.legs.every((leg) =>
+          leg.transportMode == TransportMode.bicycle ||
+          leg.transportMode == TransportMode.walk))
+      .toList();
+}
