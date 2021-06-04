@@ -9,25 +9,28 @@ String displayDistanceWithLocale(
     TrufiLocalization localization, double meters) {
   if (meters < 100) {
     return localization.instructionDistanceMeters(
-        NumberFormat.decimalPattern('de').format(
+        NumberFormat.decimalPattern(localization.localeName).format(
             double.parse(((meters / 10).round() * 10).toStringAsFixed(1))));
   }
   if (meters < 975) {
     return localization.instructionDistanceMeters(
-        NumberFormat.decimalPattern('de').format(
+        NumberFormat.decimalPattern(localization.localeName).format(
             double.parse(((meters / 50).round() * 50).toStringAsFixed(1))));
   }
   if (meters < 10000) {
-    return localization.instructionDistanceKm(NumberFormat.decimalPattern('de')
-        .format(double.parse(
-            (((meters / 100).round() * 100) / 1000).toStringAsFixed(1))));
+    return localization.instructionDistanceKm(
+        NumberFormat.decimalPattern(localization.localeName).format(
+            double.parse(
+                (((meters / 100).round() * 100) / 1000).toStringAsFixed(1))));
   }
   if (meters < 100000) {
-    return localization.instructionDistanceKm(NumberFormat.decimalPattern('de')
-        .format(double.parse((meters / 1000).round().toStringAsFixed(1))));
+    return localization.instructionDistanceKm(
+        NumberFormat.decimalPattern(localization.localeName)
+            .format(double.parse((meters / 1000).round().toStringAsFixed(1))));
   }
-  return localization.instructionDistanceKm(NumberFormat.decimalPattern('de')
-      .format(double.parse(((meters / 1000).round() * 10).toStringAsFixed(1))));
+  return localization.instructionDistanceKm(
+      NumberFormat.decimalPattern(localization.localeName).format(
+          double.parse(((meters / 1000).round() * 10).toStringAsFixed(1))));
 }
 
 double estimateItineraryDistance(LatLng from, LatLng to,
