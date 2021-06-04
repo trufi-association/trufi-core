@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 
-
 String parsePlace(TrufiLocation location) {
   return "${location.description}::${location.latitude},${location.longitude}";
 }
@@ -12,7 +11,7 @@ List<Map<String, String>> parseBikeAndPublicModes(List<TransportMode> list) {
       .map((e) => <String, String>{
             'mode': e.name,
           })
-      .where((e) => e['mode'] != TransportMode.walk.name)
+      .where((e) => e['mode'] != TransportMode.bicycle.name)
       .toList();
   dataParse.add({"mode": TransportMode.bicycle.name});
   return dataParse;
@@ -23,6 +22,7 @@ List<Map<String, String>> parsebikeParkModes(List<TransportMode> list) {
       .map((e) => <String, String>{
             'mode': e.name,
           })
+      .where((e) => e['mode'] != TransportMode.bicycle.name)
       .toList();
   dataParse.add({"mode": TransportMode.bicycle.name, 'qualifier': 'PARK'});
   return dataParse;

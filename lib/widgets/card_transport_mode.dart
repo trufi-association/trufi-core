@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CardTransportMode extends StatelessWidget {
   final Widget icon;
+  final Widget secondaryIcon;
   final String title;
   final String subtitle;
   final void Function() onTap;
@@ -12,6 +13,7 @@ class CardTransportMode extends StatelessWidget {
     @required this.title,
     @required this.subtitle,
     @required this.onTap,
+    this.secondaryIcon,
   }) : super(key: key);
 
   @override
@@ -28,7 +30,18 @@ class CardTransportMode extends StatelessWidget {
               SizedBox(
                 height: 27,
                 width: 27,
-                child: icon,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    if (secondaryIcon != null)
+                      Positioned(
+                        right: -1,
+                        top: -2,
+                        child: secondaryIcon,
+                      ),
+                    Positioned.fill(child: icon),
+                  ],
+                ),
               ),
               const SizedBox(width: 6),
               Column(
