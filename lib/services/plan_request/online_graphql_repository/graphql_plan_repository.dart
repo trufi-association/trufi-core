@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
+import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 
@@ -42,7 +43,9 @@ class GraphQLPlanRepository {
     );
     final dataStopsTimes = await client.query(listStopTimes);
     if (dataStopsTimes.hasException && dataStopsTimes.data == null) {
-      throw Exception("Bad request");
+      throw dataStopsTimes.exception.graphqlErrors.isNotEmpty
+          ? Exception("Bad request")
+          : Exception("Internet no connection");
     }
     final stopData = PlanGraphQl.fromJson(
         dataStopsTimes.data['plan'] as Map<String, dynamic>);
@@ -116,7 +119,9 @@ class GraphQLPlanRepository {
     );
     final dataStopsTimes = await client.query(listStopTimes);
     if (dataStopsTimes.hasException && dataStopsTimes.data == null) {
-      throw Exception("Bad request");
+      throw dataStopsTimes.exception.graphqlErrors.isNotEmpty
+          ? Exception("Bad request")
+          : Exception("Internet no connection");
     }
     final stopData = PlanGraphQl.fromJson(
         dataStopsTimes.data['viewer']['plan'] as Map<String, dynamic>);
@@ -129,6 +134,8 @@ class GraphQLPlanRepository {
     @required PayloadDataPlanState advancedOptions,
     String locale,
   }) async {
+    final linearDistance =
+        estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
     final WatchQueryOptions listStopTimes = WatchQueryOptions(
       document: addFragments(
         parseString(walkbike_queries.summaryPageWalkBikeQuery),
@@ -163,38 +170,46 @@ class GraphQLPlanRepository {
         'wheelchair': advancedOptions.wheelchair,
         'ticketTypes': null,
         'disableRemainingWeightHeuristic': advancedOptions.transportModes
-            .map((e) => e.name)
-            .contains('BICYCLE'),
+            .map((e) => '${e.name}_${e.qualifier ?? ''}')
+            .contains('BICYCLE_RENT'),
         'arriveBy': advancedOptions.arriveBy,
         'transferPenalty': 0,
         'bikeSpeed': advancedOptions.typeBikingSpeed.value,
         'optimize': advancedOptions.includeBikeSuggestions
             ? OptimizeType.triangle.name
-            : OptimizeType.quick.name,
-        'triangle': advancedOptions.includeBikeSuggestions
-            ? OptimizeType.triangle.value
-            : OptimizeType.quick.value,
+            : OptimizeType.greenWays.name,
+        'triangle': OptimizeType.triangle.value,
         'itineraryFiltering': 1.5,
         'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
         'locale': locale ?? 'en',
-        'bikeAndPublicMaxWalkDistance': 15000,
+        'bikeAndPublicMaxWalkDistance':
+            PayloadDataPlanState.bikeAndPublicMaxWalkDistance,
         'bikeAndPublicModes':
             parseBikeAndPublicModes(advancedOptions.transportModes),
         'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes),
-        'bikeandPublicDisableRemainingWeightHeuristic': true,
-        'shouldMakeWalkQuery': false,
-        'shouldMakeBikeQuery': false,
-        'shouldMakeCarQuery': advancedOptions.includeCarSuggestions,
+        'bikeandPublicDisableRemainingWeightHeuristic': false,
+        'shouldMakeWalkQuery': !advancedOptions.wheelchair &&
+            linearDistance < PayloadDataPlanState.maxWalkDistance,
+        'shouldMakeBikeQuery': !advancedOptions.wheelchair &&
+            linearDistance < PayloadDataPlanState.suggestBikeMaxDistance &&
+            advancedOptions.includeBikeSuggestions,
+        'shouldMakeCarQuery': advancedOptions.includeCarSuggestions &&
+            linearDistance > PayloadDataPlanState.suggestCarMinDistance,
         'shouldMakeParkRideQuery':
-            advancedOptions.includeParkAndRideSuggestions,
-        'showBikeAndParkItineraries': advancedOptions.includeBikeSuggestions,
-        'showBikeAndPublicItineraries': advancedOptions.includeBikeSuggestions,
+            advancedOptions.includeParkAndRideSuggestions &&
+                linearDistance > PayloadDataPlanState.suggestCarMinDistance,
+        'showBikeAndParkItineraries': !advancedOptions.wheelchair &&
+            advancedOptions.includeBikeSuggestions,
+        'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&
+            advancedOptions.includeBikeSuggestions,
       },
       fetchResults: true,
     );
     final dataStopsTimes = await client.query(listStopTimes);
     if (dataStopsTimes.hasException && dataStopsTimes.data == null) {
-      throw Exception("Bad request");
+      throw dataStopsTimes.exception.graphqlErrors.isNotEmpty
+          ? Exception("Bad request")
+          : Exception("Internet no connection");
     }
     final stopData = ModesTransport.fromJson(dataStopsTimes.data);
 
