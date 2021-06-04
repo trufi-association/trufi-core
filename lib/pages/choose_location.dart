@@ -158,13 +158,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // TODO: translate
                   Text(
                     locationData != null
                         ? locationData.description != ""
                             ? locationData.description
-                            : "unkown place"
-                        : "Loading...",
+                            : localization.commonUnkownPlace
+                        : localization.commonLoading,
                     style: textStyle,
                   ),
                   Text(
@@ -184,8 +183,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Text(
-                            // TODO translation
-                            "Confirm location",
+                            localization.commonConfirmLocation,
                             style: TextStyle(
                                 color: locationData != null
                                     ? Theme.of(context).primaryColor

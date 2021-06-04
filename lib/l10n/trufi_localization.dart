@@ -194,6 +194,12 @@ abstract class TrufiLocalization {
   /// **'Citybikes'**
   String get commonCitybikes;
 
+  /// General Confirm location label
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm location'**
+  String get commonConfirmLocation;
+
   /// General CustomPlaces label
   ///
   /// In en, this message translates to:
@@ -248,6 +254,12 @@ abstract class TrufiLocalization {
   /// **'Leaving now'**
   String get commonLeavingNow;
 
+  /// General Loading label
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get commonLoading;
+
   /// Message when internet connection is lost
   ///
   /// In en, this message translates to:
@@ -284,11 +296,23 @@ abstract class TrufiLocalization {
   /// **'Show on map'**
   String get commonShowMap;
 
+  /// General Tomorrow label
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get commonTomorrow;
+
   /// Message when an unknown error has occured
   ///
   /// In en, this message translates to:
   /// **'Unknown error'**
   String get commonUnknownError;
+
+  /// General Unkown place label
+  ///
+  /// In en, this message translates to:
+  /// **'Unkown place'**
+  String get commonUnkownPlace;
 
   /// General wait label
   ///
@@ -494,6 +518,12 @@ abstract class TrufiLocalization {
   /// **'Ride {vehicle} for {duration} ({distance}) to\n{location}'**
   String instructionRide(
       Object vehicle, Object distance, Object duration, Object location);
+
+  /// Vehicle name (Bike)
+  ///
+  /// In en, this message translates to:
+  /// **'Bike'**
+  String get instructionVehicleBike;
 
   /// Vehicle name (Bus)
   ///

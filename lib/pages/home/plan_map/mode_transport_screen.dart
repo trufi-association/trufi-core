@@ -62,10 +62,8 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          // TODO translate
           children: [
-            Text(
-                '${widget.title} (${widget.plan.itineraries.length} itineraries)')
+            Text('${widget.title} (${widget.plan.itineraries.length})')
           ],
         ),
       ),

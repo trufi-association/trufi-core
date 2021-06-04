@@ -52,6 +52,9 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String get commonCitybikes => 'Citybikes';
 
   @override
+  String get commonConfirmLocation => 'Show on map';
+
+  @override
   String get commonCustomPlaces => 'Custom places';
 
   @override
@@ -79,6 +82,9 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String get commonLeavingNow => 'Leaving now';
 
   @override
+  String get commonLoading => 'Show on map';
+
+  @override
   String get commonNoInternet => 'Sin conexión a internet.';
 
   @override
@@ -97,7 +103,13 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String get commonShowMap => 'Show on map';
 
   @override
+  String get commonTomorrow => 'Show on map';
+
+  @override
   String get commonUnknownError => 'Error desconocido';
+
+  @override
+  String get commonUnkownPlace => 'Show on map';
 
   @override
   String get commonWait => 'Wait';
@@ -216,6 +228,9 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
     return 'Tomar ${vehicle} por ${duration} (${distance}) hasta\n${location}';
   }
+
+  @override
+  String get instructionVehicleBike => 'Bus';
 
   @override
   String get instructionVehicleBus => 'Bus';

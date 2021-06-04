@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 
 import '../../transport_icon_detail.dart';
 
@@ -13,10 +14,12 @@ class TransportDash extends StatelessWidget {
   final double dashWidth;
   final PlanItineraryLeg leg;
   final bool isNextTransport;
+  final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
     this.isNextTransport = false,
+    this.isFirstTransport = false,
     this.height = 1,
     this.dashWidth = 5.0,
   });
@@ -32,6 +35,13 @@ class TransportDash extends StatelessWidget {
           date: leg.startTimeString.toString(),
           location: leg.fromPlace.name.toString(),
           color: leg.transportMode.color,
+          child: isFirstTransport
+              ? SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: FittedBox(child: configuration.markers.fromMarker),
+                )
+              : null,
         ),
         SeparatorPlace(
           color: leg.transportMode.color,
@@ -84,12 +94,14 @@ class WalkDash extends StatelessWidget {
       children: [
         SeparatorPlace(
           color: leg.transportMode.color,
-          separator: Icon(
-            TransportMode.walk.icon,
-            color: TransportMode.walk.color,
+          separator: Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            height: 19,
+            width: 19,
+            child: walkSvg,
           ),
           child: Text(
-              ' ${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
         ),
       ],
     );
@@ -113,7 +125,12 @@ class WaitDash extends StatelessWidget {
         ),
         SeparatorPlace(
           color: Colors.grey,
-          separator: const SizedBox(height: 20),
+          separator: Container(
+            margin: const EdgeInsets.symmetric(vertical: 2),
+            height: 20,
+            width: 20,
+            child: waitSvg,
+          ),
           child: Text(
               "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
         ),
@@ -160,6 +177,7 @@ class SeparatorPlace extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(width: 5),
         if (child != null) child,
       ],
     );

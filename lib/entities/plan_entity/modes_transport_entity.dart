@@ -57,8 +57,8 @@ class ModesTransportEntity {
       };
 
   PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
-        ...bikeParkPlan?.itineraries ?? [],
-        ...bikeAndPublicPlan?.itineraries ?? []
+        ...filterOnlyBikeAndWalk(bikeParkPlan?.itineraries ?? []),
+        ...filterOnlyBikeAndWalk(bikeAndPublicPlan?.itineraries ?? [])
       ]);
 
   bool get existWalkPlan =>
@@ -88,7 +88,8 @@ class ModesTransportEntity {
       existParkRidePlan;
 
   Widget getIconBikePublic() {
-    final publicModes = bikeParkPlan.itineraries[0].legs
+    final publicModes = filterOnlyBikeAndWalk(bikeParkPlan.itineraries)[0]
+        .legs
         .where(
           (element) =>
               element.transportMode != TransportMode.walk &&

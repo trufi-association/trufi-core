@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/plan_entity/place_entity.dart';
-
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -97,6 +96,18 @@ class PlanGraphQl {
         "to": to.toJson(),
         "itineraries": List<dynamic>.from(itineraries.map((x) => x.toJson())),
       };
+
+  PlanGraphQl copyWith({
+    _Location from,
+    _Location to,
+    List<_Itinerary> itineraries,
+  }) {
+    return PlanGraphQl(
+      from: from ?? this.from,
+      to: to ?? this.to,
+      itineraries: itineraries ?? this.itineraries,
+    );
+  }
 
   PlanEntity toPlan() {
     return PlanEntity(

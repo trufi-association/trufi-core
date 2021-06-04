@@ -116,7 +116,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bicycle: SvgPicture.string(citybike ?? ""),
     TransportMode.bus: SvgPicture.string(bus ?? ""),
     TransportMode.cableCar: null,
-    TransportMode.car: SvgPicture.string(carpool ?? ""),
+    TransportMode.car: SvgPicture.string(car ?? ""),
     TransportMode.carPool: SvgPicture.string(carpool ?? ""),
     TransportMode.ferry: null,
     TransportMode.flexible: null,
@@ -127,7 +127,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.subway: SvgPicture.string(subway ?? ""),
     TransportMode.tram: null,
     TransportMode.transit: null,
-    TransportMode.walk: null,
+    TransportMode.walk: SvgPicture.string(walk ?? ""),
     // route icons for specific types of transportation
     TransportMode.trufi: null,
     TransportMode.micro: null,
@@ -151,7 +151,31 @@ extension TransportModeExtension on TransportMode {
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,
-    TransportMode.walk: Colors.grey[850],
+    TransportMode.walk: Colors.grey[700],
+    // route icons for specific types of transportation
+    TransportMode.trufi: const Color(0xffff260c),
+    TransportMode.micro: const Color(0xffff260c),
+    TransportMode.miniBus: const Color(0xffff260c),
+    TransportMode.lightRail: const Color(0xff83b23b),
+  };
+
+  static final backgroundColors = <TransportMode, Color>{
+    TransportMode.airplane: null,
+    TransportMode.bicycle: Colors.blue,
+    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.cableCar: null,
+    TransportMode.car: Colors.transparent,
+    TransportMode.carPool: const Color(0xff9fc726),
+    TransportMode.ferry: null,
+    TransportMode.flexible: null,
+    TransportMode.funicular: null,
+    TransportMode.gondola: null,
+    TransportMode.legSwitch: null,
+    TransportMode.rail: const Color(0xff83b23b),
+    TransportMode.subway: Colors.blueAccent[700],
+    TransportMode.tram: null,
+    TransportMode.transit: null,
+    TransportMode.walk: Colors.transparent,
     // route icons for specific types of transportation
     TransportMode.trufi: const Color(0xffff260c),
     TransportMode.micro: const Color(0xffff260c),
@@ -165,8 +189,7 @@ extension TransportModeExtension on TransportMode {
   static String translates(TransportMode mode, TrufiLocalization localization) {
     return {
       TransportMode.airplane: null,
-      // TODO translate
-      TransportMode.bicycle: "Bike",
+      TransportMode.bicycle: localization.instructionVehicleBike,
       TransportMode.bus: localization.instructionVehicleBus,
       TransportMode.cableCar: localization.instructionVehicleGondola,
       TransportMode.car: localization.instructionVehicleCar,
@@ -195,11 +218,7 @@ extension TransportModeExtension on TransportMode {
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
   Color get color => colors[this] ?? Colors.grey;
-  SvgPicture get image =>
-      images[this] ??
-      SvgPicture.asset(
-        "assets/images/transport_modes/icon-icon_bus-live-green.svg",
-        package: "trufi_core",
-      );
+  Color get backgroundColor => backgroundColors[this] ?? Colors.transparent;
+  Widget get image => images[this];
   String get qualifier => qualifiers[this];
 }

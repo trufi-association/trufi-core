@@ -41,19 +41,26 @@ class LegOverviewAdvanced extends StatelessWidget {
                   const Divider(
                     color: Colors.black,
                   ),
-                  DashLinePlace(
-                    date: itinerary.startTimeHHmm.toString(),
-                    location:
-                        _getDisplayName(itineraryLeg.fromPlace.name, localization),
-                    child: SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: FittedBox(child: config.markers.fromMarker),
+                  if (itineraryLeg.transportMode == TransportMode.walk)
+                    DashLinePlace(
+                      date: itinerary.startTimeHHmm.toString(),
+                      location: _getDisplayName(
+                          itineraryLeg.fromPlace.name, localization),
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: FittedBox(child: config.markers.fromMarker),
+                      ),
+                    )
+                  else
+                    TransportDash(
+                      leg: itineraryLeg,
+                      isNextTransport: itineraryLeg.endTimeString ==
+                          itinerary.legs[index + 1].startTimeString,
                     ),
-                  )
                 ],
-              ),
-            if (itineraryLeg.transportMode == TransportMode.walk &&
+              )
+            else if (itineraryLeg.transportMode == TransportMode.walk &&
                 index < itinerary.legs.length - 1)
               Column(
                 children: [
@@ -95,8 +102,8 @@ class LegOverviewAdvanced extends StatelessWidget {
                     ),
                   DashLinePlace(
                     date: itinerary.endTimeHHmm.toString(),
-                    location:
-                        _getDisplayName(itineraryLeg.toPlace.name, localization),
+                    location: _getDisplayName(
+                        itineraryLeg.toPlace.name, localization),
                     child: SizedBox(
                         height: 24,
                         width: 24,

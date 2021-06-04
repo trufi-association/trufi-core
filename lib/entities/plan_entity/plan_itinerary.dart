@@ -87,76 +87,80 @@ class PlanItinerary {
   List<PlanItineraryLeg> get compressLegs {
     final usingOwnBicycle = legs.any(
       (leg) =>
-          leg.transportMode == TransportMode.bicycle && leg.rentedBike == false,
+          getLegModeByKey(leg.transportMode.name) == LegMode.bicycle &&
+          leg.rentedBike == false,
     );
     final compressedLegs = <PlanItineraryLeg>[];
-    if (legs.isNotEmpty) {
-      PlanItineraryLeg compressedLeg = legs[0].copyWith();
-      for (final PlanItineraryLeg currentLeg in legs) {
-        if (currentLeg.intermediatePlaces != null) {
-          compressedLegs.add(compressedLeg);
-          compressedLeg = currentLeg.copyWith();
-          continue;
-        }
-
-        if (usingOwnBicycle && continueWithBicycle(compressedLeg, currentLeg)) {
-          final newBikePark = compressedLeg?.toPlace?.bikeParkEntity ??
-              currentLeg?.toPlace?.bikeParkEntity;
-          compressedLeg = compressedLeg.copyWith(
-            duration: compressedLeg.duration + currentLeg.duration,
-            distance: compressedLeg.distance + currentLeg.distance,
-            toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
-            endTime: currentLeg.endTime,
-            mode: TransportMode.bicycle.name,
-          );
-          continue;
-        }
-
-        if (currentLeg.rentedBike != null &&
-            continueWithRentedBicycle(compressedLeg, currentLeg) &&
-            !bikingEnded(currentLeg)) {
-          compressedLeg = compressedLeg.copyWith(
-            duration: compressedLeg.duration + currentLeg.duration,
-            distance: compressedLeg.distance + currentLeg.distance,
-            toPlace: currentLeg.toPlace,
-            endTime: currentLeg.endTime,
-            mode: TransportMode.bicycle.name,
-          );
-          continue;
-        }
-
-        if (usingOwnBicycle &&
-            getLegModeByKey(compressedLeg.mode) == LegMode.walk) {
-          compressedLeg = compressedLeg.copyWith(
-            mode: LegMode.bicycleWalk.name,
-          );
-        }
-
+    PlanItineraryLeg compressedLeg;
+    for (final PlanItineraryLeg currentLeg in legs) {
+      if (compressedLeg == null) {
+        compressedLeg = currentLeg.copyWith();
+        continue;
+      }
+      if (currentLeg.intermediatePlaces != null) {
         compressedLegs.add(compressedLeg);
         compressedLeg = currentLeg.copyWith();
-
-        if (usingOwnBicycle &&
-            getLegModeByKey(currentLeg.mode) == LegMode.walk) {
-          compressedLeg = compressedLeg.copyWith(
-            mode: LegMode.bicycleWalk.name,
-          );
-        }
+        continue;
       }
+
+      if (usingOwnBicycle && continueWithBicycle(compressedLeg, currentLeg)) {
+        final newBikePark = compressedLeg?.toPlace?.bikeParkEntity ??
+            currentLeg?.toPlace?.bikeParkEntity;
+        compressedLeg = compressedLeg.copyWith(
+          duration: compressedLeg.duration + currentLeg.duration,
+          distance: compressedLeg.distance + currentLeg.distance,
+          toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
+          endTime: currentLeg.endTime,
+          mode: TransportMode.bicycle.name,
+        );
+        continue;
+      }
+
+      if (currentLeg.rentedBike != null &&
+          continueWithRentedBicycle(compressedLeg, currentLeg) &&
+          !bikingEnded(currentLeg)) {
+        compressedLeg = compressedLeg.copyWith(
+          duration: compressedLeg.duration + currentLeg.duration,
+          distance: compressedLeg.distance + currentLeg.distance,
+          toPlace: currentLeg.toPlace,
+          endTime: currentLeg.endTime,
+          mode: TransportMode.bicycle.name,
+        );
+        continue;
+      }
+
+      if (usingOwnBicycle &&
+          getLegModeByKey(compressedLeg.mode) == LegMode.walk) {
+        compressedLeg = compressedLeg.copyWith(
+          mode: LegMode.bicycleWalk.name,
+        );
+      }
+
+      compressedLegs.add(compressedLeg);
+      compressedLeg = currentLeg.copyWith();
+
+      if (usingOwnBicycle && getLegModeByKey(currentLeg.mode) == LegMode.walk) {
+        compressedLeg = compressedLeg.copyWith(
+          mode: LegMode.bicycleWalk.name,
+        );
+      }
+    }
+    if (compressedLeg != null) {
       compressedLegs.add(compressedLeg);
     }
+
     return compressedLegs;
   }
 
-  String futureText(String languageCode) {
+  String futureText(TrufiLocalization localization) {
     final nowDate = DateTime.now();
     if (startTime.difference(nowDate).inDays == 0) {
       return '';
     }
     if (startTime.difference(nowDate).inDays == 1) {
-      // TODO translate
-      return "Tomorrow";
+      return localization.commonTomorrow;
     }
-    return DateFormat('E dd.MM.', languageCode).format(startTime);
+    return DateFormat('E dd.MM.', localization.localeName).format(startTime);
   }
 
   bool get hasAdvencedData =>
