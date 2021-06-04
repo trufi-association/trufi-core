@@ -15,10 +15,11 @@ class BarItineraryDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageCode = Localizations.localeOf(context).languageCode;
-    return SizedBox(
+    return Container(
       height: 40,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.only(right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           DurationComponent(
             duration: itinerary.durationTrip,
@@ -26,19 +27,22 @@ class BarItineraryDetails extends StatelessWidget {
             endTime: itinerary.endTime,
             futureText: itinerary.futureText(languageCode),
           ),
-          // TODO adding spacer
-          if (itinerary.totalWalkingDistance > 0)
-            WalkDistance(
-              walkDistance: itinerary.totalWalkingDistance,
-              walkDuration: itinerary.totalWalkingDuration,
-            ),
-          if (itinerary.totalBikingDistance != null &&
-              itinerary.totalBikingDistance > 0)
-            WalkDistance(
-              walkDistance: itinerary.totalBikingDistance,
-              walkDuration: itinerary.totalBikingDuration,
-              icon: bikeSvg,
-            ),
+          Row(
+            children: [
+              if (itinerary.totalWalkingDistance > 0)
+                WalkDistance(
+                  walkDistance: itinerary.totalWalkingDistance,
+                  walkDuration: itinerary.totalWalkingDuration,
+                ),
+              if (itinerary.totalBikingDistance != null &&
+                  itinerary.totalBikingDistance > 0)
+                WalkDistance(
+                  walkDistance: itinerary.totalBikingDistance,
+                  walkDuration: itinerary.totalBikingDuration,
+                  icon: bikeSvg,
+                ),
+            ],
+          )
         ],
       ),
     );

@@ -18,19 +18,25 @@ class LegTransportIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
-        color: leg.transportMode.color,
+        color: leg.transportMode.backgroundColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         children: [
-          Icon(leg.transportMode.icon, color: Colors.white),
+          if (leg?.transportMode?.image != null)
+            SizedBox(height: 28, width: 28, child: leg.transportMode.image)
+          else
+            Icon(leg.transportMode.icon, color: Colors.white),
           if (leg.transportMode != TransportMode.walk)
             Padding(
-              padding: EdgeInsets.only(right: leg.route.isEmpty ? 0 : 2),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                leg.route.toString(),
+                leg.route.isNotEmpty ? leg.route : leg.transportMode.name,
                 style: theme.primaryTextTheme.headline6.copyWith(
                   fontWeight: FontWeight.w600,
+                  color: leg.transportMode == TransportMode.car
+                      ? leg.transportMode.color
+                      : null,
                 ),
               ),
             )
@@ -38,7 +44,8 @@ class LegTransportIcon extends StatelessWidget {
             Text(
               localization.instructionDurationMinutes(
                   (leg.duration.ceil() / 60).ceil()),
-              style: theme.primaryTextTheme.headline6,
+              style: theme.primaryTextTheme.headline6
+                  .copyWith(color: leg?.transportMode?.color),
             ),
         ],
       ),
