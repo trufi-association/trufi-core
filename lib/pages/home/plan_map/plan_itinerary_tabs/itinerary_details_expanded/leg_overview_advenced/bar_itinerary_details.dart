@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/duration_component.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/walk_distance.dart';
 
 class BarItineraryDetails extends StatelessWidget {
   final PlanItinerary itinerary;
@@ -13,55 +14,31 @@ class BarItineraryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final languageCode = Localizations.localeOf(context).languageCode;
-    final localization = TrufiLocalization.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, top: 5),
-      child: Column(
+    return SizedBox(
+      height: 40,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.timer_sharp),
-              const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${itinerary.durationTripString(localization)} ',
-                    style: theme.primaryTextTheme.bodyText1
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                      '${itinerary.startTimeComplete(languageCode)} - ${itinerary.endTimeHHmm}',
-                      style: theme.primaryTextTheme.bodyText1
-                          .copyWith(fontWeight: FontWeight.w400)),
-                ],
-              ),
-              const Spacer(),
-              Icon(TransportMode.walk.icon),
-              const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    itinerary.walkTimeHHmm(localization),
-                    style: theme.primaryTextTheme.bodyText1
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    itinerary.getWalkDistanceString(localization),
-                    style: theme.primaryTextTheme.bodyText1
-                        .copyWith(fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-            ],
+          DurationComponent(
+            duration: itinerary.durationTrip,
+            startTime: itinerary.startTime,
+            endTime: itinerary.endTime,
+            futureText: itinerary.futureText(languageCode),
           ),
-          const Divider(
-            color: Colors.black,
-          ),
+          // TODO adding spacer
+          if (itinerary.totalWalkingDistance > 0)
+            WalkDistance(
+              walkDistance: itinerary.totalWalkingDistance,
+              walkDuration: itinerary.totalWalkingDuration,
+            ),
+          if (itinerary.totalBikingDistance != null &&
+              itinerary.totalBikingDistance > 0)
+            WalkDistance(
+              walkDistance: itinerary.totalBikingDistance,
+              walkDuration: itinerary.totalBikingDuration,
+              icon: bikeSvg,
+            ),
         ],
       ),
     );

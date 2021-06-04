@@ -36,9 +36,12 @@ class LegOverviewAdvenced extends StatelessWidget {
               Column(
                 children: [
                   BarItineraryDetails(itinerary: itinerary),
+                  const Divider(
+                    color: Colors.black,
+                  ),
                   DashLinePlace(
                     date: itinerary.startTimeHHmm.toString(),
-                    location: itineraryLeg.fromName,
+                    location: itineraryLeg.fromPlace.name,
                     child: SizedBox(
                         height: 24,
                         width: 24,
@@ -88,7 +91,7 @@ class LegOverviewAdvenced extends StatelessWidget {
                     ),
                   DashLinePlace(
                     date: itinerary.endTimeHHmm.toString(),
-                    location: itineraryLeg.toName,
+                    location: itineraryLeg.toPlace.name,
                     child: SizedBox(
                         height: 24,
                         width: 24,
