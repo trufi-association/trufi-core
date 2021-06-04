@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -23,6 +25,7 @@ class TransportDash extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final configuration = context.read<ConfigurationCubit>().state;
     return Column(
       children: [
         DashLinePlace(
@@ -32,18 +35,28 @@ class TransportDash extends StatelessWidget {
         ),
         SeparatorPlace(
           color: leg.transportMode.color,
-          child: Row(
-            children: [
-              LegTransportIcon(leg: leg),
-              Text(
-                '  ${leg.durationLeg(localization).toString()}',
-                style: theme.primaryTextTheme.bodyText1,
-              ),
-              Text(
-                ' (${leg.distanceString(localization)})',
-                style: theme.primaryTextTheme.bodyText1,
-              ),
-            ],
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LegTransportIcon(leg: leg),
+                    Text(
+                      '  ${leg.durationLeg(localization).toString()}',
+                      style: theme.primaryTextTheme.bodyText1,
+                    ),
+                    Text(
+                      ' (${leg.distanceString(localization)})',
+                      style: theme.primaryTextTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                if (configuration.planItineraryLegBuilder != null)
+                  configuration.planItineraryLegBuilder(context, leg),
+              ],
+            ),
           ),
         ),
         if (isNextTransport)
