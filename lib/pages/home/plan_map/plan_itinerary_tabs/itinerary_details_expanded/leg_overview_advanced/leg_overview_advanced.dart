@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/defaults_location.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
-class LegOverviewAdvenced extends StatelessWidget {
+class LegOverviewAdvanced extends StatelessWidget {
   static const _paddingHeight = 20.0;
 
   final PlanItinerary itinerary;
 
-  const LegOverviewAdvenced({
+  const LegOverviewAdvanced({
     Key key,
     @required this.itinerary,
   }) : super(key: key);
@@ -30,6 +31,7 @@ class LegOverviewAdvenced extends StatelessWidget {
       ),
       itemBuilder: (BuildContext context, int index) {
         final itineraryLeg = itinerary.legs[index];
+        final localization = TrufiLocalization.of(context);
         return Column(
           children: [
             if (index == 0)
@@ -41,11 +43,13 @@ class LegOverviewAdvenced extends StatelessWidget {
                   ),
                   DashLinePlace(
                     date: itinerary.startTimeHHmm.toString(),
-                    location: itineraryLeg.fromPlace.name,
+                    location:
+                        _getDisplayName(itineraryLeg.fromPlace.name, localization),
                     child: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: FittedBox(child: config.markers.fromMarker)),
+                      height: 24,
+                      width: 24,
+                      child: FittedBox(child: config.markers.fromMarker),
+                    ),
                   )
                 ],
               ),
@@ -91,7 +95,8 @@ class LegOverviewAdvenced extends StatelessWidget {
                     ),
                   DashLinePlace(
                     date: itinerary.endTimeHHmm.toString(),
-                    location: itineraryLeg.toPlace.name,
+                    location:
+                        _getDisplayName(itineraryLeg.toPlace.name, localization),
                     child: SizedBox(
                         height: 24,
                         width: 24,
@@ -104,5 +109,14 @@ class LegOverviewAdvenced extends StatelessWidget {
       },
       itemCount: itinerary.legs.length,
     );
+  }
+
+  String _getDisplayName(String name, TrufiLocalization localization) {
+    if (name == DefaultLocation.defaultHome.keyLocation) {
+      return localization.defaultLocationHome;
+    } else if (name == DefaultLocation.defaultWork.keyLocation) {
+      return localization.defaultLocationWork;
+    }
+    return name;
   }
 }
