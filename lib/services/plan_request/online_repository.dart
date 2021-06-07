@@ -173,7 +173,7 @@ class OnlineRepository implements RequestManager {
     PayloadDataPlanState advancedOptions,
   }) {
     // TODO: implement fetchMytransportModePlan
-    throw UnimplementedError();
+    throw Exception("UnimplementedError");
   }
 }
 
