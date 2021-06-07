@@ -87,21 +87,6 @@ class ModesTransportEntity {
       existCarPlan ||
       existParkRidePlan;
 
-  Widget getIconBikePublic() {
-    final publicModes = filterOnlyBikeAndWalk(bikeParkPlan.itineraries)[0]
-        .legs
-        .where(
-          (element) =>
-              element.transportMode != TransportMode.walk &&
-              element.transportMode != TransportMode.bicycle,
-        )
-        .toList();
-    if (publicModes.isNotEmpty) {
-      return publicModes[0].transportMode.image;
-    }
-    return Container();
-  }
-
   bool get _bikeAndPublicPlanHasItineraries =>
       hasItinerariesContainingPublicTransit(bikeAndPublicPlan);
 

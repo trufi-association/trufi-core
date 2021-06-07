@@ -123,4 +123,23 @@ class PlanEntity {
   }
 
   bool get hasError => error != null;
+
+  Widget get iconSecondaryPublic {
+    if ((itineraries ?? []).isNotEmpty) {
+      final publicModes = itineraries[0]
+          .legs
+          .where(
+            (element) =>
+                element.transportMode != TransportMode.walk &&
+                element.transportMode != TransportMode.bicycle &&
+                element.transportMode != TransportMode.car &&
+                element.transportMode != TransportMode.carPool,
+          )
+          .toList();
+      if (publicModes.isNotEmpty) {
+        return publicModes[0].transportMode.image;
+      }
+    }
+    return Container();
+  }
 }
