@@ -74,7 +74,7 @@ class TransportSelector extends StatelessWidget {
               secondaryIcon: SizedBox(
                 height: 12,
                 width: 12,
-                child: modesTransport.getIconBikePublic(),
+                child: modesTransport.bikeAndVehicle.iconSecondaryPublic,
               ),
               title: durationToString(localization,
                   modesTransport.bikeAndVehicle.itineraries[0].durationTrip),
@@ -94,7 +94,12 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: parkRideSvg,
+              icon: carSvg,
+              secondaryIcon: SizedBox(
+                height: 12,
+                width: 12,
+                child: modesTransport.parkRidePlan.iconSecondaryPublic,
+              ),
               title: durationToString(localization,
                   modesTransport.parkRidePlan.itineraries[0].durationTrip),
               subtitle: displayDistanceWithLocale(localization,
