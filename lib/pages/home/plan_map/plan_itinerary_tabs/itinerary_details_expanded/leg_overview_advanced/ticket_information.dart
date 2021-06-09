@@ -19,6 +19,7 @@ class TicketInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final theme = Theme.of(context);
     final hasBikeLeg = legs.any(
       (leg) =>
@@ -35,6 +36,7 @@ class TicketInformation extends StatelessWidget {
           orElse: () => null,
         );
 
+    // ignore: unused_local_variable
     String unknownFareRouteName = unknownFareLeg != null
         ? '${unknownFareLeg.fromPlace?.name} - ${unknownFareLeg.toPlace?.name}'
         : null;
