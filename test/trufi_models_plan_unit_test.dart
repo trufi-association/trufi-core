@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 
 void main() {
   PlanEntity _plan;
@@ -30,7 +31,7 @@ void main() {
     _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
-        // route: "route",
+        route: const RouteEntity(shortName: "route"),
         routeLongName: "long_name_route",
         duration: 300.0,
         distance: 2.0);

@@ -49,7 +49,9 @@
             "distance": 415.7610000000001,
             "pathway": false,
             "mode": "WALK",
-            "route": "",
+            "route": {
+              "shortName": ""
+            },
             "agencyTimeZoneOffset": -14400000,
             "interlineWithPreviousLeg": false,
             "from": {
@@ -126,7 +128,9 @@
             "distance": 10925.586030744802,
             "pathway": false,
             "mode": "BUS",
-            "route": "217",
+            "route": {
+              "shortName": "86"
+            },
             "agencyName": "Sindicato 15 de agosto",
             "agencyUrl": "https://trufi.app",
             "agencyTimeZoneOffset": -14400000,
@@ -180,7 +184,9 @@
             "distance": 4231.390912446133,
             "pathway": false,
             "mode": "BUS",
-            "route": "130",
+            "route": {
+              "shortName": "86"
+            },
             "agencyName": "Sindicato 30 de noviembre",
             "agencyUrl": "https://trufi.app",
             "agencyTimeZoneOffset": -14400000,
@@ -234,7 +240,9 @@
             "distance": 241.137,
             "pathway": false,
             "mode": "WALK",
-            "route": "",
+            "route": {
+              "shortName": ""
+            },
             "agencyTimeZoneOffset": -14400000,
             "interlineWithPreviousLeg": false,
             "from": {
