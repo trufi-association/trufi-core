@@ -28,8 +28,6 @@ class TransportDash extends StatelessWidget {
   Widget build(BuildContext context) {
     final configuration = context.read<ConfigurationCubit>().state;
     return Column(
-      // mainAxisSize: MainAxisSize.min,
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DashLinePlace(
           date: leg.startTimeString.toString(),
@@ -45,16 +43,19 @@ class TransportDash extends StatelessWidget {
         ),
         SeparatorPlace(
           color: leg.transportMode.color,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TransitLeg(
-                leg: leg,
-              ),
-              if (configuration.planItineraryLegBuilder != null)
-                configuration.planItineraryLegBuilder(context, leg) ??
-                    Container(),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TransitLeg(
+                  leg: leg,
+                ),
+                if (configuration.planItineraryLegBuilder != null)
+                  configuration.planItineraryLegBuilder(context, leg) ??
+                      Container(),
+              ],
+            ),
           ),
         ),
         if (isNextTransport)

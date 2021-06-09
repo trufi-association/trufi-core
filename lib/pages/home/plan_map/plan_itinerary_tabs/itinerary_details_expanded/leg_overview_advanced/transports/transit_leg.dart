@@ -25,29 +25,26 @@ class TransitLeg extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: RouteNumber(
-            transportMode: leg.transportMode,
-            // TODO adapted the color server
-            // color: leg?.route?.color != null
-            //     ? Color(int.tryParse("0xFF${leg.route.color}"))
-            //     : null,
-            icon: (leg?.route?.shortName ?? '').startsWith('RT')
-                ? onDemandTaxiSvg
-                : null,
-            text: leg?.route?.shortName != null
-                ? leg.route.shortName
-                : leg.transportMode.name,
-            duration: leg.durationLeg(localization),
-            distance: leg.distanceString(localization),
-          ),
+        RouteNumber(
+          transportMode: leg.transportMode,
+          // TODO adapted the color server
+          // color: leg?.route?.color != null
+          //     ? Color(int.tryParse("0xFF${leg.route.color}"))
+          //     : null,
+          icon: (leg?.route?.shortName ?? '').startsWith('RT')
+              ? onDemandTaxiSvg
+              : null,
+          text: leg?.route?.shortName != null
+              ? leg.route.shortName
+              : leg.transportMode.name,
+          duration: leg.durationLeg(localization),
+          distance: leg.distanceString(localization),
         ),
         if (leg.pickupBookingInfo != null)
           Column(
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 8),
+                margin: const EdgeInsets.only(top: 12),
                 child: InfoMessage(
                   message: leg.pickupBookingInfo.message,
                   widget: leg.pickupBookingInfo.contactInfo?.infoUrl != null
@@ -76,7 +73,7 @@ class TransitLeg extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(top: 12),
                     padding:
                         const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
                     decoration: BoxDecoration(
