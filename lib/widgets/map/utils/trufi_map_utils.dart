@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 import '../../../utils/util_icons/custom_icons.dart';
 
@@ -27,12 +28,8 @@ Marker buildTransferMarker(LatLng point) {
   );
 }
 
-Marker buildBusMarker(
-  LatLng point,
-  Color color,
-  PlanItineraryLeg leg, {
-  VoidCallback onTap,
-}) {
+Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
+    {VoidCallback onTap, Widget icon}) {
   return Marker(
     width: 50.0,
     point: point,
@@ -48,23 +45,54 @@ Marker buildBusMarker(
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Row(
-            children: <Widget>[
-              // TODO fixed color for transportMode image
-              // if (leg.transportMode?.image != null)
-              //   SizedBox(
-              //     width: 24,
-              //     height: 24,
-              //     child: leg.transportMode?.image,
-              //   )
-              // else
-              Icon(leg.iconData, color: Colors.white),
-              Text(
-                  leg?.route?.shortName != null
-                      ? ' ${leg.route.shortName}'
-                      : '',
-                  style: const TextStyle(color: Colors.white)),
+            children: [
+              if (icon != null)
+                SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: icon,
+                )
+              else if (leg.transportMode?.getImage() != null)
+                SizedBox(
+                    height: 28,
+                    width: 28,
+                    child: leg.transportMode.getImage(color: color))
+              else
+                Icon(leg.transportMode.icon, color: Colors.white),
+              if (leg.transportMode != TransportMode.walk)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    leg?.route?.shortName != null
+                        ? ' ${leg.route.shortName}'
+                        : '',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
             ],
           ),
+          // child: Row(
+          //   children: <Widget>[
+          //     // TODO fixed color for transportMode image
+          //     if (leg.transportMode?.image != null)
+          //       SizedBox(
+          //         width: 24,
+          //         height: 24,
+          //         child: leg.transportMode?.image,
+          //       )
+          //     else
+          //       Icon(leg.iconData, color: Colors.white),
+          //     Text(
+          //         leg?.route?.shortName != null
+          //             ? ' ${leg.route.shortName}'
+          //             : '',
+          //         style: const TextStyle(color: Colors.white)),
+          //   ],
+          // ),
         ),
       ),
     ),

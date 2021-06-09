@@ -28,11 +28,11 @@ class TransitLeg extends StatelessWidget {
         RouteNumber(
           transportMode: leg.transportMode,
           // TODO adapted the color server
-          // color: leg?.route?.color != null
-          //     ? Color(int.tryParse("0xFF${leg.route.color}"))
-          //     : null,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : null,
           icon: (leg?.route?.shortName ?? '').startsWith('RT')
-              ? onDemandTaxiSvg
+              ? onDemandTaxiSvg(color: 'FFFFFF')
               : null,
           text: leg?.route?.shortName != null
               ? leg.route.shortName
@@ -74,38 +74,38 @@ class TransitLeg extends StatelessWidget {
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+                    width: 210,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
                       color: theme.primaryColor,
                       borderRadius: BorderRadius.circular(40),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          // TODO translate
-                          'Call  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
-                          style: theme.primaryTextTheme.headline6,
-                        ),
-                      ],
+                    child: Text(
+                      // TODO translate
+                      'Anrufen  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
+                      style: theme.primaryTextTheme.headline6,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              if (leg.pickupBookingInfo.contactInfo?.bookingUrl != null)
-                Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  child: RichText(
-                    text: TextSpan(
-                      style: theme.primaryTextTheme.bodyText2.copyWith(
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.w600),
-                      // TODO Translate
-                      text: "book a ride",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launch(leg.pickupBookingInfo.contactInfo?.bookingUrl);
-                        },
+              if (leg.pickupBookingInfo.contactInfo?.bookingUrl == null)
+                GestureDetector(
+                  onTap: () {
+                    launch(leg.pickupBookingInfo.contactInfo?.bookingUrl);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    width: 210,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor,
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: Text(
+                      // TODO translate
+                      "Fahrt buchen",
+                      style: theme.primaryTextTheme.headline6,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

@@ -39,8 +39,8 @@ class RouteNumber extends StatelessWidget {
                   width: 28,
                   child: icon,
                 )
-              else if (transportMode?.image != null)
-                SizedBox(height: 28, width: 28, child: transportMode.image)
+              else if (transportMode?.getImage() != null)
+                SizedBox(height: 28, width: 28, child: transportMode.getImage())
               else
                 Icon(transportMode.icon, color: Colors.white),
               if (transportMode != TransportMode.walk)

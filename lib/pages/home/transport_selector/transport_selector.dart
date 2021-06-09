@@ -127,7 +127,7 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: onDemandTaxiSvg,
+              icon: onDemandTaxiSvg(),
               title: durationToString(localization,
                   modesTransport.onDemandTaxiPlan.itineraries[0].durationTrip),
               subtitle: displayDistanceWithLocale(localization,

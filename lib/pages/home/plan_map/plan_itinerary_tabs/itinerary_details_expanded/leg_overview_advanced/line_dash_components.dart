@@ -32,7 +32,9 @@ class TransportDash extends StatelessWidget {
         DashLinePlace(
           date: leg.startTimeString.toString(),
           location: leg.fromPlace.name.toString(),
-          color: leg.transportMode.color,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
           child: isFirstTransport
               ? SizedBox(
                   height: 24,
@@ -42,7 +44,9 @@ class TransportDash extends StatelessWidget {
               : null,
         ),
         SeparatorPlace(
-          color: leg.transportMode.color,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
             child: Column(
@@ -61,8 +65,10 @@ class TransportDash extends StatelessWidget {
         if (isNextTransport)
           DashLinePlace(
             date: leg.endTimeString.toString(),
-            location: leg.fromPlace.name.toString(),
-            color: leg.transportMode.color,
+            location: leg.toPlace.name.toString(),
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : leg.transportMode.color,
           ),
       ],
     );
@@ -82,7 +88,9 @@ class WalkDash extends StatelessWidget {
     return Row(
       children: [
         SeparatorPlace(
-          color: leg.transportMode.color,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
           separator: Container(
             margin: const EdgeInsets.symmetric(vertical: 2),
             height: 19,

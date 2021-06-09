@@ -100,7 +100,7 @@ class ModesTransportEntity {
       existOnDemandTaxi;
 
   Widget getIconBikePublic() {
-    final publicModes = filterOnlyBikeAndWalk(bikeParkPlan.itineraries)[0]
+    final publicModes = filterOnlyBikeAndWalk(bikeAndVehicle.itineraries)[0]
         .legs
         .where(
           (element) =>
@@ -109,7 +109,7 @@ class ModesTransportEntity {
         )
         .toList();
     if (publicModes.isNotEmpty) {
-      return publicModes[0].transportMode.image;
+      return publicModes[0].transportMode.getImage();
     }
     return Container();
   }

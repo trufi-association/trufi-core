@@ -73,7 +73,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.bus.image,
+                    child: TransportMode.bus.getImage(),
                   ),
                   value: state.transportModes.contains(TransportMode.bus),
                   onChanged: (_) {
@@ -86,7 +86,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.rail.image,
+                    child: TransportMode.rail.getImage(),
                   ),
                   value: state.transportModes.contains(TransportMode.rail),
                   onChanged: (_) {
@@ -99,7 +99,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.subway.image,
+                    child: TransportMode.subway.getImage(),
                   ),
                   value: state.transportModes.contains(TransportMode.subway),
                   onChanged: (_) {
@@ -112,7 +112,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.carPool.image,
+                    child: TransportMode.carPool.getImage(),
                   ),
                   value: state.transportModes.contains(TransportMode.carPool),
                   onChanged: (_) {
@@ -126,7 +126,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.bicycle.image,
+                    child: TransportMode.bicycle.getImage(),
                   ),
                   value: state.transportModes.contains(TransportMode.bicycle),
                   onChanged: (_) {

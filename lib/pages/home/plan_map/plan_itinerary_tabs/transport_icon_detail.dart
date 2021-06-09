@@ -23,8 +23,8 @@ class LegTransportIcon extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (leg?.transportMode?.image != null)
-            SizedBox(height: 28, width: 28, child: leg.transportMode.image)
+          if (leg?.transportMode?.getImage() != null)
+            SizedBox(height: 28, width: 28, child: leg.transportMode.getImage())
           else
             Icon(leg.transportMode.icon, color: Colors.white),
           if (leg.transportMode != TransportMode.walk)
