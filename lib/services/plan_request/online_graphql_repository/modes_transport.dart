@@ -1,4 +1,5 @@
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/services/models_otp/enums/mode.dart';
 import 'package:trufi_core/services/models_otp/plan.dart';
 
 class ModesTransport {
@@ -8,6 +9,7 @@ class ModesTransport {
   final Plan bikeParkPlan;
   final Plan carPlan;
   final Plan parkRidePlan;
+  final Plan onDemandTaxiPlan;
 
   ModesTransport({
     this.walkPlan,
@@ -16,6 +18,7 @@ class ModesTransport {
     this.bikeParkPlan,
     this.carPlan,
     this.parkRidePlan,
+    this.onDemandTaxiPlan,
   });
 
   factory ModesTransport.fromJson(Map<String, dynamic> json) => ModesTransport(
@@ -37,6 +40,9 @@ class ModesTransport {
         parkRidePlan: json["parkRidePlan"] != null
             ? Plan.fromMap(json["parkRidePlan"] as Map<String, dynamic>)
             : null,
+        onDemandTaxiPlan: json["onDemandTaxiPlan"] != null
+            ? Plan.fromMap(json["onDemandTaxiPlan"] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,6 +52,7 @@ class ModesTransport {
         'bikeParkPlan': bikeParkPlan?.toMap(),
         'carPlan': carPlan?.toMap(),
         'parkRidePlan': parkRidePlan?.toMap(),
+        'onDemandTaxiPlan': onDemandTaxiPlan?.toMap(),
       };
 
   ModesTransportEntity toModesTransport() {
@@ -56,6 +63,12 @@ class ModesTransport {
       bikeParkPlan: bikeParkPlan?.toPlan(),
       carPlan: carPlan?.toPlan(),
       parkRidePlan: parkRidePlan?.toPlan(),
+      onDemandTaxiPlan: onDemandTaxiPlan?.toPlan()?.copyWith(
+          itineraries: onDemandTaxiPlan.itineraries
+              .where((itinerary) =>
+                  !itinerary.legs.every((leg) => leg.mode == Mode.walk))
+              .map((e) => e.toPlanItinerary())
+              .toList()),
     );
   }
 }

@@ -25,6 +25,7 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeBikeQuery: Boolean!
   $shouldMakeCarQuery: Boolean!
   $shouldMakeParkRideQuery: Boolean!
+  $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
   $showBikeAndParkItineraries: Boolean!
   $bikeAndPublicModes: [TransportMode!]
@@ -410,6 +411,77 @@ query SummaryPage_WalkBike_Query(
           name
         }
         distance
+      }
+    }
+  }
+  onDemandTaxiPlan: plan(
+    fromPlace: $fromPlace
+    toPlace: $toPlace
+    intermediatePlaces: $intermediatePlaces
+    numItineraries: 6
+    transportModes: [
+      { mode: RAIL }
+      { mode: FLEX, qualifier: EGRESS }
+      { mode: FLEX, qualifier: DIRECT }
+      { mode: WALK }
+    ]
+    date: $date
+    time: $time
+    walkReluctance: $walkReluctance
+    walkBoardCost: $walkBoardCost
+    minTransferTime: $minTransferTime
+    walkSpeed: $walkSpeed
+    maxWalkDistance: $bikeAndPublicMaxWalkDistance
+    allowedTicketTypes: $ticketTypes
+    disableRemainingWeightHeuristic: $bikeandPublicDisableRemainingWeightHeuristic
+    arriveBy: $arriveBy
+    transferPenalty: $transferPenalty
+    bikeSpeed: $bikeSpeed
+    optimize: $optimize
+    triangle: $triangle
+    itineraryFiltering: $itineraryFiltering
+    unpreferred: $unpreferred
+    locale: $locale
+    ) @include(if: $shouldMakeOnDemandTaxiQuery) {
+    from{
+      name,
+      lat,
+      lon,
+    },
+    to{
+      name,
+      lon,
+      lat,
+    },
+    ...SummaryPlanContainer_plan
+    ...ItineraryTab_plan
+    itineraries {
+      ...ItinerarySummaryListContainer_itineraries
+      duration
+      startTime
+      endTime
+      ...ItineraryTab_itinerary
+      ...SummaryPlanContainer_itineraries
+      legs {
+        mode
+        ...ItineraryLine_legs
+        transitLeg
+        rentedBike
+        distance
+        startTime
+        endTime
+        route {
+          url
+          mode
+          shortName
+        }
+        legGeometry {
+          points
+        }
+        trip {
+          gtfsId
+          tripShortName
+        }
       }
     }
   }

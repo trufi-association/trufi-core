@@ -6,6 +6,7 @@ import 'enums/leg/pickup_dropoff_type.dart';
 import 'enums/leg/realtime_state.dart';
 import 'enums/mode.dart';
 import 'geometry.dart';
+import 'pickup_booking_info.dart';
 import 'place.dart';
 import 'route.dart';
 import 'step.dart';
@@ -40,35 +41,38 @@ class Leg {
   final PickupDropoffType dropoffType;
   final bool interlineWithPreviousLeg;
   final List<Alert> alerts;
+  final PickupBookingInfo pickupBookingInfo;
 
-  const Leg(
-      {this.startTime,
-      this.endTime,
-      this.departureDelay,
-      this.arrivalDelay,
-      this.mode,
-      this.duration,
-      this.generalizedCost,
-      this.legGeometry,
-      this.agency,
-      this.realTime,
-      this.realtimeState,
-      this.distance,
-      this.transitLeg,
-      this.rentedBike,
-      this.from,
-      this.to,
-      this.route,
-      this.trip,
-      this.serviceDate,
-      this.intermediateStops,
-      this.intermediatePlaces,
-      this.intermediatePlace,
-      this.steps,
-      this.pickupType,
-      this.dropoffType,
-      this.interlineWithPreviousLeg,
-      this.alerts});
+  const Leg({
+    this.startTime,
+    this.endTime,
+    this.departureDelay,
+    this.arrivalDelay,
+    this.mode,
+    this.duration,
+    this.generalizedCost,
+    this.legGeometry,
+    this.agency,
+    this.realTime,
+    this.realtimeState,
+    this.distance,
+    this.transitLeg,
+    this.rentedBike,
+    this.from,
+    this.to,
+    this.route,
+    this.trip,
+    this.serviceDate,
+    this.intermediateStops,
+    this.intermediatePlaces,
+    this.intermediatePlace,
+    this.steps,
+    this.pickupType,
+    this.dropoffType,
+    this.interlineWithPreviousLeg,
+    this.alerts,
+    this.pickupBookingInfo,
+  });
 
   factory Leg.fromMap(Map<String, dynamic> json) => Leg(
         startTime: int.tryParse(json['startTime'].toString()),
@@ -129,6 +133,10 @@ class Leg {
                 (x) => Alert.fromJson(x as Map<String, dynamic>),
               ))
             : null,
+        pickupBookingInfo: json['pickupBookingInfo'] != null
+            ? PickupBookingInfo.fromMap(
+                json['pickupBookingInfo'] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -163,6 +171,7 @@ class Leg {
         'dropoffType': dropoffType?.name,
         'interlineWithPreviousLeg': interlineWithPreviousLeg,
         'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'pickupBookingInfo': pickupBookingInfo?.toMap(),
       };
 
   PlanItineraryLeg toPlanItineraryLeg() {
@@ -183,6 +192,7 @@ class Leg {
       fromPlace: from?.toPlaceEntity(),
       intermediatePlaces:
           intermediatePlaces?.map((x) => x.toPlaceEntity())?.toList(),
+      pickupBookingInfo: pickupBookingInfo,
       rentedBike: rentedBike,
       intermediatePlace: intermediatePlace,
       transitLeg: transitLeg,

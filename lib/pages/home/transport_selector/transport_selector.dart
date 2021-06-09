@@ -117,6 +117,22 @@ class TransportSelector extends StatelessWidget {
               subtitle: displayDistanceWithLocale(localization,
                   modesTransport.carPlan.itineraries[0].totalDistance),
             ),
+          if (modesTransport.existOnDemandTaxi)
+            CardTransportMode(
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => ModeTransportScreen(
+                    title: localization.instructionVehicleCar,
+                    plan: modesTransport.onDemandTaxiPlan,
+                  ),
+                ));
+              },
+              icon: onDemandTaxiSvg,
+              title: durationToString(localization,
+                  modesTransport.onDemandTaxiPlan.itineraries[0].durationTrip),
+              subtitle: displayDistanceWithLocale(localization,
+                  modesTransport.onDemandTaxiPlan.itineraries[0].totalDistance),
+            ),
         ],
       ),
     );

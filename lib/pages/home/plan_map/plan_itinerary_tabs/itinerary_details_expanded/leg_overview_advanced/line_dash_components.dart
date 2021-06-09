@@ -7,7 +7,7 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 
-import '../../transport_icon_detail.dart';
+import 'transports/transit_leg.dart';
 
 class TransportDash extends StatelessWidget {
   final double height;
@@ -26,8 +26,6 @@ class TransportDash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localization = TrufiLocalization.of(context);
     final configuration = context.read<ConfigurationCubit>().state;
     return Column(
       children: [
@@ -49,19 +47,8 @@ class TransportDash extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    LegTransportIcon(leg: leg),
-                    Text(
-                      '  ${leg.durationLeg(localization).toString()}',
-                      style: theme.primaryTextTheme.bodyText1,
-                    ),
-                    Text(
-                      ' (${leg.distanceString(localization)})',
-                      style: theme.primaryTextTheme.bodyText1,
-                    ),
-                  ],
+                TransitLeg(
+                  leg: leg,
                 ),
                 if (configuration.planItineraryLegBuilder != null)
                   configuration.planItineraryLegBuilder(context, leg) ??

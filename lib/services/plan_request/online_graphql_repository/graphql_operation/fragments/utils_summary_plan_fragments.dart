@@ -337,6 +337,14 @@ fragment ItineraryTab_itinerary on Itinerary {
         id
       }
     }
+    pickupBookingInfo {
+      message
+      contactInfo {
+        phoneNumber
+        infoUrl
+        bookingUrl
+      }
+    }
     legGeometry {
       length
       points

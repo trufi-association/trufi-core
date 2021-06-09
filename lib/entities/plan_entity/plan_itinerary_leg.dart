@@ -17,6 +17,7 @@ class PlanItineraryLeg {
     this.intermediatePlaces,
     this.intermediatePlace,
     this.transitLeg,
+    this.pickupBookingInfo,
   }) {
     transportMode =
         getTransportMode(mode: mode, specificTransport: routeLongName);
@@ -38,6 +39,7 @@ class PlanItineraryLeg {
   static const _intermediatePlace = "intermediatePlace";
   static const _transitLeg = "transitLeg";
   static const _rentedBike = "rentedBike";
+  static const _pickupBookingInfo = "pickupBookingInfo";
 
   final String points;
   final String mode;
@@ -53,6 +55,7 @@ class PlanItineraryLeg {
   final bool transitLeg;
   final bool intermediatePlace;
   final bool rentedBike;
+  final PickupBookingInfo pickupBookingInfo;
   // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
   TransportMode transportMode;
 
@@ -92,6 +95,10 @@ class PlanItineraryLeg {
               ),
             )
           : null,
+      pickupBookingInfo: json[_pickupBookingInfo] != null
+          ? PickupBookingInfo.fromMap(
+              json[_pickupBookingInfo] as Map<String, dynamic>)
+          : null,
       transitLeg: json[_intermediatePlace] as bool,
       intermediatePlace: json[_transitLeg] as bool,
       rentedBike: json[_rentedBike] as bool,
@@ -114,6 +121,7 @@ class PlanItineraryLeg {
       _intermediatePlaces: intermediatePlaces != null
           ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
           : null,
+      _pickupBookingInfo: pickupBookingInfo?.toMap(),
       _intermediatePlace: intermediatePlace,
       _transitLeg: transitLeg,
       _rentedBike: rentedBike,
@@ -135,6 +143,7 @@ class PlanItineraryLeg {
     bool intermediatePlace,
     bool transitLeg,
     List<PlaceEntity> intermediatePlaces,
+    PickupBookingInfo pickupBookingInfo,
   }) {
     return PlanItineraryLeg(
       points: points ?? this.points,
@@ -151,6 +160,7 @@ class PlanItineraryLeg {
       intermediatePlace: intermediatePlace ?? this.intermediatePlace,
       transitLeg: transitLeg ?? this.transitLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
+      pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
     );
   }
 

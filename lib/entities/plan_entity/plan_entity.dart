@@ -6,6 +6,7 @@ import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/services/models_otp/pickup_booking_info.dart';
 
 import 'agency_entity.dart';
 import 'enum/leg_mode.dart';
