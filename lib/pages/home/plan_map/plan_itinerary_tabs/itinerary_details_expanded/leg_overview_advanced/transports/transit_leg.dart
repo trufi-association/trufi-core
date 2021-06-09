@@ -88,7 +88,7 @@ class TransitLeg extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (leg.pickupBookingInfo.contactInfo?.bookingUrl == null)
+              if (leg.pickupBookingInfo.contactInfo?.bookingUrl != null)
                 GestureDetector(
                   onTap: () {
                     launch(leg.pickupBookingInfo.contactInfo?.bookingUrl);
