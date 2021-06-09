@@ -110,8 +110,8 @@ class TrufiApp extends StatelessWidget {
   /// in between the Fab buttons of the Trufi Core.
   final WidgetBuilder customBetweenFabBuilder;
 
-  /// List of [CustomLayer] implementations
-  final List<CustomLayer> customLayers;
+  /// List of [CustomLayerContainer] implementations
+  final List<CustomLayerContainer> customLayers;
 
   ///List of [SocialMediaItem] implementations
   ///By defaul [Trufi-Core] has some implementation what you can use:

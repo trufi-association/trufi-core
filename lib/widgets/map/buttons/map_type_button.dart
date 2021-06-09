@@ -3,21 +3,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/custom_layer/custom_layers_cubit.dart';
 import 'package:trufi_core/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/custom_layer.dart';
 
 class MapTypeButton extends StatelessWidget {
   const MapTypeButton({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final customLayersCubit = context.read<CustomLayersCubit>();
     return FloatingActionButton(
       mini: true,
       backgroundColor: Theme.of(context).backgroundColor,
       onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => _BuildMapTypeBottomSheet(),
-          backgroundColor: Theme.of(context).backgroundColor,
-        );
+        if (customLayersCubit.state.layers.isNotEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  _MapOptionsPage(child: _BuildMapTypeBottomSheet()),
+            ),
+          );
+        } else {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => _BuildMapTypeBottomSheet(),
+            backgroundColor: Theme.of(context).backgroundColor,
+          );
+        }
       },
       heroTag: null,
       child: const Icon(Icons.layers, color: Colors.black),
@@ -30,47 +42,168 @@ class _MapItemsSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            localization.commonShowMap,
+            textAlign: TextAlign.center,
+            style:
+                theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: ListView(children: const [_CustomExpansionPanel()]),
+        ),
+      ],
+    );
+  }
+}
+
+class _CustomExpansionPanel extends StatefulWidget {
+  const _CustomExpansionPanel({Key key}) : super(key: key);
+
+  @override
+  __CustomExpansionPanelState createState() => __CustomExpansionPanelState();
+}
+
+class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
+  Set<CustomLayerContainer> customLayersState = {};
+  @override
+  Widget build(BuildContext context) {
     final customLayersCubit = context.watch<CustomLayersCubit>();
-    return Container(
-      child: (customLayersCubit.state.layers.isNotEmpty)
-          ? Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                child: ListView(
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            final target = customLayersCubit.layersContainer.toList()[index];
+            if (customLayersState.contains(target)) {
+              setState(() {
+                customLayersState.remove(target);
+              });
+            } else {
+              setState(() {
+                customLayersState.add(target);
+              });
+            }
+          });
+        },
+        children: customLayersCubit.layersContainer.map((element) {
+          final containerStatus =
+              element.checkStatus(customLayersCubit.state.layersSatus);
+          return ExpansionPanel(
+              canTapOnHeader: true,
+              headerBuilder: (_, __) {
+                return Row(
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        customLayersCubit.changeCustomMapLayerContainerState(
+                          customLayer: element,
+                          // ignore: avoid_bool_literals_in_conditional_expressions
+                          newState: true,
+                        );
+                      },
+                      child: (containerStatus == null)
+                          ? SizedBox(
+                              height: 48,
+                              width: 48,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: const [
+                                  Icon(Icons.crop_square),
+                                  Icon(
+                                    Icons.remove,
+                                    size: 15,
+                                  )
+                                ],
+                              ),
+                            )
+                          : Checkbox(
+                              value: containerStatus,
+                              onChanged: (value) {
+                                customLayersCubit
+                                    .changeCustomMapLayerContainerState(
+                                  customLayer: element,
+                                  newState: value,
+                                );
+                              },
+                            ),
+                    ),
                     Container(
-                      padding: const EdgeInsets.all(16.0),
+                      width: 25,
+                      height: 25,
+                      margin: const EdgeInsets.only(right: 10),
+                      child: element.icon(context),
+                    ),
+                    Expanded(
                       child: Text(
-                        localization.commonShowMap,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyText1
-                            .copyWith(fontWeight: FontWeight.bold),
+                        element.name(context),
+                        style: theme.textTheme.bodyText1.copyWith(
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
-                    ...customLayersCubit.state.layers
-                        .map(
-                          (customLayer) => CheckboxListTile(
-                            title: Text(
-                              customLayer.name(context),
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            value: customLayersCubit
-                                .state.layersSatus[customLayer.id],
-                            onChanged: (bool value) {
-                              customLayersCubit.changeCustomMapLayerState(
-                                customLayer: customLayer,
-                                newState: value,
-                              );
-                            },
-                          ),
-                        )
-                        .toList()
                   ],
+                );
+              },
+              isExpanded: customLayersState.contains(element),
+              body: Container(
+                color: Colors.grey.withOpacity(.1),
+                child: Column(
+                  children: element.layers
+                      .map(
+                        (customLayer) => Row(
+                          children: [
+                            Checkbox(
+                              value: customLayersCubit
+                                  .state.layersSatus[customLayer.id],
+                              onChanged: (bool value) {
+                                customLayersCubit.changeCustomMapLayerState(
+                                  customLayer: customLayer,
+                                  newState: value,
+                                );
+                              },
+                            ),
+                            Container(
+                              width: 25,
+                              height: 25,
+                              margin: const EdgeInsets.only(right: 10),
+                              child: customLayer.icon(context),
+                            ),
+                            Expanded(
+                              child: Text(
+                                customLayer.name(context),
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
-              ),
-            )
-          : null,
+              ));
+        }).toList(),
+      ),
     );
+  }
+}
+
+class _MapOptionsPage extends StatelessWidget {
+  final Widget child;
+
+  const _MapOptionsPage({Key key, @required this.child}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          // TODO translate
+          title: const Text("Map Settings"),
+        ),
+        body: child);
   }
 }
 
@@ -81,39 +214,49 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final mapTileProviderCubit = context.watch<MapTileProviderCubit>();
     return SafeArea(
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        _MapItemsSelector(),
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            localization.mapTypeLabel,
-            style:
-                theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 100,
-          child: ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: mapTileProviderCubit.mapTileProviders
-                .map(
-                  (mapTileProvider) => _BuildMapTypeOptionButton(
-                    image: mapTileProvider.imageBuilder(context),
-                    label: mapTileProvider.name(context),
-                    onPressed: () {
-                      mapTileProviderCubit
-                          .changeMapTileProvider(mapTileProvider);
-                    },
-                    active: mapTileProviderCubit.state.currentMapTileProvider ==
-                        mapTileProvider,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(child: _MapItemsSelector()),
+          Card(
+            margin: const EdgeInsets.all(0),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    localization.mapTypeLabel,
+                    style: theme.textTheme.bodyText1
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
-                )
-                .toList(),
+                ),
+                SizedBox(
+                  height: 100,
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: mapTileProviderCubit.mapTileProviders
+                        .map(
+                          (mapTileProvider) => _BuildMapTypeOptionButton(
+                            image: mapTileProvider.imageBuilder(context),
+                            label: mapTileProvider.name(context),
+                            onPressed: () {
+                              mapTileProviderCubit
+                                  .changeMapTileProvider(mapTileProvider);
+                            },
+                            active: mapTileProviderCubit
+                                    .state.currentMapTileProvider ==
+                                mapTileProvider,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
