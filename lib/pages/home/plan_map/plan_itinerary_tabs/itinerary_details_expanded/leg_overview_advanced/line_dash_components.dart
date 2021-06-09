@@ -28,6 +28,8 @@ class TransportDash extends StatelessWidget {
   Widget build(BuildContext context) {
     final configuration = context.read<ConfigurationCubit>().state;
     return Column(
+      // mainAxisSize: MainAxisSize.min,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         DashLinePlace(
           date: leg.startTimeString.toString(),
@@ -43,18 +45,16 @@ class TransportDash extends StatelessWidget {
         ),
         SeparatorPlace(
           color: leg.transportMode.color,
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TransitLeg(
-                  leg: leg,
-                ),
-                if (configuration.planItineraryLegBuilder != null)
-                  configuration.planItineraryLegBuilder(context, leg) ??
-                      Container(),
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TransitLeg(
+                leg: leg,
+              ),
+              if (configuration.planItineraryLegBuilder != null)
+                configuration.planItineraryLegBuilder(context, leg) ??
+                    Container(),
+            ],
           ),
         ),
         if (isNextTransport)
@@ -88,6 +88,7 @@ class WalkDash extends StatelessWidget {
             width: 19,
             child: walkSvg,
           ),
+          height: 20,
           child: Text(
               '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
         ),
@@ -119,6 +120,7 @@ class WaitDash extends StatelessWidget {
             width: 20,
             child: waitSvg,
           ),
+          height: 20,
           child: Text(
               "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
         ),
@@ -131,43 +133,59 @@ class SeparatorPlace extends StatelessWidget {
   final Widget child;
   final Widget separator;
   final Color color;
+  final double height;
 
   const SeparatorPlace({
     Key key,
     @required this.child,
     this.color,
     this.separator,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 52),
-        SizedBox(
-          height: 50,
-          width: 20,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(width: 52),
+          if (separator != null)
+            Column(
+              children: [
+                Container(
                   width: 3,
+                  height: height,
                   color: color ?? Colors.black,
                 ),
-              ),
-              if (separator != null) separator,
-              Expanded(
-                child: Container(
+                SizedBox(
+                  width: 20,
+                  child: separator,
+                ),
+                Container(
                   width: 3,
+                  height: height,
                   color: color ?? Colors.black,
                 ),
-              )
-            ],
-          ),
-        ),
-        const SizedBox(width: 5),
-        if (child != null) child,
-      ],
+              ],
+            )
+          else
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8.5),
+              width: 3,
+              height: height,
+              color: color ?? Colors.black,
+            ),
+          const SizedBox(width: 5),
+          if (child != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                child,
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
