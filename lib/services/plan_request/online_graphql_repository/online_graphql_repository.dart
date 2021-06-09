@@ -5,6 +5,7 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/services/models_otp/enums/mode.dart';
 import 'package:trufi_core/services/models_otp/plan.dart';
 
 import '../../../models/trufi_place.dart';
@@ -85,20 +86,28 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
   }) async {
-    Plan planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+    Plan planData = await _graphQLPlanRepository.fetchPlanAdvanced(
       fromLocation: from,
       toLocation: to,
       advancedOptions: advancedOptions,
     );
-    if (planEntityData.itineraries.isEmpty) {
-      planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+    planData = planData.copyWith(
+      itineraries: planData.itineraries
+          .where(
+            (itinerary) =>
+                !itinerary.legs.every((leg) => leg.mode == Mode.walk),
+          )
+          .toList(),
+    );
+    if (planData.itineraries.isEmpty) {
+      planData = await _graphQLPlanRepository.fetchPlanAdvanced(
         fromLocation: from,
         toLocation: to,
         advancedOptions: advancedOptions,
         defaultFecth: true,
       );
     }
-    final planEntity = planEntityData.toPlan();
+    final planEntity = planData.toPlan();
     final itinerariesTrasnport = planEntity.itineraries
         .where(
           (itinerary) => !itinerary.legs
