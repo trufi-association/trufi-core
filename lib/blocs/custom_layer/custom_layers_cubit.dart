@@ -10,22 +10,32 @@ part 'custom_layers_state.dart';
 
 class CustomLayersCubit extends Cubit<CustomLayersState> {
   final LocalStorage _localStorage = LocalStorage();
-  CustomLayersCubit(List<CustomLayer> layers)
+  final List<CustomLayerContainer> layersContainer;
+  CustomLayersCubit(this.layersContainer)
       : super(
           CustomLayersState(
-            layersSatus:
-                layers.asMap().map((key, value) => MapEntry(value.id, true)),
-            layers: layers,
+            layersSatus: layersContainer
+                .fold<List<CustomLayer>>(
+                    [],
+                    (previousValue, element) =>
+                        [...previousValue, ...element.layers])
+                .asMap()
+                .map((key, value) => MapEntry(value.id, true)),
+            layers: layersContainer.fold<List<CustomLayer>>(
+                [],
+                (previousValue, element) =>
+                    [...previousValue, ...element.layers]),
           ),
         ) {
-    /// listen changes called by on [onRefresh] from each [CustomLayer] for request refresh the current [CustomLayersState]
-    for (final CustomLayer layer in layers) {
-      layer.onRefresh = () {
-        // TODO: improve state refresh
-        final tempLayers = state.layers;
-        emit(state.copyWith(layers: []));
-        emit(state.copyWith(layers: tempLayers));
-      };
+    for (final CustomLayerContainer layerContainer in layersContainer) {
+      for (final CustomLayer layer in layerContainer.layers) {
+        layer.onRefresh = () {
+          // TODO: improve state refresh
+          final tempLayers = state.layers;
+          emit(state.copyWith(layers: []));
+          emit(state.copyWith(layers: tempLayers));
+        };
+      }
     }
     _loadSavedStatus();
   }
@@ -40,6 +50,19 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
   }) {
     final Map<String, bool> tempMap = Map.from(state.layersSatus);
     tempMap[customLayer.id] = newState;
+    emit(state.copyWith(layersSatus: tempMap));
+    _localStorage.save(state.layersSatus);
+  }
+
+  void changeCustomMapLayerContainerState({
+    @required CustomLayerContainer customLayer,
+    @required bool newState,
+  }) {
+    final Map<String, bool> tempMap = Map.from(state.layersSatus);
+    for (final CustomLayer layer in customLayer.layers) {
+      tempMap[layer.id] = newState;
+    }
+
     emit(state.copyWith(layersSatus: tempMap));
     _localStorage.save(state.layersSatus);
   }
