@@ -1,3 +1,6 @@
+import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+
 import 'alert.dart';
 import 'cluster.dart';
 import 'enums/mode.dart';
@@ -189,5 +192,19 @@ class Stop {
         // .where((element) => !element.isArrival)
         // .where((element) => element.realtime)
         .toList();
+  }
+
+  StopEntity toStopEntity() {
+    return StopEntity(
+      id: id,
+      gtfsId: gtfsId,
+      name: name,
+      lat: lat,
+      lon: lon,
+      code: code,
+      zoneId: zoneId,
+      platformCode: platformCode,
+      vehicleMode: getTransportMode(mode: vehicleMode.name),
+    );
   }
 }

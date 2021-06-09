@@ -91,6 +91,7 @@ final summaryListItineraries = gql(
   '''
 fragment ItinerarySummaryListContainer_itineraries on Itinerary {
   walkDistance
+  walkTime
   startTime
   endTime
   legs {
@@ -205,6 +206,7 @@ final itineraryTabItinerary = gql(
   '''
 fragment ItineraryTab_itinerary on Itinerary {
   walkDistance
+  walkTime
   duration
   startTime
   endTime

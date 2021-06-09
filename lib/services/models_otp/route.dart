@@ -1,3 +1,6 @@
+import 'package:trufi_core/entities/plan_entity/route_entity.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+
 import 'agency.dart';
 import 'alert.dart';
 import 'enums/bikes_allowed.dart';
@@ -93,10 +96,18 @@ class RouteOtp {
         'color': color,
         'textColor': textColor,
         'bikesAllowed': bikesAllowed?.name,
-        'patterns': List<dynamic>.from(patterns.map((x) => x.toJson())),
-        'stops': List<dynamic>.from(stops.map((x) => x.toJson())),
-        'trips': List<dynamic>.from(trips.map((x) => x.toJson())),
-        'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'patterns': patterns != null
+            ? List<dynamic>.from(patterns.map((x) => x.toJson()))
+            : null,
+        'stops': stops != null
+            ? List<dynamic>.from(stops.map((x) => x.toJson()))
+            : null,
+        'trips': trips != null
+            ? List<dynamic>.from(trips.map((x) => x.toJson()))
+            : null,
+        'alerts': alerts != null
+            ? List<dynamic>.from(alerts.map((x) => x.toJson()))
+            : null,
       };
 
   String get headsignFromRouteLongName {
@@ -105,5 +116,21 @@ class RouteOtp {
 
   bool get useIcon {
     return shortName == null || shortName.length > 6;
+  }
+
+  RouteEntity toRouteEntity() {
+    return RouteEntity(
+      id: id,
+      gtfsId: gtfsId,
+      agency: agency?.toAgencyEntity(),
+      shortName: shortName,
+      longName: longName,
+      mode: getTransportMode(mode: mode.name),
+      type: type,
+      desc: desc,
+      url: url,
+      color: color,
+      textColor: textColor,
+    );
   }
 }

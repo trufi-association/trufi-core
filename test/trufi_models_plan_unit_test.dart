@@ -30,7 +30,7 @@ void main() {
     _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
-        route: "route",
+        // route: "route",
         routeLongName: "long_name_route",
         duration: 300.0,
         distance: 2.0);
@@ -109,7 +109,7 @@ void main() {
     final PlanItineraryLeg _legBus = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
-        route: "route",
+        // route: "route",
         routeLongName: "take_bus",
         duration: 300.0,
         distance: 2.0);
@@ -117,7 +117,7 @@ void main() {
     final PlanItineraryLeg _legMinibus = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
-        route: "route",
+        // route: "route",
         routeLongName: "take_minibus",
         duration: 300.0,
         distance: 2.0);
@@ -125,7 +125,7 @@ void main() {
     final PlanItineraryLeg _legTrufi = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
-        route: "route",
+        // route: "route",
         routeLongName: "take_trufi",
         duration: 300.0,
         distance: 2.0);
@@ -133,7 +133,7 @@ void main() {
     final PlanItineraryLeg _legMicro = PlanItineraryLeg(
         points: "points",
         mode: "BUS",
-        route: "route",
+        // route: "route",
         routeLongName: "take_micro",
         duration: 300.0,
         distance: 2.0);

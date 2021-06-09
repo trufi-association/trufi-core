@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/place_entity.dart';
+import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
+import 'agency_entity.dart';
 import 'enum/leg_mode.dart';
 import 'utils/modes_transport_utils.dart';
 import 'utils/plan_itinerary_leg_utils.dart';

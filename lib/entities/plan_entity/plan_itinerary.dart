@@ -5,7 +5,7 @@ class PlanItinerary {
   static const String _startTime = "startTime";
   static const String _endTime = "endTime";
   static const String _walkTime = "walkTime";
-  static const String _durationTrip = "durationTrip";
+  static const String _durationTrip = "duration";
   static const String _walkDistance = "walkDistance";
 
   static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
@@ -30,6 +30,8 @@ class PlanItinerary {
   final Duration walkTime;
   final Duration durationTrip;
   final double walkDistance;
+  // add
+
   final int distance;
   final int time;
 
@@ -153,7 +155,9 @@ class PlanItinerary {
   }
 
   String futureText(TrufiLocalization localization) {
-    final nowDate = DateTime.now();
+    final tempDate = DateTime.now();
+    final nowDate = DateTime(tempDate.year, tempDate.month, tempDate.day);
+
     if (startTime.difference(nowDate).inDays == 0) {
       return '';
     }

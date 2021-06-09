@@ -31,7 +31,9 @@ class LegTransportIcon extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                leg.route.isNotEmpty ? leg.route : leg.transportMode.name,
+                leg?.route?.shortName != null
+                    ? leg.route.shortName
+                    : leg.transportMode.name,
                 style: theme.primaryTextTheme.headline6.copyWith(
                   fontWeight: FontWeight.w600,
                   color: leg.transportMode == TransportMode.car

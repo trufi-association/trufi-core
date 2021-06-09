@@ -1,3 +1,5 @@
+import 'package:trufi_core/entities/plan_entity/car_park_entity.dart';
+
 class CarPark {
   final String id;
   final String carParkId;
@@ -41,4 +43,17 @@ class CarPark {
         'lon': lon,
         'lat': lat,
       };
+
+  CarParkEntity toCarParkEntity() {
+    return CarParkEntity(
+      id: id,
+      carParkId: carParkId,
+      name: name,
+      maxCapacity: maxCapacity,
+      spacesAvailable: spacesAvailable,
+      realtime: realtime,
+      lon: lon,
+      lat: lat,
+    );
+  }
 }

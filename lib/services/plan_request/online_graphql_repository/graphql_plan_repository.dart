@@ -7,6 +7,7 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
+import 'package:trufi_core/services/models_otp/plan.dart';
 
 import 'graphql_client/graphql_client.dart';
 import 'graphql_client/graphql_utils.dart';
@@ -19,14 +20,14 @@ import 'graphql_operation/queries/utils_summary_plan_queries.dart'
 import 'graphql_operation/queries/walkbike_plan_queries.dart'
     as walkbike_queries;
 import 'graphql_operation/query_utils.dart';
-import 'plan_graphql_model.dart';
+import 'modes_transport.dart';
 
 class GraphQLPlanRepository {
   final GraphQLClient client = getClient();
 
   GraphQLPlanRepository();
 
-  Future<PlanGraphQl> fetchPlanSimple({
+  Future<Plan> fetchPlanSimple({
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required List<TransportMode> transportsMode,
@@ -47,12 +48,12 @@ class GraphQLPlanRepository {
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    final stopData = PlanGraphQl.fromJson(
-        dataStopsTimes.data['plan'] as Map<String, dynamic>);
+    final stopData =
+        Plan.fromMap(dataStopsTimes.data['plan'] as Map<String, dynamic>);
     return stopData;
   }
 
-  Future<PlanGraphQl> fetchPlanAdvanced({
+  Future<Plan> fetchPlanAdvanced({
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required PayloadDataPlanState advancedOptions,
@@ -123,7 +124,7 @@ class GraphQLPlanRepository {
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    final stopData = PlanGraphQl.fromJson(
+    final stopData = Plan.fromMap(
         dataStopsTimes.data['viewer']['plan'] as Map<String, dynamic>);
     return stopData;
   }

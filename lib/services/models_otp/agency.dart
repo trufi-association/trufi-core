@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:trufi_core/entities/plan_entity/agency_entity.dart';
 
 import 'alert.dart';
 import 'route.dart';
@@ -61,4 +62,17 @@ class Agency {
         'routes': List<dynamic>.from(routes.map((x) => x.toJson())),
         'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
       };
+
+  AgencyEntity toAgencyEntity() {
+    return AgencyEntity(
+      id: id,
+      gtfsId: gtfsId,
+      name: name,
+      url: url,
+      timezone: timezone,
+      lang: lang,
+      phone: phone,
+      fareUrl: fareUrl,
+    );
+  }
 }

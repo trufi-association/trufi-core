@@ -1,3 +1,5 @@
+import 'package:trufi_core/entities/plan_entity/bike_rental_station_entity.dart';
+
 class BikeRentalStation {
   final String id;
   final String stationId;
@@ -63,4 +65,22 @@ class BikeRentalStation {
         'capacity': capacity,
         'allowOverloading': allowOverloading,
       };
+
+  BikeRentalStationEntity toBikeRentalStation() {
+    return BikeRentalStationEntity(
+      id: id,
+      stationId: stationId,
+      name: name,
+      bikesAvailable: bikesAvailable,
+      spacesAvailable: spacesAvailable,
+      state: state,
+      realtime: realtime,
+      allowDropoff: allowDropoff,
+      networks: networks,
+      lon: lon,
+      lat: lat,
+      capacity: capacity,
+      allowOverloading: allowOverloading,
+    );
+  }
 }

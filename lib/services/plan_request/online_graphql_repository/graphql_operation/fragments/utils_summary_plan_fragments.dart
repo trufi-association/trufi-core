@@ -205,6 +205,7 @@ final itineraryTabItineraryFragment = gql(
   '''
 fragment ItineraryTab_itinerary on Itinerary {
   walkDistance
+  walkTime
   duration
   startTime
   endTime

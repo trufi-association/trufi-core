@@ -1,3 +1,5 @@
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+
 import 'agency.dart';
 import 'alert.dart';
 import 'enums/leg/pickup_dropoff_type.dart';
@@ -11,8 +13,8 @@ import 'stop.dart';
 import 'trip.dart';
 
 class Leg {
-  final double startTime;
-  final double endTime;
+  final int startTime;
+  final int endTime;
   final int departureDelay;
   final int arrivalDelay;
   final Mode mode;
@@ -68,14 +70,14 @@ class Leg {
       this.interlineWithPreviousLeg,
       this.alerts});
 
-  factory Leg.fromJson(Map<String, dynamic> json) => Leg(
-        startTime: double.tryParse(json['startTime'].toString()) ?? 0,
-        endTime: double.tryParse(json['endTime'].toString()) ?? 0,
-        departureDelay: int.tryParse(json['departureDelay'].toString()) ?? 0,
-        arrivalDelay: int.tryParse(json['arrivalDelay'].toString()) ?? 0,
+  factory Leg.fromMap(Map<String, dynamic> json) => Leg(
+        startTime: int.tryParse(json['startTime'].toString()),
+        endTime: int.tryParse(json['endTime'].toString()),
+        departureDelay: int.tryParse(json['departureDelay'].toString()),
+        arrivalDelay: int.tryParse(json['arrivalDelay'].toString()),
         mode: getModeByString(json['mode'].toString()),
-        duration: double.tryParse(json['duration'].toString()) ?? 0,
-        generalizedCost: int.tryParse(json['generalizedCost'].toString()) ?? 0,
+        duration: double.tryParse(json['duration'].toString()),
+        generalizedCost: int.tryParse(json['generalizedCost'].toString()),
         legGeometry: json['legGeometry'] != null
             ? Geometry.fromJson(json['legGeometry'] as Map<String, dynamic>)
             : null,
@@ -85,14 +87,14 @@ class Leg {
         realTime: json['realTime'] as bool,
         realtimeState:
             getRealtimeStateByString(json['realtimeState'].toString()),
-        distance: double.tryParse(json['distance'].toString()) ?? 0,
+        distance: double.tryParse(json['distance'].toString()),
         transitLeg: json['transitLeg'] as bool,
         rentedBike: json['rentedBike'] as bool,
         from: json['from'] != null
-            ? Place.fromJson(json['from'] as Map<String, dynamic>)
+            ? Place.fromMap(json['from'] as Map<String, dynamic>)
             : null,
         to: json['to'] != null
-            ? Place.fromJson(json['to'] as Map<String, dynamic>)
+            ? Place.fromMap(json['to'] as Map<String, dynamic>)
             : null,
         route: json['route'] != null
             ? RouteOtp.fromJson(json['route'] as Map<String, dynamic>)
@@ -109,7 +111,7 @@ class Leg {
         intermediatePlaces: json['intermediatePlaces'] != null
             ? List<Place>.from(
                 (json["intermediatePlaces"] as List<dynamic>).map(
-                (x) => Place.fromJson(x as Map<String, dynamic>),
+                (x) => Place.fromMap(x as Map<String, dynamic>),
               ))
             : null,
         intermediatePlace: json['intermediatePlace'] as bool,
@@ -129,7 +131,7 @@ class Leg {
             : null,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'startTime': startTime,
         'endTime': endTime,
         'departureDelay': departureDelay,
@@ -144,15 +146,17 @@ class Leg {
         'distance': distance,
         'transitLeg': transitLeg,
         'rentedBike': rentedBike,
-        'from': from?.toJson(),
-        'to': to?.toJson(),
+        'from': from?.toMap(),
+        'to': to?.toMap(),
         'route': route?.toJson(),
         'trip': trip?.toJson(),
         'serviceDate': serviceDate,
-        'intermediateStops':
-            List<dynamic>.from(intermediateStops.map((x) => x.toJson())),
-        'intermediatePlaces':
-            List<dynamic>.from(intermediatePlaces.map((x) => x.toJson())),
+        'intermediateStops': intermediateStops != null
+            ? List<dynamic>.from(intermediateStops.map((x) => x.toJson()))
+            : null,
+        'intermediatePlaces': intermediatePlaces != null
+            ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
+            : null,
         'intermediatePlace': intermediatePlace,
         'steps': List<dynamic>.from(steps.map((x) => x.toJson())),
         'pickupType': pickupType?.name,
@@ -160,4 +164,28 @@ class Leg {
         'interlineWithPreviousLeg': interlineWithPreviousLeg,
         'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
       };
+
+  PlanItineraryLeg toPlanItineraryLeg() {
+    return PlanItineraryLeg(
+      points: legGeometry?.points,
+      mode: mode?.name,
+      route: route?.toRouteEntity(),
+      startTime: startTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(startTime)
+          : null,
+      endTime:
+          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
+      distance: distance ?? 0,
+      duration: duration ?? 0,
+      routeLongName: route?.longName ?? '',
+      agency: agency?.toAgencyEntity(),
+      toPlace: to?.toPlaceEntity(),
+      fromPlace: from?.toPlaceEntity(),
+      intermediatePlaces:
+          intermediatePlaces?.map((x) => x.toPlaceEntity())?.toList(),
+      rentedBike: rentedBike,
+      intermediatePlace: intermediatePlace,
+      transitLeg: transitLeg,
+    );
+  }
 }

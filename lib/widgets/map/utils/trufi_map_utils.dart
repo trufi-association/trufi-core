@@ -50,7 +50,10 @@ Marker buildBusMarker(
           child: Row(
             children: <Widget>[
               Icon(leg.iconData, color: Colors.white),
-              Text(" ${leg.route}",
+              Text(
+                  leg?.route?.shortName != null
+                      ? ' ${leg.route.shortName}'
+                      : '',
                   style: const TextStyle(color: Colors.white)),
             ],
           ),
