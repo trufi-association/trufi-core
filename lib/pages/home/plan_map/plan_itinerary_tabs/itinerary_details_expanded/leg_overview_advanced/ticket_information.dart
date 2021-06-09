@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/fare_utils.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/services/models_otp/fare_component.dart';
-
-import 'widget/info_message.dart';
 
 class TicketInformation extends StatelessWidget {
   final List<FareComponent> fares;

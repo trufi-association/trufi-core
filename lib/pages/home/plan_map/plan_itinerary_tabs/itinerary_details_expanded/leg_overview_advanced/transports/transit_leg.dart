@@ -4,7 +4,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/widget/info_message.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'route_number.dart';
@@ -22,21 +22,26 @@ class TransitLeg extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RouteNumber(
-          transportMode: leg.transportMode,
-          // TODO adapted the color server
-          // color: leg?.route?.color != null
-          //     ? Color(int.tryParse("0xFF${leg.route.color}"))
-          //     : null,
-          icon: (leg?.route?.shortName ?? '').startsWith('RT')
-              ? onDemandTaxiSvg
-              : null,
-          text: leg?.route?.shortName != null
-              ? leg.route.shortName
-              : leg.transportMode.name,
-          duration: leg.durationLeg(localization),
-          distance: leg.distanceString(localization),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: RouteNumber(
+            transportMode: leg.transportMode,
+            // TODO adapted the color server
+            // color: leg?.route?.color != null
+            //     ? Color(int.tryParse("0xFF${leg.route.color}"))
+            //     : null,
+            icon: (leg?.route?.shortName ?? '').startsWith('RT')
+                ? onDemandTaxiSvg
+                : null,
+            text: leg?.route?.shortName != null
+                ? leg.route.shortName
+                : leg.transportMode.name,
+            duration: leg.durationLeg(localization),
+            distance: leg.distanceString(localization),
+          ),
         ),
         if (leg.pickupBookingInfo != null)
           Column(
