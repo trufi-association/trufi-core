@@ -140,7 +140,7 @@ class PlanEntity {
           )
           .toList();
       if (publicModes.isNotEmpty) {
-        return publicModes[0].transportMode.image;
+        return publicModes[0].transportMode.getImage();
       }
     }
     return Container();
