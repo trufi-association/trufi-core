@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/blocs/theme_bloc.dart';
 
-class CustomScrollableContainer extends StatelessWidget {
+class CustomScrollableContainer extends StatefulWidget {
   final Widget body;
   final Widget panel;
   final double bodyMinSize;
@@ -16,99 +14,91 @@ class CustomScrollableContainer extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CustomScrollableContainerState createState() =>
+      _CustomScrollableContainerState();
+}
+
+class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
+  double height;
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (builderContext, constrains) {
-      return Column(
-        children: [
-          Expanded(
-            child: OverflowBox(
-              // TODO fix overflow warnings
-              minHeight: bodyMinSize,
-              child: body,
+      final minPanelSize = constrains.maxHeight - widget.panelMinSize;
+      final minBodySize = constrains.maxHeight - widget.panelMinSize;
+      // height validation
+      height ??= minPanelSize;
+      if (height > minPanelSize) height = minPanelSize;
+      if (height < 0) height = 0;
+
+      final bodyHeight = constrains.maxHeight - height;
+      return Container(
+        color: Colors.white,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: bodyHeight <= minBodySize ? bodyHeight : minBodySize,
+              child: widget.body,
             ),
-          ),
-          _PanelContainer(
-            maxSize: constrains.maxHeight,
-            minSize: panelMinSize,
-            child: panel,
-          ),
-        ],
-      );
-    });
-  }
-}
-
-class _PanelContainer extends StatefulWidget {
-  final Widget child;
-  final double maxSize;
-  final double minSize;
-  const _PanelContainer({
-    Key key,
-    @required this.child,
-    @required this.maxSize,
-    @required this.minSize,
-  }) : super(key: key);
-
-  @override
-  _PanelContainerState createState() => _PanelContainerState();
-}
-
-class _PanelContainerState extends State<_PanelContainer> {
-  double height = 100;
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.read<ThemeCubit>().state.bottomBarTheme;
-    if (height > widget.maxSize - 30) height = widget.maxSize - 30;
-    if (height < widget.minSize) height = widget.minSize;
-    return Container(
-      decoration: BoxDecoration(
-          color: theme.backgroundColor,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: theme.accentColor.withOpacity(0.5), blurRadius: 4.0)
-          ],
-        ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onVerticalDragUpdate: (detail) {
-              setState(() {
-                height -= detail.delta.dy;
-              });
-            },
-            child: Container(
-              height: 30,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
+            Positioned(
+              top: height,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      spreadRadius: 1.0,
+                      blurRadius: 10.0,
+                    ),
+                  ],
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 30,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(12.0),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onVerticalDragUpdate: (detail) {
+                        setState(() {
+                          height += detail.delta.dy;
+                        });
+                      },
+                      child: Container(
+                        height: 30,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              width: 30,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(child: widget.panel),
+                  ],
+                ),
               ),
             ),
-          ),
-          // ignore: sized_box_for_whitespace
-          Container(
-            height: height,
-            child: widget.child,
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

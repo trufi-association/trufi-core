@@ -98,7 +98,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
     final cfg = context.read<ConfigurationCubit>().state;
     final children = <Widget>[
       CustomScrollableContainer(
-        panelMinSize: 160,
+        panelMinSize: 250,
         bodyMinSize: 250,
         body: PlanMapPage(
           planPageController: _planPageController,
