@@ -199,4 +199,72 @@ class PlanItinerary {
 
   Duration get totalBikingDuration =>
       Duration(seconds: getTotalBikingDuration(compressLegs ?? []).toInt());
+
+  String get firstLegStartTime {
+    final firstDeparture = compressLegs.firstWhere(
+      (element) => element.transitLeg ?? false,
+      orElse: () => null,
+    );
+    String legStartTime = '';
+    if (firstDeparture != null) {
+      if (firstDeparture?.rentedBike ?? false) {
+        legStartTime =
+            'Departure at ${firstDeparture?.startTimeString} from ${firstDeparture?.fromPlace?.name} bike station';
+        if (firstDeparture?.fromPlace?.bikeRentalStation?.bikesAvailable !=
+            null) {
+          legStartTime =
+              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} bikes at the station';
+        }
+      } else {
+        // TODO trasnlate
+        final String firstDepartureStopType =
+            firstDeparture.transportMode == TransportMode.rail ||
+                    firstDeparture.transportMode == TransportMode.subway
+                ? 'from station'
+                : 'from stop';
+        final String firstDeparturePlatform =
+            firstDeparture?.fromPlace?.stopEntity?.platformCode != null
+                ? (firstDeparture.transportMode == TransportMode.rail
+                        ? ', Track '
+                        : ', Plattform ') +
+                    firstDeparture?.fromPlace?.stopEntity?.platformCode
+                : '';
+        legStartTime =
+            "Leaves at ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
+      }
+    } else {
+      legStartTime = "Leave when it suits you";
+    }
+
+    return legStartTime;
+  }
+
+  int get totalDurationItinerary {
+    return endTime.difference(startTime).inSeconds;
+  }
+
+  double get durationItinerary {
+    final duration = endTime.difference(startTime).inSeconds;
+    return duration + numberRouteHidens;
+  }
+
+  bool get usingOwnBicycle => legs.any((leg) =>
+      leg.transportMode == TransportMode.bicycle && leg.rentedBike ?? false);
+
+  bool get renderModeIcons => compressLegs.length < 10;
+
+  bool get usingOwnBicycleWholeTrip {
+    return usingOwnBicycle &&
+        legs.every((leg) => leg.toPlace?.bikeParkEntity == null);
+  }
+
+  double get numberRouteHidens {
+    double sumPart = 0;
+    final routeShorts = compressLegs.where((leg) {
+      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 100;
+      if (legLength < 7 && leg.transitLeg) sumPart += legLength;
+      return legLength < 7 && leg.transitLeg;
+    }).toList();
+    return ((routeShorts.length * 7 - sumPart) * totalDurationItinerary) / 100;
+  }
 }

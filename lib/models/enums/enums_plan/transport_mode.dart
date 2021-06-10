@@ -222,7 +222,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,
-    TransportMode.walk: Colors.transparent,
+    TransportMode.walk: Colors.grey[200],
     // route icons for specific types of transportation
     TransportMode.trufi: const Color(0xffff260c),
     TransportMode.micro: const Color(0xffff260c),

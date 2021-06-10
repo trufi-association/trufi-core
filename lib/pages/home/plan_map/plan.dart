@@ -7,9 +7,11 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/trufi_app.dart';
+import 'package:trufi_core/widgets/custom_scrollable_container.dart';
+
+import 'custom_itinerary/custom_itinerary.dart';
 
 class PlanPageController {
   PlanPageController(this.plan, this.ad) {
@@ -81,11 +83,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           _planPageController.plan.itineraries[_tabController.index],
         );
       });
-    _planPageController.outSelectedItinerary.listen((selectedItinerary) {
-      _tabController.animateTo(
-        _planPageController.plan.itineraries.indexOf(selectedItinerary),
-      );
-    });
   }
 
   @override
@@ -99,22 +96,18 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigurationCubit>().state;
     final children = <Widget>[
-      Column(
-        children: <Widget>[
-          Expanded(
-            child: PlanMapPage(
-              planPageController: _planPageController,
-              customOverlayWidget: widget.customOverlayWidget,
-              customBetweenFabWidget: widget.customBetweenFabWidget,
-              markerConfiguration: cfg.markers,
-            ),
-          ),
-          PlanItineraryTabPages(
-            _tabController,
-            _planPageController.plan.itineraries,
-            _planPageController.ad,
-          ),
-        ],
+      CustomScrollableContainer(
+        panelMinSize: 250,
+        bodyMinSize: 250,
+        body: PlanMapPage(
+          planPageController: _planPageController,
+          customOverlayWidget: widget.customOverlayWidget,
+          customBetweenFabWidget: widget.customBetweenFabWidget,
+          markerConfiguration: cfg.markers,
+        ),
+        panel: CustomItinerary(
+          planPageController: _planPageController,
+        ),
       ),
     ];
     final homePageBloc = context.read<HomePageCubit>();

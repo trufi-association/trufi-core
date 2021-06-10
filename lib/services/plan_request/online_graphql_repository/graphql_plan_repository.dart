@@ -200,7 +200,7 @@ class GraphQLPlanRepository {
             advancedOptions.includeParkAndRideSuggestions &&
                 linearDistance > PayloadDataPlanState.suggestCarMinDistance,
         'shouldMakeOnDemandTaxiQuery': date.hour > 21 ||
-            (date.hour == 20 && date.minute == 0) ||
+            (date.hour == 21 && date.minute == 0) ||
             date.hour < 5 ||
             (date.hour == 5 && date.minute == 0),
         'showBikeAndParkItineraries': !advancedOptions.wheelchair &&

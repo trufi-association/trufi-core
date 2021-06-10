@@ -30,15 +30,20 @@ class DurationComponent extends StatelessWidget {
           children: [
             Text(
               durationToString(localization, duration),
-              style: theme.primaryTextTheme.bodyText1
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: theme.primaryTextTheme.bodyText1.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
             Text(
-                futureText != ''
-                    ? '$futureText ${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
-                    : '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
-                style: theme.primaryTextTheme.bodyText1
-                    .copyWith(fontWeight: FontWeight.w400)),
+              futureText != ''
+                  ? '$futureText ${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
+                  : '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
+              style: theme.primaryTextTheme.bodyText1.copyWith(
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
       ],

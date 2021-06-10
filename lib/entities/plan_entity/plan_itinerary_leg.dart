@@ -99,8 +99,8 @@ class PlanItineraryLeg {
           ? PickupBookingInfo.fromMap(
               json[_pickupBookingInfo] as Map<String, dynamic>)
           : null,
-      transitLeg: json[_intermediatePlace] as bool,
-      intermediatePlace: json[_transitLeg] as bool,
+      transitLeg: json[_transitLeg] as bool,
+      intermediatePlace: json[_intermediatePlace] as bool,
       rentedBike: json[_rentedBike] as bool,
     );
   }
@@ -204,5 +204,12 @@ class PlanItineraryLeg {
     return localization.instructionDurationMinutes(value);
   }
 
+  int get durationIntLeg {
+    return endTime.difference(startTime).inSeconds;
+  }
+
   IconData get iconData => transportMode.icon;
+
+  bool get isLegOnFoot =>
+      transportMode == TransportMode.walk || mode == 'BICYCLE_WALK';
 }

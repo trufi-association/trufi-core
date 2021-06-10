@@ -23,10 +23,10 @@ class PlanItineraryTabPages extends StatefulWidget {
 
 class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
     with TickerProviderStateMixin {
-  static const _costHeight = 40.0;
-  static const _summaryHeight = 40.0;
+  static const _costHeight = 30.0;
+  static const _summaryHeight = 80.0;
   static const _detailHeight = 200.0;
-  static const _paddingHeight = 20.0;
+  static const _paddingHeight = 10.0;
 
   AnimationController _animationController;
   Animation<double> _animationCostHeight;
@@ -88,10 +88,6 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
       child: Container(
         decoration: BoxDecoration(
           color: theme.backgroundColor,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: theme.accentColor.withOpacity(0.5), blurRadius: 4.0)
-          ],
         ),
         child: SafeArea(
           child: Stack(

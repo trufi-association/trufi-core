@@ -13,8 +13,6 @@ import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
-  static const _paddingHeight = 20.0;
-
   final PlanItinerary itinerary;
 
   const LegOverviewAdvanced({
@@ -36,7 +34,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      loadData();
+      // TODO need finished implement fetchFares
+      // loadData();
     });
   }
 
@@ -44,113 +43,114 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   Widget build(BuildContext context) {
     final config = context.read<ConfigurationCubit>().state;
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(
-        top: LegOverviewAdvanced._paddingHeight / 2,
-        bottom: LegOverviewAdvanced._paddingHeight / 2,
-        left: 10.0,
-        right: 32.0,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        final itineraryLeg = widget.itinerary.legs[index];
-        final localization = TrufiLocalization.of(context);
-        return Column(
-          children: [
-            if (index == 0)
+    final localization = TrufiLocalization.of(context);
+    return Column(
+      children: widget.itinerary.legs
+          .asMap()
+          .map<int, Widget>((index, itineraryLeg) {
+            return MapEntry(
+              index,
               Column(
                 children: [
-                  if (fares != null)
-                    TicketInformation(
-                      legs: widget.itinerary.legs,
-                      fares: fares,
-                      unknownFares: unknownFares,
-                    ),
-                  BarItineraryDetails(itinerary: widget.itinerary),
-                  const Divider(
-                    color: Colors.black,
-                  ),
-                  if (itineraryLeg.transportMode == TransportMode.walk)
+                  if (index == 0)
                     Column(
                       children: [
-                        DashLinePlace(
-                          date: widget.itinerary.startTimeHHmm.toString(),
-                          location: _getDisplayName(
-                              itineraryLeg.fromPlace.name, localization),
-                          child: SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: FittedBox(child: config.markers.fromMarker),
+                        if (fares != null)
+                          TicketInformation(
+                            legs: widget.itinerary.legs,
+                            fares: fares,
+                            unknownFares: unknownFares,
                           ),
+                        BarItineraryDetails(itinerary: widget.itinerary),
+                        const Divider(
+                          color: Colors.black,
                         ),
+                        if (itineraryLeg.transportMode == TransportMode.walk)
+                          Column(
+                            children: [
+                              DashLinePlace(
+                                date: widget.itinerary.startTimeHHmm.toString(),
+                                location: _getDisplayName(
+                                    itineraryLeg.fromPlace.name, localization),
+                                child: SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: FittedBox(
+                                      child: config.markers.fromMarker),
+                                ),
+                              ),
+                              WalkDash(
+                                leg: itineraryLeg,
+                              ),
+                            ],
+                          )
+                        else if (widget.itinerary.legs.length > 1)
+                          TransportDash(
+                            leg: itineraryLeg,
+                            isFirstTransport: true,
+                            isNextTransport: itineraryLeg.endTimeString ==
+                                widget
+                                    .itinerary.legs[index + 1].startTimeString,
+                          )
+                      ],
+                    )
+                  else if (itineraryLeg.transportMode == TransportMode.walk &&
+                      index < widget.itinerary.legs.length - 1)
+                    Column(
+                      children: [
                         WalkDash(
                           leg: itineraryLeg,
                         ),
+                        if (itineraryLeg.endTimeString !=
+                            widget.itinerary.legs[index + 1].startTimeString)
+                          WaitDash(
+                            legBefore: itineraryLeg,
+                            legAfter: widget.itinerary.legs[index + 1],
+                          )
                       ],
                     )
-                  else if (widget.itinerary.legs.length > 1)
-                    TransportDash(
-                      leg: itineraryLeg,
-                      isFirstTransport: true,
-                      isNextTransport: itineraryLeg.endTimeString ==
-                          widget.itinerary.legs[index + 1].startTimeString,
-                    )
-                ],
-              )
-            else if (itineraryLeg.transportMode == TransportMode.walk &&
-                index < widget.itinerary.legs.length - 1)
-              Column(
-                children: [
-                  WalkDash(
-                    leg: itineraryLeg,
-                  ),
-                  if (itineraryLeg.endTimeString !=
-                      widget.itinerary.legs[index + 1].startTimeString)
-                    WaitDash(
-                      legBefore: itineraryLeg,
-                      legAfter: widget.itinerary.legs[index + 1],
-                    )
-                ],
-              )
-            else if (index < widget.itinerary.legs.length - 1)
-              Column(
-                children: [
-                  TransportDash(
-                    leg: itineraryLeg,
-                    isNextTransport: itineraryLeg.endTimeString ==
-                        widget.itinerary.legs[index + 1].startTimeString,
-                  ),
-                  if (itineraryLeg.endTimeString !=
-                      widget.itinerary.legs[index + 1].startTimeString)
-                    WaitDash(
-                      legBefore: itineraryLeg,
-                      legAfter: widget.itinerary.legs[index + 1],
-                    )
-                ],
-              ),
-            if (index == widget.itinerary.legs.length - 1)
-              Column(
-                children: [
-                  if (itineraryLeg.transportMode == TransportMode.walk)
-                    WalkDash(leg: itineraryLeg)
-                  else
-                    TransportDash(
-                      leg: itineraryLeg,
+                  else if (index < widget.itinerary.legs.length - 1)
+                    Column(
+                      children: [
+                        TransportDash(
+                          leg: itineraryLeg,
+                          isNextTransport: itineraryLeg.endTimeString ==
+                              widget.itinerary.legs[index + 1].startTimeString,
+                        ),
+                        if (itineraryLeg.endTimeString !=
+                            widget.itinerary.legs[index + 1].startTimeString)
+                          WaitDash(
+                            legBefore: itineraryLeg,
+                            legAfter: widget.itinerary.legs[index + 1],
+                          )
+                      ],
                     ),
-                  DashLinePlace(
-                    date: widget.itinerary.endTimeHHmm.toString(),
-                    location: _getDisplayName(
-                        itineraryLeg.toPlace.name, localization),
-                    child: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: FittedBox(child: config.markers.toMarker)),
-                  ),
+                  if (index == widget.itinerary.legs.length - 1)
+                    Column(
+                      children: [
+                        if (itineraryLeg.transportMode == TransportMode.walk)
+                          WalkDash(leg: itineraryLeg)
+                        else
+                          TransportDash(
+                            leg: itineraryLeg,
+                          ),
+                        DashLinePlace(
+                          date: widget.itinerary.endTimeHHmm.toString(),
+                          location: _getDisplayName(
+                              itineraryLeg.toPlace.name, localization),
+                          child: SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: FittedBox(child: config.markers.toMarker)),
+                        ),
+                      ],
+                    ),
                 ],
               ),
-          ],
-        );
-      },
-      itemCount: widget.itinerary.legs.length,
+            );
+          })
+          .values
+          .toList(),
     );
   }
 
