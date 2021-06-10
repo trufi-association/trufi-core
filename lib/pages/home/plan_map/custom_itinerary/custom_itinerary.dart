@@ -113,17 +113,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       ),
                     ],
                   ),
-                  LegOverviewAdvanced(itinerary: currentPlanItinerary)
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //       itemCount:
-                  //           widget.planPageController.plan.itineraries.length,
-                  //       itemBuilder: (buildContext, index) {
-                  //         final itinerary =
-                  //             widget.planPageController.plan.itineraries[index];
-                  //         return LegOverviewAdvanced(itinerary: itinerary);
-                  //       }),
-                  // )
+                  LegOverviewAdvanced(itinerary: currentPlanItinerary),
                 ],
               ),
       ),
