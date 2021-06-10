@@ -33,13 +33,13 @@ class CardTransportMode extends StatelessWidget {
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
+                    Positioned.fill(child: icon),
                     if (secondaryIcon != null)
                       Positioned(
                         right: -1,
                         top: -2,
                         child: secondaryIcon,
                       ),
-                    Positioned.fill(child: icon),
                   ],
                 ),
               ),
