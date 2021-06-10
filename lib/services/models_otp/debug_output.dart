@@ -13,7 +13,7 @@ class DebugOutput {
     this.timedOut,
   });
 
-  factory DebugOutput.fromJson(Map<String, dynamic> json) => DebugOutput(
+  factory DebugOutput.fromMap(Map<String, dynamic> json) => DebugOutput(
         totalTime: double.tryParse(json['totalTime'].toString()) ?? 0,
         pathCalculationTime:
             double.tryParse(json['pathCalculationTime'].toString()) ?? 0,
@@ -23,7 +23,7 @@ class DebugOutput {
         timedOut: json['timedOut'] as bool,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'totalTime': totalTime,
         'pathCalculationTime': pathCalculationTime,
         'precalculationTime': precalculationTime,

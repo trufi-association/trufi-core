@@ -14,7 +14,7 @@ class PlaceEntity {
   static const _lon = 'lon';
   static const _arrivalTime = 'arrivalTime';
   static const _departureTime = 'departureTime';
-  static const _stopEntity = 'stopEntity';
+  static const _stopEntity = 'stop';
   static const _bikeRentalStation = 'bikeRentalStation';
   static const _bikeParkEntity = 'bikeParkEntity';
   static const _carParkEntity = 'carParkEntity';

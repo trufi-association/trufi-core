@@ -1,3 +1,5 @@
+import 'package:trufi_core/entities/plan_entity/bike_park_entity.dart';
+
 class BikePark {
   final String id;
   final String bikeParkId;
@@ -18,13 +20,13 @@ class BikePark {
   });
 
   factory BikePark.fromJson(Map<String, dynamic> json) => BikePark(
-        id: json['id'].toString(),
-        bikeParkId: json['bikeParkId'].toString(),
-        name: json['name'].toString(),
-        spacesAvailable: int.tryParse(json['spacesAvailable'].toString()) ?? 0,
+        id: json['id'] as String,
+        bikeParkId: json['bikeParkId'] as String,
+        name: json['name'] as String,
+        spacesAvailable: int.tryParse(json['spacesAvailable'].toString()),
         realtime: json['realtime'] as bool,
-        lon: double.tryParse(json['lon'].toString()) ?? 0,
-        lat: double.tryParse(json['lat'].toString()) ?? 0,
+        lon: double.tryParse(json['lon'].toString()),
+        lat: double.tryParse(json['lat'].toString()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -36,4 +38,16 @@ class BikePark {
         'lon': lon,
         'lat': lat,
       };
+
+  BikeParkEntity toBikeParkEntity() {
+    return BikeParkEntity(
+      id: id,
+      bikeParkId: bikeParkId,
+      name: name,
+      spacesAvailable: spacesAvailable,
+      realtime: realtime,
+      lon: lon,
+      lat: lat,
+    );
+  }
 }

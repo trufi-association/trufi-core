@@ -5,11 +5,13 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/services/models_otp/enums/mode.dart';
+import 'package:trufi_core/services/models_otp/plan.dart';
 
 import '../../../models/trufi_place.dart';
 import '../request_manager.dart';
 import 'graphql_plan_repository.dart';
-import 'plan_graphql_model.dart';
+import 'modes_transport.dart';
 
 class OnlineGraphQLRepository implements RequestManager {
   final String graphQLEndPoint;
@@ -84,35 +86,41 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
   }) async {
-    PlanGraphQl planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+    Plan planData = await _graphQLPlanRepository.fetchPlanAdvanced(
       fromLocation: from,
       toLocation: to,
       advancedOptions: advancedOptions,
     );
-    if (planEntityData.itineraries.isEmpty) {
-      planEntityData = await _graphQLPlanRepository.fetchPlanAdvanced(
+    planData = planData.copyWith(
+      itineraries: planData.itineraries
+          .where(
+            (itinerary) =>
+                !itinerary.legs.every((leg) => leg.mode == Mode.walk),
+          )
+          .toList(),
+    );
+    if (planData.itineraries.isEmpty) {
+      planData = await _graphQLPlanRepository.fetchPlanAdvanced(
         fromLocation: from,
         toLocation: to,
         advancedOptions: advancedOptions,
         defaultFecth: true,
       );
     }
-    final planEntity = planEntityData.toPlan();
-    // TODO For the moment We do not need clean the itineraries with only mode Walk
-    // final itinerariesTrasnport = planEntity.itineraries
-    //     .where(
-    //       (itinerary) => !itinerary.legs
-    //           .every((leg) => leg.transportMode == TransportMode.walk),
-    //     )
-    //     .toList();
+    final planEntity = planData.toPlan();
+    final itinerariesTrasnport = planEntity.itineraries
+        .where(
+          (itinerary) => !itinerary.legs
+              .every((leg) => leg.transportMode == TransportMode.walk),
+        )
+        .toList();
 
-    // return planEntity.copyWith(
-    //   itineraries: itinerariesTrasnport,
-    //   error: itinerariesTrasnport.isEmpty
-    //       ? PlanError(404, "Not found routes")
-    //       : null,
-    // );
-    return planEntity;
+    return planEntity.copyWith(
+      itineraries: itinerariesTrasnport,
+      error: itinerariesTrasnport.isEmpty
+          ? PlanError(404, "Not found routes")
+          : null,
+    );
   }
 
   Future<ModesTransportEntity> _fetchTransportModePlan({

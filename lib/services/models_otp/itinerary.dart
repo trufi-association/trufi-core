@@ -1,13 +1,15 @@
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+
 import 'fare.dart';
 import 'leg.dart';
 
 class Itinerary {
-  final double startTime;
-  final double endTime;
-  final double duration;
+  final int startTime;
+  final int endTime;
+  final int duration;
   final int generalizedCost;
-  final double waitingTime;
-  final double walkTime;
+  final int waitingTime;
+  final int walkTime;
   final double walkDistance;
   final List<Leg> legs;
   final List<Fare> fares;
@@ -30,32 +32,31 @@ class Itinerary {
     this.arrivedAtDestinationWithRentedBicycle,
   });
 
-  factory Itinerary.fromJson(Map<String, dynamic> json) => Itinerary(
-        startTime: double.tryParse(json['startTime'].toString()) ?? 0,
-        endTime: double.tryParse(json['endTime'].toString()) ?? 0,
-        duration: double.tryParse(json['duration'].toString()) ?? 0,
-        generalizedCost: int.tryParse(json['generalizedCost'].toString()) ?? 0,
-        waitingTime: double.tryParse(json['waitingTime'].toString()) ?? 0,
-        walkTime: double.tryParse(json['walkTime'].toString()) ?? 0,
-        walkDistance: double.tryParse(json['walkDistance'].toString()) ?? 0,
+  factory Itinerary.fromMap(Map<String, dynamic> json) => Itinerary(
+        startTime: int.tryParse(json['startTime'].toString()),
+        endTime: int.tryParse(json['endTime'].toString()),
+        duration: int.tryParse(json['duration'].toString()),
+        generalizedCost: int.tryParse(json['generalizedCost'].toString()),
+        waitingTime: int.tryParse(json['waitingTime'].toString()),
+        walkTime: int.tryParse(json['walkTime'].toString()),
+        walkDistance: double.tryParse(json['walkDistance'].toString()),
         legs: json['legs'] != null
             ? List<Leg>.from((json["legs"] as List<dynamic>).map(
-                (x) => Leg.fromJson(x as Map<String, dynamic>),
+                (x) => Leg.fromMap(x as Map<String, dynamic>),
               ))
             : null,
         fares: json['fares'] != null
             ? List<Fare>.from((json["fares"] as List<dynamic>).map(
-                (x) => Fare.fromJson(x as Map<String, dynamic>),
+                (x) => Fare.fromMap(x as Map<String, dynamic>),
               ))
             : null,
-        elevationGained:
-            double.tryParse(json['elevationGained'].toString()) ?? 0,
-        elevationLost: double.tryParse(json['elevationLost'].toString()) ?? 0,
+        elevationGained: double.tryParse(json['elevationGained'].toString()),
+        elevationLost: double.tryParse(json['elevationLost'].toString()),
         arrivedAtDestinationWithRentedBicycle:
             json['arrivedAtDestinationWithRentedBicycle'] as bool,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'startTime': startTime,
         'endTime': endTime,
         'duration': duration,
@@ -63,11 +64,31 @@ class Itinerary {
         'waitingTime': waitingTime,
         'walkTime': walkTime,
         'walkDistance': walkDistance,
-        'legs': List<dynamic>.from(legs.map((x) => x.toJson())),
-        'fares': List<dynamic>.from(fares.map((x) => x.toJson())),
+        'legs': legs != null
+            ? List<dynamic>.from(legs.map((x) => x.toMap()))
+            : null,
+        'fares': fares != null
+            ? List<dynamic>.from(fares.map((x) => x.toMap()))
+            : null,
         'elevationGained': elevationGained,
         'elevationLost': elevationLost,
         'arrivedAtDestinationWithRentedBicycle':
             arrivedAtDestinationWithRentedBicycle,
       };
+
+  PlanItinerary toPlanItinerary() {
+    return PlanItinerary(
+      legs: legs
+          ?.map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
+          ?.toList(),
+      startTime: startTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(startTime)
+          : null,
+      endTime:
+          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
+      durationTrip: duration != null ? Duration(seconds: duration) : null,
+      walkDistance: walkDistance,
+      walkTime: walkTime != null ? Duration(seconds: walkTime) : null,
+    );
+  }
 }

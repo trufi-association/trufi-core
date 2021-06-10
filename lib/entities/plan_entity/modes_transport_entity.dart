@@ -7,6 +7,7 @@ class ModesTransportEntity {
   static const _bikeParkPlan = 'bikeParkPlan';
   static const _carPlan = 'carPlan';
   static const _parkRidePlan = 'parkRidePlan';
+  static const _onDemandTaxiPlan = 'onDemandTaxiPlan';
 
   final PlanEntity walkPlan;
   final PlanEntity bikePlan;
@@ -14,6 +15,7 @@ class ModesTransportEntity {
   final PlanEntity bikeParkPlan;
   final PlanEntity carPlan;
   final PlanEntity parkRidePlan;
+  final PlanEntity onDemandTaxiPlan;
 
   const ModesTransportEntity({
     this.walkPlan,
@@ -22,6 +24,7 @@ class ModesTransportEntity {
     this.bikeParkPlan,
     this.carPlan,
     this.parkRidePlan,
+    this.onDemandTaxiPlan,
   });
 
   factory ModesTransportEntity.fromJson(Map<String, dynamic> json) =>
@@ -45,6 +48,10 @@ class ModesTransportEntity {
         parkRidePlan: json[_parkRidePlan] != null
             ? PlanEntity.fromJson(json[_parkRidePlan] as Map<String, dynamic>)
             : null,
+        onDemandTaxiPlan: json[_onDemandTaxiPlan] != null
+            ? PlanEntity.fromJson(
+                json[_onDemandTaxiPlan] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +61,7 @@ class ModesTransportEntity {
         _bikeParkPlan: bikeParkPlan?.toJson(),
         _carPlan: carPlan?.toJson(),
         _parkRidePlan: parkRidePlan?.toJson(),
+        _onDemandTaxiPlan: onDemandTaxiPlan?.toJson(),
       };
 
   PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
@@ -78,6 +86,9 @@ class ModesTransportEntity {
 
   bool get existCarPlan => carPlan?.itineraries?.isNotEmpty ?? false;
 
+  bool get existOnDemandTaxi =>
+      onDemandTaxiPlan?.itineraries?.isNotEmpty ?? false;
+
   bool get existParkRidePlan => parkRidePlan?.itineraries?.isNotEmpty ?? false;
 
   bool get availableModesTransport =>
@@ -85,10 +96,11 @@ class ModesTransportEntity {
       existBikePlan ||
       existBikeAndVehicle ||
       existCarPlan ||
-      existParkRidePlan;
+      existParkRidePlan ||
+      existOnDemandTaxi;
 
   Widget getIconBikePublic() {
-    final publicModes = filterOnlyBikeAndWalk(bikeParkPlan.itineraries)[0]
+    final publicModes = filterOnlyBikeAndWalk(bikeAndVehicle.itineraries)[0]
         .legs
         .where(
           (element) =>
@@ -97,7 +109,7 @@ class ModesTransportEntity {
         )
         .toList();
     if (publicModes.isNotEmpty) {
-      return publicModes[0].transportMode.image;
+      return publicModes[0].transportMode.getImage();
     }
     return Container();
   }

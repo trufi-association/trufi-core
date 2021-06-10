@@ -18,7 +18,7 @@ void main() {
     _leg = PlanItineraryLeg(
         points: "points",
         mode: "WALK",
-        route: "123",
+        // route: "123",
         routeLongName: "long_name_route",
         duration: 300.0,
         distance: 2.0);

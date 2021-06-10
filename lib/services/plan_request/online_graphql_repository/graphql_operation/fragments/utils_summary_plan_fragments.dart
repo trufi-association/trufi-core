@@ -205,6 +205,7 @@ final itineraryTabItineraryFragment = gql(
   '''
 fragment ItineraryTab_itinerary on Itinerary {
   walkDistance
+  walkTime
   duration
   startTime
   endTime
@@ -334,6 +335,14 @@ fragment ItineraryTab_itinerary on Itinerary {
         carParkId
         name
         id
+      }
+    }
+    pickupBookingInfo {
+      message
+      contactInfo {
+        phoneNumber
+        infoUrl
+        bookingUrl
       }
     }
     legGeometry {

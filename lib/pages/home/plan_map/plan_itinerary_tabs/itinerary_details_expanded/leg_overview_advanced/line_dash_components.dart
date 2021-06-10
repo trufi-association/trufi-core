@@ -7,7 +7,7 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 
-import '../../transport_icon_detail.dart';
+import 'transports/transit_leg.dart';
 
 class TransportDash extends StatelessWidget {
   final double height;
@@ -26,15 +26,15 @@ class TransportDash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localization = TrufiLocalization.of(context);
     final configuration = context.read<ConfigurationCubit>().state;
     return Column(
       children: [
         DashLinePlace(
           date: leg.startTimeString.toString(),
           location: leg.fromPlace.name.toString(),
-          color: leg.transportMode.color,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
           child: isFirstTransport
               ? SizedBox(
                   height: 24,
@@ -44,24 +44,16 @@ class TransportDash extends StatelessWidget {
               : null,
         ),
         SeparatorPlace(
-          color: leg.transportMode.color,
-          child: Expanded(
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    LegTransportIcon(leg: leg),
-                    Text(
-                      '  ${leg.durationLeg(localization).toString()}',
-                      style: theme.primaryTextTheme.bodyText1,
-                    ),
-                    Text(
-                      ' (${leg.distanceString(localization)})',
-                      style: theme.primaryTextTheme.bodyText1,
-                    ),
-                  ],
+                TransitLeg(
+                  leg: leg,
                 ),
                 if (configuration.planItineraryLegBuilder != null)
                   configuration.planItineraryLegBuilder(context, leg) ??
@@ -73,8 +65,10 @@ class TransportDash extends StatelessWidget {
         if (isNextTransport)
           DashLinePlace(
             date: leg.endTimeString.toString(),
-            location: leg.fromPlace.name.toString(),
-            color: leg.transportMode.color,
+            location: leg.toPlace.name.toString(),
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : leg.transportMode.color,
           ),
       ],
     );
@@ -94,13 +88,16 @@ class WalkDash extends StatelessWidget {
     return Row(
       children: [
         SeparatorPlace(
-          color: leg.transportMode.color,
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.color,
           separator: Container(
             margin: const EdgeInsets.symmetric(vertical: 2),
             height: 19,
             width: 19,
             child: walkSvg,
           ),
+          height: 20,
           child: Text(
               '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
         ),
@@ -132,6 +129,7 @@ class WaitDash extends StatelessWidget {
             width: 20,
             child: waitSvg,
           ),
+          height: 20,
           child: Text(
               "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
         ),
@@ -144,43 +142,59 @@ class SeparatorPlace extends StatelessWidget {
   final Widget child;
   final Widget separator;
   final Color color;
+  final double height;
 
   const SeparatorPlace({
     Key key,
     @required this.child,
     this.color,
     this.separator,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const SizedBox(width: 52),
-        SizedBox(
-          height: 50,
-          width: 20,
-          child: Column(
-            children: [
-              Expanded(
-                child: Container(
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(width: 52),
+          if (separator != null)
+            Column(
+              children: [
+                Container(
                   width: 3,
+                  height: height,
                   color: color ?? Colors.black,
                 ),
-              ),
-              if (separator != null) separator,
-              Expanded(
-                child: Container(
+                SizedBox(
+                  width: 20,
+                  child: separator,
+                ),
+                Container(
                   width: 3,
+                  height: height,
                   color: color ?? Colors.black,
                 ),
-              )
-            ],
-          ),
-        ),
-        const SizedBox(width: 5),
-        if (child != null) child,
-      ],
+              ],
+            )
+          else
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8.5),
+              width: 3,
+              height: height,
+              color: color ?? Colors.black,
+            ),
+          const SizedBox(width: 5),
+          if (child != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                child,
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

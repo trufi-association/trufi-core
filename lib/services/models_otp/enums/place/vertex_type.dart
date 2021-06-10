@@ -3,7 +3,7 @@ enum VertexType { normal, transit, bikepark, bikeshare, parkandride }
 VertexType getVertexTypeByString(String vertexType) {
   return VertexTypeExtension.names.keys.firstWhere(
     (key) => key.name == vertexType,
-    orElse: () => VertexType.normal,
+    orElse: () => null,
   );
 }
 
@@ -15,5 +15,5 @@ extension VertexTypeExtension on VertexType {
     VertexType.bikeshare: 'BIKESHARE',
     VertexType.parkandride: 'PARKANDRIDE'
   };
-  String get name => names[this] ?? 'NORMAL';
+  String get name => names[this];
 }
