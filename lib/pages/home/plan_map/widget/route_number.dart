@@ -8,6 +8,7 @@ class RouteNumber extends StatelessWidget {
   final String distance;
   final String duration;
   final Widget icon;
+  final String mode;
 
   const RouteNumber({
     Key key,
@@ -17,6 +18,7 @@ class RouteNumber extends StatelessWidget {
     this.distance,
     this.duration,
     this.icon,
+    this.mode,
   }) : super(key: key);
 
   @override

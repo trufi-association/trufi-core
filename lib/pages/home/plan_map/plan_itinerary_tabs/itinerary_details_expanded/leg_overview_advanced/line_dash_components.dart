@@ -6,8 +6,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
-
-import 'transports/transit_leg.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
 
 class TransportDash extends StatelessWidget {
   final double height;
