@@ -13,8 +13,6 @@ import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
-  static const _paddingHeight = 20.0;
-
   final PlanItinerary itinerary;
 
   const LegOverviewAdvanced({
