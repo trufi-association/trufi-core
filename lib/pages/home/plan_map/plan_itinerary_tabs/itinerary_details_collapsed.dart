@@ -5,7 +5,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/widgets/vertical_swipe_detector.dart';
 
-import 'itinarary_details_collapsed.dart/itinerary_summary_advanced.dart';
+import 'itinarary_details_collapsed/itinerary_summary_advanced.dart';
 import 'transport_icon_detail.dart';
 
 class ItineraryDetailsCollapsed extends StatelessWidget {

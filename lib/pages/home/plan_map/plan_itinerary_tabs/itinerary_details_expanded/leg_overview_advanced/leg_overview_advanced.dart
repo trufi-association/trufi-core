@@ -13,8 +13,6 @@ import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
-  static const _paddingHeight = 20.0;
-
   final PlanItinerary itinerary;
 
   const LegOverviewAdvanced({
@@ -36,7 +34,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      loadData();
+      // TODO need finished implement fetchFares
+      // loadData();
     });
   }
 
@@ -45,10 +44,6 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
     final config = context.read<ConfigurationCubit>().state;
 
     final localization = TrufiLocalization.of(context);
-    // return Container(
-    //   height: 100,
-    //   color: Colors.red,
-    // );
     return Column(
       children: widget.itinerary.legs
           .asMap()
