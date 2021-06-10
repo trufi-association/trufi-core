@@ -117,7 +117,7 @@ extension TransportModeExtension on TransportMode {
         return null;
         break;
       case TransportMode.bicycle:
-        return SvgPicture.string(citybike ?? "");
+        return SvgPicture.string(bike ?? "");
         break;
       case TransportMode.bus:
         return SvgPicture.string(
@@ -184,7 +184,7 @@ extension TransportModeExtension on TransportMode {
 
   static final colors = <TransportMode, Color>{
     TransportMode.airplane: null,
-    TransportMode.bicycle: Colors.blue,
+    TransportMode.bicycle: const Color(0xff666666),
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
@@ -208,7 +208,7 @@ extension TransportModeExtension on TransportMode {
 
   static final backgroundColors = <TransportMode, Color>{
     TransportMode.airplane: null,
-    TransportMode.bicycle: Colors.blue,
+    TransportMode.bicycle: Colors.transparent,
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.transparent,

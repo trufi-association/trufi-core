@@ -35,6 +35,7 @@ class BarItineraryDetails extends StatelessWidget {
                   walkDistance: itinerary.totalWalkingDistance,
                   walkDuration: itinerary.totalWalkingDuration,
                 ),
+              const SizedBox(width: 10),
               if (itinerary.totalBikingDistance != null &&
                   itinerary.totalBikingDistance > 0)
                 WalkDistance(
