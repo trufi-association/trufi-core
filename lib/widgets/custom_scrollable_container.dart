@@ -20,7 +20,7 @@ class CustomScrollableContainer extends StatelessWidget {
     return LayoutBuilder(builder: (builderContext, constrains) {
       return Column(
         children: [
-          Flexible(
+          Expanded(
             child: OverflowBox(
               // TODO fix overflow warnings
               minHeight: bodyMinSize,
