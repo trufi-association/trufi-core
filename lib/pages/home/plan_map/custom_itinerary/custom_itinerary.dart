@@ -53,51 +53,54 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       widget.planPageController.inSelectedItinerary
                           .add(itinerary);
                     },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Divider(),
-                        Container(
-                          padding:
-                              const EdgeInsets.only(left: 12.0, right: 45.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              if (itinerary.hasAdvencedData)
-                                Text(
-                                  "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
-                                  style: theme.primaryTextTheme.bodyText1
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  if (itinerary.hasAdvencedData)
-                                    Text(
-                                      "${itinerary.durationTripString(localization)} ",
-                                      style: theme.primaryTextTheme.bodyText1
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500),
-                                    )
-                                  else
-                                    Text(
-                                      "${localization.instructionDurationMinutes(itinerary.time)} ",
-                                      style: theme.primaryTextTheme.bodyText1
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500),
-                                    ),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Divider(),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 12.0, right: 45.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                if (itinerary.hasAdvencedData)
                                   Text(
-                                    "(${itinerary.getDistanceString(localization)})",
-                                    style: theme.primaryTextTheme.bodyText2,
+                                    "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
+                                    style: theme.primaryTextTheme.bodyText1
+                                        .copyWith(fontWeight: FontWeight.w500),
                                   ),
-                                ],
-                              ),
-                            ],
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    if (itinerary.hasAdvencedData)
+                                      Text(
+                                        "${itinerary.durationTripString(localization)} ",
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                      )
+                                    else
+                                      Text(
+                                        "${localization.instructionDurationMinutes(itinerary.time)} ",
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                      ),
+                                    Text(
+                                      "(${itinerary.getDistanceString(localization)})",
+                                      style: theme.primaryTextTheme.bodyText2,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        ItinerarySummaryAdvanced(itinerary: itinerary),
-                      ],
+                          ItinerarySummaryAdvanced(itinerary: itinerary),
+                        ],
+                      ),
                     ),
                   );
                 })

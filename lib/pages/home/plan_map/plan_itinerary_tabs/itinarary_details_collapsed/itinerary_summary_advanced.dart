@@ -40,7 +40,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
       double waitTime;
       double waitLength;
       bool renderBar = true;
-      bool renderBar2 = true;
       double legLength =
           (leg.durationIntLeg / itinerary.durationItinerary) * 100;
 
