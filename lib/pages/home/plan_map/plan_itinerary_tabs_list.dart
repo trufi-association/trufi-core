@@ -7,21 +7,20 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_collapsed.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded.dart';
 
-class PlanItineraryTabPages extends StatefulWidget {
+class PlanItineraryTabList extends StatefulWidget {
   final TabController tabController;
   final List<PlanItinerary> itineraries;
-  final AdEntity ad;
 
-  PlanItineraryTabPages(this.tabController, this.itineraries, this.ad,
+  PlanItineraryTabList(this.tabController, this.itineraries,
       {Key key})
       : assert(itineraries != null && itineraries.isNotEmpty),
         super(key: key);
 
   @override
-  PlanItineraryTabPagesState createState() => PlanItineraryTabPagesState();
+  _PlanItineraryTabPagesState createState() => _PlanItineraryTabPagesState();
 }
 
-class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
+class _PlanItineraryTabPagesState extends State<PlanItineraryTabList>
     with TickerProviderStateMixin {
   static const _costHeight = 30.0;
   static const _summaryHeight = 80.0;
@@ -83,6 +82,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   @override
   Widget build(BuildContext context) {
     final theme = context.read<ThemeCubit>().state.bottomBarTheme;
+    return Container(color: Colors.red,height: 200,);
     return Theme(
       data: theme,
       child: Container(
@@ -101,18 +101,18 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
                       children: widget.itineraries.map<Widget>((
                         PlanItinerary itinerary,
                       ) {
-                        return _isExpanded
-                            ? ItineraryDetailsExpanded(
-                                animationDetailHeight: _animationDetailHeight,
-                                itinerary: itinerary,
-                                ad: widget.ad)
-                            : ItineraryDetailsCollapsed(
-                                setIsExpanded: _setIsExpanded,
-                                itinerary: itinerary,
-                                ad: widget.ad,
-                                animationCostHeight: _animationCostHeight,
-                                animationSummaryHeight:
-                                    _animationSummaryHeight);
+                        return Container();
+                        // return _isExpanded
+                        //     ? ItineraryDetailsExpanded(
+                        //         animationDetailHeight: _animationDetailHeight,
+                        //         itinerary: itinerary)
+                        //     : ItineraryDetailsCollapsed(
+                        //         setIsExpanded: _setIsExpanded,
+                        //         itinerary: itinerary,
+                        //         ad: widget.ad,
+                        //         animationCostHeight: _animationCostHeight,
+                        //         animationSummaryHeight:
+                        //             _animationSummaryHeight);
                       }).toList(),
                     ),
                   ),

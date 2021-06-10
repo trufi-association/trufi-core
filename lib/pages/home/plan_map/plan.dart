@@ -1,3 +1,4 @@
+
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +8,11 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
+
+import 'custom_itinerary/custom_itinerary.dart';
 
 class PlanPageController {
   PlanPageController(this.plan, this.ad) {
@@ -82,11 +84,6 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           _planPageController.plan.itineraries[_tabController.index],
         );
       });
-    _planPageController.outSelectedItinerary.listen((selectedItinerary) {
-      _tabController.animateTo(
-        _planPageController.plan.itineraries.indexOf(selectedItinerary),
-      );
-    });
   }
 
   @override
@@ -103,18 +100,14 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       CustomScrollableContainer(
         panelMinSize: 160,
         bodyMinSize: 250,
-        body: Expanded(
-          child: PlanMapPage(
-            planPageController: _planPageController,
-            customOverlayWidget: widget.customOverlayWidget,
-            customBetweenFabWidget: widget.customBetweenFabWidget,
-            markerConfiguration: cfg.markers,
-          ),
+        body: PlanMapPage(
+          planPageController: _planPageController,
+          customOverlayWidget: widget.customOverlayWidget,
+          customBetweenFabWidget: widget.customBetweenFabWidget,
+          markerConfiguration: cfg.markers,
         ),
-        panel: PlanItineraryTabPages(
-          _tabController,
-          _planPageController.plan.itineraries,
-          _planPageController.ad,
+        panel: CustomItinerary(
+          planPageController: _planPageController,
         ),
       ),
     ];
