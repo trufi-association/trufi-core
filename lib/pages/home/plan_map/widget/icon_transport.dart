@@ -27,37 +27,37 @@ class IconTransport extends StatelessWidget {
         color: color ?? transportMode.backgroundColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      child: ClipRRect(
-        child: Row(
-          children: [
-            if (icon != null)
-              SizedBox(
-                height: 22,
-                width: 22,
-                child: ClipRRect(child: icon),
-              )
-            else if (transportMode?.getImage() != null)
-              SizedBox(
-                height: 22,
-                width: 22,
-                child: ClipRRect(child: transportMode.getImage(color: color)),
-              )
-            else
-              ClipRRect(child: Icon(transportMode.icon, color: Colors.white)),
-            if (transportMode != TransportMode.walk)
-              Flexible(
-                child: Text(
-                  text,
-                  style: theme.primaryTextTheme.headline6.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: transportMode == TransportMode.car
-                        ? transportMode.color
-                        : null,
-                  ),
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Row(
+        children: [
+          if (icon != null)
+            SizedBox(
+              height: 22,
+              width: 22,
+              child: icon,
+            )
+          else if (transportMode?.getImage() != null)
+            SizedBox(
+              height: 22,
+              width: 22,
+              child: transportMode.getImage(color: color),
+            )
+          else
+            Icon(transportMode.icon, color: Colors.white),
+          if (transportMode != TransportMode.walk)
+            Flexible(
+              child: Text(
+                text,
+                style: theme.primaryTextTheme.headline6.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: transportMode == TransportMode.car
+                      ? transportMode.color
+                      : null,
                 ),
-              )
-          ],
-        ),
+                maxLines: 1,
+              ),
+            )
+        ],
       ),
     );
   }

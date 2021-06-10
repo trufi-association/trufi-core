@@ -259,10 +259,12 @@ class PlanItinerary {
   }
 
   double get numberRouteHidens {
+    double sumPart = 0;
     final routeShorts = compressLegs.where((leg) {
       final legLength = (leg.durationIntLeg / totalDurationItinerary) * 100;
+      if (legLength < 7 && leg.transitLeg) sumPart += legLength;
       return legLength < 7 && leg.transitLeg;
     }).toList();
-    return (routeShorts.length * 7 * totalDurationItinerary) / 100;
+    return ((routeShorts.length * 7 - sumPart) * totalDurationItinerary) / 100;
   }
 }

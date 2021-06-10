@@ -30,21 +30,23 @@ class ModeLeg extends StatelessWidget {
       height: 32,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 1),
-        color: leg?.route?.color != null
-            ? Color(int.tryParse("0xFF${leg.route.color}"))
-            : leg.transportMode.color,
+        decoration: BoxDecoration(
+          color: leg?.route?.color != null
+              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              : leg.transportMode.backgroundColor,
+          borderRadius: BorderRadius.circular(3),
+        ),
         child: IconTransport(
           transportMode: leg.transportMode ?? getTransportMode(mode: mode),
           text: '',
-          // duration: ,
-          icon: leg.transportMode == TransportMode.bicycle &&
-                  leg.fromPlace.bikeRentalStation != null
-              ? getBikeRentalNetwork(
-                      leg.fromPlace.bikeRentalStation.networks[0])
-                  .image
-              : mode == 'WAIT'
-                  ? waitSvg
-                  : null,
+          icon:
+              // leg.transportMode == TransportMode.bicycle &&
+              //         leg.fromPlace.bikeRentalStation != null
+              //     ? getBikeRentalNetwork(
+              //             leg.fromPlace.bikeRentalStation.networks[0])
+              //         .image
+              //     :
+              mode == 'WAIT' ? waitSvg : null,
         ),
       ),
     );
@@ -80,9 +82,12 @@ class RouteLeg extends StatelessWidget {
       child: ClipRRect(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 1),
-          color: leg?.route?.color != null
-              ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
+          decoration: BoxDecoration(
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : leg.transportMode.color,
+            borderRadius: BorderRadius.circular(3),
+          ),
           child: IconTransport(
             transportMode: leg.transportMode,
             // TODO adapted the color server

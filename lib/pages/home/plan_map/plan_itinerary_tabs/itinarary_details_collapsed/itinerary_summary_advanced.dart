@@ -40,6 +40,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
       double waitTime;
       double waitLength;
       bool renderBar = true;
+      bool renderBar2 = true;
       double legLength =
           (leg.durationIntLeg / itinerary.durationItinerary) * 100;
 
@@ -66,6 +67,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         renderBar = false;
         addition += legLength;
       }
+
       Widget tempWidget;
       if (leg.isLegOnFoot && renderBar) {
         tempWidget = Row(
@@ -90,14 +92,15 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           ],
         );
       } else if (leg.rentedBike ?? false) {
-        tempWidget = ModeLeg(
-          leg: leg,
-          legLength: legLength,
-          duration: (leg.durationIntLeg / 1000) ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
-          mode: 'CITYBIKE',
-          isTransitLeg: false,
-        );
+        // addition += legLength;
+        // tempWidget = ModeLeg(
+        //   leg: leg,
+        //   legLength: legLength,
+        //   duration: (leg.durationIntLeg / 1000) ~/ 60,
+        //   renderModeIcons: itinerary.renderModeIcons,
+        //   mode: 'CITYBIKE',
+        //   isTransitLeg: false,
+        // );
       } else if (leg.transportMode == TransportMode.car) {
         tempWidget = Row(
           children: [
