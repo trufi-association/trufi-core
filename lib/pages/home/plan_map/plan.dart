@@ -10,6 +10,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/trufi_app.dart';
+import 'package:trufi_core/widgets/custom_scrollable_container.dart';
 
 class PlanPageController {
   PlanPageController(this.plan, this.ad) {
@@ -99,22 +100,22 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigurationCubit>().state;
     final children = <Widget>[
-      Column(
-        children: <Widget>[
-          Expanded(
-            child: PlanMapPage(
-              planPageController: _planPageController,
-              customOverlayWidget: widget.customOverlayWidget,
-              customBetweenFabWidget: widget.customBetweenFabWidget,
-              markerConfiguration: cfg.markers,
-            ),
+      CustomScrollableContainer(
+        panelMinSize: 160,
+        bodyMinSize: 250,
+        body: Expanded(
+          child: PlanMapPage(
+            planPageController: _planPageController,
+            customOverlayWidget: widget.customOverlayWidget,
+            customBetweenFabWidget: widget.customBetweenFabWidget,
+            markerConfiguration: cfg.markers,
           ),
-          PlanItineraryTabPages(
-            _tabController,
-            _planPageController.plan.itineraries,
-            _planPageController.ad,
-          ),
-        ],
+        ),
+        panel: PlanItineraryTabPages(
+          _tabController,
+          _planPageController.plan.itineraries,
+          _planPageController.ad,
+        ),
       ),
     ];
     final homePageBloc = context.read<HomePageCubit>();
