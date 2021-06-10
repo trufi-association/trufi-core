@@ -45,7 +45,8 @@ class RouteNumber extends StatelessWidget {
                 SizedBox(height: 28, width: 28, child: transportMode.getImage())
               else
                 Icon(transportMode.icon, color: Colors.white),
-              if (transportMode != TransportMode.walk)
+              if (transportMode != TransportMode.walk &&
+                  transportMode != TransportMode.bicycle)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
