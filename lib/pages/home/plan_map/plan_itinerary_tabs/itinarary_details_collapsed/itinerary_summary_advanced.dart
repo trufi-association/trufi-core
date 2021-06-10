@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed.dart/mode_leg.dart';
+import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/mode_leg.dart';
 
 class ItinerarySummaryAdvanced extends StatelessWidget {
   static const renderBarThreshold = 10;
