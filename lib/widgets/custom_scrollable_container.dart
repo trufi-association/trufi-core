@@ -48,7 +48,11 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
               right: 0,
               bottom: 0,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
