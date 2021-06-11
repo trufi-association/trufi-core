@@ -5,12 +5,14 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/mode_leg.dart';
 
 class ItinerarySummaryAdvanced extends StatelessWidget {
+  final double maxWidth;
   static const renderBarThreshold = 10;
   final PlanItinerary itinerary;
 
   const ItinerarySummaryAdvanced({
     Key key,
     @required this.itinerary,
+    @required this.maxWidth,
   }) : super(key: key);
 
   @override
@@ -72,6 +74,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         tempWidget = Row(
           children: [
             ModeLeg(
+              maxWidth: maxWidth,
               leg: leg,
               legLength: legLength,
               duration: leg.durationIntLeg ~/ 60,
@@ -104,6 +107,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         tempWidget = Row(
           children: [
             ModeLeg(
+              maxWidth: maxWidth,
               leg: leg,
               legLength: legLength,
               duration: (leg.durationIntLeg / 1000) ~/ 60,
@@ -123,6 +127,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         tempWidget = Row(
           children: [
             ModeLeg(
+              maxWidth: maxWidth,
               leg: leg,
               legLength: legLength,
               duration: (leg.durationIntLeg / 1000) ~/ 60,
@@ -144,6 +149,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           if (tempWidget != null) tempWidget,
           if (leg.route != null)
             RouteLeg(
+              maxWidth: maxWidth,
               leg: leg,
               legLength: legLength,
               duration: (leg.durationIntLeg / 1000) ~/ 60,
@@ -153,6 +159,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
             ),
           if (waiting)
             ModeLeg(
+              maxWidth: maxWidth,
               leg: leg,
               legLength: waitLength,
               duration: (waitTime / 1000) ~/ 60,
@@ -163,15 +170,11 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         ],
       ));
     });
-    final width = MediaQuery.of(context).size.width * 0.9;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-          width: width,
-          child: Row(
-            children: <Widget>[...list],
-          ),
+        Row(
+          children: <Widget>[...list],
         ),
         SizedBox(
           child: Text(

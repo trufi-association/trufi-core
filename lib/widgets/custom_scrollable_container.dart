@@ -20,11 +20,12 @@ class CustomScrollableContainer extends StatefulWidget {
 
 class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
   double height;
+  bool animated = false;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (builderContext, constrains) {
       final minPanelSize = constrains.maxHeight - widget.panelMinSize;
-      final minBodySize = constrains.maxHeight - widget.panelMinSize;
+      final minBodySize = constrains.maxHeight - widget.bodyMinSize;
       // height validation
       height ??= minPanelSize;
       if (height > minPanelSize) height = minPanelSize;
@@ -35,14 +36,18 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
         color: Colors.white,
         child: Stack(
           children: [
-            Positioned(
+            AnimatedPositioned(
+              duration: Duration(seconds: animated ? 500 : 0),
+              curve: Curves.fastOutSlowIn,
               top: 0,
               left: 0,
               right: 0,
               bottom: bodyHeight <= minBodySize ? bodyHeight : minBodySize,
               child: widget.body,
             ),
-            Positioned(
+            AnimatedPositioned(
+              duration: Duration(milliseconds: animated ? 500 : 0),
+              curve: Curves.fastOutSlowIn,
               top: height,
               left: 0,
               right: 0,
@@ -65,8 +70,17 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                 child: Column(
                   children: [
                     GestureDetector(
+                      onVerticalDragEnd: (detail) {
+                        if (height < widget.bodyMinSize) {
+                          setState(() {
+                            animated = true;
+                            height = 0;
+                          });
+                        }
+                      },
                       onVerticalDragUpdate: (detail) {
                         setState(() {
+                          animated = false;
                           height += detail.delta.dy;
                         });
                       },
@@ -95,6 +109,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                         ),
                       ),
                     ),
+                    const Divider(height: 1),
                     Expanded(child: widget.panel),
                   ],
                 ),
