@@ -5,6 +5,7 @@ import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/icon_transport.dart';
 
 class ModeLeg extends StatelessWidget {
+  final double maxWidth;
   final PlanItineraryLeg leg;
   final String mode;
   final double legLength;
@@ -20,13 +21,13 @@ class ModeLeg extends StatelessWidget {
     this.duration,
     this.isTransitLeg,
     this.renderModeIcons,
+    @required this.maxWidth,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.9;
     return SizedBox(
-      width: width * (legLength.abs() / 100),
+      width: maxWidth * (legLength.abs() / 100),
       height: 32,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 1),
@@ -54,6 +55,7 @@ class ModeLeg extends StatelessWidget {
 }
 
 class RouteLeg extends StatelessWidget {
+  final double maxWidth;
   final PlanItineraryLeg leg;
   final String mode;
   final double legLength;
@@ -69,14 +71,14 @@ class RouteLeg extends StatelessWidget {
     this.duration,
     this.isTransitLeg,
     this.renderModeIcons,
+    @required this.maxWidth,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width * 0.9;
     final perc = legLength.abs() / 100;
     return SizedBox(
-      width: width * (perc < 0.07 ? 0.07 : perc),
+      width: maxWidth * (perc < 0.07 ? 0.07 : perc),
       // width: width * (legLength / 100),
       height: 32,
       child: ClipRRect(

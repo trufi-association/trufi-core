@@ -14,10 +14,11 @@ import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
   final PlanItinerary itinerary;
-
+  final void Function() onBackPressed;
   const LegOverviewAdvanced({
     Key key,
     @required this.itinerary,
+    this.onBackPressed,
   }) : super(key: key);
 
   @override
@@ -61,7 +62,19 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             fares: fares,
                             unknownFares: unknownFares,
                           ),
-                        BarItineraryDetails(itinerary: widget.itinerary),
+                        Row(
+                          children: [
+                            if (widget.onBackPressed != null)
+                              BackButton(
+                                onPressed: widget.onBackPressed,
+                              ),
+                            Expanded(
+                              child: BarItineraryDetails(
+                                itinerary: widget.itinerary,
+                              ),
+                            ),
+                          ],
+                        ),
                         const Divider(
                           color: Colors.black,
                         ),

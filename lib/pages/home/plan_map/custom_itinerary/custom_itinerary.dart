@@ -21,6 +21,7 @@ class CustomItinerary extends StatefulWidget {
 
 class _CustomItineraryState extends State<CustomItinerary> {
   PlanItinerary currentPlanItinerary;
+  bool showDetail = false;
   @override
   void initState() {
     currentPlanItinerary = widget.planPageController.selectedItinerary;
@@ -42,7 +43,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
       data: theme,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: currentPlanItinerary == null
+        child: currentPlanItinerary == null || !showDetail
             ? ListView.builder(
                 itemCount: widget.planPageController.plan.itineraries.length,
                 itemBuilder: (buildContext, index) {
@@ -54,15 +55,18 @@ class _CustomItineraryState extends State<CustomItinerary> {
                           .add(itinerary);
                     },
                     child: Container(
+                      // for avoid bad behavior of gesture detector
                       color: Colors.transparent,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Divider(),
                           Container(
-                            padding:
-                                const EdgeInsets.only(left: 12.0, right: 45.0),
+                            padding: const EdgeInsets.only(
+                              left: 12.0,
+                              right: 45.0,
+                              top: 10,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -98,7 +102,46 @@ class _CustomItineraryState extends State<CustomItinerary> {
                               ],
                             ),
                           ),
-                          ItinerarySummaryAdvanced(itinerary: itinerary),
+                          Row(
+                            children: [
+                              Container(
+                                width: 5,
+                                height: 50,
+                                color: currentPlanItinerary == itinerary
+                                    ? theme.primaryColor
+                                    : Colors.grey[200],
+                                margin: const EdgeInsets.only(right: 5),
+                              ),
+                              Expanded(
+                                child: LayoutBuilder(
+                                    builder: (builderContext, constrains) {
+                                  return ItinerarySummaryAdvanced(
+                                    maxWidth: constrains.maxWidth,
+                                    itinerary: itinerary,
+                                  );
+                                }),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    showDetail = true;
+                                  });
+                                  widget.planPageController.inSelectedItinerary
+                                      .add(itinerary);
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 30,
+                                  height: 50,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: theme.primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Divider(),
                         ],
                       ),
                     ),
@@ -106,17 +149,13 @@ class _CustomItineraryState extends State<CustomItinerary> {
                 })
             : ListView(
                 children: [
-                  Row(
-                    children: [
-                      BackButton(
-                        onPressed: () {
-                          widget.planPageController.inSelectedItinerary
-                              .add(null);
-                        },
-                      ),
-                    ],
-                  ),
-                  LegOverviewAdvanced(itinerary: currentPlanItinerary),
+                  LegOverviewAdvanced(
+                      onBackPressed: () {
+                        setState(() {
+                          showDetail = false;
+                        });
+                      },
+                      itinerary: currentPlanItinerary),
                 ],
               ),
       ),
