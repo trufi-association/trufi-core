@@ -34,7 +34,7 @@ class TransitLeg extends StatelessWidget {
                   ? Colors.white
                   : Colors.black,
           icon: (leg?.route?.shortName ?? '').startsWith('RT')
-              ? onDemandTaxiSvg(color: '000000')
+              ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode == TransportMode.bicycle &&
                       leg.fromPlace.bikeRentalStation != null
                   ? getBikeRentalNetwork(
