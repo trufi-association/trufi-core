@@ -38,7 +38,9 @@ class ModeLeg extends StatelessWidget {
               ? getBikeRentalNetwork(
                       leg.fromPlace.bikeRentalStation.networks[0])
                   .color
-              : leg.transportMode.backgroundColor,
+              : mode == 'WAIT'
+                  ? TransportMode.walk.backgroundColor
+                  : leg.transportMode.backgroundColor,
           color: Colors.black,
           text: duration?.toString() ??
               leg.durationLeg(localization).split(' ')[0],
