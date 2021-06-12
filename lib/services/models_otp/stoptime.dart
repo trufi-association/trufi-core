@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
