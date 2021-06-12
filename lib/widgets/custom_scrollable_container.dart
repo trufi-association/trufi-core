@@ -5,6 +5,7 @@ class CustomScrollableContainer extends StatefulWidget {
   final Widget panel;
   final double bodyMinSize;
   final double panelMinSize;
+
   const CustomScrollableContainer({
     Key key,
     @required this.body,
@@ -19,25 +20,28 @@ class CustomScrollableContainer extends StatefulWidget {
 }
 
 class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
-  double height;
+  double panelHeight;
   bool animated = false;
+  bool showFullModal = false;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (builderContext, constrains) {
       final minPanelSize = constrains.maxHeight - widget.panelMinSize;
       final minBodySize = constrains.maxHeight - widget.bodyMinSize;
       // height validation
-      height ??= minPanelSize;
-      if (height > minPanelSize) height = minPanelSize;
-      if (height < 0) height = 0;
+      panelHeight ??= minPanelSize;
+      if (panelHeight > minPanelSize) panelHeight = minPanelSize;
+      if (panelHeight < 0) panelHeight = 0;
 
-      final bodyHeight = constrains.maxHeight - height;
+      final bodyHeight = constrains.maxHeight - panelHeight;
+
       return Container(
         color: Colors.white,
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: Duration(seconds: animated ? 500 : 0),
+              duration: Duration(milliseconds: animated ? 500 : 0),
               curve: Curves.fastOutSlowIn,
               top: 0,
               left: 0,
@@ -48,7 +52,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
             AnimatedPositioned(
               duration: Duration(milliseconds: animated ? 500 : 0),
               curve: Curves.fastOutSlowIn,
-              top: height,
+              top: panelHeight,
               left: 0,
               right: 0,
               bottom: 0,
@@ -71,17 +75,27 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                   children: [
                     GestureDetector(
                       onVerticalDragEnd: (detail) {
-                        if (height < widget.bodyMinSize) {
+                        if (panelHeight > widget.panelMinSize &&
+                            !showFullModal) {
                           setState(() {
                             animated = true;
-                            height = 0;
+                            panelHeight = widget.panelMinSize;
+                            showFullModal = !showFullModal;
                           });
+                          return;
                         }
+
+                        setState(() {
+                          animated = true;
+                          panelHeight =
+                              !showFullModal ? 0 : widget.panelMinSize;
+                          showFullModal = !showFullModal;
+                        });
                       },
                       onVerticalDragUpdate: (detail) {
                         setState(() {
                           animated = false;
-                          height += detail.delta.dy;
+                          panelHeight += detail.delta.dy;
                         });
                       },
                       child: Container(
