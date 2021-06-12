@@ -1,6 +1,6 @@
 {
     "@@locale": "it",
-    "@@last_modified": "2021-06-04T23:44:34+02:00",
+    "@@last_modified": "2021-06-12T03:00:56+02:00",
     "aboutContent": "Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -49,6 +49,14 @@
     "@commonArrival": {
         "description": "General Arrival label"
     },
+    "commonBikesAvailable": "Show on map",
+    "@commonBikesAvailable": {
+        "description": "General Bikes Available label"
+    },
+    "commonCall": "Show on map",
+    "@commonCall": {
+        "description": "General Call label"
+    },
     "commonCancel": "Cancella",
     "@commonCancel": {
         "description": "Cancel button label"
@@ -85,6 +93,14 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
+    "commonFromStation": "Show on map",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "Show on map",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
     "commonGoOffline": "Vai offline",
     "@commonGoOffline": {
         "description": "Go offline button label"
@@ -92,6 +108,14 @@
     "commonGoOnline": "Vai online",
     "@commonGoOnline": {
         "description": "Go online button label"
+    },
+    "commonItineraryNoTransitLegs": "Show on map",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Show on map",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
     },
     "commonLeavingNow": "Leaving now",
     "@commonLeavingNow": {
@@ -101,17 +125,37 @@
     "@commonLoading": {
         "description": "General Loading label"
     },
+    "commonMapSettings": "Show on map",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "commonMoreInformartion": "Show on map",
+    "@commonMoreInformartion": {
+        "description": "General More informartion label"
+    },
     "commonNoInternet": "Nessuna connessione internet.",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
+    },
+    "commonNow": "Show on map",
+    "@commonNow": {
+        "description": "General Now label"
     },
     "commonOK": "OK",
     "@commonOK": {
         "description": "OK button label"
     },
+    "commonOnDemandTaxi": "Show on map",
+    "@commonOnDemandTaxi": {
+        "description": "General book a trip label"
+    },
     "commonOrigin": "Partenza",
     "@commonOrigin": {
         "description": "Origin field label"
+    },
+    "commonPlatform": "Show on map",
+    "@commonPlatform": {
+        "description": "General Platform  label"
     },
     "commonSave": "Save",
     "@commonSave": {
@@ -128,6 +172,10 @@
     "commonTomorrow": "Show on map",
     "@commonTomorrow": {
         "description": "General Tomorrow label"
+    },
+    "commonTrack": "Show on map",
+    "@commonTrack": {
+        "description": "General Track  label"
     },
     "commonUnknownError": "Errore sconosciuto",
     "@commonUnknownError": {
@@ -161,6 +209,18 @@
     "defaultLocationWork": "Work",
     "@defaultLocationWork": {
         "description": "The default location name Work"
+    },
+    "departureBikeStation": "Rotte: {routeContributors} e tutti gli utenti che hanno caricato rotte su OpenStreetMap, come {osmContributors} . Contattaci se vuoi unirti alla comunità OpenStreetMap!",
+    "@departureBikeStation": {
+        "placeholders": {
+            "departureStop": {
+                "example": "herrenberg"
+            },
+            "departureTime": {
+                "example": "11:45"
+            }
+        },
+        "description": "Departure Bike Station detail Time and Stop"
     },
     "description": "Il miglior modo di viaggiare con trufis, micros e autobus attraverso Cochabamba",
     "@description": {

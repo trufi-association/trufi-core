@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-04T23:44:34+02:00",
+    "@@last_modified": "2021-06-12T03:00:56+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -49,6 +49,14 @@
     "@commonArrival": {
         "description": "General Arrival label"
     },
+    "commonBikesAvailable": "Fahrräder verfügbar",
+    "@commonBikesAvailable": {
+        "description": "General Bikes Available label"
+    },
+    "commonCall": "Anrufen",
+    "@commonCall": {
+        "description": "General Call label"
+    },
     "commonCancel": "Abbrechen",
     "@commonCancel": {
         "description": "Cancel button label"
@@ -85,6 +93,14 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
+    "commonFromStation": "von Bahnhof",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "von Halt",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
     "commonGoOffline": "Offline gehen",
     "@commonGoOffline": {
         "description": "Go offline button label"
@@ -92,6 +108,14 @@
     "commonGoOnline": "Online gehen",
     "@commonGoOnline": {
         "description": "Go online button label"
+    },
+    "commonItineraryNoTransitLegs": "Start jederzeit möglich",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Fährt ab um",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
     },
     "commonLeavingNow": "Abfahrt jetzt",
     "@commonLeavingNow": {
@@ -101,17 +125,37 @@
     "@commonLoading": {
         "description": "General Loading label"
     },
+    "commonMapSettings": "Karteneinstellungen",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "commonMoreInformartion": "Weitere Informationen",
+    "@commonMoreInformartion": {
+        "description": "General More informartion label"
+    },
     "commonNoInternet": "Keine Internetverbindung.",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
+    },
+    "commonNow": "Jetzt",
+    "@commonNow": {
+        "description": "General Now label"
     },
     "commonOK": "OK",
     "@commonOK": {
         "description": "OK button label"
     },
+    "commonOnDemandTaxi": "Fahrt buchen",
+    "@commonOnDemandTaxi": {
+        "description": "General book a trip label"
+    },
     "commonOrigin": "Startpunkt",
     "@commonOrigin": {
         "description": "Origin field label"
+    },
+    "commonPlatform": "Plattform",
+    "@commonPlatform": {
+        "description": "General Platform  label"
     },
     "commonSave": "Speichern",
     "@commonSave": {
@@ -128,6 +172,10 @@
     "commonTomorrow": "Morgen",
     "@commonTomorrow": {
         "description": "General Tomorrow label"
+    },
+    "commonTrack": "Gleis",
+    "@commonTrack": {
+        "description": "General Track  label"
     },
     "commonUnknownError": "Unbekannter Fehler",
     "@commonUnknownError": {
@@ -161,6 +209,18 @@
     "defaultLocationWork": "Arbeit",
     "@defaultLocationWork": {
         "description": "The default location name Work"
+    },
+    "departureBikeStation": "Abfahrt um {departureTime} von {departureStop} Leihrad-Station",
+    "@departureBikeStation": {
+        "placeholders": {
+            "departureStop": {
+                "example": "herrenberg"
+            },
+            "departureTime": {
+                "example": "11:45"
+            }
+        },
+        "description": "Departure Bike Station detail Time and Stop"
     },
     "description": "Der beste Weg mit Trufis, Mikros und Bussen durch {cityName} zu reisen.",
     "@description": {

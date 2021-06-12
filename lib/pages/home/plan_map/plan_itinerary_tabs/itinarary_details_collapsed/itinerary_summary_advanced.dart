@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/icons_transport_modes.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/mode_leg.dart';
@@ -19,6 +20,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     double addition = 0;
     const waitThreshold = 180;
     final List<Widget> legs = [];
@@ -196,7 +198,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(top: 3),
           child: Text(
-            itinerary.firstLegStartTime,
+            itinerary.firstLegStartTime(localization),
             style: theme.primaryTextTheme.bodyText1
                 .copyWith(fontSize: 14, color: Colors.grey[600]),
             textAlign: TextAlign.left,

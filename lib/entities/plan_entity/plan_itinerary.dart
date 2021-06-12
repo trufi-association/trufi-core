@@ -200,7 +200,7 @@ class PlanItinerary {
   Duration get totalBikingDuration =>
       Duration(seconds: getTotalBikingDuration(compressLegs ?? []).toInt());
 
-  String get firstLegStartTime {
+  String firstLegStartTime(TrufiLocalization localization) {
     final firstDeparture = compressLegs.firstWhere(
       (element) => element.transitLeg ?? false,
       orElse: () => null,
@@ -208,32 +208,33 @@ class PlanItinerary {
     String legStartTime = '';
     if (firstDeparture != null) {
       if (firstDeparture?.rentedBike ?? false) {
-        legStartTime =
-            'Departure at ${firstDeparture?.startTimeString} from ${firstDeparture?.fromPlace?.name} bike station';
+        legStartTime = localization.departureBikeStation(
+          firstDeparture?.startTimeString,
+          firstDeparture?.fromPlace?.name,
+        );
         if (firstDeparture?.fromPlace?.bikeRentalStation?.bikesAvailable !=
             null) {
           legStartTime =
-              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} bikes at the station';
+              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} ${localization.commonBikesAvailable}';
         }
       } else {
-        // TODO trasnlate
         final String firstDepartureStopType =
             firstDeparture.transportMode == TransportMode.rail ||
                     firstDeparture.transportMode == TransportMode.subway
-                ? 'from station'
-                : 'from stop';
+                ? localization.commonFromStation
+                : localization.commonFromStop;
         final String firstDeparturePlatform =
             firstDeparture?.fromPlace?.stopEntity?.platformCode != null
                 ? (firstDeparture.transportMode == TransportMode.rail
-                        ? ', Track '
-                        : ', Plattform ') +
+                        ? ', ${localization.commonTrack} '
+                        : ', ${localization.commonPlatform} ') +
                     firstDeparture?.fromPlace?.stopEntity?.platformCode
                 : '';
         legStartTime =
-            "Leaves at ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
+            "${localization.commonLeavesAt} ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
       }
     } else {
-      legStartTime = "Leave when it suits you";
+      legStartTime = localization.commonItineraryNoTransitLegs;
     }
 
     return legStartTime;

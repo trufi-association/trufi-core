@@ -59,7 +59,6 @@ class PlanItineraryLeg {
   final bool rentedBike;
   final bool interlineWithPreviousLeg;
   final PickupBookingInfo pickupBookingInfo;
-  // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
   TransportMode transportMode;
 
   final List<PlaceEntity> intermediatePlaces;

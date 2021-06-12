@@ -182,6 +182,18 @@ abstract class TrufiLocalization {
   /// **'Arrival'**
   String get commonArrival;
 
+  /// General Bikes Available label
+  ///
+  /// In en, this message translates to:
+  /// **'bikes at the station'**
+  String get commonBikesAvailable;
+
+  /// General Call label
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get commonCall;
+
   /// Cancel button label
   ///
   /// In en, this message translates to:
@@ -236,6 +248,18 @@ abstract class TrufiLocalization {
   /// **'Favorite places'**
   String get commonFavoritePlaces;
 
+  /// General from station  label
+  ///
+  /// In en, this message translates to:
+  /// **'from station'**
+  String get commonFromStation;
+
+  /// General from stop  label
+  ///
+  /// In en, this message translates to:
+  /// **'from stop'**
+  String get commonFromStop;
+
   /// Go offline button label
   ///
   /// In en, this message translates to:
@@ -247,6 +271,18 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Go online'**
   String get commonGoOnline;
+
+  /// General Leave when it suits you label
+  ///
+  /// In en, this message translates to:
+  /// **'Leave when it suits you'**
+  String get commonItineraryNoTransitLegs;
+
+  /// General Leaves at  label
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves at'**
+  String get commonLeavesAt;
 
   /// General Leaving now label
   ///
@@ -260,11 +296,29 @@ abstract class TrufiLocalization {
   /// **'Loading...'**
   String get commonLoading;
 
+  /// General Map Settings label
+  ///
+  /// In en, this message translates to:
+  /// **'Map Settings'**
+  String get commonMapSettings;
+
+  /// General More informartion label
+  ///
+  /// In en, this message translates to:
+  /// **'More informartion'**
+  String get commonMoreInformartion;
+
   /// Message when internet connection is lost
   ///
   /// In en, this message translates to:
   /// **'No internet connection.'**
   String get commonNoInternet;
+
+  /// General Now label
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get commonNow;
 
   /// OK button label
   ///
@@ -272,11 +326,23 @@ abstract class TrufiLocalization {
   /// **'OK'**
   String get commonOK;
 
+  /// General book a trip label
+  ///
+  /// In en, this message translates to:
+  /// **'Book a trip'**
+  String get commonOnDemandTaxi;
+
   /// Origin field label
   ///
   /// In en, this message translates to:
   /// **'Origin'**
   String get commonOrigin;
+
+  /// General Platform  label
+  ///
+  /// In en, this message translates to:
+  /// **'Platform'**
+  String get commonPlatform;
 
   /// General Save label
   ///
@@ -301,6 +367,12 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Tomorrow'**
   String get commonTomorrow;
+
+  /// General Track  label
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get commonTrack;
 
   /// Message when an unknown error has occured
   ///
@@ -343,6 +415,12 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Work'**
   String get defaultLocationWork;
+
+  /// Departure Bike Station detail Time and Stop
+  ///
+  /// In en, this message translates to:
+  /// **'Departure at {departureTime} from {departureStop} bike station'**
+  String departureBikeStation(Object departureStop, Object departureTime);
 
   /// A sentence that describes the application's purpose
   ///

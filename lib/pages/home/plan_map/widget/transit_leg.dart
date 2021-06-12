@@ -60,8 +60,7 @@ class TransitLeg extends StatelessWidget {
                             style: theme.primaryTextTheme.bodyText2.copyWith(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w600),
-                            // TODO Translate
-                            text: "More informartion",
+                            text: localization.commonMoreInformartion,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 launch(
@@ -88,8 +87,7 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      'Anrufen  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
+                      '${localization.commonCall}  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
@@ -109,8 +107,7 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      "Fahrt buchen",
+                      localization.commonOnDemandTaxi,
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
