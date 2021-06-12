@@ -70,10 +70,13 @@ class SettingPanel extends StatelessWidget {
                 ),
                 CustomSwitchTile(
                   title: localization.instructionVehicleBus,
-                  secondary: SizedBox(
+                  secondary: Container(
+                    decoration: BoxDecoration(
+                        color: TransportMode.bus.color,
+                        borderRadius: BorderRadius.circular(5)),
                     height: 35,
                     width: 35,
-                    child: TransportMode.bus.getImage(),
+                    child: TransportMode.bus.getImage(color: Colors.white),
                   ),
                   value: state.transportModes.contains(TransportMode.bus),
                   onChanged: (_) {
@@ -83,10 +86,13 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: localization.instructionVehicleCommuterTrain,
-                  secondary: SizedBox(
+                  secondary: Container(
+                    decoration: BoxDecoration(
+                        color: TransportMode.rail.color,
+                        borderRadius: BorderRadius.circular(5)),
                     height: 35,
                     width: 35,
-                    child: TransportMode.rail.getImage(),
+                    child: TransportMode.rail.getImage(color: Colors.white),
                   ),
                   value: state.transportModes.contains(TransportMode.rail),
                   onChanged: (_) {
@@ -96,10 +102,13 @@ class SettingPanel extends StatelessWidget {
                 _divider,
                 CustomSwitchTile(
                   title: localization.instructionVehicleMetro,
-                  secondary: SizedBox(
+                  secondary: Container(
+                    decoration: BoxDecoration(
+                        color: TransportMode.subway.color,
+                        borderRadius: BorderRadius.circular(5)),
                     height: 35,
                     width: 35,
-                    child: TransportMode.subway.getImage(),
+                    child: TransportMode.subway.getImage(color: Colors.white),
                   ),
                   value: state.transportModes.contains(TransportMode.subway),
                   onChanged: (_) {
@@ -126,7 +135,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: TransportMode.bicycle.getImage(),
+                    child: BikeRentalNetwork.regioRad.image,
                   ),
                   value: state.transportModes.contains(TransportMode.bicycle),
                   onChanged: (_) {
@@ -211,7 +220,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: bikeSvg,
+                    child: bikeSvg(),
                   ),
                   value: state.includeBikeSuggestions,
                   onChanged: (value) => payloadDataPlanCubit
@@ -247,7 +256,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: parkRideSvg,
+                    child: carSvg(),
                   ),
                   value: state.includeParkAndRideSuggestions,
                   onChanged: (value) =>
@@ -258,7 +267,7 @@ class SettingPanel extends StatelessWidget {
                   secondary: SizedBox(
                     height: 35,
                     width: 35,
-                    child: carSvg,
+                    child: carSvg(),
                   ),
                   value: state.includeCarSuggestions,
                   onChanged: (value) => payloadDataPlanCubit

@@ -390,7 +390,8 @@ class PlanMapPageStateData {
 
           // Bus marker
           if (leg.transportMode != TransportMode.walk &&
-              leg.transportMode != TransportMode.bicycle) {
+              leg.transportMode != TransportMode.bicycle &&
+              leg.transportMode != TransportMode.car) {
             markers.add(
               buildBusMarker(
                 midPointForPolyline(polyline),

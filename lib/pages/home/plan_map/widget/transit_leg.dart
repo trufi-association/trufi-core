@@ -27,16 +27,23 @@ class TransitLeg extends StatelessWidget {
       children: [
         RouteNumber(
           transportMode: leg.transportMode,
-          // TODO adapted the color server
-          color: leg?.route?.color != null
+          backgroundColor: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : null,
+              : leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? Colors.white
+                  : Colors.black,
           icon: (leg?.route?.shortName ?? '').startsWith('RT')
-              ? onDemandTaxiSvg(color: 'FFFFFF')
-              : null,
+              ? onDemandTaxiSvg(color: '000000')
+              : leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .image
+                  : null,
           text: leg?.route?.shortName != null
               ? leg.route.shortName
-              : leg.transportMode.name,
+              : leg.transportMode.getTranslate(localization),
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
         ),

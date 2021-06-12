@@ -262,9 +262,19 @@ class PlanItinerary {
     double sumPart = 0;
     final routeShorts = compressLegs.where((leg) {
       final legLength = (leg.durationIntLeg / totalDurationItinerary) * 100;
-      if (legLength < 7 && leg.transitLeg) sumPart += legLength;
-      return legLength < 7 && leg.transitLeg;
+      if (legLength < 9.3 &&
+          (leg.transitLeg || leg.transportMode == TransportMode.walk)) {
+        sumPart += legLength;
+      }
+      if (leg.toPlace?.bikeParkEntity != null &&
+          leg.toPlace?.carParkEntity != null &&
+          leg.toPlace?.bikeParkEntity != null) {
+        sumPart -= 22;
+      }
+      return legLength < 9.3 &&
+          (leg.transitLeg || leg.transportMode == TransportMode.walk);
     }).toList();
-    return ((routeShorts.length * 7 - sumPart) * totalDurationItinerary) / 100;
+    return (((routeShorts.length * 9.3) - sumPart) * totalDurationItinerary) /
+        100;
   }
 }

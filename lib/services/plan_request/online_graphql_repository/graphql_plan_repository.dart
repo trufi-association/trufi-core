@@ -84,7 +84,7 @@ class GraphQLPlanRepository {
         'fromPlace': parsePlace(fromLocation),
         'toPlace': parsePlace(toLocation),
         'intermediatePlaces': [],
-        'numItineraries': 5,
+        'numItineraries': 25,
         'transportModes': parseTransportModes(transportsMode),
         "date": parseDateFormat(advancedOptions.date),
         'time': parseTime(advancedOptions.date),

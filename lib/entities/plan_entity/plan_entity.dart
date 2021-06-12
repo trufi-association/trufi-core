@@ -140,7 +140,12 @@ class PlanEntity {
           )
           .toList();
       if (publicModes.isNotEmpty) {
-        return publicModes[0].transportMode.getImage();
+        return Container(
+            decoration: BoxDecoration(
+                color: publicModes[0].route?.color != null
+                    ? Color(int.tryParse("0xFF${publicModes[0].route.color}"))
+                    : publicModes[0].transportMode.color),
+            child: publicModes[0].transportMode.getImage(color: Colors.white));
       }
     }
     return Container();

@@ -72,7 +72,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                               children: <Widget>[
                                 if (itinerary.hasAdvencedData)
                                   Text(
-                                    "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
+                                    "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
                                     style: theme.primaryTextTheme.bodyText1
                                         .copyWith(fontWeight: FontWeight.w500),
                                   ),
