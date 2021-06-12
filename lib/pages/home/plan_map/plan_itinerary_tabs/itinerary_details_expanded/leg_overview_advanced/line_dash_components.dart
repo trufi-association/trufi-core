@@ -30,9 +30,7 @@ class TransportDash extends StatelessWidget {
       children: [
         DashLinePlace(
           date: leg.startTimeString.toString(),
-          location: leg.transportMode != TransportMode.bicycle
-              ? leg.fromPlace.name.toString()
-              : '',
+          location: leg.fromPlace.name.toString(),
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
               : leg.transportMode.color,
