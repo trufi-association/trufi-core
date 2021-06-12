@@ -77,8 +77,9 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
             ),
             Expanded(
               child: SizedBox(
-                  height: animationSummaryHeight.value,
-                  child: _ItinerarySummary(itinerary: itinerary, ad: ad)),
+                height: animationSummaryHeight.value,
+                child: _ItinerarySummary(itinerary: itinerary, ad: ad),
+              ),
             ),
           ],
         ),

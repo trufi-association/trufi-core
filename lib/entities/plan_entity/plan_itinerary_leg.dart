@@ -9,11 +9,15 @@ class PlanItineraryLeg {
     this.routeLongName,
     this.distance,
     this.duration,
+    this.agency,
     this.toPlace,
     this.fromPlace,
     this.startTime,
     this.endTime,
     this.intermediatePlaces,
+    this.intermediatePlace,
+    this.transitLeg,
+    this.pickupBookingInfo,
   }) {
     transportMode =
         getTransportMode(mode: mode, specificTransport: routeLongName);
@@ -26,25 +30,34 @@ class PlanItineraryLeg {
   static const _mode = "mode";
   static const _route = "route";
   static const _routeLongName = "routeLongName";
+  static const _agency = "agency";
   static const _toPlace = "to";
   static const _fromPlace = "from";
   static const _startTime = "startTime";
   static const _endTime = "endTime";
   static const _intermediatePlaces = "intermediatePlaces";
+  static const _intermediatePlace = "intermediatePlace";
+  static const _transitLeg = "transitLeg";
+  static const _rentedBike = "rentedBike";
+  static const _pickupBookingInfo = "pickupBookingInfo";
 
   final String points;
   final String mode;
-  final String route;
+  final RouteEntity route;
   final String routeLongName;
   final double distance;
   final double duration;
+  final AgencyEntity agency;
   final PlaceEntity toPlace;
   final PlaceEntity fromPlace;
   final DateTime startTime;
   final DateTime endTime;
+  final bool transitLeg;
+  final bool intermediatePlace;
+  final bool rentedBike;
+  final PickupBookingInfo pickupBookingInfo;
   // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
   TransportMode transportMode;
-  final bool rentedBike;
 
   final List<PlaceEntity> intermediatePlaces;
 
@@ -52,10 +65,15 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      route: json[_route] as String,
+      route: json[_route] != null
+          ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
+          : null,
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
       duration: json[_duration] as double,
+      agency: json[_agency] != null
+          ? AgencyEntity.fromMap(json[_agency] as Map<String, dynamic>)
+          : null,
       toPlace: json[_toPlace] != null
           ? PlaceEntity.fromMap(json[_toPlace] as Map<String, dynamic>)
           : null,
@@ -77,6 +95,13 @@ class PlanItineraryLeg {
               ),
             )
           : null,
+      pickupBookingInfo: json[_pickupBookingInfo] != null
+          ? PickupBookingInfo.fromMap(
+              json[_pickupBookingInfo] as Map<String, dynamic>)
+          : null,
+      transitLeg: json[_transitLeg] as bool,
+      intermediatePlace: json[_intermediatePlace] as bool,
+      rentedBike: json[_rentedBike] as bool,
     );
   }
 
@@ -84,10 +109,11 @@ class PlanItineraryLeg {
     return {
       _legGeometry: {_points: points},
       _mode: mode,
-      _route: route,
+      _route: route?.toJson(),
       _routeLongName: routeLongName,
       _distance: distance,
       _duration: duration,
+      _agency: agency?.toMap(),
       _toPlace: toPlace?.toMap(),
       _fromPlace: fromPlace?.toMap(),
       _startTime: startTime?.millisecondsSinceEpoch,
@@ -95,13 +121,17 @@ class PlanItineraryLeg {
       _intermediatePlaces: intermediatePlaces != null
           ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
           : null,
+      _pickupBookingInfo: pickupBookingInfo?.toMap(),
+      _intermediatePlace: intermediatePlace,
+      _transitLeg: transitLeg,
+      _rentedBike: rentedBike,
     };
   }
 
   PlanItineraryLeg copyWith({
     String points,
     String mode,
-    String route,
+    RouteEntity route,
     String routeLongName,
     double distance,
     double duration,
@@ -110,7 +140,10 @@ class PlanItineraryLeg {
     DateTime startTime,
     DateTime endTime,
     bool rentedBike,
+    bool intermediatePlace,
+    bool transitLeg,
     List<PlaceEntity> intermediatePlaces,
+    PickupBookingInfo pickupBookingInfo,
   }) {
     return PlanItineraryLeg(
       points: points ?? this.points,
@@ -124,7 +157,10 @@ class PlanItineraryLeg {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       rentedBike: rentedBike ?? this.rentedBike,
+      intermediatePlace: intermediatePlace ?? this.intermediatePlace,
+      transitLeg: transitLeg ?? this.transitLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
+      pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
     );
   }
 
@@ -136,7 +172,7 @@ class PlanItineraryLeg {
     } else {
       sb.write(localization.instructionRide(
           transportMode.getTranslate(localization) +
-              (route.isNotEmpty ? " $route" : ""),
+              (route?.shortName != null ? " ${route.shortName}" : ""),
           _durationString(localization),
           distanceString(localization),
           _toString(localization)));
@@ -168,5 +204,12 @@ class PlanItineraryLeg {
     return localization.instructionDurationMinutes(value);
   }
 
+  int get durationIntLeg {
+    return endTime.difference(startTime).inSeconds;
+  }
+
   IconData get iconData => transportMode.icon;
+
+  bool get isLegOnFoot =>
+      transportMode == TransportMode.walk || mode == 'BICYCLE_WALK';
 }

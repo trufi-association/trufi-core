@@ -1,3 +1,6 @@
+import 'package:trufi_core/entities/plan_entity/place_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+
 import 'bike_park.dart';
 import 'bike_rental_station.dart';
 import 'car_park.dart';
@@ -29,13 +32,13 @@ class Place {
     this.carPark,
   });
 
-  factory Place.fromJson(Map<String, dynamic> json) => Place(
-        name: json['name'].toString(),
+  factory Place.fromMap(Map<String, dynamic> json) => Place(
+        name: json['name'] as String,
         vertexType: getVertexTypeByString(json['vertexType'].toString()),
-        lat: double.tryParse(json['lat'].toString()) ?? 0,
-        lon: double.tryParse(json['lon'].toString()) ?? 0,
-        arrivalTime: double.tryParse(json['arrivalTime'].toString()) ?? 0,
-        departureTime: double.tryParse(json['departureTime'].toString()) ?? 0,
+        lat: double.tryParse(json['lat'].toString()),
+        lon: double.tryParse(json['lon'].toString()),
+        arrivalTime: double.tryParse(json['arrivalTime'].toString()),
+        departureTime: double.tryParse(json['departureTime'].toString()),
         stop: json['stop'] != null
             ? Stop.fromJson(json['stop'] as Map<String, dynamic>)
             : null,
@@ -51,7 +54,7 @@ class Place {
             : null,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'name': name,
         'vertexType': vertexType?.name,
         'lat': lat,
@@ -63,4 +66,31 @@ class Place {
         'bikePark': bikePark?.toJson(),
         'carPark': carPark?.toJson(),
       };
+
+  PlanLocation toPlanLocation() {
+    return PlanLocation(
+      name: name,
+      longitude: lon,
+      latitude: lat,
+    );
+  }
+
+  PlaceEntity toPlaceEntity() {
+    return PlaceEntity(
+      name: name,
+      vertexType: vertexType,
+      lat: lat,
+      lon: lon,
+      arrivalTime: arrivalTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(arrivalTime.toInt())
+          : null,
+      departureTime: departureTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(departureTime.toInt())
+          : null,
+      stopEntity: stop?.toStopEntity(),
+      bikeRentalStation: bikeRentalStation?.toBikeRentalStation(),
+      bikeParkEntity: bikePark?.toBikeParkEntity(),
+      carParkEntity: carPark?.toCarParkEntity(),
+    );
+  }
 }

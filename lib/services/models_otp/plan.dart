@@ -1,3 +1,5 @@
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+
 import 'debug_output.dart';
 import 'itinerary.dart';
 import 'place.dart';
@@ -27,17 +29,17 @@ class Plan {
     this.debugOutput,
   });
 
-  factory Plan.fromJson(Map<String, dynamic> json) => Plan(
-        date: double.tryParse(json['date'].toString()) ?? 0,
+  factory Plan.fromMap(Map<String, dynamic> json) => Plan(
+        date: double.tryParse(json['date'].toString()),
         from: json['from'] != null
-            ? Place.fromJson(json['from'] as Map<String, dynamic>)
+            ? Place.fromMap(json['from'] as Map<String, dynamic>)
             : null,
         to: json['to'] != null
-            ? Place.fromJson(json['to'] as Map<String, dynamic>)
+            ? Place.fromMap(json['to'] as Map<String, dynamic>)
             : null,
         itineraries: json['itineraries'] != null
             ? List<Itinerary>.from((json["itineraries"] as List<dynamic>).map(
-                (x) => Itinerary.fromJson(x as Map<String, dynamic>),
+                (x) => Itinerary.fromMap(x as Map<String, dynamic>),
               ))
             : null,
         messageEnums: json['messageEnums'] != null
@@ -46,26 +48,65 @@ class Plan {
         messageStrings: json['messageStrings'] != null
             ? (json['messageStrings'] as List<dynamic>).cast<String>()
             : null,
-        prevDateTime: double.tryParse(json['prevDateTime'].toString()) ?? 0,
-        nextDateTime: double.tryParse(json['nextDateTime'].toString()) ?? 0,
-        searchWindowUsed:
-            double.tryParse(json['searchWindowUsed'].toString()) ?? 0,
+        prevDateTime: double.tryParse(json['prevDateTime'].toString()),
+        nextDateTime: double.tryParse(json['nextDateTime'].toString()),
+        searchWindowUsed: double.tryParse(json['searchWindowUsed'].toString()),
         debugOutput: json['debugOutput'] != null
-            ? DebugOutput.fromJson(json['debugOutput'] as Map<String, dynamic>)
+            ? DebugOutput.fromMap(json['debugOutput'] as Map<String, dynamic>)
             : null,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'date': date,
-        'from': from?.toJson(),
-        'to': to?.toJson(),
-        'itineraries': List.generate(
-            itineraries?.length ?? 0, (index) => itineraries[index].toJson()),
+        'from': from?.toMap(),
+        'to': to?.toMap(),
+        'itineraries': itineraries != null
+            ? List<dynamic>.from(itineraries.map((x) => x.toMap()))
+            : null,
         'messageEnums': messageEnums,
         'messageStrings': messageStrings,
         'prevDateTime': prevDateTime,
         'nextDateTime': nextDateTime,
         'searchWindowUsed': searchWindowUsed,
-        'debugOutput': debugOutput?.toJson(),
+        'debugOutput': debugOutput?.toMap(),
       };
+
+  Plan copyWith({
+    double date,
+    Place from,
+    Place to,
+    List<Itinerary> itineraries,
+    List<String> messageEnums,
+    List<String> messageStrings,
+    double prevDateTime,
+    double nextDateTime,
+    double searchWindowUsed,
+    DebugOutput debugOutput,
+  }) {
+    return Plan(
+      date: date ?? this.date,
+      from: from ?? this.from,
+      to: to ?? this.to,
+      itineraries: itineraries ?? this.itineraries,
+      messageEnums: messageEnums ?? this.messageEnums,
+      messageStrings: messageStrings ?? this.messageStrings,
+      prevDateTime: prevDateTime ?? this.prevDateTime,
+      nextDateTime: nextDateTime ?? this.nextDateTime,
+      searchWindowUsed: searchWindowUsed ?? this.searchWindowUsed,
+      debugOutput: debugOutput ?? this.debugOutput,
+    );
+  }
+
+  PlanEntity toPlan() {
+    return PlanEntity(
+      to: to.toPlanLocation(),
+      from: from.toPlanLocation(),
+      itineraries: itineraries
+          .map(
+            (itinerary) => itinerary.toPlanItinerary(),
+          )
+          .toList(),
+      error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
+    );
+  }
 }

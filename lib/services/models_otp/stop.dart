@@ -1,3 +1,6 @@
+import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+
 import 'alert.dart';
 import 'cluster.dart';
 import 'enums/mode.dart';
@@ -69,32 +72,32 @@ class Stop {
   });
 
   factory Stop.fromJson(Map<String, dynamic> json) => Stop(
-        id: json['id'].toString(),
+        id: json['id'] as String,
         stopTimesForPattern: json['stopTimesForPattern'] != null
             ? List<Stoptime>.from(
                 (json["stopTimesForPattern"] as List<dynamic>).map(
                 (x) => Stoptime.fromJson(x as Map<String, dynamic>),
               ))
             : null,
-        gtfsId: json['gtfsId'].toString(),
-        name: json['name'].toString(),
+        gtfsId: json['gtfsId'] as String,
+        name: json['name'] as String,
         lat: double.tryParse(json['lat'].toString()) ?? 0,
         lon: double.tryParse(json['lon'].toString()) ?? 0,
-        code: json['code'].toString(),
-        desc: json['desc'].toString(),
-        zoneId: json['zoneId'].toString(),
-        url: json['url'].toString(),
+        code: json['code'] as String,
+        desc: json['desc'] as String,
+        zoneId: json['zoneId'] as String,
+        url: json['url'] as String,
         locationType: getLocationTypeByString(json['locationType'].toString()),
         parentStation: json['parentStation'] != null
             ? Stop.fromJson(json['parentStation'] as Map<String, dynamic>)
             : null,
         wheelchairBoarding: getWheelchairBoardingByString(
             json['wheelchairBoarding'].toString()),
-        direction: json['direction'].toString(),
-        timezone: json['timezone'].toString(),
+        direction: json['direction'] as String,
+        timezone: json['timezone'] as String,
         vehicleType: int.tryParse(json['vehicleType'].toString()) ?? 0,
         vehicleMode: getModeByString(json['vehicleMode'].toString()),
-        platformCode: json['platformCode'].toString(),
+        platformCode: json['platformCode'] as String,
         cluster: json['cluster'] != null
             ? Cluster.fromJson(json['cluster'] as Map<String, dynamic>)
             : null,
@@ -189,5 +192,19 @@ class Stop {
         // .where((element) => !element.isArrival)
         // .where((element) => element.realtime)
         .toList();
+  }
+
+  StopEntity toStopEntity() {
+    return StopEntity(
+      id: id,
+      gtfsId: gtfsId,
+      name: name,
+      lat: lat,
+      lon: lon,
+      code: code,
+      zoneId: zoneId,
+      platformCode: platformCode,
+      vehicleMode: getTransportMode(mode: vehicleMode.name),
+    );
   }
 }

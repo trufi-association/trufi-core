@@ -7,26 +7,25 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
+import 'package:trufi_core/services/models_otp/plan.dart';
 
 import 'graphql_client/graphql_client.dart';
 import 'graphql_client/graphql_utils.dart';
 import 'graphql_operation/fragments/utils_summary_plan_fragments.dart'
     as plan_fragments;
-import 'graphql_operation/fragments/walkbike_plan_fragments.dart'
-    as walkbike_fragments;
 import 'graphql_operation/queries/utils_summary_plan_queries.dart'
     as plan_queries;
 import 'graphql_operation/queries/walkbike_plan_queries.dart'
     as walkbike_queries;
 import 'graphql_operation/query_utils.dart';
-import 'plan_graphql_model.dart';
+import 'modes_transport.dart';
 
 class GraphQLPlanRepository {
   final GraphQLClient client = getClient();
 
   GraphQLPlanRepository();
 
-  Future<PlanGraphQl> fetchPlanSimple({
+  Future<Plan> fetchPlanSimple({
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required List<TransportMode> transportsMode,
@@ -47,12 +46,12 @@ class GraphQLPlanRepository {
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    final stopData = PlanGraphQl.fromJson(
-        dataStopsTimes.data['plan'] as Map<String, dynamic>);
+    final stopData =
+        Plan.fromMap(dataStopsTimes.data['plan'] as Map<String, dynamic>);
     return stopData;
   }
 
-  Future<PlanGraphQl> fetchPlanAdvanced({
+  Future<Plan> fetchPlanAdvanced({
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required PayloadDataPlanState advancedOptions,
@@ -123,7 +122,7 @@ class GraphQLPlanRepository {
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    final stopData = PlanGraphQl.fromJson(
+    final stopData = Plan.fromMap(
         dataStopsTimes.data['viewer']['plan'] as Map<String, dynamic>);
     return stopData;
   }
@@ -136,31 +135,33 @@ class GraphQLPlanRepository {
   }) async {
     final linearDistance =
         estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
+    final date = advancedOptions?.date ?? DateTime.now();
+
     final WatchQueryOptions listStopTimes = WatchQueryOptions(
       document: addFragments(
         parseString(walkbike_queries.summaryPageWalkBikeQuery),
         [
-          walkbike_fragments.summaryPlanContainerPlan,
-          walkbike_fragments.itineraryTabPlan,
-          addFragments(walkbike_fragments.itineraryTabItinerary,
-              [walkbike_fragments.legAgencyInfoLeg]),
-          addFragments(walkbike_fragments.summaryPlanContainerItineraries, [
-            walkbike_fragments.summaryListItineraries,
-            walkbike_fragments.itineraryLineLegs,
-            addFragments(walkbike_fragments.routeLinePattern,
-                [walkbike_fragments.stopCardHeaderStop])
+          plan_fragments.summaryPlanContainerPlanFragment,
+          plan_fragments.itineraryTabPlanFragment,
+          addFragments(plan_fragments.itineraryTabItineraryFragment,
+              [plan_fragments.legAgencyInfoFragment]),
+          addFragments(plan_fragments.summaryPlanContainerItinerariesFragment, [
+            plan_fragments.itinerarySummaryListFragment,
+            plan_fragments.itineraryLineLegsFragment,
+            addFragments(plan_fragments.routeLinePatternFragment,
+                [plan_fragments.stopCardStopFragment])
           ]),
-          walkbike_fragments.itineraryLineLegs,
-          addFragments(walkbike_fragments.routeLinePattern,
-              [walkbike_fragments.stopCardHeaderStop])
+          plan_fragments.itineraryLineLegsFragment,
+          addFragments(plan_fragments.routeLinePatternFragment,
+              [plan_fragments.stopCardStopFragment])
         ],
       ),
       variables: <String, dynamic>{
         'fromPlace': parsePlace(fromLocation),
         'toPlace': parsePlace(toLocation),
         'intermediatePlaces': [],
-        'date': parseDateFormat(advancedOptions.date),
-        'time': parseTime(advancedOptions.date),
+        'date': parseDateFormat(date),
+        'time': parseTime(date),
         'walkReluctance': advancedOptions.avoidWalking ? 5 : 2,
         'walkBoardCost': advancedOptions.avoidTransfers
             ? WalkBoardCost.walkBoardCostHigh.value
@@ -198,6 +199,10 @@ class GraphQLPlanRepository {
         'shouldMakeParkRideQuery':
             advancedOptions.includeParkAndRideSuggestions &&
                 linearDistance > PayloadDataPlanState.suggestCarMinDistance,
+        'shouldMakeOnDemandTaxiQuery': date.hour > 21 ||
+            (date.hour == 21 && date.minute == 0) ||
+            date.hour < 5 ||
+            (date.hour == 5 && date.minute == 0),
         'showBikeAndParkItineraries': !advancedOptions.wheelchair &&
             advancedOptions.includeBikeSuggestions,
         'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&

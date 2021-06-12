@@ -6,6 +6,7 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/models/markers/marker_configuration.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/trufi_app.dart';
@@ -364,8 +365,11 @@ class PlanMapPageStateData {
           final PlanItineraryLeg leg = itinerary.legs[i];
           // Polyline
           final List<LatLng> points = decodePolyline(leg.points);
-          final Color color =
-              isSelected ? leg.transportMode.color : Colors.grey;
+          final Color color = isSelected
+              ? (leg?.route?.color != null
+                  ? Color(int.tryParse("0xFF${leg.route.color}"))
+                  : leg.transportMode.color)
+              : Colors.grey;
           final Polyline polyline = Polyline(
             points: points,
             color: color,
@@ -385,12 +389,18 @@ class PlanMapPageStateData {
           }
 
           // Bus marker
-          if (leg.transportMode != TransportMode.walk) {
+          if (leg.transportMode != TransportMode.walk &&
+              leg.transportMode != TransportMode.bicycle) {
             markers.add(
               buildBusMarker(
                 midPointForPolyline(polyline),
-                color,
+                leg?.route?.color != null && isSelected
+                    ? Color(int.tryParse("0xFF${leg.route.color}"))
+                    : Colors.grey,
                 leg,
+                icon: (leg?.route?.shortName ?? '').startsWith('RT')
+                    ? onDemandTaxiSvg(color: 'FFFFFF')
+                    : null,
                 onTap: () => onTap(itinerary),
               ),
             );
