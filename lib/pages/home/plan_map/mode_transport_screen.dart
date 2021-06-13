@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/pages/home/plan_map/custom_itinerary/custom_itinerary.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
 
@@ -69,8 +69,8 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
         ),
       ),
       body: CustomScrollableContainer(
-        panelMinSize: 250,
-        bodyMinSize: 250,
+        panelMinSize: MediaQuery.of(context).size.height / 3,
+        bodyMinSize: MediaQuery.of(context).size.height / 3,
         body: PlanMapPage(
           planPageController: _planPageController,
           customOverlayWidget: null,
