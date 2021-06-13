@@ -94,6 +94,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
   startTime
   endTime
   legs {
+    interlineWithPreviousLeg
     alerts {
       alertId
     }
@@ -536,6 +537,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
       ...ItineraryTab_itinerary
       ...SummaryPlanContainer_itineraries
       legs {
+        interlineWithPreviousLeg
         mode
         ...ItineraryLine_legs
         transitLeg
@@ -600,6 +602,7 @@ fragment SummaryPlanContainer_itineraries on Itinerary {
   endTime
   startTime
   legs {
+    interlineWithPreviousLeg
     mode
     to {
       bikePark {

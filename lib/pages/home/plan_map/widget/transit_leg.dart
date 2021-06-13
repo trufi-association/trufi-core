@@ -27,16 +27,23 @@ class TransitLeg extends StatelessWidget {
       children: [
         RouteNumber(
           transportMode: leg.transportMode,
-          // TODO adapted the color server
-          color: leg?.route?.color != null
+          backgroundColor: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : null,
+              : leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? Colors.white
+                  : Colors.black,
           icon: (leg?.route?.shortName ?? '').startsWith('RT')
               ? onDemandTaxiSvg(color: 'FFFFFF')
-              : null,
+              : leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .image
+                  : null,
           text: leg?.route?.shortName != null
               ? leg.route.shortName
-              : leg.transportMode.name,
+              : leg.transportMode.getTranslate(localization),
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
         ),
@@ -53,8 +60,7 @@ class TransitLeg extends StatelessWidget {
                             style: theme.primaryTextTheme.bodyText2.copyWith(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w600),
-                            // TODO Translate
-                            text: "More informartion",
+                            text: localization.commonMoreInformartion,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 launch(
@@ -81,8 +87,7 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      'Anrufen  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
+                      '${localization.commonCall}  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
@@ -102,8 +107,7 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      "Fahrt buchen",
+                      localization.commonOnDemandTaxi,
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),

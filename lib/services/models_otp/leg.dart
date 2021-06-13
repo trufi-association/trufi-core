@@ -196,6 +196,7 @@ class Leg {
       rentedBike: rentedBike,
       intermediatePlace: intermediatePlace,
       transitLeg: transitLeg,
+      interlineWithPreviousLeg: interlineWithPreviousLeg,
     );
   }
 }

@@ -46,6 +46,12 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonArrival => 'Arrival';
 
   @override
+  String get commonBikesAvailable => 'Show on map';
+
+  @override
+  String get commonCall => 'Show on map';
+
+  @override
   String get commonCancel => 'Mana';
 
   @override
@@ -73,10 +79,22 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonFavoritePlaces => 'Favorite places';
 
   @override
+  String get commonFromStation => 'Show on map';
+
+  @override
+  String get commonFromStop => 'Show on map';
+
+  @override
   String get commonGoOffline => 'Offline';
 
   @override
   String get commonGoOnline => 'Online';
+
+  @override
+  String get commonItineraryNoTransitLegs => 'Show on map';
+
+  @override
+  String get commonLeavesAt => 'Show on map';
 
   @override
   String get commonLeavingNow => 'Leaving now';
@@ -85,13 +103,28 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonLoading => 'Show on map';
 
   @override
+  String get commonMapSettings => 'Show on map';
+
+  @override
+  String get commonMoreInformartion => 'Show on map';
+
+  @override
   String get commonNoInternet => 'Mana internet kanchu';
+
+  @override
+  String get commonNow => 'Show on map';
 
   @override
   String get commonOK => 'Ari';
 
   @override
+  String get commonOnDemandTaxi => 'Show on map';
+
+  @override
   String get commonOrigin => 'Maymanta';
+
+  @override
+  String get commonPlatform => 'Show on map';
 
   @override
   String get commonSave => 'Save';
@@ -104,6 +137,9 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String get commonTomorrow => 'Show on map';
+
+  @override
+  String get commonTrack => 'Show on map';
 
   @override
   String get commonUnknownError => 'Mana yachacunchu ima pantay kasqanta chay';
@@ -127,6 +163,11 @@ class TrufiLocalizationQu extends TrufiLocalization {
 
   @override
   String get defaultLocationWork => 'Work';
+
+  @override
+  String departureBikeStation(Object departureStop, Object departureTime) {
+    return 'Rutas yanapaqkuna: {routeContributors} chanta tukuy pikunachus musuq rutas Open Street Map chayniqman apachimuqkunaman, {osmContributors}.\nRiqsirichimuwayku Open Street Map qutupi llamk’ayta munanki chayqa!';
+  }
 
   @override
   String description(Object cityName) {

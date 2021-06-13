@@ -1,62 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 class IconTransport extends StatelessWidget {
-  final TransportMode transportMode;
   final Color color;
+  final Color bacgroundColor;
   final String text;
-  final String distance;
-  final String duration;
   final Widget icon;
 
   const IconTransport({
     Key key,
-    this.transportMode,
-    this.color,
-    this.text,
-    this.distance,
-    this.duration,
-    this.icon,
+    @required this.color,
+    @required this.bacgroundColor,
+    @required this.text,
+    @required this.icon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 1),
       decoration: BoxDecoration(
-        color: color ?? transportMode.backgroundColor,
+        color: bacgroundColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Row(
         children: [
-          if (icon != null)
-            SizedBox(
-              height: 22,
-              width: 22,
-              child: icon,
-            )
-          else if (transportMode?.getImage() != null)
-            SizedBox(
-              height: 22,
-              width: 22,
-              child: transportMode.getImage(color: color),
-            )
-          else
-            Icon(transportMode.icon, color: Colors.white),
-          if (transportMode != TransportMode.walk)
-            Flexible(
-              child: Text(
-                text,
-                style: theme.primaryTextTheme.headline6.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: transportMode == TransportMode.car
-                      ? transportMode.color
-                      : null,
-                ),
-                maxLines: 1,
+          SizedBox(
+            height: 22,
+            width: 22,
+            child: icon ?? const Icon(Icons.error),
+          ),
+          Flexible(
+            child: Text(
+              text,
+              style: theme.primaryTextTheme.headline6.copyWith(
+                fontWeight: FontWeight.w600,
+                color: color,
               ),
-            )
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.clip,
+            ),
+          ),
         ],
       ),
     );

@@ -2,7 +2,6 @@ part of 'plan_entity.dart';
 
 class PlanItineraryLeg {
   PlanItineraryLeg({
-    this.rentedBike,
     this.points,
     this.mode,
     this.route,
@@ -17,7 +16,9 @@ class PlanItineraryLeg {
     this.intermediatePlaces,
     this.intermediatePlace,
     this.transitLeg,
+    this.rentedBike,
     this.pickupBookingInfo,
+    this.interlineWithPreviousLeg,
   }) {
     transportMode =
         getTransportMode(mode: mode, specificTransport: routeLongName);
@@ -39,6 +40,7 @@ class PlanItineraryLeg {
   static const _intermediatePlace = "intermediatePlace";
   static const _transitLeg = "transitLeg";
   static const _rentedBike = "rentedBike";
+  static const _interlineWithPreviousLeg = "interlineWithPreviousLeg";
   static const _pickupBookingInfo = "pickupBookingInfo";
 
   final String points;
@@ -55,8 +57,8 @@ class PlanItineraryLeg {
   final bool transitLeg;
   final bool intermediatePlace;
   final bool rentedBike;
+  final bool interlineWithPreviousLeg;
   final PickupBookingInfo pickupBookingInfo;
-  // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
   TransportMode transportMode;
 
   final List<PlaceEntity> intermediatePlaces;
@@ -102,6 +104,7 @@ class PlanItineraryLeg {
       transitLeg: json[_transitLeg] as bool,
       intermediatePlace: json[_intermediatePlace] as bool,
       rentedBike: json[_rentedBike] as bool,
+      interlineWithPreviousLeg: json[_interlineWithPreviousLeg] as bool,
     );
   }
 
@@ -125,6 +128,7 @@ class PlanItineraryLeg {
       _intermediatePlace: intermediatePlace,
       _transitLeg: transitLeg,
       _rentedBike: rentedBike,
+      _interlineWithPreviousLeg: interlineWithPreviousLeg,
     };
   }
 
@@ -142,6 +146,7 @@ class PlanItineraryLeg {
     bool rentedBike,
     bool intermediatePlace,
     bool transitLeg,
+    bool interlineWithPreviousLeg,
     List<PlaceEntity> intermediatePlaces,
     PickupBookingInfo pickupBookingInfo,
   }) {
@@ -159,6 +164,8 @@ class PlanItineraryLeg {
       rentedBike: rentedBike ?? this.rentedBike,
       intermediatePlace: intermediatePlace ?? this.intermediatePlace,
       transitLeg: transitLeg ?? this.transitLeg,
+      interlineWithPreviousLeg:
+          interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
       pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
     );

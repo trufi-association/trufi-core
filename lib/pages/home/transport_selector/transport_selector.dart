@@ -52,7 +52,7 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: bikeSvg,
+              icon: bikeSvg(),
               title: durationToString(localization,
                   modesTransport.bikePlan.itineraries[0].durationTrip),
               subtitle: displayDistanceWithLocale(localization,
@@ -70,7 +70,7 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: bikeSvg,
+              icon: bikeSvg(),
               secondaryIcon: SizedBox(
                 height: 12,
                 width: 12,
@@ -94,7 +94,7 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: carSvg,
+              icon: carSvg(),
               secondaryIcon: SizedBox(
                 height: 12,
                 width: 12,
@@ -116,7 +116,7 @@ class TransportSelector extends StatelessWidget {
                   ),
                 ));
               },
-              icon: carSvg,
+              icon: carSvg(),
               title: durationToString(localization,
                   modesTransport.carPlan.itineraries[0].durationTrip),
               subtitle: displayDistanceWithLocale(localization,
