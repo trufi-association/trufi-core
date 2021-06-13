@@ -1,4 +1,5 @@
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'agency.dart';
 import 'alert.dart';
@@ -197,6 +198,9 @@ class Leg {
       intermediatePlace: intermediatePlace,
       transitLeg: transitLeg,
       interlineWithPreviousLeg: interlineWithPreviousLeg,
+      accumulatedPoints: legGeometry?.points != null
+          ? decodePolyline(legGeometry?.points)
+          : [],
     );
   }
 }

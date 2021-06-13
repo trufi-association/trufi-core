@@ -19,6 +19,7 @@ class PlanItineraryLeg {
     this.rentedBike,
     this.pickupBookingInfo,
     this.interlineWithPreviousLeg,
+    this.accumulatedPoints = const [],
   }) {
     transportMode =
         getTransportMode(mode: mode, specificTransport: routeLongName);
@@ -59,53 +60,55 @@ class PlanItineraryLeg {
   final bool rentedBike;
   final bool interlineWithPreviousLeg;
   final PickupBookingInfo pickupBookingInfo;
-  TransportMode transportMode;
-
   final List<PlaceEntity> intermediatePlaces;
+
+  TransportMode transportMode;
+  List<LatLng> accumulatedPoints;
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
-      points: json[_legGeometry][_points] as String,
-      mode: json[_mode] as String,
-      route: json[_route] != null
-          ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
-          : null,
-      routeLongName: json[_routeLongName] as String,
-      distance: json[_distance] as double,
-      duration: json[_duration] as double,
-      agency: json[_agency] != null
-          ? AgencyEntity.fromMap(json[_agency] as Map<String, dynamic>)
-          : null,
-      toPlace: json[_toPlace] != null
-          ? PlaceEntity.fromMap(json[_toPlace] as Map<String, dynamic>)
-          : null,
-      fromPlace: json[_fromPlace] != null
-          ? PlaceEntity.fromMap(json[_fromPlace] as Map<String, dynamic>)
-          : null,
-      startTime: json[_startTime] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              int.tryParse(json[_startTime].toString()) ?? 0)
-          : null,
-      endTime: json[_endTime] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              int.tryParse(json[_endTime].toString()) ?? 0)
-          : null,
-      intermediatePlaces: json[_intermediatePlaces] != null
-          ? List<PlaceEntity>.from(
-              (json[_intermediatePlaces] as List<dynamic>).map(
-                (x) => PlaceEntity.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
-      pickupBookingInfo: json[_pickupBookingInfo] != null
-          ? PickupBookingInfo.fromMap(
-              json[_pickupBookingInfo] as Map<String, dynamic>)
-          : null,
-      transitLeg: json[_transitLeg] as bool,
-      intermediatePlace: json[_intermediatePlace] as bool,
-      rentedBike: json[_rentedBike] as bool,
-      interlineWithPreviousLeg: json[_interlineWithPreviousLeg] as bool,
-    );
+        points: json[_legGeometry][_points] as String,
+        mode: json[_mode] as String,
+        route: json[_route] != null
+            ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
+            : null,
+        routeLongName: json[_routeLongName] as String,
+        distance: json[_distance] as double,
+        duration: json[_duration] as double,
+        agency: json[_agency] != null
+            ? AgencyEntity.fromMap(json[_agency] as Map<String, dynamic>)
+            : null,
+        toPlace: json[_toPlace] != null
+            ? PlaceEntity.fromMap(json[_toPlace] as Map<String, dynamic>)
+            : null,
+        fromPlace: json[_fromPlace] != null
+            ? PlaceEntity.fromMap(json[_fromPlace] as Map<String, dynamic>)
+            : null,
+        startTime: json[_startTime] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                int.tryParse(json[_startTime].toString()) ?? 0)
+            : null,
+        endTime: json[_endTime] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                int.tryParse(json[_endTime].toString()) ?? 0)
+            : null,
+        intermediatePlaces: json[_intermediatePlaces] != null
+            ? List<PlaceEntity>.from(
+                (json[_intermediatePlaces] as List<dynamic>).map(
+                  (x) => PlaceEntity.fromMap(x as Map<String, dynamic>),
+                ),
+              )
+            : null,
+        pickupBookingInfo: json[_pickupBookingInfo] != null
+            ? PickupBookingInfo.fromMap(
+                json[_pickupBookingInfo] as Map<String, dynamic>)
+            : null,
+        transitLeg: json[_transitLeg] as bool,
+        intermediatePlace: json[_intermediatePlace] as bool,
+        rentedBike: json[_rentedBike] as bool,
+        interlineWithPreviousLeg: json[_interlineWithPreviousLeg] as bool,
+        accumulatedPoints:
+            decodePolyline(json[_legGeometry][_points] as String ?? ''));
   }
 
   Map<String, dynamic> toJson() {
@@ -149,6 +152,7 @@ class PlanItineraryLeg {
     bool interlineWithPreviousLeg,
     List<PlaceEntity> intermediatePlaces,
     PickupBookingInfo pickupBookingInfo,
+    List<LatLng> accumulatedPoints,
   }) {
     return PlanItineraryLeg(
       points: points ?? this.points,
@@ -168,6 +172,7 @@ class PlanItineraryLeg {
           interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
       pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
+      accumulatedPoints: accumulatedPoints ?? this.accumulatedPoints,
     );
   }
 

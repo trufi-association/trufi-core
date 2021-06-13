@@ -114,6 +114,10 @@ class PlanItinerary {
           toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
           endTime: currentLeg.endTime,
           mode: TransportMode.bicycle.name,
+          accumulatedPoints: [
+            ...compressedLeg.accumulatedPoints,
+            ...currentLeg.accumulatedPoints
+          ],
         );
         continue;
       }
@@ -126,7 +130,11 @@ class PlanItinerary {
           distance: compressedLeg.distance + currentLeg.distance,
           toPlace: currentLeg.toPlace,
           endTime: currentLeg.endTime,
-          mode: TransportMode.bicycle.name,
+          mode: LegMode.bicycle.name,
+          accumulatedPoints: [
+            ...compressedLeg.accumulatedPoints,
+            ...currentLeg.accumulatedPoints
+          ],
         );
         continue;
       }
