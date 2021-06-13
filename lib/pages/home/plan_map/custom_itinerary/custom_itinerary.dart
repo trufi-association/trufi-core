@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
-
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/itinerary_summary_advanced.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
 
@@ -12,6 +10,7 @@ import '../plan.dart';
 
 class CustomItinerary extends StatefulWidget {
   final PlanPageController planPageController;
+
   const CustomItinerary({Key key, @required this.planPageController})
       : super(key: key);
 
@@ -22,6 +21,7 @@ class CustomItinerary extends StatefulWidget {
 class _CustomItineraryState extends State<CustomItinerary> {
   PlanItinerary currentPlanItinerary;
   bool showDetail = false;
+
   @override
   void initState() {
     currentPlanItinerary = widget.planPageController.selectedItinerary;
@@ -61,14 +61,10 @@ class _CustomItineraryState extends State<CustomItinerary> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                              left: 12.0,
-                              right: 45.0,
-                              top: 10,
-                            ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 8),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 if (itinerary.hasAdvencedData)
                                   Text(
@@ -76,28 +72,18 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                     style: theme.primaryTextTheme.bodyText1
                                         .copyWith(fontWeight: FontWeight.w500),
                                   ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    if (itinerary.hasAdvencedData)
-                                      Text(
-                                        "${itinerary.durationTripString(localization)} ",
-                                        style: theme.primaryTextTheme.bodyText1
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500),
-                                      )
-                                    else
-                                      Text(
-                                        "${localization.instructionDurationMinutes(itinerary.time)} ",
-                                        style: theme.primaryTextTheme.bodyText1
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500),
-                                      ),
-                                    Text(
-                                      "(${itinerary.getDistanceString(localization)})",
-                                      style: theme.primaryTextTheme.bodyText2,
-                                    ),
-                                  ],
+                                Text(
+                                  itinerary.hasAdvencedData
+                                      ? itinerary
+                                          .durationTripString(localization)
+                                      : localization.instructionDurationMinutes(
+                                          itinerary.time),
+                                  style: theme.primaryTextTheme.bodyText1
+                                      .copyWith(fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  "(${itinerary.getDistanceString(localization)})",
+                                  style: theme.primaryTextTheme.bodyText2,
                                 ),
                               ],
                             ),

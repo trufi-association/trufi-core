@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -30,24 +29,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         ((lastLeg.durationIntLeg) / itinerary.durationItinerary) * 100;
     final int bikeParkedIndex =
         compressLegs.indexWhere((leg) => leg.toPlace?.bikeParkEntity != null);
-    // const onlyIconLegsLength = 0;
-
-    // int onlyIconLegs = 0;
-
-    // double intermediateSlack = 0;
-    // double transitLegCount = 0;
-    // bool noTransitLegs = true;
-
-    // compressLegs.asMap().forEach((index, leg) {
-    //   if (leg.transitLeg) {
-    //     noTransitLegs = false;
-    //     transitLegCount += 1;
-    //   }
-    //   if (leg.intermediatePlace) {
-    //     intermediateSlack += leg.startTime.millisecondsSinceEpoch -
-    //         compressLegs[index - 1].endTime.millisecondsSinceEpoch;
-    //   }
-    // });
 
     compressLegs.asMap().forEach((index, leg) {
       bool waiting = false;
