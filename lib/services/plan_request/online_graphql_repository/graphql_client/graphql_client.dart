@@ -7,6 +7,7 @@ GraphQLClient getClient() {
   return GraphQLClient(
     cache: GraphQLCache(
       store: HiveStore(),
+      partialDataPolicy: PartialDataCachePolicy.accept,
     ),
     link: _httpLink,
   );
