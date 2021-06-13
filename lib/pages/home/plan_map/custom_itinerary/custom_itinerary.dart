@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -58,7 +59,6 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       // for avoid bad behavior of gesture detector
                       color: Colors.transparent,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Padding(
@@ -92,7 +92,8 @@ class _CustomItineraryState extends State<CustomItinerary> {
                             children: [
                               Container(
                                 width: 5,
-                                height: 50,
+                                height:
+                                    50 * MediaQuery.of(context).textScaleFactor,
                                 color: currentPlanItinerary == itinerary
                                     ? theme.primaryColor
                                     : Colors.grey[200],
