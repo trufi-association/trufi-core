@@ -46,6 +46,12 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get commonArrival => 'Arrival';
 
   @override
+  String get commonBikesAvailable => 'Show on map';
+
+  @override
+  String get commonCall => 'Show on map';
+
+  @override
   String get commonCancel => 'Cancelar';
 
   @override
@@ -73,10 +79,22 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get commonFavoritePlaces => 'Favorite places';
 
   @override
+  String get commonFromStation => 'Show on map';
+
+  @override
+  String get commonFromStop => 'Show on map';
+
+  @override
   String get commonGoOffline => 'Fique offline';
 
   @override
   String get commonGoOnline => 'Fique online';
+
+  @override
+  String get commonItineraryNoTransitLegs => 'Show on map';
+
+  @override
+  String get commonLeavesAt => 'Show on map';
 
   @override
   String get commonLeavingNow => 'Leaving now';
@@ -85,13 +103,28 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get commonLoading => 'Show on map';
 
   @override
+  String get commonMapSettings => 'Show on map';
+
+  @override
+  String get commonMoreInformartion => 'Show on map';
+
+  @override
   String get commonNoInternet => 'Sem conexão à internet.';
+
+  @override
+  String get commonNow => 'Show on map';
 
   @override
   String get commonOK => 'Está bem';
 
   @override
+  String get commonOnDemandTaxi => 'Show on map';
+
+  @override
   String get commonOrigin => 'Origem';
+
+  @override
+  String get commonPlatform => 'Show on map';
 
   @override
   String get commonSave => 'Save';
@@ -104,6 +137,9 @@ class TrufiLocalizationPt extends TrufiLocalization {
 
   @override
   String get commonTomorrow => 'Show on map';
+
+  @override
+  String get commonTrack => 'Show on map';
 
   @override
   String get commonUnknownError => 'Erro desconhecido';
@@ -127,6 +163,11 @@ class TrufiLocalizationPt extends TrufiLocalization {
 
   @override
   String get defaultLocationWork => 'Work';
+
+  @override
+  String departureBikeStation(Object departureStop, Object departureTime) {
+    return 'Rotas: {routeContributors} e todos os usuários que fizeram upload de rotas para o OpenStreetMap, {osmContributors}.\nEntre em contato conosco se você quiser participar da comunidade OpenStreetMap!';
+  }
 
   @override
   String description(Object cityName) {

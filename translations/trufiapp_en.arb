@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "@@last_modified": "2021-06-04T23:44:34+02:00",
+    "@@last_modified": "2021-06-12T03:00:56+02:00",
     "aboutContent": "We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -49,6 +49,14 @@
     "@commonArrival": {
         "description": "General Arrival label"
     },
+    "commonBikesAvailable": "bikes at the station",
+    "@commonBikesAvailable": {
+        "description": "General Bikes Available label"
+    },
+    "commonCall": "Call",
+    "@commonCall": {
+        "description": "General Call label"
+    },
     "commonCancel": "Cancel",
     "@commonCancel": {
         "description": "Cancel button label"
@@ -85,6 +93,14 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
+    "commonFromStation": "from station",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "from stop",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
     "commonGoOffline": "Go offline",
     "@commonGoOffline": {
         "description": "Go offline button label"
@@ -92,6 +108,14 @@
     "commonGoOnline": "Go online",
     "@commonGoOnline": {
         "description": "Go online button label"
+    },
+    "commonItineraryNoTransitLegs": "Leave when it suits you",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Leaves at",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
     },
     "commonLeavingNow": "Leaving now",
     "@commonLeavingNow": {
@@ -101,17 +125,37 @@
     "@commonLoading": {
         "description": "General Loading label"
     },
+    "commonMapSettings": "Map Settings",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "commonMoreInformartion": "More informartion",
+    "@commonMoreInformartion": {
+        "description": "General More informartion label"
+    },
     "commonNoInternet": "No internet connection.",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
+    },
+    "commonNow": "Now",
+    "@commonNow": {
+        "description": "General Now label"
     },
     "commonOK": "OK",
     "@commonOK": {
         "description": "OK button label"
     },
+    "commonOnDemandTaxi": "Book a trip",
+    "@commonOnDemandTaxi": {
+        "description": "General book a trip label"
+    },
     "commonOrigin": "Origin",
     "@commonOrigin": {
         "description": "Origin field label"
+    },
+    "commonPlatform": "Platform",
+    "@commonPlatform": {
+        "description": "General Platform  label"
     },
     "commonSave": "Save",
     "@commonSave": {
@@ -128,6 +172,10 @@
     "commonTomorrow": "Tomorrow",
     "@commonTomorrow": {
         "description": "General Tomorrow label"
+    },
+    "commonTrack": "Track",
+    "@commonTrack": {
+        "description": "General Track  label"
     },
     "commonUnknownError": "Unknown error",
     "@commonUnknownError": {
@@ -161,6 +209,18 @@
     "defaultLocationWork": "Work",
     "@defaultLocationWork": {
         "description": "The default location name Work"
+    },
+    "departureBikeStation": "Departure at {departureTime} from {departureStop} bike station",
+    "@departureBikeStation": {
+        "placeholders": {
+            "departureStop": {
+                "example": "herrenberg"
+            },
+            "departureTime": {
+                "example": "11:45"
+            }
+        },
+        "description": "Departure Bike Station detail Time and Stop"
     },
     "description": "The best way to travel with trufis, micros and buses through {cityName}.",
     "@description": {

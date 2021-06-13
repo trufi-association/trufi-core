@@ -198,10 +198,10 @@ class _MapOptionsPage extends StatelessWidget {
   const _MapOptionsPage({Key key, @required this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final localization = TrufiLocalization.of(context);
     return Scaffold(
         appBar: AppBar(
-          // TODO translate
-          title: const Text("Map Settings"),
+          title: Text(localization.commonMapSettings),
         ),
         body: child);
   }

@@ -17,7 +17,7 @@ class BarItineraryDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return Container(
-      height: 40,
+      height: itinerary.futureText(localization) == '' ? 40 : 54,
       padding: const EdgeInsets.only(right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,7 +41,7 @@ class BarItineraryDetails extends StatelessWidget {
                 WalkDistance(
                   walkDistance: itinerary.totalBikingDistance,
                   walkDuration: itinerary.totalBikingDuration,
-                  icon: bikeSvg,
+                  icon: bikeSvg(),
                 ),
             ],
           )

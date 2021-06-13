@@ -1,5 +1,5 @@
-import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 
 import 'enums/leg/pickup_dropoff_type.dart';
 import 'enums/leg/realtime_state.dart';
@@ -94,22 +94,6 @@ class Stoptime {
     return realtimeState == RealtimeState.canceled;
   }
 
-  String getHeadsing({@required bool isLastStop}) {
-    // TODO translate code strings
-    if (isArrival) {
-      if (isLastStop) return 'route-destination-endpoint';
-      return trip?.tripHeadsign ?? 'route-destination-arrives';
-    }
-    final String tempHeadsing = headsign ??
-        (trip.pattern.headsign ??
-            (trip?.tripHeadsign ??
-                trip.pattern.route.headsignFromRouteLongName));
-    if (tempHeadsing.endsWith(' via')) {
-      return tempHeadsing.substring(0, tempHeadsing.indexOf(' via'));
-    }
-    return tempHeadsing;
-  }
-
   int get arrivalTime {
     return (serviceDay + (canceled ? scheduledArrival : realtimeArrival))
         .truncate();
@@ -131,18 +115,16 @@ class Stoptime {
     return dateTime.isAfter(dateTemp);
   }
 
-  String get timeDiffInMinutes {
+  String timeDiffInMinutes(TrufiLocalization localization) {
     String timeDiffInMinutes = '';
     final diffMinutes = dateTime.difference(DateTime.now()).inMinutes;
     if (diffMinutes < 0) {
-      // TODO translate
       timeDiffInMinutes = '';
     } else if (diffMinutes == 0) {
-      // TODO translate
-      timeDiffInMinutes = 'now';
+      timeDiffInMinutes = localization.commonNow;
     } else if (diffMinutes < 10) {
-      // TODO translate min
-      timeDiffInMinutes = '${diffMinutes.toString()} min';
+      timeDiffInMinutes =
+          localization.instructionDurationMinutes(diffMinutes.toString());
     }
     return timeDiffInMinutes;
   }

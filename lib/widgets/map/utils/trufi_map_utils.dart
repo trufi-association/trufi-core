@@ -56,7 +56,7 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
                 SizedBox(
                     height: 28,
                     width: 28,
-                    child: leg.transportMode.getImage(color: color))
+                    child: leg.transportMode.getImage(color: Colors.white))
               else
                 Icon(leg.transportMode.icon, color: Colors.white),
               if (leg.transportMode != TransportMode.walk)
@@ -75,24 +75,6 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
                 )
             ],
           ),
-          // child: Row(
-          //   children: <Widget>[
-          //     // TODO fixed color for transportMode image
-          //     if (leg.transportMode?.image != null)
-          //       SizedBox(
-          //         width: 24,
-          //         height: 24,
-          //         child: leg.transportMode?.image,
-          //       )
-          //     else
-          //       Icon(leg.iconData, color: Colors.white),
-          //     Text(
-          //         leg?.route?.shortName != null
-          //             ? ' ${leg.route.shortName}'
-          //             : '',
-          //         style: const TextStyle(color: Colors.white)),
-          //   ],
-          // ),
         ),
       ),
     ),

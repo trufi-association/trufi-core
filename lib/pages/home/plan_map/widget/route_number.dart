@@ -3,7 +3,7 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 class RouteNumber extends StatelessWidget {
   final TransportMode transportMode;
-  final Color color;
+  final Color backgroundColor;
   final String text;
   final String distance;
   final String duration;
@@ -13,7 +13,7 @@ class RouteNumber extends StatelessWidget {
   const RouteNumber({
     Key key,
     this.transportMode,
-    this.color,
+    this.backgroundColor,
     this.text,
     this.distance,
     this.duration,
@@ -30,32 +30,30 @@ class RouteNumber extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
           decoration: BoxDecoration(
-            color: color ?? transportMode.backgroundColor,
+            color: backgroundColor ?? Colors.black,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Row(
             children: [
               if (icon != null)
                 SizedBox(
-                  height: 28,
-                  width: 28,
+                  height: 20,
+                  width: 20,
                   child: icon,
                 )
-              else if (transportMode?.getImage() != null)
-                SizedBox(height: 28, width: 28, child: transportMode.getImage())
               else
-                Icon(transportMode.icon, color: Colors.white),
+                SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: transportMode.getImage(color: Colors.white)),
               if (transportMode != TransportMode.walk &&
                   transportMode != TransportMode.bicycle)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Text(
                     text,
                     style: theme.primaryTextTheme.headline6.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: transportMode == TransportMode.car
-                          ? transportMode.color
-                          : null,
                     ),
                   ),
                 )

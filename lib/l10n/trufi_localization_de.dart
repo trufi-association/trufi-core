@@ -46,6 +46,12 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonArrival => 'Ankunft';
 
   @override
+  String get commonBikesAvailable => 'Fahrräder verfügbar';
+
+  @override
+  String get commonCall => 'Anrufen';
+
+  @override
   String get commonCancel => 'Abbrechen';
 
   @override
@@ -73,10 +79,22 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonFavoritePlaces => 'Lieblingsplätze';
 
   @override
+  String get commonFromStation => 'von Bahnhof';
+
+  @override
+  String get commonFromStop => 'von Halt';
+
+  @override
   String get commonGoOffline => 'Offline gehen';
 
   @override
   String get commonGoOnline => 'Online gehen';
+
+  @override
+  String get commonItineraryNoTransitLegs => 'Start jederzeit möglich';
+
+  @override
+  String get commonLeavesAt => 'Fährt ab um';
 
   @override
   String get commonLeavingNow => 'Abfahrt jetzt';
@@ -85,13 +103,28 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonLoading => 'Laden…';
 
   @override
+  String get commonMapSettings => 'Karteneinstellungen';
+
+  @override
+  String get commonMoreInformartion => 'Weitere Informationen';
+
+  @override
   String get commonNoInternet => 'Keine Internetverbindung.';
+
+  @override
+  String get commonNow => 'Jetzt';
 
   @override
   String get commonOK => 'OK';
 
   @override
+  String get commonOnDemandTaxi => 'Fahrt buchen';
+
+  @override
   String get commonOrigin => 'Startpunkt';
+
+  @override
+  String get commonPlatform => 'Plattform';
 
   @override
   String get commonSave => 'Speichern';
@@ -104,6 +137,9 @@ class TrufiLocalizationDe extends TrufiLocalization {
 
   @override
   String get commonTomorrow => 'Morgen';
+
+  @override
+  String get commonTrack => 'Gleis';
 
   @override
   String get commonUnknownError => 'Unbekannter Fehler';
@@ -127,6 +163,11 @@ class TrufiLocalizationDe extends TrufiLocalization {
 
   @override
   String get defaultLocationWork => 'Arbeit';
+
+  @override
+  String departureBikeStation(Object departureStop, Object departureTime) {
+    return 'Abfahrt um ${departureTime} von ${departureStop} Leihrad-Station';
+  }
 
   @override
   String description(Object cityName) {
