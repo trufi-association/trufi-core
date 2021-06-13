@@ -6,6 +6,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/itinerary_summary_advanced.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
+import 'package:trufi_core/styles.dart';
 
 import '../plan.dart';
 
@@ -62,7 +63,10 @@ class _CustomItineraryState extends State<CustomItinerary> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 8),
+                            padding: EdgeInsets.only(
+                              top: Insets.sm,
+                              bottom: Insets.sm,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
