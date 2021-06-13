@@ -75,11 +75,11 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                   children: [
                     GestureDetector(
                       onVerticalDragEnd: (detail) {
-                        if (panelHeight > widget.panelMinSize &&
+                         if (panelHeight > minPanelSize &&
                             !showFullModal) {
                           setState(() {
                             animated = true;
-                            panelHeight = widget.panelMinSize;
+                            panelHeight = minPanelSize;
                             showFullModal = !showFullModal;
                           });
                           return;
@@ -88,7 +88,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                         setState(() {
                           animated = true;
                           panelHeight =
-                              !showFullModal ? 0 : widget.panelMinSize;
+                              !showFullModal ? 0 : minPanelSize;
                           showFullModal = !showFullModal;
                         });
                       },
