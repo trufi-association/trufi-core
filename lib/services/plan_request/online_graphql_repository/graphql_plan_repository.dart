@@ -60,7 +60,7 @@ class GraphQLPlanRepository {
   }) async {
     final transportsMode =
         defaultFecth ? defaultTransportModes : advancedOptions.transportModes;
-    final WatchQueryOptions listStopTimes = WatchQueryOptions(
+    final QueryOptions listStopTimes = QueryOptions(
       document: addFragments(parseString(plan_queries.utilsSummaryPageQuery), [
         addFragments(plan_fragments.summaryPageViewerFragment, [
           plan_fragments.summaryPlanContainerPlanFragment,
@@ -114,7 +114,6 @@ class GraphQLPlanRepository {
             parseBikeRentalNetworks(advancedOptions.bikeRentalNetworks),
         'locale': locale ?? 'en',
       },
-      fetchResults: true,
     );
     final dataStopsTimes = await client.query(listStopTimes);
     if (dataStopsTimes.hasException && dataStopsTimes.data == null) {
@@ -137,7 +136,7 @@ class GraphQLPlanRepository {
         estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
     final date = advancedOptions?.date ?? DateTime.now();
 
-    final WatchQueryOptions listStopTimes = WatchQueryOptions(
+    final QueryOptions listStopTimes = QueryOptions(
       document: addFragments(
         parseString(walkbike_queries.summaryPageWalkBikeQuery),
         [
@@ -208,7 +207,6 @@ class GraphQLPlanRepository {
         'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&
             advancedOptions.includeBikeSuggestions,
       },
-      fetchResults: true,
     );
     final dataStopsTimes = await client.query(listStopTimes);
     if (dataStopsTimes.hasException && dataStopsTimes.data == null) {
