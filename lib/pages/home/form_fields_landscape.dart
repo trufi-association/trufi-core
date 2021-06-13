@@ -91,7 +91,7 @@ class FormFieldsLandscape extends StatelessWidget {
               ),
             ),
           ),
-          if (homePageState.hastModesTransport) const TransportSelector(),
+          if (homePageState.hasTransportModes) const TransportSelector(),
         ],
       ),
     );

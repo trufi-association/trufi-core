@@ -46,10 +46,10 @@ class HomePage extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: isPortrait
               ? Size.fromHeight(isGraphQlEndpoint
-                  ? (77.0 + (homePageState.hastModesTransport ? 50 : 0))
+                  ? (77.0 + (homePageState.hasTransportModes ? 50 : 0))
                   : 45.0)
               : Size.fromHeight(isGraphQlEndpoint
-                  ? 33.0 + (homePageState.hastModesTransport ? 50 : 0)
+                  ? 33.0 + (homePageState.hasTransportModes ? 50 : 0)
                   : 0.0),
           child: Container(),
         ),
