@@ -64,30 +64,38 @@ class _CustomItineraryState extends State<CustomItinerary> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                              top: Insets.sm,
-                              bottom: Insets.sm,
-                            ),
+                                top: Insets.sm,
+                                bottom: Insets.sm,
+                                right: Insets.xl),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 if (itinerary.hasAdvencedData)
                                   Text(
-                                    "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
+                                    "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
                                     style: theme.primaryTextTheme.bodyText1
                                         .copyWith(fontWeight: FontWeight.w500),
                                   ),
-                                Text(
-                                  itinerary.hasAdvencedData
-                                      ? itinerary
-                                          .durationTripString(localization)
-                                      : localization.instructionDurationMinutes(
-                                          itinerary.time),
-                                  style: theme.primaryTextTheme.bodyText1
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  "(${itinerary.getDistanceString(localization)})",
-                                  style: theme.primaryTextTheme.bodyText2,
+                                RichText(
+                                  textScaleFactor:
+                                      MediaQuery.of(context).textScaleFactor,
+                                  text: TextSpan(
+                                    style: theme.primaryTextTheme.bodyText1
+                                        .copyWith(fontWeight: FontWeight.w500),
+                                    text: itinerary.hasAdvencedData
+                                        ? itinerary
+                                            .durationTripString(localization)
+                                        : localization
+                                            .instructionDurationMinutes(
+                                                itinerary.time),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            " (${itinerary.getDistanceString(localization)})",
+                                        style: theme.primaryTextTheme.bodyText2,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
