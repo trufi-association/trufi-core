@@ -40,17 +40,19 @@ class HomePage extends StatelessWidget {
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
     final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
+    final transportSelectionHeight = homePageState.hasTransportModes
+        ? 50 * MediaQuery.of(context).textScaleFactor
+        : 0;
+
     return Scaffold(
       key: const ValueKey(keys.homePage),
       appBar: AppBar(
         bottom: PreferredSize(
           preferredSize: isPortrait
-              ? Size.fromHeight(isGraphQlEndpoint
-                  ? (77.0 + (homePageState.hasTransportModes ? 50 : 0))
-                  : 45.0)
-              : Size.fromHeight(isGraphQlEndpoint
-                  ? 33.0 + (homePageState.hasTransportModes ? 50 : 0)
-                  : 0.0),
+              ? Size.fromHeight(
+                  isGraphQlEndpoint ? (77.0 + transportSelectionHeight) : 45.0)
+              : Size.fromHeight(
+                  isGraphQlEndpoint ? 33.0 + transportSelectionHeight : 0.0),
           child: Container(),
         ),
         flexibleSpace: isPortrait
