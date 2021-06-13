@@ -121,6 +121,9 @@ class GraphQLPlanRepository {
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
+    if (planAdvancedData.source.isEager) {
+      await Future.delayed(const Duration(milliseconds: 200));
+    }
     final planData = Plan.fromMap(
         planAdvancedData.data['viewer']['plan'] as Map<String, dynamic>);
     return planData;
@@ -219,3 +222,4 @@ class GraphQLPlanRepository {
     return modesTransportData;
   }
 }
+// QueryResultSource.cache
