@@ -182,7 +182,7 @@ class GraphQLPlanRepository {
           'optimize': advancedOptions.includeBikeSuggestions
               ? OptimizeType.triangle.name
               : OptimizeType.greenWays.name,
-          'triangle': OptimizeType.triangle.value,
+          'triangle': {...OptimizeType.triangle.value},
           'itineraryFiltering': 1.5,
           'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
           'locale': locale ?? 'en',
