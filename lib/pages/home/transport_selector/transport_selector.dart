@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
@@ -20,7 +19,7 @@ class TransportSelector extends StatelessWidget {
     final payloadDataPlanState = context.watch<PayloadDataPlanCubit>().state;
     return Container(
       color: Colors.grey[100],
-      height: 50,
+      height: 50 * MediaQuery.of(context).textScaleFactor,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [

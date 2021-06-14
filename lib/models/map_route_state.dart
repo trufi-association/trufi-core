@@ -102,7 +102,7 @@ class MapRouteState extends Equatable {
 
   bool get isPlacesDefined => fromPlace != null && toPlace != null;
 
-  bool get hastModesTransport =>
+  bool get hasTransportModes =>
       modesTransport != null && modesTransport.availableModesTransport;
 
   @override
