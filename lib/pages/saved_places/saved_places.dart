@@ -53,49 +53,55 @@ class SavedPlacesPage extends StatelessWidget {
                       children: [
                         BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                           builder: (context, state) {
-                            return ListView(
-                              children: [
-                                const SizedBox(height: 10),
-                                Column(
-                                  children: searchLocationsCubit
-                                      .state.myDefaultPlaces
-                                      .map(
-                                    (place) {
-                                      return LocationTiler(
-                                        location: place,
-                                        enableSetPosition: true,
-                                        isDefaultLocation: true,
-                                        updateLocation: searchLocationsCubit
-                                            .updateMyDefaultPlace,
-                                      );
-                                    },
-                                  ).toList(),
-                                ),
-                                if (searchLocationsCubit
-                                    .state.myPlaces.isNotEmpty) ...[
-                                  const Divider(),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(localization.commonCustomPlaces,
-                                        style: theme.textTheme.bodyText1),
+                            return Scrollbar(
+                              child: ListView(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Column(
+                                    children: searchLocationsCubit
+                                        .state.myDefaultPlaces
+                                        .map(
+                                      (place) {
+                                        return LocationTiler(
+                                          location: place,
+                                          enableSetPosition: true,
+                                          isDefaultLocation: true,
+                                          updateLocation: searchLocationsCubit
+                                              .updateMyDefaultPlace,
+                                        );
+                                      },
+                                    ).toList(),
                                   ),
+                                  if (searchLocationsCubit
+                                      .state.myPlaces.isNotEmpty) ...[
+                                    const Divider(),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text(
+                                          localization.commonCustomPlaces,
+                                          style: theme.textTheme.bodyText1),
+                                    ),
+                                  ],
+                                  Column(
+                                    children:
+                                        searchLocationsCubit.state.myPlaces
+                                            .map(
+                                              (place) => LocationTiler(
+                                                  location: place,
+                                                  enableSetIcon: true,
+                                                  enableSetName: true,
+                                                  enableSetPosition: true,
+                                                  updateLocation:
+                                                      searchLocationsCubit
+                                                          .updateMyPlace,
+                                                  removeLocation:
+                                                      searchLocationsCubit
+                                                          .deleteMyPlace),
+                                            )
+                                            .toList(),
+                                  )
                                 ],
-                                Column(
-                                  children: searchLocationsCubit.state.myPlaces
-                                      .map(
-                                        (place) => LocationTiler(
-                                            location: place,
-                                            enableSetIcon: true,
-                                            enableSetName: true,
-                                            enableSetPosition: true,
-                                            updateLocation: searchLocationsCubit
-                                                .updateMyPlace,
-                                            removeLocation: searchLocationsCubit
-                                                .deleteMyPlace),
-                                      )
-                                      .toList(),
-                                )
-                              ],
+                              ),
                             );
                           },
                         ),
@@ -114,18 +120,20 @@ class SavedPlacesPage extends StatelessWidget {
                     ),
                     BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
                       builder: (context, state) {
-                        return ListView.builder(
-                          itemCount: state.favoritePlaces.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return LocationTiler(
-                              location: state.favoritePlaces[index],
-                              enableSetIcon: true,
-                              updateLocation:
-                                  searchLocationsCubit.updateFavoritePlace,
-                              removeLocation:
-                                  searchLocationsCubit.deleteFavoritePlace,
-                            );
-                          },
+                        return Scrollbar(
+                          child: ListView.builder(
+                            itemCount: state.favoritePlaces.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return LocationTiler(
+                                location: state.favoritePlaces[index],
+                                enableSetIcon: true,
+                                updateLocation:
+                                    searchLocationsCubit.updateFavoritePlace,
+                                removeLocation:
+                                    searchLocationsCubit.deleteFavoritePlace,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),
