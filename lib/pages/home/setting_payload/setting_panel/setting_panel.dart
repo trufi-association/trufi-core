@@ -32,47 +32,50 @@ class SettingPanel extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<PayloadDataPlanCubit, PayloadDataPlanState>(
           builder: (blocContext, state) {
-            return ListView(
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                SpeedExpansionTile(
-                  title: localization.settingPanelWalkingSpeed,
-                  dataSpeeds: WalkingSpeed.values
-                      .map(
-                        (e) =>
-                            DataSpeed(e.translateValue(localization), e.speed),
-                      )
-                      .toList(),
-                  textSelected:
-                      state.typeWalkingSpeed.translateValue(localization),
-                  onChanged: (value) {
-                    final WalkingSpeed selected = WalkingSpeed.values
-                        .firstWhere((element) =>
-                            element.translateValue(localization) == value);
-                    payloadDataPlanCubit.setWalkingSpeed(selected);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.settingPanelAvoidWalking,
-                  value: state.avoidWalking,
-                  onChanged: (value) =>
-                      payloadDataPlanCubit.setAvoidWalking(avoidWalking: value),
-                ),
-                _dividerWeight,
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    localization.settingPanelTransportModes,
-                    style: theme.textTheme.bodyText1,
+            return Scrollbar(
+              child: ListView(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
                   ),
-                  CustomExpansionTile(
+                  SpeedExpansionTile(
                     title: localization.settingPanelWalkingSpeed,
-                    options: WalkingSpeed.values
+                    dataSpeeds: WalkingSpeed.values
                         .map(
-                          (e) => e.translateValue(localization),
+                          (e) => DataSpeed(
+                              e.translateValue(localization), e.speed),
+                        )
+                        .toList(),
+                    textSelected:
+                        state.typeWalkingSpeed.translateValue(localization),
+                    onChanged: (value) {
+                      final WalkingSpeed selected = WalkingSpeed.values
+                          .firstWhere((element) =>
+                              element.translateValue(localization) == value);
+                      payloadDataPlanCubit.setWalkingSpeed(selected);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.settingPanelAvoidWalking,
+                    value: state.avoidWalking,
+                    onChanged: (value) => payloadDataPlanCubit.setAvoidWalking(
+                        avoidWalking: value),
+                  ),
+                  _dividerWeight,
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      localization.settingPanelTransportModes,
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ),
+                  SpeedExpansionTile(
+                    title: localization.settingPanelWalkingSpeed,
+                    dataSpeeds: WalkingSpeed.values
+                        .map(
+                          (e) => DataSpeed(
+                              e.translateValue(localization), e.speed),
                         )
                         .toList(),
                     textSelected:
@@ -256,26 +259,25 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: bikeSvg(),
                     ),
-                    child: SpeedExpansionTile(
-                      title: localization.settingPanelBikingSpeed,
-                      dataSpeeds: BikingSpeed.values
-                          .map(
-                            (e) =>
-                                DataSpeed(e.translateValue(localization), ''),
-                          )
-                          .toList(),
-                      textSelected:
-                          state.typeBikingSpeed.translateValue(localization),
-                      onChanged: (value) {
-                        final BikingSpeed selected = BikingSpeed.values
-                            .firstWhere((element) =>
-                                element.translateValue(localization) == value);
-                        payloadDataPlanCubit.setBikingSpeed(selected);
-                      },
-                    ),
                     value: state.includeParkAndRideSuggestions,
                     onChanged: (value) =>
                         payloadDataPlanCubit.setParkRide(parkRide: value),
+                  ),
+                  SpeedExpansionTile(
+                    title: localization.settingPanelBikingSpeed,
+                    dataSpeeds: BikingSpeed.values
+                        .map(
+                          (e) => DataSpeed(e.translateValue(localization), ''),
+                        )
+                        .toList(),
+                    textSelected:
+                        state.typeBikingSpeed.translateValue(localization),
+                    onChanged: (value) {
+                      final BikingSpeed selected = BikingSpeed.values
+                          .firstWhere((element) =>
+                              element.translateValue(localization) == value);
+                      payloadDataPlanCubit.setBikingSpeed(selected);
+                    },
                   ),
                   CustomSwitchTile(
                     title: localization.instructionVehicleCar,
