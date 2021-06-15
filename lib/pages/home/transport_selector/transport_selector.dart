@@ -58,7 +58,7 @@ class TransportSelector extends StatelessWidget {
               ],
             ),
           )
-        : homePageState.hastModesTransport
+        : homePageState.hasTransportModes
             ? Container(
                 color: Colors.grey[100],
                 height: 50,
