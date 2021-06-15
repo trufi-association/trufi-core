@@ -69,8 +69,7 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
         ),
       ),
       body: CustomScrollableContainer(
-        panelMinSize: MediaQuery.of(context).size.height / 3,
-        bodyMinSize: MediaQuery.of(context).size.height / 3,
+        openedPosition: 200,
         body: PlanMapPage(
           planPageController: _planPageController,
           customOverlayWidget: null,
