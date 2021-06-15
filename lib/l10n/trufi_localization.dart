@@ -945,6 +945,12 @@ abstract class TrufiLocalization {
   /// **'Bike'**
   String get settingPanelMyModesTransportBike;
 
+  /// Bike and Ride configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Bike and Ride'**
+  String get settingPanelMyModesTransportBikeRide;
+
   /// Park and Ride configuration panel label
   ///
   /// In en, this message translates to:
@@ -1020,7 +1026,7 @@ abstract class TrufiLocalization {
   /// Average speed type
   ///
   /// In en, this message translates to:
-  /// **'Average'**
+  /// **'Normal'**
   String get typeSpeedAverage;
 
   /// Calm speed type

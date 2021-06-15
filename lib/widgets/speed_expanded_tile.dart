@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-class CustomExpansionTile extends StatelessWidget {
+class SpeedExpansionTile extends StatelessWidget {
   final String title;
-  final List<String> options;
+  final List<DataSpeed> dataSpeeds;
   final String textSelected;
   final Function(String) onChanged;
 
-  const CustomExpansionTile({
+  const SpeedExpansionTile({
     Key key,
     @required this.title,
-    @required this.options,
+    @required this.dataSpeeds,
     @required this.textSelected,
     @required this.onChanged,
   }) : super(key: key);
@@ -31,28 +31,44 @@ class CustomExpansionTile extends StatelessWidget {
           ),
         ],
       ),
-      children: options
+      children: dataSpeeds
           .map(
-            (option) => Container(
+            (dataSpeed) => Container(
               margin:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
               child: ListTile(
                 tileColor: theme.textTheme.bodyText1.color.withOpacity(0.05),
                 visualDensity: VisualDensity.compact,
                 title: Text(
-                  option,
+                  dataSpeed.name,
                   style: TextStyle(
                     color: theme.primaryColor,
                   ),
                 ),
-                trailing: option.toLowerCase() == textSelected.toLowerCase()
-                    ? Icon(
-                        Icons.check,
-                        color: theme.accentColor,
-                      )
-                    : null,
+                trailing: SizedBox(
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        dataSpeed.speed,
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      if (dataSpeed.name.toLowerCase() ==
+                          textSelected.toLowerCase())
+                        Icon(
+                          Icons.check,
+                          color: theme.accentColor,
+                        )
+                      else
+                        Container(width: 15),
+                    ],
+                  ),
+                ),
                 onTap: () {
-                  onChanged(option);
+                  onChanged(dataSpeed.name);
                 },
               ),
             ),
@@ -60,4 +76,11 @@ class CustomExpansionTile extends StatelessWidget {
           .toList(),
     );
   }
+}
+
+class DataSpeed {
+  final String name;
+  final String speed;
+
+  DataSpeed(this.name, this.speed);
 }

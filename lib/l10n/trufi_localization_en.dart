@@ -447,6 +447,9 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get settingPanelMyModesTransportBike => 'Bike';
 
   @override
+  String get settingPanelMyModesTransportBikeRide => 'Bike and Ride';
+
+  @override
   String get settingPanelMyModesTransportParkRide => 'Park and Ride';
 
   @override
@@ -495,7 +498,7 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get title => 'Trufi App';
 
   @override
-  String get typeSpeedAverage => 'Average';
+  String get typeSpeedAverage => 'Normal';
 
   @override
   String get typeSpeedCalm => 'Calm';

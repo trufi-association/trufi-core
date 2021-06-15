@@ -4,8 +4,8 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
-import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
+import 'package:trufi_core/widgets/speed_expanded_tile.dart';
 
 class SettingPanel extends StatelessWidget {
   static const String route = "/setting-panel";
@@ -38,11 +38,44 @@ class SettingPanel extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  CustomExpansionTile(
+                  SpeedExpansionTile(
                     title: localization.settingPanelWalkingSpeed,
-                    options: WalkingSpeed.values
+                    dataSpeeds: WalkingSpeed.values
                         .map(
-                          (e) => e.translateValue(localization),
+                          (e) => DataSpeed(
+                              e.translateValue(localization), e.speed),
+                        )
+                        .toList(),
+                    textSelected:
+                        state.typeWalkingSpeed.translateValue(localization),
+                    onChanged: (value) {
+                      final WalkingSpeed selected = WalkingSpeed.values
+                          .firstWhere((element) =>
+                              element.translateValue(localization) == value);
+                      payloadDataPlanCubit.setWalkingSpeed(selected);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.settingPanelAvoidWalking,
+                    value: state.avoidWalking,
+                    onChanged: (value) => payloadDataPlanCubit.setAvoidWalking(
+                        avoidWalking: value),
+                  ),
+                  _dividerWeight,
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      localization.settingPanelTransportModes,
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  ),
+                  SpeedExpansionTile(
+                    title: localization.settingPanelWalkingSpeed,
+                    dataSpeeds: WalkingSpeed.values
+                        .map(
+                          (e) => DataSpeed(
+                              e.translateValue(localization), e.speed),
                         )
                         .toList(),
                     textSelected:
@@ -226,47 +259,25 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: bikeSvg(),
                     ),
-                    value: state.includeBikeSuggestions,
-                    onChanged: (value) =>
-                        payloadDataPlanCubit.setIncludeBikeSuggestions(
-                            includeBikeSuggestions: value),
-                  ),
-                  if (state.includeBikeSuggestions)
-                    Container(
-                      margin: const EdgeInsets.only(
-                        left: 55,
-                      ),
-                      child: CustomExpansionTile(
-                        title: localization.settingPanelBikingSpeed,
-                        options: BikingSpeed.values
-                            .map(
-                              (e) => e.translateValue(localization),
-                            )
-                            .toList(),
-                        textSelected:
-                            state.typeBikingSpeed.translateValue(localization),
-                        onChanged: (value) {
-                          final BikingSpeed selected = BikingSpeed.values
-                              .firstWhere((element) =>
-                                  element.translateValue(localization) ==
-                                  value);
-                          payloadDataPlanCubit.setBikingSpeed(selected);
-                        },
-                      ),
-                    )
-                  else
-                    Container(),
-                  _divider,
-                  CustomSwitchTile(
-                    title: localization.settingPanelMyModesTransportParkRide,
-                    secondary: SizedBox(
-                      height: 35,
-                      width: 35,
-                      child: carSvg(),
-                    ),
                     value: state.includeParkAndRideSuggestions,
                     onChanged: (value) =>
                         payloadDataPlanCubit.setParkRide(parkRide: value),
+                  ),
+                  SpeedExpansionTile(
+                    title: localization.settingPanelBikingSpeed,
+                    dataSpeeds: BikingSpeed.values
+                        .map(
+                          (e) => DataSpeed(e.translateValue(localization), ''),
+                        )
+                        .toList(),
+                    textSelected:
+                        state.typeBikingSpeed.translateValue(localization),
+                    onChanged: (value) {
+                      final BikingSpeed selected = BikingSpeed.values
+                          .firstWhere((element) =>
+                              element.translateValue(localization) == value);
+                      payloadDataPlanCubit.setBikingSpeed(selected);
+                    },
                   ),
                   CustomSwitchTile(
                     title: localization.instructionVehicleCar,

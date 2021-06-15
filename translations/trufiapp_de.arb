@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-12T03:00:56+02:00",
+    "@@last_modified": "2021-06-15T13:19:49+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -611,7 +611,11 @@
     "@settingPanelMyModesTransportBike": {
         "description": "Bike configuration panel label"
     },
-    "settingPanelMyModesTransportParkRide": "Park and Ride",
+    "settingPanelMyModesTransportBikeRide": "Bike & Ride",
+    "@settingPanelMyModesTransportBikeRide": {
+        "description": "Bike and Ride configuration panel label"
+    },
+    "settingPanelMyModesTransportParkRide": "Park & Ride",
     "@settingPanelMyModesTransportParkRide": {
         "description": "Park and Ride configuration panel label"
     },
@@ -698,7 +702,7 @@
     "@title": {
         "description": "The application's name"
     },
-    "typeSpeedAverage": "Standard",
+    "typeSpeedAverage": "Normal",
     "@typeSpeedAverage": {
         "description": "Average speed type"
     },
@@ -706,7 +710,7 @@
     "@typeSpeedCalm": {
         "description": "Calm speed type"
     },
-    "typeSpeedFast": "Am meisten",
+    "typeSpeedFast": "Schnell",
     "@typeSpeedFast": {
         "description": "Fast speed type"
     },
@@ -714,7 +718,7 @@
     "@typeSpeedPrompt": {
         "description": "Prompt speed type"
     },
-    "typeSpeedSlow": "Am wenigsten",
+    "typeSpeedSlow": "Langsam",
     "@typeSpeedSlow": {
         "description": "Slow speed type"
     },

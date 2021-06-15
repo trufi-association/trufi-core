@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-06-12T03:00:56+02:00",
+    "@@last_modified": "2021-06-15T13:19:49+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -610,6 +610,10 @@
     "settingPanelMyModesTransportBike": "Bike",
     "@settingPanelMyModesTransportBike": {
         "description": "Bike configuration panel label"
+    },
+    "settingPanelMyModesTransportBikeRide": "Park and Ride",
+    "@settingPanelMyModesTransportBikeRide": {
+        "description": "Bike and Ride configuration panel label"
     },
     "settingPanelMyModesTransportParkRide": "Park and Ride",
     "@settingPanelMyModesTransportParkRide": {
