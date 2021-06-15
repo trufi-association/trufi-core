@@ -4,8 +4,8 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
-import 'package:trufi_core/widgets/custom_expanded_tile.dart';
 import 'package:trufi_core/widgets/custom_switch_tile.dart';
+import 'package:trufi_core/widgets/speed_expanded_tile.dart';
 
 class SettingPanel extends StatelessWidget {
   static const String route = "/setting-panel";
@@ -37,11 +37,12 @@ class SettingPanel extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                CustomExpansionTile(
+                SpeedExpansionTile(
                   title: localization.settingPanelWalkingSpeed,
-                  options: WalkingSpeed.values
+                  dataSpeeds: WalkingSpeed.values
                       .map(
-                        (e) => e.translateValue(localization),
+                        (e) =>
+                            DataSpeed(e.translateValue(localization), e.speed),
                       )
                       .toList(),
                   textSelected:
@@ -231,11 +232,12 @@ class SettingPanel extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       left: 55,
                     ),
-                    child: CustomExpansionTile(
+                    child: SpeedExpansionTile(
                       title: localization.settingPanelBikingSpeed,
-                      options: BikingSpeed.values
+                      dataSpeeds: BikingSpeed.values
                           .map(
-                            (e) => e.translateValue(localization),
+                            (e) =>
+                                DataSpeed(e.translateValue(localization), ''),
                           )
                           .toList(),
                       textSelected:

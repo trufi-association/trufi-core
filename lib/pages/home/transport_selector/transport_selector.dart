@@ -64,7 +64,7 @@ class TransportSelector extends StatelessWidget {
               onTap: () async {
                 await Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => ModeTransportScreen(
-                    title: localization.settingPanelMyModesTransportBike,
+                    title: localization.settingPanelMyModesTransportBikeRide,
                     plan: modesTransport.bikeAndVehicle,
                   ),
                 ));

@@ -1,6 +1,6 @@
 part of 'enums_plan.dart';
 
-enum WalkingSpeed { slow, calm, average, prompt, fast }
+enum WalkingSpeed { slow, average, fast }
 
 WalkingSpeed getWalkingSpeed(String key) {
   return WalkingSpeedExtension.names.keys.firstWhere(
@@ -11,34 +11,33 @@ WalkingSpeed getWalkingSpeed(String key) {
 
 extension WalkingSpeedExtension on WalkingSpeed {
   static const values = <WalkingSpeed, double>{
-    WalkingSpeed.slow: 0.69,
-    WalkingSpeed.calm: 0.97,
-    WalkingSpeed.average: 1.2,
-    WalkingSpeed.prompt: 1.67,
-    WalkingSpeed.fast: 2.22,
+    WalkingSpeed.slow: 0.83,
+    WalkingSpeed.average: 1.38,
+    WalkingSpeed.fast: 1.94444,
   };
   static const names = <WalkingSpeed, String>{
-    WalkingSpeed.slow: "slow",
-    WalkingSpeed.calm: "calm",
-    WalkingSpeed.average: "average",
-    WalkingSpeed.prompt: "prompt",
-    WalkingSpeed.fast: "fast",
+    WalkingSpeed.slow: 'slow',
+    WalkingSpeed.average: 'average',
+    WalkingSpeed.fast: 'fast',
   };
+
+  static const speeds = <WalkingSpeed, String>{
+    WalkingSpeed.slow: '3 km/h',
+    WalkingSpeed.average: '5 km/h',
+    WalkingSpeed.fast: '7 km/h',
+  };
+
+  String get name => names[this];
+  String get speed => speeds[this] ?? 'noSpeed';
   double get value => values[this] ?? 1.2;
-  String get name => names[this] ?? "slow";
+
   String translateValue(TrufiLocalization localization) {
     switch (this) {
       case WalkingSpeed.slow:
         return localization.typeSpeedSlow;
         break;
-      case WalkingSpeed.calm:
-        return localization.typeSpeedCalm;
-        break;
       case WalkingSpeed.average:
         return localization.typeSpeedAverage;
-        break;
-      case WalkingSpeed.prompt:
-        return localization.typeSpeedPrompt;
         break;
       case WalkingSpeed.fast:
         return localization.typeSpeedFast;
