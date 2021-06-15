@@ -447,7 +447,10 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get settingPanelMyModesTransportBike => 'Fahrrad';
 
   @override
-  String get settingPanelMyModesTransportParkRide => 'Park and Ride';
+  String get settingPanelMyModesTransportBikeRide => 'Bike & Ride';
+
+  @override
+  String get settingPanelMyModesTransportParkRide => 'Park & Ride';
 
   @override
   String get settingPanelTransportModes => 'Verkehrsmittel auswählen';
@@ -495,19 +498,19 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get title => 'Trufi App';
 
   @override
-  String get typeSpeedAverage => 'Standard';
+  String get typeSpeedAverage => 'Normal';
 
   @override
   String get typeSpeedCalm => 'Weniger';
 
   @override
-  String get typeSpeedFast => 'Am meisten';
+  String get typeSpeedFast => 'Schnell';
 
   @override
   String get typeSpeedPrompt => 'Mehr';
 
   @override
-  String get typeSpeedSlow => 'Am wenigsten';
+  String get typeSpeedSlow => 'Langsam';
 
   @override
   String version(Object version) {
