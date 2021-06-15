@@ -252,38 +252,44 @@ class PlanItinerary {
     return endTime.difference(startTime).inSeconds;
   }
 
-  double get durationItinerary {
-    final duration = endTime.difference(startTime).inSeconds;
-    return duration + numberRouteHidens;
-  }
-
   bool get usingOwnBicycle => legs.any((leg) =>
       leg.transportMode == TransportMode.bicycle && leg.rentedBike ?? false);
 
-  bool get renderModeIcons => compressLegs.length < 10;
-
-  bool get usingOwnBicycleWholeTrip {
-    return usingOwnBicycle &&
-        legs.every((leg) => leg.toPlace?.bikeParkEntity == null);
+  int getNumberIcons(double renderBarThreshold) {
+    final routeShorts = compressLegs.where((leg) {
+      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+      if (!(legLength < renderBarThreshold && leg.isLegOnFoot) &&
+          leg.toPlace?.bikeParkEntity != null) {
+        return true;
+      } else if (leg.transportMode == TransportMode.car &&
+          leg.toPlace?.carParkEntity != null) {
+        return true;
+      } else if (leg.transportMode == TransportMode.bicycle &&
+          leg.toPlace?.bikeParkEntity != null &&
+          !(legLength < renderBarThreshold && leg.isLegOnFoot)) {
+        return true;
+      }
+      return false;
+    }).toList();
+    return routeShorts.length;
   }
 
-  double get numberRouteHidens {
-    double sumPart = 0;
-    final routeShorts = compressLegs.where((leg) {
-      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 100;
-      if (legLength < 9.3 &&
-          (leg.transitLeg || leg.transportMode == TransportMode.walk)) {
-        sumPart += legLength;
-      }
-      if (leg.toPlace?.bikeParkEntity != null &&
-          leg.toPlace?.carParkEntity != null &&
-          leg.toPlace?.bikeParkEntity != null) {
-        sumPart -= 22;
-      }
-      return legLength < 9.3 &&
-          (leg.transitLeg || leg.transportMode == TransportMode.walk);
-    }).toList();
-    return (((routeShorts.length * 9.3) - sumPart) * totalDurationItinerary) /
-        100;
+  int getNumberLegHide(double renderBarThreshold) {
+    return compressLegs
+        .where((leg) {
+          final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+          return legLength < renderBarThreshold;
+        })
+        .toList()
+        .length;
+  }
+
+  int getNumberLegTime(double renderBarThreshold) {
+    return compressLegs.fold(0, (previousValue, element) {
+      final legLength = (element.durationIntLeg / totalDurationItinerary) * 10;
+      return legLength < renderBarThreshold
+          ? previousValue + element.durationIntLeg
+          : previousValue;
+    });
   }
 }
