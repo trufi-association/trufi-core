@@ -343,7 +343,12 @@ query SummaryPage_WalkBike_Query(
     toPlace: $toPlace, 
     intermediatePlaces: $intermediatePlaces, 
     numItineraries: 6, 
-    transportModes: [{mode: CAR, qualifier: PARK}, {mode: TRANSIT}], 
+    transportModes: [
+      { mode: CAR, qualifier: PARK }
+      { mode: BUS }
+      { mode: RAIL }
+      { mode: SUBWAY }
+    ], 
     date: $date, 
     time: $time, 
     walkReluctance: $walkReluctance, 

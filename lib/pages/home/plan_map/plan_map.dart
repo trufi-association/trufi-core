@@ -360,15 +360,23 @@ class PlanMapPageStateData {
         final List<Marker> markers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
+        final List<PlanItineraryLeg> compressedLegs = itinerary.compressLegs;
 
-        for (int i = 0; i < itinerary.legs.length; i++) {
-          final PlanItineraryLeg leg = itinerary.legs[i];
+        for (int i = 0; i < compressedLegs.length; i++) {
+          final PlanItineraryLeg leg = compressedLegs[i];
           // Polyline
-          final List<LatLng> points = decodePolyline(leg.points);
+          final List<LatLng> points = leg.accumulatedPoints.isNotEmpty
+              ? leg.accumulatedPoints
+              : decodePolyline(leg.points);
           final Color color = isSelected
-              ? (leg?.route?.color != null
-                  ? Color(int.tryParse("0xFF${leg.route.color}"))
-                  : leg.transportMode.color)
+              ? leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
+                  : (leg?.route?.color != null
+                      ? Color(int.tryParse("0xFF${leg.route.color}"))
+                      : leg.transportMode.color)
               : Colors.grey;
           final Polyline polyline = Polyline(
             points: points,
@@ -379,7 +387,7 @@ class PlanMapPageStateData {
 
           // Transfer marker
           if (isSelected &&
-              i < itinerary.legs.length - 1 &&
+              i < compressedLegs.length - 1 &&
               polyline.points.isNotEmpty) {
             markers.add(
               buildTransferMarker(

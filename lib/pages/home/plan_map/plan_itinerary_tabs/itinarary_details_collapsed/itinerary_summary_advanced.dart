@@ -7,7 +7,6 @@ import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_det
 
 class ItinerarySummaryAdvanced extends StatelessWidget {
   final double maxWidth;
-  static const renderBarThreshold = 5;
   final PlanItinerary itinerary;
 
   const ItinerarySummaryAdvanced({
@@ -20,79 +19,81 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    double addition = 0;
-    const waitThreshold = 180;
-    final List<Widget> legs = [];
+
     final compressLegs = itinerary.compressLegs;
-    final lastLeg = compressLegs[itinerary.compressLegs.length - 1];
-    final lastLegLength =
-        ((lastLeg.durationIntLeg) / itinerary.durationItinerary) * 100;
+
+    final renderBarThreshold = (24 * 10) / maxWidth;
+    final legRender = itinerary.getNumberLegHide(renderBarThreshold);
+    final iconsRender = itinerary.getNumberIcons(renderBarThreshold);
+    final legRenderDuration = itinerary.getNumberLegTime(renderBarThreshold);
+    final newMaxWidth = maxWidth - (legRender * 24 + iconsRender * 22);
+
+    final durationItinerary =
+        itinerary.totalDurationItinerary - legRenderDuration;
+    final newRenderBarThreshold = (24 * 10) / newMaxWidth;
+
+    final List<Widget> legs = [];
+
     final int bikeParkedIndex =
         compressLegs.indexWhere((leg) => leg.toPlace?.bikeParkEntity != null);
+    final lastLeg = compressLegs[compressLegs.length - 1];
+    final lastLegLength = ((lastLeg.durationIntLeg) / durationItinerary) * 10;
+    const waitThreshold = 180;
+    double addition = 0;
 
     compressLegs.asMap().forEach((index, leg) {
       bool waiting = false;
       double waitTime;
       double waitLength;
       bool renderBar = true;
+
       PlanItineraryLeg nextLeg;
       final isNextLegLast = index + 1 == compressLegs.length - 1;
-      final bool shouldRenderLastLeg =
-          isNextLegLast && lastLegLength < renderBarThreshold;
 
-      if (index < itinerary.legs.length - 1) {
-        nextLeg = itinerary.legs[index + 1];
+      final bool shouldRenderLastLeg =
+          isNextLegLast && lastLegLength < newRenderBarThreshold;
+
+      if (index < compressLegs.length - 1) {
+        nextLeg = compressLegs[index + 1];
       }
 
-      double legLength =
-          (leg.durationIntLeg / itinerary.durationItinerary) * 100;
+      double legLength = (leg.durationIntLeg / durationItinerary) * 10;
 
-      if (nextLeg != null && !(nextLeg.intermediatePlace ?? false)) {
+      if (nextLeg != null) {
         waitTime =
             nextLeg.startTime.difference(leg.endTime).inSeconds.toDouble();
-        waitLength = (waitTime / itinerary.durationItinerary) * 100;
-        if (waitTime > waitThreshold && waitLength > renderBarThreshold) {
+        waitLength = (waitTime / durationItinerary) * 10;
+        if (waitTime > waitThreshold && waitLength > newRenderBarThreshold) {
           waiting = true;
         } else {
-          legLength = ((leg.durationIntLeg + (waitTime > 0 ? waitTime : 0)) /
-                  itinerary.durationItinerary) *
-              100;
-        }
-      }
-      if (nextLeg != null && (nextLeg.interlineWithPreviousLeg ?? false)) {
-        final int lastTime =
-            nextLeg.endTime.difference(leg.startTime).inSeconds;
-        if (lastTime > 0) {
-          legLength = (lastTime / itinerary.durationItinerary) * 100;
+          legLength += waitLength;
         }
       }
 
       legLength += addition;
       addition = 0;
 
-      if (shouldRenderLastLeg) {
-        legLength += lastLegLength;
+      if (shouldRenderLastLeg && !leg.isLegOnFoot) {
+        legLength += newRenderBarThreshold;
       }
 
-      if (legLength < renderBarThreshold && leg.isLegOnFoot) {
+      if (legLength < newRenderBarThreshold && leg.isLegOnFoot) {
         renderBar = false;
-        addition += legLength;
+        addition += newRenderBarThreshold;
       }
 
       if (leg.isLegOnFoot && renderBar) {
         legs.add(ModeLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
           duration: leg.durationIntLeg ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: itinerary.usingOwnBicycle && index < bikeParkedIndex
               ? 'BICYCLE_WALK'
               : 'WALK',
           isTransitLeg: false,
         ));
         if (leg.toPlace?.bikeParkEntity != null) {
-          // onlyIconLegs += 1;
           legs.add(SizedBox(
             height: 22,
             width: 22,
@@ -101,27 +102,24 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         }
       } else if (leg.rentedBike ?? false) {
         legs.add(ModeLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
           duration: leg.durationIntLeg ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: 'CITYBIKE',
           isTransitLeg: false,
         ));
       } else if (leg.transportMode == TransportMode.car) {
         legs.add(ModeLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
           duration: leg.durationIntLeg ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: 'CAR',
           isTransitLeg: false,
         ));
 
         if (leg.toPlace?.carParkEntity != null) {
-          // onlyIconLegs += 1;
           legs.add(SizedBox(
             height: 22,
             width: 22,
@@ -130,16 +128,14 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         }
       } else if (leg.transportMode == TransportMode.bicycle && renderBar) {
         legs.add(ModeLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
           duration: leg.durationIntLeg ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: 'BICYCLE',
           isTransitLeg: false,
         ));
         if (leg.toPlace?.bikeParkEntity != null) {
-          // onlyIconLegs += 1;
           legs.add(SizedBox(
             height: 22,
             width: 22,
@@ -149,32 +145,35 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
       }
       if (leg.route != null && !(leg.interlineWithPreviousLeg ?? false)) {
         legs.add(RouteLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: leg.transportMode.name,
           isTransitLeg: true,
         ));
       }
       if (waiting) {
         legs.add(ModeLeg(
-          maxWidth: maxWidth,
+          maxWidth: newMaxWidth,
           leg: leg,
           legLength: waitLength,
           duration: waitTime ~/ 60,
-          renderModeIcons: itinerary.renderModeIcons,
           mode: 'WAIT',
           isTransitLeg: false,
         ));
       }
-      // final int normalLegs = legs.length - onlyIconLegs;
     });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
-          children: <Widget>[...legs],
+          // TODO enhance the width
+          children: legs.length > 1
+              ? <Widget>[
+                  ...legs.getRange(0, legs.length - 1),
+                  Expanded(child: legs.last)
+                ]
+              : [...legs],
         ),
         Container(
           padding: const EdgeInsets.only(top: 3),

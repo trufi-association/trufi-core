@@ -61,13 +61,7 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigurationCubit>().state;
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text('${widget.title} (${widget.plan.itineraries.length})')
-          ],
-        ),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: CustomScrollableContainer(
         openedPosition: 200,
         body: PlanMapPage(
