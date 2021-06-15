@@ -38,6 +38,7 @@ dependencies:
   url_launcher: 6.0.3
   uuid: 2.2.2
   xml: ^5.1.0
+  skeleton_animation: ^0.1.4
 
 dev_dependencies:
   bloc_test: ^8.0.0
