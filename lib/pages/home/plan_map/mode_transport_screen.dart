@@ -63,8 +63,7 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: CustomScrollableContainer(
-        panelMinSize: MediaQuery.of(context).size.height / 3,
-        bodyMinSize: MediaQuery.of(context).size.height / 3,
+        openedPosition: 200,
         body: PlanMapPage(
           planPageController: _planPageController,
           customOverlayWidget: null,

@@ -54,7 +54,11 @@ class _MapItemsSelector extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListView(children: const [_CustomExpansionPanel()]),
+          child: Scrollbar(
+            child: ListView(
+              children: const [_CustomExpansionPanel()],
+            ),
+          ),
         ),
       ],
     );
