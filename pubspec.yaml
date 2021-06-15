@@ -33,12 +33,12 @@ dependencies:
   rxdart: ^0.26.0
   share: ^2.0.1
   shared_preferences: ^2.0.5
+  skeleton_animation: ^0.1.4
   sprintf: ^6.0.0
   synchronized: ^3.0.0
   url_launcher: 6.0.3
   uuid: 2.2.2
   xml: ^5.1.0
-  skeleton_animation: ^0.1.4
 
 dev_dependencies:
   bloc_test: ^8.0.0

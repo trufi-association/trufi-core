@@ -9,7 +9,6 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/models/markers/marker_configuration.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
-import 'package:trufi_core/services/models_otp/itinerary.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/buttons/crop_button.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
