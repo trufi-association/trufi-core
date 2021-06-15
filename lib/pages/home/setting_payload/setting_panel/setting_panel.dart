@@ -38,13 +38,6 @@ class SettingPanel extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      localization.settingPanelTransportModes,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  ),
                   SpeedExpansionTile(
                     title: localization.settingPanelWalkingSpeed,
                     dataSpeeds: WalkingSpeed.values
