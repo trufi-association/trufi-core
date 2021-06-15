@@ -780,6 +780,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.4+1"
+  skeleton_animation:
+    dependency: "direct main"
+    description:
+      name: skeleton_animation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   sky_engine:
     dependency: transitive
     description: flutter

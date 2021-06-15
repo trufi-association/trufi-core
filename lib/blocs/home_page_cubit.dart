@@ -18,6 +18,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
   final RequestManager requestManager;
   CancelableOperation<PlanEntity> currentFetchPlanOperation;
+  CancelableOperation<ModesTransportEntity> currentFetchPlanModesOperation;
   CancelableOperation<AdEntity> currentFetchAdOperation;
 
   HomePageCubit(
@@ -42,6 +43,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await localRepository.deleteStateHomePage();
     if (currentFetchPlanOperation != null) {
       await currentFetchPlanOperation.cancel();
+    }
+    if (currentFetchPlanModesOperation != null) {
+      await currentFetchPlanModesOperation.cancel();
     }
   }
 
@@ -79,7 +83,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
     PayloadDataPlanState advancedOptions,
   }) async {
     if (state.toPlace != null && state.fromPlace != null) {
-      await updateMapRouteState(state.copyWithoutMap(isFetching: true));
+      await updateMapRouteState(
+          state.copyWithoutMap(isFetching: true, isFetchingModes: false));
       final PlanEntity planEntity = await _fetchPlan(
         correlationId,
         localization,
@@ -89,22 +94,22 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await updateMapRouteState(state.copyWith(isFetching: false));
         throw error;
       });
-      final modesTransportEntity = await requestManager
-          .fetchTransportModePlan(
-              from: state.fromPlace,
-              to: state.toPlace,
-              correlationId: correlationId,
-              advancedOptions: advancedOptions)
-          .catchError((error) async {
-        await updateMapRouteState(state.copyWith(isFetching: false));
+      await updateMapRouteState(state.copyWith(
+        plan: planEntity,
+        isFetching: false,
+        showSuccessAnimation: true,
+        isFetchingModes: true,
+      ));
+      final modesTransportEntity = await _fetchPlanModesState(
+        correlationId,
+        localization,
+        advancedOptions: advancedOptions,
+      ).catchError((error) async {
+        await updateMapRouteState(state.copyWith(isFetchingModes: false));
         throw error;
       });
       await updateMapRouteState(state.copyWith(
-        plan: planEntity,
-        modesTransport: modesTransportEntity,
-        isFetching: false,
-        showSuccessAnimation: true,
-      ));
+          modesTransport: modesTransportEntity, isFetchingModes: false));
     }
   }
 
@@ -151,6 +156,33 @@ class HomePageCubit extends Cubit<MapRouteState> {
       // should never happened
       throw Exception(localization.commonUnknownError);
     }
+  }
+
+  Future<ModesTransportEntity> _fetchPlanModesState(
+    String correlationId,
+    TrufiLocalization localization, {
+    PayloadDataPlanState advancedOptions,
+  }) async {
+    if (currentFetchPlanModesOperation != null) {
+      await currentFetchPlanModesOperation.cancel();
+    }
+    currentFetchPlanModesOperation = CancelableOperation.fromFuture(
+      () async {
+        return requestManager.fetchTransportModePlan(
+            from: state.fromPlace,
+            to: state.toPlace,
+            correlationId: correlationId,
+            advancedOptions: advancedOptions);
+      }(),
+    );
+    final ModesTransportEntity plan =
+        await currentFetchPlanModesOperation.valueOrCancellation(
+      null,
+    );
+    if (plan == null) {
+      return null;
+    }
+    return plan;
   }
 
 // TODO: investigate how works this functions and know why we need it

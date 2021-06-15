@@ -20,30 +20,32 @@ class FeedbackPage extends StatelessWidget {
         context.read<ConfigurationCubit>().state.feedbackDefinition;
     return Scaffold(
       appBar: AppBar(title: Text(localization.menuFeedback)),
-      body: ListView(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text(
-                  localization.feedbackTitle,
-                  style: theme.textTheme.headline6.copyWith(
-                    color: theme.textTheme.bodyText1.color,
+      body: Scrollbar(
+        child: ListView(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    localization.feedbackTitle,
+                    style: theme.textTheme.headline6.copyWith(
+                      color: theme.textTheme.bodyText1.color,
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Text(
-                    localization.feedbackContent,
-                    style: theme.textTheme.bodyText1,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                  Container(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      localization.feedbackContent,
+                      style: theme.textTheme.bodyText1,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
       drawer: const TrufiDrawer(FeedbackPage.route),
       floatingActionButton: FloatingActionButton(

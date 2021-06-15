@@ -12,6 +12,7 @@ class MapRouteState extends Equatable {
   static const String _ad = "ad";
   static const String _showSuccessAnimation = "animation";
   static const String _isFetching = "fetching";
+  static const String _isFetchingModes = "isFetchingModes";
 
   const MapRouteState({
     this.fromPlace,
@@ -20,6 +21,7 @@ class MapRouteState extends Equatable {
     this.plan,
     this.ad,
     this.isFetching = false,
+    this.isFetchingModes = false,
     this.showSuccessAnimation = false,
   });
 
@@ -29,6 +31,7 @@ class MapRouteState extends Equatable {
   final ModesTransportEntity modesTransport;
   final AdEntity ad;
   final bool isFetching;
+  final bool isFetchingModes;
   final bool showSuccessAnimation;
 
   MapRouteState copyWith({
@@ -38,6 +41,7 @@ class MapRouteState extends Equatable {
     ModesTransportEntity modesTransport,
     AdEntity ad,
     bool isFetching,
+    bool isFetchingModes,
     bool showSuccessAnimation,
     CancelableOperation<PlanEntity> currentFetchPlanOperation,
     CancelableOperation<AdEntity> currentFetchAdOperation,
@@ -49,6 +53,7 @@ class MapRouteState extends Equatable {
       modesTransport: modesTransport ?? this.modesTransport,
       ad: ad ?? this.ad,
       isFetching: isFetching ?? this.isFetching,
+      isFetchingModes: isFetchingModes ?? this.isFetchingModes,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
     );
   }
@@ -58,6 +63,7 @@ class MapRouteState extends Equatable {
     TrufiLocation toPlace,
     AdEntity ad,
     bool isFetching,
+    bool isFetchingModes,
     bool showSuccessAnimation,
     CancelableOperation<PlanEntity> currentFetchPlanOperation,
     CancelableOperation<AdEntity> currentFetchAdOperation,
@@ -67,6 +73,7 @@ class MapRouteState extends Equatable {
       toPlace: toPlace ?? this.toPlace,
       ad: ad ?? this.ad,
       isFetching: isFetching ?? this.isFetching,
+      isFetchingModes: isFetchingModes ?? this.isFetchingModes,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
     );
   }
@@ -84,6 +91,7 @@ class MapRouteState extends Equatable {
           : null,
       ad: AdEntity.fromJson(json[_ad] as Map<String, dynamic>),
       isFetching: json[_isFetching] as bool ?? false,
+      isFetchingModes: json[_isFetchingModes] as bool ?? false,
       showSuccessAnimation: json[_showSuccessAnimation] as bool ?? false,
     );
   }
@@ -96,6 +104,7 @@ class MapRouteState extends Equatable {
       _modesTransport: modesTransport?.toJson(),
       _ad: ad?.toJson(),
       _isFetching: isFetching ?? false,
+      _isFetchingModes: isFetchingModes ?? false,
       _showSuccessAnimation: showSuccessAnimation ?? false,
     };
   }
@@ -108,8 +117,9 @@ class MapRouteState extends Equatable {
   @override
   String toString() {
     return "fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, "
-        "isFetching $isFetching, showSuccessAnimation $showSuccessAnimation, plan ${plan != null}, "
-        " modesTransport ${modesTransport != null}";
+        "isFetching $isFetching, isFetchingModes $isFetchingModes, "
+        "showSuccessAnimation $showSuccessAnimation, plan ${plan != null}, "
+        "modesTransport ${modesTransport != null}";
   }
 
   @override
@@ -119,6 +129,7 @@ class MapRouteState extends Equatable {
         plan,
         modesTransport,
         isFetching,
+        isFetchingModes,
         showSuccessAnimation,
       ];
 }

@@ -71,7 +71,7 @@ class FormFieldsPortrait extends StatelessWidget {
               ],
             ),
           ),
-          if (homePageState.hasTransportModes) const TransportSelector(),
+          const TransportSelector(),
         ],
       ),
     );
