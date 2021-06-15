@@ -68,14 +68,15 @@ class AboutPageState extends State<AboutPage> {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
-                  customTranslations.get(customTranslations.aboutContent,
-                      currentLocale, localization.aboutContent),
-                  style: theme.textTheme.bodyText1,
-                ),
-              ),
+              // TODO Enhance the description
+              // Container(
+              //   padding: const EdgeInsets.only(top: 16.0),
+              //   child: Text(
+              //     customTranslations.get(customTranslations.aboutContent,
+              //         currentLocale, localization.aboutContent),
+              //     style: theme.textTheme.bodyText1,
+              //   ),
+              // ),
               if (aboutSection != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
