@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
@@ -20,9 +21,42 @@ class TransportSelector extends StatelessWidget {
     final modesTransport = homePageState.modesTransport;
     final payloadDataPlanState = context.watch<PayloadDataPlanCubit>().state;
     return homePageState.isFetchingModes
-        ? LinearProgressIndicator(
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+        ? Container(
+            color: Colors.grey[100],
+            height: 50,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                Skeleton(
+                  padding: 5,
+                  width: 100,
+                  height: 5,
+                  textColor: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                Skeleton(
+                  padding: 5,
+                  width: 100,
+                  height: 5,
+                  textColor: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                Skeleton(
+                  padding: 5,
+                  width: 100,
+                  height: 5,
+                  textColor: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                Skeleton(
+                  padding: 5,
+                  width: 100,
+                  height: 5,
+                  textColor: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ],
+            ),
           )
         : homePageState.hastModesTransport
             ? Container(
