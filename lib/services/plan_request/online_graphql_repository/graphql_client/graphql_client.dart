@@ -1,9 +1,7 @@
 import 'package:graphql/client.dart';
 
-GraphQLClient getClient() {
-  final HttpLink _httpLink = HttpLink(
-    'https://api.dev.stadtnavi.eu/routing/v1/router/index/graphql',
-  );
+GraphQLClient getClient(String endpoint) {
+  final HttpLink _httpLink = HttpLink(endpoint);
   return GraphQLClient(
     cache: GraphQLCache(
       store: HiveStore(),

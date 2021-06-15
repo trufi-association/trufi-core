@@ -21,9 +21,9 @@ import 'graphql_operation/query_utils.dart';
 import 'modes_transport.dart';
 
 class GraphQLPlanRepository {
-  final GraphQLClient client = getClient();
+  final GraphQLClient client;
 
-  GraphQLPlanRepository();
+  GraphQLPlanRepository(String endpoint) : client = getClient(endpoint);
 
   Future<Plan> fetchPlanSimple({
     @required TrufiLocation fromLocation,
