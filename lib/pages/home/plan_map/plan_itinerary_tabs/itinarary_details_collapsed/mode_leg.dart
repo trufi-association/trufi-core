@@ -28,48 +28,51 @@ class ModeLeg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final perc = legLength.abs() / 100;
+    final perc = legLength.abs() / 10;
     return SizedBox(
       width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
       height: 30,
       child: IconTransport(
-          bacgroundColor: leg.transportMode == TransportMode.bicycle &&
-                  leg.fromPlace.bikeRentalStation != null
-              ? getBikeRentalNetwork(
-                      leg.fromPlace.bikeRentalStation.networks[0])
-                  .color
-              : mode == 'WAIT'
-                  ? TransportMode.walk.backgroundColor
-                  : leg.transportMode.backgroundColor,
-          color: Colors.black,
-          text: duration?.toString() ??
-              leg.durationLeg(localization).split(' ')[0],
-          icon: leg.transportMode == TransportMode.bicycle &&
-                  leg.fromPlace.bikeRentalStation != null
-              ? getBikeRentalNetwork(
-                      leg.fromPlace.bikeRentalStation.networks[0])
-                  .image
-              : mode == 'WAIT'
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      width: 20,
-                      height: 20,
-                      child: waitSvg,
-                    )
-                  : mode == 'WALK'
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          width: 20,
-                          height: 20,
-                          child: TransportMode.walk.getImage())
-                      : mode == 'BICYCLE'
-                          ? Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
-                              width: 20,
-                              height: 20,
-                              child: TransportMode.bicycle.getImage())
-                          : leg.transportMode.getImage(color: Colors.white)),
+        bacgroundColor: leg.transportMode == TransportMode.bicycle &&
+                leg.fromPlace.bikeRentalStation != null
+            ? getBikeRentalNetwork(leg.fromPlace.bikeRentalStation.networks[0])
+                .color
+            : mode == 'WAIT'
+                ? TransportMode.walk.backgroundColor
+                : leg.transportMode.backgroundColor,
+        color: Colors.black,
+        text: (maxWidth * perc - 24) >= (duration.toString().length * 8.5)
+            ? duration?.toString() ??
+                leg.durationLeg(localization).split(' ')[0]
+            : '',
+        icon: leg.transportMode == TransportMode.bicycle &&
+                leg.fromPlace.bikeRentalStation != null
+            ? getBikeRentalNetwork(leg.fromPlace.bikeRentalStation.networks[0])
+                .image
+            : mode == 'WAIT'
+                ? Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    width: 20,
+                    height: 20,
+                    child: waitSvg,
+                  )
+                : mode == 'WALK'
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        width: 20,
+                        height: 20,
+                        child: TransportMode.walk.getImage())
+                    : mode == 'BICYCLE'
+                        ? Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 3),
+                            width: 20,
+                            height: 20,
+                            child: TransportMode.bicycle.getImage(),
+                          )
+                        : leg.transportMode.getImage(
+                            color: Colors.white,
+                          ),
+      ),
     );
   }
 }
@@ -99,7 +102,7 @@ class RouteLeg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final perc = legLength.abs() / 100;
+    final perc = legLength.abs() / 10;
     return SizedBox(
       width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
       height: 30,
@@ -112,9 +115,12 @@ class RouteLeg extends StatelessWidget {
           icon: (leg?.route?.shortName ?? '').startsWith('RT')
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode.getImage(color: Colors.white),
-          text: leg?.route?.shortName != null
-              ? leg.route.shortName
-              : leg.transportMode.getTranslate(localization),
+          text: (maxWidth * perc - 24) >=
+                  ((leg?.route?.shortName?.length ?? 100) * 8.5)
+              ? leg?.route?.shortName != null
+                  ? leg.route.shortName
+                  : leg.transportMode.getTranslate(localization)
+              : '',
         ),
       ),
     );
