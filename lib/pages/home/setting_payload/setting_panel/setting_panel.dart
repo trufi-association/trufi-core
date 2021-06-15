@@ -32,266 +32,273 @@ class SettingPanel extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<PayloadDataPlanCubit, PayloadDataPlanState>(
           builder: (blocContext, state) {
-            return ListView(
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomExpansionTile(
-                  title: localization.settingPanelWalkingSpeed,
-                  options: WalkingSpeed.values
-                      .map(
-                        (e) => e.translateValue(localization),
-                      )
-                      .toList(),
-                  textSelected:
-                      state.typeWalkingSpeed.translateValue(localization),
-                  onChanged: (value) {
-                    final WalkingSpeed selected = WalkingSpeed.values
-                        .firstWhere((element) =>
-                            element.translateValue(localization) == value);
-                    payloadDataPlanCubit.setWalkingSpeed(selected);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.settingPanelAvoidWalking,
-                  value: state.avoidWalking,
-                  onChanged: (value) =>
-                      payloadDataPlanCubit.setAvoidWalking(avoidWalking: value),
-                ),
-                _dividerWeight,
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    localization.settingPanelTransportModes,
-                    style: theme.textTheme.bodyText1,
+            return Scrollbar(
+              child: ListView(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                CustomSwitchTile(
-                  title: localization.instructionVehicleBus,
-                  secondary: Container(
-                    decoration: BoxDecoration(
-                        color: TransportMode.bus.color,
-                        borderRadius: BorderRadius.circular(5)),
-                    height: 35,
-                    width: 35,
-                    child: TransportMode.bus.getImage(color: Colors.white),
+                  CustomExpansionTile(
+                    title: localization.settingPanelWalkingSpeed,
+                    options: WalkingSpeed.values
+                        .map(
+                          (e) => e.translateValue(localization),
+                        )
+                        .toList(),
+                    textSelected:
+                        state.typeWalkingSpeed.translateValue(localization),
+                    onChanged: (value) {
+                      final WalkingSpeed selected = WalkingSpeed.values
+                          .firstWhere((element) =>
+                              element.translateValue(localization) == value);
+                      payloadDataPlanCubit.setWalkingSpeed(selected);
+                    },
                   ),
-                  value: state.transportModes.contains(TransportMode.bus),
-                  onChanged: (_) {
-                    payloadDataPlanCubit.setTransportMode(TransportMode.bus);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.instructionVehicleCommuterTrain,
-                  secondary: Container(
-                    decoration: BoxDecoration(
-                        color: TransportMode.rail.color,
-                        borderRadius: BorderRadius.circular(5)),
-                    height: 35,
-                    width: 35,
-                    child: TransportMode.rail.getImage(color: Colors.white),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.settingPanelAvoidWalking,
+                    value: state.avoidWalking,
+                    onChanged: (value) => payloadDataPlanCubit.setAvoidWalking(
+                        avoidWalking: value),
                   ),
-                  value: state.transportModes.contains(TransportMode.rail),
-                  onChanged: (_) {
-                    payloadDataPlanCubit.setTransportMode(TransportMode.rail);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.instructionVehicleMetro,
-                  secondary: Container(
-                    decoration: BoxDecoration(
-                        color: TransportMode.subway.color,
-                        borderRadius: BorderRadius.circular(5)),
-                    height: 35,
-                    width: 35,
-                    child: TransportMode.subway.getImage(color: Colors.white),
-                  ),
-                  value: state.transportModes.contains(TransportMode.subway),
-                  onChanged: (_) {
-                    payloadDataPlanCubit.setTransportMode(TransportMode.subway);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.instructionVehicleCarpool,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: TransportMode.carPool.getImage(),
-                  ),
-                  value: state.transportModes.contains(TransportMode.carPool),
-                  onChanged: (_) {
-                    payloadDataPlanCubit
-                        .setTransportMode(TransportMode.carPool);
-                  },
-                ),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.instructionVehicleSharing,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: BikeRentalNetwork.regioRad.image,
-                  ),
-                  value: state.transportModes.contains(TransportMode.bicycle),
-                  onChanged: (_) {
-                    payloadDataPlanCubit
-                        .setTransportMode(TransportMode.bicycle);
-                  },
-                ),
-                if (state.transportModes.contains(TransportMode.bicycle))
+                  _dividerWeight,
                   Container(
-                    margin: const EdgeInsets.only(left: 55, top: 5, bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 5),
-                          child: Text(localization.commonCitybikes,
-                              style: theme.textTheme.bodyText1),
-                        ),
-                        CustomSwitchTile(
-                          title: localization.instructionVehicleSharingRegioRad,
-                          secondary: SizedBox(
-                            height: 35,
-                            width: 35,
-                            child: BikeRentalNetwork.regioRad.image,
-                          ),
-                          value: state.bikeRentalNetworks
-                              .contains(BikeRentalNetwork.regioRad),
-                          onChanged: (_) {
-                            payloadDataPlanCubit.setBikeRentalNetwork(
-                                BikeRentalNetwork.regioRad);
-                          },
-                        ),
-                        CustomSwitchTile(
-                          title: localization.instructionVehicleSharingTaxi,
-                          secondary: SizedBox(
-                            height: 35,
-                            width: 35,
-                            child: BikeRentalNetwork.taxi.image,
-                          ),
-                          value: state.bikeRentalNetworks
-                              .contains(BikeRentalNetwork.taxi),
-                          onChanged: (_) {
-                            payloadDataPlanCubit
-                                .setBikeRentalNetwork(BikeRentalNetwork.taxi);
-                          },
-                        ),
-                        CustomSwitchTile(
-                          title:
-                              localization.instructionVehicleSharingCarSharing,
-                          secondary: SizedBox(
-                            height: 35,
-                            width: 35,
-                            child: BikeRentalNetwork.carSharing.image,
-                          ),
-                          value: state.bikeRentalNetworks
-                              .contains(BikeRentalNetwork.carSharing),
-                          onChanged: (_) {
-                            payloadDataPlanCubit.setBikeRentalNetwork(
-                                BikeRentalNetwork.carSharing);
-                          },
-                        ),
-                      ],
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      localization.settingPanelTransportModes,
+                      style: theme.textTheme.bodyText1,
                     ),
-                  )
-                else
-                  Container(),
-                CustomSwitchTile(
-                  title: localization.settingPanelAvoidTransfers,
-                  value: state.avoidTransfers,
-                  onChanged: (value) => payloadDataPlanCubit.setAvoidTransfers(
-                      avoidTransfers: value),
-                ),
-                _dividerWeight,
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(localization.settingPanelMyModesTransport,
-                      style: theme.textTheme.bodyText1),
-                ),
-                CustomSwitchTile(
-                  title: localization.settingPanelMyModesTransportBike,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: bikeSvg(),
                   ),
-                  value: state.includeBikeSuggestions,
-                  onChanged: (value) => payloadDataPlanCubit
-                      .setIncludeBikeSuggestions(includeBikeSuggestions: value),
-                ),
-                if (state.includeBikeSuggestions)
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleBus,
+                    secondary: Container(
+                      decoration: BoxDecoration(
+                          color: TransportMode.bus.color,
+                          borderRadius: BorderRadius.circular(5)),
+                      height: 35,
+                      width: 35,
+                      child: TransportMode.bus.getImage(color: Colors.white),
+                    ),
+                    value: state.transportModes.contains(TransportMode.bus),
+                    onChanged: (_) {
+                      payloadDataPlanCubit.setTransportMode(TransportMode.bus);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleCommuterTrain,
+                    secondary: Container(
+                      decoration: BoxDecoration(
+                          color: TransportMode.rail.color,
+                          borderRadius: BorderRadius.circular(5)),
+                      height: 35,
+                      width: 35,
+                      child: TransportMode.rail.getImage(color: Colors.white),
+                    ),
+                    value: state.transportModes.contains(TransportMode.rail),
+                    onChanged: (_) {
+                      payloadDataPlanCubit.setTransportMode(TransportMode.rail);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleMetro,
+                    secondary: Container(
+                      decoration: BoxDecoration(
+                          color: TransportMode.subway.color,
+                          borderRadius: BorderRadius.circular(5)),
+                      height: 35,
+                      width: 35,
+                      child: TransportMode.subway.getImage(color: Colors.white),
+                    ),
+                    value: state.transportModes.contains(TransportMode.subway),
+                    onChanged: (_) {
+                      payloadDataPlanCubit
+                          .setTransportMode(TransportMode.subway);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleCarpool,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: TransportMode.carPool.getImage(),
+                    ),
+                    value: state.transportModes.contains(TransportMode.carPool),
+                    onChanged: (_) {
+                      payloadDataPlanCubit
+                          .setTransportMode(TransportMode.carPool);
+                    },
+                  ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleSharing,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: BikeRentalNetwork.regioRad.image,
+                    ),
+                    value: state.transportModes.contains(TransportMode.bicycle),
+                    onChanged: (_) {
+                      payloadDataPlanCubit
+                          .setTransportMode(TransportMode.bicycle);
+                    },
+                  ),
+                  if (state.transportModes.contains(TransportMode.bicycle))
+                    Container(
+                      margin:
+                          const EdgeInsets.only(left: 55, top: 5, bottom: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 5),
+                            child: Text(localization.commonCitybikes,
+                                style: theme.textTheme.bodyText1),
+                          ),
+                          CustomSwitchTile(
+                            title:
+                                localization.instructionVehicleSharingRegioRad,
+                            secondary: SizedBox(
+                              height: 35,
+                              width: 35,
+                              child: BikeRentalNetwork.regioRad.image,
+                            ),
+                            value: state.bikeRentalNetworks
+                                .contains(BikeRentalNetwork.regioRad),
+                            onChanged: (_) {
+                              payloadDataPlanCubit.setBikeRentalNetwork(
+                                  BikeRentalNetwork.regioRad);
+                            },
+                          ),
+                          CustomSwitchTile(
+                            title: localization.instructionVehicleSharingTaxi,
+                            secondary: SizedBox(
+                              height: 35,
+                              width: 35,
+                              child: BikeRentalNetwork.taxi.image,
+                            ),
+                            value: state.bikeRentalNetworks
+                                .contains(BikeRentalNetwork.taxi),
+                            onChanged: (_) {
+                              payloadDataPlanCubit
+                                  .setBikeRentalNetwork(BikeRentalNetwork.taxi);
+                            },
+                          ),
+                          CustomSwitchTile(
+                            title: localization
+                                .instructionVehicleSharingCarSharing,
+                            secondary: SizedBox(
+                              height: 35,
+                              width: 35,
+                              child: BikeRentalNetwork.carSharing.image,
+                            ),
+                            value: state.bikeRentalNetworks
+                                .contains(BikeRentalNetwork.carSharing),
+                            onChanged: (_) {
+                              payloadDataPlanCubit.setBikeRentalNetwork(
+                                  BikeRentalNetwork.carSharing);
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    Container(),
+                  CustomSwitchTile(
+                    title: localization.settingPanelAvoidTransfers,
+                    value: state.avoidTransfers,
+                    onChanged: (value) => payloadDataPlanCubit
+                        .setAvoidTransfers(avoidTransfers: value),
+                  ),
+                  _dividerWeight,
                   Container(
-                    margin: const EdgeInsets.only(
-                      left: 55,
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(localization.settingPanelMyModesTransport,
+                        style: theme.textTheme.bodyText1),
+                  ),
+                  CustomSwitchTile(
+                    title: localization.settingPanelMyModesTransportBike,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: bikeSvg(),
                     ),
-                    child: CustomExpansionTile(
-                      title: localization.settingPanelBikingSpeed,
-                      options: BikingSpeed.values
-                          .map(
-                            (e) => e.translateValue(localization),
-                          )
-                          .toList(),
-                      textSelected:
-                          state.typeBikingSpeed.translateValue(localization),
-                      onChanged: (value) {
-                        final BikingSpeed selected = BikingSpeed.values
-                            .firstWhere((element) =>
-                                element.translateValue(localization) == value);
-                        payloadDataPlanCubit.setBikingSpeed(selected);
-                      },
+                    value: state.includeBikeSuggestions,
+                    onChanged: (value) =>
+                        payloadDataPlanCubit.setIncludeBikeSuggestions(
+                            includeBikeSuggestions: value),
+                  ),
+                  if (state.includeBikeSuggestions)
+                    Container(
+                      margin: const EdgeInsets.only(
+                        left: 55,
+                      ),
+                      child: CustomExpansionTile(
+                        title: localization.settingPanelBikingSpeed,
+                        options: BikingSpeed.values
+                            .map(
+                              (e) => e.translateValue(localization),
+                            )
+                            .toList(),
+                        textSelected:
+                            state.typeBikingSpeed.translateValue(localization),
+                        onChanged: (value) {
+                          final BikingSpeed selected = BikingSpeed.values
+                              .firstWhere((element) =>
+                                  element.translateValue(localization) ==
+                                  value);
+                          payloadDataPlanCubit.setBikingSpeed(selected);
+                        },
+                      ),
+                    )
+                  else
+                    Container(),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.settingPanelMyModesTransportParkRide,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: carSvg(),
                     ),
-                  )
-                else
-                  Container(),
-                _divider,
-                CustomSwitchTile(
-                  title: localization.settingPanelMyModesTransportParkRide,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: carSvg(),
+                    value: state.includeParkAndRideSuggestions,
+                    onChanged: (value) =>
+                        payloadDataPlanCubit.setParkRide(parkRide: value),
                   ),
-                  value: state.includeParkAndRideSuggestions,
-                  onChanged: (value) =>
-                      payloadDataPlanCubit.setParkRide(parkRide: value),
-                ),
-                CustomSwitchTile(
-                  title: localization.instructionVehicleCar,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: carSvg(),
+                  CustomSwitchTile(
+                    title: localization.instructionVehicleCar,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: carSvg(),
+                    ),
+                    value: state.includeCarSuggestions,
+                    onChanged: (value) => payloadDataPlanCubit
+                        .setIncludeCarSuggestions(includeCarSuggestions: value),
                   ),
-                  value: state.includeCarSuggestions,
-                  onChanged: (value) => payloadDataPlanCubit
-                      .setIncludeCarSuggestions(includeCarSuggestions: value),
-                ),
-                _dividerWeight,
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(localization.settingPanelAccessibility,
-                      style: theme.textTheme.bodyText1),
-                ),
-                CustomSwitchTile(
-                  title: localization.settingPanelWheelchair,
-                  secondary: SizedBox(
-                    height: 35,
-                    width: 35,
-                    child: wheelChairSvg,
+                  _dividerWeight,
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(localization.settingPanelAccessibility,
+                        style: theme.textTheme.bodyText1),
                   ),
-                  value: state.wheelchair,
-                  onChanged: (value) =>
-                      payloadDataPlanCubit.setWheelChair(wheelchair: value),
-                ),
-                const SizedBox(height: 10),
-              ],
+                  CustomSwitchTile(
+                    title: localization.settingPanelWheelchair,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: wheelChairSvg,
+                    ),
+                    value: state.wheelchair,
+                    onChanged: (value) =>
+                        payloadDataPlanCubit.setWheelChair(wheelchair: value),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             );
           },
         ),

@@ -126,7 +126,11 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                         ),
                       ),
                       const Divider(height: 1),
-                      Expanded(child: widget.panel),
+                      Expanded(
+                        child: Scrollbar(
+                          child: widget.panel,
+                        ),
+                      ),
                     ],
                   ),
                 ),
