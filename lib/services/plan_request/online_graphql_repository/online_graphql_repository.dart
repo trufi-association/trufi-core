@@ -15,11 +15,11 @@ import 'modes_transport.dart';
 
 class OnlineGraphQLRepository implements RequestManager {
   final String graphQLEndPoint;
-  final GraphQLPlanRepository _graphQLPlanRepository = GraphQLPlanRepository();
+  final GraphQLPlanRepository _graphQLPlanRepository;
 
   OnlineGraphQLRepository({
     @required this.graphQLEndPoint,
-  });
+  }) : _graphQLPlanRepository = GraphQLPlanRepository(graphQLEndPoint);
 
   @override
   Future<PlanEntity> fetchAdvancedPlan({
