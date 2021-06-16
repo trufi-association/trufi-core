@@ -69,6 +69,7 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
           customOverlayWidget: null,
           customBetweenFabWidget: null,
           markerConfiguration: cfg.markers,
+          transportConfiguration: cfg.transportConf,
         ),
         panel: CustomItinerary(
           planPageController: _planPageController,

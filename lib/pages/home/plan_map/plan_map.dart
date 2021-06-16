@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/configuration/models/transport_configuration.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -28,6 +29,7 @@ class PlanMapPage extends StatefulWidget {
     @required this.customOverlayWidget,
     @required this.customBetweenFabWidget,
     @required this.markerConfiguration,
+    @required this.transportConfiguration,
     this.planPageController,
   }) : super(key: key);
 
@@ -35,6 +37,7 @@ class PlanMapPage extends StatefulWidget {
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
   final MarkerConfiguration markerConfiguration;
+  final TransportConfiguration transportConfiguration;
 
   @override
   PlanMapPageState createState() => PlanMapPageState();
@@ -55,6 +58,7 @@ class PlanMapPageState extends State<PlanMapPage>
       plan: widget.planPageController.plan,
       onItineraryTap: widget.planPageController.inSelectedItinerary.add,
       markerConfiguration: widget.markerConfiguration,
+      transportConfiguration: widget.transportConfiguration,
     );
     _subscriptions.add(
       _trufiMapController.outMapReady.listen((_) {
@@ -205,6 +209,7 @@ class PlanMapPageStateData {
     @required this.plan,
     @required this.onItineraryTap,
     @required this.markerConfiguration,
+    @required this.transportConfiguration,
   }) {
     if (plan != null) {
       if (plan.from != null) {
@@ -221,6 +226,7 @@ class PlanMapPageStateData {
   final PlanEntity plan;
   final ValueChanged<PlanItinerary> onItineraryTap;
   final MarkerConfiguration markerConfiguration;
+  final TransportConfiguration transportConfiguration;
 
   final _itineraries = <PlanItinerary, List<PolylineWithMarkers>>{};
   final _unselectedMarkers = <Marker>[];
@@ -297,6 +303,7 @@ class PlanMapPageStateData {
         plan: plan,
         selectedItinerary: _selectedItinerary,
         onTap: onItineraryTap,
+        showTransportMarker: transportConfiguration.showTransportMarker,
       ),
     );
     _itineraries.forEach((itinerary, polylinesWithMarker) {
@@ -353,6 +360,7 @@ class PlanMapPageStateData {
     @required PlanEntity plan,
     @required PlanItinerary selectedItinerary,
     @required Function(PlanItinerary) onTap,
+    bool showTransportMarker = true,
   }) {
     final Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = {};
     if (plan != null) {
@@ -397,7 +405,8 @@ class PlanMapPageStateData {
           }
 
           // Bus marker
-          if (leg.transportMode != TransportMode.walk &&
+          if (showTransportMarker &&
+              leg.transportMode != TransportMode.walk &&
               leg.transportMode != TransportMode.bicycle &&
               leg.transportMode != TransportMode.car) {
             markers.add(

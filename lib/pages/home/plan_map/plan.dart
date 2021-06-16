@@ -103,6 +103,7 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
           customOverlayWidget: widget.customOverlayWidget,
           customBetweenFabWidget: widget.customBetweenFabWidget,
           markerConfiguration: cfg.markers,
+          transportConfiguration: cfg.transportConf,
         ),
         panel: CustomItinerary(
           planPageController: _planPageController,
