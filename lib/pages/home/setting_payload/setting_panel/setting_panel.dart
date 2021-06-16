@@ -70,38 +70,6 @@ class SettingPanel extends StatelessWidget {
                       style: theme.textTheme.bodyText1,
                     ),
                   ),
-                  SpeedExpansionTile(
-                    title: localization.settingPanelWalkingSpeed,
-                    dataSpeeds: WalkingSpeed.values
-                        .map(
-                          (e) => DataSpeed(
-                              e.translateValue(localization), e.speed),
-                        )
-                        .toList(),
-                    textSelected:
-                        state.typeWalkingSpeed.translateValue(localization),
-                    onChanged: (value) {
-                      final WalkingSpeed selected = WalkingSpeed.values
-                          .firstWhere((element) =>
-                              element.translateValue(localization) == value);
-                      payloadDataPlanCubit.setWalkingSpeed(selected);
-                    },
-                  ),
-                  _divider,
-                  CustomSwitchTile(
-                    title: localization.settingPanelAvoidWalking,
-                    value: state.avoidWalking,
-                    onChanged: (value) => payloadDataPlanCubit.setAvoidWalking(
-                        avoidWalking: value),
-                  ),
-                  _dividerWeight,
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      localization.settingPanelTransportModes,
-                      style: theme.textTheme.bodyText1,
-                    ),
-                  ),
                   CustomSwitchTile(
                     title: localization.instructionVehicleBus,
                     secondary: Container(
@@ -259,12 +227,14 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: bikeSvg(),
                     ),
-                    value: state.includeParkAndRideSuggestions,
+                    value: state.includeBikeSuggestions,
                     onChanged: (value) =>
-                        payloadDataPlanCubit.setParkRide(parkRide: value),
+                        payloadDataPlanCubit.setIncludeBikeSuggestions(
+                            includeBikeSuggestions: value),
                   ),
                   SpeedExpansionTile(
                     title: localization.settingPanelBikingSpeed,
+                    isSubtitle: true,
                     dataSpeeds: BikingSpeed.values
                         .map(
                           (e) => DataSpeed(e.translateValue(localization), ''),
@@ -279,6 +249,19 @@ class SettingPanel extends StatelessWidget {
                       payloadDataPlanCubit.setBikingSpeed(selected);
                     },
                   ),
+                  _divider,
+                  CustomSwitchTile(
+                    title: localization.settingPanelMyModesTransportParkRide,
+                    secondary: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: carSvg(),
+                    ),
+                    value: state.includeParkAndRideSuggestions,
+                    onChanged: (value) =>
+                        payloadDataPlanCubit.setParkRide(parkRide: value),
+                  ),
+                  _divider,
                   CustomSwitchTile(
                     title: localization.instructionVehicleCar,
                     secondary: SizedBox(

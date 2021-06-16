@@ -6,6 +6,7 @@ class SpeedExpansionTile extends StatelessWidget {
   final List<DataSpeed> dataSpeeds;
   final String textSelected;
   final Function(String) onChanged;
+  final bool isSubtitle;
 
   const SpeedExpansionTile({
     Key key,
@@ -13,6 +14,7 @@ class SpeedExpansionTile extends StatelessWidget {
     @required this.dataSpeeds,
     @required this.textSelected,
     @required this.onChanged,
+    this.isSubtitle = false,
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class SpeedExpansionTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          if (isSubtitle) const SizedBox(width: 55),
           Expanded(child: Text(title, style: theme.textTheme.bodyText1)),
           Text(
             textSelected,
