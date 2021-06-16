@@ -70,7 +70,7 @@ class TrufiMapAnimations {
       begin: mapController.bounds.southWest.longitude,
       end: bounds.southWest.longitude,
     );
-    final paddingTween = Tween<double>(begin: 0.0, end: 12.0);
+    final paddingTween = Tween<double>(begin: 0.0, end: 80.0);
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),
       vsync: tickerProvider,
