@@ -111,6 +111,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
             child: Stack(
               children: [
                 TrufiMap(
+                  showCustomMarkes: false,
                   controller: _trufiMapController,
                   onPositionChanged: (mapPosition, hasGesture) {
                     setState(() {

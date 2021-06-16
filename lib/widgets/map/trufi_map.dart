@@ -20,6 +20,7 @@ class TrufiMap extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.showCustomMarkes = true,
   }) : super(key: key);
 
   final TrufiMapController controller;
@@ -27,7 +28,7 @@ class TrufiMap extends StatefulWidget {
   final TapCallback onTap;
   final LongPressCallback onLongPress;
   final PositionCallback onPositionChanged;
-
+  final bool showCustomMarkes;
   @override
   _TrufiMapState createState() => _TrufiMapState();
 }
@@ -74,11 +75,8 @@ class _TrufiMapState extends State<TrufiMap> {
       ),
       layers: [
         ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
-        // tileHostingTileLayerOptions(
-        //   getTilesEndpointForMapType(currentMapType),
-        //   tileProviderKey: cfg.map.mapTilerKey,
-        // ),
-        ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
+        if (widget.showCustomMarkes)
+          ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
         cfg.markers.buildYourLocationMarkerLayerOptions(currentLocation),
         ...widget.layerOptionsBuilder(context)
       ],
