@@ -137,7 +137,8 @@ class GraphQLPlanRepository {
   }) async {
     final linearDistance =
         estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
-    final date = advancedOptions?.date ?? DateTime.now();
+    final dateNow = DateTime.now();
+    final date = advancedOptions?.date ?? dateNow;
 
     final QueryOptions walkBikePlanQuery = QueryOptions(
         document: addFragments(
@@ -210,6 +211,8 @@ class GraphQLPlanRepository {
               advancedOptions.includeBikeSuggestions,
           'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&
               advancedOptions.includeBikeSuggestions,
+          'useVehicleParkingAvailabilityInformation':
+              dateNow.difference(date).inMinutes <= 15
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {

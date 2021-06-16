@@ -28,6 +28,7 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
   $showBikeAndParkItineraries: Boolean!
+  $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
 ) {
@@ -364,7 +365,8 @@ query SummaryPage_WalkBike_Query(
     triangle: $triangle, 
     itineraryFiltering: $itineraryFiltering, 
     unpreferred: $unpreferred, 
-    locale: $locale
+    locale: $locale,
+    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
     ) @include(if: $shouldMakeParkRideQuery) {
     from{
       name,
