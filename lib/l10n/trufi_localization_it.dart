@@ -301,6 +301,9 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get instructionVehicleMinibus => 'Minibus';
 
   @override
+  String get instructionVehicleOnCar => 'Auto';
+
+  @override
   String get instructionVehicleSharing => 'Autobus';
 
   @override

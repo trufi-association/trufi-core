@@ -301,6 +301,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get instructionVehicleMinibus => 'lori sue';
 
   @override
+  String get instructionVehicleOnCar => 'lori';
+
+  @override
   String get instructionVehicleSharing => 'lori didi';
 
   @override

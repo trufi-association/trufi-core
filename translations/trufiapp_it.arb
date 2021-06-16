@@ -1,6 +1,6 @@
 {
     "@@locale": "it",
-    "@@last_modified": "2021-06-15T13:19:49+02:00",
+    "@@last_modified": "2021-06-16T13:46:33+02:00",
     "aboutContent": "Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -425,6 +425,10 @@
     "instructionVehicleMinibus": "Minibus",
     "@instructionVehicleMinibus": {
         "description": "Vehicle name (Minibus)"
+    },
+    "instructionVehicleOnCar": "Auto",
+    "@instructionVehicleOnCar": {
+        "description": "Vehicle name (Car)"
     },
     "instructionVehicleSharing": "Autobus",
     "@instructionVehicleSharing": {
