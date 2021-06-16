@@ -45,8 +45,10 @@ class _TrufiMapState extends State<TrufiMap> {
     return FlutterMap(
       mapController: widget.controller.mapController,
       options: MapOptions(
-        interactiveFlags: InteractiveFlag.pinchZoom |
-            InteractiveFlag.drag |
+        interactiveFlags: InteractiveFlag.drag |
+            InteractiveFlag.flingAnimation |
+            InteractiveFlag.pinchMove |
+            InteractiveFlag.pinchZoom |
             InteractiveFlag.doubleTapZoom,
         minZoom: cfg.map.onlineMinZoom,
         maxZoom: cfg.map.onlineMaxZoom,
