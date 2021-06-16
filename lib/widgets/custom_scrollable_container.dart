@@ -116,7 +116,9 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                               ),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: widget.onClose == null
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 if (widget.onClose != null)
                                   const SizedBox(
