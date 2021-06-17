@@ -9,10 +9,9 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/map_route_state.dart';
-import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/trufi_app.dart';
+import 'package:trufi_core/widgets/custom_location_selector.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
 import 'package:trufi_core/widgets/map/buttons/map_type_button.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
@@ -50,6 +49,9 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     _trufiMapController.mapController.onReady.then((value) {
       mapChangeStream = context.read<HomePageCubit>().stream.listen((event) {
         final mapRouteState = context.read<HomePageCubit>().state;
+        if (mapRouteState.toPlace != null && mapRouteState.fromPlace != null) {
+          return;
+        }
         if (mapRouteState.toPlace != null) {
           _trufiMapController.move(
             center: mapRouteState.toPlace.latLng,
@@ -69,6 +71,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   @override
   void dispose() {
+    _trufiMapController?.dispose();
     mapChangeStream?.cancel();
     super.dispose();
   }
@@ -174,7 +177,10 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       ),
       bottomPadding: panelCubit.state.panel?.minSize ?? 0,
       onClose: panelCubit.cleanPanel,
-      panel: panelCubit.state.panel?.panel(context),
+      panel: panelCubit.state.panel?.panel(context, () {
+        panelCubit.cleanPanel();
+        widget.onFetchPlan();
+      }),
     );
   }
 
@@ -219,12 +225,10 @@ class __LoadLocationState extends State<_LoadLocation> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiLocalization.of(context);
     final textStyle = theme.textTheme.bodyText1.copyWith(fontSize: 17);
     final hintStyle = theme.textTheme.bodyText2.copyWith(
       color: theme.textTheme.caption.color,
     );
-    final homePageCubit = context.read<HomePageCubit>();
     return Card(
       child: SafeArea(
         child: Padding(
@@ -248,55 +252,12 @@ class __LoadLocationState extends State<_LoadLocation> {
                   style: hintStyle,
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          await homePageCubit.setFromPlace(
-                            TrufiLocation(
-                              description: locationData.description,
-                              address: locationData.street,
-                              latitude: widget.location.latitude,
-                              longitude: widget.location.longitude,
-                            ),
-                          );
-                          widget.onFetchPlan();
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          localization.commonOrigin,
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          await homePageCubit.setToPlace(
-                            TrufiLocation(
-                              description: locationData.description,
-                              address: locationData.street,
-                              latitude: widget.location.latitude,
-                              longitude: widget.location.longitude,
-                            ),
-                          );
-                          widget.onFetchPlan();
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          localization.commonDestination,
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
+                CustomLocationSelector(
+                  locationData: locationData,
+                  onFetchPlan: () {
+                    widget.onFetchPlan();
+                    Navigator.of(context).pop();
+                  },
                 ),
               ] else
                 Text(
@@ -337,15 +298,8 @@ class __LoadLocationState extends State<_LoadLocation> {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return searchLocationsCubit.reverseGeodecoding(widget.location).catchError(
       (error) {
-        return LocationDetail("unknown place", "");
+        return LocationDetail("unknown place", "", widget.location);
       },
     );
   }
-}
-
-class LocationDetail {
-  final String description;
-  final String street;
-
-  LocationDetail(this.description, this.street);
 }
