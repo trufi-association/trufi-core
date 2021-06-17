@@ -209,7 +209,13 @@ class SeparatorPlace extends StatelessWidget {
               color: color ?? Colors.black,
             ),
           const SizedBox(width: 5),
-          if (child != null) child,
+          if (child != null)
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                child,
+              ],
+            ),
         ],
       ),
     );
