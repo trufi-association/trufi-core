@@ -142,14 +142,11 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                                       height: 26,
                                       width: 26,
                                       margin: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
+                                      color: Colors.transparent,
                                       child: const Center(
                                         child: Icon(
                                           Icons.close,
-                                          color: Colors.white,
+                                          color: Colors.grey,
                                         ),
                                       ),
                                     ),

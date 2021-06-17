@@ -7,7 +7,7 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/pages/choose_location.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
+import 'package:trufi_core/widgets/custom_location_selector.dart';
 
 void main() {
   TrufiLocation trufiLocation;
@@ -31,7 +31,7 @@ void main() {
 
   test('Create a trufi location from LatLng', () {
     trufiLocation = TrufiLocation.fromChooseLocationDetail(
-      ChooseLocationDetail(LocationDetail(_description, ""), _latLng),
+      ChooseLocationDetail(LocationDetail(_description, "", _latLng), _latLng),
     );
 
     expect(trufiLocation.description, _description);

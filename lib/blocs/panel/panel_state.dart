@@ -9,7 +9,10 @@ class PanelState extends Equatable {
 }
 
 class CustomMarkerPanel {
-  final WidgetBuilder panel;
+  final Widget Function(
+    BuildContext context,
+    void Function() onFetchPlan,
+  ) panel;
   final LatLng positon;
   final double minSize;
 
