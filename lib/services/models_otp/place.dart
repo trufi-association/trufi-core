@@ -99,6 +99,7 @@ class Place {
       bikeRentalStation: bikeRentalStation?.toBikeRentalStation(),
       bikeParkEntity: bikePark?.toBikeParkEntity(),
       carParkEntity: carPark?.toCarParkEntity(),
+      vehicleParkingWithEntrance: vehicleParkingWithEntrance,
     );
   }
 }
