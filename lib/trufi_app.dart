@@ -6,6 +6,7 @@ import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
@@ -136,6 +137,9 @@ class TrufiApp extends StatelessWidget {
       providers: [
         BlocProvider<ConfigurationCubit>(
           create: (context) => ConfigurationCubit(configuration),
+        ),
+        BlocProvider<PanelCubit>(
+          create: (context) => PanelCubit(),
         ),
         BlocProvider<PreferencesCubit>(
           create: (context) => PreferencesCubit(
