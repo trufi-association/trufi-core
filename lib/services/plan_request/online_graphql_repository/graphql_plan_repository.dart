@@ -200,6 +200,8 @@ class GraphQLPlanRepository {
               advancedOptions.includeBikeSuggestions,
           'shouldMakeCarQuery': advancedOptions.includeCarSuggestions &&
               linearDistance > PayloadDataPlanState.suggestCarMinDistance,
+          'shouldMakeCarParkQuery': advancedOptions.includeCarSuggestions &&
+              linearDistance > PayloadDataPlanState.suggestCarMinDistance,
           'shouldMakeParkRideQuery':
               advancedOptions.includeParkAndRideSuggestions &&
                   linearDistance > PayloadDataPlanState.suggestCarMinDistance,
@@ -212,7 +214,7 @@ class GraphQLPlanRepository {
           'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&
               advancedOptions.includeBikeSuggestions,
           'useVehicleParkingAvailabilityInformation':
-              dateNow.difference(date).inMinutes <= 15
+              date.difference(dateNow).inMinutes <= 15
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
@@ -225,4 +227,3 @@ class GraphQLPlanRepository {
     return modesTransportData;
   }
 }
-// QueryResultSource.cache

@@ -170,7 +170,7 @@ class TransportSelector extends StatelessWidget {
                             modesTransport
                                 .parkRidePlan.itineraries[0].totalDistance),
                       ),
-                    if (modesTransport.existCarPlan &&
+                    if (modesTransport.existCarAndCarPark &&
                         payloadDataPlanState.includeCarSuggestions)
                       CardTransportMode(
                         onTap: () async {
@@ -178,7 +178,7 @@ class TransportSelector extends StatelessWidget {
                             builder: (BuildContext context) =>
                                 ModeTransportScreen(
                               title: localization.instructionVehicleCar,
-                              plan: modesTransport.carPlan,
+                              plan: modesTransport.carAndCarPark,
                             ),
                           ));
                         },

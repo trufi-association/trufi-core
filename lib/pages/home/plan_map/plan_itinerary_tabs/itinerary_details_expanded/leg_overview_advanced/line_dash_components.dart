@@ -28,7 +28,6 @@ class TransportDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configuration = context.read<ConfigurationCubit>().state;
-    final theme = Theme.of(context);
     return Column(
       children: [
         DashLinePlace(
