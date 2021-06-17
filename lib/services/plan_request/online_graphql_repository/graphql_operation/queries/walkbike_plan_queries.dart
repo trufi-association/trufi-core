@@ -416,6 +416,11 @@ query SummaryPage_WalkBike_Query(
             id
           }
           name
+          vehicleParkingWithEntrance {
+            vehicleParking {
+              tags
+            }
+          }
         }
         distance
       }
