@@ -6,7 +6,7 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/markers/marker_configuration.dart';
-import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
+import 'package:trufi_core/widgets/custom_location_selector.dart';
 import 'package:trufi_core/widgets/map/buttons/your_location_button.dart';
 import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import 'package:async/async.dart';
@@ -240,7 +240,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return searchLocationsCubit.reverseGeodecoding(location).catchError(
       (error) {
-        return LocationDetail("", "");
+        return LocationDetail("", "", location);
       },
     );
   }
@@ -254,5 +254,6 @@ class ChooseLocationDetail extends LocationDetail {
   ) : super(
           locationDetail.description,
           locationDetail.street,
+          location,
         );
 }
