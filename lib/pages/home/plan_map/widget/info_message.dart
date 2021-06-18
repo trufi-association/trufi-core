@@ -13,6 +13,7 @@ class InfoMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
+      width: 240,
       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       decoration: BoxDecoration(
         color: const Color(0xffe5f2fa),
@@ -21,6 +22,7 @@ class InfoMessage extends StatelessWidget {
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.info,
@@ -28,9 +30,11 @@ class InfoMessage extends StatelessWidget {
                 size: 17,
               ),
               const SizedBox(width: 5),
-              Text(
-                message,
-                style: theme.textTheme.bodyText1.copyWith(fontSize: 14),
+              Flexible(
+                child: Text(
+                  message,
+                  style: theme.textTheme.bodyText1.copyWith(fontSize: 14),
+                ),
               ),
             ],
           ),

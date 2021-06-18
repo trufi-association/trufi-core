@@ -24,10 +24,12 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeWalkQuery: Boolean!
   $shouldMakeBikeQuery: Boolean!
   $shouldMakeCarQuery: Boolean!
+  $shouldMakeCarParkQuery: Boolean!
   $shouldMakeParkRideQuery: Boolean!
   $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
   $showBikeAndParkItineraries: Boolean!
+  $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
 ) {
@@ -338,6 +340,96 @@ query SummaryPage_WalkBike_Query(
       }
     }
   }
+  carParkPlan: plan(
+    fromPlace: $fromPlace, 
+    toPlace: $toPlace, 
+    intermediatePlaces: $intermediatePlaces, 
+    numItineraries: 6, 
+    transportModes: [{ mode: CAR, qualifier: PARK }], 
+    date: $date, 
+    time: $time, 
+    walkReluctance: $walkReluctance, 
+    walkBoardCost: $walkBoardCost, 
+    minTransferTime: $minTransferTime, 
+    walkSpeed: $walkSpeed, 
+    maxWalkDistance: $bikeAndPublicMaxWalkDistance, 
+    allowedTicketTypes: $ticketTypes, 
+    arriveBy: $arriveBy, 
+    transferPenalty: $transferPenalty, 
+    bikeSpeed: $bikeSpeed, 
+    optimize: $optimize, 
+    triangle: $triangle, 
+    itineraryFiltering: $itineraryFiltering, 
+    unpreferred: $unpreferred, 
+    locale: $locale,
+    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
+    ) @include(if: $shouldMakeCarParkQuery) {
+    from{
+      name,
+      lat,
+      lon,
+    },
+    to{
+      name,
+      lon,
+      lat,
+    },
+    ...SummaryPlanContainer_plan
+    ...ItineraryTab_plan
+    itineraries {
+      duration
+      startTime
+      endTime
+      ...ItineraryTab_itinerary
+      ...SummaryPlanContainer_itineraries
+      legs {
+        startTime
+        mode
+        ...ItineraryLine_legs
+        transitLeg
+        legGeometry {
+          points
+        }
+        route {
+          gtfsId
+          id
+        }
+        trip {
+          gtfsId
+          directionId
+          stoptimesForDate {
+            scheduledDeparture
+          }
+          pattern {
+            ...RouteLine_pattern
+            id
+          }
+          id
+        }
+        from {
+          name
+          lat
+          lon
+        }
+        to {
+          name
+          lat
+          lon
+          vehicleParkingWithEntrance {
+            vehicleParking {
+              tags
+            }
+          }
+          carPark {
+            carParkId
+            name
+            id
+          }
+        }
+        distance
+      }
+    }
+  }
   parkRidePlan: plan(
     fromPlace: $fromPlace, 
     toPlace: $toPlace, 
@@ -364,7 +456,8 @@ query SummaryPage_WalkBike_Query(
     triangle: $triangle, 
     itineraryFiltering: $itineraryFiltering, 
     unpreferred: $unpreferred, 
-    locale: $locale
+    locale: $locale,
+    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
     ) @include(if: $shouldMakeParkRideQuery) {
     from{
       name,
@@ -414,6 +507,11 @@ query SummaryPage_WalkBike_Query(
             id
           }
           name
+          vehicleParkingWithEntrance {
+            vehicleParking {
+              tags
+            }
+          }
         }
         distance
       }

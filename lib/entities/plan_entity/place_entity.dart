@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:trufi_core/entities/plan_entity/bike_park_entity.dart';
 import 'package:trufi_core/entities/plan_entity/stop_entity.dart';
 import 'package:trufi_core/services/models_otp/enums/place/vertex_type.dart';
+import 'package:trufi_core/services/models_otp/vehicle_parking_with_entrance.dart';
 
 import 'bike_rental_station_entity.dart';
 import 'car_park_entity.dart';
@@ -18,6 +19,7 @@ class PlaceEntity {
   static const _bikeRentalStation = 'bikeRentalStation';
   static const _bikeParkEntity = 'bikeParkEntity';
   static const _carParkEntity = 'carParkEntity';
+  static const _vehicleParkingWithEntrance = 'vehicleParkingWithEntrance';
 
   final String name;
   final VertexType vertexType;
@@ -29,6 +31,7 @@ class PlaceEntity {
   final BikeRentalStationEntity bikeRentalStation;
   final BikeParkEntity bikeParkEntity;
   final CarParkEntity carParkEntity;
+  final VehicleParkingWithEntrance vehicleParkingWithEntrance;
 
   PlaceEntity({
     this.name,
@@ -41,6 +44,7 @@ class PlaceEntity {
     this.bikeRentalStation,
     this.bikeParkEntity,
     this.carParkEntity,
+    this.vehicleParkingWithEntrance,
   });
 
   Map<String, dynamic> toMap() {
@@ -55,6 +59,7 @@ class PlaceEntity {
       _bikeRentalStation: bikeRentalStation?.toMap(),
       _bikeParkEntity: bikeParkEntity?.toMap(),
       _carParkEntity: carParkEntity?.toMap(),
+      _vehicleParkingWithEntrance: vehicleParkingWithEntrance?.toMap(),
     };
   }
 
@@ -83,6 +88,10 @@ class PlaceEntity {
       carParkEntity: map[_carParkEntity] != null
           ? CarParkEntity.fromMap(map[_carParkEntity] as Map<String, dynamic>)
           : null,
+      vehicleParkingWithEntrance: map[_vehicleParkingWithEntrance] != null
+          ? VehicleParkingWithEntrance.fromMap(
+              map[_vehicleParkingWithEntrance] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -97,6 +106,7 @@ class PlaceEntity {
     BikeRentalStationEntity bikeRentalStation,
     BikeParkEntity bikeParkEntity,
     CarParkEntity carParkEntity,
+    VehicleParkingWithEntrance vehicleParkingWithEntrance,
   }) {
     return PlaceEntity(
       name: name ?? this.name,
@@ -109,6 +119,8 @@ class PlaceEntity {
       bikeRentalStation: bikeRentalStation ?? this.bikeRentalStation,
       bikeParkEntity: bikeParkEntity ?? this.bikeParkEntity,
       carParkEntity: carParkEntity ?? this.carParkEntity,
+      vehicleParkingWithEntrance:
+          vehicleParkingWithEntrance ?? this.vehicleParkingWithEntrance,
     );
   }
 

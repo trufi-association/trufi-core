@@ -6,6 +6,7 @@ class ModesTransportEntity {
   static const _bikeAndPublicPlan = 'bikeAndPublicPlan';
   static const _bikeParkPlan = 'bikeParkPlan';
   static const _carPlan = 'carPlan';
+  static const _carParkPlan = 'carParkPlan';
   static const _parkRidePlan = 'parkRidePlan';
   static const _onDemandTaxiPlan = 'onDemandTaxiPlan';
 
@@ -14,6 +15,7 @@ class ModesTransportEntity {
   final PlanEntity bikeAndPublicPlan;
   final PlanEntity bikeParkPlan;
   final PlanEntity carPlan;
+  final PlanEntity carParkPlan;
   final PlanEntity parkRidePlan;
   final PlanEntity onDemandTaxiPlan;
 
@@ -23,6 +25,7 @@ class ModesTransportEntity {
     this.bikeAndPublicPlan,
     this.bikeParkPlan,
     this.carPlan,
+    this.carParkPlan,
     this.parkRidePlan,
     this.onDemandTaxiPlan,
   });
@@ -45,6 +48,9 @@ class ModesTransportEntity {
         carPlan: json[_carPlan] != null
             ? PlanEntity.fromJson(json[_carPlan] as Map<String, dynamic>)
             : null,
+        carParkPlan: json[_carParkPlan] != null
+            ? PlanEntity.fromJson(json[_carParkPlan] as Map<String, dynamic>)
+            : null,
         parkRidePlan: json[_parkRidePlan] != null
             ? PlanEntity.fromJson(json[_parkRidePlan] as Map<String, dynamic>)
             : null,
@@ -60,6 +66,7 @@ class ModesTransportEntity {
         _bikeAndPublicPlan: bikeAndPublicPlan?.toJson(),
         _bikeParkPlan: bikeParkPlan?.toJson(),
         _carPlan: carPlan?.toJson(),
+        _carParkPlan: carParkPlan?.toJson(),
         _parkRidePlan: parkRidePlan?.toJson(),
         _onDemandTaxiPlan: onDemandTaxiPlan?.toJson(),
       };
@@ -67,6 +74,11 @@ class ModesTransportEntity {
   PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
         ...filterOnlyBikeAndWalk(bikeParkPlan?.itineraries ?? []),
         ...filterOnlyBikeAndWalk(bikeAndPublicPlan?.itineraries ?? [])
+      ]);
+
+  PlanEntity get carAndCarPark => carPlan.copyWith(itineraries: [
+        ...carPlan?.itineraries ?? [],
+        ...carParkPlan?.itineraries ?? []
       ]);
 
   bool get existWalkPlan =>
@@ -86,6 +98,10 @@ class ModesTransportEntity {
 
   bool get existCarPlan => carPlan?.itineraries?.isNotEmpty ?? false;
 
+  bool get existCarParkPlan => carParkPlan?.itineraries?.isNotEmpty ?? false;
+
+  bool get existCarAndCarPark => existCarPlan || existCarParkPlan;
+
   bool get existOnDemandTaxi =>
       onDemandTaxiPlan?.itineraries?.isNotEmpty ?? false;
 
@@ -95,7 +111,7 @@ class ModesTransportEntity {
       existWalkPlan ||
       existBikePlan ||
       existBikeAndVehicle ||
-      existCarPlan ||
+      existCarAndCarPark ||
       existParkRidePlan ||
       existOnDemandTaxi;
 
