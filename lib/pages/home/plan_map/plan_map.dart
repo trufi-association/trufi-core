@@ -416,7 +416,7 @@ class PlanMapPageStateData {
                     ? Color(int.tryParse("0xFF${leg.route.color}"))
                     : Colors.grey,
                 leg,
-                icon: (leg?.route?.shortName ?? '').startsWith('RT')
+                icon: (leg?.route?.type ?? 0) == 715
                     ? onDemandTaxiSvg(color: 'FFFFFF')
                     : null,
                 onTap: () => onTap(itinerary),

@@ -112,7 +112,7 @@ class RouteLeg extends StatelessWidget {
               ? Color(int.tryParse("0xFF${leg.route.color}"))
               : leg.transportMode.backgroundColor,
           color: Colors.white,
-          icon: (leg?.route?.shortName ?? '').startsWith('RT')
+          icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode.getImage(color: Colors.white),
           text: (maxWidth * perc - 24) >=

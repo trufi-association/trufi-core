@@ -3,6 +3,7 @@ import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'agency.dart';
 import 'alert.dart';
+import 'booking_info.dart';
 import 'enums/leg/pickup_dropoff_type.dart';
 import 'enums/leg/realtime_state.dart';
 import 'enums/mode.dart';
@@ -43,6 +44,7 @@ class Leg {
   final bool interlineWithPreviousLeg;
   final List<Alert> alerts;
   final PickupBookingInfo pickupBookingInfo;
+  final BookingInfo dropOffBookingInfo;
 
   const Leg({
     this.startTime,
@@ -73,6 +75,7 @@ class Leg {
     this.interlineWithPreviousLeg,
     this.alerts,
     this.pickupBookingInfo,
+    this.dropOffBookingInfo,
   });
 
   factory Leg.fromMap(Map<String, dynamic> json) => Leg(
@@ -138,6 +141,10 @@ class Leg {
             ? PickupBookingInfo.fromMap(
                 json['pickupBookingInfo'] as Map<String, dynamic>)
             : null,
+        dropOffBookingInfo: json['dropOffBookingInfo'] != null
+            ? BookingInfo.fromMap(
+                json['dropOffBookingInfo'] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -173,6 +180,7 @@ class Leg {
         'interlineWithPreviousLeg': interlineWithPreviousLeg,
         'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
         'pickupBookingInfo': pickupBookingInfo?.toMap(),
+        'dropOffBookingInfo': dropOffBookingInfo?.toMap(),
       };
 
   PlanItineraryLeg toPlanItineraryLeg() {
@@ -194,6 +202,7 @@ class Leg {
       intermediatePlaces:
           intermediatePlaces?.map((x) => x.toPlaceEntity())?.toList(),
       pickupBookingInfo: pickupBookingInfo,
+      dropOffBookingInfo: dropOffBookingInfo,
       rentedBike: rentedBike,
       intermediatePlace: intermediatePlace,
       transitLeg: transitLeg,
