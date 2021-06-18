@@ -657,6 +657,12 @@ abstract class TrufiLocalization {
   /// **'Minibus'**
   String get instructionVehicleMinibus;
 
+  /// Vehicle name (onCar)
+  ///
+  /// In en, this message translates to:
+  /// **'Drive'**
+  String get instructionVehicleOnCar;
+
   /// Vehicle name (Sharing)
   ///
   /// In en, this message translates to:

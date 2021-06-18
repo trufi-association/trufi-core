@@ -237,7 +237,7 @@ extension TransportModeExtension on TransportMode {
       TransportMode.bicycle: localization.instructionVehicleBike,
       TransportMode.bus: localization.instructionVehicleBus,
       TransportMode.cableCar: localization.instructionVehicleGondola,
-      TransportMode.car: localization.instructionVehicleCar,
+      TransportMode.car: localization.instructionVehicleOnCar,
       TransportMode.carPool: localization.instructionVehicleCarpool,
       TransportMode.ferry: localization.instructionVehicleMetro,
       TransportMode.flexible: null,
