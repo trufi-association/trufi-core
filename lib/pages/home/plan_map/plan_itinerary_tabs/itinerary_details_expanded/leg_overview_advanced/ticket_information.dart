@@ -55,7 +55,7 @@ class TicketInformation extends StatelessWidget {
                 style: theme.primaryTextTheme.bodyText1,
               ),
               Text(
-                ' ${(fare.cents / 100).toStringAsFixed(1)} €',
+                ' ${(fare.cents / 100).toStringAsFixed(2)} €',
                 style: theme.primaryTextTheme.bodyText1.copyWith(
                   color: Colors.grey[600],
                 ),
