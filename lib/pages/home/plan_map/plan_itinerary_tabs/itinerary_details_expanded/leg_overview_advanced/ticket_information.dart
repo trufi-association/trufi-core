@@ -31,22 +31,6 @@ class TicketInformation extends StatelessWidget {
           leg.mode == 'BICYCLE_WALK',
     );
 
-    final onlyVvs =
-        fares.isNotEmpty && fares.every((fare) => fare?.agency?.name == 'VVS');
-
-    final unknownFareLeg = legs.where((leg) => leg.route != null).firstWhere(
-          (leg) => getUnknownFareRoute(unknownFares, leg.route),
-          orElse: () => null,
-        );
-
-    // ignore: unused_local_variable
-    String unknownFareRouteName = unknownFareLeg != null
-        ? '${unknownFareLeg.fromPlace?.name} - ${unknownFareLeg.toPlace?.name}'
-        : null;
-    if (unknownFareLeg?.transportMode == TransportMode.ferry) {
-      unknownFareRouteName = unknownFares[0].routes[0].longName;
-    }
-
     final faresInfo = <Widget>[];
     fares.asMap().forEach((index, fare) {
       final ticketUrl = fare?.agency?.fareUrl ?? fare?.url;
