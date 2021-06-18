@@ -192,27 +192,30 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   }
 
   Future<void> loadData() async {
-    if (!mounted) return;
-    setState(() {
-      fetchError = null;
-      loading = true;
-    });
-    fetchFares(widget.itinerary).then((value) {
-      if (mounted) {
-        setState(() {
-          fares = getFares(value);
-          unknownFares = getUnknownFares(
-              value, fares, getRoutes(widget.itinerary.compressLegs));
-          loading = false;
-        });
-      }
-    }).catchError((error) {
-      if (mounted) {
-        setState(() {
-          fetchError = "$error";
-          loading = false;
-        });
-      }
-    });
+    if (widget.itinerary.compressLegs.isNotEmpty &&
+        widget.itinerary.compressLegs.any((leg) => leg.transitLeg)) {
+      if (!mounted) return;
+      setState(() {
+        fetchError = null;
+        loading = true;
+      });
+      fetchFares(widget.itinerary).then((value) {
+        if (mounted) {
+          setState(() {
+            fares = getFares(value);
+            unknownFares = getUnknownFares(
+                value, fares, getRoutes(widget.itinerary.compressLegs));
+            loading = false;
+          });
+        }
+      }).catchError((error) {
+        if (mounted) {
+          setState(() {
+            fetchError = "$error";
+            loading = false;
+          });
+        }
+      });
+    }
   }
 }
