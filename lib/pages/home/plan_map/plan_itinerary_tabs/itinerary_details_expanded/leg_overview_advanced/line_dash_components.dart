@@ -6,6 +6,8 @@ import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
 
 class TransportDash extends StatelessWidget {
@@ -50,6 +52,7 @@ class TransportDash extends StatelessWidget {
             padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TransitLeg(
                   leg: leg,
@@ -57,6 +60,26 @@ class TransportDash extends StatelessWidget {
                 if (configuration.planItineraryLegBuilder != null)
                   configuration.planItineraryLegBuilder(context, leg) ??
                       Container(),
+                if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
+                            ?.tags !=
+                        null &&
+                    leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
+                        .contains('state:few'))
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      const InfoMessage(
+                          // TODO translate
+                          message:
+                              "This car park is close to capacity. Please allow additional time for you journey."),
+                      CustomTextButton(
+                        // TODO translate
+                        text: "Exclude full car parks",
+                        onPressed: () {},
+                      ),
+                    ],
+                  )
               ],
             ),
           ),

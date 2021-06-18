@@ -8,6 +8,7 @@ class ModesTransport {
   final Plan bikeAndPublicPlan;
   final Plan bikeParkPlan;
   final Plan carPlan;
+  final Plan carParkPlan;
   final Plan parkRidePlan;
   final Plan onDemandTaxiPlan;
 
@@ -17,6 +18,7 @@ class ModesTransport {
     this.bikeAndPublicPlan,
     this.bikeParkPlan,
     this.carPlan,
+    this.carParkPlan,
     this.parkRidePlan,
     this.onDemandTaxiPlan,
   });
@@ -37,6 +39,9 @@ class ModesTransport {
         carPlan: json["carPlan"] != null
             ? Plan.fromMap(json["carPlan"] as Map<String, dynamic>)
             : null,
+        carParkPlan: json["carParkPlan"] != null
+            ? Plan.fromMap(json["carParkPlan"] as Map<String, dynamic>)
+            : null,
         parkRidePlan: json["parkRidePlan"] != null
             ? Plan.fromMap(json["parkRidePlan"] as Map<String, dynamic>)
             : null,
@@ -51,6 +56,7 @@ class ModesTransport {
         'bikeAndPublicPlan': bikeAndPublicPlan?.toMap(),
         'bikeParkPlan': bikeParkPlan?.toMap(),
         'carPlan': carPlan?.toMap(),
+        'carParkPlan': carParkPlan?.toMap(),
         'parkRidePlan': parkRidePlan?.toMap(),
         'onDemandTaxiPlan': onDemandTaxiPlan?.toMap(),
       };
@@ -62,6 +68,7 @@ class ModesTransport {
       bikeAndPublicPlan: bikeAndPublicPlan?.toPlan(),
       bikeParkPlan: bikeParkPlan?.toPlan(),
       carPlan: carPlan?.toPlan(),
+      carParkPlan: carParkPlan?.toPlan(),
       parkRidePlan: parkRidePlan?.toPlan(),
       onDemandTaxiPlan: onDemandTaxiPlan?.toPlan()?.copyWith(
           itineraries: onDemandTaxiPlan.itineraries

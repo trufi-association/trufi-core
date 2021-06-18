@@ -6,6 +6,7 @@ import 'bike_rental_station.dart';
 import 'car_park.dart';
 import 'enums/place/vertex_type.dart';
 import 'stop.dart';
+import 'vehicle_parking_with_entrance.dart';
 
 class Place {
   final String name;
@@ -18,6 +19,7 @@ class Place {
   final BikeRentalStation bikeRentalStation;
   final BikePark bikePark;
   final CarPark carPark;
+  final VehicleParkingWithEntrance vehicleParkingWithEntrance;
 
   const Place({
     this.name,
@@ -30,6 +32,7 @@ class Place {
     this.bikeRentalStation,
     this.bikePark,
     this.carPark,
+    this.vehicleParkingWithEntrance,
   });
 
   factory Place.fromMap(Map<String, dynamic> json) => Place(
@@ -52,6 +55,10 @@ class Place {
         carPark: json['carPark'] != null
             ? CarPark.fromJson(json['carPark'] as Map<String, dynamic>)
             : null,
+        vehicleParkingWithEntrance: json['vehicleParkingWithEntrance'] != null
+            ? VehicleParkingWithEntrance.fromMap(
+                json['vehicleParkingWithEntrance'] as Map<String, dynamic>)
+            : null,
       );
 
   Map<String, dynamic> toMap() => {
@@ -65,6 +72,7 @@ class Place {
         'bikeRentalStation': bikeRentalStation?.toJson(),
         'bikePark': bikePark?.toJson(),
         'carPark': carPark?.toJson(),
+        'vehicleParkingWithEntrance': vehicleParkingWithEntrance?.toMap(),
       };
 
   PlanLocation toPlanLocation() {
@@ -91,6 +99,7 @@ class Place {
       bikeRentalStation: bikeRentalStation?.toBikeRentalStation(),
       bikeParkEntity: bikePark?.toBikeParkEntity(),
       carParkEntity: carPark?.toCarParkEntity(),
+      vehicleParkingWithEntrance: vehicleParkingWithEntrance,
     );
   }
 }
