@@ -39,7 +39,8 @@ dependencies:
   url_launcher: 6.0.3
   uuid: 2.2.2
   xml: ^5.1.0
-
+dependency_overrides:
+  crypto: ^3.0.1
 dev_dependencies:
   bloc_test: ^8.0.0
   flutter_driver:
