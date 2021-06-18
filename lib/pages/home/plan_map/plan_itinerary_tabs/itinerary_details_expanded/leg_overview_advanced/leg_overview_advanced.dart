@@ -35,8 +35,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      // TODO need finished implement fetchFares
-      // loadData();
+      loadData();
     });
   }
 
@@ -46,6 +45,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
 
     final localization = TrufiLocalization.of(context);
     final compresedLegs = widget.itinerary.compressLegs;
+    // loadData();
     return Column(
       children: compresedLegs
           .asMap()
@@ -56,13 +56,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                 children: [
                   if (index == 0)
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (fares != null)
-                          TicketInformation(
-                            legs: compresedLegs,
-                            fares: fares,
-                            unknownFares: unknownFares,
-                          ),
                         Row(
                           children: [
                             if (widget.onBackPressed != null)
@@ -79,6 +74,16 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                         const Divider(
                           color: Colors.black,
                         ),
+                        if (fares != null)
+                          TicketInformation(
+                            legs: compresedLegs,
+                            fares: fares,
+                            unknownFares: unknownFares,
+                          ),
+                        if (fares != null)
+                          const Divider(
+                            color: Colors.grey,
+                          ),
                         if (itineraryLeg.transportMode == TransportMode.walk)
                           Column(
                             children: [
