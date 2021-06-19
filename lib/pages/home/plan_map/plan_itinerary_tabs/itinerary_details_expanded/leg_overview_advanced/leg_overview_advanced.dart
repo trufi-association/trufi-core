@@ -27,7 +27,7 @@ class LegOverviewAdvanced extends StatefulWidget {
 }
 
 class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
-  bool loading = true;
+  bool loading = false;
   String fetchError;
   List<FareComponent> fares;
   List<FareComponent> unknownFares;
@@ -113,9 +113,10 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             fares: fares,
                             unknownFares: unknownFares,
                           ),
-                        const Divider(
-                          color: Colors.grey,
-                        ),
+                        if (fares != null || loading)
+                          const Divider(
+                            color: Colors.grey,
+                          ),
                         if (itineraryLeg.transportMode == TransportMode.walk)
                           Column(
                             children: [
