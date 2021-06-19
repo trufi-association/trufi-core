@@ -71,6 +71,28 @@ class ModesTransportEntity {
         _onDemandTaxiPlan: onDemandTaxiPlan?.toJson(),
       };
 
+  ModesTransportEntity copyWith({
+    PlanEntity walkPlan,
+    PlanEntity bikePlan,
+    PlanEntity bikeAndPublicPlan,
+    PlanEntity bikeParkPlan,
+    PlanEntity carPlan,
+    PlanEntity carParkPlan,
+    PlanEntity parkRidePlan,
+    PlanEntity onDemandTaxiPlan,
+  }) {
+    return ModesTransportEntity(
+      walkPlan: walkPlan ?? this.walkPlan,
+      bikePlan: bikePlan ?? this.bikePlan,
+      bikeAndPublicPlan: bikeAndPublicPlan ?? this.bikeAndPublicPlan,
+      bikeParkPlan: bikeParkPlan ?? this.bikeParkPlan,
+      carPlan: carPlan ?? this.carPlan,
+      carParkPlan: carParkPlan ?? this.carParkPlan,
+      parkRidePlan: parkRidePlan ?? this.parkRidePlan,
+      onDemandTaxiPlan: onDemandTaxiPlan ?? this.onDemandTaxiPlan,
+    );
+  }
+
   PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
         ...filterOnlyBikeAndWalk(bikeParkPlan?.itineraries ?? []),
         ...filterOnlyBikeAndWalk(bikeAndPublicPlan?.itineraries ?? [])

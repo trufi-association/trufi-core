@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -28,6 +30,10 @@ class TransportDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configuration = context.read<ConfigurationCubit>().state;
+    final TrufiLocalization localization = TrufiLocalization.of(context);
+    final homePageCubit = context.read<HomePageCubit>();
+    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
+
     return Column(
       children: [
         DashLinePlace(
@@ -76,7 +82,10 @@ class TransportDash extends StatelessWidget {
                       CustomTextButton(
                         // TODO translate
                         text: "Exclude full car parks",
-                        onPressed: () {},
+                        onPressed: () {
+                          homePageCubit.fetchPlanModeRidePark(
+                              localization, payloadDataPlanState);
+                        },
                       ),
                     ],
                   )

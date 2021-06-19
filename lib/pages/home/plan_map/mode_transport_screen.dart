@@ -1,6 +1,8 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/pages/home/plan_map/custom_itinerary/custom_itinerary.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
@@ -60,42 +62,33 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
   @override
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigurationCubit>().state;
+    final homePageCubit = context.watch<HomePageCubit>();
+    final homePageState = homePageCubit.state;
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: CustomScrollableContainer(
-        openedPosition: 200,
-        body: PlanMapPage(
-          planPageController: _planPageController,
-          customOverlayWidget: null,
-          customBetweenFabWidget: null,
-          markerConfiguration: cfg.markers,
-          transportConfiguration: cfg.transportConf,
-        ),
-        panel: CustomItinerary(
-          planPageController: _planPageController,
-        ),
+      body: Stack(
+        children: [
+          CustomScrollableContainer(
+            openedPosition: 200,
+            body: PlanMapPage(
+              planPageController: _planPageController,
+              customOverlayWidget: null,
+              customBetweenFabWidget: null,
+              markerConfiguration: cfg.markers,
+              transportConfiguration: cfg.transportConf,
+            ),
+            panel: homePageState.isFetching
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomItinerary(
+                    planPageController: _planPageController,
+                  ),
+          ),
+          if (cfg.animations.loading != null && homePageState.isFetching)
+            Positioned.fill(child: cfg.animations.loading)
+        ],
       ),
-      //  Stack(
-      //   children: <Widget>[
-      //     Column(
-      //       children: <Widget>[
-      //         Expanded(
-      //           child: PlanMapPage(
-      //             planPageController: _planPageController,
-      //             customOverlayWidget: null,
-      //             customBetweenFabWidget: null,
-      //             markerConfiguration: cfg.markers,
-      //           ),
-      //         ),
-      //         PlanItineraryTabPages(
-      //           _tabController,
-      //           _planPageController.plan.itineraries,
-      //           _planPageController.ad,
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

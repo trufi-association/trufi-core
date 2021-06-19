@@ -139,6 +139,8 @@ class GraphQLPlanRepository {
         estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
     final dateNow = DateTime.now();
     final date = advancedOptions?.date ?? dateNow;
+    final shouldMakeAllQuery = !advancedOptions.isFreeParkToCarPark &&
+        !advancedOptions.isFreeParkToParkRide;
 
     final QueryOptions walkBikePlanQuery = QueryOptions(
         document: addFragments(
@@ -193,28 +195,37 @@ class GraphQLPlanRepository {
               parseBikeAndPublicModes(advancedOptions.transportModes),
           'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes),
           'bikeandPublicDisableRemainingWeightHeuristic': false,
-          'shouldMakeWalkQuery': !advancedOptions.wheelchair &&
+          'shouldMakeWalkQuery': shouldMakeAllQuery &&
+              !advancedOptions.wheelchair &&
               linearDistance < PayloadDataPlanState.maxWalkDistance,
-          'shouldMakeBikeQuery': !advancedOptions.wheelchair &&
+          'shouldMakeBikeQuery': shouldMakeAllQuery &&
+              !advancedOptions.wheelchair &&
               linearDistance < PayloadDataPlanState.suggestBikeMaxDistance &&
               advancedOptions.includeBikeSuggestions,
-          'shouldMakeCarQuery': advancedOptions.includeCarSuggestions &&
+          'shouldMakeCarQuery': shouldMakeAllQuery &&
+              advancedOptions.includeCarSuggestions &&
               linearDistance > PayloadDataPlanState.suggestCarMinDistance,
-          'shouldMakeCarParkQuery': advancedOptions.includeCarSuggestions &&
-              linearDistance > PayloadDataPlanState.suggestCarMinDistance,
-          'shouldMakeParkRideQuery':
-              advancedOptions.includeParkAndRideSuggestions &&
+          'shouldMakeCarParkQuery':
+              (advancedOptions.isFreeParkToCarPark || shouldMakeAllQuery) &&
+                  advancedOptions.includeCarSuggestions &&
                   linearDistance > PayloadDataPlanState.suggestCarMinDistance,
-          'shouldMakeOnDemandTaxiQuery': date.hour > 21 ||
+          'shouldMakeParkRideQuery':
+              (advancedOptions.isFreeParkToParkRide || shouldMakeAllQuery) &&
+                  advancedOptions.includeParkAndRideSuggestions &&
+                  linearDistance > PayloadDataPlanState.suggestCarMinDistance,
+          'shouldMakeOnDemandTaxiQuery': shouldMakeAllQuery && date.hour > 21 ||
               (date.hour == 21 && date.minute == 0) ||
               date.hour < 5 ||
               (date.hour == 5 && date.minute == 0),
-          'showBikeAndParkItineraries': !advancedOptions.wheelchair &&
+          'showBikeAndParkItineraries': shouldMakeAllQuery &&
+              !advancedOptions.wheelchair &&
               advancedOptions.includeBikeSuggestions,
-          'showBikeAndPublicItineraries': !advancedOptions.wheelchair &&
+          'showBikeAndPublicItineraries': shouldMakeAllQuery &&
+              !advancedOptions.wheelchair &&
               advancedOptions.includeBikeSuggestions,
           'useVehicleParkingAvailabilityInformation':
-              date.difference(dateNow).inMinutes <= 15
+              date.difference(dateNow).inMinutes <= 15,
+          'bannedVehicleParkingTags': shouldMakeAllQuery ? [] : ['state:few'],
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
