@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
@@ -10,10 +11,12 @@ import 'package:trufi_core/services/models_otp/route.dart';
 
 Future<List<Fare>> fetchFares(PlanItinerary itinerary) async {
   final legsFiltered = (itinerary?.legs ?? [])
-      .where((element) => element.transportMode != TransportMode.walk
-          // element.transportMode != TransportMode.bicycle &&
-          // element.transportMode != TransportMode.car,
-          )
+      .where(
+        (element) =>
+            element.transportMode != TransportMode.walk &&
+            element.transportMode != TransportMode.bicycle &&
+            element.transportMode != TransportMode.car,
+      )
       .toList();
   if (legsFiltered.isEmpty) {
     return [];
@@ -23,24 +26,26 @@ Future<List<Fare>> fetchFares(PlanItinerary itinerary) async {
     'endTime': itinerary?.endTime?.millisecondsSinceEpoch,
     'walkDistance': itinerary?.walkDistance,
     'duration': itinerary?.durationTrip?.inSeconds,
-    'legs': legsFiltered.map((e) => e.toJson()).toList()
-    // .map((e) => <String, dynamic>{
-    //       'mode': e.mode,
-    //       'transitLeg': e.transitLeg,
-    //       'startTime': e.startTime?.millisecondsSinceEpoch,
-    //       'endTime': e.endTime?.millisecondsSinceEpoch,
-    //       "to": {
-    //         "lat": e.toPlace?.lat,
-    //         "lon": e.toPlace?.lon,
-    //         "stop": {"gtfsId": e?.toPlace?.stopEntity?.gtfsId}
-    //       },
-    //       "from": {
-    //         "lat": e.fromPlace?.lat,
-    //         "lon": e.fromPlace?.lon,
-    //         "stop": {"gtfsId": e.fromPlace?.stopEntity?.gtfsId}
-    //       },
-    //     })
-    // .toList(),
+    'legs':
+        //legsFiltered.map((e) => e.toJson()).toList()
+        legsFiltered
+            .map((e) => <String, dynamic>{
+                  'mode': e.mode,
+                  'transitLeg': e.transitLeg,
+                  'startTime': e.startTime?.millisecondsSinceEpoch,
+                  'endTime': e.endTime?.millisecondsSinceEpoch,
+                  "to": {
+                    "lat": e.toPlace?.lat,
+                    "lon": e.toPlace?.lon,
+                    "stop": {"gtfsId": e?.toPlace?.stopEntity?.gtfsId}
+                  },
+                  "from": {
+                    "lat": e.fromPlace?.lat,
+                    "lon": e.fromPlace?.lon,
+                    "stop": {"gtfsId": e.fromPlace?.stopEntity?.gtfsId}
+                  },
+                })
+            .toList(),
   };
   final response = await http.post(
     Uri.parse(
@@ -50,6 +55,7 @@ Future<List<Fare>> fetchFares(PlanItinerary itinerary) async {
     headers: {'content-type': 'application/json'},
   );
   if (response.statusCode != 200) {
+    log(jsonDecode(response.body).toString());
     throw Exception(
       "Server Error on fetchPBF ${response.request.url} with ${response.statusCode}",
     );
