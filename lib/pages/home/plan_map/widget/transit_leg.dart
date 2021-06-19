@@ -32,7 +32,7 @@ class TransitLeg extends StatelessWidget {
               : leg.transportMode == TransportMode.bicycle &&
                       leg.fromPlace.bikeRentalStation != null
                   ? Colors.white
-                  : Colors.black,
+                  : leg.transportMode.backgroundColor,
           icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode == TransportMode.bicycle &&
