@@ -1,17 +1,9 @@
-import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share/share.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home/home_page.dart';
-import 'package:trufi_core/widgets/social_media/social_media.dart';
-
-import '../pages/about.dart';
-import '../pages/feedback.dart';
-import '../pages/saved_places/saved_places.dart';
 
 class TrufiDrawer extends StatefulWidget {
   const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
@@ -51,7 +43,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
     final config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final preferencesCubit = context.read<PreferencesCubit>();
-    final socialMediaItems = preferencesCubit.socialMediaItems;
+    final menuItems = preferencesCubit.menuItems;
     final weatherInfo = preferencesCubit.state.weatherInfo;
     return Drawer(
       child: ListView(
@@ -119,145 +111,20 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               ],
             ),
           ),
-          _buildListItem(
-            Icons.linear_scale,
-            localization.menuConnections,
-            HomePage.route,
-          ),
-          _buildListItem(
-            Icons.room,
-            localization.menuYourPlaces,
-            SavedPlacesPage.route,
-          ),
-          if (config.feedbackDefinition != null)
-            _buildListItem(
-              Icons.feedback,
-              localization.menuFeedback,
-              FeedbackPage.route,
-            ),
-          _buildListItem(
-            Icons.info,
-            localization.menuAbout,
-            AboutPage.route,
-          ),
-          const Divider(),
-          // FIXME: For now we do not provide this option
-          //_buildOfflineToggle(context),
-          _buildLanguageDropdownButton(context),
-          _buildAppReviewButton(context),
-          _buildAppShareButton(context, config.urls.shareUrl),
-          const Divider(),
-          ...socialMediaItems
-              .map(
-                (socialMediaItem) => SocialMediaButton(
-                  socialMediaItem: socialMediaItem,
+          ...menuItems.fold<List<Widget>>(
+            [],
+            (previousValue, element) => [
+              ...previousValue,
+              if (previousValue.isNotEmpty) const Divider(),
+              ...element.map(
+                (element) => element.buildItem(
+                  context,
+                  isSelected: widget.currentRoute == element.id,
                 ),
               )
-              .toList(),
+            ],
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildListItem(IconData iconData, String title, String route) {
-    final bool isSelected = widget.currentRoute == route;
-    return Container(
-      color: isSelected ? Colors.grey[300] : null,
-      child: ListTile(
-        leading: Icon(iconData, color: isSelected ? Colors.black : Colors.grey),
-        title: Text(
-          title,
-          style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-        ),
-        selected: isSelected,
-        onTap: () {
-          Navigator.popUntil(context, ModalRoute.withName(HomePage.route));
-          if (route != HomePage.route) {
-            Navigator.pushNamed(context, route);
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _buildLanguageDropdownButton(BuildContext context) {
-    final values = context
-        .read<ConfigurationCubit>()
-        .state
-        .supportedLanguages
-        .map((lang) =>
-            LanguageDropdownValue(lang.languageCode, lang.displayName))
-        .toList();
-    final theme = Theme.of(context);
-    final languageCode = Localizations.localeOf(context).languageCode;
-    return ListTile(
-      leading: const Icon(Icons.language),
-      title: DropdownButton<LanguageDropdownValue>(
-        style: theme.textTheme.bodyText1,
-        value: values.firstWhere((value) => value.languageCode == languageCode),
-        onChanged: (LanguageDropdownValue value) {
-          BlocProvider.of<PreferencesCubit>(context)
-              .updateLanguage(value.languageCode);
-        },
-        items: values.map((LanguageDropdownValue value) {
-          return DropdownMenuItem<LanguageDropdownValue>(
-            value: value,
-            child: Text(
-              value.languageString,
-              style: theme.textTheme.bodyText1,
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildAppReviewButton(BuildContext context) {
-    final localization = TrufiLocalization.of(context);
-    return ListTile(
-      leading: const Icon(Icons.star, color: Colors.grey),
-      title: Text(
-        localization.menuAppReview,
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-      ),
-      onTap: () async {
-        await AppReview.writeReview;
-      },
-    );
-  }
-
-  Rect getAppShareButtonOrigin() {
-    final RenderBox box =
-        appShareButtonKey.currentContext.findRenderObject() as RenderBox;
-    return box.localToGlobal(Offset.zero) & box.size;
-  }
-
-  Widget _buildAppShareButton(BuildContext context, String url) {
-    final config = context.read<ConfigurationCubit>().state;
-    final currentLocale = Localizations.localeOf(context);
-    final localization = TrufiLocalization.of(context);
-    return Container(
-      key: appShareButtonKey,
-      child: ListTile(
-        leading: const Icon(Icons.share, color: Colors.grey),
-        title: Text(
-          localization.menuShareApp,
-          style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
-        ),
-        onTap: () {
-          Share.share(
-            localization.shareAppText(
-              url,
-              config.customTranslations.get(
-                config.customTranslations.title,
-                currentLocale,
-                localization.title,
-              ),
-              config.appCity,
-            ),
-            sharePositionOrigin: getAppShareButtonOrigin(),
-          );
-        },
       ),
     );
   }

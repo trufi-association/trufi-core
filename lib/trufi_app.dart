@@ -12,12 +12,12 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/models/social_media/social_media_item.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
+import 'package:trufi_core/models/menu/menu_item.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences/preferences_cubit.dart';
@@ -81,7 +81,7 @@ class TrufiApp extends StatelessWidget {
     this.customLayers = const [],
     this.mapTileProviders,
     this.searchLocationManager,
-    this.socialMediaItem = const [],
+    this.menuItems,
   })  : assert(configuration != null, "Configuration cannot be empty"),
         assert(theme != null, "Theme cannot be empty"),
         super(key: key) {
@@ -114,10 +114,9 @@ class TrufiApp extends StatelessWidget {
   /// List of [CustomLayerContainer] implementations
   final List<CustomLayerContainer> customLayers;
 
-  ///List of [SocialMediaItem] implementations
-  ///By defaul [Trufi-Core] has some implementation what you can use:
-  /// [FacebookSocialMedia] [InstagramSocialMedia] [TwitterSocialMedia]
-  final List<SocialMediaItem> socialMediaItem;
+  /// Optional extension of Main menu
+  /// By default will be used the [defaultMenuItems]
+  final List<List<MenuItem>> menuItems;
 
   /// List of Map Tile Provider
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
@@ -151,7 +150,7 @@ class TrufiApp extends StatelessWidget {
                     )
                     .languageCode,
               ),
-              socialMediaItem,
+              menuItems ?? defaultMenuItems,
               configuration.map.center,
               showWeather: configuration.showWeather),
         ),
