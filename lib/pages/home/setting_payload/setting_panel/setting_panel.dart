@@ -159,50 +159,53 @@ class SettingPanel extends StatelessWidget {
                             child: Text(localization.commonCitybikes,
                                 style: theme.textTheme.bodyText1),
                           ),
-                          CustomSwitchTile(
-                            title:
-                                localization.instructionVehicleSharingRegioRad,
-                            secondary: SizedBox(
-                              height: 35,
-                              width: 35,
-                              child: BikeRentalNetwork.regioRad.image,
+                          if (BikeRentalNetwork.regioRad.visible)
+                            CustomSwitchTile(
+                              title: localization
+                                  .instructionVehicleSharingRegioRad,
+                              secondary: SizedBox(
+                                height: 35,
+                                width: 35,
+                                child: BikeRentalNetwork.regioRad.image,
+                              ),
+                              value: state.bikeRentalNetworks
+                                  .contains(BikeRentalNetwork.regioRad),
+                              onChanged: (_) {
+                                payloadDataPlanCubit.setBikeRentalNetwork(
+                                    BikeRentalNetwork.regioRad);
+                              },
                             ),
-                            value: state.bikeRentalNetworks
-                                .contains(BikeRentalNetwork.regioRad),
-                            onChanged: (_) {
-                              payloadDataPlanCubit.setBikeRentalNetwork(
-                                  BikeRentalNetwork.regioRad);
-                            },
-                          ),
-                          CustomSwitchTile(
-                            title: localization.instructionVehicleSharingTaxi,
-                            secondary: SizedBox(
-                              height: 35,
-                              width: 35,
-                              child: BikeRentalNetwork.taxi.image,
+                          if (BikeRentalNetwork.taxi.visible)
+                            CustomSwitchTile(
+                              title: localization.instructionVehicleSharingTaxi,
+                              secondary: SizedBox(
+                                height: 35,
+                                width: 35,
+                                child: BikeRentalNetwork.taxi.image,
+                              ),
+                              value: state.bikeRentalNetworks
+                                  .contains(BikeRentalNetwork.taxi),
+                              onChanged: (_) {
+                                payloadDataPlanCubit.setBikeRentalNetwork(
+                                    BikeRentalNetwork.taxi);
+                              },
                             ),
-                            value: state.bikeRentalNetworks
-                                .contains(BikeRentalNetwork.taxi),
-                            onChanged: (_) {
-                              payloadDataPlanCubit
-                                  .setBikeRentalNetwork(BikeRentalNetwork.taxi);
-                            },
-                          ),
-                          CustomSwitchTile(
-                            title: localization
-                                .instructionVehicleSharingCarSharing,
-                            secondary: SizedBox(
-                              height: 35,
-                              width: 35,
-                              child: BikeRentalNetwork.carSharing.image,
+                          if (BikeRentalNetwork.carSharing.visible)
+                            CustomSwitchTile(
+                              title: localization
+                                  .instructionVehicleSharingCarSharing,
+                              secondary: SizedBox(
+                                height: 35,
+                                width: 35,
+                                child: BikeRentalNetwork.carSharing.image,
+                              ),
+                              value: state.bikeRentalNetworks
+                                  .contains(BikeRentalNetwork.carSharing),
+                              onChanged: (_) {
+                                payloadDataPlanCubit.setBikeRentalNetwork(
+                                    BikeRentalNetwork.carSharing);
+                              },
                             ),
-                            value: state.bikeRentalNetworks
-                                .contains(BikeRentalNetwork.carSharing),
-                            onChanged: (_) {
-                              payloadDataPlanCubit.setBikeRentalNetwork(
-                                  BikeRentalNetwork.carSharing);
-                            },
-                          ),
                         ],
                       ),
                     )
@@ -255,7 +258,7 @@ class SettingPanel extends StatelessWidget {
                     secondary: SizedBox(
                       height: 35,
                       width: 35,
-                      child: carSvg(),
+                      child: parkRideSvg,
                     ),
                     value: state.includeParkAndRideSuggestions,
                     onChanged: (value) =>
