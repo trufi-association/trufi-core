@@ -34,7 +34,7 @@ class PreferencesCubit extends Cubit<PreferenceState> {
 
     // Generate new UUID if missing
     if (correlationId == null) {
-      correlationId = Uuid().v4();
+      correlationId = const Uuid().v4();
       await localRepository.saveCorrelationId(correlationId);
     }
 
