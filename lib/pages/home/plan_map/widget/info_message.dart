@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 class InfoMessage extends StatelessWidget {
   final String message;
   final Widget widget;
+  final EdgeInsetsGeometry margin;
+
   const InfoMessage({
     Key key,
     @required this.message,
     this.widget,
+    this.margin,
   }) : super(key: key);
 
   @override
@@ -14,6 +17,7 @@ class InfoMessage extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       width: 240,
+      margin: margin,
       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       decoration: BoxDecoration(
         color: const Color(0xffe5f2fa),

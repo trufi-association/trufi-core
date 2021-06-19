@@ -43,7 +43,7 @@ class FareComponent {
         : null;
   }
 
-  String get ticketName {
-    return fareId?.substring(fareId.indexOf(':') + 1) ?? '';
+  String getTicketName(String languageCode) {
+    return languageCode == 'en' ? 'Adult' : 'Regulär';
   }
 }
