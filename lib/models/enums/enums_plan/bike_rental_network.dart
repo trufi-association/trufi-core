@@ -21,10 +21,17 @@ extension BikeRentalNetworkExtension on BikeRentalNetwork {
     BikeRentalNetwork.carSharing: SvgPicture.string(carSharing ?? ""),
     BikeRentalNetwork.regioRad: SvgPicture.string(regioRad ?? ""),
   };
+
   static final colors = <BikeRentalNetwork, Color>{
     BikeRentalNetwork.taxi: const Color(0xfff1b736),
     BikeRentalNetwork.carSharing: const Color(0xffff834a),
     BikeRentalNetwork.regioRad: const Color(0xff009fe4),
+  };
+
+  static final visibles = <BikeRentalNetwork, bool>{
+    BikeRentalNetwork.taxi: false,
+    BikeRentalNetwork.carSharing: false,
+    BikeRentalNetwork.regioRad: true,
   };
 
   String get name => values[this] ?? 'car-sharing';
@@ -32,6 +39,8 @@ extension BikeRentalNetworkExtension on BikeRentalNetwork {
   SvgPicture get image => images[this] ?? SvgPicture.string(carSharing ?? "");
 
   Color get color => colors[this] ?? Colors.black;
+
+  bool get visible => visibles[this] ?? false;
 }
 
 const defaultBikeRentalNetworks = <BikeRentalNetwork>[

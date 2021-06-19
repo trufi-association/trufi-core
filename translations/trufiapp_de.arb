@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-17T12:42:18+02:00",
+    "@@last_modified": "2021-06-18T14:56:20+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -129,7 +129,7 @@
     "@commonMapSettings": {
         "description": "General Map Settings label"
     },
-    "commonMoreInformartion": "Weitere Informationen",
+    "commonMoreInformartion": "Mehr Infos",
     "@commonMoreInformartion": {
         "description": "General More informartion label"
     },

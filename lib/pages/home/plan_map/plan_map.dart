@@ -185,7 +185,7 @@ class PlanMapPageState extends State<PlanMapPage>
     bool hasGesture,
   ) {
     if (_data.selectedBounds != null && _data.selectedBounds.isValid) {
-      _cropButtonKey.currentState.setVisible(
+      _cropButtonKey?.currentState?.setVisible(
         visible: !position.bounds.containsBounds(_data.selectedBounds),
       );
     }
@@ -416,7 +416,7 @@ class PlanMapPageStateData {
                     ? Color(int.tryParse("0xFF${leg.route.color}"))
                     : Colors.grey,
                 leg,
-                icon: (leg?.route?.shortName ?? '').startsWith('RT')
+                icon: (leg?.route?.type ?? 0) == 715
                     ? onDemandTaxiSvg(color: 'FFFFFF')
                     : null,
                 onTap: () => onTap(itinerary),

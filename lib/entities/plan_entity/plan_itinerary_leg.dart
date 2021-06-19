@@ -18,6 +18,7 @@ class PlanItineraryLeg {
     this.transitLeg,
     this.rentedBike,
     this.pickupBookingInfo,
+    this.dropOffBookingInfo,
     this.interlineWithPreviousLeg,
     this.accumulatedPoints = const [],
   }) {
@@ -43,6 +44,7 @@ class PlanItineraryLeg {
   static const _rentedBike = "rentedBike";
   static const _interlineWithPreviousLeg = "interlineWithPreviousLeg";
   static const _pickupBookingInfo = "pickupBookingInfo";
+  static const _dropOffBookingInfo = "dropOffBookingInfo";
 
   final String points;
   final String mode;
@@ -60,6 +62,7 @@ class PlanItineraryLeg {
   final bool rentedBike;
   final bool interlineWithPreviousLeg;
   final PickupBookingInfo pickupBookingInfo;
+  final BookingInfo dropOffBookingInfo;
   final List<PlaceEntity> intermediatePlaces;
 
   TransportMode transportMode;
@@ -103,6 +106,10 @@ class PlanItineraryLeg {
             ? PickupBookingInfo.fromMap(
                 json[_pickupBookingInfo] as Map<String, dynamic>)
             : null,
+        dropOffBookingInfo: json[_dropOffBookingInfo] != null
+            ? BookingInfo.fromMap(
+                json[_dropOffBookingInfo] as Map<String, dynamic>)
+            : null,
         transitLeg: json[_transitLeg] as bool,
         intermediatePlace: json[_intermediatePlace] as bool,
         rentedBike: json[_rentedBike] as bool,
@@ -128,6 +135,7 @@ class PlanItineraryLeg {
           ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
           : null,
       _pickupBookingInfo: pickupBookingInfo?.toMap(),
+      _dropOffBookingInfo: dropOffBookingInfo?.toMap(),
       _intermediatePlace: intermediatePlace,
       _transitLeg: transitLeg,
       _rentedBike: rentedBike,
@@ -152,6 +160,7 @@ class PlanItineraryLeg {
     bool interlineWithPreviousLeg,
     List<PlaceEntity> intermediatePlaces,
     PickupBookingInfo pickupBookingInfo,
+    BookingInfo dropOffBookingInfo,
     List<LatLng> accumulatedPoints,
   }) {
     return PlanItineraryLeg(
@@ -172,6 +181,7 @@ class PlanItineraryLeg {
           interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
       pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
+      dropOffBookingInfo: dropOffBookingInfo ?? this.dropOffBookingInfo,
       accumulatedPoints: accumulatedPoints ?? this.accumulatedPoints,
     );
   }

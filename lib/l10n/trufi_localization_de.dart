@@ -106,7 +106,7 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get commonMapSettings => 'Karteneinstellungen';
 
   @override
-  String get commonMoreInformartion => 'Weitere Informationen';
+  String get commonMoreInformartion => 'Mehr Infos';
 
   @override
   String get commonNoInternet => 'Keine Internetverbindung.';

@@ -33,7 +33,7 @@ class TransitLeg extends StatelessWidget {
                       leg.fromPlace.bikeRentalStation != null
                   ? Colors.white
                   : Colors.black,
-          icon: (leg?.route?.shortName ?? '').startsWith('RT')
+          icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode == TransportMode.bicycle &&
                       leg.fromPlace.bikeRentalStation != null
@@ -47,14 +47,15 @@ class TransitLeg extends StatelessWidget {
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
         ),
-        if (leg.pickupBookingInfo != null)
+        if (leg.dropOffBookingInfo != null)
           Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: InfoMessage(
-                  message: leg.pickupBookingInfo.message,
-                  widget: leg.pickupBookingInfo.contactInfo?.infoUrl != null
+                  message:
+                      '${leg.dropOffBookingInfo.message ?? ''} ${leg.dropOffBookingInfo.dropOffMessage ?? ''}',
+                  widget: leg.dropOffBookingInfo.contactInfo?.infoUrl != null
                       ? RichText(
                           text: TextSpan(
                             style: theme.primaryTextTheme.bodyText2.copyWith(
@@ -63,19 +64,19 @@ class TransitLeg extends StatelessWidget {
                             text: localization.commonMoreInformartion,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                launch(
-                                    leg.pickupBookingInfo.contactInfo?.infoUrl);
+                                launch(leg
+                                    .dropOffBookingInfo.contactInfo?.infoUrl);
                               },
                           ),
                         )
                       : null,
                 ),
               ),
-              if (leg.pickupBookingInfo.contactInfo?.phoneNumber != null)
+              if (leg.dropOffBookingInfo.contactInfo?.phoneNumber != null)
                 GestureDetector(
                   onTap: () {
                     launch(
-                      "tel:${leg.pickupBookingInfo.contactInfo?.phoneNumber}",
+                      "tel:${leg.dropOffBookingInfo.contactInfo?.phoneNumber}",
                     );
                   },
                   child: Container(
@@ -87,16 +88,16 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      '${localization.commonCall}  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
+                      '${localization.commonCall}  ${leg.dropOffBookingInfo.contactInfo?.phoneNumber}',
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              if (leg.pickupBookingInfo.contactInfo?.bookingUrl != null)
+              if (leg.dropOffBookingInfo.contactInfo?.bookingUrl != null)
                 GestureDetector(
                   onTap: () {
-                    launch(leg.pickupBookingInfo.contactInfo?.bookingUrl);
+                    launch(leg.dropOffBookingInfo.contactInfo?.bookingUrl);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),

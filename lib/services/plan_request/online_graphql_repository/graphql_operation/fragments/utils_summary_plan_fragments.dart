@@ -338,8 +338,9 @@ fragment ItineraryTab_itinerary on Itinerary {
         id
       }
     }
-    pickupBookingInfo {
+    dropOffBookingInfo {
       message
+      dropOffMessage
       contactInfo {
         phoneNumber
         infoUrl
@@ -377,6 +378,7 @@ fragment ItineraryTab_itinerary on Itinerary {
       shortName
       color
       gtfsId
+      type
       longName
       desc
       agency {
