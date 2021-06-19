@@ -156,12 +156,12 @@ packages:
     source: hosted
     version: "0.15.2"
   crypto:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.5"
+    version: "3.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -966,7 +966,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.2"
+    version: "3.0.4"
   uuid_enhanced:
     dependency: transitive
     description:
