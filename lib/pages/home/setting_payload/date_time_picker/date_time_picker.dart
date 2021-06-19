@@ -13,15 +13,40 @@ class DateTimePicker extends StatefulWidget {
   _DateTimePickerState createState() => _DateTimePickerState();
 }
 
-class _DateTimePickerState extends State<DateTimePicker> {
+class _DateTimePickerState extends State<DateTimePicker>
+    with SingleTickerProviderStateMixin {
   static const _styleOptions = TextStyle(fontSize: 16);
   final _nowDate = DateTime.now().roundDown(delta: const Duration(minutes: 15));
+  TabController _controller;
   DateTimeConf tempDateConf;
 
   @override
   void initState() {
     tempDateConf = widget.dateConf;
     super.initState();
+    _controller = TabController(
+        length: 3, initialIndex: tempDateConf.isArriveBy ? 2 : 1, vsync: this);
+    _controller.addListener(() {
+      if (_controller.index == 0) {
+        setState(() {
+          Navigator.of(context).pop(const DateTimeConf(null));
+        });
+      } else if (_controller.index == 1) {
+        setState(() {
+          tempDateConf = tempDateConf.copyWith(isArriveBy: false);
+        });
+      } else if (_controller.index == 2) {
+        setState(() {
+          tempDateConf = tempDateConf.copyWith(isArriveBy: true);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,101 +56,47 @@ class _DateTimePickerState extends State<DateTimePicker> {
     return Container(
       height: MediaQuery.of(context).size.height *
           (MediaQuery.of(context).orientation == Orientation.portrait
-              ? 0.4
+              ? 0.35
               : 0.6),
       color: theme.backgroundColor,
       child: Column(
         children: [
-          Row(
-            children: <Widget>[
-              CupertinoButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  localization.commonCancel,
-                  textAlign: TextAlign.left,
+          TabBar(
+            labelPadding: const EdgeInsets.only(top: 18, bottom: 10),
+            controller: _controller,
+            indicatorWeight: 3,
+            tabs: [
+              Text(
+                localization.commonLeavingNow,
+                style: _styleOptions.copyWith(
+                  color: theme.textTheme.bodyText1.color,
+                  fontWeight: FontWeight.w400,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const Spacer(),
-              CupertinoButton(
-                onPressed: () {
-                  Navigator.of(context).pop(const DateTimeConf(null));
-                },
-                child: Text(
-                  localization.commonLeavingNow,
+              Text(
+                localization.commonDeparture,
+                style: _styleOptions.copyWith(
+                  color: tempDateConf.isArriveBy
+                      ? Colors.grey[700]
+                      : theme.textTheme.bodyText2.color,
+                  fontWeight: tempDateConf.isArriveBy
+                      ? FontWeight.w400
+                      : FontWeight.w400,
                 ),
+                textAlign: TextAlign.center,
               ),
-              CupertinoButton(
-                onPressed: () {
-                  Navigator.of(context).pop(
-                    tempDateConf.copyWith(date: tempDateConf.date ?? _nowDate),
-                  );
-                },
-                child: Text(localization.commonOK),
-              ),
-            ],
-          ),
-          const Divider(height: 0, thickness: 1),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 40,
-                  margin: const EdgeInsets.fromLTRB(20, 5, 5, 0),
-                  decoration: BoxDecoration(
-                    color: tempDateConf.isArriveBy
-                        ? theme.backgroundColor
-                        : theme.primaryColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        tempDateConf = tempDateConf.copyWith(isArriveBy: false);
-                      });
-                    },
-                    child: Text(
-                      localization.commonDeparture,
-                      style: _styleOptions.copyWith(
-                        color: tempDateConf.isArriveBy
-                            ? theme.textTheme.bodyText1.color
-                            : theme.textTheme.subtitle1.color,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+              Text(
+                localization.commonArrival,
+                style: _styleOptions.copyWith(
+                  color: !tempDateConf.isArriveBy
+                      ? Colors.grey[700]
+                      : theme.textTheme.bodyText2.color,
+                  fontWeight: !tempDateConf.isArriveBy
+                      ? FontWeight.w400
+                      : FontWeight.w400,
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  height: 40,
-                  margin: const EdgeInsets.fromLTRB(5, 5, 20, 0),
-                  decoration: BoxDecoration(
-                    color: !tempDateConf.isArriveBy
-                        ? theme.backgroundColor
-                        : theme.primaryColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        tempDateConf = tempDateConf.copyWith(isArriveBy: true);
-                      });
-                    },
-                    child: Text(
-                      localization.commonArrival,
-                      style: _styleOptions.copyWith(
-                        color: !tempDateConf.isArriveBy
-                            ? theme.textTheme.bodyText1.color
-                            : theme.textTheme.subtitle1.color,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -143,6 +114,45 @@ class _DateTimePickerState extends State<DateTimePicker> {
               minimumDate: _nowDate,
               maximumDate: _nowDate.add(const Duration(days: 30)),
               minuteInterval: 15,
+            ),
+          ),
+          const Divider(height: 0, thickness: 1),
+          IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: SafeArea(
+                    child: CupertinoButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        localization.commonCancel.toUpperCase(),
+                        style: theme.textTheme.bodyText1,
+                      ),
+                    ),
+                  ),
+                ),
+                const VerticalDivider(
+                  thickness: 1,
+                ),
+                Expanded(
+                  child: SafeArea(
+                    child: CupertinoButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(
+                          tempDateConf.copyWith(
+                              date: tempDateConf.date ?? _nowDate),
+                        );
+                      },
+                      child: Text(
+                        localization.commonOK.toUpperCase(),
+                        style: theme.textTheme.bodyText2,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
