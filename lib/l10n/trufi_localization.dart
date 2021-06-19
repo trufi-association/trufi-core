@@ -164,6 +164,18 @@ abstract class TrufiLocalization {
   /// **'Enjoying Trufi?'**
   String get appReviewDialogTitle;
 
+  /// This car park is close to capacity
+  ///
+  /// In en, this message translates to:
+  /// **'This car park is close to capacity. Please allow additional time for you journey.'**
+  String get carParkCloseCapacityMessage;
+
+  /// Car Park Exclude Full parks label
+  ///
+  /// In en, this message translates to:
+  /// **'Exclude full car parks'**
+  String get carParkExcludeFull;
+
   /// Page subtitle when choosing a location on the map
   ///
   /// In en, this message translates to:
@@ -698,6 +710,36 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Walk {duration} ({distance}) to\n{location}'**
   String instructionWalk(Object distance, Object duration, Object location);
+
+  /// Itinerary Buy tickets label
+  ///
+  /// In en, this message translates to:
+  /// **'Buy tickets'**
+  String get itineraryBuyTicket;
+
+  /// Itinerary No price information label
+  ///
+  /// In en, this message translates to:
+  /// **'No price information'**
+  String get itineraryMissingPrice;
+
+  /// Itinerary Price Only PublicTransport label
+  ///
+  /// In en, this message translates to:
+  /// **'Price only valid for public transport part of the journey.'**
+  String get itineraryPriceOnlyPublicTransport;
+
+  /// Itinerary Ticket Title label
+  ///
+  /// In en, this message translates to:
+  /// **'Required tickets'**
+  String get itineraryTicketsTitle;
+
+  /// Itinerary Ticket Title label
+  ///
+  /// In en, this message translates to:
+  /// **'Required ticket'**
+  String get itineraryTicketTitle;
 
   /// Label for the Map types
   ///
