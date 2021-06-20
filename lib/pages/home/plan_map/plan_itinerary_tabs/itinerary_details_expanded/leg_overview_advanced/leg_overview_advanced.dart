@@ -191,9 +191,11 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                   if (index == compresedLegs.length - 1)
                     Column(
                       children: [
-                        if (itineraryLeg.transportMode == TransportMode.walk)
+                        if (itineraryLeg.transportMode == TransportMode.walk &&
+                            compresedLegs.length > 1)
                           WalkDash(leg: itineraryLeg)
-                        else
+                        else if (itineraryLeg.transportMode !=
+                            TransportMode.walk)
                           TransportDash(
                             leg: itineraryLeg,
                           ),
