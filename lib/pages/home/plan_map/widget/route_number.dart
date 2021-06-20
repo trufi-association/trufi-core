@@ -72,32 +72,48 @@ class RouteNumber extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 8),
-                width: 150,
-                child: Text(
-                  tripHeadSing ?? '',
-                  style: theme.primaryTextTheme.bodyText1,
-                  overflow: TextOverflow.visible,
+              if (transportMode != TransportMode.bicycle)
+                Container(
+                  margin: const EdgeInsets.only(left: 8),
+                  width: 150,
+                  child: Text(
+                    tripHeadSing ?? '',
+                    style: theme.primaryTextTheme.bodyText1,
+                    overflow: TextOverflow.visible,
+                  ),
+                )
+              else
+                Row(
+                  children: [
+                    Text(
+                      duration ?? '',
+                      style: theme.primaryTextTheme.bodyText1,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      distance ?? '',
+                      style: theme.primaryTextTheme.bodyText1,
+                    ),
+                  ],
                 ),
-              ),
             ],
           ),
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            Text(
-              duration ?? '',
-              style: theme.primaryTextTheme.bodyText1,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              distance ?? '',
-              style: theme.primaryTextTheme.bodyText1,
-            ),
-          ],
-        ),
+        if (transportMode != TransportMode.bicycle)
+          Row(
+            children: [
+              Text(
+                duration ?? '',
+                style: theme.primaryTextTheme.bodyText1,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                distance ?? '',
+                style: theme.primaryTextTheme.bodyText1,
+              ),
+            ],
+          ),
       ],
     );
   }
