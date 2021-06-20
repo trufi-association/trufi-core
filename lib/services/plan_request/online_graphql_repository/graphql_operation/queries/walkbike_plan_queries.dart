@@ -32,6 +32,7 @@ query SummaryPage_WalkBike_Query(
   $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
+  $bannedVehicleParkingTags: [String]
 ) {
   walkPlan: plan(
     fromPlace: $fromPlace,
@@ -363,6 +364,7 @@ query SummaryPage_WalkBike_Query(
     unpreferred: $unpreferred, 
     locale: $locale,
     useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
+    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeCarParkQuery) {
     from{
       name,
@@ -458,6 +460,7 @@ query SummaryPage_WalkBike_Query(
     unpreferred: $unpreferred, 
     locale: $locale,
     useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
+    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeParkRideQuery) {
     from{
       name,

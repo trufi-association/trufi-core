@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-19T23:01:04+02:00",
+    "@@last_modified": "2021-06-20T05:18:42+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -37,11 +37,11 @@
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
     },
-    "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
+    "carParkCloseCapacityMessage": "Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.",
     "@carParkCloseCapacityMessage": {
         "description": "This car park is close to capacity"
     },
-    "carParkExcludeFull": "Exclude full car parks",
+    "carParkExcludeFull": "Volle Parkplätze ausschließen",
     "@carParkExcludeFull": {
         "description": "Car Park Exclude Full parks label"
     },
@@ -473,23 +473,23 @@
         },
         "description": "Itinerary instruction (walking)"
     },
-    "itineraryBuyTicket": "Buy tickets",
+    "itineraryBuyTicket": "Tickets kaufen",
     "@itineraryBuyTicket": {
         "description": "Itinerary Buy tickets label"
     },
-    "itineraryMissingPrice": "No price information",
+    "itineraryMissingPrice": "Keine Preisangabe möglich",
     "@itineraryMissingPrice": {
         "description": "Itinerary No price information label"
     },
-    "itineraryPriceOnlyPublicTransport": "Price only valid for public transport part of the journey.",
+    "itineraryPriceOnlyPublicTransport": "Preisauskunft nur für ÖPNV gültig.",
     "@itineraryPriceOnlyPublicTransport": {
         "description": "Itinerary Price Only PublicTransport label"
     },
-    "itineraryTicketsTitle": "Required tickets",
+    "itineraryTicketsTitle": "Benötigte Fahrkarten",
     "@itineraryTicketsTitle": {
         "description": "Itinerary Ticket Title label"
     },
-    "itineraryTicketTitle": "Required ticket",
+    "itineraryTicketTitle": "Benötigte Fahrkarte",
     "@itineraryTicketTitle": {
         "description": "Itinerary Ticket Title label"
     },

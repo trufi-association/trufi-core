@@ -45,7 +45,10 @@ class RouteNumber extends StatelessWidget {
                 SizedBox(
                     height: 20,
                     width: 20,
-                    child: transportMode.getImage(color: Colors.white)),
+                    child: transportMode.getImage(
+                        color: transportMode == TransportMode.bicycle
+                            ? transportMode.color
+                            : Colors.white)),
               if (transportMode != TransportMode.walk &&
                   transportMode != TransportMode.bicycle)
                 Padding(

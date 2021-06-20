@@ -63,19 +63,23 @@ class ModesTransport {
 
   ModesTransportEntity toModesTransport() {
     return ModesTransportEntity(
-      walkPlan: walkPlan?.toPlan(),
-      bikePlan: bikePlan?.toPlan(),
-      bikeAndPublicPlan: bikeAndPublicPlan?.toPlan(),
-      bikeParkPlan: bikeParkPlan?.toPlan(),
-      carPlan: carPlan?.toPlan(),
-      carParkPlan: carParkPlan?.toPlan(),
-      parkRidePlan: parkRidePlan?.toPlan(),
-      onDemandTaxiPlan: onDemandTaxiPlan?.toPlan()?.copyWith(
-          itineraries: onDemandTaxiPlan.itineraries
-              .where((itinerary) =>
-                  !itinerary.legs.every((leg) => leg.mode == Mode.walk))
-              .map((e) => e.toPlanItinerary())
-              .toList()),
+      walkPlan: walkPlan?.toPlan()?.copyWith(type: 'walkPlan'),
+      bikePlan: bikePlan?.toPlan()?.copyWith(type: 'bikePlan'),
+      bikeAndPublicPlan:
+          bikeAndPublicPlan?.toPlan()?.copyWith(type: 'bikeAndPublicPlan'),
+      bikeParkPlan: bikeParkPlan?.toPlan()?.copyWith(type: 'bikeParkPlan'),
+      carPlan: carPlan?.toPlan()?.copyWith(type: 'carPlan'),
+      carParkPlan: carParkPlan?.toPlan()?.copyWith(type: 'carParkPlan'),
+      parkRidePlan: parkRidePlan?.toPlan()?.copyWith(type: 'parkRidePlan'),
+      onDemandTaxiPlan: onDemandTaxiPlan
+          ?.toPlan()
+          ?.copyWith(
+              itineraries: onDemandTaxiPlan.itineraries
+                  .where((itinerary) =>
+                      !itinerary.legs.every((leg) => leg.mode == Mode.walk))
+                  .map((e) => e.toPlanItinerary())
+                  .toList())
+          ?.copyWith(type: 'onDemandTaxiPlan'),
     );
   }
 }

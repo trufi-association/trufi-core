@@ -996,13 +996,13 @@ abstract class TrufiLocalization {
   /// Bike and Ride configuration panel label
   ///
   /// In en, this message translates to:
-  /// **'Bike and Ride'**
+  /// **'Bike & Ride'**
   String get settingPanelMyModesTransportBikeRide;
 
   /// Park and Ride configuration panel label
   ///
   /// In en, this message translates to:
-  /// **'Park and Ride'**
+  /// **'Park & Ride'**
   String get settingPanelMyModesTransportParkRide;
 
   /// Transport Modes configuration panel label

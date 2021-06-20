@@ -10,6 +10,7 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
@@ -97,12 +98,15 @@ class HomePage extends StatelessWidget {
               child: homePageState.plan != null &&
                       homePageState.plan.error == null &&
                       !homePageState.isFetching
-                  ? PlanPage(
-                      homePageState.plan,
-                      homePageState.ad,
-                      customOverlayWidget,
-                      customBetweenFabWidget,
-                    )
+                  ? BlocBuilder<HomePageCubit, MapRouteState>(
+                      builder: (context, state) {
+                      return PlanPage(
+                        homePageState.plan,
+                        homePageState.ad,
+                        customOverlayWidget,
+                        customBetweenFabWidget,
+                      );
+                    })
                   : PlanEmptyPage(
                       onFetchPlan: () {
                         _callFetchPlan(context);
