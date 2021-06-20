@@ -37,10 +37,10 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get appReviewDialogTitle => 'trufi de vi nawoa';
 
   @override
-  String get carParkCloseCapacityMessage => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
+  String get carParkCloseCapacityMessage => 'This car park is close to capacity. Please allow additional time for you journey.';
 
   @override
-  String get carParkExcludeFull => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
+  String get carParkExcludeFull => 'Exclude full car parks';
 
   @override
   String get chooseLocationPageSubtitle => 'keke mortata la.';
@@ -330,19 +330,19 @@ class TrufiLocalizationEe extends TrufiLocalization {
   }
 
   @override
-  String get itineraryBuyTicket => 'Tickets kaufen';
+  String get itineraryBuyTicket => 'Buy tickets';
 
   @override
-  String get itineraryMissingPrice => 'Keine Preisangabe möglich';
+  String get itineraryMissingPrice => 'No price information';
 
   @override
-  String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
+  String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
 
   @override
-  String get itineraryTicketsTitle => 'Benötigte Fahrkarten';
+  String get itineraryTicketsTitle => 'Required tickets';
 
   @override
-  String get itineraryTicketTitle => 'Benötigte Fahrkarte';
+  String get itineraryTicketTitle => 'Required ticket';
 
   @override
   String get mapTypeLabel => 'Map Type';

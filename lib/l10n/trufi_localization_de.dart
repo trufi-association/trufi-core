@@ -37,10 +37,10 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get appReviewDialogTitle => 'Magst du Trufi?';
 
   @override
-  String get carParkCloseCapacityMessage => 'This car park is close to capacity. Please allow additional time for you journey.';
+  String get carParkCloseCapacityMessage => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
 
   @override
-  String get carParkExcludeFull => 'Exclude full car parks';
+  String get carParkExcludeFull => 'Volle Parkplätze ausschließen';
 
   @override
   String get chooseLocationPageSubtitle => 'Karte unter Markierung schwenken und zoomen';
@@ -330,19 +330,19 @@ class TrufiLocalizationDe extends TrufiLocalization {
   }
 
   @override
-  String get itineraryBuyTicket => 'Buy tickets';
+  String get itineraryBuyTicket => 'Tickets kaufen';
 
   @override
-  String get itineraryMissingPrice => 'No price information';
+  String get itineraryMissingPrice => 'Keine Preisangabe möglich';
 
   @override
-  String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
+  String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
 
   @override
-  String get itineraryTicketsTitle => 'Required tickets';
+  String get itineraryTicketsTitle => 'Benötigte Fahrkarten';
 
   @override
-  String get itineraryTicketTitle => 'Required ticket';
+  String get itineraryTicketTitle => 'Benötigte Fahrkarte';
 
   @override
   String get mapTypeLabel => 'Kartentyp';

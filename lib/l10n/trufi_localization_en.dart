@@ -471,10 +471,10 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get settingPanelMyModesTransportBike => 'Bike';
 
   @override
-  String get settingPanelMyModesTransportBikeRide => 'Bike and Ride';
+  String get settingPanelMyModesTransportBikeRide => 'Bike & Ride';
 
   @override
-  String get settingPanelMyModesTransportParkRide => 'Park and Ride';
+  String get settingPanelMyModesTransportParkRide => 'Park & Ride';
 
   @override
   String get settingPanelTransportModes => 'Transport modes';
