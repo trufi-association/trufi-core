@@ -21,7 +21,8 @@ class TicketInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localeName = TrufiLocalization.of(context).localeName;
+    final localization = TrufiLocalization.of(context);
+    final localeName = localization.localeName;
 
     final hasBikeLeg = legs.any(
       (leg) =>
@@ -36,8 +37,9 @@ class TicketInformation extends StatelessWidget {
       if (index == 0) {
         faresInfo.add(
           Text(
-            // TODO translate
-            'Benötigte Fahrkarte:',
+            fares.length > 1
+                ? '${localization.itineraryTicketsTitle}:'
+                : '${localization.itineraryTicketTitle}:',
             style: theme.primaryTextTheme.bodyText1.copyWith(
               color: Colors.grey[600],
             ),
@@ -64,8 +66,7 @@ class TicketInformation extends StatelessWidget {
           ),
           if (ticketUrl != null)
             CustomTextButton(
-              // TODO translate Required ticket
-              text: 'Tickets kaufen',
+              text: localization.itineraryBuyTicket,
               onPressed: () async {
                 if (await canLaunch(ticketUrl)) {
                   await launch(ticketUrl);
@@ -79,9 +80,8 @@ class TicketInformation extends StatelessWidget {
     });
 
     return fares.isEmpty || unknownFares.isNotEmpty
-        ? const InfoMessage(
-            // TODO translate No price information
-            message: 'Keine Preisangabe möglich',
+        ? InfoMessage(
+            message: localization.itineraryMissingPrice,
           )
         : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,10 +96,9 @@ class TicketInformation extends StatelessWidget {
                 ),
               ),
               if (hasBikeLeg)
-                const InfoMessage(
-                  // TODO translate'Price only valid for public transport part of the journey.'
-                  message: 'Preisauskunft nur für ÖPNV gültig.',
-                  margin: EdgeInsets.only(right: 15, top: 5),
+                InfoMessage(
+                  message: localization.itineraryPriceOnlyPublicTransport,
+                  margin: const EdgeInsets.only(right: 15, top: 5),
                 ),
             ],
           );

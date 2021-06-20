@@ -37,6 +37,12 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get appReviewDialogTitle => 'trufi de vi nawoa';
 
   @override
+  String get carParkCloseCapacityMessage => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
+
+  @override
+  String get carParkExcludeFull => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
+
+  @override
   String get chooseLocationPageSubtitle => 'keke mortata la.';
 
   @override
@@ -322,6 +328,21 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String instructionWalk(Object distance, Object duration, Object location) {
     return 'zor';
   }
+
+  @override
+  String get itineraryBuyTicket => 'Tickets kaufen';
+
+  @override
+  String get itineraryMissingPrice => 'Keine Preisangabe möglich';
+
+  @override
+  String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
+
+  @override
+  String get itineraryTicketsTitle => 'Benötigte Fahrkarten';
+
+  @override
+  String get itineraryTicketTitle => 'Benötigte Fahrkarte';
 
   @override
   String get mapTypeLabel => 'Map Type';

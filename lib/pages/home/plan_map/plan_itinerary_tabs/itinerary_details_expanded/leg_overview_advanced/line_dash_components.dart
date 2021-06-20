@@ -28,6 +28,7 @@ class TransportDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configuration = context.read<ConfigurationCubit>().state;
+    final localization = TrufiLocalization.of(context);
     return Column(
       children: [
         DashLinePlace(
@@ -69,13 +70,10 @@ class TransportDash extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      const InfoMessage(
-                          // TODO translate
-                          message:
-                              "This car park is close to capacity. Please allow additional time for you journey."),
+                      InfoMessage(
+                          message: localization.carParkCloseCapacityMessage),
                       CustomTextButton(
-                        // TODO translate
-                        text: "Exclude full car parks",
+                        text: localization.carParkExcludeFull,
                         onPressed: () {},
                       ),
                     ],

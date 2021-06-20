@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "@@last_modified": "2021-06-18T14:56:20+02:00",
+    "@@last_modified": "2021-06-19T23:01:04+02:00",
     "aboutContent": "We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -36,6 +36,14 @@
     "appReviewDialogTitle": "Enjoying Trufi?",
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
+    },
+    "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
+    "@carParkCloseCapacityMessage": {
+        "description": "This car park is close to capacity"
+    },
+    "carParkExcludeFull": "Exclude full car parks",
+    "@carParkExcludeFull": {
+        "description": "Car Park Exclude Full parks label"
     },
     "chooseLocationPageSubtitle": "Pan & zoom map under pin",
     "@chooseLocationPageSubtitle": {
@@ -464,6 +472,26 @@
             }
         },
         "description": "Itinerary instruction (walking)"
+    },
+    "itineraryBuyTicket": "Buy tickets",
+    "@itineraryBuyTicket": {
+        "description": "Itinerary Buy tickets label"
+    },
+    "itineraryMissingPrice": "No price information",
+    "@itineraryMissingPrice": {
+        "description": "Itinerary No price information label"
+    },
+    "itineraryPriceOnlyPublicTransport": "Price only valid for public transport part of the journey.",
+    "@itineraryPriceOnlyPublicTransport": {
+        "description": "Itinerary Price Only PublicTransport label"
+    },
+    "itineraryTicketsTitle": "Required tickets",
+    "@itineraryTicketsTitle": {
+        "description": "Itinerary Ticket Title label"
+    },
+    "itineraryTicketTitle": "Required ticket",
+    "@itineraryTicketTitle": {
+        "description": "Itinerary Ticket Title label"
     },
     "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
