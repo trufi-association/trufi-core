@@ -33,7 +33,6 @@ class TransportDash extends StatelessWidget {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     final homePageCubit = context.read<HomePageCubit>();
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
-
     return Column(
       children: [
         DashLinePlace(
@@ -75,13 +74,10 @@ class TransportDash extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      const InfoMessage(
-                          // TODO translate
-                          message:
-                              "This car park is close to capacity. Please allow additional time for you journey."),
+                      InfoMessage(
+                          message: localization.carParkCloseCapacityMessage),
                       CustomTextButton(
-                        // TODO translate
-                        text: "Exclude full car parks",
+                        text: localization.carParkExcludeFull,
                         onPressed: () async {
                           await homePageCubit.fetchPlanModeRidePark(
                               localization, payloadDataPlanState);
