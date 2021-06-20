@@ -183,12 +183,14 @@ class TransportSelector extends StatelessWidget {
                           ));
                         },
                         icon: carSvg(),
-                        title: durationToString(localization,
-                            modesTransport.carPlan.itineraries[0].durationTrip),
+                        title: durationToString(
+                            localization,
+                            modesTransport
+                                .carAndCarPark.itineraries[0].durationTrip),
                         subtitle: displayDistanceWithLocale(
                             localization,
                             modesTransport
-                                .carPlan.itineraries[0].totalDistance),
+                                .carAndCarPark.itineraries[0].totalDistance),
                       ),
                     if (modesTransport.existOnDemandTaxi)
                       CardTransportMode(

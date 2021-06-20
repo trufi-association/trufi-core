@@ -93,15 +93,19 @@ class ModesTransportEntity {
     );
   }
 
-  PlanEntity get bikeAndVehicle => bikeAndPublicPlan.copyWith(itineraries: [
+  PlanEntity get bikeAndVehicle =>
+      bikeAndPublicPlan?.copyWith(itineraries: [
         ...filterOnlyBikeAndWalk(bikeParkPlan?.itineraries ?? []),
         ...filterOnlyBikeAndWalk(bikeAndPublicPlan?.itineraries ?? [])
-      ]);
+      ]) ??
+      bikeParkPlan.copyWith(type: 'bikeAndPublicPlan');
 
-  PlanEntity get carAndCarPark => carPlan.copyWith(itineraries: [
+  PlanEntity get carAndCarPark =>
+      carPlan?.copyWith(itineraries: [
         ...carPlan?.itineraries ?? [],
         ...carParkPlan?.itineraries ?? []
-      ]);
+      ]) ??
+      carParkPlan.copyWith(type: 'carPlan');
 
   bool get existWalkPlan =>
       (walkPlan?.itineraries?.isNotEmpty ?? false) &&

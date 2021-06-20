@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/custom_itinerary/custom_itinerary.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
 
-class ModeTransportScreen extends StatefulWidget {
+class ModeTransportScreen extends StatelessWidget {
   final PlanEntity plan;
   final String title;
 
@@ -19,42 +20,81 @@ class ModeTransportScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ModeTransportScreenState createState() => _ModeTransportScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body:
+          BlocBuilder<HomePageCubit, MapRouteState>(builder: (context, state) {
+        PlanEntity currentPlan;
+        switch (plan.type) {
+          case 'walkPlan':
+            currentPlan = state.modesTransport.walkPlan;
+            break;
+          case 'bikePlan':
+            currentPlan = state.modesTransport.bikePlan;
+            break;
+          case 'bikeAndPublicPlan':
+            currentPlan = state.modesTransport.bikeAndVehicle;
+            break;
+          case 'parkRidePlan':
+            currentPlan = state.modesTransport.parkRidePlan;
+            break;
+          case 'carPlan':
+            currentPlan = state.modesTransport.carAndCarPark;
+            break;
+          case 'onDemandTaxiPlan':
+            currentPlan = state.modesTransport.onDemandTaxiPlan;
+            break;
+          default:
+            currentPlan = state.modesTransport.walkPlan;
+        }
+        return PlanTransportScren(
+          planPageController: PlanPageController(currentPlan, null),
+        );
+      }),
+    );
+  }
 }
 
-class _ModeTransportScreenState extends State<ModeTransportScreen>
-    with TickerProviderStateMixin {
-  PlanPageController _planPageController;
-  TabController _tabController;
+class PlanTransportScren extends StatefulWidget {
+  final PlanPageController planPageController;
+  const PlanTransportScren({Key key, @required this.planPageController})
+      : super(key: key);
 
+  @override
+  _PlanTransportScrenState createState() => _PlanTransportScrenState();
+}
+
+class _PlanTransportScrenState extends State<PlanTransportScren>
+    with TickerProviderStateMixin {
+  TabController _tabController;
   @override
   void initState() {
     super.initState();
-    _planPageController = PlanPageController(widget.plan, null);
-    if (_planPageController.plan.itineraries.isNotEmpty) {
-      _planPageController.inSelectedItinerary.add(
-        _planPageController.plan.itineraries.first,
+    if (widget.planPageController.plan.itineraries.isNotEmpty) {
+      widget.planPageController.inSelectedItinerary.add(
+        widget.planPageController.plan.itineraries.first,
       );
     }
     _tabController = TabController(
-      length: _planPageController.plan.itineraries.length,
+      length: widget.planPageController.plan.itineraries.length,
       vsync: this,
     )..addListener(() {
-        _planPageController.inSelectedItinerary.add(
-          _planPageController.plan.itineraries[_tabController.index],
+        widget.planPageController.inSelectedItinerary.add(
+          widget.planPageController.plan.itineraries[_tabController.index],
         );
       });
-    _planPageController.outSelectedItinerary.listen((selectedItinerary) {
+    widget.planPageController.outSelectedItinerary.listen((selectedItinerary) {
       _tabController.animateTo(
-        _planPageController.plan.itineraries.indexOf(selectedItinerary),
+        widget.planPageController.plan.itineraries.indexOf(selectedItinerary),
       );
     });
   }
 
   @override
   void dispose() {
-    _planPageController.dispose();
-    _tabController.dispose();
+    widget.planPageController?.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -63,31 +103,28 @@ class _ModeTransportScreenState extends State<ModeTransportScreen>
     final cfg = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final homePageState = homePageCubit.state;
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Stack(
-        children: [
-          CustomScrollableContainer(
-            openedPosition: 200,
-            body: PlanMapPage(
-              planPageController: _planPageController,
-              customOverlayWidget: null,
-              customBetweenFabWidget: null,
-              markerConfiguration: cfg.markers,
-              transportConfiguration: cfg.transportConf,
-            ),
-            panel: homePageState.isFetching
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : CustomItinerary(
-                    planPageController: _planPageController,
-                  ),
+    return Stack(
+      children: [
+        CustomScrollableContainer(
+          openedPosition: 200,
+          body: PlanMapPage(
+            planPageController: widget.planPageController,
+            customOverlayWidget: null,
+            customBetweenFabWidget: null,
+            markerConfiguration: cfg.markers,
+            transportConfiguration: cfg.transportConf,
           ),
-          if (cfg.animations.loading != null && homePageState.isFetching)
-            Positioned.fill(child: cfg.animations.loading)
-        ],
-      ),
+          panel: homePageState.isFetching
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : CustomItinerary(
+                  planPageController: widget.planPageController,
+                ),
+        ),
+        if (cfg.animations.loading != null && homePageState.isFetching)
+          Positioned.fill(child: cfg.animations.loading)
+      ],
     );
   }
 }

@@ -86,7 +86,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     final tempAdvencedOptions = advancedOptions.copyWith(
         isFreeParkToParkRide: true, isFreeParkToCarPark: true);
     final modesTransportEntity = await _fetchPlanModesState(
-      'wqe',
+      '',
       localization,
       advancedOptions: tempAdvencedOptions,
     ).catchError((error) async {
@@ -150,7 +150,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
       await currentFetchPlanOperation.cancel();
     }
     currentFetchPlanOperation = car
-        ? CancelableOperation.fromFuture(() async {
+        ? CancelableOperation.fromFuture(() {
             return requestManager.fetchCarPlan(
               state.fromPlace,
               state.toPlace,
@@ -158,7 +158,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
             );
           }())
         : CancelableOperation.fromFuture(
-            () async {
+            () {
               return requestManager.fetchAdvancedPlan(
                   from: state.fromPlace,
                   to: state.toPlace,
@@ -194,7 +194,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
       await currentFetchPlanModesOperation.cancel();
     }
     currentFetchPlanModesOperation = CancelableOperation.fromFuture(
-      () async {
+      () {
         return requestManager.fetchTransportModePlan(
             from: state.fromPlace,
             to: state.toPlace,

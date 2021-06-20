@@ -82,8 +82,8 @@ class TransportDash extends StatelessWidget {
                       CustomTextButton(
                         // TODO translate
                         text: "Exclude full car parks",
-                        onPressed: () {
-                          homePageCubit.fetchPlanModeRidePark(
+                        onPressed: () async {
+                          await homePageCubit.fetchPlanModeRidePark(
                               localization, payloadDataPlanState);
                         },
                       ),
