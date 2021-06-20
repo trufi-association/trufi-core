@@ -141,10 +141,11 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                               leg: itineraryLeg,
                               isFirstTransport: true,
                               isNextTransport:
-                                  itineraryLeg.endTime.millisecondsSinceEpoch -
-                                          compresedLegs[index + 1]
-                                              .startTime
-                                              .millisecondsSinceEpoch >=
+                                  (itineraryLeg.endTime.millisecondsSinceEpoch -
+                                              compresedLegs[index + 1]
+                                                  .startTime
+                                                  .millisecondsSinceEpoch)
+                                          .abs() >=
                                       0)
                       ],
                     )
@@ -171,10 +172,11 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                         TransportDash(
                             leg: itineraryLeg,
                             isNextTransport:
-                                itineraryLeg.endTime.millisecondsSinceEpoch -
-                                        compresedLegs[index + 1]
-                                            .startTime
-                                            .millisecondsSinceEpoch >=
+                                (itineraryLeg.endTime.millisecondsSinceEpoch -
+                                            compresedLegs[index + 1]
+                                                .startTime
+                                                .millisecondsSinceEpoch)
+                                        .abs() >=
                                     0),
                         if (itineraryLeg.endTime.millisecondsSinceEpoch <
                             compresedLegs[index + 1]
