@@ -9,6 +9,7 @@ import 'package:latlong/latlong.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/services/models_otp/booking_info.dart';
 import 'package:trufi_core/services/models_otp/pickup_booking_info.dart';
+import 'package:trufi_core/services/models_otp/trip.dart';
 import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'agency_entity.dart';

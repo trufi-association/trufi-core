@@ -210,6 +210,7 @@ class Leg {
       accumulatedPoints: legGeometry?.points != null
           ? decodePolyline(legGeometry?.points)
           : [],
+      trip: trip,
     );
   }
 }

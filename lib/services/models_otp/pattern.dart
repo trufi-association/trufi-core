@@ -83,12 +83,22 @@ class PatternOtp {
         'name': name,
         'code': code,
         'headsign': headsign,
-        'trips': List<dynamic>.from(trips.map((x) => x.toJson())),
-        'tripsForDate': List<dynamic>.from(tripsForDate.map((x) => x.toJson())),
-        'stops': List<dynamic>.from(stops.map((x) => x.toJson())),
-        'geometry': List<dynamic>.from(geometry.map((x) => x.toJson())),
+        'trips': trips != null
+            ? List<dynamic>.from(trips.map((x) => x.toJson()))
+            : null,
+        'tripsForDate': tripsForDate != null
+            ? List<dynamic>.from(tripsForDate.map((x) => x.toJson()))
+            : null,
+        'stops': stops != null
+            ? List<dynamic>.from(stops.map((x) => x.toJson()))
+            : null,
+        'geometry': geometry != null
+            ? List<dynamic>.from(geometry.map((x) => x.toJson()))
+            : null,
         'patternGeometry': patternGeometry?.toJson(),
         'semanticHash': semanticHash,
-        'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'alerts': alerts != null
+            ? List<dynamic>.from(alerts.map((x) => x.toJson()))
+            : null,
       };
 }

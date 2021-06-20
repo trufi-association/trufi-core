@@ -116,16 +116,24 @@ class Alert {
         'route': route?.toJson(),
         'trip': trip?.toJson(),
         'stop': stop?.toJson(),
-        'patterns': List<dynamic>.from(patterns.map((x) => x.toJson())),
+        'patterns': patterns != null
+            ? List<dynamic>.from(patterns.map((x) => x.toJson()))
+            : null,
         'alertHeaderText': alertHeaderText,
-        'alertHeaderTextTranslations': List<dynamic>.from(
-            alertHeaderTextTranslations.map((x) => x.toJson())),
+        'alertHeaderTextTranslations': alertHeaderTextTranslations != null
+            ? List<dynamic>.from(
+                alertHeaderTextTranslations.map((x) => x.toJson()))
+            : null,
         'alertDescriptionText': alertDescriptionText,
-        'alertDescriptionTextTranslations': List<dynamic>.from(
-            alertDescriptionTextTranslations.map((x) => x.toJson())),
+        'alertDescriptionTextTranslations':
+            alertDescriptionTextTranslations != null
+                ? List<dynamic>.from(
+                    alertDescriptionTextTranslations.map((x) => x.toJson()))
+                : null,
         'alertUrl': alertUrl,
-        'alertUrlTranslations':
-            List<dynamic>.from(alertUrlTranslations.map((x) => x.toJson())),
+        'alertUrlTranslations': alertUrlTranslations != null
+            ? List<dynamic>.from(alertUrlTranslations.map((x) => x.toJson()))
+            : null,
         'alertEffect': alertEffect?.name,
         'alertCause': alertCause?.name,
         'alertSeverityLevel': alertSeverityLevel?.name,

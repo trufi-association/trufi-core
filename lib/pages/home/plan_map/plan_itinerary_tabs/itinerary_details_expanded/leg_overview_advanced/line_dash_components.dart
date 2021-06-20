@@ -143,11 +143,15 @@ class WaitDash extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     return Column(
       children: [
-        DashLinePlace(
-          date: legBefore.endTimeString.toString(),
-          location: legBefore.toPlace.name,
-          color: Colors.grey,
-        ),
+        if (legBefore.endTime.millisecondsSinceEpoch -
+                    legAfter.startTime.millisecondsSinceEpoch ==
+                0 ||
+            legBefore.transportMode == TransportMode.walk)
+          DashLinePlace(
+            date: legBefore.endTimeString.toString(),
+            location: legBefore.toPlace.name,
+            color: Colors.grey,
+          ),
         SeparatorPlace(
           color: Colors.grey,
           separator: Container(
