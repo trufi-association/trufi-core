@@ -1,4 +1,3 @@
-
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'trufi_localization.dart';
@@ -10,16 +9,19 @@ class TrufiLocalizationDe extends TrufiLocalization {
   TrufiLocalizationDe([String locale = 'de']) : super(locale);
 
   @override
-  String get aboutContent => 'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.';
+  String get aboutContent =>
+      'Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.';
 
   @override
   String get aboutLicenses => 'Lizenzen';
 
   @override
-  String get aboutOpenSource => 'Diese App ist Open Source und auf GitHub verfügbar. Zögere nicht, einen Beitrag zu leisten oder bringe sie in Deine Stadt!';
+  String get aboutOpenSource =>
+      'Diese App ist Open Source und auf GitHub verfügbar. Zögere nicht, einen Beitrag zu leisten oder bringe sie in Deine Stadt!';
 
   @override
-  String get alertLocationServicesDeniedMessage => 'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.';
+  String get alertLocationServicesDeniedMessage =>
+      'Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.';
 
   @override
   String get alertLocationServicesDeniedTitle => 'Kein Standort';
@@ -31,19 +33,22 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get appReviewDialogButtonDecline => 'Jetzt nicht';
 
   @override
-  String get appReviewDialogContent => 'Unterstütze uns mit einer Bewertung im Google Play Store.';
+  String get appReviewDialogContent =>
+      'Unterstütze uns mit einer Bewertung im Google Play Store.';
 
   @override
   String get appReviewDialogTitle => 'Magst du Trufi?';
 
   @override
-  String get carParkCloseCapacityMessage => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
+  String get carParkCloseCapacityMessage =>
+      'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
 
   @override
   String get carParkExcludeFull => 'Volle Parkplätze ausschließen';
 
   @override
-  String get chooseLocationPageSubtitle => 'Karte unter Markierung schwenken und zoomen';
+  String get chooseLocationPageSubtitle =>
+      'Karte unter Markierung schwenken und zoomen';
 
   @override
   String get chooseLocationPageTitle => 'Ort auswählen';
@@ -184,55 +189,71 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get donate => 'Spenden';
 
   @override
-  String get errorAmbiguousDestination => 'Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
+  String get errorAmbiguousDestination =>
+      'Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
 
   @override
-  String get errorAmbiguousOrigin => 'Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
+  String get errorAmbiguousOrigin =>
+      'Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
 
   @override
-  String get errorAmbiguousOriginDestination => 'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
+  String get errorAmbiguousOriginDestination =>
+      'Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.';
 
   @override
   String get errorCancelledByUser => 'Vom Benutzer abgebrochen';
 
   @override
-  String get errorEmailFeedback => 'Die Feedback App konnte nicht geöffnet werden, die URL oder die E-Mail ist nicht korrekt.';
+  String get errorEmailFeedback =>
+      'Die Feedback App konnte nicht geöffnet werden, die URL oder die E-Mail ist nicht korrekt.';
 
   @override
-  String get errorNoBarrierFree => 'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.';
+  String get errorNoBarrierFree =>
+      'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.';
 
   @override
-  String get errorNoTransitTimes => 'Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zu weit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.';
+  String get errorNoTransitTimes =>
+      'Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zu weit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.';
 
   @override
-  String get errorOutOfBoundary => 'Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.';
+  String get errorOutOfBoundary =>
+      'Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.';
 
   @override
-  String get errorPathNotFound => 'Dieser Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (dies ist beispielsweise der Fall, wenn Sie sich in einer Wohnstraße befinden, die nur mit einer Autobahn verbunden ist).';
+  String get errorPathNotFound =>
+      'Dieser Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (dies ist beispielsweise der Fall, wenn Sie sich in einer Wohnstraße befinden, die nur mit einer Autobahn verbunden ist).';
 
   @override
-  String get errorServerCanNotHandleRequest => 'Die Anfrage enthält Fehler, die der Server nicht verarbeiten kann.';
+  String get errorServerCanNotHandleRequest =>
+      'Die Anfrage enthält Fehler, die der Server nicht verarbeiten kann.';
 
   @override
-  String get errorServerTimeout => 'Das Bearbeiten ihrer Anfrage dauert zu lange. Bitte versuchen Sie es später erneut.';
+  String get errorServerTimeout =>
+      'Das Bearbeiten ihrer Anfrage dauert zu lange. Bitte versuchen Sie es später erneut.';
 
   @override
-  String get errorServerUnavailable => 'Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.';
+  String get errorServerUnavailable =>
+      'Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.';
 
   @override
-  String get errorTrivialDistance => 'Der Startpunkt liegt in einer trivialen Entfernung zum Ziel.';
+  String get errorTrivialDistance =>
+      'Der Startpunkt liegt in einer trivialen Entfernung zum Ziel.';
 
   @override
-  String get errorUnknownDestination => 'Das Ziel ist unbekannt. Können Sie ein bisschen genauer sein?';
+  String get errorUnknownDestination =>
+      'Das Ziel ist unbekannt. Können Sie ein bisschen genauer sein?';
 
   @override
-  String get errorUnknownOrigin => 'Der Startpunkt ist unbekannt. Können Sie ein bisschen genauer sein?';
+  String get errorUnknownOrigin =>
+      'Der Startpunkt ist unbekannt. Können Sie ein bisschen genauer sein?';
 
   @override
-  String get errorUnknownOriginDestination => 'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?';
+  String get errorUnknownOriginDestination =>
+      'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?';
 
   @override
-  String get feedbackContent => 'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.';
+  String get feedbackContent =>
+      'Haben Sie Vorschläge für unsere App oder haben Sie Fehler in den Daten gefunden? Wir würden gerne von Ihnen hören! Bitte geben Sie Ihre E-Mail-Adresse oder Ihre Telefonnummer an, damit wir Ihnen antworten können.';
 
   @override
   String get feedbackTitle => 'E-Mail senden';
@@ -272,7 +293,8 @@ class TrufiLocalizationDe extends TrufiLocalization {
   }
 
   @override
-  String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
+  String instructionRide(
+      Object vehicle, Object distance, Object duration, Object location) {
     return 'Fahren Sie mit ${vehicle} ${duration} (${distance}) bis ${location}';
   }
 
@@ -336,7 +358,8 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get itineraryMissingPrice => 'Keine Preisangabe möglich';
 
   @override
-  String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
+  String get itineraryPriceOnlyPublicTransport =>
+      'Preisauskunft nur für ÖPNV gültig.';
 
   @override
   String get itineraryTicketsTitle => 'Benötigte Fahrkarten';
@@ -381,7 +404,8 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get menuYourPlaces => 'Favoriten';
 
   @override
-  String get noRouteError => 'Wir konnten leider keine Route finden. Was möchten Sie tun?';
+  String get noRouteError =>
+      'Wir konnten leider keine Route finden. Was möchten Sie tun?';
 
   @override
   String get noRouteErrorActionCancel => 'Anderes Ziel auswählen';
@@ -496,7 +520,8 @@ class TrufiLocalizationDe extends TrufiLocalization {
   }
 
   @override
-  String get teamContent => 'Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mithilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:';
+  String get teamContent =>
+      'Wir sind ein internationales Team mit dem Namen Trufi Association, das diese App mithilfe vieler Freiwilliger erstellt hat! Möchtest du mithelfen, die Trufi App zu verbessern und Teil unseres Teams sein? Bitte kontaktiere uns über:';
 
   @override
   String teamSectionRepresentatives(Object representatives) {
