@@ -44,6 +44,7 @@ class TransitLeg extends StatelessWidget {
           text: leg?.route?.shortName != null
               ? leg.route.shortName
               : leg.transportMode.getTranslate(localization),
+          tripHeadSing: leg.headSign,
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
         ),
