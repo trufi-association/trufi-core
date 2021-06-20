@@ -102,13 +102,15 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
       });
     }
 
-    if (panelCubit.state.panel != null) {
-      _trufiMapController.move(
-        center: panelCubit.state.panel.positon,
-        zoom: 16,
-        tickerProvider: this,
-      );
-    }
+    _trufiMapController.mapController.onReady.then((value) {
+      if (panelCubit.state.panel != null) {
+        _trufiMapController.move(
+          center: panelCubit.state.panel.positon,
+          zoom: 16,
+          tickerProvider: this,
+        );
+      }
+    });
     return CustomScrollableContainer(
       openedPosition: 200,
       body: Stack(
