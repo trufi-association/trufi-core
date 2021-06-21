@@ -72,7 +72,8 @@ class RouteNumber extends StatelessWidget {
                   ],
                 ),
               ),
-              if (transportMode != TransportMode.bicycle)
+              if (transportMode != TransportMode.bicycle &&
+                  transportMode != TransportMode.car)
                 Container(
                   margin: const EdgeInsets.only(left: 8),
                   width: 150,
@@ -85,6 +86,7 @@ class RouteNumber extends StatelessWidget {
               else
                 Row(
                   children: [
+                    const SizedBox(width: 8),
                     Text(
                       duration ?? '',
                       style: theme.primaryTextTheme.bodyText1,
@@ -100,7 +102,8 @@ class RouteNumber extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        if (transportMode != TransportMode.bicycle)
+        if (transportMode != TransportMode.bicycle &&
+            transportMode != TransportMode.car)
           Row(
             children: [
               Text(

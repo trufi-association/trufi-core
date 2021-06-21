@@ -6,6 +6,7 @@ import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/gps_location/location_provider_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
@@ -73,13 +74,20 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
               // TODO: improve onShowCarRoute action
               final homePageCubit = dialogContext.read<HomePageCubit>();
               final appReviewCubit = dialogContext.read<AppReviewCubit>();
+              final payloadDataPlanState =
+                  context.read<PayloadDataPlanCubit>().state;
               homePageCubit.updateMapRouteState(
                 homePageCubit.state.copyWith(isFetching: true),
               );
               final correlationId =
                   dialogContext.read<PreferencesCubit>().state.correlationId;
               homePageCubit
-                  .fetchPlan(correlationId, localization, car: true)
+                  .fetchPlan(
+                    correlationId,
+                    localization,
+                    car: true,
+                    advancedOptions: payloadDataPlanState,
+                  )
                   .then(
                       (value) => appReviewCubit.incrementReviewWorthyActions())
                   .catchError(
