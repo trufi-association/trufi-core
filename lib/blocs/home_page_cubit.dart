@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
@@ -151,11 +152,19 @@ class HomePageCubit extends Cubit<MapRouteState> {
     }
     currentFetchPlanOperation = car
         ? CancelableOperation.fromFuture(() {
-            return requestManager.fetchCarPlan(
-              state.fromPlace,
-              state.toPlace,
-              correlationId,
-            );
+            return advancedOptions != null
+                ? requestManager.fetchAdvancedPlan(
+                    from: state.fromPlace,
+                    to: state.toPlace,
+                    correlationId: correlationId,
+                    advancedOptions: advancedOptions
+                        .copyWith(transportModes: [TransportMode.car]),
+                  )
+                : requestManager.fetchCarPlan(
+                    state.fromPlace,
+                    state.toPlace,
+                    correlationId,
+                  );
           }())
         : CancelableOperation.fromFuture(
             () {
