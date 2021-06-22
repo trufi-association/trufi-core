@@ -46,7 +46,7 @@ class PlanPageController {
   PlanItinerary get selectedItinerary => _selectedItinerary;
 }
 
-class PlanPage extends StatefulWidget {
+class PlanPage extends StatelessWidget {
   final PlanEntity plan;
   final AdEntity ad;
   final LocaleWidgetBuilder customOverlayWidget;
@@ -55,39 +55,60 @@ class PlanPage extends StatefulWidget {
   const PlanPage(
       this.plan, this.ad, this.customOverlayWidget, this.customBetweenFabWidget,
       {Key key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CurrentPlanPage(
+      plan,
+      PlanPageController(plan, ad),
+      customOverlayWidget,
+      customBetweenFabWidget,
+    );
+  }
+}
+
+class CurrentPlanPage extends StatefulWidget {
+  final PlanPageController planPageController;
+  final PlanEntity plan;
+  final LocaleWidgetBuilder customOverlayWidget;
+  final WidgetBuilder customBetweenFabWidget;
+
+  const CurrentPlanPage(this.plan, this.planPageController,
+      this.customOverlayWidget, this.customBetweenFabWidget,
+      {Key key})
       : assert(plan != null),
         super(key: key);
 
   @override
-  PlanPageState createState() => PlanPageState();
+  CurrentPlanPageState createState() => CurrentPlanPageState();
 }
 
-class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
-  PlanPageController _planPageController;
+class CurrentPlanPageState extends State<CurrentPlanPage>
+    with TickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _planPageController = PlanPageController(widget.plan, widget.ad);
-    if (_planPageController.plan.itineraries.isNotEmpty) {
-      _planPageController.inSelectedItinerary.add(
-        _planPageController.plan.itineraries.first,
+    if (widget.planPageController.plan.itineraries.isNotEmpty) {
+      widget.planPageController.inSelectedItinerary.add(
+        widget.planPageController.plan.itineraries.first,
       );
     }
     _tabController = TabController(
-      length: _planPageController.plan.itineraries.length,
+      length: widget.planPageController.plan.itineraries.length,
       vsync: this,
     )..addListener(() {
-        _planPageController.inSelectedItinerary.add(
-          _planPageController.plan.itineraries[_tabController.index],
+        widget.planPageController.inSelectedItinerary.add(
+          widget.planPageController.plan.itineraries[_tabController.index],
         );
       });
   }
 
   @override
   void dispose() {
-    _planPageController.dispose();
+    widget.planPageController.dispose();
     _tabController.dispose();
     super.dispose();
   }
@@ -99,14 +120,14 @@ class PlanPageState extends State<PlanPage> with TickerProviderStateMixin {
       CustomScrollableContainer(
         openedPosition: 200,
         body: PlanMapPage(
-          planPageController: _planPageController,
+          planPageController: widget.planPageController,
           customOverlayWidget: widget.customOverlayWidget,
           customBetweenFabWidget: widget.customBetweenFabWidget,
           markerConfiguration: cfg.markers,
           transportConfiguration: cfg.transportConf,
         ),
         panel: CustomItinerary(
-          planPageController: _planPageController,
+          planPageController: widget.planPageController,
         ),
       ),
     ];
