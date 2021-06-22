@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
+import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/itinerary_summary_advanced.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/styles.dart';
 
 import '../plan.dart';
@@ -41,6 +44,8 @@ class _CustomItineraryState extends State<CustomItinerary> {
   Widget build(BuildContext context) {
     final theme = context.read<ThemeCubit>().state.bottomBarTheme;
     final localization = TrufiLocalization.of(context);
+    final homePageCubit = context.watch<HomePageCubit>();
+    final homePageState = homePageCubit.state;
     return Theme(
       data: theme,
       child: Container(
@@ -62,6 +67,42 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          if (index == 0 &&
+                              widget?.planPageController?.plan?.planInfoBoxs !=
+                                  null &&
+                              (widget.planPageController.plan.planInfoBoxs
+                                      .isNotEmpty ??
+                                  false))
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: Stack(
+                                children: [
+                                  ...widget.planPageController.plan.planInfoBoxs
+                                      .reversed
+                                      .map<Widget>((infoBox) {
+                                    return InfoMessage(
+                                      message:
+                                          infoBox.translateValue(localization),
+                                      closeInfo: () {
+                                        homePageCubit.updateMapRouteState(
+                                          homePageState.copyWith(
+                                            plan: homePageState.plan.copyWith(
+                                              planInfoBoxs: homePageState
+                                                  .plan.planInfoBoxs
+                                                  .skip(1)
+                                                  .toList(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }).toList()
+                                ],
+                              ),
+                            ),
                           Padding(
                             padding: EdgeInsets.only(
                                 top: Insets.sm,

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/services/models_otp/enums/mode.dart';
@@ -99,7 +100,8 @@ class OnlineGraphQLRepository implements RequestManager {
           )
           .toList(),
     );
-    if (planData.itineraries.isEmpty) {
+    final mainFetchIsEmpty = planData.itineraries.isEmpty;
+    if (mainFetchIsEmpty) {
       planData = await _graphQLPlanRepository.fetchPlanAdvanced(
         fromLocation: from,
         toLocation: to,
@@ -117,6 +119,8 @@ class OnlineGraphQLRepository implements RequestManager {
 
     return planEntity.copyWith(
       itineraries: itinerariesTrasnport,
+      planInfoBoxs:
+          mainFetchIsEmpty ? [PlanInfoBox.usingDefaultTransports] : null,
       error: itinerariesTrasnport.isEmpty
           ? PlanError(404, "Not found routes")
           : null,
