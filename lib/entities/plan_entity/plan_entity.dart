@@ -14,6 +14,7 @@ import 'package:trufi_core/widgets/map/utils/trufi_map_utils.dart';
 
 import 'agency_entity.dart';
 import 'enum/leg_mode.dart';
+import 'enum/plan_info_box.dart';
 import 'utils/modes_transport_utils.dart';
 import 'utils/plan_itinerary_leg_utils.dart';
 import 'utils/time_utils.dart';
@@ -31,6 +32,7 @@ class PlanEntity {
     this.to,
     this.itineraries,
     this.error,
+    this.planInfoBoxs,
   });
 
   static const _error = "error";
@@ -39,12 +41,14 @@ class PlanEntity {
   static const _plan = "plan";
   static const _to = "to";
   static const _type = "type";
+  static const _planInfoBoxs = "planInfoBoxs";
 
   final PlanLocation from;
   final PlanLocation to;
   final String type;
   final List<PlanItinerary> itineraries;
   final PlanError error;
+  final List<PlanInfoBox> planInfoBoxs;
 
   factory PlanEntity.fromJson(Map<String, dynamic> json) {
     if (json == null) {
@@ -68,6 +72,9 @@ class PlanEntity {
               .toList() as List<PlanItinerary>,
         ),
         type: planJson[_type] as String,
+        planInfoBoxs: planJson[_planInfoBoxs]?.map<PlanInfoBox>((dynamic json) {
+          return getPlanInfoBoxByKey(json.toString());
+        })?.toList() as List<PlanInfoBox>,
       );
     }
   }
@@ -78,6 +85,7 @@ class PlanEntity {
     List<PlanItinerary> itineraries,
     PlanError error,
     String type,
+    List<PlanInfoBox> planInfoBoxs,
   }) {
     return PlanEntity(
       from: from ?? this.from,
@@ -85,6 +93,7 @@ class PlanEntity {
       itineraries: itineraries ?? this.itineraries,
       error: error ?? this.error,
       type: type ?? this.type,
+      planInfoBoxs: planInfoBoxs ?? this.planInfoBoxs,
     );
   }
 
@@ -125,7 +134,9 @@ class PlanEntity {
 
   Map<String, dynamic> toJson() {
     return error != null
-        ? {_error: error.toJson()}
+        ? {
+            _error: error.toJson(),
+          }
         : {
             _plan: {
               _from: from.toJson(),
@@ -133,6 +144,8 @@ class PlanEntity {
               _itineraries:
                   itineraries.map((itinerary) => itinerary.toJson()).toList(),
               _type: type,
+              _planInfoBoxs:
+                  planInfoBoxs?.map((infoBox) => infoBox.name)?.toList(),
             }
           };
   }
