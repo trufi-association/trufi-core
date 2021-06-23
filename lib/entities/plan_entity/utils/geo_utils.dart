@@ -8,32 +8,36 @@ NumberFormat formatTwoDecimals({String localeName}) {
   return NumberFormat('#.00', localeName ?? 'en');
 }
 
+NumberFormat formatOneDecimals({String localeName}) {
+  return NumberFormat('#.0', localeName ?? 'en');
+}
+
 String displayDistanceWithLocale(
     TrufiLocalization localization, double meters) {
-  if (meters < 100) {
-    return localization.instructionDistanceMeters(formatTwoDecimals(
+  final tempMeters = meters ?? 0;
+  if (tempMeters < 100) {
+    return localization.instructionDistanceMeters(formatOneDecimals(
       localeName: localization.localeName,
-    ).format(double.parse(((meters / 10).round() * 10).toStringAsFixed(1))));
+    ).format((tempMeters / 10).round() * 10));
   }
-  if (meters < 975) {
-    return localization.instructionDistanceMeters(formatTwoDecimals(
-            localeName: localization.localeName)
-        .format(double.parse(((meters / 50).round() * 50).toStringAsFixed(1))));
+  if (tempMeters < 975) {
+    return localization.instructionDistanceMeters(
+        formatOneDecimals(localeName: localization.localeName)
+            .format((tempMeters / 50).round() * 50));
   }
-  if (meters < 10000) {
+  if (tempMeters < 10000) {
     return localization.instructionDistanceKm(
-        formatTwoDecimals(localeName: localization.localeName).format(
-            double.parse(
-                (((meters / 100).round() * 100) / 1000).toStringAsFixed(1))));
+        formatOneDecimals(localeName: localization.localeName)
+            .format(((tempMeters / 100).round() * 100) / 1000));
   }
-  if (meters < 100000) {
+  if (tempMeters < 100000) {
     return localization.instructionDistanceKm(
-        formatTwoDecimals(localeName: localization.localeName)
-            .format(double.parse((meters / 1000).round().toStringAsFixed(1))));
+        formatOneDecimals(localeName: localization.localeName)
+            .format((tempMeters / 1000).round()));
   }
-  return localization.instructionDistanceKm(formatTwoDecimals(
-          localeName: localization.localeName)
-      .format(double.parse(((meters / 1000).round() * 10).toStringAsFixed(1))));
+  return localization.instructionDistanceKm(
+      formatOneDecimals(localeName: localization.localeName)
+          .format((tempMeters / 1000).round() * 10));
 }
 
 double estimateItineraryDistance(LatLng from, LatLng to,
