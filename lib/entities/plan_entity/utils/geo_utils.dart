@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
+import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
@@ -38,17 +39,10 @@ double estimateItineraryDistance(LatLng from, LatLng to,
   double distance = 0;
   final List<LatLng> points = [from, ...viaPoints, to];
   for (var i = 0; i < points.length - 1; i++) {
-    distance += distanceTwoPoints(points[i], points[i + 1]);
+    distance += toolkit.SphericalUtil.computeDistanceBetween(
+      toolkit.LatLng(points[i].latitude, points[i].longitude),
+      toolkit.LatLng(points[i + 1].latitude, points[i + 1].longitude),
+    );
   }
   return distance;
-}
-
-double distanceTwoPoints(LatLng from, LatLng to) {
-  const p = 0.017453292519943295;
-  final a = 0.5 -
-      cos((to.latitude - from.latitude) * p) / 2 +
-      cos(from.latitude * p) *
-          cos(to.latitude * p) *
-          (1 - cos(to.longitude - from.longitude * p) / 2);
-  return 12742 * asin(sqrt(a));
 }
