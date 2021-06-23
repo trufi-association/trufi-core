@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
@@ -57,7 +59,7 @@ class TicketInformation extends StatelessWidget {
                 style: theme.primaryTextTheme.bodyText1,
               ),
               Text(
-                ' ${(fare.cents / 100).toStringAsFixed(2)} €',
+                ' ${formatTwoDecimals(localeName: localization.localeName).format(fare.cents / 100)} €',
                 style: theme.primaryTextTheme.bodyText1.copyWith(
                   color: Colors.grey[600],
                 ),
