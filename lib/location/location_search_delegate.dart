@@ -576,27 +576,27 @@ class _BuildItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+          vertical: 1,
+        ),
         child: Row(
           children: <Widget>[
             Icon(iconData, color: theme.primaryIconTheme.color),
-            const SizedBox(width: 32.0, height: 48.0),
+            const SizedBox(width: 5.0, height: 48.0),
             Expanded(
-              child: RichText(
-                maxLines: 1,
-                text: TextSpan(
-                  style: theme.textTheme.bodyText2,
-                  children: <TextSpan>[
-                    TextSpan(text: title),
-                    const TextSpan(text: "     "),
-                    TextSpan(
-                      text: subtitle,
-                      style: TextStyle(
-                        color: theme.hintColor,
-                      ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(title),
+                  Text(
+                    subtitle ?? "",
+                    style: TextStyle(
+                      color: theme.hintColor,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             if (trailing != null) trailing
