@@ -194,6 +194,7 @@ class GraphQLPlanRepository {
           'bikeAndPublicModes':
               parseBikeAndPublicModes(advancedOptions.transportModes),
           'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes),
+          'carMode': parseCarMode(toLocation.latLng),
           'bikeandPublicDisableRemainingWeightHeuristic': false,
           'shouldMakeWalkQuery': shouldMakeAllQuery &&
               !advancedOptions.wheelchair &&
@@ -202,10 +203,7 @@ class GraphQLPlanRepository {
               !advancedOptions.wheelchair &&
               linearDistance < PayloadDataPlanState.suggestBikeMaxDistance &&
               advancedOptions.includeBikeSuggestions,
-          'shouldMakeCarQuery': shouldMakeAllQuery &&
-              advancedOptions.includeCarSuggestions &&
-              linearDistance > PayloadDataPlanState.suggestCarMinDistance,
-          'shouldMakeCarParkQuery':
+          'shouldMakeCarQuery':
               (advancedOptions.isFreeParkToCarPark || shouldMakeAllQuery) &&
                   advancedOptions.includeCarSuggestions &&
                   linearDistance > PayloadDataPlanState.suggestCarMinDistance,
