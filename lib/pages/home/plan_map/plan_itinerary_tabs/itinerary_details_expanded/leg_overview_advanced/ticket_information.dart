@@ -37,47 +37,47 @@ class TicketInformation extends StatelessWidget {
       final ticketUrl = fare?.agency?.fareUrl ?? fare?.url;
       if (index == 0) {
         faresInfo.add(
-          Text(
-            fares.length > 1
-                ? '${localization.itineraryTicketsTitle}:'
-                : '${localization.itineraryTicketTitle}:',
-            style: theme.primaryTextTheme.bodyText1.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-        );
-      }
-
-      faresInfo.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fare.getTicketName(localeName),
-                style: theme.primaryTextTheme.bodyText1,
-              ),
-              Text(
-                ' ${formatTwoDecimals(localeName: localization.localeName).format(fare.cents / 100)} €',
+                fares.length > 1
+                    ? '${localization.itineraryTicketsTitle}:'
+                    : '${localization.itineraryTicketTitle}:',
                 style: theme.primaryTextTheme.bodyText1.copyWith(
                   color: Colors.grey[600],
                 ),
               ),
+              Row(
+                children: [
+                  Text(
+                    fare.getTicketName(localeName),
+                    style: theme.primaryTextTheme.bodyText1,
+                  ),
+                  Text(
+                    ' ${formatTwoDecimals(localeName: localization.localeName).format(fare.cents / 100)} €',
+                    style: theme.primaryTextTheme.bodyText1.copyWith(
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-          if (ticketUrl != null)
-            CustomTextButton(
-              text: localization.itineraryBuyTicket,
-              onPressed: () async {
-                if (await canLaunch(ticketUrl)) {
-                  await launch(ticketUrl);
-                }
-              },
-              isDark: false,
-              height: 27,
-            )
-        ],
-      ));
+        );
+      }
+      if (ticketUrl != null) {
+        faresInfo.add(CustomTextButton(
+          text: localization.itineraryBuyTicket,
+          onPressed: () async {
+            if (await canLaunch(ticketUrl)) {
+              await launch(ticketUrl);
+            }
+          },
+          isDark: false,
+          height: 27,
+        ));
+      }
     });
 
     return fares.isEmpty || unknownFares.isNotEmpty
@@ -89,8 +89,8 @@ class TicketInformation extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ...faresInfo,
                   ],
@@ -101,6 +101,16 @@ class TicketInformation extends StatelessWidget {
                   message: localization.itineraryPriceOnlyPublicTransport,
                   margin: const EdgeInsets.only(right: 15, top: 5),
                 ),
+              Container(
+                padding: const EdgeInsets.only(top: 7),
+                child: Text(
+                  // TODO translate
+                  'Tarifauskünfte werden durch die Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW) zur Verfügung gestellt. Alle Angaben ohne Gewähr.',
+                  style: theme.primaryTextTheme.bodyText1
+                      .copyWith(fontSize: 12, color: Colors.grey[600]),
+                  textAlign: TextAlign.left,
+                ),
+              ),
             ],
           );
   }
