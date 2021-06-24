@@ -136,7 +136,7 @@ class GraphQLPlanRepository {
     String locale,
   }) async {
     final linearDistance =
-        estimateItineraryDistance(fromLocation.latLng, toLocation.latLng);
+        estimateDistance(fromLocation.latLng, toLocation.latLng);
     final dateNow = DateTime.now();
     final date = advancedOptions?.date ?? dateNow;
     final shouldMakeAllQuery = !advancedOptions.isFreeParkToCarPark &&
