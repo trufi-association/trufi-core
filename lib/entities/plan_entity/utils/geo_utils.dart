@@ -1,36 +1,43 @@
-import 'dart:math';
-
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
+import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
+NumberFormat formatTwoDecimals({String localeName}) {
+  return NumberFormat('#.00', localeName ?? 'en');
+}
+
+NumberFormat formatOneDecimals({String localeName}) {
+  return NumberFormat('#.0', localeName ?? 'en');
+}
+
 String displayDistanceWithLocale(
     TrufiLocalization localization, double meters) {
-  if (meters < 100) {
+  final tempMeters = meters ?? 0;
+  if (tempMeters < 100) {
+    return localization.instructionDistanceMeters(formatOneDecimals(
+      localeName: localization.localeName,
+    ).format((tempMeters / 10).round() * 10));
+  }
+  if (tempMeters < 975) {
     return localization.instructionDistanceMeters(
-        NumberFormat.decimalPattern(localization.localeName).format(
-            double.parse(((meters / 10).round() * 10).toStringAsFixed(1))));
+        formatOneDecimals(localeName: localization.localeName)
+            .format((tempMeters / 50).round() * 50));
   }
-  if (meters < 975) {
-    return localization.instructionDistanceMeters(
-        NumberFormat.decimalPattern(localization.localeName).format(
-            double.parse(((meters / 50).round() * 50).toStringAsFixed(1))));
-  }
-  if (meters < 10000) {
+  if (tempMeters < 10000) {
     return localization.instructionDistanceKm(
-        NumberFormat.decimalPattern(localization.localeName).format(
-            double.parse(
-                (((meters / 100).round() * 100) / 1000).toStringAsFixed(1))));
+        formatOneDecimals(localeName: localization.localeName)
+            .format(((tempMeters / 100).round() * 100) / 1000));
   }
-  if (meters < 100000) {
+  if (tempMeters < 100000) {
     return localization.instructionDistanceKm(
-        NumberFormat.decimalPattern(localization.localeName)
-            .format(double.parse((meters / 1000).round().toStringAsFixed(1))));
+        formatOneDecimals(localeName: localization.localeName)
+            .format((tempMeters / 1000).round()));
   }
   return localization.instructionDistanceKm(
-      NumberFormat.decimalPattern(localization.localeName).format(
-          double.parse(((meters / 1000).round() * 10).toStringAsFixed(1))));
+      formatOneDecimals(localeName: localization.localeName)
+          .format((tempMeters / 1000).round() * 10));
 }
 
 double estimateItineraryDistance(LatLng from, LatLng to,
@@ -38,17 +45,10 @@ double estimateItineraryDistance(LatLng from, LatLng to,
   double distance = 0;
   final List<LatLng> points = [from, ...viaPoints, to];
   for (var i = 0; i < points.length - 1; i++) {
-    distance += distanceTwoPoints(points[i], points[i + 1]);
+    distance += toolkit.SphericalUtil.computeDistanceBetween(
+      toolkit.LatLng(points[i].latitude, points[i].longitude),
+      toolkit.LatLng(points[i + 1].latitude, points[i + 1].longitude),
+    );
   }
   return distance;
-}
-
-double distanceTwoPoints(LatLng from, LatLng to) {
-  const p = 0.017453292519943295;
-  final a = 0.5 -
-      cos((to.latitude - from.latitude) * p) / 2 +
-      cos(from.latitude * p) *
-          cos(to.latitude * p) *
-          (1 - cos(to.longitude - from.longitude * p) / 2);
-  return 12742 * asin(sqrt(a));
 }
