@@ -278,7 +278,8 @@ class PlanItinerary {
     return compressLegs
         .where((leg) {
           final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
-          return legLength < renderBarThreshold;
+          return legLength < renderBarThreshold &&
+              leg.transportMode != TransportMode.walk;
         })
         .toList()
         .length;

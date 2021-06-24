@@ -79,7 +79,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
 
       if (legLength < newRenderBarThreshold && leg.isLegOnFoot) {
         renderBar = false;
-        addition += newRenderBarThreshold;
+        // addition += newRenderBarThreshold;
       }
 
       if (leg.isLegOnFoot && renderBar) {
