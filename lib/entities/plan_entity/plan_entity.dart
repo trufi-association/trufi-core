@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:latlong/latlong.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/services/models_otp/booking_info.dart';
 import 'package:trufi_core/services/models_otp/pickup_booking_info.dart';
 import 'package:trufi_core/services/models_otp/trip.dart';
@@ -25,14 +27,14 @@ part 'plan_itinerary.dart';
 part 'plan_itinerary_leg.dart';
 part 'plan_location.dart';
 
-class PlanEntity {
-  PlanEntity({
+class PlanEntity extends Equatable {
+  const PlanEntity({
     this.type,
     this.from,
     this.to,
     this.itineraries,
     this.error,
-    this.planInfoBoxs,
+    this.planInfoBox = PlanInfoBox.undefined,
   });
 
   static const _error = "error";
@@ -41,14 +43,14 @@ class PlanEntity {
   static const _plan = "plan";
   static const _to = "to";
   static const _type = "type";
-  static const _planInfoBoxs = "planInfoBoxs";
+  static const _planInfoBox = "planInfoBox";
 
   final PlanLocation from;
   final PlanLocation to;
   final String type;
   final List<PlanItinerary> itineraries;
   final PlanError error;
-  final List<PlanInfoBox> planInfoBoxs;
+  final PlanInfoBox planInfoBox;
 
   factory PlanEntity.fromJson(Map<String, dynamic> json) {
     if (json == null) {
@@ -72,9 +74,7 @@ class PlanEntity {
               .toList() as List<PlanItinerary>,
         ),
         type: planJson[_type] as String,
-        planInfoBoxs: planJson[_planInfoBoxs]?.map<PlanInfoBox>((dynamic json) {
-          return getPlanInfoBoxByKey(json.toString());
-        })?.toList() as List<PlanInfoBox>,
+        planInfoBox: getPlanInfoBoxByKey(planJson[_planInfoBox] as String),
       );
     }
   }
@@ -85,7 +85,7 @@ class PlanEntity {
     List<PlanItinerary> itineraries,
     PlanError error,
     String type,
-    List<PlanInfoBox> planInfoBoxs,
+    PlanInfoBox planInfoBox,
   }) {
     return PlanEntity(
       from: from ?? this.from,
@@ -93,7 +93,7 @@ class PlanEntity {
       itineraries: itineraries ?? this.itineraries,
       error: error ?? this.error,
       type: type ?? this.type,
-      planInfoBoxs: planInfoBoxs ?? this.planInfoBoxs,
+      planInfoBox: planInfoBox ?? this.planInfoBox,
     );
   }
 
@@ -139,18 +139,23 @@ class PlanEntity {
           }
         : {
             _plan: {
-              _from: from.toJson(),
-              _to: to.toJson(),
+              _from: from?.toJson(),
+              _to: to?.toJson(),
               _itineraries:
-                  itineraries.map((itinerary) => itinerary.toJson()).toList(),
+                  itineraries?.map((itinerary) => itinerary.toJson())?.toList(),
               _type: type,
-              _planInfoBoxs:
-                  planInfoBoxs?.map((infoBox) => infoBox.name)?.toList(),
+              _planInfoBox: planInfoBox?.name
             }
           };
   }
 
   bool get hasError => error != null;
+
+  bool get isOnlyWalk =>
+      itineraries.isEmpty ||
+      itineraries.length == 1 &&
+          itineraries[0].legs.length == 1 &&
+          itineraries[0].legs[0].transportMode == TransportMode.walk;
 
   Widget get iconSecondaryPublic {
     if ((itineraries ?? []).isNotEmpty) {
@@ -175,4 +180,14 @@ class PlanEntity {
     }
     return Container();
   }
+
+  @override
+  List<Object> get props => [
+        from,
+        to,
+        type,
+        itineraries,
+        error,
+        planInfoBox,
+      ];
 }
