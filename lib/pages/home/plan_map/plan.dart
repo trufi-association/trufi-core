@@ -59,26 +59,25 @@ class PlanPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homePageState = context.watch<HomePageCubit>().state;
     return CurrentPlanPage(
-      plan,
       PlanPageController(plan, ad),
       customOverlayWidget,
       customBetweenFabWidget,
+      key: Key('firstFetchPlan ${homePageState.isFetchingModes}'),
     );
   }
 }
 
 class CurrentPlanPage extends StatefulWidget {
   final PlanPageController planPageController;
-  final PlanEntity plan;
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
 
-  const CurrentPlanPage(this.plan, this.planPageController,
-      this.customOverlayWidget, this.customBetweenFabWidget,
+  const CurrentPlanPage(this.planPageController, this.customOverlayWidget,
+      this.customBetweenFabWidget,
       {Key key})
-      : assert(plan != null),
-        super(key: key);
+      : super(key: key);
 
   @override
   CurrentPlanPageState createState() => CurrentPlanPageState();
@@ -108,8 +107,8 @@ class CurrentPlanPageState extends State<CurrentPlanPage>
 
   @override
   void dispose() {
-    widget.planPageController.dispose();
-    _tabController.dispose();
+    widget.planPageController?.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
