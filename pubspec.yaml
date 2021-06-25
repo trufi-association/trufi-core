@@ -27,6 +27,7 @@ dependencies:
   graphql: ^4.0.1
   http: 0.13.1
   intl: 0.17.0
+  maps_toolkit: ^2.0.0
   package_info: 2.0.0
   path_provider: ^2.0.1
   permission_handler: ^6.1.1

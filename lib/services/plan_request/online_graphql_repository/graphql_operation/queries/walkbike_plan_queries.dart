@@ -24,7 +24,6 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeWalkQuery: Boolean!
   $shouldMakeBikeQuery: Boolean!
   $shouldMakeCarQuery: Boolean!
-  $shouldMakeCarParkQuery: Boolean!
   $shouldMakeParkRideQuery: Boolean!
   $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
@@ -32,6 +31,7 @@ query SummaryPage_WalkBike_Query(
   $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
+  $carMode: [TransportMode!]
   $bannedVehicleParkingTags: [String]
 ) {
   walkPlan: plan(
@@ -267,86 +267,7 @@ query SummaryPage_WalkBike_Query(
     toPlace: $toPlace, 
     intermediatePlaces: $intermediatePlaces, 
     numItineraries: 6, 
-    transportModes: [{mode: CAR}], 
-    date: $date, 
-    time: $time, 
-    walkReluctance: $walkReluctance, 
-    walkBoardCost: $walkBoardCost, 
-    minTransferTime: $minTransferTime, 
-    walkSpeed: $walkSpeed, 
-    maxWalkDistance: $bikeAndPublicMaxWalkDistance, 
-    allowedTicketTypes: $ticketTypes, 
-    arriveBy: $arriveBy, 
-    transferPenalty: $transferPenalty, 
-    bikeSpeed: $bikeSpeed, 
-    optimize: $optimize, 
-    triangle: $triangle, 
-    itineraryFiltering: $itineraryFiltering, 
-    unpreferred: $unpreferred, 
-    locale: $locale,
-    ) @include(if: $shouldMakeCarQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
-    itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
-      legs {
-        startTime
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        legGeometry {
-          points
-        }
-        route {
-          gtfsId
-          id
-        }
-        trip {
-          gtfsId
-          directionId
-          stoptimesForDate {
-            scheduledDeparture
-          }
-          pattern {
-            ...RouteLine_pattern
-            id
-          }
-          id
-        }
-        from {
-          name
-          lat
-          lon
-        }
-        to {
-          name
-          lat
-          lon
-        }
-        distance
-      }
-    }
-  }
-  carParkPlan: plan(
-    fromPlace: $fromPlace, 
-    toPlace: $toPlace, 
-    intermediatePlaces: $intermediatePlaces, 
-    numItineraries: 6, 
-    transportModes: [{ mode: CAR, qualifier: PARK }], 
+    transportModes: $carMode, 
     date: $date, 
     time: $time, 
     walkReluctance: $walkReluctance, 
@@ -365,7 +286,7 @@ query SummaryPage_WalkBike_Query(
     locale: $locale,
     useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
     bannedVehicleParkingTags: $bannedVehicleParkingTags,
-    ) @include(if: $shouldMakeCarParkQuery) {
+    ) @include(if: $shouldMakeCarQuery) {
     from{
       name,
       lat,
