@@ -520,7 +520,32 @@ fragment SummaryPage_serviceTimeRange on serviceTimeRange {
 final summaryPageViewerFragment = gql(
   r'''
 fragment SummaryPage_viewer_3ZG8s4 on QueryType {
-  plan(fromPlace: $fromPlace, toPlace: $toPlace, intermediatePlaces: $intermediatePlaces, numItineraries: $numItineraries, transportModes: $transportModes, date: $date, time: $time, walkReluctance: $walkReluctance, walkBoardCost: $walkBoardCost, minTransferTime: $minTransferTime, walkSpeed: $walkSpeed, maxWalkDistance: $maxWalkDistance, wheelchair: $wheelchair, allowedTicketTypes: $ticketTypes, disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic, arriveBy: $arriveBy, transferPenalty: $transferPenalty, bikeSpeed: $bikeSpeed, optimize: $optimize, triangle: $triangle, itineraryFiltering: $itineraryFiltering, unpreferred: $unpreferred, allowedBikeRentalNetworks: $allowedBikeRentalNetworks, locale: $locale) {
+  plan(
+    fromPlace: $fromPlace,
+    toPlace: $toPlace,
+    intermediatePlaces: $intermediatePlaces,
+    numItineraries: $numItineraries, 
+    transportModes: $transportModes,
+    date: $date,
+    time: $time,
+    walkReluctance: $walkReluctance,
+    walkBoardCost: $walkBoardCost,
+    minTransferTime: $minTransferTime,
+    walkSpeed: $walkSpeed,
+    maxWalkDistance: $maxWalkDistance,
+    wheelchair: $wheelchair,
+    allowedTicketTypes: $ticketTypes,
+    disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic,
+    arriveBy: $arriveBy,
+    transferPenalty: $transferPenalty,
+    bikeSpeed: $bikeSpeed,
+    optimize: $optimize,
+    triangle: $triangle,
+    itineraryFiltering: $itineraryFiltering,
+    unpreferred: $unpreferred,
+    allowedBikeRentalNetworks: $allowedBikeRentalNetworks,
+    locale: $locale
+    ) {
     ...SummaryPlanContainer_plan
     ...ItineraryTab_plan
     from{

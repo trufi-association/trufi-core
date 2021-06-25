@@ -132,7 +132,6 @@ class HomePageCubit extends Cubit<MapRouteState> {
           state.copyWith(
             isFetching: false,
             showSuccessAnimation: true,
-            isFetchingModes: true,
             plan: PlanEntity(
               planInfoBox: planInfoBox,
               itineraries: const [],
@@ -164,10 +163,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
           plan: planEntity,
           isFetching: false,
           showSuccessAnimation: true,
-          isFetchingModes: true,
         ));
       }
-
+      await updateMapRouteState(state.copyWith(
+        isFetchingModes: true,
+      ));
       final modesTransportEntity = await _fetchPlanModesState(
         correlationId,
         localization,
@@ -181,12 +181,12 @@ class HomePageCubit extends Cubit<MapRouteState> {
           modesTransportEntity.existBikePlan) {
         if (modesTransportEntity.existWalkPlan &&
             !modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.walkBikeItinerary1;
+          planInfoBox = PlanInfoBox.onlyWalkingRoutes;
         } else if (!modesTransportEntity.existWalkPlan &&
             modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.walkBikeItinerary2;
+          planInfoBox = PlanInfoBox.onlyCyclingRoutes;
         } else {
-          planInfoBox = PlanInfoBox.walkBikeItinerary3;
+          planInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
         }
       } else {
         if (initPayloadDataPlanState == advancedOptions) {
@@ -203,6 +203,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
               : null,
           modesTransport: modesTransportEntity,
           isFetchingModes: false,
+          isFetching: false,
         ),
       );
     }

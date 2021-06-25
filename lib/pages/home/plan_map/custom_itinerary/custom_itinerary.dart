@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
@@ -10,6 +11,7 @@ import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_det
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../plan.dart';
 
@@ -51,9 +53,9 @@ class _CustomItineraryState extends State<CustomItinerary> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
         child: !showDetail
-            ? widget.planPageController.plan.isOnlyWalk
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
+            ? widget.planPageController.plan.isOnlyWalk &&
+                    widget.planPageController.plan.type != 'walkPlan'
+                ? ListView(
                     children: [
                       Container(
                         margin: const EdgeInsets.symmetric(
@@ -63,6 +65,38 @@ class _CustomItineraryState extends State<CustomItinerary> {
                         child: InfoMessage(
                           message: widget.planPageController.plan.planInfoBox
                               .translateValue(localization),
+                          isErrorMessage: !widget
+                              .planPageController.plan.isTypeMessageInformation,
+                          widget: widget
+                                  .planPageController.plan.isOutSideLocation
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 21),
+                                  child: RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        style: theme.textTheme.bodyText1
+                                            .copyWith(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                        text: localization
+                                            .infoMessageUseNationalServicePrefix,
+                                      ),
+                                      TextSpan(
+                                        style: theme.primaryTextTheme.bodyText2
+                                            .copyWith(
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        text: ' Fahrplanauskunft efa-bw',
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            launch('https://www.efa-bw.de');
+                                          },
+                                      )
+                                    ]),
+                                  ),
+                                )
+                              : null,
                         ),
                       ),
                     ],

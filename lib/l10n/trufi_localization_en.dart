@@ -160,6 +160,9 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get commonWalk => 'Walk';
 
   @override
+  String get copyrightsPriceProvider => 'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.';
+
+  @override
   String defaultLocationAdd(Object defaultLocation) {
     return 'Add ${defaultLocation}';
   }
@@ -245,6 +248,39 @@ class TrufiLocalizationEn extends TrufiLocalization {
 
   @override
   String get followOnTwitter => 'Follow us on Twitter';
+
+  @override
+  String get infoMessageDestinationOutsideService => 'No route suggestions were found because the destination is outside the service area.';
+
+  @override
+  String get infoMessageNoRouteMsg => 'Unfortunately, no route suggestions were found.';
+
+  @override
+  String get infoMessageNoRouteMsgWithChanges => 'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.';
+
+  @override
+  String get infoMessageNoRouteOriginNearDestination => 'No route suggestions were found because the origin and destination are the same.';
+
+  @override
+  String get infoMessageNoRouteOriginSameAsDestination => 'No route suggestions were found because the origin and destination are very close to each other.';
+
+  @override
+  String get infoMessageNoRouteShowingAlternativeOptions => 'No route suggestions were found with the your settings. However, we found the following route options:';
+
+  @override
+  String get infoMessageOnlyCyclingRoutes => 'Your search returned only walking and cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingRoutes => 'Your search returned only walking routes.';
+
+  @override
+  String get infoMessageOriginOutsideService => 'No route suggestions were found because the origin is outside the service area.';
+
+  @override
+  String get infoMessageUseNationalServicePrefix => 'We recommend you try the national journey planner,';
 
   @override
   String instructionDistanceKm(Object value) {

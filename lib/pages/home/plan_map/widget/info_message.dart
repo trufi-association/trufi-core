@@ -5,6 +5,7 @@ class InfoMessage extends StatelessWidget {
   final Widget widget;
   final EdgeInsetsGeometry margin;
   final Function closeInfo;
+  final bool isErrorMessage;
 
   const InfoMessage({
     Key key,
@@ -12,6 +13,7 @@ class InfoMessage extends StatelessWidget {
     this.widget,
     this.margin,
     this.closeInfo,
+    this.isErrorMessage = false,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,8 @@ class InfoMessage extends StatelessWidget {
                 : margin,
             padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 7),
             decoration: BoxDecoration(
-              color: const Color(0xffe5f2fa),
+              color:
+                  isErrorMessage ? Colors.grey[300] : const Color(0xffe5f2fa),
               borderRadius: BorderRadius.circular(5),
             ),
             child: Column(
@@ -40,8 +43,10 @@ class InfoMessage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.info,
-                      color: theme.primaryColor,
+                      isErrorMessage ? Icons.warning : Icons.info,
+                      color: isErrorMessage
+                          ? const Color(0xffdc2251)
+                          : theme.primaryColor,
                       size: 17,
                     ),
                     const SizedBox(width: 5),

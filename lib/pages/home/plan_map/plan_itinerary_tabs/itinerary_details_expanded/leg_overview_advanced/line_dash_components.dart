@@ -17,11 +17,13 @@ class TransportDash extends StatelessWidget {
   final double dashWidth;
   final PlanItineraryLeg leg;
   final bool isNextTransport;
+  final bool isBeforeTransport;
   final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
     this.isNextTransport = false,
+    this.isBeforeTransport = true,
     this.isFirstTransport = false,
     this.height = 1,
     this.dashWidth = 5.0,
@@ -35,58 +37,56 @@ class TransportDash extends StatelessWidget {
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     return Column(
       children: [
-        DashLinePlace(
-          date: leg.startTimeString.toString(),
-          location: leg.fromPlace.name.toString(),
-          color: leg?.route?.color != null
-              ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
-          child: isFirstTransport
-              ? SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: FittedBox(child: configuration.markers.fromMarker),
-                )
-              : null,
-        ),
+        if (isBeforeTransport)
+          DashLinePlace(
+            date: leg.startTimeString.toString(),
+            location: leg.fromPlace.name.toString(),
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : leg.transportMode.color,
+            child: isFirstTransport
+                ? SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: FittedBox(child: configuration.markers.fromMarker),
+                  )
+                : null,
+          ),
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
               : leg.transportMode.color,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TransitLeg(
-                  leg: leg,
-                ),
-                if (configuration.planItineraryLegBuilder != null)
-                  configuration.planItineraryLegBuilder(context, leg) ??
-                      Container(),
-                if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
-                            ?.tags !=
-                        null &&
-                    leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
-                        .contains('state:few'))
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      InfoMessage(
-                          message: localization.carParkCloseCapacityMessage),
-                      CustomTextButton(
-                        text: localization.carParkExcludeFull,
-                        onPressed: () async {
-                          await homePageCubit.fetchPlanModeRidePark(
-                              localization, payloadDataPlanState);
-                        },
-                      ),
-                    ],
-                  )
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TransitLeg(
+                leg: leg,
+              ),
+              if (configuration.planItineraryLegBuilder != null)
+                configuration.planItineraryLegBuilder(context, leg) ??
+                    Container(),
+              if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
+                          ?.tags !=
+                      null &&
+                  leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
+                      .contains('state:few'))
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    InfoMessage(
+                        message: localization.carParkCloseCapacityMessage),
+                    CustomTextButton(
+                      text: localization.carParkExcludeFull,
+                      onPressed: () async {
+                        await homePageCubit.fetchPlanModeRidePark(
+                            localization, payloadDataPlanState);
+                      },
+                    ),
+                  ],
+                )
+            ],
           ),
         ),
         if (isNextTransport)
@@ -124,9 +124,12 @@ class WalkDash extends StatelessWidget {
             width: 19,
             child: walkSvg,
           ),
-          height: 20,
-          child: Text(
-              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          ),
         ),
       ],
     );
@@ -160,9 +163,12 @@ class WaitDash extends StatelessWidget {
             width: 20,
             child: waitSvg,
           ),
-          height: 20,
-          child: Text(
-              "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          ),
         ),
       ],
     );
@@ -218,11 +224,9 @@ class SeparatorPlace extends StatelessWidget {
             ),
           const SizedBox(width: 5),
           if (child != null)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                child,
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: child,
             ),
         ],
       ),
