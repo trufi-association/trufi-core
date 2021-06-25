@@ -70,7 +70,6 @@ class TrufiMapAnimations {
       begin: mapController.bounds.southWest.longitude,
       end: bounds.southWest.longitude,
     );
-    final paddingTween = Tween<double>(begin: 0.0, end: 80.0);
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),
       vsync: tickerProvider,
@@ -91,8 +90,8 @@ class TrufiMapAnimations {
             swLongitudeTween.evaluate(animation),
           ),
         ),
-        options: FitBoundsOptions(
-          padding: EdgeInsets.all(paddingTween.evaluate(animation)),
+        options: const FitBoundsOptions(
+          padding: EdgeInsets.all(50),
         ),
       );
     });
