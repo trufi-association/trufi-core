@@ -181,6 +181,21 @@ class PlanEntity extends Equatable {
     return Container();
   }
 
+  bool get isOutSideLocation {
+    return planInfoBox == PlanInfoBox.originOutsideService ||
+        planInfoBox == PlanInfoBox.destinationOutsideService;
+  }
+
+  bool get isTypeMessageInformation {
+    return [
+      PlanInfoBox.noRouteOriginSameAsDestination,
+      PlanInfoBox.noRouteOriginNearDestination,
+      PlanInfoBox.onlyWalkingRoutes,
+      PlanInfoBox.onlyCyclingRoutes,
+      PlanInfoBox.onlyWalkingCyclingRoutes,
+    ].contains(planInfoBox);
+  }
+
   @override
   List<Object> get props => [
         from,
