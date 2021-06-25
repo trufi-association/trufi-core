@@ -590,12 +590,13 @@ class _BuildItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(title),
-                  Text(
-                    subtitle ?? "",
-                    style: TextStyle(
-                      color: theme.hintColor,
+                  if (subtitle != null)
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: theme.hintColor,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
