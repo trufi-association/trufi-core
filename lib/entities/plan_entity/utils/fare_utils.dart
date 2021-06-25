@@ -9,7 +9,7 @@ import 'package:trufi_core/services/models_otp/fare.dart';
 import 'package:trufi_core/services/models_otp/fare_component.dart';
 import 'package:trufi_core/services/models_otp/route.dart';
 
-Future<List<Fare>> fetchFares(PlanItinerary itinerary) async {
+Future<List<Fare>> fetchFares(PlanItinerary itinerary, String url) async {
   final legsFiltered = (itinerary?.legs ?? [])
       .where(
         (element) =>
@@ -49,7 +49,7 @@ Future<List<Fare>> fetchFares(PlanItinerary itinerary) async {
   };
   final response = await http.post(
     Uri.parse(
-      'https://api.dev.stadtnavi.eu/fares',
+      'https://$url/fares',
     ),
     body: jsonEncode(body),
     headers: {'content-type': 'application/json'},
