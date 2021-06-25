@@ -112,7 +112,7 @@ class GraphQLPlanRepository {
         'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
         'allowedBikeRentalNetworks':
             parseBikeRentalNetworks(advancedOptions.bikeRentalNetworks),
-        'locale': locale ?? 'en',
+        'locale': locale ?? 'de',
       },
     );
     final planAdvancedData = await client.query(planAdvancedQuery);
@@ -188,7 +188,7 @@ class GraphQLPlanRepository {
           'triangle': {...OptimizeType.triangle.value},
           'itineraryFiltering': 1.5,
           'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
-          'locale': locale ?? 'en',
+          'locale': locale ?? 'de',
           'bikeAndPublicMaxWalkDistance':
               PayloadDataPlanState.bikeAndPublicMaxWalkDistance,
           'bikeAndPublicModes':
