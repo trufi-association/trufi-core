@@ -378,7 +378,8 @@ query SummaryPage_WalkBike_Query(
     optimize: $optimize, 
     triangle: $triangle, 
     itineraryFiltering: $itineraryFiltering, 
-    unpreferred: $unpreferred, 
+    unpreferred: $unpreferred,
+    carReluctance: 10,
     locale: $locale,
     useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
     bannedVehicleParkingTags: $bannedVehicleParkingTags,
@@ -448,6 +449,7 @@ query SummaryPage_WalkBike_Query(
     numItineraries: 6
     transportModes: [
       { mode: RAIL }
+      { mode: BUS }
       { mode: FLEX, qualifier: EGRESS }
       { mode: FLEX, qualifier: DIRECT }
       { mode: WALK }
@@ -469,6 +471,7 @@ query SummaryPage_WalkBike_Query(
     itineraryFiltering: $itineraryFiltering
     unpreferred: $unpreferred
     locale: $locale
+    searchWindow: 10800
     ) @include(if: $shouldMakeOnDemandTaxiQuery) {
     from{
       name,
