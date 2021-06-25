@@ -53,40 +53,37 @@ class TransportDash extends StatelessWidget {
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
               : leg.transportMode.color,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TransitLeg(
-                  leg: leg,
-                ),
-                if (configuration.planItineraryLegBuilder != null)
-                  configuration.planItineraryLegBuilder(context, leg) ??
-                      Container(),
-                if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
-                            ?.tags !=
-                        null &&
-                    leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
-                        .contains('state:few'))
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      InfoMessage(
-                          message: localization.carParkCloseCapacityMessage),
-                      CustomTextButton(
-                        text: localization.carParkExcludeFull,
-                        onPressed: () async {
-                          await homePageCubit.fetchPlanModeRidePark(
-                              localization, payloadDataPlanState);
-                        },
-                      ),
-                    ],
-                  )
-              ],
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TransitLeg(
+                leg: leg,
+              ),
+              if (configuration.planItineraryLegBuilder != null)
+                configuration.planItineraryLegBuilder(context, leg) ??
+                    Container(),
+              if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
+                          ?.tags !=
+                      null &&
+                  leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
+                      .contains('state:few'))
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    InfoMessage(
+                        message: localization.carParkCloseCapacityMessage),
+                    CustomTextButton(
+                      text: localization.carParkExcludeFull,
+                      onPressed: () async {
+                        await homePageCubit.fetchPlanModeRidePark(
+                            localization, payloadDataPlanState);
+                      },
+                    ),
+                  ],
+                )
+            ],
           ),
         ),
         if (isNextTransport)
@@ -218,11 +215,9 @@ class SeparatorPlace extends StatelessWidget {
             ),
           const SizedBox(width: 5),
           if (child != null)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                child,
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: child,
             ),
         ],
       ),

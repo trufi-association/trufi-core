@@ -101,21 +101,23 @@ class RouteNumber extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
         if (transportMode != TransportMode.bicycle &&
             transportMode != TransportMode.car)
-          Row(
-            children: [
-              Text(
-                duration ?? '',
-                style: theme.primaryTextTheme.bodyText1,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                distance ?? '',
-                style: theme.primaryTextTheme.bodyText1,
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              children: [
+                Text(
+                  duration ?? '',
+                  style: theme.primaryTextTheme.bodyText1,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  distance ?? '',
+                  style: theme.primaryTextTheme.bodyText1,
+                ),
+              ],
+            ),
           ),
       ],
     );
