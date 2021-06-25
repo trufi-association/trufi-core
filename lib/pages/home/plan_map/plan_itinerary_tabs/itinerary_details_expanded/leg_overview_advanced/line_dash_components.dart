@@ -121,9 +121,12 @@ class WalkDash extends StatelessWidget {
             width: 19,
             child: walkSvg,
           ),
-          height: 20,
-          child: Text(
-              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          ),
         ),
       ],
     );
@@ -157,9 +160,12 @@ class WaitDash extends StatelessWidget {
             width: 20,
             child: waitSvg,
           ),
-          height: 20,
-          child: Text(
-              "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          ),
         ),
       ],
     );

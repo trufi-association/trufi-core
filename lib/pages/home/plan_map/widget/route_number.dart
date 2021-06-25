@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 class RouteNumber extends StatelessWidget {
@@ -26,7 +27,9 @@ class RouteNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = TrufiLocalization.of(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           decoration: BoxDecoration(
@@ -104,19 +107,11 @@ class RouteNumber extends StatelessWidget {
         if (transportMode != TransportMode.bicycle &&
             transportMode != TransportMode.car)
           Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Row(
-              children: [
-                Text(
-                  duration ?? '',
-                  style: theme.primaryTextTheme.bodyText1,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  distance ?? '',
-                  style: theme.primaryTextTheme.bodyText1,
-                ),
-              ],
+            padding: const EdgeInsets.only(top: 5, left: 5),
+            child: Text(
+              '${distance ?? ''} ${duration != null ? "($duration)" : ''} ',
+              style: theme.primaryTextTheme.bodyText1
+                  .copyWith(fontSize: 13, color: Colors.grey[700]),
             ),
           ),
       ],
