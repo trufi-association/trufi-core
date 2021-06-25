@@ -30,4 +30,12 @@ class PlanLocation {
       _longitude: longitude,
     };
   }
+
+  factory PlanLocation.fromTrufiLocation(TrufiLocation trufiLocation) {
+    return PlanLocation(
+      name: trufiLocation.description,
+      latitude: trufiLocation.latitude,
+      longitude: trufiLocation.longitude,
+    );
+  }
 }

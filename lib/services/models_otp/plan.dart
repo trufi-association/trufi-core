@@ -106,7 +106,8 @@ class Plan {
             (itinerary) => itinerary.toPlanItinerary(),
           )
           .toList(),
-      error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
+      // TODO remove when review by Samuel
+      // error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
     );
   }
 }

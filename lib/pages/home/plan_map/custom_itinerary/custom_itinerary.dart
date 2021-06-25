@@ -50,143 +50,153 @@ class _CustomItineraryState extends State<CustomItinerary> {
       data: theme,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: currentPlanItinerary == null || !showDetail
-            ? ListView.builder(
-                itemCount: widget.planPageController.plan.itineraries.length,
-                itemBuilder: (buildContext, index) {
-                  final itinerary =
-                      widget.planPageController.plan.itineraries[index];
-                  return GestureDetector(
-                    onTap: () {
-                      widget.planPageController.inSelectedItinerary
-                          .add(itinerary);
-                    },
-                    child: Container(
-                      // for avoid bad behavior of gesture detector
-                      color: Colors.transparent,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (index == 0 &&
-                              widget?.planPageController?.plan?.planInfoBoxs !=
-                                  null &&
-                              (widget.planPageController.plan.planInfoBoxs
-                                      .isNotEmpty ??
-                                  false))
-                            Container(
-                              margin: const EdgeInsets.symmetric(
-                                vertical: 5,
-                                horizontal: 10,
-                              ),
-                              child: Stack(
-                                children: [
-                                  ...widget.planPageController.plan.planInfoBoxs
-                                      .reversed
-                                      .map<Widget>((infoBox) {
-                                    return InfoMessage(
-                                      message:
-                                          infoBox.translateValue(localization),
+        child: !showDetail
+            ? widget.planPageController.plan.isOnlyWalk
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
+                        ),
+                        child: InfoMessage(
+                          message: widget.planPageController.plan.planInfoBox
+                              .translateValue(localization),
+                        ),
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    itemCount:
+                        widget.planPageController.plan.itineraries.length,
+                    itemBuilder: (buildContext, index) {
+                      final itinerary =
+                          widget.planPageController.plan.itineraries[index];
+                      return GestureDetector(
+                        onTap: () {
+                          widget.planPageController.inSelectedItinerary
+                              .add(itinerary);
+                        },
+                        child: Container(
+                          // for avoid bad behavior of gesture detector
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (index == 0 &&
+                                  widget?.planPageController?.plan
+                                          ?.planInfoBox !=
+                                      PlanInfoBox.undefined)
+                                Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 10,
+                                    ),
+                                    child: InfoMessage(
+                                      message: widget
+                                          .planPageController.plan.planInfoBox
+                                          .translateValue(localization),
                                       closeInfo: () {
                                         homePageCubit.updateMapRouteState(
                                           homePageState.copyWith(
                                             plan: homePageState.plan.copyWith(
-                                              planInfoBoxs: homePageState
-                                                  .plan.planInfoBoxs
-                                                  .skip(1)
-                                                  .toList(),
+                                              planInfoBox:
+                                                  PlanInfoBox.undefined,
                                             ),
                                           ),
                                         );
                                       },
-                                    );
-                                  }).toList()
+                                    )),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: Insets.sm,
+                                    bottom: Insets.sm,
+                                    right: Insets.xl),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    if (itinerary.hasAdvencedData)
+                                      Text(
+                                        "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                      ),
+                                    RichText(
+                                      textScaleFactor: MediaQuery.of(context)
+                                          .textScaleFactor,
+                                      text: TextSpan(
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                        text: itinerary.hasAdvencedData
+                                            ? itinerary.durationTripString(
+                                                localization)
+                                            : localization
+                                                .instructionDurationMinutes(
+                                                    itinerary.time),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                " (${itinerary.getDistanceString(localization)})",
+                                            style: theme
+                                                .primaryTextTheme.bodyText2,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 5,
+                                    height: 50 *
+                                        MediaQuery.of(context).textScaleFactor,
+                                    color: currentPlanItinerary == itinerary
+                                        ? theme.primaryColor
+                                        : Colors.grey[200],
+                                    margin: const EdgeInsets.only(right: 5),
+                                  ),
+                                  Expanded(
+                                    child: LayoutBuilder(
+                                        builder: (builderContext, constrains) {
+                                      return ItinerarySummaryAdvanced(
+                                        maxWidth: constrains.maxWidth,
+                                        itinerary: itinerary,
+                                      );
+                                    }),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showDetail = true;
+                                      });
+                                      widget.planPageController
+                                          .inSelectedItinerary
+                                          .add(itinerary);
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      width: 30,
+                                      height: 50,
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: theme.primaryColor,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: Insets.sm,
-                                bottom: Insets.sm,
-                                right: Insets.xl),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                if (itinerary.hasAdvencedData)
-                                  Text(
-                                    "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
-                                    style: theme.primaryTextTheme.bodyText1
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                  ),
-                                RichText(
-                                  textScaleFactor:
-                                      MediaQuery.of(context).textScaleFactor,
-                                  text: TextSpan(
-                                    style: theme.primaryTextTheme.bodyText1
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                    text: itinerary.hasAdvencedData
-                                        ? itinerary
-                                            .durationTripString(localization)
-                                        : localization
-                                            .instructionDurationMinutes(
-                                                itinerary.time),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            " (${itinerary.getDistanceString(localization)})",
-                                        style: theme.primaryTextTheme.bodyText2,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 5,
-                                height:
-                                    50 * MediaQuery.of(context).textScaleFactor,
-                                color: currentPlanItinerary == itinerary
-                                    ? theme.primaryColor
-                                    : Colors.grey[200],
-                                margin: const EdgeInsets.only(right: 5),
-                              ),
-                              Expanded(
-                                child: LayoutBuilder(
-                                    builder: (builderContext, constrains) {
-                                  return ItinerarySummaryAdvanced(
-                                    maxWidth: constrains.maxWidth,
-                                    itinerary: itinerary,
-                                  );
-                                }),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    showDetail = true;
-                                  });
-                                  widget.planPageController.inSelectedItinerary
-                                      .add(itinerary);
-                                },
-                                child: Container(
-                                  color: Colors.transparent,
-                                  width: 30,
-                                  height: 50,
-                                  child: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: theme.primaryColor,
-                                  ),
-                                ),
-                              ),
+                              const Divider(),
                             ],
                           ),
-                          const Divider(),
-                        ],
-                      ),
-                    ),
-                  );
-                })
+                        ),
+                      );
+                    })
             : ListView(
                 children: [
                   LegOverviewAdvanced(

@@ -109,21 +109,30 @@ class OnlineGraphQLRepository implements RequestManager {
         defaultFecth: true,
       );
     }
-    final planEntity = planData.toPlan();
-    final itinerariesTrasnport = planEntity.itineraries
-        .where(
-          (itinerary) => !itinerary.legs
-              .every((leg) => leg.transportMode == TransportMode.walk),
-        )
-        .toList();
+    PlanEntity planEntity = planData.toPlan();
+    if (!planEntity.isOnlyWalk) {
+      planEntity = planData
+          .copyWith(
+            itineraries: planData.itineraries
+                .where(
+                  (itinerary) =>
+                      !itinerary.legs.every((leg) => leg.mode == Mode.walk),
+                )
+                .toList(),
+          )
+          .toPlan();
+    }
 
     return planEntity.copyWith(
-      itineraries: itinerariesTrasnport,
-      planInfoBoxs:
-          mainFetchIsEmpty ? [PlanInfoBox.usingDefaultTransports] : null,
-      error: itinerariesTrasnport.isEmpty
-          ? PlanError(404, "Not found routes")
-          : null,
+      planInfoBox: planEntity.isOnlyWalk
+          ? PlanInfoBox.noRouteMsg
+          : (mainFetchIsEmpty
+              ? PlanInfoBox.usingDefaultTransports
+              : PlanInfoBox.undefined),
+      // TODO remove when review by Samuel
+      // error: planEntity.itineraries.isEmpty
+      //     ? PlanError(404, "Not found routes")
+      //     : null,
     );
   }
 
