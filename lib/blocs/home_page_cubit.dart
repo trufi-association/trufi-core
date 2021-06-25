@@ -201,7 +201,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           plan: planInfoBox == null &&
                   auxPlanInfoBox != null &&
                   state.plan.isOnlyWalk
-              ? state.plan.copyWith(planInfoBox: planInfoBox)
+              ? state.plan.copyWith(planInfoBox: auxPlanInfoBox)
               : null,
           modesTransport: modesTransportEntity,
           isFetchingModes: false,
