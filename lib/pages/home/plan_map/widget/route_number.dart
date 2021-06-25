@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 
 class RouteNumber extends StatelessWidget {
