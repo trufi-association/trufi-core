@@ -17,11 +17,13 @@ class TransportDash extends StatelessWidget {
   final double dashWidth;
   final PlanItineraryLeg leg;
   final bool isNextTransport;
+  final bool isBeforeTransport;
   final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
     this.isNextTransport = false,
+    this.isBeforeTransport = true,
     this.isFirstTransport = false,
     this.height = 1,
     this.dashWidth = 5.0,
@@ -35,20 +37,21 @@ class TransportDash extends StatelessWidget {
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     return Column(
       children: [
-        DashLinePlace(
-          date: leg.startTimeString.toString(),
-          location: leg.fromPlace.name.toString(),
-          color: leg?.route?.color != null
-              ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
-          child: isFirstTransport
-              ? SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: FittedBox(child: configuration.markers.fromMarker),
-                )
-              : null,
-        ),
+        if (isBeforeTransport)
+          DashLinePlace(
+            date: leg.startTimeString.toString(),
+            location: leg.fromPlace.name.toString(),
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : leg.transportMode.color,
+            child: isFirstTransport
+                ? SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: FittedBox(child: configuration.markers.fromMarker),
+                  )
+                : null,
+          ),
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))

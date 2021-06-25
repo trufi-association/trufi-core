@@ -140,13 +140,17 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                           TransportDash(
                               leg: itineraryLeg,
                               isFirstTransport: true,
-                              isNextTransport:
-                                  (itineraryLeg.endTime.millisecondsSinceEpoch -
+                              isNextTransport: (itineraryLeg.endTime
+                                                  .millisecondsSinceEpoch -
                                               compresedLegs[index + 1]
                                                   .startTime
                                                   .millisecondsSinceEpoch)
                                           .abs() >=
-                                      0)
+                                      0 &&
+                                  (itineraryLeg.transportMode !=
+                                          TransportMode.bicycle ||
+                                      compresedLegs[index + 1].transportMode ==
+                                          TransportMode.walk))
                       ],
                     )
                   else if (itineraryLeg.transportMode == TransportMode.walk &&
@@ -171,6 +175,9 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                       children: [
                         TransportDash(
                             leg: itineraryLeg,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
+                                index == 0,
                             isNextTransport:
                                 (itineraryLeg.endTime.millisecondsSinceEpoch -
                                             compresedLegs[index + 1]
@@ -198,6 +205,10 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             TransportMode.walk)
                           TransportDash(
                             leg: itineraryLeg,
+                            isFirstTransport: index == 0,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
+                                index == 0,
                           ),
                         DashLinePlace(
                           date: widget.itinerary.endTimeHHmm.toString(),
