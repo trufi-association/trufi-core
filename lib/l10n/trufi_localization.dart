@@ -638,6 +638,12 @@ abstract class TrufiLocalization {
   /// **'No route suggestions were found because the origin is outside the service area.'**
   String get infoMessageOriginOutsideService;
 
+  /// Text info message Use National Service Prefix for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'We recommend you try the national journey planner,'**
+  String get infoMessageUseNationalServicePrefix;
+
   /// Itinerary leg distance (km)
   ///
   /// In en, this message translates to:

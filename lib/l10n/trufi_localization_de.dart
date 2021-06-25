@@ -280,6 +280,9 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get infoMessageOriginOutsideService => 'Leider konnte keine Route von diesem Startort gefunden werden. Der Startort befindet sich außerhalb des abgedeckten Gebietes. Bitte ändern Sie den Startort.';
 
   @override
+  String get infoMessageUseNationalServicePrefix => 'Wir empfehlen, dass Sie den überregionalen Routenplaner nutzen,';
+
+  @override
   String instructionDistanceKm(Object value) {
     return '${value} km';
   }

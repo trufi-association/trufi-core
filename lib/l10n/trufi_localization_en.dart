@@ -280,6 +280,9 @@ class TrufiLocalizationEn extends TrufiLocalization {
   String get infoMessageOriginOutsideService => 'No route suggestions were found because the origin is outside the service area.';
 
   @override
+  String get infoMessageUseNationalServicePrefix => 'We recommend you try the national journey planner,';
+
+  @override
   String instructionDistanceKm(Object value) {
     return '${value} km';
   }

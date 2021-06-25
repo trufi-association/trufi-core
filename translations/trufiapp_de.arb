@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-25T13:27:35+02:00",
+    "@@last_modified": "2021-06-25T13:48:54+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -370,6 +370,10 @@
     "infoMessageOriginOutsideService": "Leider konnte keine Route von diesem Startort gefunden werden. Der Startort befindet sich außerhalb des abgedeckten Gebietes. Bitte ändern Sie den Startort.",
     "@infoMessageOriginOutsideService": {
         "description": "Text info message origin outside for plan Fetch"
+    },
+    "infoMessageUseNationalServicePrefix": "Wir empfehlen, dass Sie den überregionalen Routenplaner nutzen,",
+    "@infoMessageUseNationalServicePrefix": {
+        "description": "Text info message Use National Service Prefix for plan Fetch"
     },
     "instructionDistanceKm": "{value} km",
     "@instructionDistanceKm": {

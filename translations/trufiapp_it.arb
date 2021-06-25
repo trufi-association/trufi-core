@@ -1,6 +1,6 @@
 {
     "@@locale": "it",
-    "@@last_modified": "2021-06-25T13:27:35+02:00",
+    "@@last_modified": "2021-06-25T13:48:54+02:00",
     "aboutContent": "Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -370,6 +370,10 @@
     "infoMessageOriginOutsideService": "No route suggestions were found because the origin is outside the service area.",
     "@infoMessageOriginOutsideService": {
         "description": "Text info message origin outside for plan Fetch"
+    },
+    "infoMessageUseNationalServicePrefix": "We recommend you try the national journey planner,",
+    "@infoMessageUseNationalServicePrefix": {
+        "description": "Text info message Use National Service Prefix for plan Fetch"
     },
     "instructionDistanceKm": "{value} km",
     "@instructionDistanceKm": {
