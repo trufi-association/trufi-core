@@ -176,30 +176,32 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await updateMapRouteState(state.copyWith(isFetchingModes: false));
         throw error;
       });
-      planInfoBox = null;
+      PlanInfoBox auxPlanInfoBox;
       if (modesTransportEntity.existWalkPlan ||
           modesTransportEntity.existBikePlan) {
         if (modesTransportEntity.existWalkPlan &&
             !modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.onlyWalkingRoutes;
+          auxPlanInfoBox = PlanInfoBox.onlyWalkingRoutes;
         } else if (!modesTransportEntity.existWalkPlan &&
             modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.onlyCyclingRoutes;
+          auxPlanInfoBox = PlanInfoBox.onlyCyclingRoutes;
         } else {
-          planInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
+          auxPlanInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
         }
       } else {
         if (initPayloadDataPlanState == advancedOptions) {
-          planInfoBox = PlanInfoBox.noRouteMsgWithChanges;
+          auxPlanInfoBox = PlanInfoBox.noRouteMsgWithChanges;
         } else {
-          planInfoBox = PlanInfoBox.noRouteMsg;
+          auxPlanInfoBox = PlanInfoBox.noRouteMsg;
         }
       }
 
       await updateMapRouteState(
         state.copyWith(
-          plan: planInfoBox != null && state.plan.isOnlyWalk
-              ? state.plan.copyWith(planInfoBox: planInfoBox)
+          plan: planInfoBox == null &&
+                  auxPlanInfoBox != null &&
+                  state.plan.isOnlyWalk
+              ? state.plan.copyWith(planInfoBox: auxPlanInfoBox)
               : null,
           modesTransport: modesTransportEntity,
           isFetchingModes: false,
