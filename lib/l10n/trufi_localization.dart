@@ -410,6 +410,12 @@ abstract class TrufiLocalization {
   /// **'Walk'**
   String get commonWalk;
 
+  /// copyrights Price Provider for cost
+  ///
+  /// In en, this message translates to:
+  /// **'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.'**
+  String get copyrightsPriceProvider;
+
   /// The name Add for {defaultLocation}
   ///
   /// In en, this message translates to:
@@ -571,6 +577,66 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Follow us on Twitter'**
   String get followOnTwitter;
+
+  /// Text info message Destination outside for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the destination is outside the service area.'**
+  String get infoMessageDestinationOutsideService;
+
+  /// Text info message No Route Msg for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, no route suggestions were found.'**
+  String get infoMessageNoRouteMsg;
+
+  /// Text info message No Route Msg With Changes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.'**
+  String get infoMessageNoRouteMsgWithChanges;
+
+  /// Text info message no route origin same as a destination for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin and destination are the same.'**
+  String get infoMessageNoRouteOriginNearDestination;
+
+  /// Text info message No Route Origin Same As Destination for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin and destination are very close to each other.'**
+  String get infoMessageNoRouteOriginSameAsDestination;
+
+  /// Text info message No Route Showing Alternative Options for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found with the your settings. However, we found the following route options:'**
+  String get infoMessageNoRouteShowingAlternativeOptions;
+
+  /// Text info message Only walking and cycling Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only walking and cycling routes.'**
+  String get infoMessageOnlyCyclingRoutes;
+
+  /// Text info message Only cycling Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only cycling routes.'**
+  String get infoMessageOnlyWalkingCyclingRoutes;
+
+  /// Text info message Only Walking Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only walking routes.'**
+  String get infoMessageOnlyWalkingRoutes;
+
+  /// Text info message origin outside for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin is outside the service area.'**
+  String get infoMessageOriginOutsideService;
 
   /// Itinerary leg distance (km)
   ///

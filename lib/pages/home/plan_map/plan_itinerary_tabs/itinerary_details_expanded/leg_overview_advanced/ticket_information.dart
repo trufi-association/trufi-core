@@ -104,8 +104,7 @@ class TicketInformation extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.only(top: 7),
                 child: Text(
-                  // TODO translate
-                  'Tarifauskünfte werden durch die Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW) zur Verfügung gestellt. Alle Angaben ohne Gewähr.',
+                  localization.copyrightsPriceProvider,
                   style: theme.primaryTextTheme.bodyText1
                       .copyWith(fontSize: 12, color: Colors.grey[600]),
                   textAlign: TextAlign.left,

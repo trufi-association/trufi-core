@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-06-20T23:48:51+02:00",
+    "@@last_modified": "2021-06-25T13:27:35+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -201,6 +201,10 @@
     "@commonWalk": {
         "description": "General Walk label"
     },
+    "copyrightsPriceProvider": "Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.",
+    "@copyrightsPriceProvider": {
+        "description": "copyrights Price Provider for cost"
+    },
     "defaultLocationAdd": "Version {version}",
     "@defaultLocationAdd": {
         "placeholders": {
@@ -326,6 +330,46 @@
     "followOnTwitter": "Follow us on Twitter",
     "@followOnTwitter": {
         "description": "Twitter menu item"
+    },
+    "infoMessageDestinationOutsideService": "No route suggestions were found because the destination is outside the service area.",
+    "@infoMessageDestinationOutsideService": {
+        "description": "Text info message Destination outside for plan Fetch"
+    },
+    "infoMessageNoRouteMsg": "Unfortunately, no route suggestions were found.",
+    "@infoMessageNoRouteMsg": {
+        "description": "Text info message No Route Msg for plan Fetch"
+    },
+    "infoMessageNoRouteMsgWithChanges": "Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.",
+    "@infoMessageNoRouteMsgWithChanges": {
+        "description": "Text info message No Route Msg With Changes for plan Fetch"
+    },
+    "infoMessageNoRouteOriginNearDestination": "No route suggestions were found because the origin and destination are the same.",
+    "@infoMessageNoRouteOriginNearDestination": {
+        "description": "Text info message no route origin same as a destination for plan Fetch"
+    },
+    "infoMessageNoRouteOriginSameAsDestination": "No route suggestions were found because the origin and destination are very close to each other.",
+    "@infoMessageNoRouteOriginSameAsDestination": {
+        "description": "Text info message No Route Origin Same As Destination for plan Fetch"
+    },
+    "infoMessageNoRouteShowingAlternativeOptions": "No route suggestions were found with the your settings. However, we found the following route options:",
+    "@infoMessageNoRouteShowingAlternativeOptions": {
+        "description": "Text info message No Route Showing Alternative Options for plan Fetch"
+    },
+    "infoMessageOnlyCyclingRoutes": "Your search returned only walking and cycling routes.",
+    "@infoMessageOnlyCyclingRoutes": {
+        "description": "Text info message Only walking and cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingCyclingRoutes": "Your search returned only cycling routes.",
+    "@infoMessageOnlyWalkingCyclingRoutes": {
+        "description": "Text info message Only cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingRoutes": "Your search returned only walking routes.",
+    "@infoMessageOnlyWalkingRoutes": {
+        "description": "Text info message Only Walking Routes for plan Fetch"
+    },
+    "infoMessageOriginOutsideService": "No route suggestions were found because the origin is outside the service area.",
+    "@infoMessageOriginOutsideService": {
+        "description": "Text info message origin outside for plan Fetch"
     },
     "instructionDistanceKm": "{value} km.",
     "@instructionDistanceKm": {

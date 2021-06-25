@@ -181,12 +181,12 @@ class HomePageCubit extends Cubit<MapRouteState> {
           modesTransportEntity.existBikePlan) {
         if (modesTransportEntity.existWalkPlan &&
             !modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.walkBikeItinerary1;
+          planInfoBox = PlanInfoBox.onlyWalkingRoutes;
         } else if (!modesTransportEntity.existWalkPlan &&
             modesTransportEntity.existBikePlan) {
-          planInfoBox = PlanInfoBox.walkBikeItinerary2;
+          planInfoBox = PlanInfoBox.onlyCyclingRoutes;
         } else {
-          planInfoBox = PlanInfoBox.walkBikeItinerary3;
+          planInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
         }
       } else {
         if (initPayloadDataPlanState == advancedOptions) {

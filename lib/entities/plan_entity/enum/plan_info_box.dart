@@ -5,9 +5,9 @@ enum PlanInfoBox {
   destinationOutsideService,
   noRouteOriginSameAsDestination,
   noRouteOriginNearDestination,
-  walkBikeItinerary1,
-  walkBikeItinerary2,
-  walkBikeItinerary3,
+  onlyWalkingRoutes,
+  onlyCyclingRoutes,
+  onlyWalkingCyclingRoutes,
   noRouteMsgWithChanges,
   noRouteMsg,
   usingDefaultTransports,
@@ -29,9 +29,9 @@ extension PlanInfoBoxExtension on PlanInfoBox {
         'NO_ROUTE_ORIGIN_SAME_AS_DESTINATION',
     PlanInfoBox.noRouteOriginNearDestination:
         'NO_ROUTE_ORIGIN_NEAR_DESTINATION',
-    PlanInfoBox.walkBikeItinerary1: 'WALK_BIKE_ITINERARY1',
-    PlanInfoBox.walkBikeItinerary2: 'WALK_BIKE_ITINERARY2',
-    PlanInfoBox.walkBikeItinerary3: 'WALK_BIKE_ITINERARY3',
+    PlanInfoBox.onlyWalkingRoutes: 'WALK_BIKE_ITINERARY1',
+    PlanInfoBox.onlyCyclingRoutes: 'WALK_BIKE_ITINERARY2',
+    PlanInfoBox.onlyWalkingCyclingRoutes: 'WALK_BIKE_ITINERARY3',
     PlanInfoBox.noRouteMsgWithChanges: 'NO_ROUTE_MSG_WITH_CHANGES',
     PlanInfoBox.noRouteMsg: 'NO_ROUTE_MSG',
     PlanInfoBox.usingDefaultTransports: 'USING_DEFAULT_TRANSPORTS',
@@ -43,44 +43,34 @@ extension PlanInfoBoxExtension on PlanInfoBox {
   String translateValue(TrufiLocalization localization) {
     switch (this) {
       case PlanInfoBox.originOutsideService:
-        // TODO translate
-        return 'originOutsideService';
+        return localization.infoMessageOriginOutsideService;
         break;
       case PlanInfoBox.destinationOutsideService:
-        // TODO translate
-        return 'destinationOutsideService';
+        return localization.infoMessageDestinationOutsideService;
         break;
       case PlanInfoBox.noRouteOriginSameAsDestination:
-        // TODO translate
-        return 'noRouteOriginSameAsDestination';
+        return localization.infoMessageNoRouteOriginSameAsDestination;
         break;
       case PlanInfoBox.noRouteOriginNearDestination:
-        // TODO translate
-        return 'noRouteOriginNearDestination';
+        return localization.infoMessageNoRouteOriginNearDestination;
         break;
-      case PlanInfoBox.walkBikeItinerary1:
-        // TODO translate
-        return 'walkBikeItinerary1';
+      case PlanInfoBox.onlyWalkingRoutes:
+        return localization.infoMessageOnlyWalkingRoutes;
         break;
-      case PlanInfoBox.walkBikeItinerary2:
-        // TODO translate
-        return 'walkBikeItinerary2';
+      case PlanInfoBox.onlyCyclingRoutes:
+        return localization.infoMessageOnlyCyclingRoutes;
         break;
-      case PlanInfoBox.walkBikeItinerary3:
-        // TODO translate
-        return 'walkBikeItinerary3';
+      case PlanInfoBox.onlyWalkingCyclingRoutes:
+        return localization.infoMessageOnlyWalkingCyclingRoutes;
         break;
       case PlanInfoBox.noRouteMsgWithChanges:
-        // TODO translate
-        return 'noRouteMsgWithChanges';
+        return localization.infoMessageNoRouteMsgWithChanges;
         break;
       case PlanInfoBox.noRouteMsg:
-        // TODO translate
-        return 'noRouteMsg';
+        return localization.infoMessageNoRouteMsg;
         break;
       case PlanInfoBox.usingDefaultTransports:
-        // TODO translate
-        return 'Keine Routenvorschläge mit Ihren Einstelllungen gefunden. Stattdessen haben wird die folgenden Reiseoptionen gefunden:';
+        return localization.infoMessageNoRouteShowingAlternativeOptions;
         break;
       default:
         return localization.commonError;
