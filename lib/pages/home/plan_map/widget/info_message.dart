@@ -68,7 +68,7 @@ class InfoMessage extends StatelessWidget {
               top: 0,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: Colors.grey,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 padding: const EdgeInsets.all(1.5),
