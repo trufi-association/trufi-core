@@ -9,6 +9,10 @@ class VehicleParking {
   final String imageUrl;
   final List<String> tags;
   final bool anyCarPlaces;
+  final String vehicleParkingId;
+  final String detailsUrl;
+  final String note;
+  final String openingHours;
 
   const VehicleParking({
     this.name,
@@ -19,6 +23,10 @@ class VehicleParking {
     this.imageUrl,
     this.tags,
     this.anyCarPlaces,
+    this.vehicleParkingId,
+    this.detailsUrl,
+    this.note,
+    this.openingHours,
   });
 
   factory VehicleParking.fromMap(Map<String, dynamic> json) => VehicleParking(
@@ -37,6 +45,10 @@ class VehicleParking {
             ? (json['tags'] as List<dynamic>).cast<String>()
             : null,
         anyCarPlaces: json['anyCarPlaces'] as bool,
+        vehicleParkingId: json['vehicleParkingId'] as String,
+        detailsUrl: json['detailsUrl'] as String,
+        note: json['note'] as String,
+        openingHours: json['openingHours'] as String,
       );
 
   Map<String, dynamic> toMap() => {
@@ -48,5 +60,9 @@ class VehicleParking {
         'imageUrl': imageUrl,
         'tags': tags,
         'anyCarPlaces': anyCarPlaces,
+        'vehicleParkingId': vehicleParkingId,
+        'detailsUrl': detailsUrl,
+        'note': note,
+        'openingHours': openingHours,
       };
 }
