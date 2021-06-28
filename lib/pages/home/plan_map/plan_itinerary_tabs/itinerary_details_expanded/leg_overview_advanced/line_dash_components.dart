@@ -104,16 +104,24 @@ class TransportDash extends StatelessWidget {
 
 class WalkDash extends StatelessWidget {
   final PlanItineraryLeg leg;
+  final PlanItineraryLeg legBefore;
   const WalkDash({
     Key key,
     @required this.leg,
+    this.legBefore,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    return Row(
+    return Column(
       children: [
+        if (legBefore != null && legBefore.transportMode == TransportMode.walk)
+          DashLinePlace(
+            date: leg.startTimeString.toString(),
+            location: leg.fromPlace.name,
+            color: Colors.grey,
+          ),
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
