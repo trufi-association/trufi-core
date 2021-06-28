@@ -159,6 +159,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                       children: [
                         WalkDash(
                           leg: itineraryLeg,
+                          legBefore: compresedLegs[index - 1],
                         ),
                         if (itineraryLeg.endTime.millisecondsSinceEpoch <
                             compresedLegs[index + 1]
