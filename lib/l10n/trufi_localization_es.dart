@@ -268,10 +268,10 @@ class TrufiLocalizationEs extends TrufiLocalization {
   String get infoMessageNoRouteShowingAlternativeOptions => 'No route suggestions were found with the your settings. However, we found the following route options:';
 
   @override
-  String get infoMessageOnlyCyclingRoutes => 'Your search returned only walking and cycling routes.';
+  String get infoMessageOnlyCyclingRoutes => 'Your search returned only cycling routes.';
 
   @override
-  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only cycling routes.';
+  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only walking and cycling routes.';
 
   @override
   String get infoMessageOnlyWalkingRoutes => 'Your search returned only walking routes.';

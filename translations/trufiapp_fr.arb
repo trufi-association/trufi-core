@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-06-25T13:48:54+02:00",
+    "@@last_modified": "2021-06-28T17:04:20+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -355,11 +355,11 @@
     "@infoMessageNoRouteShowingAlternativeOptions": {
         "description": "Text info message No Route Showing Alternative Options for plan Fetch"
     },
-    "infoMessageOnlyCyclingRoutes": "Your search returned only walking and cycling routes.",
+    "infoMessageOnlyCyclingRoutes": "Your search returned only cycling routes.",
     "@infoMessageOnlyCyclingRoutes": {
         "description": "Text info message Only walking and cycling Routes for plan Fetch"
     },
-    "infoMessageOnlyWalkingCyclingRoutes": "Your search returned only cycling routes.",
+    "infoMessageOnlyWalkingCyclingRoutes": "Your search returned only walking and cycling routes.",
     "@infoMessageOnlyWalkingCyclingRoutes": {
         "description": "Text info message Only cycling Routes for plan Fetch"
     },
