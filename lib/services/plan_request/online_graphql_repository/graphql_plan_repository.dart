@@ -55,7 +55,7 @@ class GraphQLPlanRepository {
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required PayloadDataPlanState advancedOptions,
-    String locale,
+    @required String locale,
     bool defaultFecth = false,
   }) async {
     final transportsMode =
@@ -133,7 +133,7 @@ class GraphQLPlanRepository {
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required PayloadDataPlanState advancedOptions,
-    String locale,
+    @required String locale,
   }) async {
     final linearDistance =
         estimateDistance(fromLocation.latLng, toLocation.latLng);

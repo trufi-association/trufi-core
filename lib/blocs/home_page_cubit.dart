@@ -229,6 +229,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
                     correlationId: correlationId,
                     advancedOptions: advancedOptions
                         .copyWith(transportModes: [TransportMode.car]),
+                    localeName: localization.localeName,
                   )
                 : requestManager.fetchCarPlan(
                     state.fromPlace,
@@ -239,10 +240,12 @@ class HomePageCubit extends Cubit<MapRouteState> {
         : CancelableOperation.fromFuture(
             () {
               return requestManager.fetchAdvancedPlan(
-                  from: state.fromPlace,
-                  to: state.toPlace,
-                  correlationId: correlationId,
-                  advancedOptions: advancedOptions);
+                from: state.fromPlace,
+                to: state.toPlace,
+                correlationId: correlationId,
+                advancedOptions: advancedOptions,
+                localeName: localization.localeName,
+              );
             }(),
           );
     final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
@@ -278,7 +281,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
             from: state.fromPlace,
             to: state.toPlace,
             correlationId: correlationId,
-            advancedOptions: advancedOptions);
+            advancedOptions: advancedOptions,
+            localeName: localization.localeName);
       }(),
     );
     final ModesTransportEntity plan =

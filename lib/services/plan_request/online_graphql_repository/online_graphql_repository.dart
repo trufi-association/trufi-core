@@ -28,15 +28,16 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation to,
     @required String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) async {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, [TransportMode.transit, TransportMode.walk]);
     } else {
       return _fetchPlanAdvanced(
-        from: from,
-        to: to,
-        advancedOptions: advancedOptions,
-      );
+          from: from,
+          to: to,
+          advancedOptions: advancedOptions,
+          locale: localeName);
     }
   }
 
@@ -46,11 +47,13 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) {
     return _fetchTransportModePlan(
       from: from,
       to: to,
       advancedOptions: advancedOptions,
+      locale: localeName,
     );
   }
 
@@ -86,11 +89,13 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
+    @required String locale,
   }) async {
     Plan planData = await _graphQLPlanRepository.fetchPlanAdvanced(
       fromLocation: from,
       toLocation: to,
       advancedOptions: advancedOptions,
+      locale: locale,
     );
     planData = planData.copyWith(
       itineraries: planData.itineraries
@@ -106,6 +111,7 @@ class OnlineGraphQLRepository implements RequestManager {
         fromLocation: from,
         toLocation: to,
         advancedOptions: advancedOptions,
+        locale: locale,
         defaultFecth: true,
       );
     }
@@ -140,13 +146,14 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
+    @required String locale,
   }) async {
     final ModesTransport planEntityData =
         await _graphQLPlanRepository.fetchWalkBikePlanQuery(
-      fromLocation: from,
-      toLocation: to,
-      advancedOptions: advancedOptions,
-    );
+            fromLocation: from,
+            toLocation: to,
+            advancedOptions: advancedOptions,
+            locale: locale);
     return planEntityData.toModesTransport();
   }
 }
