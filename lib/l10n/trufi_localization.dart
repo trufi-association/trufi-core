@@ -617,13 +617,13 @@ abstract class TrufiLocalization {
   /// Text info message Only walking and cycling Routes for plan Fetch
   ///
   /// In en, this message translates to:
-  /// **'Your search returned only walking and cycling routes.'**
+  /// **'Your search returned only cycling routes.'**
   String get infoMessageOnlyCyclingRoutes;
 
   /// Text info message Only cycling Routes for plan Fetch
   ///
   /// In en, this message translates to:
-  /// **'Your search returned only cycling routes.'**
+  /// **'Your search returned only walking and cycling routes.'**
   String get infoMessageOnlyWalkingCyclingRoutes;
 
   /// Text info message Only Walking Routes for plan Fetch
