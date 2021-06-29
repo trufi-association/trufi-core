@@ -96,11 +96,6 @@ class TicketInformation extends StatelessWidget {
                   ],
                 ),
               ),
-              if (hasBikeLeg)
-                InfoMessage(
-                  message: localization.itineraryPriceOnlyPublicTransport,
-                  margin: const EdgeInsets.only(right: 15, top: 5),
-                ),
               Container(
                 padding: const EdgeInsets.only(top: 7),
                 child: Text(
@@ -110,6 +105,11 @@ class TicketInformation extends StatelessWidget {
                   textAlign: TextAlign.left,
                 ),
               ),
+              if (hasBikeLeg)
+                InfoMessage(
+                  message: localization.itineraryPriceOnlyPublicTransport,
+                  margin: const EdgeInsets.only(right: 15, top: 5),
+                ),
             ],
           );
   }
