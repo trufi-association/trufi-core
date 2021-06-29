@@ -6,6 +6,7 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/utils/modes_transport_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinarary_details_collapsed/itinerary_summary_advanced.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/leg_overview_advanced.dart';
@@ -107,8 +108,12 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       int lengthBikePark;
                       if (widget.planPageController.plan.type ==
                           'bikeAndPublicPlan') {
-                        lengthBikePark = homePageState
-                            .modesTransport?.bikeParkPlan?.itineraries?.length;
+                        lengthBikePark = filterOnlyBikeAndWalk(homePageState
+                                    .modesTransport
+                                    ?.bikeParkPlan
+                                    ?.itineraries ??
+                                [])
+                            ?.length;
                       }
                       return GestureDetector(
                         onTap: () {
