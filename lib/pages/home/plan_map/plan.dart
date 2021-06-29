@@ -7,7 +7,6 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/composite_subscription.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
-import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
