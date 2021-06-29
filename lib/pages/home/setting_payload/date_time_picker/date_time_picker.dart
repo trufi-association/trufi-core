@@ -50,10 +50,6 @@ class _DateTimePickerState extends State<DateTimePicker>
         });
       }
     });
-    Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer t) => _setInitialDateTime(),
-    );
   }
 
   @override
@@ -169,17 +165,6 @@ class _DateTimePickerState extends State<DateTimePicker>
         ],
       ),
     );
-  }
-
-  void _setInitialDateTime() {
-    setState(() {
-      final tempNow = DateTime.now();
-      if (initialDateTime.isBefore(tempNow)) {
-        initialDateTime = tempNow
-            .roundDown(delta: const Duration(minutes: 15))
-            .add(const Duration(minutes: 15));
-      }
-    });
   }
 }
 
