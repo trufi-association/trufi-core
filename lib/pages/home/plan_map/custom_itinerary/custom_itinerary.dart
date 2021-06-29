@@ -108,6 +108,12 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       itemBuilder: (buildContext, index) {
                         final itinerary =
                             widget.planPageController.plan.itineraries[index];
+                        int lengthBikePark;
+                        if (widget.planPageController.plan.type ==
+                            'bikeAndPublicPlan') {
+                          lengthBikePark = homePageState.modesTransport
+                              ?.bikeParkPlan?.itineraries?.length;
+                        }
                         return GestureDetector(
                           onTap: () {
                             widget.planPageController.inSelectedItinerary
@@ -142,6 +148,38 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                           );
                                         },
                                       )),
+                                if (index == 0 &&
+                                    lengthBikePark != null &&
+                                    lengthBikePark > 0)
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      localization
+                                          .itinerarySummaryBikeParkTitle,
+                                      style: theme.primaryTextTheme.bodyText2
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                if (lengthBikePark != null &&
+                                    lengthBikePark == index &&
+                                    lengthBikePark <
+                                        widget.planPageController.plan
+                                            .itineraries.length)
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 7),
+                                    child: Text(
+                                      localization
+                                          .itinerarySummaryBikeAndPublicRailSubwayTitle,
+                                      style: theme.primaryTextTheme.bodyText2
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
                                 Padding(
                                   padding: EdgeInsets.only(
                                       top: Insets.sm,
