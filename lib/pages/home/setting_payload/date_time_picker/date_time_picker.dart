@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -50,10 +48,6 @@ class _DateTimePickerState extends State<DateTimePicker>
         });
       }
     });
-    Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer t) => _setInitialDateTime(),
-    );
   }
 
   @override
@@ -169,17 +163,6 @@ class _DateTimePickerState extends State<DateTimePicker>
         ],
       ),
     );
-  }
-
-  void _setInitialDateTime() {
-    setState(() {
-      final tempNow = DateTime.now();
-      if (initialDateTime.isBefore(tempNow)) {
-        initialDateTime = tempNow
-            .roundDown(delta: const Duration(minutes: 15))
-            .add(const Duration(minutes: 15));
-      }
-    });
   }
 }
 
