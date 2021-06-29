@@ -254,7 +254,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
     if (plan != null && !plan.hasError) {
       return plan;
     } else if (plan == null) {
-      throw FetchCanceledByUserException(localization.errorCancelledByUser);
+      // FIXME Research about is correct use the exception
+      // throw FetchCanceledByUserException(localization.errorCancelledByUser);
+      return null;
     } else if (plan.hasError) {
       if (car) {
         throw FetchOnlineCarException(plan.error.message);
