@@ -243,15 +243,14 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   Future<void> loadData() async {
     if (widget.itinerary.compressLegs.isNotEmpty &&
         widget.itinerary.compressLegs.any((leg) => leg.transitLeg)) {
-      final openTripPlannerUrl =
-          context.read<ConfigurationCubit>().state.urls.openTripPlannerUrl;
+      final faresUrl = context.read<ConfigurationCubit>().state.urls.faresUrl;
 
       if (!mounted) return;
       setState(() {
         fetchError = null;
         loading = true;
       });
-      fetchFares(widget.itinerary, openTripPlannerUrl).then((value) {
+      fetchFares(widget.itinerary, faresUrl).then((value) {
         if (mounted) {
           setState(() {
             fares = getFares(value);
