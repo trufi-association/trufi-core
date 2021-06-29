@@ -5,6 +5,7 @@ class IconTransport extends StatelessWidget {
   final Color bacgroundColor;
   final String text;
   final Widget icon;
+  final Widget secondaryIcon;
 
   const IconTransport({
     Key key,
@@ -12,6 +13,7 @@ class IconTransport extends StatelessWidget {
     @required this.bacgroundColor,
     @required this.text,
     @required this.icon,
+    this.secondaryIcon,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,15 @@ class IconTransport extends StatelessWidget {
             width: 22,
             child: icon ?? const Icon(Icons.error),
           ),
+          if (secondaryIcon != null)
+            SizedBox(
+              height: 22,
+              width: 22,
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: secondaryIcon,
+              ),
+            ),
           Flexible(
             child: Text(
               text,

@@ -115,6 +115,8 @@ class RouteLeg extends StatelessWidget {
           icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode.getImage(color: Colors.white),
+          secondaryIcon:
+              (maxWidth * perc) >= 46 ? bikeSvg(color: 'FFFFFF') : null,
           text: (maxWidth * perc - 24) >=
                   ((leg?.route?.shortName?.length ?? 100) * 8.5)
               ? leg?.route?.shortName != null
