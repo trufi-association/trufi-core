@@ -378,6 +378,12 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
 
   @override
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Nehmen Sie Ihr Rad mit in den Zug oder die Bahn';
+
+  @override
+  String get itinerarySummaryBikeParkTitle => 'Fahrrad abstellen und weiterfahren';
+
+  @override
   String get itineraryTicketsTitle => 'Benötigte Fahrkarten';
 
   @override
