@@ -368,62 +368,64 @@ class PlanMapPageStateData {
         final List<Marker> markers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
-        final List<PlanItineraryLeg> compressedLegs = itinerary.compressLegs;
+        final bool showOnlySelected = selectedItinerary.isOnlyShowItinerary;
+        if (!showOnlySelected || isSelected) {
+          final List<PlanItineraryLeg> compressedLegs = itinerary.compressLegs;
+          for (int i = 0; i < compressedLegs.length; i++) {
+            final PlanItineraryLeg leg = compressedLegs[i];
+            // Polyline
+            final List<LatLng> points = leg.accumulatedPoints.isNotEmpty
+                ? leg.accumulatedPoints
+                : decodePolyline(leg.points);
+            final Color color = isSelected
+                ? leg.transportMode == TransportMode.bicycle &&
+                        leg.fromPlace.bikeRentalStation != null
+                    ? getBikeRentalNetwork(
+                            leg.fromPlace.bikeRentalStation.networks[0])
+                        .color
+                    : (leg?.route?.color != null
+                        ? Color(int.tryParse("0xFF${leg.route.color}"))
+                        : leg.transportMode.color)
+                : Colors.grey;
+            final Polyline polyline = Polyline(
+              points: points,
+              color: color,
+              strokeWidth: isSelected ? 6.0 : 3.0,
+              isDotted: leg.transportMode == TransportMode.walk,
+            );
 
-        for (int i = 0; i < compressedLegs.length; i++) {
-          final PlanItineraryLeg leg = compressedLegs[i];
-          // Polyline
-          final List<LatLng> points = leg.accumulatedPoints.isNotEmpty
-              ? leg.accumulatedPoints
-              : decodePolyline(leg.points);
-          final Color color = isSelected
-              ? leg.transportMode == TransportMode.bicycle &&
-                      leg.fromPlace.bikeRentalStation != null
-                  ? getBikeRentalNetwork(
-                          leg.fromPlace.bikeRentalStation.networks[0])
-                      .color
-                  : (leg?.route?.color != null
+            // Transfer marker
+            if (isSelected &&
+                i < compressedLegs.length - 1 &&
+                polyline.points.isNotEmpty) {
+              markers.add(
+                buildTransferMarker(
+                  polyline.points[polyline.points.length - 1],
+                ),
+              );
+            }
+
+            // Bus marker
+            if (showTransportMarker &&
+                leg.transportMode != TransportMode.walk &&
+                leg.transportMode != TransportMode.bicycle &&
+                leg.transportMode != TransportMode.car) {
+              markers.add(
+                buildBusMarker(
+                  midPointForPolyline(polyline),
+                  leg?.route?.color != null && isSelected
                       ? Color(int.tryParse("0xFF${leg.route.color}"))
-                      : leg.transportMode.color)
-              : Colors.grey;
-          final Polyline polyline = Polyline(
-            points: points,
-            color: color,
-            strokeWidth: isSelected ? 6.0 : 3.0,
-            isDotted: leg.transportMode == TransportMode.walk,
-          );
-
-          // Transfer marker
-          if (isSelected &&
-              i < compressedLegs.length - 1 &&
-              polyline.points.isNotEmpty) {
-            markers.add(
-              buildTransferMarker(
-                polyline.points[polyline.points.length - 1],
-              ),
-            );
+                      : Colors.grey,
+                  leg,
+                  icon: (leg?.route?.type ?? 0) == 715
+                      ? onDemandTaxiSvg(color: 'FFFFFF')
+                      : null,
+                  onTap: () => onTap(itinerary),
+                ),
+              );
+            }
+            polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
           }
-
-          // Bus marker
-          if (showTransportMarker &&
-              leg.transportMode != TransportMode.walk &&
-              leg.transportMode != TransportMode.bicycle &&
-              leg.transportMode != TransportMode.car) {
-            markers.add(
-              buildBusMarker(
-                midPointForPolyline(polyline),
-                leg?.route?.color != null && isSelected
-                    ? Color(int.tryParse("0xFF${leg.route.color}"))
-                    : Colors.grey,
-                leg,
-                icon: (leg?.route?.type ?? 0) == 715
-                    ? onDemandTaxiSvg(color: 'FFFFFF')
-                    : null,
-                onTap: () => onTap(itinerary),
-              ),
-            );
-          }
-          polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
         }
         itineraries.addAll({itinerary: polylinesWithMarkers});
       }

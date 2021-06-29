@@ -215,7 +215,8 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                         });
                                         widget.planPageController
                                             .inSelectedItinerary
-                                            .add(itinerary);
+                                            .add(itinerary.copyWith(
+                                                isOnlyShowItinerary: true));
                                       },
                                       child: Container(
                                         color: Colors.transparent,
@@ -242,6 +243,9 @@ class _CustomItineraryState extends State<CustomItinerary> {
                           setState(() {
                             showDetail = false;
                           });
+                          widget.planPageController.inSelectedItinerary.add(
+                              currentPlanItinerary.copyWith(
+                                  isOnlyShowItinerary: false));
                         },
                         itinerary: currentPlanItinerary),
                   ],

@@ -1,6 +1,6 @@
 part of 'plan_entity.dart';
 
-class PlanItinerary {
+class PlanItinerary extends Equatable {
   static const String _legs = "legs";
   static const String _startTime = "startTime";
   static const String _endTime = "endTime";
@@ -21,6 +21,7 @@ class PlanItinerary {
     this.walkTime,
     this.durationTrip,
     this.walkDistance,
+    this.isOnlyShowItinerary = false,
   })  : distance = _distanceForLegs(legs),
         time = _timeForLegs(legs);
 
@@ -30,6 +31,8 @@ class PlanItinerary {
   final Duration walkTime;
   final Duration durationTrip;
   final double walkDistance;
+  final bool isOnlyShowItinerary;
+
   // add
 
   final int distance;
@@ -75,6 +78,7 @@ class PlanItinerary {
     Duration walkTime,
     Duration durationTrip,
     double walkDistance,
+    bool isOnlyShowItinerary,
   }) {
     return PlanItinerary(
       legs: legs ?? this.legs,
@@ -83,6 +87,7 @@ class PlanItinerary {
       walkTime: walkTime ?? this.walkTime,
       durationTrip: durationTrip ?? this.durationTrip,
       walkDistance: walkDistance ?? this.walkDistance,
+      isOnlyShowItinerary: isOnlyShowItinerary ?? this.isOnlyShowItinerary,
     );
   }
 
@@ -293,4 +298,14 @@ class PlanItinerary {
           : previousValue;
     });
   }
+
+  @override
+  List<Object> get props => [
+        legs,
+        startTime,
+        endTime,
+        walkTime,
+        durationTrip,
+        walkDistance,
+      ];
 }
