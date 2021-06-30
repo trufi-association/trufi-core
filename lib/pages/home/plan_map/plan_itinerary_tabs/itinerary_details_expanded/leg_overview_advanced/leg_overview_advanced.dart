@@ -138,6 +138,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                           )
                         else if (compresedLegs.length > 1)
                           TransportDash(
+                              itinerary: widget.itinerary,
                               leg: itineraryLeg,
                               isFirstTransport: true,
                               isNextTransport: (itineraryLeg.endTime
@@ -175,6 +176,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                     Column(
                       children: [
                         TransportDash(
+                            itinerary: widget.itinerary,
                             leg: itineraryLeg,
                             isBeforeTransport: itineraryLeg.transportMode !=
                                     TransportMode.bicycle ||
@@ -207,6 +209,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                         else if (itineraryLeg.transportMode !=
                             TransportMode.walk)
                           TransportDash(
+                            itinerary: widget.itinerary,
                             leg: itineraryLeg,
                             isFirstTransport: index == 0,
                             isBeforeTransport: itineraryLeg.transportMode !=

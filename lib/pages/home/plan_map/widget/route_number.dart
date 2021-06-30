@@ -80,7 +80,7 @@ class RouteNumber extends StatelessWidget {
                   textContainer == null)
                 Container(
                   margin: const EdgeInsets.only(left: 8),
-                  width: 150,
+                  width: 176,
                   child: Text(
                     tripHeadSing ?? '',
                     style: theme.primaryTextTheme.bodyText1,
@@ -104,7 +104,7 @@ class RouteNumber extends StatelessWidget {
                 )
               else
                 Container(
-                  width: 180,
+                  width: 210,
                   padding: const EdgeInsets.only(top: 5, left: 5),
                   child: textContainer,
                 ),

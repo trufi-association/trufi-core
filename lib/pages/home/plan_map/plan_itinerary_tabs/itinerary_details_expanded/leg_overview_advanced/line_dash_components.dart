@@ -16,12 +16,14 @@ class TransportDash extends StatelessWidget {
   final double height;
   final double dashWidth;
   final PlanItineraryLeg leg;
+  final PlanItinerary itinerary;
   final bool isNextTransport;
   final bool isBeforeTransport;
   final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
+    @required this.itinerary,
     this.isNextTransport = false,
     this.isBeforeTransport = true,
     this.isFirstTransport = false,
@@ -100,7 +102,13 @@ class TransportDash extends StatelessWidget {
                       },
                     ),
                   ],
-                )
+                ),
+              if (isTypeBikeRentalNetwork &&
+                  (itinerary?.arrivedAtDestinationWithRentedBicycle ?? false))
+                InfoMessage(
+                    message:
+                        // TODO Translate
+                        'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.'),
             ],
           ),
         ),
