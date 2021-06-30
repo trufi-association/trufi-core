@@ -117,8 +117,19 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       }
                       return GestureDetector(
                         onTap: () {
-                          widget.planPageController.inSelectedItinerary
-                              .add(itinerary);
+                          if (currentPlanItinerary != itinerary) {
+                            widget.planPageController.inSelectedItinerary
+                                .add(itinerary);
+                          } else {
+                            setState(() {
+                              showDetail = true;
+                            });
+                            widget.planPageController.inSelectedItinerary.add(
+                              itinerary.copyWith(
+                                isOnlyShowItinerary: true,
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           // for avoid bad behavior of gesture detector
