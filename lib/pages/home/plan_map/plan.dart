@@ -102,7 +102,9 @@ class CurrentPlanPageState extends State<PlanPage>
     final children = <Widget>[
       BlocBuilder<HomePageCubit, MapRouteState>(
         builder: (context, state) {
-          resetController(PlanPageController(state.plan, state.ad));
+          if (state.isFetchEarlier || state.isFetchLater) {
+            resetController(PlanPageController(state.plan, state.ad));
+          }
           return CustomScrollableContainer(
             openedPosition: 200,
             body: PlanMapPage(
