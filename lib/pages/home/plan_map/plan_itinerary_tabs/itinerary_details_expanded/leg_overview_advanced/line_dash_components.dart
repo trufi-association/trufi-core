@@ -33,8 +33,8 @@ class TransportDash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = context.read<ConfigurationCubit>().state;
     final TrufiLocalization localization = TrufiLocalization.of(context);
+    final configuration = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.read<HomePageCubit>();
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     final isTypeBikeRentalNetwork =
@@ -47,8 +47,7 @@ class TransportDash extends StatelessWidget {
             date: leg.startTimeString.toString(),
             location: leg.transportMode == TransportMode.bicycle &&
                     leg.fromPlace.bikeRentalStation != null
-                // TODO translate
-                ? 'Fetch a rental bike:'
+                ? localization.bikeRentalFetchRentalBike
                 : leg.fromPlace.name.toString(),
             color: leg?.route?.color != null
                 ? Color(int.tryParse("0xFF${leg.route.color}"))
@@ -106,9 +105,7 @@ class TransportDash extends StatelessWidget {
               if (isTypeBikeRentalNetwork &&
                   (itinerary?.arrivedAtDestinationWithRentedBicycle ?? false))
                 InfoMessage(
-                    message:
-                        // TODO Translate
-                        'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.'),
+                    message: localization.bikeRentalNetworkFreeFloating),
             ],
           ),
         ),

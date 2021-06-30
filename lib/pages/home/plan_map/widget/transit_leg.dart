@@ -64,8 +64,7 @@ class TransitLeg extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
-                          // TODO translate
-                          'Bike station',
+                          localization.bikeRentalBikeStation,
                           style: TextStyle(color: Colors.grey[800]),
                         ),
                       ),
