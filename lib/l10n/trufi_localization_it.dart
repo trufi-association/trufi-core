@@ -85,6 +85,9 @@ class TrufiLocalizationIt extends TrufiLocalization {
   String get commonDestination => 'Destinazione';
 
   @override
+  String get commonDetails => 'Walk';
+
+  @override
   String get commonError => 'Errore';
 
   @override

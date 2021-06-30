@@ -85,6 +85,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonDestination => 'afisi yim nele';
 
   @override
+  String get commonDetails => 'Walk';
+
+  @override
   String get commonError => 'aforku';
 
   @override
