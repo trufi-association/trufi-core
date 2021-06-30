@@ -7,6 +7,8 @@ class PlanItinerary extends Equatable {
   static const String _walkTime = "walkTime";
   static const String _durationTrip = "duration";
   static const String _walkDistance = "walkDistance";
+  static const String _arrivedAtDestinationWithRentedBicycle =
+      "arrivedAtDestinationWithRentedBicycle";
 
   static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
       legs.fold<int>(0, (distance, leg) => distance += leg.distance.ceil());
@@ -21,6 +23,7 @@ class PlanItinerary extends Equatable {
     this.walkTime,
     this.durationTrip,
     this.walkDistance,
+    this.arrivedAtDestinationWithRentedBicycle,
     this.isOnlyShowItinerary = false,
   })  : distance = _distanceForLegs(legs),
         time = _timeForLegs(legs);
@@ -31,6 +34,7 @@ class PlanItinerary extends Equatable {
   final Duration walkTime;
   final Duration durationTrip;
   final double walkDistance;
+  final bool arrivedAtDestinationWithRentedBicycle;
   final bool isOnlyShowItinerary;
 
   // add
@@ -40,24 +44,27 @@ class PlanItinerary extends Equatable {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-        legs: json[_legs].map<PlanItineraryLeg>((dynamic json) {
-          return PlanItineraryLeg.fromJson(json as Map<String, dynamic>);
-        }).toList() as List<PlanItineraryLeg>,
-        startTime: json[_startTime] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                int.tryParse(json[_startTime].toString()) ?? 0)
-            : null,
-        endTime: json[_endTime] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                int.tryParse(json[_endTime].toString()) ?? 0)
-            : null,
-        walkTime: json[_walkTime] != null
-            ? Duration(seconds: json[_walkTime] as int)
-            : null,
-        durationTrip: json[_durationTrip] != null
-            ? Duration(seconds: json[_durationTrip] as int)
-            : null,
-        walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0);
+      legs: json[_legs].map<PlanItineraryLeg>((dynamic json) {
+        return PlanItineraryLeg.fromJson(json as Map<String, dynamic>);
+      }).toList() as List<PlanItineraryLeg>,
+      startTime: json[_startTime] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              int.tryParse(json[_startTime].toString()) ?? 0)
+          : null,
+      endTime: json[_endTime] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              int.tryParse(json[_endTime].toString()) ?? 0)
+          : null,
+      walkTime: json[_walkTime] != null
+          ? Duration(seconds: json[_walkTime] as int)
+          : null,
+      durationTrip: json[_durationTrip] != null
+          ? Duration(seconds: json[_durationTrip] as int)
+          : null,
+      walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
+      arrivedAtDestinationWithRentedBicycle:
+          json[_arrivedAtDestinationWithRentedBicycle] as bool,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -67,7 +74,9 @@ class PlanItinerary extends Equatable {
       _endTime: endTime?.millisecondsSinceEpoch,
       _walkTime: walkTime?.inSeconds,
       _durationTrip: durationTrip?.inSeconds,
-      _walkDistance: walkDistance
+      _walkDistance: walkDistance,
+      _arrivedAtDestinationWithRentedBicycle:
+          arrivedAtDestinationWithRentedBicycle
     };
   }
 
@@ -78,6 +87,7 @@ class PlanItinerary extends Equatable {
     Duration walkTime,
     Duration durationTrip,
     double walkDistance,
+    bool arrivedAtDestinationWithRentedBicycle,
     bool isOnlyShowItinerary,
   }) {
     return PlanItinerary(
@@ -87,6 +97,9 @@ class PlanItinerary extends Equatable {
       walkTime: walkTime ?? this.walkTime,
       durationTrip: durationTrip ?? this.durationTrip,
       walkDistance: walkDistance ?? this.walkDistance,
+      arrivedAtDestinationWithRentedBicycle:
+          arrivedAtDestinationWithRentedBicycle ??
+              this.arrivedAtDestinationWithRentedBicycle,
       isOnlyShowItinerary: isOnlyShowItinerary ?? this.isOnlyShowItinerary,
     );
   }
@@ -307,5 +320,6 @@ class PlanItinerary extends Equatable {
         walkTime,
         durationTrip,
         walkDistance,
+        arrivedAtDestinationWithRentedBicycle,
       ];
 }

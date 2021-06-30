@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
@@ -12,16 +13,22 @@ import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
 
+import '../../../plan.dart';
+
 class TransportDash extends StatelessWidget {
+  final PlanPageController planPageController;
   final double height;
   final double dashWidth;
   final PlanItineraryLeg leg;
+  final PlanItinerary itinerary;
   final bool isNextTransport;
   final bool isBeforeTransport;
   final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
+    @required this.itinerary,
+    @required this.planPageController,
     this.isNextTransport = false,
     this.isBeforeTransport = true,
     this.isFirstTransport = false,
@@ -31,19 +38,29 @@ class TransportDash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final configuration = context.read<ConfigurationCubit>().state;
     final TrufiLocalization localization = TrufiLocalization.of(context);
+    final configuration = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.read<HomePageCubit>();
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
+    final isTypeBikeRentalNetwork =
+        leg.transportMode == TransportMode.bicycle &&
+            leg.fromPlace?.bikeRentalStation != null;
     return Column(
       children: [
         if (isBeforeTransport)
           DashLinePlace(
             date: leg.startTimeString.toString(),
-            location: leg.fromPlace.name.toString(),
+            location: leg.transportMode == TransportMode.bicycle &&
+                    leg.fromPlace.bikeRentalStation != null
+                ? localization.bikeRentalFetchRentalBike
+                : leg.fromPlace.name.toString(),
             color: leg?.route?.color != null
                 ? Color(int.tryParse("0xFF${leg.route.color}"))
-                : leg.transportMode.color,
+                : isTypeBikeRentalNetwork
+                    ? getBikeRentalNetwork(
+                            leg.fromPlace.bikeRentalStation.networks[0])
+                        .color
+                    : leg.transportMode.color,
             child: isFirstTransport
                 ? SizedBox(
                     height: 24,
@@ -55,13 +72,25 @@ class TransportDash extends StatelessWidget {
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
+              : isTypeBikeRentalNetwork
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
+                  : leg.transportMode.color,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TransitLeg(
-                leg: leg,
+              GestureDetector(
+                onTap: () {
+                  if (planPageController != null) {
+                    planPageController.inSelectePosition
+                        .add(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+                  }
+                },
+                child: TransitLeg(
+                  leg: leg,
+                ),
               ),
               if (configuration.planItineraryLegBuilder != null)
                 configuration.planItineraryLegBuilder(context, leg) ??
@@ -85,7 +114,11 @@ class TransportDash extends StatelessWidget {
                       },
                     ),
                   ],
-                )
+                ),
+              if (isTypeBikeRentalNetwork &&
+                  (itinerary?.arrivedAtDestinationWithRentedBicycle ?? false))
+                InfoMessage(
+                    message: localization.bikeRentalNetworkFreeFloating),
             ],
           ),
         ),

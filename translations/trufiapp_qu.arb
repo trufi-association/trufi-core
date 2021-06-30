@@ -1,6 +1,6 @@
 {
     "@@locale": "qu",
-    "@@last_modified": "2021-06-30T16:26:03+02:00",
+    "@@last_modified": "2021-06-30T22:05:39+02:00",
     "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -36,6 +36,18 @@
     "appReviewDialogTitle": "Enjoying Trufi?",
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
+    },
+    "bikeRentalBikeStation": "Bike station",
+    "@bikeRentalBikeStation": {
+        "description": "Common Text Bike station"
+    },
+    "bikeRentalFetchRentalBike": "Fetch a rental bike:",
+    "@bikeRentalFetchRentalBike": {
+        "description": "Common Text Fetch a rental bike."
+    },
+    "bikeRentalNetworkFreeFloating": "Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.",
+    "@bikeRentalNetworkFreeFloating": {
+        "description": "Text Bike Rental Network message FreeFloating"
     },
     "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
     "@carParkCloseCapacityMessage": {

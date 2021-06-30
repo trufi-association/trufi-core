@@ -21,6 +21,9 @@ class TransitLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final isTypeBikeRentalNetwork =
+        leg.transportMode == TransportMode.bicycle &&
+            leg.fromPlace?.bikeRentalStation != null;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,14 +32,14 @@ class TransitLeg extends StatelessWidget {
           transportMode: leg.transportMode,
           backgroundColor: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode == TransportMode.bicycle &&
-                      leg.fromPlace.bikeRentalStation != null
-                  ? Colors.white
+              : isTypeBikeRentalNetwork
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
                   : leg.transportMode.backgroundColor,
           icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
-              : leg.transportMode == TransportMode.bicycle &&
-                      leg.fromPlace.bikeRentalStation != null
+              : isTypeBikeRentalNetwork
                   ? getBikeRentalNetwork(
                           leg.fromPlace.bikeRentalStation.networks[0])
                       .image
@@ -47,6 +50,27 @@ class TransitLeg extends StatelessWidget {
           tripHeadSing: leg.headSign,
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
+          textContainer: isTypeBikeRentalNetwork
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (isTypeBikeRentalNetwork)
+                      Text(
+                        leg.fromPlace.name.toString(),
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                      ),
+                    if (isTypeBikeRentalNetwork)
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          localization.bikeRentalBikeStation,
+                          style: TextStyle(color: Colors.grey[800]),
+                        ),
+                      ),
+                  ],
+                )
+              : null,
         ),
         if (leg.dropOffBookingInfo != null)
           Column(

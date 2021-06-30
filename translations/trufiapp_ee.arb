@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-06-30T16:26:03+02:00",
+    "@@last_modified": "2021-06-30T22:05:39+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -36,6 +36,18 @@
     "appReviewDialogTitle": "trufi de vi nawoa",
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
+    },
+    "bikeRentalBikeStation": "Bike station",
+    "@bikeRentalBikeStation": {
+        "description": "Common Text Bike station"
+    },
+    "bikeRentalFetchRentalBike": "Fetch a rental bike:",
+    "@bikeRentalFetchRentalBike": {
+        "description": "Common Text Fetch a rental bike."
+    },
+    "bikeRentalNetworkFreeFloating": "Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.",
+    "@bikeRentalNetworkFreeFloating": {
+        "description": "Text Bike Rental Network message FreeFloating"
     },
     "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
     "@carParkCloseCapacityMessage": {

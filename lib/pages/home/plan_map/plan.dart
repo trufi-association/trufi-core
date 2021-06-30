@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
@@ -27,6 +28,7 @@ class PlanPageController {
   final AdEntity ad;
 
   final _selectedItineraryController = rx.BehaviorSubject<PlanItinerary>();
+  final _positionMap = rx.BehaviorSubject<LatLng>();
   final _subscriptions = CompositeSubscription();
 
   PlanItinerary _selectedItinerary;
@@ -42,6 +44,14 @@ class PlanPageController {
 
   Stream<PlanItinerary> get outSelectedItinerary {
     return _selectedItineraryController.stream;
+  }
+
+  Sink<LatLng> get inSelectePosition {
+    return _positionMap.sink;
+  }
+
+  Stream<LatLng> get outSelectePosition {
+    return _positionMap.stream;
   }
 
   PlanItinerary get selectedItinerary => _selectedItinerary;

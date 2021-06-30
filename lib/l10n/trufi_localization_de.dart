@@ -37,6 +37,15 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get appReviewDialogTitle => 'Magst du Trufi?';
 
   @override
+  String get bikeRentalBikeStation => 'Leihrad-Station';
+
+  @override
+  String get bikeRentalFetchRentalBike => 'Leihrad ausleihen:';
+
+  @override
+  String get bikeRentalNetworkFreeFloating => 'Ziel ist keine Rückgabestation. Ausleihe kann hier nicht abgeschlossen werden. Anbieterabhängig fallen weiter Gebühren bis zur Rückgabe an einer Station an.';
+
+  @override
   String get carParkCloseCapacityMessage => 'Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.';
 
   @override

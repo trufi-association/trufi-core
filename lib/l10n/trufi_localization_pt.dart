@@ -37,6 +37,15 @@ class TrufiLocalizationPt extends TrufiLocalization {
   String get appReviewDialogTitle => 'Gostando de Trufi?';
 
   @override
+  String get bikeRentalBikeStation => 'Bike station';
+
+  @override
+  String get bikeRentalFetchRentalBike => 'Fetch a rental bike:';
+
+  @override
+  String get bikeRentalNetworkFreeFloating => 'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.';
+
+  @override
   String get carParkCloseCapacityMessage => 'This car park is close to capacity. Please allow additional time for you journey.';
 
   @override
