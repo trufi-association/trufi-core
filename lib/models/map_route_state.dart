@@ -104,11 +104,7 @@ class MapRouteState extends Equatable {
               json[_modesTransport] as Map<String, dynamic>)
           : null,
       ad: AdEntity.fromJson(json[_ad] as Map<String, dynamic>),
-      isFetching: json[_isFetching] as bool ?? false,
-      isFetchingModes: json[_isFetchingModes] as bool ?? false,
       showSuccessAnimation: json[_showSuccessAnimation] as bool ?? false,
-      isFetchLater: json[_isFetchLater] as bool ?? false,
-      isFetchEarlier: json[_isFetchEarlier] as bool ?? false,
     );
   }
 
