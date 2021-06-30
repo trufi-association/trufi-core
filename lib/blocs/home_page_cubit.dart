@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
@@ -130,7 +131,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await Future.delayed(const Duration(milliseconds: 200));
         await updateMapRouteState(
           state.copyWith(
-            isFetching: false,
+            isFetching: true,
+            isFetchingModes: false,
+            isFetchEarlier: false,
+            isFetchLater: false,
+            isFetchingMore: false,
             showSuccessAnimation: true,
             plan: PlanEntity(
               planInfoBox: planInfoBox,
@@ -145,10 +150,15 @@ class HomePageCubit extends Cubit<MapRouteState> {
           return;
         }
       } else {
-        await updateMapRouteState(state.copyWithoutMap(
-          isFetching: true,
-          isFetchingModes: false,
-        ));
+        await updateMapRouteState(
+          state.copyWithoutMap(
+            isFetching: true,
+            isFetchingModes: false,
+            isFetchEarlier: false,
+            isFetchLater: false,
+            isFetchingMore: false,
+          ),
+        );
         final PlanEntity planEntity = await _fetchPlan(
           correlationId,
           localization,
@@ -209,6 +219,150 @@ class HomePageCubit extends Cubit<MapRouteState> {
         ),
       );
     }
+  }
+
+  Future<void> fetchMoreDeparturePlan(
+    String correlationId,
+    TrufiLocalization localization, {
+    @required List<PlanItinerary> itineraries,
+    PayloadDataPlanState advancedOptions,
+    bool isFetchEarlier = true,
+  }) async {
+    await updateMapRouteState(state.copyWith(
+      isFetchEarlier: isFetchEarlier,
+      isFetchLater: !isFetchEarlier,
+      isFetchingMore: false,
+    ));
+
+    DateTime newDateTime;
+    if (isFetchEarlier) {
+      final newItinerary = itineraries.reduce((value, element) {
+        if (element.startTime.isBefore(value.startTime)) {
+          return element;
+        }
+        return value;
+      });
+      newDateTime = newItinerary.endTime.subtract(const Duration(minutes: 1));
+    } else {
+      final newItinerary = itineraries.reduce((value, element) {
+        if (element.startTime.isAfter(value.startTime)) {
+          return element;
+        }
+        return value;
+      });
+      newDateTime = newItinerary.startTime;
+    }
+
+    final PlanEntity planEntity = await _fetchPlan(
+      correlationId,
+      localization,
+      advancedOptions:
+          advancedOptions.copyWith(date: newDateTime, arriveBy: isFetchEarlier),
+    ).catchError((error) async {
+      await updateMapRouteState(state.copyWith(
+        isFetchEarlier: false,
+        isFetchLater: false,
+        isFetchingMore: false,
+      ));
+      throw error;
+    });
+
+    List<PlanItinerary> tempItinerarires;
+    if (isFetchEarlier) {
+      tempItinerarires = [
+        ...planEntity.itineraries.reversed ?? [],
+        ...state.plan?.itineraries ?? [],
+      ];
+    } else {
+      tempItinerarires = [
+        ...state.plan?.itineraries ?? [],
+        ...planEntity.itineraries ?? [],
+      ];
+    }
+
+    await updateMapRouteState(state.copyWith(
+      plan: state.plan.copyWith(itineraries: tempItinerarires),
+      isFetchingMore: true,
+    ));
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    await updateMapRouteState(state.copyWith(
+      isFetchEarlier: false,
+      isFetchLater: false,
+      isFetchingMore: false,
+    ));
+  }
+
+  Future<void> fetchMoreArrivalPlan(
+    String correlationId,
+    TrufiLocalization localization, {
+    @required List<PlanItinerary> itineraries,
+    PayloadDataPlanState advancedOptions,
+    bool isFetchEarlier = true,
+  }) async {
+    await updateMapRouteState(state.copyWith(
+      isFetchEarlier: isFetchEarlier,
+      isFetchLater: !isFetchEarlier,
+      isFetchingMore: false,
+    ));
+
+    DateTime newDateTime;
+    if (isFetchEarlier) {
+      final newItinerary = itineraries.reduce((value, element) {
+        if (element.startTime.isAfter(value.startTime)) {
+          return element;
+        }
+        return value;
+      });
+      newDateTime = newItinerary.startTime.add(const Duration(minutes: 1));
+    } else {
+      final newItinerary = itineraries.reduce((value, element) {
+        if (element.startTime.isBefore(value.startTime)) {
+          return element;
+        }
+        return value;
+      });
+      newDateTime = newItinerary.endTime.subtract(const Duration(minutes: 1));
+    }
+
+    final PlanEntity planEntity = await _fetchPlan(
+      correlationId,
+      localization,
+      advancedOptions: advancedOptions.copyWith(
+          date: newDateTime, arriveBy: !isFetchEarlier),
+    ).catchError((error) async {
+      await updateMapRouteState(state.copyWith(
+        isFetchEarlier: false,
+        isFetchLater: false,
+        isFetchingMore: false,
+      ));
+      throw error;
+    });
+
+    List<PlanItinerary> tempItinerarires;
+    if (isFetchEarlier) {
+      tempItinerarires = [
+        ...planEntity.itineraries.reversed ?? [],
+        ...state.plan?.itineraries ?? [],
+      ];
+    } else {
+      tempItinerarires = [
+        ...state.plan?.itineraries ?? [],
+        ...planEntity.itineraries ?? [],
+      ];
+    }
+
+    await updateMapRouteState(state.copyWith(
+      plan: state.plan.copyWith(itineraries: tempItinerarires),
+      isFetchingMore: true,
+    ));
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    await updateMapRouteState(state.copyWith(
+      isFetchEarlier: false,
+      isFetchLater: false,
+      isFetchingMore: false,
+    ));
   }
 
   Future<PlanEntity> _fetchPlan(

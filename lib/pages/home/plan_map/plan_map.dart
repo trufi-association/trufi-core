@@ -81,8 +81,8 @@ class PlanMapPageState extends State<PlanMapPage>
 
   @override
   void dispose() {
-    _subscriptions.cancel();
-    _trufiMapController.dispose();
+    _subscriptions?.cancel();
+    _trufiMapController?.dispose();
     super.dispose();
   }
 

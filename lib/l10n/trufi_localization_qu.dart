@@ -241,6 +241,12 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get feedbackTitle => 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!';
 
   @override
+  String get fetchMoreItinerariesEarlierDepartures => 'Earlier departures';
+
+  @override
+  String get fetchMoreItinerariesLaterDeparturesTitle => 'Later departures';
+
+  @override
   String get followOnFacebook => 'Follow us on Facebook';
 
   @override

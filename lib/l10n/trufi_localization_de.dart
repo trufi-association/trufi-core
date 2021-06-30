@@ -241,6 +241,12 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get feedbackTitle => 'E-Mail senden';
 
   @override
+  String get fetchMoreItinerariesEarlierDepartures => 'Früher';
+
+  @override
+  String get fetchMoreItinerariesLaterDeparturesTitle => 'Später';
+
+  @override
   String get followOnFacebook => 'Folge uns auf Facebook';
 
   @override
@@ -378,7 +384,7 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get itineraryPriceOnlyPublicTransport => 'Preisauskunft nur für ÖPNV gültig.';
 
   @override
-  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Nehmen Sie Ihr Rad mit in den Zug oder die Bahn';
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Nehmen Sie Ihr Rad mit in den Zug oder die bahn';
 
   @override
   String get itinerarySummaryBikeParkTitle => 'Fahrrad abstellen und weiterfahren';

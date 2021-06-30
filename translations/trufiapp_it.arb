@@ -1,6 +1,6 @@
 {
     "@@locale": "it",
-    "@@last_modified": "2021-06-29T15:03:08+02:00",
+    "@@last_modified": "2021-06-30T16:26:03+02:00",
     "aboutContent": "Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -318,6 +318,14 @@
     "feedbackTitle": "Inviaci un'E-mail",
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
+    },
+    "fetchMoreItinerariesEarlierDepartures": "Earlier departures",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Later departures",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
     },
     "followOnFacebook": "Follow us on Facebook",
     "@followOnFacebook": {

@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-29T15:03:08+02:00",
+    "@@last_modified": "2021-06-30T16:26:03+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -319,6 +319,14 @@
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
     },
+    "fetchMoreItinerariesEarlierDepartures": "Früher",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Später",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
+    },
     "followOnFacebook": "Folge uns auf Facebook",
     "@followOnFacebook": {
         "description": "Facebook menu item"
@@ -537,7 +545,7 @@
     "@itineraryPriceOnlyPublicTransport": {
         "description": "Itinerary Price Only PublicTransport label"
     },
-    "itinerarySummaryBikeAndPublicRailSubwayTitle": "Nehmen Sie Ihr Rad mit in den Zug oder die Bahn",
+    "itinerarySummaryBikeAndPublicRailSubwayTitle": "Nehmen Sie Ihr Rad mit in den Zug oder die bahn",
     "@itinerarySummaryBikeAndPublicRailSubwayTitle": {
         "description": "Text title itinerary Summary Bike And Public Rail Subway"
     },

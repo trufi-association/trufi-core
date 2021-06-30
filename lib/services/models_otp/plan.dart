@@ -108,6 +108,6 @@ class Plan {
           .toList(),
       // TODO remove when review by Samuel
       // error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
-    );
+    )?.copyWith(type: 'plan');
   }
 }

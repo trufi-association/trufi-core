@@ -1,6 +1,6 @@
 {
     "@@locale": "qu",
-    "@@last_modified": "2021-06-29T15:03:08+02:00",
+    "@@last_modified": "2021-06-30T16:26:03+02:00",
     "aboutContent": "Bolivia suyumantapacha waq jawa suyukunawan jukchasqa kayku, munayku chanta kallpanchayku ima transporte publico ñisqata. Kay thatkichiy ruwasqa kachkan Qhuchapampa jap’iypi, ukhupi jawaman ima, aswan sasata ch’usanaykipaq.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -318,6 +318,14 @@
     "feedbackTitle": "Correo electrónico ñiqta yuyasqasniykita apachimuwayku!",
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
+    },
+    "fetchMoreItinerariesEarlierDepartures": "Earlier departures",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Later departures",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
     },
     "followOnFacebook": "Follow us on Facebook",
     "@followOnFacebook": {
