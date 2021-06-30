@@ -15,6 +15,7 @@ class MapRouteState extends Equatable {
   static const String _isFetchingModes = "isFetchingModes";
   static const String _isFetchLater = "isFetchLater";
   static const String _isFetchEarlier = "isFetchEarlier";
+  static const String _isFetchingMore = "isFetchingMore";
 
   const MapRouteState({
     this.fromPlace,
@@ -26,6 +27,7 @@ class MapRouteState extends Equatable {
     this.isFetchingModes = false,
     this.isFetchLater = false,
     this.isFetchEarlier = false,
+    this.isFetchingMore = false,
     this.showSuccessAnimation = false,
   });
 
@@ -38,6 +40,7 @@ class MapRouteState extends Equatable {
   final bool isFetchingModes;
   final bool isFetchLater;
   final bool isFetchEarlier;
+  final bool isFetchingMore;
   final bool showSuccessAnimation;
 
   MapRouteState copyWith({
@@ -51,6 +54,7 @@ class MapRouteState extends Equatable {
     bool showSuccessAnimation,
     bool isFetchLater,
     bool isFetchEarlier,
+    bool isFetchingMore,
     CancelableOperation<PlanEntity> currentFetchPlanOperation,
     CancelableOperation<AdEntity> currentFetchAdOperation,
   }) {
@@ -64,6 +68,7 @@ class MapRouteState extends Equatable {
       isFetchingModes: isFetchingModes ?? this.isFetchingModes,
       isFetchLater: isFetchLater ?? this.isFetchLater,
       isFetchEarlier: isFetchEarlier ?? this.isFetchEarlier,
+      isFetchingMore: isFetchingMore ?? this.isFetchingMore,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
     );
   }
@@ -77,6 +82,7 @@ class MapRouteState extends Equatable {
     bool showSuccessAnimation,
     bool isFetchLater,
     bool isFetchEarlier,
+    bool isFetchingMore,
     CancelableOperation<PlanEntity> currentFetchPlanOperation,
     CancelableOperation<AdEntity> currentFetchAdOperation,
   }) {
@@ -88,6 +94,7 @@ class MapRouteState extends Equatable {
       isFetchingModes: isFetchingModes ?? this.isFetchingModes,
       isFetchLater: isFetchLater ?? this.isFetchLater,
       isFetchEarlier: isFetchEarlier ?? this.isFetchEarlier,
+      isFetchingMore: isFetchingMore ?? this.isFetchingMore,
       showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
     );
   }
@@ -120,6 +127,7 @@ class MapRouteState extends Equatable {
       _showSuccessAnimation: showSuccessAnimation ?? false,
       _isFetchLater: isFetchLater ?? false,
       _isFetchEarlier: isFetchEarlier ?? false,
+      _isFetchingMore: isFetchingMore ?? false,
     };
   }
 
@@ -148,5 +156,6 @@ class MapRouteState extends Equatable {
         showSuccessAnimation,
         isFetchLater,
         isFetchEarlier,
+        isFetchingMore,
       ];
 }

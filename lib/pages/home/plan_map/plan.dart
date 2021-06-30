@@ -102,14 +102,15 @@ class CurrentPlanPageState extends State<PlanPage>
     final children = <Widget>[
       BlocBuilder<HomePageCubit, MapRouteState>(
         builder: (context, state) {
-          if (state.isFetchEarlier || state.isFetchLater) {
+          if ((state.isFetchEarlier || state.isFetchLater) &&
+              state.isFetchingMore) {
             resetController(PlanPageController(state.plan, state.ad));
           }
           return CustomScrollableContainer(
             openedPosition: 200,
             body: PlanMapPage(
               key: Key(
-                  'PlanMapPageSSS${state.isFetchEarlier}${state.isFetchLater}'),
+                  'PlanMapPageSSS${state.isFetchEarlier}${state.isFetchLater}${state.isFetchingMore}'),
               planPageController: _planPageController,
               customOverlayWidget: widget.customOverlayWidget,
               customBetweenFabWidget: widget.customBetweenFabWidget,
@@ -118,7 +119,7 @@ class CurrentPlanPageState extends State<PlanPage>
             ),
             panel: CustomItinerary(
               key: Key(
-                  'CustomItinerarySSS${state.isFetchEarlier}${state.isFetchLater}'),
+                  'CustomItinerarySSS${state.isFetchEarlier}${state.isFetchLater}${state.isFetchingMore}'),
               planPageController: _planPageController,
             ),
           );

@@ -135,6 +135,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
             isFetchingModes: false,
             isFetchEarlier: false,
             isFetchLater: false,
+            isFetchingMore: false,
             showSuccessAnimation: true,
             plan: PlanEntity(
               planInfoBox: planInfoBox,
@@ -155,6 +156,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
             isFetchingModes: false,
             isFetchEarlier: false,
             isFetchLater: false,
+            isFetchingMore: false,
           ),
         );
         final PlanEntity planEntity = await _fetchPlan(
@@ -229,6 +231,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(state.copyWith(
       isFetchEarlier: isFetchEarlier,
       isFetchLater: !isFetchEarlier,
+      isFetchingMore: false,
     ));
 
     DateTime newDateTime;
@@ -256,7 +259,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
       advancedOptions:
           advancedOptions.copyWith(date: newDateTime, arriveBy: isFetchEarlier),
     ).catchError((error) async {
-      await updateMapRouteState(state.copyWith(isFetching: false));
+      await updateMapRouteState(state.copyWith(
+        isFetchEarlier: false,
+        isFetchLater: false,
+        isFetchingMore: false,
+      ));
       throw error;
     });
 
@@ -275,8 +282,14 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
     await updateMapRouteState(state.copyWith(
       plan: state.plan.copyWith(itineraries: tempItinerarires),
+      isFetchingMore: true,
+    ));
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    await updateMapRouteState(state.copyWith(
       isFetchEarlier: false,
       isFetchLater: false,
+      isFetchingMore: false,
     ));
   }
 
@@ -290,6 +303,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(state.copyWith(
       isFetchEarlier: isFetchEarlier,
       isFetchLater: !isFetchEarlier,
+      isFetchingMore: false,
     ));
 
     DateTime newDateTime;
@@ -317,7 +331,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
       advancedOptions: advancedOptions.copyWith(
           date: newDateTime, arriveBy: !isFetchEarlier),
     ).catchError((error) async {
-      await updateMapRouteState(state.copyWith(isFetching: false));
+      await updateMapRouteState(state.copyWith(
+        isFetchEarlier: false,
+        isFetchLater: false,
+        isFetchingMore: false,
+      ));
       throw error;
     });
 
@@ -336,8 +354,14 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
     await updateMapRouteState(state.copyWith(
       plan: state.plan.copyWith(itineraries: tempItinerarires),
+      isFetchingMore: true,
+    ));
+
+    await Future.delayed(const Duration(milliseconds: 200));
+    await updateMapRouteState(state.copyWith(
       isFetchEarlier: false,
       isFetchLater: false,
+      isFetchingMore: false,
     ));
   }
 
