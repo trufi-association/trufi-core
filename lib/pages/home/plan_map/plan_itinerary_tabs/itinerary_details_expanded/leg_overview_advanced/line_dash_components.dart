@@ -43,7 +43,12 @@ class TransportDash extends StatelessWidget {
             location: leg.fromPlace.name.toString(),
             color: leg?.route?.color != null
                 ? Color(int.tryParse("0xFF${leg.route.color}"))
-                : leg.transportMode.color,
+                : leg.transportMode == TransportMode.bicycle &&
+                        leg.fromPlace.bikeRentalStation != null
+                    ? getBikeRentalNetwork(
+                            leg.fromPlace.bikeRentalStation.networks[0])
+                        .color
+                    : leg.transportMode.color,
             child: isFirstTransport
                 ? SizedBox(
                     height: 24,
@@ -55,7 +60,12 @@ class TransportDash extends StatelessWidget {
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
+              : leg.transportMode == TransportMode.bicycle &&
+                      leg.fromPlace.bikeRentalStation != null
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
+                  : leg.transportMode.color,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
