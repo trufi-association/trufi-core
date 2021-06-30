@@ -36,6 +36,7 @@ fragment ItineraryLine_legs on Leg {
     }
     stop {
       gtfsId
+      name
       code
       platformCode
       id
@@ -56,6 +57,7 @@ fragment ItineraryLine_legs on Leg {
     }
     stop {
       gtfsId
+      name
       code
       platformCode
       id
@@ -146,6 +148,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
         realtimeState
         stop {
           gtfsId
+          name
           id
         }
         pickupType
@@ -177,6 +180,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
     to {
       stop {
         gtfsId
+        name
         zoneId
         alerts {
           alertSeverityLevel
@@ -258,6 +262,7 @@ fragment ItineraryTab_itinerary on Itinerary {
         platformCode
         vehicleMode
         zoneId
+        name
         alerts {
           alertSeverityLevel
           effectiveEndDate
@@ -299,6 +304,7 @@ fragment ItineraryTab_itinerary on Itinerary {
       }
       stop {
         gtfsId
+        name
         code
         platformCode
         zoneId
@@ -425,6 +431,7 @@ fragment ItineraryTab_itinerary on Itinerary {
         realtimeState
         stop {
           gtfsId
+          name
           id
         }
       }
@@ -594,6 +601,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
           lon
           stop {
             gtfsId
+            name
             zoneId
             id
           }
@@ -606,6 +614,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
         to {
           stop {
             gtfsId
+            name
             zoneId
             id
           }

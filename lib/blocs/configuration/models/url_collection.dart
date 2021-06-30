@@ -12,10 +12,14 @@ class UrlCollection {
   /// To share the application set this link to an appropriate page
   final String shareUrl;
 
+  /// Url for request fares transport
+  final String faresUrl;
+
   UrlCollection({
     this.routeFeedbackUrl = "",
     this.openTripPlannerUrl = "",
     this.donationUrl = "",
     this.shareUrl = "",
+    this.faresUrl = "",
   });
 }
