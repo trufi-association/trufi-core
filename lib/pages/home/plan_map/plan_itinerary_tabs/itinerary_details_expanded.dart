@@ -22,7 +22,10 @@ class ItineraryDetailsExpanded extends StatelessWidget {
     return SizedBox(
       height: animationDetailHeight.value,
       child: itinerary.hasAdvencedData
-          ? LegOverviewAdvanced(itinerary: itinerary)
+          ? LegOverviewAdvanced(
+              itinerary: itinerary,
+              planPageController: null,
+            )
           : LegOverview(itinerary: itinerary, ad: ad),
     );
   }

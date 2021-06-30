@@ -77,6 +77,14 @@ class PlanMapPageState extends State<PlanMapPage>
         });
       }),
     );
+    _subscriptions.add(
+      widget.planPageController.outSelectePosition.listen((
+        position,
+      ) {
+        _trufiMapController.move(
+            center: position, zoom: 14, tickerProvider: this);
+      }),
+    );
   }
 
   @override

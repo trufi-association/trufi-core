@@ -398,6 +398,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                 child: ListView(
                   children: [
                     LegOverviewAdvanced(
+                        planPageController: widget.planPageController,
                         onBackPressed: () {
                           setState(() {
                             showDetail = false;

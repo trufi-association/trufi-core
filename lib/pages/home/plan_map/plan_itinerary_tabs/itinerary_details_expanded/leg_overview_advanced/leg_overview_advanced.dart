@@ -10,15 +10,18 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/ticket_information.dart';
 import 'package:trufi_core/services/models_otp/fare_component.dart';
 
+import '../../../plan.dart';
 import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
   final PlanItinerary itinerary;
+  final PlanPageController planPageController;
   final void Function() onBackPressed;
   const LegOverviewAdvanced({
     Key key,
     @required this.itinerary,
+    @required this.planPageController,
     this.onBackPressed,
   }) : super(key: key);
 
@@ -138,6 +141,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                           )
                         else if (compresedLegs.length > 1)
                           TransportDash(
+                              planPageController: widget.planPageController,
                               itinerary: widget.itinerary,
                               leg: itineraryLeg,
                               isFirstTransport: true,
@@ -176,6 +180,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                     Column(
                       children: [
                         TransportDash(
+                            planPageController: widget.planPageController,
                             itinerary: widget.itinerary,
                             leg: itineraryLeg,
                             isBeforeTransport: itineraryLeg.transportMode !=
@@ -209,6 +214,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                         else if (itineraryLeg.transportMode !=
                             TransportMode.walk)
                           TransportDash(
+                            planPageController: widget.planPageController,
                             itinerary: widget.itinerary,
                             leg: itineraryLeg,
                             isFirstTransport: index == 0,

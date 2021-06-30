@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
@@ -12,7 +13,10 @@ import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
 
+import '../../../plan.dart';
+
 class TransportDash extends StatelessWidget {
+  final PlanPageController planPageController;
   final double height;
   final double dashWidth;
   final PlanItineraryLeg leg;
@@ -24,6 +28,7 @@ class TransportDash extends StatelessWidget {
   const TransportDash({
     @required this.leg,
     @required this.itinerary,
+    @required this.planPageController,
     this.isNextTransport = false,
     this.isBeforeTransport = true,
     this.isFirstTransport = false,
@@ -76,8 +81,16 @@ class TransportDash extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TransitLeg(
-                leg: leg,
+              GestureDetector(
+                onTap: () {
+                  if (planPageController != null) {
+                    planPageController.inSelectePosition
+                        .add(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+                  }
+                },
+                child: TransitLeg(
+                  leg: leg,
+                ),
               ),
               if (configuration.planItineraryLegBuilder != null)
                 configuration.planItineraryLegBuilder(context, leg) ??
