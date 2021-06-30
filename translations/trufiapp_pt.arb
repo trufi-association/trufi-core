@@ -1,6 +1,6 @@
 {
     "@@locale": "pt",
-    "@@last_modified": "2021-06-28T17:04:20+02:00",
+    "@@last_modified": "2021-06-29T15:03:08+02:00",
     "aboutContent": "Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\n\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -536,6 +536,14 @@
     "itineraryPriceOnlyPublicTransport": "Price only valid for public transport part of the journey.",
     "@itineraryPriceOnlyPublicTransport": {
         "description": "Itinerary Price Only PublicTransport label"
+    },
+    "itinerarySummaryBikeAndPublicRailSubwayTitle": "Take your bike with you on the train or to metro",
+    "@itinerarySummaryBikeAndPublicRailSubwayTitle": {
+        "description": "Text title itinerary Summary Bike And Public Rail Subway"
+    },
+    "itinerarySummaryBikeParkTitle": "Leave your bike at a Park & Ride",
+    "@itinerarySummaryBikeParkTitle": {
+        "description": "Text title itinerary Summary Bike Park Title"
     },
     "itineraryTicketsTitle": "Required tickets",
     "@itineraryTicketsTitle": {

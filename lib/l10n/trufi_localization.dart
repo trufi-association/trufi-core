@@ -807,6 +807,18 @@ abstract class TrufiLocalization {
   /// **'Price only valid for public transport part of the journey.'**
   String get itineraryPriceOnlyPublicTransport;
 
+  /// Text title itinerary Summary Bike And Public Rail Subway
+  ///
+  /// In en, this message translates to:
+  /// **'Take your bike with you on the train or to metro'**
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle;
+
+  /// Text title itinerary Summary Bike Park Title
+  ///
+  /// In en, this message translates to:
+  /// **'Leave your bike at a Park & Ride'**
+  String get itinerarySummaryBikeParkTitle;
+
   /// Itinerary Ticket Title label
   ///
   /// In en, this message translates to:

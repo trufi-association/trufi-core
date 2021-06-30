@@ -49,7 +49,7 @@ Future<List<Fare>> fetchFares(PlanItinerary itinerary, String url) async {
   };
   final response = await http.post(
     Uri.parse(
-      'https://$url/fares',
+      'https://api.qa.stadtnavi.eu/fares',
     ),
     body: jsonEncode(body),
     headers: {'content-type': 'application/json'},

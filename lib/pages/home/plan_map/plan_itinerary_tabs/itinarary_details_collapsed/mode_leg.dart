@@ -80,6 +80,7 @@ class ModeLeg extends StatelessWidget {
 class RouteLeg extends StatelessWidget {
   final double maxWidth;
   final PlanItineraryLeg leg;
+  final PlanItineraryLeg beforeLeg;
   final String mode;
   final double legLength;
   final int duration;
@@ -90,6 +91,7 @@ class RouteLeg extends StatelessWidget {
   const RouteLeg({
     Key key,
     this.leg,
+    this.beforeLeg,
     this.mode,
     this.legLength,
     this.duration,
@@ -103,6 +105,8 @@ class RouteLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final perc = legLength.abs() / 10;
+    final isRedenderBike = beforeLeg?.transportMode == TransportMode.bicycle &&
+        beforeLeg?.toPlace?.bikeParkEntity == null;
     return SizedBox(
       width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
       height: 30,
@@ -115,6 +119,9 @@ class RouteLeg extends StatelessWidget {
           icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : leg.transportMode.getImage(color: Colors.white),
+          secondaryIcon: (maxWidth * perc) >= 46 && isRedenderBike
+              ? bikeSvg(color: 'FFFFFF')
+              : null,
           text: (maxWidth * perc - 24) >=
                   ((leg?.route?.shortName?.length ?? 100) * 8.5)
               ? leg?.route?.shortName != null

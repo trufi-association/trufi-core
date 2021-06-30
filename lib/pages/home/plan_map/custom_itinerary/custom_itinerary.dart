@@ -50,143 +50,193 @@ class _CustomItineraryState extends State<CustomItinerary> {
     final homePageState = homePageCubit.state;
     return Theme(
         data: theme,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          child: !showDetail
-              ? widget.planPageController.plan.isOnlyWalk &&
-                      widget.planPageController.plan.type != 'walkPlan'
-                  ? ListView(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 10,
-                          ),
-                          child: InfoMessage(
-                            message: homePageState.plan.planInfoBox
-                                .translateValue(localization),
-                            isErrorMessage:
-                                !homePageState.plan.isTypeMessageInformation,
-                            widget: homePageState.plan.isOutSideLocation
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 21),
-                                    child: RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                          style: theme.textTheme.bodyText1
-                                              .copyWith(
-                                                  fontSize: 14,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600),
-                                          text: localization
-                                              .infoMessageUseNationalServicePrefix,
-                                        ),
-                                        TextSpan(
-                                          style: theme
-                                              .primaryTextTheme.bodyText2
-                                              .copyWith(
-                                            decoration:
-                                                TextDecoration.underline,
-                                          ),
-                                          text: ' Fahrplanauskunft efa-bw',
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                              launch('https://www.efa-bw.de');
-                                            },
-                                        )
-                                      ]),
-                                    ),
-                                  )
-                                : null,
-                          ),
+        child: !showDetail
+            ? widget.planPageController.plan.isOnlyWalk &&
+                    widget.planPageController.plan.type != 'walkPlan'
+                ? ListView(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 10,
                         ),
-                      ],
-                    )
-                  : ListView.builder(
-                      itemCount:
-                          widget.planPageController.plan.itineraries.length,
-                      itemBuilder: (buildContext, index) {
-                        final itinerary =
-                            widget.planPageController.plan.itineraries[index];
-                        return GestureDetector(
-                          onTap: () {
-                            widget.planPageController.inSelectedItinerary
-                                .add(itinerary);
-                          },
-                          child: Container(
-                            // for avoid bad behavior of gesture detector
-                            color: Colors.transparent,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                if (index == 0 &&
-                                    widget?.planPageController?.plan
-                                            ?.planInfoBox !=
-                                        PlanInfoBox.undefined)
-                                  Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                        horizontal: 10,
+                        child: InfoMessage(
+                          message: homePageState.plan.planInfoBox
+                              .translateValue(localization),
+                          isErrorMessage:
+                              !homePageState.plan.isTypeMessageInformation,
+                          widget: homePageState.plan.isOutSideLocation
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 21),
+                                  child: RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        style: theme.textTheme.bodyText1
+                                            .copyWith(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                        text: localization
+                                            .infoMessageUseNationalServicePrefix,
                                       ),
-                                      child: InfoMessage(
-                                        message: homePageState.plan.planInfoBox
-                                            .translateValue(localization),
-                                        closeInfo: () {
-                                          homePageCubit.updateMapRouteState(
-                                            homePageState.copyWith(
-                                              plan: homePageState.plan.copyWith(
-                                                planInfoBox:
-                                                    PlanInfoBox.undefined,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: Insets.sm,
-                                      bottom: Insets.sm,
-                                      right: Insets.xl),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      if (itinerary.hasAdvencedData)
-                                        Text(
-                                          "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
-                                          style: theme
-                                              .primaryTextTheme.bodyText1
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w500),
+                                      TextSpan(
+                                        style: theme.primaryTextTheme.bodyText2
+                                            .copyWith(
+                                          decoration: TextDecoration.underline,
                                         ),
-                                      RichText(
-                                        textScaleFactor: MediaQuery.of(context)
-                                            .textScaleFactor,
-                                        text: TextSpan(
+                                        text: ' Fahrplanauskunft efa-bw',
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            launch('https://www.efa-bw.de');
+                                          },
+                                      )
+                                    ]),
+                                  ),
+                                )
+                              : null,
+                        ),
+                      ),
+                    ],
+                  )
+                : ListView.builder(
+                    itemCount:
+                        widget.planPageController.plan.itineraries.length,
+                    itemBuilder: (buildContext, index) {
+                      final itinerary =
+                          widget.planPageController.plan.itineraries[index];
+                      int lengthBikePark;
+                      if (widget.planPageController.plan.type ==
+                          'bikeAndPublicPlan') {
+                        lengthBikePark = homePageState
+                            .modesTransport?.bikeParkPlan?.itineraries?.length;
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          widget.planPageController.inSelectedItinerary
+                              .add(itinerary);
+                        },
+                        child: Container(
+                          // for avoid bad behavior of gesture detector
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (index == 0 &&
+                                  widget?.planPageController?.plan
+                                          ?.planInfoBox !=
+                                      PlanInfoBox.undefined)
+                                Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 10,
+                                    ),
+                                    child: InfoMessage(
+                                      message: homePageState.plan.planInfoBox
+                                          .translateValue(localization),
+                                      closeInfo: () {
+                                        homePageCubit.updateMapRouteState(
+                                          homePageState.copyWith(
+                                            plan: homePageState.plan.copyWith(
+                                              planInfoBox:
+                                                  PlanInfoBox.undefined,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )),
+                              if (index == 0 &&
+                                  lengthBikePark != null &&
+                                  lengthBikePark > 0)
+                                Container(
+                                  color: Colors.grey[200],
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 10),
+                                    child: Text(
+                                      localization
+                                          .itinerarySummaryBikeParkTitle,
+                                      style: theme.primaryTextTheme.bodyText1
+                                          .copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (lengthBikePark != null &&
+                                  lengthBikePark == index &&
+                                  lengthBikePark <
+                                      widget.planPageController.plan.itineraries
+                                          .length)
+                                Container(
+                                  color: Colors.grey[200],
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 10),
+                                        child: Text(
+                                          localization
+                                              .itinerarySummaryBikeAndPublicRailSubwayTitle,
                                           style: theme
                                               .primaryTextTheme.bodyText1
                                               .copyWith(
-                                                  fontWeight: FontWeight.w500),
-                                          text: itinerary.hasAdvencedData
-                                              ? itinerary.durationTripString(
-                                                  localization)
-                                              : localization
-                                                  .instructionDurationMinutes(
-                                                      itinerary.time),
-                                          children: [
-                                            TextSpan(
-                                              text:
-                                                  " (${itinerary.getDistanceString(localization)})",
-                                              style: theme
-                                                  .primaryTextTheme.bodyText2,
-                                            )
-                                          ],
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                Row(
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                ),
+                                padding: EdgeInsets.only(
+                                    top: Insets.sm,
+                                    bottom: Insets.sm,
+                                    right: Insets.xl),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    if (itinerary.hasAdvencedData)
+                                      Text(
+                                        "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                      ),
+                                    RichText(
+                                      textScaleFactor: MediaQuery.of(context)
+                                          .textScaleFactor,
+                                      text: TextSpan(
+                                        style: theme.primaryTextTheme.bodyText1
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500),
+                                        text: itinerary.hasAdvencedData
+                                            ? itinerary.durationTripString(
+                                                localization)
+                                            : localization
+                                                .instructionDurationMinutes(
+                                                    itinerary.time),
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                " (${itinerary.getDistanceString(localization)})",
+                                            style: theme
+                                                .primaryTextTheme.bodyText2,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                ),
+                                child: Row(
                                   children: [
                                     Container(
                                       width: 5,
@@ -229,13 +279,16 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                     ),
                                   ],
                                 ),
-                                const Divider(),
-                              ],
-                            ),
+                              ),
+                              const Divider(),
+                            ],
                           ),
-                        );
-                      })
-              : ListView(
+                        ),
+                      );
+                    })
+            : Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                child: ListView(
                   children: [
                     LegOverviewAdvanced(
                         onBackPressed: () {
@@ -249,6 +302,6 @@ class _CustomItineraryState extends State<CustomItinerary> {
                         itinerary: currentPlanItinerary),
                   ],
                 ),
-        ));
+              ));
   }
 }

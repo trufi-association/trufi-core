@@ -378,6 +378,12 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
 
   @override
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Take your bike with you on the train or to metro';
+
+  @override
+  String get itinerarySummaryBikeParkTitle => 'Leave your bike at a Park & Ride';
+
+  @override
   String get itineraryTicketsTitle => 'Required tickets';
 
   @override

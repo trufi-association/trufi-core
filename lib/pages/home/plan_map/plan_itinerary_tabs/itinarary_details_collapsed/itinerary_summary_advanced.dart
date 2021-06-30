@@ -149,6 +149,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           leg: leg,
           legLength: legLength,
           mode: leg.transportMode.name,
+          beforeLeg: index - 1 >= 0 ? compressLegs[index - 1] : null,
           isTransitLeg: true,
         ));
       }
