@@ -12,7 +12,6 @@ import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_map.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
-import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 
 import 'custom_itinerary/custom_itinerary.dart';
 
