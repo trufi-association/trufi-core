@@ -51,6 +51,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
   Widget build(BuildContext context) {
     final theme = context.read<ThemeCubit>().state.bottomBarTheme;
     final localization = TrufiLocalization.of(context);
+    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final homePageState = homePageCubit.state;
     return Theme(
@@ -103,259 +104,295 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       ),
                     ],
                   )
-                : ListView.builder(
-                    itemCount:
-                        widget.planPageController.plan.itineraries.length,
-                    itemBuilder: (buildContext, index) {
-                      final itinerary =
-                          widget.planPageController.plan.itineraries[index];
-                      int lengthBikePark;
-                      if (widget.planPageController.plan.type ==
-                          'bikeAndPublicPlan') {
-                        lengthBikePark = filterOnlyBikeAndWalk(homePageState
-                                    .modesTransport
-                                    ?.bikeParkPlan
-                                    ?.itineraries ??
-                                [])
-                            ?.length;
-                      }
-                      return Column(
-                        children: [
-                          if (index == 0 &&
-                              widget.planPageController.plan.type == 'plan')
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: OutlinedButton(
-                                        onPressed: () async {
-                                          await _fetchMoreitineraries(true);
-                                        },
-                                        child: Text(
-                                          // TODO translate Später
-                                          'Later departures',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: OutlinedButton(
-                                        onPressed: () async {
-                                          await _fetchMoreitineraries(false);
-                                        },
-                                        child: Text(
-                                          // TODO translate Früher
-                                          'Earlier departures',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                  ],
+                : Column(
+                    children: [
+                      if (widget
+                              .planPageController.plan.itineraries.isNotEmpty &&
+                          widget.planPageController.plan.type == 'plan')
+                        Row(
+                          children: [
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  await _fetchMoreitineraries(
+                                    context: context,
+                                    isFetchEarlier: true,
+                                  );
+                                },
+                                child: Text(
+                                  payloadDataPlanState.arriveBy
+                                      ? localization
+                                          .fetchMoreItinerariesLaterDeparturesTitle
+                                      : localization
+                                          .fetchMoreItinerariesEarlierDepartures,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
-                                if (homePageState.isFetchEarlier ||
-                                    homePageState.isFetchLater)
-                                  LinearProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Theme.of(context).primaryColor),
-                                  ),
-                              ],
+                              ),
                             ),
-                          GestureDetector(
-                            onTap: () {
-                              widget.planPageController.inSelectedItinerary
-                                  .add(itinerary);
-                            },
-                            child: Container(
-                              // for avoid bad behavior of gesture detector
-                              color: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  await _fetchMoreitineraries(
+                                    context: context,
+                                    isFetchEarlier: false,
+                                  );
+                                },
+                                child: Text(
+                                  payloadDataPlanState.arriveBy
+                                      ? localization
+                                          .fetchMoreItinerariesEarlierDepartures
+                                      : localization
+                                          .fetchMoreItinerariesLaterDeparturesTitle,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                      if (homePageState.isFetchEarlier ||
+                          homePageState.isFetchLater)
+                        LinearProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(context).primaryColor),
+                        ),
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: widget
+                                .planPageController.plan.itineraries.length,
+                            itemBuilder: (buildContext, index) {
+                              final itinerary = widget
+                                  .planPageController.plan.itineraries[index];
+                              int lengthBikePark;
+                              if (widget.planPageController.plan.type ==
+                                  'bikeAndPublicPlan') {
+                                lengthBikePark = filterOnlyBikeAndWalk(
+                                        homePageState.modesTransport
+                                                ?.bikeParkPlan?.itineraries ??
+                                            [])
+                                    ?.length;
+                              }
+                              return Column(
                                 children: [
-                                  if (index == 0 &&
-                                      widget?.planPageController?.plan
-                                              ?.planInfoBox !=
-                                          PlanInfoBox.undefined)
-                                    Container(
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 5,
-                                          horizontal: 10,
-                                        ),
-                                        child: InfoMessage(
-                                          message: homePageState
-                                              .plan.planInfoBox
-                                              .translateValue(localization),
-                                          closeInfo: () {
-                                            homePageCubit.updateMapRouteState(
-                                              homePageState.copyWith(
-                                                plan:
-                                                    homePageState.plan.copyWith(
-                                                  planInfoBox:
-                                                      PlanInfoBox.undefined,
+                                  GestureDetector(
+                                    onTap: () {
+                                      widget.planPageController
+                                          .inSelectedItinerary
+                                          .add(itinerary);
+                                    },
+                                    child: Container(
+                                      // for avoid bad behavior of gesture detector
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          if (index == 0 &&
+                                              widget?.planPageController?.plan
+                                                      ?.planInfoBox !=
+                                                  PlanInfoBox.undefined)
+                                            Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 5,
+                                                  horizontal: 10,
+                                                ),
+                                                child: InfoMessage(
+                                                  message: homePageState
+                                                      .plan.planInfoBox
+                                                      .translateValue(
+                                                          localization),
+                                                  closeInfo: () {
+                                                    homePageCubit
+                                                        .updateMapRouteState(
+                                                      homePageState.copyWith(
+                                                        plan: homePageState.plan
+                                                            .copyWith(
+                                                          planInfoBox:
+                                                              PlanInfoBox
+                                                                  .undefined,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                )),
+                                          if (index == 0 &&
+                                              lengthBikePark != null &&
+                                              lengthBikePark > 0)
+                                            Container(
+                                              color: Colors.grey[200],
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8,
+                                                        horizontal: 10),
+                                                child: Text(
+                                                  localization
+                                                      .itinerarySummaryBikeParkTitle,
+                                                  style: theme.primaryTextTheme
+                                                      .bodyText1
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        )),
-                                  if (index == 0 &&
-                                      lengthBikePark != null &&
-                                      lengthBikePark > 0)
-                                    Container(
-                                      color: Colors.grey[200],
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 10),
-                                        child: Text(
-                                          localization
-                                              .itinerarySummaryBikeParkTitle,
-                                          style: theme
-                                              .primaryTextTheme.bodyText1
-                                              .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  if (lengthBikePark != null &&
-                                      lengthBikePark == index &&
-                                      lengthBikePark <
-                                          widget.planPageController.plan
-                                              .itineraries.length)
-                                    Container(
-                                      color: Colors.grey[200],
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 10),
-                                            child: Text(
-                                              localization
-                                                  .itinerarySummaryBikeAndPublicRailSubwayTitle,
-                                              style: theme
-                                                  .primaryTextTheme.bodyText1
-                                                  .copyWith(
-                                                fontWeight: FontWeight.w600,
+                                            ),
+                                          if (lengthBikePark != null &&
+                                              lengthBikePark == index &&
+                                              lengthBikePark <
+                                                  widget.planPageController.plan
+                                                      .itineraries.length)
+                                            Container(
+                                              color: Colors.grey[200],
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 8,
+                                                        horizontal: 10),
+                                                    child: Text(
+                                                      localization
+                                                          .itinerarySummaryBikeAndPublicRailSubwayTitle,
+                                                      style: theme
+                                                          .primaryTextTheme
+                                                          .bodyText1
+                                                          .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                            ),
+                                            padding: EdgeInsets.only(
+                                                top: Insets.sm,
+                                                bottom: Insets.sm,
+                                                right: Insets.xl),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                if (itinerary.hasAdvencedData)
+                                                  Text(
+                                                    "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
+                                                    style: theme
+                                                        .primaryTextTheme
+                                                        .bodyText1
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                  ),
+                                                RichText(
+                                                  textScaleFactor:
+                                                      MediaQuery.of(context)
+                                                          .textScaleFactor,
+                                                  text: TextSpan(
+                                                    style: theme
+                                                        .primaryTextTheme
+                                                        .bodyText1
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                    text: itinerary
+                                                            .hasAdvencedData
+                                                        ? itinerary
+                                                            .durationTripString(
+                                                                localization)
+                                                        : localization
+                                                            .instructionDurationMinutes(
+                                                                itinerary.time),
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            " (${itinerary.getDistanceString(localization)})",
+                                                        style: theme
+                                                            .primaryTextTheme
+                                                            .bodyText2,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 5,
+                                                  height: 50 *
+                                                      MediaQuery.of(context)
+                                                          .textScaleFactor,
+                                                  color: currentPlanItinerary ==
+                                                          itinerary
+                                                      ? theme.primaryColor
+                                                      : Colors.grey[200],
+                                                  margin: const EdgeInsets.only(
+                                                      right: 5),
+                                                ),
+                                                Expanded(
+                                                  child: LayoutBuilder(builder:
+                                                      (builderContext,
+                                                          constrains) {
+                                                    return ItinerarySummaryAdvanced(
+                                                      maxWidth:
+                                                          constrains.maxWidth,
+                                                      itinerary: itinerary,
+                                                    );
+                                                  }),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      showDetail = true;
+                                                    });
+                                                    widget.planPageController
+                                                        .inSelectedItinerary
+                                                        .add(itinerary.copyWith(
+                                                            isOnlyShowItinerary:
+                                                                true));
+                                                  },
+                                                  child: Container(
+                                                    color: Colors.transparent,
+                                                    width: 30,
+                                                    height: 50,
+                                                    child: Icon(
+                                                      Icons
+                                                          .arrow_forward_ios_rounded,
+                                                      color: theme.primaryColor,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(),
                                         ],
                                       ),
                                     ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    padding: EdgeInsets.only(
-                                        top: Insets.sm,
-                                        bottom: Insets.sm,
-                                        right: Insets.xl),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        if (itinerary.hasAdvencedData)
-                                          Text(
-                                            "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
-                                            style: theme
-                                                .primaryTextTheme.bodyText1
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                          ),
-                                        RichText(
-                                          textScaleFactor:
-                                              MediaQuery.of(context)
-                                                  .textScaleFactor,
-                                          text: TextSpan(
-                                            style: theme
-                                                .primaryTextTheme.bodyText1
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                            text: itinerary.hasAdvencedData
-                                                ? itinerary.durationTripString(
-                                                    localization)
-                                                : localization
-                                                    .instructionDurationMinutes(
-                                                        itinerary.time),
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    " (${itinerary.getDistanceString(localization)})",
-                                                style: theme
-                                                    .primaryTextTheme.bodyText2,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 5,
-                                          height: 50 *
-                                              MediaQuery.of(context)
-                                                  .textScaleFactor,
-                                          color:
-                                              currentPlanItinerary == itinerary
-                                                  ? theme.primaryColor
-                                                  : Colors.grey[200],
-                                          margin:
-                                              const EdgeInsets.only(right: 5),
-                                        ),
-                                        Expanded(
-                                          child: LayoutBuilder(builder:
-                                              (builderContext, constrains) {
-                                            return ItinerarySummaryAdvanced(
-                                              maxWidth: constrains.maxWidth,
-                                              itinerary: itinerary,
-                                            );
-                                          }),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              showDetail = true;
-                                            });
-                                            widget.planPageController
-                                                .inSelectedItinerary
-                                                .add(itinerary.copyWith(
-                                                    isOnlyShowItinerary: true));
-                                          },
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            width: 30,
-                                            height: 50,
-                                            child: Icon(
-                                              Icons.arrow_forward_ios_rounded,
-                                              color: theme.primaryColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Divider(),
                                 ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    })
+                              );
+                            }),
+                      ),
+                    ],
+                  )
             : Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: ListView(
@@ -375,11 +412,14 @@ class _CustomItineraryState extends State<CustomItinerary> {
               ));
   }
 
-  Future<void> _fetchMoreitineraries(bool isFetchEarlier) async {
+  Future<void> _fetchMoreitineraries({
+    @required BuildContext context,
+    @required bool isFetchEarlier,
+  }) async {
     final TrufiLocalization localization = TrufiLocalization.of(context);
-    final homePageCubit = context.watch<HomePageCubit>();
-    final homePageState = homePageCubit.state;
     final appReviewCubit = context.read<AppReviewCubit>();
+    final homePageCubit = context.read<HomePageCubit>();
+    final homePageState = homePageCubit.state;
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     if (!homePageState.isFetchEarlier && !homePageState.isFetchLater) {
