@@ -47,7 +47,9 @@ class TransitLeg extends StatelessWidget {
           text: leg?.route?.shortName != null
               ? leg.route.shortName
               : leg.transportMode.getTranslate(localization),
-          tripHeadSing: leg.headSign,
+          tripHeadSing: leg.transportMode == TransportMode.carPool
+              ? leg.toPlace.name
+              : leg.headSign,
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
           textContainer: isTypeBikeRentalNetwork
@@ -72,6 +74,24 @@ class TransitLeg extends StatelessWidget {
                 )
               : null,
         ),
+        if (TransportMode.carPool == leg.transportMode &&
+            leg.route?.url != null)
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: GestureDetector(
+              onTap: () async {
+                if (await canLaunch(leg.route?.url)) {
+                  await launch(leg.route?.url);
+                }
+              },
+              child: Text(
+                localization.commonDetails,
+                style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
         if (leg.dropOffBookingInfo != null)
           Column(
             children: [

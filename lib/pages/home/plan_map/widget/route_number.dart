@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
+import 'package:trufi_core/models/enums/enums_plan/icons/icons_transport_modes.dart';
 
 class RouteNumber extends StatelessWidget {
   final TransportMode transportMode;
@@ -62,7 +63,8 @@ class RouteNumber extends StatelessWidget {
                                   ? transportMode.color
                                   : Colors.white)),
                     if (transportMode != TransportMode.walk &&
-                        transportMode != TransportMode.bicycle)
+                        transportMode != TransportMode.bicycle &&
+                        transportMode != TransportMode.carPool)
                       Container(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
@@ -71,15 +73,35 @@ class RouteNumber extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                      )
+                      ),
                   ],
                 ),
               ),
+              if (transportMode == TransportMode.carPool)
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: carpoolFgSvg,
+                      ),
+                      const SizedBox(width: 2),
+                      SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: carpoolAdacSvg,
+                      )
+                    ],
+                  ),
+                ),
               if (transportMode != TransportMode.bicycle &&
                   transportMode != TransportMode.car &&
                   textContainer == null)
                 Container(
                   margin: const EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.all(2),
                   width: 176,
                   child: Text(
                     tripHeadSing ?? '',

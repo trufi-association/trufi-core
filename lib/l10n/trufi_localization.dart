@@ -260,6 +260,12 @@ abstract class TrufiLocalization {
   /// **'Destination'**
   String get commonDestination;
 
+  /// General details label
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get commonDetails;
+
   /// Message when an error has occured
   ///
   /// In en, this message translates to:

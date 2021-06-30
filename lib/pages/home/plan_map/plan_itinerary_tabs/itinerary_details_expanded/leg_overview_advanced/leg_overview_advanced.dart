@@ -212,7 +212,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             compresedLegs.length > 1)
                           WalkDash(leg: itineraryLeg)
                         else if (itineraryLeg.transportMode !=
-                            TransportMode.walk)
+                                TransportMode.walk &&
+                            compresedLegs.length > 1)
                           TransportDash(
                             planPageController: widget.planPageController,
                             itinerary: widget.itinerary,
@@ -222,6 +223,16 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                                     TransportMode.bicycle ||
                                 compresedLegs[index - 1].transportMode ==
                                     TransportMode.walk ||
+                                index == 0,
+                          )
+                        else
+                          TransportDash(
+                            planPageController: widget.planPageController,
+                            itinerary: widget.itinerary,
+                            leg: itineraryLeg,
+                            isFirstTransport: index == 0,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
                                 index == 0,
                           ),
                         DashLinePlace(

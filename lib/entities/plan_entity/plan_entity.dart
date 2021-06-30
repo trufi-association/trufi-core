@@ -165,8 +165,7 @@ class PlanEntity extends Equatable {
             (element) =>
                 element.transportMode != TransportMode.walk &&
                 element.transportMode != TransportMode.bicycle &&
-                element.transportMode != TransportMode.car &&
-                element.transportMode != TransportMode.carPool,
+                element.transportMode != TransportMode.car,
           )
           .toList();
       if (publicModes.isNotEmpty) {

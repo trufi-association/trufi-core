@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-06-30T22:05:39+02:00",
+    "@@last_modified": "2021-06-30T23:40:19+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -100,6 +100,10 @@
     "commonDestination": "afisi yim nele",
     "@commonDestination": {
         "description": "Destination field label"
+    },
+    "commonDetails": "Walk",
+    "@commonDetails": {
+        "description": "General details label"
     },
     "commonError": "aforku",
     "@commonError": {
