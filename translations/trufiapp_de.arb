@@ -1,6 +1,6 @@
 {
     "@@locale": "de",
-    "@@last_modified": "2021-06-30T16:26:03+02:00",
+    "@@last_modified": "2021-06-30T22:05:39+02:00",
     "aboutContent": "Wir sind ein bolivianisches und internationales Team, das den öffentlichen Nahverkehr liebt und unterstützen möchte. Wir haben diese App entwickelt, um den Menschen die Verwendung des öffentlichen Nahverkehrs in Cochabamba und der näheren Umgebung zu erleichtern.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -36,6 +36,18 @@
     "appReviewDialogTitle": "Magst du Trufi?",
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
+    },
+    "bikeRentalBikeStation": "Leihrad-Station",
+    "@bikeRentalBikeStation": {
+        "description": "Common Text Bike station"
+    },
+    "bikeRentalFetchRentalBike": "Leihrad ausleihen:",
+    "@bikeRentalFetchRentalBike": {
+        "description": "Common Text Fetch a rental bike."
+    },
+    "bikeRentalNetworkFreeFloating": "Ziel ist keine Rückgabestation. Ausleihe kann hier nicht abgeschlossen werden. Anbieterabhängig fallen weiter Gebühren bis zur Rückgabe an einer Station an.",
+    "@bikeRentalNetworkFreeFloating": {
+        "description": "Text Bike Rental Network message FreeFloating"
     },
     "carParkCloseCapacityMessage": "Dieser Parkplatz ist fast ausgebucht. Bitte planen Sie zusätzliche Zeit für Ihre Anfahrt ein.",
     "@carParkCloseCapacityMessage": {

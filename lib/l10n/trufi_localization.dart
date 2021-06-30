@@ -164,6 +164,24 @@ abstract class TrufiLocalization {
   /// **'Enjoying Trufi?'**
   String get appReviewDialogTitle;
 
+  /// Common Text Bike station
+  ///
+  /// In en, this message translates to:
+  /// **'Bike station'**
+  String get bikeRentalBikeStation;
+
+  /// Common Text Fetch a rental bike.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch a rental bike:'**
+  String get bikeRentalFetchRentalBike;
+
+  /// Text Bike Rental Network message FreeFloating
+  ///
+  /// In en, this message translates to:
+  /// **'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.'**
+  String get bikeRentalNetworkFreeFloating;
+
   /// This car park is close to capacity
   ///
   /// In en, this message translates to:
