@@ -15,6 +15,7 @@ fragment ItineraryLine_legs on Leg {
   route {
     shortName
     color
+    url
     agency {
       name
       id
@@ -117,6 +118,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
       }
     }
     route {
+      url
       mode
       shortName
       color
@@ -387,6 +389,7 @@ fragment ItineraryTab_itinerary on Itinerary {
       type
       longName
       desc
+      url
       agency {
         gtfsId
         fareUrl
@@ -475,6 +478,7 @@ fragment RouteLine_pattern on Pattern {
     mode
     color
     id
+    url
   }
   stops {
     lat
@@ -580,6 +584,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
         }
         route {
           gtfsId
+          url
           id
         }
         trip {
@@ -653,6 +658,7 @@ fragment SummaryPlanContainer_itineraries on Itinerary {
       points
     }
     route {
+      url
       gtfsId
       id
     }
