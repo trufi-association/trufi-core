@@ -1,6 +1,6 @@
 {
     "@@locale": "fr",
-    "@@last_modified": "2021-06-29T15:03:08+02:00",
+    "@@last_modified": "2021-06-30T16:26:03+02:00",
     "aboutContent": "Nous sommes une équipe bolivienne et internationale de personnes qui aiment et soutiennent les transports en commun. Nous avons développé cette application pour faciliter l'utilisation du système de transport en commun à Cochabamba et dans les environs.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -318,6 +318,14 @@
     "feedbackTitle": "Envoyez-nous un e-mail",
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
+    },
+    "fetchMoreItinerariesEarlierDepartures": "Earlier departures",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Later departures",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
     },
     "followOnFacebook": "Follow us on Facebook",
     "@followOnFacebook": {

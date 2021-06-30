@@ -560,6 +560,18 @@ abstract class TrufiLocalization {
   /// **'Please e-mail us'**
   String get feedbackTitle;
 
+  /// Text about extra fetch itineraries for Earlier departure title
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier departures'**
+  String get fetchMoreItinerariesEarlierDepartures;
+
+  /// Text about extra fetch itineraries for later departure title
+  ///
+  /// In en, this message translates to:
+  /// **'Later departures'**
+  String get fetchMoreItinerariesLaterDeparturesTitle;
+
   /// Facebook menu item
   ///
   /// In en, this message translates to:
