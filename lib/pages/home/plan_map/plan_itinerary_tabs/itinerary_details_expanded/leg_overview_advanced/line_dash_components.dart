@@ -35,16 +35,22 @@ class TransportDash extends StatelessWidget {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     final homePageCubit = context.read<HomePageCubit>();
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
+    final isTypeBikeRentalNetwork =
+        leg.transportMode == TransportMode.bicycle &&
+            leg.fromPlace?.bikeRentalStation != null;
     return Column(
       children: [
         if (isBeforeTransport)
           DashLinePlace(
             date: leg.startTimeString.toString(),
-            location: leg.fromPlace.name.toString(),
+            location: leg.transportMode == TransportMode.bicycle &&
+                    leg.fromPlace.bikeRentalStation != null
+                // TODO translate
+                ? 'Fetch a rental bike:'
+                : leg.fromPlace.name.toString(),
             color: leg?.route?.color != null
                 ? Color(int.tryParse("0xFF${leg.route.color}"))
-                : leg.transportMode == TransportMode.bicycle &&
-                        leg.fromPlace.bikeRentalStation != null
+                : isTypeBikeRentalNetwork
                     ? getBikeRentalNetwork(
                             leg.fromPlace.bikeRentalStation.networks[0])
                         .color
@@ -60,8 +66,7 @@ class TransportDash extends StatelessWidget {
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode == TransportMode.bicycle &&
-                      leg.fromPlace.bikeRentalStation != null
+              : isTypeBikeRentalNetwork
                   ? getBikeRentalNetwork(
                           leg.fromPlace.bikeRentalStation.networks[0])
                       .color

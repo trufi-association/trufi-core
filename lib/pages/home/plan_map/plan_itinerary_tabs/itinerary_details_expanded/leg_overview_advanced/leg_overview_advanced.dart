@@ -178,6 +178,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             leg: itineraryLeg,
                             isBeforeTransport: itineraryLeg.transportMode !=
                                     TransportMode.bicycle ||
+                                compresedLegs[index - 1].transportMode ==
+                                    TransportMode.walk ||
                                 index == 0,
                             isNextTransport:
                                 (itineraryLeg.endTime.millisecondsSinceEpoch -
@@ -209,6 +211,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                             isFirstTransport: index == 0,
                             isBeforeTransport: itineraryLeg.transportMode !=
                                     TransportMode.bicycle ||
+                                compresedLegs[index - 1].transportMode ==
+                                    TransportMode.walk ||
                                 index == 0,
                           ),
                         DashLinePlace(

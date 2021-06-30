@@ -9,6 +9,7 @@ class RouteNumber extends StatelessWidget {
   final String distance;
   final String duration;
   final Widget icon;
+  final Widget textContainer;
   final String mode;
 
   const RouteNumber({
@@ -20,6 +21,7 @@ class RouteNumber extends StatelessWidget {
     this.distance,
     this.duration,
     this.icon,
+    this.textContainer,
     this.mode,
   }) : super(key: key);
 
@@ -74,7 +76,8 @@ class RouteNumber extends StatelessWidget {
                 ),
               ),
               if (transportMode != TransportMode.bicycle &&
-                  transportMode != TransportMode.car)
+                  transportMode != TransportMode.car &&
+                  textContainer == null)
                 Container(
                   margin: const EdgeInsets.only(left: 8),
                   width: 150,
@@ -84,7 +87,7 @@ class RouteNumber extends StatelessWidget {
                     overflow: TextOverflow.visible,
                   ),
                 )
-              else
+              else if (textContainer == null)
                 Row(
                   children: [
                     const SizedBox(width: 8),
@@ -98,12 +101,27 @@ class RouteNumber extends StatelessWidget {
                       style: theme.primaryTextTheme.bodyText1,
                     ),
                   ],
+                )
+              else
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.only(top: 5, left: 5),
+                  child: textContainer,
                 ),
             ],
           ),
         ),
         if (transportMode != TransportMode.bicycle &&
             transportMode != TransportMode.car)
+          Padding(
+            padding: const EdgeInsets.only(top: 5, left: 5),
+            child: Text(
+              '${distance ?? ''} ${duration != null ? "($duration)" : ''} ',
+              style: theme.primaryTextTheme.bodyText1
+                  .copyWith(fontSize: 13, color: Colors.grey[700]),
+            ),
+          ),
+        if (transportMode == TransportMode.bicycle && textContainer != null)
           Padding(
             padding: const EdgeInsets.only(top: 5, left: 5),
             child: Text(
