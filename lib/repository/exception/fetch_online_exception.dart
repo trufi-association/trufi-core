@@ -62,7 +62,7 @@ class FetchOnlineCarException implements Exception {
 
   @override
   String toString() {
-    return "Canceled by user: $_message";
+    return "Fetch Online Car Exception: $_message";
   }
 }
 
@@ -73,6 +73,6 @@ class FetchOnlinePlanException implements Exception {
 
   @override
   String toString() {
-    return "Canceled by user: $_message";
+    return "Fetch Online Plan Exception: $_message";
   }
 }

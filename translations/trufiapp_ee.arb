@@ -1,6 +1,6 @@
 {
     "@@locale": "ee",
-    "@@last_modified": "2021-06-04T23:44:34+02:00",
+    "@@last_modified": "2021-06-30T23:40:19+02:00",
     "aboutContent": "mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -37,6 +37,26 @@
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
     },
+    "bikeRentalBikeStation": "Bike station",
+    "@bikeRentalBikeStation": {
+        "description": "Common Text Bike station"
+    },
+    "bikeRentalFetchRentalBike": "Fetch a rental bike:",
+    "@bikeRentalFetchRentalBike": {
+        "description": "Common Text Fetch a rental bike."
+    },
+    "bikeRentalNetworkFreeFloating": "Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.",
+    "@bikeRentalNetworkFreeFloating": {
+        "description": "Text Bike Rental Network message FreeFloating"
+    },
+    "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
+    "@carParkCloseCapacityMessage": {
+        "description": "This car park is close to capacity"
+    },
+    "carParkExcludeFull": "Exclude full car parks",
+    "@carParkExcludeFull": {
+        "description": "Car Park Exclude Full parks label"
+    },
     "chooseLocationPageSubtitle": "keke mortata la.",
     "@chooseLocationPageSubtitle": {
         "description": "Page subtitle when choosing a location on the map"
@@ -48,6 +68,14 @@
     "commonArrival": "Arrival",
     "@commonArrival": {
         "description": "General Arrival label"
+    },
+    "commonBikesAvailable": "Show on map",
+    "@commonBikesAvailable": {
+        "description": "General Bikes Available label"
+    },
+    "commonCall": "Show on map",
+    "@commonCall": {
+        "description": "General Call label"
     },
     "commonCancel": "tutu",
     "@commonCancel": {
@@ -73,6 +101,10 @@
     "@commonDestination": {
         "description": "Destination field label"
     },
+    "commonDetails": "Walk",
+    "@commonDetails": {
+        "description": "General details label"
+    },
     "commonError": "aforku",
     "@commonError": {
         "description": "Message when an error has occured"
@@ -85,6 +117,14 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
+    "commonFromStation": "Show on map",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "Show on map",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
     "commonGoOffline": "dzo le ka dzi",
     "@commonGoOffline": {
         "description": "Go offline button label"
@@ -92,6 +132,14 @@
     "commonGoOnline": "va ka dzi",
     "@commonGoOnline": {
         "description": "Go online button label"
+    },
+    "commonItineraryNoTransitLegs": "Show on map",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Show on map",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
     },
     "commonLeavingNow": "Leaving now",
     "@commonLeavingNow": {
@@ -101,17 +149,37 @@
     "@commonLoading": {
         "description": "General Loading label"
     },
+    "commonMapSettings": "Show on map",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "commonMoreInformartion": "Show on map",
+    "@commonMoreInformartion": {
+        "description": "General More informartion label"
+    },
     "commonNoInternet": "ka meli o",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
+    },
+    "commonNow": "Show on map",
+    "@commonNow": {
+        "description": "General Now label"
     },
     "commonOK": "enyo",
     "@commonOK": {
         "description": "OK button label"
     },
+    "commonOnDemandTaxi": "Show on map",
+    "@commonOnDemandTaxi": {
+        "description": "General book a trip label"
+    },
     "commonOrigin": "afisi netso",
     "@commonOrigin": {
         "description": "Origin field label"
+    },
+    "commonPlatform": "Show on map",
+    "@commonPlatform": {
+        "description": "General Platform  label"
     },
     "commonSave": "Save",
     "@commonSave": {
@@ -129,6 +197,10 @@
     "@commonTomorrow": {
         "description": "General Tomorrow label"
     },
+    "commonTrack": "Show on map",
+    "@commonTrack": {
+        "description": "General Track  label"
+    },
     "commonUnknownError": "aforku manyamanya",
     "@commonUnknownError": {
         "description": "Message when an unknown error has occured"
@@ -144,6 +216,10 @@
     "commonWalk": "Walk",
     "@commonWalk": {
         "description": "General Walk label"
+    },
+    "copyrightsPriceProvider": "Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.",
+    "@copyrightsPriceProvider": {
+        "description": "copyrights Price Provider for cost"
     },
     "defaultLocationAdd": "nutinya",
     "@defaultLocationAdd": {
@@ -161,6 +237,18 @@
     "defaultLocationWork": "Work",
     "@defaultLocationWork": {
         "description": "The default location name Work"
+    },
+    "departureBikeStation": "morwo kple dorworfea nudorwolawo\nzu miadometor deka",
+    "@departureBikeStation": {
+        "placeholders": {
+            "departureStop": {
+                "example": "herrenberg"
+            },
+            "departureTime": {
+                "example": "11:45"
+            }
+        },
+        "description": "Departure Bike Station detail Time and Stop"
     },
     "description": "morzorzor adoduia le Chombamba yenye lori did kple lori sue wo",
     "@description": {
@@ -247,6 +335,14 @@
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
     },
+    "fetchMoreItinerariesEarlierDepartures": "Earlier departures",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Later departures",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
+    },
     "followOnFacebook": "kplormido le Facebook",
     "@followOnFacebook": {
         "description": "Facebook menu item"
@@ -258,6 +354,50 @@
     "followOnTwitter": "kplormido le Twiter",
     "@followOnTwitter": {
         "description": "Twitter menu item"
+    },
+    "infoMessageDestinationOutsideService": "No route suggestions were found because the destination is outside the service area.",
+    "@infoMessageDestinationOutsideService": {
+        "description": "Text info message Destination outside for plan Fetch"
+    },
+    "infoMessageNoRouteMsg": "Unfortunately, no route suggestions were found.",
+    "@infoMessageNoRouteMsg": {
+        "description": "Text info message No Route Msg for plan Fetch"
+    },
+    "infoMessageNoRouteMsgWithChanges": "Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.",
+    "@infoMessageNoRouteMsgWithChanges": {
+        "description": "Text info message No Route Msg With Changes for plan Fetch"
+    },
+    "infoMessageNoRouteOriginNearDestination": "No route suggestions were found because the origin and destination are the same.",
+    "@infoMessageNoRouteOriginNearDestination": {
+        "description": "Text info message no route origin same as a destination for plan Fetch"
+    },
+    "infoMessageNoRouteOriginSameAsDestination": "No route suggestions were found because the origin and destination are very close to each other.",
+    "@infoMessageNoRouteOriginSameAsDestination": {
+        "description": "Text info message No Route Origin Same As Destination for plan Fetch"
+    },
+    "infoMessageNoRouteShowingAlternativeOptions": "No route suggestions were found with the your settings. However, we found the following route options:",
+    "@infoMessageNoRouteShowingAlternativeOptions": {
+        "description": "Text info message No Route Showing Alternative Options for plan Fetch"
+    },
+    "infoMessageOnlyCyclingRoutes": "Your search returned only cycling routes.",
+    "@infoMessageOnlyCyclingRoutes": {
+        "description": "Text info message Only walking and cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingCyclingRoutes": "Your search returned only walking and cycling routes.",
+    "@infoMessageOnlyWalkingCyclingRoutes": {
+        "description": "Text info message Only cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingRoutes": "Your search returned only walking routes.",
+    "@infoMessageOnlyWalkingRoutes": {
+        "description": "Text info message Only Walking Routes for plan Fetch"
+    },
+    "infoMessageOriginOutsideService": "No route suggestions were found because the origin is outside the service area.",
+    "@infoMessageOriginOutsideService": {
+        "description": "Text info message origin outside for plan Fetch"
+    },
+    "infoMessageUseNationalServicePrefix": "We recommend you try the national journey planner,",
+    "@infoMessageUseNationalServicePrefix": {
+        "description": "Text info message Use National Service Prefix for plan Fetch"
     },
     "instructionDistanceKm": "kilom3ta",
     "@instructionDistanceKm": {
@@ -366,6 +506,10 @@
     "@instructionVehicleMinibus": {
         "description": "Vehicle name (Minibus)"
     },
+    "instructionVehicleOnCar": "lori",
+    "@instructionVehicleOnCar": {
+        "description": "Vehicle name (onCar)"
+    },
     "instructionVehicleSharing": "lori didi",
     "@instructionVehicleSharing": {
         "description": "Vehicle name (Sharing)"
@@ -381,6 +525,10 @@
     "instructionVehicleSharingTaxi": "lori didi",
     "@instructionVehicleSharingTaxi": {
         "description": "Vehicle name (Taxi)"
+    },
+    "instructionVehicleTaxi": "lori",
+    "@instructionVehicleTaxi": {
+        "description": "Vehicle name (onCar)"
     },
     "instructionVehicleTrufi": "Trufi",
     "@instructionVehicleTrufi": {
@@ -400,6 +548,34 @@
             }
         },
         "description": "Itinerary instruction (walking)"
+    },
+    "itineraryBuyTicket": "Buy tickets",
+    "@itineraryBuyTicket": {
+        "description": "Itinerary Buy tickets label"
+    },
+    "itineraryMissingPrice": "No price information",
+    "@itineraryMissingPrice": {
+        "description": "Itinerary No price information label"
+    },
+    "itineraryPriceOnlyPublicTransport": "Price only valid for public transport part of the journey.",
+    "@itineraryPriceOnlyPublicTransport": {
+        "description": "Itinerary Price Only PublicTransport label"
+    },
+    "itinerarySummaryBikeAndPublicRailSubwayTitle": "Take your bike with you on the train or to metro",
+    "@itinerarySummaryBikeAndPublicRailSubwayTitle": {
+        "description": "Text title itinerary Summary Bike And Public Rail Subway"
+    },
+    "itinerarySummaryBikeParkTitle": "Leave your bike at a Park & Ride",
+    "@itinerarySummaryBikeParkTitle": {
+        "description": "Text title itinerary Summary Bike Park Title"
+    },
+    "itineraryTicketsTitle": "Required tickets",
+    "@itineraryTicketsTitle": {
+        "description": "Itinerary Ticket Title label"
+    },
+    "itineraryTicketTitle": "Required ticket",
+    "@itineraryTicketTitle": {
+        "description": "Itinerary Ticket Title label"
     },
     "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
@@ -550,6 +726,10 @@
     "settingPanelMyModesTransportBike": "Bike",
     "@settingPanelMyModesTransportBike": {
         "description": "Bike configuration panel label"
+    },
+    "settingPanelMyModesTransportBikeRide": "Park and Ride",
+    "@settingPanelMyModesTransportBikeRide": {
+        "description": "Bike and Ride configuration panel label"
     },
     "settingPanelMyModesTransportParkRide": "Park and Ride",
     "@settingPanelMyModesTransportParkRide": {

@@ -20,6 +20,7 @@ class TrufiMap extends StatefulWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.showCustomMarkes = true,
   }) : super(key: key);
 
   final TrufiMapController controller;
@@ -27,7 +28,7 @@ class TrufiMap extends StatefulWidget {
   final TapCallback onTap;
   final LongPressCallback onLongPress;
   final PositionCallback onPositionChanged;
-
+  final bool showCustomMarkes;
   @override
   _TrufiMapState createState() => _TrufiMapState();
 }
@@ -45,8 +46,10 @@ class _TrufiMapState extends State<TrufiMap> {
     return FlutterMap(
       mapController: widget.controller.mapController,
       options: MapOptions(
-        interactiveFlags: InteractiveFlag.pinchZoom |
-            InteractiveFlag.drag |
+        interactiveFlags: InteractiveFlag.drag |
+            InteractiveFlag.flingAnimation |
+            InteractiveFlag.pinchMove |
+            InteractiveFlag.pinchZoom |
             InteractiveFlag.doubleTapZoom,
         minZoom: cfg.map.onlineMinZoom,
         maxZoom: cfg.map.onlineMaxZoom,
@@ -72,11 +75,8 @@ class _TrufiMapState extends State<TrufiMap> {
       ),
       layers: [
         ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
-        // tileHostingTileLayerOptions(
-        //   getTilesEndpointForMapType(currentMapType),
-        //   tileProviderKey: cfg.map.mapTilerKey,
-        // ),
-        ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
+        if (widget.showCustomMarkes)
+          ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
         cfg.markers.buildYourLocationMarkerLayerOptions(currentLocation),
         ...widget.layerOptionsBuilder(context)
       ],

@@ -21,55 +21,107 @@ class TransitLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
+    final isTypeBikeRentalNetwork =
+        leg.transportMode == TransportMode.bicycle &&
+            leg.fromPlace?.bikeRentalStation != null;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RouteNumber(
           transportMode: leg.transportMode,
-          // TODO adapted the color server
-          color: leg?.route?.color != null
+          backgroundColor: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : null,
-          icon: (leg?.route?.shortName ?? '').startsWith('RT')
+              : isTypeBikeRentalNetwork
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
+                  : leg.transportMode.backgroundColor,
+          icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
-              : null,
+              : isTypeBikeRentalNetwork
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .image
+                  : null,
           text: leg?.route?.shortName != null
               ? leg.route.shortName
-              : leg.transportMode.name,
+              : leg.transportMode.getTranslate(localization),
+          tripHeadSing: leg.transportMode == TransportMode.carPool
+              ? leg.toPlace.name
+              : leg.headSign,
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
+          textContainer: isTypeBikeRentalNetwork
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (isTypeBikeRentalNetwork)
+                      Text(
+                        leg.fromPlace.name.toString(),
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                      ),
+                    if (isTypeBikeRentalNetwork)
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          localization.bikeRentalBikeStation,
+                          style: TextStyle(color: Colors.grey[800]),
+                        ),
+                      ),
+                  ],
+                )
+              : null,
         ),
-        if (leg.pickupBookingInfo != null)
+        if (TransportMode.carPool == leg.transportMode &&
+            leg.route?.url != null)
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: GestureDetector(
+              onTap: () async {
+                if (await canLaunch(leg.route?.url)) {
+                  await launch(leg.route?.url);
+                }
+              },
+              child: Text(
+                localization.commonDetails,
+                style: const TextStyle(
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        if (leg.dropOffBookingInfo != null)
           Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: InfoMessage(
-                  message: leg.pickupBookingInfo.message,
-                  widget: leg.pickupBookingInfo.contactInfo?.infoUrl != null
+                  message:
+                      '${leg.dropOffBookingInfo.message ?? ''} ${leg.dropOffBookingInfo.dropOffMessage ?? ''}',
+                  widget: leg.dropOffBookingInfo.contactInfo?.infoUrl != null
                       ? RichText(
                           text: TextSpan(
                             style: theme.primaryTextTheme.bodyText2.copyWith(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w600),
-                            // TODO Translate
-                            text: "More informartion",
+                            text: localization.commonMoreInformartion,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                launch(
-                                    leg.pickupBookingInfo.contactInfo?.infoUrl);
+                                launch(leg
+                                    .dropOffBookingInfo.contactInfo?.infoUrl);
                               },
                           ),
                         )
                       : null,
                 ),
               ),
-              if (leg.pickupBookingInfo.contactInfo?.phoneNumber != null)
+              if (leg.dropOffBookingInfo.contactInfo?.phoneNumber != null)
                 GestureDetector(
                   onTap: () {
                     launch(
-                      "tel:${leg.pickupBookingInfo.contactInfo?.phoneNumber}",
+                      "tel:${leg.dropOffBookingInfo.contactInfo?.phoneNumber}",
                     );
                   },
                   child: Container(
@@ -81,17 +133,16 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      'Anrufen  ${leg.pickupBookingInfo.contactInfo?.phoneNumber}',
+                      '${localization.commonCall}  ${leg.dropOffBookingInfo.contactInfo?.phoneNumber}',
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              if (leg.pickupBookingInfo.contactInfo?.bookingUrl != null)
+              if (leg.dropOffBookingInfo.contactInfo?.bookingUrl != null)
                 GestureDetector(
                   onTap: () {
-                    launch(leg.pickupBookingInfo.contactInfo?.bookingUrl);
+                    launch(leg.dropOffBookingInfo.contactInfo?.bookingUrl);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),
@@ -102,8 +153,7 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      // TODO translate
-                      "Fahrt buchen",
+                      localization.commonOnDemandTaxi,
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),

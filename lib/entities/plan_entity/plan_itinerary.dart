@@ -1,12 +1,14 @@
 part of 'plan_entity.dart';
 
-class PlanItinerary {
+class PlanItinerary extends Equatable {
   static const String _legs = "legs";
   static const String _startTime = "startTime";
   static const String _endTime = "endTime";
   static const String _walkTime = "walkTime";
   static const String _durationTrip = "duration";
   static const String _walkDistance = "walkDistance";
+  static const String _arrivedAtDestinationWithRentedBicycle =
+      "arrivedAtDestinationWithRentedBicycle";
 
   static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
       legs.fold<int>(0, (distance, leg) => distance += leg.distance.ceil());
@@ -21,6 +23,8 @@ class PlanItinerary {
     this.walkTime,
     this.durationTrip,
     this.walkDistance,
+    this.arrivedAtDestinationWithRentedBicycle,
+    this.isOnlyShowItinerary = false,
   })  : distance = _distanceForLegs(legs),
         time = _timeForLegs(legs);
 
@@ -30,6 +34,9 @@ class PlanItinerary {
   final Duration walkTime;
   final Duration durationTrip;
   final double walkDistance;
+  final bool arrivedAtDestinationWithRentedBicycle;
+  final bool isOnlyShowItinerary;
+
   // add
 
   final int distance;
@@ -37,24 +44,27 @@ class PlanItinerary {
 
   factory PlanItinerary.fromJson(Map<String, dynamic> json) {
     return PlanItinerary(
-        legs: json[_legs].map<PlanItineraryLeg>((dynamic json) {
-          return PlanItineraryLeg.fromJson(json as Map<String, dynamic>);
-        }).toList() as List<PlanItineraryLeg>,
-        startTime: json[_startTime] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                int.tryParse(json[_startTime].toString()) ?? 0)
-            : null,
-        endTime: json[_endTime] != null
-            ? DateTime.fromMillisecondsSinceEpoch(
-                int.tryParse(json[_endTime].toString()) ?? 0)
-            : null,
-        walkTime: json[_walkTime] != null
-            ? Duration(seconds: json[_walkTime] as int)
-            : null,
-        durationTrip: json[_durationTrip] != null
-            ? Duration(seconds: json[_durationTrip] as int)
-            : null,
-        walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0);
+      legs: json[_legs].map<PlanItineraryLeg>((dynamic json) {
+        return PlanItineraryLeg.fromJson(json as Map<String, dynamic>);
+      }).toList() as List<PlanItineraryLeg>,
+      startTime: json[_startTime] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              int.tryParse(json[_startTime].toString()) ?? 0)
+          : null,
+      endTime: json[_endTime] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              int.tryParse(json[_endTime].toString()) ?? 0)
+          : null,
+      walkTime: json[_walkTime] != null
+          ? Duration(seconds: json[_walkTime] as int)
+          : null,
+      durationTrip: json[_durationTrip] != null
+          ? Duration(seconds: json[_durationTrip] as int)
+          : null,
+      walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
+      arrivedAtDestinationWithRentedBicycle:
+          json[_arrivedAtDestinationWithRentedBicycle] as bool,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -64,7 +74,9 @@ class PlanItinerary {
       _endTime: endTime?.millisecondsSinceEpoch,
       _walkTime: walkTime?.inSeconds,
       _durationTrip: durationTrip?.inSeconds,
-      _walkDistance: walkDistance
+      _walkDistance: walkDistance,
+      _arrivedAtDestinationWithRentedBicycle:
+          arrivedAtDestinationWithRentedBicycle
     };
   }
 
@@ -75,6 +87,8 @@ class PlanItinerary {
     Duration walkTime,
     Duration durationTrip,
     double walkDistance,
+    bool arrivedAtDestinationWithRentedBicycle,
+    bool isOnlyShowItinerary,
   }) {
     return PlanItinerary(
       legs: legs ?? this.legs,
@@ -83,6 +97,10 @@ class PlanItinerary {
       walkTime: walkTime ?? this.walkTime,
       durationTrip: durationTrip ?? this.durationTrip,
       walkDistance: walkDistance ?? this.walkDistance,
+      arrivedAtDestinationWithRentedBicycle:
+          arrivedAtDestinationWithRentedBicycle ??
+              this.arrivedAtDestinationWithRentedBicycle,
+      isOnlyShowItinerary: isOnlyShowItinerary ?? this.isOnlyShowItinerary,
     );
   }
 
@@ -114,6 +132,10 @@ class PlanItinerary {
           toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
           endTime: currentLeg.endTime,
           mode: TransportMode.bicycle.name,
+          accumulatedPoints: [
+            ...compressedLeg.accumulatedPoints,
+            ...currentLeg.accumulatedPoints
+          ],
         );
         continue;
       }
@@ -126,7 +148,11 @@ class PlanItinerary {
           distance: compressedLeg.distance + currentLeg.distance,
           toPlace: currentLeg.toPlace,
           endTime: currentLeg.endTime,
-          mode: TransportMode.bicycle.name,
+          mode: LegMode.bicycle.name,
+          accumulatedPoints: [
+            ...compressedLeg.accumulatedPoints,
+            ...currentLeg.accumulatedPoints
+          ],
         );
         continue;
       }
@@ -200,7 +226,7 @@ class PlanItinerary {
   Duration get totalBikingDuration =>
       Duration(seconds: getTotalBikingDuration(compressLegs ?? []).toInt());
 
-  String get firstLegStartTime {
+  String firstLegStartTime(TrufiLocalization localization) {
     final firstDeparture = compressLegs.firstWhere(
       (element) => element.transitLeg ?? false,
       orElse: () => null,
@@ -208,32 +234,33 @@ class PlanItinerary {
     String legStartTime = '';
     if (firstDeparture != null) {
       if (firstDeparture?.rentedBike ?? false) {
-        legStartTime =
-            'Departure at ${firstDeparture?.startTimeString} from ${firstDeparture?.fromPlace?.name} bike station';
+        legStartTime = localization.departureBikeStation(
+          firstDeparture?.startTimeString,
+          firstDeparture?.fromPlace?.name,
+        );
         if (firstDeparture?.fromPlace?.bikeRentalStation?.bikesAvailable !=
             null) {
           legStartTime =
-              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} bikes at the station';
+              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} ${localization.commonBikesAvailable}';
         }
       } else {
-        // TODO trasnlate
         final String firstDepartureStopType =
             firstDeparture.transportMode == TransportMode.rail ||
                     firstDeparture.transportMode == TransportMode.subway
-                ? 'from station'
-                : 'from stop';
+                ? localization.commonFromStation
+                : localization.commonFromStop;
         final String firstDeparturePlatform =
             firstDeparture?.fromPlace?.stopEntity?.platformCode != null
                 ? (firstDeparture.transportMode == TransportMode.rail
-                        ? ', Track '
-                        : ', Plattform ') +
+                        ? ', ${localization.commonTrack} '
+                        : ', ${localization.commonPlatform} ') +
                     firstDeparture?.fromPlace?.stopEntity?.platformCode
                 : '';
         legStartTime =
-            "Leaves at ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
+            "${localization.commonLeavesAt} ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
       }
     } else {
-      legStartTime = "Leave when it suits you";
+      legStartTime = localization.commonItineraryNoTransitLegs;
     }
 
     return legStartTime;
@@ -243,28 +270,56 @@ class PlanItinerary {
     return endTime.difference(startTime).inSeconds;
   }
 
-  double get durationItinerary {
-    final duration = endTime.difference(startTime).inSeconds;
-    return duration + numberRouteHidens;
-  }
-
   bool get usingOwnBicycle => legs.any((leg) =>
       leg.transportMode == TransportMode.bicycle && leg.rentedBike ?? false);
 
-  bool get renderModeIcons => compressLegs.length < 10;
-
-  bool get usingOwnBicycleWholeTrip {
-    return usingOwnBicycle &&
-        legs.every((leg) => leg.toPlace?.bikeParkEntity == null);
-  }
-
-  double get numberRouteHidens {
-    double sumPart = 0;
+  int getNumberIcons(double renderBarThreshold) {
     final routeShorts = compressLegs.where((leg) {
-      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 100;
-      if (legLength < 7 && leg.transitLeg) sumPart += legLength;
-      return legLength < 7 && leg.transitLeg;
+      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+      if (!(legLength < renderBarThreshold && leg.isLegOnFoot) &&
+          leg.toPlace?.bikeParkEntity != null) {
+        return true;
+      } else if (leg.transportMode == TransportMode.car &&
+          leg.toPlace?.carParkEntity != null) {
+        return true;
+      } else if (leg.transportMode == TransportMode.bicycle &&
+          leg.toPlace?.bikeParkEntity != null &&
+          !(legLength < renderBarThreshold && leg.isLegOnFoot)) {
+        return true;
+      }
+      return false;
     }).toList();
-    return ((routeShorts.length * 7 - sumPart) * totalDurationItinerary) / 100;
+    return routeShorts.length;
   }
+
+  int getNumberLegHide(double renderBarThreshold) {
+    return compressLegs
+        .where((leg) {
+          final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+          return legLength < renderBarThreshold &&
+              leg.transportMode != TransportMode.walk;
+        })
+        .toList()
+        .length;
+  }
+
+  int getNumberLegTime(double renderBarThreshold) {
+    return compressLegs.fold(0, (previousValue, element) {
+      final legLength = (element.durationIntLeg / totalDurationItinerary) * 10;
+      return legLength < renderBarThreshold
+          ? previousValue + element.durationIntLeg
+          : previousValue;
+    });
+  }
+
+  @override
+  List<Object> get props => [
+        legs,
+        startTime,
+        endTime,
+        walkTime,
+        durationTrip,
+        walkDistance,
+        arrivedAtDestinationWithRentedBicycle,
+      ];
 }

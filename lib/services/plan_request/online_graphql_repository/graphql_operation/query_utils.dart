@@ -1,4 +1,7 @@
 import 'package:intl/intl.dart';
+import 'package:latlong/latlong.dart';
+import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
+
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 
@@ -26,6 +29,16 @@ List<Map<String, String>> parsebikeParkModes(List<TransportMode> list) {
       .toList();
   dataParse.add({"mode": TransportMode.bicycle.name, 'qualifier': 'PARK'});
   return dataParse;
+}
+
+Map<String, String> parseCarMode(LatLng destiny) {
+  final bool isInHerrenbergOldTown =
+      insidePointInPolygon(destiny, herrenbergOldTown);
+
+  return {
+    "mode": TransportMode.car.name,
+    'qualifier': isInHerrenbergOldTown ? 'PARK' : null,
+  };
 }
 
 List<Map<String, String>> parseTransportModes(List<TransportMode> list) {

@@ -15,6 +15,7 @@ fragment ItineraryLine_legs on Leg {
   route {
     shortName
     color
+    url
     agency {
       name
       id
@@ -36,6 +37,7 @@ fragment ItineraryLine_legs on Leg {
     }
     stop {
       gtfsId
+      name
       code
       platformCode
       id
@@ -56,6 +58,7 @@ fragment ItineraryLine_legs on Leg {
     }
     stop {
       gtfsId
+      name
       code
       platformCode
       id
@@ -94,6 +97,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
   startTime
   endTime
   legs {
+    interlineWithPreviousLeg
     alerts {
       alertId
     }
@@ -114,6 +118,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
       }
     }
     route {
+      url
       mode
       shortName
       color
@@ -145,6 +150,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
         realtimeState
         stop {
           gtfsId
+          name
           id
         }
         pickupType
@@ -176,6 +182,7 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
     to {
       stop {
         gtfsId
+        name
         zoneId
         alerts {
           alertSeverityLevel
@@ -257,6 +264,7 @@ fragment ItineraryTab_itinerary on Itinerary {
         platformCode
         vehicleMode
         zoneId
+        name
         alerts {
           alertSeverityLevel
           effectiveEndDate
@@ -298,6 +306,7 @@ fragment ItineraryTab_itinerary on Itinerary {
       }
       stop {
         gtfsId
+        name
         code
         platformCode
         zoneId
@@ -337,8 +346,9 @@ fragment ItineraryTab_itinerary on Itinerary {
         id
       }
     }
-    pickupBookingInfo {
+    dropOffBookingInfo {
       message
+      dropOffMessage
       contactInfo {
         phoneNumber
         infoUrl
@@ -376,8 +386,10 @@ fragment ItineraryTab_itinerary on Itinerary {
       shortName
       color
       gtfsId
+      type
       longName
       desc
+      url
       agency {
         gtfsId
         fareUrl
@@ -422,6 +434,7 @@ fragment ItineraryTab_itinerary on Itinerary {
         realtimeState
         stop {
           gtfsId
+          name
           id
         }
       }
@@ -465,6 +478,7 @@ fragment RouteLine_pattern on Pattern {
     mode
     color
     id
+    url
   }
   stops {
     lat
@@ -517,7 +531,32 @@ fragment SummaryPage_serviceTimeRange on serviceTimeRange {
 final summaryPageViewerFragment = gql(
   r'''
 fragment SummaryPage_viewer_3ZG8s4 on QueryType {
-  plan(fromPlace: $fromPlace, toPlace: $toPlace, intermediatePlaces: $intermediatePlaces, numItineraries: $numItineraries, transportModes: $transportModes, date: $date, time: $time, walkReluctance: $walkReluctance, walkBoardCost: $walkBoardCost, minTransferTime: $minTransferTime, walkSpeed: $walkSpeed, maxWalkDistance: $maxWalkDistance, wheelchair: $wheelchair, allowedTicketTypes: $ticketTypes, disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic, arriveBy: $arriveBy, transferPenalty: $transferPenalty, bikeSpeed: $bikeSpeed, optimize: $optimize, triangle: $triangle, itineraryFiltering: $itineraryFiltering, unpreferred: $unpreferred, allowedBikeRentalNetworks: $allowedBikeRentalNetworks, locale: $locale) {
+  plan(
+    fromPlace: $fromPlace,
+    toPlace: $toPlace,
+    intermediatePlaces: $intermediatePlaces,
+    numItineraries: $numItineraries, 
+    transportModes: $transportModes,
+    date: $date,
+    time: $time,
+    walkReluctance: $walkReluctance,
+    walkBoardCost: $walkBoardCost,
+    minTransferTime: $minTransferTime,
+    walkSpeed: $walkSpeed,
+    maxWalkDistance: $maxWalkDistance,
+    wheelchair: $wheelchair,
+    allowedTicketTypes: $ticketTypes,
+    disableRemainingWeightHeuristic: $disableRemainingWeightHeuristic,
+    arriveBy: $arriveBy,
+    transferPenalty: $transferPenalty,
+    bikeSpeed: $bikeSpeed,
+    optimize: $optimize,
+    triangle: $triangle,
+    itineraryFiltering: $itineraryFiltering,
+    unpreferred: $unpreferred,
+    allowedBikeRentalNetworks: $allowedBikeRentalNetworks,
+    locale: $locale
+    ) {
     ...SummaryPlanContainer_plan
     ...ItineraryTab_plan
     from{
@@ -536,6 +575,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
       ...ItineraryTab_itinerary
       ...SummaryPlanContainer_itineraries
       legs {
+        interlineWithPreviousLeg
         mode
         ...ItineraryLine_legs
         transitLeg
@@ -544,6 +584,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
         }
         route {
           gtfsId
+          url
           id
         }
         trip {
@@ -565,6 +606,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
           lon
           stop {
             gtfsId
+            name
             zoneId
             id
           }
@@ -577,6 +619,7 @@ fragment SummaryPage_viewer_3ZG8s4 on QueryType {
         to {
           stop {
             gtfsId
+            name
             zoneId
             id
           }
@@ -600,6 +643,7 @@ fragment SummaryPlanContainer_itineraries on Itinerary {
   endTime
   startTime
   legs {
+    interlineWithPreviousLeg
     mode
     to {
       bikePark {
@@ -614,6 +658,7 @@ fragment SummaryPlanContainer_itineraries on Itinerary {
       points
     }
     route {
+      url
       gtfsId
       id
     }

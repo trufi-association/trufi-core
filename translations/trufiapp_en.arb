@@ -1,6 +1,6 @@
 {
     "@@locale": "en",
-    "@@last_modified": "2021-06-04T23:44:34+02:00",
+    "@@last_modified": "2021-06-30T23:40:19+02:00",
     "aboutContent": "We are a Bolivian and international team of people that love and support public transport. We have developed this app to make it easy for people to use the transport system in Cochabamba and the surrounding area.",
     "@aboutContent": {
         "description": "Text displayed on the about page"
@@ -37,6 +37,26 @@
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
     },
+    "bikeRentalBikeStation": "Bike station",
+    "@bikeRentalBikeStation": {
+        "description": "Common Text Bike station"
+    },
+    "bikeRentalFetchRentalBike": "Fetch a rental bike:",
+    "@bikeRentalFetchRentalBike": {
+        "description": "Common Text Fetch a rental bike."
+    },
+    "bikeRentalNetworkFreeFloating": "Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.",
+    "@bikeRentalNetworkFreeFloating": {
+        "description": "Text Bike Rental Network message FreeFloating"
+    },
+    "carParkCloseCapacityMessage": "This car park is close to capacity. Please allow additional time for you journey.",
+    "@carParkCloseCapacityMessage": {
+        "description": "This car park is close to capacity"
+    },
+    "carParkExcludeFull": "Exclude full car parks",
+    "@carParkExcludeFull": {
+        "description": "Car Park Exclude Full parks label"
+    },
     "chooseLocationPageSubtitle": "Pan & zoom map under pin",
     "@chooseLocationPageSubtitle": {
         "description": "Page subtitle when choosing a location on the map"
@@ -48,6 +68,14 @@
     "commonArrival": "Arrival",
     "@commonArrival": {
         "description": "General Arrival label"
+    },
+    "commonBikesAvailable": "bikes at the station",
+    "@commonBikesAvailable": {
+        "description": "General Bikes Available label"
+    },
+    "commonCall": "Call",
+    "@commonCall": {
+        "description": "General Call label"
     },
     "commonCancel": "Cancel",
     "@commonCancel": {
@@ -73,6 +101,10 @@
     "@commonDestination": {
         "description": "Destination field label"
     },
+    "commonDetails": "Details",
+    "@commonDetails": {
+        "description": "General details label"
+    },
     "commonError": "Error",
     "@commonError": {
         "description": "Message when an error has occured"
@@ -85,6 +117,14 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
+    "commonFromStation": "from station",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "from stop",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
     "commonGoOffline": "Go offline",
     "@commonGoOffline": {
         "description": "Go offline button label"
@@ -92,6 +132,14 @@
     "commonGoOnline": "Go online",
     "@commonGoOnline": {
         "description": "Go online button label"
+    },
+    "commonItineraryNoTransitLegs": "Leave when it suits you",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Leaves at",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
     },
     "commonLeavingNow": "Leaving now",
     "@commonLeavingNow": {
@@ -101,17 +149,37 @@
     "@commonLoading": {
         "description": "General Loading label"
     },
+    "commonMapSettings": "Map Settings",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "commonMoreInformartion": "More informartion",
+    "@commonMoreInformartion": {
+        "description": "General More informartion label"
+    },
     "commonNoInternet": "No internet connection.",
     "@commonNoInternet": {
         "description": "Message when internet connection is lost"
+    },
+    "commonNow": "Now",
+    "@commonNow": {
+        "description": "General Now label"
     },
     "commonOK": "OK",
     "@commonOK": {
         "description": "OK button label"
     },
+    "commonOnDemandTaxi": "Book a trip",
+    "@commonOnDemandTaxi": {
+        "description": "General book a trip label"
+    },
     "commonOrigin": "Origin",
     "@commonOrigin": {
         "description": "Origin field label"
+    },
+    "commonPlatform": "Platform",
+    "@commonPlatform": {
+        "description": "General Platform  label"
     },
     "commonSave": "Save",
     "@commonSave": {
@@ -129,6 +197,10 @@
     "@commonTomorrow": {
         "description": "General Tomorrow label"
     },
+    "commonTrack": "Track",
+    "@commonTrack": {
+        "description": "General Track  label"
+    },
     "commonUnknownError": "Unknown error",
     "@commonUnknownError": {
         "description": "Message when an unknown error has occured"
@@ -144,6 +216,10 @@
     "commonWalk": "Walk",
     "@commonWalk": {
         "description": "General Walk label"
+    },
+    "copyrightsPriceProvider": "Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.",
+    "@copyrightsPriceProvider": {
+        "description": "copyrights Price Provider for cost"
     },
     "defaultLocationAdd": "Add {defaultLocation}",
     "@defaultLocationAdd": {
@@ -161,6 +237,18 @@
     "defaultLocationWork": "Work",
     "@defaultLocationWork": {
         "description": "The default location name Work"
+    },
+    "departureBikeStation": "Departure at {departureTime} from {departureStop} bike station",
+    "@departureBikeStation": {
+        "placeholders": {
+            "departureStop": {
+                "example": "herrenberg"
+            },
+            "departureTime": {
+                "example": "11:45"
+            }
+        },
+        "description": "Departure Bike Station detail Time and Stop"
     },
     "description": "The best way to travel with trufis, micros and buses through {cityName}.",
     "@description": {
@@ -247,6 +335,14 @@
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
     },
+    "fetchMoreItinerariesEarlierDepartures": "Earlier departures",
+    "@fetchMoreItinerariesEarlierDepartures": {
+        "description": "Text about extra fetch itineraries for Earlier departure title "
+    },
+    "fetchMoreItinerariesLaterDeparturesTitle": "Later departures",
+    "@fetchMoreItinerariesLaterDeparturesTitle": {
+        "description": "Text about extra fetch itineraries for later departure title "
+    },
     "followOnFacebook": "Follow us on Facebook",
     "@followOnFacebook": {
         "description": "Facebook menu item"
@@ -258,6 +354,50 @@
     "followOnTwitter": "Follow us on Twitter",
     "@followOnTwitter": {
         "description": "Twitter menu item"
+    },
+    "infoMessageDestinationOutsideService": "No route suggestions were found because the destination is outside the service area.",
+    "@infoMessageDestinationOutsideService": {
+        "description": "Text info message Destination outside for plan Fetch"
+    },
+    "infoMessageNoRouteMsg": "Unfortunately, no route suggestions were found.",
+    "@infoMessageNoRouteMsg": {
+        "description": "Text info message No Route Msg for plan Fetch"
+    },
+    "infoMessageNoRouteMsgWithChanges": "Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.",
+    "@infoMessageNoRouteMsgWithChanges": {
+        "description": "Text info message No Route Msg With Changes for plan Fetch"
+    },
+    "infoMessageNoRouteOriginNearDestination": "No route suggestions were found because the origin and destination are the same.",
+    "@infoMessageNoRouteOriginNearDestination": {
+        "description": "Text info message no route origin same as a destination for plan Fetch"
+    },
+    "infoMessageNoRouteOriginSameAsDestination": "No route suggestions were found because the origin and destination are very close to each other.",
+    "@infoMessageNoRouteOriginSameAsDestination": {
+        "description": "Text info message No Route Origin Same As Destination for plan Fetch"
+    },
+    "infoMessageNoRouteShowingAlternativeOptions": "No route suggestions were found with the your settings. However, we found the following route options:",
+    "@infoMessageNoRouteShowingAlternativeOptions": {
+        "description": "Text info message No Route Showing Alternative Options for plan Fetch"
+    },
+    "infoMessageOnlyCyclingRoutes": "Your search returned only cycling routes.",
+    "@infoMessageOnlyCyclingRoutes": {
+        "description": "Text info message Only walking and cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingCyclingRoutes": "Your search returned only walking and cycling routes.",
+    "@infoMessageOnlyWalkingCyclingRoutes": {
+        "description": "Text info message Only cycling Routes for plan Fetch"
+    },
+    "infoMessageOnlyWalkingRoutes": "Your search returned only walking routes.",
+    "@infoMessageOnlyWalkingRoutes": {
+        "description": "Text info message Only Walking Routes for plan Fetch"
+    },
+    "infoMessageOriginOutsideService": "No route suggestions were found because the origin is outside the service area.",
+    "@infoMessageOriginOutsideService": {
+        "description": "Text info message origin outside for plan Fetch"
+    },
+    "infoMessageUseNationalServicePrefix": "We recommend you try the national journey planner,",
+    "@infoMessageUseNationalServicePrefix": {
+        "description": "Text info message Use National Service Prefix for plan Fetch"
     },
     "instructionDistanceKm": "{value} km",
     "@instructionDistanceKm": {
@@ -366,6 +506,10 @@
     "@instructionVehicleMinibus": {
         "description": "Vehicle name (Minibus)"
     },
+    "instructionVehicleOnCar": "Drive",
+    "@instructionVehicleOnCar": {
+        "description": "Vehicle name (onCar)"
+    },
     "instructionVehicleSharing": "Sharing",
     "@instructionVehicleSharing": {
         "description": "Vehicle name (Sharing)"
@@ -381,6 +525,10 @@
     "instructionVehicleSharingTaxi": "Taxi",
     "@instructionVehicleSharingTaxi": {
         "description": "Vehicle name (Taxi)"
+    },
+    "instructionVehicleTaxi": "Taxi",
+    "@instructionVehicleTaxi": {
+        "description": "Vehicle name (onCar)"
     },
     "instructionVehicleTrufi": "Trufi",
     "@instructionVehicleTrufi": {
@@ -400,6 +548,34 @@
             }
         },
         "description": "Itinerary instruction (walking)"
+    },
+    "itineraryBuyTicket": "Buy tickets",
+    "@itineraryBuyTicket": {
+        "description": "Itinerary Buy tickets label"
+    },
+    "itineraryMissingPrice": "No price information",
+    "@itineraryMissingPrice": {
+        "description": "Itinerary No price information label"
+    },
+    "itineraryPriceOnlyPublicTransport": "Price only valid for public transport part of the journey.",
+    "@itineraryPriceOnlyPublicTransport": {
+        "description": "Itinerary Price Only PublicTransport label"
+    },
+    "itinerarySummaryBikeAndPublicRailSubwayTitle": "Take your bike with you on the train or to metro",
+    "@itinerarySummaryBikeAndPublicRailSubwayTitle": {
+        "description": "Text title itinerary Summary Bike And Public Rail Subway"
+    },
+    "itinerarySummaryBikeParkTitle": "Leave your bike at a Park & Ride",
+    "@itinerarySummaryBikeParkTitle": {
+        "description": "Text title itinerary Summary Bike Park Title"
+    },
+    "itineraryTicketsTitle": "Required tickets",
+    "@itineraryTicketsTitle": {
+        "description": "Itinerary Ticket Title label"
+    },
+    "itineraryTicketTitle": "Required ticket",
+    "@itineraryTicketTitle": {
+        "description": "Itinerary Ticket Title label"
     },
     "mapTypeLabel": "Map Type",
     "@mapTypeLabel": {
@@ -551,7 +727,11 @@
     "@settingPanelMyModesTransportBike": {
         "description": "Bike configuration panel label"
     },
-    "settingPanelMyModesTransportParkRide": "Park and Ride",
+    "settingPanelMyModesTransportBikeRide": "Bike & Ride",
+    "@settingPanelMyModesTransportBikeRide": {
+        "description": "Bike and Ride configuration panel label"
+    },
+    "settingPanelMyModesTransportParkRide": "Park & Ride",
     "@settingPanelMyModesTransportParkRide": {
         "description": "Park and Ride configuration panel label"
     },
@@ -638,7 +818,7 @@
     "@title": {
         "description": "The application's name"
     },
-    "typeSpeedAverage": "Average",
+    "typeSpeedAverage": "Normal",
     "@typeSpeedAverage": {
         "description": "Average speed type"
     },

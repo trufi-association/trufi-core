@@ -17,11 +17,12 @@ final initPayloadDataPlanState = PayloadDataPlanState(
 
 @immutable
 class PayloadDataPlanState extends Equatable {
-  static const int maxWalkDistance = 15000;
+  static const int maxWalkDistance = 3000;
   static const int suggestCarMinDistance = 2000;
   static const int suggestBikeMaxDistance = 30000;
   static const int suggestBikeAndPublicMaxDistance = 15000;
   static const int bikeAndPublicMaxWalkDistance = 15000;
+  static const int minDistanceBetweenFromAndTo = 20;
 
   static const String _typeWalkingSpeed = "typeWalkingSpeed";
   static const String _avoidWalking = "avoidWalking";
@@ -34,7 +35,7 @@ class PayloadDataPlanState extends Equatable {
       "includeParkAndRideSuggestions";
   static const String _includeCarSuggestions = "includeCarSuggestions";
   static const String _wheelchair = "wheelchair";
-  static const String _date = "date-key";
+  static const String _date = "date";
   static const String _arriveBy = "arriveBy";
 
   const PayloadDataPlanState({
@@ -50,6 +51,8 @@ class PayloadDataPlanState extends Equatable {
     @required this.wheelchair,
     @required this.arriveBy,
     @required this.date,
+    this.isFreeParkToParkRide = false,
+    this.isFreeParkToCarPark = false,
   });
 
   final WalkingSpeed typeWalkingSpeed;
@@ -64,6 +67,8 @@ class PayloadDataPlanState extends Equatable {
   final bool wheelchair;
   final bool arriveBy;
   final DateTime date;
+  final bool isFreeParkToParkRide;
+  final bool isFreeParkToCarPark;
 
   PayloadDataPlanState copyWith({
     WalkingSpeed typeWalkingSpeed,
@@ -78,6 +83,8 @@ class PayloadDataPlanState extends Equatable {
     bool wheelchair,
     bool arriveBy,
     DateTime date,
+    bool isFreeParkToParkRide,
+    bool isFreeParkToCarPark,
   }) {
     return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
@@ -95,6 +102,8 @@ class PayloadDataPlanState extends Equatable {
       wheelchair: wheelchair ?? this.wheelchair,
       arriveBy: arriveBy ?? this.arriveBy,
       date: date ?? this.date,
+      isFreeParkToParkRide: isFreeParkToParkRide ?? this.isFreeParkToParkRide,
+      isFreeParkToCarPark: isFreeParkToCarPark ?? this.isFreeParkToCarPark,
     );
   }
 
@@ -178,6 +187,8 @@ class PayloadDataPlanState extends Equatable {
         includeCarSuggestions,
         wheelchair,
         date,
-        arriveBy
+        arriveBy,
+        isFreeParkToParkRide,
+        isFreeParkToCarPark,
       ];
 }

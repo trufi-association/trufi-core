@@ -28,8 +28,11 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
   $showBikeAndParkItineraries: Boolean!
+  $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
+  $carMode: [TransportMode!]
+  $bannedVehicleParkingTags: [String]
 ) {
   walkPlan: plan(
     fromPlace: $fromPlace,
@@ -264,7 +267,7 @@ query SummaryPage_WalkBike_Query(
     toPlace: $toPlace, 
     intermediatePlaces: $intermediatePlaces, 
     numItineraries: 6, 
-    transportModes: [{mode: CAR}], 
+    transportModes: $carMode, 
     date: $date, 
     time: $time, 
     walkReluctance: $walkReluctance, 
@@ -281,6 +284,8 @@ query SummaryPage_WalkBike_Query(
     itineraryFiltering: $itineraryFiltering, 
     unpreferred: $unpreferred, 
     locale: $locale,
+    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
+    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeCarQuery) {
     from{
       name,
@@ -333,6 +338,16 @@ query SummaryPage_WalkBike_Query(
           name
           lat
           lon
+          vehicleParkingWithEntrance {
+            vehicleParking {
+              tags
+            }
+          }
+          carPark {
+            carParkId
+            name
+            id
+          }
         }
         distance
       }
@@ -343,7 +358,12 @@ query SummaryPage_WalkBike_Query(
     toPlace: $toPlace, 
     intermediatePlaces: $intermediatePlaces, 
     numItineraries: 6, 
-    transportModes: [{mode: CAR, qualifier: PARK}, {mode: TRANSIT}], 
+    transportModes: [
+      { mode: CAR, qualifier: PARK }
+      { mode: BUS }
+      { mode: RAIL }
+      { mode: SUBWAY }
+    ], 
     date: $date, 
     time: $time, 
     walkReluctance: $walkReluctance, 
@@ -358,8 +378,11 @@ query SummaryPage_WalkBike_Query(
     optimize: $optimize, 
     triangle: $triangle, 
     itineraryFiltering: $itineraryFiltering, 
-    unpreferred: $unpreferred, 
-    locale: $locale
+    unpreferred: $unpreferred,
+    carReluctance: 10,
+    locale: $locale,
+    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
+    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeParkRideQuery) {
     from{
       name,
@@ -409,6 +432,11 @@ query SummaryPage_WalkBike_Query(
             id
           }
           name
+          vehicleParkingWithEntrance {
+            vehicleParking {
+              tags
+            }
+          }
         }
         distance
       }
@@ -421,6 +449,7 @@ query SummaryPage_WalkBike_Query(
     numItineraries: 6
     transportModes: [
       { mode: RAIL }
+      { mode: BUS }
       { mode: FLEX, qualifier: EGRESS }
       { mode: FLEX, qualifier: DIRECT }
       { mode: WALK }
@@ -442,6 +471,7 @@ query SummaryPage_WalkBike_Query(
     itineraryFiltering: $itineraryFiltering
     unpreferred: $unpreferred
     locale: $locale
+    searchWindow: 10800
     ) @include(if: $shouldMakeOnDemandTaxiQuery) {
     from{
       name,

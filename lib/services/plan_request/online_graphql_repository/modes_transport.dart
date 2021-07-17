@@ -8,6 +8,7 @@ class ModesTransport {
   final Plan bikeAndPublicPlan;
   final Plan bikeParkPlan;
   final Plan carPlan;
+  final Plan carParkPlan;
   final Plan parkRidePlan;
   final Plan onDemandTaxiPlan;
 
@@ -17,6 +18,7 @@ class ModesTransport {
     this.bikeAndPublicPlan,
     this.bikeParkPlan,
     this.carPlan,
+    this.carParkPlan,
     this.parkRidePlan,
     this.onDemandTaxiPlan,
   });
@@ -37,6 +39,9 @@ class ModesTransport {
         carPlan: json["carPlan"] != null
             ? Plan.fromMap(json["carPlan"] as Map<String, dynamic>)
             : null,
+        carParkPlan: json["carParkPlan"] != null
+            ? Plan.fromMap(json["carParkPlan"] as Map<String, dynamic>)
+            : null,
         parkRidePlan: json["parkRidePlan"] != null
             ? Plan.fromMap(json["parkRidePlan"] as Map<String, dynamic>)
             : null,
@@ -51,24 +56,30 @@ class ModesTransport {
         'bikeAndPublicPlan': bikeAndPublicPlan?.toMap(),
         'bikeParkPlan': bikeParkPlan?.toMap(),
         'carPlan': carPlan?.toMap(),
+        'carParkPlan': carParkPlan?.toMap(),
         'parkRidePlan': parkRidePlan?.toMap(),
         'onDemandTaxiPlan': onDemandTaxiPlan?.toMap(),
       };
 
   ModesTransportEntity toModesTransport() {
     return ModesTransportEntity(
-      walkPlan: walkPlan?.toPlan(),
-      bikePlan: bikePlan?.toPlan(),
-      bikeAndPublicPlan: bikeAndPublicPlan?.toPlan(),
-      bikeParkPlan: bikeParkPlan?.toPlan(),
-      carPlan: carPlan?.toPlan(),
-      parkRidePlan: parkRidePlan?.toPlan(),
-      onDemandTaxiPlan: onDemandTaxiPlan?.toPlan()?.copyWith(
-          itineraries: onDemandTaxiPlan.itineraries
-              .where((itinerary) =>
-                  !itinerary.legs.every((leg) => leg.mode == Mode.walk))
-              .map((e) => e.toPlanItinerary())
-              .toList()),
+      walkPlan: walkPlan?.toPlan()?.copyWith(type: 'walkPlan'),
+      bikePlan: bikePlan?.toPlan()?.copyWith(type: 'bikePlan'),
+      bikeAndPublicPlan:
+          bikeAndPublicPlan?.toPlan()?.copyWith(type: 'bikeAndPublicPlan'),
+      bikeParkPlan: bikeParkPlan?.toPlan()?.copyWith(type: 'bikeParkPlan'),
+      carPlan: carPlan?.toPlan()?.copyWith(type: 'carPlan'),
+      carParkPlan: carParkPlan?.toPlan()?.copyWith(type: 'carParkPlan'),
+      parkRidePlan: parkRidePlan?.toPlan()?.copyWith(type: 'parkRidePlan'),
+      onDemandTaxiPlan: onDemandTaxiPlan
+          ?.toPlan()
+          ?.copyWith(
+              itineraries: onDemandTaxiPlan.itineraries
+                  .where((itinerary) =>
+                      !itinerary.legs.every((leg) => leg.mode == Mode.walk))
+                  .map((e) => e.toPlanItinerary())
+                  .toList())
+          ?.copyWith(type: 'onDemandTaxiPlan'),
     );
   }
 }

@@ -11,6 +11,7 @@ abstract class RequestManager {
     @required TrufiLocation to,
     @required String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   });
 
   Future<ModesTransportEntity> fetchTransportModePlan({
@@ -18,6 +19,7 @@ abstract class RequestManager {
     @required TrufiLocation to,
     @required String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   });
 
   Future<PlanEntity> fetchCarPlan(

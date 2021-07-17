@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/services/models_otp/enums/mode.dart';
@@ -15,11 +16,11 @@ import 'modes_transport.dart';
 
 class OnlineGraphQLRepository implements RequestManager {
   final String graphQLEndPoint;
-  final GraphQLPlanRepository _graphQLPlanRepository = GraphQLPlanRepository();
+  final GraphQLPlanRepository _graphQLPlanRepository;
 
   OnlineGraphQLRepository({
     @required this.graphQLEndPoint,
-  });
+  }) : _graphQLPlanRepository = GraphQLPlanRepository(graphQLEndPoint);
 
   @override
   Future<PlanEntity> fetchAdvancedPlan({
@@ -27,15 +28,16 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation to,
     @required String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) async {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, [TransportMode.transit, TransportMode.walk]);
     } else {
       return _fetchPlanAdvanced(
-        from: from,
-        to: to,
-        advancedOptions: advancedOptions,
-      );
+          from: from,
+          to: to,
+          advancedOptions: advancedOptions,
+          locale: localeName);
     }
   }
 
@@ -45,11 +47,13 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) {
     return _fetchTransportModePlan(
       from: from,
       to: to,
       advancedOptions: advancedOptions,
+      locale: localeName,
     );
   }
 
@@ -85,11 +89,13 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
+    @required String locale,
   }) async {
     Plan planData = await _graphQLPlanRepository.fetchPlanAdvanced(
       fromLocation: from,
       toLocation: to,
       advancedOptions: advancedOptions,
+      locale: locale,
     );
     planData = planData.copyWith(
       itineraries: planData.itineraries
@@ -99,27 +105,40 @@ class OnlineGraphQLRepository implements RequestManager {
           )
           .toList(),
     );
-    if (planData.itineraries.isEmpty) {
+    final mainFetchIsEmpty = planData.itineraries.isEmpty;
+    if (mainFetchIsEmpty) {
       planData = await _graphQLPlanRepository.fetchPlanAdvanced(
         fromLocation: from,
         toLocation: to,
         advancedOptions: advancedOptions,
+        locale: locale,
         defaultFecth: true,
       );
     }
-    final planEntity = planData.toPlan();
-    final itinerariesTrasnport = planEntity.itineraries
-        .where(
-          (itinerary) => !itinerary.legs
-              .every((leg) => leg.transportMode == TransportMode.walk),
-        )
-        .toList();
+    PlanEntity planEntity = planData.toPlan();
+    if (!planEntity.isOnlyWalk) {
+      planEntity = planData
+          .copyWith(
+            itineraries: planData.itineraries
+                .where(
+                  (itinerary) =>
+                      !itinerary.legs.every((leg) => leg.mode == Mode.walk),
+                )
+                .toList(),
+          )
+          .toPlan();
+    }
 
     return planEntity.copyWith(
-      itineraries: itinerariesTrasnport,
-      error: itinerariesTrasnport.isEmpty
-          ? PlanError(404, "Not found routes")
-          : null,
+      planInfoBox: planEntity.isOnlyWalk
+          ? PlanInfoBox.noRouteMsg
+          : (mainFetchIsEmpty
+              ? PlanInfoBox.usingDefaultTransports
+              : PlanInfoBox.undefined),
+      // TODO remove when review by Samuel
+      // error: planEntity.itineraries.isEmpty
+      //     ? PlanError(404, "Not found routes")
+      //     : null,
     );
   }
 
@@ -127,13 +146,14 @@ class OnlineGraphQLRepository implements RequestManager {
     @required TrufiLocation from,
     @required TrufiLocation to,
     @required PayloadDataPlanState advancedOptions,
+    @required String locale,
   }) async {
     final ModesTransport planEntityData =
         await _graphQLPlanRepository.fetchWalkBikePlanQuery(
-      fromLocation: from,
-      toLocation: to,
-      advancedOptions: advancedOptions,
-    );
+            fromLocation: from,
+            toLocation: to,
+            advancedOptions: advancedOptions,
+            locale: locale);
     return planEntityData.toModesTransport();
   }
 }

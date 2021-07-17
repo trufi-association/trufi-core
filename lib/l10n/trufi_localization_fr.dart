@@ -37,6 +37,21 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get appReviewDialogTitle => 'Enjoying Trufi?';
 
   @override
+  String get bikeRentalBikeStation => 'Bike station';
+
+  @override
+  String get bikeRentalFetchRentalBike => 'Fetch a rental bike:';
+
+  @override
+  String get bikeRentalNetworkFreeFloating => 'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.';
+
+  @override
+  String get carParkCloseCapacityMessage => 'This car park is close to capacity. Please allow additional time for you journey.';
+
+  @override
+  String get carParkExcludeFull => 'Exclude full car parks';
+
+  @override
   String get chooseLocationPageSubtitle => 'Agrandir et déplacer la carte pour centrer le marqueur';
 
   @override
@@ -44,6 +59,12 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String get commonArrival => 'Arrival';
+
+  @override
+  String get commonBikesAvailable => 'Show on map';
+
+  @override
+  String get commonCall => 'Show on map';
 
   @override
   String get commonCancel => 'Annuler';
@@ -64,6 +85,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonDestination => 'Destination';
 
   @override
+  String get commonDetails => 'Walk';
+
+  @override
   String get commonError => 'Erreur';
 
   @override
@@ -73,10 +97,22 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonFavoritePlaces => 'Favorite places';
 
   @override
+  String get commonFromStation => 'Show on map';
+
+  @override
+  String get commonFromStop => 'Show on map';
+
+  @override
   String get commonGoOffline => 'Se déconnecter';
 
   @override
   String get commonGoOnline => 'Se connecter';
+
+  @override
+  String get commonItineraryNoTransitLegs => 'Show on map';
+
+  @override
+  String get commonLeavesAt => 'Show on map';
 
   @override
   String get commonLeavingNow => 'Leaving now';
@@ -85,13 +121,28 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonLoading => 'Show on map';
 
   @override
+  String get commonMapSettings => 'Show on map';
+
+  @override
+  String get commonMoreInformartion => 'Show on map';
+
+  @override
   String get commonNoInternet => 'Pas de connexion Internet.';
+
+  @override
+  String get commonNow => 'Show on map';
 
   @override
   String get commonOK => 'OK';
 
   @override
+  String get commonOnDemandTaxi => 'Show on map';
+
+  @override
   String get commonOrigin => 'Origine';
+
+  @override
+  String get commonPlatform => 'Show on map';
 
   @override
   String get commonSave => 'Save';
@@ -106,6 +157,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonTomorrow => 'Show on map';
 
   @override
+  String get commonTrack => 'Show on map';
+
+  @override
   String get commonUnknownError => 'Erreur inconnue';
 
   @override
@@ -118,6 +172,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get commonWalk => 'Walk';
 
   @override
+  String get copyrightsPriceProvider => 'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.';
+
+  @override
   String defaultLocationAdd(Object defaultLocation) {
     return 'Version {version}';
   }
@@ -127,6 +184,11 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String get defaultLocationWork => 'Work';
+
+  @override
+  String departureBikeStation(Object departureStop, Object departureTime) {
+    return 'Itinéraires: {routeContributors} et tous les utilisateurs ayant chargé des itinéraires dans OpenStreetMap, tels que {osmContributors}.\nContactez-nous si vous souhaitez rejoindre la communauté OpenStreetMap!';
+  }
 
   @override
   String description(Object cityName) {
@@ -191,6 +253,12 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get feedbackTitle => 'Envoyez-nous un e-mail';
 
   @override
+  String get fetchMoreItinerariesEarlierDepartures => 'Earlier departures';
+
+  @override
+  String get fetchMoreItinerariesLaterDeparturesTitle => 'Later departures';
+
+  @override
   String get followOnFacebook => 'Follow us on Facebook';
 
   @override
@@ -198,6 +266,39 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String get followOnTwitter => 'Follow us on Twitter';
+
+  @override
+  String get infoMessageDestinationOutsideService => 'No route suggestions were found because the destination is outside the service area.';
+
+  @override
+  String get infoMessageNoRouteMsg => 'Unfortunately, no route suggestions were found.';
+
+  @override
+  String get infoMessageNoRouteMsgWithChanges => 'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.';
+
+  @override
+  String get infoMessageNoRouteOriginNearDestination => 'No route suggestions were found because the origin and destination are the same.';
+
+  @override
+  String get infoMessageNoRouteOriginSameAsDestination => 'No route suggestions were found because the origin and destination are very close to each other.';
+
+  @override
+  String get infoMessageNoRouteShowingAlternativeOptions => 'No route suggestions were found with the your settings. However, we found the following route options:';
+
+  @override
+  String get infoMessageOnlyCyclingRoutes => 'Your search returned only cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only walking and cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingRoutes => 'Your search returned only walking routes.';
+
+  @override
+  String get infoMessageOriginOutsideService => 'No route suggestions were found because the origin is outside the service area.';
+
+  @override
+  String get infoMessageUseNationalServicePrefix => 'We recommend you try the national journey planner,';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -260,6 +361,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get instructionVehicleMinibus => 'Minibus';
 
   @override
+  String get instructionVehicleOnCar => 'Voiture';
+
+  @override
   String get instructionVehicleSharing => 'Bus';
 
   @override
@@ -272,12 +376,36 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get instructionVehicleSharingTaxi => 'Bus';
 
   @override
+  String get instructionVehicleTaxi => 'Voiture';
+
+  @override
   String get instructionVehicleTrufi => 'Trufi';
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
     return 'Marcher ${duration} (${distance}) vers\n${location}';
   }
+
+  @override
+  String get itineraryBuyTicket => 'Buy tickets';
+
+  @override
+  String get itineraryMissingPrice => 'No price information';
+
+  @override
+  String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
+
+  @override
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Take your bike with you on the train or to metro';
+
+  @override
+  String get itinerarySummaryBikeParkTitle => 'Leave your bike at a Park & Ride';
+
+  @override
+  String get itineraryTicketsTitle => 'Required tickets';
+
+  @override
+  String get itineraryTicketTitle => 'Required ticket';
 
   @override
   String get mapTypeLabel => 'Map Type';
@@ -404,6 +532,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
 
   @override
   String get settingPanelMyModesTransportBike => 'Bike';
+
+  @override
+  String get settingPanelMyModesTransportBikeRide => 'Park and Ride';
 
   @override
   String get settingPanelMyModesTransportParkRide => 'Park and Ride';

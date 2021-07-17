@@ -78,17 +78,19 @@ class Itinerary {
 
   PlanItinerary toPlanItinerary() {
     return PlanItinerary(
-      legs: legs
-          ?.map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
-          ?.toList(),
-      startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
-          : null,
-      endTime:
-          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
-      durationTrip: duration != null ? Duration(seconds: duration) : null,
-      walkDistance: walkDistance,
-      walkTime: walkTime != null ? Duration(seconds: walkTime) : null,
-    );
+        legs: legs
+            ?.map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
+            ?.toList(),
+        startTime: startTime != null
+            ? DateTime.fromMillisecondsSinceEpoch(startTime)
+            : null,
+        endTime: endTime != null
+            ? DateTime.fromMillisecondsSinceEpoch(endTime)
+            : null,
+        durationTrip: duration != null ? Duration(seconds: duration) : null,
+        walkDistance: walkDistance,
+        walkTime: walkTime != null ? Duration(seconds: walkTime) : null,
+        arrivedAtDestinationWithRentedBicycle:
+            arrivedAtDestinationWithRentedBicycle);
   }
 }

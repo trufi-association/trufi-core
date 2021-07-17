@@ -2,7 +2,6 @@ part of 'plan_entity.dart';
 
 class PlanItineraryLeg {
   PlanItineraryLeg({
-    this.rentedBike,
     this.points,
     this.mode,
     this.route,
@@ -17,7 +16,12 @@ class PlanItineraryLeg {
     this.intermediatePlaces,
     this.intermediatePlace,
     this.transitLeg,
+    this.rentedBike,
     this.pickupBookingInfo,
+    this.dropOffBookingInfo,
+    this.interlineWithPreviousLeg,
+    this.accumulatedPoints = const [],
+    this.trip,
   }) {
     transportMode =
         getTransportMode(mode: mode, specificTransport: routeLongName);
@@ -39,7 +43,10 @@ class PlanItineraryLeg {
   static const _intermediatePlace = "intermediatePlace";
   static const _transitLeg = "transitLeg";
   static const _rentedBike = "rentedBike";
+  static const _interlineWithPreviousLeg = "interlineWithPreviousLeg";
   static const _pickupBookingInfo = "pickupBookingInfo";
+  static const _dropOffBookingInfo = "dropOffBookingInfo";
+  static const _trip = "trip";
 
   final String points;
   final String mode;
@@ -55,11 +62,14 @@ class PlanItineraryLeg {
   final bool transitLeg;
   final bool intermediatePlace;
   final bool rentedBike;
+  final bool interlineWithPreviousLeg;
   final PickupBookingInfo pickupBookingInfo;
-  // TODO research news LegMode like (BICYCLE_WALK, CITYBIKE)
-  TransportMode transportMode;
-
+  final BookingInfo dropOffBookingInfo;
   final List<PlaceEntity> intermediatePlaces;
+  final Trip trip;
+
+  TransportMode transportMode;
+  List<LatLng> accumulatedPoints;
 
   factory PlanItineraryLeg.fromJson(Map<String, dynamic> json) {
     return PlanItineraryLeg(
@@ -99,9 +109,19 @@ class PlanItineraryLeg {
           ? PickupBookingInfo.fromMap(
               json[_pickupBookingInfo] as Map<String, dynamic>)
           : null,
+      dropOffBookingInfo: json[_dropOffBookingInfo] != null
+          ? BookingInfo.fromMap(
+              json[_dropOffBookingInfo] as Map<String, dynamic>)
+          : null,
       transitLeg: json[_transitLeg] as bool,
       intermediatePlace: json[_intermediatePlace] as bool,
       rentedBike: json[_rentedBike] as bool,
+      interlineWithPreviousLeg: json[_interlineWithPreviousLeg] as bool,
+      accumulatedPoints:
+          decodePolyline(json[_legGeometry][_points] as String ?? ''),
+      trip: json[_trip] != null
+          ? Trip.fromJson(json[_trip] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -122,9 +142,12 @@ class PlanItineraryLeg {
           ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
           : null,
       _pickupBookingInfo: pickupBookingInfo?.toMap(),
+      _dropOffBookingInfo: dropOffBookingInfo?.toMap(),
       _intermediatePlace: intermediatePlace,
       _transitLeg: transitLeg,
       _rentedBike: rentedBike,
+      _interlineWithPreviousLeg: interlineWithPreviousLeg,
+      _trip: trip?.toJson(),
     };
   }
 
@@ -142,8 +165,12 @@ class PlanItineraryLeg {
     bool rentedBike,
     bool intermediatePlace,
     bool transitLeg,
+    bool interlineWithPreviousLeg,
     List<PlaceEntity> intermediatePlaces,
     PickupBookingInfo pickupBookingInfo,
+    BookingInfo dropOffBookingInfo,
+    List<LatLng> accumulatedPoints,
+    Trip trip,
   }) {
     return PlanItineraryLeg(
       points: points ?? this.points,
@@ -159,8 +186,13 @@ class PlanItineraryLeg {
       rentedBike: rentedBike ?? this.rentedBike,
       intermediatePlace: intermediatePlace ?? this.intermediatePlace,
       transitLeg: transitLeg ?? this.transitLeg,
+      interlineWithPreviousLeg:
+          interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
       pickupBookingInfo: pickupBookingInfo ?? this.pickupBookingInfo,
+      dropOffBookingInfo: dropOffBookingInfo ?? this.dropOffBookingInfo,
+      accumulatedPoints: accumulatedPoints ?? this.accumulatedPoints,
+      trip: trip ?? this.trip,
     );
   }
 
@@ -212,4 +244,8 @@ class PlanItineraryLeg {
 
   bool get isLegOnFoot =>
       transportMode == TransportMode.walk || mode == 'BICYCLE_WALK';
+
+  String get headSign {
+    return trip?.tripHeadsign ?? (route?.shortName ?? (route?.longName ?? ''));
+  }
 }

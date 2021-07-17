@@ -168,17 +168,31 @@ class Stop {
         'vehicleMode': vehicleMode?.name,
         'platformCode': platformCode,
         'cluster': cluster?.toJson(),
-        'stops': List<dynamic>.from(stops.map((x) => x.toJson())),
-        'routes': List<dynamic>.from(routes.map((x) => x.toJson())),
-        'patterns': List<dynamic>.from(patterns.map((x) => x.toJson())),
-        'transfers': List<dynamic>.from(transfers.map((x) => x.toJson())),
-        'stoptimesForServiceDate':
-            List<dynamic>.from(stoptimesForServiceDate.map((x) => x.toJson())),
-        'stoptimesForPatterns':
-            List<dynamic>.from(stoptimesForPatterns.map((x) => x.toJson())),
-        'stoptimesWithoutPatterns':
-            List<dynamic>.from(stoptimesWithoutPatterns.map((x) => x.toJson())),
-        'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'stops': stops != null
+            ? List<dynamic>.from(stops.map((x) => x.toJson()))
+            : null,
+        'routes': routes != null
+            ? List<dynamic>.from(routes.map((x) => x.toJson()))
+            : null,
+        'patterns': patterns != null
+            ? List<dynamic>.from(patterns.map((x) => x.toJson()))
+            : null,
+        'transfers': transfers != null
+            ? List<dynamic>.from(transfers.map((x) => x.toJson()))
+            : null,
+        'stoptimesForServiceDate': stoptimesForServiceDate != null
+            ? List<dynamic>.from(stoptimesForServiceDate.map((x) => x.toJson()))
+            : null,
+        'stoptimesForPatterns': stoptimesForPatterns != null
+            ? List<dynamic>.from(stoptimesForPatterns.map((x) => x.toJson()))
+            : null,
+        'stoptimesWithoutPatterns': stoptimesWithoutPatterns != null
+            ? List<dynamic>.from(
+                stoptimesWithoutPatterns.map((x) => x.toJson()))
+            : null,
+        'alerts': alerts != null
+            ? List<dynamic>.from(alerts.map((x) => x.toJson()))
+            : null,
       };
 
   List<Stoptime> get stoptimesWithoutPatternsCurrent {

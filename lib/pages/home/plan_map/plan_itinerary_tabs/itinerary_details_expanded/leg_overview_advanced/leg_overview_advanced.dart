@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeleton_animation/skeleton_animation.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/fare_utils.dart';
@@ -9,15 +10,18 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_details_expanded/leg_overview_advanced/ticket_information.dart';
 import 'package:trufi_core/services/models_otp/fare_component.dart';
 
+import '../../../plan.dart';
 import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
 class LegOverviewAdvanced extends StatefulWidget {
   final PlanItinerary itinerary;
+  final PlanPageController planPageController;
   final void Function() onBackPressed;
   const LegOverviewAdvanced({
     Key key,
     @required this.itinerary,
+    @required this.planPageController,
     this.onBackPressed,
   }) : super(key: key);
 
@@ -26,7 +30,7 @@ class LegOverviewAdvanced extends StatefulWidget {
 }
 
 class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
-  bool loading = true;
+  bool loading = false;
   String fetchError;
   List<FareComponent> fares;
   List<FareComponent> unknownFares;
@@ -35,8 +39,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      // TODO need finished implement fetchFares
-      // loadData();
+      loadData();
     });
   }
 
@@ -45,8 +48,10 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
     final config = context.read<ConfigurationCubit>().state;
 
     final localization = TrufiLocalization.of(context);
+    final compresedLegs = widget.itinerary.compressLegs;
+    // loadData();
     return Column(
-      children: widget.itinerary.legs
+      children: compresedLegs
           .asMap()
           .map<int, Widget>((index, itineraryLeg) {
             return MapEntry(
@@ -55,13 +60,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                 children: [
                   if (index == 0)
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (fares != null)
-                          TicketInformation(
-                            legs: widget.itinerary.legs,
-                            fares: fares,
-                            unknownFares: unknownFares,
-                          ),
                         Row(
                           children: [
                             if (widget.onBackPressed != null)
@@ -78,6 +78,48 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                         const Divider(
                           color: Colors.black,
                         ),
+                        if (loading)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Skeleton(
+                                    padding: 2,
+                                    width: 170,
+                                    height: 18,
+                                    textColor: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  Skeleton(
+                                    padding: 2,
+                                    width: 170,
+                                    height: 18,
+                                    textColor: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ],
+                              ),
+                              Flexible(
+                                child: Skeleton(
+                                  padding: 2,
+                                  height: 40,
+                                  textColor: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (fares != null)
+                          TicketInformation(
+                            legs: compresedLegs,
+                            fares: fares,
+                            unknownFares: unknownFares,
+                          ),
+                        if (fares != null || loading)
+                          const Divider(
+                            color: Colors.grey,
+                          ),
                         if (itineraryLeg.transportMode == TransportMode.walk)
                           Column(
                             children: [
@@ -97,55 +139,101 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                               ),
                             ],
                           )
-                        else if (widget.itinerary.legs.length > 1)
+                        else if (compresedLegs.length > 1)
                           TransportDash(
-                            leg: itineraryLeg,
-                            isFirstTransport: true,
-                            isNextTransport: itineraryLeg.endTimeString ==
-                                widget
-                                    .itinerary.legs[index + 1].startTimeString,
-                          )
+                              planPageController: widget.planPageController,
+                              itinerary: widget.itinerary,
+                              leg: itineraryLeg,
+                              isFirstTransport: true,
+                              isNextTransport: (itineraryLeg.endTime
+                                                  .millisecondsSinceEpoch -
+                                              compresedLegs[index + 1]
+                                                  .startTime
+                                                  .millisecondsSinceEpoch)
+                                          .abs() >=
+                                      0 &&
+                                  (itineraryLeg.transportMode !=
+                                          TransportMode.bicycle ||
+                                      compresedLegs[index + 1].transportMode ==
+                                          TransportMode.walk))
                       ],
                     )
                   else if (itineraryLeg.transportMode == TransportMode.walk &&
-                      index < widget.itinerary.legs.length - 1)
+                      index < compresedLegs.length - 1)
                     Column(
                       children: [
                         WalkDash(
                           leg: itineraryLeg,
+                          legBefore: compresedLegs[index - 1],
                         ),
-                        if (itineraryLeg.endTimeString !=
-                            widget.itinerary.legs[index + 1].startTimeString)
+                        if (itineraryLeg.endTime.millisecondsSinceEpoch <
+                            compresedLegs[index + 1]
+                                .startTime
+                                .millisecondsSinceEpoch)
                           WaitDash(
                             legBefore: itineraryLeg,
-                            legAfter: widget.itinerary.legs[index + 1],
+                            legAfter: compresedLegs[index + 1],
                           )
                       ],
                     )
-                  else if (index < widget.itinerary.legs.length - 1)
+                  else if (index < compresedLegs.length - 1)
                     Column(
                       children: [
                         TransportDash(
-                          leg: itineraryLeg,
-                          isNextTransport: itineraryLeg.endTimeString ==
-                              widget.itinerary.legs[index + 1].startTimeString,
-                        ),
-                        if (itineraryLeg.endTimeString !=
-                            widget.itinerary.legs[index + 1].startTimeString)
+                            planPageController: widget.planPageController,
+                            itinerary: widget.itinerary,
+                            leg: itineraryLeg,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
+                                compresedLegs[index - 1].transportMode ==
+                                    TransportMode.walk ||
+                                index == 0,
+                            isNextTransport:
+                                (itineraryLeg.endTime.millisecondsSinceEpoch -
+                                            compresedLegs[index + 1]
+                                                .startTime
+                                                .millisecondsSinceEpoch)
+                                        .abs() >=
+                                    0),
+                        if (itineraryLeg.endTime.millisecondsSinceEpoch <
+                            compresedLegs[index + 1]
+                                .startTime
+                                .millisecondsSinceEpoch)
                           WaitDash(
                             legBefore: itineraryLeg,
-                            legAfter: widget.itinerary.legs[index + 1],
+                            legAfter: compresedLegs[index + 1],
                           )
                       ],
                     ),
-                  if (index == widget.itinerary.legs.length - 1)
+                  if (index == compresedLegs.length - 1)
                     Column(
                       children: [
-                        if (itineraryLeg.transportMode == TransportMode.walk)
+                        if (itineraryLeg.transportMode == TransportMode.walk &&
+                            compresedLegs.length > 1)
                           WalkDash(leg: itineraryLeg)
+                        else if (itineraryLeg.transportMode !=
+                                TransportMode.walk &&
+                            compresedLegs.length > 1)
+                          TransportDash(
+                            planPageController: widget.planPageController,
+                            itinerary: widget.itinerary,
+                            leg: itineraryLeg,
+                            isFirstTransport: index == 0,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
+                                compresedLegs[index - 1].transportMode ==
+                                    TransportMode.walk ||
+                                index == 0,
+                          )
                         else
                           TransportDash(
+                            planPageController: widget.planPageController,
+                            itinerary: widget.itinerary,
                             leg: itineraryLeg,
+                            isFirstTransport: index == 0,
+                            isBeforeTransport: itineraryLeg.transportMode !=
+                                    TransportMode.bicycle ||
+                                index == 0,
                           ),
                         DashLinePlace(
                           date: widget.itinerary.endTimeHHmm.toString(),
@@ -177,27 +265,32 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
   }
 
   Future<void> loadData() async {
-    if (!mounted) return;
-    setState(() {
-      fetchError = null;
-      loading = true;
-    });
-    fetchFares(widget.itinerary).then((value) {
-      if (mounted) {
-        setState(() {
-          fares = getFares(value);
-          unknownFares =
-              getUnknownFares(value, fares, getRoutes(widget.itinerary.legs));
-          loading = false;
-        });
-      }
-    }).catchError((error) {
-      if (mounted) {
-        setState(() {
-          fetchError = "$error";
-          loading = false;
-        });
-      }
-    });
+    if (widget.itinerary.compressLegs.isNotEmpty &&
+        widget.itinerary.compressLegs.any((leg) => leg.transitLeg)) {
+      final faresUrl = context.read<ConfigurationCubit>().state.urls.faresUrl;
+
+      if (!mounted) return;
+      setState(() {
+        fetchError = null;
+        loading = true;
+      });
+      fetchFares(widget.itinerary, faresUrl).then((value) {
+        if (mounted) {
+          setState(() {
+            fares = getFares(value);
+            unknownFares = getUnknownFares(
+                value, fares, getRoutes(widget.itinerary.compressLegs));
+            loading = false;
+          });
+        }
+      }).catchError((error) {
+        if (mounted) {
+          setState(() {
+            fetchError = "$error";
+            loading = false;
+          });
+        }
+      });
+    }
   }
 }

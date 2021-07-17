@@ -45,7 +45,7 @@ class WFSWeatherDataRepository extends WeatherData {
         .toList();
 
     return WeatherInfo(
-      parameterValues[0],
+      double.tryParse(parameterValues[0]).toStringAsFixed(0),
       parameterValues[1],
       parameterValues[2],
     );

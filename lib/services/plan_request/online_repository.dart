@@ -28,6 +28,7 @@ class OnlineRepository implements RequestManager {
     @required TrufiLocation to,
     @required String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, "TRANSIT,WALK", correlationId);
@@ -171,6 +172,7 @@ class OnlineRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
     PayloadDataPlanState advancedOptions,
+    String localeName,
   }) {
     // TODO: implement fetchMytransportModePlan
     throw Exception("UnimplementedError");

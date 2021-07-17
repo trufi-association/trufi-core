@@ -27,18 +27,21 @@ dependencies:
   graphql: ^4.0.1
   http: 0.13.1
   intl: 0.17.0
+  maps_toolkit: ^2.0.0
   package_info: 2.0.0
   path_provider: ^2.0.1
   permission_handler: ^6.1.1
   rxdart: ^0.26.0
   share: ^2.0.1
   shared_preferences: ^2.0.5
+  skeleton_animation: ^0.1.4
   sprintf: ^6.0.0
   synchronized: ^3.0.0
   url_launcher: 6.0.3
-  uuid: 2.2.2
+  uuid: ^3.0.4
   xml: ^5.1.0
-
+dependency_overrides:
+  crypto: ^3.0.1
 dev_dependencies:
   bloc_test: ^8.0.0
   flutter_driver:

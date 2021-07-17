@@ -44,96 +44,96 @@ class AboutPageState extends State<AboutPage> {
     final currentLocale = Localizations.localeOf(context);
     final aboutSection = context.read<ConfigurationCubit>().state.aboutSection;
 
-    return ListView(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                customTranslations.get(customTranslations.title, currentLocale,
-                    localization.title),
-                style: theme.textTheme.headline6.copyWith(
-                  color: theme.textTheme.bodyText1.color,
+    return Scrollbar(
+      child: ListView(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  customTranslations.get(customTranslations.title,
+                      currentLocale, localization.title),
+                  style: theme.textTheme.headline6.copyWith(
+                    color: theme.textTheme.bodyText1.color,
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
+                Text(
                   customTranslations.get(customTranslations.tagline,
                       currentLocale, localization.tagline(currentCity)),
                   style: theme.textTheme.subtitle1.copyWith(
                     color: theme.textTheme.bodyText1.color,
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
-                  customTranslations.get(customTranslations.aboutContent,
-                      currentLocale, localization.aboutContent),
-                  style: theme.textTheme.bodyText1,
-                ),
-              ),
-              if (aboutSection != null)
-                Padding(
+                // TODO add forma trufi about info
+                // Container(
+                //   padding: const EdgeInsets.only(top: 16.0),
+                //   child: Text(
+                //     customTranslations.get(customTranslations.aboutContent,
+                //         currentLocale, localization.aboutContent),
+                //     style: theme.textTheme.bodyText1,
+                //   ),
+                // ),
+                if (aboutSection != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: aboutSection(context),
+                  ),
+                Container(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: aboutSection(context),
-                ),
-              Container(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    return showLicensePage(
-                      context: context,
-                      applicationName: customTranslations.get(
-                        customTranslations.title,
-                        currentLocale,
-                        localization.title,
-                      ),
-                    );
-                  },
-                  child: Text(localization.aboutLicenses),
-                ),
-              ),
-              FutureBuilder(
-                future: PackageInfo.fromPlatform(),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<PackageInfo> snapshot,
-                ) {
-                  if (snapshot.hasError ||
-                      snapshot.connectionState != ConnectionState.done) {
-                    return const Text("");
-                  }
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        localization.version(snapshot.data.version),
-                        style: theme.textTheme.bodyText1,
-                      ),
-                    ],
-                  );
-                },
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: InkWell(
-                  onTap: () {
-                    launch('https://github.com/trufi-association/trufi-app');
-                  },
-                  child: Text(
-                    localization.aboutOpenSource,
-                    style: linkStyle,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      return showLicensePage(
+                        context: context,
+                        applicationName: customTranslations.get(
+                          customTranslations.title,
+                          currentLocale,
+                          localization.title,
+                        ),
+                      );
+                    },
+                    child: Text(localization.aboutLicenses),
                   ),
                 ),
-              ),
-            ],
-          ),
-        )
-      ],
+                FutureBuilder(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<PackageInfo> snapshot,
+                  ) {
+                    if (snapshot.hasError ||
+                        snapshot.connectionState != ConnectionState.done) {
+                      return const Text("");
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          localization.version(snapshot.data.version),
+                          style: theme.textTheme.bodyText1,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Container(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: InkWell(
+                    onTap: () {
+                      launch('https://github.com/trufi-association/trufi-app');
+                    },
+                    child: Text(
+                      localization.aboutOpenSource,
+                      style: linkStyle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

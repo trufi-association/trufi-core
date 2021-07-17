@@ -112,22 +112,22 @@ extension TransportModeExtension on TransportMode {
   };
 
   static SvgPicture images(TransportMode transportMode, Color color) {
+    final String colorHX = color?.value?.toRadixString(16);
     switch (transportMode) {
       case TransportMode.airplane:
         return null;
         break;
       case TransportMode.bicycle:
-        return SvgPicture.string(bike ?? "");
+        return SvgPicture.string(bike(color: colorHX ?? '666666') ?? "");
         break;
       case TransportMode.bus:
-        return SvgPicture.string(
-            bus(color: color?.value?.toRadixString(16) ?? 'ff260c') ?? "");
+        return SvgPicture.string(bus(color: colorHX ?? 'ff260c') ?? "");
         break;
       case TransportMode.cableCar:
         return null;
         break;
       case TransportMode.car:
-        return SvgPicture.string(car ?? "");
+        return SvgPicture.string(car(color: colorHX ?? 'ff260c') ?? "");
         break;
       case TransportMode.carPool:
         return SvgPicture.string(carpool ?? "");
@@ -148,12 +148,10 @@ extension TransportModeExtension on TransportMode {
         return null;
         break;
       case TransportMode.rail:
-        return SvgPicture.string(
-            rail(color: color?.value?.toRadixString(16) ?? '83b23b') ?? "");
+        return SvgPicture.string(rail(color: colorHX ?? '83b23b') ?? "");
         break;
       case TransportMode.subway:
-        return SvgPicture.string(
-            subway(color: color?.value?.toRadixString(16) ?? '2962ff') ?? "");
+        return SvgPicture.string(subway(color: colorHX ?? '2962ff') ?? "");
         break;
       case TransportMode.tram:
         return null;
@@ -194,7 +192,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.funicular: null,
     TransportMode.gondola: null,
     TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff83b23b),
+    TransportMode.rail: const Color(0xff018000),
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,
@@ -208,10 +206,10 @@ extension TransportModeExtension on TransportMode {
 
   static final backgroundColors = <TransportMode, Color>{
     TransportMode.airplane: null,
-    TransportMode.bicycle: Colors.transparent,
+    TransportMode.bicycle: Colors.grey[200],
     TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
-    TransportMode.car: Colors.transparent,
+    TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
     TransportMode.ferry: null,
     TransportMode.flexible: null,
@@ -239,7 +237,7 @@ extension TransportModeExtension on TransportMode {
       TransportMode.bicycle: localization.instructionVehicleBike,
       TransportMode.bus: localization.instructionVehicleBus,
       TransportMode.cableCar: localization.instructionVehicleGondola,
-      TransportMode.car: localization.instructionVehicleCar,
+      TransportMode.car: localization.instructionVehicleOnCar,
       TransportMode.carPool: localization.instructionVehicleCarpool,
       TransportMode.ferry: localization.instructionVehicleMetro,
       TransportMode.flexible: null,
@@ -269,7 +267,7 @@ extension TransportModeExtension on TransportMode {
   Widget getImage({Color color}) =>
       images(this, color) ??
       const Icon(
-        Icons.circle,
+        Icons.error,
         color: Colors.red,
       );
   String get qualifier => qualifiers[this];

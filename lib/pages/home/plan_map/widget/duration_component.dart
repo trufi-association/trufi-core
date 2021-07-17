@@ -37,7 +37,7 @@ class DurationComponent extends StatelessWidget {
             ),
             Text(
               futureText != ''
-                  ? '$futureText ${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
+                  ? '$futureText\n${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
                   : '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
               style: theme.primaryTextTheme.bodyText1.copyWith(
                 fontWeight: FontWeight.w400,

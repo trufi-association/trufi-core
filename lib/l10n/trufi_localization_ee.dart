@@ -1,3 +1,4 @@
+
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'trufi_localization.dart';
@@ -9,19 +10,16 @@ class TrufiLocalizationEe extends TrufiLocalization {
   TrufiLocalizationEe([String locale = 'ee']) : super(locale);
 
   @override
-  String get aboutContent =>
-      'mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.';
+  String get aboutContent => 'mitso Bolivia kple dukorvovome eye morlor hahomorzozor. mido dorworfea be morzorzor nanor  borboe na Cochabamba kple efe gologuiawo.';
 
   @override
   String get aboutLicenses => 'nuse';
 
   @override
-  String get aboutOpenSource =>
-      'na dorworfea na tedenu wo. dorworfea le github';
+  String get aboutOpenSource => 'na dorworfea na tedenu wo. dorworfea le github';
 
   @override
-  String get alertLocationServicesDeniedMessage =>
-      'kpor egbor be GPS le wo morfoka dzi';
+  String get alertLocationServicesDeniedMessage => 'kpor egbor be GPS le wo morfoka dzi';
 
   @override
   String get alertLocationServicesDeniedTitle => 'tefe meli o';
@@ -39,6 +37,21 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get appReviewDialogTitle => 'trufi de vi nawoa';
 
   @override
+  String get bikeRentalBikeStation => 'Bike station';
+
+  @override
+  String get bikeRentalFetchRentalBike => 'Fetch a rental bike:';
+
+  @override
+  String get bikeRentalNetworkFreeFloating => 'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.';
+
+  @override
+  String get carParkCloseCapacityMessage => 'This car park is close to capacity. Please allow additional time for you journey.';
+
+  @override
+  String get carParkExcludeFull => 'Exclude full car parks';
+
+  @override
   String get chooseLocationPageSubtitle => 'keke mortata la.';
 
   @override
@@ -46,6 +59,12 @@ class TrufiLocalizationEe extends TrufiLocalization {
 
   @override
   String get commonArrival => 'Arrival';
+
+  @override
+  String get commonBikesAvailable => 'Show on map';
+
+  @override
+  String get commonCall => 'Show on map';
 
   @override
   String get commonCancel => 'tutu';
@@ -66,6 +85,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonDestination => 'afisi yim nele';
 
   @override
+  String get commonDetails => 'Walk';
+
+  @override
   String get commonError => 'aforku';
 
   @override
@@ -75,10 +97,22 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonFavoritePlaces => 'Favorite places';
 
   @override
+  String get commonFromStation => 'Show on map';
+
+  @override
+  String get commonFromStop => 'Show on map';
+
+  @override
   String get commonGoOffline => 'dzo le ka dzi';
 
   @override
   String get commonGoOnline => 'va ka dzi';
+
+  @override
+  String get commonItineraryNoTransitLegs => 'Show on map';
+
+  @override
+  String get commonLeavesAt => 'Show on map';
 
   @override
   String get commonLeavingNow => 'Leaving now';
@@ -87,13 +121,28 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonLoading => 'Show on map';
 
   @override
+  String get commonMapSettings => 'Show on map';
+
+  @override
+  String get commonMoreInformartion => 'Show on map';
+
+  @override
   String get commonNoInternet => 'ka meli o';
+
+  @override
+  String get commonNow => 'Show on map';
 
   @override
   String get commonOK => 'enyo';
 
   @override
+  String get commonOnDemandTaxi => 'Show on map';
+
+  @override
   String get commonOrigin => 'afisi netso';
+
+  @override
+  String get commonPlatform => 'Show on map';
 
   @override
   String get commonSave => 'Save';
@@ -108,6 +157,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get commonTomorrow => 'Show on map';
 
   @override
+  String get commonTrack => 'Show on map';
+
+  @override
   String get commonUnknownError => 'aforku manyamanya';
 
   @override
@@ -118,6 +170,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
 
   @override
   String get commonWalk => 'Walk';
+
+  @override
+  String get copyrightsPriceProvider => 'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.';
 
   @override
   String defaultLocationAdd(Object defaultLocation) {
@@ -131,6 +186,11 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get defaultLocationWork => 'Work';
 
   @override
+  String departureBikeStation(Object departureStop, Object departureTime) {
+    return 'morwo kple dorworfea nudorwolawo\nzu miadometor deka';
+  }
+
+  @override
   String description(Object cityName) {
     return 'morzorzor adoduia le Chombamba yenye lori did kple lori sue wo';
   }
@@ -139,47 +199,37 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get donate => 'naanu';
 
   @override
-  String get errorAmbiguousDestination =>
-      'morzorzordzikporla la meya afisi yim nele o. tsor le esiawo dome alo nlor bubu';
+  String get errorAmbiguousDestination => 'morzorzordzikporla la meya afisi yim nele o. tsor le esiawo dome alo nlor bubu';
 
   @override
-  String get errorAmbiguousOrigin =>
-      'morzorzordzikporla la menya afisi yim nele o. tsor esiawo dome tor deka alo de afisi yim nele la gorme nyuie';
+  String get errorAmbiguousOrigin => 'morzorzordzikporla la menya afisi yim nele o. tsor esiawo dome tor deka alo de afisi yim nele la gorme nyuie';
 
   @override
-  String get errorAmbiguousOriginDestination =>
-      'gormesese melina afisi neyine kple afisi netso o.tso esiawo dome tor deka alo de afisi yim nele la gorme nyuie';
+  String get errorAmbiguousOriginDestination => 'gormesese melina afisi neyine kple afisi netso o.tso esiawo dome tor deka alo de afisi yim nele la gorme nyuie';
 
   @override
   String get errorCancelledByUser => 'Canceled by user';
 
   @override
-  String get errorEmailFeedback =>
-      'Could not open mail feedback app, the URL or email is incorrect';
+  String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
 
   @override
-  String get errorNoBarrierFree =>
-      'bafakeke matenu ayi afisi netso kple afisi neyina o';
+  String get errorNoBarrierFree => 'bafakeke matenu ayi afisi netso kple afisi neyina o';
 
   @override
-  String get errorNoTransitTimes =>
-      'Morzor xeyixi meli o. Nkeke si nedo la vayi alo ele etsor me alo wu melina xeyixi si netia la o.';
+  String get errorNoTransitTimes => 'Morzor xeyixi meli o. Nkeke si nedo la vayi alo ele etsor me alo wu melina xeyixi si netia la o.';
 
   @override
-  String get errorOutOfBoundary =>
-      'morzorzor la matenu ayi o. morzorzorla mele mofiatata dzi o';
+  String get errorOutOfBoundary => 'morzorzor la matenu ayi o. morzorzorla mele mofiatata dzi o';
 
   @override
-  String get errorPathNotFound =>
-      'morzorzor la matenu adzedzi o. afisi netso alo afisineyina be le dzadze o';
+  String get errorPathNotFound => 'morzorzor la matenu adzedzi o. afisi netso alo afisineyina be le dzadze o';
 
   @override
-  String get errorServerCanNotHandleRequest =>
-      'nane gble tso wi biabialanu,dorworfea mese egorme o';
+  String get errorServerCanNotHandleRequest => 'nane gble tso wi biabialanu,dorworfea mese egorme o';
 
   @override
-  String get errorServerTimeout =>
-      'morzorzordzikporla fe dorworwor mele tsortsorm o.gawoe ake.';
+  String get errorServerTimeout => 'morzorzordzikporla fe dorworwor mele tsortsorm o.gawoe ake.';
 
   @override
   String get errorServerUnavailable => 'morzorzordzikporla meli o.woe emegbe';
@@ -188,22 +238,25 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get errorTrivialDistance => 'afisi netso la tso kpuie nutor';
 
   @override
-  String get errorUnknownDestination =>
-      'afisi neyina la mele nyanyame o,doe do ake';
+  String get errorUnknownDestination => 'afisi neyina la mele nyanyame o,doe do ake';
 
   @override
   String get errorUnknownOrigin => 'afisi netso la mele nyanya me o,doe do ake';
 
   @override
-  String get errorUnknownOriginDestination =>
-      'afisi netso kple afisi neyina la meli o. gbugbor na dorwo do';
+  String get errorUnknownOriginDestination => 'afisi netso kple afisi neyina la meli o. gbugbor na dorwo do';
 
   @override
-  String get feedbackContent =>
-      'dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email';
+  String get feedbackContent => 'dordordo ade li nele dzidzim be miawo tso dorworfea nua.\nnami wo kafomor fe dzesiwo kple wo email';
 
   @override
   String get feedbackTitle => 'Do email do da mi';
+
+  @override
+  String get fetchMoreItinerariesEarlierDepartures => 'Earlier departures';
+
+  @override
+  String get fetchMoreItinerariesLaterDeparturesTitle => 'Later departures';
 
   @override
   String get followOnFacebook => 'kplormido le Facebook';
@@ -213,6 +266,39 @@ class TrufiLocalizationEe extends TrufiLocalization {
 
   @override
   String get followOnTwitter => 'kplormido le Twiter';
+
+  @override
+  String get infoMessageDestinationOutsideService => 'No route suggestions were found because the destination is outside the service area.';
+
+  @override
+  String get infoMessageNoRouteMsg => 'Unfortunately, no route suggestions were found.';
+
+  @override
+  String get infoMessageNoRouteMsgWithChanges => 'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.';
+
+  @override
+  String get infoMessageNoRouteOriginNearDestination => 'No route suggestions were found because the origin and destination are the same.';
+
+  @override
+  String get infoMessageNoRouteOriginSameAsDestination => 'No route suggestions were found because the origin and destination are very close to each other.';
+
+  @override
+  String get infoMessageNoRouteShowingAlternativeOptions => 'No route suggestions were found with the your settings. However, we found the following route options:';
+
+  @override
+  String get infoMessageOnlyCyclingRoutes => 'Your search returned only cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only walking and cycling routes.';
+
+  @override
+  String get infoMessageOnlyWalkingRoutes => 'Your search returned only walking routes.';
+
+  @override
+  String get infoMessageOriginOutsideService => 'No route suggestions were found because the origin is outside the service area.';
+
+  @override
+  String get infoMessageUseNationalServicePrefix => 'We recommend you try the national journey planner,';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -240,8 +326,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   }
 
   @override
-  String instructionRide(
-      Object vehicle, Object distance, Object duration, Object location) {
+  String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
     return 'za ${vehicle} abe ${duration} ${distance} yi ${location} nkor';
   }
 
@@ -276,6 +361,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get instructionVehicleMinibus => 'lori sue';
 
   @override
+  String get instructionVehicleOnCar => 'lori';
+
+  @override
   String get instructionVehicleSharing => 'lori didi';
 
   @override
@@ -288,12 +376,36 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get instructionVehicleSharingTaxi => 'lori didi';
 
   @override
+  String get instructionVehicleTaxi => 'lori';
+
+  @override
   String get instructionVehicleTrufi => 'Trufi';
 
   @override
   String instructionWalk(Object distance, Object duration, Object location) {
     return 'zor';
   }
+
+  @override
+  String get itineraryBuyTicket => 'Buy tickets';
+
+  @override
+  String get itineraryMissingPrice => 'No price information';
+
+  @override
+  String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
+
+  @override
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Take your bike with you on the train or to metro';
+
+  @override
+  String get itinerarySummaryBikeParkTitle => 'Leave your bike at a Park & Ride';
+
+  @override
+  String get itineraryTicketsTitle => 'Required tickets';
+
+  @override
+  String get itineraryTicketTitle => 'Required ticket';
 
   @override
   String get mapTypeLabel => 'Map Type';
@@ -422,6 +534,9 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get settingPanelMyModesTransportBike => 'Bike';
 
   @override
+  String get settingPanelMyModesTransportBikeRide => 'Park and Ride';
+
+  @override
   String get settingPanelMyModesTransportParkRide => 'Park and Ride';
 
   @override
@@ -444,8 +559,7 @@ class TrufiLocalizationEe extends TrufiLocalization {
   }
 
   @override
-  String get teamContent =>
-      'dorworfe siame torwo tso dukorvovome.edzibe yea zu miadome tor deka?yormi le kafomorsia dzi';
+  String get teamContent => 'dorworfe siame torwo tso dukorvovome.edzibe yea zu miadome tor deka?yormi le kafomorsia dzi';
 
   @override
   String teamSectionRepresentatives(Object representatives) {

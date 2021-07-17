@@ -164,6 +164,36 @@ abstract class TrufiLocalization {
   /// **'Enjoying Trufi?'**
   String get appReviewDialogTitle;
 
+  /// Common Text Bike station
+  ///
+  /// In en, this message translates to:
+  /// **'Bike station'**
+  String get bikeRentalBikeStation;
+
+  /// Common Text Fetch a rental bike.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch a rental bike:'**
+  String get bikeRentalFetchRentalBike;
+
+  /// Text Bike Rental Network message FreeFloating
+  ///
+  /// In en, this message translates to:
+  /// **'Destination is not a designated drop-off area. Rental cannot be completed here. Please check terms & conditions for additional fees.'**
+  String get bikeRentalNetworkFreeFloating;
+
+  /// This car park is close to capacity
+  ///
+  /// In en, this message translates to:
+  /// **'This car park is close to capacity. Please allow additional time for you journey.'**
+  String get carParkCloseCapacityMessage;
+
+  /// Car Park Exclude Full parks label
+  ///
+  /// In en, this message translates to:
+  /// **'Exclude full car parks'**
+  String get carParkExcludeFull;
+
   /// Page subtitle when choosing a location on the map
   ///
   /// In en, this message translates to:
@@ -181,6 +211,18 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Arrival'**
   String get commonArrival;
+
+  /// General Bikes Available label
+  ///
+  /// In en, this message translates to:
+  /// **'bikes at the station'**
+  String get commonBikesAvailable;
+
+  /// General Call label
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get commonCall;
 
   /// Cancel button label
   ///
@@ -218,6 +260,12 @@ abstract class TrufiLocalization {
   /// **'Destination'**
   String get commonDestination;
 
+  /// General details label
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get commonDetails;
+
   /// Message when an error has occured
   ///
   /// In en, this message translates to:
@@ -236,6 +284,18 @@ abstract class TrufiLocalization {
   /// **'Favorite places'**
   String get commonFavoritePlaces;
 
+  /// General from station  label
+  ///
+  /// In en, this message translates to:
+  /// **'from station'**
+  String get commonFromStation;
+
+  /// General from stop  label
+  ///
+  /// In en, this message translates to:
+  /// **'from stop'**
+  String get commonFromStop;
+
   /// Go offline button label
   ///
   /// In en, this message translates to:
@@ -247,6 +307,18 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Go online'**
   String get commonGoOnline;
+
+  /// General Leave when it suits you label
+  ///
+  /// In en, this message translates to:
+  /// **'Leave when it suits you'**
+  String get commonItineraryNoTransitLegs;
+
+  /// General Leaves at  label
+  ///
+  /// In en, this message translates to:
+  /// **'Leaves at'**
+  String get commonLeavesAt;
 
   /// General Leaving now label
   ///
@@ -260,11 +332,29 @@ abstract class TrufiLocalization {
   /// **'Loading...'**
   String get commonLoading;
 
+  /// General Map Settings label
+  ///
+  /// In en, this message translates to:
+  /// **'Map Settings'**
+  String get commonMapSettings;
+
+  /// General More informartion label
+  ///
+  /// In en, this message translates to:
+  /// **'More informartion'**
+  String get commonMoreInformartion;
+
   /// Message when internet connection is lost
   ///
   /// In en, this message translates to:
   /// **'No internet connection.'**
   String get commonNoInternet;
+
+  /// General Now label
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get commonNow;
 
   /// OK button label
   ///
@@ -272,11 +362,23 @@ abstract class TrufiLocalization {
   /// **'OK'**
   String get commonOK;
 
+  /// General book a trip label
+  ///
+  /// In en, this message translates to:
+  /// **'Book a trip'**
+  String get commonOnDemandTaxi;
+
   /// Origin field label
   ///
   /// In en, this message translates to:
   /// **'Origin'**
   String get commonOrigin;
+
+  /// General Platform  label
+  ///
+  /// In en, this message translates to:
+  /// **'Platform'**
+  String get commonPlatform;
 
   /// General Save label
   ///
@@ -302,6 +404,12 @@ abstract class TrufiLocalization {
   /// **'Tomorrow'**
   String get commonTomorrow;
 
+  /// General Track  label
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get commonTrack;
+
   /// Message when an unknown error has occured
   ///
   /// In en, this message translates to:
@@ -326,6 +434,12 @@ abstract class TrufiLocalization {
   /// **'Walk'**
   String get commonWalk;
 
+  /// copyrights Price Provider for cost
+  ///
+  /// In en, this message translates to:
+  /// **'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.'**
+  String get copyrightsPriceProvider;
+
   /// The name Add for {defaultLocation}
   ///
   /// In en, this message translates to:
@@ -343,6 +457,12 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Work'**
   String get defaultLocationWork;
+
+  /// Departure Bike Station detail Time and Stop
+  ///
+  /// In en, this message translates to:
+  /// **'Departure at {departureTime} from {departureStop} bike station'**
+  String departureBikeStation(Object departureStop, Object departureTime);
 
   /// A sentence that describes the application's purpose
   ///
@@ -464,6 +584,18 @@ abstract class TrufiLocalization {
   /// **'Please e-mail us'**
   String get feedbackTitle;
 
+  /// Text about extra fetch itineraries for Earlier departure title
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier departures'**
+  String get fetchMoreItinerariesEarlierDepartures;
+
+  /// Text about extra fetch itineraries for later departure title
+  ///
+  /// In en, this message translates to:
+  /// **'Later departures'**
+  String get fetchMoreItinerariesLaterDeparturesTitle;
+
   /// Facebook menu item
   ///
   /// In en, this message translates to:
@@ -481,6 +613,72 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Follow us on Twitter'**
   String get followOnTwitter;
+
+  /// Text info message Destination outside for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the destination is outside the service area.'**
+  String get infoMessageDestinationOutsideService;
+
+  /// Text info message No Route Msg for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, no route suggestions were found.'**
+  String get infoMessageNoRouteMsg;
+
+  /// Text info message No Route Msg With Changes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.'**
+  String get infoMessageNoRouteMsgWithChanges;
+
+  /// Text info message no route origin same as a destination for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin and destination are the same.'**
+  String get infoMessageNoRouteOriginNearDestination;
+
+  /// Text info message No Route Origin Same As Destination for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin and destination are very close to each other.'**
+  String get infoMessageNoRouteOriginSameAsDestination;
+
+  /// Text info message No Route Showing Alternative Options for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found with the your settings. However, we found the following route options:'**
+  String get infoMessageNoRouteShowingAlternativeOptions;
+
+  /// Text info message Only walking and cycling Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only cycling routes.'**
+  String get infoMessageOnlyCyclingRoutes;
+
+  /// Text info message Only cycling Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only walking and cycling routes.'**
+  String get infoMessageOnlyWalkingCyclingRoutes;
+
+  /// Text info message Only Walking Routes for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'Your search returned only walking routes.'**
+  String get infoMessageOnlyWalkingRoutes;
+
+  /// Text info message origin outside for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'No route suggestions were found because the origin is outside the service area.'**
+  String get infoMessageOriginOutsideService;
+
+  /// Text info message Use National Service Prefix for plan Fetch
+  ///
+  /// In en, this message translates to:
+  /// **'We recommend you try the national journey planner,'**
+  String get infoMessageUseNationalServicePrefix;
 
   /// Itinerary leg distance (km)
   ///
@@ -579,6 +777,12 @@ abstract class TrufiLocalization {
   /// **'Minibus'**
   String get instructionVehicleMinibus;
 
+  /// Vehicle name (onCar)
+  ///
+  /// In en, this message translates to:
+  /// **'Drive'**
+  String get instructionVehicleOnCar;
+
   /// Vehicle name (Sharing)
   ///
   /// In en, this message translates to:
@@ -603,6 +807,12 @@ abstract class TrufiLocalization {
   /// **'Taxi'**
   String get instructionVehicleSharingTaxi;
 
+  /// Vehicle name (onCar)
+  ///
+  /// In en, this message translates to:
+  /// **'Taxi'**
+  String get instructionVehicleTaxi;
+
   /// Vehicle name (Trufi)
   ///
   /// In en, this message translates to:
@@ -614,6 +824,48 @@ abstract class TrufiLocalization {
   /// In en, this message translates to:
   /// **'Walk {duration} ({distance}) to\n{location}'**
   String instructionWalk(Object distance, Object duration, Object location);
+
+  /// Itinerary Buy tickets label
+  ///
+  /// In en, this message translates to:
+  /// **'Buy tickets'**
+  String get itineraryBuyTicket;
+
+  /// Itinerary No price information label
+  ///
+  /// In en, this message translates to:
+  /// **'No price information'**
+  String get itineraryMissingPrice;
+
+  /// Itinerary Price Only PublicTransport label
+  ///
+  /// In en, this message translates to:
+  /// **'Price only valid for public transport part of the journey.'**
+  String get itineraryPriceOnlyPublicTransport;
+
+  /// Text title itinerary Summary Bike And Public Rail Subway
+  ///
+  /// In en, this message translates to:
+  /// **'Take your bike with you on the train or to metro'**
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle;
+
+  /// Text title itinerary Summary Bike Park Title
+  ///
+  /// In en, this message translates to:
+  /// **'Leave your bike at a Park & Ride'**
+  String get itinerarySummaryBikeParkTitle;
+
+  /// Itinerary Ticket Title label
+  ///
+  /// In en, this message translates to:
+  /// **'Required tickets'**
+  String get itineraryTicketsTitle;
+
+  /// Itinerary Ticket Title label
+  ///
+  /// In en, this message translates to:
+  /// **'Required ticket'**
+  String get itineraryTicketTitle;
 
   /// Label for the Map types
   ///
@@ -867,10 +1119,16 @@ abstract class TrufiLocalization {
   /// **'Bike'**
   String get settingPanelMyModesTransportBike;
 
+  /// Bike and Ride configuration panel label
+  ///
+  /// In en, this message translates to:
+  /// **'Bike & Ride'**
+  String get settingPanelMyModesTransportBikeRide;
+
   /// Park and Ride configuration panel label
   ///
   /// In en, this message translates to:
-  /// **'Park and Ride'**
+  /// **'Park & Ride'**
   String get settingPanelMyModesTransportParkRide;
 
   /// Transport Modes configuration panel label
@@ -942,7 +1200,7 @@ abstract class TrufiLocalization {
   /// Average speed type
   ///
   /// In en, this message translates to:
-  /// **'Average'**
+  /// **'Normal'**
   String get typeSpeedAverage;
 
   /// Calm speed type

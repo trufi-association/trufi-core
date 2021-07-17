@@ -73,9 +73,8 @@ class LocationFormField extends StatelessWidget {
                         text: value != null
                             ? TextSpan(
                                 style: textStyle,
-                                text: value.displayName(
-                                  localization,
-                                ),
+                                text:
+                                    "${value.displayName(localization)}${value.address != null ? ", ${value.address}" : ""}",
                               )
                             : TextSpan(
                                 style: hintStyle,

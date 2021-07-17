@@ -41,7 +41,7 @@ void main() {
       final result = await subject.getCurrentWeatherAtLocation(
           now, LatLng(48.59523, 8.86648));
 
-      expect(result.temperature, "19.08");
+      expect(result.temperature, "19");
       expect(result.windSpeed, "4.8");
       expect(result.weatherSymbol, "3.0");
     });

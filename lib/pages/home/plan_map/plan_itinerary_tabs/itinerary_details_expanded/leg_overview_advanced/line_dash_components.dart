@@ -2,22 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong/latlong.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
 
+import '../../../plan.dart';
+
 class TransportDash extends StatelessWidget {
+  final PlanPageController planPageController;
   final double height;
   final double dashWidth;
   final PlanItineraryLeg leg;
+  final PlanItinerary itinerary;
   final bool isNextTransport;
+  final bool isBeforeTransport;
   final bool isFirstTransport;
 
   const TransportDash({
     @required this.leg,
+    @required this.itinerary,
+    @required this.planPageController,
     this.isNextTransport = false,
+    this.isBeforeTransport = true,
     this.isFirstTransport = false,
     this.height = 1,
     this.dashWidth = 5.0,
@@ -25,40 +38,88 @@ class TransportDash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TrufiLocalization localization = TrufiLocalization.of(context);
     final configuration = context.read<ConfigurationCubit>().state;
+    final homePageCubit = context.read<HomePageCubit>();
+    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
+    final isTypeBikeRentalNetwork =
+        leg.transportMode == TransportMode.bicycle &&
+            leg.fromPlace?.bikeRentalStation != null;
     return Column(
       children: [
-        DashLinePlace(
-          date: leg.startTimeString.toString(),
-          location: leg.fromPlace.name.toString(),
-          color: leg?.route?.color != null
-              ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
-          child: isFirstTransport
-              ? SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: FittedBox(child: configuration.markers.fromMarker),
-                )
-              : null,
-        ),
+        if (isBeforeTransport)
+          DashLinePlace(
+            date: leg.startTimeString.toString(),
+            location: leg.transportMode == TransportMode.bicycle &&
+                    leg.fromPlace.bikeRentalStation != null
+                ? localization.bikeRentalFetchRentalBike
+                : leg.fromPlace.name.toString(),
+            color: leg?.route?.color != null
+                ? Color(int.tryParse("0xFF${leg.route.color}"))
+                : isTypeBikeRentalNetwork
+                    ? getBikeRentalNetwork(
+                            leg.fromPlace.bikeRentalStation.networks[0])
+                        .color
+                    : leg.transportMode.color,
+            child: isFirstTransport
+                ? SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: FittedBox(child: configuration.markers.fromMarker),
+                  )
+                : null,
+          ),
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
-              : leg.transportMode.color,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TransitLeg(
+              : isTypeBikeRentalNetwork
+                  ? getBikeRentalNetwork(
+                          leg.fromPlace.bikeRentalStation.networks[0])
+                      .color
+                  : leg.transportMode.color,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (planPageController != null) {
+                    planPageController.inSelectePosition
+                        .add(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+                  }
+                },
+                child: TransitLeg(
                   leg: leg,
                 ),
-                if (configuration.planItineraryLegBuilder != null)
-                  configuration.planItineraryLegBuilder(context, leg) ??
-                      Container(),
-              ],
-            ),
+              ),
+              if (configuration.planItineraryLegBuilder != null)
+                configuration.planItineraryLegBuilder(context, leg) ??
+                    Container(),
+              if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
+                          ?.tags !=
+                      null &&
+                  leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
+                      .contains('state:few'))
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    InfoMessage(
+                        message: localization.carParkCloseCapacityMessage),
+                    CustomTextButton(
+                      text: localization.carParkExcludeFull,
+                      onPressed: () async {
+                        await homePageCubit.fetchPlanModeRidePark(
+                            localization, payloadDataPlanState);
+                      },
+                    ),
+                  ],
+                ),
+              if (isTypeBikeRentalNetwork &&
+                  (itinerary?.arrivedAtDestinationWithRentedBicycle ?? false))
+                InfoMessage(
+                    message: localization.bikeRentalNetworkFreeFloating),
+            ],
           ),
         ),
         if (isNextTransport)
@@ -76,16 +137,24 @@ class TransportDash extends StatelessWidget {
 
 class WalkDash extends StatelessWidget {
   final PlanItineraryLeg leg;
+  final PlanItineraryLeg legBefore;
   const WalkDash({
     Key key,
     @required this.leg,
+    this.legBefore,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    return Row(
+    return Column(
       children: [
+        if (legBefore != null && legBefore.transportMode == TransportMode.walk)
+          DashLinePlace(
+            date: leg.startTimeString.toString(),
+            location: leg.fromPlace.name,
+            color: Colors.grey,
+          ),
         SeparatorPlace(
           color: leg?.route?.color != null
               ? Color(int.tryParse("0xFF${leg.route.color}"))
@@ -96,9 +165,12 @@ class WalkDash extends StatelessWidget {
             width: 19,
             child: walkSvg,
           ),
-          height: 20,
-          child: Text(
-              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          ),
         ),
       ],
     );
@@ -115,11 +187,15 @@ class WaitDash extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     return Column(
       children: [
-        DashLinePlace(
-          date: legBefore.endTimeString.toString(),
-          location: legBefore.toPlace.name,
-          color: Colors.grey,
-        ),
+        if (legBefore.endTime.millisecondsSinceEpoch -
+                    legAfter.startTime.millisecondsSinceEpoch ==
+                0 ||
+            legBefore.transportMode == TransportMode.walk)
+          DashLinePlace(
+            date: legBefore.endTimeString.toString(),
+            location: legBefore.toPlace.name,
+            color: Colors.grey,
+          ),
         SeparatorPlace(
           color: Colors.grey,
           separator: Container(
@@ -128,9 +204,12 @@ class WaitDash extends StatelessWidget {
             width: 20,
             child: waitSvg,
           ),
-          height: 20,
-          child: Text(
-              "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          height: 15,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+                "${localization.commonWait} (${localization.instructionDurationMinutes(legAfter.startTime.difference(legBefore.endTime).inMinutes)})"),
+          ),
         ),
       ],
     );
@@ -186,11 +265,9 @@ class SeparatorPlace extends StatelessWidget {
             ),
           const SizedBox(width: 5),
           if (child != null)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                child,
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: child,
             ),
         ],
       ),

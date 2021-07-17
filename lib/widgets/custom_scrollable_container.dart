@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 class CustomScrollableContainer extends StatefulWidget {
   final Widget body;
   final Widget panel;
-  final double bodyMinSize;
-  final double panelMinSize;
+  final double openedPosition;
+  final double bottomPadding;
+  final void Function() onClose;
+
   const CustomScrollableContainer({
     Key key,
     @required this.body,
-    @required this.panel,
-    @required this.bodyMinSize,
-    @required this.panelMinSize,
+    this.panel,
+    @required this.openedPosition,
+    this.bottomPadding = 0,
+    this.onClose,
   }) : super(key: key);
 
   @override
@@ -19,102 +22,150 @@ class CustomScrollableContainer extends StatefulWidget {
 }
 
 class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
-  double height;
+  double panelHeight;
   bool animated = false;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (builderContext, constrains) {
-      final minPanelSize = constrains.maxHeight - widget.panelMinSize;
-      final minBodySize = constrains.maxHeight - widget.bodyMinSize;
+      const topLimit = 0.0;
+      final openedPosition = constrains.maxHeight - widget.openedPosition;
+      final bottomLimit = constrains.maxHeight -
+          (35 + MediaQuery.of(context).padding.bottom + widget.bottomPadding);
       // height validation
-      height ??= minPanelSize;
-      if (height > minPanelSize) height = minPanelSize;
-      if (height < 0) height = 0;
+      panelHeight ??= openedPosition;
+      // limits validations
+      if (panelHeight < topLimit) panelHeight = topLimit;
+      if (panelHeight > bottomLimit) panelHeight = bottomLimit;
 
-      final bodyHeight = constrains.maxHeight - height;
+      final reversePanelHeight = constrains.maxHeight - panelHeight;
+
       return Container(
         color: Colors.white,
         child: Stack(
           children: [
             AnimatedPositioned(
-              duration: Duration(seconds: animated ? 500 : 0),
+              duration: Duration(milliseconds: animated ? 300 : 0),
               curve: Curves.fastOutSlowIn,
               top: 0,
               left: 0,
               right: 0,
-              bottom: bodyHeight <= minBodySize ? bodyHeight : minBodySize,
+              bottom: widget.panel == null
+                  ? 0
+                  : reversePanelHeight < openedPosition
+                      ? reversePanelHeight
+                      : openedPosition,
               child: widget.body,
             ),
-            AnimatedPositioned(
-              duration: Duration(milliseconds: animated ? 500 : 0),
-              curve: Curves.fastOutSlowIn,
-              top: height,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 1.0,
-                      blurRadius: 10.0,
+            if (widget.panel != null)
+              AnimatedPositioned(
+                duration: Duration(milliseconds: animated ? 300 : 0),
+                curve: Curves.fastOutSlowIn,
+                top: panelHeight,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
                     ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onVerticalDragEnd: (detail) {
-                        if (height < widget.bodyMinSize) {
-                          setState(() {
-                            animated = true;
-                            height = 0;
-                          });
-                        }
-                      },
-                      onVerticalDragUpdate: (detail) {
-                        setState(() {
-                          animated = false;
-                          height += detail.delta.dy;
-                        });
-                      },
-                      child: Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              width: 30,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(12.0),
-                                ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        spreadRadius: 1.0,
+                        blurRadius: 10.0,
+                      ),
+                    ],
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onVerticalDragEnd: (detail) {
+                            if (detail.primaryVelocity < 0) {
+                              setState(() {
+                                animated = true;
+                                panelHeight = panelHeight < openedPosition
+                                    ? topLimit
+                                    : openedPosition;
+                              });
+                            } else if (detail.primaryVelocity > 0) {
+                              setState(() {
+                                animated = true;
+                                panelHeight = panelHeight > openedPosition
+                                    ? bottomLimit
+                                    : openedPosition;
+                              });
+                            }
+                          },
+                          onVerticalDragUpdate: (detail) {
+                            setState(() {
+                              animated = false;
+                              panelHeight += detail.delta.dy;
+                            });
+                          },
+                          child: Container(
+                            height: 30,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5),
                               ),
                             ),
-                          ],
+                            child: Row(
+                              mainAxisAlignment: widget.onClose == null
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                if (widget.onClose != null)
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                  ),
+                                Container(
+                                  width: 30,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(12.0),
+                                    ),
+                                  ),
+                                ),
+                                if (widget.onClose != null)
+                                  GestureDetector(
+                                    onTap: widget.onClose,
+                                    child: Container(
+                                      height: 26,
+                                      width: 26,
+                                      margin: const EdgeInsets.all(2),
+                                      color: Colors.transparent,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                        const Divider(height: 1),
+                        Expanded(
+                          child: Scrollbar(
+                            child: widget.panel,
+                          ),
+                        ),
+                      ],
                     ),
-                    const Divider(height: 1),
-                    Expanded(child: widget.panel),
-                  ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       );
