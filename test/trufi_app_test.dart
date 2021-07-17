@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
@@ -9,6 +10,9 @@ import 'package:trufi_core/pages/home/search_location/location_form_field.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 
+final center = LatLng(-17.39000, -66.15400);
+final southWest = LatLng(-17.79300, -66.75000);
+final northEast = LatLng(-16.90400, -65.67400);
 void main() {
   testWidgets('Trufi App - Home Widget', (WidgetTester tester) async {
     await mockNetworkImagesFor(
@@ -24,6 +28,9 @@ void main() {
             urls: UrlCollection(),
             animations: AnimationConfiguration(),
             map: MapConfiguration(
+              center: center,
+              southWest: southWest,
+              northEast: northEast,
               mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
             ),
           ),
@@ -43,6 +50,9 @@ void main() {
         urls: UrlCollection(),
         animations: AnimationConfiguration(),
         map: MapConfiguration(
+          center: center,
+          southWest: southWest,
+          northEast: northEast,
           mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
         ),
       ),
@@ -63,6 +73,9 @@ void main() {
         urls: UrlCollection(),
         animations: AnimationConfiguration(),
         map: MapConfiguration(
+          center: center,
+          southWest: southWest,
+          northEast: northEast,
           mapAttributionBuilder: (context) => MapTileAndOSMCopyright(),
         ),
       ),
