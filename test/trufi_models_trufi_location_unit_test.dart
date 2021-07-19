@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 
 import 'package:trufi_core/models/trufi_place.dart';

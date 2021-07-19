@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/models/menu/menu_item.dart';
 import 'package:trufi_core/repository/entities/weather_info.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
 import 'package:trufi_core/location/location_search_storage.dart';
 import 'package:trufi_core/models/trufi_place.dart';

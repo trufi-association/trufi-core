@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 
 // TODO: Add some documentation that makes sense

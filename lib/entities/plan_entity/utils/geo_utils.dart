@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
