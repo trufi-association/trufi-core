@@ -59,9 +59,6 @@ class OfflineSearchLocation implements SearchLocationManager {
     final String displayName = body["display_name"]?.toString();
     final String road = body["address"]["road"]?.toString();
     final String hamlet = body["address"]["hamlet"]?.toString();
-    return LocationDetail(
-      road ?? displayName ?? "",
-      hamlet ?? "",
-    );
+    return LocationDetail(road ?? displayName ?? "", hamlet ?? "", location);
   }
 }
