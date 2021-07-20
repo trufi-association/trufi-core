@@ -99,8 +99,7 @@ class PlanMapPageState extends State<PlanMapPage>
     final Locale locale = Localizations.localeOf(context);
 
     final trufiConfiguration = context.read<ConfigurationCubit>().state;
-
-    if (_mapController.ready) {
+    _mapController.onReady.then((value) {
       if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
         _trufiMapController.fitBounds(
           bounds: _data.selectedBounds,
@@ -108,7 +107,7 @@ class PlanMapPageState extends State<PlanMapPage>
         );
         _data.needsCameraUpdate = false;
       }
-    }
+    });
     return Stack(
       children: <Widget>[
         TrufiMap(
