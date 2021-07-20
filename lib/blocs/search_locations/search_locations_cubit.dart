@@ -228,6 +228,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         : (a is TrufiStreet)
             ? a.junctions.fold<bool>(
                 false,
+                // ignore: iterable_contains_unrelated_type
                 (result, j) => result |= locations.contains(j.location),
               )
             : false;
@@ -238,6 +239,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         : (b is TrufiStreet)
             ? b.junctions.fold<bool>(
                 false,
+                // ignore: iterable_contains_unrelated_type
                 (result, j) => result |= locations.contains(j.location),
               )
             : false;
