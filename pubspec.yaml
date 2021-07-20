@@ -6,7 +6,7 @@ homepage: https://www.trufi-association.org/
 repository: https://github.com/trufi-association/trufi-core
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.2.3 <3.0.0" #changing the constraints to stable version
 
 dependencies:
   app_review: ^2.1.1+1
