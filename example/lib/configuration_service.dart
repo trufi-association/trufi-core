@@ -6,8 +6,9 @@ import 'package:trufi_core/blocs/configuration/models/language_configuration.dar
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 
-Configuration setupExampleConfiguration() {
+import 'package:latlong/latlong.dart';
 
+Configuration setupExampleConfiguration() {
   // Attribution
   final attribution = Attribution(
     representatives: [
@@ -46,10 +47,16 @@ Configuration setupExampleConfiguration() {
   );
 
   // Urls
-  final urls = UrlCollection();
+  final urls = UrlCollection(
+    openTripPlannerUrl: "https://api.trufi.app/otp/routers/default",
+  );
 
   // Map
-  final map = MapConfiguration();
+  final map = MapConfiguration(
+    center: LatLng(-17.39000, -66.15400),
+    southWest: LatLng(-17.79300, -66.75000),
+    northEast: LatLng(-16.90400, -65.67400),
+  );
 
   // Languages
   final languages = [
@@ -80,5 +87,6 @@ Configuration setupExampleConfiguration() {
     map: map,
     urls: urls,
     debug: true,
+    showWeather: false,
   );
 }

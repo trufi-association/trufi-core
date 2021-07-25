@@ -75,7 +75,7 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      route: json[_route] != null
+      route: json[_route] != null && (json[_route] is Map<String, dynamic>)
           ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
           : null,
       routeLongName: json[_routeLongName] as String,
