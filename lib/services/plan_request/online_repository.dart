@@ -175,7 +175,7 @@ class OnlineRepository implements RequestManager {
     String localeName,
   }) {
     // TODO: implement fetchMytransportModePlan
-    throw UnimplementedError();
+    throw Exception("UnimplementedError");
   }
 }
 

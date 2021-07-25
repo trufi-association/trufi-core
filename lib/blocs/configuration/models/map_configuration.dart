@@ -51,17 +51,16 @@ class MapConfiguration {
     this.onlineMaxZoom = 19.0,
     this.onlineZoom = 13.0,
     this.chooseLocationZoom = 15.0,
-    this.center,
-    this.southWest,
-    this.northEast,
+    @required this.center,
+    @required this.southWest,
+    @required this.northEast,
     this.mapAttributionBuilder,
   }) {
-    mapAttributionBuilder = mapAttributionBuilder ??
-        (context) {
-          return MapTileAndOSMCopyright();
-        };
-    center = center ?? LatLng(5.574558, -0.214656);
-    southWest = southWest ?? LatLng(5.510057, -0.328217);
-    northEast = northEast ?? LatLng(5.726678, 0.071411);
+    mapAttributionBuilder =
+        mapAttributionBuilder ?? (context) => MapTileAndOSMCopyright();
+
+    center = center;
+    southWest = southWest;
+    northEast = northEast;
   }
 }

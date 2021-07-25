@@ -42,6 +42,7 @@ dependencies:
   xml: ^5.1.2
 dependency_overrides:
   crypto: ^3.0.1
+  test_api: ^0.3.0
 dev_dependencies:
   bloc_test: ^8.0.2
   flutter_driver:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/animation_configuration.dart';
@@ -18,7 +19,11 @@ void main() {
     configuration: Configuration(
       urls: UrlCollection(),
       animations: AnimationConfiguration(),
-      map: MapConfiguration(),
+      map: MapConfiguration(
+        center: LatLng(-17.39000, -66.15400),
+        southWest: LatLng(-17.79300, -66.75000),
+        northEast: LatLng(-16.90400, -65.67400),
+      ),
     ),
   ));
 }

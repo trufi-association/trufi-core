@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/blocs/location_search_bloc.dart';
@@ -47,9 +49,16 @@ class OfflineSearchLocation implements SearchLocationManager {
   }
 
   @override
-  Future<LocationDetail> reverseGeodecoding(LatLng location) {
-    // TODO: implement reverseGeodecoding
-    throw UnimplementedError();
+  Future<LocationDetail> reverseGeodecoding(LatLng location) async {
+    final response = await http.get(
+      Uri.parse(
+        "https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json&zoom=17",
+      ),
+    );
+    final body = jsonDecode(utf8.decode(response.bodyBytes));
+    final String displayName = body["display_name"]?.toString();
+    final String road = body["address"]["road"]?.toString();
+    final String hamlet = body["address"]["hamlet"]?.toString();
+    return LocationDetail(road ?? displayName ?? "", hamlet ?? "", location);
   }
-
 }
