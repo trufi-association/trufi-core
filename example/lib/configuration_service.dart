@@ -6,7 +6,7 @@ import 'package:trufi_core/blocs/configuration/models/language_configuration.dar
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 Configuration setupExampleConfiguration() {
   // Attribution
