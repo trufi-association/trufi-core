@@ -41,16 +41,15 @@ dependencies:
   url_launcher: ^6.0.9
   uuid: ^3.0.4
   xml: ^5.1.2
-dependency_overrides:
-  crypto: ^3.0.1
-  test_api: ^0.3.0
+
+
 dev_dependencies:
   bloc_test: ^8.0.2
   flutter_driver:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  mockito: ^5.0.11
+  mockito: ^5.0.12
   network_image_mock: ^2.0.1
   plugin_platform_interface: ^2.0.1
 
