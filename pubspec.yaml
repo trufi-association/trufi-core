@@ -10,6 +10,7 @@ environment:
 
 dependencies:
   app_review: ^2.1.1+1
+  cached_network_image: ^3.1.0
   cupertino_icons: ^1.0.3
   diff_match_patch: ^0.4.1
   equatable: ^2.0.3

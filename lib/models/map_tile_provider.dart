@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_map/flutter_map.dart';
 
 abstract class MapTileProvider {
@@ -36,5 +37,16 @@ class OSMDefaultMapTile extends MapTileProvider {
   @override
   String name(BuildContext context) {
     return id;
+  }
+}
+
+class DefaultMapTileCaching extends TileProvider {
+  Coords coords;
+  TileLayerOptions options;
+  DefaultMapTileCaching({this.coords, this.options});
+
+  @override
+  ImageProvider getImage(Coords corrds, TileLayerOptions options) {
+    return CachedNetworkImageProvider(getTileUrl(coords, options));
   }
 }
