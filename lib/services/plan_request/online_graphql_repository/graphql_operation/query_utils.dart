@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';

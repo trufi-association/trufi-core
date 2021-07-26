@@ -561,9 +561,9 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
  
   @override
   String get firstPageTooltip => 'Fist page';
-
-  @override
+  
   String get lastPageTooltip => 'Last page';
+
   @override
   String get inputDateModeButtonLabel => 'Switch to input';
 

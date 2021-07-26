@@ -8,7 +8,7 @@ import 'package:trufi_core/repository/places_store_repository/places_storage.dar
 import 'package:trufi_core/repository/places_store_repository/shared_preferences_place_storage.dart';
 import 'package:trufi_core/services/search_location/search_location_manager.dart';
 
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:async/async.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:equatable/equatable.dart';
@@ -228,6 +228,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         : (a is TrufiStreet)
             ? a.junctions.fold<bool>(
                 false,
+                // ignore: iterable_contains_unrelated_type
                 (result, j) => result |= locations.contains(j.location),
               )
             : false;
@@ -238,6 +239,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
         : (b is TrufiStreet)
             ? b.junctions.fold<bool>(
                 false,
+                // ignore: iterable_contains_unrelated_type
                 (result, j) => result |= locations.contains(j.location),
               )
             : false;

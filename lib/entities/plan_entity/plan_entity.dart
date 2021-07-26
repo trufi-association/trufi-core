@@ -6,7 +6,7 @@ import 'package:trufi_core/entities/plan_entity/place_entity.dart';
 import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/services/models_otp/booking_info.dart';
