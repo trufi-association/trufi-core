@@ -23,6 +23,11 @@ class PayloadDataPlanState extends Equatable {
   static const int suggestBikeAndPublicMaxDistance = 15000;
   static const int bikeAndPublicMaxWalkDistance = 15000;
   static const int minDistanceBetweenFromAndTo = 20;
+  static const List<String> parkAndRideBannedVehicleParkingTags = [
+    'lot_type:Parkplatz',
+    'lot_type:Tiefgarage',
+    'lot_type:Parkhaus'
+  ];
 
   static const String _typeWalkingSpeed = "typeWalkingSpeed";
   static const String _avoidWalking = "avoidWalking";

@@ -223,7 +223,12 @@ class GraphQLPlanRepository {
               advancedOptions.includeBikeSuggestions,
           'useVehicleParkingAvailabilityInformation':
               date.difference(dateNow).inMinutes <= 15,
-          'bannedVehicleParkingTags': shouldMakeAllQuery ? [] : ['state:few'],
+          'bannedVehicleParkingTags': shouldMakeAllQuery
+              ? PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
+              : [
+                  'state:few',
+                  ...PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
+                ],
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
