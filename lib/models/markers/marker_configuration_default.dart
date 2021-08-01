@@ -53,7 +53,11 @@ class MarkerConfigurationDefault implements MarkerConfiguration {
             anchorPos: AnchorPos.align(AnchorAlign.center),
             builder: (context) => const MyLocationMarker(),
           )
-        : Marker(width: 0, height: 0, point: null, builder: (_) => Container());
+        : Marker(
+            width: 0,
+            height: 0,
+            point: LatLng(0, 0),
+            builder: (_) => Container());
   }
 
   @override
