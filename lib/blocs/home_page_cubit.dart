@@ -186,6 +186,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await updateMapRouteState(state.copyWith(isFetchingModes: false));
         throw error;
       });
+      // TODO when the modesTransportEntity is null
+      if (modesTransportEntity == null) return;
       PlanInfoBox auxPlanInfoBox;
       if (modesTransportEntity.existWalkPlan ||
           modesTransportEntity.existBikePlan) {
