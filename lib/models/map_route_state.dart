@@ -99,6 +99,36 @@ class MapRouteState extends Equatable {
     );
   }
 
+  MapRouteState copyWithNullable({
+    Optional<TrufiLocation> fromPlace = const Optional(),
+    Optional<TrufiLocation> toPlace = const Optional(),
+    PlanEntity plan,
+    ModesTransportEntity modesTransport,
+    AdEntity ad,
+    bool isFetching,
+    bool isFetchingModes,
+    bool showSuccessAnimation,
+    bool isFetchLater,
+    bool isFetchEarlier,
+    bool isFetchingMore,
+    CancelableOperation<PlanEntity> currentFetchPlanOperation,
+    CancelableOperation<AdEntity> currentFetchAdOperation,
+  }) {
+    return MapRouteState(
+      fromPlace: fromPlace.isValid ? fromPlace.value : this.fromPlace,
+      toPlace: toPlace.isValid ? toPlace.value : this.toPlace,
+      plan: plan ?? this.plan,
+      modesTransport: modesTransport ?? this.modesTransport,
+      ad: ad ?? this.ad,
+      isFetching: isFetching ?? this.isFetching,
+      isFetchingModes: isFetchingModes ?? this.isFetchingModes,
+      isFetchLater: isFetchLater ?? this.isFetchLater,
+      isFetchEarlier: isFetchEarlier ?? this.isFetchEarlier,
+      isFetchingMore: isFetchingMore ?? this.isFetchingMore,
+      showSuccessAnimation: showSuccessAnimation ?? this.showSuccessAnimation,
+    );
+  }
+
   // Json
   factory MapRouteState.fromJson(Map<String, dynamic> json) {
     return MapRouteState(
@@ -158,4 +188,16 @@ class MapRouteState extends Equatable {
         isFetchEarlier,
         isFetchingMore,
       ];
+}
+
+class Optional<T> {
+  final bool isValid;
+  final T _value;
+
+  T get value => _value;
+
+  const Optional()
+      : isValid = false,
+        _value = null;
+  const Optional.value(this._value) : isValid = true;
 }
