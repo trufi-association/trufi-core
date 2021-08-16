@@ -149,10 +149,7 @@ class ResultsScreen extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     await homePageCubit
-        .fetchPlan(
-          correlationId,
-          localization,
-        )
+        .fetchPlan(correlationId, localization, removePlan: false)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }

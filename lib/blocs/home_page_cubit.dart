@@ -59,8 +59,21 @@ class HomePageCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
+  Future<void> setPlace(TrufiLocation place) async {
+    if (state?.fromPlace == null) {
+      setFromPlace(place);
+    } else if (state?.toPlace == null) {
+      setToPlace(place);
+    }
+  }
+
   Future<void> setFromPlace(TrufiLocation fromPlace) async {
     await updateMapRouteState(state.copyWith(fromPlace: fromPlace));
+  }
+
+  Future<void> resetFromPlace() async {
+    await updateMapRouteState(
+        state.copyWithNullable(fromPlace: const Optional.value(null)));
   }
 
   Future<void> swapLocations() async {
@@ -74,6 +87,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
   Future<void> setToPlace(TrufiLocation toPlace) async {
     await updateMapRouteState(state.copyWith(toPlace: toPlace));
+  }
+
+  Future<void> resetToPlace() async {
+    await updateMapRouteState(
+        state.copyWithNullable(toPlace: const Optional.value(null)));
   }
 
   Future<void> configSuccessAnimation({bool show}) async {
@@ -110,6 +128,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     TrufiLocalization localization, {
     bool car = false,
     PayloadDataPlanState advancedOptions,
+    bool removePlan = true,
   }) async {
     if (state.toPlace != null && state.fromPlace != null) {
       PlanInfoBox planInfoBox;
@@ -151,13 +170,21 @@ class HomePageCubit extends Cubit<MapRouteState> {
         }
       } else {
         await updateMapRouteState(
-          state.copyWithoutMap(
-            isFetching: true,
-            isFetchingModes: false,
-            isFetchEarlier: false,
-            isFetchLater: false,
-            isFetchingMore: false,
-          ),
+          removePlan
+              ? state.copyWithoutMap(
+                  isFetching: true,
+                  isFetchingModes: false,
+                  isFetchEarlier: false,
+                  isFetchLater: false,
+                  isFetchingMore: false,
+                )
+              : state.copyWith(
+                  isFetching: true,
+                  isFetchingModes: false,
+                  isFetchEarlier: false,
+                  isFetchLater: false,
+                  isFetchingMore: false,
+                ),
         );
         final PlanEntity planEntity = await _fetchPlan(
           correlationId,
@@ -175,6 +202,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           showSuccessAnimation: true,
         ));
       }
+      if (advancedOptions == null) return;
       await updateMapRouteState(state.copyWith(
         isFetchingModes: true,
       ));
