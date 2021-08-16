@@ -11,9 +11,11 @@ class ItineraryDateSelector extends StatelessWidget {
   const ItineraryDateSelector({
     Key key,
     @required this.onFetchPlan,
+    this.color,
   }) : super(key: key);
 
   final void Function() onFetchPlan;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class ItineraryDateSelector extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.access_time_rounded,
-              color: theme.backgroundColor,
+              color: color ?? theme.backgroundColor,
               size: 20,
             ),
             Expanded(
@@ -60,14 +62,16 @@ class ItineraryDateSelector extends StatelessWidget {
                     : payloadDataPlanCubit.state.arriveBy
                         ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
                         : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
-                style: theme.textTheme.subtitle1.copyWith(fontSize: 15),
+                style: color != null
+                    ? theme.textTheme.bodyText1.copyWith(fontSize: 15)
+                    : theme.textTheme.subtitle1.copyWith(fontSize: 15),
                 textAlign: TextAlign.center,
                 maxLines: 1,
               ),
             ),
             Icon(
               Icons.keyboard_arrow_down,
-              color: theme.backgroundColor,
+              color: color ?? theme.backgroundColor,
               size: 20,
             ),
           ],
