@@ -28,15 +28,17 @@ class ResetButton extends StatelessWidget {
   const ResetButton({
     Key key,
     @required this.onReset,
+    this.color,
   }) : super(key: key);
   final void Function() onReset;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return FittedBox(
       child: IconButton(
         icon: Icon(
           Icons.clear,
-          color: Theme.of(context).primaryIconTheme.color,
+          color: color ?? Theme.of(context).primaryIconTheme.color,
         ),
         onPressed: onReset,
       ),

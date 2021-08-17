@@ -12,7 +12,6 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_observer.dart';
@@ -33,6 +32,7 @@ import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
+import 'pages/home/home_page.dart';
 import 'services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
@@ -77,6 +77,7 @@ class TrufiApp extends StatelessWidget {
     this.bottomBarTheme,
     this.customOverlayBuilder,
     this.customBetweenFabBuilder,
+    this.customHomePage,
     Key key,
     this.customLayers = const [],
     this.mapTileProviders,
@@ -110,6 +111,9 @@ class TrufiApp extends StatelessWidget {
   /// The [customBetweenFabBuilder] is [Builder] that allows creating a overlay
   /// in between the Fab buttons of the Trufi Core.
   final WidgetBuilder customBetweenFabBuilder;
+
+  /// The [customHomePage] is [Widget] that allows creating a custom HomePage
+  final Widget customHomePage;
 
   /// List of [CustomLayerContainer] implementations
   final List<CustomLayerContainer> customLayers;
@@ -208,6 +212,7 @@ class TrufiApp extends StatelessWidget {
           child: LocalizedMaterialApp(
             customOverlayBuilder,
             customBetweenFabBuilder,
+            customHomePage: customHomePage,
           ),
         ),
       ),
@@ -218,11 +223,12 @@ class TrufiApp extends StatelessWidget {
 class LocalizedMaterialApp extends StatelessWidget {
   const LocalizedMaterialApp(
       this.customOverlayWidget, this.customBetweenFabWidget,
-      {Key key})
+      {Key key, this.customHomePage})
       : super(key: key);
 
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
+  final Widget customHomePage;
 
   @override
   Widget build(BuildContext context) {
@@ -252,10 +258,11 @@ class LocalizedMaterialApp extends StatelessWidget {
           ],
           supportedLocales: TrufiLocalization.supportedLocales,
           theme: context.watch<ThemeCubit>().state.activeTheme,
-          home: HomePage(
-            customOverlayWidget: customOverlayWidget,
-            customBetweenFabWidget: customBetweenFabWidget,
-          ),
+          home: customHomePage ??
+              HomePage(
+                customOverlayWidget: customOverlayWidget,
+                customBetweenFabWidget: customBetweenFabWidget,
+              ),
         );
       },
     );
