@@ -429,6 +429,9 @@ class TrufiLocalizationDe extends TrufiLocalization {
   String get menuConnections => 'Verbindungen';
 
   @override
+  String get listofBusses => 'Liste der Busse';
+
+  @override
   String get menuFeedback => 'Feedback';
 
   @override

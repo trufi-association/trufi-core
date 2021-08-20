@@ -429,6 +429,9 @@ class TrufiLocalizationFr extends TrufiLocalization {
   String get menuConnections => 'Afficher les itinéraires';
 
   @override
+  String get listofBusses => 'Liste des bus';
+
+  @override
   String get menuFeedback => 'Envoyer un commentaire';
 
   @override

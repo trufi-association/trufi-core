@@ -428,6 +428,9 @@ class TrufiLocalizationPt extends TrufiLocalization {
   @override
   String get menuConnections => 'Mostrar rotas';
 
+    @override
+  String get listofBusses => 'Lista de ônibus';
+
   @override
   String get menuFeedback => 'Enviar comentários.';
 

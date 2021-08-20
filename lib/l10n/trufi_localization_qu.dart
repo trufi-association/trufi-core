@@ -1,4 +1,3 @@
-
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'trufi_localization.dart';
@@ -172,7 +171,8 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get commonWalk => 'Walk';
 
   @override
-  String get copyrightsPriceProvider => 'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.';
+  String get copyrightsPriceProvider =>
+      'Fare information provided by Nahverkehrsgesellschaft Baden-Württemberg mbH (NVBW). No liability for the correctness of the information.';
 
   @override
   String defaultLocationAdd(Object defaultLocation) {
@@ -199,58 +199,75 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get donate => 'Donate';
 
   @override
-  String get errorAmbiguousDestination => 'Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.';
+  String get errorAmbiguousDestination =>
+      'Ñan wakichiqqa chayana kitiykimanta mana ridsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.';
 
   @override
-  String get errorAmbiguousOrigin => 'Ñan wakichiqqa qallariy kitiykiqa mana riqsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.';
+  String get errorAmbiguousOrigin =>
+      'Ñan wakichiqqa qallariy kitiykiqa mana riqsinchu. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay.';
 
   @override
-  String get errorAmbiguousOriginDestination => 'Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.';
+  String get errorAmbiguousOriginDestination =>
+      'Qallariy chanta chayana kitikunata sumaqta akllay, aswan sut’i kay. Kay kitikunamanta chikllay manaqa chayana kitita sut’ita qillqay. Un destino más exacto.';
 
   @override
   String get errorCancelledByUser => 'Canceled by user';
 
   @override
-  String get errorEmailFeedback => 'Could not open mail feedback app, the URL or email is incorrect';
+  String get errorEmailFeedback =>
+      'Could not open mail feedback app, the URL or email is incorrect';
 
   @override
-  String get errorNoBarrierFree => 'Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.';
+  String get errorNoBarrierFree =>
+      'Qallariy chanta chayana kitikunata mana chukuna tinkuypalluqchu.';
 
   @override
-  String get errorNoTransitTimes => 'Mana llamk’aq phani kanchu. Ichas mana kay p’unchawpi ruwakuyta atikunmanchu, manaqa mana ñan kanmanchu ch’usanaykipaq.';
+  String get errorNoTransitTimes =>
+      'Mana llamk’aq phani kanchu. Ichas mana kay p’unchawpi ruwakuyta atikunmanchu, manaqa mana ñan kanmanchu ch’usanaykipaq.';
 
   @override
-  String get errorOutOfBoundary => 'Kay ch’usana kitiqa mana ruwakuyta atinchu. Manachu kay llaqtapi mana kasqanta kitita machkhanki?';
+  String get errorOutOfBoundary =>
+      'Kay ch’usana kitiqa mana ruwakuyta atinchu. Manachu kay llaqtapi mana kasqanta kitita machkhanki?';
 
   @override
-  String get errorPathNotFound => 'Kay ch’usana kitiqa mana ruwakuyta atikunchu mana ñan tarikusqanrayku, akllay qallariy chanta chayana kititaqa allin riqsisqa ñankunapi.';
+  String get errorPathNotFound =>
+      'Kay ch’usana kitiqa mana ruwakuyta atikunchu mana ñan tarikusqanrayku, akllay qallariy chanta chayana kititaqa allin riqsisqa ñankunapi.';
 
   @override
-  String get errorServerCanNotHandleRequest => 'Mañasqayki kitiqa mana tariyta atikunchu.';
+  String get errorServerCanNotHandleRequest =>
+      'Mañasqayki kitiqa mana tariyta atikunchu.';
 
   @override
-  String get errorServerTimeout => 'Kiti mask’aqqa anchata unaykachkan. Watiqmanta juk ratumanta mask’ay.';
+  String get errorServerTimeout =>
+      'Kiti mask’aqqa anchata unaykachkan. Watiqmanta juk ratumanta mask’ay.';
 
   @override
-  String get errorServerUnavailable => 'Qhispichiwasqayku. Kunan pacha, ñan mask’aqqa mana llamk’achkanku. Watiqmanta mask’ay juk ratumanta.';
+  String get errorServerUnavailable =>
+      'Qhispichiwasqayku. Kunan pacha, ñan mask’aqqa mana llamk’achkanku. Watiqmanta mask’ay juk ratumanta.';
 
   @override
-  String get errorTrivialDistance => 'Qallariy chanta chayana kitkunaqa ancha qaylla kachkanku.';
+  String get errorTrivialDistance =>
+      'Qallariy chanta chayana kitkunaqa ancha qaylla kachkanku.';
 
   @override
-  String get errorUnknownDestination => 'Chayana kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.';
+  String get errorUnknownDestination =>
+      'Chayana kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.';
 
   @override
-  String get errorUnknownOrigin => 'Qallariy kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.';
+  String get errorUnknownOrigin =>
+      'Qallariy kitiqa mana riqsisqachu. Aswan sut’ita riqsichiy.';
 
   @override
-  String get errorUnknownOriginDestination => 'Qallariy chanta chayana kitikunaqa mana riqsisqachu kanku. Kitiykita aswan sut’ita riqsichiy.';
+  String get errorUnknownOriginDestination =>
+      'Qallariy chanta chayana kitikunaqa mana riqsisqachu kanku. Kitiykita aswan sut’ita riqsichiy.';
 
   @override
-  String get feedbackContent => 'Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.';
+  String get feedbackContent =>
+      'Imayna riqch’asunki Trufi App? Mayk’aqpis pantaykunata tarirqankichu? Riqsiyta munayku! Correo electrónico chanta yupaykita ima riqsirichiwayku sumaqta yanaparisunaykupaq.';
 
   @override
-  String get feedbackTitle => 'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!';
+  String get feedbackTitle =>
+      'Correo electrónico ñiqta yuyasqasniykita apachimuwayku!';
 
   @override
   String get fetchMoreItinerariesEarlierDepartures => 'Earlier departures';
@@ -268,37 +285,48 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get followOnTwitter => 'Follow us on Twitter';
 
   @override
-  String get infoMessageDestinationOutsideService => 'No route suggestions were found because the destination is outside the service area.';
+  String get infoMessageDestinationOutsideService =>
+      'No route suggestions were found because the destination is outside the service area.';
 
   @override
-  String get infoMessageNoRouteMsg => 'Unfortunately, no route suggestions were found.';
+  String get infoMessageNoRouteMsg =>
+      'Unfortunately, no route suggestions were found.';
 
   @override
-  String get infoMessageNoRouteMsgWithChanges => 'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.';
+  String get infoMessageNoRouteMsgWithChanges =>
+      'Unfortunately, no route suggestions were found. Please check your search settings or try changing the origin or destination.';
 
   @override
-  String get infoMessageNoRouteOriginNearDestination => 'No route suggestions were found because the origin and destination are the same.';
+  String get infoMessageNoRouteOriginNearDestination =>
+      'No route suggestions were found because the origin and destination are the same.';
 
   @override
-  String get infoMessageNoRouteOriginSameAsDestination => 'No route suggestions were found because the origin and destination are very close to each other.';
+  String get infoMessageNoRouteOriginSameAsDestination =>
+      'No route suggestions were found because the origin and destination are very close to each other.';
 
   @override
-  String get infoMessageNoRouteShowingAlternativeOptions => 'No route suggestions were found with the your settings. However, we found the following route options:';
+  String get infoMessageNoRouteShowingAlternativeOptions =>
+      'No route suggestions were found with the your settings. However, we found the following route options:';
 
   @override
-  String get infoMessageOnlyCyclingRoutes => 'Your search returned only cycling routes.';
+  String get infoMessageOnlyCyclingRoutes =>
+      'Your search returned only cycling routes.';
 
   @override
-  String get infoMessageOnlyWalkingCyclingRoutes => 'Your search returned only walking and cycling routes.';
+  String get infoMessageOnlyWalkingCyclingRoutes =>
+      'Your search returned only walking and cycling routes.';
 
   @override
-  String get infoMessageOnlyWalkingRoutes => 'Your search returned only walking routes.';
+  String get infoMessageOnlyWalkingRoutes =>
+      'Your search returned only walking routes.';
 
   @override
-  String get infoMessageOriginOutsideService => 'No route suggestions were found because the origin is outside the service area.';
+  String get infoMessageOriginOutsideService =>
+      'No route suggestions were found because the origin is outside the service area.';
 
   @override
-  String get infoMessageUseNationalServicePrefix => 'We recommend you try the national journey planner,';
+  String get infoMessageUseNationalServicePrefix =>
+      'We recommend you try the national journey planner,';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -326,7 +354,8 @@ class TrufiLocalizationQu extends TrufiLocalization {
   }
 
   @override
-  String instructionRide(Object vehicle, Object distance, Object duration, Object location) {
+  String instructionRide(
+      Object vehicle, Object distance, Object duration, Object location) {
     return 'Jap’iy ${vehicle} ${duration} (${distance})\n${location} kama';
   }
 
@@ -393,13 +422,16 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get itineraryMissingPrice => 'No price information';
 
   @override
-  String get itineraryPriceOnlyPublicTransport => 'Price only valid for public transport part of the journey.';
+  String get itineraryPriceOnlyPublicTransport =>
+      'Price only valid for public transport part of the journey.';
 
   @override
-  String get itinerarySummaryBikeAndPublicRailSubwayTitle => 'Take your bike with you on the train or to metro';
+  String get itinerarySummaryBikeAndPublicRailSubwayTitle =>
+      'Take your bike with you on the train or to metro';
 
   @override
-  String get itinerarySummaryBikeParkTitle => 'Leave your bike at a Park & Ride';
+  String get itinerarySummaryBikeParkTitle =>
+      'Leave your bike at a Park & Ride';
 
   @override
   String get itineraryTicketsTitle => 'Required tickets';
@@ -429,6 +461,10 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get menuConnections => 'Ñankunata rikhuchiy';
 
   @override
+  //TODO:change the langauge
+  String get listofBusses => 'List of Busses';
+
+  @override
   String get menuFeedback => 'Yuyasqayniykita riqsichiwayku';
 
   @override
@@ -444,13 +480,15 @@ class TrufiLocalizationQu extends TrufiLocalization {
   String get menuYourPlaces => 'Tus lugares';
 
   @override
-  String get noRouteError => 'Qhispichiwasqayku. Mana achhaykama ñanta tariyta atikunchu. Imata ruwayta munanki?';
+  String get noRouteError =>
+      'Qhispichiwasqayku. Mana achhaykama ñanta tariyta atikunchu. Imata ruwayta munanki?';
 
   @override
   String get noRouteErrorActionCancel => 'Waq kitiwan watiqmanta mask\'ay';
 
   @override
-  String get noRouteErrorActionReportMissingRoute => 'Mana rikhurimuq ñanta riqsichiy';
+  String get noRouteErrorActionReportMissingRoute =>
+      'Mana rikhurimuq ñanta riqsichiy';
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Autopaq kay ñanta rikhuchiy';
@@ -559,7 +597,8 @@ class TrufiLocalizationQu extends TrufiLocalization {
   }
 
   @override
-  String get teamContent => 'Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:';
+  String get teamContent =>
+      'Trufi Association ñisqa kay aplicación Trufi App ñisqata apachimun may chhika yanapaqkunawan. Munankichu Trufi App aswan sumaqman tukunanta? Kayman riqsirichimuwayku:';
 
   @override
   String teamSectionRepresentatives(Object representatives) {

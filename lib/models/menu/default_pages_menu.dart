@@ -5,6 +5,7 @@ import 'package:trufi_core/models/menu/menu_item.dart';
 import 'package:trufi_core/pages/about.dart';
 import 'package:trufi_core/pages/feedback.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
+import 'package:trufi_core/pages/listofbusses.dart';
 import 'package:trufi_core/pages/saved_places/saved_places.dart';
 
 class MenuPageItem extends MenuItem {
@@ -29,7 +30,7 @@ class MenuPageItem extends MenuItem {
         );
 }
 
-enum DefaultPagesMenu { homePage, savedPlaces, feedback, about }
+enum DefaultPagesMenu { homePage, savedPlaces, feedback, about,listofBusses }
 
 extension LayerIdsToString on DefaultPagesMenu {
   MenuPageItem toMenuPage() {
@@ -47,6 +48,21 @@ extension LayerIdsToString on DefaultPagesMenu {
         name: (context) {
           final localization = TrufiLocalization.of(context);
           return localization.menuConnections;
+        },
+      ),
+      DefaultPagesMenu.listofBusses: MenuPageItem(
+        id: ListOfBusses.route,
+        selectedIcon: (context) => const Icon(
+          Icons.train,
+          color: Colors.black,
+        ),
+        notSelectedIcon: (context) => const Icon(
+          Icons.train,
+          color: Colors.grey,
+        ),
+        name: (context) {
+          final localization = TrufiLocalization.of(context);
+          return localization.listofBusses;
         },
       ),
       DefaultPagesMenu.savedPlaces: MenuPageItem(

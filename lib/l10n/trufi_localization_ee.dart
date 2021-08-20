@@ -429,6 +429,10 @@ class TrufiLocalizationEe extends TrufiLocalization {
   String get menuConnections => 'fia mor';
 
   @override
+  //TODO:change langauge 
+  String get listofBusses => 'List of Busses';
+
+  @override
   String get menuFeedback => 'nami susu';
 
   @override

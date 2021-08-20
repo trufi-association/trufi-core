@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/busses_info/bus_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
@@ -14,6 +15,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
+import 'package:trufi_core/pages/listofbusses.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
@@ -201,6 +203,9 @@ class TrufiApp extends StatelessWidget {
               PayloadDataPlanCubit(sharedPreferencesRepository),
           lazy: false,
         ),
+        BlocProvider<BusCubit>(
+          create: (context) => BusCubit(),
+        )
       ],
       child: TrufiBlocProvider<LocationSearchBloc>(
         bloc: LocationSearchBloc(context),
@@ -227,6 +232,7 @@ class LocalizedMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final routes = <String, WidgetBuilder>{
+      ListOfBusses.route: (context) =>  ListOfBusses(),
       AboutPage.route: (context) => const AboutPage(),
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),

@@ -164,6 +164,9 @@ abstract class TrufiLocalization {
   /// **'Enjoying Trufi?'**
   String get appReviewDialogTitle;
 
+//*show the routes */
+  String get listofBusses;
+
   /// Common Text Bike station
   ///
   /// In en, this message translates to:
