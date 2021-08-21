@@ -17,7 +17,6 @@ class ListOfBusses extends StatelessWidget {
         appBar: AppBar(
           title: const Text('List of Busses'),
         ),
-        //TODO:create a list view and pass the data required
         body: FutureBuilder(
           future: buslist,
           builder: (context, AsyncSnapshot<List<Bus>> snapshot) {
@@ -26,7 +25,7 @@ class ListOfBusses extends StatelessWidget {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return BusItem(
-                        busname: snapshot.data[index].name.split(':').first);
+                        busdata: snapshot.data[index]);
                   });
             }
             return const Center(

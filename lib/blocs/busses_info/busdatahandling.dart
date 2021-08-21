@@ -5,22 +5,19 @@ class BusDataHandling {
 
   Future<Map<String, dynamic>> loadDataFromAssets() async {
     final data = await rootBundle.loadString('assets/json/routes.geojson');
-    
+
     return jsonDecode(data) as Map<String, dynamic>;
     //* this is our required data
   }
 
-  Future<List<Map<String,dynamic>>> loadBussesData() async {
+  Future<List<Map<String, dynamic>>> loadBussesData() async {
     Map<String, dynamic> data = await loadDataFromAssets();
 
     final featuresdata = data["features"] as List;
 
     featuresdata.forEach((element) {
-      if (element["properties"]["route"] == "bus") {
-        busList.add(element["properties"] as Map<String, dynamic>);
-      }
+      busList.add(element as Map<String, dynamic>);
     });
     return busList;
   }
-
 }
