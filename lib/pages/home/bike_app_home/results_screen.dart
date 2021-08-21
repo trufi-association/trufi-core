@@ -4,14 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
+import 'package:trufi_core/widgets/trufi_scaffold.dart';
 
 import '../../../keys.dart' as keys;
 import '../../../models/trufi_place.dart';
@@ -37,74 +36,59 @@ class ResultsScreen extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final config = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
-    final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
-    final transportSelectionHeight =
-        homePageState.hasTransportModes || homePageState.isFetchingModes
-            ? 50 * MediaQuery.of(context).textScaleFactor
-            : 0;
-    return Scaffold(
+    return TrufiScaffold(
       key: const ValueKey(keys.homePage),
-      appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: isPortrait
-              ? Size.fromHeight(
-                  isGraphQlEndpoint ? (77.0 + transportSelectionHeight) : 90.0)
-              : Size.fromHeight(
-                  isGraphQlEndpoint ? 33.0 + transportSelectionHeight : 45.0),
-          child: Container(),
-        ),
-        flexibleSpace: Column(
-          children: [
-            if (isPortrait)
-              FormFieldsPortrait(
-                onFetchPlan: () {
-                  _callFetchPlan(context);
-                },
-                onReset: () async {
-                  await homePageCubit.reset();
-                  await payloadDataPlanCubit.resetDataDate();
-                },
-                onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
-                    .setFromPlace(fromPlace)
-                    .then((value) => _callFetchPlan(context)),
-                onSaveTo: (TrufiLocation fromPlace) => homePageCubit
-                    .setToPlace(fromPlace)
-                    .then((value) => _callFetchPlan(context)),
-                onSwap: () => homePageCubit
-                    .swapLocations()
-                    .then((value) => _callFetchPlan(context)),
-              )
-            else
-              FormFieldsLandscape(
-                onFetchPlan: () {
-                  _callFetchPlan(context);
-                },
-                onReset: () => homePageCubit.reset(),
-                onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
-                    .setFromPlace(fromPlace)
-                    .then((value) => _callFetchPlan(context)),
-                onSaveTo: (TrufiLocation fromPlace) => homePageCubit
-                    .setToPlace(fromPlace)
-                    .then((value) => _callFetchPlan(context)),
-                onSwap: () => homePageCubit
-                    .swapLocations()
-                    .then((value) => _callFetchPlan(context)),
-              ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(left: 50, right: 8),
-              child: ItineraryDateSelector(
-                onFetchPlan: () {
-                  _callFetchPlan(context);
-                },
-              ),
+      appBar: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (isPortrait)
+            FormFieldsPortrait(
+              onFetchPlan: () {
+                _callFetchPlan(context);
+              },
+              onReset: () async {
+                await homePageCubit.reset();
+                await payloadDataPlanCubit.resetDataDate();
+              },
+              onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
+                  .setFromPlace(fromPlace)
+                  .then((value) => _callFetchPlan(context)),
+              onSaveTo: (TrufiLocation fromPlace) => homePageCubit
+                  .setToPlace(fromPlace)
+                  .then((value) => _callFetchPlan(context)),
+              onSwap: () => homePageCubit
+                  .swapLocations()
+                  .then((value) => _callFetchPlan(context)),
+            )
+          else
+            FormFieldsLandscape(
+              onFetchPlan: () {
+                _callFetchPlan(context);
+              },
+              onReset: () => homePageCubit.reset(),
+              onSaveFrom: (TrufiLocation fromPlace) => homePageCubit
+                  .setFromPlace(fromPlace)
+                  .then((value) => _callFetchPlan(context)),
+              onSaveTo: (TrufiLocation fromPlace) => homePageCubit
+                  .setToPlace(fromPlace)
+                  .then((value) => _callFetchPlan(context)),
+              onSwap: () => homePageCubit
+                  .swapLocations()
+                  .then((value) => _callFetchPlan(context)),
             ),
-          ],
-        ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ItineraryDateSelector(
+              onFetchPlan: () {
+                _callFetchPlan(context);
+              },
+            ),
+          ),
+        ],
       ),
       body: ListView.builder(
           shrinkWrap: true,
