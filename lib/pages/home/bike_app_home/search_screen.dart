@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -197,11 +198,10 @@ class _SearchScreenState extends State<SearchScreen> {
     final homePageCubit = context.read<HomePageCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     await homePageCubit
-        .fetchPlan(
-          correlationId,
-          localization,
-        )
+        .fetchPlan(correlationId, localization,
+            advancedOptions: payloadDataPlanCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }

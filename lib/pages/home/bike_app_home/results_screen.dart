@@ -175,8 +175,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
     final homePageCubit = context.read<HomePageCubit>();
     final appReviewCubit = context.read<AppReviewCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     await homePageCubit
-        .fetchPlan(correlationId, localization, removePlan: false)
+        .fetchPlan(correlationId, localization,
+            advancedOptions: payloadDataPlanCubit.state, removePlan: false)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
   }
