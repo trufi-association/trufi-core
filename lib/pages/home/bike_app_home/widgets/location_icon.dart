@@ -28,7 +28,7 @@ class LocationIcon extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!location.isLatLngDefined) {
-          final locationUpdated = await _definePosition(context);
+          await _definePosition(context);
         } else if (homePageState.fromPlace != location &&
             homePageState.toPlace != location) {
           homePageCubit.setPlace(location);
