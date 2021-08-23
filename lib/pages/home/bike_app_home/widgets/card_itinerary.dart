@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/utils/time_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/pages/home/plan_map/widget/duration_component.dart';
 
 class CardItinerary extends StatelessWidget {
   const CardItinerary({
@@ -51,6 +53,14 @@ class CardItinerary extends StatelessWidget {
               ],
             ),
           ),
+          Text(
+            '${durationToHHmm(itinerary.startTime)} - ${durationToHHmm(itinerary.endTime)}',
+            style: theme.primaryTextTheme.bodyText1.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(width: 5),
         ],
       ),
     );
