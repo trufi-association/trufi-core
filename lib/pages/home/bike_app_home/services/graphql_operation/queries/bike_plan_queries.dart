@@ -58,24 +58,8 @@ const String queryBikePublicTransport = r'''
 query query_bike_plan_public(
   $fromPlace: String!
   $toPlace: String!
-  $intermediatePlaces: [InputCoordinates!]
   $date: String!
   $time: String!
-  $walkReluctance: Float
-  $walkBoardCost: Int
-  $minTransferTime: Int
-  $walkSpeed: Float
-  $bikeAndPublicMaxWalkDistance: Float
-  $ticketTypes: [String]
-  $bikeandPublicDisableRemainingWeightHeuristic: Boolean
-  $arriveBy: Boolean
-  $transferPenalty: Int
-  $bikeSpeed: Float
-  $optimize: OptimizeType
-  $triangle: InputTriangle
-  $itineraryFiltering: Float
-  $unpreferred: InputUnpreferred
-  $locale: String
   $bikeAndPublicModes: [TransportMode!]
 ) {
   viewer {

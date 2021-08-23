@@ -80,31 +80,6 @@ class GraphqlBikePlanRepository {
         'intermediatePlaces': [],
         'date': parseDateFormat(date),
         'time': parseTime(date),
-        'walkReluctance': advancedOptions.avoidWalking ? 5 : 2,
-        'walkBoardCost': advancedOptions.avoidTransfers
-            ? WalkBoardCost.walkBoardCostHigh.value
-            : WalkBoardCost.defaultCost.value,
-        'minTransferTime': 120,
-        'walkSpeed': advancedOptions.typeWalkingSpeed.value,
-        'bikeAndPublicMaxWalkDistance':
-            PayloadDataPlanState.bikeAndPublicMaxWalkDistance,
-        'ticketTypes': null,
-        'bikeandPublicDisableRemainingWeightHeuristic': false,
-        'arriveBy': advancedOptions.arriveBy,
-        'transferPenalty': 0,
-        'bikeSpeed': advancedOptions.typeBikingSpeed.value,
-        'optimize': advancedOptions.includeBikeSuggestions
-            ? OptimizeType.triangle.name
-            : OptimizeType.greenWays.name,
-        // 'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes),
-        // 'disableRemainingWeightHeuristic': transportsMode
-        //     .map((e) => '${e.name}_${e.qualifier ?? ''}')
-        //     .contains('BICYCLE_RENT'),
-        //     parsebikeParkModes(advancedOptions.transportModes)
-        'triangle': {...OptimizeType.triangle.value},
-        'itineraryFiltering': 1.5,
-        'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
-        'locale': locale ?? 'de',
         'bikeAndPublicModes':
             parseBikeAndPublicModes(advancedOptions.transportModes),
       },
