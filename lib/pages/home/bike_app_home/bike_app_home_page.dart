@@ -20,7 +20,10 @@ class BikeAppHomePage extends StatelessWidget {
         homePageState.plan != null && homePageState.plan.error == null;
     return Stack(
       children: [
-        if (hasPlan) const ResultsScreen() else const SearchScreen(),
+        if (hasPlan)
+          ResultsScreen(plan: homePageState.plan)
+        else
+          const SearchScreen(),
         if (config.animations.loading != null && homePageState.isFetching)
           Positioned.fill(child: config.animations.loading),
       ],

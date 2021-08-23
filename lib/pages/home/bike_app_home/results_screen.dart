@@ -7,7 +7,11 @@ import 'package:trufi_core/blocs/app_review_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
+import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
+import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/pages/home/bike_app_home/details_screen.dart';
+import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 import 'package:trufi_core/widgets/trufi_scaffold.dart';
@@ -21,14 +25,38 @@ import '../form_fields_portrait.dart';
 import '../setting_payload/date_time_picker/itinerary_date_selector.dart';
 import 'widgets/card_itinerary.dart';
 
-class ResultsScreen extends StatelessWidget {
+class ResultsScreen extends StatefulWidget {
   static const String route = '/';
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
+  final PlanEntity plan;
+  final AdEntity ad;
 
-  const ResultsScreen(
-      {Key key, this.customOverlayWidget, this.customBetweenFabWidget})
-      : super(key: key);
+  const ResultsScreen({
+    Key key,
+    this.customOverlayWidget,
+    this.customBetweenFabWidget,
+    @required this.plan,
+    this.ad,
+  }) : super(key: key);
+
+  @override
+  _ResultsScreenState createState() => _ResultsScreenState();
+}
+
+class _ResultsScreenState extends State<ResultsScreen> {
+  PlanPageController _planPageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _planPageController = PlanPageController(widget.plan, widget.ad);
+    if (_planPageController.plan.itineraries.isNotEmpty) {
+      _planPageController.inSelectedItinerary.add(
+        _planPageController.plan.itineraries.first,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,12 +132,27 @@ class ResultsScreen extends StatelessWidget {
                     style: theme.textTheme.bodyText2.copyWith(fontSize: 25),
                   ),
                 ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: CardItinerary(
-                  index: index + 1,
-                  itinerary: homePageState?.plan?.itineraries[index],
+              GestureDetector(
+                onTap: () {
+                  _planPageController.inSelectedItinerary.add(
+                    homePageState?.plan?.itineraries[index],
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BikeDetailScreen(
+                        planPageController: _planPageController,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: CardItinerary(
+                    index: index + 1,
+                    itinerary: homePageState?.plan?.itineraries[index],
+                  ),
                 ),
               ),
               if (index == homePageState.plan.itineraries.length - 1)
