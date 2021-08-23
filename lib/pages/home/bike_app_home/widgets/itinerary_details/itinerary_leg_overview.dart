@@ -47,7 +47,8 @@ class ItineraryLegOverview extends StatelessWidget {
                           const Divider(
                             color: Colors.black,
                           ),
-                          if (itineraryLeg.transportMode == TransportMode.walk)
+                          if (itineraryLeg.transportMode ==
+                              TransportMode.bicycle)
                             Column(
                               children: [
                                 DashLinePlace(
@@ -62,8 +63,11 @@ class ItineraryLegOverview extends StatelessWidget {
                                         child: config.markers.fromMarker),
                                   ),
                                 ),
-                                WalkDash(
+                                TransportDash(
                                   leg: itineraryLeg,
+                                  itinerary: itinerary,
+                                  planPageController: planPageController,
+                                  isBeforeTransport: false,
                                 ),
                               ],
                             )
