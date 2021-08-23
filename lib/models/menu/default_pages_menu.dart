@@ -5,7 +5,7 @@ import 'package:trufi_core/models/menu/menu_item.dart';
 import 'package:trufi_core/pages/about.dart';
 import 'package:trufi_core/pages/feedback.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
-import 'package:trufi_core/pages/listofbusses.dart';
+import 'package:trufi_core/pages/list_of_busses_page.dart';
 import 'package:trufi_core/pages/saved_places/saved_places.dart';
 
 class MenuPageItem extends MenuItem {

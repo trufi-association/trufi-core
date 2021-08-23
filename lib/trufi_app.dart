@@ -13,9 +13,10 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/pages/bus_routes_page.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
-import 'package:trufi_core/pages/listofbusses.dart';
+import 'package:trufi_core/pages/list_of_busses_page.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
@@ -237,6 +238,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       FeedbackPage.route: (context) => const FeedbackPage(),
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
       SettingPanel.route: (context) => const SettingPanel(),
+      BusRoutesPage.route:(context) =>  BusRoutesPage(),
     };
 
     return BlocBuilder<PreferencesCubit, PreferenceState>(

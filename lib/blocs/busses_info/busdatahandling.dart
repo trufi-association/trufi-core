@@ -3,15 +3,15 @@ part of 'bus_cubit.dart';
 class BusDataHandling {
   List<Map<String, dynamic>> busList = [];
 
-  Future<Map<String, dynamic>> loadDataFromAssets() async {
-    final data = await rootBundle.loadString('assets/json/routes.geojson');
+  Future<Map<String, dynamic>> loadDataFromAssets(String path) async {
+    final data = await rootBundle.loadString(path);
 
     return jsonDecode(data) as Map<String, dynamic>;
-    //* this is our required data
   }
 
   Future<List<Map<String, dynamic>>> loadBussesData() async {
-    Map<String, dynamic> data = await loadDataFromAssets();
+    Map<String, dynamic> data =
+        await loadDataFromAssets('assets/json/routes.geojson');
 
     final featuresdata = data["features"] as List;
 
@@ -19,5 +19,11 @@ class BusDataHandling {
       busList.add(element as Map<String, dynamic>);
     });
     return busList;
+  }
+
+  Future<Map<String, dynamic>> loadStopsData() async {
+    Map<String, dynamic> data =
+        await loadDataFromAssets('assets/json/stops.json');
+    return data;
   }
 }

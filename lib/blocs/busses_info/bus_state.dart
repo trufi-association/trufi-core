@@ -47,3 +47,7 @@ class Properties {
         strokeWidth: json["stroke-width"] as int,
       );
 }
+
+class Stops {
+  Map<String,dynamic> stopsData;
+}
