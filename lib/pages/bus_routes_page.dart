@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:trufi_core/blocs/busses_info/bus_cubit.dart';
 import 'package:trufi_core/pages/home/home_page.dart';
+import 'package:trufi_core/widgets/stops_widget.dart';
 
 class BusRoutesPage extends StatelessWidget {
   const BusRoutesPage({Key key}) : super(key: key);
@@ -49,7 +50,12 @@ class BusRoutesPage extends StatelessWidget {
                           style: const TextStyle(fontSize: 20),
                         )
                       ],
-                    )
+                    ),
+                    Expanded(
+                      child: StopsWidget(
+                        bus: bus,
+                      ),
+                    ),
                   ],
                 ),
               ))

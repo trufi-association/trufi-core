@@ -16,16 +16,20 @@ class BusCubit extends Cubit<Bus> {
 
   List<Map<String, dynamic>> rawbussesdata;
   List<Bus> buslist = [];
+  Map<String, dynamic> stops;
 
   Future<List<Bus>> getBusses() async {
     rawbussesdata = await datahandler.loadBussesData();
     rawbussesdata.forEach((element) {
       buslist.add(Bus.fromJson(element));
     });
+
     return buslist;
   }
-  Future<Map<String,dynamic>> getStopsdata() async{
+
+  Future<Map<String, dynamic>> getStopsdata() async {
     final stopsdata = await datahandler.loadStopsData();
-    return stopsdata;
+    stops = stopsdata;
+    return stops;
   }
 }
