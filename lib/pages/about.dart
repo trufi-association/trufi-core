@@ -62,7 +62,7 @@ class AboutPageState extends State<AboutPage> {
                 Text(
                   customTranslations.get(customTranslations.tagline,
                       currentLocale, localization.tagline(currentCity)),
-                  style: theme.textTheme.subtitle1.copyWith(
+                  style: theme.textTheme.headline6.copyWith(
                     color: theme.textTheme.bodyText1.color,
                   ),
                 ),

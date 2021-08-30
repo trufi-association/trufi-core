@@ -44,7 +44,7 @@ class MapSettingButton extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Text(
                 localization.commonSettings,
-                style: theme.textTheme.subtitle1,
+                style: theme.textTheme.headline6,
               ),
             ),
           ],
