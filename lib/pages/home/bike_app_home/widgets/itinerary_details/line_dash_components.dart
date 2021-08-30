@@ -3,16 +3,13 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:trufi_core/blocs/home_page_cubit.dart';
-import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
-import 'package:trufi_core/pages/home/plan_map/widget/custom_text_button.dart';
-import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
-import 'package:trufi_core/pages/home/plan_map/widget/transit_leg.dart';
+
+import 'route_number.dart';
 
 class TransportDash extends StatelessWidget {
   final PlanPageController planPageController;
@@ -39,8 +36,6 @@ class TransportDash extends StatelessWidget {
   Widget build(BuildContext context) {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     final configuration = context.read<ConfigurationCubit>().state;
-    final homePageCubit = context.read<HomePageCubit>();
-    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     final isTypeBikeRentalNetwork =
         leg.transportMode == TransportMode.bicycle &&
             leg.fromPlace?.bikeRentalStation != null;
@@ -87,37 +82,28 @@ class TransportDash extends StatelessWidget {
                         .add(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
                   }
                 },
-                child: TransitLeg(
-                  leg: leg,
+                child: RouteNumber(
+                  transportMode: leg.transportMode,
+                  backgroundColor: leg?.route?.color != null
+                      ? Color(int.tryParse("0xFF${leg.route.color}"))
+                      : leg.transportMode.backgroundColor,
+                  icon: (leg?.route?.type ?? 0) == 715
+                      ? onDemandTaxiSvg(color: 'FFFFFF')
+                      : isTypeBikeRentalNetwork
+                          ? getBikeRentalNetwork(
+                                  leg.fromPlace.bikeRentalStation.networks[0])
+                              .image
+                          : null,
+                  text: leg?.route?.shortName != null
+                      ? leg.route.shortName
+                      : leg.transportMode.getTranslate(localization),
+                  tripHeadSing: leg.transportMode == TransportMode.carPool
+                      ? leg.toPlace.name
+                      : leg.headSign,
+                  duration: leg.durationLeg(localization),
+                  distance: leg.distanceString(localization),
                 ),
               ),
-              if (configuration.planItineraryLegBuilder != null)
-                configuration.planItineraryLegBuilder(context, leg) ??
-                    Container(),
-              if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
-                          ?.tags !=
-                      null &&
-                  leg.toPlace.vehicleParkingWithEntrance.vehicleParking.tags
-                      .contains('state:few'))
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    InfoMessage(
-                        message: localization.carParkCloseCapacityMessage),
-                    CustomTextButton(
-                      text: localization.carParkExcludeFull,
-                      onPressed: () async {
-                        await homePageCubit.fetchPlanModeRidePark(
-                            localization, payloadDataPlanState);
-                      },
-                    ),
-                  ],
-                ),
-              if (isTypeBikeRentalNetwork &&
-                  (itinerary?.arrivedAtDestinationWithRentedBicycle ?? false))
-                InfoMessage(
-                    message: localization.bikeRentalNetworkFreeFloating),
             ],
           ),
         ),
@@ -148,7 +134,8 @@ class WalkDash extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     return Column(
       children: [
-        if (legBefore != null && legBefore.transportMode == TransportMode.walk)
+        if (legBefore != null &&
+            legBefore.transportMode == TransportMode.bicycle)
           DashLinePlace(
             date: leg.startTimeString.toString(),
             location: leg.fromPlace.name,

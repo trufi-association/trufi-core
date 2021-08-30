@@ -46,15 +46,15 @@ class LocationIcon extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             margin: margin ?? EdgeInsets.zero,
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(),
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(0.0, 1),
-                  blurRadius: 2.0,
-                ),
-              ],
-            ),
+                color: Colors.white,
+                border: Border.all(),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0.0, 1),
+                    blurRadius: 2.0,
+                  ),
+                ],
+                shape: BoxShape.circle),
             child: Icon(
               typeToIconData(location.type) ?? Icons.place,
             ),

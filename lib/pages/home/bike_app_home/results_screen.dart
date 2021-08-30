@@ -122,49 +122,56 @@ class _ResultsScreenState extends State<ResultsScreen> {
           shrinkWrap: true,
           itemCount: homePageState?.plan?.itineraries?.length,
           itemBuilder: (_, index) {
-            return Column(children: [
-              if (index == 0)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Text(
-                    "Es gibt ${homePageState?.plan?.itineraries?.length} mögliche Routen für dich:",
-                    style: theme.textTheme.bodyText2.copyWith(fontSize: 25),
-                  ),
-                ),
-              GestureDetector(
-                onTap: () {
-                  _planPageController.inSelectedItinerary.add(
-                    homePageState?.plan?.itineraries[index],
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BikeDetailScreen(
-                        planPageController: _planPageController,
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (index == 0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: Text(
+                        "Es gibt ${homePageState?.plan?.itineraries?.length} mögliche Routen",
+                        style: theme.textTheme.subtitle1.copyWith(fontSize: 25),
                       ),
                     ),
-                  );
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: CardItinerary(
-                    index: index + 1,
-                    itinerary: homePageState?.plan?.itineraries[index],
+                  GestureDetector(
+                    onTap: () {
+                      _planPageController.inSelectedItinerary.add(
+                        homePageState?.plan?.itineraries[index],
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BikeDetailScreen(
+                            planPageController: _planPageController,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      child: CardItinerary(
+                        index: index + 1,
+                        itinerary: homePageState?.plan?.itineraries[index],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              if (index == homePageState.plan.itineraries.length - 1)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: CustomTextButton(
-                    text: 'Auf der Karte anzeigen',
-                    onPressed: () {},
-                  ),
-                ),
-            ]);
+                  if (index == homePageState.plan.itineraries.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25),
+                      child: Center(
+                        child: CustomTextButton(
+                          text: 'ZEIG MEHR',
+                          onPressed: () {},
+                          color: theme.accentColor,
+                          borderRadius: 10,
+                          width: 150,
+                          height: 45,
+                        ),
+                      ),
+                    ),
+                ]);
           }),
       drawer: const TrufiDrawer(ResultsScreen.route),
     );

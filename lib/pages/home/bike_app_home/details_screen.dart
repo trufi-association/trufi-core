@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/pages/home/bike_app_home/widgets/itinerary_details/itinerary_leg_overview.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
@@ -25,10 +26,25 @@ class _BikeDetailScreenState extends State<BikeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final cfg = context.read<ConfigurationCubit>().state;
+    final homePageState = context.watch<HomePageCubit>().state;
+    final localization = TrufiLocalization.of(context);
     widget.planPageController.selectedItinerary;
     return Scaffold(
+      backgroundColor: const Color(0xFFF4F4F4),
       appBar: AppBar(
-        title: const Text("Title"),
+        title: Row(
+          children: [
+            Flexible(
+                child: Text(homePageState.fromPlace.displayName(localization))),
+            const Icon(
+              Icons.arrow_right_alt,
+              color: Colors.white,
+              size: 35,
+            ),
+            Flexible(
+                child: Text(homePageState.toPlace.displayName(localization))),
+          ],
+        ),
       ),
       body: CustomScrollableContainer(
         openedPosition: 200,

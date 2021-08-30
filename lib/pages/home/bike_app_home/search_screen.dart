@@ -12,7 +12,6 @@ import 'package:trufi_core/pages/home/bike_app_home/widgets/location_icon.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 import 'package:trufi_core/widgets/trufi_drawer.dart';
 
-import '../../../keys.dart' as keys;
 import '../../choose_location.dart';
 import '../home_page.dart';
 import '../setting_payload/date_time_picker/itinerary_date_selector.dart';
@@ -27,7 +26,16 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  int selectedRadio = 0;
   bool firstScreen = true;
+
+  void setSelectedRadio(int value) {
+    setState(() {
+      selectedRadio = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,31 +44,55 @@ class _SearchScreenState extends State<SearchScreen> {
         MediaQuery.of(context).orientation == Orientation.portrait;
     final homePageCubit = context.watch<HomePageCubit>();
     return Scaffold(
-      key: const ValueKey(keys.homePage),
-      appBar: AppBar(
-        elevation: 0,
+      // key: const ValueKey(keys.homePage),
+      key: _scaffoldKey,
+      backgroundColor: const Color(0xFFF4F4F4),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(100), // here the desired height
+        child: AppBar(
+          elevation: 0,
+          toolbarHeight: 100,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: IconButton(
+              onPressed: () => _scaffoldKey.currentState.openDrawer(),
+              icon: const Icon(
+                Icons.menu_outlined,
+                size: 35,
+              ),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Text(
+                  "Bike & Bahn",
+                  style: TextStyle(fontSize: 25, color: Colors.white),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            color: theme.primaryColor,
-            height: isPortrait ? 110 : 50,
-            child: Text(
-              isPortrait
-                  ? "Hallo, finde deinen\n Bike & Bahn Weg"
-                  : "Hallo, finde deinen Bike & Bahn Weg",
-              style: const TextStyle(fontSize: 30, color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          ),
+          // TODO translate
           Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Spacer(),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Willkomment!",
+                    style: theme.textTheme.subtitle1.copyWith(fontSize: 30),
+                  ),
+                  const SizedBox(height: 20),
                   if (isPortrait)
                     BAFormFieldsPortrait(
                       spaceBetween: 10,
@@ -81,7 +113,45 @@ class _SearchScreenState extends State<SearchScreen> {
                     color: Colors.black,
                     onFetchPlan: () {},
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: RadioListTile<int>(
+                          value: 0,
+                          title: const Text(
+                            'Mehr Rad',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          groupValue: selectedRadio,
+                          onChanged: setSelectedRadio,
+                          selected: 0 == selectedRadio,
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Flexible(
+                        child: RadioListTile<int>(
+                          value: 1,
+                          title: const Text(
+                            'Mehr Offi',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          groupValue: selectedRadio,
+                          onChanged: setSelectedRadio,
+                          selected: 1 == selectedRadio,
+                          contentPadding: EdgeInsets.zero,
+                          dense: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  Text(
+                    "Favoriten",
+                    style: theme.textTheme.subtitle1.copyWith(fontSize: 17),
+                  ),
                   SizedBox(
                     height: 80,
                     child: Row(
@@ -118,31 +188,31 @@ class _SearchScreenState extends State<SearchScreen> {
                                           )
                                           .toList(),
                                       Container(
-                                        margin: const EdgeInsets.only(left: 10),
+                                        margin: const EdgeInsets.only(left: 5),
                                         child: InkWell(
                                           onTap: () {
                                             _addNewPlace(context);
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
-                                              color: theme.primaryColor,
+                                              color: Colors.transparent,
                                               shape: BoxShape.circle,
                                               border: Border.all(
                                                 width: 2,
-                                                color: Colors.white,
+                                                color: theme.accentColor,
                                               ),
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  color: Colors.grey,
-                                                  offset: Offset(0.0, 1.0),
-                                                  blurRadius: 5.0,
-                                                ),
-                                              ],
+                                              // boxShadow: const [
+                                              //   BoxShadow(
+                                              //     color: Colors.grey,
+                                              //     offset: Offset(0.0, 1.0),
+                                              //     blurRadius: 5.0,
+                                              //   ),
+                                              // ],
                                             ),
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.add,
-                                              color: Colors.white,
+                                              color: theme.accentColor,
                                             ),
                                           ),
                                         ),
@@ -157,13 +227,18 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  CustomTextButton(
-                    text: 'Suchen',
-                    height: 45,
-                    onPressed: () {
-                      _callFetchPlan(context);
-                    },
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: CustomTextButton(
+                      text: 'SUCHEN',
+                      onPressed: () {
+                        _callFetchPlan(context);
+                      },
+                      color: theme.accentColor,
+                      borderRadius: 10,
+                      height: 45,
+                    ),
                   ),
                   const Spacer(),
                 ],

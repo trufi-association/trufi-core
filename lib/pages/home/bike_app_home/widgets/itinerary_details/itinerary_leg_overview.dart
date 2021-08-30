@@ -159,7 +159,8 @@ class ItineraryLegOverview extends StatelessWidget {
                                       TransportMode.walk ||
                                   index == 0,
                             )
-                          else
+                          else if (itineraryLeg.transportMode !=
+                              TransportMode.bicycle)
                             TransportDash(
                               planPageController: planPageController,
                               itinerary: itinerary,
