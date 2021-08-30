@@ -17,6 +17,7 @@ class TrufiScaffold extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: const Color(0xFFF4F4F4),
       body: Column(
         children: [
           Container(
