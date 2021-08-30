@@ -28,8 +28,7 @@ class LocationIcon extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!location.isLatLngDefined) {
-          final locationUpdated = await _definePosition(context);
-          homePageCubit.setPlace(locationUpdated);
+          await _definePosition(context);
         } else if (homePageState.fromPlace != location &&
             homePageState.toPlace != location) {
           homePageCubit.setPlace(location);
@@ -47,15 +46,15 @@ class LocationIcon extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             margin: margin ?? EdgeInsets.zero,
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(),
-              boxShadow: const [
-                BoxShadow(
-                  offset: Offset(0.0, 1),
-                  blurRadius: 2.0,
-                ),
-              ],
-            ),
+                color: Colors.white,
+                border: Border.all(),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(0.0, 1),
+                    blurRadius: 2.0,
+                  ),
+                ],
+                shape: BoxShape.circle),
             child: Icon(
               typeToIconData(location.type) ?? Icons.place,
             ),

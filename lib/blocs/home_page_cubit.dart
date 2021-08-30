@@ -129,6 +129,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
     bool car = false,
     PayloadDataPlanState advancedOptions,
     bool removePlan = true,
+    bool fetchModes = false,
   }) async {
     if (state.toPlace != null && state.fromPlace != null) {
       PlanInfoBox planInfoBox;
@@ -202,7 +203,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           showSuccessAnimation: true,
         ));
       }
-      if (advancedOptions == null) return;
+      if (!fetchModes) return;
       await updateMapRouteState(state.copyWith(
         isFetchingModes: true,
       ));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
+import 'package:trufi_core/entities/plan_entity/utils/time_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class CardItinerary extends StatelessWidget {
@@ -16,42 +17,52 @@ class CardItinerary extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     return Card(
-      child: Row(
-        children: [
-          Container(
-            width: 80,
-            height: 60,
-            color: Colors.black,
-            child: Center(
-              child: Text(
-                "Route $index",
-                style: theme.textTheme.headline6.copyWith(fontSize: 20),
-              ),
+      child: Container(
+        height: 100,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              "Über Station X$index",
+              style: theme.textTheme.bodyText1
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Über Station X$index",
-                  style: theme.textTheme.bodyText2
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(
                   "${localization.instructionDurationMinutes(itinerary.time)} ",
-                  style: theme.textTheme.bodyText1
+                  style: theme.textTheme.subtitle1
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "(${itinerary.getDistanceString(localization)})",
-                  style: theme.textTheme.bodyText2,
+                  '${durationToHHmm(itinerary.startTime)} - ${durationToHHmm(itinerary.endTime)}',
+                  style: theme.primaryTextTheme.bodyText1.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  itinerary.getDistanceString(localization),
+                  style: theme.textTheme.subtitle1
+                      .copyWith(fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  'Mehr Bike',
+                  style: theme.textTheme.bodyText2
+                      .copyWith(fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

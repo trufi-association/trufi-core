@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 class CustomTextButton extends StatelessWidget {
   final String text;
   final void Function() onPressed;
-  final double height;
   final bool isDark;
+  final double borderRadius;
+  final double height;
+  final double width;
+  final Color color;
   const CustomTextButton({
     Key key,
     @required this.text,
     @required this.onPressed,
     this.isDark = true,
+    this.borderRadius = 18.0,
     this.height,
+    this.width,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -18,18 +24,19 @@ class CustomTextButton extends StatelessWidget {
     final theme = Theme.of(context);
     return SizedBox(
       height: height,
+      width: width,
       child: TextButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
+              borderRadius: BorderRadius.circular(borderRadius),
               side: BorderSide(
                 color: isDark ? Colors.transparent : Colors.black,
               ),
             ),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-            isDark ? theme.primaryColor : Colors.white,
+            color ?? (isDark ? theme.primaryColor : Colors.white),
           ),
           padding: MaterialStateProperty.all<EdgeInsets>(
               const EdgeInsets.symmetric(horizontal: 10)),

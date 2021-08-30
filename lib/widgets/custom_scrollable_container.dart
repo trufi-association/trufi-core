@@ -81,6 +81,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                     ],
                   ),
                   child: SafeArea(
+                    top: false,
                     child: Column(
                       children: [
                         GestureDetector(
