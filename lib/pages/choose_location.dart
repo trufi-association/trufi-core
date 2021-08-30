@@ -173,7 +173,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                   ),
                   const SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       OutlinedButton(
                         onPressed: () async {
@@ -189,6 +189,27 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                                 color: locationData != null
                                     ? Theme.of(context).primaryColor
                                     : Colors.grey),
+                          ),
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop(ChooseLocationDetail(
+                            LocationDetail(
+                              'UnKnow',
+                              '',
+                              position.center,
+                            ),
+                            position.center,
+                          ));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Text(
+                            // TODO translate
+                            "Jetzt auswählen",
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
                           ),
                         ),
                       ),
