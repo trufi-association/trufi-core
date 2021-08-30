@@ -60,7 +60,9 @@ query query_bike_plan_public(
   $toPlace: String!
   $date: String!
   $time: String!
+  $maxWalkDistance: Float!
   $bikeAndPublicModes: [TransportMode!]
+  $numItineraries: Int!
 ) {
   viewer {
     ...bikePlan

@@ -6,10 +6,11 @@ fragment bikePlan on QueryType {
   plan(
     fromPlace: $fromPlace, 
     toPlace: $toPlace, 
-    numItineraries: 6, 
     transportModes: $bikeAndPublicModes, 
     date: $date, 
     time: $time, 
+    maxWalkDistance: $maxWalkDistance,
+    numItineraries: $numItineraries, 
     ) {
     from{
       name,

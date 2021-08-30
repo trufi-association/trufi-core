@@ -77,18 +77,23 @@ class GraphqlBikePlanRepository {
       variables: <String, dynamic>{
         'fromPlace': parsePlace(fromLocation),
         'toPlace': parsePlace(toLocation),
-        'intermediatePlaces': [],
         'date': parseDateFormat(date),
         'time': parseTime(date),
-        'bikeAndPublicModes':
-            parseBikeAndPublicModes(advancedOptions.transportModes),
+        'maxWalkDistance': 4828.032,
+        'numItineraries': 4,
+        'bikeAndPublicModes': [
+          //TODO define bike-public-transport or - bike-park-public transport
+          //{'mode': TransportMode.bicycle.name},
+          {'mode': TransportMode.bicycle.name, 'qualifier': 'PARK'},
+          {'mode': TransportMode.transit.name},
+        ],
       },
     );
     final planAdvancedData = await client.query(planAdvancedQuery);
     if (planAdvancedData.hasException && planAdvancedData.data == null) {
       throw planAdvancedData.exception.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
-          : Exception("Internet no connection");
+          : Exception("Server Error");
     }
     if (planAdvancedData.source.isEager) {
       await Future.delayed(const Duration(milliseconds: 200));
