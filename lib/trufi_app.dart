@@ -33,7 +33,6 @@ import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
-import 'pages/home/bike_app_home/services/bike_graphql_repository.dart';
 import 'pages/home/home_page.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
