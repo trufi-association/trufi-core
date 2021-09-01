@@ -181,14 +181,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                             Navigator.of(context).pop(locationData);
                           }
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: SizedBox(
+                          width: 140,
                           child: Text(
                             localization.commonConfirmLocation,
                             style: TextStyle(
                                 color: locationData != null
                                     ? Theme.of(context).primaryColor
                                     : Colors.grey),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
                           ),
                         ),
                       ),
@@ -196,20 +198,24 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                         onPressed: () async {
                           Navigator.of(context).pop(ChooseLocationDetail(
                             LocationDetail(
-                              'UnKnow',
+                              'Unknow',
                               '',
                               position.center,
                             ),
                             position.center,
                           ));
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: SizedBox(
+                          width: 140,
                           child: Text(
                             // TODO translate
-                            "Jetzt auswählen",
+                            localization.localeName == 'en'
+                                ? "Choose now"
+                                : "Jetzt auswählen",
                             style: TextStyle(
                                 color: Theme.of(context).primaryColor),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
                           ),
                         ),
                       ),
