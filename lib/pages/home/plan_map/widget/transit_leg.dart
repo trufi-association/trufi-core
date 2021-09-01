@@ -123,6 +123,8 @@ class TransitLeg extends StatelessWidget {
                                       e.stopEntity?.name ?? '',
                                       style: theme.primaryTextTheme.bodyText1,
                                       maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
                                     ),
                                   ),
                                   const SizedBox(width: 5),
