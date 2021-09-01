@@ -34,7 +34,11 @@ class LocationFormField extends StatelessWidget {
     );
     return Row(
       children: [
-        if (leading != null) leading,
+        if (leading != null)
+          SizedBox(
+            width: 40.0,
+            child: leading,
+          ),
         Expanded(
           child: GestureDetector(
             onTap: () async {
@@ -84,7 +88,11 @@ class LocationFormField extends StatelessWidget {
             ),
           ),
         ),
-        if (trailing != null) trailing,
+        if (trailing != null)
+          SizedBox(
+            width: 40.0,
+            child: trailing,
+          )
       ],
     );
   }
