@@ -6,7 +6,7 @@ import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/pages/home/home_buttons.dart';
-import 'package:trufi_core/pages/home/search_location/default_location_form_field.dart';
+import 'package:trufi_core/pages/home/bike_app_home/widgets/default_location_form_field.dart';
 
 class BAFormFieldsPortrait extends StatelessWidget {
   const BAFormFieldsPortrait({
