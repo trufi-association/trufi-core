@@ -10,13 +10,15 @@ class DefaultLocationFormField extends StatelessWidget {
     @required this.textLeadingImage,
     @required this.onSaved,
     @required this.isOrigin,
+    @required this.value,
+    this.showTitle = true,
     this.leading,
     this.trailing,
-    @required this.value,
   }) : super(key: key);
 
   final bool isOrigin;
   final String hintText;
+  final bool showTitle;
   final Widget textLeadingImage;
   final Function(TrufiLocation) onSaved;
   final Widget leading;
@@ -27,74 +29,79 @@ class DefaultLocationFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final textStyle = theme.textTheme.bodyText1;
-    final hintStyle = theme.textTheme.bodyText2.copyWith(
-      color: theme.textTheme.caption.color,
-    );
-    return Row(
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: () async {
-              TypeLocationForm().isOrigin = isOrigin;
-              // Show search
-              final TrufiLocation location = await showSearch<TrufiLocation>(
-                context: context,
-                delegate: LocationSearchDelegate(),
-              );
-              // Check result
-              if (location != null) {
-                onSaved(location);
-              }
-            },
-            child: Container(
-              height: 40,
-              margin: const EdgeInsets.all(4.0),
-              padding: const EdgeInsets.all(1.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1),
-                    blurRadius: 1.0,
+    final textStyle = theme.textTheme.subtitle1.copyWith(fontSize: 17);
+    final hintStyle = theme.textTheme.subtitle1.copyWith(fontSize: 17);
+    final titleStyle = theme.textTheme.bodyText1.copyWith(fontSize: 12);
+    return GestureDetector(
+      onTap: () async {
+        TypeLocationForm().isOrigin = isOrigin;
+        // Show search
+        final TrufiLocation location = await showSearch<TrufiLocation>(
+          context: context,
+          delegate: LocationSearchDelegate(),
+        );
+        // Check result
+        if (location != null) {
+          onSaved(location);
+        }
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 40,
+            margin: const EdgeInsets.only(
+              left: 10.0,
+              right: 10.0,
+              top: 14.0,
+            ),
+            padding: const EdgeInsets.all(0.0),
+            child: Row(
+              children: <Widget>[
+                SizedBox(height: 16.0, child: textLeadingImage),
+                Expanded(
+                  child: RichText(
+                    maxLines: 1,
+                    text: value != null
+                        ? TextSpan(
+                            style: textStyle,
+                            text:
+                                "${value.displayName(localization)}${value.address != null ? ", ${value.address}" : ""}",
+                          )
+                        : TextSpan(
+                            style: hintStyle,
+                            text: hintText,
+                          ),
                   ),
-                ],
-              ),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(height: 16.0, child: textLeadingImage),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(4.0),
-                      child: RichText(
-                        maxLines: 1,
-                        text: value != null
-                            ? TextSpan(
-                                style: textStyle,
-                                text:
-                                    "${value.displayName(localization)}${value.address != null ? ", ${value.address}" : ""}",
-                              )
-                            : TextSpan(
-                                style: hintStyle,
-                                text: hintText,
-                              ),
-                      ),
-                    ),
-                  ),
-                  if (trailing != null)
-                    SizedBox(
-                      width: 40.0,
-                      child: trailing,
-                    )
-                ],
-              ),
+                ),
+                if (trailing != null)
+                  SizedBox(
+                    width: 22,
+                    child: trailing,
+                  )
+              ],
             ),
           ),
-        ),
-      ],
+          Positioned(
+            bottom: 3,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: const Color(0xff747474),
+              height: 1.5,
+            ),
+          ),
+          if (value != null && showTitle)
+            Positioned(
+              top: 0,
+              left: 10,
+              child: Text(
+                hintText,
+                style: titleStyle,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
