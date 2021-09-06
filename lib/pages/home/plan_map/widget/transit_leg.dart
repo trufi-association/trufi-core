@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -7,14 +9,17 @@ import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/info_message.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../plan.dart';
 import 'route_number.dart';
 
 class TransitLeg extends StatelessWidget {
   final PlanItineraryLeg leg;
+  final PlanPageController planPageController;
 
   const TransitLeg({
     Key key,
     @required this.leg,
+    @required this.planPageController,
   }) : super(key: key);
 
   @override
@@ -74,6 +79,66 @@ class TransitLeg extends StatelessWidget {
                 )
               : null,
         ),
+        if (leg?.intermediatePlaces != null &&
+            leg.intermediatePlaces.isNotEmpty)
+          SizedBox(
+            width: 250,
+            child: ExpansionTile(
+              title: Text(
+                '${leg.intermediatePlaces.length} ${localization.localeName == 'en' ? (leg.intermediatePlaces.length > 1 ? 'stops' : 'stop') : (leg.intermediatePlaces.length > 1 ? 'Zwischenstopps' : 'Zwischenstopp')}',
+              ),
+              tilePadding: const EdgeInsets.symmetric(horizontal: 7),
+              textColor: theme.primaryColor,
+              collapsedTextColor: theme.primaryColor,
+              iconColor: theme.primaryColor,
+              collapsedIconColor: theme.primaryColor,
+              children: [
+                ...leg.intermediatePlaces
+                    .map((e) => Container(
+                          width: 235,
+                          height: 30,
+                          padding: const EdgeInsets.symmetric(vertical: 3),
+                          child: Material(
+                            child: InkWell(
+                              onTap: () {
+                                if (planPageController != null &&
+                                    e.stopEntity?.lat != null &&
+                                    e.stopEntity?.lon != null) {
+                                  planPageController.inSelectePosition.add(
+                                      LatLng(
+                                          e.stopEntity.lat, e.stopEntity.lon));
+                                }
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    DateFormat('HH:mm').format(
+                                        e.arrivalTime ?? DateTime.now()),
+                                    style: theme.primaryTextTheme.bodyText1,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Flexible(
+                                    child: Text(
+                                      e.stopEntity?.name ?? '',
+                                      style: theme.primaryTextTheme.bodyText1,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Icon(Icons.keyboard_arrow_right,
+                                      color: theme.primaryColor),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ],
+            ),
+          ),
         if (TransportMode.carPool == leg.transportMode &&
             leg.route?.url != null)
           Padding(

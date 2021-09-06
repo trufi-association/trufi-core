@@ -90,6 +90,7 @@ class TransportDash extends StatelessWidget {
                 },
                 child: TransitLeg(
                   leg: leg,
+                  planPageController: planPageController,
                 ),
               ),
               if (configuration.planItineraryLegBuilder != null)

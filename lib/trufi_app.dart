@@ -14,6 +14,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
 import 'package:trufi_core/models/menu/menu_item.dart';
@@ -32,7 +33,6 @@ import 'blocs/search_locations/search_locations_cubit.dart';
 import 'models/custom_layer.dart';
 import 'models/map_tile_provider.dart';
 import 'pages/app_lifecycle_reactor.dart';
-import 'pages/home/bike_app_home/services/bike_graphql_repository.dart';
 import 'pages/home/home_page.dart';
 import 'services/plan_request/online_repository.dart';
 import 'services/search_location/offline_search_location.dart';
@@ -188,7 +188,7 @@ class TrufiApp extends StatelessWidget {
                   ? OnlineRepository(
                       otpEndpoint: openTripPlannerUrl,
                     )
-                  : BikeGraphQLRepository(
+                  : OnlineGraphQLRepository(
                       graphQLEndPoint: openTripPlannerUrl,
                     ),
             );
