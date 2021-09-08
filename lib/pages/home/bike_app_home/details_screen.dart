@@ -32,17 +32,30 @@ class _BikeDetailScreenState extends State<BikeDetailScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F4F4),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: () async {
+            Navigator.maybePop(context);
+          },
+        ),
         title: Row(
           children: [
             Flexible(
-                child: Text(homePageState.fromPlace.displayName(localization))),
+                child: Text(
+              homePageState.fromPlace.displayName(localization),
+              style: const TextStyle(fontSize: 17),
+            )),
             const Icon(
               Icons.arrow_right_alt,
               color: Colors.white,
               size: 35,
             ),
             Flexible(
-                child: Text(homePageState.toPlace.displayName(localization))),
+                child: Text(
+              homePageState.toPlace.displayName(localization),
+              style: const TextStyle(fontSize: 17),
+            )),
           ],
         ),
       ),

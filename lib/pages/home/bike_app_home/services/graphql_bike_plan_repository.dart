@@ -83,8 +83,8 @@ class GraphqlBikePlanRepository {
         'numItineraries': 4,
         'bikeAndPublicModes': [
           //TODO define bike-public-transport or - bike-park-public transport
-          //{'mode': TransportMode.bicycle.name},
-          {'mode': TransportMode.bicycle.name, 'qualifier': 'PARK'},
+          {'mode': TransportMode.bicycle.name},
+          // {'mode': TransportMode.bicycle.name, 'qualifier': 'PARK'},
           {'mode': TransportMode.transit.name},
         ],
       },
