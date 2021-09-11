@@ -34,7 +34,6 @@ class PlanItineraryLeg {
   static const _points = "points";
   static const _mode = "mode";
   static const _route = "route";
-  static const _shortName = "shortName";
   static const _routeLongName = "routeLongName";
   static const _agency = "agency";
   static const _toPlace = "to";
