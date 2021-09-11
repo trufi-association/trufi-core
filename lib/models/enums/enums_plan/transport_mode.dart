@@ -266,9 +266,13 @@ extension TransportModeExtension on TransportMode {
   Color get backgroundColor => backgroundColors[this] ?? Colors.transparent;
   Widget getImage({Color color}) =>
       images(this, color) ??
-      const Icon(
-        Icons.error,
-        color: Colors.red,
-      );
+      (Icon(
+            icons[this],
+            color: color,
+          ) ??
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+          ));
   String get qualifier => qualifiers[this];
 }
