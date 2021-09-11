@@ -143,7 +143,8 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           ));
         }
       }
-      if (leg.route != null && !(leg.interlineWithPreviousLeg ?? false)) {
+      if ((leg.route != null || leg.shortName != null) &&
+          !(leg.interlineWithPreviousLeg ?? false)) {
         legs.add(RouteLeg(
           maxWidth: newMaxWidth,
           leg: leg,
