@@ -83,9 +83,9 @@ class PlanItineraryLeg {
               : null)
           : null,
       shortName: json[_route] != null
-          ? ((json[_route] is String) && json[_route] == ''
-              ? null
-              : json[_route] as String)
+          ? ((json[_route] is String) && json[_route] != ''
+              ? json[_route] as String
+              : null)
           : null,
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
