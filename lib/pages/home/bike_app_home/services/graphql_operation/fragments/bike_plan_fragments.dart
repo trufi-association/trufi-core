@@ -11,6 +11,7 @@ fragment bikePlan on QueryType {
     time: $time, 
     maxWalkDistance: $maxWalkDistance,
     numItineraries: $numItineraries, 
+    arriveBy: $arriveBy,
     ) {
     from{
       name,

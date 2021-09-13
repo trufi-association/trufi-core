@@ -63,6 +63,7 @@ query query_bike_plan_public(
   $maxWalkDistance: Float!
   $bikeAndPublicModes: [TransportMode!]
   $numItineraries: Int!
+  $arriveBy: Boolean!
 ) {
   viewer {
     ...bikePlan
