@@ -22,17 +22,17 @@ final stadtnaviTheme = ThemeData(
 
 final bottomBarTheme = ThemeData(
   primaryColor: const Color(0xff263238),
-  primaryColorLight: const Color(0xffeceff1),
   accentColor: const Color(0xffd81b60),
   backgroundColor: const Color(0xff263238),
+  primaryColorLight: const Color(0xffeceff1),
   textTheme: ThemeData.light().textTheme.copyWith(
-        bodyText1: const TextStyle(color: Colors.white, fontSize: 19),
+        bodyText1: const TextStyle(color: Colors.black, fontSize: 19),
         bodyText2: const TextStyle(color: Color(0xffd81b60), fontSize: 19),
-        headline6: const TextStyle(color: Color(0xFF000000), fontSize: 19),
+        headline6: const TextStyle(color: Colors.white, fontSize: 19),
         subtitle1: const TextStyle(color: Colors.white),
       ),
   primaryTextTheme: ThemeData.light().primaryTextTheme.copyWith(
-        bodyText1: const TextStyle(color: Colors.white, fontSize: 15),
+        bodyText1: const TextStyle(color: Colors.black, fontSize: 15),
         bodyText2: const TextStyle(color: Color(0xffd81b60), fontSize: 15),
         headline6: const TextStyle(color: Colors.white, fontSize: 15),
         subtitle1: const TextStyle(color: Colors.white, fontSize: 15),

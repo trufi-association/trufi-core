@@ -421,8 +421,10 @@ class PlanMapPageStateData {
               markers.add(
                 buildBusMarker(
                   midPointForPolyline(polyline),
-                  leg?.route?.color != null && isSelected
-                      ? Color(int.tryParse("0xFF${leg.route.color}"))
+                  isSelected
+                      ? (leg?.route?.color != null
+                          ? Color(int.tryParse("0xFF${leg.route.color}"))
+                          : leg.transportMode.backgroundColor)
                       : Colors.grey,
                   leg,
                   icon: (leg?.route?.type ?? 0) == 715

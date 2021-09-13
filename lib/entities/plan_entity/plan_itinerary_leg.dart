@@ -5,6 +5,7 @@ class PlanItineraryLeg {
     this.points,
     this.mode,
     this.route,
+    this.shortName,
     this.routeLongName,
     this.distance,
     this.duration,
@@ -51,6 +52,7 @@ class PlanItineraryLeg {
   final String points;
   final String mode;
   final RouteEntity route;
+  final String shortName;
   final String routeLongName;
   final double distance;
   final double duration;
@@ -75,8 +77,15 @@ class PlanItineraryLeg {
     return PlanItineraryLeg(
       points: json[_legGeometry][_points] as String,
       mode: json[_mode] as String,
-      route: json[_route] != null && (json[_route] is Map<String, dynamic>)
-          ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
+      route: json[_route] != null
+          ? ((json[_route] is Map<String, dynamic>)
+              ? RouteEntity.fromJson(json[_route] as Map<String, dynamic>)
+              : null)
+          : null,
+      shortName: json[_route] != null
+          ? ((json[_route] is String) && json[_route] != ''
+              ? json[_route] as String
+              : null)
           : null,
       routeLongName: json[_routeLongName] as String,
       distance: json[_distance] as double,
@@ -129,7 +138,7 @@ class PlanItineraryLeg {
     return {
       _legGeometry: {_points: points},
       _mode: mode,
-      _route: route?.toJson(),
+      _route: route?.toJson() ?? shortName,
       _routeLongName: routeLongName,
       _distance: distance,
       _duration: duration,
@@ -155,6 +164,7 @@ class PlanItineraryLeg {
     String points,
     String mode,
     RouteEntity route,
+    String shortName,
     String routeLongName,
     double distance,
     double duration,
@@ -176,6 +186,7 @@ class PlanItineraryLeg {
       points: points ?? this.points,
       mode: mode ?? this.mode,
       route: route ?? this.route,
+      shortName: shortName ?? this.shortName,
       routeLongName: routeLongName ?? this.routeLongName,
       distance: distance ?? this.distance,
       duration: duration ?? this.duration,
@@ -246,6 +257,7 @@ class PlanItineraryLeg {
       transportMode == TransportMode.walk || mode == 'BICYCLE_WALK';
 
   String get headSign {
-    return trip?.tripHeadsign ?? (route?.shortName ?? (route?.longName ?? ''));
+    return trip?.tripHeadsign ??
+        (route?.shortName ?? (route?.longName ?? (shortName ?? '')));
   }
 }

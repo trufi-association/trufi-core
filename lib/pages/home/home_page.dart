@@ -126,11 +126,14 @@ class HomePage extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
+    final config = context.read<ConfigurationCubit>().state;
     await homePageCubit
         .fetchPlan(
           correlationId,
           localization,
-          advancedOptions: payloadDataPlanCubit.state,
+          advancedOptions: config.serverType == ServerType.defaultServer
+              ? null
+              : payloadDataPlanCubit.state,
           fetchModes: true,
         )
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
