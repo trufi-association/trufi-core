@@ -183,7 +183,7 @@ extension TransportModeExtension on TransportMode {
   static final colors = <TransportMode, Color>{
     TransportMode.airplane: null,
     TransportMode.bicycle: const Color(0xff666666),
-    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.bus: const Color(0xffd81b60),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
@@ -198,16 +198,16 @@ extension TransportModeExtension on TransportMode {
     TransportMode.transit: null,
     TransportMode.walk: Colors.grey[700],
     // route icons for specific types of transportation
-    TransportMode.trufi: const Color(0xffff260c),
-    TransportMode.micro: const Color(0xffff260c),
-    TransportMode.miniBus: const Color(0xffff260c),
-    TransportMode.lightRail: const Color(0xff83b23b),
+    TransportMode.trufi: const Color(0xffd81b60),
+    TransportMode.micro: const Color(0xffd81b60),
+    TransportMode.miniBus: const Color(0xffd81b60),
+    TransportMode.lightRail: const Color(0xffd81b60),
   };
 
   static final backgroundColors = <TransportMode, Color>{
     TransportMode.airplane: null,
     TransportMode.bicycle: Colors.grey[200],
-    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.bus: const Color(0xffd81b60),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
@@ -222,10 +222,10 @@ extension TransportModeExtension on TransportMode {
     TransportMode.transit: null,
     TransportMode.walk: Colors.grey[200],
     // route icons for specific types of transportation
-    TransportMode.trufi: const Color(0xffff260c),
-    TransportMode.micro: const Color(0xffff260c),
-    TransportMode.miniBus: const Color(0xffff260c),
-    TransportMode.lightRail: const Color(0xff83b23b),
+    TransportMode.trufi: const Color(0xffd81b60),
+    TransportMode.micro: const Color(0xffd81b60),
+    TransportMode.miniBus: const Color(0xffd81b60),
+    TransportMode.lightRail: const Color(0xffd81b60),
   };
   static const qualifiers = <TransportMode, String>{
     TransportMode.bicycle: 'RENT',
@@ -266,9 +266,13 @@ extension TransportModeExtension on TransportMode {
   Color get backgroundColor => backgroundColors[this] ?? Colors.transparent;
   Widget getImage({Color color}) =>
       images(this, color) ??
-      const Icon(
-        Icons.error,
-        color: Colors.red,
-      );
+      (Icon(
+            icons[this],
+            color: color,
+          ) ??
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+          ));
   String get qualifier => qualifiers[this];
 }

@@ -63,9 +63,7 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
-                    leg?.route?.shortName != null
-                        ? ' ${leg.route.shortName}'
-                        : '',
+                    leg?.headSign != null ? ' ${leg.headSign}' : '',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,

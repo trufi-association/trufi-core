@@ -137,25 +137,48 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                               WalkDash(
                                 leg: itineraryLeg,
                               ),
+                              if (compresedLegs[index + 1]
+                                      .startTime
+                                      .difference(itineraryLeg.endTime)
+                                      .inMinutes >
+                                  0)
+                                WaitDash(
+                                  legBefore: itineraryLeg,
+                                  legAfter: compresedLegs[index + 1],
+                                )
                             ],
                           )
                         else if (compresedLegs.length > 1)
-                          TransportDash(
-                              planPageController: widget.planPageController,
-                              itinerary: widget.itinerary,
-                              leg: itineraryLeg,
-                              isFirstTransport: true,
-                              isNextTransport: (itineraryLeg.endTime
-                                                  .millisecondsSinceEpoch -
-                                              compresedLegs[index + 1]
-                                                  .startTime
-                                                  .millisecondsSinceEpoch)
-                                          .abs() >=
-                                      0 &&
-                                  (itineraryLeg.transportMode !=
-                                          TransportMode.bicycle ||
-                                      compresedLegs[index + 1].transportMode ==
-                                          TransportMode.walk))
+                          Column(
+                            children: [
+                              TransportDash(
+                                  planPageController: widget.planPageController,
+                                  itinerary: widget.itinerary,
+                                  leg: itineraryLeg,
+                                  isFirstTransport: true,
+                                  isNextTransport: (itineraryLeg.endTime
+                                                      .millisecondsSinceEpoch -
+                                                  compresedLegs[index + 1]
+                                                      .startTime
+                                                      .millisecondsSinceEpoch)
+                                              .abs() >=
+                                          0 &&
+                                      (itineraryLeg.transportMode !=
+                                              TransportMode.bicycle ||
+                                          compresedLegs[index + 1]
+                                                  .transportMode ==
+                                              TransportMode.walk)),
+                              if (compresedLegs[index + 1]
+                                      .startTime
+                                      .difference(itineraryLeg.endTime)
+                                      .inMinutes >
+                                  0)
+                                WaitDash(
+                                  legBefore: itineraryLeg,
+                                  legAfter: compresedLegs[index + 1],
+                                )
+                            ],
+                          )
                       ],
                     )
                   else if (itineraryLeg.transportMode == TransportMode.walk &&
@@ -166,10 +189,11 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                           leg: itineraryLeg,
                           legBefore: compresedLegs[index - 1],
                         ),
-                        if (itineraryLeg.endTime.millisecondsSinceEpoch <
-                            compresedLegs[index + 1]
+                        if (compresedLegs[index + 1]
                                 .startTime
-                                .millisecondsSinceEpoch)
+                                .difference(itineraryLeg.endTime)
+                                .inMinutes >
+                            0)
                           WaitDash(
                             legBefore: itineraryLeg,
                             legAfter: compresedLegs[index + 1],
@@ -195,10 +219,11 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                                                 .millisecondsSinceEpoch)
                                         .abs() >=
                                     0),
-                        if (itineraryLeg.endTime.millisecondsSinceEpoch <
-                            compresedLegs[index + 1]
+                        if (compresedLegs[index + 1]
                                 .startTime
-                                .millisecondsSinceEpoch)
+                                .difference(itineraryLeg.endTime)
+                                .inMinutes >
+                            0)
                           WaitDash(
                             legBefore: itineraryLeg,
                             legAfter: compresedLegs[index + 1],
@@ -268,7 +293,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
     if (widget.itinerary.compressLegs.isNotEmpty &&
         widget.itinerary.compressLegs.any((leg) => leg.transitLeg)) {
       final faresUrl = context.read<ConfigurationCubit>().state.urls.faresUrl;
-
+      if (faresUrl?.isEmpty ?? true) return;
       if (!mounted) return;
       setState(() {
         fetchError = null;

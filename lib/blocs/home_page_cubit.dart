@@ -203,7 +203,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           showSuccessAnimation: true,
         ));
       }
-      if (!fetchModes) return;
+      if (!fetchModes || advancedOptions == null) return;
       await updateMapRouteState(state.copyWith(
         isFetchingModes: true,
       ));
