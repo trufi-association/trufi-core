@@ -263,6 +263,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
             advancedOptions: payloadDataPlanCubit.state, removePlan: false)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
+    _planPageController =
+        PlanPageController(homePageCubit.state.plan, widget.ad);
   }
 
   Future<void> _fetchMoreitineraries({
@@ -287,5 +289,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
           .then((value) => appReviewCubit.incrementReviewWorthyActions())
           .catchError((error) => onFetchError(context, error as Exception));
     }
+    _planPageController =
+        PlanPageController(homePageCubit.state.plan, widget.ad);
   }
 }
