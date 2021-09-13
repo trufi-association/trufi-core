@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home/setting_payload/date_time_picker/date_time_picker.dart';
+
+import 'date_time_maps_picker.dart';
 
 class DateSelector extends StatelessWidget {
   const DateSelector({
@@ -27,11 +28,10 @@ class DateSelector extends StatelessWidget {
       height: 40,
       child: GestureDetector(
         onTap: () async {
-          final tempPickedDate = await showModalBottomSheet<DateTimeConf>(
+          final tempPickedDate = await showDialog<DateTimeConf>(
             context: context,
-            isDismissible: false,
             builder: (BuildContext builder) {
-              return DateTimePicker(
+              return DateTimeMapsPicker(
                 dateConf: DateTimeConf(
                   payloadDataPlanCubit.state.date,
                   isArriveBy: payloadDataPlanCubit.state.arriveBy,
