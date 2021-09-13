@@ -336,8 +336,5 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
             advancedOptions: payloadDataPlanCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
-    final homePageState = homePageCubit.state;
-    final hasPlan =
-        homePageState.plan != null && homePageState.plan.error == null;
   }
 }

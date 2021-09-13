@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -56,8 +54,9 @@ class _DateTimeMapsPickerState extends State<DateTimeMapsPicker>
                 Expanded(
                   child: Scrollbar(
                     child: ListView(
-                      physics:
-                          isPortrait ? NeverScrollableScrollPhysics() : null,
+                      physics: isPortrait
+                          ? const NeverScrollableScrollPhysics()
+                          : null,
                       children: [
                         Row(
                           children: [
@@ -244,7 +243,7 @@ class _DateTimeMapsPickerState extends State<DateTimeMapsPicker>
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     Expanded(
