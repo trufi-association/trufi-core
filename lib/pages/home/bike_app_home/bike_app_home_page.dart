@@ -230,8 +230,9 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                                           .map(
                                             (place) => LocationIcon(
                                               location: place,
-                                              margin: const EdgeInsets.symmetric(
-                                                  horizontal: 5),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
                                             ),
                                           )
                                           .toList(),
@@ -239,8 +240,9 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                                           .map(
                                             (place) => LocationIcon(
                                               location: place,
-                                              margin: const EdgeInsets.symmetric(
-                                                  horizontal: 5),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
                                             ),
                                           )
                                           .toList(),
@@ -286,7 +288,7 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                         _callFetchPlan(context);
                       },
                       color: theme.accentColor,
-                      borderRadius: 10,
+                      borderRadius: 50,
                       height: 45,
                     ),
                   ),
@@ -337,13 +339,5 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
     final homePageState = homePageCubit.state;
     final hasPlan =
         homePageState.plan != null && homePageState.plan.error == null;
-    if (hasPlan) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) =>
-              ResultsScreen(plan: homePageState.plan),
-        ),
-      );
-    }
   }
 }

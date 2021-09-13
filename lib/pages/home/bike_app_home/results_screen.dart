@@ -132,7 +132,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       const SizedBox(height: 15),
                       DateSelector(
                         color: const Color(0xff747474),
-                        onFetchPlan: () {},
+                        onFetchPlan: () {
+                          _callFetchPlan(context);
+                        },
                       ),
                     ],
                   ),
@@ -161,7 +163,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                             GestureDetector(
                               onTap: () {
                                 _planPageController.inSelectedItinerary.add(
-                                  homePageState?.plan?.itineraries[index],
+                                  homePageState?.plan?.itineraries[index]
+                                      .copyWith(isOnlyShowItinerary: true),
                                 );
                                 Navigator.push(
                                   context,
@@ -205,6 +208,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                               BorderSide(
                                                   color: Theme.of(context)
                                                       .accentColor),
+                                            ),
+                                            shape: MaterialStateProperty.all<
+                                                OutlinedBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
                                             ),
                                           ),
                                           child: SizedBox(
