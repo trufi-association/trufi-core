@@ -235,7 +235,7 @@ class _TimePickerSpinnerState extends State<TimePickerSpinner> {
           },
           () => isHourScrolling = false,
           isScrolling: isHourScrolling,
-          isForce2Digits: false,
+          isForce2Digits: widget.isForce2Digits,
         ),
       ),
       spacer(),
