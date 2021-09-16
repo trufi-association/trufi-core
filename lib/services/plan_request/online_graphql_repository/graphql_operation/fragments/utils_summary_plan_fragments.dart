@@ -98,9 +98,6 @@ fragment ItinerarySummaryListContainer_itineraries on Itinerary {
   endTime
   legs {
     interlineWithPreviousLeg
-    alerts {
-      alertId
-    }
     realTime
     realtimeState
     transitLeg
@@ -216,7 +213,6 @@ fragment ItineraryTab_itinerary on Itinerary {
   duration
   startTime
   endTime
-  arrivedAtDestinationWithRentedBicycle
   fares {
     cents
     components {
@@ -237,13 +233,6 @@ fragment ItineraryTab_itinerary on Itinerary {
   }
   legs {
     mode
-    alerts {
-      alertId
-      alertDescriptionTextTranslations {
-        language
-        text
-      }
-    }
     ...LegAgencyInfo_leg
     from {
       lat
@@ -344,15 +333,6 @@ fragment ItineraryTab_itinerary on Itinerary {
         carParkId
         name
         id
-      }
-    }
-    dropOffBookingInfo {
-      message
-      dropOffMessage
-      contactInfo {
-        phoneNumber
-        infoUrl
-        bookingUrl
       }
     }
     legGeometry {

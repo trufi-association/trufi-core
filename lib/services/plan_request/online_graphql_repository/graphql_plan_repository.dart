@@ -241,3 +241,10 @@ class GraphQLPlanRepository {
     return modesTransportData;
   }
 }
+
+
+// "Validation error of type FieldUndefined: Field 'arrivedAtDestinationWithRentedBicycle' in type 'Itinerary' is undefined @ 'ItineraryTab_itinerary/arrivedAtDestinationWithRentedBicycle'"
+// Validation error of type FieldUndefined: Field 'alerts' in type 'Leg' is undefined @ 'ItineraryTab_itinerary/legs/alerts'
+// "Validation error of type FieldUndefined: Field 'dropOffBookingInfo' in type 'Leg' is undefined @ 'ItineraryTab_itinerary/legs/dropOffBookingInfo'"
+// "Validation error of type FieldUndefined: Field 'alerts' in type 'Leg' is undefined @ 'ItinerarySummaryListContainer_itineraries/legs/alerts'"
+
