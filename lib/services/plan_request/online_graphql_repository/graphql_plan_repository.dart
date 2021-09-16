@@ -221,14 +221,14 @@ class GraphQLPlanRepository {
           'showBikeAndPublicItineraries': shouldMakeAllQuery &&
               !advancedOptions.wheelchair &&
               advancedOptions.includeBikeSuggestions,
-          'useVehicleParkingAvailabilityInformation':
-              date.difference(dateNow).inMinutes <= 15,
-          'bannedVehicleParkingTags': shouldMakeAllQuery
-              ? PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
-              : [
-                  'state:few',
-                  ...PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
-                ],
+          // 'useVehicleParkingAvailabilityInformation':
+          //     date.difference(dateNow).inMinutes <= 15,
+          // 'bannedVehicleParkingTags': shouldMakeAllQuery
+          //     ? PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
+          //     : [
+          //         'state:few',
+          //         ...PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
+          //       ],
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
@@ -242,9 +242,11 @@ class GraphQLPlanRepository {
   }
 }
 
-
-// "Validation error of type FieldUndefined: Field 'arrivedAtDestinationWithRentedBicycle' in type 'Itinerary' is undefined @ 'ItineraryTab_itinerary/arrivedAtDestinationWithRentedBicycle'"
-// Validation error of type FieldUndefined: Field 'alerts' in type 'Leg' is undefined @ 'ItineraryTab_itinerary/legs/alerts'
-// "Validation error of type FieldUndefined: Field 'dropOffBookingInfo' in type 'Leg' is undefined @ 'ItineraryTab_itinerary/legs/dropOffBookingInfo'"
-// "Validation error of type FieldUndefined: Field 'alerts' in type 'Leg' is undefined @ 'ItinerarySummaryListContainer_itineraries/legs/alerts'"
-
+// Validation error of type UnknownArgument: Unknown field argument useVehicleParkingAvailabilityInformation @ 'plan'
+// Validation error of type UnknownArgument: Unknown field argument bannedVehicleParkingTags @ 'plan'
+// "Validation error of type FieldUndefined: Field 'vehicleParkingWithEntrance' in type 'Place' is undefined @ 'plan/itineraries/legs/to/vehicleParkingWithEntrance'"
+// Validation error of type UnknownArgument: Unknown field argument carReluctance @ 'plan'
+// Validation error of type UnknownArgument: Unknown field argument useVehicleParkingAvailabilityInformation @ 'plan'
+// Validation error of type UnknownArgument: Unknown field argument bannedVehicleParkingTags @ 'plan'
+// "Validation error of type FieldUndefined: Field 'vehicleParkingWithEntrance' in type 'Place' is undefined @ 'plan/itineraries/legs/to/vehicleParkingWithEntrance'"
+// "Validation error of type WrongType: argument 'transportModes[2].mode' with value 'EnumValue{name='FLEX'}' is not a valid 'Mode' - Expected enum literal value not in allowable values -  'EnumValue{name='FLEX'}'. @ 'plan'"
