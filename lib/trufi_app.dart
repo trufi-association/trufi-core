@@ -83,6 +83,7 @@ class TrufiApp extends StatelessWidget {
     this.mapTileProviders,
     this.searchLocationManager,
     this.menuItems,
+    this.routes,
   })  : assert(configuration != null, "Configuration cannot be empty"),
         assert(theme != null, "Theme cannot be empty"),
         super(key: key) {
@@ -130,6 +131,8 @@ class TrufiApp extends StatelessWidget {
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
+
+  final Map<String, WidgetBuilder> routes;
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +216,7 @@ class TrufiApp extends StatelessWidget {
             customOverlayBuilder,
             customBetweenFabBuilder,
             customHomePage: customHomePage,
+            routes: routes,
           ),
         ),
       ),
@@ -222,13 +226,17 @@ class TrufiApp extends StatelessWidget {
 
 class LocalizedMaterialApp extends StatelessWidget {
   const LocalizedMaterialApp(
-      this.customOverlayWidget, this.customBetweenFabWidget,
-      {Key key, this.customHomePage})
-      : super(key: key);
+    this.customOverlayWidget,
+    this.customBetweenFabWidget, {
+    Key key,
+    this.customHomePage,
+    this.routes,
+  }) : super(key: key);
 
   final LocaleWidgetBuilder customOverlayWidget;
   final WidgetBuilder customBetweenFabWidget;
   final Widget customHomePage;
+  final Map<String, WidgetBuilder> routes;
 
   @override
   Widget build(BuildContext context) {
@@ -238,6 +246,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
       SettingPanel.route: (context) => const SettingPanel(),
     };
+    routes.addAll(this.routes??{});
 
     return BlocBuilder<PreferencesCubit, PreferenceState>(
       builder: (BuildContext context, state) {

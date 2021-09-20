@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
@@ -59,6 +60,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
     final localization = TrufiLocalization.of(context);
     final homePageCubit = context.watch<HomePageCubit>();
     final homePageState = homePageCubit.state;
+    final config = context.read<ConfigurationCubit>().state;
     return Scaffold(
       key: const ValueKey(keys.homePage),
       backgroundColor: const Color(0xffEAEAEA),
@@ -210,7 +212,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                                 SizedBox(
                                   width: double.infinity,
                                   child: Image.asset(
-                                    "assets/images/background-image2.png",
+                                    config.pageBackgroundAssetPath,
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -227,7 +229,6 @@ class _ResultsScreenState extends State<ResultsScreen> {
       ),
     );
   }
-
 
   Future<void> _fetchMoreitineraries({
     @required BuildContext context,
