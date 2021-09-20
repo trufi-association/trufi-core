@@ -111,8 +111,7 @@ class _PlanTransportScrenState extends State<PlanTransportScren>
             planPageController: widget.planPageController,
             customOverlayWidget: null,
             customBetweenFabWidget: null,
-            markerConfiguration: cfg.markers,
-            transportConfiguration: cfg.transportConf,
+            mapConfiguration: cfg.map,
           ),
           panel: homePageState.isFetching
               ? const Center(

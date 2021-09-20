@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
   final String text;
+  final TextStyle textStyle;
   final void Function() onPressed;
   final bool isDark;
   final double borderRadius;
@@ -12,6 +13,7 @@ class CustomTextButton extends StatelessWidget {
     Key key,
     @required this.text,
     @required this.onPressed,
+    this.textStyle,
     this.isDark = true,
     this.borderRadius = 18.0,
     this.height,
@@ -44,9 +46,10 @@ class CustomTextButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(
-            color: isDark ? Colors.white : theme.primaryColor,
-          ),
+          style: textStyle ??
+              TextStyle(
+                color: isDark ? Colors.white : theme.primaryColor,
+              ),
         ),
       ),
     );

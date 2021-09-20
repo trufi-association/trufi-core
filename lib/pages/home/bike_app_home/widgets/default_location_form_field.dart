@@ -29,9 +29,8 @@ class DefaultLocationFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final textStyle = theme.textTheme.subtitle1.copyWith(fontSize: 17);
-    final hintStyle = theme.textTheme.subtitle1.copyWith(fontSize: 17);
-    final titleStyle = theme.textTheme.bodyText1.copyWith(fontSize: 12);
+    final textStyle = theme.textTheme.subtitle1.copyWith(fontSize: 18);
+    final hintStyle = theme.textTheme.subtitle1.copyWith(fontSize: 18);
     return GestureDetector(
       onTap: () async {
         TypeLocationForm().isOrigin = isOrigin;
@@ -49,10 +48,9 @@ class DefaultLocationFormField extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            height: 40,
+            height: 48,
             margin: const EdgeInsets.only(
               left: 10.0,
-              right: 10.0,
               top: 14.0,
             ),
             padding: const EdgeInsets.all(0.0),
@@ -87,8 +85,8 @@ class DefaultLocationFormField extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              color: const Color(0xff747474),
-              height: 1.5,
+              color: theme.dividerColor,
+              height: 0.65,
             ),
           ),
           if (value != null && showTitle)
@@ -97,21 +95,13 @@ class DefaultLocationFormField extends StatelessWidget {
               left: 10,
               child: Text(
                 hintText,
-                style: titleStyle,
+                style: theme.textTheme.bodyText1.copyWith(
+                  fontSize: 11,
+                ),
               ),
             ),
         ],
       ),
     );
   }
-}
-
-class TypeLocationForm {
-  static final TypeLocationForm _singleton = TypeLocationForm._internal();
-
-  factory TypeLocationForm() => _singleton;
-
-  TypeLocationForm._internal();
-
-  bool isOrigin = false;
 }

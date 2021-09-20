@@ -46,17 +46,15 @@ class RouteNumber extends StatelessWidget {
                     width: 20,
                     child: icon,
                   )
-                else
+                else if (transportMode == TransportMode.bicycle)
                   SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: transportMode.getImage(
-                          color: transportMode == TransportMode.bicycle
-                              ? transportMode.color
-                              : Colors.white)),
+                    height: 20,
+                    width: 20,
+                    child: transportMode.getImage(color: transportMode.color),
+                  ),
                 if (transportMode != TransportMode.bicycle)
                   Container(
-                    padding: const EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: Text(
                       text,
                       style: theme.primaryTextTheme.headline6.copyWith(
@@ -79,7 +77,7 @@ class RouteNumber extends StatelessWidget {
             ),
           ),
           Text(
-            ' - ${distance ?? ''} ${duration != null ? "($duration)" : ''} ',
+            ' - ${duration ?? ''}, ${distance ?? ''}',
             style: theme.primaryTextTheme.bodyText1
                 .copyWith(fontSize: 13, color: Colors.grey[700]),
           ),

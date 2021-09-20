@@ -312,6 +312,14 @@ class PlanItinerary extends Equatable {
     });
   }
 
+  PlanItineraryLeg firstDeparture() {
+    final firstDeparture = compressLegs.firstWhere(
+      (element) => element.transitLeg ?? false,
+      orElse: () => null,
+    );
+    return firstDeparture;
+  }
+
   @override
   List<Object> get props => [
         legs,

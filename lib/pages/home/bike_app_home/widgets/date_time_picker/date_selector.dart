@@ -53,7 +53,7 @@ class DateSelector extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 10.0,
                 right: 10.0,
-                top: 9.5,
+                top: 10.0,
               ),
               child: Row(
                 children: <Widget>[
@@ -72,7 +72,7 @@ class DateSelector extends StatelessWidget {
                                 ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
                                 : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
                         style: theme.textTheme.subtitle1
-                            .copyWith(fontSize: 17, color: color),
+                            .copyWith(fontSize: 18, color: color),
                         maxLines: 1,
                       ),
                     ),
@@ -88,8 +88,8 @@ class DateSelector extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 7),
               child: Container(
-                color: color ?? const Color(0xff747474),
-                height: 1.5,
+                color: theme.dividerColor,
+                height: 0.6,
               ),
             ),
           ],

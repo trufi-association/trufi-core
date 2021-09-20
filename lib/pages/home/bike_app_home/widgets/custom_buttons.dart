@@ -10,6 +10,7 @@ class SwapButton extends StatelessWidget {
   final void Function() onSwap;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return IconButton(
       padding: EdgeInsets.zero,
       splashRadius: 22,
@@ -18,9 +19,32 @@ class SwapButton extends StatelessWidget {
             ? Icons.swap_vert
             : Icons.swap_horiz,
         size: 22,
-        color: const Color(0xff747474),
+        color: theme.textTheme.subtitle1.color,
       ),
       onPressed: onSwap,
+    );
+  }
+}
+
+class ResetButton extends StatelessWidget {
+  const ResetButton({
+    Key key,
+    @required this.onReset,
+  }) : super(key: key);
+  final void Function() onReset;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return IconButton(
+      padding: EdgeInsets.zero,
+      splashRadius: 22,
+      icon: Icon(
+        Icons.clear,
+        size: 22,
+        color: theme.textTheme.subtitle1.color,
+      ),
+      onPressed: onReset,
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home/search_location/location_form_field.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
 
@@ -606,4 +605,14 @@ class _BuildItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class TypeLocationForm {
+  static final TypeLocationForm _singleton = TypeLocationForm._internal();
+
+  factory TypeLocationForm() => _singleton;
+
+  TypeLocationForm._internal();
+
+  bool isOrigin = false;
 }

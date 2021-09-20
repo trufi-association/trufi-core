@@ -60,7 +60,7 @@ class ItineraryLegOverview extends StatelessWidget {
                                     height: 24,
                                     width: 24,
                                     child: FittedBox(
-                                        child: config.markers.fromMarker),
+                                        child: config.map.markersConfiguration.fromMarker),
                                   ),
                                 ),
                                 TransportDash(
@@ -178,7 +178,7 @@ class ItineraryLegOverview extends StatelessWidget {
                                 height: 24,
                                 width: 24,
                                 child:
-                                    FittedBox(child: config.markers.toMarker)),
+                                    FittedBox(child: config.map.markersConfiguration.toMarker)),
                           ),
                         ],
                       ),
