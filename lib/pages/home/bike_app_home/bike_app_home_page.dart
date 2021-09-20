@@ -107,169 +107,160 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
             ),
           ),
         ),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                const Spacer(),
-                if (isPortrait)
-                  SizedBox(
-                    width: double.infinity,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Center(
                     child: Image.asset(
                       config.pageBackgroundAssetPath,
                       fit: BoxFit.fill,
+                      height: 200,
                     ),
-                  )
-                else
-                  Image.asset(
-                    config.pageBackgroundAssetPath,
-                    fit: BoxFit.fill,
-                  ),
-              ],
-            ),
-            SafeArea(
-              child: Stack(
-                children: [
-                  ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    children: [
-                      // TODO translate
-                      const SizedBox(height: 30),
-                      Text(
-                        "Moin!",
-                        style: theme.textTheme.bodyText2.copyWith(
-                          fontSize: 34,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      if (isPortrait)
-                        BAFormFieldsPortrait(
-                          spaceBetween: 20,
-                          onSaveFrom: (TrufiLocation fromPlace) =>
-                              homePageCubit.setFromPlace(fromPlace),
-                          onSaveTo: (TrufiLocation fromPlace) =>
-                              homePageCubit.setToPlace(fromPlace),
-                          onSwap: () => homePageCubit.swapLocations(),
-                          onReset: () => homePageCubit.reset(),
-                        )
-                      else
-                        BAFormFieldsLandscape(
-                          onSaveFrom: (TrufiLocation fromPlace) =>
-                              homePageCubit.setFromPlace(fromPlace),
-                          onSaveTo: (TrufiLocation fromPlace) =>
-                              homePageCubit.setToPlace(fromPlace),
-                          onSwap: () => homePageCubit.swapLocations(),
-                        ),
-                      const SizedBox(height: 35),
-                      DateSelector(
-                        color: const Color(0xff747474),
-                        onFetchPlan: () {},
-                      ),
-                      const SizedBox(height: 35),
-                      const FactorSelector(),
-                      const SizedBox(height: 40),
-                      Text(
-                        "Favoriten",
-                        style: theme.textTheme.subtitle1.copyWith(fontSize: 18),
-                      ),
-                      SizedBox(
-                        height: 65,
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: BlocBuilder<SearchLocationsCubit,
-                                  SearchLocationsState>(
-                                builder: (context, state) {
-                                  return ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics: const BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          ...state.myDefaultPlaces
-                                              .map(
-                                                (place) => LocationIcon(
-                                                  location: place,
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                ),
-                                              )
-                                              .toList(),
-                                          ...state.myPlaces
-                                              .map(
-                                                (place) => LocationIcon(
-                                                  location: place,
-                                                  margin: const EdgeInsets
-                                                      .symmetric(horizontal: 5),
-                                                ),
-                                              )
-                                              .toList(),
-                                          Container(
-                                            height: 48,
-                                            width: 48,
-                                            margin:
-                                                const EdgeInsets.only(left: 8),
-                                            child: InkWell(
-                                              onTap: () {
-                                                _addNewPlace(context);
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.add,
-                                                  size: 28,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 50),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: CustomTextButton(
-                          text: 'SUCHEN',
-                          onPressed: () {
-                            _callFetchPlan(context);
-                          },
-                          color: theme.accentColor,
-                          textStyle: theme.textTheme.headline6.copyWith(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                          borderRadius: 5,
-                          height: 50,
-                          width: 200,
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
-            ),
-            if (config.animations.loading != null && homePageState.isFetching)
-              Positioned.fill(
-                  child: Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(child: CircularProgressIndicator()),
-              ))
-          ],
+              ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                children: [
+                  // TODO translate
+                  const SizedBox(height: 30),
+                  Text(
+                    "Moin!",
+                    style: theme.textTheme.bodyText2.copyWith(
+                      fontSize: 34,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  if (isPortrait)
+                    BAFormFieldsPortrait(
+                      spaceBetween: 20,
+                      onSaveFrom: (TrufiLocation fromPlace) =>
+                          homePageCubit.setFromPlace(fromPlace),
+                      onSaveTo: (TrufiLocation fromPlace) =>
+                          homePageCubit.setToPlace(fromPlace),
+                      onSwap: () => homePageCubit.swapLocations(),
+                      onReset: () => homePageCubit.reset(),
+                    )
+                  else
+                    BAFormFieldsLandscape(
+                      onSaveFrom: (TrufiLocation fromPlace) =>
+                          homePageCubit.setFromPlace(fromPlace),
+                      onSaveTo: (TrufiLocation fromPlace) =>
+                          homePageCubit.setToPlace(fromPlace),
+                      onSwap: () => homePageCubit.swapLocations(),
+                    ),
+                  const SizedBox(height: 35),
+                  DateSelector(
+                    color: const Color(0xff747474),
+                    onFetchPlan: () {},
+                  ),
+                  const SizedBox(height: 35),
+                  const FactorSelector(),
+                  const SizedBox(height: 40),
+                  Text(
+                    "Favoriten",
+                    style: theme.textTheme.subtitle1.copyWith(fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: 65,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: BlocBuilder<SearchLocationsCubit,
+                              SearchLocationsState>(
+                            builder: (context, state) {
+                              return ListView(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                shrinkWrap: true,
+                                children: [
+                                  Row(
+                                    children: [
+                                      ...state.myDefaultPlaces
+                                          .map(
+                                            (place) => LocationIcon(
+                                              location: place,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                            ),
+                                          )
+                                          .toList(),
+                                      ...state.myPlaces
+                                          .map(
+                                            (place) => LocationIcon(
+                                              location: place,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                            ),
+                                          )
+                                          .toList(),
+                                      Container(
+                                        height: 48,
+                                        width: 48,
+                                        margin: const EdgeInsets.only(left: 8),
+                                        child: InkWell(
+                                          onTap: () {
+                                            _addNewPlace(context);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              color: Colors.transparent,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(),
+                                            ),
+                                            child: const Icon(
+                                              Icons.add,
+                                              size: 28,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: CustomTextButton(
+                      text: 'SUCHEN',
+                      onPressed: () {
+                        _callFetchPlan(context);
+                      },
+                      color: theme.accentColor,
+                      textStyle: theme.textTheme.headline6
+                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                      borderRadius: 5,
+                      height: 50,
+                      width: 200,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+              if (config.animations.loading != null && homePageState.isFetching)
+                Positioned.fill(
+                    child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
+                ))
+            ],
+          ),
         ),
         drawer: const TrufiDrawer(HomePage.route),
       ),

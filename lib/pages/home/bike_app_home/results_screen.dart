@@ -139,6 +139,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 35),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         child: CardItinerary(
                           itinerary: homePageState?.plan?.itineraries[index],
                         ),
@@ -148,7 +149,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
                       Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 50),
+                            padding: const EdgeInsets.only(
+                              top: 50,
+                              bottom: 10,
+                            ),
                             child: Center(
                               child: homePageState.isFetchLater
                                   ? const CircularProgressIndicator()

@@ -26,6 +26,8 @@ class FactorSelector extends StatelessWidget {
             child: Text(
               "Wie viel Rad möchtest du fahren?",
               style: theme.textTheme.subtitle1.copyWith(fontSize: 18),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
           value: listTriangleFactor.firstWhere(
