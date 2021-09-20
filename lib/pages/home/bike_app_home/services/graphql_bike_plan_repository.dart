@@ -54,6 +54,7 @@ class GraphqlBikePlanRepository {
   }) async {
     final dateNow = DateTime.now();
     final date = advancedOptions?.date ?? dateNow;
+
     final QueryOptions planAdvancedQuery = QueryOptions(
       document: addFragments(parseString(bike_query.queryBikePublicTransport), [
         addFragments(bike_fragment.bikePublicTransportFragment, [
@@ -81,10 +82,7 @@ class GraphqlBikePlanRepository {
         'time': parseTime(date),
         // 'maxWalkDistance': 4828.032,
         'numItineraries': 4,
-        'bikeAndPublicModes': [
-          {'mode': TransportMode.bicycle.name},
-          {'mode': TransportMode.transit.name},
-        ],
+        'bikeAndPublicModes': offTimes(date),
         'triangle': advancedOptions.triangleFactor.value,
         'arriveBy': advancedOptions.arriveBy,
       },
@@ -101,5 +99,28 @@ class GraphqlBikePlanRepository {
     final planData = Plan.fromMap(
         planAdvancedData.data['viewer']['plan'] as Map<String, dynamic>);
     return planData;
+  }
+
+  List<Map<String, String>> offTimes(DateTime date) {
+    final isWeekend =
+        date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
+    List<Map<String, String>> bikeAndPublicModes = [
+      {'mode': TransportMode.bicycle.name},
+      {'mode': TransportMode.transit.name},
+    ];
+    if (isWeekend) {
+      if (date.hour > 15 && date.hour < 19) {
+        bikeAndPublicModes = [
+          {'mode': TransportMode.bicycle.name},
+        ];
+      }
+    } else {
+      if (date.hour > 5 && date.hour < 10) {
+        bikeAndPublicModes = [
+          {'mode': TransportMode.bicycle.name},
+        ];
+      }
+    }
+    return bikeAndPublicModes;
   }
 }
