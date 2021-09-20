@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
+import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
+import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/pages/home/bike_app_home/widgets/itinerary_details/itinerary_leg_overview.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 
@@ -33,12 +35,21 @@ class _BikeDetailScreenState extends State<BikeDetailScreen> {
       backgroundColor: const Color(0xFFF4F4F4),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, size: 30),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () async {
+            // await homePageCubit.reset();
             Navigator.maybePop(context);
           },
         ),
+        actions: const [
+          Icon(
+            Icons.update,
+            color: Colors.white,
+            size: 30,
+          ),
+          SizedBox(width: 20)
+        ],
         title: Row(
           children: [
             Flexible(
@@ -65,8 +76,7 @@ class _BikeDetailScreenState extends State<BikeDetailScreen> {
           planPageController: widget.planPageController,
           customOverlayWidget: null,
           customBetweenFabWidget: null,
-          markerConfiguration: cfg.markers,
-          transportConfiguration: cfg.transportConf,
+          mapConfiguration: cfg.map,
         ),
         panel: ItineraryDetails(
           planPageController: widget.planPageController,
@@ -87,39 +97,38 @@ class ItineraryDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.read<ThemeCubit>().state.bottomBarTheme;
     final localization = TrufiLocalization.of(context);
+    final homePageState = context.read<HomePageCubit>().state;
+    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     final itinerary = planPageController.selectedItinerary;
-    final index = planPageController.plan.itineraries.indexOf(
-      itinerary,
-    );
     return Theme(
       data: theme,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         children: [
+          const SizedBox(height: 10),
           Text(
-            "Route $index Uber Station X$index",
-            style:
-                theme.textTheme.bodyText2.copyWith(fontWeight: FontWeight.bold),
+            // TODO translate
+            itinerary.firstDeparture()?.headSign ?? "Nur Fahrradroute",
+            style: theme.textTheme.bodyText1.copyWith(
+              fontSize: 20,
+            ),
           ),
-          Row(
-            children: [
-              Text(
-                "${itinerary.legs[0].fromPlace.name} ",
-                style: theme.textTheme.bodyText1.copyWith(fontSize: 17),
-              ),
-              Text(
-                localization.instructionDurationMinutes(itinerary.time),
-                style: theme.textTheme.bodyText2.copyWith(fontSize: 17),
-              ),
-              Text(
-                " (${itinerary.getDistanceString(localization)})",
-                style: theme.textTheme.bodyText2.copyWith(fontSize: 17),
-              ),
-            ],
-          ),
+          const SizedBox(height: 5),
           Text(
-            "Mehr Bike als Bahn",
-            style: theme.primaryTextTheme.bodyText1,
+            homePageState.fromPlace.displayName(localization),
+            style: theme.textTheme.subtitle1.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffADADAD),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            payloadDataPlanState.triangleFactor.translateValue(localization),
+            style: theme.primaryTextTheme.bodyText2.copyWith(
+              fontSize: 16,
+              fontStyle: FontStyle.italic,
+            ),
           ),
           Container(
             color: Colors.transparent,

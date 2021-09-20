@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/pages/home/setting_payload/date_time_picker/date_time_picker.dart';
+
+import 'date_time_maps_picker.dart';
 
 class DateSelector extends StatelessWidget {
   const DateSelector({
@@ -27,11 +28,10 @@ class DateSelector extends StatelessWidget {
       height: 40,
       child: GestureDetector(
         onTap: () async {
-          final tempPickedDate = await showModalBottomSheet<DateTimeConf>(
+          final tempPickedDate = await showDialog<DateTimeConf>(
             context: context,
-            isDismissible: false,
             builder: (BuildContext builder) {
-              return DateTimePicker(
+              return DateTimeMapsPicker(
                 dateConf: DateTimeConf(
                   payloadDataPlanCubit.state.date,
                   isArriveBy: payloadDataPlanCubit.state.arriveBy,
@@ -53,7 +53,7 @@ class DateSelector extends StatelessWidget {
               padding: const EdgeInsets.only(
                 left: 10.0,
                 right: 10.0,
-                top: 9.5,
+                top: 10.0,
               ),
               child: Row(
                 children: <Widget>[
@@ -72,7 +72,7 @@ class DateSelector extends StatelessWidget {
                                 ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
                                 : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
                         style: theme.textTheme.subtitle1
-                            .copyWith(fontSize: 17, color: color),
+                            .copyWith(fontSize: 18, color: color),
                         maxLines: 1,
                       ),
                     ),
@@ -88,8 +88,8 @@ class DateSelector extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 7),
               child: Container(
-                color: color ?? const Color(0xff747474),
-                height: 1.5,
+                color: theme.dividerColor,
+                height: 0.6,
               ),
             ),
           ],

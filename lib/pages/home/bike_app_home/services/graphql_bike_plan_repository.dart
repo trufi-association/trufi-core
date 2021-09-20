@@ -79,14 +79,14 @@ class GraphqlBikePlanRepository {
         'toPlace': parsePlace(toLocation),
         'date': parseDateFormat(date),
         'time': parseTime(date),
-        'maxWalkDistance': 4828.032,
+        // 'maxWalkDistance': 4828.032,
         'numItineraries': 4,
         'bikeAndPublicModes': [
-          //TODO define bike-public-transport or - bike-park-public transport
           {'mode': TransportMode.bicycle.name},
-          // {'mode': TransportMode.bicycle.name, 'qualifier': 'PARK'},
           {'mode': TransportMode.transit.name},
         ],
+        'triangle': advancedOptions.triangleFactor.value,
+        'arriveBy': advancedOptions.arriveBy,
       },
     );
     final planAdvancedData = await client.query(planAdvancedQuery);

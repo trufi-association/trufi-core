@@ -192,7 +192,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.funicular: null,
     TransportMode.gondola: null,
     TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff018000),
+    TransportMode.rail: const Color(0xff83b23b),
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,

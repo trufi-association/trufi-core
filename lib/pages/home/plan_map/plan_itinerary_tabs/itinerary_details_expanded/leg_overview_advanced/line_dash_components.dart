@@ -39,7 +39,7 @@ class TransportDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TrufiLocalization localization = TrufiLocalization.of(context);
-    final configuration = context.read<ConfigurationCubit>().state;
+    final cfg = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.read<HomePageCubit>();
     final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
     final isTypeBikeRentalNetwork =
@@ -65,7 +65,9 @@ class TransportDash extends StatelessWidget {
                 ? SizedBox(
                     height: 24,
                     width: 24,
-                    child: FittedBox(child: configuration.markers.fromMarker),
+                    child: FittedBox(
+                      child: cfg.map.markersConfiguration.fromMarker,
+                    ),
                   )
                 : null,
           ),
@@ -93,9 +95,8 @@ class TransportDash extends StatelessWidget {
                   planPageController: planPageController,
                 ),
               ),
-              if (configuration.planItineraryLegBuilder != null)
-                configuration.planItineraryLegBuilder(context, leg) ??
-                    Container(),
+              if (cfg.planItineraryLegBuilder != null)
+                cfg.planItineraryLegBuilder(context, leg) ?? Container(),
               if (leg?.toPlace?.vehicleParkingWithEntrance?.vehicleParking
                           ?.tags !=
                       null &&

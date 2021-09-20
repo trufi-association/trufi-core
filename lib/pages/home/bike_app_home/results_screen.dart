@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
@@ -16,12 +15,8 @@ import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
 
 import '../../../keys.dart' as keys;
-import '../../../models/trufi_place.dart';
 import '../../../trufi_app.dart';
-import 'widgets/ba_form_field_landscape.dart';
-import 'widgets/ba_form_field_portrait.dart';
 import 'widgets/card_itinerary.dart';
-import 'widgets/date_time_picker/date_selector.dart';
 
 class ResultsScreen extends StatefulWidget {
   static const String route = '/';
@@ -62,7 +57,6 @@ class _ResultsScreenState extends State<ResultsScreen> {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     final localization = TrufiLocalization.of(context);
-    final config = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final homePageState = homePageCubit.state;
     return Scaffold(
@@ -70,13 +64,20 @@ class _ResultsScreenState extends State<ResultsScreen> {
       backgroundColor: const Color(0xffEAEAEA),
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, size: 30),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () async {
-            // await homePageCubit.reset();
             Navigator.maybePop(context);
           },
         ),
+        actions: const [
+          Icon(
+            Icons.update,
+            color: Colors.white,
+            size: 30,
+          ),
+          SizedBox(width: 20)
+        ],
         title: Row(
           children: [
             Flexible(
@@ -97,163 +98,136 @@ class _ResultsScreenState extends State<ResultsScreen> {
           ],
         ),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    children: [
-                      if (isPortrait)
-                        BAFormFieldsPortrait(
-                          spaceBetween: 5,
-                          onSaveFrom: (TrufiLocation fromPlace) =>
-                              homePageCubit.setFromPlace(fromPlace),
-                          onSaveTo: (TrufiLocation fromPlace) =>
-                              homePageCubit.setToPlace(fromPlace),
-                          onSwap: () => homePageCubit
-                              .swapLocations()
-                              .then((value) => _callFetchPlan(context)),
-                          showTitle: false,
-                        )
-                      else
-                        BAFormFieldsLandscape(
-                          onSaveFrom: (TrufiLocation fromPlace) =>
-                              homePageCubit.setFromPlace(fromPlace),
-                          onSaveTo: (TrufiLocation fromPlace) =>
-                              homePageCubit.setToPlace(fromPlace),
-                          onSwap: () => homePageCubit
-                              .swapLocations()
-                              .then((value) => _callFetchPlan(context)),
+      body: ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        itemCount: homePageState?.plan?.itineraries?.length,
+        itemBuilder: (_, index) {
+          return Stack(
+            children: [
+              SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (index == 0)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 40, bottom: 30),
+                        child: Center(
+                          child: Text(
+                            "Es gibt ${homePageState?.plan?.itineraries?.length} mögliche Routen",
+                            style: theme.textTheme.subtitle1
+                                .copyWith(fontSize: 25),
+                          ),
                         ),
-                      const SizedBox(height: 15),
-                      DateSelector(
-                        color: const Color(0xff747474),
-                        onFetchPlan: () {},
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
-                Expanded(
-                  child: Container(
-                    color: const Color(0xffF4F4F4),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: homePageState?.plan?.itineraries?.length,
-                      itemBuilder: (_, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (index == 0)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 30),
-                                child: Text(
-                                  "Es gibt ${homePageState?.plan?.itineraries?.length} mögliche Routen",
-                                  style: theme.textTheme.subtitle1
-                                      .copyWith(fontSize: 25),
-                                ),
-                              ),
-                            GestureDetector(
-                              onTap: () {
-                                _planPageController.inSelectedItinerary.add(
-                                  homePageState?.plan?.itineraries[index],
-                                );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BikeDetailScreen(
-                                      planPageController: _planPageController,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 10),
-                                child: CardItinerary(
-                                  index: index + 1,
-                                  itinerary:
-                                      homePageState?.plan?.itineraries[index],
-                                ),
-                              ),
+                    GestureDetector(
+                      onTap: () {
+                        _planPageController.inSelectedItinerary.add(
+                          homePageState?.plan?.itineraries[index]
+                              .copyWith(isOnlyShowItinerary: true),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BikeDetailScreen(
+                              planPageController: _planPageController,
                             ),
-                            if (index ==
-                                homePageState.plan.itineraries.length - 1)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 25),
-                                child: Center(
-                                  child: homePageState.isFetchLater
-                                      ? const CircularProgressIndicator()
-                                      : OutlinedButton(
-                                          onPressed: () async {
-                                            _fetchMoreitineraries(
-                                                context: context,
-                                                isFetchEarlier: false);
-                                          },
-                                          style: ButtonStyle(
-                                            padding: MaterialStateProperty.all<
-                                                    EdgeInsets>(
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 10)),
-                                            side: MaterialStateProperty.all<
-                                                BorderSide>(
-                                              BorderSide(
-                                                  color: Theme.of(context)
-                                                      .accentColor),
-                                            ),
-                                          ),
-                                          child: SizedBox(
-                                            width: 140,
-                                            child: Text(
-                                              // TODO translate
-                                              'ZEIG MEHR',
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .accentColor),
-                                              textAlign: TextAlign.center,
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                          ],
+                          ),
                         );
                       },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: CardItinerary(
+                          itinerary: homePageState?.plan?.itineraries[index],
+                        ),
+                      ),
                     ),
-                  ),
+                    if (index == homePageState.plan.itineraries.length - 1)
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Center(
+                              child: homePageState.isFetchLater
+                                  ? const CircularProgressIndicator()
+                                  : OutlinedButton(
+                                      onPressed: () async {
+                                        _fetchMoreitineraries(
+                                            context: context,
+                                            isFetchEarlier: false);
+                                      },
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all<
+                                                EdgeInsets>(
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 10)),
+                                        side: MaterialStateProperty.all<
+                                            BorderSide>(
+                                          BorderSide(
+                                            color:
+                                                theme.textTheme.subtitle1.color,
+                                          ),
+                                        ),
+                                        shape: MaterialStateProperty.all<
+                                            OutlinedBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        minimumSize:
+                                            MaterialStateProperty.all<Size>(
+                                          const Size(200, 50),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        // TODO translate
+                                        "MEHR ANZEIGEN",
+                                        style:
+                                            theme.textTheme.subtitle1.copyWith(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          if (isPortrait)
+                            Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      homePageState.plan.itineraries.length > 3
+                                          ? 0
+                                          : ((4 -
+                                                      homePageState.plan
+                                                          .itineraries.length) *
+                                                  110.0) -
+                                              80,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: Image.asset(
+                                    "assets/images/background-image2.png",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ],
+                            )
+                        ],
+                      ),
+                  ],
                 ),
-              ],
-            ),
-            if (config.animations.loading != null && homePageState.isFetching)
-              Positioned.fill(
-                  child: Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(child: CircularProgressIndicator()),
-              ))
-          ],
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Future<void> _callFetchPlan(BuildContext context) async {
-    final TrufiLocalization localization = TrufiLocalization.of(context);
-    final homePageCubit = context.read<HomePageCubit>();
-    final appReviewCubit = context.read<AppReviewCubit>();
-    final correlationId = context.read<PreferencesCubit>().state.correlationId;
-    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
-    await homePageCubit
-        .fetchPlan(correlationId, localization,
-            advancedOptions: payloadDataPlanCubit.state, removePlan: false)
-        .then((value) => appReviewCubit.incrementReviewWorthyActions())
-        .catchError((error) => onFetchError(context, error as Exception));
-  }
 
   Future<void> _fetchMoreitineraries({
     @required BuildContext context,
@@ -277,5 +251,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
           .then((value) => appReviewCubit.incrementReviewWorthyActions())
           .catchError((error) => onFetchError(context, error as Exception));
     }
+    _planPageController =
+        PlanPageController(homePageCubit.state.plan, widget.ad);
   }
 }

@@ -12,7 +12,7 @@ void main() {
   const double _longitude = 129.0;
   final LatLng _point = LatLng(_latitude, _longitude);
   PlanItineraryLeg _leg;
-  const MarkerConfiguration markers = MarkerConfigurationDefault();
+  const MarkerConfiguration markers = DefaultMarkerConfiguration();
   setUp(() {
     _leg = PlanItineraryLeg(
         points: "points",

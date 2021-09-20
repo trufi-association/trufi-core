@@ -13,3 +13,4 @@ part 'optimize_type.dart';
 part 'transport_mode.dart';
 part 'walk_board_cost.dart';
 part 'walking_speed.dart';
+part 'triangle_factor.dart';

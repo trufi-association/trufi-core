@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
@@ -22,6 +20,7 @@ import '../home_page.dart';
 import 'widgets/ba_form_field_landscape.dart';
 import 'widgets/ba_form_field_portrait.dart';
 import 'widgets/date_time_picker/date_selector.dart';
+import 'widgets/factor_selector.dart';
 
 class BikeAppHomePage extends StatefulWidget {
   static const String route = '/';
@@ -71,28 +70,36 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
         key: _scaffoldKey,
         backgroundColor: const Color(0xFFF4F4F4),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(120),
           child: AppBar(
             elevation: 0,
-            toolbarHeight: 100,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: IconButton(
-                onPressed: () => _scaffoldKey.currentState.openDrawer(),
-                icon: const Icon(
-                  Icons.menu_outlined,
-                  size: 35,
-                ),
-              ),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(right: 15),
+            toolbarHeight: 120,
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            title: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Text(
-                    "Bike & Bahn",
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                children: [
+                  SizedBox(
+                    height: 45.0,
+                    width: 45.0,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                      icon: const Icon(
+                        Icons.menu_outlined,
+                        size: 45,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text(
+                    "Nicht ohne mein Rad",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
                     textAlign: TextAlign.right,
                   ),
                 ],
@@ -100,206 +107,169 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
             ),
           ),
         ),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                children: [
-                  // TODO translate
-                  const SizedBox(height: 35),
-                  Text(
-                    "Willkomment!",
-                    style: theme.textTheme.subtitle1.copyWith(fontSize: 30),
-                  ),
-                  const SizedBox(height: 28),
-                  if (isPortrait)
-                    BAFormFieldsPortrait(
-                      spaceBetween: 20,
-                      onSaveFrom: (TrufiLocation fromPlace) =>
-                          homePageCubit.setFromPlace(fromPlace),
-                      onSaveTo: (TrufiLocation fromPlace) =>
-                          homePageCubit.setToPlace(fromPlace),
-                      onSwap: () => homePageCubit.swapLocations(),
-                    )
-                  else
-                    BAFormFieldsLandscape(
-                      onSaveFrom: (TrufiLocation fromPlace) =>
-                          homePageCubit.setFromPlace(fromPlace),
-                      onSaveTo: (TrufiLocation fromPlace) =>
-                          homePageCubit.setToPlace(fromPlace),
-                      onSwap: () => homePageCubit.swapLocations(),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                const Spacer(),
+                if (isPortrait)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Image.asset(
+                      config.pageBackgroundAssetPath,
+                      fit: BoxFit.fill,
                     ),
-                  const SizedBox(height: 25),
-                  if (isPortrait)
-                    Column(
-                      children: [
-                        DateSelector(
-                          color: const Color(0xff747474),
-                          onFetchPlan: () {},
+                  )
+                else
+                  Image.asset(
+                    config.pageBackgroundAssetPath,
+                    fit: BoxFit.fill,
+                  ),
+              ],
+            ),
+            SafeArea(
+              child: Stack(
+                children: [
+                  ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    children: [
+                      // TODO translate
+                      const SizedBox(height: 30),
+                      Text(
+                        "Moin!",
+                        style: theme.textTheme.bodyText2.copyWith(
+                          fontSize: 34,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
                         ),
-                        const SizedBox(height: 35),
-                        Row(
+                      ),
+                      const SizedBox(height: 10),
+                      if (isPortrait)
+                        BAFormFieldsPortrait(
+                          spaceBetween: 20,
+                          onSaveFrom: (TrufiLocation fromPlace) =>
+                              homePageCubit.setFromPlace(fromPlace),
+                          onSaveTo: (TrufiLocation fromPlace) =>
+                              homePageCubit.setToPlace(fromPlace),
+                          onSwap: () => homePageCubit.swapLocations(),
+                          onReset: () => homePageCubit.reset(),
+                        )
+                      else
+                        BAFormFieldsLandscape(
+                          onSaveFrom: (TrufiLocation fromPlace) =>
+                              homePageCubit.setFromPlace(fromPlace),
+                          onSaveTo: (TrufiLocation fromPlace) =>
+                              homePageCubit.setToPlace(fromPlace),
+                          onSwap: () => homePageCubit.swapLocations(),
+                        ),
+                      const SizedBox(height: 35),
+                      DateSelector(
+                        color: const Color(0xff747474),
+                        onFetchPlan: () {},
+                      ),
+                      const SizedBox(height: 35),
+                      const FactorSelector(),
+                      const SizedBox(height: 40),
+                      Text(
+                        "Favoriten",
+                        style: theme.textTheme.subtitle1.copyWith(fontSize: 18),
+                      ),
+                      SizedBox(
+                        height: 65,
+                        child: Row(
                           children: [
-                            const Text(
-                              'Mehr Rad',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Expanded(
-                              child: Slider(
-                                value: rating,
-                                onChanged: (value) {
-                                  setState(() {
-                                    log(value.toString());
-                                    rating = value;
-                                  });
+                            Flexible(
+                              child: BlocBuilder<SearchLocationsCubit,
+                                  SearchLocationsState>(
+                                builder: (context, state) {
+                                  return ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          ...state.myDefaultPlaces
+                                              .map(
+                                                (place) => LocationIcon(
+                                                  location: place,
+                                                  margin: const EdgeInsets
+                                                      .symmetric(horizontal: 5),
+                                                ),
+                                              )
+                                              .toList(),
+                                          ...state.myPlaces
+                                              .map(
+                                                (place) => LocationIcon(
+                                                  location: place,
+                                                  margin: const EdgeInsets
+                                                      .symmetric(horizontal: 5),
+                                                ),
+                                              )
+                                              .toList(),
+                                          Container(
+                                            height: 48,
+                                            width: 48,
+                                            margin:
+                                                const EdgeInsets.only(left: 8),
+                                            child: InkWell(
+                                              onTap: () {
+                                                _addNewPlace(context);
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.add,
+                                                  size: 28,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  );
                                 },
-                                label: '',
-                                max: 100,
                               ),
-                            ),
-                            const Text(
-                              'Mehr Offi',
-                              style: TextStyle(fontSize: 16),
                             ),
                           ],
                         ),
-                      ],
-                    )
-                  else
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: DateSelector(
-                            color: const Color(0xff747474),
-                            onFetchPlan: () {},
-                          ),
+                      ),
+                      const SizedBox(height: 50),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50),
+                        child: CustomTextButton(
+                          text: 'SUCHEN',
+                          onPressed: () {
+                            _callFetchPlan(context);
+                          },
+                          color: theme.accentColor,
+                          textStyle: theme.textTheme.headline6.copyWith(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          borderRadius: 5,
+                          height: 50,
+                          width: 200,
                         ),
-                        const SizedBox(width: 48.0),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const Text(
-                                'Mehr Rad',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Expanded(
-                                child: Slider(
-                                  value: rating,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      log(value.toString());
-                                      rating = value;
-                                    });
-                                  },
-                                  label: '',
-                                  max: 100,
-                                ),
-                              ),
-                              const Text(
-                                'Mehr Offi',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  const SizedBox(height: 25),
-                  Text(
-                    "Favoriten",
-                    style: theme.textTheme.subtitle1.copyWith(fontSize: 17),
-                  ),
-                  SizedBox(
-                    height: 80,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: BlocBuilder<SearchLocationsCubit,
-                              SearchLocationsState>(
-                            builder: (context, state) {
-                              return ListView(
-                                scrollDirection: Axis.horizontal,
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                children: [
-                                  Row(
-                                    children: [
-                                      ...state.myDefaultPlaces
-                                          .map(
-                                            (place) => LocationIcon(
-                                              location: place,
-                                              margin: const EdgeInsets.symmetric(
-                                                  horizontal: 5),
-                                            ),
-                                          )
-                                          .toList(),
-                                      ...state.myPlaces
-                                          .map(
-                                            (place) => LocationIcon(
-                                              location: place,
-                                              margin: const EdgeInsets.symmetric(
-                                                  horizontal: 5),
-                                            ),
-                                          )
-                                          .toList(),
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 5),
-                                        child: InkWell(
-                                          onTap: () {
-                                            _addNewPlace(context);
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              color: Colors.transparent,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                width: 2,
-                                                color: theme.accentColor,
-                                              ),
-                                            ),
-                                            child: Icon(
-                                              Icons.add,
-                                              color: theme.accentColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: CustomTextButton(
-                      text: 'SUCHEN',
-                      onPressed: () {
-                        _callFetchPlan(context);
-                      },
-                      color: theme.accentColor,
-                      borderRadius: 10,
-                      height: 45,
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              if (config.animations.loading != null && homePageState.isFetching)
-                Positioned.fill(
-                    child: Container(
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(child: CircularProgressIndicator()),
-                ))
-            ],
-          ),
+            ),
+            if (config.animations.loading != null && homePageState.isFetching)
+              Positioned.fill(
+                  child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(child: CircularProgressIndicator()),
+              ))
+          ],
         ),
         drawer: const TrufiDrawer(HomePage.route),
       ),
@@ -334,16 +304,5 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
             advancedOptions: payloadDataPlanCubit.state)
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
-    final homePageState = homePageCubit.state;
-    final hasPlan =
-        homePageState.plan != null && homePageState.plan.error == null;
-    if (hasPlan) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (BuildContext context) =>
-              ResultsScreen(plan: homePageState.plan),
-        ),
-      );
-    }
   }
 }

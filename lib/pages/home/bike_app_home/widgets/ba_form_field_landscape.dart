@@ -25,7 +25,7 @@ class BAFormFieldsLandscape extends StatelessWidget {
     final localization = TrufiLocalization.of(context);
     final homePageCubit = context.read<HomePageCubit>();
     final homePageState = homePageCubit.state;
-    final config = context.read<ConfigurationCubit>().state;
+    final cfg = context.read<ConfigurationCubit>().state;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -33,7 +33,7 @@ class BAFormFieldsLandscape extends StatelessWidget {
           child: DefaultLocationFormField(
             isOrigin: true,
             hintText: localization.searchPleaseSelectOrigin,
-            textLeadingImage: config.markers.fromMarker,
+            textLeadingImage: cfg.map.markersConfiguration.fromMarker,
             onSaved: onSaveFrom,
             value: homePageState.fromPlace,
           ),
@@ -51,7 +51,7 @@ class BAFormFieldsLandscape extends StatelessWidget {
           child: DefaultLocationFormField(
             isOrigin: false,
             hintText: localization.searchPleaseSelectDestination,
-            textLeadingImage: config.markers.toMarker,
+            textLeadingImage: cfg.map.markersConfiguration.toMarker,
             onSaved: onSaveTo,
             value: homePageState.toPlace,
           ),

@@ -79,13 +79,13 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   @override
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
-    final trufiConfiguration = context.read<ConfigurationCubit>().state;
+    final cfg = context.read<ConfigurationCubit>().state;
     final panelCubit = context.watch<PanelCubit>();
     final homePageCubit = context.read<HomePageCubit>();
     void onMapPress(LatLng location) {
       panelCubit.cleanPanel();
       setState(() {
-        tempMarker = trufiConfiguration.markers.buildToMarker(location);
+        tempMarker = cfg.map.markersConfiguration.buildToMarker(location);
       });
       _trufiMapController.move(
         center: location,
@@ -121,10 +121,10 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
             layerOptionsBuilder: (context) => [
               MarkerLayerOptions(markers: [
                 if (homePageCubit.state.fromPlace != null)
-                  trufiConfiguration.markers
+                  cfg.map.markersConfiguration
                       .buildFromMarker(homePageCubit.state.fromPlace.latLng),
                 if (homePageCubit.state.toPlace != null)
-                  trufiConfiguration.markers
+                  cfg.map.markersConfiguration
                       .buildToMarker(homePageCubit.state.toPlace.latLng),
                 if (tempMarker != null) tempMarker,
               ]),
@@ -159,7 +159,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
             bottom: 0,
             left: 10,
             child: SafeArea(
-              child: trufiConfiguration.map.mapAttributionBuilder(context),
+              child: cfg.map.mapAttributionBuilder(context),
             ),
           ),
           Positioned.fill(

@@ -24,7 +24,7 @@ class LocationIcon extends StatelessWidget {
     final theme = Theme.of(context);
     final homePageCubit = context.watch<HomePageCubit>();
     final homePageState = homePageCubit.state;
-    final config = context.read<ConfigurationCubit>().state;
+    final cfg = context.read<ConfigurationCubit>().state;
     return GestureDetector(
       onTap: () async {
         if (!location.isLatLngDefined) {
@@ -43,20 +43,24 @@ class LocationIcon extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(5),
+            width: 48,
+            height: 48,
             margin: margin ?? EdgeInsets.zero,
             decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(),
+                color: const Color(0xfff4f4f4),
+                border: Border.all(
+                  color: theme.accentColor,
+                ),
                 boxShadow: const [
                   BoxShadow(
                     offset: Offset(0.0, 1),
-                    blurRadius: 2.0,
+                    blurRadius: 1.0,
                   ),
                 ],
                 shape: BoxShape.circle),
             child: Icon(
               typeToIconData(location.type) ?? Icons.place,
+              color: theme.accentColor,
             ),
           ),
           Positioned(
@@ -87,7 +91,7 @@ class LocationIcon extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: config.markers.fromMarker,
+                    child: cfg.map.markersConfiguration.fromMarker,
                   )
                 else if (homePageState.toPlace == location)
                   Container(
@@ -98,7 +102,7 @@ class LocationIcon extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     padding: const EdgeInsets.all(1.7),
-                    child: config.markers.toMarker,
+                    child: cfg.map.markersConfiguration.toMarker,
                   )
                 else
                   Container(),

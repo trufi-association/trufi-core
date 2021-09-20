@@ -59,7 +59,7 @@ class TransportDash extends StatelessWidget {
                 ? SizedBox(
                     height: 24,
                     width: 24,
-                    child: FittedBox(child: configuration.markers.fromMarker),
+                    child: FittedBox(child: configuration.map.markersConfiguration.fromMarker),
                   )
                 : null,
           ),

@@ -42,7 +42,7 @@ class ChooseLocationPage extends StatefulWidget {
 class ChooseLocationPageState extends State<ChooseLocationPage> {
   final _trufiMapController = TrufiMapController();
   MapPosition position;
-  Marker _chooseOnMapMarker;
+  Widget _chooseOnMapMarker;
 
   bool loading = true;
   String fetchError;
@@ -51,8 +51,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   void initState() {
     super.initState();
     final cfg = context.read<ConfigurationCubit>().state;
-    final markerConfiguration = cfg.markers;
-    _chooseOnMapMarker = _selectedMarker(cfg.map.center, markerConfiguration);
+    final markersConfiguration = cfg.map.markersConfiguration;
+    _chooseOnMapMarker = _selectedMarker(cfg.map.center, markersConfiguration);
     if (widget.position != null) {
       _trufiMapController.mapController.onReady.then(
         (value) => _trufiMapController.move(
@@ -128,7 +128,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                     child: SizedBox(
                       height: 30,
                       width: 30,
-                      child: _chooseOnMapMarker?.builder(context),
+                      child: _chooseOnMapMarker,
                     ),
                   ),
                 ),
@@ -198,7 +198,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                         onPressed: () async {
                           Navigator.of(context).pop(ChooseLocationDetail(
                             LocationDetail(
-                              'Unknow',
+                              'Unknown',
                               '',
                               position.center,
                             ),
@@ -230,13 +230,13 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     );
   }
 
-  Marker _selectedMarker(
+  Widget _selectedMarker(
     LatLng location,
     MarkerConfiguration markerConfiguration,
   ) {
     return widget.isOrigin
-        ? markerConfiguration.buildFromMarker(location)
-        : markerConfiguration.buildToMarker(location);
+        ? markerConfiguration.fromMarker
+        : markerConfiguration.toMarker;
   }
 
   CancelableOperation<LocationDetail> cancelableOperation;

@@ -28,8 +28,15 @@ Marker buildTransferMarker(LatLng point) {
   );
 }
 
-Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
-    {VoidCallback onTap, Widget icon}) {
+Marker buildBusMarker(
+  LatLng point,
+  Color color,
+  PlanItineraryLeg leg, {
+  VoidCallback onTap,
+  Widget icon,
+  bool showIcon = true,
+  bool showText = true,
+}) {
   return Marker(
     width: 50.0,
     point: point,
@@ -46,27 +53,30 @@ Marker buildBusMarker(LatLng point, Color color, PlanItineraryLeg leg,
           fit: BoxFit.scaleDown,
           child: Row(
             children: [
-              if (icon != null)
-                SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: icon,
-                )
-              else if (leg.transportMode?.getImage() != null)
-                SizedBox(
-                    height: 28,
-                    width: 28,
-                    child: leg.transportMode.getImage(color: Colors.white))
-              else
-                Icon(leg.transportMode.icon, color: Colors.white),
-              if (leg.transportMode != TransportMode.walk)
+              if (showIcon) ...[
+                if (icon != null)
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: icon,
+                  )
+                else if (leg.transportMode?.getImage() != null)
+                  SizedBox(
+                      height: 28,
+                      width: 28,
+                      child: leg.transportMode.getImage(color: Colors.white))
+                else
+                  Icon(leg.transportMode.icon, color: Colors.white)
+              ],
+              if (showText && leg.transportMode != TransportMode.walk)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
-                    leg?.headSign != null ? ' ${leg.headSign}' : '',
+                    leg?.route?.shortName ??
+                        (leg?.headSign != null ? ' ${leg.headSign}' : ''),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 17,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

@@ -97,13 +97,3 @@ class LocationFormField extends StatelessWidget {
     );
   }
 }
-
-class TypeLocationForm {
-  static final TypeLocationForm _singleton = TypeLocationForm._internal();
-
-  factory TypeLocationForm() => _singleton;
-
-  TypeLocationForm._internal();
-
-  bool isOrigin = false;
-}

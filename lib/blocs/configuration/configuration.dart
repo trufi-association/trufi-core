@@ -3,14 +3,11 @@ import 'package:trufi_core/blocs/configuration/models/animation_configuration.da
 import 'package:trufi_core/blocs/configuration/models/attribution.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/map_configuration.dart';
-import 'package:trufi_core/blocs/configuration/models/transport_configuration.dart';
 import 'package:trufi_core/blocs/configuration/models/url_collection.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_custom_localization.dart';
 import 'package:trufi_core/models/definition_feedback.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/models/markers/marker_configuration.dart';
-import 'package:trufi_core/models/markers/marker_configuration_default.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/online_repository.dart';
 
@@ -21,6 +18,9 @@ class Configuration {
 
   /// The Asset Path to the drawerBackgroundImage
   final String drawerBackgroundAssetPath;
+
+  /// The Asset Path to the pageBackgroundImage
+  final String pageBackgroundAssetPath;
 
   /// Contains all Urls that can be configured inside of Trufi
   final UrlCollection urls;
@@ -33,9 +33,6 @@ class Configuration {
 
   /// Loading and Success Animation
   final AnimationConfiguration animations;
-
-  /// To, From and yourLocation Marker
-  final MarkerConfiguration markers;
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -65,9 +62,6 @@ class Configuration {
   /// Show the weather in the drawer from FMI - Finnish Meteorological Institute
   final bool showWeather;
 
-  /// Transport modes configuration
-  final TransportConfiguration transportConf;
-
   /// PlanItineraryLeg injection extra option
   final Widget Function(BuildContext context, PlanItineraryLeg planItineraryLeg)
       planItineraryLegBuilder;
@@ -80,16 +74,15 @@ class Configuration {
     this.appCity = "Cochabamba",
     this.supportedLanguages = const [],
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",
+    this.pageBackgroundAssetPath = "assets/images/background-image.png",
     this.customTranslations,
     this.feedbackDefinition,
     this.aboutSection,
-    this.markers = const MarkerConfigurationDefault(),
     this.animations,
     this.map,
     this.urls,
     this.attribution,
     this.showWeather = true,
-    this.transportConf = const TransportConfiguration(),
     this.planItineraryLegBuilder,
   });
 }
