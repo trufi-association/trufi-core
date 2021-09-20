@@ -77,7 +77,8 @@ class _TrufiMapState extends State<TrufiMap> {
         ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
         if (widget.showCustomMarkes)
           ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
-        cfg.markers.buildYourLocationMarkerLayerOptions(currentLocation),
+        cfg.map.markersConfiguration
+            .buildYourLocationMarkerLayerOptions(currentLocation),
         ...widget.layerOptionsBuilder(context)
       ],
     );

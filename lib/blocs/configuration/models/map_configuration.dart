@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core/blocs/configuration/models/itinerary_creator.dart';
+import 'package:trufi_core/models/markers/marker_configuration.dart';
+import 'package:trufi_core/models/markers/marker_configuration_default.dart';
 import 'package:trufi_core/widgets/map/map_copyright.dart';
 
 // TODO: Add some documentation that makes sense
@@ -42,6 +45,12 @@ class MapConfiguration {
   /// This widgetBuilder creates the Attribution Texts on top of the map
   WidgetBuilder mapAttributionBuilder;
 
+  /// To, From and yourLocation Marker
+  final MarkerConfiguration markersConfiguration;
+
+  /// Itinerari creator configuration
+  final ItinararyCreator itinararyCreator;
+
   MapConfiguration({
     this.defaultZoom = 12.0,
     this.offlineZoom = 13.0,
@@ -55,10 +64,11 @@ class MapConfiguration {
     @required this.southWest,
     @required this.northEast,
     this.mapAttributionBuilder,
+    this.markersConfiguration = const DefaultMarkerConfiguration(),
+    this.itinararyCreator = const DefaultItineraryCreator(),
   }) {
     mapAttributionBuilder =
         mapAttributionBuilder ?? (context) => MapTileAndOSMCopyright();
-
     center = center;
     southWest = southWest;
     northEast = northEast;

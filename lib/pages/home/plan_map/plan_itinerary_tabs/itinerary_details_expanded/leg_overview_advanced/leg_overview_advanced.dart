@@ -45,7 +45,7 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
 
   @override
   Widget build(BuildContext context) {
-    final config = context.read<ConfigurationCubit>().state;
+    final cfg = context.read<ConfigurationCubit>().state;
 
     final localization = TrufiLocalization.of(context);
     final compresedLegs = widget.itinerary.compressLegs;
@@ -131,7 +131,8 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                                   height: 24,
                                   width: 24,
                                   child: FittedBox(
-                                      child: config.markers.fromMarker),
+                                      child: cfg
+                                          .map.markersConfiguration.fromMarker),
                                 ),
                               ),
                               WalkDash(
@@ -267,7 +268,9 @@ class _LegOverviewAdvancedState extends State<LegOverviewAdvanced> {
                           child: SizedBox(
                               height: 24,
                               width: 24,
-                              child: FittedBox(child: config.markers.toMarker)),
+                              child: FittedBox(
+                                child: cfg.map.markersConfiguration.toMarker,
+                              )),
                         ),
                       ],
                     ),

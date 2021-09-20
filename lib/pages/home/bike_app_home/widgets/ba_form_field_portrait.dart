@@ -12,6 +12,7 @@ class BAFormFieldsPortrait extends StatelessWidget {
     @required this.onSaveFrom,
     @required this.onSaveTo,
     @required this.onSwap,
+    @required this.onReset,
     this.padding = EdgeInsets.zero,
     this.spaceBetween = 0,
     this.showTitle = true,
@@ -20,6 +21,7 @@ class BAFormFieldsPortrait extends StatelessWidget {
   final void Function(TrufiLocation) onSaveFrom;
   final void Function(TrufiLocation) onSaveTo;
   final void Function() onSwap;
+  final void Function() onReset;
   final EdgeInsetsGeometry padding;
   final double spaceBetween;
   final bool showTitle;
@@ -42,6 +44,9 @@ class BAFormFieldsPortrait extends StatelessWidget {
                 textLeadingImage: null,
                 value: homePageState.fromPlace,
                 showTitle: showTitle,
+                trailing: homePageState.isPlacesDefined
+                    ? ResetButton(onReset: onReset)
+                    : null,
               ),
               SizedBox(
                 height: spaceBetween,

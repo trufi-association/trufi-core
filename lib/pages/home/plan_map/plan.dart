@@ -124,8 +124,7 @@ class CurrentPlanPageState extends State<PlanPage>
               planPageController: _planPageController,
               customOverlayWidget: widget.customOverlayWidget,
               customBetweenFabWidget: widget.customBetweenFabWidget,
-              markerConfiguration: cfg.markers,
-              transportConfiguration: cfg.transportConf,
+              mapConfiguration: cfg.map,
             ),
             panel: CustomItinerary(
               key: Key(

@@ -45,7 +45,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   isOrigin: true,
                   onSaved: onSaveFrom,
                   hintText: translations.searchPleaseSelectOrigin,
-                  textLeadingImage: config.markers.fromMarker,
+                  textLeadingImage: config.map.markersConfiguration.fromMarker,
                   leading: const SizedBox.shrink(),
                   trailing: homePageState.isPlacesDefined
                       ? ResetButton(onReset: onReset)
@@ -56,7 +56,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   isOrigin: false,
                   onSaved: onSaveTo,
                   hintText: translations.searchPleaseSelectDestination,
-                  textLeadingImage: config.markers.toMarker,
+                  textLeadingImage: config.map.markersConfiguration.toMarker,
                   leading: const SizedBox.shrink(),
                   trailing: homePageState.isPlacesDefined
                       ? SwapButton(

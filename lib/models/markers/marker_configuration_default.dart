@@ -7,8 +7,8 @@ import 'markers_default/from_marker_default.dart';
 import 'markers_default/to_marker_default.dart';
 import 'markers_default/your_location_marker.dart';
 
-class MarkerConfigurationDefault implements MarkerConfiguration {
-  const MarkerConfigurationDefault();
+class DefaultMarkerConfiguration implements MarkerConfiguration {
+  const DefaultMarkerConfiguration();
 
   @override
   Widget get fromMarker => const FromMarkerDefault();
