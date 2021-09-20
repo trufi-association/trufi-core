@@ -58,6 +58,10 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
     await updateMapRouteState(state.copyWith(bikeRentalNetworks: newList));
   }
 
+  Future<void> setTriangleFactor(TriangleFactor triangleFactor) async {
+    await updateMapRouteState(state.copyWith(triangleFactor: triangleFactor));
+  }
+
   Future<void> setWalkingSpeed(WalkingSpeed walkingSpeed) async {
     await updateMapRouteState(state.copyWith(typeWalkingSpeed: walkingSpeed));
   }

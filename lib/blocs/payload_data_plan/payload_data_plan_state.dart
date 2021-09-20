@@ -5,6 +5,7 @@ final initPayloadDataPlanState = PayloadDataPlanState(
   avoidWalking: false,
   transportModes: defaultTransportModes,
   bikeRentalNetworks: defaultBikeRentalNetworks,
+  triangleFactor: TriangleFactor.unknown,
   avoidTransfers: false,
   includeBikeSuggestions: true,
   typeBikingSpeed: BikingSpeed.average,
@@ -33,6 +34,7 @@ class PayloadDataPlanState extends Equatable {
   static const String _avoidWalking = "avoidWalking";
   static const String _transportModes = "transportModes";
   static const String _bikeRentalNetworks = "bikeRentalNetworks";
+  static const String _triangleFactor = "triangleFactor";
   static const String _avoidTransfers = "avoidTransfers";
   static const String _includeBikeSuggestions = "includeBikeSuggestions";
   static const String _typeBikingSpeed = "typeBikingSpeed";
@@ -48,6 +50,7 @@ class PayloadDataPlanState extends Equatable {
     @required this.avoidWalking,
     @required this.transportModes,
     @required this.bikeRentalNetworks,
+    @required this.triangleFactor,
     @required this.avoidTransfers,
     @required this.includeBikeSuggestions,
     @required this.typeBikingSpeed,
@@ -64,6 +67,7 @@ class PayloadDataPlanState extends Equatable {
   final bool avoidWalking;
   final List<TransportMode> transportModes;
   final List<BikeRentalNetwork> bikeRentalNetworks;
+  final TriangleFactor triangleFactor;
   final bool avoidTransfers;
   final bool includeBikeSuggestions;
   final BikingSpeed typeBikingSpeed;
@@ -79,6 +83,7 @@ class PayloadDataPlanState extends Equatable {
     WalkingSpeed typeWalkingSpeed,
     List<TransportMode> transportModes,
     List<BikeRentalNetwork> bikeRentalNetworks,
+    TriangleFactor triangleFactor,
     bool avoidTransfers,
     bool avoidWalking,
     bool includeBikeSuggestions,
@@ -95,6 +100,7 @@ class PayloadDataPlanState extends Equatable {
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
       transportModes: transportModes ?? this.transportModes,
       bikeRentalNetworks: bikeRentalNetworks ?? this.bikeRentalNetworks,
+      triangleFactor: triangleFactor ?? this.triangleFactor,
       avoidTransfers: avoidTransfers ?? this.avoidTransfers,
       avoidWalking: avoidWalking ?? this.avoidWalking,
       includeBikeSuggestions:
@@ -120,6 +126,7 @@ class PayloadDataPlanState extends Equatable {
       typeWalkingSpeed: typeWalkingSpeed,
       transportModes: transportModes,
       bikeRentalNetworks: bikeRentalNetworks,
+      triangleFactor: triangleFactor,
       avoidTransfers: avoidTransfers,
       avoidWalking: avoidWalking,
       includeBikeSuggestions: includeBikeSuggestions,
@@ -146,6 +153,8 @@ class PayloadDataPlanState extends Equatable {
             (key) => getBikeRentalNetwork(key as String),
           )
           .toList() as List<BikeRentalNetwork>,
+      triangleFactor:
+          getTriangleFactorByString(json[_triangleFactor] as String),
       avoidTransfers: json[_avoidTransfers] as bool,
       avoidWalking: json[_avoidWalking] as bool,
       includeBikeSuggestions: json[_includeBikeSuggestions] as bool,
@@ -168,6 +177,7 @@ class PayloadDataPlanState extends Equatable {
       _bikeRentalNetworks: bikeRentalNetworks
           .map((bikeRentalNetwork) => bikeRentalNetwork.name)
           .toList(),
+      _triangleFactor: triangleFactor.name,
       _avoidTransfers: avoidTransfers,
       _includeBikeSuggestions: includeBikeSuggestions,
       _typeBikingSpeed: typeBikingSpeed.name,
@@ -185,6 +195,7 @@ class PayloadDataPlanState extends Equatable {
         avoidWalking,
         transportModes,
         bikeRentalNetworks,
+        triangleFactor,
         avoidTransfers,
         includeBikeSuggestions,
         typeBikingSpeed,

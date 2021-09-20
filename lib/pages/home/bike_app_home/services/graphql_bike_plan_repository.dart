@@ -79,12 +79,13 @@ class GraphqlBikePlanRepository {
         'toPlace': parsePlace(toLocation),
         'date': parseDateFormat(date),
         'time': parseTime(date),
-        'maxWalkDistance': 4828.032,
+        // 'maxWalkDistance': 4828.032,
         'numItineraries': 4,
         'bikeAndPublicModes': [
           {'mode': TransportMode.bicycle.name},
           {'mode': TransportMode.transit.name},
         ],
+        'triangle': advancedOptions.triangleFactor.value,
         'arriveBy': advancedOptions.arriveBy,
       },
     );
