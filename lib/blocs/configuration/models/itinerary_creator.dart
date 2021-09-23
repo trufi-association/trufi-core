@@ -60,7 +60,9 @@ class DefaultItineraryCreator implements ItinararyCreator {
                         .color
                     : (leg?.route?.color != null
                         ? Color(int.tryParse("0xFF${leg.route.color}"))
-                        : leg.transportMode.backgroundColor)
+                        : leg.transportMode == TransportMode.walk
+                            ? leg.transportMode.color
+                            : leg.transportMode.backgroundColor)
                 : Colors.grey;
 
             final Polyline polyline = Polyline(
