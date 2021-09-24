@@ -49,6 +49,7 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     final homePageCubit = context.watch<HomePageCubit>();
+    final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
     final config = context.read<ConfigurationCubit>().state;
     return BlocListener<HomePageCubit, MapRouteState>(
@@ -110,18 +111,19 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
         body: SafeArea(
           child: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      config.pageBackgroundAssetPath,
-                      fit: BoxFit.fill,
-                      height: 200,
+              if (!isPortrait)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        config.pageBackgroundAssetPath,
+                        fit: BoxFit.fill,
+                        height: 200,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               ListView(
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -145,7 +147,10 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                       onSaveTo: (TrufiLocation fromPlace) =>
                           homePageCubit.setToPlace(fromPlace),
                       onSwap: () => homePageCubit.swapLocations(),
-                      onReset: () => homePageCubit.reset(),
+                      onReset: () async {
+                        await homePageCubit.reset();
+                        await payloadDataPlanCubit.resetDataDate();
+                      },
                     )
                   else
                     BAFormFieldsLandscape(
@@ -154,6 +159,10 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                       onSaveTo: (TrufiLocation fromPlace) =>
                           homePageCubit.setToPlace(fromPlace),
                       onSwap: () => homePageCubit.swapLocations(),
+                      onReset: () async {
+                        await homePageCubit.reset();
+                        await payloadDataPlanCubit.resetDataDate();
+                      },
                     ),
                   const SizedBox(height: 35),
                   DateSelector(
@@ -235,22 +244,47 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
-                    child: CustomTextButton(
-                      text: 'SUCHEN',
-                      onPressed: () {
-                        _callFetchPlan(context);
-                      },
-                      color: theme.accentColor,
-                      textStyle: theme.textTheme.headline6
-                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                      borderRadius: 5,
-                      height: 50,
-                      width: 200,
+                  SizedBox(
+                    height: isPortrait ? 220 : 100,
+                    child: Stack(
+                      children: [
+                        if (isPortrait)
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Center(
+                                child: Image.asset(
+                                  config.pageBackgroundAssetPath,
+                                  fit: BoxFit.fill,
+                                  height: 200,
+                                ),
+                              ),
+                            ],
+                          ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: SizedBox(
+                              child: CustomTextButton(
+                                text: 'SUCHEN',
+                                onPressed: () {
+                                  _callFetchPlan(context);
+                                },
+                                color: theme.accentColor,
+                                textStyle: theme.textTheme.headline6.copyWith(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                borderRadius: 5,
+                                height: 50,
+                                width: 200,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
               if (config.animations.loading != null && homePageState.isFetching)
