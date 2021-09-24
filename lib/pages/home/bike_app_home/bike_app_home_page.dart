@@ -36,6 +36,7 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
   int selectedRadio = 0;
   double rating = 0;
   bool firstScreen = true;
+  bool wasValidateForm = false;
 
   void setSelectedRadio(int value) {
     setState(() {
@@ -151,6 +152,7 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                         await homePageCubit.reset();
                         await payloadDataPlanCubit.resetDataDate();
                       },
+                      isValidateForm: wasValidateForm,
                     )
                   else
                     BAFormFieldsLandscape(
@@ -270,6 +272,9 @@ class _BikeAppHomePageState extends State<BikeAppHomePage> {
                               child: CustomTextButton(
                                 text: 'SUCHEN',
                                 onPressed: () {
+                                  setState(() {
+                                    wasValidateForm = true;
+                                  });
                                   _callFetchPlan(context);
                                 },
                                 color: theme.accentColor,

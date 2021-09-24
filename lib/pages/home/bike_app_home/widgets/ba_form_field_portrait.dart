@@ -16,6 +16,7 @@ class BAFormFieldsPortrait extends StatelessWidget {
     this.padding = EdgeInsets.zero,
     this.spaceBetween = 0,
     this.showTitle = true,
+    this.isValidateForm = false,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -25,6 +26,7 @@ class BAFormFieldsPortrait extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final double spaceBetween;
   final bool showTitle;
+  final bool isValidateForm;
 
   @override
   Widget build(BuildContext context) {
@@ -47,25 +49,28 @@ class BAFormFieldsPortrait extends StatelessWidget {
                 trailing: homePageState.isPlacesDefined
                     ? ResetButton(onReset: onReset)
                     : null,
+                isValid: !isValidateForm || homePageState.fromPlace != null,
               ),
               SizedBox(
                 height: spaceBetween,
               ),
               DefaultLocationFormField(
-                  isOrigin: false,
-                  onSaved: onSaveTo,
-                  // TODO translate
-                  hintText: "Ihr Zielort",
-                  textLeadingImage: null,
-                  trailing: homePageState.toPlace != null &&
-                          homePageState.fromPlace != null
-                      ? SwapButton(
-                          orientation: Orientation.portrait,
-                          onSwap: onSwap,
-                        )
-                      : null,
-                  value: homePageState.toPlace,
-                  showTitle: showTitle),
+                isOrigin: false,
+                onSaved: onSaveTo,
+                // TODO translate
+                hintText: "Ihr Zielort",
+                textLeadingImage: null,
+                trailing: homePageState.toPlace != null &&
+                        homePageState.fromPlace != null
+                    ? SwapButton(
+                        orientation: Orientation.portrait,
+                        onSwap: onSwap,
+                      )
+                    : null,
+                value: homePageState.toPlace,
+                showTitle: showTitle,
+                isValid: !isValidateForm || homePageState.toPlace != null,
+              ),
             ],
           ),
         ),
