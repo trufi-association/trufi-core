@@ -14,11 +14,13 @@ class BAFormFieldsLandscape extends StatelessWidget {
     @required this.onSaveFrom,
     @required this.onSaveTo,
     @required this.onSwap,
+    @required this.onReset,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
   final void Function(TrufiLocation) onSaveTo;
   final void Function() onSwap;
+  final void Function() onReset;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,12 @@ class BAFormFieldsLandscape extends StatelessWidget {
           ),
         ),
         if (homePageState.toPlace != null && homePageState.fromPlace != null)
-          SwapButton(
-            orientation: Orientation.landscape,
-            onSwap: onSwap,
+          Padding(
+            padding: const EdgeInsets.only(top: 17),
+            child: SwapButton(
+              orientation: Orientation.landscape,
+              onSwap: onSwap,
+            ),
           )
         else
           const SizedBox(
@@ -56,6 +61,13 @@ class BAFormFieldsLandscape extends StatelessWidget {
             value: homePageState.toPlace,
           ),
         ),
+        if (homePageState.toPlace != null && homePageState.fromPlace != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 17),
+            child: ResetButton(
+              onReset: onReset,
+            ),
+          )
       ],
     );
   }
