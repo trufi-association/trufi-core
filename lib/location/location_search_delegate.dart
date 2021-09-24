@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -249,6 +250,8 @@ class _BuildFutureBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final config = context.read<ConfigurationCubit>().state;
+    final currentLocale = Localizations.localeOf(context);
     return FutureBuilder(
       future: future,
       initialData: null,
@@ -287,7 +290,12 @@ class _BuildFutureBuilder extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _BuildTitle(title: title),
-                _BuildErrorItem(title: localization.searchItemNoResults),
+                _BuildErrorItem(
+                    title: config.customTranslations.get(
+                  config.customTranslations.searchItemNoResults,
+                  currentLocale,
+                  localization.searchItemNoResults,
+                )),
               ],
             ),
           );
