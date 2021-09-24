@@ -14,17 +14,24 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
 
   final SharedPreferencesPlaceStorage myPlacesStorage =
       SharedPreferencesPlaceStorage("myPlacesStorage");
+  final bool isDateReset;
 
-  PayloadDataPlanCubit(this.localRepository) : super(initPayloadDataPlanState) {
+  PayloadDataPlanCubit(
+    this.localRepository, {
+    this.isDateReset = false,
+  }) : super(initPayloadDataPlanState) {
     _load();
   }
 
   Future<void> _load() async {
     final jsonString = await localRepository.getStateSettingPanel();
     if (jsonString != null && jsonString.isNotEmpty) {
+      final payloadDataPlanState = PayloadDataPlanState.fromJson(
+          jsonDecode(jsonString) as Map<String, dynamic>);
       emit(
-        PayloadDataPlanState.fromJson(
-            jsonDecode(jsonString) as Map<String, dynamic>),
+        isDateReset
+            ? payloadDataPlanState.copyWithDateNull()
+            : payloadDataPlanState,
       );
     }
   }
