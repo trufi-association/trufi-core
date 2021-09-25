@@ -69,7 +69,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
           icon: const Icon(Icons.arrow_back, size: 30),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () async {
-            Navigator.maybePop(context);
+            await homePageCubit.resetPlan();
+            await Navigator.maybePop(context);
           },
         ),
         actions: const [
@@ -103,7 +104,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
       body: ListView.builder(
         shrinkWrap: true,
         padding: EdgeInsets.zero,
-        itemCount: homePageState?.plan?.itineraries?.length,
+        itemCount: homePageState?.plan?.itineraries?.length ?? 0,
         itemBuilder: (_, index) {
           return Stack(
             children: [
