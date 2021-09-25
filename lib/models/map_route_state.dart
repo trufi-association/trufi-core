@@ -102,7 +102,7 @@ class MapRouteState extends Equatable {
   MapRouteState copyWithNullable({
     Optional<TrufiLocation> fromPlace = const Optional(),
     Optional<TrufiLocation> toPlace = const Optional(),
-    PlanEntity plan,
+    Optional<PlanEntity> plan = const Optional(),
     ModesTransportEntity modesTransport,
     AdEntity ad,
     bool isFetching,
@@ -117,7 +117,7 @@ class MapRouteState extends Equatable {
     return MapRouteState(
       fromPlace: fromPlace.isValid ? fromPlace.value : this.fromPlace,
       toPlace: toPlace.isValid ? toPlace.value : this.toPlace,
-      plan: plan ?? this.plan,
+      plan: plan.isValid ? plan.value : this.plan,
       modesTransport: modesTransport ?? this.modesTransport,
       ad: ad ?? this.ad,
       isFetching: isFetching ?? this.isFetching,

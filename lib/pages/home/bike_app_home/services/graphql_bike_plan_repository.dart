@@ -80,14 +80,21 @@ class GraphqlBikePlanRepository {
         'toPlace': parsePlace(toLocation),
         'date': parseDateFormat(date),
         'time': parseTime(date),
-        // 'maxWalkDistance': 4828.032,
+        'maxWalkDistance': 4828.032,
         'numItineraries': 4,
         'bikeAndPublicModes': offTimes(date),
+        'optimize': advancedOptions.triangleFactor ==
+                    TriangleFactor.lessPublicTransport ||
+                advancedOptions.triangleFactor ==
+                    TriangleFactor.morePublicTransport
+            ? 'TRIANGLE'
+            : null,
         'triangle': advancedOptions.triangleFactor.value,
         'arriveBy': advancedOptions.arriveBy,
       },
     );
     final planAdvancedData = await client.query(planAdvancedQuery);
+    // Exception while fetching data (/viewer/plan) : org.opentripplanner.api.common.ParameterException
     if (planAdvancedData.hasException && planAdvancedData.data == null) {
       throw planAdvancedData.exception.graphqlErrors.isNotEmpty
           ? Exception("Bad request")

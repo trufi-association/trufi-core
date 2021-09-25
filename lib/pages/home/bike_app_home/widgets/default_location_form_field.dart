@@ -14,6 +14,7 @@ class DefaultLocationFormField extends StatelessWidget {
     this.showTitle = true,
     this.leading,
     this.trailing,
+    this.isValid = true,
   }) : super(key: key);
 
   final bool isOrigin;
@@ -22,6 +23,7 @@ class DefaultLocationFormField extends StatelessWidget {
   final Widget textLeadingImage;
   final Function(TrufiLocation) onSaved;
   final Widget leading;
+  final bool isValid;
   final Widget trailing;
   final TrufiLocation value;
 
@@ -30,7 +32,8 @@ class DefaultLocationFormField extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final textStyle = theme.textTheme.subtitle1.copyWith(fontSize: 18);
-    final hintStyle = theme.textTheme.subtitle1.copyWith(fontSize: 18);
+    final hintStyle = theme.textTheme.subtitle1
+        .copyWith(fontSize: 18, color: isValid ? null : Colors.red);
     return GestureDetector(
       onTap: () async {
         TypeLocationForm().isOrigin = isOrigin;
@@ -85,7 +88,7 @@ class DefaultLocationFormField extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              color: theme.dividerColor,
+              color: isValid ? theme.dividerColor : Colors.red,
               height: 0.65,
             ),
           ),

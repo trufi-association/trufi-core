@@ -53,6 +53,11 @@ class HomePageCubit extends Cubit<MapRouteState> {
     }
   }
 
+  Future<void> resetPlan() async {
+    await updateMapRouteState(
+        state.copyWithNullable(plan: const Optional.value(null)));
+  }
+
   Future<void> updateMapRouteState(MapRouteState newState) async {
     await localRepository.saveStateHomePage(jsonEncode(newState.toJson()));
 

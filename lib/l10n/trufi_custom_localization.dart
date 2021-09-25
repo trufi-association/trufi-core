@@ -54,4 +54,10 @@ abstract class TrufiCustomLocalization {
   /// for people to use the transport system in Cochabamba and the
   /// surrounding area.'**
   Map<Locale, String> aboutContent;
+
+
+  /// The [searchItemNoResults] is a warning message when the place finder does not get results
+  ///
+  /// Default Translation to "No results"
+  Map<Locale, String> searchItemNoResults;
 }

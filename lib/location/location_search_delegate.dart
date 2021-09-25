@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
@@ -19,7 +20,7 @@ import '../widgets/favorite_button.dart';
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   LocationSearchDelegate();
 
-  TrufiLocation _result;
+  dynamic _result;
 
   @override
   ThemeData appBarTheme(BuildContext context) =>
@@ -47,13 +48,13 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         _result = suggestion;
         close(context, suggestion);
       },
-      onSelectedMap: (TrufiLocation suggestion) {
-        _result = suggestion;
+      onSelectedMap: (TrufiLocation location) {
+        _result = location;
         showResults(context);
       },
       onStreetTapped: (TrufiStreet street) {
-        _result = street.location;
-        close(context, street.location);
+        _result = street;
+        showResults(context);
       },
     );
   }
@@ -65,7 +66,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         return _buildStreetResults(context, _result as TrufiStreet);
       } else {
         Future.delayed(Duration.zero, () {
-          close(context, _result);
+          close(context, _result as TrufiLocation);
         });
       }
     }
@@ -141,7 +142,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             Icons.label_outline,
             localization.instructionJunction(
               "...",
-              junction.street2.displayName,
+              junction.street2.displayName(localization),
             ),
             trailing: FavoriteButton(
               location: junction.location(localization),
@@ -249,6 +250,8 @@ class _BuildFutureBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final config = context.read<ConfigurationCubit>().state;
+    final currentLocale = Localizations.localeOf(context);
     return FutureBuilder(
       future: future,
       initialData: null,
@@ -287,7 +290,12 @@ class _BuildFutureBuilder extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _BuildTitle(title: title),
-                _BuildErrorItem(title: localization.searchItemNoResults),
+                _BuildErrorItem(
+                    title: config.customTranslations.get(
+                  config.customTranslations.searchItemNoResults,
+                  currentLocale,
+                  localization.searchItemNoResults,
+                )),
               ],
             ),
           );

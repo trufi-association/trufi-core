@@ -204,8 +204,11 @@ class TrufiApp extends StatelessWidget {
           create: (context) => ThemeCubit(theme, searchTheme, bottomBarTheme),
         ),
         BlocProvider<PayloadDataPlanCubit>(
-          create: (context) =>
-              PayloadDataPlanCubit(sharedPreferencesRepository),
+          create: (context) => PayloadDataPlanCubit(
+            sharedPreferencesRepository,
+            // TODO send param in trufiApp
+            isDateReset: true,
+          ),
           lazy: false,
         ),
       ],
@@ -246,7 +249,7 @@ class LocalizedMaterialApp extends StatelessWidget {
       SavedPlacesPage.route: (context) => const SavedPlacesPage(),
       SettingPanel.route: (context) => const SettingPanel(),
     };
-    routes.addAll(this.routes??{});
+    routes.addAll(this.routes ?? {});
 
     return BlocBuilder<PreferencesCubit, PreferenceState>(
       builder: (BuildContext context, state) {

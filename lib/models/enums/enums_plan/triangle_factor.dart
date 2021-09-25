@@ -31,7 +31,7 @@ extension TriangleFactorExtension on TriangleFactor {
     TriangleFactor.lessPublicTransport: {
       'safetyFactor': 0.5555555555555556,
       'slopeFactor': 0.1873142020882622,
-      'timeFactor': 0.32098765432098764
+      'timeFactor': 0.2571302423561822
     },
     TriangleFactor.normal: null,
     TriangleFactor.morePublicTransport: {
