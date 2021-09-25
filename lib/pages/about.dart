@@ -64,22 +64,22 @@ class AboutPageState extends State<AboutPage> {
                       currentLocale, localization.tagline(currentCity)),
                   style: theme.textTheme.headline6.copyWith(
                     color: theme.textTheme.bodyText1.color,
+                    fontSize: 15,
                   ),
                 ),
-                // TODO add forma trufi about info
-                // Container(
-                //   padding: const EdgeInsets.only(top: 16.0),
-                //   child: Text(
-                //     customTranslations.get(customTranslations.aboutContent,
-                //         currentLocale, localization.aboutContent),
-                //     style: theme.textTheme.bodyText1,
-                //   ),
-                // ),
                 if (aboutSection != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: aboutSection(context),
+                  )else
+                  Container(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Text(
+                    customTranslations.get(customTranslations.aboutContent,
+                        currentLocale, localization.aboutContent),
+                    style: theme.textTheme.bodyText1,
                   ),
+                ),
                 Container(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
