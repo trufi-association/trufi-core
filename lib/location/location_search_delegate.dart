@@ -20,7 +20,7 @@ import '../widgets/favorite_button.dart';
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
   LocationSearchDelegate();
 
-  TrufiLocation _result;
+  dynamic _result;
 
   @override
   ThemeData appBarTheme(BuildContext context) =>
@@ -48,13 +48,13 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         _result = suggestion;
         close(context, suggestion);
       },
-      onSelectedMap: (TrufiLocation suggestion) {
-        _result = suggestion;
+      onSelectedMap: (TrufiLocation location) {
+        _result = location;
         showResults(context);
       },
       onStreetTapped: (TrufiStreet street) {
-        _result = street.location;
-        close(context, street.location);
+        _result = street;
+        showResults(context);
       },
     );
   }
@@ -66,7 +66,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
         return _buildStreetResults(context, _result as TrufiStreet);
       } else {
         Future.delayed(Duration.zero, () {
-          close(context, _result);
+          close(context, _result as TrufiLocation);
         });
       }
     }
@@ -142,7 +142,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation> {
             Icons.label_outline,
             localization.instructionJunction(
               "...",
-              junction.street2.displayName,
+              junction.street2.displayName(localization),
             ),
             trailing: FavoriteButton(
               location: junction.location(localization),

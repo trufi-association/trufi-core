@@ -202,8 +202,8 @@ class TrufiStreetJunction {
 
   String displayName(TrufiLocalization localization) =>
       localization.instructionJunction(
-        street1.location?.displayName,
-        street2.location?.displayName,
+        street1.location?.displayName(localization),
+        street2.location?.displayName(localization),
       );
 
   TrufiLocation location(TrufiLocalization localization) {
