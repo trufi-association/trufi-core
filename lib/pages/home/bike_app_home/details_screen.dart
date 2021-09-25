@@ -38,7 +38,6 @@ class _BikeDetailScreenState extends State<BikeDetailScreen> {
           icon: const Icon(Icons.arrow_back, size: 30),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () async {
-            // await homePageCubit.reset();
             Navigator.maybePop(context);
           },
         ),
