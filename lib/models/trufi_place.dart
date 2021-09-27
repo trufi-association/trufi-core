@@ -139,7 +139,9 @@ class TrufiLocation implements TrufiPlace {
     TrufiLocalization localization,
   ) {
     String translate = description;
-    if (type == DefaultLocation.defaultHome.initLocation.type) {
+    if (translate == '') {
+      translate =  localization.commonUnkownPlace;
+    } else if (type == DefaultLocation.defaultHome.initLocation.type) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
           : localization.defaultLocationAdd(localization.defaultLocationHome);
