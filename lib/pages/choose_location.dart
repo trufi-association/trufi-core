@@ -198,7 +198,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                         onPressed: () async {
                           Navigator.of(context).pop(ChooseLocationDetail(
                             LocationDetail(
-                              'Unknown',
+                              '',
                               '',
                               position.center,
                             ),
