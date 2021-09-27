@@ -12,9 +12,10 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
-import 'package:trufi_core/pages/home/bike_app_home/services/bike_graphql_repository.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
+import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
+import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
 import 'package:trufi_core/models/menu/menu_item.dart';
@@ -84,6 +85,7 @@ class TrufiApp extends StatelessWidget {
     this.searchLocationManager,
     this.menuItems,
     this.routes,
+    this.customRequestManager,
   })  : assert(configuration != null, "Configuration cannot be empty"),
         assert(theme != null, "Theme cannot be empty"),
         super(key: key) {
@@ -132,7 +134,13 @@ class TrufiApp extends StatelessWidget {
   /// [OfflineSearchLocation] that used the assets/data/search.json
   final SearchLocationManager searchLocationManager;
 
+  /// Optional extension for routes
+  /// By default will be used the [routes]
   final Map<String, WidgetBuilder> routes;
+
+  /// Optional extension implement your [customRequestManager]
+  /// By default will be used the [OnlineRepository] or [OnlineGraphQLRepository]
+  final RequestManager customRequestManager;
 
   @override
   Widget build(BuildContext context) {
@@ -187,13 +195,14 @@ class TrufiApp extends StatelessWidget {
           create: (context) {
             return HomePageCubit(
               sharedPreferencesRepository,
-              serverType == ServerType.defaultServer
-                  ? OnlineRepository(
-                      otpEndpoint: openTripPlannerUrl,
-                    )
-                  : BikeGraphQLRepository(
-                      graphQLEndPoint: openTripPlannerUrl,
-                    ),
+              customRequestManager ??
+                  (serverType == ServerType.defaultServer
+                      ? OnlineRepository(
+                          otpEndpoint: openTripPlannerUrl,
+                        )
+                      : OnlineGraphQLRepository(
+                          graphQLEndPoint: openTripPlannerUrl,
+                        )),
             );
           },
         ),
