@@ -140,7 +140,9 @@ class TrufiLocation implements TrufiPlace {
   ) {
     String translate = description;
     if (translate == '') {
-      translate =  localization.commonUnkownPlace;
+      translate = localization.localeName == 'en'
+          ? "Selected on the map"
+          : "Auf Karte ausgewählt";
     } else if (type == DefaultLocation.defaultHome.initLocation.type) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
