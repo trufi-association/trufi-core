@@ -175,50 +175,52 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      OutlinedButton(
-                        onPressed: () async {
-                          if (locationData != null) {
-                            Navigator.of(context).pop(locationData);
-                          }
-                        },
-                        child: SizedBox(
-                          width: 140,
-                          child: Text(
-                            localization.commonConfirmLocation,
-                            style: TextStyle(
-                                color: locationData != null
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                          ),
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          Navigator.of(context).pop(ChooseLocationDetail(
-                            LocationDetail(
-                              '',
-                              '',
+                      if (loading)
+                        OutlinedButton(
+                          onPressed: () async {
+                            Navigator.of(context).pop(ChooseLocationDetail(
+                              LocationDetail(
+                                '',
+                                '',
+                                position.center,
+                              ),
                               position.center,
+                            ));
+                          },
+                          child: SizedBox(
+                            width: 140,
+                            child: Text(
+                              // TODO translate
+                              localization.localeName == 'en'
+                                  ? "Choose now"
+                                  : "Jetzt auswählen",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
                             ),
-                            position.center,
-                          ));
-                        },
-                        child: SizedBox(
-                          width: 140,
-                          child: Text(
-                            // TODO translate
-                            localization.localeName == 'en'
-                                ? "Choose now"
-                                : "Jetzt auswählen",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
+                          ),
+                        )
+                      else
+                        OutlinedButton(
+                          onPressed: () async {
+                            if (locationData != null) {
+                              Navigator.of(context).pop(locationData);
+                            }
+                          },
+                          child: SizedBox(
+                            width: 140,
+                            child: Text(
+                              localization.commonConfirmLocation,
+                              style: TextStyle(
+                                  color: locationData != null
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ],
