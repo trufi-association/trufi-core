@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/trufi_place.dart';
+import 'package:trufi_core/pages/saved_places/dialog_edit_location.dart';
 import 'package:trufi_core/utils/util_icons/icons.dart';
-import 'package:trufi_core/widgets/dialog_edit_text.dart';
 
 import '../choose_location.dart';
 import 'dialog_select_icon.dart';
@@ -16,14 +16,14 @@ class LocationTiler extends StatelessWidget {
     this.removeLocation,
     this.isDefaultLocation = false,
     this.enableSetIcon = false,
-    this.enableSetName = false,
+    this.enableLocation = false,
     this.enableSetPosition = false,
   }) : super(key: key);
 
   final TrufiLocation location;
   final bool isDefaultLocation;
   final bool enableSetIcon;
-  final bool enableSetName;
+  final bool enableLocation;
   final bool enableSetPosition;
   final Function(TrufiLocation, TrufiLocation) updateLocation;
   final Function(TrufiLocation) removeLocation;
@@ -60,33 +60,59 @@ class LocationTiler extends StatelessWidget {
                   if (enableSetIcon)
                     PopupMenuItem(
                       value: 1,
-                      child: Text(
-                        localization.savedPlacesSetIconLabel,
-                        style: theme.textTheme.bodyText1,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit),
+                          const SizedBox(width: 10),
+                          Text(
+                            localization.savedPlacesSetIconLabel,
+                            style: theme.textTheme.bodyText1,
+                          ),
+                        ],
                       ),
                     ),
-                  if (enableSetName)
+                  if (enableLocation)
                     PopupMenuItem(
                       value: 2,
-                      child: Text(
-                        localization.savedPlacesSetNameLabel,
-                        style: theme.textTheme.bodyText1,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit),
+                          const SizedBox(width: 10),
+                          Text(
+                            localization.localeName == 'de'
+                                ? "Bearbeiten"
+                                : "Edit",
+                            style: theme.textTheme.bodyText1,
+                          ),
+                        ],
                       ),
                     ),
                   if (enableSetPosition)
                     PopupMenuItem(
                       value: 3,
-                      child: Text(
-                        localization.savedPlacesSetPositionLabel,
-                        style: theme.textTheme.bodyText1,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit_location_alt),
+                          const SizedBox(width: 10),
+                          Text(
+                            localization.savedPlacesSetPositionLabel,
+                            style: theme.textTheme.bodyText1,
+                          ),
+                        ],
                       ),
                     ),
                   if (removeLocation != null || location.isLatLngDefined)
                     PopupMenuItem(
                       value: 4,
-                      child: Text(
-                        localization.savedPlacesRemoveLabel,
-                        style: theme.textTheme.bodyText1,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.delete),
+                          const SizedBox(width: 10),
+                          Text(
+                            localization.savedPlacesRemoveLabel.split(' ')[0],
+                            style: theme.textTheme.bodyText1,
+                          ),
+                        ],
                       ),
                     ),
                 ],
@@ -94,7 +120,7 @@ class LocationTiler extends StatelessWidget {
                   if (index == 1) {
                     await _changeIcon(context);
                   } else if (index == 2) {
-                    await _changeName(context);
+                    await _changeLocation(context);
                   } else if (index == 3) {
                     await _changePosition(context);
                   } else if (index == 4) {
@@ -132,13 +158,13 @@ class LocationTiler extends StatelessWidget {
     updateLocation(location, location.copyWith(type: type));
   }
 
-  Future<void> _changeName(BuildContext context) async {
-    final String description = await showDialog(
+  Future<void> _changeLocation(BuildContext context) async {
+    final TrufiLocation newLocation = await showDialog<TrufiLocation>(
         context: context,
         builder: (BuildContext context) {
-          return DialogEditText(initText: location.description);
+          return DialogEditLocation(location: location);
         });
-    updateLocation(location, location.copyWith(description: description));
+    if (newLocation != null) updateLocation(location, newLocation);
   }
 
   Future<void> _changePosition(BuildContext context) async {

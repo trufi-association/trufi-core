@@ -88,9 +88,7 @@ class SavedPlacesPage extends StatelessWidget {
                                             .map(
                                               (place) => LocationTiler(
                                                   location: place,
-                                                  enableSetIcon: true,
-                                                  enableSetName: true,
-                                                  enableSetPosition: true,
+                                                  enableLocation: true,
                                                   updateLocation:
                                                       searchLocationsCubit
                                                           .updateMyPlace,
@@ -126,7 +124,6 @@ class SavedPlacesPage extends StatelessWidget {
                             itemBuilder: (BuildContext context, int index) {
                               return LocationTiler(
                                 location: state.favoritePlaces[index],
-                                enableSetIcon: true,
                                 updateLocation:
                                     searchLocationsCubit.updateFavoritePlace,
                                 removeLocation:

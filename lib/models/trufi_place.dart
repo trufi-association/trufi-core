@@ -140,12 +140,16 @@ class TrufiLocation implements TrufiPlace {
   ) {
     String translate = description;
     if (translate == '') {
-      translate =  localization.commonUnkownPlace;
-    } else if (type == DefaultLocation.defaultHome.initLocation.type) {
+      translate = localization.localeName == 'en'
+          ? "Selected on the map"
+          : "Auf Karte ausgewählt";
+    } else if (type == DefaultLocation.defaultHome.initLocation.type &&
+        description == DefaultLocation.defaultHome.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
           : localization.defaultLocationAdd(localization.defaultLocationHome);
-    } else if (type == DefaultLocation.defaultWork.initLocation.type) {
+    } else if (type == DefaultLocation.defaultWork.initLocation.type &&
+        description == DefaultLocation.defaultWork.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationWork
           : localization.defaultLocationAdd(localization.defaultLocationWork);
