@@ -211,7 +211,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
-    TransportMode.ferry: null,
+    TransportMode.ferry: const Color(0xff1B3661),
     TransportMode.flexible: null,
     TransportMode.funicular: null,
     TransportMode.gondola: null,
@@ -263,7 +263,8 @@ extension TransportModeExtension on TransportMode {
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
   Color get color => colors[this] ?? Colors.grey;
-  Color get backgroundColor => backgroundColors[this] ?? Colors.transparent;
+  Color get backgroundColor =>
+      backgroundColors[this] ?? const Color(0xff1B3661);
   Widget getImage({Color color}) =>
       images(this, color) ??
       (Icon(
