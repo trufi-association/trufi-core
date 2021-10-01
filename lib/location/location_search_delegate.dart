@@ -172,7 +172,8 @@ class _SuggestionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-
+    final config = context.read<ConfigurationCubit>().state;
+    final currentLocale = Localizations.localeOf(context);
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SafeArea(
       top: false,
@@ -195,7 +196,11 @@ class _SuggestionList extends StatelessWidget {
                 locations: searchLocationsCubit.state.myPlaces),
           if (query.isEmpty)
             _BuildObjectList(
-              localization.searchTitleFavorites,
+              config.customTranslations.get(
+                config.customTranslations.searchTitleFavorites,
+                currentLocale,
+                localization.searchTitleFavorites,
+              ),
               Icons.place,
               searchLocationsCubit.state.favoritePlaces,
               onSelected,

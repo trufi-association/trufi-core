@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -17,6 +18,8 @@ class SavedPlacesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
+    final config = context.read<ConfigurationCubit>().state;
+    final currentLocale = Localizations.localeOf(context);
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
     return Scaffold(
@@ -37,7 +40,11 @@ class SavedPlacesPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    localization.commonFavoritePlaces,
+                    config.customTranslations.get(
+                      config.customTranslations.commonFavoritePlaces,
+                      currentLocale,
+                      localization.commonFavoritePlaces,
+                    ),
                     style: theme.textTheme.bodyText1,
                     maxLines: 2,
                   ),

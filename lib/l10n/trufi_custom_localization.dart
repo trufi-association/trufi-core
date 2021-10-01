@@ -60,4 +60,14 @@ abstract class TrufiCustomLocalization {
   ///
   /// Default Translation to "No results"
   Map<Locale, String> searchItemNoResults;
+
+  /// The [searchTitleFavorites] is a title list in the search
+  ///
+  /// Default Translation to "Favorites"
+  Map<Locale, String> searchTitleFavorites;
+  
+  /// The [commonFavoritePlaces] is a title for favorites places in Your places
+  ///
+  /// Default Translation to "Favorites places"
+  Map<Locale, String> commonFavoritePlaces;
 }
