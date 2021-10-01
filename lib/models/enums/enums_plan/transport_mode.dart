@@ -89,7 +89,7 @@ extension TransportModeExtension on TransportMode {
 
   static const icons = <TransportMode, IconData>{
     TransportMode.airplane: Icons.airplanemode_active,
-    TransportMode.bicycle: Icons.pedal_bike,
+    TransportMode.bicycle: Icons.directions_bike,
     TransportMode.bus: Icons.directions_bus,
     TransportMode.cableCar: CustomIcons.gondola,
     TransportMode.car: Icons.drive_eta,
