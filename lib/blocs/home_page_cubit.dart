@@ -156,7 +156,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
         await Future.delayed(const Duration(milliseconds: 200));
         await updateMapRouteState(
           state.copyWith(
-            isFetching: true,
+            isFetching: false,
             isFetchingModes: false,
             isFetchEarlier: false,
             isFetchLater: false,
