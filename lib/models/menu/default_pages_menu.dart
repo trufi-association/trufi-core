@@ -13,12 +13,17 @@ class MenuPageItem extends MenuItem {
     @required WidgetBuilder selectedIcon,
     @required WidgetBuilder notSelectedIcon,
     @required String Function(BuildContext) name,
+    Color nameColor,
   }) : super(
           id: id,
           selectedIcon: selectedIcon,
           notSelectedIcon: notSelectedIcon,
           name: (context) {
-            return MenuItem.buildName(context, name(context));
+            return MenuItem.buildName(
+              context,
+              name(context),
+              color: nameColor,
+            );
           },
           onClick: (context, isSelected) {
             Navigator.popUntil(context, ModalRoute.withName(id));

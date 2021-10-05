@@ -33,10 +33,12 @@ abstract class MenuItem {
     );
   }
 
-  static Widget buildName(BuildContext context, String name) {
+  static Widget buildName(BuildContext context, String name, {Color color}) {
     return Text(
       name,
-      style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+      style: TextStyle(
+        color: color ?? Theme.of(context).textTheme.bodyText1.color,
+      ),
     );
   }
 }
