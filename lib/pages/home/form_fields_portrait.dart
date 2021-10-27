@@ -66,7 +66,7 @@ class FormFieldsPortrait extends StatelessWidget {
                       : null,
                   value: homePageState.toPlace,
                 ),
-                if (config.serverType == ServerType.graphQLServer)
+                if (config.showAdvancedOptions)
                   SettingPayload(onFetchPlan: onFetchPlan),
               ],
             ),

@@ -196,7 +196,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           correlationId,
           localization,
           car: car,
-          advancedOptions: advancedOptions,
+          advancedOptions: fetchModes ? advancedOptions : null,
         ).catchError((error) async {
           await updateMapRouteState(state.copyWith(isFetching: false));
           throw error;

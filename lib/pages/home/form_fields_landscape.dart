@@ -83,7 +83,7 @@ class FormFieldsLandscape extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (config.serverType == ServerType.graphQLServer)
+                  if (config.showAdvancedOptions)
                     SettingPayload(
                       onFetchPlan: onFetchPlan,
                     ),

@@ -38,6 +38,9 @@ class Configuration {
   /// [OnlineGraphQLRepository] or [OnlineRepository]
   final ServerType serverType;
 
+  /// This determines the use advancedOptions
+  final bool showAdvancedOptions;
+
   /// All languages that the Host app should support
   final List<LanguageConfiguration> supportedLanguages;
 
@@ -71,6 +74,7 @@ class Configuration {
     this.minimumReviewWorthyActionCount = 3,
     this.debug = false,
     this.serverType = ServerType.defaultServer,
+    this.showAdvancedOptions = false,
     this.appCity = "Cochabamba",
     this.supportedLanguages = const [],
     this.drawerBackgroundAssetPath = "assets/images/drawer-bg.jpg",

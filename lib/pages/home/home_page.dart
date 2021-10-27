@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final homePageState = homePageCubit.state;
-    final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
+    final showAdvancedOptions = config.showAdvancedOptions;
     final transportSelectionHeight =
         homePageState.hasTransportModes || homePageState.isFetchingModes
             ? 50 * MediaQuery.of(context).textScaleFactor
@@ -50,9 +50,9 @@ class HomePage extends StatelessWidget {
         bottom: PreferredSize(
           preferredSize: isPortrait
               ? Size.fromHeight(
-                  isGraphQlEndpoint ? (77.0 + transportSelectionHeight) : 45.0)
+                  showAdvancedOptions ? (77.0 + transportSelectionHeight) : 45.0)
               : Size.fromHeight(
-                  isGraphQlEndpoint ? 33.0 + transportSelectionHeight : 0.0),
+                  showAdvancedOptions ? 33.0 + transportSelectionHeight : 0.0),
           child: Container(),
         ),
         flexibleSpace: isPortrait
@@ -131,10 +131,8 @@ class HomePage extends StatelessWidget {
         .fetchPlan(
           correlationId,
           localization,
-          advancedOptions: config.serverType == ServerType.defaultServer
-              ? null
-              : payloadDataPlanCubit.state,
-          fetchModes: true,
+          advancedOptions: payloadDataPlanCubit.state,
+          fetchModes: config.showAdvancedOptions,
         )
         .then((value) => appReviewCubit.incrementReviewWorthyActions())
         .catchError((error) => onFetchError(context, error as Exception));
