@@ -196,13 +196,9 @@ class TrufiApp extends StatelessWidget {
             return HomePageCubit(
               sharedPreferencesRepository,
               customRequestManager ??
-                  (serverType == ServerType.defaultServer
-                      ? OnlineRepository(
-                          otpEndpoint: openTripPlannerUrl,
-                        )
-                      : OnlineGraphQLRepository(
-                          graphQLEndPoint: openTripPlannerUrl,
-                        )),
+                  OnlineGraphQLRepository(
+                    graphQLEndPoint: openTripPlannerUrl,
+                  ),
             );
           },
         ),
