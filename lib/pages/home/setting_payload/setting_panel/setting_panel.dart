@@ -25,7 +25,7 @@ class SettingPanel extends StatelessWidget {
         title: Text(localization.commonSettings),
         leading: BackButton(
           onPressed: () {
-            Navigator.of(context).pop(payloadDataPlanCubit.state);
+            Navigator.maybePop(context, payloadDataPlanCubit.state);
           },
         ),
       ),
