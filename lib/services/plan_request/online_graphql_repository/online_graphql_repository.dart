@@ -31,13 +31,19 @@ class OnlineGraphQLRepository implements RequestManager {
     String localeName,
   }) async {
     if (advancedOptions == null) {
-      return _fetchPlan(from, to, [TransportMode.transit, TransportMode.walk]);
+      return _fetchPlan(
+        from: from,
+        to: to,
+        transportModes: [TransportMode.transit, TransportMode.walk],
+        locale: localeName,
+      );
     } else {
       return _fetchPlanAdvanced(
-          from: from,
-          to: to,
-          advancedOptions: advancedOptions,
-          locale: localeName);
+        from: from,
+        to: to,
+        advancedOptions: advancedOptions,
+        locale: localeName,
+      );
     }
   }
 
@@ -63,7 +69,11 @@ class OnlineGraphQLRepository implements RequestManager {
     TrufiLocation to,
     String correlationId,
   ) {
-    return _fetchPlan(from, to, [TransportMode.car, TransportMode.walk]);
+    return _fetchPlan(
+      from: from,
+      to: to,
+      transportModes: [TransportMode.car, TransportMode.walk],
+    );
   }
 
   @override
@@ -72,15 +82,25 @@ class OnlineGraphQLRepository implements RequestManager {
     throw UnimplementedError();
   }
 
-  Future<PlanEntity> _fetchPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    List<TransportMode> transportModes,
-  ) async {
-    final planEntityData = await _graphQLPlanRepository.fetchPlanSimple(
+  Future<PlanEntity> _fetchPlan({
+    @required TrufiLocation from,
+    @required TrufiLocation to,
+    @required List<TransportMode> transportModes,
+    String locale,
+  }) async {
+    Plan planEntityData = await _graphQLPlanRepository.fetchPlanSimple(
       fromLocation: from,
       toLocation: to,
       transportsMode: transportModes,
+      locale: locale,
+    );
+    planEntityData = planEntityData.copyWith(
+      itineraries: planEntityData.itineraries
+          .where(
+            (itinerary) =>
+                !itinerary.legs.every((leg) => leg.mode == Mode.walk),
+          )
+          .toList(),
     );
     return planEntityData.toPlan();
   }
@@ -149,7 +169,7 @@ class OnlineGraphQLRepository implements RequestManager {
     @required String locale,
   }) async {
     final ModesTransport planEntityData =
-        await _graphQLPlanRepository.fetchWalkBikePlanQuery(
+        await _graphQLPlanRepository.fetchModesPlanQuery(
             fromLocation: from,
             toLocation: to,
             advancedOptions: advancedOptions,

@@ -1,5 +1,5 @@
-const String summaryPageWalkBikeQuery = r'''
-query SummaryPage_WalkBike_Query(
+const String summaryModesPlanQuery = r'''
+query summaryModesPlanQuery(
   $fromPlace: String!
   $toPlace: String!
   $intermediatePlaces: [InputCoordinates!]
@@ -28,11 +28,9 @@ query SummaryPage_WalkBike_Query(
   $shouldMakeOnDemandTaxiQuery: Boolean!
   $showBikeAndPublicItineraries: Boolean!
   $showBikeAndParkItineraries: Boolean!
-  $useVehicleParkingAvailabilityInformation: Boolean!
   $bikeAndPublicModes: [TransportMode!]
   $bikeParkModes: [TransportMode!]
   $carMode: [TransportMode!]
-  $bannedVehicleParkingTags: [String]
 ) {
   walkPlan: plan(
     fromPlace: $fromPlace,
@@ -46,35 +44,9 @@ query SummaryPage_WalkBike_Query(
     arriveBy: $arriveBy, 
     locale: $locale,
     ) @include(if: $shouldMakeWalkQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
-    itineraries {
-      walkDistance
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
-      legs {
-        mode
-        ...ItineraryLine_legs
-        legGeometry {
-          points
-        }
-        distance
-      }
-    }
+    ...planFragment
   }
+
   bikePlan: plan(
     fromPlace: $fromPlace, 
     toPlace: $toPlace, 
@@ -89,33 +61,7 @@ query SummaryPage_WalkBike_Query(
     triangle: $triangle, 
     locale: $locale,
     ) @include(if: $shouldMakeBikeQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
-    itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
-      legs {
-        mode
-        ...ItineraryLine_legs
-        legGeometry {
-          points
-        }
-        distance
-      }
-    }
+    ...planFragment
   }
   bikeAndPublicPlan: plan(
     fromPlace: $fromPlace, 
@@ -141,50 +87,7 @@ query SummaryPage_WalkBike_Query(
     unpreferred: $unpreferred, 
     locale: $locale,
     ) @include(if: $showBikeAndPublicItineraries) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
-    itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
-      legs {
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        legGeometry {
-          points
-        }
-        route {
-          gtfsId
-          id
-        }
-        trip {
-          gtfsId
-          directionId
-          stoptimesForDate {
-            scheduledDeparture
-          }
-          pattern {
-            ...RouteLine_pattern
-            id
-          }
-          id
-        }
-        distance
-      }
-    }
+    ...planFragment
   }
   bikeParkPlan: plan(
     fromPlace: $fromPlace, 
@@ -210,47 +113,9 @@ query SummaryPage_WalkBike_Query(
     unpreferred: $unpreferred, 
     locale: $locale,
     ) @include(if: $showBikeAndParkItineraries) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
+    ...planFragment
     itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
       legs {
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        legGeometry {
-          points
-        }
-        route {
-          gtfsId
-          id
-        }
-        trip {
-          gtfsId
-          directionId
-          stoptimesForDate {
-            scheduledDeparture
-          }
-          pattern {
-            ...RouteLine_pattern
-            id
-          }
-          id
-        }
         to {
           bikePark {
             bikeParkId
@@ -258,7 +123,6 @@ query SummaryPage_WalkBike_Query(
             id
           }
         }
-        distance
       }
     }
   }
@@ -284,72 +148,17 @@ query SummaryPage_WalkBike_Query(
     itineraryFiltering: $itineraryFiltering, 
     unpreferred: $unpreferred, 
     locale: $locale,
-    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
-    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeCarQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
+    ...planFragment
     itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
       legs {
-        startTime
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        legGeometry {
-          points
-        }
-        route {
-          gtfsId
-          id
-        }
-        trip {
-          gtfsId
-          directionId
-          stoptimesForDate {
-            scheduledDeparture
-          }
-          pattern {
-            ...RouteLine_pattern
-            id
-          }
-          id
-        }
-        from {
-          name
-          lat
-          lon
-        }
         to {
-          name
-          lat
-          lon
-          vehicleParkingWithEntrance {
-            vehicleParking {
-              tags
-            }
-          }
           carPark {
             carParkId
             name
             id
           }
         }
-        distance
       }
     }
   }
@@ -379,66 +188,18 @@ query SummaryPage_WalkBike_Query(
     triangle: $triangle, 
     itineraryFiltering: $itineraryFiltering, 
     unpreferred: $unpreferred,
-    carReluctance: 10,
     locale: $locale,
-    useVehicleParkingAvailabilityInformation: $useVehicleParkingAvailabilityInformation,
-    bannedVehicleParkingTags: $bannedVehicleParkingTags,
     ) @include(if: $shouldMakeParkRideQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
+    ...planFragment
     itineraries {
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
       legs {
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        legGeometry {
-          points
-        }
-        route {
-          gtfsId
-          id
-        }
-        trip {
-          gtfsId
-          directionId
-          stoptimesForDate {
-            scheduledDeparture
-          }
-          pattern {
-            ...RouteLine_pattern
-            id
-          }
-          id
-        }
         to {
           carPark {
             carParkId
             name
             id
           }
-          name
-          vehicleParkingWithEntrance {
-            vehicleParking {
-              tags
-            }
-          }
         }
-        distance
       }
     }
   }
@@ -450,8 +211,6 @@ query SummaryPage_WalkBike_Query(
     transportModes: [
       { mode: RAIL }
       { mode: BUS }
-      { mode: FLEX, qualifier: EGRESS }
-      { mode: FLEX, qualifier: DIRECT }
       { mode: WALK }
     ]
     date: $date
@@ -473,43 +232,10 @@ query SummaryPage_WalkBike_Query(
     locale: $locale
     searchWindow: 10800
     ) @include(if: $shouldMakeOnDemandTaxiQuery) {
-    from{
-      name,
-      lat,
-      lon,
-    },
-    to{
-      name,
-      lon,
-      lat,
-    },
-    ...SummaryPlanContainer_plan
-    ...ItineraryTab_plan
+    ...planFragment
     itineraries {
-      ...ItinerarySummaryListContainer_itineraries
-      duration
-      startTime
-      endTime
-      ...ItineraryTab_itinerary
-      ...SummaryPlanContainer_itineraries
       legs {
-        mode
-        ...ItineraryLine_legs
-        transitLeg
-        rentedBike
-        distance
-        startTime
-        endTime
-        route {
-          url
-          mode
-          shortName
-        }
-        legGeometry {
-          points
-        }
         trip {
-          gtfsId
           tripShortName
         }
       }

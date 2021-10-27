@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:meta/meta.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
@@ -11,12 +11,12 @@ import 'package:trufi_core/services/models_otp/plan.dart';
 
 import 'graphql_client/graphql_client.dart';
 import 'graphql_client/graphql_utils.dart';
-import 'graphql_operation/fragments/utils_summary_plan_fragments.dart'
-    as plan_fragments;
-import 'graphql_operation/queries/utils_summary_plan_queries.dart'
-    as plan_queries;
-import 'graphql_operation/queries/walkbike_plan_queries.dart'
-    as walkbike_queries;
+import 'graphql_operation/fragments/plan_fragment.dart' as plan_fragment;
+import 'graphql_operation/fragments/service_time_range_fragment.dart'
+    as service_time_range_fragment;
+import 'graphql_operation/queries/modes_plan_queries.dart'
+    as modes_plan_queries;
+import 'graphql_operation/queries/plan_queries.dart' as plan_queries;
 import 'graphql_operation/query_utils.dart';
 import 'modes_transport.dart';
 
@@ -29,14 +29,22 @@ class GraphQLPlanRepository {
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required List<TransportMode> transportsMode,
+    @required String locale,
   }) async {
+    final dateNow = DateTime.now();
     final QueryOptions planSimpleQuery = QueryOptions(
-      document: parseString(plan_queries.utilsSummarySimplePageQuery),
+      document: addFragments(parseString(plan_queries.simplePlanQuery), [
+        plan_fragment.planFragment,
+        service_time_range_fragment.serviceTimeRangeFragment,
+      ]),
       variables: <String, dynamic>{
         'fromPlace': parsePlace(fromLocation),
         'toPlace': parsePlace(toLocation),
         'numItineraries': 5,
         'transportModes': parseTransportModes(transportsMode),
+        "date": parseDateFormat(dateNow),
+        'time': parseTime(dateNow),
+        'locale': locale ?? 'de',
       },
       fetchPolicy: FetchPolicy.networkOnly,
     );
@@ -44,10 +52,10 @@ class GraphQLPlanRepository {
     if (planSimpleData.hasException && planSimpleData.data == null) {
       throw planSimpleData.exception.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
-          : Exception("Internet no connection");
+          : Exception("Error connection");
     }
-    final planData =
-        Plan.fromMap(planSimpleData.data['plan'] as Map<String, dynamic>);
+    final planData = Plan.fromMap(
+        planSimpleData.data['viewer']['plan'] as Map<String, dynamic>);
     return planData;
   }
 
@@ -61,24 +69,9 @@ class GraphQLPlanRepository {
     final transportsMode =
         defaultFecth ? defaultTransportModes : advancedOptions.transportModes;
     final QueryOptions planAdvancedQuery = QueryOptions(
-      document: addFragments(parseString(plan_queries.utilsSummaryPageQuery), [
-        addFragments(plan_fragments.summaryPageViewerFragment, [
-          plan_fragments.summaryPlanContainerPlanFragment,
-          plan_fragments.itineraryTabPlanFragment,
-          addFragments(plan_fragments.itineraryTabItineraryFragment,
-              [plan_fragments.legAgencyInfoFragment]),
-          addFragments(plan_fragments.summaryPlanContainerItinerariesFragment, [
-            plan_fragments.itinerarySummaryListFragment,
-            plan_fragments.itineraryLineLegsFragment,
-            addFragments(plan_fragments.routeLinePatternFragment,
-                [plan_fragments.stopCardStopFragment]),
-          ]),
-          plan_fragments.itineraryLineLegsFragment,
-          addFragments(plan_fragments.routeLinePatternFragment, [
-            plan_fragments.stopCardStopFragment,
-          ]),
-        ]),
-        plan_fragments.summaryPageServiceTimeRangeFragment,
+      document: addFragments(parseString(plan_queries.advancedPlanQuery), [
+        plan_fragment.planFragment,
+        service_time_range_fragment.serviceTimeRangeFragment,
       ]),
       variables: <String, dynamic>{
         'fromPlace': parsePlace(fromLocation),
@@ -119,7 +112,7 @@ class GraphQLPlanRepository {
     if (planAdvancedData.hasException && planAdvancedData.data == null) {
       throw planAdvancedData.exception.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
-          : Exception("Internet no connection");
+          : Exception("Error connection");
     }
     if (planAdvancedData.source.isEager) {
       await Future.delayed(const Duration(milliseconds: 200));
@@ -129,7 +122,7 @@ class GraphQLPlanRepository {
     return planData;
   }
 
-  Future<ModesTransport> fetchWalkBikePlanQuery({
+  Future<ModesTransport> fetchModesPlanQuery({
     @required TrufiLocation fromLocation,
     @required TrufiLocation toLocation,
     @required PayloadDataPlanState advancedOptions,
@@ -142,25 +135,10 @@ class GraphQLPlanRepository {
     final shouldMakeAllQuery = !advancedOptions.isFreeParkToCarPark &&
         !advancedOptions.isFreeParkToParkRide;
 
-    final QueryOptions walkBikePlanQuery = QueryOptions(
+    final QueryOptions modesPlanQuery = QueryOptions(
         document: addFragments(
-          parseString(walkbike_queries.summaryPageWalkBikeQuery),
-          [
-            plan_fragments.summaryPlanContainerPlanFragment,
-            plan_fragments.itineraryTabPlanFragment,
-            addFragments(plan_fragments.itineraryTabItineraryFragment,
-                [plan_fragments.legAgencyInfoFragment]),
-            addFragments(
-                plan_fragments.summaryPlanContainerItinerariesFragment, [
-              plan_fragments.itinerarySummaryListFragment,
-              plan_fragments.itineraryLineLegsFragment,
-              addFragments(plan_fragments.routeLinePatternFragment,
-                  [plan_fragments.stopCardStopFragment])
-            ]),
-            plan_fragments.itineraryLineLegsFragment,
-            addFragments(plan_fragments.routeLinePatternFragment,
-                [plan_fragments.stopCardStopFragment])
-          ],
+          parseString(modes_plan_queries.summaryModesPlanQuery),
+          [plan_fragment.planFragment],
         ),
         variables: <String, dynamic>{
           'fromPlace': parsePlace(fromLocation),
@@ -230,13 +208,13 @@ class GraphQLPlanRepository {
                   ...PayloadDataPlanState.parkAndRideBannedVehicleParkingTags
                 ],
         });
-    final walkBikePlanData = await client.query(walkBikePlanQuery);
-    if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
-      throw walkBikePlanData.exception.graphqlErrors.isNotEmpty
+    final modesPlanData = await client.query(modesPlanQuery);
+    if (modesPlanData.hasException && modesPlanData.data == null) {
+      throw modesPlanData.exception.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
-          : Exception("Internet no connection");
+          : Exception("Error connection");
     }
-    final modesTransportData = ModesTransport.fromJson(walkBikePlanData.data);
+    final modesTransportData = ModesTransport.fromJson(modesPlanData.data);
 
     return modesTransportData;
   }
