@@ -11,7 +11,6 @@ import 'package:trufi_core/blocs/preferences/preferences.dart';
 import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
@@ -146,7 +145,6 @@ class TrufiApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
     final openTripPlannerUrl = configuration.urls.openTripPlannerUrl;
-    final serverType = configuration.serverType;
     return MultiBlocProvider(
       providers: [
         BlocProvider<ConfigurationCubit>(

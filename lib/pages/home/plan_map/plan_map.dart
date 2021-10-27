@@ -119,7 +119,6 @@ class PlanMapPageState extends State<PlanMapPage>
               if (_data.selectedMarkersLayer.markers.isNotEmpty)
                 _data.selectedMarkersLayer,
               _data.fromMarkerLayer,
-              // _trufiMapController.yourLocationLayer,
               _data.toMarkerLayer,
             ];
           },
