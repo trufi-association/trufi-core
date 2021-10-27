@@ -60,7 +60,8 @@ class DefaultItineraryCreator implements ItinararyCreator {
                         .color
                     : (leg?.route?.color != null
                         ? Color(int.tryParse("0xFF${leg.route.color}"))
-                        : leg.transportMode == TransportMode.walk
+                        : (leg.transportMode == TransportMode.walk ||
+                                leg.transportMode == TransportMode.bicycle)
                             ? leg.transportMode.color
                             : leg.transportMode.backgroundColor)
                 : Colors.grey;
