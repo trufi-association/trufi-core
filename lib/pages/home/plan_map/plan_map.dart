@@ -113,7 +113,8 @@ class PlanMapPageState extends State<PlanMapPage>
           layerOptionsBuilder: (context) {
             return <LayerOptions>[
               _data.unselectedPolylinesLayer,
-              _data.unselectedMarkersLayer,
+              if (_data.unselectedMarkersLayer.markers.isNotEmpty)
+                _data.unselectedMarkersLayer,
               _data.selectedPolylinesLayer,
               if (_data.selectedMarkersLayer.markers.isNotEmpty)
                 _data.selectedMarkersLayer,
