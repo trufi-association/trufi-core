@@ -283,7 +283,7 @@ class _BuildFutureBuilder extends StatelessWidget {
         if (snapshot.data == null) {
           return SliverToBoxAdapter(
             child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
+              valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.secondary),
             ),
           );
         }

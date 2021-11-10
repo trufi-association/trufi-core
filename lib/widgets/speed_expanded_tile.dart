@@ -63,7 +63,7 @@ class SpeedExpansionTile extends StatelessWidget {
                           textSelected.toLowerCase())
                         Icon(
                           Icons.check,
-                          color: theme.accentColor,
+                          color: theme.colorScheme.secondary,
                         )
                       else
                         Container(width: 15),

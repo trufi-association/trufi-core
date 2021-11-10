@@ -294,7 +294,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(
                     width: 2.0,
-                    color: active ? theme.accentColor : Colors.transparent,
+                    color: active ? theme.colorScheme.secondary : Colors.transparent,
                   ),
                   borderRadius: BorderRadius.circular(8.0)),
               child: ClipRRect(
@@ -308,7 +308,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
                 label,
                 style: TextStyle(
                     fontSize: theme.textTheme.caption.fontSize,
-                    color: active ? theme.accentColor : Colors.grey),
+                    color: active ? theme.colorScheme.secondary : Colors.grey),
               ),
             ),
           ],

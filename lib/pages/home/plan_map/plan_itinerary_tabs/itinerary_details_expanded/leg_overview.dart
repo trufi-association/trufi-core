@@ -31,7 +31,7 @@ class LegOverview extends StatelessWidget {
           return Row(
             children: <Widget>[
               Icon(Icons.sentiment_very_satisfied,
-                  color: Theme.of(context).accentColor),
+                  color: Theme.of(context).colorScheme.secondary),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(8.0),

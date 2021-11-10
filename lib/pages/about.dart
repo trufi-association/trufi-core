@@ -35,7 +35,7 @@ class AboutPageState extends State<AboutPage> {
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
     final TextStyle linkStyle = theme.textTheme.bodyText1.copyWith(
-      color: theme.accentColor,
+      color: theme.colorScheme.secondary,
     );
 
     final config = context.read<ConfigurationCubit>().state;

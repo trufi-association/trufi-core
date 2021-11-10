@@ -45,12 +45,12 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
             scale: 0.5,
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 border: Border.all(color: Colors.white, width: 3.5),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     spreadRadius: 8.0,
                     blurRadius: 30.0,
                   ),
@@ -58,7 +58,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
               ),
               child: Icon(
                 CustomIcons.circle,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
           ),
@@ -70,7 +70,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
               alignment: Alignment.topCenter,
               child: Icon(
                 Icons.arrow_drop_up,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             ),
           ),

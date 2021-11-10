@@ -124,7 +124,7 @@ class _ItinerarySummary extends StatelessWidget {
                           Row(
                             children: <Widget>[
                               Icon(Icons.sentiment_very_satisfied,
-                                  color: Theme.of(context).accentColor),
+                                  color: Theme.of(context).colorScheme.secondary),
                             ],
                           ),
                       ],
