@@ -19,6 +19,7 @@ final theme = ThemeData(
     ),
     accentColor: const Color(0xffd81b60),
   ),
+  primaryColor: const Color(0xff263238),
   primaryColorLight: const Color(0xffeceff1),
   backgroundColor: Colors.white,
   textTheme: ThemeData.light().textTheme.copyWith(
@@ -55,6 +56,7 @@ final bottomBarTheme = ThemeData(
     ),
     accentColor: const Color(0xffd81b60),
   ),
+  primaryColor: const Color(0xff263238),
   backgroundColor: const Color(0xff263238),
   primaryColorLight: const Color(0xffeceff1),
   textTheme: ThemeData.light().textTheme.copyWith(
