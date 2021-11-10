@@ -72,7 +72,4 @@ final bottomBarTheme = ThemeData(
   primaryIconTheme: ThemeData.light().primaryIconTheme.copyWith(
         color: Colors.white,
       ),
-  accentIconTheme: ThemeData.light().primaryIconTheme.copyWith(
-        color: Colors.black,
-      ),
 );
