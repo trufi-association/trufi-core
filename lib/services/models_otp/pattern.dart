@@ -1,13 +1,14 @@
+import 'package:trufi_core/entities/plan_entity/route_entity.dart';
+
 import 'alert.dart';
 import 'coordinates.dart';
 import 'geometry.dart';
-import 'route.dart';
 import 'stop.dart';
 import 'trip.dart';
 
 class PatternOtp {
   final String id;
-  final RouteOtp route;
+  final RouteEntity route;
   final int directionId;
   final String name;
   final String code;
@@ -36,10 +37,42 @@ class PatternOtp {
     this.alerts,
   });
 
+  PatternOtp copyWith({
+    String id,
+    RouteEntity route,
+    int directionId,
+    String name,
+    String code,
+    String headsign,
+    List<Trip> trips,
+    List<Trip> tripsForDate,
+    List<Stop> stops,
+    List<Coordinates> geometry,
+    Geometry patternGeometry,
+    String semanticHash,
+    List<Alert> alerts,
+  }) {
+    return PatternOtp(
+      id: id ?? this.id,
+      route: route ?? this.route,
+      directionId: directionId ?? this.directionId,
+      name: name ?? this.name,
+      code: code ?? this.code,
+      headsign: headsign ?? this.headsign,
+      trips: trips ?? this.trips,
+      tripsForDate: tripsForDate ?? this.tripsForDate,
+      stops: stops ?? this.stops,
+      geometry: geometry ?? this.geometry,
+      patternGeometry: patternGeometry ?? this.patternGeometry,
+      semanticHash: semanticHash ?? this.semanticHash,
+      alerts: alerts ?? this.alerts,
+    );
+  }
+
   factory PatternOtp.fromJson(Map<String, dynamic> json) => PatternOtp(
         id: json['id'].toString(),
         route: json['route'] != null
-            ? RouteOtp.fromJson(json['route'] as Map<String, dynamic>)
+            ? RouteEntity.fromJson(json['route'] as Map<String, dynamic>)
             : null,
         directionId: int.tryParse(json['directionId'].toString()) ?? 0,
         name: json['name'].toString(),

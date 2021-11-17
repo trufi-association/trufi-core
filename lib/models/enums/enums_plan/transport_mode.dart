@@ -262,7 +262,7 @@ extension TransportModeExtension on TransportMode {
 
   String get name => names[this] ?? 'WALK';
   IconData get icon => icons[this] ?? Icons.directions_walk;
-  Color get color => colors[this] ?? Colors.grey;
+  Color get color => colors[this] ?? const Color(0xff1B3661);
   Color get backgroundColor =>
       backgroundColors[this] ?? const Color(0xff1B3661);
   Widget getImage({Color color}) =>

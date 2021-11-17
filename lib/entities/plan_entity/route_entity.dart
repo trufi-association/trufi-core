@@ -36,7 +36,9 @@ class RouteEntity {
             : null,
         shortName: json['shortName'] as String,
         longName: json['longName'] as String,
-        mode: getTransportMode(mode: json['mode'].toString()),
+        mode: getTransportMode(
+            mode: json['mode'].toString(),
+            specificTransport: (json['longName'] ?? '') as String),
         type: int.tryParse(json['type'].toString()) ?? 0,
         desc: json['desc'] as String,
         url: json['url'] as String,
