@@ -7,7 +7,7 @@ enum TriangleFactor {
   unknown,
 }
 
-TriangleFactor getTriangleFactorByString(String triangleFactor) {
+TriangleFactor getTriangleFactorByString(String? triangleFactor) {
   return TriangleFactorExtension.names.keys.firstWhere(
     (key) => key.name == triangleFactor,
     orElse: () => TriangleFactor.unknown,
@@ -27,7 +27,7 @@ extension TriangleFactorExtension on TriangleFactor {
     TriangleFactor.morePublicTransport: 'MORE_PUBLIC_TRANSPORT',
     TriangleFactor.unknown: 'UNKNOWN',
   };
-  static const values = <TriangleFactor, Map<String, double>>{
+  static const values = <TriangleFactor, Map<String, double>?>{
     TriangleFactor.lessPublicTransport: {
       'safetyFactor': 0.5555555555555556,
       'slopeFactor': 0.1873142020882622,
@@ -44,7 +44,7 @@ extension TriangleFactorExtension on TriangleFactor {
 
   String get name => names[this] ?? 'UNKNOWN';
 
-  Map<String, double> get value => values[this];
+  Map<String, double>? get value => values[this];
 
   String translateValue(TrufiLocalization localization) {
     switch (this) {

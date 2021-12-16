@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/blocs/gps_location/location_state.dart';
 
 class LocationProviderCubit extends Cubit<LocationState> {
-  StreamSubscription<Position> _locationStreamSubscription;
+  StreamSubscription<Position>? _locationStreamSubscription;
   LocationProviderCubit() : super(const LocationState());
 
   Future<void> start() async {
@@ -30,7 +30,7 @@ class LocationProviderCubit extends Cubit<LocationState> {
 
   void stop() {
     if (_locationStreamSubscription != null) {
-      _locationStreamSubscription.cancel();
+      _locationStreamSubscription?.cancel();
       _locationStreamSubscription = null;
     }
   }

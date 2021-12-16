@@ -7,21 +7,21 @@ import 'stop.dart';
 import 'trip.dart';
 
 class Stoptime {
-  final Stop stop;
-  final int scheduledArrival;
-  final int realtimeArrival;
-  final int arrivalDelay;
-  final int scheduledDeparture;
-  final int realtimeDeparture;
-  final int departureDelay;
-  final bool timepoint;
-  final bool realtime;
-  final RealtimeState realtimeState;
-  final PickupDropoffType pickupType;
-  final PickupDropoffType dropoffType;
-  final double serviceDay;
-  final Trip trip;
-  final String headsign;
+  final Stop? stop;
+  final int? scheduledArrival;
+  final int? realtimeArrival;
+  final int? arrivalDelay;
+  final int? scheduledDeparture;
+  final int? realtimeDeparture;
+  final int? departureDelay;
+  final bool? timepoint;
+  final bool? realtime;
+  final RealtimeState? realtimeState;
+  final PickupDropoffType? pickupType;
+  final PickupDropoffType? dropoffType;
+  final double? serviceDay;
+  final Trip? trip;
+  final String? headsign;
 
   const Stoptime({
     this.stop,
@@ -54,8 +54,8 @@ class Stoptime {
         realtimeDeparture:
             int.tryParse(json['realtimeDeparture'].toString()) ?? 0,
         departureDelay: int.tryParse(json['departureDelay'].toString()) ?? 0,
-        timepoint: json['timepoint'] as bool,
-        realtime: json['realtime'] as bool,
+        timepoint: json['timepoint'] as bool?,
+        realtime: json['realtime'] as bool?,
         realtimeState:
             getRealtimeStateByString(json['realtimeState'].toString()),
         pickupType: getPickupDropoffTypeByString(json['pickupType'].toString()),
@@ -65,7 +65,7 @@ class Stoptime {
         trip: json['trip'] != null
             ? Trip.fromJson(json['trip'] as Map<String, dynamic>)
             : null,
-        headsign: json['headsign'] as String,
+        headsign: json['headsign'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -95,12 +95,12 @@ class Stoptime {
   }
 
   int get arrivalTime {
-    return (serviceDay + (canceled ? scheduledArrival : realtimeArrival))
+    return (serviceDay! + (canceled ? scheduledArrival! : realtimeArrival!))
         .truncate();
   }
 
   int get departureTime {
-    return (serviceDay + (canceled ? scheduledDeparture : realtimeDeparture))
+    return (serviceDay! + (canceled ? scheduledDeparture! : realtimeDeparture!))
         .truncate();
   }
 

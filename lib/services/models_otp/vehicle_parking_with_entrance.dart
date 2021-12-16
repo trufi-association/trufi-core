@@ -1,9 +1,9 @@
 import 'vehicle_parking.dart';
 
 class VehicleParkingWithEntrance {
-  final VehicleParking vehicleParking;
-  final bool closesSoon;
-  final bool realtime;
+  final VehicleParking? vehicleParking;
+  final bool? closesSoon;
+  final bool? realtime;
 
   const VehicleParkingWithEntrance({
     this.vehicleParking,
@@ -17,8 +17,8 @@ class VehicleParkingWithEntrance {
             ? VehicleParking.fromMap(
                 json['vehicleParking'] as Map<String, dynamic>)
             : null,
-        closesSoon: json['closesSoon'] as bool,
-        realtime: json['realtime'] as bool,
+        closesSoon: json['closesSoon'] as bool?,
+        realtime: json['realtime'] as bool?,
       );
 
   Map<String, dynamic> toMap() => {

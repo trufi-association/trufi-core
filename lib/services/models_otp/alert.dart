@@ -9,26 +9,26 @@ import 'translated_string.dart';
 import 'trip.dart';
 
 class Alert {
-  final String id;
-  final String alertId;
-  final int alertHash;
-  final String feed;
-  final Agency agency;
-  final RouteOtp route;
-  final Trip trip;
-  final Stop stop;
-  final List<PatternOtp> patterns;
-  final String alertHeaderText;
-  final List<TranslatedString> alertHeaderTextTranslations;
-  final String alertDescriptionText;
-  final List<TranslatedString> alertDescriptionTextTranslations;
-  final String alertUrl;
-  final List<TranslatedString> alertUrlTranslations;
-  final AlertEffectType alertEffect;
-  final AlertCauseType alertCause;
-  final AlertSeverityLevelType alertSeverityLevel;
-  final double effectiveStartDate;
-  final double effectiveEndDate;
+  final String? id;
+  final String? alertId;
+  final int? alertHash;
+  final String? feed;
+  final Agency? agency;
+  final RouteOtp? route;
+  final Trip? trip;
+  final Stop? stop;
+  final List<PatternOtp>? patterns;
+  final String? alertHeaderText;
+  final List<TranslatedString>? alertHeaderTextTranslations;
+  final String? alertDescriptionText;
+  final List<TranslatedString>? alertDescriptionTextTranslations;
+  final String? alertUrl;
+  final List<TranslatedString>? alertUrlTranslations;
+  final AlertEffectType? alertEffect;
+  final AlertCauseType? alertCause;
+  final AlertSeverityLevelType? alertSeverityLevel;
+  final double? effectiveStartDate;
+  final double? effectiveEndDate;
 
   const Alert({
     this.id,
@@ -117,22 +117,22 @@ class Alert {
         'trip': trip?.toJson(),
         'stop': stop?.toJson(),
         'patterns': patterns != null
-            ? List<dynamic>.from(patterns.map((x) => x.toJson()))
+            ? List<dynamic>.from(patterns!.map((x) => x.toJson()))
             : null,
         'alertHeaderText': alertHeaderText,
         'alertHeaderTextTranslations': alertHeaderTextTranslations != null
             ? List<dynamic>.from(
-                alertHeaderTextTranslations.map((x) => x.toJson()))
+                alertHeaderTextTranslations!.map((x) => x.toJson()))
             : null,
         'alertDescriptionText': alertDescriptionText,
         'alertDescriptionTextTranslations':
             alertDescriptionTextTranslations != null
                 ? List<dynamic>.from(
-                    alertDescriptionTextTranslations.map((x) => x.toJson()))
+                    alertDescriptionTextTranslations!.map((x) => x.toJson()))
                 : null,
         'alertUrl': alertUrl,
         'alertUrlTranslations': alertUrlTranslations != null
-            ? List<dynamic>.from(alertUrlTranslations.map((x) => x.toJson()))
+            ? List<dynamic>.from(alertUrlTranslations!.map((x) => x.toJson()))
             : null,
         'alertEffect': alertEffect?.name,
         'alertCause': alertCause?.name,

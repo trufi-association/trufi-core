@@ -1,11 +1,11 @@
 part of 'panel_cubit.dart';
 
 class PanelState extends Equatable {
-  final CustomMarkerPanel panel;
+  final CustomMarkerPanel? panel;
 
   const PanelState({this.panel});
   @override
-  List<Object> get props => [panel];
+  List<Object?> get props => [panel];
 }
 
 class CustomMarkerPanel {
@@ -17,8 +17,8 @@ class CustomMarkerPanel {
   final double minSize;
 
   CustomMarkerPanel({
-    @required this.panel,
-    @required this.positon,
-    @required this.minSize,
+    required this.panel,
+    required this.positon,
+    required this.minSize,
   });
 }

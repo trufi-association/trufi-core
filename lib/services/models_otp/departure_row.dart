@@ -3,12 +3,12 @@ import 'stop.dart';
 import 'stoptime.dart';
 
 class DepartureRow {
-  final String id;
-  final Stop stop;
-  final double lat;
-  final double lon;
-  final PatternOtp pattern;
-  final List<Stoptime> stoptimes;
+  final String? id;
+  final Stop? stop;
+  final double? lat;
+  final double? lon;
+  final PatternOtp? pattern;
+  final List<Stoptime>? stoptimes;
 
   const DepartureRow({
     this.id,
@@ -20,7 +20,7 @@ class DepartureRow {
   });
 
   factory DepartureRow.fromJson(Map<String, dynamic> json) => DepartureRow(
-        id: json['id'] as String,
+        id: json['id'] as String?,
         stop: json['stop'] != null
             ? Stop.fromJson(json['stop'] as Map<String, dynamic>)
             : null,
@@ -42,6 +42,6 @@ class DepartureRow {
         'lat': lat,
         'lon': lon,
         'pattern': pattern?.toJson(),
-        'stoptimes': List<dynamic>.from(stoptimes.map((x) => x.toJson())),
+        'stoptimes': List<dynamic>.from(stoptimes!.map((x) => x.toJson())),
       };
 }

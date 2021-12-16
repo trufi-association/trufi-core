@@ -2,14 +2,13 @@ part of 'enums_plan.dart';
 
 enum BikeRentalNetwork { taxi, carSharing, regioRad }
 
-BikeRentalNetwork getBikeRentalNetwork(String key) {
-  return BikeRentalNetworkExtension.values.keys.firstWhere(
+BikeRentalNetwork? getBikeRentalNetwork(String key) {
+  return BikeRentalNetworkExtension.values.keys.firstWhereOrNull(
     (keyE) => keyE.name == key,
-    orElse: () => null,
   );
 }
 
-extension BikeRentalNetworkExtension on BikeRentalNetwork {
+extension BikeRentalNetworkExtension on BikeRentalNetwork? {
   static const values = <BikeRentalNetwork, String>{
     BikeRentalNetwork.taxi: 'taxi',
     BikeRentalNetwork.carSharing: 'car-sharing',
@@ -17,9 +16,9 @@ extension BikeRentalNetworkExtension on BikeRentalNetwork {
   };
 
   static final images = <BikeRentalNetwork, SvgPicture>{
-    BikeRentalNetwork.taxi: SvgPicture.string(taxi ?? ""),
-    BikeRentalNetwork.carSharing: SvgPicture.string(carSharing ?? ""),
-    BikeRentalNetwork.regioRad: SvgPicture.string(regioRad ?? ""),
+    BikeRentalNetwork.taxi: SvgPicture.string(taxi),
+    BikeRentalNetwork.carSharing: SvgPicture.string(carSharing),
+    BikeRentalNetwork.regioRad: SvgPicture.string(regioRad),
   };
 
   static final colors = <BikeRentalNetwork, Color>{
@@ -34,13 +33,13 @@ extension BikeRentalNetworkExtension on BikeRentalNetwork {
     BikeRentalNetwork.regioRad: true,
   };
 
-  String get name => values[this] ?? 'car-sharing';
+  String get name => values[this!] ?? 'car-sharing';
 
-  SvgPicture get image => images[this] ?? SvgPicture.string(carSharing ?? "");
+  SvgPicture get image => images[this!] ?? SvgPicture.string(carSharing);
 
-  Color get color => colors[this] ?? Colors.black;
+  Color get color => colors[this!] ?? Colors.black;
 
-  bool get visible => visibles[this] ?? false;
+  bool get visible => visibles[this!] ?? false;
 }
 
 const defaultBikeRentalNetworks = <BikeRentalNetwork>[

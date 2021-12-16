@@ -4,15 +4,15 @@ enum _VerticalSwipeDirection { none, down, up }
 
 class VerticalSwipeDetector extends StatefulWidget {
   const VerticalSwipeDetector({
-    @required this.child,
+    required this.child,
     this.onSwipeDown,
     this.onSwipeUp,
-    Key key
+    Key? key
   }): super(key: key);
 
   final Widget child;
-  final Function onSwipeDown;
-  final Function onSwipeUp;
+  final Function? onSwipeDown;
+  final Function? onSwipeUp;
 
   @override
   VerticalSwipeDetectorState createState() => VerticalSwipeDetectorState();
@@ -50,9 +50,9 @@ class VerticalSwipeDetectorState extends State<VerticalSwipeDetector> {
 
   void endSwipe(DragEndDetails gestureDetails) {
     if (_direction == _VerticalSwipeDirection.down) {
-      if (widget.onSwipeDown != null) widget.onSwipeDown();
+      if (widget.onSwipeDown != null) widget.onSwipeDown!();
     } else if (_direction == _VerticalSwipeDirection.up) {
-      if (widget.onSwipeUp != null) widget.onSwipeUp();
+      if (widget.onSwipeUp != null) widget.onSwipeUp!();
     }
   }
 }

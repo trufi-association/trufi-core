@@ -4,25 +4,26 @@ import 'package:intl/intl.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 
 import 'date_time_picker.dart';
 
 class ItineraryDateSelector extends StatelessWidget {
   const ItineraryDateSelector({
-    Key key,
-    @required this.onFetchPlan,
+    Key? key,
+    required this.onFetchPlan,
     this.color,
   }) : super(key: key);
 
   final void Function() onFetchPlan;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final languageCode = Localizations.localeOf(context).languageCode;
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
-    final homePageState = context.watch<HomePageCubit>().state;
+    final MapRouteState homePageState = context.watch<HomePageCubit>().state;
     final payloadDataPlanCubit = context.watch<PayloadDataPlanCubit>();
     return SizedBox(
       height: 34,
@@ -59,12 +60,12 @@ class ItineraryDateSelector extends StatelessWidget {
               child: Text(
                 payloadDataPlanCubit.state.date == null
                     ? localization.commonLeavingNow
-                    : payloadDataPlanCubit.state.arriveBy
-                        ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date.customFormat(languageCode)}"
-                        : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date.customFormat(languageCode)}",
+                    : payloadDataPlanCubit.state.arriveBy!
+                        ? "${localization.commonArrival} ${payloadDataPlanCubit.state.date!.customFormat(languageCode)}"
+                        : "${localization.commonDeparture}  ${payloadDataPlanCubit.state.date!.customFormat(languageCode)}",
                 style: color != null
-                    ? theme.textTheme.bodyText1.copyWith(fontSize: 15)
-                    : theme.textTheme.headline6.copyWith(fontSize: 15),
+                    ? theme.textTheme.bodyText1!.copyWith(fontSize: 15)
+                    : theme.textTheme.headline6!.copyWith(fontSize: 15),
                 textAlign: TextAlign.center,
                 maxLines: 1,
               ),

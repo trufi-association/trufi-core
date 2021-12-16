@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 class BikeParkEntity {
-  final String id;
-  final String bikeParkId;
-  final String name;
-  final int spacesAvailable;
-  final bool realtime;
-  final double lon;
-  final double lat;
+  final String? id;
+  final String? bikeParkId;
+  final String? name;
+  final int? spacesAvailable;
+  final bool? realtime;
+  final double? lon;
+  final double? lat;
 
   const BikeParkEntity({
     this.id,
@@ -33,13 +33,13 @@ class BikeParkEntity {
 
   factory BikeParkEntity.fromMap(Map<String, dynamic> map) {
     return BikeParkEntity(
-      id: map['id'] as String,
-      bikeParkId: map['bikeParkId'] as String,
-      name: map['name'] as String,
-      spacesAvailable: map['spacesAvailable'] as int,
-      realtime: map['realtime'] as bool,
-      lon: map['lon'] as double,
-      lat: map['lat'] as double,
+      id: map['id'] as String?,
+      bikeParkId: map['bikeParkId'] as String?,
+      name: map['name'] as String?,
+      spacesAvailable: map['spacesAvailable'] as int?,
+      realtime: map['realtime'] as bool?,
+      lon: map['lon'] as double?,
+      lat: map['lat'] as double?,
     );
   }
 

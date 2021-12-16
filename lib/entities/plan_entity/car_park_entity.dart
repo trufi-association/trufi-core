@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class CarParkEntity {
-  final String id;
-  final String carParkId;
-  final String name;
-  final int maxCapacity;
-  final int spacesAvailable;
-  final bool realtime;
-  final double lon;
-  final double lat;
+  final String? id;
+  final String? carParkId;
+  final String? name;
+  final int? maxCapacity;
+  final int? spacesAvailable;
+  final bool? realtime;
+  final double? lon;
+  final double? lat;
 
   const CarParkEntity({
     this.id,
@@ -36,14 +36,14 @@ class CarParkEntity {
 
   factory CarParkEntity.fromMap(Map<String, dynamic> map) {
     return CarParkEntity(
-      id: map['id'] as String,
-      carParkId: map['carParkId'] as String,
-      name: map['name'] as String,
-      maxCapacity: map['maxCapacity'] as int,
-      spacesAvailable: map['spacesAvailable'] as int,
-      realtime: map['realtime'] as bool,
-      lon: map['lon'] as double,
-      lat: map['lat'] as double,
+      id: map['id'] as String?,
+      carParkId: map['carParkId'] as String?,
+      name: map['name'] as String?,
+      maxCapacity: map['maxCapacity'] as int?,
+      spacesAvailable: map['spacesAvailable'] as int?,
+      realtime: map['realtime'] as bool?,
+      lon: map['lon'] as double?,
+      lat: map['lat'] as double?,
     );
   }
 

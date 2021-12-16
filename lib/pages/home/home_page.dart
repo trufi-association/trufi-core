@@ -10,6 +10,7 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/plan.dart';
 import 'package:trufi_core/pages/home/plan_map/plan_empty.dart';
 import 'package:trufi_core/widgets/fetch_error_handler.dart';
@@ -23,11 +24,11 @@ import 'form_fields_portrait.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
-  final LocaleWidgetBuilder customOverlayWidget;
-  final WidgetBuilder customBetweenFabWidget;
+  final LocaleWidgetBuilder? customOverlayWidget;
+  final WidgetBuilder? customBetweenFabWidget;
 
   const HomePage(
-      {Key key, this.customOverlayWidget, this.customBetweenFabWidget})
+      {Key? key, this.customOverlayWidget, this.customBetweenFabWidget})
       : super(key: key);
 
   @override
@@ -35,10 +36,10 @@ class HomePage extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    final config = context.read<ConfigurationCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
-    final homePageState = homePageCubit.state;
+    final MapRouteState homePageState = homePageCubit.state;
     final isGraphQlEndpoint = config.serverType == ServerType.graphQLServer;
     final transportSelectionHeight =
         homePageState.hasTransportModes || homePageState.isFetchingModes
@@ -95,7 +96,7 @@ class HomePage extends StatelessWidget {
           Positioned.fill(
             child: Container(
               child: homePageState.plan != null &&
-                      homePageState.plan.error == null &&
+                      homePageState.plan!.error == null &&
                       !homePageState.isFetching
                   ? PlanPage(
                       homePageState.plan,
@@ -112,8 +113,8 @@ class HomePage extends StatelessWidget {
                     ),
             ),
           ),
-          if (config.animations.loading != null && homePageState.isFetching)
-            Positioned.fill(child: config.animations.loading)
+          if (config.animations!.loading != null && homePageState.isFetching)
+            Positioned.fill(child: config.animations!.loading)
         ],
       ),
       drawer: const TrufiDrawer(HomePage.route),
@@ -126,7 +127,7 @@ class HomePage extends StatelessWidget {
     final appReviewCubit = context.read<AppReviewCubit>();
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
-    final config = context.read<ConfigurationCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     await homePageCubit
         .fetchPlan(
           correlationId,

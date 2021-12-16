@@ -31,7 +31,7 @@ List<Map<String, String>> parsebikeParkModes(List<TransportMode> list) {
   return dataParse;
 }
 
-Map<String, String> parseCarMode(LatLng destiny) {
+Map<String, String?> parseCarMode(LatLng destiny) {
   final bool isInHerrenbergOldTown =
       insidePointInPolygon(destiny, herrenbergOldTown);
 
@@ -41,9 +41,9 @@ Map<String, String> parseCarMode(LatLng destiny) {
   };
 }
 
-List<Map<String, String>> parseTransportModes(List<TransportMode> list) {
+List<Map<String, String?>> parseTransportModes(List<TransportMode> list) {
   final dataParse = list
-      .map((e) => <String, String>{
+      .map((e) => <String, String?>{
             'mode': e.name,
             'qualifier': e.qualifier,
           })
@@ -56,12 +56,12 @@ List<String> parseBikeRentalNetworks(List<BikeRentalNetwork> list) {
   return dataParse;
 }
 
-String parseDateFormat(DateTime date) {
+String parseDateFormat(DateTime? date) {
   final tempDate = date ?? DateTime.now();
   return DateFormat('yyyy-MM-dd').format(tempDate);
 }
 
-String parseTime(DateTime date) {
+String parseTime(DateTime? date) {
   final tempDate = date ?? DateTime.now();
   return DateFormat('HH:mm:ss').format(tempDate);
 }

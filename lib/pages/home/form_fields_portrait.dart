@@ -5,6 +5,7 @@ import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 
 import '../../models/trufi_place.dart';
 import 'home_buttons.dart';
@@ -14,12 +15,12 @@ import 'transport_selector/transport_selector.dart';
 
 class FormFieldsPortrait extends StatelessWidget {
   const FormFieldsPortrait({
-    Key key,
-    @required this.onSaveFrom,
-    @required this.onSaveTo,
-    @required this.onFetchPlan,
-    @required this.onReset,
-    @required this.onSwap,
+    Key? key,
+    required this.onSaveFrom,
+    required this.onSaveTo,
+    required this.onFetchPlan,
+    required this.onReset,
+    required this.onSwap,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -31,8 +32,8 @@ class FormFieldsPortrait extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translations = TrufiLocalization.of(context);
-    final homePageState = context.read<HomePageCubit>().state;
-    final config = context.read<ConfigurationCubit>().state;
+    final MapRouteState homePageState = context.read<HomePageCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     return SafeArea(
       child: Column(
         children: [
@@ -45,7 +46,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   isOrigin: true,
                   onSaved: onSaveFrom,
                   hintText: translations.searchPleaseSelectOrigin,
-                  textLeadingImage: config.map.markersConfiguration.fromMarker,
+                  textLeadingImage: config.map!.markersConfiguration.fromMarker,
                   leading: const SizedBox.shrink(),
                   trailing: homePageState.isPlacesDefined
                       ? ResetButton(onReset: onReset)
@@ -56,7 +57,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   isOrigin: false,
                   onSaved: onSaveTo,
                   hintText: translations.searchPleaseSelectDestination,
-                  textLeadingImage: config.map.markersConfiguration.toMarker,
+                  textLeadingImage: config.map!.markersConfiguration.toMarker,
                   leading: const SizedBox.shrink(),
                   trailing: homePageState.isPlacesDefined
                       ? SwapButton(

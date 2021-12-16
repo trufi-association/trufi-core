@@ -5,9 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 abstract class SocialMediaItem extends MenuItem {
   final String url;
   SocialMediaItem({
-    @required this.url,
-    @required WidgetBuilder buildIcon,
-    @required String Function(BuildContext) name,
+    required this.url,
+    required WidgetBuilder buildIcon,
+    required String Function(BuildContext) name,
   }) : super(
           selectedIcon: buildIcon,
           notSelectedIcon: buildIcon,

@@ -5,8 +5,8 @@ import 'package:trufi_core/models/theme_state.dart';
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit(
     ThemeData activeTheme,
-    ThemeData searchTheme,
-    ThemeData bottomBarTheme,
+    ThemeData? searchTheme,
+    ThemeData? bottomBarTheme,
   ) : super(
           ThemeState(
             activeTheme: activeTheme,
@@ -23,11 +23,11 @@ class ThemeCubit extends Cubit<ThemeState> {
       primaryIconTheme:
           activeTheme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: activeTheme.primaryTextTheme.copyWith(
-        headline6: activeTheme.primaryTextTheme.bodyText2
+        headline6: activeTheme.primaryTextTheme.bodyText2!
             .copyWith(color: Colors.black),
-        bodyText2: activeTheme.primaryTextTheme.bodyText2
+        bodyText2: activeTheme.primaryTextTheme.bodyText2!
             .copyWith(color: Colors.black),
-        bodyText1: activeTheme.primaryTextTheme.bodyText1.copyWith(
+        bodyText1: activeTheme.primaryTextTheme.bodyText1!.copyWith(
           color: activeTheme.accentColor,
         ),
       ),
@@ -41,11 +41,11 @@ class ThemeCubit extends Cubit<ThemeState> {
       primaryIconTheme:
           activeTheme.primaryIconTheme.copyWith(color: Colors.black54),
       textTheme: activeTheme.primaryTextTheme.copyWith(
-        headline6: activeTheme.primaryTextTheme.bodyText2
+        headline6: activeTheme.primaryTextTheme.bodyText2!
             .copyWith(color: Colors.black),
-        bodyText2: activeTheme.primaryTextTheme.bodyText2
+        bodyText2: activeTheme.primaryTextTheme.bodyText2!
             .copyWith(color: Colors.black),
-        bodyText1: activeTheme.primaryTextTheme.bodyText1.copyWith(
+        bodyText1: activeTheme.primaryTextTheme.bodyText1!.copyWith(
           color: activeTheme.accentColor,
         ),
       ),

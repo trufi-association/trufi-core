@@ -6,7 +6,7 @@ import 'package:trufi_core/blocs/preferences/preferences_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class TrufiDrawer extends StatefulWidget {
-  const TrufiDrawer(this.currentRoute, {Key key}) : super(key: key);
+  const TrufiDrawer(this.currentRoute, {Key? key}) : super(key: key);
 
   final String currentRoute;
 
@@ -15,7 +15,7 @@ class TrufiDrawer extends StatefulWidget {
 }
 
 class TrufiDrawerState extends State<TrufiDrawer> {
-  AssetImage bgImage;
+  late AssetImage bgImage;
   final GlobalKey appShareButtonKey =
       GlobalKey(debugLabel: "appShareButtonKey");
 
@@ -40,7 +40,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final config = context.read<ConfigurationCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final preferencesCubit = context.read<PreferencesCubit>();
     final menuItems = preferencesCubit.menuItems;
@@ -71,8 +71,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            config.customTranslations.get(
-                              config.customTranslations.title,
+                            config.customTranslations!.get(
+                              config.customTranslations!.title,
                               currentLocale,
                               localization.title,
                             ),
@@ -80,8 +80,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            config.customTranslations.get(
-                              config.customTranslations.tagline,
+                            config.customTranslations!.get(
+                              config.customTranslations!.tagline,
                               currentLocale,
                               localization.tagline(config.appCity),
                             ),
@@ -117,7 +117,7 @@ class TrufiDrawerState extends State<TrufiDrawer> {
               ...previousValue,
               if (previousValue.isNotEmpty) const Divider(),
               ...element.map(
-                (element) => element.buildItem(
+                (element) => element!.buildItem(
                   context,
                   isSelected: widget.currentRoute == element.id,
                 ),
@@ -132,8 +132,8 @@ class TrufiDrawerState extends State<TrufiDrawer> {
 
 class TrufiDrawerRoute<T> extends MaterialPageRoute<T> {
   TrufiDrawerRoute({
-    WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
   }) : super(builder: builder, settings: settings);
 
   @override

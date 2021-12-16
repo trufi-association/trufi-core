@@ -7,8 +7,8 @@ import 'package:trufi_core/widgets/app_review_dialog.dart';
 
 class AppLifecycleReactor extends StatefulWidget {
   const AppLifecycleReactor({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -22,16 +22,16 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
-    WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance!.addPostFrameCallback(
       (duration) => {context.read<LocationProviderCubit>().start()},
     );
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 

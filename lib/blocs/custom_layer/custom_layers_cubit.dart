@@ -41,24 +41,24 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
   }
   Future<void> _loadSavedStatus() async {
     final savedMap = await _localStorage.load();
-    emit(state.copyWith(layersSatus: {...state.layersSatus, ...savedMap}));
+    emit(state.copyWith(layersSatus: {...state.layersSatus!, ...savedMap}));
   }
 
   void changeCustomMapLayerState({
-    @required CustomLayer customLayer,
-    @required bool newState,
+    required CustomLayer customLayer,
+    required bool? newState,
   }) {
-    final Map<String, bool> tempMap = Map.from(state.layersSatus);
+    final Map<String, bool?> tempMap = Map.from(state.layersSatus!);
     tempMap[customLayer.id] = newState;
     emit(state.copyWith(layersSatus: tempMap));
     _localStorage.save(state.layersSatus);
   }
 
   void changeCustomMapLayerContainerState({
-    @required CustomLayerContainer customLayer,
-    @required bool newState,
+    required CustomLayerContainer customLayer,
+    required bool? newState,
   }) {
-    final Map<String, bool> tempMap = Map.from(state.layersSatus);
+    final Map<String, bool?> tempMap = Map.from(state.layersSatus!);
     for (final CustomLayer layer in customLayer.layers) {
       tempMap[layer.id] = newState;
     }
@@ -67,8 +67,8 @@ class CustomLayersCubit extends Cubit<CustomLayersState> {
     _localStorage.save(state.layersSatus);
   }
 
-  List<LayerOptions> activeCustomLayers(int zoom) => state.layers
-      .where((element) => state.layersSatus[element.id])
+  List<LayerOptions> activeCustomLayers(int? zoom) => state.layers!
+      .where((element) => state.layersSatus![element.id]!)
       .map((element) => element.buildLayerOptions(zoom))
       .toList();
 }

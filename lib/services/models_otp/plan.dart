@@ -5,16 +5,16 @@ import 'itinerary.dart';
 import 'place.dart';
 
 class Plan {
-  final double date;
-  final Place from;
-  final Place to;
-  final List<Itinerary> itineraries;
-  final List<String> messageEnums;
-  final List<String> messageStrings;
-  final double prevDateTime;
-  final double nextDateTime;
-  final double searchWindowUsed;
-  final DebugOutput debugOutput;
+  final double? date;
+  final Place? from;
+  final Place? to;
+  final List<Itinerary>? itineraries;
+  final List<String>? messageEnums;
+  final List<String>? messageStrings;
+  final double? prevDateTime;
+  final double? nextDateTime;
+  final double? searchWindowUsed;
+  final DebugOutput? debugOutput;
 
   const Plan({
     this.date,
@@ -61,7 +61,7 @@ class Plan {
         'from': from?.toMap(),
         'to': to?.toMap(),
         'itineraries': itineraries != null
-            ? List<dynamic>.from(itineraries.map((x) => x.toMap()))
+            ? List<dynamic>.from(itineraries!.map((x) => x.toMap()))
             : null,
         'messageEnums': messageEnums,
         'messageStrings': messageStrings,
@@ -72,16 +72,16 @@ class Plan {
       };
 
   Plan copyWith({
-    double date,
-    Place from,
-    Place to,
-    List<Itinerary> itineraries,
-    List<String> messageEnums,
-    List<String> messageStrings,
-    double prevDateTime,
-    double nextDateTime,
-    double searchWindowUsed,
-    DebugOutput debugOutput,
+    double? date,
+    Place? from,
+    Place? to,
+    List<Itinerary>? itineraries,
+    List<String>? messageEnums,
+    List<String>? messageStrings,
+    double? prevDateTime,
+    double? nextDateTime,
+    double? searchWindowUsed,
+    DebugOutput? debugOutput,
   }) {
     return Plan(
       date: date ?? this.date,
@@ -99,15 +99,15 @@ class Plan {
 
   PlanEntity toPlan() {
     return PlanEntity(
-      to: to.toPlanLocation(),
-      from: from.toPlanLocation(),
-      itineraries: itineraries
+      to: to!.toPlanLocation(),
+      from: from!.toPlanLocation(),
+      itineraries: itineraries!
           .map(
             (itinerary) => itinerary.toPlanItinerary(),
           )
           .toList(),
       // TODO remove when review by Samuel
       // error: itineraries.isEmpty ? PlanError(404, "Not found routes") : null,
-    )?.copyWith(type: 'plan');
+    ).copyWith(type: 'plan');
   }
 }

@@ -43,7 +43,7 @@ class MapConfiguration {
   LatLng northEast;
 
   /// This widgetBuilder creates the Attribution Texts on top of the map
-  WidgetBuilder mapAttributionBuilder;
+  WidgetBuilder? mapAttributionBuilder;
 
   /// To, From and yourLocation Marker
   final MarkerConfiguration markersConfiguration;
@@ -60,9 +60,9 @@ class MapConfiguration {
     this.onlineMaxZoom = 19.0,
     this.onlineZoom = 13.0,
     this.chooseLocationZoom = 15.0,
-    @required this.center,
-    @required this.southWest,
-    @required this.northEast,
+    required this.center,
+    required this.southWest,
+    required this.northEast,
     this.mapAttributionBuilder,
     this.markersConfiguration = const DefaultMarkerConfiguration(),
     this.itinararyCreator = const DefaultItineraryCreator(),

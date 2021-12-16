@@ -14,9 +14,9 @@ typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiMap extends StatefulWidget {
   const TrufiMap({
-    Key key,
-    @required this.controller,
-    @required this.layerOptionsBuilder,
+    Key? key,
+    required this.controller,
+    required this.layerOptionsBuilder,
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
@@ -25,21 +25,21 @@ class TrufiMap extends StatefulWidget {
 
   final TrufiMapController controller;
   final LayerOptionsBuilder layerOptionsBuilder;
-  final TapCallback onTap;
-  final LongPressCallback onLongPress;
-  final PositionCallback onPositionChanged;
+  final TapCallback? onTap;
+  final LongPressCallback? onLongPress;
+  final PositionCallback? onPositionChanged;
   final bool showCustomMarkes;
   @override
   _TrufiMapState createState() => _TrufiMapState();
 }
 
 class _TrufiMapState extends State<TrufiMap> {
-  int mapZoom;
+  int? mapZoom;
 
   @override
   Widget build(BuildContext context) {
-    final cfg = context.read<ConfigurationCubit>().state;
-    final currentMapType = context.watch<MapTileProviderCubit>().state;
+    final Configuration cfg = context.read<ConfigurationCubit>().state;
+    final MapTileProviderState currentMapType = context.watch<MapTileProviderCubit>().state;
     final currentLocation =
         context.watch<LocationProviderCubit>().state.currentLocation;
     final customLayersCubit = context.watch<CustomLayersCubit>();
@@ -51,33 +51,33 @@ class _TrufiMapState extends State<TrufiMap> {
             InteractiveFlag.pinchMove |
             InteractiveFlag.pinchZoom |
             InteractiveFlag.doubleTapZoom,
-        minZoom: cfg.map.onlineMinZoom,
-        maxZoom: cfg.map.onlineMaxZoom,
-        zoom: cfg.map.onlineZoom,
+        minZoom: cfg.map!.onlineMinZoom,
+        maxZoom: cfg.map!.onlineMaxZoom,
+        zoom: cfg.map!.onlineZoom,
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
-        center: cfg.map.center,
+        center: cfg.map!.center,
         onPositionChanged: (
           MapPosition position,
           bool hasGesture,
         ) {
           if (widget.onPositionChanged != null) {
             Future.delayed(Duration.zero, () {
-              widget.onPositionChanged(position, hasGesture);
+              widget.onPositionChanged!(position, hasGesture);
             });
           }
           // fix render issue
           Future.delayed(Duration.zero, () {
-            final int zoom = position.zoom.round();
+            final int zoom = position.zoom!.round();
             if (mapZoom != zoom) setState(() => mapZoom = zoom);
           });
         },
       ),
       layers: [
-        ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
+        ...currentMapType.currentMapTileProvider!.buildTileLayerOptions(),
         if (widget.showCustomMarkes)
           ...customLayersCubit.activeCustomLayers(mapZoom).reversed,
-        cfg.map.markersConfiguration
+        cfg.map!.markersConfiguration
             .buildYourLocationMarkerLayerOptions(currentLocation),
         ...widget.layerOptionsBuilder(context)
       ],

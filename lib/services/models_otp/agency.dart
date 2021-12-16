@@ -13,20 +13,20 @@ class Agency {
   final String lang;
   final String phone;
   final String fareUrl;
-  final List<RouteOtp> routes;
-  final List<Alert> alerts;
+  final List<RouteOtp>? routes;
+  final List<Alert>? alerts;
 
   const Agency({
-    @required this.id,
-    @required this.gtfsId,
-    @required this.name,
-    @required this.url,
-    @required this.timezone,
-    @required this.lang,
-    @required this.phone,
-    @required this.fareUrl,
-    @required this.routes,
-    @required this.alerts,
+    required this.id,
+    required this.gtfsId,
+    required this.name,
+    required this.url,
+    required this.timezone,
+    required this.lang,
+    required this.phone,
+    required this.fareUrl,
+    required this.routes,
+    required this.alerts,
   });
 
   factory Agency.fromJson(Map<String, dynamic> json) => Agency(
@@ -59,8 +59,8 @@ class Agency {
         'lang': lang,
         'phone': phone,
         'fareUrl': fareUrl,
-        'routes': List<dynamic>.from(routes.map((x) => x.toJson())),
-        'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'routes': List<dynamic>.from(routes!.map((x) => x.toJson())),
+        'alerts': List<dynamic>.from(alerts!.map((x) => x.toJson())),
       };
 
   AgencyEntity toAgencyEntity() {

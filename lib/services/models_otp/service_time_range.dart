@@ -5,8 +5,8 @@ class ServiceTimeRange {
   final int end;
 
   const ServiceTimeRange({
-    @required this.start,
-    @required this.end,
+    required this.start,
+    required this.end,
   });
 
   factory ServiceTimeRange.fromJson(Map<String, dynamic> json) =>

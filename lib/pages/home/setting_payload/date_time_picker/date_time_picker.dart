@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class DateTimePicker extends StatefulWidget {
-  const DateTimePicker({Key key, @required this.dateConf})
+  const DateTimePicker({Key? key, required this.dateConf})
       : assert(dateConf != null),
         super(key: key);
 
@@ -19,30 +19,30 @@ class _DateTimePickerState extends State<DateTimePicker>
   final _nowDate = DateTime.now()
       .roundDown(delta: const Duration(minutes: 15))
       .add(const Duration(minutes: 15));
-  TabController _controller;
-  DateTimeConf tempDateConf;
-  DateTime initialDateTime;
+  TabController? _controller;
+  late DateTimeConf tempDateConf;
+  DateTime? initialDateTime;
 
   @override
   void initState() {
     tempDateConf = widget.dateConf;
     initialDateTime =
-        tempDateConf.date != null && tempDateConf.date.isAfter(_nowDate)
-            ? tempDateConf.date.roundDown(delta: const Duration(minutes: 15))
+        tempDateConf.date != null && tempDateConf.date!.isAfter(_nowDate)
+            ? tempDateConf.date!.roundDown(delta: const Duration(minutes: 15))
             : _nowDate;
     super.initState();
     _controller = TabController(
-        length: 3, initialIndex: tempDateConf.isArriveBy ? 2 : 1, vsync: this);
-    _controller.addListener(() {
-      if (_controller.index == 0) {
+        length: 3, initialIndex: tempDateConf.isArriveBy! ? 2 : 1, vsync: this);
+    _controller!.addListener(() {
+      if (_controller!.index == 0) {
         setState(() {
           Navigator.of(context).pop(const DateTimeConf(null));
         });
-      } else if (_controller.index == 1) {
+      } else if (_controller!.index == 1) {
         setState(() {
           tempDateConf = tempDateConf.copyWith(isArriveBy: false);
         });
-      } else if (_controller.index == 2) {
+      } else if (_controller!.index == 2) {
         setState(() {
           tempDateConf = tempDateConf.copyWith(isArriveBy: true);
         });
@@ -76,7 +76,7 @@ class _DateTimePickerState extends State<DateTimePicker>
               Text(
                 localization.commonLeavingNow,
                 style: _styleOptions.copyWith(
-                  color: theme.textTheme.bodyText1.color,
+                  color: theme.textTheme.bodyText1!.color,
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,
@@ -84,10 +84,10 @@ class _DateTimePickerState extends State<DateTimePicker>
               Text(
                 localization.commonDeparture,
                 style: _styleOptions.copyWith(
-                  color: tempDateConf.isArriveBy
+                  color: tempDateConf.isArriveBy!
                       ? Colors.grey[700]
-                      : theme.textTheme.bodyText2.color,
-                  fontWeight: tempDateConf.isArriveBy
+                      : theme.textTheme.bodyText2!.color,
+                  fontWeight: tempDateConf.isArriveBy!
                       ? FontWeight.w400
                       : FontWeight.w400,
                 ),
@@ -96,10 +96,10 @@ class _DateTimePickerState extends State<DateTimePicker>
               Text(
                 localization.commonArrival,
                 style: _styleOptions.copyWith(
-                  color: !tempDateConf.isArriveBy
+                  color: !tempDateConf.isArriveBy!
                       ? Colors.grey[700]
-                      : theme.textTheme.bodyText2.color,
-                  fontWeight: !tempDateConf.isArriveBy
+                      : theme.textTheme.bodyText2!.color,
+                  fontWeight: !tempDateConf.isArriveBy!
                       ? FontWeight.w400
                       : FontWeight.w400,
                 ),
@@ -172,12 +172,12 @@ class DateTimeConf {
     this.isArriveBy = false,
   });
 
-  final DateTime date;
-  final bool isArriveBy;
+  final DateTime? date;
+  final bool? isArriveBy;
 
   DateTimeConf copyWith({
-    DateTime date,
-    bool isArriveBy,
+    DateTime? date,
+    bool? isArriveBy,
   }) {
     return DateTimeConf(
       date ?? this.date,

@@ -6,21 +6,21 @@ import 'package:trufi_core/pages/home/plan_map/plan_itinerary_tabs/itinerary_det
 import 'itinerary_details_expanded/leg_overview.dart';
 
 class ItineraryDetailsExpanded extends StatelessWidget {
-  final Animation<double> animationDetailHeight;
+  final Animation<double>? animationDetailHeight;
   final PlanItinerary itinerary;
   final AdEntity ad;
 
   const ItineraryDetailsExpanded({
-    Key key,
-    @required this.animationDetailHeight,
-    @required this.itinerary,
-    @required this.ad,
+    Key? key,
+    required this.animationDetailHeight,
+    required this.itinerary,
+    required this.ad,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: animationDetailHeight.value,
+      height: animationDetailHeight!.value,
       child: itinerary.hasAdvencedData
           ? LegOverviewAdvanced(
               itinerary: itinerary,

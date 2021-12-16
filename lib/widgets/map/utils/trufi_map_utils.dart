@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
@@ -31,9 +30,9 @@ Marker buildTransferMarker(LatLng point) {
 Marker buildBusMarker(
   LatLng point,
   Color color,
-  PlanItineraryLeg leg, {
-  VoidCallback onTap,
-  Widget icon,
+  PlanItineraryLeg? leg, {
+  VoidCallback? onTap,
+  Widget? icon,
   bool showIcon = true,
   bool showText = true,
 }) {
@@ -60,7 +59,7 @@ Marker buildBusMarker(
                     width: 30,
                     child: icon,
                   )
-                else if (leg.transportMode?.getImage() != null)
+                else if (leg!.transportMode?.getImage() != null)
                   SizedBox(
                       height: 28,
                       width: 28,
@@ -68,12 +67,12 @@ Marker buildBusMarker(
                 else
                   Icon(leg.transportMode.icon, color: Colors.white)
               ],
-              if (showText && leg.transportMode != TransportMode.walk)
+              if (showText && leg!.transportMode != TransportMode.walk)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
-                    leg?.route?.shortName ??
-                        (leg?.headSign != null ? ' ${leg.headSign}' : ''),
+                    leg.route?.shortName ??
+                        (leg.headSign != null ? ' ${leg.headSign}' : ''),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,
@@ -94,7 +93,7 @@ Marker buildMarker(
   IconData iconData,
   AnchorPos anchorPos,
   Color color, {
-  Decoration decoration,
+  Decoration? decoration,
 }) {
   return Marker(
     point: point,
@@ -109,7 +108,7 @@ Marker buildMarker(
 }
 
 LatLng createLatLngWithPlanLocation(PlanLocation location) {
-  return LatLng(location.latitude, location.longitude);
+  return LatLng(location.latitude!, location.longitude!);
 }
 
 List<LatLng> decodePolyline(String encoded) {
@@ -142,8 +141,8 @@ List<LatLng> decodePolyline(String encoded) {
   return points;
 }
 
-Polyline polylineHitTest(List<Polyline> polylines, LatLng point) {
-  Polyline minPolyline;
+Polyline? polylineHitTest(List<Polyline> polylines, LatLng point) {
+  Polyline? minPolyline;
   double minDist = double.maxFinite;
   for (final Polyline p in polylines) {
     for (int i = 0; i < p.points.length - 1; i++) {
@@ -190,7 +189,7 @@ double lengthForPolyline(Polyline polyline) {
   return totalLength;
 }
 
-LatLng midPointForPolyline(Polyline polyline) {
+LatLng? midPointForPolyline(Polyline polyline) {
   final double midPointLength = lengthForPolyline(polyline) / 2;
   double totalLength = 0.0;
   for (int i = 0; i < polyline.points.length - 1; i++) {

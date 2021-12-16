@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
   final String text;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final void Function() onPressed;
   final bool isDark;
   final double borderRadius;
-  final double height;
-  final double width;
-  final Color color;
+  final double? height;
+  final double? width;
+  final Color? color;
   const CustomTextButton({
-    Key key,
-    @required this.text,
-    @required this.onPressed,
+    Key? key,
+    required this.text,
+    required this.onPressed,
     this.textStyle,
     this.isDark = true,
     this.borderRadius = 18.0,

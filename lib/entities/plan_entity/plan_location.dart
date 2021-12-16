@@ -11,15 +11,15 @@ class PlanLocation {
   static const String _latitude = "lat";
   static const String _longitude = "lon";
 
-  final String name;
-  final double latitude;
-  final double longitude;
+  final String? name;
+  final double? latitude;
+  final double? longitude;
 
   factory PlanLocation.fromJson(Map<String, dynamic> json) {
     return PlanLocation(
-      name: json[_name] as String,
-      latitude: json[_latitude] as double,
-      longitude: json[_longitude] as double,
+      name: json[_name] as String?,
+      latitude: json[_latitude] as double?,
+      longitude: json[_longitude] as double?,
     );
   }
 

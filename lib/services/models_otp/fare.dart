@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'fare_component.dart';
 
 class Fare {
-  final String type;
-  final String currency;
-  final int cents;
-  final List<FareComponent> components;
+  final String? type;
+  final String? currency;
+  final int? cents;
+  final List<FareComponent>? components;
 
   const Fare({
     this.type,
@@ -16,8 +16,8 @@ class Fare {
   });
 
   factory Fare.fromMap(Map<String, dynamic> json) => Fare(
-        type: json['type'] as String,
-        currency: json['currency'] as String,
+        type: json['type'] as String?,
+        currency: json['currency'] as String?,
         cents: (json['cents'] as num).toInt(),
         components: json['components'] != null
             ? List<FareComponent>.from(
@@ -32,7 +32,7 @@ class Fare {
         'currency': currency,
         'cents': cents,
         'components': components != null
-            ? List<dynamic>.from(components.map((x) => x.toJson()))
+            ? List<dynamic>.from(components!.map((x) => x.toJson()))
             : null,
       };
 

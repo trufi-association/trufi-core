@@ -11,7 +11,7 @@ import 'package:trufi_core/widgets/trufi_drawer.dart';
 enum DefaultItemsMenu { language, appReview }
 
 extension LayerIdsToString on DefaultItemsMenu {
-  SimpleMenuItem toMenuItem() {
+  SimpleMenuItem? toMenuItem() {
     final Map<DefaultItemsMenu, SimpleMenuItem> map = {
       DefaultItemsMenu.language: SimpleMenuItem(
           buildIcon: (context) => const Icon(Icons.language),
@@ -29,9 +29,9 @@ extension LayerIdsToString on DefaultItemsMenu {
               style: theme.textTheme.bodyText1,
               value: values
                   .firstWhere((value) => value.languageCode == languageCode),
-              onChanged: (LanguageDropdownValue value) {
+              onChanged: (LanguageDropdownValue? value) {
                 BlocProvider.of<PreferencesCubit>(context)
-                    .updateLanguage(value.languageCode);
+                    .updateLanguage(value!.languageCode);
               },
               items: values.map((LanguageDropdownValue value) {
                 return DropdownMenuItem<LanguageDropdownValue>(
@@ -62,9 +62,9 @@ extension LayerIdsToString on DefaultItemsMenu {
 
 class SimpleMenuItem extends MenuItem {
   SimpleMenuItem({
-    @required WidgetBuilder buildIcon,
-    @required WidgetBuilder name,
-    void Function() onClick,
+    required WidgetBuilder buildIcon,
+    required WidgetBuilder name,
+    void Function()? onClick,
   }) : super(
           selectedIcon: buildIcon,
           notSelectedIcon: buildIcon,

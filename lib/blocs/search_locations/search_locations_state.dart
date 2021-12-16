@@ -7,17 +7,17 @@ class SearchLocationsState extends Equatable {
   final List<TrufiLocation> favoritePlaces;
 
   const SearchLocationsState({
-    @required this.myPlaces,
-    @required this.myDefaultPlaces,
-    @required this.historyPlaces,
-    @required this.favoritePlaces,
+    required this.myPlaces,
+    required this.myDefaultPlaces,
+    required this.historyPlaces,
+    required this.favoritePlaces,
   });
 
   SearchLocationsState copyWith({
-    List<TrufiLocation> myPlaces,
-    List<TrufiLocation> myDefaultPlaces,
-    List<TrufiLocation> historyPlaces,
-    List<TrufiLocation> favoritePlaces,
+    List<TrufiLocation>? myPlaces,
+    List<TrufiLocation>? myDefaultPlaces,
+    List<TrufiLocation>? historyPlaces,
+    List<TrufiLocation>? favoritePlaces,
   }) {
     return SearchLocationsState(
       myPlaces: myPlaces ?? this.myPlaces,
@@ -28,5 +28,6 @@ class SearchLocationsState extends Equatable {
   }
 
   @override
-  List<Object> get props => [myPlaces, myDefaultPlaces, historyPlaces, favoritePlaces];
+  List<Object> get props =>
+      [myPlaces, myDefaultPlaces, historyPlaces, favoritePlaces];
 }

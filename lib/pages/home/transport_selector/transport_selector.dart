@@ -8,18 +8,20 @@ import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/entities/plan_entity/utils/time_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/other_icons.dart';
+import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/pages/home/plan_map/mode_transport_screen.dart';
 import 'package:trufi_core/widgets/card_transport_mode.dart';
 
 class TransportSelector extends StatelessWidget {
-  const TransportSelector({Key key}) : super(key: key);
+  const TransportSelector({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final homePageState = context.watch<HomePageCubit>().state;
+    final MapRouteState homePageState = context.watch<HomePageCubit>().state;
     final modesTransport = homePageState.modesTransport;
-    final payloadDataPlanState = context.watch<PayloadDataPlanCubit>().state;
+    final PayloadDataPlanState payloadDataPlanState =
+        context.watch<PayloadDataPlanCubit>().state;
     return homePageState.isFetchingModes
         ? Container(
             color: Colors.grey[100],
@@ -65,8 +67,8 @@ class TransportSelector extends StatelessWidget {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    if (modesTransport.existWalkPlan &&
-                        !payloadDataPlanState.wheelchair)
+                    if (modesTransport!.existWalkPlan &&
+                        !payloadDataPlanState.wheelchair!)
                       CardTransportMode(
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
@@ -81,15 +83,15 @@ class TransportSelector extends StatelessWidget {
                         title: durationToString(
                             localization,
                             modesTransport
-                                .walkPlan.itineraries[0].durationTrip),
+                                .walkPlan!.itineraries![0].durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
                             modesTransport
-                                .walkPlan.itineraries[0].walkDistance),
+                                .walkPlan!.itineraries![0].walkDistance),
                       ),
                     if (modesTransport.existBikePlan &&
-                        !payloadDataPlanState.wheelchair &&
-                        payloadDataPlanState.includeBikeSuggestions)
+                        !payloadDataPlanState.wheelchair! &&
+                        payloadDataPlanState.includeBikeSuggestions!)
                       CardTransportMode(
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
@@ -105,15 +107,15 @@ class TransportSelector extends StatelessWidget {
                         title: durationToString(
                             localization,
                             modesTransport
-                                .bikePlan.itineraries[0].durationTrip),
+                                .bikePlan!.itineraries![0].durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
                             modesTransport
-                                .bikePlan.itineraries[0].totalDistance),
+                                .bikePlan!.itineraries![0].totalDistance),
                       ),
                     if (modesTransport.existBikeAndVehicle &&
-                        !payloadDataPlanState.wheelchair &&
-                        payloadDataPlanState.includeBikeSuggestions)
+                        !payloadDataPlanState.wheelchair! &&
+                        payloadDataPlanState.includeBikeSuggestions!)
                       CardTransportMode(
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
@@ -135,14 +137,14 @@ class TransportSelector extends StatelessWidget {
                         title: durationToString(
                             localization,
                             modesTransport
-                                .bikeAndVehicle.itineraries[0].durationTrip),
+                                .bikeAndVehicle.itineraries![0].durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
-                            modesTransport.bikeAndVehicle.itineraries[0]
+                            modesTransport.bikeAndVehicle.itineraries![0]
                                 .totalBikingDistance),
                       ),
                     if (modesTransport.existParkRidePlan &&
-                        payloadDataPlanState.includeParkAndRideSuggestions)
+                        payloadDataPlanState.includeParkAndRideSuggestions!)
                       CardTransportMode(
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
@@ -159,19 +161,19 @@ class TransportSelector extends StatelessWidget {
                           height: 12,
                           width: 12,
                           child:
-                              modesTransport.parkRidePlan.iconSecondaryPublic,
+                              modesTransport.parkRidePlan!.iconSecondaryPublic,
                         ),
                         title: durationToString(
                             localization,
                             modesTransport
-                                .parkRidePlan.itineraries[0].durationTrip),
+                                .parkRidePlan!.itineraries![0].durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
                             modesTransport
-                                .parkRidePlan.itineraries[0].totalDistance),
+                                .parkRidePlan!.itineraries![0].totalDistance),
                       ),
                     if (modesTransport.existCarAndCarPark &&
-                        payloadDataPlanState.includeCarSuggestions)
+                        payloadDataPlanState.includeCarSuggestions!)
                       CardTransportMode(
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(
@@ -186,11 +188,11 @@ class TransportSelector extends StatelessWidget {
                         title: durationToString(
                             localization,
                             modesTransport
-                                .carAndCarPark.itineraries[0].durationTrip),
+                                .carAndCarPark.itineraries![0].durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
                             modesTransport
-                                .carAndCarPark.itineraries[0].totalDistance),
+                                .carAndCarPark.itineraries![0].totalDistance),
                       ),
                     if (modesTransport.existOnDemandTaxi)
                       CardTransportMode(
@@ -206,12 +208,12 @@ class TransportSelector extends StatelessWidget {
                         icon: onDemandTaxiSvg(),
                         title: durationToString(
                             localization,
-                            modesTransport
-                                .onDemandTaxiPlan.itineraries[0].durationTrip),
+                            modesTransport.onDemandTaxiPlan!.itineraries![0]
+                                .durationTrip!),
                         subtitle: displayDistanceWithLocale(
                             localization,
-                            modesTransport
-                                .onDemandTaxiPlan.itineraries[0].totalDistance),
+                            modesTransport.onDemandTaxiPlan!.itineraries![0]
+                                .totalDistance),
                       ),
                   ],
                 ),

@@ -13,8 +13,8 @@ import 'package:uuid/uuid.dart';
 class PreferencesCubit extends Cubit<PreferenceState> {
   LocalRepository localRepository = SharedPreferencesRepository();
   final LatLng currentLocation;
-  final List<List<MenuItem>> menuItems;
-  final bool showWeather;
+  final List<List<MenuItem?>> menuItems;
+  final bool? showWeather;
 
   PreferencesCubit(
       PreferenceState initState, this.menuItems, this.currentLocation,
@@ -24,10 +24,10 @@ class PreferencesCubit extends Cubit<PreferenceState> {
   }
 
   Future<void> _load() async {
-    String correlationId = await localRepository.getCorrelationId();
-    WeatherInfo weatherInfo;
+    String? correlationId = await localRepository.getCorrelationId();
+    WeatherInfo? weatherInfo;
 
-    if (showWeather) {
+    if (showWeather!) {
       weatherInfo = await WFSWeatherDataRepository()
           .getCurrentWeatherAtLocation(DateTime.now(), currentLocation);
     }

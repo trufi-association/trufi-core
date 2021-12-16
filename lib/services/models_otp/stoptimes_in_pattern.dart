@@ -2,8 +2,8 @@ import 'pattern.dart';
 import 'stoptime.dart';
 
 class StoptimesInPattern {
-  final PatternOtp pattern;
-  final List<Stoptime> stoptimes;
+  final PatternOtp? pattern;
+  final List<Stoptime>? stoptimes;
 
   const StoptimesInPattern({
     this.pattern,
@@ -25,6 +25,6 @@ class StoptimesInPattern {
   Map<String, dynamic> toJson() => {
         'pattern': pattern?.toJson(),
         'stoptimes': List.generate(
-            stoptimes?.length ?? 0, (index) => stoptimes[index].toJson()),
+            stoptimes?.length ?? 0, (index) => stoptimes![index].toJson()),
       };
 }

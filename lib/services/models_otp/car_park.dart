@@ -1,14 +1,14 @@
 import 'package:trufi_core/entities/plan_entity/car_park_entity.dart';
 
 class CarPark {
-  final String id;
-  final String carParkId;
-  final String name;
-  final int maxCapacity;
-  final int spacesAvailable;
-  final bool realtime;
-  final double lon;
-  final double lat;
+  final String? id;
+  final String? carParkId;
+  final String? name;
+  final int? maxCapacity;
+  final int? spacesAvailable;
+  final bool? realtime;
+  final double? lon;
+  final double? lat;
 
   const CarPark({
     this.id,
@@ -28,7 +28,7 @@ class CarPark {
         maxCapacity: int.tryParse(json[['maxCapacity']].toString()) ?? 0,
         spacesAvailable:
             int.tryParse(json[['spacesAvailable']].toString()) ?? 0,
-        realtime: json['realtime'] as bool,
+        realtime: json['realtime'] as bool?,
         lon: double.tryParse(json['lon'].toString()) ?? 0,
         lat: double.tryParse(json['lat'].toString()) ?? 0,
       );

@@ -18,7 +18,7 @@ AlertEffectType getAlertEffectTypeByString(String alertEffectType) {
   );
 }
 
-extension AlertEffectTypeExtension on AlertEffectType {
+extension AlertEffectTypeExtension on AlertEffectType? {
   static const names = <AlertEffectType, String>{
     AlertEffectType.noService: 'NO_SERVICE',
     AlertEffectType.reducedService: 'REDUCED_SERVICE',
@@ -31,5 +31,5 @@ extension AlertEffectTypeExtension on AlertEffectType {
     AlertEffectType.stopMoved: 'STOP_MOVED',
     AlertEffectType.noEffect: 'NO_EFFECT',
   };
-  String get name => names[this] ?? 'NO_SERVICE';
+  String get name => names[this!] ?? 'NO_SERVICE';
 }

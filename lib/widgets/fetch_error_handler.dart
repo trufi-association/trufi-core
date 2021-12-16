@@ -53,7 +53,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
       final languageCode = Localizations.localeOf(context).languageCode;
       final packageInfo = await PackageInfo.fromPlatform();
       final routeFeedbackUrl =
-          context.read<ConfigurationCubit>().state.urls.routeFeedbackUrl;
+          context.read<ConfigurationCubit>().state.urls!.routeFeedbackUrl;
       return showDialog(
         context: context,
         builder: (dialogContext) {
@@ -61,7 +61,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
             context: dialogContext,
             error: exception.toString(),
             onReportMissingRoute: () async {
-              final LatLng currentLocation = dialogContext
+              final LatLng? currentLocation = dialogContext
                   .read<LocationProviderCubit>()
                   .state
                   .currentLocation;
@@ -74,7 +74,7 @@ Future<void> onFetchError(BuildContext context, Exception exception) async {
               // TODO: improve onShowCarRoute action
               final homePageCubit = dialogContext.read<HomePageCubit>();
               final appReviewCubit = dialogContext.read<AppReviewCubit>();
-              final payloadDataPlanState =
+              final PayloadDataPlanState payloadDataPlanState =
                   context.read<PayloadDataPlanCubit>().state;
               homePageCubit.updateMapRouteState(
                 homePageCubit.state.copyWith(isFetching: true),

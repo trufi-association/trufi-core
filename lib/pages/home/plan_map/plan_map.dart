@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -23,17 +24,17 @@ typedef OnSelected = void Function(PlanItinerary itinerary);
 
 class PlanMapPage extends StatefulWidget {
   const PlanMapPage({
-    Key key,
-    @required this.customOverlayWidget,
-    @required this.customBetweenFabWidget,
-    @required this.mapConfiguration,
+    Key? key,
+    required this.customOverlayWidget,
+    required this.customBetweenFabWidget,
+    required this.mapConfiguration,
     this.planPageController,
   }) : super(key: key);
 
-  final PlanPageController planPageController;
-  final LocaleWidgetBuilder customOverlayWidget;
-  final WidgetBuilder customBetweenFabWidget;
-  final MapConfiguration mapConfiguration;
+  final PlanPageController? planPageController;
+  final LocaleWidgetBuilder? customOverlayWidget;
+  final WidgetBuilder? customBetweenFabWidget;
+  final MapConfiguration? mapConfiguration;
 
   @override
   PlanMapPageState createState() => PlanMapPageState();
@@ -45,14 +46,14 @@ class PlanMapPageState extends State<PlanMapPage>
   final _subscriptions = CompositeSubscription();
   final _trufiMapController = TrufiMapController();
 
-  PlanMapPageStateData _data;
+  late PlanMapPageStateData _data;
 
   @override
   void initState() {
     super.initState();
     _data = PlanMapPageStateData(
-      plan: widget.planPageController.plan,
-      onItineraryTap: widget.planPageController.inSelectedItinerary.add,
+      plan: widget.planPageController!.plan,
+      onItineraryTap: widget.planPageController!.inSelectedItinerary.add,
       mapConfiguration: widget.mapConfiguration,
     );
     _subscriptions.add(
@@ -63,7 +64,7 @@ class PlanMapPageState extends State<PlanMapPage>
       }),
     );
     _subscriptions.add(
-      widget.planPageController.outSelectedItinerary.listen((
+      widget.planPageController!.outSelectedItinerary.listen((
         selectedItinerary,
       ) {
         setState(() {
@@ -73,7 +74,7 @@ class PlanMapPageState extends State<PlanMapPage>
       }),
     );
     _subscriptions.add(
-      widget.planPageController.outSelectePosition.listen((
+      widget.planPageController!.outSelectePosition.listen((
         position,
       ) {
         _trufiMapController.move(
@@ -84,8 +85,8 @@ class PlanMapPageState extends State<PlanMapPage>
 
   @override
   void dispose() {
-    _subscriptions?.cancel();
-    _trufiMapController?.dispose();
+    _subscriptions.cancel();
+    _trufiMapController.dispose();
     super.dispose();
   }
 
@@ -93,7 +94,8 @@ class PlanMapPageState extends State<PlanMapPage>
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
 
-    final trufiConfiguration = context.read<ConfigurationCubit>().state;
+    final Configuration trufiConfiguration =
+        context.read<ConfigurationCubit>().state;
     _mapController.onReady.then((value) {
       if (_data.needsCameraUpdate && _data.selectedBounds.isValid) {
         _trufiMapController.fitBounds(
@@ -131,7 +133,7 @@ class PlanMapPageState extends State<PlanMapPage>
         Positioned(
           bottom: 10,
           left: 10,
-          child: trufiConfiguration.map.mapAttributionBuilder(context),
+          child: trufiConfiguration.map!.mapAttributionBuilder!(context),
         ),
         Positioned(
           bottom: 16.0,
@@ -155,7 +157,7 @@ class PlanMapPageState extends State<PlanMapPage>
               bottom: 60,
             ),
             child: widget.customOverlayWidget != null
-                ? widget.customOverlayWidget(context, locale)
+                ? widget.customOverlayWidget!(context, locale)
                 : null,
           ),
         ),
@@ -168,7 +170,7 @@ class PlanMapPageState extends State<PlanMapPage>
               top: 65,
             ),
             child: widget.customBetweenFabWidget != null
-                ? widget.customBetweenFabWidget(context)
+                ? widget.customBetweenFabWidget!(context)
                 : null,
           ),
         )
@@ -177,9 +179,9 @@ class PlanMapPageState extends State<PlanMapPage>
   }
 
   void _handleOnMapTap(LatLng point) {
-    final PlanItinerary tappedItinerary = _data.itineraryForPoint(point);
+    final PlanItinerary? tappedItinerary = _data.itineraryForPoint(point);
     if (tappedItinerary != null) {
-      widget.planPageController.inSelectedItinerary.add(tappedItinerary);
+      widget.planPageController!.inSelectedItinerary.add(tappedItinerary);
     }
   }
 
@@ -187,9 +189,9 @@ class PlanMapPageState extends State<PlanMapPage>
     MapPosition position,
     bool hasGesture,
   ) {
-    if (_data.selectedBounds != null && _data.selectedBounds.isValid) {
-      _cropButtonKey?.currentState?.setVisible(
-        visible: !position.bounds.containsBounds(_data.selectedBounds),
+    if (_data.selectedBounds.isValid) {
+      _cropButtonKey.currentState?.setVisible(
+        visible: !position.bounds!.containsBounds(_data.selectedBounds),
       );
     }
   }
@@ -209,25 +211,25 @@ class PlanMapPageState extends State<PlanMapPage>
 
 class PlanMapPageStateData {
   PlanMapPageStateData({
-    @required this.plan,
-    @required this.onItineraryTap,
-    @required this.mapConfiguration,
+    required this.plan,
+    required this.onItineraryTap,
+    required this.mapConfiguration,
   }) {
     if (plan != null) {
-      if (plan.from != null) {
-        _fromMarker = mapConfiguration.markersConfiguration
-            .buildFromMarker(createLatLngWithPlanLocation(plan.from));
+      if (plan!.from != null) {
+        _fromMarker = mapConfiguration!.markersConfiguration
+            .buildFromMarker(createLatLngWithPlanLocation(plan!.from!));
       }
-      if (plan.to != null) {
-        _toMarker = mapConfiguration.markersConfiguration
-            .buildToMarker(createLatLngWithPlanLocation(plan.to));
+      if (plan!.to != null) {
+        _toMarker = mapConfiguration!.markersConfiguration
+            .buildToMarker(createLatLngWithPlanLocation(plan!.to!));
       }
     }
   }
 
-  final PlanEntity plan;
+  final PlanEntity? plan;
   final ValueChanged<PlanItinerary> onItineraryTap;
-  final MapConfiguration mapConfiguration;
+  final MapConfiguration? mapConfiguration;
 
   final _itineraries = <PlanItinerary, List<PolylineWithMarkers>>{};
   final _unselectedMarkers = <Marker>[];
@@ -236,11 +238,11 @@ class PlanMapPageStateData {
   final _selectedPolylines = <Polyline>[];
   final _allPolylines = <Polyline>[];
 
-  Marker _fromMarker;
-  Marker _toMarker;
+  Marker? _fromMarker;
+  Marker? _toMarker;
 
   LatLngBounds _selectedBounds = LatLngBounds();
-  PlanItinerary _selectedItinerary;
+  PlanItinerary? _selectedItinerary;
 
   bool needsCameraUpdate = true;
 
@@ -258,13 +260,13 @@ class PlanMapPageStateData {
 
   MarkerLayerOptions get fromMarkerLayer {
     return MarkerLayerOptions(
-      markers: _fromMarker != null ? [_fromMarker] : [],
+      markers: _fromMarker != null ? [_fromMarker!] : [],
     );
   }
 
   MarkerLayerOptions get toMarkerLayer {
     return MarkerLayerOptions(
-      markers: _toMarker != null ? [_toMarker] : [],
+      markers: _toMarker != null ? [_toMarker!] : [],
     );
   }
 
@@ -277,7 +279,7 @@ class PlanMapPageStateData {
   }
 
   MarkerLayerOptions get selectedMarkersLayer {
-    return MarkerLayerOptions(markers: [..._selectedMarkers, _fromMarker]);
+    return MarkerLayerOptions(markers: [..._selectedMarkers, _fromMarker!]);
   }
 
   PolylineLayerOptions get selectedPolylinesLayer {
@@ -286,20 +288,20 @@ class PlanMapPageStateData {
 
   LatLngBounds get selectedBounds => _selectedBounds;
 
-  PlanItinerary get selectedItinerary => _selectedItinerary;
+  PlanItinerary? get selectedItinerary => _selectedItinerary;
 
   // Setter
 
-  set selectedItinerary(PlanItinerary selectedItinerary) {
+  set selectedItinerary(PlanItinerary? selectedItinerary) {
     clear();
     _selectedItinerary = selectedItinerary;
     if (_fromMarker != null) {
-      _selectedBounds.extend(_fromMarker.point);
+      _selectedBounds.extend(_fromMarker!.point);
     }
     if (_toMarker != null) {
-      _selectedBounds.extend(_toMarker.point);
+      _selectedBounds.extend(_toMarker!.point);
     }
-    _itineraries.addAll(mapConfiguration.itinararyCreator.buildItineraries(
+    _itineraries.addAll(mapConfiguration!.itinararyCreator.buildItineraries(
       plan: plan,
       selectedItinerary: _selectedItinerary,
       onTap: onItineraryTap,
@@ -330,27 +332,26 @@ class PlanMapPageStateData {
 
   // Helper
 
-  PlanItinerary itineraryForPoint(LatLng point) {
+  PlanItinerary? itineraryForPoint(LatLng point) {
     return _itineraryForPolyline(polylineHitTest(_unselectedPolylines, point));
   }
 
-  PlanItinerary _itineraryForPolyline(Polyline polyline) {
+  PlanItinerary? _itineraryForPolyline(Polyline? polyline) {
     final entry = _itineraryEntryForPolyline(polyline);
     return entry?.key;
   }
 
-  MapEntry<PlanItinerary, List<PolylineWithMarkers>> _itineraryEntryForPolyline(
-    Polyline polyline,
+  MapEntry<PlanItinerary, List<PolylineWithMarkers>>?
+      _itineraryEntryForPolyline(
+    Polyline? polyline,
   ) {
-    return _itineraries.entries.firstWhere(
+    return _itineraries.entries.firstWhereOrNull(
       (pair) {
         return null !=
-            pair.value.firstWhere(
+            pair.value.firstWhereOrNull(
               (pwm) => pwm.polyline == polyline,
-              orElse: () => null,
             );
       },
-      orElse: () => null,
     );
   }
 }

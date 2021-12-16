@@ -2,8 +2,8 @@ import 'page_info.dart';
 import 'place_at_distance_edge.dart';
 
 class PlaceAtDistanceConnection {
-  final List<PlaceAtDistanceEdge> edges;
-  final PageInfo pageInfo;
+  final List<PlaceAtDistanceEdge>? edges;
+  final PageInfo? pageInfo;
 
   const PlaceAtDistanceConnection({this.edges, this.pageInfo});
 
@@ -22,7 +22,7 @@ class PlaceAtDistanceConnection {
 
   Map<String, dynamic> toJson() => {
         'edges':
-            List.generate(edges?.length ?? 0, (index) => edges[index].toJson()),
+            List.generate(edges?.length ?? 0, (index) => edges![index].toJson()),
         'pageInfo': pageInfo?.toJson(),
       };
 }

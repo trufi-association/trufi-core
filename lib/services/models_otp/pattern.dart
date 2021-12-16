@@ -6,19 +6,19 @@ import 'stop.dart';
 import 'trip.dart';
 
 class PatternOtp {
-  final String id;
-  final RouteOtp route;
-  final int directionId;
-  final String name;
-  final String code;
-  final String headsign;
-  final List<Trip> trips;
-  final List<Trip> tripsForDate;
-  final List<Stop> stops;
-  final List<Coordinates> geometry;
-  final Geometry patternGeometry;
-  final String semanticHash;
-  final List<Alert> alerts;
+  final String? id;
+  final RouteOtp? route;
+  final int? directionId;
+  final String? name;
+  final String? code;
+  final String? headsign;
+  final List<Trip>? trips;
+  final List<Trip>? tripsForDate;
+  final List<Stop>? stops;
+  final List<Coordinates>? geometry;
+  final Geometry? patternGeometry;
+  final String? semanticHash;
+  final List<Alert>? alerts;
 
   const PatternOtp({
     this.id,
@@ -44,7 +44,7 @@ class PatternOtp {
         directionId: int.tryParse(json['directionId'].toString()) ?? 0,
         name: json['name'].toString(),
         code: json['code'].toString(),
-        headsign: json['headsign'] as String,
+        headsign: json['headsign'] as String?,
         trips: json['trips'] != null
             ? List<Trip>.from((json["trips"] as List<dynamic>).map(
                 (x) => Trip.fromJson(x as Map<String, dynamic>),
@@ -84,21 +84,21 @@ class PatternOtp {
         'code': code,
         'headsign': headsign,
         'trips': trips != null
-            ? List<dynamic>.from(trips.map((x) => x.toJson()))
+            ? List<dynamic>.from(trips!.map((x) => x.toJson()))
             : null,
         'tripsForDate': tripsForDate != null
-            ? List<dynamic>.from(tripsForDate.map((x) => x.toJson()))
+            ? List<dynamic>.from(tripsForDate!.map((x) => x.toJson()))
             : null,
         'stops': stops != null
-            ? List<dynamic>.from(stops.map((x) => x.toJson()))
+            ? List<dynamic>.from(stops!.map((x) => x.toJson()))
             : null,
         'geometry': geometry != null
-            ? List<dynamic>.from(geometry.map((x) => x.toJson()))
+            ? List<dynamic>.from(geometry!.map((x) => x.toJson()))
             : null,
         'patternGeometry': patternGeometry?.toJson(),
         'semanticHash': semanticHash,
         'alerts': alerts != null
-            ? List<dynamic>.from(alerts.map((x) => x.toJson()))
+            ? List<dynamic>.from(alerts!.map((x) => x.toJson()))
             : null,
       };
 }

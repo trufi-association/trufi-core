@@ -13,5 +13,5 @@ abstract class MarkerConfiguration {
 
   MarkerLayerOptions buildToMarkerLayerOptions(LatLng point);
   MarkerLayerOptions buildFromMarkerLayerOptions(LatLng point);
-  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng point);
+  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng? point);
 }

@@ -1,7 +1,7 @@
 class ContactInfo {
-  final String phoneNumber;
-  final String infoUrl;
-  final String bookingUrl;
+  final String? phoneNumber;
+  final String? infoUrl;
+  final String? bookingUrl;
 
   const ContactInfo({
     this.phoneNumber,
@@ -10,9 +10,9 @@ class ContactInfo {
   });
 
   factory ContactInfo.fromMap(Map<String, dynamic> map) => ContactInfo(
-        phoneNumber: map['phoneNumber'] as String,
-        infoUrl: map['infoUrl'] as String,
-        bookingUrl: map['bookingUrl'] as String,
+        phoneNumber: map['phoneNumber'] as String?,
+        infoUrl: map['infoUrl'] as String?,
+        bookingUrl: map['bookingUrl'] as String?,
       );
 
   Map<String, dynamic> toMap() => {

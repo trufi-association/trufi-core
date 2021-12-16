@@ -1,6 +1,6 @@
 class Coordinates {
-  final double lat;
-  final double lon;
+  final double? lat;
+  final double? lon;
 
   const Coordinates({this.lat, this.lon});
 

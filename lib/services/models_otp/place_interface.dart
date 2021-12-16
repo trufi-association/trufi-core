@@ -1,7 +1,7 @@
 class PlaceInterface {
-  final String id;
-  final double lat;
-  final double lon;
+  final String? id;
+  final double? lat;
+  final double? lon;
 
   const PlaceInterface({
     this.id,

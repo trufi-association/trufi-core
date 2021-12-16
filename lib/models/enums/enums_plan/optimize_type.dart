@@ -11,7 +11,7 @@ extension OptimizeTypeExtension on OptimizeType {
     OptimizeType.triangle: 'TRIANGLE',
     OptimizeType.transfers: 'TRANSFERS',
   };
-  static const values = <OptimizeType, Map<String, double>>{
+  static const values = <OptimizeType, Map<String, double>?>{
     OptimizeType.quick: null,
     OptimizeType.safe: null,
     OptimizeType.flat: null,
@@ -25,5 +25,5 @@ extension OptimizeTypeExtension on OptimizeType {
   };
 
   String get name => names[this] ?? 'QUICK';
-  Map<String, double> get value => values[this];
+  Map<String, double>? get value => values[this];
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomSwitchTile extends StatelessWidget {
   const CustomSwitchTile({
-    Key key,
-    @required this.title,
-    @required this.value,
-    @required this.onChanged,
+    Key? key,
+    required this.title,
+    required this.value,
+    required this.onChanged,
     this.secondary,
   }) : super(key: key);
   final String title;
-  final Widget secondary;
-  final bool value;
+  final Widget? secondary;
+  final bool? value;
   final Function(bool) onChanged;
 
   @override
@@ -20,7 +20,7 @@ class CustomSwitchTile extends StatelessWidget {
       title: Text(title, style: theme.textTheme.bodyText1),
       secondary: secondary,
       activeColor: theme.primaryColor,
-      value: value,
+      value: value!,
       onChanged: onChanged,
     );
   }

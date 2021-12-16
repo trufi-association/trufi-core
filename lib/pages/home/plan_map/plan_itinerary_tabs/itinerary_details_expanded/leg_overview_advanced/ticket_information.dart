@@ -9,14 +9,14 @@ import 'package:trufi_core/services/models_otp/fare_component.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TicketInformation extends StatelessWidget {
-  final List<FareComponent> fares;
-  final List<FareComponent> unknownFares;
-  final List<PlanItineraryLeg> legs;
+  final List<FareComponent>? fares;
+  final List<FareComponent?>? unknownFares;
+  final List<PlanItineraryLeg?> legs;
   const TicketInformation({
-    Key key,
-    @required this.fares,
-    @required this.unknownFares,
-    @required this.legs,
+    Key? key,
+    required this.fares,
+    required this.unknownFares,
+    required this.legs,
   }) : super(key: key);
 
   @override
@@ -27,24 +27,24 @@ class TicketInformation extends StatelessWidget {
 
     final hasBikeLeg = legs.any(
       (leg) =>
-          (leg.rentedBike ?? false) ||
+          (leg!.rentedBike ?? false) ||
           leg.transportMode == TransportMode.bicycle ||
           leg.mode == 'BICYCLE_WALK',
     );
 
     final faresInfo = <Widget>[];
-    fares.asMap().forEach((index, fare) {
-      final ticketUrl = fare?.agency?.fareUrl ?? fare?.url;
+    fares!.asMap().forEach((index, fare) {
+      final ticketUrl = fare.agency?.fareUrl ?? fare.url;
       if (index == 0) {
         faresInfo.add(
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fares.length > 1
+                fares!.length > 1
                     ? '${localization.itineraryTicketsTitle}:'
                     : '${localization.itineraryTicketTitle}:',
-                style: theme.primaryTextTheme.bodyText1.copyWith(
+                style: theme.primaryTextTheme.bodyText1!.copyWith(
                   color: Colors.grey[600],
                 ),
               ),
@@ -55,8 +55,8 @@ class TicketInformation extends StatelessWidget {
                     style: theme.primaryTextTheme.bodyText1,
                   ),
                   Text(
-                    ' ${formatTwoDecimals(localeName: localization.localeName).format(fare.cents / 100)} €',
-                    style: theme.primaryTextTheme.bodyText1.copyWith(
+                    ' ${formatTwoDecimals(localeName: localization.localeName).format(fare.cents! / 100)} €',
+                    style: theme.primaryTextTheme.bodyText1!.copyWith(
                       color: Colors.grey[600],
                     ),
                   ),
@@ -80,7 +80,7 @@ class TicketInformation extends StatelessWidget {
       }
     });
 
-    return fares.isEmpty || unknownFares.isNotEmpty
+    return fares!.isEmpty || unknownFares!.isNotEmpty
         ? InfoMessage(
             message: localization.itineraryMissingPrice,
           )
@@ -100,7 +100,7 @@ class TicketInformation extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 7),
                 child: Text(
                   localization.copyrightsPriceProvider,
-                  style: theme.primaryTextTheme.bodyText1
+                  style: theme.primaryTextTheme.bodyText1!
                       .copyWith(fontSize: 12, color: Colors.grey[600]),
                   textAlign: TextAlign.left,
                 ),

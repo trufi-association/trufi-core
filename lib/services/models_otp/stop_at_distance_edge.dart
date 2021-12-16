@@ -1,8 +1,8 @@
 import 'stop_at_distance.dart';
 
 class StopAtDistanceEdge {
-  final StopAtDistance node;
-  final String cursor;
+  final StopAtDistance? node;
+  final String? cursor;
 
   const StopAtDistanceEdge({
     this.node,

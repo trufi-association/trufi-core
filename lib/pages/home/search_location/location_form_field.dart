@@ -6,31 +6,31 @@ import '../../../models/trufi_place.dart';
 
 class LocationFormField extends StatelessWidget {
   const LocationFormField({
-    Key key,
-    @required this.hintText,
-    @required this.textLeadingImage,
-    @required this.onSaved,
-    @required this.isOrigin,
+    Key? key,
+    required this.hintText,
+    required this.textLeadingImage,
+    required this.onSaved,
+    required this.isOrigin,
     this.leading,
     this.trailing,
-    @required this.value,
+    required this.value,
   }) : super(key: key);
 
   final bool isOrigin;
   final String hintText;
   final Widget textLeadingImage;
   final Function(TrufiLocation) onSaved;
-  final Widget leading;
-  final Widget trailing;
-  final TrufiLocation value;
+  final Widget? leading;
+  final Widget? trailing;
+  final TrufiLocation? value;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final textStyle = theme.textTheme.bodyText1;
-    final hintStyle = theme.textTheme.bodyText2.copyWith(
-      color: theme.textTheme.caption.color,
+    final hintStyle = theme.textTheme.bodyText2!.copyWith(
+      color: theme.textTheme.caption!.color,
     );
     return Row(
       children: [
@@ -44,7 +44,7 @@ class LocationFormField extends StatelessWidget {
             onTap: () async {
               TypeLocationForm().isOrigin = isOrigin;
               // Show search
-              final TrufiLocation location = await showSearch<TrufiLocation>(
+              final TrufiLocation? location = await showSearch<TrufiLocation?>(
                 context: context,
                 delegate: LocationSearchDelegate(),
               );
@@ -74,7 +74,7 @@ class LocationFormField extends StatelessWidget {
                             ? TextSpan(
                                 style: textStyle,
                                 text:
-                                    "${value.displayName(localization)}${value.address != null ? ", ${value.address}" : ""}",
+                                    "${value!.displayName(localization)}${value!.address != null ? ", ${value!.address}" : ""}",
                               )
                             : TextSpan(
                                 style: hintStyle,

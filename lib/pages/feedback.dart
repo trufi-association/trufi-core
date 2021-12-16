@@ -10,14 +10,14 @@ import '../widgets/trufi_drawer.dart';
 class FeedbackPage extends StatelessWidget {
   static const String route = "/feedback";
 
-  const FeedbackPage({Key key}) : super(key: key);
+  const FeedbackPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final feedBack =
-        context.read<ConfigurationCubit>().state.feedbackDefinition;
+        context.read<ConfigurationCubit>().state.feedbackDefinition!;
     return Scaffold(
       appBar: AppBar(title: Text(localization.menuFeedback)),
       body: Scrollbar(
@@ -30,8 +30,8 @@ class FeedbackPage extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     localization.feedbackTitle,
-                    style: theme.textTheme.headline6.copyWith(
-                      color: theme.textTheme.bodyText1.color,
+                    style: theme.textTheme.headline6!.copyWith(
+                      color: theme.textTheme.bodyText1!.color,
                     ),
                   ),
                   Container(

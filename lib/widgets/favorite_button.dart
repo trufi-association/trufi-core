@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,13 +6,13 @@ import '../models/trufi_place.dart';
 
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({
-    Key key,
-    this.location,
+    Key? key,
+    required this.location,
     this.color,
   }) : super(key: key);
 
   final TrufiLocation location;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

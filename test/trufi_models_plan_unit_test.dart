@@ -8,9 +8,9 @@ import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 
 void main() {
   PlanEntity _plan;
-  PlanLocation _from;
-  PlanLocation _to;
-  List<PlanItinerary> _itineraries;
+  PlanLocation? _from;
+  PlanLocation? _to;
+  List<PlanItinerary>? _itineraries;
 
   const String _fromName = "from_name";
   const double _fromLatitude = 18.0;
@@ -20,7 +20,7 @@ void main() {
   const double _toLatitude = 18.45696;
   const double _toLongitude = 129.826;
   PlanError _error;
-  PlanItineraryLeg _leg;
+  PlanItineraryLeg? _leg;
 
   setUp(() {
     _from = PlanLocation(
@@ -35,11 +35,11 @@ void main() {
         routeLongName: "long_name_route",
         duration: 300.0,
         distance: 2.0);
-    final List<PlanItineraryLeg> legs = [];
+    final List<PlanItineraryLeg?> legs = [];
     legs.add(_leg);
     final PlanItinerary itinerary = PlanItinerary(legs: legs);
     _itineraries = [];
-    _itineraries.add(itinerary);
+    _itineraries!.add(itinerary);
   });
 
   test('Create a plan', () {
@@ -55,14 +55,14 @@ void main() {
     final jsonPlan = json.decode(await file.readAsString());
     _plan = PlanEntity.fromJson(jsonPlan as Map<String, dynamic>);
 
-    expect(_plan.from.name, "Origin");
-    expect(_plan.from.latitude, -17.3974935907119);
-    expect(_plan.from.longitude, -66.28395080566406);
-    expect(_plan.to.name, "Destination");
-    expect(_plan.to.latitude, -17.36669500942906);
-    expect(_plan.to.longitude, -66.18576049804688);
-    expect(_plan.itineraries.first.legs.first.mode, "WALK");
-    expect(_plan.itineraries.first.legs.last.duration, 191.0);
+    expect(_plan.from!.name, "Origin");
+    expect(_plan.from!.latitude, -17.3974935907119);
+    expect(_plan.from!.longitude, -66.28395080566406);
+    expect(_plan.to!.name, "Destination");
+    expect(_plan.to!.latitude, -17.36669500942906);
+    expect(_plan.to!.longitude, -66.18576049804688);
+    expect(_plan.itineraries!.first.legs.first!.mode, "WALK");
+    expect(_plan.itineraries!.first.legs.last!.duration, 191.0);
   });
 
   test('Plan from error ', () {
@@ -71,7 +71,7 @@ void main() {
     // error id is -1 when generated with fromError.
     final plan2 = PlanEntity.fromError("error 2");
     // id are different, so check messages
-    expect(plan2.error.message, plan.error.message);
+    expect(plan2.error!.message, plan.error!.message);
   });
 
   test('Plan toJson ', () {
@@ -94,7 +94,7 @@ void main() {
     // error id is -1 when generated with fromError.
     final plan2 = PlanEntity.fromError("error 2");
     // id are different, so check messages
-    expect(plan2.error.message, plan.error.message);
+    expect(plan2.error!.message, plan.error!.message);
   });
 
   test('Create Plan error with fromError', () async {
@@ -102,7 +102,7 @@ void main() {
     final jsonPlan = json.decode(await file.readAsString());
     _plan = PlanEntity.fromJson(jsonPlan as Map<String, dynamic>);
 
-    expect(_plan.error.message,
+    expect(_plan.error!.message,
         "Trip is not possible.  Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).");
   });
 
@@ -139,7 +139,7 @@ void main() {
         duration: 300.0,
         distance: 2.0);
 
-    expect(_leg.iconData, Icons.directions_walk);
+    expect(_leg!.iconData, Icons.directions_walk);
     expect(_legBus.iconData, Icons.directions_bus);
     expect(_legMicro.iconData, Icons.directions_bus);
     expect(_legMinibus.iconData, Icons.airport_shuttle);

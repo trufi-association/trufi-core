@@ -7,7 +7,7 @@ RealtimeState getRealtimeStateByString(String realtimeState) {
   );
 }
 
-extension RealtimeStateExtension on RealtimeState {
+extension RealtimeStateExtension on RealtimeState? {
   static const names = <RealtimeState, String>{
     RealtimeState.scheduled: 'SCHEDULED',
     RealtimeState.updated: 'UPDATED',
@@ -15,5 +15,5 @@ extension RealtimeStateExtension on RealtimeState {
     RealtimeState.added: 'ADDED',
     RealtimeState.modified: 'MODIFIED'
   };
-  String get name => names[this] ?? 'SCHEDULED';
+  String get name => names[this!] ?? 'SCHEDULED';
 }

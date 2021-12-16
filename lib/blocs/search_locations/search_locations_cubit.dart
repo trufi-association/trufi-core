@@ -30,7 +30,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   final SearchLocationManager _searchLocationManager;
   final _fetchLocationLock = Lock();
-  CancelableOperation<List<TrufiPlace>> _fetchLocationOperation;
+  CancelableOperation<List<TrufiPlace>>? _fetchLocationOperation;
 
   SearchLocationsCubit(
     this._searchLocationManager,
@@ -132,26 +132,26 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     historyPlacesStorage.delete(location);
   }
 
-  void deleteFavoritePlace(TrufiLocation location) {
+  void deleteFavoritePlace(TrufiLocation? location) {
     emit(state.copyWith(
       favoritePlaces: _deleteItem(state.favoritePlaces, location),
     ));
     favoritePlacesStorage.delete(location);
   }
 
-  List<TrufiPlace> getHistoryList() {
+  List<TrufiPlace?> getHistoryList() {
     return state.historyPlaces.reversed.toList();
   }
 
-  Future<List<TrufiPlace>> fetchLocations(
+  Future<List<TrufiPlace>?> fetchLocations(
     LocationSearchBloc locationSearchBloc,
-    String query, {
-    String correlationId,
+    String? query, {
+    String? correlationId,
     int limit = 30,
   }) async {
     // Cancel running operation
     if (_fetchLocationOperation != null) {
-      _fetchLocationOperation.cancel();
+      _fetchLocationOperation!.cancel();
       _fetchLocationOperation = null;
     }
 
@@ -168,7 +168,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
                 correlationId: correlationId,
               ),
             );
-            return _fetchLocationOperation.valueOrCancellation(null);
+            return _fetchLocationOperation!.valueOrCancellation(null);
           });
   }
 
@@ -196,7 +196,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
 
   List<TrufiLocation> _deleteItem(
     List<TrufiLocation> list,
-    TrufiLocation location,
+    TrufiLocation? location,
   ) {
     final tempList = [...list];
     tempList.remove(location);
@@ -214,13 +214,13 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   int _sortByFavoriteLocations(
     TrufiPlace a,
     TrufiPlace b,
-    List<TrufiLocation> favorites,
+    List<TrufiLocation?> favorites,
   ) {
     return _sortByLocations(a, b, favorites);
   }
 
   int _sortByLocations(
-      TrufiPlace a, TrufiPlace b, List<TrufiLocation> locations) {
+      TrufiPlace a, TrufiPlace b, List<TrufiLocation?> locations) {
     final bool aIsAvailable = (a is TrufiLocation)
         ? locations.contains(a)
         // TODO: Fix Linting problem with tests
@@ -250,7 +250,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             : 1;
   }
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location) =>
+  Future<LocationDetail> reverseGeodecoding(LatLng? location) =>
       _searchLocationManager.reverseGeodecoding(
         location,
       );

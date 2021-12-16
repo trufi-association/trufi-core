@@ -16,35 +16,35 @@ import 'stop.dart';
 import 'trip.dart';
 
 class Leg {
-  final int startTime;
-  final int endTime;
-  final int departureDelay;
-  final int arrivalDelay;
-  final Mode mode;
-  final double duration;
-  final int generalizedCost;
-  final Geometry legGeometry;
-  final Agency agency;
-  final bool realTime;
-  final RealtimeState realtimeState;
-  final double distance;
-  final bool transitLeg;
-  final bool rentedBike;
-  final Place from;
-  final Place to;
-  final RouteOtp route;
-  final Trip trip;
-  final String serviceDate;
-  final List<Stop> intermediateStops;
-  final List<Place> intermediatePlaces;
-  final bool intermediatePlace;
-  final List<Step> steps;
-  final PickupDropoffType pickupType;
-  final PickupDropoffType dropoffType;
-  final bool interlineWithPreviousLeg;
-  final List<Alert> alerts;
-  final PickupBookingInfo pickupBookingInfo;
-  final BookingInfo dropOffBookingInfo;
+  final int? startTime;
+  final int? endTime;
+  final int? departureDelay;
+  final int? arrivalDelay;
+  final Mode? mode;
+  final double? duration;
+  final int? generalizedCost;
+  final Geometry? legGeometry;
+  final Agency? agency;
+  final bool? realTime;
+  final RealtimeState? realtimeState;
+  final double? distance;
+  final bool? transitLeg;
+  final bool? rentedBike;
+  final Place? from;
+  final Place? to;
+  final RouteOtp? route;
+  final Trip? trip;
+  final String? serviceDate;
+  final List<Stop>? intermediateStops;
+  final List<Place>? intermediatePlaces;
+  final bool? intermediatePlace;
+  final List<Step>? steps;
+  final PickupDropoffType? pickupType;
+  final PickupDropoffType? dropoffType;
+  final bool? interlineWithPreviousLeg;
+  final List<Alert>? alerts;
+  final PickupBookingInfo? pickupBookingInfo;
+  final BookingInfo? dropOffBookingInfo;
 
   const Leg({
     this.startTime,
@@ -92,12 +92,12 @@ class Leg {
         agency: json['agency'] != null
             ? Agency.fromJson(json['agency'] as Map<String, dynamic>)
             : null,
-        realTime: json['realTime'] as bool,
+        realTime: json['realTime'] as bool?,
         realtimeState:
             getRealtimeStateByString(json['realtimeState'].toString()),
         distance: double.tryParse(json['distance'].toString()),
-        transitLeg: json['transitLeg'] as bool,
-        rentedBike: json['rentedBike'] as bool,
+        transitLeg: json['transitLeg'] as bool?,
+        rentedBike: json['rentedBike'] as bool?,
         from: json['from'] != null
             ? Place.fromMap(json['from'] as Map<String, dynamic>)
             : null,
@@ -122,7 +122,7 @@ class Leg {
                 (x) => Place.fromMap(x as Map<String, dynamic>),
               ))
             : null,
-        intermediatePlace: json['intermediatePlace'] as bool,
+        intermediatePlace: json['intermediatePlace'] as bool?,
         steps: json['steps'] != null
             ? List<Step>.from((json["steps"] as List<dynamic>).map(
                 (x) => Step.fromJson(x as Map<String, dynamic>),
@@ -131,7 +131,7 @@ class Leg {
         pickupType: getPickupDropoffTypeByString(json['pickupType'].toString()),
         dropoffType:
             getPickupDropoffTypeByString(json['dropoffType'].toString()),
-        interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool,
+        interlineWithPreviousLeg: json['interlineWithPreviousLeg'] as bool?,
         alerts: json['alerts'] != null
             ? List<Alert>.from((json["alerts"] as List<dynamic>).map(
                 (x) => Alert.fromJson(x as Map<String, dynamic>),
@@ -168,17 +168,17 @@ class Leg {
         'trip': trip?.toJson(),
         'serviceDate': serviceDate,
         'intermediateStops': intermediateStops != null
-            ? List<dynamic>.from(intermediateStops.map((x) => x.toJson()))
+            ? List<dynamic>.from(intermediateStops!.map((x) => x.toJson()))
             : null,
         'intermediatePlaces': intermediatePlaces != null
-            ? List<dynamic>.from(intermediatePlaces.map((x) => x.toMap()))
+            ? List<dynamic>.from(intermediatePlaces!.map((x) => x.toMap()))
             : null,
         'intermediatePlace': intermediatePlace,
-        'steps': List<dynamic>.from(steps.map((x) => x.toJson())),
+        'steps': List<dynamic>.from(steps!.map((x) => x.toJson())),
         'pickupType': pickupType?.name,
         'dropoffType': dropoffType?.name,
         'interlineWithPreviousLeg': interlineWithPreviousLeg,
-        'alerts': List<dynamic>.from(alerts.map((x) => x.toJson())),
+        'alerts': List<dynamic>.from(alerts!.map((x) => x.toJson())),
         'pickupBookingInfo': pickupBookingInfo?.toMap(),
         'dropOffBookingInfo': dropOffBookingInfo?.toMap(),
       };
@@ -189,10 +189,11 @@ class Leg {
       mode: mode?.name,
       route: route?.toRouteEntity(),
       startTime: startTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(startTime)
+          ? DateTime.fromMillisecondsSinceEpoch(startTime!)
           : null,
-      endTime:
-          endTime != null ? DateTime.fromMillisecondsSinceEpoch(endTime) : null,
+      endTime: endTime != null
+          ? DateTime.fromMillisecondsSinceEpoch(endTime!)
+          : null,
       distance: distance ?? 0,
       duration: duration ?? 0,
       routeLongName: route?.longName ?? '',
@@ -200,7 +201,7 @@ class Leg {
       toPlace: to?.toPlaceEntity(),
       fromPlace: from?.toPlaceEntity(),
       intermediatePlaces:
-          intermediatePlaces?.map((x) => x.toPlaceEntity())?.toList(),
+          intermediatePlaces?.map((x) => x.toPlaceEntity()).toList(),
       pickupBookingInfo: pickupBookingInfo,
       dropOffBookingInfo: dropOffBookingInfo,
       rentedBike: rentedBike,
@@ -208,7 +209,7 @@ class Leg {
       transitLeg: transitLeg,
       interlineWithPreviousLeg: interlineWithPreviousLeg,
       accumulatedPoints: legGeometry?.points != null
-          ? decodePolyline(legGeometry?.points)
+          ? decodePolyline(legGeometry!.points!)
           : [],
       trip: trip,
     );

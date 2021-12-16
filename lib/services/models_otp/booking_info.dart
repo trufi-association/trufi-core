@@ -1,9 +1,9 @@
 import 'contact_info.dart';
 
 class BookingInfo {
-  final String message;
-  final String dropOffMessage;
-  final ContactInfo contactInfo;
+  final String? message;
+  final String? dropOffMessage;
+  final ContactInfo? contactInfo;
 
   const BookingInfo({
     this.message,
@@ -12,8 +12,8 @@ class BookingInfo {
   });
 
   factory BookingInfo.fromMap(Map<String, dynamic> map) => BookingInfo(
-        message: map['message'] as String,
-        dropOffMessage: map['dropOffMessage'] as String,
+        message: map['message'] as String?,
+        dropOffMessage: map['dropOffMessage'] as String?,
         contactInfo: map['contactInfo'] != null
             ? ContactInfo.fromMap(map['contactInfo'] as Map<String, dynamic>)
             : null,

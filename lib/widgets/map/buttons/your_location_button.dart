@@ -8,7 +8,7 @@ import 'package:trufi_core/widgets/map/trufi_map_controller.dart';
 import '../trufi_map_controller.dart';
 
 class YourLocationButton extends StatefulWidget {
-  const YourLocationButton({@required this.trufiMapController});
+  const YourLocationButton({required this.trufiMapController});
   final TrufiMapController trufiMapController;
 
   @override

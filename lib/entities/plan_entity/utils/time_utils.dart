@@ -2,8 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 String durationToString(TrufiLocalization localization, Duration duration) {
-  final minutes = localization
-      .instructionDurationMinutes(duration.inMinutes?.remainder(60));
+  final minutes =
+      localization.instructionDurationMinutes(duration.inMinutes.remainder(60));
 
   if (duration.inHours >= 1) {
     final hours = localization

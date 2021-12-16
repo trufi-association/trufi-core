@@ -1,8 +1,8 @@
 import 'place_at_distance.dart';
 
 class PlaceAtDistanceEdge {
-  final PlaceAtDistance node;
-  final String cursor;
+  final PlaceAtDistance? node;
+  final String? cursor;
 
   const PlaceAtDistanceEdge({this.node, this.cursor});
 

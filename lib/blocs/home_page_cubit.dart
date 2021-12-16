@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/async.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
@@ -10,20 +10,22 @@ import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/map_route_state.dart';
+import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/repository/local_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
-import 'package:trufi_core/models/trufi_place.dart';
 
 import 'payload_data_plan/payload_data_plan_cubit.dart';
+
+export 'package:trufi_core/models/map_route_state.dart';
 
 class HomePageCubit extends Cubit<MapRouteState> {
   LocalRepository localRepository;
 
   final RequestManager requestManager;
-  CancelableOperation<PlanEntity> currentFetchPlanOperation;
-  CancelableOperation<ModesTransportEntity> currentFetchPlanModesOperation;
-  CancelableOperation<AdEntity> currentFetchAdOperation;
+  CancelableOperation<PlanEntity>? currentFetchPlanOperation;
+  CancelableOperation<ModesTransportEntity>? currentFetchPlanModesOperation;
+  late CancelableOperation<AdEntity?> currentFetchAdOperation;
 
   HomePageCubit(
     this.localRepository,
@@ -46,10 +48,10 @@ class HomePageCubit extends Cubit<MapRouteState> {
     emit(const MapRouteState());
     await localRepository.deleteStateHomePage();
     if (currentFetchPlanOperation != null) {
-      await currentFetchPlanOperation.cancel();
+      await currentFetchPlanOperation!.cancel();
     }
     if (currentFetchPlanModesOperation != null) {
-      await currentFetchPlanModesOperation.cancel();
+      await currentFetchPlanModesOperation!.cancel();
     }
   }
 
@@ -65,9 +67,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> setPlace(TrufiLocation place) async {
-    if (state?.fromPlace == null) {
+    if (state.fromPlace == null) {
       setFromPlace(place);
-    } else if (state?.toPlace == null) {
+    } else if (state.toPlace == null) {
       setToPlace(place);
     }
   }
@@ -99,7 +101,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
         state.copyWithNullable(toPlace: const Optional.value(null)));
   }
 
-  Future<void> configSuccessAnimation({bool show}) async {
+  Future<void> configSuccessAnimation({bool? show}) async {
     await updateMapRouteState(state.copyWith(showSuccessAnimation: show));
   }
 
@@ -112,40 +114,42 @@ class HomePageCubit extends Cubit<MapRouteState> {
     ));
     final tempAdvencedOptions = advancedOptions.copyWith(
         isFreeParkToParkRide: true, isFreeParkToCarPark: true);
-    final modesTransportEntity = await _fetchPlanModesState(
-      '',
-      localization,
-      advancedOptions: tempAdvencedOptions,
-    ).catchError((error) async {
+    try {
+      final modesTransportEntity = await _fetchPlanModesState(
+        '',
+        localization,
+        advancedOptions: tempAdvencedOptions,
+      );
+      await updateMapRouteState(state.copyWith(
+          modesTransport: state.modesTransport!.copyWith(
+            parkRidePlan: modesTransportEntity?.parkRidePlan,
+            carParkPlan: modesTransportEntity?.carParkPlan,
+          ),
+          isFetching: false));
+    } catch (error) {
       await updateMapRouteState(state.copyWith(isFetching: false));
-      throw error;
-    });
-    await updateMapRouteState(state.copyWith(
-        modesTransport: state.modesTransport.copyWith(
-          parkRidePlan: modesTransportEntity.parkRidePlan,
-          carParkPlan: modesTransportEntity.carParkPlan,
-        ),
-        isFetching: false));
+      rethrow;
+    }
   }
 
   Future<void> fetchPlan(
-    String correlationId,
+    String? correlationId,
     TrufiLocalization localization, {
     bool car = false,
-    PayloadDataPlanState advancedOptions,
+    PayloadDataPlanState? advancedOptions,
     bool removePlan = true,
     bool fetchModes = false,
   }) async {
     if (state.toPlace != null && state.fromPlace != null) {
-      PlanInfoBox planInfoBox;
-      if (insidePointInPolygon(state.fromPlace.latLng, areaPolygon)) {
+      PlanInfoBox? planInfoBox;
+      if (insidePointInPolygon(state.fromPlace!.latLng, areaPolygon)) {
         planInfoBox = PlanInfoBox.originOutsideService;
-      } else if (insidePointInPolygon(state.toPlace.latLng, areaPolygon)) {
+      } else if (insidePointInPolygon(state.toPlace!.latLng, areaPolygon)) {
         planInfoBox = PlanInfoBox.destinationOutsideService;
       } else if (estimateDistance(
-              state.fromPlace.latLng, state.toPlace.latLng) <
+              state.fromPlace!.latLng, state.toPlace!.latLng) <
           PayloadDataPlanState.minDistanceBetweenFromAndTo) {
-        if (state.toPlace.latLng == state.fromPlace.latLng) {
+        if (state.toPlace!.latLng == state.fromPlace!.latLng) {
           planInfoBox = PlanInfoBox.noRouteOriginSameAsDestination;
         } else {
           planInfoBox = PlanInfoBox.noRouteOriginNearDestination;
@@ -165,8 +169,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
             plan: PlanEntity(
               planInfoBox: planInfoBox,
               itineraries: const [],
-              to: PlanLocation.fromTrufiLocation(state.toPlace),
-              from: PlanLocation.fromTrufiLocation(state.fromPlace),
+              to: PlanLocation.fromTrufiLocation(state.toPlace!),
+              from: PlanLocation.fromTrufiLocation(state.fromPlace!),
             ),
           ),
         );
@@ -192,76 +196,77 @@ class HomePageCubit extends Cubit<MapRouteState> {
                   isFetchingMore: false,
                 ),
         );
-        final PlanEntity planEntity = await _fetchPlan(
-          correlationId,
-          localization,
-          car: car,
-          advancedOptions: advancedOptions,
-        ).catchError((error) async {
+        try {
+          final PlanEntity? planEntity = await _fetchPlan(
+            correlationId,
+            localization,
+            car: car,
+            advancedOptions: advancedOptions,
+          );
+          await updateMapRouteState(state.copyWith(
+            plan: planEntity,
+            isFetching: false,
+            showSuccessAnimation: true,
+          ));
+        } catch (error) {
           await updateMapRouteState(state.copyWith(isFetching: false));
-          throw error;
-        });
-
-        await updateMapRouteState(state.copyWith(
-          plan: planEntity,
-          isFetching: false,
-          showSuccessAnimation: true,
-        ));
+          rethrow;
+        }
       }
       if (!fetchModes || advancedOptions == null) return;
       await updateMapRouteState(state.copyWith(
         isFetchingModes: true,
       ));
-      final modesTransportEntity = await _fetchPlanModesState(
-        correlationId,
-        localization,
-        advancedOptions: advancedOptions,
-      ).catchError((error) async {
-        await updateMapRouteState(state.copyWith(isFetchingModes: false));
-        throw error;
-      });
-      // TODO when the modesTransportEntity is null
-      if (modesTransportEntity == null) return;
-      PlanInfoBox auxPlanInfoBox;
-      if (modesTransportEntity.existWalkPlan ||
-          modesTransportEntity.existBikePlan) {
-        if (modesTransportEntity.existWalkPlan &&
-            !modesTransportEntity.existBikePlan) {
-          auxPlanInfoBox = PlanInfoBox.onlyWalkingRoutes;
-        } else if (!modesTransportEntity.existWalkPlan &&
+      try {
+        final modesTransportEntity = await _fetchPlanModesState(
+          correlationId,
+          localization,
+          advancedOptions: advancedOptions,
+        );
+        // TODO when the modesTransportEntity is null
+        if (modesTransportEntity == null) return;
+        PlanInfoBox auxPlanInfoBox;
+        if (modesTransportEntity.existWalkPlan ||
             modesTransportEntity.existBikePlan) {
-          auxPlanInfoBox = PlanInfoBox.onlyCyclingRoutes;
+          if (modesTransportEntity.existWalkPlan &&
+              !modesTransportEntity.existBikePlan) {
+            auxPlanInfoBox = PlanInfoBox.onlyWalkingRoutes;
+          } else if (!modesTransportEntity.existWalkPlan &&
+              modesTransportEntity.existBikePlan) {
+            auxPlanInfoBox = PlanInfoBox.onlyCyclingRoutes;
+          } else {
+            auxPlanInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
+          }
         } else {
-          auxPlanInfoBox = PlanInfoBox.onlyWalkingCyclingRoutes;
+          if (initPayloadDataPlanState == advancedOptions) {
+            auxPlanInfoBox = PlanInfoBox.noRouteMsgWithChanges;
+          } else {
+            auxPlanInfoBox = PlanInfoBox.noRouteMsg;
+          }
         }
-      } else {
-        if (initPayloadDataPlanState == advancedOptions) {
-          auxPlanInfoBox = PlanInfoBox.noRouteMsgWithChanges;
-        } else {
-          auxPlanInfoBox = PlanInfoBox.noRouteMsg;
-        }
-      }
 
-      await updateMapRouteState(
-        state.copyWith(
-          plan: planInfoBox == null &&
-                  auxPlanInfoBox != null &&
-                  state.plan.isOnlyWalk
-              ? state.plan.copyWith(planInfoBox: auxPlanInfoBox)
-              : null,
-          modesTransport: modesTransportEntity,
-          isFetchingModes: false,
-          isFetching: false,
-        ),
-      );
+        await updateMapRouteState(
+          state.copyWith(
+            plan: planInfoBox == null && state.plan!.isOnlyWalk
+                ? state.plan!.copyWith(planInfoBox: auxPlanInfoBox)
+                : null,
+            modesTransport: modesTransportEntity,
+            isFetchingModes: false,
+            isFetching: false,
+          ),
+        );
+      } catch (error) {
+        await updateMapRouteState(state.copyWith(isFetchingModes: false));
+        rethrow;
+      }
     }
   }
 
   Future<void> fetchMoreDeparturePlan(
-    String correlationId,
+    String? correlationId,
     TrufiLocalization localization, {
-    @required List<PlanItinerary> itineraries,
-    PayloadDataPlanState advancedOptions,
+    required List<PlanItinerary>? itineraries,
+    required PayloadDataPlanState advancedOptions,
     bool isFetchEarlier = true,
   }) async {
     await updateMapRouteState(state.copyWith(
@@ -270,56 +275,55 @@ class HomePageCubit extends Cubit<MapRouteState> {
       isFetchingMore: false,
     ));
 
-    DateTime newDateTime;
+    DateTime? newDateTime;
     if (isFetchEarlier) {
-      final newItinerary = itineraries.reduce((value, element) {
-        if (element.startTime.isBefore(value.startTime)) {
+      final newItinerary = itineraries!.reduce((value, element) {
+        if (element.startTime!.isBefore(value.startTime!)) {
           return element;
         }
         return value;
       });
-      newDateTime = newItinerary.endTime.subtract(const Duration(minutes: 1));
+      newDateTime = newItinerary.endTime!.subtract(const Duration(minutes: 1));
     } else {
-      final newItinerary = itineraries.reduce((value, element) {
-        if (element.startTime.isAfter(value.startTime)) {
+      final newItinerary = itineraries!.reduce((value, element) {
+        if (element.startTime!.isAfter(value.startTime!)) {
           return element;
         }
         return value;
       });
       newDateTime = newItinerary.startTime;
     }
-
-    final PlanEntity planEntity = await _fetchPlan(
-      correlationId,
-      localization,
-      advancedOptions:
-          advancedOptions.copyWith(date: newDateTime, arriveBy: isFetchEarlier),
-    ).catchError((error) async {
+    try {
+      final PlanEntity? planEntity = await _fetchPlan(
+        correlationId,
+        localization,
+        advancedOptions: advancedOptions.copyWith(
+            date: newDateTime, arriveBy: isFetchEarlier),
+      );
+      List<PlanItinerary> tempItinerarires;
+      if (isFetchEarlier) {
+        tempItinerarires = [
+          ...planEntity?.itineraries?.reversed ?? [],
+          ...state.plan?.itineraries ?? [],
+        ];
+      } else {
+        tempItinerarires = [
+          ...state.plan?.itineraries ?? [],
+          ...planEntity!.itineraries ?? [],
+        ];
+      }
+      await updateMapRouteState(state.copyWith(
+        plan: state.plan!.copyWith(itineraries: tempItinerarires),
+        isFetchingMore: true,
+      ));
+    } catch (error) {
       await updateMapRouteState(state.copyWith(
         isFetchEarlier: false,
         isFetchLater: false,
         isFetchingMore: false,
       ));
-      throw error;
-    });
-
-    List<PlanItinerary> tempItinerarires;
-    if (isFetchEarlier) {
-      tempItinerarires = [
-        ...planEntity.itineraries.reversed ?? [],
-        ...state.plan?.itineraries ?? [],
-      ];
-    } else {
-      tempItinerarires = [
-        ...state.plan?.itineraries ?? [],
-        ...planEntity.itineraries ?? [],
-      ];
+      rethrow;
     }
-
-    await updateMapRouteState(state.copyWith(
-      plan: state.plan.copyWith(itineraries: tempItinerarires),
-      isFetchingMore: true,
-    ));
 
     await Future.delayed(const Duration(milliseconds: 200));
     await updateMapRouteState(state.copyWith(
@@ -330,10 +334,10 @@ class HomePageCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> fetchMoreArrivalPlan(
-    String correlationId,
+    String? correlationId,
     TrufiLocalization localization, {
-    @required List<PlanItinerary> itineraries,
-    PayloadDataPlanState advancedOptions,
+    required List<PlanItinerary>? itineraries,
+    required PayloadDataPlanState advancedOptions,
     bool isFetchEarlier = true,
   }) async {
     await updateMapRouteState(state.copyWith(
@@ -344,71 +348,70 @@ class HomePageCubit extends Cubit<MapRouteState> {
 
     DateTime newDateTime;
     if (isFetchEarlier) {
-      final newItinerary = itineraries.reduce((value, element) {
-        if (element.startTime.isAfter(value.startTime)) {
+      final newItinerary = itineraries!.reduce((value, element) {
+        if (element.startTime!.isAfter(value.startTime!)) {
           return element;
         }
         return value;
       });
-      newDateTime = newItinerary.startTime.add(const Duration(minutes: 1));
+      newDateTime = newItinerary.startTime!.add(const Duration(minutes: 1));
     } else {
-      final newItinerary = itineraries.reduce((value, element) {
-        if (element.startTime.isBefore(value.startTime)) {
+      final newItinerary = itineraries!.reduce((value, element) {
+        if (element.startTime!.isBefore(value.startTime!)) {
           return element;
         }
         return value;
       });
-      newDateTime = newItinerary.endTime.subtract(const Duration(minutes: 1));
+      newDateTime = newItinerary.endTime!.subtract(const Duration(minutes: 1));
     }
+    try {
+      final PlanEntity? planEntity = await _fetchPlan(
+        correlationId,
+        localization,
+        advancedOptions: advancedOptions.copyWith(
+            date: newDateTime, arriveBy: !isFetchEarlier),
+      );
+      List<PlanItinerary> tempItinerarires;
+      if (isFetchEarlier) {
+        tempItinerarires = [
+          ...planEntity?.itineraries?.reversed ?? [],
+          ...state.plan?.itineraries ?? [],
+        ];
+      } else {
+        tempItinerarires = [
+          ...state.plan?.itineraries ?? [],
+          ...planEntity!.itineraries ?? [],
+        ];
+      }
+      await updateMapRouteState(state.copyWith(
+        plan: state.plan!.copyWith(itineraries: tempItinerarires),
+        isFetchingMore: true,
+      ));
 
-    final PlanEntity planEntity = await _fetchPlan(
-      correlationId,
-      localization,
-      advancedOptions: advancedOptions.copyWith(
-          date: newDateTime, arriveBy: !isFetchEarlier),
-    ).catchError((error) async {
+      await Future.delayed(const Duration(milliseconds: 200));
       await updateMapRouteState(state.copyWith(
         isFetchEarlier: false,
         isFetchLater: false,
         isFetchingMore: false,
       ));
-      throw error;
-    });
-
-    List<PlanItinerary> tempItinerarires;
-    if (isFetchEarlier) {
-      tempItinerarires = [
-        ...planEntity.itineraries.reversed ?? [],
-        ...state.plan?.itineraries ?? [],
-      ];
-    } else {
-      tempItinerarires = [
-        ...state.plan?.itineraries ?? [],
-        ...planEntity.itineraries ?? [],
-      ];
+    } catch (error) {
+      await updateMapRouteState(state.copyWith(
+        isFetchEarlier: false,
+        isFetchLater: false,
+        isFetchingMore: false,
+      ));
+      rethrow;
     }
-
-    await updateMapRouteState(state.copyWith(
-      plan: state.plan.copyWith(itineraries: tempItinerarires),
-      isFetchingMore: true,
-    ));
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    await updateMapRouteState(state.copyWith(
-      isFetchEarlier: false,
-      isFetchLater: false,
-      isFetchingMore: false,
-    ));
   }
 
-  Future<PlanEntity> _fetchPlan(
-    String correlationId,
+  Future<PlanEntity?> _fetchPlan(
+    String? correlationId,
     TrufiLocalization localization, {
     bool car = false,
-    PayloadDataPlanState advancedOptions,
+    PayloadDataPlanState? advancedOptions,
   }) async {
     if (currentFetchPlanOperation != null) {
-      await currentFetchPlanOperation.cancel();
+      await currentFetchPlanOperation!.cancel();
     }
     currentFetchPlanOperation = car
         ? CancelableOperation.fromFuture(() {
@@ -438,7 +441,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
               );
             }(),
           );
-    final PlanEntity plan = await currentFetchPlanOperation.valueOrCancellation(
+    final PlanEntity? plan =
+        await currentFetchPlanOperation!.valueOrCancellation(
       null,
     );
     if (plan != null && !plan.hasError) {
@@ -449,9 +453,9 @@ class HomePageCubit extends Cubit<MapRouteState> {
       return null;
     } else if (plan.hasError) {
       if (car) {
-        throw FetchOnlineCarException(plan.error.message);
+        throw FetchOnlineCarException(plan.error!.message);
       } else {
-        throw FetchOnlinePlanException(plan.error.message);
+        throw FetchOnlinePlanException(plan.error!.message);
       }
     } else {
       // should never happened
@@ -459,13 +463,13 @@ class HomePageCubit extends Cubit<MapRouteState> {
     }
   }
 
-  Future<ModesTransportEntity> _fetchPlanModesState(
-    String correlationId,
+  Future<ModesTransportEntity?> _fetchPlanModesState(
+    String? correlationId,
     TrufiLocalization localization, {
-    PayloadDataPlanState advancedOptions,
+    PayloadDataPlanState? advancedOptions,
   }) async {
     if (currentFetchPlanModesOperation != null) {
-      await currentFetchPlanModesOperation.cancel();
+      await currentFetchPlanModesOperation!.cancel();
     }
     currentFetchPlanModesOperation = CancelableOperation.fromFuture(
       () {
@@ -477,8 +481,8 @@ class HomePageCubit extends Cubit<MapRouteState> {
             localeName: localization.localeName);
       }(),
     );
-    final ModesTransportEntity plan =
-        await currentFetchPlanModesOperation.valueOrCancellation(
+    final ModesTransportEntity? plan =
+        await currentFetchPlanModesOperation!.valueOrCancellation(
       null,
     );
     // TODO plan can be null, Add error Handler
@@ -496,7 +500,7 @@ class HomePageCubit extends Cubit<MapRouteState> {
           );
         }(),
       );
-      final AdEntity ad =
+      final AdEntity? ad =
           await currentFetchAdOperation.valueOrCancellation(null);
       await updateMapRouteState(
         state.copyWith(ad: ad),

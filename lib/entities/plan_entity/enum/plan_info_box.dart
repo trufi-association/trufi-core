@@ -14,7 +14,7 @@ enum PlanInfoBox {
   undefined,
 }
 
-PlanInfoBox getPlanInfoBoxByKey(String key) {
+PlanInfoBox getPlanInfoBoxByKey(String? key) {
   return PlanInfoBoxExtension.names.keys.firstWhere(
     (keyE) => keyE.name == key,
     orElse: () => PlanInfoBox.undefined,
@@ -38,7 +38,7 @@ extension PlanInfoBoxExtension on PlanInfoBox {
     PlanInfoBox.undefined: 'UNDEFINED',
   };
 
-  String get name => names[this];
+  String? get name => names[this];
 
   String translateValue(TrufiLocalization localization) {
     switch (this) {

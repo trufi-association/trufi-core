@@ -10,14 +10,14 @@ class PlanItinerary extends Equatable {
   static const String _arrivedAtDestinationWithRentedBicycle =
       "arrivedAtDestinationWithRentedBicycle";
 
-  static int _distanceForLegs(List<PlanItineraryLeg> legs) =>
-      legs.fold<int>(0, (distance, leg) => distance += leg.distance.ceil());
+  static int _distanceForLegs(List<PlanItineraryLeg?> legs) =>
+      legs.fold<int>(0, (distance, leg) => distance += leg!.distance!.ceil());
 
-  static int _timeForLegs(List<PlanItineraryLeg> legs) =>
-      (legs.fold<double>(0, (time, leg) => time += leg.duration) / 60).ceil();
+  static int _timeForLegs(List<PlanItineraryLeg?> legs) =>
+      (legs.fold<double>(0, (time, leg) => time += leg!.duration!) / 60).ceil();
 
   PlanItinerary({
-    this.legs,
+    required this.legs,
     this.startTime,
     this.endTime,
     this.walkTime,
@@ -28,13 +28,13 @@ class PlanItinerary extends Equatable {
   })  : distance = _distanceForLegs(legs),
         time = _timeForLegs(legs);
 
-  final List<PlanItineraryLeg> legs;
-  final DateTime startTime;
-  final DateTime endTime;
-  final Duration walkTime;
-  final Duration durationTrip;
-  final double walkDistance;
-  final bool arrivedAtDestinationWithRentedBicycle;
+  final List<PlanItineraryLeg?> legs;
+  final DateTime? startTime;
+  final DateTime? endTime;
+  final Duration? walkTime;
+  final Duration? durationTrip;
+  final double? walkDistance;
+  final bool? arrivedAtDestinationWithRentedBicycle;
   final bool isOnlyShowItinerary;
 
   // add
@@ -63,13 +63,13 @@ class PlanItinerary extends Equatable {
           : null,
       walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
       arrivedAtDestinationWithRentedBicycle:
-          json[_arrivedAtDestinationWithRentedBicycle] as bool,
+          json[_arrivedAtDestinationWithRentedBicycle] as bool?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      _legs: legs.map((itinerary) => itinerary.toJson()).toList(),
+      _legs: legs.map((itinerary) => itinerary!.toJson()).toList(),
       _startTime: startTime?.millisecondsSinceEpoch,
       _endTime: endTime?.millisecondsSinceEpoch,
       _walkTime: walkTime?.inSeconds,
@@ -81,14 +81,14 @@ class PlanItinerary extends Equatable {
   }
 
   PlanItinerary copyWith({
-    List<PlanItineraryLeg> legs,
-    DateTime startTime,
-    DateTime endTime,
-    Duration walkTime,
-    Duration durationTrip,
-    double walkDistance,
-    bool arrivedAtDestinationWithRentedBicycle,
-    bool isOnlyShowItinerary,
+    List<PlanItineraryLeg>? legs,
+    DateTime? startTime,
+    DateTime? endTime,
+    Duration? walkTime,
+    Duration? durationTrip,
+    double? walkDistance,
+    bool? arrivedAtDestinationWithRentedBicycle,
+    bool? isOnlyShowItinerary,
   }) {
     return PlanItinerary(
       legs: legs ?? this.legs,
@@ -104,32 +104,32 @@ class PlanItinerary extends Equatable {
     );
   }
 
-  List<PlanItineraryLeg> get compressLegs {
+  List<PlanItineraryLeg?> get compressLegs {
     final usingOwnBicycle = legs.any(
       (leg) =>
-          getLegModeByKey(leg.transportMode.name) == LegMode.bicycle &&
+          getLegModeByKey(leg!.transportMode.name) == LegMode.bicycle &&
           leg.rentedBike == false,
     );
-    final compressedLegs = <PlanItineraryLeg>[];
-    PlanItineraryLeg compressedLeg;
-    for (final PlanItineraryLeg currentLeg in legs) {
+    final compressedLegs = <PlanItineraryLeg?>[];
+    PlanItineraryLeg? compressedLeg;
+    for (final PlanItineraryLeg? currentLeg in legs) {
       if (compressedLeg == null) {
-        compressedLeg = currentLeg.copyWith();
+        compressedLeg = currentLeg!.copyWith();
         continue;
       }
-      if (currentLeg.intermediatePlaces != null) {
+      if (currentLeg!.intermediatePlaces != null) {
         compressedLegs.add(compressedLeg);
         compressedLeg = currentLeg.copyWith();
         continue;
       }
 
       if (usingOwnBicycle && continueWithBicycle(compressedLeg, currentLeg)) {
-        final newBikePark = compressedLeg?.toPlace?.bikeParkEntity ??
-            currentLeg?.toPlace?.bikeParkEntity;
+        final newBikePark = compressedLeg.toPlace?.bikeParkEntity ??
+            currentLeg.toPlace?.bikeParkEntity;
         compressedLeg = compressedLeg.copyWith(
-          duration: compressedLeg.duration + currentLeg.duration,
-          distance: compressedLeg.distance + currentLeg.distance,
-          toPlace: currentLeg.toPlace.copyWith(bikeParkEntity: newBikePark),
+          duration: compressedLeg.duration! + currentLeg.duration!,
+          distance: compressedLeg.distance! + currentLeg.distance!,
+          toPlace: currentLeg.toPlace!.copyWith(bikeParkEntity: newBikePark),
           endTime: currentLeg.endTime,
           mode: TransportMode.bicycle.name,
           accumulatedPoints: [
@@ -144,8 +144,8 @@ class PlanItinerary extends Equatable {
           continueWithRentedBicycle(compressedLeg, currentLeg) &&
           !bikingEnded(currentLeg)) {
         compressedLeg = compressedLeg.copyWith(
-          duration: compressedLeg.duration + currentLeg.duration,
-          distance: compressedLeg.distance + currentLeg.distance,
+          duration: compressedLeg.duration! + currentLeg.duration!,
+          distance: compressedLeg.distance! + currentLeg.distance!,
           toPlace: currentLeg.toPlace,
           endTime: currentLeg.endTime,
           mode: LegMode.bicycle.name,
@@ -184,13 +184,13 @@ class PlanItinerary extends Equatable {
     final tempDate = DateTime.now();
     final nowDate = DateTime(tempDate.year, tempDate.month, tempDate.day);
 
-    if (startTime.difference(nowDate).inDays == 0) {
+    if (startTime!.difference(nowDate).inDays == 0) {
       return '';
     }
-    if (startTime.difference(nowDate).inDays == 1) {
+    if (startTime!.difference(nowDate).inDays == 1) {
       return localization.commonTomorrow;
     }
-    return DateFormat('E dd.MM.', localization.localeName).format(startTime);
+    return DateFormat('E dd.MM.', localization.localeName).format(startTime!);
   }
 
   bool get hasAdvencedData =>
@@ -200,48 +200,47 @@ class PlanItinerary extends Equatable {
       durationTrip != null &&
       walkDistance != null;
 
-  String get startTimeHHmm => durationToHHmm(startTime);
+  String get startTimeHHmm => durationToHHmm(startTime!);
 
-  String get endTimeHHmm => durationToHHmm(endTime);
+  String get endTimeHHmm => durationToHHmm(endTime!);
 
   String getDistanceString(TrufiLocalization localization) =>
       displayDistanceWithLocale(localization, distance.toDouble());
 
   String durationTripString(TrufiLocalization localization) =>
-      durationToString(localization, durationTrip);
+      durationToString(localization, durationTrip!);
 
   String getWalkDistanceString(TrufiLocalization localization) =>
-      displayDistanceWithLocale(localization, walkDistance.toDouble());
+      displayDistanceWithLocale(localization, walkDistance!.toDouble());
 
   double get totalDistance => sumDistances(legs);
 
-  double get totalWalkingDistance =>
-      getTotalWalkingDistance(compressLegs ?? []);
+  double get totalWalkingDistance => getTotalWalkingDistance(compressLegs);
 
-  double get totalBikingDistance => getTotalBikingDistance(compressLegs ?? []);
+  double get totalBikingDistance => getTotalBikingDistance(compressLegs);
 
   Duration get totalWalkingDuration =>
-      Duration(seconds: getTotalWalkingDuration(compressLegs ?? []).toInt());
+      Duration(seconds: getTotalWalkingDuration(compressLegs).toInt());
 
   Duration get totalBikingDuration =>
-      Duration(seconds: getTotalBikingDuration(compressLegs ?? []).toInt());
+      Duration(seconds: getTotalBikingDuration(compressLegs).toInt());
 
   String firstLegStartTime(TrufiLocalization localization) {
     final firstDeparture = compressLegs.firstWhere(
-      (element) => element.transitLeg ?? false,
+      (element) => element!.transitLeg ?? false,
       orElse: () => null,
     );
     String legStartTime = '';
     if (firstDeparture != null) {
-      if (firstDeparture?.rentedBike ?? false) {
+      if (firstDeparture.rentedBike ?? false) {
         legStartTime = localization.departureBikeStation(
-          firstDeparture?.startTimeString,
-          firstDeparture?.fromPlace?.name,
+          firstDeparture.startTimeString,
+          firstDeparture.fromPlace!.name!,
         );
-        if (firstDeparture?.fromPlace?.bikeRentalStation?.bikesAvailable !=
+        if (firstDeparture.fromPlace?.bikeRentalStation?.bikesAvailable !=
             null) {
           legStartTime =
-              '$legStartTime ${firstDeparture.fromPlace.bikeRentalStation.bikesAvailable} ${localization.commonBikesAvailable}';
+              '$legStartTime ${firstDeparture.fromPlace!.bikeRentalStation!.bikesAvailable} ${localization.commonBikesAvailable}';
         }
       } else {
         final String firstDepartureStopType =
@@ -250,14 +249,14 @@ class PlanItinerary extends Equatable {
                 ? localization.commonFromStation
                 : localization.commonFromStop;
         final String firstDeparturePlatform =
-            firstDeparture?.fromPlace?.stopEntity?.platformCode != null
+            firstDeparture.fromPlace?.stopEntity?.platformCode != null
                 ? (firstDeparture.transportMode == TransportMode.rail
                         ? ', ${localization.commonTrack} '
                         : ', ${localization.commonPlatform} ') +
-                    firstDeparture?.fromPlace?.stopEntity?.platformCode
+                    firstDeparture.fromPlace!.stopEntity!.platformCode!
                 : '';
         legStartTime =
-            "${localization.commonLeavesAt} ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace.name} $firstDeparturePlatform";
+            "${localization.commonLeavesAt} ${firstDeparture.startTimeString} $firstDepartureStopType ${firstDeparture.fromPlace!.name} $firstDeparturePlatform";
       }
     } else {
       legStartTime = localization.commonItineraryNoTransitLegs;
@@ -267,15 +266,15 @@ class PlanItinerary extends Equatable {
   }
 
   int get totalDurationItinerary {
-    return endTime.difference(startTime).inSeconds;
+    return endTime!.difference(startTime!).inSeconds;
   }
 
-  bool get usingOwnBicycle => legs.any((leg) =>
-      leg.transportMode == TransportMode.bicycle && leg.rentedBike ?? false);
+  bool get usingOwnBicycle => legs.any(
+      (leg) => leg!.transportMode == TransportMode.bicycle && leg.rentedBike!);
 
   int getNumberIcons(double renderBarThreshold) {
     final routeShorts = compressLegs.where((leg) {
-      final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+      final legLength = (leg!.durationIntLeg / totalDurationItinerary) * 10;
       if (!(legLength < renderBarThreshold && leg.isLegOnFoot) &&
           leg.toPlace?.bikeParkEntity != null) {
         return true;
@@ -295,7 +294,7 @@ class PlanItinerary extends Equatable {
   int getNumberLegHide(double renderBarThreshold) {
     return compressLegs
         .where((leg) {
-          final legLength = (leg.durationIntLeg / totalDurationItinerary) * 10;
+          final legLength = (leg!.durationIntLeg / totalDurationItinerary) * 10;
           return legLength < renderBarThreshold &&
               leg.transportMode != TransportMode.walk;
         })
@@ -305,23 +304,23 @@ class PlanItinerary extends Equatable {
 
   int getNumberLegTime(double renderBarThreshold) {
     return compressLegs.fold(0, (previousValue, element) {
-      final legLength = (element.durationIntLeg / totalDurationItinerary) * 10;
+      final legLength = (element!.durationIntLeg / totalDurationItinerary) * 10;
       return legLength < renderBarThreshold
           ? previousValue + element.durationIntLeg
           : previousValue;
     });
   }
 
-  PlanItineraryLeg firstDeparture() {
+  PlanItineraryLeg? firstDeparture() {
     final firstDeparture = compressLegs.firstWhere(
-      (element) => element.transitLeg ?? false,
+      (element) => element!.transitLeg ?? false,
       orElse: () => null,
     );
     return firstDeparture;
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         legs,
         startTime,
         endTime,

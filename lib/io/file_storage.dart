@@ -21,7 +21,7 @@ class FileStorage {
   final String _fileName;
   final Lock _fileLock = Lock();
 
-  File _file;
+  File? _file;
 
   static Future<String> get localPath async {
     return (await getApplicationDocumentsDirectory()).path;

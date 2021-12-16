@@ -41,12 +41,12 @@ class OSMDefaultMapTile extends MapTileProvider {
 }
 
 class DefaultMapTileCaching extends TileProvider {
-  Coords coords;
-  TileLayerOptions options;
+  Coords? coords;
+  TileLayerOptions? options;
   DefaultMapTileCaching({this.coords, this.options});
 
   @override
   ImageProvider getImage(Coords corrds, TileLayerOptions options) {
-    return CachedNetworkImageProvider(getTileUrl(coords, options));
+    return CachedNetworkImageProvider(getTileUrl(coords!, options));
   }
 }

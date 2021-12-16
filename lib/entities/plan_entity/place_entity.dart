@@ -21,17 +21,17 @@ class PlaceEntity {
   static const _carParkEntity = 'carParkEntity';
   static const _vehicleParkingWithEntrance = 'vehicleParkingWithEntrance';
 
-  final String name;
-  final VertexType vertexType;
-  final double lat;
-  final double lon;
-  final DateTime arrivalTime;
-  final DateTime departureTime;
-  final StopEntity stopEntity;
-  final BikeRentalStationEntity bikeRentalStation;
-  final BikeParkEntity bikeParkEntity;
-  final CarParkEntity carParkEntity;
-  final VehicleParkingWithEntrance vehicleParkingWithEntrance;
+  final String? name;
+  final VertexType? vertexType;
+  final double? lat;
+  final double? lon;
+  final DateTime? arrivalTime;
+  final DateTime? departureTime;
+  final StopEntity? stopEntity;
+  final BikeRentalStationEntity? bikeRentalStation;
+  final BikeParkEntity? bikeParkEntity;
+  final CarParkEntity? carParkEntity;
+  final VehicleParkingWithEntrance? vehicleParkingWithEntrance;
 
   PlaceEntity({
     this.name,
@@ -65,10 +65,10 @@ class PlaceEntity {
 
   factory PlaceEntity.fromMap(Map<String, dynamic> map) {
     return PlaceEntity(
-      name: map[_name] as String,
-      vertexType: getVertexTypeByString(map[_vertexType] as String),
-      lat: map[_lat] as double,
-      lon: map[_lon] as double,
+      name: map[_name] as String?,
+      vertexType: getVertexTypeByString(map[_vertexType] as String?),
+      lat: map[_lat] as double?,
+      lon: map[_lon] as double?,
       arrivalTime: map[_arrivalTime] != null
           ? DateTime.fromMillisecondsSinceEpoch(map[_arrivalTime] as int)
           : null,
@@ -96,17 +96,17 @@ class PlaceEntity {
   }
 
   PlaceEntity copyWith({
-    String name,
-    VertexType vertexType,
-    double lat,
-    double lon,
-    DateTime arrivalTime,
-    DateTime departureTime,
-    StopEntity stopEntity,
-    BikeRentalStationEntity bikeRentalStation,
-    BikeParkEntity bikeParkEntity,
-    CarParkEntity carParkEntity,
-    VehicleParkingWithEntrance vehicleParkingWithEntrance,
+    String? name,
+    VertexType? vertexType,
+    double? lat,
+    double? lon,
+    DateTime? arrivalTime,
+    DateTime? departureTime,
+    StopEntity? stopEntity,
+    BikeRentalStationEntity? bikeRentalStation,
+    BikeParkEntity? bikeParkEntity,
+    CarParkEntity? carParkEntity,
+    VehicleParkingWithEntrance? vehicleParkingWithEntrance,
   }) {
     return PlaceEntity(
       name: name ?? this.name,

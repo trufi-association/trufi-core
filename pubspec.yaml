@@ -1,12 +1,11 @@
 name: trufi_core
 description: A Flutter Plugin for Public Transport.
 version: 2.0.0
-author: Trufi Association e.V.
 homepage: https://www.trufi-association.org/
 repository: https://github.com/trufi-association/trufi-core
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   app_review: ^2.1.1+1
@@ -41,6 +40,7 @@ dependencies:
   url_launcher: ^6.0.9
   uuid: ^3.0.4
   xml: ^5.1.2
+  collection: ^1.15.0-nullsafety.4
 
 
 dev_dependencies:

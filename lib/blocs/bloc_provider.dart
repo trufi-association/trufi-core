@@ -6,9 +6,9 @@ abstract class BlocBase {
 
 class TrufiBlocProvider<T extends BlocBase> extends StatefulWidget {
   const TrufiBlocProvider({
-    Key key,
-    @required this.child,
-    @required this.bloc,
+    Key? key,
+    required this.child,
+    required this.bloc,
   }) : super(key: key);
 
   final T bloc;
@@ -19,7 +19,7 @@ class TrufiBlocProvider<T extends BlocBase> extends StatefulWidget {
 
   static T of<T extends BlocBase>(BuildContext context) {
     final TrufiBlocProvider<T> provider =
-        context.findAncestorWidgetOfExactType<TrufiBlocProvider<T>>();
+        context.findAncestorWidgetOfExactType<TrufiBlocProvider<T>>()!;
     return provider.bloc;
   }
 }

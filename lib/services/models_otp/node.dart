@@ -1,5 +1,5 @@
 class Node {
-  final String id;
+  final String? id;
 
   const Node({this.id});
 

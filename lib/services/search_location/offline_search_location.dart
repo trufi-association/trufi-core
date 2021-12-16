@@ -16,9 +16,9 @@ class OfflineSearchLocation implements SearchLocationManager {
   Future<List<TrufiPlace>> fetchLocations(
     // FavoriteLocationsCubit favoriteLocationsCubit,
     LocationSearchBloc locationSearchBloc,
-    String query, {
-    String correlationId,
-    int limit = 30,
+    String? query, {
+    String? correlationId,
+    int? limit = 30,
   }) async {
     final LocationSearchStorage storage = locationSearchBloc.storage;
 
@@ -33,12 +33,12 @@ class OfflineSearchLocation implements SearchLocationManager {
 
     // Remove levenshteinObject
     final List<TrufiPlace> trufiPlaces = sortedLevenshteinObjects
-        .take(limit)
+        .take(limit!)
         .map((LevenshteinObject<TrufiPlace> l) => l.object)
         .toList();
 
     // sort with street priority
-    mergeSort(trufiPlaces, compare: (a, b) => (a is TrufiStreet) ? -1 : 1);
+    mergeSort(trufiPlaces, compare: (dynamic a, dynamic b) => (a is TrufiStreet) ? -1 : 1);
 
     // // Favorites to the top
     // mergeSort(trufiPlaces, compare: (a, b) {
@@ -49,16 +49,16 @@ class OfflineSearchLocation implements SearchLocationManager {
   }
 
   @override
-  Future<LocationDetail> reverseGeodecoding(LatLng location) async {
+  Future<LocationDetail> reverseGeodecoding(LatLng? location) async {
     final response = await http.get(
       Uri.parse(
-        "https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json&zoom=17",
+        "https://nominatim.openstreetmap.org/reverse?lat=${location!.latitude}&lon=${location.longitude}&format=json&zoom=17",
       ),
     );
     final body = jsonDecode(utf8.decode(response.bodyBytes));
-    final String displayName = body["display_name"]?.toString();
-    final String road = body["address"]["road"]?.toString();
-    final String hamlet = body["address"]["hamlet"]?.toString();
+    final String? displayName = body["display_name"]?.toString();
+    final String? road = body["address"]["road"]?.toString();
+    final String? hamlet = body["address"]["hamlet"]?.toString();
     return LocationDetail(road ?? displayName ?? "", hamlet ?? "", location);
   }
 }

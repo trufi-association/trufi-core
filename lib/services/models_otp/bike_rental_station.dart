@@ -1,19 +1,19 @@
 import 'package:trufi_core/entities/plan_entity/bike_rental_station_entity.dart';
 
 class BikeRentalStation {
-  final String id;
-  final String stationId;
-  final String name;
-  final int bikesAvailable;
-  final int spacesAvailable;
-  final String state;
-  final bool realtime;
-  final bool allowDropoff;
-  final List<String> networks;
-  final double lon;
-  final double lat;
-  final int capacity;
-  final bool allowOverloading;
+  final String? id;
+  final String? stationId;
+  final String? name;
+  final int? bikesAvailable;
+  final int? spacesAvailable;
+  final String? state;
+  final bool? realtime;
+  final bool? allowDropoff;
+  final List<String>? networks;
+  final double? lon;
+  final double? lat;
+  final int? capacity;
+  final bool? allowOverloading;
 
   const BikeRentalStation({
     this.id,
@@ -33,21 +33,21 @@ class BikeRentalStation {
 
   factory BikeRentalStation.fromJson(Map<String, dynamic> json) =>
       BikeRentalStation(
-        id: json['id'] as String,
-        stationId: json['stationId'] as String,
-        name: json['name'] as String,
-        bikesAvailable: json['bikesAvailable'] as int,
-        spacesAvailable: json['spacesAvailable'] as int,
+        id: json['id'] as String?,
+        stationId: json['stationId'] as String?,
+        name: json['name'] as String?,
+        bikesAvailable: json['bikesAvailable'] as int?,
+        spacesAvailable: json['spacesAvailable'] as int?,
         state: json['state'].toString(),
-        realtime: json['realtime'] as bool,
-        allowDropoff: json['allowDropoff'] as bool,
+        realtime: json['realtime'] as bool?,
+        allowDropoff: json['allowDropoff'] as bool?,
         networks: json['networks'] != null
             ? (json['networks'] as List<dynamic>).cast<String>()
             : null,
-        lon: json['lon'] as double,
-        lat: json['lat'] as double,
-        capacity: json['capacity'] as int,
-        allowOverloading: json['allowOverloading'] as bool,
+        lon: json['lon'] as double?,
+        lat: json['lat'] as double?,
+        capacity: json['capacity'] as int?,
+        allowOverloading: json['allowOverloading'] as bool?,
       );
 
   Map<String, dynamic> toJson() => {

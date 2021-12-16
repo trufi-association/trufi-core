@@ -7,7 +7,7 @@ import '../../../composite_subscription.dart';
 import '../../../utils/util_icons/custom_icons.dart';
 
 class MyLocationMarker extends StatefulWidget {
-  const MyLocationMarker({Key key}) : super(key: key);
+  const MyLocationMarker({Key? key}) : super(key: key);
 
   @override
   MyLocationMarkerState createState() => MyLocationMarkerState();
@@ -16,13 +16,13 @@ class MyLocationMarker extends StatefulWidget {
 class MyLocationMarkerState extends State<MyLocationMarker> {
   final _subscriptions = CompositeSubscription();
 
-  double _direction;
+  double? _direction;
 
   @override
   void initState() {
     super.initState();
     _subscriptions.add(
-      FlutterCompass.events.listen((CompassEvent event) {
+      FlutterCompass.events!.listen((CompassEvent event) {
         setState(() {
           _direction = event.heading;
         });
@@ -65,7 +65,7 @@ class MyLocationMarkerState extends State<MyLocationMarker> {
         ),
         if (_direction != null)
           Transform.rotate(
-            angle: (pi / 180.0) * _direction,
+            angle: (pi / 180.0) * _direction!,
             child: Container(
               alignment: Alignment.topCenter,
               child: Icon(

@@ -10,9 +10,9 @@ import 'dialog_select_icon.dart';
 
 class LocationTiler extends StatelessWidget {
   const LocationTiler({
-    Key key,
-    @required this.location,
-    @required this.updateLocation,
+    Key? key,
+    required this.location,
+    required this.updateLocation,
     this.removeLocation,
     this.isDefaultLocation = false,
     this.enableSetIcon = false,
@@ -26,7 +26,7 @@ class LocationTiler extends StatelessWidget {
   final bool enableLocation;
   final bool enableSetPosition;
   final Function(TrufiLocation, TrufiLocation) updateLocation;
-  final Function(TrufiLocation) removeLocation;
+  final Function(TrufiLocation)? removeLocation;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class LocationTiler extends StatelessWidget {
             Expanded(
               child: Text(
                 location.displayName(localization),
-                style: theme.textTheme.bodyText1
+                style: theme.textTheme.bodyText1!
                     .copyWith(color: theme.primaryColor),
                 maxLines: 1,
               ),
@@ -134,7 +134,7 @@ class LocationTiler extends StatelessWidget {
                       );
                     } else {
                       if (removeLocation != null) {
-                        removeLocation(location);
+                        removeLocation!(location);
                       }
                     }
                   }
@@ -159,7 +159,7 @@ class LocationTiler extends StatelessWidget {
   }
 
   Future<void> _changeLocation(BuildContext context) async {
-    final TrufiLocation newLocation = await showDialog<TrufiLocation>(
+    final TrufiLocation? newLocation = await showDialog<TrufiLocation>(
         context: context,
         builder: (BuildContext context) {
           return DialogEditLocation(location: location);
@@ -168,7 +168,7 @@ class LocationTiler extends StatelessWidget {
   }
 
   Future<void> _changePosition(BuildContext context) async {
-    final ChooseLocationDetail chooseLocationDetail =
+    final ChooseLocationDetail? chooseLocationDetail =
         await ChooseLocationPage.selectPosition(
       context,
       position: location.isLatLngDefined
@@ -179,8 +179,8 @@ class LocationTiler extends StatelessWidget {
       updateLocation(
         location,
         location.copyWith(
-          longitude: chooseLocationDetail.location.longitude,
-          latitude: chooseLocationDetail.location.latitude,
+          longitude: chooseLocationDetail.location!.longitude,
+          latitude: chooseLocationDetail.location!.latitude,
         ),
       );
     }

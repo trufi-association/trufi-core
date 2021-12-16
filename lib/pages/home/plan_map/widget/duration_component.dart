@@ -3,16 +3,16 @@ import 'package:trufi_core/entities/plan_entity/utils/time_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class DurationComponent extends StatelessWidget {
-  final Duration duration;
-  final DateTime startTime;
-  final DateTime endTime;
+  final Duration? duration;
+  final DateTime? startTime;
+  final DateTime? endTime;
   final String futureText;
 
   const DurationComponent({
-    Key key,
-    @required this.duration,
-    @required this.startTime,
-    @required this.endTime,
+    Key? key,
+    required this.duration,
+    required this.startTime,
+    required this.endTime,
     this.futureText = '',
   }) : super(key: key);
 
@@ -29,17 +29,17 @@ class DurationComponent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              durationToString(localization, duration),
-              style: theme.primaryTextTheme.bodyText1.copyWith(
+              durationToString(localization, duration!),
+              style: theme.primaryTextTheme.bodyText1!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),
             Text(
               futureText != ''
-                  ? '$futureText\n${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
-                  : '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
-              style: theme.primaryTextTheme.bodyText1.copyWith(
+                  ? '$futureText\n${durationToHHmm(startTime!)} - ${durationToHHmm(endTime!)}'
+                  : '${durationToHHmm(startTime!)} - ${durationToHHmm(endTime!)}',
+              style: theme.primaryTextTheme.bodyText1!.copyWith(
                 fontWeight: FontWeight.w400,
                 color: Colors.black,
               ),

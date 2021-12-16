@@ -5,7 +5,7 @@ import 'robots/home_robot.dart';
 
 void main() {
   group('home test', () {
-    FlutterDriver driver;
+    FlutterDriver? driver;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
@@ -13,7 +13,7 @@ void main() {
 
     tearDownAll(() async {
       if (driver != null) {
-        driver.close();
+        driver!.close();
       }
     });
 

@@ -12,7 +12,7 @@ class SettingPanel extends StatelessWidget {
   static const Divider _divider = Divider(thickness: 2);
   static const Divider _dividerWeight = Divider(thickness: 10);
 
-  const SettingPanel({Key key}) : super(key: key);
+  const SettingPanel({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: TransportMode.bus.getImage(color: Colors.white),
                     ),
-                    value: state.transportModes.contains(TransportMode.bus),
+                    value: state.transportModes!.contains(TransportMode.bus),
                     onChanged: (_) {
                       payloadDataPlanCubit.setTransportMode(TransportMode.bus);
                     },
@@ -96,7 +96,7 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: TransportMode.rail.getImage(color: Colors.white),
                     ),
-                    value: state.transportModes.contains(TransportMode.rail),
+                    value: state.transportModes!.contains(TransportMode.rail),
                     onChanged: (_) {
                       payloadDataPlanCubit.setTransportMode(TransportMode.rail);
                     },
@@ -112,7 +112,7 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: TransportMode.subway.getImage(color: Colors.white),
                     ),
-                    value: state.transportModes.contains(TransportMode.subway),
+                    value: state.transportModes!.contains(TransportMode.subway),
                     onChanged: (_) {
                       payloadDataPlanCubit
                           .setTransportMode(TransportMode.subway);
@@ -126,7 +126,7 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: TransportMode.carPool.getImage(),
                     ),
-                    value: state.transportModes.contains(TransportMode.carPool),
+                    value: state.transportModes!.contains(TransportMode.carPool),
                     onChanged: (_) {
                       payloadDataPlanCubit
                           .setTransportMode(TransportMode.carPool);
@@ -140,13 +140,13 @@ class SettingPanel extends StatelessWidget {
                       width: 35,
                       child: BikeRentalNetwork.regioRad.image,
                     ),
-                    value: state.transportModes.contains(TransportMode.bicycle),
+                    value: state.transportModes!.contains(TransportMode.bicycle),
                     onChanged: (_) {
                       payloadDataPlanCubit
                           .setTransportMode(TransportMode.bicycle);
                     },
                   ),
-                  if (state.transportModes.contains(TransportMode.bicycle))
+                  if (state.transportModes!.contains(TransportMode.bicycle))
                     Container(
                       margin:
                           const EdgeInsets.only(left: 55, top: 5, bottom: 20),
@@ -168,7 +168,7 @@ class SettingPanel extends StatelessWidget {
                                 width: 35,
                                 child: BikeRentalNetwork.regioRad.image,
                               ),
-                              value: state.bikeRentalNetworks
+                              value: state.bikeRentalNetworks!
                                   .contains(BikeRentalNetwork.regioRad),
                               onChanged: (_) {
                                 payloadDataPlanCubit.setBikeRentalNetwork(
@@ -183,7 +183,7 @@ class SettingPanel extends StatelessWidget {
                                 width: 35,
                                 child: BikeRentalNetwork.taxi.image,
                               ),
-                              value: state.bikeRentalNetworks
+                              value: state.bikeRentalNetworks!
                                   .contains(BikeRentalNetwork.taxi),
                               onChanged: (_) {
                                 payloadDataPlanCubit.setBikeRentalNetwork(
@@ -199,7 +199,7 @@ class SettingPanel extends StatelessWidget {
                                 width: 35,
                                 child: BikeRentalNetwork.carSharing.image,
                               ),
-                              value: state.bikeRentalNetworks
+                              value: state.bikeRentalNetworks!
                                   .contains(BikeRentalNetwork.carSharing),
                               onChanged: (_) {
                                 payloadDataPlanCubit.setBikeRentalNetwork(

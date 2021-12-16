@@ -3,18 +3,18 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/enums/enums_plan/icons/icons_transport_modes.dart';
 
 class RouteNumber extends StatelessWidget {
-  final TransportMode transportMode;
-  final Color backgroundColor;
-  final String text;
-  final String tripHeadSing;
-  final String distance;
-  final String duration;
-  final Widget icon;
-  final Widget textContainer;
-  final String mode;
+  final TransportMode? transportMode;
+  final Color? backgroundColor;
+  final String? text;
+  final String? tripHeadSing;
+  final String? distance;
+  final String? duration;
+  final Widget? icon;
+  final Widget? textContainer;
+  final String? mode;
 
   const RouteNumber({
-    Key key,
+    Key? key,
     this.transportMode,
     this.backgroundColor,
     this.text,
@@ -68,8 +68,8 @@ class RouteNumber extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
-                          text,
-                          style: theme.primaryTextTheme.headline6.copyWith(
+                          text!,
+                          style: theme.primaryTextTheme.headline6!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -139,7 +139,7 @@ class RouteNumber extends StatelessWidget {
             padding: const EdgeInsets.only(top: 5, left: 5),
             child: Text(
               '${distance ?? ''} ${duration != null ? "($duration)" : ''} ',
-              style: theme.primaryTextTheme.bodyText1
+              style: theme.primaryTextTheme.bodyText1!
                   .copyWith(fontSize: 13, color: Colors.grey[700]),
             ),
           ),
@@ -148,7 +148,7 @@ class RouteNumber extends StatelessWidget {
             padding: const EdgeInsets.only(top: 5, left: 5),
             child: Text(
               '${distance ?? ''} ${duration != null ? "($duration)" : ''} ',
-              style: theme.primaryTextTheme.bodyText1
+              style: theme.primaryTextTheme.bodyText1!
                   .copyWith(fontSize: 13, color: Colors.grey[700]),
             ),
           ),

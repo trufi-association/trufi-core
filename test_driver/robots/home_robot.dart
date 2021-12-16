@@ -6,7 +6,7 @@ import 'robot.dart';
 import 'search_robot.dart';
 
 class HomeRobot extends Robot {
-  HomeRobot(FlutterDriver driver, Future<void> work) : super(driver, work);
+  HomeRobot(FlutterDriver? driver, Future<void> work) : super(driver, work);
 
   HomeRobot seesFromPlacesField() {
     work = work.then((_) async => seesKey(keys.homePageFromPlaceField));

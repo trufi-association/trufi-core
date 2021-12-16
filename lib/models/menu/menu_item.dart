@@ -1,14 +1,15 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share/share.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
+import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/menu/default_item_menu.dart';
 import 'package:trufi_core/models/menu/default_pages_menu.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share/share.dart';
-import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 
 abstract class MenuItem {
-  final String id;
+  final String? id;
   final WidgetBuilder selectedIcon;
   final WidgetBuilder notSelectedIcon;
   final WidgetBuilder name;
@@ -16,10 +17,10 @@ abstract class MenuItem {
 
   MenuItem({
     this.id,
-    @required this.selectedIcon,
-    @required this.notSelectedIcon,
-    @required this.name,
-    @required this.onClick,
+    required this.selectedIcon,
+    required this.notSelectedIcon,
+    required this.name,
+    required this.onClick,
   });
   Widget buildItem(BuildContext context, {bool isSelected = false}) {
     return Container(
@@ -33,11 +34,11 @@ abstract class MenuItem {
     );
   }
 
-  static Widget buildName(BuildContext context, String name, {Color color}) {
+  static Widget buildName(BuildContext context, String name, {Color? color}) {
     return Text(
       name,
       style: TextStyle(
-        color: color ?? Theme.of(context).textTheme.bodyText1.color,
+        color: color ?? Theme.of(context).textTheme.bodyText1!.color,
       ),
     );
   }
@@ -55,14 +56,15 @@ class AppShareButtonMenu extends MenuItem {
             TrufiLocalization.of(context).menuShareApp,
           ),
           onClick: (context, _) {
-            final config = context.read<ConfigurationCubit>().state;
+            final Configuration config =
+                context.read<ConfigurationCubit>().state;
             final currentLocale = Localizations.localeOf(context);
             final localization = TrufiLocalization.of(context);
             Share.share(
               localization.shareAppText(
                 url,
-                config.customTranslations.get(
-                  config.customTranslations.title,
+                config.customTranslations!.get(
+                  config.customTranslations!.title,
                   currentLocale,
                   localization.title,
                 ),
@@ -74,7 +76,13 @@ class AppShareButtonMenu extends MenuItem {
 }
 
 final List<List<MenuItem>> defaultMenuItems = [
-  DefaultPagesMenu.values.map((menuPage) => menuPage.toMenuPage()).toList(),
-  DefaultItemsMenu.values.map((menuPage) => menuPage.toMenuItem()).toList(),
+  DefaultPagesMenu.values
+      .map((menuPage) => menuPage.toMenuPage())
+      .whereNotNull()
+      .toList(),
+  DefaultItemsMenu.values
+      .map((menuPage) => menuPage.toMenuItem())
+      .whereNotNull()
+      .toList(),
   [AppShareButtonMenu("")]
 ];

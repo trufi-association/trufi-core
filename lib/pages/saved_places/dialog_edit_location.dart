@@ -7,11 +7,11 @@ import 'package:latlong2/latlong.dart';
 import '../choose_location.dart';
 
 class DialogEditLocation extends StatefulWidget {
-  final TrufiLocation location;
+  final TrufiLocation? location;
 
   const DialogEditLocation({
-    Key key,
-    @required this.location,
+    Key? key,
+    required this.location,
   }) : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class DialogEditLocation extends StatefulWidget {
 
 class _DialogEditLocationState extends State<DialogEditLocation> {
   final _formKey = GlobalKey<FormFieldState>();
-  TrufiLocation location;
+  TrufiLocation? location;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
           title: Text(
             // TODO translation
             localization.localeName == 'de' ? "Ort bearbeiten" : "Edit place",
-            style: theme.textTheme.bodyText1.copyWith(
+            style: theme.textTheme.bodyText1!.copyWith(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -61,7 +61,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                 ),
                 TextFormField(
                   key: _formKey,
-                  initialValue: location.displayName(localization),
+                  initialValue: location!.displayName(localization),
                   decoration: InputDecoration(
                     hintText: localization.savedPlacesEnterNameTitle,
                     hintStyle: theme.textTheme.subtitle1,
@@ -75,11 +75,11 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                       ),
                     ),
                   ),
-                  style: theme.textTheme.bodyText1.copyWith(fontSize: 16),
+                  style: theme.textTheme.bodyText1!.copyWith(fontSize: 16),
                   onChanged: (value) {
-                    location = location.copyWith(description: value);
+                    location = location!.copyWith(description: value);
                   },
-                  validator: (value) => _validateInput(value, localization),
+                  validator: (value) => _validateInput(value!, localization),
                   autocorrect: false,
                 ),
                 const SizedBox(height: 15),
@@ -103,11 +103,11 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                     ),
                     itemBuilder: (BuildContext builderContext, int index) {
                       final isSelected =
-                          location.type == listIconsPlace.keys.elementAt(index);
+                          location!.type == listIconsPlace.keys.elementAt(index);
                       return InkWell(
                         onTap: () {
                           setState(() {
-                            location = location.copyWith(
+                            location = location!.copyWith(
                                 type: listIconsPlace.keys.elementAt(index));
                           });
                         },
@@ -129,17 +129,17 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                 const SizedBox(height: 15),
                 OutlinedButton(
                   onPressed: () async {
-                    final ChooseLocationDetail chooseLocationDetail =
+                    final ChooseLocationDetail? chooseLocationDetail =
                         await ChooseLocationPage.selectPosition(
                       context,
-                      position: location.isLatLngDefined
-                          ? LatLng(location.latitude, location.longitude)
+                      position: location!.isLatLngDefined
+                          ? LatLng(location!.latitude, location!.longitude)
                           : null,
                     );
                     if (chooseLocationDetail != null) {
-                      location = location.copyWith(
-                        longitude: chooseLocationDetail.location.longitude,
-                        latitude: chooseLocationDetail.location.latitude,
+                      location = location!.copyWith(
+                        longitude: chooseLocationDetail.location!.longitude,
+                        latitude: chooseLocationDetail.location!.latitude,
                       );
                     }
                   },
@@ -158,7 +158,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                       Icon(
                         Icons.edit_location_alt,
                         size: 20,
-                        color: theme.textTheme.bodyText1.color,
+                        color: theme.textTheme.bodyText1!.color,
                       ),
                     ],
                   ),
@@ -184,7 +184,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
             const SizedBox(width: 10),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState.validate()) {
+                if (_formKey.currentState!.validate()) {
                   Navigator.of(context).pop(location);
                 }
               },
@@ -202,8 +202,8 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
     );
   }
 
-  String _validateInput(String text, TrufiLocalization localization) {
-    String result;
+  String? _validateInput(String text, TrufiLocalization localization) {
+    String? result;
     if (text.isEmpty) {
       // TODO translation
       result = localization.localeName == 'de'

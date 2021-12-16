@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:trufi_core/widgets/colored_svg_picture.dart';
 
 class ToMarkerDefault extends StatelessWidget {
-  const ToMarkerDefault({Key key}) : super(key: key);
+  const ToMarkerDefault({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

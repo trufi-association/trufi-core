@@ -58,7 +58,7 @@ class FetchCanceledByUserException implements Exception {
 class FetchOnlineCarException implements Exception {
   FetchOnlineCarException(this._message);
 
-  final String _message;
+  final String? _message;
 
   @override
   String toString() {
@@ -69,7 +69,7 @@ class FetchOnlineCarException implements Exception {
 class FetchOnlinePlanException implements Exception {
   FetchOnlinePlanException(this._message);
 
-  final String _message;
+  final String? _message;
 
   @override
   String toString() {

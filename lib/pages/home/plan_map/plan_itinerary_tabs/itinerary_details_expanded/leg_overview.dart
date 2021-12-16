@@ -10,9 +10,9 @@ class LegOverview extends StatelessWidget {
   final PlanItinerary itinerary;
   final AdEntity ad;
   const LegOverview({
-    Key key,
-    @required this.itinerary,
-    @required this.ad,
+    Key? key,
+    required this.itinerary,
+    required this.ad,
   }) : super(key: key);
 
   @override
@@ -46,7 +46,7 @@ class LegOverview extends StatelessWidget {
             ],
           );
         }
-        final leg = itinerary.legs[index];
+        final leg = itinerary.legs[index]!;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(

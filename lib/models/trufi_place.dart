@@ -11,9 +11,9 @@ abstract class TrufiPlace {}
 
 class TrufiLocation implements TrufiPlace {
   TrufiLocation({
-    @required this.description,
-    @required this.latitude,
-    @required this.longitude,
+    required this.description,
+    required this.latitude,
+    required this.longitude,
     this.alternativeNames,
     this.localizedNames,
     this.address,
@@ -25,19 +25,19 @@ class TrufiLocation implements TrufiPlace {
   final String description;
   final double latitude;
   final double longitude;
-  final List<String> alternativeNames;
-  final Map<String, String> localizedNames;
-  final String address;
-  final String type;
+  final List<String>? alternativeNames;
+  final Map<String, String>? localizedNames;
+  final String? address;
+  final String? type;
 
   TrufiLocation copyWith({
-    String description,
-    double latitude,
-    double longitude,
-    List<String> alternativeNames,
-    Map<String, String> localizedNames,
-    String address,
-    String type,
+    String? description,
+    double? latitude,
+    double? longitude,
+    List<String>? alternativeNames,
+    Map<String, String>? localizedNames,
+    String? address,
+    String? type,
   }) {
     return TrufiLocation(
       description: description ?? this.description,
@@ -56,8 +56,8 @@ class TrufiLocation implements TrufiPlace {
     return TrufiLocation(
       description: chooseLocationDetail.description,
       address: chooseLocationDetail.street,
-      latitude: chooseLocationDetail.location.latitude,
-      longitude: chooseLocationDetail.location.longitude,
+      latitude: chooseLocationDetail.location!.latitude,
+      longitude: chooseLocationDetail.location!.longitude,
     );
   }
 
@@ -72,8 +72,8 @@ class TrufiLocation implements TrufiPlace {
   factory TrufiLocation.fromSearchPlacesJson(List<dynamic> json) {
     return TrufiLocation(
       description: json[0].toString(),
-      alternativeNames: json[1].cast<String>() as List<String>,
-      localizedNames: json[2].cast<String, String>() as Map<String, String>,
+      alternativeNames: json[1].cast<String>() as List<String>?,
+      localizedNames: json[2].cast<String, String>() as Map<String, String>?,
       longitude: json[3][0].toDouble() as double,
       latitude: json[3][1].toDouble() as double,
       address: json[4] as String,
@@ -83,9 +83,9 @@ class TrufiLocation implements TrufiPlace {
 
   factory TrufiLocation.fromPlanLocation(PlanLocation value) {
     return TrufiLocation(
-      description: value.name,
-      latitude: value.latitude,
-      longitude: value.longitude,
+      description: value.name!,
+      latitude: value.latitude!,
+      longitude: value.longitude!,
     );
   }
 
@@ -98,13 +98,12 @@ class TrufiLocation implements TrufiPlace {
   }
 
   factory TrufiLocation.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
     return TrufiLocation(
       description: json["description"] as String,
       latitude: json["latitude"] as double,
       longitude: json["longitude"] as double,
-      type: json["type"] as String,
-      address: json["address"] != null ? json["address"] as String : '',
+      type: json["type"] as String?,
+      address: json["address"] != null ? json["address"] as String? : '',
     );
   }
 
@@ -143,13 +142,13 @@ class TrufiLocation implements TrufiPlace {
       translate = localization.localeName == 'en'
           ? "Selected on the map"
           : "Auf Karte ausgewählt";
-    } else if (type == DefaultLocation.defaultHome.initLocation.type &&
-        description == DefaultLocation.defaultHome.initLocation.description) {
+    } else if (type == DefaultLocation.defaultHome.initLocation!.type &&
+        description == DefaultLocation.defaultHome.initLocation!.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
           : localization.defaultLocationAdd(localization.defaultLocationHome);
-    } else if (type == DefaultLocation.defaultWork.initLocation.type &&
-        description == DefaultLocation.defaultWork.initLocation.description) {
+    } else if (type == DefaultLocation.defaultWork.initLocation!.type &&
+        description == DefaultLocation.defaultWork.initLocation!.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationWork
           : localization.defaultLocationAdd(localization.defaultLocationWork);
@@ -167,7 +166,7 @@ class TrufiLocation implements TrufiPlace {
 }
 
 class TrufiStreet implements TrufiPlace {
-  TrufiStreet({@required this.location});
+  TrufiStreet({required this.location});
 
   final TrufiLocation location;
   final List<TrufiStreetJunction> junctions = [];
@@ -176,7 +175,7 @@ class TrufiStreet implements TrufiPlace {
     return TrufiStreet(
       location: TrufiLocation(
         description: json[0] as String,
-        alternativeNames: json[1].cast<String>() as List<String>,
+        alternativeNames: json[1].cast<String>() as List<String>?,
         longitude: json[2][0].toDouble() as double,
         latitude: json[2][1].toDouble() as double,
       ),
@@ -191,16 +190,16 @@ class TrufiStreet implements TrufiPlace {
 
 class TrufiStreetJunction {
   TrufiStreetJunction({
-    @required this.street1,
-    @required this.street2,
-    @required this.latitude,
-    @required this.longitude,
+    required this.street1,
+    required this.street2,
+    required this.latitude,
+    required this.longitude,
   });
 
   final TrufiStreet street1;
   final TrufiStreet street2;
-  final double latitude;
-  final double longitude;
+  final double? latitude;
+  final double? longitude;
 
   String get description {
     return '${street1.location.description} & ${street2.location.description}';
@@ -208,15 +207,15 @@ class TrufiStreetJunction {
 
   String displayName(TrufiLocalization localization) =>
       localization.instructionJunction(
-        street1.location?.displayName(localization),
-        street2.location?.displayName(localization),
+        street1.location.displayName(localization),
+        street2.location.displayName(localization),
       );
 
   TrufiLocation location(TrufiLocalization localization) {
     return TrufiLocation(
       description: displayName(localization),
-      latitude: latitude,
-      longitude: longitude,
+      latitude: latitude!,
+      longitude: longitude!,
     );
   }
 }

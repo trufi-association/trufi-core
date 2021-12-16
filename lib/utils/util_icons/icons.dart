@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'custom_icons.dart';
 
-IconData typeToIconData(String type) {
+IconData? typeToIconData(String? type) {
   switch (type) {
     case 'amenity:bar':
     case 'amenity:pub':

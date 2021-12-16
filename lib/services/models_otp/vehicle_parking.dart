@@ -1,18 +1,18 @@
 import 'package:trufi_core/services/models_otp/vehicle_places.dart';
 
 class VehicleParking {
-  final String name;
-  final double lat;
-  final double lon;
-  final VehiclePlaces capacity;
-  final VehiclePlaces availability;
-  final String imageUrl;
-  final List<String> tags;
-  final bool anyCarPlaces;
-  final String vehicleParkingId;
-  final String detailsUrl;
-  final String note;
-  final String openingHours;
+  final String? name;
+  final double? lat;
+  final double? lon;
+  final VehiclePlaces? capacity;
+  final VehiclePlaces? availability;
+  final String? imageUrl;
+  final List<String>? tags;
+  final bool? anyCarPlaces;
+  final String? vehicleParkingId;
+  final String? detailsUrl;
+  final String? note;
+  final String? openingHours;
 
   const VehicleParking({
     this.name,
@@ -30,7 +30,7 @@ class VehicleParking {
   });
 
   factory VehicleParking.fromMap(Map<String, dynamic> json) => VehicleParking(
-        name: json['name'] as String,
+        name: json['name'] as String?,
         lat: double.tryParse(json['lat'].toString()),
         lon: double.tryParse(json['lon'].toString()),
         capacity: json['capacity'] != null
@@ -40,15 +40,15 @@ class VehicleParking {
             ? VehiclePlaces.fromMap(
                 json['availability'] as Map<String, dynamic>)
             : null,
-        imageUrl: json['imageUrl'] as String,
+        imageUrl: json['imageUrl'] as String?,
         tags: json['tags'] != null
             ? (json['tags'] as List<dynamic>).cast<String>()
             : null,
-        anyCarPlaces: json['anyCarPlaces'] as bool,
-        vehicleParkingId: json['vehicleParkingId'] as String,
-        detailsUrl: json['detailsUrl'] as String,
-        note: json['note'] as String,
-        openingHours: json['openingHours'] as String,
+        anyCarPlaces: json['anyCarPlaces'] as bool?,
+        vehicleParkingId: json['vehicleParkingId'] as String?,
+        detailsUrl: json['detailsUrl'] as String?,
+        note: json['note'] as String?,
+        openingHours: json['openingHours'] as String?,
       );
 
   Map<String, dynamic> toMap() => {

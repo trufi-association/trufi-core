@@ -3,14 +3,14 @@ import 'package:trufi_core/services/models_otp/enums/mode.dart';
 import 'package:trufi_core/services/models_otp/plan.dart';
 
 class ModesTransport {
-  final Plan walkPlan;
-  final Plan bikePlan;
-  final Plan bikeAndPublicPlan;
-  final Plan bikeParkPlan;
-  final Plan carPlan;
-  final Plan carParkPlan;
-  final Plan parkRidePlan;
-  final Plan onDemandTaxiPlan;
+  final Plan? walkPlan;
+  final Plan? bikePlan;
+  final Plan? bikeAndPublicPlan;
+  final Plan? bikeParkPlan;
+  final Plan? carPlan;
+  final Plan? carParkPlan;
+  final Plan? parkRidePlan;
+  final Plan? onDemandTaxiPlan;
 
   ModesTransport({
     this.walkPlan,
@@ -63,23 +63,23 @@ class ModesTransport {
 
   ModesTransportEntity toModesTransport() {
     return ModesTransportEntity(
-      walkPlan: walkPlan?.toPlan()?.copyWith(type: 'walkPlan'),
-      bikePlan: bikePlan?.toPlan()?.copyWith(type: 'bikePlan'),
+      walkPlan: walkPlan?.toPlan().copyWith(type: 'walkPlan'),
+      bikePlan: bikePlan?.toPlan().copyWith(type: 'bikePlan'),
       bikeAndPublicPlan:
-          bikeAndPublicPlan?.toPlan()?.copyWith(type: 'bikeAndPublicPlan'),
-      bikeParkPlan: bikeParkPlan?.toPlan()?.copyWith(type: 'bikeParkPlan'),
-      carPlan: carPlan?.toPlan()?.copyWith(type: 'carPlan'),
-      carParkPlan: carParkPlan?.toPlan()?.copyWith(type: 'carParkPlan'),
-      parkRidePlan: parkRidePlan?.toPlan()?.copyWith(type: 'parkRidePlan'),
+          bikeAndPublicPlan?.toPlan().copyWith(type: 'bikeAndPublicPlan'),
+      bikeParkPlan: bikeParkPlan?.toPlan().copyWith(type: 'bikeParkPlan'),
+      carPlan: carPlan?.toPlan().copyWith(type: 'carPlan'),
+      carParkPlan: carParkPlan?.toPlan().copyWith(type: 'carParkPlan'),
+      parkRidePlan: parkRidePlan?.toPlan().copyWith(type: 'parkRidePlan'),
       onDemandTaxiPlan: onDemandTaxiPlan
           ?.toPlan()
-          ?.copyWith(
-              itineraries: onDemandTaxiPlan.itineraries
+          .copyWith(
+              itineraries: onDemandTaxiPlan!.itineraries!
                   .where((itinerary) =>
                       !itinerary.legs.every((leg) => leg.mode == Mode.walk))
                   .map((e) => e.toPlanItinerary())
                   .toList())
-          ?.copyWith(type: 'onDemandTaxiPlan'),
+          .copyWith(type: 'onDemandTaxiPlan'),
     );
   }
 }

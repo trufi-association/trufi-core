@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/plan_entity/place_entity.dart';
 import 'package:trufi_core/entities/plan_entity/route_entity.dart';
 import 'package:trufi_core/entities/plan_entity/utils/geo_utils.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 import 'package:trufi_core/services/models_otp/booking_info.dart';
@@ -45,17 +45,14 @@ class PlanEntity extends Equatable {
   static const _type = "type";
   static const _planInfoBox = "planInfoBox";
 
-  final PlanLocation from;
-  final PlanLocation to;
-  final String type;
-  final List<PlanItinerary> itineraries;
-  final PlanError error;
+  final PlanLocation? from;
+  final PlanLocation? to;
+  final String? type;
+  final List<PlanItinerary>? itineraries;
+  final PlanError? error;
   final PlanInfoBox planInfoBox;
 
   factory PlanEntity.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
     if (json.containsKey(_error)) {
       return PlanEntity(
           type: 'Error',
@@ -73,19 +70,19 @@ class PlanEntity extends Equatable {
               )
               .toList() as List<PlanItinerary>,
         ),
-        type: planJson[_type] as String,
-        planInfoBox: getPlanInfoBoxByKey(planJson[_planInfoBox] as String),
+        type: planJson[_type] as String?,
+        planInfoBox: getPlanInfoBoxByKey(planJson[_planInfoBox] as String?),
       );
     }
   }
 
   PlanEntity copyWith({
-    PlanLocation from,
-    PlanLocation to,
-    List<PlanItinerary> itineraries,
-    PlanError error,
-    String type,
-    PlanInfoBox planInfoBox,
+    PlanLocation? from,
+    PlanLocation? to,
+    List<PlanItinerary>? itineraries,
+    PlanError? error,
+    String? type,
+    PlanInfoBox? planInfoBox,
   }) {
     return PlanEntity(
       from: from ?? this.from,
@@ -107,7 +104,7 @@ class PlanEntity extends Equatable {
       (itineraries, itinerary) {
         // Get first bus leg
         final firstBusLeg = itinerary.legs.firstWhere(
-          (leg) => leg.mode == "BUS",
+          (leg) => leg!.mode == "BUS",
           orElse: () => null,
         );
         // If no bus leg exist just add the itinerary
@@ -135,16 +132,16 @@ class PlanEntity extends Equatable {
   Map<String, dynamic> toJson() {
     return error != null
         ? {
-            _error: error.toJson(),
+            _error: error!.toJson(),
           }
         : {
             _plan: {
               _from: from?.toJson(),
               _to: to?.toJson(),
               _itineraries:
-                  itineraries?.map((itinerary) => itinerary.toJson())?.toList(),
+                  itineraries?.map((itinerary) => itinerary.toJson()).toList(),
               _type: type,
-              _planInfoBox: planInfoBox?.name
+              _planInfoBox: planInfoBox.name
             }
           };
   }
@@ -152,18 +149,18 @@ class PlanEntity extends Equatable {
   bool get hasError => error != null;
 
   bool get isOnlyWalk =>
-      itineraries.isEmpty ||
-      itineraries.length == 1 &&
-          itineraries[0].legs.length == 1 &&
-          itineraries[0].legs[0].transportMode == TransportMode.walk;
+      itineraries!.isEmpty ||
+      itineraries!.length == 1 &&
+          itineraries![0].legs.length == 1 &&
+          itineraries![0].legs[0]!.transportMode == TransportMode.walk;
 
   Widget get iconSecondaryPublic {
     if ((itineraries ?? []).isNotEmpty) {
-      final publicModes = itineraries[0]
+      final publicModes = itineraries![0]
           .legs
           .where(
             (element) =>
-                element.transportMode != TransportMode.walk &&
+                element!.transportMode != TransportMode.walk &&
                 element.transportMode != TransportMode.bicycle &&
                 element.transportMode != TransportMode.car,
           )
@@ -171,10 +168,11 @@ class PlanEntity extends Equatable {
       if (publicModes.isNotEmpty) {
         return Container(
             decoration: BoxDecoration(
-                color: publicModes[0].route?.color != null
-                    ? Color(int.tryParse("0xFF${publicModes[0].route.color}"))
-                    : publicModes[0].transportMode.color),
-            child: publicModes[0].transportMode.getImage(color: Colors.white));
+                color: publicModes[0]!.route?.color != null
+                    ? Color(
+                        int.tryParse("0xFF${publicModes[0]!.route!.color}")!)
+                    : publicModes[0]!.transportMode.color),
+            child: publicModes[0]!.transportMode.getImage(color: Colors.white));
       }
     }
     return Container();
@@ -196,7 +194,7 @@ class PlanEntity extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         from,
         to,
         type,

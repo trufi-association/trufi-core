@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +20,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../plan.dart';
 
 class CustomItinerary extends StatefulWidget {
-  final PlanPageController planPageController;
+  final PlanPageController? planPageController;
 
-  const CustomItinerary({Key key, @required this.planPageController})
+  const CustomItinerary({Key? key, required this.planPageController})
       : super(key: key);
 
   @override
@@ -31,14 +30,14 @@ class CustomItinerary extends StatefulWidget {
 }
 
 class _CustomItineraryState extends State<CustomItinerary> {
-  PlanItinerary currentPlanItinerary;
+  PlanItinerary? currentPlanItinerary;
   bool showDetail = false;
 
   @override
   void initState() {
-    currentPlanItinerary = widget.planPageController.selectedItinerary;
+    currentPlanItinerary = widget.planPageController!.selectedItinerary;
     super.initState();
-    widget.planPageController.outSelectedItinerary.listen((selectedItinerary) {
+    widget.planPageController!.outSelectedItinerary.listen((selectedItinerary) {
       if (mounted) {
         setState(() {
           currentPlanItinerary = selectedItinerary;
@@ -49,16 +48,17 @@ class _CustomItineraryState extends State<CustomItinerary> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.read<ThemeCubit>().state.bottomBarTheme;
+    final theme = context.read<ThemeCubit>().state.bottomBarTheme!;
     final localization = TrufiLocalization.of(context);
-    final payloadDataPlanState = context.read<PayloadDataPlanCubit>().state;
+    final PayloadDataPlanState payloadDataPlanState =
+        context.read<PayloadDataPlanCubit>().state;
     final homePageCubit = context.watch<HomePageCubit>();
-    final homePageState = homePageCubit.state;
+    final MapRouteState homePageState = homePageCubit.state;
     return Theme(
         data: theme,
         child: !showDetail
-            ? widget.planPageController.plan.isOnlyWalk &&
-                    widget.planPageController.plan.type != 'walkPlan'
+            ? widget.planPageController!.plan!.isOnlyWalk &&
+                    widget.planPageController!.plan!.type != 'walkPlan'
                 ? ListView(
                     children: [
                       Container(
@@ -67,17 +67,17 @@ class _CustomItineraryState extends State<CustomItinerary> {
                           horizontal: 10,
                         ),
                         child: InfoMessage(
-                          message: homePageState.plan.planInfoBox
+                          message: homePageState.plan!.planInfoBox
                               .translateValue(localization),
                           isErrorMessage:
-                              !homePageState.plan.isTypeMessageInformation,
-                          widget: homePageState.plan.isOutSideLocation
+                              !homePageState.plan!.isTypeMessageInformation,
+                          widget: homePageState.plan!.isOutSideLocation
                               ? Padding(
                                   padding: const EdgeInsets.only(left: 21),
                                   child: RichText(
                                     text: TextSpan(children: [
                                       TextSpan(
-                                        style: theme.textTheme.bodyText1
+                                        style: theme.textTheme.bodyText1!
                                             .copyWith(
                                                 fontSize: 14,
                                                 color: Colors.black,
@@ -86,7 +86,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                             .infoMessageUseNationalServicePrefix,
                                       ),
                                       TextSpan(
-                                        style: theme.primaryTextTheme.bodyText2
+                                        style: theme.primaryTextTheme.bodyText2!
                                             .copyWith(
                                           decoration: TextDecoration.underline,
                                         ),
@@ -106,9 +106,9 @@ class _CustomItineraryState extends State<CustomItinerary> {
                   )
                 : Column(
                     children: [
-                      if (widget
-                              .planPageController.plan.itineraries.isNotEmpty &&
-                          widget.planPageController.plan.type == 'plan')
+                      if (widget.planPageController!.plan!.itineraries!
+                              .isNotEmpty &&
+                          widget.planPageController!.plan!.type == 'plan')
                         Row(
                           children: [
                             const SizedBox(width: 10),
@@ -121,7 +121,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                   );
                                 },
                                 child: Text(
-                                  payloadDataPlanState.arriveBy
+                                  payloadDataPlanState.arriveBy!
                                       ? localization
                                           .fetchMoreItinerariesLaterDeparturesTitle
                                       : localization
@@ -141,7 +141,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                   );
                                 },
                                 child: Text(
-                                  payloadDataPlanState.arriveBy
+                                  payloadDataPlanState.arriveBy!
                                       ? localization
                                           .fetchMoreItinerariesEarlierDepartures
                                       : localization
@@ -163,24 +163,24 @@ class _CustomItineraryState extends State<CustomItinerary> {
                       Expanded(
                         child: ListView.builder(
                             itemCount: widget
-                                .planPageController.plan.itineraries.length,
+                                .planPageController!.plan!.itineraries!.length,
                             itemBuilder: (buildContext, index) {
-                              final itinerary = widget
-                                  .planPageController.plan.itineraries[index];
-                              int lengthBikePark;
-                              if (widget.planPageController.plan.type ==
+                              final itinerary = widget.planPageController!.plan!
+                                  .itineraries![index];
+                              int? lengthBikePark;
+                              if (widget.planPageController!.plan!.type ==
                                   'bikeAndPublicPlan') {
                                 lengthBikePark = filterOnlyBikeAndWalk(
                                         homePageState.modesTransport
                                                 ?.bikeParkPlan?.itineraries ??
                                             [])
-                                    ?.length;
+                                    .length;
                               }
                               return Column(
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      widget.planPageController
+                                      widget.planPageController!
                                           .inSelectedItinerary
                                           .add(itinerary);
                                     },
@@ -192,7 +192,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                             CrossAxisAlignment.stretch,
                                         children: [
                                           if (index == 0 &&
-                                              widget?.planPageController?.plan
+                                              widget.planPageController?.plan
                                                       ?.planInfoBox !=
                                                   PlanInfoBox.undefined)
                                             Container(
@@ -203,14 +203,15 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                 ),
                                                 child: InfoMessage(
                                                   message: homePageState
-                                                      .plan.planInfoBox
+                                                      .plan!.planInfoBox
                                                       .translateValue(
                                                           localization),
                                                   closeInfo: () {
                                                     homePageCubit
                                                         .updateMapRouteState(
                                                       homePageState.copyWith(
-                                                        plan: homePageState.plan
+                                                        plan: homePageState
+                                                            .plan!
                                                             .copyWith(
                                                           planInfoBox:
                                                               PlanInfoBox
@@ -234,7 +235,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                   localization
                                                       .itinerarySummaryBikeParkTitle,
                                                   style: theme.primaryTextTheme
-                                                      .bodyText1
+                                                      .bodyText1!
                                                       .copyWith(
                                                     fontWeight: FontWeight.w600,
                                                   ),
@@ -244,8 +245,11 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                           if (lengthBikePark != null &&
                                               lengthBikePark == index &&
                                               lengthBikePark <
-                                                  widget.planPageController.plan
-                                                      .itineraries.length)
+                                                  widget
+                                                      .planPageController!
+                                                      .plan!
+                                                      .itineraries!
+                                                      .length)
                                             Container(
                                               color: Colors.grey[200],
                                               child: Row(
@@ -260,7 +264,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                           .itinerarySummaryBikeAndPublicRailSubwayTitle,
                                                       style: theme
                                                           .primaryTextTheme
-                                                          .bodyText1
+                                                          .bodyText1!
                                                           .copyWith(
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -288,7 +292,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                     "${itinerary.futureText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
                                                     style: theme
                                                         .primaryTextTheme
-                                                        .bodyText1
+                                                        .bodyText1!
                                                         .copyWith(
                                                             fontWeight:
                                                                 FontWeight
@@ -301,7 +305,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                   text: TextSpan(
                                                     style: theme
                                                         .primaryTextTheme
-                                                        .bodyText1
+                                                        .bodyText1!
                                                         .copyWith(
                                                             fontWeight:
                                                                 FontWeight
@@ -362,7 +366,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                                                     setState(() {
                                                       showDetail = true;
                                                     });
-                                                    widget.planPageController
+                                                    widget.planPageController!
                                                         .inSelectedItinerary
                                                         .add(itinerary.copyWith(
                                                             isOnlyShowItinerary:
@@ -403,9 +407,9 @@ class _CustomItineraryState extends State<CustomItinerary> {
                           setState(() {
                             showDetail = false;
                           });
-                          widget.planPageController.inSelectedItinerary.add(
-                              currentPlanItinerary.copyWith(
-                                  isOnlyShowItinerary: false));
+                          widget.planPageController!.inSelectedItinerary.add(
+                              currentPlanItinerary!
+                                  .copyWith(isOnlyShowItinerary: false));
                         },
                         itinerary: currentPlanItinerary),
                   ],
@@ -414,24 +418,24 @@ class _CustomItineraryState extends State<CustomItinerary> {
   }
 
   Future<void> _fetchMoreitineraries({
-    @required BuildContext context,
-    @required bool isFetchEarlier,
+    required BuildContext context,
+    required bool isFetchEarlier,
   }) async {
     final TrufiLocalization localization = TrufiLocalization.of(context);
     final appReviewCubit = context.read<AppReviewCubit>();
     final homePageCubit = context.read<HomePageCubit>();
-    final homePageState = homePageCubit.state;
+    final MapRouteState homePageState = homePageCubit.state;
     final payloadDataPlanCubit = context.read<PayloadDataPlanCubit>();
     final correlationId = context.read<PreferencesCubit>().state.correlationId;
     if (!homePageState.isFetchEarlier && !homePageState.isFetchLater) {
-      if (payloadDataPlanCubit.state.arriveBy) {
+      if (payloadDataPlanCubit.state.arriveBy!) {
         await homePageCubit
             .fetchMoreArrivalPlan(
               correlationId,
               localization,
               advancedOptions: payloadDataPlanCubit.state,
               isFetchEarlier: isFetchEarlier,
-              itineraries: homePageState.plan.itineraries,
+              itineraries: homePageState.plan!.itineraries,
             )
             .then((value) => appReviewCubit.incrementReviewWorthyActions())
             .catchError((error) => onFetchError(context, error as Exception));
@@ -442,7 +446,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
               localization,
               advancedOptions: payloadDataPlanCubit.state,
               isFetchEarlier: isFetchEarlier,
-              itineraries: homePageState.plan.itineraries,
+              itineraries: homePageState.plan!.itineraries,
             )
             .then((value) => appReviewCubit.incrementReviewWorthyActions())
             .catchError((error) => onFetchError(context, error as Exception));

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class InfoMessage extends StatelessWidget {
   final String message;
-  final Widget widget;
-  final EdgeInsetsGeometry margin;
-  final Function closeInfo;
+  final Widget? widget;
+  final EdgeInsetsGeometry? margin;
+  final Function? closeInfo;
   final bool isErrorMessage;
 
   const InfoMessage({
-    Key key,
-    @required this.message,
+    Key? key,
+    required this.message,
     this.widget,
     this.margin,
     this.closeInfo,
@@ -53,12 +53,12 @@ class InfoMessage extends StatelessWidget {
                     Flexible(
                       child: Text(
                         message,
-                        style: theme.textTheme.bodyText1.copyWith(fontSize: 14),
+                        style: theme.textTheme.bodyText1!.copyWith(fontSize: 14),
                       ),
                     ),
                   ],
                 ),
-                if (widget != null) widget
+                if (widget != null) widget!
               ],
             ),
           ),
@@ -73,7 +73,7 @@ class InfoMessage extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(1.5),
                 child: GestureDetector(
-                  onTap: () => closeInfo(),
+                  onTap: () => closeInfo!(),
                   child: const Icon(
                     Icons.close,
                     color: Colors.white,

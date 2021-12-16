@@ -1,10 +1,10 @@
 import 'elevation_profile_component.dart';
 
 class Step {
-  final double distance;
-  final double lon;
-  final double lat;
-  final List<ElevationProfileComponent> elevationProfile;
+  final double? distance;
+  final double? lon;
+  final double? lat;
+  final List<ElevationProfileComponent>? elevationProfile;
 
   const Step({
     this.distance,
@@ -30,6 +30,6 @@ class Step {
         'lon': lon,
         'lat': lat,
         'elevationProfile':
-            List<dynamic>.from(elevationProfile.map((x) => x.toJson())),
+            List<dynamic>.from(elevationProfile!.map((x) => x.toJson())),
       };
 }

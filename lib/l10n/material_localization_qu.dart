@@ -236,7 +236,7 @@ const quDateSymbols = {
     'HH:mm:ss',
     'HH:mm',
   ],
-  'AVAILABLEFORMATS': null,
+  'AVAILABLEFORMATS': '',
   'FIRSTDAYOFWEEK': 0,
   'WEEKENDRANGE': <dynamic>[
     5,
@@ -305,15 +305,15 @@ class _QuMaterialLocalizationsDelegate
 class QuMaterialLocalizations extends GlobalMaterialLocalizations {
   const QuMaterialLocalizations({
     String localeName = 'qu',
-    @required intl.DateFormat fullYearFormat,
-    @required intl.DateFormat compactDateFormat,
-    @required intl.DateFormat shortDateFormat,
-    @required intl.DateFormat mediumDateFormat,
-    @required intl.DateFormat longDateFormat,
-    @required intl.DateFormat yearMonthFormat,
-    @required intl.DateFormat shortMonthDayFormat,
-    @required intl.NumberFormat decimalFormat,
-    @required intl.NumberFormat twoDigitZeroPaddedFormat,
+    required intl.DateFormat fullYearFormat,
+    required intl.DateFormat compactDateFormat,
+    required intl.DateFormat shortDateFormat,
+    required intl.DateFormat mediumDateFormat,
+    required intl.DateFormat longDateFormat,
+    required intl.DateFormat yearMonthFormat,
+    required intl.DateFormat shortMonthDayFormat,
+    required intl.NumberFormat decimalFormat,
+    required intl.NumberFormat twoDigitZeroPaddedFormat,
   }) : super(
           localeName: localeName,
           fullYearFormat: fullYearFormat,
@@ -423,10 +423,10 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
   String get refreshIndicatorSemanticLabel => r'Refresh';
 
   @override
-  String get remainingTextFieldCharacterCountFew => null;
+  String get remainingTextFieldCharacterCountFew => '';
 
   @override
-  String get remainingTextFieldCharacterCountMany => null;
+  String get remainingTextFieldCharacterCountMany => '';
 
   @override
   String get remainingTextFieldCharacterCountOne => r'1 character remaining';
@@ -436,7 +436,7 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
       r'$remainingCount characters remaining';
 
   @override
-  String get remainingTextFieldCharacterCountTwo => null;
+  String get remainingTextFieldCharacterCountTwo => '';
 
   @override
   String get remainingTextFieldCharacterCountZero => r'No characters remaining';
@@ -472,10 +472,10 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
   String get selectAllButtonLabel => r'SELECT ALL';
 
   @override
-  String get selectedRowCountTitleFew => null;
+  String get selectedRowCountTitleFew => '';
 
   @override
-  String get selectedRowCountTitleMany => null;
+  String get selectedRowCountTitleMany => '';
 
   @override
   String get selectedRowCountTitleOne => r'1 item selected';
@@ -484,7 +484,7 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
   String get selectedRowCountTitleOther => r'$selectedRowCount items selected';
 
   @override
-  String get selectedRowCountTitleTwo => null;
+  String get selectedRowCountTitleTwo => '';
 
   @override
   String get selectedRowCountTitleZero => r'No items selected';
@@ -558,10 +558,10 @@ class QuMaterialLocalizations extends GlobalMaterialLocalizations {
 
   @override
   String get dialModeButtonLabel => 'Switch to dial picker mode';
- 
+
   @override
   String get firstPageTooltip => 'Fist page';
-  
+
   String get lastPageTooltip => 'Last page';
 
   @override

@@ -6,7 +6,7 @@ enum LegMode {
   undefined,
 }
 
-LegMode getLegModeByKey(String key) {
+LegMode getLegModeByKey(String? key) {
   return LegModeExtension.names.keys.firstWhere(
     (keyE) => keyE.name == key,
     orElse: () => LegMode.undefined,
@@ -22,5 +22,5 @@ extension LegModeExtension on LegMode {
     LegMode.undefined: 'UNDEFINED',
   };
 
-  String get name => names[this];
+  String? get name => names[this];
 }

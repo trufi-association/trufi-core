@@ -7,11 +7,11 @@ LocationType getLocationTypeByString(String locationType) {
   );
 }
 
-extension LocationTypeExtension on LocationType {
+extension LocationTypeExtension on LocationType? {
   static const names = <LocationType, String>{
     LocationType.stop: 'STOP',
     LocationType.station: 'STATION',
     LocationType.entrance: 'ENTRANCE'
   };
-  String get name => names[this] ?? 'STOP';
+  String get name => names[this!] ?? 'STOP';
 }

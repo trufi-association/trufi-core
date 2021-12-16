@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trufi_core/blocs/configuration/configuration.dart';
 
 void main() {
-  TrufiCustomLocalizations subject;
+  late TrufiCustomLocalizations subject;
 
   group("TrufiCustomLocalizations", () {
     setUp(() {

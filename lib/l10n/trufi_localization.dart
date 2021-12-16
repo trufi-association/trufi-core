@@ -74,7 +74,8 @@ abstract class TrufiLocalization {
   final String localeName;
 
   static TrufiLocalization of(BuildContext context) {
-    return Localizations.of<TrufiLocalization>(context, TrufiLocalization);
+    return Localizations.of<TrufiLocalization>(context, TrufiLocalization) ??
+        TrufiLocalizationEn();
   }
 
   static const LocalizationsDelegate<TrufiLocalization> delegate =

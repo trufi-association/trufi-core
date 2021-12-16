@@ -1,9 +1,9 @@
 import 'place_interface.dart';
 
 class PlaceAtDistance {
-  final String id;
-  final PlaceInterface place;
-  final int distance;
+  final String? id;
+  final PlaceInterface? place;
+  final int? distance;
 
   const PlaceAtDistance({this.id, this.place, this.distance});
 

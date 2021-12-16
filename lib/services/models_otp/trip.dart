@@ -8,29 +8,29 @@ import 'stop.dart';
 import 'stoptime.dart';
 
 class Trip {
-  final String id;
-  final String gtfsId;
-  final RouteOtp route;
-  final String serviceId;
-  final List<String> activeDates;
-  final String tripShortName;
-  final String tripHeadsign;
-  final String routeShortName;
-  final String directionId;
-  final String blockId;
-  final String shapeId;
-  final WheelchairBoarding wheelchairAccessible;
-  final BikesAllowed bikesAllowed;
-  final PatternOtp pattern;
-  final List<Stop> stops;
-  final String semanticHash;
-  final List<Stoptime> stoptimes;
-  final Stoptime departureStoptime;
-  final Stoptime arrivalStoptime;
-  final List<Stoptime> stoptimesForDate;
-  final List<double> geometry;
-  final Geometry tripGeometry;
-  final List<Alert> alerts;
+  final String? id;
+  final String? gtfsId;
+  final RouteOtp? route;
+  final String? serviceId;
+  final List<String>? activeDates;
+  final String? tripShortName;
+  final String? tripHeadsign;
+  final String? routeShortName;
+  final String? directionId;
+  final String? blockId;
+  final String? shapeId;
+  final WheelchairBoarding? wheelchairAccessible;
+  final BikesAllowed? bikesAllowed;
+  final PatternOtp? pattern;
+  final List<Stop>? stops;
+  final String? semanticHash;
+  final List<Stoptime>? stoptimes;
+  final Stoptime? departureStoptime;
+  final Stoptime? arrivalStoptime;
+  final List<Stoptime>? stoptimesForDate;
+  final List<double>? geometry;
+  final Geometry? tripGeometry;
+  final List<Alert>? alerts;
 
   const Trip({
     this.id,
@@ -59,24 +59,24 @@ class Trip {
   });
 
   factory Trip.fromJson(Map<String, dynamic> json) => Trip(
-        id: json['id'] as String,
-        gtfsId: json['gtfsId'] as String,
+        id: json['id'] as String?,
+        gtfsId: json['gtfsId'] as String?,
         route: json['route'] != null
             ? RouteOtp.fromJson(json['route'] as Map<String, dynamic>)
             : null,
-        serviceId: json['serviceId'] as String,
+        serviceId: json['serviceId'] as String?,
         activeDates: json['activeDates'] != null
             ? (json['activeDates'] as List<dynamic>).cast<String>()
             : null,
-        tripShortName: json['tripShortName'] as String,
-        tripHeadsign: json['tripHeadsign'] as String,
-        routeShortName: json['routeShortName'] as String,
-        directionId: json['directionId'] as String,
-        blockId: json['blockId'] as String,
-        shapeId: json['shapeId'] as String,
+        tripShortName: json['tripShortName'] as String?,
+        tripHeadsign: json['tripHeadsign'] as String?,
+        routeShortName: json['routeShortName'] as String?,
+        directionId: json['directionId'] as String?,
+        blockId: json['blockId'] as String?,
+        shapeId: json['shapeId'] as String?,
         wheelchairAccessible: getWheelchairBoardingByString(
             json['wheelchairAccessible'].toString()),
-        bikesAllowed: getBikesAllowedByString(json['bikesAllowed'] as String),
+        bikesAllowed: getBikesAllowedByString(json['bikesAllowed'] as String?),
         pattern: json['pattern'] != null
             ? PatternOtp.fromJson(json['pattern'] as Map<String, dynamic>)
             : null,
@@ -85,7 +85,7 @@ class Trip {
                 (x) => Stop.fromJson(x as Map<String, dynamic>),
               ))
             : null,
-        semanticHash: json['semanticHash'] as String,
+        semanticHash: json['semanticHash'] as String?,
         stoptimes: json['stoptimes'] != null
             ? List<Stoptime>.from((json["stoptimes"] as List<dynamic>).map(
                 (x) => Stoptime.fromJson(x as Map<String, dynamic>),
@@ -105,7 +105,7 @@ class Trip {
               ))
             : null,
         geometry: json['geometry'] != null
-            ? (json['geometry'] as List<double>)
+            ? (json['geometry'] as List<double>?)
             : null,
         tripGeometry: json['tripGeometry'] != null
             ? Geometry.fromJson(json['tripGeometry'] as Map<String, dynamic>)
@@ -133,17 +133,17 @@ class Trip {
         'bikesAllowed': bikesAllowed?.name,
         'pattern': pattern?.toJson(),
         'stops':
-            List.generate(stops?.length ?? 0, (index) => stops[index].toJson()),
+            List.generate(stops?.length ?? 0, (index) => stops![index].toJson()),
         'semanticHash': semanticHash,
         'stoptimes': List.generate(
-            stoptimes?.length ?? 0, (index) => stoptimes[index].toJson()),
+            stoptimes?.length ?? 0, (index) => stoptimes![index].toJson()),
         'departureStoptime': departureStoptime?.toJson(),
         'arrivalStoptime': arrivalStoptime?.toJson(),
         'stoptimesForDate': List.generate(stoptimesForDate?.length ?? 0,
-            (index) => stoptimesForDate[index].toJson()),
+            (index) => stoptimesForDate![index].toJson()),
         'geometry': geometry,
         'tripGeometry': tripGeometry?.toJson(),
         'alerts': List.generate(
-            alerts?.length ?? 0, (index) => alerts[index].toJson()),
+            alerts?.length ?? 0, (index) => alerts![index].toJson()),
       };
 }

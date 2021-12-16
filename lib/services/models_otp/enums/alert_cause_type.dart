@@ -20,7 +20,7 @@ AlertCauseType getAlertCauseTypeByString(String alertCauseType) {
   );
 }
 
-extension AlertCauseTypeExtension on AlertCauseType {
+extension AlertCauseTypeExtension on AlertCauseType? {
   static const names = <AlertCauseType, String>{
     AlertCauseType.unknowncause: 'UNKNOWN_CAUSE',
     AlertCauseType.othercause: 'OTHER_CAUSE',
@@ -35,5 +35,5 @@ extension AlertCauseTypeExtension on AlertCauseType {
     AlertCauseType.policeactivity: 'POLICE_ACTIVITY',
     AlertCauseType.medicalemergency: 'MEDICAL_EMERGENCY'
   };
-  String get name => names[this] ?? 'UNKNOWN_CAUSE';
+  String get name => names[this!] ?? 'UNKNOWN_CAUSE';
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class SwapButton extends StatelessWidget {
   const SwapButton({
-    Key key,
-    @required this.orientation,
-    @required this.onSwap,
+    Key? key,
+    required this.orientation,
+    required this.onSwap,
   }) : super(key: key);
   final Orientation orientation;
   final void Function() onSwap;
@@ -26,12 +26,12 @@ class SwapButton extends StatelessWidget {
 
 class ResetButton extends StatelessWidget {
   const ResetButton({
-    Key key,
-    @required this.onReset,
+    Key? key,
+    required this.onReset,
     this.color,
   }) : super(key: key);
   final void Function() onReset;
-  final Color color;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return FittedBox(

@@ -7,7 +7,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 
 class MapSettingButton extends StatelessWidget {
-  const MapSettingButton({Key key, @required this.onFetchPlan})
+  const MapSettingButton({Key? key, required this.onFetchPlan})
       : super(key: key);
 
   final void Function() onFetchPlan;
@@ -23,10 +23,10 @@ class MapSettingButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(8.0))),
       child: InkWell(
         onTap: () async {
-          final oldPayloadDataPlanState =
+          final PayloadDataPlanState oldPayloadDataPlanState =
               context.read<PayloadDataPlanCubit>().state;
 
-          final PayloadDataPlanState newPayloadDataPlanState =
+          final PayloadDataPlanState? newPayloadDataPlanState =
               await Navigator.of(context).push(
             MaterialPageRoute<PayloadDataPlanState>(
               builder: (BuildContext context) => const SettingPanel(),
@@ -44,7 +44,7 @@ class MapSettingButton extends StatelessWidget {
               padding: const EdgeInsets.only(left: 5),
               child: Text(
                 localization.commonSettings,
-                style: theme.textTheme.headline6.copyWith(fontSize: 15),
+                style: theme.textTheme.headline6!.copyWith(fontSize: 15),
               ),
             ),
           ],

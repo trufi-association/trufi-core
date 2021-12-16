@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trufi_core/blocs/app_review_cubit.dart';
-import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/configuration/models/language_configuration.dart';
 import 'package:trufi_core/blocs/home_page_cubit.dart';
@@ -12,13 +11,13 @@ import 'package:trufi_core/blocs/theme_bloc.dart';
 import 'package:trufi_core/l10n/material_localization_qu.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
+import 'package:trufi_core/models/menu/menu_item.dart';
 import 'package:trufi_core/pages/home/setting_payload/setting_panel/setting_panel.dart';
 import 'package:trufi_core/repository/shared_preferences_repository.dart';
 import 'package:trufi_core/services/plan_request/online_graphql_repository/online_graphql_repository.dart';
 import 'package:trufi_core/services/plan_request/request_manager.dart';
 import 'package:trufi_core/trufi_observer.dart';
 
-import 'package:trufi_core/models/menu/menu_item.dart';
 import './blocs/bloc_provider.dart';
 import './blocs/location_search_bloc.dart';
 import './blocs/preferences/preferences_cubit.dart';
@@ -72,23 +71,21 @@ typedef LocaleWidgetBuilder = Widget Function(
 ///
 class TrufiApp extends StatelessWidget {
   TrufiApp({
-    @required this.configuration,
-    @required this.theme,
+    required this.configuration,
+    required this.theme,
     this.searchTheme,
     this.bottomBarTheme,
     this.customOverlayBuilder,
     this.customBetweenFabBuilder,
     this.customHomePage,
-    Key key,
+    Key? key,
     this.customLayers = const [],
     this.mapTileProviders,
     this.searchLocationManager,
     this.menuItems,
     this.routes,
     this.customRequestManager,
-  })  : assert(configuration != null, "Configuration cannot be empty"),
-        assert(theme != null, "Theme cannot be empty"),
-        super(key: key) {
+  }) : super(key: key) {
     if (configuration.debug) {
       Bloc.observer = TrufiObserver();
     }
@@ -102,50 +99,50 @@ class TrufiApp extends StatelessWidget {
   final ThemeData theme;
 
   /// The used ThemeData for the SearchDelegate
-  final ThemeData searchTheme;
+  final ThemeData? searchTheme;
 
   /// The used ThemeData for the BottomBarTheme
-  final ThemeData bottomBarTheme;
+  final ThemeData? bottomBarTheme;
 
   /// A [customOverlayBuilder] that receives the current language to allow
   /// a custom overlay on top of the Trufi Core.
-  final LocaleWidgetBuilder customOverlayBuilder;
+  final LocaleWidgetBuilder? customOverlayBuilder;
 
   /// The [customBetweenFabBuilder] is [Builder] that allows creating a overlay
   /// in between the Fab buttons of the Trufi Core.
-  final WidgetBuilder customBetweenFabBuilder;
+  final WidgetBuilder? customBetweenFabBuilder;
 
   /// The [customHomePage] is [Widget] that allows creating a custom HomePage
-  final Widget customHomePage;
+  final Widget? customHomePage;
 
   /// List of [CustomLayerContainer] implementations
   final List<CustomLayerContainer> customLayers;
 
   /// Optional extension of Main menu
   /// By default will be used the [defaultMenuItems]
-  final List<List<MenuItem>> menuItems;
+  final List<List<MenuItem>>? menuItems;
 
   /// List of Map Tile Provider
   /// if the list is [null] or [Empty], [Trufi Core] then will be used [OSMDefaultMapTile]
-  final List<MapTileProvider> mapTileProviders;
+  final List<MapTileProvider>? mapTileProviders;
 
   ///You can provider a [SearchLocationManager]
   ///By defaul [Trufi-Core] has implementation
   /// [OfflineSearchLocation] that used the assets/data/search.json
-  final SearchLocationManager searchLocationManager;
+  final SearchLocationManager? searchLocationManager;
 
   /// Optional extension for routes
   /// By default will be used the [routes]
-  final Map<String, WidgetBuilder> routes;
+  final Map<String, WidgetBuilder>? routes;
 
   /// Optional extension implement your [customRequestManager]
   /// By default will be used the [OnlineRepository] or [OnlineGraphQLRepository]
-  final RequestManager customRequestManager;
+  final RequestManager? customRequestManager;
 
   @override
   Widget build(BuildContext context) {
     final sharedPreferencesRepository = SharedPreferencesRepository();
-    final openTripPlannerUrl = configuration.urls.openTripPlannerUrl;
+    final openTripPlannerUrl = configuration.urls!.openTripPlannerUrl;
     final serverType = configuration.serverType;
     return MultiBlocProvider(
       providers: [
@@ -166,7 +163,7 @@ class TrufiApp extends StatelessWidget {
                     .languageCode,
               ),
               menuItems ?? defaultMenuItems,
-              configuration.map.center,
+              configuration.map!.center,
               showWeather: configuration.showWeather),
         ),
         BlocProvider<CustomLayersCubit>(
@@ -175,8 +172,8 @@ class TrufiApp extends StatelessWidget {
         BlocProvider<MapTileProviderCubit>(
           create: (context) => MapTileProviderCubit(
             mapTileProviders:
-                mapTileProviders != null && mapTileProviders.isNotEmpty
-                    ? mapTileProviders
+                mapTileProviders != null && mapTileProviders!.isNotEmpty
+                    ? mapTileProviders!
                     : [OSMDefaultMapTile()],
           ),
         ),
@@ -240,15 +237,15 @@ class LocalizedMaterialApp extends StatelessWidget {
   const LocalizedMaterialApp(
     this.customOverlayWidget,
     this.customBetweenFabWidget, {
-    Key key,
+    Key? key,
     this.customHomePage,
     this.routes,
   }) : super(key: key);
 
-  final LocaleWidgetBuilder customOverlayWidget;
-  final WidgetBuilder customBetweenFabWidget;
-  final Widget customHomePage;
-  final Map<String, WidgetBuilder> routes;
+  final LocaleWidgetBuilder? customOverlayWidget;
+  final WidgetBuilder? customBetweenFabWidget;
+  final Widget? customHomePage;
+  final Map<String, WidgetBuilder>? routes;
 
   @override
   Widget build(BuildContext context) {
@@ -266,7 +263,7 @@ class LocalizedMaterialApp extends StatelessWidget {
           locale: Locale.fromSubtags(languageCode: state.languageCode),
           onGenerateRoute: (settings) {
             return TrufiDrawerRoute(
-              builder: routes[settings.name],
+              builder: routes[settings.name!]!,
               settings: settings,
             );
           },

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart';
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/enum/plan_info_box.dart';
@@ -19,23 +16,24 @@ class OnlineGraphQLRepository implements RequestManager {
   final GraphQLPlanRepository _graphQLPlanRepository;
 
   OnlineGraphQLRepository({
-    @required this.graphQLEndPoint,
+    required this.graphQLEndPoint,
   }) : _graphQLPlanRepository = GraphQLPlanRepository(graphQLEndPoint);
 
   @override
   Future<PlanEntity> fetchAdvancedPlan({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    required TrufiLocation? from,
+    required TrufiLocation? to,
+    required String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   }) async {
     if (advancedOptions == null) {
-      return _fetchPlan(from, to, [TransportMode.transit, TransportMode.walk]);
+      return _fetchPlan(
+          from!, to!, [TransportMode.transit, TransportMode.walk]);
     } else {
       return _fetchPlanAdvanced(
-          from: from,
-          to: to,
+          from: from!,
+          to: to!,
           advancedOptions: advancedOptions,
           locale: localeName);
     }
@@ -43,31 +41,31 @@ class OnlineGraphQLRepository implements RequestManager {
 
   @override
   Future<ModesTransportEntity> fetchTransportModePlan({
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    TrufiLocation? from,
+    TrufiLocation? to,
+    String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   }) {
     return _fetchTransportModePlan(
-      from: from,
-      to: to,
-      advancedOptions: advancedOptions,
+      from: from!,
+      to: to!,
+      advancedOptions: advancedOptions!,
       locale: localeName,
     );
   }
 
   @override
   Future<PlanEntity> fetchCarPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
+    TrufiLocation? from,
+    TrufiLocation? to,
+    String? correlationId,
   ) {
-    return _fetchPlan(from, to, [TransportMode.car, TransportMode.walk]);
+    return _fetchPlan(from!, to!, [TransportMode.car, TransportMode.walk]);
   }
 
   @override
-  Future<AdEntity> fetchAd(TrufiLocation to, String correlationId) {
+  Future<AdEntity> fetchAd(TrufiLocation? to, String correlationId) {
     // TODO: implement fetchAd
     throw UnimplementedError();
   }
@@ -86,10 +84,10 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   Future<PlanEntity> _fetchPlanAdvanced({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required PayloadDataPlanState advancedOptions,
-    @required String locale,
+    required TrufiLocation from,
+    required TrufiLocation to,
+    required PayloadDataPlanState advancedOptions,
+    required String? locale,
   }) async {
     Plan planData = await _graphQLPlanRepository.fetchPlanAdvanced(
       fromLocation: from,
@@ -98,14 +96,14 @@ class OnlineGraphQLRepository implements RequestManager {
       locale: locale,
     );
     planData = planData.copyWith(
-      itineraries: planData.itineraries
+      itineraries: planData.itineraries!
           .where(
             (itinerary) =>
                 !itinerary.legs.every((leg) => leg.mode == Mode.walk),
           )
           .toList(),
     );
-    final mainFetchIsEmpty = planData.itineraries.isEmpty;
+    final mainFetchIsEmpty = planData.itineraries!.isEmpty;
     if (mainFetchIsEmpty) {
       planData = await _graphQLPlanRepository.fetchPlanAdvanced(
         fromLocation: from,
@@ -119,7 +117,7 @@ class OnlineGraphQLRepository implements RequestManager {
     if (!planEntity.isOnlyWalk) {
       planEntity = planData
           .copyWith(
-            itineraries: planData.itineraries
+            itineraries: planData.itineraries!
                 .where(
                   (itinerary) =>
                       !itinerary.legs.every((leg) => leg.mode == Mode.walk),
@@ -143,10 +141,10 @@ class OnlineGraphQLRepository implements RequestManager {
   }
 
   Future<ModesTransportEntity> _fetchTransportModePlan({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required PayloadDataPlanState advancedOptions,
-    @required String locale,
+    required TrufiLocation from,
+    required TrufiLocation to,
+    required PayloadDataPlanState advancedOptions,
+    required String? locale,
   }) async {
     final ModesTransport planEntityData =
         await _graphQLPlanRepository.fetchWalkBikePlanQuery(

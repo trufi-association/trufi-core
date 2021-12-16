@@ -11,7 +11,7 @@ class MapTileLocalStorage {
     );
   }
 
-  Future<String> load() async {
+  Future<String?> load() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(customLayersStorage);
   }

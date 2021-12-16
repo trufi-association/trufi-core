@@ -1,13 +1,13 @@
 import 'package:trufi_core/entities/plan_entity/bike_park_entity.dart';
 
 class BikePark {
-  final String id;
-  final String bikeParkId;
-  final String name;
-  final int spacesAvailable;
-  final bool realtime;
-  final double lon;
-  final double lat;
+  final String? id;
+  final String? bikeParkId;
+  final String? name;
+  final int? spacesAvailable;
+  final bool? realtime;
+  final double? lon;
+  final double? lat;
 
   const BikePark({
     this.id,
@@ -20,11 +20,11 @@ class BikePark {
   });
 
   factory BikePark.fromJson(Map<String, dynamic> json) => BikePark(
-        id: json['id'] as String,
-        bikeParkId: json['bikeParkId'] as String,
-        name: json['name'] as String,
+        id: json['id'] as String?,
+        bikeParkId: json['bikeParkId'] as String?,
+        name: json['name'] as String?,
         spacesAvailable: int.tryParse(json['spacesAvailable'].toString()),
-        realtime: json['realtime'] as bool,
+        realtime: json['realtime'] as bool?,
         lon: double.tryParse(json['lon'].toString()),
         lat: double.tryParse(json['lat'].toString()),
       );

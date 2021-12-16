@@ -31,11 +31,11 @@ class MapRouteState extends Equatable {
     this.showSuccessAnimation = false,
   });
 
-  final TrufiLocation fromPlace;
-  final TrufiLocation toPlace;
-  final PlanEntity plan;
-  final ModesTransportEntity modesTransport;
-  final AdEntity ad;
+  final TrufiLocation? fromPlace;
+  final TrufiLocation? toPlace;
+  final PlanEntity? plan;
+  final ModesTransportEntity? modesTransport;
+  final AdEntity? ad;
   final bool isFetching;
   final bool isFetchingModes;
   final bool isFetchLater;
@@ -44,19 +44,19 @@ class MapRouteState extends Equatable {
   final bool showSuccessAnimation;
 
   MapRouteState copyWith({
-    TrufiLocation fromPlace,
-    TrufiLocation toPlace,
-    PlanEntity plan,
-    ModesTransportEntity modesTransport,
-    AdEntity ad,
-    bool isFetching,
-    bool isFetchingModes,
-    bool showSuccessAnimation,
-    bool isFetchLater,
-    bool isFetchEarlier,
-    bool isFetchingMore,
-    CancelableOperation<PlanEntity> currentFetchPlanOperation,
-    CancelableOperation<AdEntity> currentFetchAdOperation,
+    TrufiLocation? fromPlace,
+    TrufiLocation? toPlace,
+    PlanEntity? plan,
+    ModesTransportEntity? modesTransport,
+    AdEntity? ad,
+    bool? isFetching,
+    bool? isFetchingModes,
+    bool? showSuccessAnimation,
+    bool? isFetchLater,
+    bool? isFetchEarlier,
+    bool? isFetchingMore,
+    CancelableOperation<PlanEntity>? currentFetchPlanOperation,
+    CancelableOperation<AdEntity>? currentFetchAdOperation,
   }) {
     return MapRouteState(
       fromPlace: fromPlace ?? this.fromPlace,
@@ -74,17 +74,17 @@ class MapRouteState extends Equatable {
   }
 
   MapRouteState copyWithoutMap({
-    TrufiLocation fromPlace,
-    TrufiLocation toPlace,
-    AdEntity ad,
-    bool isFetching,
-    bool isFetchingModes,
-    bool showSuccessAnimation,
-    bool isFetchLater,
-    bool isFetchEarlier,
-    bool isFetchingMore,
-    CancelableOperation<PlanEntity> currentFetchPlanOperation,
-    CancelableOperation<AdEntity> currentFetchAdOperation,
+    TrufiLocation? fromPlace,
+    TrufiLocation? toPlace,
+    AdEntity? ad,
+    bool? isFetching,
+    bool? isFetchingModes,
+    bool? showSuccessAnimation,
+    bool? isFetchLater,
+    bool? isFetchEarlier,
+    bool? isFetchingMore,
+    CancelableOperation<PlanEntity>? currentFetchPlanOperation,
+    CancelableOperation<AdEntity>? currentFetchAdOperation,
   }) {
     return MapRouteState(
       fromPlace: fromPlace ?? this.fromPlace,
@@ -103,16 +103,16 @@ class MapRouteState extends Equatable {
     Optional<TrufiLocation> fromPlace = const Optional(),
     Optional<TrufiLocation> toPlace = const Optional(),
     Optional<PlanEntity> plan = const Optional(),
-    ModesTransportEntity modesTransport,
-    AdEntity ad,
-    bool isFetching,
-    bool isFetchingModes,
-    bool showSuccessAnimation,
-    bool isFetchLater,
-    bool isFetchEarlier,
-    bool isFetchingMore,
-    CancelableOperation<PlanEntity> currentFetchPlanOperation,
-    CancelableOperation<AdEntity> currentFetchAdOperation,
+    ModesTransportEntity? modesTransport,
+    AdEntity? ad,
+    bool? isFetching,
+    bool? isFetchingModes,
+    bool? showSuccessAnimation,
+    bool? isFetchLater,
+    bool? isFetchEarlier,
+    bool? isFetchingMore,
+    CancelableOperation<PlanEntity>? currentFetchPlanOperation,
+    CancelableOperation<AdEntity>? currentFetchAdOperation,
   }) {
     return MapRouteState(
       fromPlace: fromPlace.isValid ? fromPlace.value : this.fromPlace,
@@ -141,7 +141,7 @@ class MapRouteState extends Equatable {
               json[_modesTransport] as Map<String, dynamic>)
           : null,
       ad: AdEntity.fromJson(json[_ad] as Map<String, dynamic>),
-      showSuccessAnimation: json[_showSuccessAnimation] as bool ?? false,
+      showSuccessAnimation: json[_showSuccessAnimation] as bool? ?? false,
     );
   }
 
@@ -152,19 +152,19 @@ class MapRouteState extends Equatable {
       _plan: plan?.toJson(),
       _modesTransport: modesTransport?.toJson(),
       _ad: ad?.toJson(),
-      _isFetching: isFetching ?? false,
-      _isFetchingModes: isFetchingModes ?? false,
-      _showSuccessAnimation: showSuccessAnimation ?? false,
-      _isFetchLater: isFetchLater ?? false,
-      _isFetchEarlier: isFetchEarlier ?? false,
-      _isFetchingMore: isFetchingMore ?? false,
+      _isFetching: isFetching,
+      _isFetchingModes: isFetchingModes,
+      _showSuccessAnimation: showSuccessAnimation,
+      _isFetchLater: isFetchLater,
+      _isFetchEarlier: isFetchEarlier,
+      _isFetchingMore: isFetchingMore,
     };
   }
 
   bool get isPlacesDefined => fromPlace != null && toPlace != null;
 
   bool get hasTransportModes =>
-      modesTransport != null && modesTransport.availableModesTransport;
+      modesTransport != null && modesTransport!.availableModesTransport;
 
   @override
   String toString() {
@@ -176,7 +176,7 @@ class MapRouteState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         fromPlace,
         toPlace,
         plan,
@@ -192,9 +192,9 @@ class MapRouteState extends Equatable {
 
 class Optional<T> {
   final bool isValid;
-  final T _value;
+  final T? _value;
 
-  T get value => _value;
+  T? get value => _value;
 
   const Optional()
       : isValid = false,

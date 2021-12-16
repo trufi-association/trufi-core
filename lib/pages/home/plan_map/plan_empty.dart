@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
-
-import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
+import 'package:trufi_core/blocs/home_page_cubit.dart';
 import 'package:trufi_core/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
-import 'package:trufi_core/models/map_route_state.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/widgets/custom_location_selector.dart';
 import 'package:trufi_core/widgets/custom_scrollable_container.dart';
@@ -22,16 +20,16 @@ const double customOverlayWidgetMargin = 80;
 
 class PlanEmptyPage extends StatefulWidget {
   const PlanEmptyPage({
-    Key key,
-    @required this.onFetchPlan,
+    Key? key,
+    required this.onFetchPlan,
     this.initialPosition,
     this.customOverlayWidget,
     this.customBetweenFabWidget,
   }) : super(key: key);
 
-  final LatLng initialPosition;
-  final LocaleWidgetBuilder customOverlayWidget;
-  final WidgetBuilder customBetweenFabWidget;
+  final LatLng? initialPosition;
+  final LocaleWidgetBuilder? customOverlayWidget;
+  final WidgetBuilder? customBetweenFabWidget;
   final void Function() onFetchPlan;
 
   @override
@@ -41,26 +39,26 @@ class PlanEmptyPage extends StatefulWidget {
 class PlanEmptyPageState extends State<PlanEmptyPage>
     with TickerProviderStateMixin {
   final _trufiMapController = TrufiMapController();
-  Marker tempMarker;
-  StreamSubscription<MapRouteState> mapChangeStream;
+  Marker? tempMarker;
+  StreamSubscription<MapRouteState>? mapChangeStream;
   @override
   void initState() {
     super.initState();
     _trufiMapController.mapController.onReady.then((value) {
       mapChangeStream = context.read<HomePageCubit>().stream.listen((event) {
-        final mapRouteState = context.read<HomePageCubit>().state;
+        final MapRouteState mapRouteState = context.read<HomePageCubit>().state;
         if (mapRouteState.toPlace != null && mapRouteState.fromPlace != null) {
           return;
         }
         if (mapRouteState.toPlace != null) {
           _trufiMapController.move(
-            center: mapRouteState.toPlace.latLng,
+            center: mapRouteState.toPlace!.latLng,
             zoom: 16,
             tickerProvider: this,
           );
         } else if (mapRouteState.fromPlace != null) {
           _trufiMapController.move(
-            center: mapRouteState.fromPlace.latLng,
+            center: mapRouteState.fromPlace!.latLng,
             zoom: 16,
             tickerProvider: this,
           );
@@ -71,7 +69,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 
   @override
   void dispose() {
-    _trufiMapController?.dispose();
+    _trufiMapController.dispose();
     mapChangeStream?.cancel();
     super.dispose();
   }
@@ -79,13 +77,13 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   @override
   Widget build(BuildContext context) {
     final Locale locale = Localizations.localeOf(context);
-    final cfg = context.read<ConfigurationCubit>().state;
+    final Configuration cfg = context.read<ConfigurationCubit>().state;
     final panelCubit = context.watch<PanelCubit>();
     final homePageCubit = context.read<HomePageCubit>();
     void onMapPress(LatLng location) {
       panelCubit.cleanPanel();
       setState(() {
-        tempMarker = cfg.map.markersConfiguration.buildToMarker(location);
+        tempMarker = cfg.map!.markersConfiguration.buildToMarker(location);
       });
       _trufiMapController.move(
         center: location,
@@ -105,7 +103,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
     _trufiMapController.mapController.onReady.then((value) {
       if (panelCubit.state.panel != null) {
         _trufiMapController.move(
-          center: panelCubit.state.panel.positon,
+          center: panelCubit.state.panel!.positon,
           zoom: 16,
           tickerProvider: this,
         );
@@ -121,12 +119,12 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
             layerOptionsBuilder: (context) => [
               MarkerLayerOptions(markers: [
                 if (homePageCubit.state.fromPlace != null)
-                  cfg.map.markersConfiguration
-                      .buildFromMarker(homePageCubit.state.fromPlace.latLng),
+                  cfg.map!.markersConfiguration
+                      .buildFromMarker(homePageCubit.state.fromPlace!.latLng),
                 if (homePageCubit.state.toPlace != null)
-                  cfg.map.markersConfiguration
-                      .buildToMarker(homePageCubit.state.toPlace.latLng),
-                if (tempMarker != null) tempMarker,
+                  cfg.map!.markersConfiguration
+                      .buildToMarker(homePageCubit.state.toPlace!.latLng),
+                if (tempMarker != null) tempMarker!,
               ]),
             ],
             onTap: onMapPress,
@@ -151,7 +149,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
                 bottom: 60,
               ),
               child: widget.customOverlayWidget != null
-                  ? widget.customOverlayWidget(context, locale)
+                  ? widget.customOverlayWidget!(context, locale)
                   : null,
             ),
           ),
@@ -159,7 +157,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
             bottom: 0,
             left: 10,
             child: SafeArea(
-              child: cfg.map.mapAttributionBuilder(context),
+              child: cfg.map!.mapAttributionBuilder!(context),
             ),
           ),
           Positioned.fill(
@@ -171,7 +169,7 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
                 top: 65,
               ),
               child: widget.customBetweenFabWidget != null
-                  ? widget.customBetweenFabWidget(context)
+                  ? widget.customBetweenFabWidget!(context)
                   : null,
             ),
           )
@@ -187,8 +185,8 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
   }
 
   Future<void> _showBottomMarkerModal({
-    BuildContext context,
-    LatLng location,
+    required BuildContext context,
+    LatLng? location,
   }) async {
     return showModalBottomSheet(
       context: context,
@@ -203,10 +201,10 @@ class PlanEmptyPageState extends State<PlanEmptyPage>
 }
 
 class _LoadLocation extends StatefulWidget {
-  final LatLng location;
+  final LatLng? location;
   final void Function() onFetchPlan;
   const _LoadLocation(
-      {Key key, @required this.location, @required this.onFetchPlan})
+      {Key? key, required this.location, required this.onFetchPlan})
       : super(key: key);
   @override
   __LoadLocationState createState() => __LoadLocationState();
@@ -214,12 +212,12 @@ class _LoadLocation extends StatefulWidget {
 
 class __LoadLocationState extends State<_LoadLocation> {
   bool loading = true;
-  String fetchError;
-  LocationDetail locationData;
+  String? fetchError;
+  LocationDetail? locationData;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
+    WidgetsBinding.instance!.addPostFrameCallback((duration) {
       loadData();
     });
   }
@@ -227,9 +225,9 @@ class __LoadLocationState extends State<_LoadLocation> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textStyle = theme.textTheme.bodyText1.copyWith(fontSize: 17);
-    final hintStyle = theme.textTheme.bodyText2.copyWith(
-      color: theme.textTheme.caption.color,
+    final textStyle = theme.textTheme.bodyText1!.copyWith(fontSize: 17);
+    final hintStyle = theme.textTheme.bodyText2!.copyWith(
+      color: theme.textTheme.caption!.color,
     );
     return Card(
       child: SafeArea(
@@ -246,11 +244,11 @@ class __LoadLocationState extends State<_LoadLocation> {
                 )
               else if (locationData != null) ...[
                 Text(
-                  locationData.description,
+                  locationData!.description,
                   style: textStyle,
                 ),
                 Text(
-                  locationData.street,
+                  locationData!.street,
                   style: hintStyle,
                 ),
                 const SizedBox(height: 20),
@@ -263,7 +261,7 @@ class __LoadLocationState extends State<_LoadLocation> {
                 ),
               ] else
                 Text(
-                  fetchError,
+                  fetchError!,
                   style: const TextStyle(color: Colors.red),
                 ),
             ],

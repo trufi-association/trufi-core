@@ -66,7 +66,7 @@ void main() {
                 supportedLanguages: [
                   LanguageConfiguration("en", "", "English", isDefault: true),
                 ],
-                customTranslations: TrufiCustomLocalizations()..title = null,
+                customTranslations: TrufiCustomLocalizations(),
                 urls: UrlCollection(),
                 showWeather: false,
               ),

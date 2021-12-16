@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 abstract class CustomLayer {
   final String id;
-  Function onRefresh;
+  Function? onRefresh;
   CustomLayer(this.id);
 
   void refresh() {
-    if (onRefresh != null) onRefresh();
+    if (onRefresh != null) onRefresh!();
   }
 
-  LayerOptions buildLayerOptions(int zoom);
+  LayerOptions buildLayerOptions(int? zoom);
 
   String name(BuildContext context);
 
@@ -22,16 +22,16 @@ class CustomLayerContainer {
   final WidgetBuilder icon;
   final String Function(BuildContext context) name;
   CustomLayerContainer({
-    @required this.layers,
-    @required this.icon,
-    @required this.name,
+    required this.layers,
+    required this.icon,
+    required this.name,
   });
-  bool checkStatus(Map<String, bool> layersSatus) {
+  bool? checkStatus(Map<String, bool?>? layersSatus) {
     bool active = true;
     bool inactive = false;
     for (final layer in layers) {
-      active &= layersSatus[layer.id];
-      inactive |= layersSatus[layer.id];
+      active &= layersSatus![layer.id]!;
+      inactive |= layersSatus[layer.id]!;
     }
     return active
         ? active

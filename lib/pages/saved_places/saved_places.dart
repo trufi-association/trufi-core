@@ -13,12 +13,12 @@ import '../choose_location.dart';
 class SavedPlacesPage extends StatelessWidget {
   static const String route = '/places';
 
-  const SavedPlacesPage({Key key}) : super(key: key);
+  const SavedPlacesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final config = context.read<ConfigurationCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     final currentLocale = Localizations.localeOf(context);
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
@@ -40,8 +40,8 @@ class SavedPlacesPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                   child: Text(
-                    config.customTranslations.get(
-                      config.customTranslations.commonFavoritePlaces,
+                    config.customTranslations!.get(
+                      config.customTranslations!.commonFavoritePlaces,
                       currentLocale,
                       localization.commonFavoritePlaces,
                     ),
@@ -154,7 +154,7 @@ class SavedPlacesPage extends StatelessWidget {
 
   Future<void> _addNewPlace(BuildContext context) async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final ChooseLocationDetail chooseLocationDetail =
+    final ChooseLocationDetail? chooseLocationDetail =
         await ChooseLocationPage.selectPosition(
       context,
     );
@@ -162,8 +162,8 @@ class SavedPlacesPage extends StatelessWidget {
       searchLocationsCubit.insertMyPlace(TrufiLocation(
         description: chooseLocationDetail.description,
         address: chooseLocationDetail.street,
-        latitude: chooseLocationDetail.location.latitude,
-        longitude: chooseLocationDetail.location.longitude,
+        latitude: chooseLocationDetail.location!.latitude,
+        longitude: chooseLocationDetail.location!.longitude,
         type: 'saved_place:map',
       ));
     }

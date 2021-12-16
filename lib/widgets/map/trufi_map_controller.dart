@@ -23,19 +23,19 @@ class TrufiMapController {
     _animations = TrufiMapAnimations(_mapController);
   }
 
-  TrufiMapAnimations _animations;
+  late TrufiMapAnimations _animations;
 
   void dispose() {
     _mapReadyController.close();
   }
 
   Future<void> moveToYourLocation({
-    @required BuildContext context,
-    @required LatLng location,
-    TickerProvider tickerProvider,
+    required BuildContext context,
+    required LatLng? location,
+    TickerProvider? tickerProvider,
   }) async {
-    final cfg = context.read<ConfigurationCubit>().state;
-    final zoom = cfg.map.chooseLocationZoom;
+    final Configuration cfg = context.read<ConfigurationCubit>().state;
+    final zoom = cfg.map!.chooseLocationZoom;
 
     if (location != null) {
       move(
@@ -53,15 +53,15 @@ class TrufiMapController {
   }
 
   void move({
-    @required LatLng center,
-    @required double zoom,
-    TickerProvider tickerProvider,
+    required LatLng? center,
+    required double zoom,
+    TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
-      _mapController.move(center, zoom);
+      _mapController.move(center!, zoom);
     } else {
       _animations.move(
-        center: center,
+        center: center!,
         zoom: zoom,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
@@ -70,8 +70,8 @@ class TrufiMapController {
   }
 
   void fitBounds({
-    @required LatLngBounds bounds,
-    TickerProvider tickerProvider,
+    required LatLngBounds bounds,
+    TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
       _mapController.fitBounds(bounds);

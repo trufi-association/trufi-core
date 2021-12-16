@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info/package_info.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,7 +11,7 @@ import '../widgets/trufi_drawer.dart';
 class AboutPage extends StatefulWidget {
   static const String route = "/about";
 
-  const AboutPage({Key key}) : super(key: key);
+  const AboutPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => AboutPageState();
@@ -34,13 +35,13 @@ class AboutPageState extends State<AboutPage> {
   Widget _buildBody(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     final theme = Theme.of(context);
-    final TextStyle linkStyle = theme.textTheme.bodyText1.copyWith(
+    final TextStyle linkStyle = theme.textTheme.bodyText1!.copyWith(
       color: theme.accentColor,
     );
 
-    final config = context.read<ConfigurationCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     final currentCity = config.appCity;
-    final customTranslations = config.customTranslations;
+    final customTranslations = config.customTranslations!;
     final currentLocale = Localizations.localeOf(context);
     final aboutSection = context.read<ConfigurationCubit>().state.aboutSection;
 
@@ -55,15 +56,15 @@ class AboutPageState extends State<AboutPage> {
                 Text(
                   customTranslations.get(customTranslations.title,
                       currentLocale, localization.title),
-                  style: theme.textTheme.headline6.copyWith(
-                    color: theme.textTheme.bodyText1.color,
+                  style: theme.textTheme.headline6!.copyWith(
+                    color: theme.textTheme.bodyText1!.color,
                   ),
                 ),
                 Text(
                   customTranslations.get(customTranslations.tagline,
                       currentLocale, localization.tagline(currentCity)),
-                  style: theme.textTheme.headline6.copyWith(
-                    color: theme.textTheme.bodyText1.color,
+                  style: theme.textTheme.headline6!.copyWith(
+                    color: theme.textTheme.bodyText1!.color,
                     fontSize: 15,
                   ),
                 ),
@@ -71,15 +72,16 @@ class AboutPageState extends State<AboutPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: aboutSection(context),
-                  )else
+                  )
+                else
                   Container(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Text(
-                    customTranslations.get(customTranslations.aboutContent,
-                        currentLocale, localization.aboutContent),
-                    style: theme.textTheme.bodyText1,
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      customTranslations.get(customTranslations.aboutContent,
+                          currentLocale, localization.aboutContent),
+                      style: theme.textTheme.bodyText1,
+                    ),
                   ),
-                ),
                 Container(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
@@ -110,7 +112,7 @@ class AboutPageState extends State<AboutPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          localization.version(snapshot.data.version),
+                          localization.version(snapshot.data!.version),
                           style: theme.textTheme.bodyText1,
                         ),
                       ],

@@ -2,7 +2,7 @@ part of 'enums_plan.dart';
 
 enum BikingSpeed { slow, calm, average, prompt, fast }
 
-BikingSpeed getBikingSpeed(String key) {
+BikingSpeed getBikingSpeed(String? key) {
   return BikingSpeedExtension.names.keys.firstWhere(
     (keyE) => keyE.name == key,
     orElse: () => BikingSpeed.average,

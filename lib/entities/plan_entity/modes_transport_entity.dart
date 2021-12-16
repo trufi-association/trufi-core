@@ -10,14 +10,14 @@ class ModesTransportEntity {
   static const _parkRidePlan = 'parkRidePlan';
   static const _onDemandTaxiPlan = 'onDemandTaxiPlan';
 
-  final PlanEntity walkPlan;
-  final PlanEntity bikePlan;
-  final PlanEntity bikeAndPublicPlan;
-  final PlanEntity bikeParkPlan;
-  final PlanEntity carPlan;
-  final PlanEntity carParkPlan;
-  final PlanEntity parkRidePlan;
-  final PlanEntity onDemandTaxiPlan;
+  final PlanEntity? walkPlan;
+  final PlanEntity? bikePlan;
+  final PlanEntity? bikeAndPublicPlan;
+  final PlanEntity? bikeParkPlan;
+  final PlanEntity? carPlan;
+  final PlanEntity? carParkPlan;
+  final PlanEntity? parkRidePlan;
+  final PlanEntity? onDemandTaxiPlan;
 
   const ModesTransportEntity({
     this.walkPlan,
@@ -72,14 +72,14 @@ class ModesTransportEntity {
       };
 
   ModesTransportEntity copyWith({
-    PlanEntity walkPlan,
-    PlanEntity bikePlan,
-    PlanEntity bikeAndPublicPlan,
-    PlanEntity bikeParkPlan,
-    PlanEntity carPlan,
-    PlanEntity carParkPlan,
-    PlanEntity parkRidePlan,
-    PlanEntity onDemandTaxiPlan,
+    PlanEntity? walkPlan,
+    PlanEntity? bikePlan,
+    PlanEntity? bikeAndPublicPlan,
+    PlanEntity? bikeParkPlan,
+    PlanEntity? carPlan,
+    PlanEntity? carParkPlan,
+    PlanEntity? parkRidePlan,
+    PlanEntity? onDemandTaxiPlan,
   }) {
     return ModesTransportEntity(
       walkPlan: walkPlan ?? this.walkPlan,
@@ -98,25 +98,25 @@ class ModesTransportEntity {
         ...filterOnlyBikeAndWalk(bikeParkPlan?.itineraries ?? []),
         ...filterOnlyBikeAndWalk(bikeAndPublicPlan?.itineraries ?? [])
       ]) ??
-      bikeParkPlan.copyWith(type: 'bikeAndPublicPlan');
+      bikeParkPlan!.copyWith(type: 'bikeAndPublicPlan');
 
   PlanEntity get carAndCarPark =>
       carPlan?.copyWith(itineraries: [
         ...carPlan?.itineraries ?? [],
         ...carParkPlan?.itineraries ?? []
       ]) ??
-      carParkPlan.copyWith(type: 'carPlan');
+      carParkPlan!.copyWith(type: 'carPlan');
 
   bool get existWalkPlan =>
       (walkPlan?.itineraries?.isNotEmpty ?? false) &&
-      walkPlan.itineraries[0].walkDistance <
+      walkPlan!.itineraries![0].walkDistance! <
           PayloadDataPlanState.maxWalkDistance;
 
   bool get existBikePlan =>
       (bikePlan?.itineraries?.isNotEmpty ?? false) &&
-      !bikePlan.itineraries.every((itinerary) => itinerary.legs
-          .every((leg) => leg.transportMode == TransportMode.walk)) &&
-      bikePlan.itineraries[0].totalBikingDistance <
+      !bikePlan!.itineraries!.every((itinerary) => itinerary.legs
+          .every((leg) => leg!.transportMode == TransportMode.walk)) &&
+      bikePlan!.itineraries![0].totalBikingDistance <
           PayloadDataPlanState.suggestBikeMaxDistance;
 
   bool get existBikeAndVehicle =>
@@ -142,16 +142,16 @@ class ModesTransportEntity {
       existOnDemandTaxi;
 
   Widget getIconBikePublic() {
-    final publicModes = filterOnlyBikeAndWalk(bikeAndVehicle.itineraries)[0]
+    final publicModes = filterOnlyBikeAndWalk(bikeAndVehicle.itineraries!)[0]
         .legs
         .where(
           (element) =>
-              element.transportMode != TransportMode.walk &&
+              element!.transportMode != TransportMode.walk &&
               element.transportMode != TransportMode.bicycle,
         )
         .toList();
     if (publicModes.isNotEmpty) {
-      return publicModes[0].transportMode.getImage();
+      return publicModes[0]!.transportMode.getImage();
     }
     return Container();
   }

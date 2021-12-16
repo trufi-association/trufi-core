@@ -23,16 +23,16 @@ class Configuration {
   final String pageBackgroundAssetPath;
 
   /// Contains all Urls that can be configured inside of Trufi
-  final UrlCollection urls;
+  final UrlCollection? urls;
 
   /// Everyone who is involved creating the application
-  final Attribution attribution;
+  final Attribution? attribution;
 
   /// All map related configurations for the Trufi Core
-  final MapConfiguration map;
+  final MapConfiguration? map;
 
   /// Loading and Success Animation
-  final AnimationConfiguration animations;
+  final AnimationConfiguration? animations;
 
   /// This determines which Backend Server the app uses
   /// [OnlineGraphQLRepository] or [OnlineRepository]
@@ -42,14 +42,14 @@ class Configuration {
   final List<LanguageConfiguration> supportedLanguages;
 
   /// Custom Translations
-  final TrufiCustomLocalizations customTranslations;
+  final TrufiCustomLocalizations? customTranslations;
 
   /// Definition of the feedback if it is a URL or a Email
-  final FeedbackDefinition feedbackDefinition;
+  final FeedbackDefinition? feedbackDefinition;
 
   /// The [aboutSection] is [Builder] that allows you to add information
   /// in the About page.
-  final WidgetBuilder aboutSection;
+  final WidgetBuilder? aboutSection;
 
   /// City where the App is used
   final String appCity;
@@ -63,7 +63,7 @@ class Configuration {
   final bool showWeather;
 
   /// PlanItineraryLeg injection extra option
-  final Widget Function(BuildContext context, PlanItineraryLeg planItineraryLeg)
+  final Widget Function(BuildContext context, PlanItineraryLeg? planItineraryLeg)?
       planItineraryLegBuilder;
 
   Configuration({

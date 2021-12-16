@@ -7,12 +7,12 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 class WalkDistance extends StatelessWidget {
   final double walkDistance;
   final Duration walkDuration;
-  final Widget icon;
+  final Widget? icon;
 
   const WalkDistance({
-    Key key,
-    @required this.walkDistance,
-    @required this.walkDuration,
+    Key? key,
+    required this.walkDistance,
+    required this.walkDuration,
     this.icon,
   }) : super(key: key);
 
@@ -42,12 +42,12 @@ class WalkDistance extends StatelessWidget {
           children: [
             Text(
               durationToString(localization, walkDuration),
-              style: theme.primaryTextTheme.bodyText1
+              style: theme.primaryTextTheme.bodyText1!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
             Text(
-              displayDistanceWithLocale(localization, walkDistance ?? 0),
-              style: theme.primaryTextTheme.bodyText1
+              displayDistanceWithLocale(localization, walkDistance),
+              style: theme.primaryTextTheme.bodyText1!
                   .copyWith(fontWeight: FontWeight.w400),
             ),
           ],

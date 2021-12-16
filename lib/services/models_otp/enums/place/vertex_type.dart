@@ -1,13 +1,14 @@
+import 'package:collection/collection.dart' show IterableExtension;
+
 enum VertexType { normal, transit, bikepark, bikeshare, parkandride }
 
-VertexType getVertexTypeByString(String vertexType) {
-  return VertexTypeExtension.names.keys.firstWhere(
+VertexType? getVertexTypeByString(String? vertexType) {
+  return VertexTypeExtension.names.keys.firstWhereOrNull(
     (key) => key.name == vertexType,
-    orElse: () => null,
   );
 }
 
-extension VertexTypeExtension on VertexType {
+extension VertexTypeExtension on VertexType? {
   static const names = <VertexType, String>{
     VertexType.normal: 'NORMAL',
     VertexType.transit: 'TRANSIT',
@@ -15,5 +16,5 @@ extension VertexTypeExtension on VertexType {
     VertexType.bikeshare: 'BIKESHARE',
     VertexType.parkandride: 'PARKANDRIDE'
   };
-  String get name => names[this];
+  String? get name => names[this!];
 }

@@ -46,55 +46,55 @@ class PayloadDataPlanState extends Equatable {
   static const String _arriveBy = "arriveBy";
 
   const PayloadDataPlanState({
-    @required this.typeWalkingSpeed,
-    @required this.avoidWalking,
-    @required this.transportModes,
-    @required this.bikeRentalNetworks,
-    @required this.triangleFactor,
-    @required this.avoidTransfers,
-    @required this.includeBikeSuggestions,
-    @required this.typeBikingSpeed,
-    @required this.includeParkAndRideSuggestions,
-    @required this.includeCarSuggestions,
-    @required this.wheelchair,
-    @required this.arriveBy,
-    @required this.date,
+    required this.typeWalkingSpeed,
+    required this.avoidWalking,
+    required this.transportModes,
+    required this.bikeRentalNetworks,
+    required this.triangleFactor,
+    required this.avoidTransfers,
+    required this.includeBikeSuggestions,
+    required this.typeBikingSpeed,
+    required this.includeParkAndRideSuggestions,
+    required this.includeCarSuggestions,
+    required this.wheelchair,
+    required this.arriveBy,
+    required this.date,
     this.isFreeParkToParkRide = false,
     this.isFreeParkToCarPark = false,
   });
 
   final WalkingSpeed typeWalkingSpeed;
-  final bool avoidWalking;
-  final List<TransportMode> transportModes;
-  final List<BikeRentalNetwork> bikeRentalNetworks;
+  final bool? avoidWalking;
+  final List<TransportMode>? transportModes;
+  final List<BikeRentalNetwork>? bikeRentalNetworks;
   final TriangleFactor triangleFactor;
-  final bool avoidTransfers;
-  final bool includeBikeSuggestions;
+  final bool? avoidTransfers;
+  final bool? includeBikeSuggestions;
   final BikingSpeed typeBikingSpeed;
-  final bool includeParkAndRideSuggestions;
-  final bool includeCarSuggestions;
-  final bool wheelchair;
-  final bool arriveBy;
-  final DateTime date;
+  final bool? includeParkAndRideSuggestions;
+  final bool? includeCarSuggestions;
+  final bool? wheelchair;
+  final bool? arriveBy;
+  final DateTime? date;
   final bool isFreeParkToParkRide;
   final bool isFreeParkToCarPark;
 
   PayloadDataPlanState copyWith({
-    WalkingSpeed typeWalkingSpeed,
-    List<TransportMode> transportModes,
-    List<BikeRentalNetwork> bikeRentalNetworks,
-    TriangleFactor triangleFactor,
-    bool avoidTransfers,
-    bool avoidWalking,
-    bool includeBikeSuggestions,
-    BikingSpeed typeBikingSpeed,
-    bool includeParkAndRideSuggestions,
-    bool includeCarSuggestions,
-    bool wheelchair,
-    bool arriveBy,
-    DateTime date,
-    bool isFreeParkToParkRide,
-    bool isFreeParkToCarPark,
+    WalkingSpeed? typeWalkingSpeed,
+    List<TransportMode>? transportModes,
+    List<BikeRentalNetwork>? bikeRentalNetworks,
+    TriangleFactor? triangleFactor,
+    bool? avoidTransfers,
+    bool? avoidWalking,
+    bool? includeBikeSuggestions,
+    BikingSpeed? typeBikingSpeed,
+    bool? includeParkAndRideSuggestions,
+    bool? includeCarSuggestions,
+    bool? wheelchair,
+    bool? arriveBy,
+    DateTime? date,
+    bool? isFreeParkToParkRide,
+    bool? isFreeParkToCarPark,
   }) {
     return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed ?? this.typeWalkingSpeed,
@@ -119,8 +119,8 @@ class PayloadDataPlanState extends Equatable {
   }
 
   PayloadDataPlanState copyWithDateNull({
-    bool arriveBy,
-    DateTime date,
+    bool? arriveBy,
+    DateTime? date,
   }) {
     return PayloadDataPlanState(
       typeWalkingSpeed: typeWalkingSpeed,
@@ -142,28 +142,28 @@ class PayloadDataPlanState extends Equatable {
   // Json
   factory PayloadDataPlanState.fromJson(Map<String, dynamic> json) {
     return PayloadDataPlanState(
-      typeWalkingSpeed: getWalkingSpeed(json[_typeWalkingSpeed] as String),
+      typeWalkingSpeed: getWalkingSpeed(json[_typeWalkingSpeed] as String?),
       transportModes: json[_transportModes]
           .map<TransportMode>(
             (key) => getTransportMode(mode: key as String),
           )
-          .toList() as List<TransportMode>,
+          .toList() as List<TransportMode>?,
       bikeRentalNetworks: json[_bikeRentalNetworks]
           .map<BikeRentalNetwork>(
             (key) => getBikeRentalNetwork(key as String),
           )
-          .toList() as List<BikeRentalNetwork>,
+          .toList() as List<BikeRentalNetwork>?,
       triangleFactor:
-          getTriangleFactorByString(json[_triangleFactor] as String),
-      avoidTransfers: json[_avoidTransfers] as bool,
-      avoidWalking: json[_avoidWalking] as bool,
-      includeBikeSuggestions: json[_includeBikeSuggestions] as bool,
-      typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as String),
+          getTriangleFactorByString(json[_triangleFactor] as String?),
+      avoidTransfers: json[_avoidTransfers] as bool?,
+      avoidWalking: json[_avoidWalking] as bool?,
+      includeBikeSuggestions: json[_includeBikeSuggestions] as bool?,
+      typeBikingSpeed: getBikingSpeed(json[_typeBikingSpeed] as String?),
       includeParkAndRideSuggestions:
-          json[_includeParkAndRideSuggestions] as bool,
-      includeCarSuggestions: json[_includeCarSuggestions] as bool,
-      wheelchair: json[_wheelchair] as bool,
-      arriveBy: json[_arriveBy] as bool,
+          json[_includeParkAndRideSuggestions] as bool?,
+      includeCarSuggestions: json[_includeCarSuggestions] as bool?,
+      wheelchair: json[_wheelchair] as bool?,
+      arriveBy: json[_arriveBy] as bool?,
       date: json[_date] != null ? DateTime.parse(json[_date] as String) : null,
     );
   }
@@ -173,8 +173,8 @@ class PayloadDataPlanState extends Equatable {
       _typeWalkingSpeed: typeWalkingSpeed.name,
       _avoidWalking: avoidWalking,
       _transportModes:
-          transportModes.map((transportMode) => transportMode.name).toList(),
-      _bikeRentalNetworks: bikeRentalNetworks
+          transportModes!.map((transportMode) => transportMode.name).toList(),
+      _bikeRentalNetworks: bikeRentalNetworks!
           .map((bikeRentalNetwork) => bikeRentalNetwork.name)
           .toList(),
       _triangleFactor: triangleFactor.name,
@@ -190,7 +190,7 @@ class PayloadDataPlanState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         typeWalkingSpeed,
         avoidWalking,
         transportModes,

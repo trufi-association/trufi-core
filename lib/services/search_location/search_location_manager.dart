@@ -6,10 +6,10 @@ import 'package:latlong2/latlong.dart';
 abstract class SearchLocationManager {
   Future<List<TrufiPlace>> fetchLocations(
     LocationSearchBloc locationSearchBloc,
-    String query, {
-    int limit,
-    String correlationId,
+    String? query, {
+    int? limit,
+    String? correlationId,
   });
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location);
+  Future<LocationDetail> reverseGeodecoding(LatLng? location);
 }

@@ -9,17 +9,17 @@ import 'stop.dart';
 import 'vehicle_parking_with_entrance.dart';
 
 class Place {
-  final String name;
-  final VertexType vertexType;
-  final double lat;
-  final double lon;
-  final double arrivalTime;
-  final double departureTime;
-  final Stop stop;
-  final BikeRentalStation bikeRentalStation;
-  final BikePark bikePark;
-  final CarPark carPark;
-  final VehicleParkingWithEntrance vehicleParkingWithEntrance;
+  final String? name;
+  final VertexType? vertexType;
+  final double? lat;
+  final double? lon;
+  final double? arrivalTime;
+  final double? departureTime;
+  final Stop? stop;
+  final BikeRentalStation? bikeRentalStation;
+  final BikePark? bikePark;
+  final CarPark? carPark;
+  final VehicleParkingWithEntrance? vehicleParkingWithEntrance;
 
   const Place({
     this.name,
@@ -36,7 +36,7 @@ class Place {
   });
 
   factory Place.fromMap(Map<String, dynamic> json) => Place(
-        name: json['name'] as String,
+        name: json['name'] as String?,
         vertexType: getVertexTypeByString(json['vertexType'].toString()),
         lat: double.tryParse(json['lat'].toString()),
         lon: double.tryParse(json['lon'].toString()),
@@ -90,10 +90,10 @@ class Place {
       lat: lat,
       lon: lon,
       arrivalTime: arrivalTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(arrivalTime.toInt())
+          ? DateTime.fromMillisecondsSinceEpoch(arrivalTime!.toInt())
           : null,
       departureTime: departureTime != null
-          ? DateTime.fromMillisecondsSinceEpoch(departureTime.toInt())
+          ? DateTime.fromMillisecondsSinceEpoch(departureTime!.toInt())
           : null,
       stopEntity: stop?.toStopEntity(),
       bikeRentalStation: bikeRentalStation?.toBikeRentalStation(),

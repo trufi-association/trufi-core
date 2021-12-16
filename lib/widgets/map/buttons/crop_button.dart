@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class CropButton extends StatefulWidget {
   const CropButton({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
   }) : super(key: key);
 
   final Function onPressed;
@@ -14,10 +14,10 @@ class CropButton extends StatefulWidget {
 
 class CropButtonState extends State<CropButton>
     with SingleTickerProviderStateMixin {
-  bool _visible = false;
+  bool? _visible = false;
 
-  AnimationController _animationController;
-  Animation<double> _animation;
+  AnimationController? _animationController;
+  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class CropButtonState extends State<CropButton>
       duration: const Duration(milliseconds: 250),
       vsync: this,
     );
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController)
+    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController!)
       ..addListener(() {
         setState(() {});
       });
@@ -59,16 +59,16 @@ class CropButtonState extends State<CropButton>
     setVisible(visible: false);
   }
 
-  bool get isVisible => _visible;
+  bool? get isVisible => _visible;
 
-  void setVisible({bool visible}) {
+  void setVisible({bool? visible}) {
     if (_visible != visible) {
       setState(() {
         _visible = visible;
-        if (visible) {
-          _animationController.forward();
+        if (visible!) {
+          _animationController!.forward();
         } else {
-          _animationController.reverse();
+          _animationController!.reverse();
         }
       });
     }

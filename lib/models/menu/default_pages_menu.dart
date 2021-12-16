@@ -9,11 +9,11 @@ import 'package:trufi_core/pages/saved_places/saved_places.dart';
 
 class MenuPageItem extends MenuItem {
   MenuPageItem({
-    @required String id,
-    @required WidgetBuilder selectedIcon,
-    @required WidgetBuilder notSelectedIcon,
-    @required String Function(BuildContext) name,
-    Color nameColor,
+    required String id,
+    required WidgetBuilder selectedIcon,
+    required WidgetBuilder notSelectedIcon,
+    required String Function(BuildContext) name,
+    Color? nameColor,
   }) : super(
           id: id,
           selectedIcon: selectedIcon,
@@ -37,7 +37,7 @@ class MenuPageItem extends MenuItem {
 enum DefaultPagesMenu { homePage, savedPlaces, feedback, about }
 
 extension LayerIdsToString on DefaultPagesMenu {
-  MenuPageItem toMenuPage() {
+  MenuPageItem? toMenuPage() {
     final Map<DefaultPagesMenu, MenuPageItem> map = {
       DefaultPagesMenu.homePage: MenuPageItem(
         id: HomePage.route,

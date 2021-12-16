@@ -13,7 +13,7 @@ class PlanItineraryTabPages extends StatefulWidget {
   final AdEntity ad;
 
   PlanItineraryTabPages(this.tabController, this.itineraries, this.ad,
-      {Key key})
+      {Key? key})
       : assert(itineraries != null && itineraries.isNotEmpty),
         super(key: key);
 
@@ -28,10 +28,10 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   static const _detailHeight = 200.0;
   static const _paddingHeight = 10.0;
 
-  AnimationController _animationController;
-  Animation<double> _animationCostHeight;
-  Animation<double> _animationSummaryHeight;
-  Animation<double> _animationDetailHeight;
+  late AnimationController _animationController;
+  Animation<double>? _animationCostHeight;
+  Animation<double>? _animationSummaryHeight;
+  Animation<double>? _animationDetailHeight;
 
   bool _isExpanded = false;
 
@@ -82,7 +82,7 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.read<ThemeCubit>().state.bottomBarTheme;
+    final theme = context.read<ThemeCubit>().state.bottomBarTheme!;
     return Theme(
       data: theme,
       child: Container(
@@ -159,12 +159,12 @@ class PlanItineraryTabPagesState extends State<PlanItineraryTabPages>
   double get height {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    var height = _animationDetailHeight.value +
-        _animationCostHeight.value +
+    var height = _animationDetailHeight!.value +
+        _animationCostHeight!.value +
         _paddingHeight;
 
     if (isPortrait) {
-      height += _animationSummaryHeight.value;
+      height += _animationSummaryHeight!.value;
     }
 
     return height;

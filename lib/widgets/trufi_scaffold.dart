@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class TrufiScaffold extends StatelessWidget {
   TrufiScaffold({
-    Key key,
-    @required this.appBar,
-    @required this.body,
-    @required this.drawer,
+    Key? key,
+    required this.appBar,
+    required this.body,
+    required this.drawer,
   }) : super(key: key);
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -49,7 +49,7 @@ class TrufiScaffold extends StatelessWidget {
                           color: theme.primaryIconTheme.color,
                         ),
                         onPressed: () {
-                          _scaffoldKey.currentState.openDrawer();
+                          _scaffoldKey.currentState!.openDrawer();
                         },
                       ),
                       Expanded(

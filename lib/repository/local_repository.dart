@@ -1,7 +1,7 @@
 abstract class LocalRepository {
   Future<void> saveLanguageCode(String languageCode);
 
-  Future<void> saveUseOnline({bool loadOnline});
+  Future<void> saveUseOnline({bool? loadOnline});
 
   Future<void> saveCorrelationId(String correlationId);
 
@@ -11,22 +11,22 @@ abstract class LocalRepository {
 
   Future<void> saveReviewWorthyActionCount(int actionCount);
 
-  Future<String> getCorrelationId();
+  Future<String?> getCorrelationId();
 
-  Future<String> getLanguageCode();
+  Future<String?> getLanguageCode();
 
-  Future<bool> getOnline();
+  Future<bool?> getOnline();
 
-  Future<String> getMapType();
+  Future<String?> getMapType();
 
-  Future<String> getLastReviewRequestAppVersionKey();
+  Future<String?> getLastReviewRequestAppVersionKey();
 
   Future<void> deleteStateHomePage();
 
-  Future<String> getStateHomePage();
+  Future<String?> getStateHomePage();
 
   // Operations about StateSettingPanel 
   Future<void> saveStateSettingPanel(String stateSettingJson);
 
-  Future<String> getStateSettingPanel();
+  Future<String?> getStateSettingPanel();
 }

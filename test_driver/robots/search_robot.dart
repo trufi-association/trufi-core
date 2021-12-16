@@ -5,7 +5,7 @@ import 'home_robot.dart';
 import 'robot.dart';
 
 class SearchRobot extends Robot {
-  SearchRobot(FlutterDriver driver, Future<void> work) : super(driver, work);
+  SearchRobot(FlutterDriver? driver, Future<void> work) : super(driver, work);
 
   SearchRobot seesBackButton() {
     work = work.then((_) async => seesTooltip(Robot.backButtonTooltip));

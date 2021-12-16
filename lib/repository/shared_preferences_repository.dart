@@ -12,7 +12,7 @@ const String _lastReviewRequestAppVersionKey =
     "last_review_request_app_version";
 
 class SharedPreferencesRepository implements LocalRepository {
-  Future<SharedPreferences> _sharedPreferences;
+  Future<SharedPreferences>? _sharedPreferences;
 
   SharedPreferencesRepository() {
     _sharedPreferences = SharedPreferences.getInstance();
@@ -20,91 +20,91 @@ class SharedPreferencesRepository implements LocalRepository {
 
   @override
   Future<void> saveLanguageCode(String languageCode) async {
-    final preferences = await _sharedPreferences;
+    final preferences = await _sharedPreferences!;
     await preferences.setString(_propertyLanguageCodeKey, languageCode);
   }
 
   @override
-  Future<void> saveUseOnline({bool loadOnline}) async {
-    final preferences = await _sharedPreferences;
-    await preferences.setBool(_propertyOnlineKey, loadOnline);
+  Future<void> saveUseOnline({bool? loadOnline}) async {
+    final preferences = await _sharedPreferences!;
+    await preferences.setBool(_propertyOnlineKey, loadOnline!);
   }
 
   @override
   Future<void> saveCorrelationId(String correlationId) async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.setString(_correlationIdKey, correlationId);
   }
 
   @override
   Future<void> saveStateHomePage(String stateHomePage) async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.setString(_stateHomePageKey, stateHomePage);
   }
 
   @override
   Future<void> saveLastReviewRequestAppVersion(String currentVersion) async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.setString(_lastReviewRequestAppVersionKey, currentVersion);
   }
 
   @override
   Future<void> saveReviewWorthyActionCount(int actionCount) async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.setInt(_actionCountKey, actionCount);
   }
 
   @override
-  Future<String> getCorrelationId() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getCorrelationId() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_correlationIdKey);
   }
 
   @override
-  Future<String> getLanguageCode() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getLanguageCode() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_propertyLanguageCodeKey);
   }
 
   @override
-  Future<bool> getOnline() async {
-    final preference = await _sharedPreferences;
+  Future<bool?> getOnline() async {
+    final preference = await _sharedPreferences!;
     return preference.getBool(_propertyOnlineKey);
   }
 
   @override
-  Future<String> getMapType() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getMapType() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_propertyMapTypeKey);
   }
 
   @override
-  Future<String> getLastReviewRequestAppVersionKey() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getLastReviewRequestAppVersionKey() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_lastReviewRequestAppVersionKey);
   }
 
   @override
   Future<void> deleteStateHomePage() async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.remove(_stateHomePageKey);
   }
 
   @override
-  Future<String> getStateHomePage() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getStateHomePage() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_stateHomePageKey);
   }
 
   @override
-  Future<String> getStateSettingPanel() async {
-    final preference = await _sharedPreferences;
+  Future<String?> getStateSettingPanel() async {
+    final preference = await _sharedPreferences!;
     return preference.getString(_stateSettingPanelKey);
   }
 
   @override
   Future<void> saveStateSettingPanel(String stateSettingPanel) async {
-    final preference = await _sharedPreferences;
+    final preference = await _sharedPreferences!;
     preference.setString(_stateSettingPanelKey, stateSettingPanel);
   }
 }

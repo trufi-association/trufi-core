@@ -8,8 +8,8 @@ import '../mocks/location_search_bloc.dart';
 
 void main() {
   group("OfflineRepository", () {
-    OfflineSearchLocation subject;
-    MockLocationSearchBloc locationSearchBloc;
+    late OfflineSearchLocation subject;
+    late MockLocationSearchBloc locationSearchBloc;
     MockLocationSearchStorage locationSearchStorage;
 
     const query = "TestQuery";

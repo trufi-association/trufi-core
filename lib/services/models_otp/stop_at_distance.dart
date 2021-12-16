@@ -1,9 +1,9 @@
 import 'stop.dart';
 
 class StopAtDistance {
-  final String id;
-  final Stop stop;
-  final int distance;
+  final String? id;
+  final Stop? stop;
+  final int? distance;
 
   const StopAtDistance({
     this.id,

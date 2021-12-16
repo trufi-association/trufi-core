@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomScrollableContainer extends StatefulWidget {
   final Widget body;
-  final Widget panel;
+  final Widget? panel;
   final double openedPosition;
   final double bottomPadding;
-  final void Function() onClose;
+  final void Function()? onClose;
 
   const CustomScrollableContainer({
-    Key key,
-    @required this.body,
+    Key? key,
+    required this.body,
     this.panel,
-    @required this.openedPosition,
+    required this.openedPosition,
     this.bottomPadding = 0,
     this.onClose,
   }) : super(key: key);
@@ -22,7 +22,7 @@ class CustomScrollableContainer extends StatefulWidget {
 }
 
 class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
-  double panelHeight;
+  double? panelHeight;
   bool animated = false;
 
   @override
@@ -35,10 +35,10 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
       // height validation
       panelHeight ??= openedPosition;
       // limits validations
-      if (panelHeight < topLimit) panelHeight = topLimit;
-      if (panelHeight > bottomLimit) panelHeight = bottomLimit;
+      if (panelHeight! < topLimit) panelHeight = topLimit;
+      if (panelHeight! > bottomLimit) panelHeight = bottomLimit;
 
-      final reversePanelHeight = constrains.maxHeight - panelHeight;
+      final reversePanelHeight = constrains.maxHeight - panelHeight!;
 
       return Container(
         color: Colors.white,
@@ -86,17 +86,17 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                       children: [
                         GestureDetector(
                           onVerticalDragEnd: (detail) {
-                            if (detail.primaryVelocity < 0) {
+                            if (detail.primaryVelocity! < 0) {
                               setState(() {
                                 animated = true;
-                                panelHeight = panelHeight < openedPosition
+                                panelHeight = panelHeight! < openedPosition
                                     ? topLimit
                                     : openedPosition;
                               });
-                            } else if (detail.primaryVelocity > 0) {
+                            } else if (detail.primaryVelocity! > 0) {
                               setState(() {
                                 animated = true;
-                                panelHeight = panelHeight > openedPosition
+                                panelHeight = panelHeight! > openedPosition
                                     ? bottomLimit
                                     : openedPosition;
                               });
@@ -105,7 +105,8 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                           onVerticalDragUpdate: (detail) {
                             setState(() {
                               animated = false;
-                              panelHeight += detail.delta.dy;
+                              panelHeight =
+                                  (panelHeight ?? 0) + detail.delta.dy;
                             });
                           },
                           child: Container(
@@ -159,7 +160,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
                         const Divider(height: 1),
                         Expanded(
                           child: Scrollbar(
-                            child: widget.panel,
+                            child: widget.panel!,
                           ),
                         ),
                       ],

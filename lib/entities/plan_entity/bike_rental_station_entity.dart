@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 class BikeRentalStationEntity {
-  final String id;
-  final String stationId;
-  final String name;
-  final int bikesAvailable;
-  final int spacesAvailable;
-  final String state;
-  final bool realtime;
-  final bool allowDropoff;
-  final List<String> networks;
-  final double lon;
-  final double lat;
-  final int capacity;
-  final bool allowOverloading;
+  final String? id;
+  final String? stationId;
+  final String? name;
+  final int? bikesAvailable;
+  final int? spacesAvailable;
+  final String? state;
+  final bool? realtime;
+  final bool? allowDropoff;
+  final List<String>? networks;
+  final double? lon;
+  final double? lat;
+  final int? capacity;
+  final bool? allowOverloading;
 
   const BikeRentalStationEntity({
     this.id,
@@ -51,21 +51,21 @@ class BikeRentalStationEntity {
 
   factory BikeRentalStationEntity.fromMap(Map<String, dynamic> map) {
     return BikeRentalStationEntity(
-      id: map['id'] as String,
-      stationId: map['stationId'] as String,
-      name: map['name'] as String,
-      bikesAvailable: map['bikesAvailable'] as int,
-      spacesAvailable: map['spacesAvailable'] as int,
+      id: map['id'] as String?,
+      stationId: map['stationId'] as String?,
+      name: map['name'] as String?,
+      bikesAvailable: map['bikesAvailable'] as int?,
+      spacesAvailable: map['spacesAvailable'] as int?,
       state: map['state'].toString(),
-      realtime: map['realtime'] as bool,
-      allowDropoff: map['allowDropoff'] as bool,
+      realtime: map['realtime'] as bool?,
+      allowDropoff: map['allowDropoff'] as bool?,
       networks: map['networks'] != null
           ? (map['networks'] as List<dynamic>).cast<String>()
           : null,
-      lon: map['lon'] as double,
-      lat: map['lat'] as double,
-      capacity: map['capacity'] as int,
-      allowOverloading: map['allowOverloading'] as bool,
+      lon: map['lon'] as double?,
+      lat: map['lat'] as double?,
+      capacity: map['capacity'] as int?,
+      allowOverloading: map['allowOverloading'] as bool?,
     );
   }
 

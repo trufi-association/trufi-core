@@ -7,12 +7,12 @@ PickupDropoffType getPickupDropoffTypeByString(String pickupDropoffType) {
   );
 }
 
-extension PickupDropoffTypeExtension on PickupDropoffType {
+extension PickupDropoffTypeExtension on PickupDropoffType? {
   static const names = <PickupDropoffType, String>{
     PickupDropoffType.scheduled: 'SCHEDULED',
     PickupDropoffType.none: 'NONE',
     PickupDropoffType.callagency: 'CALL_AGENCY',
     PickupDropoffType.coordinatewithdriver: 'COORDINATE_WITH_DRIVER'
   };
-  String get name => names[this] ?? 'SCHEDULED';
+  String get name => names[this!] ?? 'SCHEDULED';
 }

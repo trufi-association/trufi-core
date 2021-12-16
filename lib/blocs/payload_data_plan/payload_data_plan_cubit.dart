@@ -46,7 +46,7 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
   }
 
   Future<void> setTransportMode(TransportMode transportMode) async {
-    final newList = [...state.transportModes];
+    final newList = [...state.transportModes!];
     if (newList.contains(transportMode)) {
       newList.remove(transportMode);
     } else {
@@ -56,7 +56,7 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
   }
 
   Future<void> setBikeRentalNetwork(BikeRentalNetwork bikeRentalNetwork) async {
-    final newList = [...state.bikeRentalNetworks];
+    final newList = [...state.bikeRentalNetworks!];
     if (newList.contains(bikeRentalNetwork)) {
       newList.remove(bikeRentalNetwork);
     } else {
@@ -73,21 +73,21 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
     await updateMapRouteState(state.copyWith(typeWalkingSpeed: walkingSpeed));
   }
 
-  Future<void> setAvoidWalking({@required bool avoidWalking}) async {
+  Future<void> setAvoidWalking({required bool avoidWalking}) async {
     await updateMapRouteState(state.copyWith(avoidWalking: avoidWalking));
   }
 
-  Future<void> setAvoidTransfers({@required bool avoidTransfers}) async {
+  Future<void> setAvoidTransfers({required bool avoidTransfers}) async {
     await updateMapRouteState(state.copyWith(avoidTransfers: avoidTransfers));
   }
 
   Future<void> setIncludeBikeSuggestions(
-      {@required bool includeBikeSuggestions}) async {
+      {required bool includeBikeSuggestions}) async {
     await updateMapRouteState(
         state.copyWith(includeBikeSuggestions: includeBikeSuggestions));
   }
 
-  Future<void> setParkRide({@required bool parkRide}) async {
+  Future<void> setParkRide({required bool parkRide}) async {
     await updateMapRouteState(
         state.copyWith(includeParkAndRideSuggestions: parkRide));
   }
@@ -97,16 +97,16 @@ class PayloadDataPlanCubit extends Cubit<PayloadDataPlanState> {
   }
 
   Future<void> setIncludeCarSuggestions(
-      {@required bool includeCarSuggestions}) async {
+      {required bool includeCarSuggestions}) async {
     await updateMapRouteState(
         state.copyWith(includeCarSuggestions: includeCarSuggestions));
   }
 
-  Future<void> setWheelChair({@required bool wheelchair}) async {
+  Future<void> setWheelChair({required bool wheelchair}) async {
     await updateMapRouteState(state.copyWith(wheelchair: wheelchair));
   }
 
-  Future<void> setDataDate({DateTime date, bool arriveBy}) async {
+  Future<void> setDataDate({DateTime? date, bool? arriveBy}) async {
     await updateMapRouteState(
         state.copyWithDateNull(date: date, arriveBy: arriveBy));
   }

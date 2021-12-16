@@ -12,7 +12,7 @@ class WFSWeatherDataRepository extends WeatherData {
   String url =
       "https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3";
 
-  WFSWeatherDataRepository({http.Client client})
+  WFSWeatherDataRepository({http.Client? client})
       : client = client ?? http.Client();
 
   @override
@@ -45,7 +45,7 @@ class WFSWeatherDataRepository extends WeatherData {
         .toList();
 
     return WeatherInfo(
-      double.tryParse(parameterValues[0]).toStringAsFixed(0),
+      double.tryParse(parameterValues[0])!.toStringAsFixed(0),
       parameterValues[1],
       parameterValues[2],
     );

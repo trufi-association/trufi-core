@@ -10,9 +10,9 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
   final PlanItinerary itinerary;
 
   const ItinerarySummaryAdvanced({
-    Key key,
-    @required this.itinerary,
-    @required this.maxWidth,
+    Key? key,
+    required this.itinerary,
+    required this.maxWidth,
   }) : super(key: key);
 
   @override
@@ -35,19 +35,19 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
     final List<Widget> legs = [];
 
     final int bikeParkedIndex =
-        compressLegs.indexWhere((leg) => leg.toPlace?.bikeParkEntity != null);
-    final lastLeg = compressLegs[compressLegs.length - 1];
+        compressLegs.indexWhere((leg) => leg!.toPlace?.bikeParkEntity != null);
+    final lastLeg = compressLegs[compressLegs.length - 1]!;
     final lastLegLength = ((lastLeg.durationIntLeg) / durationItinerary) * 10;
     const waitThreshold = 180;
     double addition = 0;
 
     compressLegs.asMap().forEach((index, leg) {
       bool waiting = false;
-      double waitTime;
-      double waitLength;
+      late double waitTime;
+      double? waitLength;
       bool renderBar = true;
 
-      PlanItineraryLeg nextLeg;
+      PlanItineraryLeg? nextLeg;
       final isNextLegLast = index + 1 == compressLegs.length - 1;
 
       final bool shouldRenderLastLeg =
@@ -57,11 +57,11 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
         nextLeg = compressLegs[index + 1];
       }
 
-      double legLength = (leg.durationIntLeg / durationItinerary) * 10;
+      double legLength = (leg!.durationIntLeg / durationItinerary) * 10;
 
       if (nextLeg != null) {
         waitTime =
-            nextLeg.startTime.difference(leg.endTime).inSeconds.toDouble();
+            nextLeg.startTime!.difference(leg.endTime!).inSeconds.toDouble();
         waitLength = (waitTime / durationItinerary) * 10;
         if (waitTime > waitThreshold && waitLength > newRenderBarThreshold) {
           waiting = true;
@@ -181,7 +181,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           padding: const EdgeInsets.only(top: 3),
           child: Text(
             itinerary.firstLegStartTime(localization),
-            style: theme.primaryTextTheme.bodyText1
+            style: theme.primaryTextTheme.bodyText1!
                 .copyWith(fontSize: 14, color: Colors.grey[600]),
             textAlign: TextAlign.left,
           ),

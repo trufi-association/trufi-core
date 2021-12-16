@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core/blocs/configuration/configuration.dart';
 import 'package:trufi_core/blocs/configuration/configuration_cubit.dart';
 import 'package:trufi_core/blocs/search_locations/search_locations_cubit.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
@@ -13,8 +16,8 @@ import 'package:async/async.dart';
 import '../widgets/map/trufi_map.dart';
 
 class ChooseLocationPage extends StatefulWidget {
-  static Future<ChooseLocationDetail> selectPosition(BuildContext context,
-      {LatLng position, bool isOrigin}) {
+  static Future<ChooseLocationDetail?> selectPosition(BuildContext context,
+      {LatLng? position, bool? isOrigin}) {
     return Navigator.of(context).push(
       MaterialPageRoute<ChooseLocationDetail>(
         builder: (BuildContext context) => ChooseLocationPage(
@@ -26,13 +29,12 @@ class ChooseLocationPage extends StatefulWidget {
   }
 
   const ChooseLocationPage({
-    Key key,
-    @required this.isOrigin,
+    Key? key,
+    required this.isOrigin,
     this.position,
-  })  : assert(isOrigin != null),
-        super(key: key);
+  }) : super(key: key);
 
-  final LatLng position;
+  final LatLng? position;
   final bool isOrigin;
 
   @override
@@ -41,28 +43,28 @@ class ChooseLocationPage extends StatefulWidget {
 
 class ChooseLocationPageState extends State<ChooseLocationPage> {
   final _trufiMapController = TrufiMapController();
-  MapPosition position;
-  Widget _chooseOnMapMarker;
+  late MapPosition position;
+  Widget? _chooseOnMapMarker;
 
   bool loading = true;
-  String fetchError;
-  ChooseLocationDetail locationData;
+  String? fetchError;
+  ChooseLocationDetail? locationData;
   @override
   void initState() {
     super.initState();
-    final cfg = context.read<ConfigurationCubit>().state;
-    final markersConfiguration = cfg.map.markersConfiguration;
-    _chooseOnMapMarker = _selectedMarker(cfg.map.center, markersConfiguration);
+    final Configuration cfg = context.read<ConfigurationCubit>().state;
+    final markersConfiguration = cfg.map!.markersConfiguration;
+    _chooseOnMapMarker = _selectedMarker(cfg.map!.center, markersConfiguration);
     if (widget.position != null) {
       _trufiMapController.mapController.onReady.then(
         (value) => _trufiMapController.move(
           center: widget.position,
-          zoom: cfg.map.chooseLocationZoom,
+          zoom: cfg.map!.chooseLocationZoom,
         ),
       );
     }
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
-      loadData(widget.position ?? cfg.map.center);
+    WidgetsBinding.instance!.addPostFrameCallback((duration) {
+      loadData(widget.position ?? cfg.map!.center);
     });
   }
 
@@ -76,10 +78,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
-    final trufiConfiguration = context.read<ConfigurationCubit>().state;
-    final textStyle = theme.textTheme.bodyText1.copyWith(fontSize: 17);
-    final hintStyle = theme.textTheme.bodyText2.copyWith(
-      color: theme.textTheme.caption.color,
+    final Configuration trufiConfiguration =
+        context.read<ConfigurationCubit>().state;
+    final textStyle = theme.textTheme.bodyText1!.copyWith(fontSize: 17);
+    final hintStyle = theme.textTheme.bodyText2!.copyWith(
+      color: theme.textTheme.caption!.color,
     );
     return Scaffold(
       appBar: AppBar(
@@ -142,7 +145,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                 Positioned(
                   bottom: 10,
                   left: 10,
-                  child: trufiConfiguration.map.mapAttributionBuilder(context),
+                  child:
+                      trufiConfiguration.map!.mapAttributionBuilder!(context),
                 ),
               ],
             ),
@@ -161,8 +165,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
                 children: [
                   Text(
                     locationData != null
-                        ? locationData.description != ""
-                            ? locationData.description
+                        ? locationData!.description != ""
+                            ? locationData!.description
                             : localization.commonUnkownPlace
                         : localization.commonLoading,
                     style: textStyle,
@@ -241,20 +245,20 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
         : markerConfiguration.toMarker;
   }
 
-  CancelableOperation<LocationDetail> cancelableOperation;
-  Future<void> loadData(LatLng location) async {
+  CancelableOperation<LocationDetail>? cancelableOperation;
+  Future<void> loadData(LatLng? location) async {
     if (!mounted) return;
 
     await Future.delayed(Duration.zero);
-    if (cancelableOperation != null && !cancelableOperation.isCanceled) {
-      await cancelableOperation.cancel();
+    if (cancelableOperation != null && !cancelableOperation!.isCanceled) {
+      await cancelableOperation!.cancel();
     }
     setState(() {
       fetchError = null;
       loading = true;
     });
     cancelableOperation = CancelableOperation.fromFuture(_fetchData(location));
-    cancelableOperation.valueOrCancellation().then((value) {
+    cancelableOperation!.valueOrCancellation().then((value) {
       if (mounted) {
         setState(() {
           locationData =
@@ -265,7 +269,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
     });
   }
 
-  Future<LocationDetail> _fetchData(LatLng location) async {
+  Future<LocationDetail> _fetchData(LatLng? location) async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return searchLocationsCubit.reverseGeodecoding(location).catchError(
       (error) {
@@ -276,7 +280,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage> {
 }
 
 class ChooseLocationDetail extends LocationDetail {
-  final LatLng location;
+  final LatLng? location;
   ChooseLocationDetail(
     LocationDetail locationDetail,
     this.location,

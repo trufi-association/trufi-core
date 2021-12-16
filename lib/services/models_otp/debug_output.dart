@@ -1,9 +1,9 @@
 class DebugOutput {
-  final double totalTime;
-  final double pathCalculationTime;
-  final double precalculationTime;
-  final double renderingTime;
-  final bool timedOut;
+  final double? totalTime;
+  final double? pathCalculationTime;
+  final double? precalculationTime;
+  final double? renderingTime;
+  final bool? timedOut;
 
   const DebugOutput({
     this.totalTime,
@@ -20,7 +20,7 @@ class DebugOutput {
         precalculationTime:
             double.tryParse(json['precalculationTime'].toString()) ?? 0,
         renderingTime: double.tryParse(json['renderingTime'].toString()) ?? 0,
-        timedOut: json['timedOut'] as bool,
+        timedOut: json['timedOut'] as bool?,
       );
 
   Map<String, dynamic> toMap() => {

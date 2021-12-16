@@ -8,12 +8,12 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/trufi_place.dart';
 class CustomLocationSelector extends StatelessWidget {
   const CustomLocationSelector({
-    Key key,
-    @required this.locationData,
-    @required this.onFetchPlan,
+    Key? key,
+    required this.locationData,
+    required this.onFetchPlan,
   }) : super(key: key);
 
-  final LocationDetail locationData;
+  final LocationDetail? locationData;
   final void Function() onFetchPlan;
   @override
   Widget build(BuildContext context) {
@@ -28,10 +28,10 @@ class CustomLocationSelector extends StatelessWidget {
             onPressed: () async {
               await homePageCubit.setFromPlace(
                 TrufiLocation(
-                  description: locationData.description,
-                  address: locationData.street,
-                  latitude: locationData.position.latitude,
-                  longitude: locationData.position.longitude,
+                  description: locationData!.description,
+                  address: locationData!.street,
+                  latitude: locationData!.position!.latitude,
+                  longitude: locationData!.position!.longitude,
                 ),
               );
               onFetchPlan();
@@ -48,10 +48,10 @@ class CustomLocationSelector extends StatelessWidget {
             onPressed: () async {
               await homePageCubit.setToPlace(
                 TrufiLocation(
-                  description: locationData.description,
-                  address: locationData.street,
-                  latitude: locationData.position.latitude,
-                  longitude: locationData.position.longitude,
+                  description: locationData!.description,
+                  address: locationData!.street,
+                  latitude: locationData!.position!.latitude,
+                  longitude: locationData!.position!.longitude,
                 ),
               );
               onFetchPlan();
@@ -71,7 +71,7 @@ class CustomLocationSelector extends StatelessWidget {
 class LocationDetail {
   final String description;
   final String street;
-  final LatLng position;
+  final LatLng? position;
 
   LocationDetail(this.description, this.street, this.position);
 }

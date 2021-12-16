@@ -17,9 +17,9 @@ enum TransportMarkers {
 
 abstract class ItinararyCreator {
   Map<PlanItinerary, List<PolylineWithMarkers>> buildItineraries({
-    @required PlanEntity plan,
-    @required PlanItinerary selectedItinerary,
-    @required Function(PlanItinerary) onTap,
+    required PlanEntity? plan,
+    required PlanItinerary? selectedItinerary,
+    required Function(PlanItinerary) onTap,
   });
 }
 
@@ -32,34 +32,34 @@ class DefaultItineraryCreator implements ItinararyCreator {
 
   @override
   Map<PlanItinerary, List<PolylineWithMarkers>> buildItineraries({
-    @required PlanEntity plan,
-    @required PlanItinerary selectedItinerary,
-    @required Function(PlanItinerary p1) onTap,
+    required PlanEntity? plan,
+    required PlanItinerary? selectedItinerary,
+    required Function(PlanItinerary p1) onTap,
   }) {
     final Map<PlanItinerary, List<PolylineWithMarkers>> itineraries = {};
     if (plan != null) {
-      for (final itinerary in plan.itineraries) {
+      for (final itinerary in plan.itineraries!) {
         final List<Marker> markers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
-        final bool showOnlySelected = selectedItinerary.isOnlyShowItinerary;
+        final bool showOnlySelected = selectedItinerary!.isOnlyShowItinerary;
 
         if (!showOnlySelected || isSelected) {
-          final List<PlanItineraryLeg> compressedLegs = itinerary.compressLegs;
+          final List<PlanItineraryLeg?> compressedLegs = itinerary.compressLegs;
           for (int i = 0; i < compressedLegs.length; i++) {
-            final PlanItineraryLeg leg = compressedLegs[i];
+            final PlanItineraryLeg leg = compressedLegs[i]!;
             // Polyline
             final List<LatLng> points = leg.accumulatedPoints.isNotEmpty
                 ? leg.accumulatedPoints
-                : decodePolyline(leg.points);
+                : decodePolyline(leg.points!);
             final Color color = isSelected
                 ? leg.transportMode == TransportMode.bicycle &&
-                        leg.fromPlace.bikeRentalStation != null
+                        leg.fromPlace!.bikeRentalStation != null
                     ? getBikeRentalNetwork(
-                            leg.fromPlace.bikeRentalStation.networks[0])
+                            leg.fromPlace!.bikeRentalStation!.networks![0])
                         .color
-                    : (leg?.route?.color != null
-                        ? Color(int.tryParse("0xFF${leg.route.color}"))
+                    : (leg.route?.color != null
+                        ? Color(int.tryParse("0xFF${leg.route!.color}")!)
                         : leg.transportMode == TransportMode.walk
                             ? leg.transportMode.color
                             : leg.transportMode.backgroundColor)
@@ -90,14 +90,14 @@ class DefaultItineraryCreator implements ItinararyCreator {
                 leg.transportMode != TransportMode.car) {
               markers.add(
                 buildBusMarker(
-                  midPointForPolyline(polyline),
+                  midPointForPolyline(polyline)!,
                   isSelected
-                      ? (leg?.route?.color != null
-                          ? Color(int.tryParse("0xFF${leg.route.color}"))
+                      ? (leg.route?.color != null
+                          ? Color(int.tryParse("0xFF${leg.route!.color}")!)
                           : leg.transportMode.backgroundColor)
                       : Colors.grey,
                   leg,
-                  icon: (leg?.route?.type ?? 0) == 715
+                  icon: (leg.route?.type ?? 0) == 715
                       ? onDemandTaxiSvg(color: 'FFFFFF')
                       : null,
                   onTap: () => onTap(itinerary),

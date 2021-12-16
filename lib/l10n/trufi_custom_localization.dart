@@ -20,12 +20,14 @@ abstract class TrufiCustomLocalization {
     if (customTranslationMap == null || customTranslationMap.isEmpty)
       return defaultTranslation;
 
-    if (customTranslationMap.containsKey(locale))
-      return customTranslationMap[locale];
+    if (customTranslationMap.containsKey(locale)) {
+      return customTranslationMap[locale] ?? '';
+    }
 
     final fallBackLocale = Locale(locale.languageCode);
-    if (customTranslationMap.containsKey(fallBackLocale))
-      return customTranslationMap[fallBackLocale];
+    if (customTranslationMap.containsKey(fallBackLocale)) {
+      return customTranslationMap[fallBackLocale] ?? '';
+    }
 
     return defaultTranslation;
   }
@@ -33,18 +35,18 @@ abstract class TrufiCustomLocalization {
   /// The [title] of the application
   ///
   /// Default Translation to "Trufi App"
-  Map<Locale, String> title;
+  Map<Locale, String> title = {};
 
   /// The [tagline] is a Short Marketing text of your application
   ///
   /// Default Translation to "Public transportation in Cochabamba"
-  Map<Locale, String> tagline;
+  Map<Locale, String> tagline = {};
 
   /// A sentence that describes the application's purpose
   ///
   /// In en_US, this message translates to:
   /// **'The best way to travel with trufis, micros and busses through Cochabamba.'**
-  Map<Locale, String> description;
+  Map<Locale, String> description = {};
 
   /// Text displayed on the about page
   ///
@@ -53,21 +55,20 @@ abstract class TrufiCustomLocalization {
   /// support public transport. We have developed this app to make it easy
   /// for people to use the transport system in Cochabamba and the
   /// surrounding area.'**
-  Map<Locale, String> aboutContent;
-
+  Map<Locale, String> aboutContent = {};
 
   /// The [searchItemNoResults] is a warning message when the place finder does not get results
   ///
   /// Default Translation to "No results"
-  Map<Locale, String> searchItemNoResults;
+  Map<Locale, String> searchItemNoResults = {};
 
   /// The [searchTitleFavorites] is a title list in the search
   ///
   /// Default Translation to "Favorites"
-  Map<Locale, String> searchTitleFavorites;
-  
+  Map<Locale, String> searchTitleFavorites = {};
+
   /// The [commonFavoritePlaces] is a title for favorites places in Your places
   ///
   /// Default Translation to "Favorites places"
-  Map<Locale, String> commonFavoritePlaces;
+  Map<Locale, String> commonFavoritePlaces = {};
 }

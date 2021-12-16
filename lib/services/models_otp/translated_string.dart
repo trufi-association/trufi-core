@@ -1,6 +1,6 @@
 class TranslatedString {
-  final String text;
-  final String language;
+  final String? text;
+  final String? language;
 
   const TranslatedString({
     this.text,

@@ -25,7 +25,7 @@ void main() {
         );
         return HomePageCubit(mockLocalRepository, mockRequestManager);
       },
-      verify: (_) => verify(mockLocalRepository.getStateHomePage()),
+      verify: (dynamic _) => verify(mockLocalRepository.getStateHomePage()),
       expect: () => [const MapRouteState()],
     );
 
@@ -36,7 +36,7 @@ void main() {
         await cubit.updateMapRouteState(const MapRouteState(isFetching: true));
         await cubit.reset();
       },
-      verify: (_) => verify(mockLocalRepository.deleteStateHomePage()),
+      verify: (dynamic _) => verify(mockLocalRepository.deleteStateHomePage()),
       expect: () => [
         const MapRouteState(),
         const MapRouteState(isFetching: true),
@@ -47,7 +47,7 @@ void main() {
     blocTest(
       "updateHomePageStateData should emit new state and call localStorage",
       build: () => HomePageCubit(mockLocalRepository, mockRequestManager),
-      verify: (_) => verify(
+      verify: (dynamic _) => verify(
         mockLocalRepository.saveStateHomePage(
           jsonEncode(const MapRouteState(isFetching: true).toJson()),
         ),

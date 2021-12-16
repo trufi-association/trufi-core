@@ -7,11 +7,11 @@ WheelchairBoarding getWheelchairBoardingByString(String wheelchairBoarding) {
   );
 }
 
-extension WheelchairBoardingExtension on WheelchairBoarding {
+extension WheelchairBoardingExtension on WheelchairBoarding? {
   static const names = <WheelchairBoarding, String>{
     WheelchairBoarding.noinformation: 'NO_INFORMATION',
     WheelchairBoarding.possible: 'POSSIBLE',
     WheelchairBoarding.notpossible: 'NOT_POSSIBLE'
   };
-  String get name => names[this] ?? 'NO_INFORMATION';
+  String get name => names[this!] ?? 'NO_INFORMATION';
 }

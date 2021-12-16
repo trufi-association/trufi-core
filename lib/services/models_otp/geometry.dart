@@ -1,6 +1,6 @@
 class Geometry {
-  final int length;
-  final String points;
+  final int? length;
+  final String? points;
 
   const Geometry({this.length, this.points});
 

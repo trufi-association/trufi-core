@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 class AgencyEntity {
-  final int id;
+  final int? id;
   final String gtfsId;
   final String name;
   final String url;
@@ -11,14 +11,14 @@ class AgencyEntity {
   final String fareUrl;
 
   const AgencyEntity({
-    @required this.id,
-    @required this.gtfsId,
-    @required this.name,
-    @required this.url,
-    @required this.timezone,
-    @required this.lang,
-    @required this.phone,
-    @required this.fareUrl,
+    required this.id,
+    required this.gtfsId,
+    required this.name,
+    required this.url,
+    required this.timezone,
+    required this.lang,
+    required this.phone,
+    required this.fareUrl,
   });
 
   factory AgencyEntity.fromMap(Map<String, dynamic> map) => AgencyEntity(

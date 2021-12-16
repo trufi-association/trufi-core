@@ -26,8 +26,8 @@ Widget buildAlertLocationServicesDenied(BuildContext context) {
 }
 
 Widget buildErrorAlert({
-  @required BuildContext context,
-  String error,
+  required BuildContext context,
+  required String error,
 }) {
   final localization = TrufiLocalization.of(context);
   return _buildAlert(
@@ -39,14 +39,14 @@ Widget buildErrorAlert({
 }
 
 Widget buildTransitErrorAlert({
-  @required BuildContext context,
-  @required Function onReportMissingRoute,
-  @required Function onShowCarRoute,
-  String error,
+  required BuildContext context,
+  required Function onReportMissingRoute,
+  required Function onShowCarRoute,
+  String? error,
 }) {
   final localization = TrufiLocalization.of(context);
-  final theme = context.read<ThemeCubit>().state.activeTheme;
-  final actionTextStyle = theme.textTheme.bodyText2.copyWith(
+  final theme = context.read<ThemeCubit>().state.activeTheme!;
+  final actionTextStyle = theme.textTheme.bodyText2!.copyWith(
     color: theme.accentColor,
   );
   return _buildAlert(
@@ -90,10 +90,10 @@ Widget buildTransitErrorAlert({
 }
 
 Widget buildOnAndOfflineErrorAlert({
-  @required BuildContext context,
-  @required bool online,
-  Widget title,
-  Widget content,
+  required BuildContext context,
+  required bool online,
+  Widget? title,
+  Widget? content,
 }) {
   return _buildAlert(
     context: context,
@@ -108,21 +108,21 @@ Widget buildOnAndOfflineErrorAlert({
 }
 
 Widget _buildAlert({
-  @required BuildContext context,
-  Widget title,
-  Widget content,
-  List<Widget> actions,
+  required BuildContext context,
+  Widget? title,
+  Widget? content,
+  List<Widget>? actions,
 }) {
-  final theme = context.read<ThemeCubit>().state.activeTheme;
+  final theme = context.read<ThemeCubit>().state.activeTheme!;
   return AlertDialog(
     title: title,
-    titleTextStyle: theme.primaryTextTheme.headline6.copyWith(
+    titleTextStyle: theme.primaryTextTheme.headline6!.copyWith(
       color: Colors.red,
       fontWeight: FontWeight.bold,
     ),
     content: content,
     contentTextStyle:
-        theme.primaryTextTheme.bodyText2.copyWith(color: Colors.black),
+        theme.primaryTextTheme.bodyText2!.copyWith(color: Colors.black),
     actions: actions,
   );
 }

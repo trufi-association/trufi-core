@@ -8,13 +8,13 @@ enum DefaultLocation {
 extension DefaultLocationExtension on DefaultLocation {
   static final initLocations = <DefaultLocation, TrufiLocation>{
     DefaultLocation.defaultHome: TrufiLocation(
-      description: keys[DefaultLocation.defaultHome],
+      description: keys[DefaultLocation.defaultHome]!,
       latitude: 0,
       longitude: 0,
       type: 'saved_place:home',
     ),
     DefaultLocation.defaultWork: TrufiLocation(
-      description: keys[DefaultLocation.defaultWork],
+      description: keys[DefaultLocation.defaultWork]!,
       latitude: 0,
       longitude: 0,
       type: 'saved_place:work',
@@ -25,6 +25,6 @@ extension DefaultLocationExtension on DefaultLocation {
     DefaultLocation.defaultHome: 'Key-Default-Home',
     DefaultLocation.defaultWork: 'Key-Default-Work'
   };
-  TrufiLocation get initLocation => initLocations[this];
-  String get keyLocation => keys[this];
+  TrufiLocation? get initLocation => initLocations[this];
+  String? get keyLocation => keys[this];
 }

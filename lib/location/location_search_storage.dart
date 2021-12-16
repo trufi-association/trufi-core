@@ -24,7 +24,7 @@ class LocationSearchStorage {
     _streets.clear();
     try {
       final locationData = await loadFromAssets(context, key);
-      _places.addAll(locationData.places);
+      _places.addAll(locationData.places!);
       _streets.addAll(locationData.streets);
     } catch (e) {
       // TODO: Fix the test properly
@@ -37,13 +37,13 @@ class LocationSearchStorage {
     return _sortedByFavorites(_places.toList(), context);
   }
 
-  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(String query) async {
+  Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(String? query) async {
     return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
       [],
       (streets, street) {
         final distance = _levenshteinDistanceForLocation(
           street.location,
-          query.toLowerCase(),
+          query!.toLowerCase(),
         );
         if (distance < _levenshteinDistanceThreshold) {
           streets.add(LevenshteinObject(street, distance));
@@ -53,13 +53,13 @@ class LocationSearchStorage {
     );
   }
 
-  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(String query) async {
+  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(String? query) async {
     return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
       [],
       (locations, location) {
         final distance = _levenshteinDistanceForLocation(
           location,
-          query.toLowerCase(),
+          query!.toLowerCase(),
         );
         if (distance < _levenshteinDistanceThreshold) {
           locations.add(LevenshteinObject(location, distance));
@@ -79,7 +79,7 @@ class LocationSearchStorage {
       query,
     );
     // Search in alternative names
-    for (final name in location.alternativeNames) {
+    for (final name in location.alternativeNames!) {
       distance = min(
         distance,
         _levenshteinDistanceForString(
@@ -134,7 +134,7 @@ class LocationSearchStorage {
 class LocationSearchData {
   LocationSearchData(this.places, this.streets);
 
-  final List<TrufiLocation> places;
+  final List<TrufiLocation>? places;
   final List<TrufiStreet> streets;
 }
 
@@ -157,7 +157,7 @@ LocationSearchData _parseSearchJson(String encoded) {
           .map<TrufiLocation>(
             (dynamic json) => TrufiLocation.fromSearchPlacesJson(json as List<dynamic>),
           )
-          .toList() as List<TrufiLocation>;
+          .toList() as List<TrufiLocation>?;
       // Streets
       final streets = <String, TrufiStreet>{};
       search[keyStreets].keys.forEach((dynamic key) {
@@ -176,8 +176,8 @@ LocationSearchData _parseSearchJson(String encoded) {
                 TrufiStreetJunction(
                   street1: street1,
                   street2: street2,
-                  longitude: junction[1][0].toDouble() as double,
-                  latitude: junction[1][1].toDouble() as double,
+                  longitude: junction[1][0].toDouble() as double?,
+                  latitude: junction[1][1].toDouble() as double?,
                 ),
               );
             }

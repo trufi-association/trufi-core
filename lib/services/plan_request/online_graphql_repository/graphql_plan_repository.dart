@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:meta/meta.dart';
 
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
@@ -26,9 +25,9 @@ class GraphQLPlanRepository {
   GraphQLPlanRepository(String endpoint) : client = getClient(endpoint);
 
   Future<Plan> fetchPlanSimple({
-    @required TrufiLocation fromLocation,
-    @required TrufiLocation toLocation,
-    @required List<TransportMode> transportsMode,
+    required TrufiLocation fromLocation,
+    required TrufiLocation toLocation,
+    required List<TransportMode> transportsMode,
   }) async {
     final QueryOptions planSimpleQuery = QueryOptions(
       document: parseString(plan_queries.utilsSummarySimplePageQuery),
@@ -42,24 +41,24 @@ class GraphQLPlanRepository {
     );
     final planSimpleData = await client.query(planSimpleQuery);
     if (planSimpleData.hasException && planSimpleData.data == null) {
-      throw planSimpleData.exception.graphqlErrors.isNotEmpty
+      throw planSimpleData.exception!.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
     final planData =
-        Plan.fromMap(planSimpleData.data['plan'] as Map<String, dynamic>);
+        Plan.fromMap(planSimpleData.data!['plan'] as Map<String, dynamic>);
     return planData;
   }
 
   Future<Plan> fetchPlanAdvanced({
-    @required TrufiLocation fromLocation,
-    @required TrufiLocation toLocation,
-    @required PayloadDataPlanState advancedOptions,
-    @required String locale,
+    required TrufiLocation fromLocation,
+    required TrufiLocation toLocation,
+    required PayloadDataPlanState advancedOptions,
+    required String? locale,
     bool defaultFecth = false,
   }) async {
     final transportsMode =
-        defaultFecth ? defaultTransportModes : advancedOptions.transportModes;
+        defaultFecth ? defaultTransportModes : advancedOptions.transportModes!;
     final QueryOptions planAdvancedQuery = QueryOptions(
       document: addFragments(parseString(plan_queries.utilsSummaryPageQuery), [
         addFragments(plan_fragments.summaryPageViewerFragment, [
@@ -88,8 +87,8 @@ class GraphQLPlanRepository {
         'transportModes': parseTransportModes(transportsMode),
         "date": parseDateFormat(advancedOptions.date),
         'time': parseTime(advancedOptions.date),
-        'walkReluctance': advancedOptions.avoidWalking ? 5 : 2,
-        'walkBoardCost': advancedOptions.avoidTransfers
+        'walkReluctance': advancedOptions.avoidWalking! ? 5 : 2,
+        'walkBoardCost': advancedOptions.avoidTransfers!
             ? WalkBoardCost.walkBoardCostHigh.value
             : WalkBoardCost.defaultCost.value,
         'minTransferTime': 120,
@@ -102,43 +101,43 @@ class GraphQLPlanRepository {
         'arriveBy': advancedOptions.arriveBy,
         'transferPenalty': 0,
         'bikeSpeed': advancedOptions.typeBikingSpeed.value,
-        'optimize': advancedOptions.includeBikeSuggestions
+        'optimize': advancedOptions.includeBikeSuggestions!
             ? OptimizeType.triangle.name
             : OptimizeType.quick.name,
-        'triangle': advancedOptions.includeBikeSuggestions
+        'triangle': advancedOptions.includeBikeSuggestions!
             ? OptimizeType.triangle.value
             : OptimizeType.quick.value,
         'itineraryFiltering': 1.5,
         'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
         'allowedBikeRentalNetworks':
-            parseBikeRentalNetworks(advancedOptions.bikeRentalNetworks),
+            parseBikeRentalNetworks(advancedOptions.bikeRentalNetworks!),
         'locale': locale ?? 'de',
       },
     );
     final planAdvancedData = await client.query(planAdvancedQuery);
     if (planAdvancedData.hasException && planAdvancedData.data == null) {
-      throw planAdvancedData.exception.graphqlErrors.isNotEmpty
+      throw planAdvancedData.exception!.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    if (planAdvancedData.source.isEager) {
+    if (planAdvancedData.source!.isEager) {
       await Future.delayed(const Duration(milliseconds: 200));
     }
     final planData = Plan.fromMap(
-        planAdvancedData.data['viewer']['plan'] as Map<String, dynamic>);
+        planAdvancedData.data!['viewer']['plan'] as Map<String, dynamic>);
     return planData;
   }
 
   Future<ModesTransport> fetchWalkBikePlanQuery({
-    @required TrufiLocation fromLocation,
-    @required TrufiLocation toLocation,
-    @required PayloadDataPlanState advancedOptions,
-    @required String locale,
+    required TrufiLocation fromLocation,
+    required TrufiLocation toLocation,
+    required PayloadDataPlanState advancedOptions,
+    required String? locale,
   }) async {
     final linearDistance =
         estimateDistance(fromLocation.latLng, toLocation.latLng);
     final dateNow = DateTime.now();
-    final date = advancedOptions?.date ?? dateNow;
+    final date = advancedOptions.date ?? dateNow;
     final shouldMakeAllQuery = !advancedOptions.isFreeParkToCarPark &&
         !advancedOptions.isFreeParkToParkRide;
 
@@ -168,59 +167,59 @@ class GraphQLPlanRepository {
           'intermediatePlaces': [],
           'date': parseDateFormat(date),
           'time': parseTime(date),
-          'walkReluctance': advancedOptions.avoidWalking ? 5 : 2,
-          'walkBoardCost': advancedOptions.avoidTransfers
+          'walkReluctance': advancedOptions.avoidWalking! ? 5 : 2,
+          'walkBoardCost': advancedOptions.avoidTransfers!
               ? WalkBoardCost.walkBoardCostHigh.value
               : WalkBoardCost.defaultCost.value,
           'minTransferTime': 120,
           'walkSpeed': advancedOptions.typeWalkingSpeed.value,
           'wheelchair': advancedOptions.wheelchair,
           'ticketTypes': null,
-          'disableRemainingWeightHeuristic': advancedOptions.transportModes
+          'disableRemainingWeightHeuristic': advancedOptions.transportModes!
               .map((e) => '${e.name}_${e.qualifier ?? ''}')
               .contains('BICYCLE_RENT'),
           'arriveBy': advancedOptions.arriveBy,
           'transferPenalty': 0,
           'bikeSpeed': advancedOptions.typeBikingSpeed.value,
-          'optimize': advancedOptions.includeBikeSuggestions
+          'optimize': advancedOptions.includeBikeSuggestions!
               ? OptimizeType.triangle.name
               : OptimizeType.greenWays.name,
-          'triangle': {...OptimizeType.triangle.value},
+          'triangle': {...?OptimizeType.triangle.value},
           'itineraryFiltering': 1.5,
           'unpreferred': {'useUnpreferredRoutesPenalty': 1200},
           'locale': locale ?? 'de',
           'bikeAndPublicMaxWalkDistance':
               PayloadDataPlanState.bikeAndPublicMaxWalkDistance,
           'bikeAndPublicModes':
-              parseBikeAndPublicModes(advancedOptions.transportModes),
-          'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes),
+              parseBikeAndPublicModes(advancedOptions.transportModes!),
+          'bikeParkModes': parsebikeParkModes(advancedOptions.transportModes!),
           'carMode': parseCarMode(toLocation.latLng),
           'bikeandPublicDisableRemainingWeightHeuristic': false,
           'shouldMakeWalkQuery': shouldMakeAllQuery &&
-              !advancedOptions.wheelchair &&
+              !advancedOptions.wheelchair! &&
               linearDistance < PayloadDataPlanState.maxWalkDistance,
           'shouldMakeBikeQuery': shouldMakeAllQuery &&
-              !advancedOptions.wheelchair &&
+              !advancedOptions.wheelchair! &&
               linearDistance < PayloadDataPlanState.suggestBikeMaxDistance &&
-              advancedOptions.includeBikeSuggestions,
+              advancedOptions.includeBikeSuggestions!,
           'shouldMakeCarQuery':
               (advancedOptions.isFreeParkToCarPark || shouldMakeAllQuery) &&
-                  advancedOptions.includeCarSuggestions &&
+                  advancedOptions.includeCarSuggestions! &&
                   linearDistance > PayloadDataPlanState.suggestCarMinDistance,
           'shouldMakeParkRideQuery':
               (advancedOptions.isFreeParkToParkRide || shouldMakeAllQuery) &&
-                  advancedOptions.includeParkAndRideSuggestions &&
+                  advancedOptions.includeParkAndRideSuggestions! &&
                   linearDistance > PayloadDataPlanState.suggestCarMinDistance,
           'shouldMakeOnDemandTaxiQuery': shouldMakeAllQuery && date.hour > 21 ||
               (date.hour == 21 && date.minute == 0) ||
               date.hour < 5 ||
               (date.hour == 5 && date.minute == 0),
           'showBikeAndParkItineraries': shouldMakeAllQuery &&
-              !advancedOptions.wheelchair &&
-              advancedOptions.includeBikeSuggestions,
+              !advancedOptions.wheelchair! &&
+              advancedOptions.includeBikeSuggestions!,
           'showBikeAndPublicItineraries': shouldMakeAllQuery &&
-              !advancedOptions.wheelchair &&
-              advancedOptions.includeBikeSuggestions,
+              !advancedOptions.wheelchair! &&
+              advancedOptions.includeBikeSuggestions!,
           'useVehicleParkingAvailabilityInformation':
               date.difference(dateNow).inMinutes <= 15,
           'bannedVehicleParkingTags': shouldMakeAllQuery
@@ -232,11 +231,11 @@ class GraphQLPlanRepository {
         });
     final walkBikePlanData = await client.query(walkBikePlanQuery);
     if (walkBikePlanData.hasException && walkBikePlanData.data == null) {
-      throw walkBikePlanData.exception.graphqlErrors.isNotEmpty
+      throw walkBikePlanData.exception!.graphqlErrors.isNotEmpty
           ? Exception("Bad request")
           : Exception("Internet no connection");
     }
-    final modesTransportData = ModesTransport.fromJson(walkBikePlanData.data);
+    final modesTransportData = ModesTransport.fromJson(walkBikePlanData.data!);
 
     return modesTransportData;
   }

@@ -1,9 +1,9 @@
 class TicketType {
-  final String id;
-  final String fareId;
-  final double price;
-  final String currency;
-  final List<String> zones;
+  final String? id;
+  final String? fareId;
+  final double? price;
+  final String? currency;
+  final List<String>? zones;
 
   const TicketType({
     this.id,

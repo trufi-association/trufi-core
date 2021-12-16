@@ -4,18 +4,18 @@ import 'fare.dart';
 import 'leg.dart';
 
 class Itinerary {
-  final int startTime;
-  final int endTime;
-  final int duration;
-  final int generalizedCost;
-  final int waitingTime;
-  final int walkTime;
-  final double walkDistance;
+  final int? startTime;
+  final int? endTime;
+  final int? duration;
+  final int? generalizedCost;
+  final int? waitingTime;
+  final int? walkTime;
+  final double? walkDistance;
   final List<Leg> legs;
-  final List<Fare> fares;
-  final double elevationGained;
-  final double elevationLost;
-  final bool arrivedAtDestinationWithRentedBicycle;
+  final List<Fare>? fares;
+  final double? elevationGained;
+  final double? elevationLost;
+  final bool? arrivedAtDestinationWithRentedBicycle;
 
   const Itinerary({
     this.startTime,
@@ -25,7 +25,7 @@ class Itinerary {
     this.waitingTime,
     this.walkTime,
     this.walkDistance,
-    this.legs,
+    this.legs = const [],
     this.fares,
     this.elevationGained,
     this.elevationLost,
@@ -44,7 +44,7 @@ class Itinerary {
             ? List<Leg>.from((json["legs"] as List<dynamic>).map(
                 (x) => Leg.fromMap(x as Map<String, dynamic>),
               ))
-            : null,
+            : [],
         fares: json['fares'] != null
             ? List<Fare>.from((json["fares"] as List<dynamic>).map(
                 (x) => Fare.fromMap(x as Map<String, dynamic>),
@@ -53,7 +53,7 @@ class Itinerary {
         elevationGained: double.tryParse(json['elevationGained'].toString()),
         elevationLost: double.tryParse(json['elevationLost'].toString()),
         arrivedAtDestinationWithRentedBicycle:
-            json['arrivedAtDestinationWithRentedBicycle'] as bool,
+            json['arrivedAtDestinationWithRentedBicycle'] as bool?,
       );
 
   Map<String, dynamic> toMap() => {
@@ -68,7 +68,7 @@ class Itinerary {
             ? List<dynamic>.from(legs.map((x) => x.toMap()))
             : null,
         'fares': fares != null
-            ? List<dynamic>.from(fares.map((x) => x.toMap()))
+            ? List<dynamic>.from(fares!.map((x) => x.toMap()))
             : null,
         'elevationGained': elevationGained,
         'elevationLost': elevationLost,
@@ -79,17 +79,17 @@ class Itinerary {
   PlanItinerary toPlanItinerary() {
     return PlanItinerary(
         legs: legs
-            ?.map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
-            ?.toList(),
+            .map((itineraryLeg) => itineraryLeg.toPlanItineraryLeg())
+            .toList(),
         startTime: startTime != null
-            ? DateTime.fromMillisecondsSinceEpoch(startTime)
+            ? DateTime.fromMillisecondsSinceEpoch(startTime!)
             : null,
         endTime: endTime != null
-            ? DateTime.fromMillisecondsSinceEpoch(endTime)
+            ? DateTime.fromMillisecondsSinceEpoch(endTime!)
             : null,
-        durationTrip: duration != null ? Duration(seconds: duration) : null,
+        durationTrip: duration != null ? Duration(seconds: duration!) : null,
         walkDistance: walkDistance,
-        walkTime: walkTime != null ? Duration(seconds: walkTime) : null,
+        walkTime: walkTime != null ? Duration(seconds: walkTime!) : null,
         arrivedAtDestinationWithRentedBicycle:
             arrivedAtDestinationWithRentedBicycle);
   }

@@ -24,7 +24,7 @@ void main() {
           now,
           LatLng(48.59523, 8.86648),
         ),
-        throwsA(predicate((e) =>
+        throwsA(predicate((dynamic e) =>
             e is HttpException &&
             e.message ==
                 "Could not get the current Weather at your location 400")),

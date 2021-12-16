@@ -7,29 +7,29 @@ import 'package:trufi_core/models/trufi_place.dart';
 
 abstract class RequestManager {
   Future<PlanEntity> fetchAdvancedPlan({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    required TrufiLocation? from,
+    required TrufiLocation? to,
+    required String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   });
 
   Future<ModesTransportEntity> fetchTransportModePlan({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    required TrufiLocation? from,
+    required TrufiLocation? to,
+    required String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   });
 
   Future<PlanEntity> fetchCarPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
+    TrufiLocation? from,
+    TrufiLocation? to,
+    String? correlationId,
   );
 
-  Future<AdEntity> fetchAd(
-    TrufiLocation to,
+  Future<AdEntity?> fetchAd(
+    TrufiLocation? to,
     String correlationId,
   );
 }

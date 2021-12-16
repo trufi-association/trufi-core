@@ -4,11 +4,11 @@ import 'package:trufi_core/models/enums/enums_plan/enums_plan.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
 class LegTransportIcon extends StatelessWidget {
-  final PlanItineraryLeg leg;
+  final PlanItineraryLeg? leg;
 
   const LegTransportIcon({
-    Key key,
-    @required this.leg,
+    Key? key,
+    required this.leg,
   }) : super(key: key);
 
   @override
@@ -18,26 +18,26 @@ class LegTransportIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
-        color: leg.transportMode.backgroundColor,
+        color: leg!.transportMode.backgroundColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         children: [
           if (leg?.transportMode?.getImage() != null)
-            SizedBox(height: 28, width: 28, child: leg.transportMode.getImage())
+            SizedBox(height: 28, width: 28, child: leg!.transportMode.getImage())
           else
-            Icon(leg.transportMode.icon, color: Colors.white),
-          if (leg.transportMode != TransportMode.walk)
+            Icon(leg!.transportMode.icon, color: Colors.white),
+          if (leg!.transportMode != TransportMode.walk)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 leg?.route?.shortName != null
-                    ? leg.route.shortName
-                    : leg.transportMode.name,
-                style: theme.primaryTextTheme.headline6.copyWith(
+                    ? leg!.route!.shortName!
+                    : leg!.transportMode.name,
+                style: theme.primaryTextTheme.headline6!.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: leg.transportMode == TransportMode.car
-                      ? leg.transportMode.color
+                  color: leg!.transportMode == TransportMode.car
+                      ? leg!.transportMode.color
                       : null,
                 ),
               ),
@@ -45,8 +45,8 @@ class LegTransportIcon extends StatelessWidget {
           else
             Text(
               localization.instructionDurationMinutes(
-                  (leg.duration.ceil() / 60).ceil()),
-              style: theme.primaryTextTheme.headline6
+                  (leg!.duration!.ceil() / 60).ceil()),
+              style: theme.primaryTextTheme.headline6!
                   .copyWith(color: leg?.transportMode?.color),
             ),
         ],

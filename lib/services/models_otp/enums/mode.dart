@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:trufi_core/models/enums/enums_plan/icons/icons_transport_modes.dart';
 import 'package:trufi_core/utils/util_icons/custom_icons.dart';
 
@@ -30,7 +29,7 @@ Mode getModeByString(String mode) {
   );
 }
 
-extension ModeExtension on Mode {
+extension ModeExtension on Mode? {
   static const names = <Mode, String>{
     Mode.airplane: 'AIRPLANE',
     Mode.bicycle: 'BICYCLE',
@@ -69,7 +68,7 @@ extension ModeExtension on Mode {
     Mode.walk: Icons.directions_walk,
   };
 
-  static final colors = <Mode, Color>{
+  static final colors = <Mode, Color?>{
     Mode.airplane: null,
     Mode.bicycle: Colors.blue,
     Mode.bus: const Color(0xffff260c),
@@ -88,30 +87,30 @@ extension ModeExtension on Mode {
     Mode.walk: Colors.grey[850],
   };
 
-  static final images = <Mode, SvgPicture>{
+  static final images = <Mode, SvgPicture?>{
     Mode.airplane: null,
-    Mode.bicycle: SvgPicture.string(citybike ?? ""),
-    Mode.bus: SvgPicture.string(bus() ?? ""),
+    Mode.bicycle: SvgPicture.string(citybike),
+    Mode.bus: SvgPicture.string(bus()),
     Mode.cableCar: null,
-    Mode.car: SvgPicture.string(carpool ?? ""),
-    Mode.carPool: SvgPicture.string(carpool ?? ""),
+    Mode.car: SvgPicture.string(carpool),
+    Mode.carPool: SvgPicture.string(carpool),
     Mode.ferry: null,
     Mode.flexible: null,
     Mode.funicular: null,
     Mode.gondola: null,
     Mode.legSwitch: null,
-    Mode.rail: SvgPicture.string(rail() ?? ""),
-    Mode.subway: SvgPicture.string(subway() ?? ""),
+    Mode.rail: SvgPicture.string(rail()),
+    Mode.subway: SvgPicture.string(subway()),
     Mode.tram: null,
     Mode.transit: null,
     Mode.walk: null,
   };
 
-  String get name => names[this] ?? 'WALK';
+  String get name => names[this!] ?? 'WALK';
 
-  IconData get icon => icons[this] ?? (Icons.directions_walk);
+  IconData get icon => icons[this!] ?? (Icons.directions_walk);
 
-  Widget get image => images[this] ?? (Icon(icon, color: color));
+  Widget get image => images[this!] ?? (Icon(icon, color: color));
 
-  Color get color => colors[this] ?? Colors.grey;
+  Color get color => colors[this!] ?? Colors.grey;
 }

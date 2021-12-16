@@ -10,19 +10,19 @@ import 'transport_icon_detail.dart';
 class ItineraryDetailsCollapsed extends StatelessWidget {
   static const _paddingHeight = 20.0;
 
-  final Animation<double> animationCostHeight;
-  final Animation<double> animationSummaryHeight;
+  final Animation<double>? animationCostHeight;
+  final Animation<double>? animationSummaryHeight;
   final Function(bool) setIsExpanded;
   final PlanItinerary itinerary;
   final AdEntity ad;
 
   const ItineraryDetailsCollapsed({
-    Key key,
-    @required this.setIsExpanded,
-    @required this.itinerary,
-    @required this.ad,
-    @required this.animationCostHeight,
-    @required this.animationSummaryHeight,
+    Key? key,
+    required this.setIsExpanded,
+    required this.itinerary,
+    required this.ad,
+    required this.animationCostHeight,
+    required this.animationSummaryHeight,
   }) : super(key: key);
 
   @override
@@ -40,7 +40,7 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
           direction: isPortrait ? Axis.vertical : Axis.horizontal,
           children: <Widget>[
             Container(
-              height: animationCostHeight.value,
+              height: animationCostHeight!.value,
               padding: const EdgeInsets.only(left: 12.0, right: 45.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +48,7 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
                   if (itinerary.hasAdvencedData)
                     Text(
                       "${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}    ",
-                      style: theme.textTheme.bodyText1
+                      style: theme.textTheme.bodyText1!
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
                   Row(
@@ -57,13 +57,13 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
                       if (itinerary.hasAdvencedData)
                         Text(
                           "${itinerary.durationTripString(localization)} ",
-                          style: theme.textTheme.bodyText1
+                          style: theme.textTheme.bodyText1!
                               .copyWith(fontWeight: FontWeight.w500),
                         )
                       else
                         Text(
                           "${localization.instructionDurationMinutes(itinerary.time)} ",
-                          style: theme.textTheme.bodyText1
+                          style: theme.textTheme.bodyText1!
                               .copyWith(fontWeight: FontWeight.w500),
                         ),
                       Text(
@@ -77,7 +77,7 @@ class ItineraryDetailsCollapsed extends StatelessWidget {
             ),
             Expanded(
               child: SizedBox(
-                height: animationSummaryHeight.value,
+                height: animationSummaryHeight!.value,
                 child: _ItinerarySummary(itinerary: itinerary, ad: ad),
               ),
             ),
@@ -93,9 +93,9 @@ class _ItinerarySummary extends StatelessWidget {
   final AdEntity ad;
 
   const _ItinerarySummary({
-    Key key,
-    @required this.itinerary,
-    @required this.ad,
+    Key? key,
+    required this.itinerary,
+    required this.ad,
   }) : super(key: key);
 
   @override
@@ -113,7 +113,7 @@ class _ItinerarySummary extends StatelessWidget {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (contextBuilder, index) {
-                    final PlanItineraryLeg leg = itinerary.legs[index];
+                    final PlanItineraryLeg? leg = itinerary.legs[index];
                     return Row(
                       children: <Widget>[
                         LegTransportIcon(leg: leg),

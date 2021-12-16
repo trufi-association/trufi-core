@@ -1,12 +1,12 @@
 import 'stop.dart';
 
 class Cluster {
-  final String id;
-  final String gtfsId;
-  final String name;
-  final double lat;
-  final double lon;
-  final List<Stop> stops;
+  final String? id;
+  final String? gtfsId;
+  final String? name;
+  final double? lat;
+  final double? lon;
+  final List<Stop>? stops;
 
   const Cluster({
     this.id,
@@ -18,9 +18,9 @@ class Cluster {
   });
 
   factory Cluster.fromJson(Map<String, dynamic> json) => Cluster(
-        id: json['id'] as String,
-        gtfsId: json['gtfsId'] as String,
-        name: json['name'] as String,
+        id: json['id'] as String?,
+        gtfsId: json['gtfsId'] as String?,
+        name: json['name'] as String?,
         lat: double.tryParse(json['lat'].toString()) ?? 0,
         lon: double.tryParse(json['lon'].toString()) ?? 0,
         stops: json['stops'] != null
@@ -35,6 +35,6 @@ class Cluster {
         'name': name,
         'lat': lat,
         'lon': lon,
-        'stops': List<dynamic>.from(stops.map((x) => x.toJson())),
+        'stops': List<dynamic>.from(stops!.map((x) => x.toJson())),
       };
 }

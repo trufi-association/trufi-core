@@ -2,11 +2,11 @@ part of 'map_tile_provider_cubit.dart';
 
 @immutable
 class MapTileProviderState extends Equatable {
-  final MapTileProvider currentMapTileProvider;
+  final MapTileProvider? currentMapTileProvider;
 
   const MapTileProviderState({this.currentMapTileProvider});
   
-  MapTileProviderState copyWith({MapTileProvider currentMapTileProvider}) {
+  MapTileProviderState copyWith({MapTileProvider? currentMapTileProvider}) {
     return MapTileProviderState(
       currentMapTileProvider:
           currentMapTileProvider ?? this.currentMapTileProvider,
@@ -14,5 +14,5 @@ class MapTileProviderState extends Equatable {
   }
 
   @override
-  List<Object> get props => [currentMapTileProvider];
+  List<Object?> get props => [currentMapTileProvider];
 }

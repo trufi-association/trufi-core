@@ -32,12 +32,12 @@ const defaultTransportModes = <TransportMode>[
 ];
 
 TransportMode getTransportMode({
-  @required String mode,
-  String specificTransport,
+  required String? mode,
+  String? specificTransport,
 }) {
   TransportMode value = TransportMode.walk;
   if (specificTransport != null) {
-    final String enumType = specificTransport?.toUpperCase() ?? "";
+    final String enumType = specificTransport.toUpperCase();
     value = enumType.contains(TransportMode.trufi.name)
         ? TransportMode.trufi
         : enumType.contains(TransportMode.micro.name)
@@ -55,14 +55,14 @@ TransportMode getTransportMode({
   return value;
 }
 
-TransportMode _getTransportModeByMode(String mode) {
+TransportMode _getTransportModeByMode(String? mode) {
   return TransportModeExtension.names.keys.firstWhere(
     (key) => key.name == mode,
     orElse: () => TransportMode.walk,
   );
 }
 
-extension TransportModeExtension on TransportMode {
+extension TransportModeExtension on TransportMode? {
   static const names = <TransportMode, String>{
     TransportMode.airplane: "AIRPLANE",
     TransportMode.bicycle: "BICYCLE",
@@ -111,76 +111,30 @@ extension TransportModeExtension on TransportMode {
     TransportMode.lightRail: Icons.train,
   };
 
-  static SvgPicture images(TransportMode transportMode, Color color) {
-    final String colorHX = color?.value?.toRadixString(16);
+  static SvgPicture? images(TransportMode? transportMode, Color? color) {
+    final String? colorHX = color?.value.toRadixString(16);
     switch (transportMode) {
-      case TransportMode.airplane:
-        return null;
-        break;
       case TransportMode.bicycle:
-        return SvgPicture.string(bike(color: colorHX ?? '666666') ?? "");
-        break;
+        return SvgPicture.string(bike(color: colorHX ?? '666666'));
       case TransportMode.bus:
-        return SvgPicture.string(bus(color: colorHX ?? 'ff260c') ?? "");
-        break;
-      case TransportMode.cableCar:
-        return null;
-        break;
+        return SvgPicture.string(bus(color: colorHX ?? 'ff260c'));
       case TransportMode.car:
-        return SvgPicture.string(car(color: colorHX ?? 'ff260c') ?? "");
-        break;
+        return SvgPicture.string(car(color: colorHX ?? 'ff260c'));
       case TransportMode.carPool:
-        return SvgPicture.string(carpool ?? "");
-        break;
-      case TransportMode.ferry:
-        return null;
-        break;
-      case TransportMode.flexible:
-        return null;
-        break;
-      case TransportMode.funicular:
-        return null;
-        break;
-      case TransportMode.gondola:
-        return null;
-        break;
-      case TransportMode.legSwitch:
-        return null;
-        break;
+        return SvgPicture.string(carpool);
       case TransportMode.rail:
-        return SvgPicture.string(rail(color: colorHX ?? '83b23b') ?? "");
-        break;
+        return SvgPicture.string(rail(color: colorHX ?? '83b23b'));
       case TransportMode.subway:
-        return SvgPicture.string(subway(color: colorHX ?? '2962ff') ?? "");
-        break;
-      case TransportMode.tram:
-        return null;
-        break;
-      case TransportMode.transit:
-        return null;
-        break;
+        return SvgPicture.string(subway(color: colorHX ?? '2962ff'));
       case TransportMode.walk:
-        return SvgPicture.string(walk ?? "");
-        break;
+        return SvgPicture.string(walk);
       // route icons for specific types of transportation
-      case TransportMode.trufi:
-        return null;
-        break;
-      case TransportMode.micro:
-        return null;
-        break;
-      case TransportMode.miniBus:
-        return null;
-        break;
-      case TransportMode.lightRail:
-        return null;
-        break;
       default:
         return null;
     }
   }
 
-  static final colors = <TransportMode, Color>{
+  static final colors = <TransportMode, Color?>{
     TransportMode.airplane: null,
     TransportMode.bicycle: const Color(0xff666666),
     TransportMode.bus: const Color(0xffd81b60),
@@ -204,7 +158,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.lightRail: const Color(0xffd81b60),
   };
 
-  static final backgroundColors = <TransportMode, Color>{
+  static final backgroundColors = <TransportMode, Color?>{
     TransportMode.airplane: null,
     TransportMode.bicycle: Colors.grey[200],
     TransportMode.bus: const Color(0xffd81b60),
@@ -231,7 +185,8 @@ extension TransportModeExtension on TransportMode {
     TransportMode.bicycle: 'RENT',
   };
 
-  static String translates(TransportMode mode, TrufiLocalization localization) {
+  static String? translates(
+      TransportMode? mode, TrufiLocalization localization) {
     return {
       TransportMode.airplane: null,
       TransportMode.bicycle: localization.instructionVehicleBike,
@@ -254,26 +209,22 @@ extension TransportModeExtension on TransportMode {
       TransportMode.micro: localization.instructionVehicleMicro,
       TransportMode.miniBus: localization.instructionVehicleMinibus,
       TransportMode.lightRail: localization.instructionVehicleLightRail,
-    }[mode];
+    }[mode!];
   }
 
   String getTranslate(TrufiLocalization localization) =>
       translates(this, localization) ?? 'No translate';
 
-  String get name => names[this] ?? 'WALK';
-  IconData get icon => icons[this] ?? Icons.directions_walk;
-  Color get color => colors[this] ?? Colors.grey;
+  String get name => names[this!] ?? 'WALK';
+  IconData get icon => icons[this!] ?? Icons.directions_walk;
+  Color get color => colors[this!] ?? Colors.grey;
   Color get backgroundColor =>
-      backgroundColors[this] ?? const Color(0xff1B3661);
-  Widget getImage({Color color}) =>
+      backgroundColors[this!] ?? const Color(0xff1B3661);
+  Widget getImage({Color? color}) =>
       images(this, color) ??
       (Icon(
-            icons[this],
-            color: color,
-          ) ??
-          const Icon(
-            Icons.error,
-            color: Colors.red,
-          ));
-  String get qualifier => qualifiers[this];
+        icons[this!],
+        color: color,
+      ));
+  String? get qualifier => qualifiers[this!];
 }

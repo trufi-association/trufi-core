@@ -6,7 +6,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/custom_layer.dart';
 
 class MapTypeButton extends StatelessWidget {
-  const MapTypeButton({Key key}) : super(key: key);
+  const MapTypeButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class MapTypeButton extends StatelessWidget {
       mini: true,
       backgroundColor: Theme.of(context).backgroundColor,
       onPressed: () {
-        if (customLayersCubit.state.layers.isNotEmpty) {
+        if (customLayersCubit.state.layers!.isNotEmpty) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -50,7 +50,7 @@ class _MapItemsSelector extends StatelessWidget {
             localization.commonShowMap,
             textAlign: TextAlign.center,
             style:
-                theme.textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+                theme.textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         Expanded(
@@ -66,7 +66,7 @@ class _MapItemsSelector extends StatelessWidget {
 }
 
 class _CustomExpansionPanel extends StatefulWidget {
-  const _CustomExpansionPanel({Key key}) : super(key: key);
+  const _CustomExpansionPanel({Key? key}) : super(key: key);
 
   @override
   __CustomExpansionPanelState createState() => __CustomExpansionPanelState();
@@ -146,7 +146,7 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                     Expanded(
                       child: Text(
                         element.name(context),
-                        style: theme.textTheme.bodyText1.copyWith(
+                        style: theme.textTheme.bodyText1!.copyWith(
                           color: Colors.black87,
                         ),
                       ),
@@ -164,8 +164,8 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                           children: [
                             Checkbox(
                               value: customLayersCubit
-                                  .state.layersSatus[customLayer.id],
-                              onChanged: (bool value) {
+                                  .state.layersSatus![customLayer.id],
+                              onChanged: (bool? value) {
                                 customLayersCubit.changeCustomMapLayerState(
                                   customLayer: customLayer,
                                   newState: value,
@@ -199,7 +199,7 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
 class _MapOptionsPage extends StatelessWidget {
   final Widget child;
 
-  const _MapOptionsPage({Key key, @required this.child}) : super(key: key);
+  const _MapOptionsPage({Key? key, required this.child}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
@@ -230,7 +230,7 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     localization.mapTypeLabel,
-                    style: theme.textTheme.bodyText1
+                    style: theme.textTheme.bodyText1!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -266,13 +266,13 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
 }
 
 class _BuildMapTypeOptionButton extends StatelessWidget {
-  final Widget image;
-  final String label;
-  final VoidCallback onPressed;
+  final Widget? image;
+  final String? label;
+  final VoidCallback? onPressed;
   final bool active;
 
   const _BuildMapTypeOptionButton({
-    Key key,
+    Key? key,
     this.image,
     this.label,
     this.onPressed,
@@ -305,9 +305,9 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(4.0),
               child: Text(
-                label,
+                label!,
                 style: TextStyle(
-                    fontSize: theme.textTheme.caption.fontSize,
+                    fontSize: theme.textTheme.caption!.fontSize,
                     color: active ? theme.accentColor : Colors.grey),
               ),
             ),

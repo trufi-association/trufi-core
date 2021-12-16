@@ -9,8 +9,8 @@ import 'package:trufi_core/blocs/payload_data_plan/payload_data_plan_cubit.dart'
 import 'package:trufi_core/entities/ad_entity/ad_entity.dart';
 import 'package:trufi_core/entities/plan_entity/plan_entity.dart';
 import 'package:trufi_core/l10n/trufi_localization.dart';
-import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 import 'package:trufi_core/models/trufi_place.dart';
+import 'package:trufi_core/repository/exception/fetch_online_exception.dart';
 
 import 'request_manager.dart';
 
@@ -18,17 +18,17 @@ class OnlineRepository implements RequestManager {
   static const String searchPath = '/geocode';
   static const String planPath = '/plan';
   final String otpEndpoint;
-  final String adsEndpoint;
+  final String? adsEndpoint;
 
-  OnlineRepository({@required this.otpEndpoint, this.adsEndpoint});
+  OnlineRepository({required this.otpEndpoint, this.adsEndpoint});
 
   @override
   Future<PlanEntity> fetchAdvancedPlan({
-    @required TrufiLocation from,
-    @required TrufiLocation to,
-    @required String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    required TrufiLocation? from,
+    required TrufiLocation? to,
+    required String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   }) {
     if (advancedOptions == null) {
       return _fetchPlan(from, to, "TRANSIT,WALK", correlationId);
@@ -40,26 +40,26 @@ class OnlineRepository implements RequestManager {
 
   @override
   Future<PlanEntity> fetchCarPlan(
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
+    TrufiLocation? from,
+    TrufiLocation? to,
+    String? correlationId,
   ) {
     return _fetchPlan(from, to, "CAR,WALK", correlationId);
   }
 
   @override
-  Future<AdEntity> fetchAd(
-    TrufiLocation to,
+  Future<AdEntity?> fetchAd(
+    TrufiLocation? to,
     String correlationId,
   ) {
     return _fetchAd(to, correlationId);
   }
 
   Future<PlanEntity> _fetchPlan(
-    TrufiLocation from,
-    TrufiLocation to,
+    TrufiLocation? from,
+    TrufiLocation? to,
     String mode,
-    String correlationId,
+    String? correlationId,
   ) async {
     final Uri request = Uri.parse(
       otpEndpoint + planPath,
@@ -79,8 +79,8 @@ class OnlineRepository implements RequestManager {
     }
   }
 
-  Future<AdEntity> _fetchAd(
-    TrufiLocation to,
+  Future<AdEntity?> _fetchAd(
+    TrufiLocation? to,
     String correlationId,
   ) async {
     final adEndpoint = adsEndpoint;
@@ -89,7 +89,7 @@ class OnlineRepository implements RequestManager {
     }
 
     final Uri request = Uri.parse(
-      adsEndpoint,
+      adsEndpoint!,
     ).replace(queryParameters: {
       "toPlace": to.toString(),
       "correlation": correlationId,
@@ -130,7 +130,7 @@ class OnlineRepository implements RequestManager {
 
 // TODO link again with localization error
   // ignore: unused_element
-  String _localizedErrorForPlanError(
+  String? _localizedErrorForPlanError(
     PlanError error,
     TrufiLocalization localization,
   ) {
@@ -168,11 +168,11 @@ class OnlineRepository implements RequestManager {
 
   @override
   Future<ModesTransportEntity> fetchTransportModePlan({
-    TrufiLocation from,
-    TrufiLocation to,
-    String correlationId,
-    PayloadDataPlanState advancedOptions,
-    String localeName,
+    TrufiLocation? from,
+    TrufiLocation? to,
+    String? correlationId,
+    PayloadDataPlanState? advancedOptions,
+    String? localeName,
   }) {
     // TODO: implement fetchMytransportModePlan
     throw Exception("UnimplementedError");
@@ -181,12 +181,12 @@ class OnlineRepository implements RequestManager {
 
 // TODO: clean code
 // ignore: unused_element
-List<TrufiLocation> _parseLocations(String responseBody) {
+List<TrufiLocation>? _parseLocations(String responseBody) {
   return json
       .decode(responseBody)
       .map<TrufiLocation>(
           (Map<String, dynamic> json) => TrufiLocation.fromSearch(json))
-      .toList() as List<TrufiLocation>;
+      .toList() as List<TrufiLocation>?;
 }
 
 PlanEntity _parsePlan(String responseBody) {

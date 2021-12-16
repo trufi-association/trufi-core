@@ -14,7 +14,7 @@ class AppReviewCubit extends Cubit<int> {
   }
 
   Future<bool> isAppReviewAppropriate(PackageInfo packageInfo) async {
-    final currentActionCount = state;
+    final int currentActionCount = state;
 
     if (currentActionCount >= minimumReviewWorthyActions) {
       final currentVersion = packageInfo.version;

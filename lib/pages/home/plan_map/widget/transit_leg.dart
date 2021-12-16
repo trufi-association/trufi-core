@@ -13,13 +13,13 @@ import '../plan.dart';
 import 'route_number.dart';
 
 class TransitLeg extends StatelessWidget {
-  final PlanItineraryLeg leg;
-  final PlanPageController planPageController;
+  final PlanItineraryLeg? leg;
+  final PlanPageController? planPageController;
 
   const TransitLeg({
-    Key key,
-    @required this.leg,
-    @required this.planPageController,
+    Key? key,
+    required this.leg,
+    required this.planPageController,
   }) : super(key: key);
 
   @override
@@ -27,43 +27,43 @@ class TransitLeg extends StatelessWidget {
     final theme = Theme.of(context);
     final localization = TrufiLocalization.of(context);
     final isTypeBikeRentalNetwork =
-        leg.transportMode == TransportMode.bicycle &&
-            leg.fromPlace?.bikeRentalStation != null;
+        leg!.transportMode == TransportMode.bicycle &&
+            leg!.fromPlace?.bikeRentalStation != null;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RouteNumber(
-          transportMode: leg.transportMode,
+          transportMode: leg!.transportMode,
           backgroundColor: leg?.route?.color != null
-              ? Color(int.tryParse("0xFF${leg.route.color}"))
+              ? Color(int.tryParse("0xFF${leg!.route!.color}")!)
               : isTypeBikeRentalNetwork
                   ? getBikeRentalNetwork(
-                          leg.fromPlace.bikeRentalStation.networks[0])
+                          leg!.fromPlace!.bikeRentalStation!.networks![0])
                       .color
-                  : leg.transportMode.backgroundColor,
+                  : leg!.transportMode.backgroundColor,
           icon: (leg?.route?.type ?? 0) == 715
               ? onDemandTaxiSvg(color: 'FFFFFF')
               : isTypeBikeRentalNetwork
                   ? getBikeRentalNetwork(
-                          leg.fromPlace.bikeRentalStation.networks[0])
+                          leg!.fromPlace!.bikeRentalStation!.networks![0])
                       .image
                   : null,
           text: leg?.route?.shortName != null
-              ? leg.route.shortName
-              : leg.transportMode.getTranslate(localization),
-          tripHeadSing: leg.transportMode == TransportMode.carPool
-              ? leg.toPlace.name
-              : leg.headSign,
-          duration: leg.durationLeg(localization),
-          distance: leg.distanceString(localization),
+              ? leg!.route!.shortName
+              : leg!.transportMode.getTranslate(localization),
+          tripHeadSing: leg!.transportMode == TransportMode.carPool
+              ? leg!.toPlace!.name
+              : leg!.headSign,
+          duration: leg!.durationLeg(localization),
+          distance: leg!.distanceString(localization),
           textContainer: isTypeBikeRentalNetwork
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (isTypeBikeRentalNetwork)
                       Text(
-                        leg.fromPlace.name.toString(),
+                        leg!.fromPlace!.name.toString(),
                         style: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w600),
                       ),
@@ -80,12 +80,12 @@ class TransitLeg extends StatelessWidget {
               : null,
         ),
         if (leg?.intermediatePlaces != null &&
-            leg.intermediatePlaces.isNotEmpty)
+            leg!.intermediatePlaces!.isNotEmpty)
           SizedBox(
             width: 250,
             child: ExpansionTile(
               title: Text(
-                '${leg.intermediatePlaces.length} ${localization.localeName == 'en' ? (leg.intermediatePlaces.length > 1 ? 'stops' : 'stop') : (leg.intermediatePlaces.length > 1 ? 'Zwischenstopps' : 'Zwischenstopp')}',
+                '${leg!.intermediatePlaces!.length} ${localization.localeName == 'en' ? (leg!.intermediatePlaces!.length > 1 ? 'stops' : 'stop') : (leg!.intermediatePlaces!.length > 1 ? 'Zwischenstopps' : 'Zwischenstopp')}',
               ),
               tilePadding: const EdgeInsets.symmetric(horizontal: 7),
               textColor: theme.primaryColor,
@@ -93,7 +93,7 @@ class TransitLeg extends StatelessWidget {
               iconColor: theme.primaryColor,
               collapsedIconColor: theme.primaryColor,
               children: [
-                ...leg.intermediatePlaces
+                ...leg!.intermediatePlaces!
                     .map((e) => Container(
                           width: 235,
                           height: 30,
@@ -104,9 +104,9 @@ class TransitLeg extends StatelessWidget {
                                 if (planPageController != null &&
                                     e.stopEntity?.lat != null &&
                                     e.stopEntity?.lon != null) {
-                                  planPageController.inSelectePosition.add(
-                                      LatLng(
-                                          e.stopEntity.lat, e.stopEntity.lon));
+                                  planPageController!.inSelectePosition.add(
+                                      LatLng(e.stopEntity!.lat!,
+                                          e.stopEntity!.lon!));
                                 }
                               },
                               child: Row(
@@ -139,14 +139,14 @@ class TransitLeg extends StatelessWidget {
               ],
             ),
           ),
-        if (TransportMode.carPool == leg.transportMode &&
-            leg.route?.url != null)
+        if (TransportMode.carPool == leg!.transportMode &&
+            leg!.route?.url != null)
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: GestureDetector(
               onTap: () async {
-                if (await canLaunch(leg.route?.url)) {
-                  await launch(leg.route?.url);
+                if (await canLaunch(leg?.route?.url ?? '')) {
+                  await launch(leg!.route!.url!);
                 }
               },
               child: Text(
@@ -157,36 +157,37 @@ class TransitLeg extends StatelessWidget {
               ),
             ),
           ),
-        if (leg.dropOffBookingInfo != null)
+        if (leg!.dropOffBookingInfo != null)
           Column(
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 12),
                 child: InfoMessage(
                   message:
-                      '${leg.dropOffBookingInfo.message ?? ''} ${leg.dropOffBookingInfo.dropOffMessage ?? ''}',
-                  widget: leg.dropOffBookingInfo.contactInfo?.infoUrl != null
+                      '${leg!.dropOffBookingInfo!.message ?? ''} ${leg!.dropOffBookingInfo!.dropOffMessage ?? ''}',
+                  widget: leg!.dropOffBookingInfo!.contactInfo?.infoUrl != null
                       ? RichText(
                           text: TextSpan(
-                            style: theme.primaryTextTheme.bodyText2.copyWith(
+                            style: theme.primaryTextTheme.bodyText2!.copyWith(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w600),
                             text: localization.commonMoreInformartion,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                launch(leg
-                                    .dropOffBookingInfo.contactInfo?.infoUrl);
+                                launch(leg!.dropOffBookingInfo!.contactInfo
+                                        ?.infoUrl! ??
+                                    '');
                               },
                           ),
                         )
                       : null,
                 ),
               ),
-              if (leg.dropOffBookingInfo.contactInfo?.phoneNumber != null)
+              if (leg!.dropOffBookingInfo!.contactInfo?.phoneNumber != null)
                 GestureDetector(
                   onTap: () {
                     launch(
-                      "tel:${leg.dropOffBookingInfo.contactInfo?.phoneNumber}",
+                      "tel:${leg!.dropOffBookingInfo!.contactInfo?.phoneNumber}",
                     );
                   },
                   child: Container(
@@ -198,16 +199,17 @@ class TransitLeg extends StatelessWidget {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      '${localization.commonCall}  ${leg.dropOffBookingInfo.contactInfo?.phoneNumber}',
+                      '${localization.commonCall}  ${leg!.dropOffBookingInfo!.contactInfo?.phoneNumber}',
                       style: theme.primaryTextTheme.headline6,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-              if (leg.dropOffBookingInfo.contactInfo?.bookingUrl != null)
+              if (leg!.dropOffBookingInfo!.contactInfo?.bookingUrl != null)
                 GestureDetector(
                   onTap: () {
-                    launch(leg.dropOffBookingInfo.contactInfo?.bookingUrl);
+                    launch(leg!.dropOffBookingInfo!.contactInfo?.bookingUrl! ??
+                        '');
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 12),

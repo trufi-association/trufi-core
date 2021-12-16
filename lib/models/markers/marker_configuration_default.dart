@@ -44,7 +44,7 @@ class DefaultMarkerConfiguration implements MarkerConfiguration {
   }
 
   @override
-  Marker buildYourLocationMarker(LatLng point) {
+  Marker buildYourLocationMarker(LatLng? point) {
     return (point != null)
         ? Marker(
             width: 50.0,
@@ -71,7 +71,7 @@ class DefaultMarkerConfiguration implements MarkerConfiguration {
   }
 
   @override
-  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng point) {
+  MarkerLayerOptions buildYourLocationMarkerLayerOptions(LatLng? point) {
     return MarkerLayerOptions(markers: [buildYourLocationMarker(point)]);
   }
 }

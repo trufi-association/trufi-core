@@ -7,40 +7,40 @@ import 'package:trufi_core/pages/home/plan_map/widget/duration_component.dart';
 import 'package:trufi_core/pages/home/plan_map/widget/walk_distance.dart';
 
 class BarItineraryDetails extends StatelessWidget {
-  final PlanItinerary itinerary;
+  final PlanItinerary? itinerary;
   const BarItineraryDetails({
-    Key key,
-    @required this.itinerary,
+    Key? key,
+    required this.itinerary,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
     return Container(
-      height: itinerary.futureText(localization) == '' ? 40 : 54,
+      height: itinerary!.futureText(localization) == '' ? 40 : 54,
       padding: const EdgeInsets.only(right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           DurationComponent(
-            duration: itinerary.durationTrip,
-            startTime: itinerary.startTime,
-            endTime: itinerary.endTime,
-            futureText: itinerary.futureText(localization),
+            duration: itinerary!.durationTrip,
+            startTime: itinerary!.startTime,
+            endTime: itinerary!.endTime,
+            futureText: itinerary!.futureText(localization),
           ),
           Row(
             children: [
-              if (itinerary.totalWalkingDistance > 0)
+              if (itinerary!.totalWalkingDistance > 0)
                 WalkDistance(
-                  walkDistance: itinerary.totalWalkingDistance,
-                  walkDuration: itinerary.totalWalkingDuration,
+                  walkDistance: itinerary!.totalWalkingDistance,
+                  walkDuration: itinerary!.totalWalkingDuration,
                 ),
               const SizedBox(width: 10),
-              if (itinerary.totalBikingDistance != null &&
-                  itinerary.totalBikingDistance > 0)
+              if (itinerary!.totalBikingDistance != null &&
+                  itinerary!.totalBikingDistance > 0)
                 WalkDistance(
-                  walkDistance: itinerary.totalBikingDistance,
-                  walkDuration: itinerary.totalBikingDuration,
+                  walkDistance: itinerary!.totalBikingDistance,
+                  walkDuration: itinerary!.totalBikingDuration,
                   icon: bikeSvg(),
                 ),
             ],

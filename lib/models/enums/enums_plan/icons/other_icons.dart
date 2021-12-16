@@ -83,11 +83,11 @@ const String wheelChair = '''
 ''';
 SvgPicture waitSvg = SvgPicture.string(wait);
 SvgPicture walkSvg = SvgPicture.string(walk);
-SvgPicture bikeSvg({String color}) =>
+SvgPicture bikeSvg({String? color}) =>
     SvgPicture.string(bike(color: color ?? '000000'));
 SvgPicture parkRideSvg = SvgPicture.string(parkRide);
-SvgPicture carSvg({String color}) =>
+SvgPicture carSvg({String? color}) =>
     SvgPicture.string(car(color: color ?? '000000'));
 SvgPicture wheelChairSvg = SvgPicture.string(wheelChair);
-SvgPicture onDemandTaxiSvg({String color}) =>
+SvgPicture onDemandTaxiSvg({String? color}) =>
     SvgPicture.string(onDemandTaxi(color: color ?? '000000'));

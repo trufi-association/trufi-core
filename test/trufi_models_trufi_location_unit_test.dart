@@ -11,7 +11,7 @@ import 'package:trufi_core/widgets/custom_location_selector.dart';
 
 void main() {
   TrufiLocation trufiLocation;
-  LatLng _latLng;
+  LatLng? _latLng;
   const String _description = "trufi_location";
   const double _latitude = 18.0;
   const double _longitude = 129.0;

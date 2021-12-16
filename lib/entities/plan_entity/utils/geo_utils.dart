@@ -4,16 +4,16 @@ import 'package:maps_toolkit/maps_toolkit.dart' as toolkit;
 
 import 'package:trufi_core/l10n/trufi_localization.dart';
 
-NumberFormat formatTwoDecimals({String localeName}) {
+NumberFormat formatTwoDecimals({String? localeName}) {
   return NumberFormat('#.00', localeName ?? 'en');
 }
 
-NumberFormat formatOneDecimals({String localeName}) {
+NumberFormat formatOneDecimals({String? localeName}) {
   return NumberFormat('#.0', localeName ?? 'en');
 }
 
 String displayDistanceWithLocale(
-    TrufiLocalization localization, double meters) {
+    TrufiLocalization localization, double? meters) {
   final tempMeters = meters ?? 0;
   if (tempMeters < 100) {
     return localization.instructionDistanceMeters(formatOneDecimals(

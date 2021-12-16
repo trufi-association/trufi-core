@@ -9,11 +9,11 @@ class SpeedExpansionTile extends StatelessWidget {
   final bool isSubtitle;
 
   const SpeedExpansionTile({
-    Key key,
-    @required this.title,
-    @required this.dataSpeeds,
-    @required this.textSelected,
-    @required this.onChanged,
+    Key? key,
+    required this.title,
+    required this.dataSpeeds,
+    required this.textSelected,
+    required this.onChanged,
     this.isSubtitle = false,
   }) : super(key: key);
 
@@ -40,7 +40,7 @@ class SpeedExpansionTile extends StatelessWidget {
               margin:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4.0),
               child: ListTile(
-                tileColor: theme.textTheme.bodyText1.color.withOpacity(0.05),
+                tileColor: theme.textTheme.bodyText1!.color!.withOpacity(0.05),
                 visualDensity: VisualDensity.compact,
                 title: Text(
                   dataSpeed.name,

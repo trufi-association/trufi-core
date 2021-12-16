@@ -1,6 +1,6 @@
 class ElevationProfileComponent {
-  final double distance;
-  final double elevation;
+  final double? distance;
+  final double? elevation;
 
   const ElevationProfileComponent({this.distance, this.elevation});
 

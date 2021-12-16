@@ -1,7 +1,7 @@
 class VehiclePlaces {
-  final int bicycleSpaces;
-  final int carSpaces;
-  final int wheelchairAccessibleCarSpaces;
+  final int? bicycleSpaces;
+  final int? carSpaces;
+  final int? wheelchairAccessibleCarSpaces;
 
   const VehiclePlaces({
     this.bicycleSpaces,

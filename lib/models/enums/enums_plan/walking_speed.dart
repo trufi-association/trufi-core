@@ -2,7 +2,7 @@ part of 'enums_plan.dart';
 
 enum WalkingSpeed { slow, average, fast }
 
-WalkingSpeed getWalkingSpeed(String key) {
+WalkingSpeed getWalkingSpeed(String? key) {
   return WalkingSpeedExtension.names.keys.firstWhere(
     (keyE) => keyE.name == key,
     orElse: () => WalkingSpeed.average,
@@ -27,7 +27,7 @@ extension WalkingSpeedExtension on WalkingSpeed {
     WalkingSpeed.fast: '7 km/h',
   };
 
-  String get name => names[this];
+  String? get name => names[this];
   String get speed => speeds[this] ?? 'noSpeed';
   double get value => values[this] ?? 1.2;
 

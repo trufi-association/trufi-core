@@ -7,6 +7,7 @@ import 'package:trufi_core/l10n/trufi_localization.dart';
 import 'package:trufi_core/models/enums/server_type.dart';
 import 'package:trufi_core/pages/home/transport_selector/transport_selector.dart';
 
+import 'package:trufi_core/blocs/configuration/configuration.dart';
 import '../../models/trufi_place.dart';
 import 'home_buttons.dart';
 import 'search_location/location_form_field.dart';
@@ -14,12 +15,12 @@ import 'setting_payload/setting_payload.dart';
 
 class FormFieldsLandscape extends StatelessWidget {
   const FormFieldsLandscape({
-    Key key,
-    @required this.onSaveFrom,
-    @required this.onSaveTo,
-    @required this.onFetchPlan,
-    @required this.onReset,
-    @required this.onSwap,
+    Key? key,
+    required this.onSaveFrom,
+    required this.onSaveTo,
+    required this.onFetchPlan,
+    required this.onReset,
+    required this.onSwap,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -31,8 +32,8 @@ class FormFieldsLandscape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiLocalization.of(context);
-    final homePageState = context.read<HomePageCubit>().state;
-    final config = context.read<ConfigurationCubit>().state;
+    final MapRouteState homePageState = context.read<HomePageCubit>().state;
+    final Configuration config = context.read<ConfigurationCubit>().state;
     return SafeArea(
       child: Column(
         children: [
@@ -52,7 +53,8 @@ class FormFieldsLandscape extends StatelessWidget {
                         child: LocationFormField(
                           isOrigin: true,
                           hintText: localization.searchPleaseSelectOrigin,
-                          textLeadingImage: config.map.markersConfiguration.fromMarker,
+                          textLeadingImage:
+                              config.map!.markersConfiguration.fromMarker,
                           onSaved: onSaveFrom,
                           value: homePageState.fromPlace,
                         ),
@@ -70,7 +72,8 @@ class FormFieldsLandscape extends StatelessWidget {
                         child: LocationFormField(
                           isOrigin: false,
                           hintText: localization.searchPleaseSelectDestination,
-                          textLeadingImage: config.map.markersConfiguration.toMarker,
+                          textLeadingImage:
+                              config.map!.markersConfiguration.toMarker,
                           onSaved: onSaveTo,
                           value: homePageState.toPlace,
                         ),
