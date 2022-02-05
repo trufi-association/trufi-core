@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/models/menu/social_media/facebook_social_media.dart';
-import 'package:trufi_core/models/menu/social_media/instagram_social_media.dart';
-import 'package:trufi_core/models/menu/social_media/twitter_social_media.dart';
-import 'package:trufi_core/models/menu/social_media/website_social_media.dart';
-import 'package:trufi_core/trufi_app.dart';
-import 'package:trufi_core_example/configuration_service.dart';
-import 'package:trufi_core/models/menu/menu_item.dart';
-import 'theme/theme.dart';
+import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
+import 'package:trufi_core/default_values.dart';
+import 'package:trufi_core/trufi_core.dart';
+import 'package:trufi_core/trufi_router.dart';
+import 'package:latlong2/latlong.dart';
 
-void main() {
-  // Colors
-  final theme = ThemeData(
-    primaryColor: const Color(0xff263238),
-    primaryColorLight: const Color(0xffeceff1),
-    accentColor: const Color(0xffd81b60),
-    backgroundColor: Colors.white,
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initHiveForFlutter();
+  runApp(
+    TrufiApp(
+      appNameTitle: 'Example',
+      blocProviders: [
+        ...DefaultValues.blocProviders(
+          otpEndpoint: "http://138.197.103.220:8000/otp/routers/default",
+          otpGraphqlEndpoint:
+              "https://otp.busboy.app/otp/routers/default/index/graphql",
+          mapConfiguration: MapConfiguration(
+            center: LatLng(5.825574, -73.033660),
+          ),
+        ),
+      ],
+      trufiRouter: TrufiRouter(
+        routerDelegate: DefaultValues.routerDelegate(
+          appName: 'Example',
+          cityName: 'City - Country',
+        ),
+      ),
+    ),
   );
-
-  // Run app
-  runApp(TrufiApp(
-    configuration: setupExampleConfiguration(),
-    theme: theme,
-    bottomBarTheme: bottomBarTheme,
-    menuItems: [
-      ...defaultMenuItems,
-      [
-        FacebookSocialMedia("https://www.facebook.com/trufiapp"),
-        InstagramSocialMedia("https://www.instagram.com/trufi.app"),
-        TwitterSocialMedia("https://twitter.com/TrufiAssoc"),
-        WebSiteSocialMedia("https://www.trufi.app/blog/"),
-      ]
-    ],
-  ));
 }
