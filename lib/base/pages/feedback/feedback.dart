@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
+import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
+import 'package:trufi_core/base/utils/packge_info_platform.dart';
 
 class FeedbackPage extends StatelessWidget {
   static const String route = "/Feedback";
+  final String urlFeedback;
   final Widget Function(BuildContext) drawerBuilder;
 
   const FeedbackPage({
     Key? key,
     required this.drawerBuilder,
+    required this.urlFeedback,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localizationF = FeedbackLocalization.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(localization.menuFeedback)),
+      appBar: AppBar(title: Text(localizationF.menuFeedback)),
       drawer: drawerBuilder(context),
       body: Scrollbar(
         child: ListView(
@@ -25,10 +31,10 @@ class FeedbackPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const Text("feedbackTitle"),
+                  Text(localizationF.feedbackTitle),
                   Container(
                     padding: const EdgeInsets.only(top: 16.0),
-                    child: const Text("feedbackContent"),
+                    child: Text(localizationF.feedbackContent),
                   )
                 ],
               ),
@@ -37,7 +43,14 @@ class FeedbackPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
+        onPressed: () async {
+          String version = await PackageInfoPlatform.version();
+          final LatLng? currentLocation = GPSLocationProvider().myLocation;
+          launch(
+            "$urlFeedback?lang=${localizationF.localeName}&geo=${currentLocation?.latitude},"
+            "${currentLocation?.longitude}&app=$version",
+          );
+        },
         heroTag: null,
         child: const Icon(Icons.feedback),
       ),

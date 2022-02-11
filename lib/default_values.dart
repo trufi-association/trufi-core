@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/pages/about.dart';
-import 'package:trufi_core/base/pages/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
@@ -42,6 +43,7 @@ abstract class DefaultValues {
         currentLocale: Locale("en"),
         localizationDelegates: [
           SavedPlacesLocalization.delegate,
+          FeedbackLocalization.delegate,
         ],
         supportedLocales: [
           Locale('de'),
@@ -79,6 +81,7 @@ abstract class DefaultValues {
   static RouterDelegate<Object> routerDelegate({
     required String appName,
     required String cityName,
+    required String urlFeedback,
     String backgroundImage = 'assets/images/drawer-bg.jpg',
   }) {
     generateDrawer(String currentRoute) {
@@ -126,6 +129,7 @@ abstract class DefaultValues {
                 ),
             FeedbackPage.route: (route) => NoAnimationPage(
                   child: FeedbackPage(
+                    urlFeedback: urlFeedback,
                     drawerBuilder: generateDrawer(FeedbackPage.route),
                   ),
                 ),
