@@ -26,6 +26,7 @@ void main() async {
         routerDelegate: DefaultValues.routerDelegate(
           appName: 'Example',
           cityName: 'City - Country',
+          urlFeedback: 'https://example/feedback'
         ),
       ),
     ),
