@@ -1,5 +1,11 @@
+import 'package:app_review/app_review.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
+
+import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:share_plus/share_plus.dart';
 
 class TrufiDrawer extends StatelessWidget {
   const TrufiDrawer(
@@ -7,12 +13,14 @@ class TrufiDrawer extends StatelessWidget {
     Key? key,
     required this.appName,
     required this.cityName,
+    required this.urlShareApp,
     required this.backgroundImage,
     required this.menuItems,
   }) : super(key: key);
 
   final String appName;
   final String cityName;
+  final String urlShareApp;
   final String currentRoute;
   final String backgroundImage;
   final List<List<MenuItem>> menuItems;
@@ -75,15 +83,29 @@ class TrufiDrawer extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.star_rate,
-                                  color: Colors.white,
+                              if (!kIsWeb)
+                                IconButton(
+                                  onPressed: () async {
+                                    await AppReview.writeReview;
+                                  },
+                                  icon: const Icon(
+                                    Icons.star_rate,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  final localization =
+                                      TrufiBaseLocalization.of(context);
+
+                                  Share.share(
+                                    localization.shareAppText(
+                                      urlShareApp,
+                                      appName,
+                                      cityName,
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.share,
                                   color: Colors.white,

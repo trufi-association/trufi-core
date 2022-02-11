@@ -374,6 +374,24 @@ abstract class TrufiBaseLocalization {
   /// **'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?'**
   String get errorUnknownOriginDestination;
 
+  /// Facebook menu item
+  ///
+  /// In pt, this message translates to:
+  /// **'Siga-nos no Facebook'**
+  String get followOnFacebook;
+
+  /// Instagram menu item
+  ///
+  /// In pt, this message translates to:
+  /// **'Siga-nos no Instagram'**
+  String get followOnInstagram;
+
+  /// Twitter menu item
+  ///
+  /// In pt, this message translates to:
+  /// **'Siga-nos no Twitter'**
+  String get followOnTwitter;
+
   /// Itinerary leg distance (km)
   ///
   /// In pt, this message translates to:
@@ -482,11 +500,11 @@ abstract class TrufiBaseLocalization {
   /// **'Mostrar rotas'**
   String get menuConnections;
 
-  /// Menu item that shows the feedback page
+  /// No description provided for @menuSocialMedia.
   ///
   /// In pt, this message translates to:
-  /// **'Enviar comentários.'**
-  String get menuFeedback;
+  /// **'Social media'**
+  String get menuSocialMedia;
 
   /// Menu item that shows the bus list page
   ///
@@ -518,6 +536,12 @@ abstract class TrufiBaseLocalization {
   /// **'Mostrar percurso de carro'**
   String get noRouteErrorActionShowCarRoute;
 
+  /// Website menu item
+  ///
+  /// In pt, this message translates to:
+  /// **'Leia nosso blog'**
+  String get readOurBlog;
+
   /// Message that is displayed when the response of the trip planning request could not be received
   ///
   /// In pt, this message translates to:
@@ -547,6 +571,30 @@ abstract class TrufiBaseLocalization {
   /// In pt, this message translates to:
   /// **'Selecionar origem'**
   String get searchPleaseSelectOrigin;
+
+  /// Text with URL that is used when sharing the app.
+  ///
+  /// In pt, this message translates to:
+  /// **'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em {url}'**
+  String shareAppText(Object url, Object appTitle, Object cityName);
+
+  /// No description provided for @themeModeDark.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dark Theme'**
+  String get themeModeDark;
+
+  /// No description provided for @themeModeLight.
+  ///
+  /// In pt, this message translates to:
+  /// **'Light theme'**
+  String get themeModeLight;
+
+  /// No description provided for @themeModeSystem.
+  ///
+  /// In pt, this message translates to:
+  /// **'System Default'**
+  String get themeModeSystem;
 }
 
 class _TrufiBaseLocalizationDelegate extends LocalizationsDelegate<TrufiBaseLocalization> {

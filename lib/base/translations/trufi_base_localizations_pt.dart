@@ -143,6 +143,15 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?';
 
   @override
+  String get followOnFacebook => 'Siga-nos no Facebook';
+
+  @override
+  String get followOnInstagram => 'Siga-nos no Instagram';
+
+  @override
+  String get followOnTwitter => 'Siga-nos no Twitter';
+
+  @override
   String instructionDistanceKm(Object value) {
     return '$value km';
   }
@@ -205,7 +214,7 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get menuConnections => 'Mostrar rotas';
 
   @override
-  String get menuFeedback => 'Enviar comentários.';
+  String get menuSocialMedia => 'Social media';
 
   @override
   String get menuTransportList => 'Bus list';
@@ -223,6 +232,9 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get noRouteErrorActionShowCarRoute => 'Mostrar percurso de carro';
 
   @override
+  String get readOurBlog => 'Leia nosso blog';
+
+  @override
   String get searchFailLoadingPlan => 'Falha ao carregar o plano.';
 
   @override
@@ -236,4 +248,18 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
 
   @override
   String get searchPleaseSelectOrigin => 'Selecionar origem';
+
+  @override
+  String shareAppText(Object url, Object appTitle, Object cityName) {
+    return 'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em $url';
+  }
+
+  @override
+  String get themeModeDark => 'Dark Theme';
+
+  @override
+  String get themeModeLight => 'Light theme';
+
+  @override
+  String get themeModeSystem => 'System Default';
 }

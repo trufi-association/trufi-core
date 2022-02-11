@@ -143,6 +143,15 @@ class TrufiBaseLocalizationEe extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'afisi netso kple afisi neyina la meli o. gbugbor na dorwo do';
 
   @override
+  String get followOnFacebook => 'kplormido le Facebook';
+
+  @override
+  String get followOnInstagram => 'kplormido le instagram';
+
+  @override
+  String get followOnTwitter => 'kplormido le Twiter';
+
+  @override
   String instructionDistanceKm(Object value) {
     return 'kilom3ta';
   }
@@ -205,7 +214,7 @@ class TrufiBaseLocalizationEe extends TrufiBaseLocalization {
   String get menuConnections => 'fia mor';
 
   @override
-  String get menuFeedback => 'nami susu';
+  String get menuSocialMedia => 'Social media';
 
   @override
   String get menuTransportList => 'Bus list';
@@ -223,6 +232,9 @@ class TrufiBaseLocalizationEe extends TrufiBaseLocalization {
   String get noRouteErrorActionShowCarRoute => 'fia mor kple lori';
 
   @override
+  String get readOurBlog => 'xle miafe nu';
+
+  @override
   String get searchFailLoadingPlan => 'mekor dzidzedze o';
 
   @override
@@ -236,4 +248,18 @@ class TrufiBaseLocalizationEe extends TrufiBaseLocalization {
 
   @override
   String get searchPleaseSelectOrigin => 'tsor afisi ne tso';
+
+  @override
+  String shareAppText(Object url, Object appTitle, Object cityName) {
+    return 'hahomorzorzor le Cochabamba${url}';
+  }
+
+  @override
+  String get themeModeDark => 'Dark Theme';
+
+  @override
+  String get themeModeLight => 'Light theme';
+
+  @override
+  String get themeModeSystem => 'System Default';
 }

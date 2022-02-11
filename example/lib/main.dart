@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
@@ -11,22 +12,26 @@ void main() async {
   await initHiveForFlutter();
   runApp(
     TrufiApp(
-      appNameTitle: 'Example',
+      appNameTitle: 'Trufi app',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "http://138.197.103.220:8000/otp/routers/default",
+          otpEndpoint: "https://api.trufi.app/otp/routers/default",
           otpGraphqlEndpoint:
               "https://otp.busboy.app/otp/routers/default/index/graphql",
           mapConfiguration: MapConfiguration(
-            center: LatLng(5.825574, -73.033660),
+            center: LatLng(-17.39000, -66.15400),
           ),
         ),
       ],
       trufiRouter: TrufiRouter(
         routerDelegate: DefaultValues.routerDelegate(
-          appName: 'Example',
-          cityName: 'City - Country',
-          urlFeedback: 'https://example/feedback'
+          appName: 'Trufi',
+          cityName: 'Cochabamba - Bolivia',
+          urlFeedback:
+              'https://trufifeedback.z15.web.core.windows.net/route.html',
+          urlShareApp: 'https://appurl.io/BOPP7QnKX',
+          urlSocialMedia: const UrlSocialMedia(
+              urlFacebook: 'https://www.facebook.com/TrufiAssoc'),
         ),
       ),
     ),

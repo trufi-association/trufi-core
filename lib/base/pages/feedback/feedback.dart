@@ -22,10 +22,13 @@ class FeedbackPage extends StatelessWidget {
     final localizationF = FeedbackLocalization.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(localizationF.menuFeedback)),
+      appBar: AppBar(
+        title: Row(children: [Text(localizationF.menuFeedback)]),
+      ),
       drawer: drawerBuilder(context),
       body: Scrollbar(
         child: ListView(
+          physics: const ClampingScrollPhysics(),
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(16.0),

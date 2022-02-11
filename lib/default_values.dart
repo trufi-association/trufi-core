@@ -12,6 +12,7 @@ import 'package:trufi_core/base/pages/saved_places/translations/saved_places_loc
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/drawer/trufi_drawer.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
@@ -81,7 +82,9 @@ abstract class DefaultValues {
   static RouterDelegate<Object> routerDelegate({
     required String appName,
     required String cityName,
+    required String urlShareApp,
     required String urlFeedback,
+    UrlSocialMedia? urlSocialMedia,
     String backgroundImage = 'assets/images/drawer-bg.jpg',
   }) {
     generateDrawer(String currentRoute) {
@@ -89,7 +92,8 @@ abstract class DefaultValues {
             currentRoute,
             appName: appName,
             cityName: cityName,
-            menuItems: defaultMenuItems,
+            urlShareApp: urlShareApp,
+            menuItems: defaultMenuItems(defaultUrls: urlSocialMedia),
             backgroundImage: backgroundImage,
           );
     }

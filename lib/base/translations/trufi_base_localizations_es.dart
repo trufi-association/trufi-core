@@ -143,6 +143,15 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'Origen y destino desconocidos ¿Podría ser un poco más preciso?';
 
   @override
+  String get followOnFacebook => 'Follow us on Facebook';
+
+  @override
+  String get followOnInstagram => 'Follow us on Instagram';
+
+  @override
+  String get followOnTwitter => 'Follow us on Twitter';
+
+  @override
   String instructionDistanceKm(Object value) {
     return '$value km';
   }
@@ -205,7 +214,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get menuConnections => 'Muestra rutas';
 
   @override
-  String get menuFeedback => 'Enviar comentarios';
+  String get menuSocialMedia => 'Redes sociales';
 
   @override
   String get menuTransportList => 'Bus list';
@@ -223,6 +232,9 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get noRouteErrorActionShowCarRoute => 'Mostrar ruta en auto';
 
   @override
+  String get readOurBlog => 'Read our blog';
+
+  @override
   String get searchFailLoadingPlan => 'Error al cargar el itinerario.';
 
   @override
@@ -236,4 +248,18 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String get searchPleaseSelectOrigin => 'Seleccione origen';
+
+  @override
+  String shareAppText(Object url, Object appTitle, Object cityName) {
+    return 'Download $appTitle, the public transport app for $cityName, at $url';
+  }
+
+  @override
+  String get themeModeDark => 'Thema oscuro';
+
+  @override
+  String get themeModeLight => 'Thema claro';
+
+  @override
+  String get themeModeSystem => 'Predeterminado del sistema';
 }
