@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/pages/about.dart';
-import 'package:trufi_core/base/pages/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
@@ -84,7 +85,7 @@ extension LayerIdsToString on DefaultPagesMenu {
           color: Colors.grey,
         ),
         name: (context) {
-          return TrufiBaseLocalization.of(context).menuFeedback;
+          return FeedbackLocalization.of(context).menuFeedback;
         },
       ),
       DefaultPagesMenu.transportList: MenuPageItem(
