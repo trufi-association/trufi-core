@@ -20,6 +20,7 @@ class FeedbackPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizationF = FeedbackLocalization.of(context);
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(localizationF.menuFeedback)),
       drawer: drawerBuilder(context),
@@ -31,10 +32,18 @@ class FeedbackPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Text(localizationF.feedbackTitle),
+                  Text(
+                    localizationF.feedbackTitle,
+                    style: theme.textTheme.bodyText1?.copyWith(
+                      fontSize: 20,
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.only(top: 16.0),
-                    child: Text(localizationF.feedbackContent),
+                    child: Text(
+                      localizationF.feedbackContent,
+                      style: theme.textTheme.bodyText2,
+                    ),
                   )
                 ],
               ),
