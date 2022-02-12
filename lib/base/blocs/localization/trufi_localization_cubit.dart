@@ -10,8 +10,6 @@ class TrufiLocalizationCubit extends Cubit<TrufiLocalization> {
     switch (locale.languageCode.toLowerCase()) {
       case 'de':
         return 'Deutsch';
-      case 'ee':
-        return 'English';
       case 'en':
         return 'English';
       case 'es':
