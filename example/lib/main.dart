@@ -12,26 +12,26 @@ void main() async {
   await initHiveForFlutter();
   runApp(
     TrufiApp(
-      appNameTitle: 'Trufi app',
+      appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
           otpEndpoint: "https://api.trufi.app/otp/routers/default",
           otpGraphqlEndpoint:
               "https://otp.busboy.app/otp/routers/default/index/graphql",
           mapConfiguration: MapConfiguration(
-            center: LatLng(-17.39000, -66.15400),
+            center: LatLng(5.825574, -73.033660),
           ),
         ),
       ],
       trufiRouter: TrufiRouter(
         routerDelegate: DefaultValues.routerDelegate(
-          appName: 'Trufi',
-          cityName: 'Cochabamba - Bolivia',
-          urlFeedback:
-              'https://trufifeedback.z15.web.core.windows.net/route.html',
-          urlShareApp: 'https://appurl.io/BOPP7QnKX',
+          appName: 'ExampleApp',
+          cityName: 'City - Country',
+          urlFeedback: 'https://example/feedback',
+          urlShareApp: 'https://example/share',
           urlSocialMedia: const UrlSocialMedia(
-              urlFacebook: 'https://www.facebook.com/TrufiAssoc'),
+            urlFacebook: 'https://www.facebook.com/Example',
+          ),
         ),
       ),
     ),
