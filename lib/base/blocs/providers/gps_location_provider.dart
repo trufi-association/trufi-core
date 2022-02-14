@@ -77,7 +77,7 @@ class GPSLocationProvider {
   Future<void> startLocation(BuildContext context) async {
     final LocationPermission status = await Geolocator.checkPermission();
     // check GPS Permision Platform(Web, Android and iOS)
-    _checkGPSPermisionPlatform(context, status);
+    await _checkGPSPermisionPlatform(context, status);
 
     // listen current location
     _locationStreamSubscription ??= Geolocator.getPositionStream(

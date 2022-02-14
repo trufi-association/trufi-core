@@ -5,13 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/pages/about.dart';
-import 'package:trufi_core/base/pages/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/feedback.dart';
+import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/drawer/trufi_drawer.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
@@ -27,6 +29,7 @@ abstract class DefaultValues {
         currentLocale: Locale("en"),
         localizationDelegates: [
           SavedPlacesLocalization.delegate,
+          FeedbackLocalization.delegate,
         ],
         supportedLocales: [
           Locale('de'),
@@ -67,6 +70,9 @@ abstract class DefaultValues {
     required String cityName,
     WidgetBuilder? backgroundImageBuilder,
     AsyncExecutor? asyncExecutor,
+    required String urlShareApp,
+    required String urlFeedback,
+    UrlSocialMedia? urlSocialMedia,
   }) {
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
@@ -75,6 +81,8 @@ abstract class DefaultValues {
             cityName: cityName,
             menuItems: defaultMenuItems,
             backgroundImageBuilder: backgroundImageBuilder,
+            urlShareApp: urlShareApp,
+            menuItems: defaultMenuItems(defaultUrls: urlSocialMedia),
           );
     }
 
@@ -115,6 +123,7 @@ abstract class DefaultValues {
                 ),
             FeedbackPage.route: (route) => NoAnimationPage(
                   child: FeedbackPage(
+                    urlFeedback: urlFeedback,
                     drawerBuilder: generateDrawer(FeedbackPage.route),
                   ),
                 ),

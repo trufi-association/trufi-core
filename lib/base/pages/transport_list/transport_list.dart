@@ -26,7 +26,11 @@ class TransportList extends StatelessWidget {
         final listTransports = state.transports;
         return Scaffold(
           appBar: AppBar(
-            title: Text(localization.menuTransportList),
+            title: Row(
+              children: [
+                Text(localization.menuTransportList),
+              ],
+            ),
             actions: [
               if (!state.isLoading)
                 IconButton(

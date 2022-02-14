@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
+import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SimpleMenuItem extends MenuItem {
+  SimpleMenuItem({
+    required WidgetBuilder buildIcon,
+    required WidgetBuilder name,
+    void Function()? onClick,
+  }) : super(
+          selectedIcon: buildIcon,
+          notSelectedIcon: buildIcon,
+          name: name,
+          onClick: (context, isSelected) {
+            if (onClick != null) onClick();
+          },
+        );
+}
 
 enum DefaultItemsMenu { language, theme }
 
@@ -30,7 +46,8 @@ extension LayerIdsToString on DefaultItemsMenu {
                 return DropdownMenuItem<Locale>(
                   value: value,
                   child: Text(
-                    value.toString(),
+                    TrufiLocalizationCubit.localeDisplayName(value),
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 );
               }).toList(),
@@ -46,11 +63,18 @@ extension LayerIdsToString on DefaultItemsMenu {
                       themeMode: value,
                     );
               },
+              isExpanded: true,
               items: ThemeMode.values.map((ThemeMode value) {
                 return DropdownMenuItem<ThemeMode>(
                   value: value,
                   child: Text(
-                    value.toString(),
+                    ThemeCubit.themeModeDisplayName(
+                      TrufiBaseLocalization.of(context),
+                      value,
+                    ),
+                    style: Theme.of(context).textTheme.bodyText2,
+                    softWrap: false,
+                    maxLines: 1,
                   ),
                 );
               }).toList(),
@@ -60,19 +84,4 @@ extension LayerIdsToString on DefaultItemsMenu {
 
     return map[this]!;
   }
-}
-
-class SimpleMenuItem extends MenuItem {
-  SimpleMenuItem({
-    required WidgetBuilder buildIcon,
-    required WidgetBuilder name,
-    void Function()? onClick,
-  }) : super(
-          selectedIcon: buildIcon,
-          notSelectedIcon: buildIcon,
-          name: name,
-          onClick: (context, isSelected) {
-            if (onClick != null) onClick();
-          },
-        );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
@@ -11,10 +12,10 @@ void main() async {
   await initHiveForFlutter();
   runApp(
     TrufiApp(
-      appNameTitle: 'Example',
+      appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "http://138.197.103.220:8000/otp/routers/default",
+          otpEndpoint: "https://api.trufi.app/otp/routers/default",
           otpGraphqlEndpoint:
               "https://otp.busboy.app/otp/routers/default/index/graphql",
 
@@ -26,7 +27,7 @@ void main() async {
       ],
       trufiRouter: TrufiRouter(
         routerDelegate: DefaultValues.routerDelegate(
-          appName: 'Example',
+          appName: 'ExampleApp',
           cityName: 'City - Country',
           backgroundImageBuilder: (_) {
             return Image.asset(
@@ -34,6 +35,11 @@ void main() async {
               fit: BoxFit.cover,
             );
           },
+          urlFeedback: 'https://example/feedback',
+          urlShareApp: 'https://example/share',
+          urlSocialMedia: const UrlSocialMedia(
+            urlFacebook: 'https://www.facebook.com/Example',
+          ),
         ),
       ),
     ),

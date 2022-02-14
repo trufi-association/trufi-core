@@ -29,7 +29,11 @@ class SavedPlacesPage extends StatelessWidget {
       fontWeight: FontWeight.w600,
     );
     return Scaffold(
-      appBar: AppBar(title: Text(localizationSP.menuYourPlaces)),
+      appBar: AppBar(title: Row(
+        children: [
+          Text(localizationSP.menuYourPlaces),
+        ],
+      )),
       drawer: drawerBuilder(context),
       body: Column(
         children: [

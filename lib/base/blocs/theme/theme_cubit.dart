@@ -2,10 +2,27 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 part 'theme_state.dart';
 
 class ThemeCubit extends Cubit<TrufiBaseTheme> {
+  static String themeModeDisplayName(
+    TrufiBaseLocalization localization,
+    ThemeMode themeMode,
+  ) {
+    switch (themeMode) {
+      case ThemeMode.system:
+        return localization.themeModeSystem;
+      case ThemeMode.light:
+        return localization.themeModeLight;
+      case ThemeMode.dark:
+        return localization.themeModeDark;
+      default:
+        return localization.themeModeSystem;
+    }
+  }
+
   final _localRepository = TrufiBaseThemeHiveLocalRepository();
 
   ThemeCubit({

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/default_item_menu.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/default_pages_menu.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 
 abstract class MenuItem {
   final String? id;
@@ -35,14 +36,22 @@ abstract class MenuItem {
   static Widget buildName(BuildContext context, String name, {Color? color}) {
     return Text(
       name,
-      style: TextStyle(
-        color: color ?? Theme.of(context).textTheme.bodyText1?.color,
-      ),
+      style: Theme.of(context).textTheme.bodyText2?.copyWith(color: color),
     );
   }
 }
 
-final List<List<MenuItem>> defaultMenuItems = [
-  DefaultPagesMenu.values.map((menuPage) => menuPage.toMenuPage()).toList(),
-  DefaultItemsMenu.values.map((menuPage) => menuPage.toMenuItem()).toList(),
-];
+List<List<MenuItem>> defaultMenuItems({
+  required UrlSocialMedia? defaultUrls,
+}) {
+  return [
+    DefaultPagesMenu.values.map((menuPage) => menuPage.toMenuPage()).toList(),
+    [
+      if (defaultUrls != null && defaultUrls.existUrl)
+        defaultSocialMedia(defaultUrls),
+      ...DefaultItemsMenu.values
+          .map((menuPage) => menuPage.toMenuItem())
+          .toList(),
+    ]
+  ];
+}
