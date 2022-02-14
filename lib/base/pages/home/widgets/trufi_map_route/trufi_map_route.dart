@@ -1,13 +1,14 @@
 import 'dart:async';
+import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
-import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_utils.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/load_location.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/crop_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map.dart';
@@ -22,10 +23,11 @@ typedef MapRouteBuilder = Widget Function(
 
 class TrufiMapRoute extends StatefulWidget {
   final TrufiMapController trufiMapController;
-
+  final AsyncExecutor asyncExecutor;
   const TrufiMapRoute({
     Key? key,
     required this.trufiMapController,
+    required this.asyncExecutor,
   }) : super(key: key);
 
   @override
@@ -148,8 +150,23 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
       barrierColor: Colors.transparent,
       builder: (buildContext) => LoadLocation(
         location: location,
-        onFetchPlan: () => callFetchPlan(context),
+        onFetchPlan: () => _callFetchPlan(context),
       ),
+    );
+  }
+
+  Future<void> _callFetchPlan(BuildContext context) async {
+    final mapRouteCubit = context.read<MapRouteCubit>();
+    final mapRouteState = mapRouteCubit.state;
+    if (mapRouteState.toPlace == null || mapRouteState.fromPlace == null) {
+      return;
+    }
+    widget.asyncExecutor.run(
+      context: context,
+      onExecute: mapRouteCubit.fetchPlan,
+      onFinish: (_) {
+        AppReviewProvider().incrementReviewWorthyActions();
+      },
     );
   }
 }

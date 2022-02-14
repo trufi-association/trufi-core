@@ -1,3 +1,4 @@
+import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
@@ -5,7 +6,6 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
-import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_utils.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/trufi_map_route.dart';
@@ -18,11 +18,13 @@ class HomePage extends StatefulWidget {
 
   final WidgetBuilder drawerBuilder;
   final MapRouteBuilder mapBuilder;
+  final AsyncExecutor asyncExecutor;
 
   const HomePage({
     Key? key,
     required this.drawerBuilder,
     required this.mapBuilder,
+    required this.asyncExecutor,
   }) : super(key: key);
 
   @override
@@ -133,8 +135,20 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Future<void> _callFetchPlan(BuildContext context) async =>
-      await callFetchPlan(context);
+  Future<void> _callFetchPlan(BuildContext context) async {
+    final mapRouteCubit = context.read<MapRouteCubit>();
+    final mapRouteState = mapRouteCubit.state;
+    if (mapRouteState.toPlace == null || mapRouteState.fromPlace == null) {
+      return;
+    }
+    widget.asyncExecutor.run(
+      context: context,
+      onExecute: mapRouteCubit.fetchPlan,
+      onFinish: (_) {
+        AppReviewProvider().incrementReviewWorthyActions();
+      },
+    );
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

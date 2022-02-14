@@ -1,3 +1,4 @@
+import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,6 +81,7 @@ abstract class DefaultValues {
     required String appName,
     required String cityName,
     String backgroundImage = 'assets/images/drawer-bg.jpg',
+    AsyncExecutor? asyncExecutor,
   }) {
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
@@ -98,11 +100,13 @@ abstract class DefaultValues {
           routes: {
             HomePage.route: (route) => NoAnimationPage(
                   child: HomePage(
+                    asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                     mapBuilder: (
                       mapContext,
                       trufiMapController,
                     ) {
                       return TrufiMapRoute(
+                        asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                         trufiMapController: trufiMapController,
                       );
                     },

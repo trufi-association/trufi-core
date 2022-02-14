@@ -85,62 +85,44 @@ class MapRouteCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
-  Future<void> fetchPlan({
-    bool car = false,
-  }) async {
+  Future<void> fetchPlan() async {
     if (state.toPlace != null && state.fromPlace != null) {
       await updateMapRouteState(state.copyWithNullable(
         plan: const Optional.value(null),
         selectedItinerary: const Optional.value(null),
       ));
-      await currentFetchPlanOperation?.cancel();
+      await cancelCurrentFetchIfExist();
       try {
-        currentFetchPlanOperation = car
-            ? CancelableOperation.fromFuture(() {
-                return _requestManager.fetchAdvancedPlan(
-                    from: state.fromPlace!,
-                    to: state.toPlace!,
-                    transportModes: [TransportMode.car]);
-              }())
-            : CancelableOperation.fromFuture(
-                () {
-                  return _requestManager.fetchAdvancedPlan(
-                    from: state.fromPlace!,
-                    to: state.toPlace!,
-                    transportModes: [TransportMode.transit, TransportMode.walk],
-                  );
-                }(),
-              );
-        Plan? plan = await currentFetchPlanOperation?.valueOrCancellation(
-          null,
+        currentFetchPlanOperation = CancelableOperation.fromFuture(
+          () {
+            return _requestManager.fetchAdvancedPlan(
+              from: state.fromPlace!,
+              to: state.toPlace!,
+              transportModes: [TransportMode.transit, TransportMode.walk],
+            );
+          }(),
         );
+        Plan? plan = await currentFetchPlanOperation?.valueOrCancellation();
         if (plan != null) {
           if (plan.error != null) {
-            if (car) {
-              throw FetchOnlineCarException(
-                plan.error!.id,
-                plan.error!.message,
-              );
-            } else {
-              throw FetchOnlinePlanException(plan.error!.message);
-            }
+            throw FetchOnlinePlanException(plan.error!.id, plan.error!.message);
           }
-          if (plan.itineraries != null) {
-            if (plan.itineraries!.isEmpty) {
-              throw FetchOnlineCarException(404, '');
-            }
-            await updateMapRouteState(state.copyWith(
-              plan: plan,
-              selectedItinerary: plan.itineraries![0],
-            ));
-          }
-        } else if (plan == null) {
-          throw FetchCancelPlanException("");
+          await updateMapRouteState(state.copyWith(
+            plan: plan,
+            selectedItinerary: plan.itineraries![0],
+          ));
+        } else {
+          throw FetchCancelPlanException();
         }
       } catch (e) {
         if (e.runtimeType != FetchCancelPlanException) rethrow;
       }
     }
+  }
+
+  Future<void> cancelCurrentFetchIfExist() async {
+    await currentFetchPlanOperation?.cancel();
+    currentFetchPlanOperation = null;
   }
 
   Future<void> selectItinerary(Itinerary selectedItinerary) async {

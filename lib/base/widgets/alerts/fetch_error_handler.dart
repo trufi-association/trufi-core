@@ -9,21 +9,6 @@ import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 Future<dynamic> onFetchError(BuildContext context, dynamic exception) async {
   final localization = TrufiBaseLocalization.of(context);
   switch (exception.runtimeType) {
-    case FetchErrorServerException:
-      return _showErrorAlert(
-        context: context,
-        error: "Offline mode is not implemented yet.",
-      );
-    case FetchOfflineRequestException:
-      return _showErrorAlert(
-        context: context,
-        error: "Offline mode is not implemented yet.",
-      );
-    case FetchOfflineResponseException:
-      return _showErrorAlert(
-        context: context,
-        error: "Offline mode is not implemented yet.",
-      );
     case FetchOnlineRequestException:
       return _showErrorAlert(
         context: context,
@@ -37,23 +22,7 @@ Future<dynamic> onFetchError(BuildContext context, dynamic exception) async {
     case FetchOnlinePlanException:
       return showTrufiDialog(
         context: context,
-        builder: (dialogContext) {
-          return BuildTransitErrorAlert(
-            onReportMissingRoute: () => BuildTransitErrorAlert.reportRouteError(
-                localization.localeName),
-            onShowCarRoute: () =>
-                BuildTransitErrorAlert.requestCarRoute(context),
-          );
-        },
-      );
-    case FetchOnlineCarException:
-      return _showErrorAlert(
-        context: context,
-        error: localizedErrorForPlanError(
-          (exception as FetchOnlineCarException).code,
-          exception.toString(),
-          localization,
-        ),
+        builder: (dialogContext) => const BuildTransitErrorAlert(),
       );
     default:
       return _showErrorAlert(

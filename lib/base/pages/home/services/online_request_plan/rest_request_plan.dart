@@ -48,7 +48,7 @@ class RestRequestPlanService implements RequestPlanService {
     if (response.statusCode == 200) {
       return compute(_parsePlan, utf8.decode(response.bodyBytes));
     } else {
-      throw FetchOnlineResponseException('Failed to load plan');
+      throw FetchOnlineResponseException('Server Error');
     }
   }
 

@@ -49,12 +49,12 @@ Future<T?> showTrufiDialog<T>({
   Color barrierColor = Colors.black54,
   bool barrierDismissible = true,
   bool useSafeArea = true,
-  bool onWillPop = true
+  bool onWillPop = true,
 }) {
   return showDialog<T>(
     context: context,
     barrierDismissible: barrierDismissible,
-    barrierColor: barrierColor, //this works
+    barrierColor: barrierColor,
     useSafeArea: useSafeArea,
     builder: (buildContext) {
       return BaseTrufiPage(
