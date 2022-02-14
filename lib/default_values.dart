@@ -79,7 +79,6 @@ abstract class DefaultValues {
             currentRoute,
             appName: appName,
             cityName: cityName,
-            menuItems: defaultMenuItems,
             backgroundImageBuilder: backgroundImageBuilder,
             urlShareApp: urlShareApp,
             menuItems: defaultMenuItems(defaultUrls: urlSocialMedia),
