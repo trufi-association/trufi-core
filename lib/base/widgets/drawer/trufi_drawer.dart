@@ -7,15 +7,15 @@ class TrufiDrawer extends StatelessWidget {
     Key? key,
     required this.appName,
     required this.cityName,
-    required this.backgroundImage,
+    this.backgroundImageBuilder,
     required this.menuItems,
   }) : super(key: key);
 
   final String appName;
   final String cityName;
   final String currentRoute;
-  final String backgroundImage;
   final List<List<MenuItem>> menuItems;
+  final WidgetBuilder? backgroundImageBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +27,14 @@ class TrufiDrawer extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.asset(
-                  backgroundImage,
-                  fit: BoxFit.cover,
-                ),
+                if (backgroundImageBuilder != null)
+                  backgroundImageBuilder!(context)
+                else
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                  ),
                 Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(

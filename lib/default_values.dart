@@ -22,22 +22,6 @@ import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/rout
 import 'base/blocs/localization/trufi_localization_cubit.dart';
 import 'base/pages/home/widgets/trufi_map_route/trufi_map_route.dart';
 
-abstract class BikeAppDefaultValues {
-  static List<BlocProvider> blocProviders({
-    required String otpEndpoint,
-    required String otpGraphqlEndpoint,
-    required MapConfiguration mapConfiguration,
-  }) {
-    return [
-      ...DefaultValues.blocProviders(
-        otpEndpoint: otpEndpoint,
-        otpGraphqlEndpoint: otpGraphqlEndpoint,
-        mapConfiguration: mapConfiguration,
-      ),
-    ];
-  }
-}
-
 abstract class DefaultValues {
   static TrufiLocalization trufiLocalization() => const TrufiLocalization(
         currentLocale: Locale("en"),
@@ -55,6 +39,7 @@ abstract class DefaultValues {
     required String otpEndpoint,
     required String otpGraphqlEndpoint,
     required MapConfiguration mapConfiguration,
+    required String searchAssetPath,
   }) {
     return [
       BlocProvider<RouteTransportsCubit>(
@@ -62,7 +47,7 @@ abstract class DefaultValues {
       ),
       BlocProvider<SearchLocationsCubit>(
         create: (context) => SearchLocationsCubit(
-          searchLocationRepository: DefaultSearchLocation(),
+          searchLocationRepository: DefaultSearchLocation(searchAssetPath),
         ),
       ),
       BlocProvider<MapRouteCubit>(
@@ -80,7 +65,7 @@ abstract class DefaultValues {
   static RouterDelegate<Object> routerDelegate({
     required String appName,
     required String cityName,
-    String backgroundImage = 'assets/images/drawer-bg.jpg',
+    WidgetBuilder? backgroundImageBuilder,
     AsyncExecutor? asyncExecutor,
   }) {
     generateDrawer(String currentRoute) {
@@ -89,7 +74,7 @@ abstract class DefaultValues {
             appName: appName,
             cityName: cityName,
             menuItems: defaultMenuItems,
-            backgroundImage: backgroundImage,
+            backgroundImageBuilder: backgroundImageBuilder,
           );
     }
 

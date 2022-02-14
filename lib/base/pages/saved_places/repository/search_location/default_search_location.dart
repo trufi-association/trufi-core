@@ -11,8 +11,8 @@ import '../search_location_repository.dart';
 class DefaultSearchLocation implements SearchLocationRepository {
   final LocationSearchStorage storage = LocationSearchStorage();
 
-  DefaultSearchLocation() {
-    storage.load('assets/data/search.json');
+  DefaultSearchLocation(String searchAssetPath) {
+    storage.load(searchAssetPath);
   }
 
   @override
