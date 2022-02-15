@@ -486,12 +486,6 @@ abstract class TrufiBaseLocalization {
   /// **'Walk'**
   String get instructionVehicleWalk;
 
-  /// Menu item that shows the about page
-  ///
-  /// In pt, this message translates to:
-  /// **'Sobre'**
-  String get menuAbout;
-
   /// Menu item that shows the map/planned trip
   ///
   /// In pt, this message translates to:
