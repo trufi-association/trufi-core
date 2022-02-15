@@ -7,7 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'about_localizations_de.dart';
-import 'about_localizations_ee.dart';
 import 'about_localizations_en.dart';
 import 'about_localizations_es.dart';
 import 'about_localizations_fr.dart';
@@ -96,7 +95,6 @@ abstract class AboutLocalization {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
-    Locale('ee'),
     Locale('en'),
     Locale('es'),
     Locale('fr'),
@@ -162,7 +160,7 @@ class _AboutLocalizationDelegate extends LocalizationsDelegate<AboutLocalization
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'ee', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AboutLocalizationDelegate old) => false;
@@ -174,7 +172,6 @@ AboutLocalization lookupAboutLocalization(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'de': return AboutLocalizationDe();
-    case 'ee': return AboutLocalizationEe();
     case 'en': return AboutLocalizationEn();
     case 'es': return AboutLocalizationEs();
     case 'fr': return AboutLocalizationFr();

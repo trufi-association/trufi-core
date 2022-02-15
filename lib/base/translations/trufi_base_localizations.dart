@@ -7,7 +7,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'trufi_base_localizations_de.dart';
-import 'trufi_base_localizations_ee.dart';
 import 'trufi_base_localizations_en.dart';
 import 'trufi_base_localizations_es.dart';
 import 'trufi_base_localizations_fr.dart';
@@ -96,7 +95,6 @@ abstract class TrufiBaseLocalization {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
-    Locale('ee'),
     Locale('en'),
     Locale('es'),
     Locale('fr'),
@@ -606,7 +604,7 @@ class _TrufiBaseLocalizationDelegate extends LocalizationsDelegate<TrufiBaseLoca
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'ee', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_TrufiBaseLocalizationDelegate old) => false;
@@ -618,7 +616,6 @@ TrufiBaseLocalization lookupTrufiBaseLocalization(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'de': return TrufiBaseLocalizationDe();
-    case 'ee': return TrufiBaseLocalizationEe();
     case 'en': return TrufiBaseLocalizationEn();
     case 'es': return TrufiBaseLocalizationEs();
     case 'fr': return TrufiBaseLocalizationFr();
