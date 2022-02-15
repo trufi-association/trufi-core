@@ -29,26 +29,19 @@ class FeedbackPage extends StatelessWidget {
       body: Scrollbar(
         child: ListView(
           physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           children: <Widget>[
+            Text(
+              localizationF.feedbackTitle,
+              style: theme.textTheme.bodyText1?.copyWith(
+                fontSize: 20,
+              ),
+            ),
             Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Text(
-                    localizationF.feedbackTitle,
-                    style: theme.textTheme.bodyText1?.copyWith(
-                      fontSize: 20,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      localizationF.feedbackContent,
-                      style: theme.textTheme.bodyText2,
-                    ),
-                  )
-                ],
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Text(
+                localizationF.feedbackContent,
+                style: theme.textTheme.bodyText2,
               ),
             )
           ],

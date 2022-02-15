@@ -251,7 +251,7 @@ class TrufiBaseLocalizationEe extends TrufiBaseLocalization {
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return 'hahomorzorzor le Cochabamba${url}';
+    return 'hahomorzorzor le Cochabamba$url';
   }
 
   @override

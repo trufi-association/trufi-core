@@ -17,3 +17,8 @@ done
 # for i in $list; do
 #     flutter gen-l10n --arb-dir=translations/feedback_localizations --template-arb-file=$i --output-localization-file=feedback_localizations.dart --output-class=FeedbackLocalization --output-dir=lib/base/pages/feedback/translations --no-synthetic-package
 # done
+
+#Aboud command translations
+# for i in $list; do
+#     flutter gen-l10n --arb-dir=translations/about_localizations --template-arb-file=$i --output-localization-file=about_localizations.dart --output-class=AboutLocalization --output-dir=lib/base/pages/about/translations --no-synthetic-package
+# done

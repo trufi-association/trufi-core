@@ -1,7 +1,6 @@
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
