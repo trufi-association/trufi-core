@@ -7,19 +7,19 @@
     "@alertLocationServicesDeniedTitle": {
         "description": "Title of dialog that explains that access to location services was denied"
     },
-    "appReviewDialogButtonAccept": "Write review",
+    "appReviewDialogButtonAccept": "Puntuar",
     "@appReviewDialogButtonAccept": {
         "description": "Accept button of the App Review Dialog used on Android"
     },
-    "appReviewDialogButtonDecline": "Not now",
+    "appReviewDialogButtonDecline": "Ahora no",
     "@appReviewDialogButtonDecline": {
         "description": "Decline button of the App Review Dialog used on Android"
     },
-    "appReviewDialogContent": "Support us with a review on the Google Play Store.",
+    "appReviewDialogContent": "Apóyanos con una reseña en Google Play Store.",
     "@appReviewDialogContent": {
         "description": "Content of the App Review Dialog used on Android"
     },
-    "appReviewDialogTitle": "Enjoying Trufi?",
+    "appReviewDialogTitle": "¿Disfrutando de Trufi?",
     "@appReviewDialogTitle": {
         "description": "Title of the App Review Dialog used on Android"
     },
@@ -35,7 +35,7 @@
     "@commonCancel": {
         "description": "Cancel button label"
     },
-    "commonConfirmLocation": "Show on map",
+    "commonConfirmLocation": "Confirmar ubicación",
     "@commonConfirmLocation": {
         "description": "General Confirm location label"
     },
@@ -43,7 +43,7 @@
     "@commonDestination": {
         "description": "Destination field label"
     },
-    "commonEdit": "Edit",
+    "commonEdit": "Editar",
     "@commonEdit": {
         "description": "General Edit label"
     },
@@ -51,23 +51,23 @@
     "@commonError": {
         "description": "Message when an error has occured"
     },
-    "commonFromStation": "Show on map",
+    "commonFromStation": "de la estación",
     "@commonFromStation": {
         "description": "General from station  label"
     },
-    "commonFromStop": "Show on map",
+    "commonFromStop": "desde la parada",
     "@commonFromStop": {
         "description": "General from stop  label"
     },
-    "commonItineraryNoTransitLegs": "Show on map",
+    "commonItineraryNoTransitLegs": "Salir cuando te convenga",
     "@commonItineraryNoTransitLegs": {
         "description": "General Leave when it suits you label"
     },
-    "commonLeavesAt": "Show on map",
+    "commonLeavesAt": "Sale a las",
     "@commonLeavesAt": {
         "description": "General Leaves at  label"
     },
-    "commonLoading": "Show on map",
+    "commonLoading": "Cargando...",
     "@commonLoading": {
         "description": "General Loading label"
     },
@@ -87,15 +87,15 @@
     "@commonOrigin": {
         "description": "Origin field label"
     },
-    "commonRemove": "Remove",
+    "commonRemove": "Eliminar",
     "@commonRemove": {
         "description": "General Remove label"
     },
-    "commonSave": "Save",
+    "commonSave": "Guardar",
     "@commonSave": {
         "description": "General Save label"
     },
-    "commonTomorrow": "Show on map",
+    "commonTomorrow": "Mañana",
     "@commonTomorrow": {
         "description": "General Tomorrow label"
     },
@@ -103,15 +103,15 @@
     "@commonUnknownError": {
         "description": "Message when an unknown error has occured"
     },
-    "commonUnkownPlace": "Show on map",
+    "commonUnkownPlace": "Lugar desconocido",
     "@commonUnkownPlace": {
         "description": "General Unkown place label"
     },
-    "commonWait": "Wait",
+    "commonWait": "Esperar",
     "@commonWait": {
         "description": "General wait label"
     },
-    "commonWalk": "Walk",
+    "commonWalk": "Caminar",
     "@commonWalk": {
         "description": "General Walk label"
     },
@@ -135,7 +135,7 @@
     "@errorNoBarrierFree": {
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible"
     },
-    "errorNoConnectServer": "No connect with server.",
+    "errorNoConnectServer": "Sin conexión con el servidor.",
     "@errorNoConnectServer": {
         "description": "Message when internet connection is lost"
     },
@@ -179,15 +179,15 @@
     "@errorUnknownOriginDestination": {
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
     },
-    "followOnFacebook": "Follow us on Facebook",
+    "followOnFacebook": "Síguenos en Facebook",
     "@followOnFacebook": {
         "description": "Facebook menu item"
     },
-    "followOnInstagram": "Follow us on Instagram",
+    "followOnInstagram": "Síguenos en Instagram",
     "@followOnInstagram": {
         "description": "Instagram menu item"
     },
-    "followOnTwitter": "Follow us on Twitter",
+    "followOnTwitter": "Síguenos en Twitter",
     "@followOnTwitter": {
         "description": "Twitter menu item"
     },
@@ -209,7 +209,7 @@
         },
         "description": "Itinerary leg distance (m)"
     },
-    "instructionDurationHours": "{value} min",
+    "instructionDurationHours": "{value} h",
     "@instructionDurationHours": {
         "placeholders": {
             "value": {
@@ -227,7 +227,7 @@
         },
         "description": "Itinerary leg duration"
     },
-    "instructionVehicleBike": "Bus",
+    "instructionVehicleBike": "Bicicleta",
     "@instructionVehicleBike": {
         "description": "Vehicle name (Bike)"
     },
@@ -239,19 +239,19 @@
     "@instructionVehicleCar": {
         "description": "Vehicle name (Car)"
     },
-    "instructionVehicleCarpool": "Bus",
+    "instructionVehicleCarpool": "Compartir coche",
     "@instructionVehicleCarpool": {
         "description": "Vehicle name (Carpool)"
     },
-    "instructionVehicleCommuterTrain": "Bus",
+    "instructionVehicleCommuterTrain": "Tren de cercanías",
     "@instructionVehicleCommuterTrain": {
         "description": "Vehicle name (Commuter train)"
     },
-    "instructionVehicleGondola": "Góndola",
+    "instructionVehicleGondola": "Teleférico",
     "@instructionVehicleGondola": {
         "description": "Vehicle name (Gondola)"
     },
-    "instructionVehicleLightRail": "Light Rail Train",
+    "instructionVehicleLightRail": "Tren ligero",
     "@instructionVehicleLightRail": {
         "description": "Vehicle name (Light Rail Train)"
     },
@@ -271,19 +271,15 @@
     "@instructionVehicleTrufi": {
         "description": "Vehicle name (Trufi)"
     },
-    "instructionVehicleWalk": "Walk",
-    "menuAbout": "Acerca",
-    "@menuAbout": {
-        "description": "Menu item that shows the about page"
-    },
-    "menuConnections": "Muestra rutas",
+    "instructionVehicleWalk": "Caminar",
+    "menuConnections": "Mostrar rutas",
     "@menuConnections": {
         "description": "Menu item that shows the map/planned trip"
     },
     "menuSocialMedia": "Redes sociales",
-    "menuTransportList": "Bus list",
+    "menuTransportList": "Lista de autobuses",
     "@menuTransportList": {
-        "description": "Menu item that shows the bus list page"
+        "description": "Vehicle name (Metro)"
     },
     "noRouteError": "Lo sentimos, no pudimos encontrar una ruta. ¿Qué quiere hacer?",
     "@noRouteError": {
@@ -301,7 +297,7 @@
     "@noRouteErrorActionShowCarRoute": {
         "description": "Button label to show the car route when no route could be found"
     },
-    "readOurBlog": "Read our blog",
+    "readOurBlog": "Lee nuestro blog",
     "@readOurBlog": {
         "description": "Website menu item"
     },
@@ -325,7 +321,7 @@
     "@searchPleaseSelectOrigin": {
         "description": "Placeholder text for the origin field (in map-visible state)"
     },
-    "shareAppText": "Download {appTitle}, the public transport app for {cityName}, at {url}",
+    "shareAppText": "Descargar {appTitle}, la aplicación de transporte público para {cityName}, en {url}",
     "@shareAppText": {
         "placeholders": {
             "url": {

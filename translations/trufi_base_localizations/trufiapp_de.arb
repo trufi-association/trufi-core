@@ -135,7 +135,7 @@
     "@errorNoBarrierFree": {
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible"
     },
-    "errorNoConnectServer": "No connect with server.",
+    "errorNoConnectServer": "Keine Verbindung zum Server.",
     "@errorNoConnectServer": {
         "description": "Message when internet connection is lost"
     },
@@ -271,10 +271,9 @@
     "@instructionVehicleTrufi": {
         "description": "Vehicle name (Trufi)"
     },
-    "instructionVehicleWalk": "Walk",
-    "menuAbout": "Über",
-    "@menuAbout": {
-        "description": "Menu item that shows the about page"
+    "instructionVehicleWalk": "Gehen",
+    "@instructionVehicleWalk": {
+        "description": "Vehicle name (Walk)"
     },
     "menuConnections": "Verbindungen",
     "@menuConnections": {

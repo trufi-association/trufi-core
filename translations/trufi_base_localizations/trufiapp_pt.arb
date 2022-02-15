@@ -272,10 +272,6 @@
         "description": "Vehicle name (Trufi)"
     },
     "instructionVehicleWalk": "Walk",
-    "menuAbout": "Sobre",
-    "@menuAbout": {
-        "description": "Menu item that shows the about page"
-    },
     "menuConnections": "Mostrar rotas",
     "@menuConnections": {
         "description": "Menu item that shows the map/planned trip"
