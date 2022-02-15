@@ -110,7 +110,7 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
   String get errorNoBarrierFree => 'Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.';
 
   @override
-  String get errorNoConnectServer => 'No connect with server.';
+  String get errorNoConnectServer => 'Keine Verbindung zum Server.';
 
   @override
   String get errorNoTransitTimes => 'Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zu weit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.';
@@ -205,10 +205,7 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
   String get instructionVehicleTrufi => 'der Trufi';
 
   @override
-  String get instructionVehicleWalk => 'Walk';
-
-  @override
-  String get menuAbout => 'Über';
+  String get instructionVehicleWalk => 'Gehen';
 
   @override
   String get menuConnections => 'Verbindungen';

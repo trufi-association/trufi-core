@@ -14,16 +14,16 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get alertLocationServicesDeniedTitle => 'Sin acceso a la ubicación';
 
   @override
-  String get appReviewDialogButtonAccept => 'Write review';
+  String get appReviewDialogButtonAccept => 'Puntuar';
 
   @override
-  String get appReviewDialogButtonDecline => 'Not now';
+  String get appReviewDialogButtonDecline => 'Ahora no';
 
   @override
-  String get appReviewDialogContent => 'Support us with a review on the Google Play Store.';
+  String get appReviewDialogContent => 'Apóyanos con una reseña en Google Play Store.';
 
   @override
-  String get appReviewDialogTitle => 'Enjoying Trufi?';
+  String get appReviewDialogTitle => '¿Disfrutando de Trufi?';
 
   @override
   String get chooseLocationPageSubtitle => 'Amplía y mueve el mapa para centrar el marcador';
@@ -35,31 +35,31 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get commonCancel => 'Cancelar';
 
   @override
-  String get commonConfirmLocation => 'Show on map';
+  String get commonConfirmLocation => 'Confirmar ubicación';
 
   @override
   String get commonDestination => 'Destino';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'Editar';
 
   @override
   String get commonError => 'Error';
 
   @override
-  String get commonFromStation => 'Show on map';
+  String get commonFromStation => 'de la estación';
 
   @override
-  String get commonFromStop => 'Show on map';
+  String get commonFromStop => 'desde la parada';
 
   @override
-  String get commonItineraryNoTransitLegs => 'Show on map';
+  String get commonItineraryNoTransitLegs => 'Salir cuando te convenga';
 
   @override
-  String get commonLeavesAt => 'Show on map';
+  String get commonLeavesAt => 'Sale a las';
 
   @override
-  String get commonLoading => 'Show on map';
+  String get commonLoading => 'Cargando...';
 
   @override
   String get commonNoInternet => 'Sin conexión a internet.';
@@ -74,25 +74,25 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get commonOrigin => 'Origen';
 
   @override
-  String get commonRemove => 'Remove';
+  String get commonRemove => 'Eliminar';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'Guardar';
 
   @override
-  String get commonTomorrow => 'Show on map';
+  String get commonTomorrow => 'Mañana';
 
   @override
   String get commonUnknownError => 'Error desconocido';
 
   @override
-  String get commonUnkownPlace => 'Show on map';
+  String get commonUnkownPlace => 'Lugar desconocido';
 
   @override
-  String get commonWait => 'Wait';
+  String get commonWait => 'Esperar';
 
   @override
-  String get commonWalk => 'Walk';
+  String get commonWalk => 'Caminar';
 
   @override
   String get commonYourLocation => 'Su ubicación';
@@ -110,7 +110,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get errorNoBarrierFree => 'Origen y destino no son accesibles a silla de ruedas.';
 
   @override
-  String get errorNoConnectServer => 'No connect with server.';
+  String get errorNoConnectServer => 'Sin conexión con el servidor.';
 
   @override
   String get errorNoTransitTimes => 'No hay tiempos de tránsito disponibles. La información podría no ser válida para la fecha actual o no hay rutas disponibles para su viaje.';
@@ -143,13 +143,13 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'Origen y destino desconocidos ¿Podría ser un poco más preciso?';
 
   @override
-  String get followOnFacebook => 'Follow us on Facebook';
+  String get followOnFacebook => 'Síguenos en Facebook';
 
   @override
-  String get followOnInstagram => 'Follow us on Instagram';
+  String get followOnInstagram => 'Síguenos en Instagram';
 
   @override
-  String get followOnTwitter => 'Follow us on Twitter';
+  String get followOnTwitter => 'Síguenos en Twitter';
 
   @override
   String instructionDistanceKm(Object value) {
@@ -163,7 +163,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String instructionDurationHours(Object value) {
-    return '$value min';
+    return '$value h';
   }
 
   @override
@@ -172,7 +172,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   }
 
   @override
-  String get instructionVehicleBike => 'Bus';
+  String get instructionVehicleBike => 'Bicicleta';
 
   @override
   String get instructionVehicleBus => 'Bus';
@@ -181,16 +181,16 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get instructionVehicleCar => 'Coche';
 
   @override
-  String get instructionVehicleCarpool => 'Bus';
+  String get instructionVehicleCarpool => 'Compartir coche';
 
   @override
-  String get instructionVehicleCommuterTrain => 'Bus';
+  String get instructionVehicleCommuterTrain => 'Tren de cercanías';
 
   @override
-  String get instructionVehicleGondola => 'Góndola';
+  String get instructionVehicleGondola => 'Teleférico';
 
   @override
-  String get instructionVehicleLightRail => 'Light Rail Train';
+  String get instructionVehicleLightRail => 'Tren ligero';
 
   @override
   String get instructionVehicleMetro => 'Metro';
@@ -205,19 +205,16 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get instructionVehicleTrufi => 'Trufi';
 
   @override
-  String get instructionVehicleWalk => 'Walk';
+  String get instructionVehicleWalk => 'Caminar';
 
   @override
-  String get menuAbout => 'Acerca';
-
-  @override
-  String get menuConnections => 'Muestra rutas';
+  String get menuConnections => 'Mostrar rutas';
 
   @override
   String get menuSocialMedia => 'Redes sociales';
 
   @override
-  String get menuTransportList => 'Bus list';
+  String get menuTransportList => 'Lista de autobuses';
 
   @override
   String get noRouteError => 'Lo sentimos, no pudimos encontrar una ruta. ¿Qué quiere hacer?';
@@ -232,7 +229,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get noRouteErrorActionShowCarRoute => 'Mostrar ruta en auto';
 
   @override
-  String get readOurBlog => 'Read our blog';
+  String get readOurBlog => 'Lee nuestro blog';
 
   @override
   String get searchFailLoadingPlan => 'Error al cargar el itinerario.';
@@ -251,7 +248,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return 'Download $appTitle, the public transport app for $cityName, at $url';
+    return 'Descargar $appTitle, la aplicación de transporte público para $cityName, en $url';
   }
 
   @override

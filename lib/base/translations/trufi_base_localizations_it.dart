@@ -208,9 +208,6 @@ class TrufiBaseLocalizationIt extends TrufiBaseLocalization {
   String get instructionVehicleWalk => 'Walk';
 
   @override
-  String get menuAbout => 'A proposito';
-
-  @override
   String get menuConnections => 'Mostra itinerari';
 
   @override
