@@ -1,1 +1,14 @@
-{"menuFeedback":"Enviar comentarios","@menuFeedback":{"description":"Menu item that shows the feedback page"},"feedbackTitle":"Envíanos un correo electrónico","@feedbackTitle":{"description":"Title displayed on the feedback page"},"feedbackContent":"¿Tiene sugerencias para nuestra aplicación o ha encontrado algunos errores en los datos? Nos encantaría saberlo! Asegúrese de agregar su dirección de correo electrónico o teléfono para que podamos responderlo.","@feedbackContent":{"description":"Text displayed on the feedback page"}}
+{
+    "menuFeedback": "Enviar comentarios",
+    "@menuFeedback": {
+        "description": "Menu item that shows the feedback page"
+    },
+    "feedbackTitle": "Envíanos un correo electrónico",
+    "@feedbackTitle": {
+        "description": "Title displayed on the feedback page"
+    },
+    "feedbackContent": "¿Tiene sugerencias para nuestra aplicación o ha encontrado algunos errores en los datos? Nos encantaría saberlo! Asegúrese de agregar su dirección de correo electrónico o teléfono para que podamos responderlo.",
+    "@feedbackContent": {
+        "description": "Text displayed on the feedback page"
+    }
+}
