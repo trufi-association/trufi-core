@@ -4,7 +4,8 @@ import 'package:routemaster/routemaster.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
-import 'package:trufi_core/base/pages/about.dart';
+import 'package:trufi_core/base/pages/about/about.dart';
+import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
@@ -30,6 +31,7 @@ abstract class DefaultValues {
         localizationDelegates: [
           SavedPlacesLocalization.delegate,
           FeedbackLocalization.delegate,
+          AboutLocalization.delegate,
         ],
         supportedLocales: [
           Locale('de'),
@@ -128,6 +130,8 @@ abstract class DefaultValues {
                 ),
             AboutPage.route: (route) => NoAnimationPage(
                   child: AboutPage(
+                    appName: appName,
+                    cityName: cityName,
                     drawerBuilder: generateDrawer(AboutPage.route),
                   ),
                 ),

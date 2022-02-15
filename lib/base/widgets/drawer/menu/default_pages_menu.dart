@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:trufi_core/base/pages/about.dart';
+import 'package:trufi_core/base/pages/about/about.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';

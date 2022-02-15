@@ -29,7 +29,8 @@ class SavedPlacesPage extends StatelessWidget {
       fontWeight: FontWeight.w600,
     );
     return Scaffold(
-      appBar: AppBar(title: Row(
+      appBar: AppBar(
+          title: Row(
         children: [
           Text(localizationSP.menuYourPlaces),
         ],
@@ -44,8 +45,9 @@ class SavedPlacesPage extends StatelessWidget {
                   builder: (context, state) {
                     return Scrollbar(
                       child: ListView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 15),
                         children: [
-                          const SizedBox(height: 10),
                           Column(
                             children:
                                 searchLocationsCubit.state.myDefaultPlaces.map(

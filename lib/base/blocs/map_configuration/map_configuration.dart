@@ -25,7 +25,6 @@ class MapConfiguration {
   /// To, From and yourLocation Marker
   final MarkerConfiguration markersConfiguration;
 
-  // TODO configure ItinararyCreator in core
   // /// Itinerari creator configuration
   // final ItinararyCreator itinararyCreator;
 

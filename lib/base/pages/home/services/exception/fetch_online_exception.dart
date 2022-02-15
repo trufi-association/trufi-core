@@ -76,6 +76,8 @@ class FetchOnlinePlanException implements Exception {
   final String _message;
 
   int get code => _code;
+  String get message => _message;
+
   @override
   String toString() {
     return "Fetch Online Plan Exception: $_message";
