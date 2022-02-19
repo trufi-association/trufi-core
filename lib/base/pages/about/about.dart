@@ -51,6 +51,23 @@ class AboutPage extends StatelessWidget {
               physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(20, 15, 20, 40),
               children: [
+                FutureBuilder(
+                  future: PackageInfoPlatform.version(),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<String> snapshot,
+                  ) {
+                    if (snapshot.hasError ||
+                        snapshot.connectionState != ConnectionState.done) {
+                      return const Text("");
+                    }
+                    return Text(
+                      localizationA.version(snapshot.data ?? ''),
+                      style: const TextStyle(fontWeight: FontWeight.w100),
+                      textAlign: TextAlign.right,
+                    );
+                  },
+                ),
                 Text(
                   appName,
                   style: const TextStyle(
@@ -110,51 +127,38 @@ class AboutPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 50),
-                ElevatedButton(
-                  child: Text(
-                    localizationA.aboutLicenses,
-                  ),
-                  onPressed: () {
-                    return customShowLicensePage(
-                      context: context,
-                      applicationName: appName,
-                      applicationLegalese: cityName,
-                      applicationIcon: Container(
-                        padding: const EdgeInsets.all(20),
-                        height: 150,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(
-                              child: Image.asset(
-                                'assets/images/trufi-logo.png',
-                                package: 'trufi_core',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ],
-                        ),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      child: Text(
+                        localizationA.aboutLicenses,
                       ),
-                    );
-                  },
-                ),
-                FutureBuilder(
-                  future: PackageInfoPlatform.version(),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<String> snapshot,
-                  ) {
-                    if (snapshot.hasError ||
-                        snapshot.connectionState != ConnectionState.done) {
-                      return const Text("");
-                    }
-                    return Text(
-                      localizationA.version(snapshot.data ?? ''),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.right,
-                    );
-                  },
+                      onPressed: () {
+                        return customShowLicensePage(
+                          context: context,
+                          applicationName: appName,
+                          applicationLegalese: cityName,
+                          applicationIcon: Container(
+                            padding: const EdgeInsets.all(20),
+                            height: 150,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: Image.asset(
+                                    'assets/images/trufi-logo.png',
+                                    package: 'trufi_core',
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 InkWell(
