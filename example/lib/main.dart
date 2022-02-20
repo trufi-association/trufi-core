@@ -15,11 +15,10 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-            otpEndpoint: "https://api.trufi.app/otp/routers/default",
-            otpGraphqlEndpoint:
-                "https://otp.busboy.app/otp/routers/default/index/graphql",
+            otpEndpoint: "https://cbba.trufi.dev/otp",
+            otpGraphqlEndpoint: "https://cbba.trufi.dev/otp/index/graphql",
             mapConfiguration: MapConfiguration(
-              center: LatLng(5.825574, -73.033660),
+              center: LatLng(-17.392600, -66.158787),
             ),
             searchAssetPath: "assets/data/search.json"),
       ],
