@@ -15,6 +15,7 @@ class LocationFormField extends StatelessWidget {
     this.value,
     this.leading,
     this.trailing,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final bool isOrigin;
@@ -24,7 +25,7 @@ class LocationFormField extends StatelessWidget {
   final TrufiLocation? value;
   final Widget? leading;
   final Widget? trailing;
-
+  final String mapTilesUrl;
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -47,6 +48,7 @@ class LocationFormField extends StatelessWidget {
                   hint: isOrigin
                       ? localization.searchHintOrigin
                       : localization.searchHintDestination,
+                  mapTilesUrl: mapTilesUrl,
                 ),
               );
               // Check result

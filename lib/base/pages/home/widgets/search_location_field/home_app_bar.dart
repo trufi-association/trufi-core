@@ -11,6 +11,7 @@ class HomeAppBar extends StatelessWidget {
   final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
+  final String mapTilesUrl;
   const HomeAppBar({
     Key? key,
     required this.onSaveFrom,
@@ -19,6 +20,7 @@ class HomeAppBar extends StatelessWidget {
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,7 @@ class HomeAppBar extends StatelessWidget {
                           onSaveFrom: onSaveFrom,
                           onSaveTo: onSaveTo,
                           onSwap: onSwap,
+                          mapTilesUrl: mapTilesUrl,
                         )
                       : FormFieldsLandscape(
                           onFetchPlan: onFetchPlan,
@@ -65,6 +68,7 @@ class HomeAppBar extends StatelessWidget {
                           onSaveFrom: onSaveFrom,
                           onSaveTo: onSaveTo,
                           onSwap: onSwap,
+                          mapTilesUrl: mapTilesUrl,
                         ),
                 ),
               ],

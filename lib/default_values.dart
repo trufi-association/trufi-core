@@ -79,6 +79,7 @@ abstract class DefaultValues {
     required String urlShareApp,
     required String urlFeedback,
     UrlSocialMedia? urlSocialMedia,
+    required String mapTilesUrl,
   }) {
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
@@ -98,12 +99,14 @@ abstract class DefaultValues {
           routes: {
             HomePage.route: (route) => NoAnimationPage(
                   child: HomePage(
+                    mapTilesUrl: mapTilesUrl,
                     asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                     mapBuilder: (
                       mapContext,
                       trufiMapController,
                     ) {
                       return TrufiMapRoute(
+                        mapTilesUrl: mapTilesUrl,
                         asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                         trufiMapController: trufiMapController,
                       );
@@ -118,11 +121,13 @@ abstract class DefaultValues {
                 ),
             TransportListDetail.route: (route) => NoAnimationPage(
                   child: TransportListDetail(
+                    mapTilesUrl: mapTilesUrl,
                     id: Uri.decodeQueryComponent(route.pathParameters['id']!),
                   ),
                 ),
             SavedPlacesPage.route: (route) => NoAnimationPage(
                   child: SavedPlacesPage(
+                    mapTilesUrl: mapTilesUrl,
                     drawerBuilder: generateDrawer(SavedPlacesPage.route),
                   ),
                 ),

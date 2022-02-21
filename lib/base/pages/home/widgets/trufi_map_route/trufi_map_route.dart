@@ -24,10 +24,12 @@ typedef MapRouteBuilder = Widget Function(
 class TrufiMapRoute extends StatefulWidget {
   final TrufiMapController trufiMapController;
   final AsyncExecutor asyncExecutor;
+  final String mapTilesUrl;
   const TrufiMapRoute({
     Key? key,
     required this.trufiMapController,
     required this.asyncExecutor,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -49,6 +51,7 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
           bloc: widget.trufiMapController,
           builder: (context, state) {
             return TrufiMap(
+              mapTilesUrl: widget.mapTilesUrl,
               trufiMapController: widget.trufiMapController,
               layerOptionsBuilder: (context) => [
                 if (state.unselectedPolylinesLayer != null)

@@ -8,10 +8,11 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class DialogEditLocation extends StatefulWidget {
   final TrufiLocation location;
-
+  final String mapTilesUrl;
   const DialogEditLocation({
     Key? key,
     required this.location,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -130,6 +131,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                       position: location.isLatLngDefined
                           ? LatLng(location.latitude, location.longitude)
                           : null,
+                      mapTilesUrl: widget.mapTilesUrl,
                     );
                     if (chooseLocationDetail != null) {
                       location = location.copyWith(

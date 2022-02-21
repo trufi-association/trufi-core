@@ -17,7 +17,7 @@ class TrufiMap extends StatelessWidget {
   final TapCallback? onTap;
   final LongPressCallback? onLongPress;
   final PositionCallback? onPositionChanged;
-
+  final String mapTilesUrl;
   const TrufiMap({
     Key? key,
     required this.trufiMapController,
@@ -26,6 +26,7 @@ class TrufiMap extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -65,8 +66,7 @@ class TrufiMap extends StatelessWidget {
                 ),
                 layers: [
                   TileLayerOptions(
-                    urlTemplate:
-                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate: mapTilesUrl,
                     subdomains: ['a', 'b', 'c'],
                     tileProvider: NetworkTileProvider(),
                   ),

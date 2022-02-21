@@ -20,6 +20,7 @@ class LocationTiler extends StatelessWidget {
     this.enableSetIcon = false,
     this.enableLocation = false,
     this.enableSetPosition = false,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final TrufiLocation location;
@@ -29,7 +30,7 @@ class LocationTiler extends StatelessWidget {
   final bool enableSetPosition;
   final Function(TrufiLocation, TrufiLocation) updateLocation;
   final Function(TrufiLocation)? removeLocation;
-
+  final String mapTilesUrl;
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -156,7 +157,10 @@ class LocationTiler extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return DialogEditLocation(location: location);
+          return DialogEditLocation(
+            location: location,
+            mapTilesUrl: mapTilesUrl,
+          );
         });
     if (newLocation != null) updateLocation(location, newLocation);
   }
@@ -168,6 +172,7 @@ class LocationTiler extends StatelessWidget {
       position: location.isLatLngDefined
           ? LatLng(location.latitude, location.longitude)
           : null,
+      mapTilesUrl: mapTilesUrl,
     );
     if (chooseLocationDetail != null) {
       updateLocation(

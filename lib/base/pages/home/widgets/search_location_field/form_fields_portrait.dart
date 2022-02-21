@@ -16,6 +16,7 @@ class FormFieldsPortrait extends StatelessWidget {
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -23,7 +24,7 @@ class FormFieldsPortrait extends StatelessWidget {
   final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
-
+  final String mapTilesUrl;
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -45,6 +46,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   ? ResetButton(onReset: onReset)
                   : null,
               value: mapRouteState.fromPlace,
+              mapTilesUrl: mapTilesUrl,
             ),
             LocationFormField(
               isOrigin: false,
@@ -58,6 +60,7 @@ class FormFieldsPortrait extends StatelessWidget {
                     )
                   : null,
               value: mapRouteState.toPlace,
+              mapTilesUrl: mapTilesUrl,
             ),
           ],
         ),

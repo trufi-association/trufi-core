@@ -16,6 +16,7 @@ class FormFieldsLandscape extends StatelessWidget {
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -23,7 +24,7 @@ class FormFieldsLandscape extends StatelessWidget {
   final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
-
+  final String mapTilesUrl;
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -46,6 +47,7 @@ class FormFieldsLandscape extends StatelessWidget {
                     mapConfiguratiom.markersConfiguration.fromMarker,
                 onSaved: onSaveFrom,
                 value: mapRouteState.fromPlace,
+                mapTilesUrl: mapTilesUrl,
               ),
             ),
             SizedBox(
@@ -65,6 +67,7 @@ class FormFieldsLandscape extends StatelessWidget {
                     mapConfiguratiom.markersConfiguration.toMarker,
                 onSaved: onSaveTo,
                 value: mapRouteState.toPlace,
+                mapTilesUrl: mapTilesUrl,
               ),
             ),
             SizedBox(

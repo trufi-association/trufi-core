@@ -14,10 +14,11 @@ import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dar
 
 class TransportListDetail extends StatefulWidget {
   static const String route = "/TransportList/:id";
-
+  final String mapTilesUrl;
   const TransportListDetail({
     Key? key,
     required this.id,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final String id;
@@ -92,6 +93,7 @@ class _TransportListDetailState extends State<TransportListDetail> {
                       const LinearProgressIndicator(),
                     Expanded(
                       child: TrufiMapTransport(
+                        mapTilesUrl: widget.mapTilesUrl,
                         trufiMapController: trufiMapController,
                         transportData: transportData,
                       ),
