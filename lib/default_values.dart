@@ -26,14 +26,15 @@ import 'base/blocs/localization/trufi_localization_cubit.dart';
 import 'base/pages/home/widgets/trufi_map_route/trufi_map_route.dart';
 
 abstract class DefaultValues {
-  static TrufiLocalization trufiLocalization() => const TrufiLocalization(
-        currentLocale: Locale("en"),
-        localizationDelegates: [
+  static TrufiLocalization trufiLocalization({Locale? currentLocale}) =>
+      TrufiLocalization(
+        currentLocale: currentLocale ?? const Locale("en"),
+        localizationDelegates: const [
           SavedPlacesLocalization.delegate,
           FeedbackLocalization.delegate,
           AboutLocalization.delegate,
         ],
-        supportedLocales: [
+        supportedLocales: const [
           Locale('de'),
           Locale('en'),
           Locale('es'),
