@@ -15,12 +15,14 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-            otpEndpoint: "https://cbba.trufi.dev/otp",
-            otpGraphqlEndpoint: "https://cbba.trufi.dev/otp/index/graphql",
-            mapConfiguration: MapConfiguration(
-              center: LatLng(-17.392600, -66.158787),
-            ),
-            searchAssetPath: "assets/data/search.json"),
+          otpEndpoint: "https://cbba.trufi.dev/otp",
+          otpGraphqlEndpoint: "https://cbba.trufi.dev/otp/index/graphql",
+          mapConfiguration: MapConfiguration(
+            center: LatLng(-17.392600, -66.158787),
+          ),
+          searchAssetPath: "assets/data/search.json",
+          photonUrl: "https://cbba.trufi.dev/photon",
+        ),
       ],
       trufiRouter: TrufiRouter(
         routerDelegate: DefaultValues.routerDelegate(

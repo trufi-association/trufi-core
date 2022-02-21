@@ -45,6 +45,7 @@ abstract class DefaultValues {
     required String otpGraphqlEndpoint,
     required MapConfiguration mapConfiguration,
     required String searchAssetPath,
+    required String photonUrl,
   }) {
     return [
       BlocProvider<RouteTransportsCubit>(
@@ -52,7 +53,10 @@ abstract class DefaultValues {
       ),
       BlocProvider<SearchLocationsCubit>(
         create: (context) => SearchLocationsCubit(
-          searchLocationRepository: DefaultSearchLocation(searchAssetPath),
+          searchLocationRepository: DefaultSearchLocation(
+            searchAssetPath,
+            photonUrl,
+          ),
         ),
       ),
       BlocProvider<MapRouteCubit>(

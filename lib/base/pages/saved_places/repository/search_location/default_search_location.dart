@@ -10,8 +10,8 @@ import '../search_location_repository.dart';
 
 class DefaultSearchLocation implements SearchLocationRepository {
   final LocationSearchStorage storage = LocationSearchStorage();
-
-  DefaultSearchLocation(String searchAssetPath) {
+  final String photonUrl;
+  DefaultSearchLocation(String searchAssetPath, this.photonUrl) {
     storage.load(searchAssetPath);
   }
 
@@ -51,15 +51,19 @@ class DefaultSearchLocation implements SearchLocationRepository {
   Future<LocationDetail> reverseGeodecoding(LatLng location) async {
     final response = await http.get(
       Uri.parse(
-        "https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json&zoom=17",
+        "$photonUrl/reverse?lon=${location.longitude}&lat=${location.latitude}",
       ),
     );
     final body = jsonDecode(utf8.decode(response.bodyBytes));
-    final String? displayName = body["display_name"]?.toString();
-    final String? road = body["address"]["road"]?.toString();
-    final String? hamlet = body["address"]["hamlet"]?.toString();
-    final String? suburb = body["address"]["suburb"]?.toString();
-    return LocationDetail(
-        road ?? displayName ?? "", hamlet ?? suburb ?? "", location);
+    if (body["type"] == "FeatureCollection") {
+      final features = body["features"] as List;
+      if (features.isNotEmpty) {
+        final feature = features.first;
+        final properties = feature["properties"];
+        return LocationDetail(
+            properties["name"], properties["street"] ?? "", location);
+      }
+    }
+    throw Exception("no data found");
   }
 }
