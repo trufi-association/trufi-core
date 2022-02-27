@@ -6,7 +6,7 @@ import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/rout
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/bottom_stops_detail.dart';
-import 'package:trufi_core/base/pages/transport_list/widgets/transport_list_detail/trufi_map_transport.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/trufi_map_transport.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
