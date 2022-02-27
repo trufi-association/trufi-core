@@ -49,6 +49,18 @@ class RouteTransportsServices {
     final stopData = PatternOtp.fromJson(
         dataPattern.data!['pattern'] as Map<String, dynamic>);
 
-    return stopData;
+    // For cities that don't use stops like Cochabamba (uses street intersection).
+    // Workaround: remove the name of the adjacent stops that are repeated
+    final newListStops = <Stop>[];
+    if (stopData.stops != null && stopData.stops!.isNotEmpty) {
+      newListStops.add(stopData.stops!.first);
+      for (final stop in stopData.stops!) {
+        if (stop.name != newListStops.last.name) {
+          newListStops.add(stop);
+        }
+      }
+    }
+
+    return stopData.copyWith(stops: newListStops);
   }
 }
