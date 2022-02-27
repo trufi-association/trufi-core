@@ -27,7 +27,8 @@ class ModeLeg extends StatelessWidget {
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
         color: Colors.black,
-        text: (maxWidth * perc - 24) >= (duration.toString().length * 8.5)
+        text: (maxWidth * perc - 24) >= (duration.toString().length * 8.5) &&
+                duration > 0
             ? duration.toString()
             : '',
         icon: Container(
