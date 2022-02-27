@@ -26,6 +26,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
     );
     return BaseBuildAlert(
       title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(localization.noRouteError),
           const SizedBox(height: 15),
@@ -44,6 +45,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
+          const SizedBox(height: 10),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
