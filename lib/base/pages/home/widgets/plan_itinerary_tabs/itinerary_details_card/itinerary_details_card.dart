@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
@@ -27,6 +26,7 @@ class ItineraryDetailsCard extends StatelessWidget {
     final mapRouteCubit = context.read<MapRouteCubit>();
     final mapRouteState = mapRouteCubit.state;
     final compresedLegs = itinerary.compressLegs;
+    final sizeLegs = compresedLegs.length;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -47,141 +47,74 @@ class ItineraryDetailsCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: compresedLegs.length,
+            itemCount: sizeLegs,
             itemBuilder: (context, index) {
               final itineraryLeg = compresedLegs[index];
               return Column(
                 children: [
+                  // fromDashLine
                   if (index == 0)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (itineraryLeg.transportMode == TransportMode.walk)
-                          Column(
-                            children: [
-                              DashLinePlace(
-                                date: itinerary.startTimeHHmm.toString(),
-                                location: mapRouteState.fromPlace
-                                        ?.displayName(localization) ??
-                                    '',
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    const SizedBox(height: 18, width: 24),
-                                    Positioned(
-                                      top: -5,
-                                      right: -1,
-                                      left: -1,
-                                      child: SizedBox(
-                                        height: 28,
-                                        width: 28,
-                                        child: FittedBox(
-                                          child: mapConfiguratiom
-                                              .markersConfiguration.fromMarker,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              WalkDash(
-                                leg: itineraryLeg,
-                              ),
-                            ],
-                          )
-                        else if (compresedLegs.length > 1)
-                          TransportDash(
-                              itinerary: itinerary,
-                              leg: itineraryLeg,
-                              isFirstTransport: true,
-                              isNextTransport: (itineraryLeg.endTime
-                                                  .millisecondsSinceEpoch -
-                                              compresedLegs[index + 1]
-                                                  .startTime
-                                                  .millisecondsSinceEpoch)
-                                          .abs() >=
-                                      0 &&
-                                  (itineraryLeg.transportMode !=
-                                          TransportMode.bicycle ||
-                                      compresedLegs[index + 1].transportMode ==
-                                          TransportMode.walk)),
-                      ],
-                    )
-                  else if (itineraryLeg.transportMode == TransportMode.walk &&
-                      index < compresedLegs.length - 1)
-                    WalkDash(
-                      leg: itineraryLeg,
-                      legBefore: compresedLegs[index - 1],
-                    )
-                  else if (index < compresedLegs.length - 1)
-                    TransportDash(
-                        itinerary: itinerary,
-                        leg: itineraryLeg,
-                        isBeforeTransport: itineraryLeg.transportMode !=
-                                TransportMode.bicycle ||
-                            compresedLegs[index - 1].transportMode ==
-                                TransportMode.walk ||
-                            index == 0,
-                        isNextTransport:
-                            (itineraryLeg.endTime.millisecondsSinceEpoch -
-                                        compresedLegs[index + 1]
-                                            .startTime
-                                            .millisecondsSinceEpoch)
-                                    .abs() >=
-                                0),
-                  if (index == compresedLegs.length - 1)
-                    Column(
-                      children: [
-                        if (itineraryLeg.transportMode == TransportMode.walk &&
-                            compresedLegs.length > 1)
-                          WalkDash(leg: itineraryLeg)
-                        else if (itineraryLeg.transportMode !=
-                                TransportMode.walk &&
-                            compresedLegs.length > 1)
-                          TransportDash(
-                            itinerary: itinerary,
-                            leg: itineraryLeg,
-                            isFirstTransport: index == 0,
-                            isBeforeTransport: itineraryLeg.transportMode !=
-                                    TransportMode.bicycle ||
-                                compresedLegs[index - 1].transportMode ==
-                                    TransportMode.walk ||
-                                index == 0,
-                          )
-                        else if (itineraryLeg.transportMode !=
-                            TransportMode.walk)
-                          TransportDash(
-                            itinerary: itinerary,
-                            leg: itineraryLeg,
-                            isFirstTransport: index == 0,
-                            isBeforeTransport: itineraryLeg.transportMode !=
-                                    TransportMode.bicycle ||
-                                index == 0,
-                          ),
-                        DashLinePlace(
-                          date: itinerary.endTimeHHmm.toString(),
-                          location: mapRouteState.toPlace
-                                  ?.displayName(localization) ??
+                    DashLinePlace(
+                      date: itinerary.startTimeHHmm.toString(),
+                      location:
+                          mapRouteState.fromPlace?.displayName(localization) ??
                               '',
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              const SizedBox(height: 24, width: 24),
-                              Positioned(
-                                top: -3,
-                                child: SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: FittedBox(
-                                    child: mapConfiguratiom
-                                        .markersConfiguration.toMarker,
-                                  ),
-                                ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const SizedBox(height: 18, width: 24),
+                          Positioned(
+                            top: -5,
+                            right: -1,
+                            left: -1,
+                            child: SizedBox(
+                              height: 28,
+                              width: 28,
+                              child: FittedBox(
+                                child: mapConfiguratiom
+                                    .markersConfiguration.fromMarker,
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+
+                  // Route
+                  if (itineraryLeg.transitLeg)
+                    TransportDash(
+                      leg: itineraryLeg,
+                      showBeforeLine: index != 0,
+                      showAfterLine: index != sizeLegs - 1 &&
+                          !compresedLegs[index + 1].transitLeg,
+                    )
+                  else
+                    WalkDash(leg: itineraryLeg),
+
+                  // toDashLine
+                  if (index == sizeLegs - 1)
+                    DashLinePlace(
+                      date: itinerary.endTimeHHmm.toString(),
+                      location:
+                          mapRouteState.toPlace?.displayName(localization) ??
+                              '',
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const SizedBox(height: 24, width: 24),
+                          Positioned(
+                            top: -3,
+                            child: SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: FittedBox(
+                                child: mapConfiguratiom
+                                    .markersConfiguration.toMarker,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                 ],
               );

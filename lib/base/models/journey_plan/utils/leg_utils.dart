@@ -9,9 +9,11 @@ String distanceWithTranslation(
     TrufiBaseLocalization localization, double meters) {
   final tempMeters = meters;
   if (tempMeters < 100) {
+    double roundMeters = (tempMeters / 10).round() * 10;
+
     return localization.instructionDistanceMeters(_formatOneDecimals(
       localeName: localization.localeName,
-    ).format((tempMeters / 10).round() * 10));
+    ).format(roundMeters > 0 ? roundMeters : 1));
   }
   if (tempMeters < 975) {
     return localization.instructionDistanceMeters(

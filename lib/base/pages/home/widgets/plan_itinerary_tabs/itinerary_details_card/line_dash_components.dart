@@ -1,52 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/transit_leg.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class TransportDash extends StatelessWidget {
-  final double height;
-  final double dashWidth;
   final Leg leg;
-  final Itinerary itinerary;
-  final bool isNextTransport;
-  final bool isBeforeTransport;
-  final bool isFirstTransport;
+  final bool showBeforeLine;
+  final bool showAfterLine;
 
   const TransportDash({
     Key? key,
-    this.height = 1,
-    this.dashWidth = 5.0,
     required this.leg,
-    required this.itinerary,
-    this.isNextTransport = false,
-    this.isBeforeTransport = true,
-    this.isFirstTransport = false,
+    this.showBeforeLine = true,
+    this.showAfterLine = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     return Column(
       children: [
-        if (isBeforeTransport)
+        if (showBeforeLine)
           DashLinePlace(
             date: leg.startTimeString,
             location: leg.fromPlace.name,
             color: leg.primaryColor,
-            child: isFirstTransport
-                ? SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: FittedBox(
-                      child: mapConfiguratiom.markersConfiguration.fromMarker,
-                    ),
-                  )
-                : null,
           ),
         SeparatorPlace(
           color: leg.primaryColor,
@@ -63,7 +43,7 @@ class TransportDash extends StatelessWidget {
           ),
           leading: leg.transportMode.getImage(color: theme.iconTheme.color),
         ),
-        if (isNextTransport)
+        if (showAfterLine)
           DashLinePlace(
             date: leg.endTimeString.toString(),
             location: leg.toPlace.name.toString(),
@@ -76,11 +56,9 @@ class TransportDash extends StatelessWidget {
 
 class WalkDash extends StatelessWidget {
   final Leg leg;
-  final Leg? legBefore;
   const WalkDash({
     Key? key,
     required this.leg,
-    this.legBefore,
   }) : super(key: key);
 
   @override
@@ -89,12 +67,6 @@ class WalkDash extends StatelessWidget {
     final localization = TrufiBaseLocalization.of(context);
     return Column(
       children: [
-        if (legBefore != null && legBefore?.transportMode == TransportMode.walk)
-          DashLinePlace(
-            date: leg.startTimeString.toString(),
-            location: leg.fromPlace.name,
-            color: Colors.grey,
-          ),
         SeparatorPlace(
           color: leg.primaryColor,
           height: 10,
