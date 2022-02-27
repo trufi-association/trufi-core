@@ -87,98 +87,48 @@ class ItineraryDetailsCard extends StatelessWidget {
                               WalkDash(
                                 leg: itineraryLeg,
                               ),
-                              if (compresedLegs.length > 1 &&
-                                  compresedLegs[index + 1]
-                                          .startTime
-                                          .difference(itineraryLeg.endTime)
-                                          .inSeconds >
-                                      0)
-                                WaitDash(
-                                  legBefore: itineraryLeg,
-                                  legAfter: compresedLegs[index + 1],
-                                )
                             ],
                           )
                         else if (compresedLegs.length > 1)
-                          Column(
-                            children: [
-                              TransportDash(
-                                  itinerary: itinerary,
-                                  leg: itineraryLeg,
-                                  isFirstTransport: true,
-                                  isNextTransport: (itineraryLeg.endTime
-                                                      .millisecondsSinceEpoch -
-                                                  compresedLegs[index + 1]
-                                                      .startTime
-                                                      .millisecondsSinceEpoch)
-                                              .abs() >=
-                                          0 &&
-                                      (itineraryLeg.transportMode !=
-                                              TransportMode.bicycle ||
-                                          compresedLegs[index + 1]
-                                                  .transportMode ==
-                                              TransportMode.walk)),
-                              if (compresedLegs[index + 1]
-                                      .startTime
-                                      .difference(itineraryLeg.endTime)
-                                      .inSeconds >
-                                  0)
-                                WaitDash(
-                                  legBefore: itineraryLeg,
-                                  legAfter: compresedLegs[index + 1],
-                                )
-                            ],
-                          )
+                          TransportDash(
+                              itinerary: itinerary,
+                              leg: itineraryLeg,
+                              isFirstTransport: true,
+                              isNextTransport: (itineraryLeg.endTime
+                                                  .millisecondsSinceEpoch -
+                                              compresedLegs[index + 1]
+                                                  .startTime
+                                                  .millisecondsSinceEpoch)
+                                          .abs() >=
+                                      0 &&
+                                  (itineraryLeg.transportMode !=
+                                          TransportMode.bicycle ||
+                                      compresedLegs[index + 1].transportMode ==
+                                          TransportMode.walk)),
                       ],
                     )
                   else if (itineraryLeg.transportMode == TransportMode.walk &&
                       index < compresedLegs.length - 1)
-                    Column(
-                      children: [
-                        WalkDash(
-                          leg: itineraryLeg,
-                          legBefore: compresedLegs[index - 1],
-                        ),
-                        if (compresedLegs[index + 1]
-                                .startTime
-                                .difference(itineraryLeg.endTime)
-                                .inSeconds >
-                            0)
-                          WaitDash(
-                            legBefore: itineraryLeg,
-                            legAfter: compresedLegs[index + 1],
-                          )
-                      ],
+                    WalkDash(
+                      leg: itineraryLeg,
+                      legBefore: compresedLegs[index - 1],
                     )
                   else if (index < compresedLegs.length - 1)
-                    Column(
-                      children: [
-                        TransportDash(
-                            itinerary: itinerary,
-                            leg: itineraryLeg,
-                            isBeforeTransport: itineraryLeg.transportMode !=
-                                    TransportMode.bicycle ||
-                                compresedLegs[index - 1].transportMode ==
-                                    TransportMode.walk ||
-                                index == 0,
-                            isNextTransport:
-                                (itineraryLeg.endTime.millisecondsSinceEpoch -
-                                            compresedLegs[index + 1]
-                                                .startTime
-                                                .millisecondsSinceEpoch)
-                                        .abs() >=
-                                    0),
-                        if (compresedLegs[index + 1]
-                                .startTime
-                                .difference(itineraryLeg.endTime)
-                                .inSeconds >
-                            0)
-                          WaitDash(
-                            legBefore: itineraryLeg,
-                            legAfter: compresedLegs[index + 1],
-                          )
-                      ],
-                    ),
+                    TransportDash(
+                        itinerary: itinerary,
+                        leg: itineraryLeg,
+                        isBeforeTransport: itineraryLeg.transportMode !=
+                                TransportMode.bicycle ||
+                            compresedLegs[index - 1].transportMode ==
+                                TransportMode.walk ||
+                            index == 0,
+                        isNextTransport:
+                            (itineraryLeg.endTime.millisecondsSinceEpoch -
+                                        compresedLegs[index + 1]
+                                            .startTime
+                                            .millisecondsSinceEpoch)
+                                    .abs() >=
+                                0),
                   if (index == compresedLegs.length - 1)
                     Column(
                       children: [

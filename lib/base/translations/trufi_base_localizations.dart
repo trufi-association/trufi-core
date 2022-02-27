@@ -201,7 +201,7 @@ abstract class TrufiBaseLocalization {
   /// General Leaves at  label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Leaves'**
   String get commonLeavesAt;
 
   /// General Loading label

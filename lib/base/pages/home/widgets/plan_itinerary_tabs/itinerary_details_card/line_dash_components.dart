@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
-import 'package:trufi_core/base/models/journey_plan/utils/duration_utils.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/transit_leg.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class TransportDash extends StatelessWidget {
   final double height;
@@ -109,51 +107,6 @@ class WalkDash extends StatelessWidget {
   }
 }
 
-class WaitDash extends StatelessWidget {
-  final Leg legBefore;
-  final Leg legAfter;
-  const WaitDash({
-    Key? key,
-    required this.legBefore,
-    required this.legAfter,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
-    return Column(
-      children: [
-        if (legBefore.endTime.millisecondsSinceEpoch -
-                    legAfter.startTime.millisecondsSinceEpoch ==
-                0 ||
-            legBefore.transportMode == TransportMode.walk)
-          DashLinePlace(
-            date: legBefore.endTimeString.toString(),
-            location: legBefore.toPlace.name,
-            color: Colors.grey,
-          ),
-        if (legAfter.transitLeg)
-          SeparatorPlace(
-            color: Colors.grey,
-            separator: Container(
-              margin: const EdgeInsets.symmetric(vertical: 2),
-              height: 20,
-              width: 20,
-              child: waitIcon(color: theme.iconTheme.color),
-            ),
-            height: 15,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                  "${localization.commonWait} (${durationFormatString(localization, legAfter.startTime.difference(legBefore.endTime))})"),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
 class SeparatorPlace extends StatelessWidget {
   final Widget child;
   final Widget? leading;
@@ -242,21 +195,20 @@ class DashLinePlace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return IntrinsicHeight(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             width: 50,
-            margin: const EdgeInsets.only(top: 1),
-            child: Text(
-              date,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+            child: Center(
+              child: Container(
+                width: 40,
+                height: 1.5,
+                color: theme.dividerColor,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
           if (child == null)

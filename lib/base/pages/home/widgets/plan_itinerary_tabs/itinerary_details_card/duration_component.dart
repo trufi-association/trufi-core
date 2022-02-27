@@ -24,25 +24,12 @@ class DurationComponent extends StatelessWidget {
       children: [
         const Icon(Icons.timer_sharp),
         const SizedBox(width: 2),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              durationFormatString(localization, duration),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              futureText != ''
-                  ? '$futureText\n${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}'
-                  : '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
+        Text(
+          durationFormatString(localization, duration),
+          style: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

@@ -56,7 +56,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get commonItineraryNoTransitLegs => 'Salir cuando te convenga';
 
   @override
-  String get commonLeavesAt => 'Sale a las';
+  String get commonLeavesAt => 'Sale';
 
   @override
   String get commonLoading => 'Cargando...';

@@ -36,18 +36,17 @@ class ItineraryCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(
                 top: Insets.sm,
-                bottom: Insets.sm,
+                bottom: Insets.xs,
                 right: Insets.xl,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    "${itinerary.startDateText(localization)} ${itinerary.startTimeHHmm} - ${itinerary.endTimeHHmm}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Expanded(
+                      child: Container(
+                    height: 1.5,
+                    color: theme.dividerColor,
+                  )),
+                  const SizedBox(width: 8),
                   RichText(
                     textScaleFactor: MediaQuery.of(context).textScaleFactor,
                     text: TextSpan(

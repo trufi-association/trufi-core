@@ -63,7 +63,7 @@
     "@commonItineraryNoTransitLegs": {
         "description": "General Leave when it suits you label"
     },
-    "commonLeavesAt": "Fährt ab um",
+    "commonLeavesAt": "Fährt",
     "@commonLeavesAt": {
         "description": "General Leaves at  label"
     },

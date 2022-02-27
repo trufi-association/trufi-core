@@ -145,7 +145,7 @@ class Itinerary extends Equatable {
               ? localization.commonFromStation
               : localization.commonFromStop;
       legStartTime =
-          "${localization.commonLeavesAt} ${firstTransport.startTimeString} $firstDepartureStopType ${firstTransport.fromPlace.name}";
+          "${localization.commonLeavesAt} $firstDepartureStopType ${firstTransport.fromPlace.name}";
     } else {
       legStartTime = localization.commonItineraryNoTransitLegs;
     }
