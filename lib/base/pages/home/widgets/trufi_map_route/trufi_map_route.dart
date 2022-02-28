@@ -25,11 +25,13 @@ class TrufiMapRoute extends StatefulWidget {
   final TrufiMapController trufiMapController;
   final AsyncExecutor asyncExecutor;
   final String mapTilesUrl;
+  final WidgetBuilder? overlapWidget;
   const TrufiMapRoute({
     Key? key,
     required this.trufiMapController,
     required this.asyncExecutor,
     required this.mapTilesUrl,
+    this.overlapWidget,
   }) : super(key: key);
 
   @override
@@ -93,6 +95,7 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
             );
           },
         ),
+        if (widget.overlapWidget != null) widget.overlapWidget!(context)
       ],
     );
   }
