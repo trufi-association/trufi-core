@@ -79,7 +79,7 @@ class AboutPage extends StatelessWidget {
                 Text(cityName),
                 const SizedBox(height: 16.0),
                 Text(
-                  localizationA.tagline(cityName),
+                  localizationA.tagline(cityName.split("-")[0].trim()),
                   style: theme.textTheme.subtitle2?.copyWith(),
                 ),
                 const SizedBox(height: 16.0),
@@ -108,7 +108,10 @@ class AboutPage extends StatelessWidget {
                       ),
                       children: [
                         Text(
-                          localizationA.aboutCollapseContent,
+                          localizationA.aboutCollapseContent(
+                            appName,
+                            cityName.split("-")[0].trim(),
+                          ),
                           style:
                               theme.textTheme.bodyText2?.copyWith(height: 1.5),
                         )

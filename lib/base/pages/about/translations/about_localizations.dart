@@ -102,11 +102,11 @@ abstract class AboutLocalization {
     Locale('pt')
   ];
 
-  /// No description provided for @aboutCollapseContent.
+  /// A short marketing sentence that describes the app
   ///
   /// In pt, this message translates to:
-  /// **'The Trufi app for Cochabamba enhances your travel experience on trufis and buses, and helps to move around Cochabamba.\n\nNeed to go somewhere and don\'t know which trufi or bus to take?\n\nWith Trufi App it\'s easy!\n\nTrufi Association is an international NGO that promotes easier access to public transport. Official maps, apps, and schedules don\'t exist in many cities. We fill in the gaps - and sometimes even map routes from scratch. Our apps help everyone find the best way to get from Point A to Point B within their cities. Well-designed mobility contributes to greater sustainability, cleaner air and better quality of life.\nIn many cities there are no official maps, apps or timetables. We complete them, and sometimes even draw routes from scratch. Our apps help everyone find the best way to get from point A to point B within their cities. A well-designed transportation system contributes to greater sustainability, cleaner air and a better quality of life.\n\nWe love La Llajta and public transportation, that\'s why Trufi Association created this app to make it easy for Cochabamba commuters and anyone else to get around Cochabamba.\n\nPlease help us make Trufi App better by volunteering with us. We need mappers, developers, planners, testers, and many other hands. Please contact our team via email feedback@trufi.app.\n'**
-  String get aboutCollapseContent;
+  /// **'The {appName} for {city} enhances your travel experience on trufis and buses, and helps to move around {city}.\n\nNeed to go somewhere and don\'t know which trufi or bus to take?\nWith Trufi App it\'s easy! \n\nTrufi Association is an international NGO that promotes easier access to public transport. In many cities there are no official maps, apps or timetables. We complete them, and sometimes even draw routes from scratch. Our apps help everyone find the best way to get from point A to point B within their cities. A well-designed transportation system contributes to greater sustainability, cleaner air and a better quality of life.\n\nWe love La Llajta and public transportation, that\'s why Trufi Association created this app to make it easy for {city} commuters and anyone else to get around {city}.\n\nPlease help us make {appName} better by volunteering with us. We need mappers, developers, planners, testers, and many other hands. Please contact our team via email feedback@trufi.app.\n'**
+  String aboutCollapseContent(Object appName, Object city);
 
   /// No description provided for @aboutCollapseTitle.
   ///
@@ -141,7 +141,7 @@ abstract class AboutLocalization {
   /// A short marketing sentence that describes the app
   ///
   /// In pt, this message translates to:
-  /// **'Transporte público em Cochabamba'**
+  /// **'Transporte público em {city}'**
   String tagline(Object city);
 
   /// The application's version
