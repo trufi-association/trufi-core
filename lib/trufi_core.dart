@@ -2,6 +2,7 @@ library trufi_core;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'package:trufi_core/base/widgets/app_lifecycle_reactor.dart';
@@ -57,6 +58,12 @@ class TrufiApp extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: ThemeMode.system,
+          // Delegates are required when there is no context for delegates by default
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           supportedLocales: _trufiLocalization.supportedLocales,
           debugShowCheckedModeBanner: false,
           routeInformationParser: trufiRouter.routeInformationParser,

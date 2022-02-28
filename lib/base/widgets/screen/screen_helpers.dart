@@ -79,7 +79,7 @@ Future<T?> showTrufiModalBottomSheet<T>({
   BoxConstraints? constraints,
   Color? barrierColor,
   bool isScrollControlled = false,
-  bool useRootNavigator = false,
+  bool useRootNavigator = true,
   bool isDismissible = true,
   bool enableDrag = true,
   RouteSettings? routeSettings,
@@ -87,7 +87,11 @@ Future<T?> showTrufiModalBottomSheet<T>({
 }) async {
   return showModalBottomSheet<T>(
     context: context,
-    builder: (buildContext) => BaseTrufiPage(child: builder(buildContext)),
+    builder: (buildContext) => BaseTrufiPage(
+      child: Builder(
+        builder: builder,
+      ),
+    ),
     backgroundColor: backgroundColor,
     elevation: elevation,
     shape: shape,
