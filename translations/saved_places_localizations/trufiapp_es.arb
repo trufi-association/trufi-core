@@ -1,18 +1,18 @@
 {
-    "chooseNowLabel": "Choose now",
-    "chooseOnMap": "Choose on map",
+    "chooseNowLabel": "Elegir ahora",
+    "chooseOnMap": "Elegir en el mapa",
     "@chooseOnMap": {
         "description": "Search option that allows to choose a point on the map"
     },
-    "commonCustomPlaces": "Custom places",
+    "commonCustomPlaces": "Lugares personalizados",
     "@commonCustomPlaces": {
         "description": "General CustomPlaces label"
     },
-    "commonFavoritePlaces": "Favorite places",
+    "commonFavoritePlaces": "Lugares favoritos",
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
-    "defaultLocationAdd": "Versión {defaultLocation}",
+    "defaultLocationAdd": "Establecer {defaultLocation}",
     "@defaultLocationAdd": {
         "placeholders": {
             "defaultLocation": {
@@ -21,16 +21,16 @@
         },
         "description": "The name Add for {defaultLocation}"
     },
-    "defaultLocationHome": "Home",
+    "defaultLocationHome": "Hogar",
     "@defaultLocationHome": {
         "description": "The default location name Home"
     },
-    "defaultLocationWork": "Work",
+    "defaultLocationWork": "Trabajo",
     "@defaultLocationWork": {
         "description": "The default location name Work"
     },
-    "iconlabel": "Icon",
-    "instructionJunction": "{street1} and {street2}",
+    "iconlabel": "Icono",
+    "instructionJunction": "{street1} y {street2}",
     "@instructionJunction": {
         "type": "text",
         "placeholders": {
@@ -47,15 +47,15 @@
     "@menuYourPlaces": {
         "description": "A menu item that shows the saved places"
     },
-    "nameLabel": "Name",
-    "savedPlacesEditLabel": "Edit place",
-    "savedPlacesEnterNameTitle": "Enter name",
-    "savedPlacesEnterNameValidation": "The name cannot be empty",
-    "savedPlacesRemoveLabel": "Remove place",
-    "savedPlacesSelectIconTitle": "Select symbol",
-    "savedPlacesSetIconLabel": "Change symbol",
-    "savedPlacesSetNameLabel": "Edit name",
-    "savedPlacesSetPositionLabel": "Edit position",
+    "nameLabel": "Nombre",
+    "savedPlacesEditLabel": "Editar lugar",
+    "savedPlacesEnterNameTitle": "Ingrese su nombre",
+    "savedPlacesEnterNameValidation": "El nombre no puede ser vacio",
+    "savedPlacesRemoveLabel": "Eliminar lugar",
+    "savedPlacesSelectIconTitle": "Seleccionar icono",
+    "savedPlacesSetIconLabel": "Cambiar icono",
+    "savedPlacesSetNameLabel": "Editar nombre",
+    "savedPlacesSetPositionLabel": "Editar posición",
     "searchTitleFavorites": "Favoritos",
     "@searchTitleFavorites": {
         "description": "Search section title for locations marked as favorites"
@@ -68,5 +68,5 @@
     "@searchTitleResults": {
         "description": "Search section title for results found for the provided search term"
     },
-    "selectedOnMap": "Selected on the map"
+    "selectedOnMap": "Seleccionado en el mapa"
 }

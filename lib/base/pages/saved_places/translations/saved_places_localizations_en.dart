@@ -21,7 +21,7 @@ class SavedPlacesLocalizationEn extends SavedPlacesLocalization {
 
   @override
   String defaultLocationAdd(Object defaultLocation) {
-    return 'Add $defaultLocation';
+    return 'Set $defaultLocation address';
   }
 
   @override
