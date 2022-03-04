@@ -275,12 +275,12 @@
     "@instructionVehicleWalk": {
         "description": "Vehicle name (Walk)"
     },
-    "menuConnections": "Verbindungen",
+    "menuConnections": "Routenplaner",
     "@menuConnections": {
         "description": "Menu item that shows the map/planned trip"
     },
     "menuSocialMedia": "Soziale Medien",
-    "menuTransportList": "Busliste",
+    "menuTransportList": "Verbindungen",
     "@menuTransportList": {
         "description": "Vehicle name (Metro)"
     },

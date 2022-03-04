@@ -272,12 +272,12 @@
         "description": "Vehicle name (Trufi)"
     },
     "instructionVehicleWalk": "Walk",
-    "menuConnections": "Mostrar rotas",
+    "menuConnections": "Route planner",
     "@menuConnections": {
         "description": "Menu item that shows the map/planned trip"
     },
     "menuSocialMedia": "Social media",
-    "menuTransportList": "Bus list",
+    "menuTransportList": "Mostrar rotas",
     "@menuTransportList": {
         "description": "Menu item that shows the bus list page"
     },

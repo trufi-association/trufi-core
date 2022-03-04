@@ -208,13 +208,13 @@ class TrufiBaseLocalizationIt extends TrufiBaseLocalization {
   String get instructionVehicleWalk => 'Walk';
 
   @override
-  String get menuConnections => 'Mostra itinerari';
+  String get menuConnections => 'Route planner';
 
   @override
   String get menuSocialMedia => 'Social media';
 
   @override
-  String get menuTransportList => 'Bus list';
+  String get menuTransportList => 'Mostra itinerari';
 
   @override
   String get noRouteError => 'Scusa, non siamo riusciti a trovare un itinerario. Che cosa vuoi fare?';
