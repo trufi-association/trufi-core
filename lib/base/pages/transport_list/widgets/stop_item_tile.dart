@@ -15,44 +15,41 @@ class StopItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          children: [
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: color, width: 3.5),
-                  shape: BoxShape.circle),
-            ),
-            if (!isLastElement)
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
               Container(
-                width: 4,
-                height: 15,
-                color: color,
-              )
-          ],
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: SizedBox(
-            height: !isLastElement ? 20 : 50,
-            child: Row(
-              crossAxisAlignment: !isLastElement
-                  ? CrossAxisAlignment.center
-                  : CrossAxisAlignment.start,
-              children: [
-                Expanded(child: Text(stop.name)),
-              ],
+                height: 20,
+                width: 20,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: color, width: 3.5),
+                    shape: BoxShape.circle),
+              ),
+              if (!isLastElement)
+                Expanded(
+                  child: Container(
+                    width: 3,
+                    color: color,
+                  ),
+                ),
+            ],
+          ), 
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Text(stop.name+"\n"),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
