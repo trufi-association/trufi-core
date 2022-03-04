@@ -90,4 +90,12 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     }
     return tempList;
   }
+
+  Future<void> filterList(String query) async {
+    emit(
+      state.copyWith(
+        queryFilter: query,
+      ),
+    );
+  }
 }
