@@ -58,10 +58,10 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
               layerOptionsBuilder: (context) => [
                 if (state.unselectedPolylinesLayer != null)
                   state.unselectedPolylinesLayer!,
-                if (state.selectedPolylinesLayer != null)
-                  state.selectedPolylinesLayer!,
                 if (state.unselectedMarkersLayer != null)
                   state.unselectedMarkersLayer!,
+                if (state.selectedPolylinesLayer != null)
+                  state.selectedPolylinesLayer!,
                 if (state.selectedMarkersLayer != null)
                   state.selectedMarkersLayer!,
                 if (state.fromMarkerLayer != null) state.fromMarkerLayer!,
