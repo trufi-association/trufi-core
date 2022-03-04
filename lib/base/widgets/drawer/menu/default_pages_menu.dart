@@ -36,7 +36,7 @@ class MenuPageItem extends MenuItem {
         );
 }
 
-enum DefaultPagesMenu { homePage, savedPlaces, transportList, feedback, about }
+enum DefaultPagesMenu { homePage, transportList, savedPlaces, feedback, about }
 
 extension LayerIdsToString on DefaultPagesMenu {
   MenuPageItem toMenuPage() {
