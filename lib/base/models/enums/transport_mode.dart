@@ -253,16 +253,18 @@ extension TransportModeExtension on TransportMode {
       width: size,
       height: size,
       padding: const EdgeInsets.all(2),
-      child: _images(this, color) ??
-          (_icons[this] != null
-              ? Icon(
-                  _icons[this],
-                  color: color??color,
-                )
-              : const Icon(
-                  Icons.error,
-                  color: Colors.red,
-                )),
+      child: FittedBox(
+        child: _images(this, color) ??
+            (_icons[this] != null
+                ? Icon(
+                    _icons[this],
+                    color: color ?? color,
+                  )
+                : const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  )),
+      ),
     );
   }
 }

@@ -211,6 +211,7 @@ class _BuildYourPlaces extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final localizationSP = SavedPlacesLocalization.of(context);
     return SliverList(
       delegate: SliverChildBuilderDelegate(
@@ -223,7 +224,7 @@ class _BuildYourPlaces extends StatelessWidget {
                 onTap: () {
                   onSelected(location);
                 },
-                iconData: typeToIconData(location.type),
+                iconData: typeToIconData(location.type,color: theme.iconTheme.color),
                 title: location.displayName(localizationSP),
                 subtitle: location.address,
               ),
@@ -253,6 +254,7 @@ class _BuildObjectList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final localizationSP = SavedPlacesLocalization.of(context);
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SliverList(
@@ -268,7 +270,7 @@ class _BuildObjectList extends StatelessWidget {
                 searchLocationsCubit.insertHistoryPlace(object);
                 onSelected(object);
               },
-              iconData: typeToIconData(object.type),
+              iconData: typeToIconData(object.type,color: theme.iconTheme.color),
               title: object.displayName(localizationSP),
               subtitle: object.address,
               trailing: FavoriteButton(
