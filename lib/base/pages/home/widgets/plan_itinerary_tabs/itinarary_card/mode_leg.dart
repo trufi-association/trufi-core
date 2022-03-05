@@ -8,13 +8,11 @@ class ModeLeg extends StatelessWidget {
   final double maxWidth;
   final Leg leg;
   final double legLength;
-  final int duration;
 
   const ModeLeg({
     Key? key,
     required this.leg,
     required this.legLength,
-    required this.duration,
     required this.maxWidth,
   }) : super(key: key);
 
@@ -27,10 +25,7 @@ class ModeLeg extends StatelessWidget {
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
         color: Colors.black,
-        text: (maxWidth * perc - 24) >= (duration.toString().length * 8.5) &&
-                duration > 0
-            ? duration.toString()
-            : '',
+        text: '',
         icon: Container(
           padding: const EdgeInsets.symmetric(horizontal: 2),
           width: 20,
