@@ -336,7 +336,7 @@
         },
         "description": "Text with URL that is used when sharing the app."
     },
-    "themeModeDark": "Thema oscuro",
-    "themeModeLight": "Thema claro",
+    "themeModeDark": "Modo oscuro",
+    "themeModeLight": "Modo claro",
     "themeModeSystem": "Predeterminado del sistema"
 }

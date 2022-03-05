@@ -21,7 +21,7 @@
         },
         "description": "The name Add for {defaultLocation}"
     },
-    "defaultLocationHome": "Hogar",
+    "defaultLocationHome": "Casa",
     "@defaultLocationHome": {
         "description": "The default location name Home"
     },

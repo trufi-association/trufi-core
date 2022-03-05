@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,12 +11,16 @@ class AboutPage extends StatelessWidget {
 
   final String appName;
   final String cityName;
+  final String countryName;
+  final String emailContact;
   final Widget Function(BuildContext) drawerBuilder;
 
   const AboutPage({
     Key? key,
     required this.appName,
     required this.cityName,
+    required this.countryName,
+    required this.emailContact,
     required this.drawerBuilder,
   }) : super(key: key);
 
@@ -75,16 +80,14 @@ class AboutPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 2.0),
-                Text(cityName),
                 const SizedBox(height: 16.0),
                 Text(
-                  localizationA.tagline(cityName.split("-")[0].trim()),
+                  localizationA.tagline("$cityName, $countryName"),
                   style: theme.textTheme.subtitle2?.copyWith(),
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  localizationA.aboutContent,
+                  localizationA.aboutContent(appName),
                 ),
                 const SizedBox(height: 24),
                 Container(
@@ -108,10 +111,29 @@ class AboutPage extends StatelessWidget {
                       ),
                       children: [
                         Text(
-                          localizationA.aboutCollapseContent(
-                            appName,
-                            cityName.split("-")[0].trim(),
-                          ),
+                          localizationA.aboutCollapseContent + '\n',
+                          style:
+                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              child: Text(
+                                localizationA.trufiWebsite + '\n',
+                                style: theme.textTheme.bodyText2?.copyWith(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              onTap: () {
+                                launch('https://www.trufi-association.org/');
+                              },
+                            ),
+                          ],
+                        ),
+                        Text(
+                          localizationA.aboutCollapseContentFoot + '\n',
                           style:
                               theme.textTheme.bodyText2?.copyWith(height: 1.5),
                         )
@@ -123,13 +145,13 @@ class AboutPage extends StatelessWidget {
                       collapsedIconColor: theme.iconTheme.color,
                       iconColor: theme.iconTheme.color,
                       tilePadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 7),
+                          horizontal: 15, vertical: 0),
                       childrenPadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 7),
+                          horizontal: 15, vertical: 0),
                     ),
                   ),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 Column(
                   children: [
                     ElevatedButton(
@@ -166,16 +188,42 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 InkWell(
                   child: Text(
-                    localizationA.aboutOpenSource,
-                    style: TextStyle(
-                      color: theme.colorScheme.secondary,
+                    'Email',
+                    style: theme.textTheme.bodyText2?.copyWith(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                   onTap: () {
-                    launch(
-                      'https://github.com/trufi-association/trufi-core.git',
-                    );
+                    final url = "mailto:$emailContact?subject=Contact";
+                    launch(url);
                   },
+                ),
+                SelectableText(
+                  emailContact,
+                ),
+                const SizedBox(height: 20),
+                RichText(
+                  text: TextSpan(
+                    style: theme.textTheme.bodyText2,
+                    text: '${localizationA.aboutOpenSource} ',
+                    children: [
+                      TextSpan(
+                          text: 'Github',
+                          style: theme.textTheme.bodyText2?.copyWith(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              launch(
+                                'https://github.com/trufi-association/trufi-core.git',
+                              );
+                            }),
+                    ],
+                  ),
                 ),
               ],
             ),

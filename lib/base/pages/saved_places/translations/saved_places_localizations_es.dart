@@ -25,7 +25,7 @@ class SavedPlacesLocalizationEs extends SavedPlacesLocalization {
   }
 
   @override
-  String get defaultLocationHome => 'Hogar';
+  String get defaultLocationHome => 'Casa';
 
   @override
   String get defaultLocationWork => 'Trabajo';

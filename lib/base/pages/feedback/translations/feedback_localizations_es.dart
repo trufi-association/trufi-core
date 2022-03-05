@@ -14,5 +14,5 @@ class FeedbackLocalizationEs extends FeedbackLocalization {
   String get feedbackTitle => 'Envíanos un correo electrónico';
 
   @override
-  String get feedbackContent => '¿Tiene sugerencias para nuestra aplicación o ha encontrado algunos errores en los datos? Nos encantaría saberlo! Asegúrese de agregar su dirección de correo electrónico o teléfono para que podamos responderlo.';
+  String get feedbackContent => '¿Tienes sugerencias para nuestra aplicación o has encontrado algunos errores en los datos? ¡Nos encantaría saberlo! Asegúrate de agregar tu dirección de correo electrónico o teléfono para que podamos responderte.';
 }

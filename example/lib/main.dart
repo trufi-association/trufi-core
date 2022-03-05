@@ -27,7 +27,8 @@ void main() async {
       trufiRouter: TrufiRouter(
         routerDelegate: DefaultValues.routerDelegate(
           appName: 'ExampleApp',
-          cityName: 'City - Country',
+          cityName: 'City',
+          countryName: 'Country',
           backgroundImageBuilder: (_) {
             return Image.asset(
               'assets/images/drawer-bg.jpg',
@@ -35,6 +36,7 @@ void main() async {
             );
           },
           urlFeedback: 'https://example/feedback',
+          emailContact: 'example@example.com',
           urlShareApp: 'https://example/share',
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',

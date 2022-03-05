@@ -1,30 +1,28 @@
 {
-    "aboutCollapseContent": "The {appName} for {city} enhances your travel experience on trufis and buses, and helps to move around {city}.\n\nNeed to go somewhere and don't know which trufi or bus to take?\nWith Trufi App it's easy! \n\nTrufi Association is an international NGO that promotes easier access to public transport. In many cities there are no official maps, apps or timetables. We complete them, and sometimes even draw routes from scratch. Our apps help everyone find the best way to get from point A to point B within their cities. A well-designed transportation system contributes to greater sustainability, cleaner air and a better quality of life.\n\nWe love La Llajta and public transportation, that's why Trufi Association created this app to make it easy for {city} commuters and anyone else to get around {city}.\n\nPlease help us make {appName} better by volunteering with us. We need mappers, developers, planners, testers, and many other hands. Please contact our team via email feedback@trufi.app.\n",
+    "aboutCollapseContent": "Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.",
     "@aboutCollapseContent": {
+        "description": "A short marketing sentence that describes the app"
+    },
+    "aboutCollapseContentFoot": "We need mappers, developers, planners, testers, and many other hands.",
+    "aboutCollapseTitle": "More About Trufi Association",
+    "aboutContent": "Need to go somewhere and don't know which trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, and we want to make it easier to use for everyone. So we developed this app. We hope you enjoy it.",
+    "@aboutContent": {
         "placeholders": {
             "appName": {
                 "example": "Trufi App"
-            },
-            "city": {
-                "example": "Cochabamba"
             }
         },
-        "description": "A short marketing sentence that describes the app"
-    },
-    "aboutCollapseTitle": "We are the coolest group ever! Any other questions?",
-    "aboutContent": "Somos uma equipe boliviana e internacional de pessoas que amam e apoiam o transporte público.\n\nNós desenvolvemos este aplicativo para facilitar o uso do sistema de transporte em Cochabamba e arredores.",
-    "@aboutContent": {
         "description": "Text displayed on the about page"
     },
     "aboutLicenses": "Licenças",
     "@aboutLicenses": {
         "description": "Button label to show licenses"
     },
-    "aboutOpenSource": "Este aplicativo é lançado como código aberto no GitHub. Sinta-se livre para contribuir ou trazê-lo para sua própria cidade.",
+    "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.",
     "@aboutOpenSource": {
         "description": "A note about open source"
     },
-    "menuAbout": "Sobre",
+    "menuAbout": "About us",
     "@menuAbout": {
         "description": "Menu item that shows the about page"
     },
@@ -37,6 +35,7 @@
         },
         "description": "A short marketing sentence that describes the app"
     },
+    "trufiWebsite": "Trufi Association Website",
     "version": "Versão {version}",
     "@version": {
         "placeholders": {
@@ -45,5 +44,6 @@
             }
         },
         "description": "The application's version"
-    }
+    },
+    "volunteerTrufi": "Volunteer For Trufi"
 }

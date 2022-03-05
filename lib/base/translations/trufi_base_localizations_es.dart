@@ -252,10 +252,10 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   }
 
   @override
-  String get themeModeDark => 'Thema oscuro';
+  String get themeModeDark => 'Modo oscuro';
 
   @override
-  String get themeModeLight => 'Thema claro';
+  String get themeModeLight => 'Modo claro';
 
   @override
   String get themeModeSystem => 'Predeterminado del sistema';
