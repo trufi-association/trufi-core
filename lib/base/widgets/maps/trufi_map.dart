@@ -8,6 +8,8 @@ import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/your_location_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
 
+import 'cache_map_tiles.dart';
+
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
 class TrufiMap extends StatelessWidget {
@@ -68,7 +70,7 @@ class TrufiMap extends StatelessWidget {
                   TileLayerOptions(
                     urlTemplate: mapTilesUrl,
                     subdomains: ['a', 'b', 'c'],
-                    tileProvider: NetworkTileProvider(),
+                     tileProvider: const CachedTileProvider()
                   ),
                   mapConfiguratiom.markersConfiguration
                       .buildYourLocationMarkerLayerOptions(currentLocation),
