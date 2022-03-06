@@ -272,12 +272,12 @@
         "description": "Vehicle name (Trufi)"
     },
     "instructionVehicleWalk": "Caminar",
-    "menuConnections": "Mostrar rutas",
+    "menuConnections": "Planificador de rutas",
     "@menuConnections": {
         "description": "Menu item that shows the map/planned trip"
     },
     "menuSocialMedia": "Redes sociales",
-    "menuTransportList": "Lista de autobuses",
+    "menuTransportList": "Mostrar lineas",
     "@menuTransportList": {
         "description": "Vehicle name (Metro)"
     },
@@ -336,7 +336,7 @@
         },
         "description": "Text with URL that is used when sharing the app."
     },
-    "themeModeDark": "Thema oscuro",
-    "themeModeLight": "Thema claro",
+    "themeModeDark": "Modo oscuro",
+    "themeModeLight": "Modo claro",
     "themeModeSystem": "Predeterminado del sistema"
 }

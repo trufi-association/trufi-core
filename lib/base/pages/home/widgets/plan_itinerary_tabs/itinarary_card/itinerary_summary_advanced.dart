@@ -85,7 +85,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          duration: leg.duration.inSeconds ~/ 60,
         ));
       } else if (leg.transportMode == TransportMode.car) {
         legs.add(RouteLeg(
@@ -99,7 +98,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          duration: leg.duration.inSeconds ~/ 60,
         ));
       }
       if ((leg.route != null || leg.shortName != null)) {

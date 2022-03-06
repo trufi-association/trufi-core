@@ -489,7 +489,7 @@ abstract class TrufiBaseLocalization {
   /// Menu item that shows the map/planned trip
   ///
   /// In pt, this message translates to:
-  /// **'Mostrar rotas'**
+  /// **'Route planner'**
   String get menuConnections;
 
   /// No description provided for @menuSocialMedia.
@@ -501,7 +501,7 @@ abstract class TrufiBaseLocalization {
   /// Menu item that shows the bus list page
   ///
   /// In pt, this message translates to:
-  /// **'Bus list'**
+  /// **'Mostrar rotas'**
   String get menuTransportList;
 
   /// Message when no route could be found after a route search

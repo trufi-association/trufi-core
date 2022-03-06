@@ -12,6 +12,7 @@ class TrufiDrawer extends StatelessWidget {
     Key? key,
     required this.appName,
     required this.cityName,
+    required this.countryName,
     this.backgroundImageBuilder,
     required this.urlShareApp,
     required this.menuItems,
@@ -19,6 +20,7 @@ class TrufiDrawer extends StatelessWidget {
 
   final String appName;
   final String cityName;
+  final String countryName;
   final String urlShareApp;
   final String currentRoute;
   final List<List<MenuItem>> menuItems;
@@ -76,7 +78,7 @@ class TrufiDrawer extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  cityName,
+                                  '$cityName - $countryName',
                                   style: const TextStyle(
                                     color: Colors.white,
                                   ),

@@ -34,11 +34,9 @@ class Plan extends Equatable {
           itineraries.add(itinerary);
         } else {
           // If a bus leg exist and the first route isn't used yet just add the itinerary
-          final startTime = firstBusLeg.startTime.millisecondsSinceEpoch;
-          final endTime = firstBusLeg.endTime.millisecondsSinceEpoch;
-          if (!usedRoutes.contains('${firstBusLeg.route}$startTime$endTime')) {
+          if (!usedRoutes.contains(firstBusLeg.shortName)) {
             itineraries.add(itinerary);
-            usedRoutes.add('${firstBusLeg.route}$startTime$endTime');
+            usedRoutes.add(firstBusLeg.shortName!);
           }
         }
         // Return current list

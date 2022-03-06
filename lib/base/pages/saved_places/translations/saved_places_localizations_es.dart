@@ -8,65 +8,65 @@ class SavedPlacesLocalizationEs extends SavedPlacesLocalization {
   SavedPlacesLocalizationEs([String locale = 'es']) : super(locale);
 
   @override
-  String get chooseNowLabel => 'Choose now';
+  String get chooseNowLabel => 'Elegir ahora';
 
   @override
-  String get chooseOnMap => 'Choose on map';
+  String get chooseOnMap => 'Elegir en el mapa';
 
   @override
-  String get commonCustomPlaces => 'Custom places';
+  String get commonCustomPlaces => 'Lugares personalizados';
 
   @override
-  String get commonFavoritePlaces => 'Favorite places';
+  String get commonFavoritePlaces => 'Lugares favoritos';
 
   @override
   String defaultLocationAdd(Object defaultLocation) {
-    return 'Versión $defaultLocation';
+    return 'Establecer $defaultLocation';
   }
 
   @override
-  String get defaultLocationHome => 'Home';
+  String get defaultLocationHome => 'Casa';
 
   @override
-  String get defaultLocationWork => 'Work';
+  String get defaultLocationWork => 'Trabajo';
 
   @override
-  String get iconlabel => 'Icon';
+  String get iconlabel => 'Icono';
 
   @override
   String instructionJunction(Object street1, Object street2) {
-    return '$street1 and $street2';
+    return '$street1 y $street2';
   }
 
   @override
   String get menuYourPlaces => 'Tus lugares';
 
   @override
-  String get nameLabel => 'Name';
+  String get nameLabel => 'Nombre';
 
   @override
-  String get savedPlacesEditLabel => 'Edit place';
+  String get savedPlacesEditLabel => 'Editar lugar';
 
   @override
-  String get savedPlacesEnterNameTitle => 'Enter name';
+  String get savedPlacesEnterNameTitle => 'Ingrese su nombre';
 
   @override
-  String get savedPlacesEnterNameValidation => 'The name cannot be empty';
+  String get savedPlacesEnterNameValidation => 'El nombre no puede ser vacio';
 
   @override
-  String get savedPlacesRemoveLabel => 'Remove place';
+  String get savedPlacesRemoveLabel => 'Eliminar lugar';
 
   @override
-  String get savedPlacesSelectIconTitle => 'Select symbol';
+  String get savedPlacesSelectIconTitle => 'Seleccionar icono';
 
   @override
-  String get savedPlacesSetIconLabel => 'Change symbol';
+  String get savedPlacesSetIconLabel => 'Cambiar icono';
 
   @override
-  String get savedPlacesSetNameLabel => 'Edit name';
+  String get savedPlacesSetNameLabel => 'Editar nombre';
 
   @override
-  String get savedPlacesSetPositionLabel => 'Edit position';
+  String get savedPlacesSetPositionLabel => 'Editar posición';
 
   @override
   String get searchTitleFavorites => 'Favoritos';
@@ -78,5 +78,5 @@ class SavedPlacesLocalizationEs extends SavedPlacesLocalization {
   String get searchTitleResults => 'Resultados de búsqueda';
 
   @override
-  String get selectedOnMap => 'Selected on the map';
+  String get selectedOnMap => 'Seleccionado en el mapa';
 }

@@ -138,12 +138,12 @@ class TrufiLocation implements TrufiPlace {
         description == DefaultLocation.defaultHome.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
-          : localization.defaultLocationAdd(localization.defaultLocationHome);
+          : localization.defaultLocationAdd(localization.defaultLocationHome.toLowerCase());
     } else if (type == DefaultLocation.defaultWork.initLocation.type &&
         description == DefaultLocation.defaultWork.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationWork
-          : localization.defaultLocationAdd(localization.defaultLocationWork);
+          : localization.defaultLocationAdd(localization.defaultLocationWork.toLowerCase());
     }
     return translate;
   }

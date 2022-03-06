@@ -3,22 +3,26 @@ part of 'route_transports_cubit.dart';
 @immutable
 class RouteTransportsState extends Equatable {
   final List<PatternOtp> transports;
+  final String queryFilter;
   final bool isLoading;
   final bool isGeometryLoading;
 
   const RouteTransportsState({
     this.transports = const [],
+    this.queryFilter = '',
     this.isLoading = false,
     this.isGeometryLoading = false,
   });
 
   RouteTransportsState copyWith({
     List<PatternOtp>? transports,
+    String? queryFilter,
     bool? isLoading,
     bool? isGeometryLoading,
   }) {
     return RouteTransportsState(
       transports: transports ?? this.transports,
+      queryFilter: queryFilter ?? this.queryFilter,
       isLoading: isLoading ?? this.isLoading,
       isGeometryLoading: isGeometryLoading ?? this.isGeometryLoading,
     );
@@ -27,8 +31,6 @@ class RouteTransportsState extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'transports': transports.map((x) => x.toJson()).toList(),
-      // 'isLoading': isLoading,
-      // 'isGeometryLoading': isGeometryLoading,
     };
   }
 
@@ -39,17 +41,16 @@ class RouteTransportsState extends Equatable {
                   PatternOtp.fromJson(json as Map<String, dynamic>))
               ?.toList() as List<PatternOtp>? ??
           <PatternOtp>[],
-      // isLoading: json['isLoading'] ?? false,
-      // isGeometryLoading: json['isGeometryLoading'] ?? false,
     );
   }
 
   @override
-  List<Object> get props => [transports, isLoading, isGeometryLoading];
+  List<Object> get props =>
+      [transports, queryFilter, isLoading, isGeometryLoading];
 
   @override
   String toString() {
-    return 'RouteTransportsState: {transports:$transports , isLoading:$isLoading '
-        'isGeometryLoading: $isGeometryLoading}';
+    return 'RouteTransportsState: {transports:$transports , queryFilter:$queryFilter '
+        'isLoading:$isLoading isGeometryLoading: $isGeometryLoading}';
   }
 }

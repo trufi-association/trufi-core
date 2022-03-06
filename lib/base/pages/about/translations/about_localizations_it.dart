@@ -8,30 +8,41 @@ class AboutLocalizationIt extends AboutLocalization {
   AboutLocalizationIt([String locale = 'it']) : super(locale);
 
   @override
-  String get aboutCollapseContent => 'The Trufi app for Cochabamba enhances your travel experience on trufis and buses, and helps to move around Cochabamba.\n\nNeed to go somewhere and don\'t know which trufi or bus to take?\n\nWith Trufi App it\'s easy!\n\nTrufi Association is an international NGO that promotes easier access to public transport. Official maps, apps, and schedules don\'t exist in many cities. We fill in the gaps - and sometimes even map routes from scratch. Our apps help everyone find the best way to get from Point A to Point B within their cities. Well-designed mobility contributes to greater sustainability, cleaner air and better quality of life.\nIn many cities there are no official maps, apps or timetables. We complete them, and sometimes even draw routes from scratch. Our apps help everyone find the best way to get from point A to point B within their cities. A well-designed transportation system contributes to greater sustainability, cleaner air and a better quality of life.\n\nWe love La Llajta and public transportation, that\'s why Trufi Association created this app to make it easy for Cochabamba commuters and anyone else to get around Cochabamba.\n\nPlease help us make Trufi App better by volunteering with us. We need mappers, developers, planners, testers, and many other hands. Please contact our team via email feedback@trufi.app.\n';
+  String get aboutCollapseContent => 'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.';
 
   @override
-  String get aboutCollapseTitle => 'We are the coolest group ever! Any other questions?';
+  String get aboutCollapseContentFoot => 'We need mappers, developers, planners, testers, and many other hands.';
 
   @override
-  String get aboutContent => 'Siamo un team boliviano e internazionale di persone che amano e supportano il trasporto pubblico. Abbiamo sviluppato questa app per semplificare l\'uso dei trasporti pubblici a Cochabamba e nelle aree circostanti.';
+  String get aboutCollapseTitle => 'More About Trufi Association';
+
+  @override
+  String aboutContent(Object appName) {
+    return 'Need to go somewhere and don\'t know which trufi or bus to take?\nThe $appName makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, and we want to make it easier to use for everyone. So we developed this app. We hope you enjoy it.';
+  }
 
   @override
   String get aboutLicenses => 'Licenze';
 
   @override
-  String get aboutOpenSource => 'Questa applicazione viene rilasciata come open source su GitHub. Sentitevi liberi di contribuire o di portarlo nella vostra città.';
+  String get aboutOpenSource => 'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.';
 
   @override
-  String get menuAbout => 'A proposito';
+  String get menuAbout => 'About us';
 
   @override
   String tagline(Object city) {
-    return 'Trasporto pubblico a Cochabamba';
+    return 'Trasporto pubblico a $city';
   }
+
+  @override
+  String get trufiWebsite => 'Trufi Association Website';
 
   @override
   String version(Object version) {
     return 'Versione $version';
   }
+
+  @override
+  String get volunteerTrufi => 'Volunteer For Trufi';
 }

@@ -12,7 +12,7 @@
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
-    "defaultLocationAdd": "Add {defaultLocation}",
+    "defaultLocationAdd": "Set {defaultLocation} address",
     "@defaultLocationAdd": {
         "placeholders": {
             "defaultLocation": {

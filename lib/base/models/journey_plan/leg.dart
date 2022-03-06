@@ -46,12 +46,12 @@ class Leg extends Equatable {
     required this.transitLeg,
     this.accumulatedPoints = const [],
   });
-
   factory Leg.fromJson(Map<String, dynamic> json) {
     return Leg(
       points: json[_legGeometry][_points] as String,
       transportMode: getTransportMode(
         mode: json[_mode] as String,
+        specificTransport: json[_routeLongName],
       ),
       route: json[_route] != null
           ? ((json[_route] is Map<String, dynamic>)

@@ -51,17 +51,17 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
       children: [
         BlocBuilder<TrufiMapController, TrufiMapState>(
           bloc: widget.trufiMapController,
-          builder: (context, state) {
+          builder: (context1, state) {
             return TrufiMap(
               mapTilesUrl: widget.mapTilesUrl,
               trufiMapController: widget.trufiMapController,
               layerOptionsBuilder: (context) => [
                 if (state.unselectedPolylinesLayer != null)
                   state.unselectedPolylinesLayer!,
-                if (state.selectedPolylinesLayer != null)
-                  state.selectedPolylinesLayer!,
                 if (state.unselectedMarkersLayer != null)
                   state.unselectedMarkersLayer!,
+                if (state.selectedPolylinesLayer != null)
+                  state.selectedPolylinesLayer!,
                 if (state.selectedMarkersLayer != null)
                   state.selectedMarkersLayer!,
                 if (state.fromMarkerLayer != null) state.fromMarkerLayer!,
@@ -81,10 +81,10 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
                     null) {
                   _handleOnMapTap(context, point);
                 } else {
-                  onMapPress(point);
+                  onMapPress(context, point);
                 }
               },
-              onLongPress: (_, point) => onMapPress(point),
+              onLongPress: (_, point) => onMapPress(context, point),
               onPositionChanged: _handleOnMapPositionChanged,
               floatingActionButtons: Column(
                 children: [
@@ -127,7 +127,7 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
     }
   }
 
-  void onMapPress(LatLng location) {
+  void onMapPress(BuildContext context, LatLng location) {
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     setState(() {
       tempMarker =
@@ -139,6 +139,7 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
       tickerProvider: this,
     );
     _showBottomMarkerModal(
+      context: context,
       location: location,
     ).then((value) {
       setState(() {
@@ -148,6 +149,7 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
   }
 
   Future<void> _showBottomMarkerModal({
+    required BuildContext context,
     required LatLng location,
   }) async {
     return showTrufiModalBottomSheet(
