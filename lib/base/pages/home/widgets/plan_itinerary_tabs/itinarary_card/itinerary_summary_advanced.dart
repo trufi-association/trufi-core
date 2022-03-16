@@ -36,13 +36,10 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
     final lastLeg = compressLegs[compressLegs.length - 1];
     final lastLegLength =
         ((lastLeg.duration.inSeconds) / durationItinerary) * 10;
-    const waitThreshold = 180;
     double addition = 0;
 
     compressLegs.asMap().forEach((index, leg) {
-      bool waiting = false;
       double? waitTime;
-      double? waitLength;
       bool renderBar = true;
 
       Leg? nextLeg;
@@ -60,12 +57,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
       if (nextLeg != null) {
         waitTime =
             nextLeg.startTime.difference(leg.endTime).inSeconds.toDouble();
-        waitLength = (waitTime / durationItinerary) * 10;
-        if (waitTime > waitThreshold && waitLength > newRenderBarThreshold) {
-          waiting = true;
-        } else {
-          legLength += waitLength;
-        }
+          legLength += (waitTime / durationItinerary) * 10;
       }
 
       legLength += addition;
@@ -77,7 +69,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
 
       if (legLength < newRenderBarThreshold && leg.isLegOnFoot) {
         renderBar = false;
-        // addition += newRenderBarThreshold;
       }
 
       if (leg.isLegOnFoot && renderBar) {
@@ -107,13 +98,13 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           legLength: legLength,
         ));
       }
-      if (waiting) {
-        legs.add(WaitLeg(
-          maxWidth: newMaxWidth,
-          legLength: waitLength!,
-          duration: waitTime! ~/ 60,
-        ));
-      }
+      // if (waiting) {
+      //   legs.add(WaitLeg(
+      //     maxWidth: newMaxWidth,
+      //     legLength: waitLength!,
+      //     duration: waitTime! ~/ 60,
+      //   ));
+      // }
     });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
