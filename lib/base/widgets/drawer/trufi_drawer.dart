@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_review/app_review.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +90,7 @@ class TrufiDrawer extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              if (!kIsWeb)
+                              if (!kIsWeb && !Platform.isAndroid)
                                 IconButton(
                                   onPressed: () async {
                                     await AppReview.writeReview;
