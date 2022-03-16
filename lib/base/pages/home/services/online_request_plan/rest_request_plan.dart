@@ -41,6 +41,7 @@ class RestRequestPlanService implements RequestPlanService {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": _todayMonthDayYear(),
+      "time": '12:00:00',
       "numItineraries": "5",
       "mode": _parseTransportModes(transportModes),
     });
@@ -66,7 +67,7 @@ class RestRequestPlanService implements RequestPlanService {
   String _todayMonthDayYear() {
     final today = DateTime.now();
     return "${today.month.toString().padLeft(2, '0')}-"
-            "${today.day.toString().padLeft(2, '0')}-" +
+            "01-" +
         today.year.toString();
   }
 
