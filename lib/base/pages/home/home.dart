@@ -57,13 +57,19 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final mapRouteCubit = context.watch<MapRouteCubit>();
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       key: HomePage.scaffoldKey,
       drawer: widget.drawerBuilder(context),
-      body: SafeArea(
-        child: Column(
-          children: [
-            HomeAppBar(
+      extendBody: true,
+      body: Column(
+        children: [
+          SafeArea(
+            bottom: false,
+            left: isPortrait,
+            right: isPortrait,
+            child: HomeAppBar(
               onSaveFrom: (TrufiLocation fromPlace) =>
                   mapRouteCubit.setFromPlace(fromPlace).then(
                 (value) {
@@ -96,7 +102,13 @@ class _HomePageState extends State<HomePage>
                   .then((value) => _callFetchPlan(context)),
               mapTilesUrl: widget.mapTilesUrl,
             ),
-            Expanded(
+          ),
+          Expanded(
+            child: SafeArea(
+              top: false,
+              bottom: false,
+              left: isPortrait,
+              right: isPortrait,
               child: BlocListener<MapRouteCubit, MapRouteState>(
                 listener: (buildContext, state) {
                   trufiMapController.mapController.onReady.then((_) {
@@ -115,8 +127,8 @@ class _HomePageState extends State<HomePage>
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

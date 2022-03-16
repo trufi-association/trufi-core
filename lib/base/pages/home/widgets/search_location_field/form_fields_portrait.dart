@@ -30,40 +30,38 @@ class FormFieldsPortrait extends StatelessWidget {
     final localization = TrufiBaseLocalization.of(context);
     final mapRouteState = context.watch<MapRouteCubit>().state;
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            LocationFormField(
-              isOrigin: true,
-              onSaved: onSaveFrom,
-              hintText: localization.searchPleaseSelectOrigin,
-              textLeadingImage:
-                  mapConfiguratiom.markersConfiguration.fromMarker,
-              trailing: mapRouteState.isPlacesDefined
-                  ? ResetButton(onReset: onReset)
-                  : null,
-              value: mapRouteState.fromPlace,
-              mapTilesUrl: mapTilesUrl,
-            ),
-            LocationFormField(
-              isOrigin: false,
-              onSaved: onSaveTo,
-              hintText: localization.searchPleaseSelectDestination,
-              textLeadingImage: mapConfiguratiom.markersConfiguration.toMarker,
-              trailing: mapRouteState.isPlacesDefined
-                  ? SwapButton(
-                      orientation: Orientation.portrait,
-                      onSwap: onSwap,
-                    )
-                  : null,
-              value: mapRouteState.toPlace,
-              mapTilesUrl: mapTilesUrl,
-            ),
-          ],
-        ),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 4.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          LocationFormField(
+            isOrigin: true,
+            onSaved: onSaveFrom,
+            hintText: localization.searchPleaseSelectOrigin,
+            textLeadingImage:
+                mapConfiguratiom.markersConfiguration.fromMarker,
+            trailing: mapRouteState.isPlacesDefined
+                ? ResetButton(onReset: onReset)
+                : null,
+            value: mapRouteState.fromPlace,
+            mapTilesUrl: mapTilesUrl,
+          ),
+          LocationFormField(
+            isOrigin: false,
+            onSaved: onSaveTo,
+            hintText: localization.searchPleaseSelectDestination,
+            textLeadingImage: mapConfiguratiom.markersConfiguration.toMarker,
+            trailing: mapRouteState.isPlacesDefined
+                ? SwapButton(
+                    orientation: Orientation.portrait,
+                    onSwap: onSwap,
+                  )
+                : null,
+            value: mapRouteState.toPlace,
+            mapTilesUrl: mapTilesUrl,
+          ),
+        ],
       ),
     );
   }

@@ -41,6 +41,7 @@ class HomeAppBar extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (!isPortrait) const SizedBox(width: 30),
                 IconButton(
                   icon: const Icon(
                     Icons.menu,
