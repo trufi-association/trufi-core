@@ -6,6 +6,8 @@ This implementation demonstrates how to use the trufi_core Flutter plugin to bui
 
 The app needs to connect to a backend running on a server to be able to recommend routes. The app does not work without internet connection. But once it fetched the route it can operate without internet connection except for the map background tiles. So you can fetch your route at home and take your ride offline. But anyway you need a backend for the map background tiles and the routing at least. We build the backend called [trufi-server](https://github.com/trufi-association/trufi-server) which you can use. That backend just serves pre-generated data and that needs to be created. This is what we use [trufi-server-resources](https://github.com/trufi-association/trufi-server-resources) for.
 
+That requires Linux. You will use Linux anyway on the production server later on. But you can run [Linux in a VM on Windows](https://www.wikihow.com/Install-Ubuntu-on-VirtualBox) or [on Mac](https://www.wikihow.com/Run-Linux-on-a-Mac) if you don’t use Linux natively. We use Debian or Debian favored systems like Ubuntu. Our backend has some debian related dependencies so better decide for Debian.
+
 ## Getting started
 
 `pubspec.yaml` references `trufi_core`. Here we use a relative path, in your final application it should look more like this:
