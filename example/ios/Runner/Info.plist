@@ -25,6 +25,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Trufi app is using your location to display it on a map.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Trufi app is using your location to display it on a map.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>stadtnavi app is using your location to display it on a map.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>stadtnavi app is using your location to display it on a map.</string>

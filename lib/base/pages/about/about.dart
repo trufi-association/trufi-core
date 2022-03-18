@@ -127,7 +127,25 @@ class AboutPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                launch('https://www.trufi-association.org/');
+                                launch(
+                                    'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website');
+                              },
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              child: Text(
+                                localizationA.volunteerTrufi + '\n',
+                                style: theme.textTheme.bodyText2?.copyWith(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              onTap: () {
+                                launch('https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
                               },
                             ),
                           ],
