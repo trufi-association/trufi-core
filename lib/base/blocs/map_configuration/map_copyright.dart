@@ -22,10 +22,10 @@ class MapTileAndOSMCopyright extends StatelessWidget {
               color: Colors.black,
               shadows: shadows,
             ),
-            text: "© MapTiler ",
+            text: "© OpenMapTiles ",
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch("https://www.maptiler.com/copyright/");
+                launch("https://openmaptiles.org/");
               },
           ),
           TextSpan(
