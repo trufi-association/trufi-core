@@ -33,6 +33,11 @@ class HomeAppBar extends StatelessWidget {
       color: ThemeCubit.isDarkMode(theme)
           ? theme.appBarTheme.backgroundColor
           : theme.colorScheme.primary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(4),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
