@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
-
+import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider.dart';
+import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'package:trufi_core/base/pages/about/about.dart';
 import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
@@ -69,6 +70,11 @@ abstract class DefaultValues {
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
       ),
+      BlocProvider<MapTileProviderCubit>(
+        create: (context) => MapTileProviderCubit(
+          mapTileProviders: [OSMDefaultMapTile()],
+        ),
+      ),
     ];
   }
 
@@ -82,7 +88,6 @@ abstract class DefaultValues {
     required String urlFeedback,
     required String emailContact,
     UrlSocialMedia? urlSocialMedia,
-    required String mapTilesUrl,
   }) {
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
@@ -103,14 +108,12 @@ abstract class DefaultValues {
           routes: {
             HomePage.route: (route) => NoAnimationPage(
                   child: HomePage(
-                    mapTilesUrl: mapTilesUrl,
                     asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                     mapBuilder: (
                       mapContext,
                       trufiMapController,
                     ) {
                       return TrufiMapRoute(
-                        mapTilesUrl: mapTilesUrl,
                         asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                         trufiMapController: trufiMapController,
                       );
@@ -125,13 +128,11 @@ abstract class DefaultValues {
                 ),
             TransportListDetail.route: (route) => NoAnimationPage(
                   child: TransportListDetail(
-                    mapTilesUrl: mapTilesUrl,
                     id: Uri.decodeQueryComponent(route.pathParameters['id']!),
                   ),
                 ),
             SavedPlacesPage.route: (route) => NoAnimationPage(
                   child: SavedPlacesPage(
-                    mapTilesUrl: mapTilesUrl,
                     drawerBuilder: generateDrawer(SavedPlacesPage.route),
                   ),
                 ),

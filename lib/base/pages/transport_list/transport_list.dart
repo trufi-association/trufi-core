@@ -6,7 +6,6 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
-import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
 
 class TransportList extends StatelessWidget {
@@ -21,7 +20,6 @@ class TransportList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeCubit>().themeData(context);
-    final localization = TrufiBaseLocalization.of(context);
     final routeTransportsCubit = context.read<RouteTransportsCubit>();
     return BlocBuilder<RouteTransportsCubit, RouteTransportsState>(
       builder: (context, state) {

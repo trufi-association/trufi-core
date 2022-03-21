@@ -4,11 +4,10 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/your_location_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
-
-import 'cache_map_tiles.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
@@ -19,7 +18,6 @@ class TrufiMap extends StatelessWidget {
   final TapCallback? onTap;
   final LongPressCallback? onLongPress;
   final PositionCallback? onPositionChanged;
-  final String mapTilesUrl;
   const TrufiMap({
     Key? key,
     required this.trufiMapController,
@@ -28,12 +26,12 @@ class TrufiMap extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final currentMapType = context.watch<MapTileProviderCubit>().state;
     return Stack(
       children: [
         StreamBuilder<LatLng?>(
@@ -67,11 +65,8 @@ class TrufiMap extends StatelessWidget {
                   },
                 ),
                 layers: [
-                  TileLayerOptions(
-                    urlTemplate: mapTilesUrl,
-                    subdomains: ['a', 'b', 'c'],
-                     tileProvider: const CachedTileProvider()
-                  ),
+                  ...currentMapType.currentMapTileProvider
+                      .buildTileLayerOptions(),
                   mapConfiguratiom.markersConfiguration
                       .buildYourLocationMarkerLayerOptions(currentLocation),
                   ...layerOptionsBuilder(context)

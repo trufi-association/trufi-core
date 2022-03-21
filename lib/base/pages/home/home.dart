@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
+import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
@@ -19,13 +20,11 @@ class HomePage extends StatefulWidget {
   final WidgetBuilder drawerBuilder;
   final MapRouteBuilder mapBuilder;
   final AsyncExecutor asyncExecutor;
-  final String mapTilesUrl;
   const HomePage({
     Key? key,
     required this.drawerBuilder,
     required this.mapBuilder,
     required this.asyncExecutor,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -59,9 +58,17 @@ class _HomePageState extends State<HomePage>
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+    final theme = Theme.of(context);
     return Scaffold(
       key: HomePage.scaffoldKey,
       drawer: widget.drawerBuilder(context),
+      appBar: AppBar(
+        backgroundColor: ThemeCubit.isDarkMode(theme)
+            ? theme.appBarTheme.backgroundColor
+            : theme.colorScheme.primary,
+        toolbarHeight: 0,
+        elevation: 0,
+      ),
       extendBody: true,
       body: Column(
         children: [
@@ -100,7 +107,6 @@ class _HomePageState extends State<HomePage>
               onSwap: () => mapRouteCubit
                   .swapLocations()
                   .then((value) => _callFetchPlan(context)),
-              mapTilesUrl: widget.mapTilesUrl,
             ),
           ),
           Expanded(

@@ -18,7 +18,6 @@ class SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onSelectedMap;
   final ValueChanged<TrufiStreet> onStreetTapped;
-  final String mapTilesUrl;
   const SuggestionList({
     Key? key,
     required this.query,
@@ -26,7 +25,6 @@ class SuggestionList extends StatelessWidget {
     required this.onSelected,
     required this.onSelectedMap,
     required this.onStreetTapped,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -44,7 +42,6 @@ class SuggestionList extends StatelessWidget {
               slivers: [
                 _BuildYourLocation(onSelected),
                 _BuildChooseOnMap(
-                    mapTilesUrl: mapTilesUrl,
                     onSelectedMap: onSelectedMap,
                     isOrigin: isOrigin),
                 if (query.isEmpty)
@@ -166,11 +163,9 @@ class _BuildFutureBuilder extends StatelessWidget {
 class _BuildChooseOnMap extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelectedMap;
   final bool isOrigin;
-  final String mapTilesUrl;
   const _BuildChooseOnMap({
     required this.onSelectedMap,
     required this.isOrigin,
-    required this.mapTilesUrl,
   });
 
   @override
@@ -182,7 +177,6 @@ class _BuildChooseOnMap extends StatelessWidget {
           final chooseLocationDetail = await ChooseLocationPage.selectPosition(
             context,
             isOrigin: isOrigin,
-            mapTilesUrl: mapTilesUrl,
           );
 
           if (chooseLocationDetail != null) {
