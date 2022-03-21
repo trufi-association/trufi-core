@@ -31,8 +31,8 @@ class MapConfiguration {
   MapConfiguration({
     required this.center,
     this.defaultZoom = 12.0,
-    this.onlineMinZoom = 1.0,
-    this.onlineMaxZoom = 19.0,
+    this.onlineMinZoom = 2.0,
+    this.onlineMaxZoom = 18.0,
     this.onlineZoom = 13.0,
     this.chooseLocationZoom = 16.0,
     this.mapAttributionBuilder,
