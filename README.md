@@ -11,24 +11,60 @@ Built in [Flutter](https://flutter.dev/) by the [Trufi Association](https://www.
 
 [<img alt="Trufi Logo" src="trufi.svg" width="120" />](https://www.trufi-association.org/)
 
-## Screenshots
-
 <img src="https://www.trufi.app/wp-content/uploads/2019/02/device_pixel-497x1024.png" width="200" hspace="20"/><img src="https://www.trufi.app/wp-content/uploads/2019/02/device_iphone-507x1024.png" width="200" hspace="20" />
 
-## Get the Trufi App
+## Get the Trufi App for your city
 
 The mobile application is currently available for the following cities:
 
 * Cochabamba, Bolivia - [Website](https://www.trufi.app), [Google Play](https://play.google.com/store/apps/details?id=app.trufi.navigator), [App Store](https://apps.apple.com/bo/app/trufi/id1471411924)
 * Accra, Ghana - [Website](https://www.trotro.app/), [Google Play](https://play.google.com/store/apps/details?id=com.trotro.trotro), [App Store](https://apps.apple.com/bo/app/trotro/id1478620071)
+* Addis Abeba, Ethiopia
 
-Please contact the [Trufi Association](https://www.trufi-association.org/contact/) to get one for your city, too.
+Please contact the [Trufi Association](https://www.trufi-association.org/contact/) to get one for your city, too. But if you prefer to do it yourself then see below
 
-## Getting started
+### Getting started
 
 Trufi Core is the base dependency used to create your public transport app. Have a look at the [example](example) implementation that contains further instructions.
 
+#### Preparing environment
+
+1. Copy the contents of the folder `example` into a new repository. See [trufi-app](https://github.com/trufi-association/trufi-app) for an example because we did it like what described below.
+
+2. Modify `pubspec.yml`:
+   Replace the content
+
+   ```yaml
+     trufi_core:
+       path: ../
+   ```
+
+   with
+   ```yaml
+     trufi_core:
+       git:
+         url: https://github.com/trufi-association/trufi-core.git
+         ref: main
+   ```
+
+   to be able to use this library - trufi-core
+   
+3. Prepare your development environment so you can compile it successfully
+
+#### Making necessary modifications
+
+1. Edit [main.dart](./example/lib/main.dart) and modify the necessary things
+   1. Offline search POI functionality: remove `photonUrl` and generate your own version of the `assets/data/search.json` using [osm-search-data-export](https://github.com/trufi-association/osm-search-data-export).
+   2. Online search POI functionality: remove `searchAssetPath`
+
+2. Change [drawer-bg.jpg](./example/assets/images/drawer-bg.jpg)
+
+## Contributing
+
+See [CONTRIBUTING](./CONTRIBUTION.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) prior to contributing.
+
 ### Translations
+
 Do not modify the files in [/translations](/translations) they are managed from Lokalise.
 If you need to update the translations checkout the [Translations Update Guide](https://github.com/trufi-association/trufi-core/wiki/Translations-Update-Guide)
 Please reach out to the [Contributers](https://github.com/trufi-association/trufi-core/graphs/contributors) to get access.
@@ -55,5 +91,6 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 ## Shout-outs
+
 Big thanks to [<img src="https://avatars2.githubusercontent.com/u/14294501?s=200&v=4" alt="" width="16" valign="-3px" /> Lokalise](https://lokalise.com) for supporting our localization efforts with a free Open Source Enterprise plan.
 Thanks to the [FMI - Finnish Meteorological Institute](https://en.ilmatieteenlaitos.fi/open-data) for the Open Weather Data
