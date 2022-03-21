@@ -106,19 +106,22 @@ class UrlSocialMedia {
   final String? urlInstagram;
   final String? urlTwitter;
   final String? urlWebSite;
+  final String? urlYoutube;
 
   const UrlSocialMedia({
     this.urlFacebook,
     this.urlInstagram,
     this.urlTwitter,
     this.urlWebSite,
+    this.urlYoutube,
   });
 
   bool get existUrl =>
       urlFacebook != null ||
       urlInstagram != null ||
       urlTwitter != null ||
-      urlWebSite != null;
+      urlWebSite != null ||
+      urlYoutube != null;
 }
 
 MenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {

@@ -51,6 +51,7 @@ final String mapTilesUrl;
           close(context, null);
         }
       },
+      color: Colors.white,
     );
   }
 

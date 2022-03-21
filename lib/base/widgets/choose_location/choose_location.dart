@@ -29,7 +29,8 @@ class ChooseLocationPage extends StatefulWidget {
       context: context,
       builder: (BuildContext context) => ChooseLocationPage(
         position: position,
-        isOrigin: isOrigin ?? false, mapTilesUrl: mapTilesUrl,
+        isOrigin: isOrigin ?? false,
+        mapTilesUrl: mapTilesUrl,
       ),
     );
   }
@@ -37,7 +38,8 @@ class ChooseLocationPage extends StatefulWidget {
   const ChooseLocationPage({
     Key? key,
     required this.isOrigin,
-    this.position,required this.mapTilesUrl,
+    this.position,
+    required this.mapTilesUrl,
   }) : super(key: key);
 
   final LatLng? position;
@@ -104,6 +106,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     // final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +135,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
             child: Stack(
               children: [
                 TrufiMap(
-                  mapTilesUrl:widget.mapTilesUrl,
+                  mapTilesUrl: widget.mapTilesUrl,
                   trufiMapController: trufiMapController,
                   layerOptionsBuilder: (context) => [],
                   onPositionChanged: (mapPosition, hasGesture) {
@@ -157,78 +160,76 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
             ),
           ),
           if (loading) const LinearProgressIndicator(),
-          SafeArea(
-            child: Container(
-              color: theme.cardColor,
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    locationData != null
-                        ? locationData!.description != ""
-                            ? locationData!.description
-                            : localization.commonUnkownPlace
-                        : localization.commonLoading,
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                  Text(
-                    locationData?.street ?? "",
-                    style: TextStyle(color: hintTextColor(theme)),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (loading)
-                        OutlinedButton(
-                          onPressed: () async {
-                            if (position?.center != null) {
-                              Navigator.of(context).pop(
-                                LocationDetail(
-                                  '',
-                                  '',
-                                  position!.center!,
-                                ),
-                              );
-                            }
-                          },
-                          child: SizedBox(
-                            width: 140,
-                            child: Text(
-                              localizationSP.chooseNowLabel,
-                              style:
-                                  TextStyle(color: theme.colorScheme.secondary),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                            ),
-                          ),
-                        )
-                      else
-                        OutlinedButton(
-                          onPressed: () async {
-                            if (locationData != null) {
-                              Navigator.of(context).pop(locationData);
-                            }
-                          },
-                          child: SizedBox(
-                            width: 140,
-                            child: Text(
-                              localization.commonConfirmLocation,
-                              style: TextStyle(
-                                  color: locationData != null
-                                      ? theme.colorScheme.secondary
-                                      : Colors.grey),
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                            ),
+          Container(
+            color: theme.cardColor,
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  locationData != null
+                      ? locationData!.description != ""
+                          ? locationData!.description
+                          : localization.commonUnkownPlace
+                      : localization.commonLoading,
+                  style: const TextStyle(fontSize: 17),
+                ),
+                Text(
+                  locationData?.street ?? "",
+                  style: TextStyle(color: hintTextColor(theme)),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (loading)
+                      OutlinedButton(
+                        onPressed: () async {
+                          if (position?.center != null) {
+                            Navigator.of(context).pop(
+                              LocationDetail(
+                                '',
+                                '',
+                                position!.center!,
+                              ),
+                            );
+                          }
+                        },
+                        child: SizedBox(
+                          width: 140,
+                          child: Text(
+                            localizationSP.chooseNowLabel,
+                            style:
+                                TextStyle(color: theme.colorScheme.secondary),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
                           ),
                         ),
-                    ],
-                  ),
-                ],
-              ),
+                      )
+                    else
+                      OutlinedButton(
+                        onPressed: () async {
+                          if (locationData != null) {
+                            Navigator.of(context).pop(locationData);
+                          }
+                        },
+                        child: SizedBox(
+                          width: 140,
+                          child: Text(
+                            localization.commonConfirmLocation,
+                            style: TextStyle(
+                                color: locationData != null
+                                    ? theme.colorScheme.secondary
+                                    : Colors.grey),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ),
           )
         ],

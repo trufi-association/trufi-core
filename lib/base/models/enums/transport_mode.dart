@@ -122,7 +122,7 @@ extension TransportModeExtension on TransportMode {
       case TransportMode.bicycle:
         return bikeIcon(color: color ?? const Color(0xff666666));
       case TransportMode.bus:
-        return busIcon(color: color ?? const Color(0xffd81b60));
+        return busIcon(color: color ?? const Color(0xffff260c));
       case TransportMode.cableCar:
         return gondolaIcon(color: color ?? const Color(0xff000000));
       case TransportMode.car:
@@ -140,9 +140,9 @@ extension TransportModeExtension on TransportMode {
       case TransportMode.legSwitch:
         return null;
       case TransportMode.rail:
-        return railIcon(color: color ?? const Color(0xff83b23b));
+        return railIcon(color: color ?? const Color(0xff018000));
       case TransportMode.subway:
-        return subwayIcon(color: color ?? const Color(0xff2962ff));
+        return subwayIcon(color: color ?? Colors.blueAccent[700]);
       case TransportMode.tram:
         return null;
       case TransportMode.transit:
@@ -166,7 +166,7 @@ extension TransportModeExtension on TransportMode {
   static final _colors = <TransportMode, Color?>{
     TransportMode.airplane: null,
     TransportMode.bicycle: const Color(0xff666666),
-    TransportMode.bus: const Color(0xffd81b60),
+    TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
@@ -175,7 +175,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.funicular: null,
     TransportMode.gondola: null,
     TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff83b23b),
+    TransportMode.rail: const Color(0xff018000),
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,
@@ -190,7 +190,7 @@ extension TransportModeExtension on TransportMode {
   static final _backgroundColors = <TransportMode, Color?>{
     TransportMode.airplane: null,
     TransportMode.bicycle: Colors.grey[200],
-    TransportMode.bus: const Color(0xffd81b60),
+    TransportMode.bus: const Color(0xffff260c),
     TransportMode.cableCar: null,
     TransportMode.car: Colors.black,
     TransportMode.carPool: const Color(0xff9fc726),
@@ -199,7 +199,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.funicular: null,
     TransportMode.gondola: null,
     TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff83b23b),
+    TransportMode.rail: const Color(0xff018000),
     TransportMode.subway: Colors.blueAccent[700],
     TransportMode.tram: null,
     TransportMode.transit: null,
@@ -209,6 +209,10 @@ extension TransportModeExtension on TransportMode {
     TransportMode.micro: const Color(0xffd81b60),
     TransportMode.miniBus: const Color(0xffd81b60),
     TransportMode.lightRail: const Color(0xffd81b60),
+  };
+
+  static const qualifiers = <TransportMode, String>{
+    TransportMode.bicycle: 'RENT',
   };
 
   static String? _translates(
@@ -239,6 +243,7 @@ extension TransportModeExtension on TransportMode {
   }
 
   String get name => names[this] ?? 'ERROR';
+  String? get qualifier => qualifiers[this];
 
   String getTranslate(TrufiBaseLocalization localization) =>
       _translates(this, localization) ?? 'No translate';

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider.dart';
+import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider_cubit.dart';
 
 import 'package:trufi_core/base/pages/about/about.dart';
 import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
@@ -68,6 +70,11 @@ abstract class DefaultValues {
       ),
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
+      ),
+      BlocProvider<MapTileProviderCubit>(
+        create: (context) => MapTileProviderCubit(
+          mapTileProviders: [OSMDefaultMapTile()],
+        ),
       ),
     ];
   }

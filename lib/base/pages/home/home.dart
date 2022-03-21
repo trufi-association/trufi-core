@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage>
             ? theme.appBarTheme.backgroundColor
             : theme.colorScheme.primary,
         toolbarHeight: 0,
+        elevation: 0,
       ),
       extendBody: true,
       body: Column(
