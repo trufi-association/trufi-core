@@ -11,12 +11,10 @@ import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dar
 class TrufiMapTransport extends StatefulWidget {
   final TrufiMapController trufiMapController;
   final PatternOtp? transportData;
-  final String mapTilesUrl;
   const TrufiMapTransport({
     Key? key,
     required this.trufiMapController,
     this.transportData,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -37,7 +35,6 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
       );
     }
     return TrufiMap(
-      mapTilesUrl: widget.mapTilesUrl,
       trufiMapController: widget.trufiMapController,
       layerOptionsBuilder: (context) => [
         PolylineLayerOptions(

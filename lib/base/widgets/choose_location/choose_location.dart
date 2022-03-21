@@ -18,19 +18,16 @@ import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dar
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class ChooseLocationPage extends StatefulWidget {
-  final String mapTilesUrl;
   static Future<LocationDetail?> selectPosition(
     BuildContext context, {
     LatLng? position,
     bool? isOrigin,
-    required String mapTilesUrl,
   }) async {
     return await showTrufiDialog<LocationDetail?>(
       context: context,
       builder: (BuildContext context) => ChooseLocationPage(
         position: position,
         isOrigin: isOrigin ?? false,
-        mapTilesUrl: mapTilesUrl,
       ),
     );
   }
@@ -39,7 +36,6 @@ class ChooseLocationPage extends StatefulWidget {
     Key? key,
     required this.isOrigin,
     this.position,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   final LatLng? position;
@@ -135,7 +131,6 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
             child: Stack(
               children: [
                 TrufiMap(
-                  mapTilesUrl: widget.mapTilesUrl,
                   trufiMapController: trufiMapController,
                   layerOptionsBuilder: (context) => [],
                   onPositionChanged: (mapPosition, hasGesture) {

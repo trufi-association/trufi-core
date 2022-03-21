@@ -11,11 +11,9 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 class SavedPlacesPage extends StatelessWidget {
   static const String route = '/places';
   final Widget Function(BuildContext) drawerBuilder;
-  final String mapTilesUrl;
   const SavedPlacesPage({
     Key? key,
     required this.drawerBuilder,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -59,7 +57,6 @@ class SavedPlacesPage extends StatelessWidget {
                                   isDefaultLocation: true,
                                   updateLocation:
                                       searchLocationsCubit.updateMyDefaultPlace,
-                                  mapTilesUrl: mapTilesUrl,
                                 );
                               },
                             ).toList(),
@@ -86,7 +83,6 @@ class SavedPlacesPage extends StatelessWidget {
                                         searchLocationsCubit.updateMyPlace,
                                     removeLocation:
                                         searchLocationsCubit.deleteMyPlace,
-                                    mapTilesUrl: mapTilesUrl,
                                   ),
                                 )
                                 .toList(),
@@ -112,7 +108,6 @@ class SavedPlacesPage extends StatelessWidget {
                                         .updateFavoritePlace,
                                     removeLocation: searchLocationsCubit
                                         .deleteFavoritePlace,
-                                    mapTilesUrl: mapTilesUrl,
                                   ),
                                 )
                                 .toList(),
@@ -145,7 +140,6 @@ class SavedPlacesPage extends StatelessWidget {
     final LocationDetail? locationDetail =
         await ChooseLocationPage.selectPosition(
       context,
-      mapTilesUrl: mapTilesUrl,
     );
     if (locationDetail != null) {
       searchLocationsCubit.insertMyPlace(TrufiLocation(

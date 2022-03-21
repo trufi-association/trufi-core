@@ -9,11 +9,9 @@ import 'package:trufi_core/base/widgets/location_search_delegate/suggestion_list
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation?> {
   final bool isOrigin;
   final String hint;
-final String mapTilesUrl;
   LocationSearchDelegate({
     required this.isOrigin,
     required this.hint,
-    required this.mapTilesUrl,
   }) : super(
           searchFieldLabel: hint,
         );
@@ -58,7 +56,6 @@ final String mapTilesUrl;
   @override
   Widget buildSuggestions(BuildContext context) {
     return SuggestionList(
-      mapTilesUrl:mapTilesUrl,
       query: query,
       isOrigin: isOrigin,
       onSelected: (TrufiLocation suggestion) {

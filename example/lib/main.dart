@@ -41,8 +41,6 @@ void main() async {
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',
           ),
-          mapTilesUrl:
-              "https://cbba.trufi.dev/static-maps/trufi-liberty/{z}/{x}/{y}@2x.jpg",
         ),
       ),
     ),

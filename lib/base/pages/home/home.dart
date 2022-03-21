@@ -20,13 +20,11 @@ class HomePage extends StatefulWidget {
   final WidgetBuilder drawerBuilder;
   final MapRouteBuilder mapBuilder;
   final AsyncExecutor asyncExecutor;
-  final String mapTilesUrl;
   const HomePage({
     Key? key,
     required this.drawerBuilder,
     required this.mapBuilder,
     required this.asyncExecutor,
-    required this.mapTilesUrl,
   }) : super(key: key);
 
   @override
@@ -109,7 +107,6 @@ class _HomePageState extends State<HomePage>
               onSwap: () => mapRouteCubit
                   .swapLocations()
                   .then((value) => _callFetchPlan(context)),
-              mapTilesUrl: widget.mapTilesUrl,
             ),
           ),
           Expanded(
