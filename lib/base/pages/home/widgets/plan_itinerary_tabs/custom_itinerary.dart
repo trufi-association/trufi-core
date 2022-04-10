@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary_card/itinerary_card.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/itinerary_details_card.dart';
 
 class CustomItinerary extends StatefulWidget {
+  final Function(LatLng) moveTo;
   const CustomItinerary({
     Key? key,
+    required this.moveTo,
   }) : super(key: key);
 
   @override
@@ -45,6 +48,7 @@ class _CustomItineraryState extends State<CustomItinerary> {
                     showDetail = false;
                   });
                 },
+                moveTo: widget.moveTo,
               )
             : Container();
   }

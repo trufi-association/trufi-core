@@ -105,7 +105,9 @@ class _TransportListDetailState extends State<TransportListDetail> {
                 ? BottomStopsDetails(
                     routeOtp: transportData!.route!,
                     stops: transportData!.stops ?? [],
-                    moveTo: (point) {},
+                    moveTo: (point) {
+                      trufiMapController.move(center: point, zoom: 18);
+                    },
                   )
                 : const Center(
                     child: CircularProgressIndicator(),
