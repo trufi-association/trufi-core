@@ -48,6 +48,7 @@ abstract class DefaultValues {
     required MapConfiguration mapConfiguration,
     required String searchAssetPath,
     required String photonUrl,
+    List<MapTileProvider>? mapTileProviders,
   }) {
     return [
       BlocProvider<RouteTransportsCubit>(
@@ -72,7 +73,7 @@ abstract class DefaultValues {
       ),
       BlocProvider<MapTileProviderCubit>(
         create: (context) => MapTileProviderCubit(
-          mapTileProviders: [OSMDefaultMapTile()],
+          mapTileProviders: mapTileProviders ?? [OSMDefaultMapTile()],
         ),
       ),
     ];
