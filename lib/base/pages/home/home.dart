@@ -128,7 +128,11 @@ class _HomePageState extends State<HomePage>
                     trufiMapController,
                   ),
                   panel: mapRouteCubit.state.plan != null
-                      ? const CustomItinerary()
+                      ? CustomItinerary(
+                          moveTo: (center) {
+                            trufiMapController.move(center: center, zoom: 15);
+                          },
+                        )
                       : null,
                 ),
               ),

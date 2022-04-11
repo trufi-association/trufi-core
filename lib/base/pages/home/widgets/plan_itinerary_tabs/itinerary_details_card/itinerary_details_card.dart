@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -12,11 +13,13 @@ import 'line_dash_components.dart';
 class ItineraryDetailsCard extends StatelessWidget {
   final Itinerary itinerary;
   final void Function() onBackPressed;
+  final Function(LatLng) moveTo;
 
   const ItineraryDetailsCard({
     Key? key,
     required this.itinerary,
     required this.onBackPressed,
+    required this.moveTo,
   }) : super(key: key);
 
   @override
@@ -87,6 +90,7 @@ class ItineraryDetailsCard extends StatelessWidget {
                       showBeforeLine: index != 0,
                       showAfterLine: index != sizeLegs - 1 &&
                           !compresedLegs[index + 1].transitLeg,
+                      moveTo: moveTo,
                     )
                   else
                     WalkDash(leg: itineraryLeg),

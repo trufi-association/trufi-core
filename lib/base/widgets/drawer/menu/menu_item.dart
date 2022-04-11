@@ -36,7 +36,10 @@ abstract class MenuItem {
   static Widget buildName(BuildContext context, String name, {Color? color}) {
     return Text(
       name,
-      style: Theme.of(context).textTheme.bodyText2?.copyWith(color: color),
+      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+            color: color,
+            fontWeight: FontWeight.w500,
+          ),
     );
   }
 }

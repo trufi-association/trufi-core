@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -9,10 +10,12 @@ class TransportDash extends StatelessWidget {
   final Leg leg;
   final bool showBeforeLine;
   final bool showAfterLine;
+  final Function(LatLng) moveTo;
 
   const TransportDash({
     Key? key,
     required this.leg,
+    required this.moveTo,
     this.showBeforeLine = true,
     this.showAfterLine = false,
   }) : super(key: key);
@@ -32,10 +35,7 @@ class TransportDash extends StatelessWidget {
           color: leg.primaryColor,
           child: GestureDetector(
             onTap: () {
-              // if (planPageController != null) {
-              //   planPageController.inSelectePosition
-              //       .add(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
-              // }
+              moveTo(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
             },
             child: TransitLeg(
               leg: leg,
