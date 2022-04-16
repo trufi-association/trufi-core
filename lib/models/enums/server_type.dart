@@ -1,1 +1,0 @@
-enum ServerType { defaultServer, graphQLServer }

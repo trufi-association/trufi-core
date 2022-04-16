@@ -1,0 +1,72 @@
+{
+    "chooseNowLabel": "Jetzt auswählen",
+    "chooseOnMap": "Choose on map",
+    "@chooseOnMap": {
+        "description": "Search option that allows to choose a point on the map"
+    },
+    "commonCustomPlaces": "Benutzerdefinierte Orte",
+    "@commonCustomPlaces": {
+        "description": "General CustomPlaces label"
+    },
+    "commonFavoritePlaces": "Lieblingsplätze",
+    "@commonFavoritePlaces": {
+        "description": "General Favorite places label"
+    },
+    "defaultLocationAdd": "Hinzufügen {defaultLocation}",
+    "@defaultLocationAdd": {
+        "placeholders": {
+            "defaultLocation": {
+                "example": "1.0"
+            }
+        },
+        "description": "The name Add for {defaultLocation}"
+    },
+    "defaultLocationHome": "Zuhause",
+    "@defaultLocationHome": {
+        "description": "The default location name Home"
+    },
+    "defaultLocationWork": "Arbeit",
+    "@defaultLocationWork": {
+        "description": "The default location name Work"
+    },
+    "iconlabel": "Icon",
+    "instructionJunction": "{street1} und {street2}",
+    "@instructionJunction": {
+        "type": "text",
+        "placeholders": {
+            "street1": {
+                "example": "Av. Blanco Galindo"
+            },
+            "street2": {
+                "example": "Av. 16 de Julio"
+            }
+        },
+        "description": "Junction name of two streets"
+    },
+    "menuYourPlaces": "Ihre Orte",
+    "@menuYourPlaces": {
+        "description": "A menu item that shows the saved places"
+    },
+    "nameLabel": "Name",
+    "savedPlacesEditLabel": "Ort bearbeiten",
+    "savedPlacesEnterNameTitle": "Name eingeben",
+    "savedPlacesEnterNameValidation": "Der Name darf nicht leer sein",
+    "savedPlacesRemoveLabel": "Platz entfernen",
+    "savedPlacesSelectIconTitle": "Symbol auswählen",
+    "savedPlacesSetIconLabel": "Symbol auswählen",
+    "savedPlacesSetNameLabel": "Namen bearbeiten",
+    "savedPlacesSetPositionLabel": "Position bearbeiten",
+    "searchTitleFavorites": "Favoriten",
+    "@searchTitleFavorites": {
+        "description": "Search section title for locations marked as favorites"
+    },
+    "searchTitleRecent": "Zuletzt gesucht",
+    "@searchTitleRecent": {
+        "description": "Search section title for recent location"
+    },
+    "searchTitleResults": "Suchergebnisse",
+    "@searchTitleResults": {
+        "description": "Search section title for results found for the provided search term"
+    },
+    "selectedOnMap": "Auf Karte ausgewählt"
+}

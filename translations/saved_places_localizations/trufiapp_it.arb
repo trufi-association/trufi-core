@@ -1,0 +1,72 @@
+{
+    "chooseNowLabel": "Choose now",
+    "chooseOnMap": "Choose on map",
+    "@chooseOnMap": {
+        "description": "Search option that allows to choose a point on the map"
+    },
+    "commonCustomPlaces": "Custom places",
+    "@commonCustomPlaces": {
+        "description": "General CustomPlaces label"
+    },
+    "commonFavoritePlaces": "Favorite places",
+    "@commonFavoritePlaces": {
+        "description": "General Favorite places label"
+    },
+    "defaultLocationAdd": "Versione {defaultLocation}",
+    "@defaultLocationAdd": {
+        "placeholders": {
+            "defaultLocation": {
+                "example": "1.0"
+            }
+        },
+        "description": "The name Add for {defaultLocation}"
+    },
+    "defaultLocationHome": "Home",
+    "@defaultLocationHome": {
+        "description": "The default location name Home"
+    },
+    "defaultLocationWork": "Work",
+    "@defaultLocationWork": {
+        "description": "The default location name Work"
+    },
+    "iconlabel": "Icon",
+    "instructionJunction": "{street1} and {street2}",
+    "@instructionJunction": {
+        "type": "text",
+        "placeholders": {
+            "street1": {
+                "example": "Av. Blanco Galindo"
+            },
+            "street2": {
+                "example": "Av. 16 de Julio"
+            }
+        },
+        "description": "Junction name of two streets"
+    },
+    "menuYourPlaces": "I tuoi posti",
+    "@menuYourPlaces": {
+        "description": "A menu item that shows the saved places"
+    },
+    "nameLabel": "Name",
+    "savedPlacesEditLabel": "Edit place",
+    "savedPlacesEnterNameTitle": "Enter name",
+    "savedPlacesEnterNameValidation": "The name cannot be empty",
+    "savedPlacesRemoveLabel": "Remove place",
+    "savedPlacesSelectIconTitle": "Select symbol",
+    "savedPlacesSetIconLabel": "Change symbol",
+    "savedPlacesSetNameLabel": "Edit name",
+    "savedPlacesSetPositionLabel": "Edit position",
+    "searchTitleFavorites": "Preferiti",
+    "@searchTitleFavorites": {
+        "description": "Search section title for locations marked as favorites"
+    },
+    "searchTitleRecent": "Recenti",
+    "@searchTitleRecent": {
+        "description": "Search section title for recent location"
+    },
+    "searchTitleResults": "Cerca Risultati",
+    "@searchTitleResults": {
+        "description": "Search section title for results found for the provided search term"
+    },
+    "selectedOnMap": "Selected on the map"
+}

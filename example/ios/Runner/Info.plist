@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Trufi is using your location to navigate you to your destination.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Trufi App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>trufi_core_example</string>
+	<string>trufi_app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -24,6 +24,15 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Trufi app is using your location to display it on a map.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Trufi app is using your location to display it on a map.</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>stadtnavi app is using your location to display it on a map.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>stadtnavi app is using your location to display it on a map.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -42,10 +51,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>TODO: Add a correct text here. {Ask for location permission}</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>TODO: Add a correct text here. {Ask for location permission}</string>
+	<true/>
 </dict>
 </plist>

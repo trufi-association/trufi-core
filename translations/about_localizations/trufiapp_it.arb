@@ -1,0 +1,49 @@
+{
+    "aboutCollapseContent": "Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.",
+    "@aboutCollapseContent": {
+        "description": "A short marketing sentence that describes the app"
+    },
+    "aboutCollapseContentFoot": "We need mappers, developers, planners, testers, and many other hands.",
+    "aboutCollapseTitle": "More About Trufi Association",
+    "aboutContent": "Need to go somewhere and don't know which trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, and we want to make it easier to use for everyone. So we developed this app. We hope you enjoy it.",
+    "@aboutContent": {
+        "placeholders": {
+            "appName": {
+                "example": "Trufi App"
+            }
+        },
+        "description": "Text displayed on the about page"
+    },
+    "aboutLicenses": "Licenze",
+    "@aboutLicenses": {
+        "description": "Button label to show licenses"
+    },
+    "aboutOpenSource": "This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.",
+    "@aboutOpenSource": {
+        "description": "A note about open source"
+    },
+    "menuAbout": "About us",
+    "@menuAbout": {
+        "description": "Menu item that shows the about page"
+    },
+    "tagline": "Trasporto pubblico a {city}",
+    "@tagline": {
+        "placeholders": {
+            "city": {
+                "example": "Karlsruhe"
+            }
+        },
+        "description": "A short marketing sentence that describes the app"
+    },
+    "trufiWebsite": "Trufi Association Website",
+    "version": "Versione {version}",
+    "@version": {
+        "placeholders": {
+            "version": {
+                "example": "1.0"
+            }
+        },
+        "description": "The application's version"
+    },
+    "volunteerTrufi": "Volunteer For Trufi"
+}

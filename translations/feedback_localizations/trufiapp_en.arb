@@ -1,0 +1,14 @@
+{
+    "menuFeedback": "Send Feedback",
+    "@menuFeedback": {
+        "description": "Menu item that shows the feedback page"
+    },
+    "feedbackTitle": "Please e-mail us",
+    "@feedbackTitle": {
+        "description": "Title displayed on the feedback page"
+    },
+    "feedbackContent": "Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.",
+    "@feedbackContent": {
+        "description": "Text displayed on the feedback page"
+    }
+}

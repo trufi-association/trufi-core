@@ -1,0 +1,345 @@
+{
+    "alertLocationServicesDeniedMessage": "Bitte vergewissere dich, dass du ein GPS Signal empfängst und die Ortungsdienste aktiviert sind.",
+    "@alertLocationServicesDeniedMessage": {
+        "description": "Text of dialog that explains that access to location services was denied"
+    },
+    "alertLocationServicesDeniedTitle": "Kein Standort",
+    "@alertLocationServicesDeniedTitle": {
+        "description": "Title of dialog that explains that access to location services was denied"
+    },
+    "appReviewDialogButtonAccept": "Bewerten",
+    "@appReviewDialogButtonAccept": {
+        "description": "Accept button of the App Review Dialog used on Android"
+    },
+    "appReviewDialogButtonDecline": "Jetzt nicht",
+    "@appReviewDialogButtonDecline": {
+        "description": "Decline button of the App Review Dialog used on Android"
+    },
+    "appReviewDialogContent": "Unterstütze uns mit einer Bewertung im Google Play Store.",
+    "@appReviewDialogContent": {
+        "description": "Content of the App Review Dialog used on Android"
+    },
+    "appReviewDialogTitle": "Magst du Trufi?",
+    "@appReviewDialogTitle": {
+        "description": "Title of the App Review Dialog used on Android"
+    },
+    "chooseLocationPageSubtitle": "Karte unter Markierung schwenken und zoomen",
+    "@chooseLocationPageSubtitle": {
+        "description": "Page subtitle when choosing a location on the map"
+    },
+    "chooseLocationPageTitle": "Ort auswählen",
+    "@chooseLocationPageTitle": {
+        "description": "Page title when choosing a location on the map"
+    },
+    "commonCancel": "Abbrechen",
+    "@commonCancel": {
+        "description": "Cancel button label"
+    },
+    "commonConfirmLocation": "Standort bestätigen",
+    "@commonConfirmLocation": {
+        "description": "General Confirm location label"
+    },
+    "commonDestination": "Fahrtziel",
+    "@commonDestination": {
+        "description": "Destination field label"
+    },
+    "commonEdit": "Bearbeiten",
+    "@commonEdit": {
+        "description": "General Edit label"
+    },
+    "commonError": "Fehler",
+    "@commonError": {
+        "description": "Message when an error has occured"
+    },
+    "commonFromStation": "von Bahnhof",
+    "@commonFromStation": {
+        "description": "General from station  label"
+    },
+    "commonFromStop": "von Halt",
+    "@commonFromStop": {
+        "description": "General from stop  label"
+    },
+    "commonItineraryNoTransitLegs": "Start jederzeit möglich",
+    "@commonItineraryNoTransitLegs": {
+        "description": "General Leave when it suits you label"
+    },
+    "commonLeavesAt": "Fährt",
+    "@commonLeavesAt": {
+        "description": "General Leaves at  label"
+    },
+    "commonLoading": "Laden…",
+    "@commonLoading": {
+        "description": "General Loading label"
+    },
+    "commonNoInternet": "Keine Internetverbindung.",
+    "@commonNoInternet": {
+        "description": "Message when internet connection is lost"
+    },
+    "commonNoResults": "Keine Ergebnisse",
+    "@commonNoResults": {
+        "description": "Message that is displayed when no results were found for the search term that was provided"
+    },
+    "commonOK": "OK",
+    "@commonOK": {
+        "description": "OK button label"
+    },
+    "commonOrigin": "Startpunkt",
+    "@commonOrigin": {
+        "description": "Origin field label"
+    },
+    "commonRemove": "Entfernen",
+    "@commonRemove": {
+        "description": "General Remove label"
+    },
+    "commonSave": "Speichern",
+    "@commonSave": {
+        "description": "General Save label"
+    },
+    "commonTomorrow": "Morgen",
+    "@commonTomorrow": {
+        "description": "General Tomorrow label"
+    },
+    "commonUnknownError": "Unbekannter Fehler",
+    "@commonUnknownError": {
+        "description": "Message when an unknown error has occured"
+    },
+    "commonUnkownPlace": "Unbekannter Ort",
+    "@commonUnkownPlace": {
+        "description": "General Unkown place label"
+    },
+    "commonWait": "Wartezeit",
+    "@commonWait": {
+        "description": "General wait label"
+    },
+    "commonWalk": "Gehen",
+    "@commonWalk": {
+        "description": "General Walk label"
+    },
+    "commonYourLocation": "Ihr Standort",
+    "@commonYourLocation": {
+        "description": "Search option that allows to use the current user location"
+    },
+    "errorAmbiguousDestination": "Der Reiseplaner weiß nicht genau, zu welchem Ort Sie fahren möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.",
+    "@errorAmbiguousDestination": {
+        "description": "Message that is displayed when a trip could not be planned, because the specified destination is ambiguous"
+    },
+    "errorAmbiguousOrigin": "Der Reiseplaner weiß nicht genau, von welchem Ort aus Sie starten möchten. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.",
+    "@errorAmbiguousOrigin": {
+        "description": "Message that is displayed when a trip could not be planned, because the specified origin is ambiguous"
+    },
+    "errorAmbiguousOriginDestination": "Der Startpunkt und das Ziel sind unklar. Bitte wählen Sie aus den folgenden Optionen eine aus oder geben Sie eine genauere Beschreibung an.",
+    "@errorAmbiguousOriginDestination": {
+        "description": "Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous"
+    },
+    "errorNoBarrierFree": "Der Startpunkt und das Ziel sind nicht für Rollstuhlfahrer zugänglich.",
+    "@errorNoBarrierFree": {
+        "description": "Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible"
+    },
+    "errorNoConnectServer": "Keine Verbindung zum Server.",
+    "@errorNoConnectServer": {
+        "description": "Message when internet connection is lost"
+    },
+    "errorNoTransitTimes": "Keine Abfahrtszeiten verfügbar. Das Datum liegt eventuell zu weit in der Vergangenheit oder der Zukunft oder es gibt keinen Transitservice zu dem von Ihnen gewählten Zeitpunkt.",
+    "@errorNoTransitTimes": {
+        "description": "Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time"
+    },
+    "errorOutOfBoundary": "Dieser Trip ist nicht möglich. Sie versuchen möglicherweise eine Reise außerhalb der verfügbaren Kartendaten zu planen.",
+    "@errorOutOfBoundary": {
+        "description": "Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries"
+    },
+    "errorPathNotFound": "Dieser Trip ist nicht möglich. Ihr Start- oder Endpunkt ist möglicherweise nicht sicher zugänglich (dies ist beispielsweise der Fall, wenn Sie sich in einer Wohnstraße befinden, die nur mit einer Autobahn verbunden ist).",
+    "@errorPathNotFound": {
+        "description": "Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible"
+    },
+    "errorServerCanNotHandleRequest": "Die Anfrage enthält Fehler, die der Server nicht verarbeiten kann.",
+    "@errorServerCanNotHandleRequest": {
+        "description": "Message that is displayed when a trip could not be planned, because the request had errors"
+    },
+    "errorServerTimeout": "Das Bearbeiten ihrer Anfrage dauert zu lange. Bitte versuchen Sie es später erneut.",
+    "@errorServerTimeout": {
+        "description": "Message that is displayed when a trip could not be planned, because the server is taking too long to respond"
+    },
+    "errorServerUnavailable": "Es tut uns leid. Der Reiseplaner ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.",
+    "@errorServerUnavailable": {
+        "description": "Message that is displayed when the trip planning server was not available"
+    },
+    "errorTrivialDistance": "Der Startpunkt liegt in einer trivialen Entfernung zum Ziel.",
+    "@errorTrivialDistance": {
+        "description": "Message that is displayed when a trip could not be planned, because origin and destination are too close to each other"
+    },
+    "errorUnknownDestination": "Das Ziel ist unbekannt. Können Sie ein bisschen genauer sein?",
+    "@errorUnknownDestination": {
+        "description": "Message that is displayed when a trip could not be planned, because the destination was not found"
+    },
+    "errorUnknownOrigin": "Der Startpunkt ist unbekannt. Können Sie ein bisschen genauer sein?",
+    "@errorUnknownOrigin": {
+        "description": "Message that is displayed when a trip could not be planned, because the origin was not found"
+    },
+    "errorUnknownOriginDestination": "Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?",
+    "@errorUnknownOriginDestination": {
+        "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
+    },
+    "followOnFacebook": "Folge uns auf Facebook",
+    "@followOnFacebook": {
+        "description": "Facebook menu item"
+    },
+    "followOnInstagram": "Folge uns auf Instagram",
+    "@followOnInstagram": {
+        "description": "Instagram menu item"
+    },
+    "followOnTwitter": "Folge uns auf Twitter",
+    "@followOnTwitter": {
+        "description": "Twitter menu item"
+    },
+    "instructionDistanceKm": "{value} km",
+    "@instructionDistanceKm": {
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "description": "Itinerary leg distance (km)"
+    },
+    "instructionDistanceMeters": "{value} m",
+    "@instructionDistanceMeters": {
+        "placeholders": {
+            "value": {
+                "example": "100"
+            }
+        },
+        "description": "Itinerary leg distance (m)"
+    },
+    "instructionDurationHours": "{value} h",
+    "@instructionDurationHours": {
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "description": "Itinerary leg duration in hours"
+    },
+    "instructionDurationMinutes": "{value} min",
+    "@instructionDurationMinutes": {
+        "placeholders": {
+            "value": {
+                "example": "10"
+            }
+        },
+        "description": "Itinerary leg duration"
+    },
+    "instructionVehicleBike": "Fahrrad",
+    "@instructionVehicleBike": {
+        "description": "Vehicle name (Bike)"
+    },
+    "instructionVehicleBus": "Bus",
+    "@instructionVehicleBus": {
+        "description": "Vehicle name (Bus)"
+    },
+    "instructionVehicleCar": "Auto",
+    "@instructionVehicleCar": {
+        "description": "Vehicle name (Car)"
+    },
+    "instructionVehicleCarpool": "Fahrgemeinschaft",
+    "@instructionVehicleCarpool": {
+        "description": "Vehicle name (Carpool)"
+    },
+    "instructionVehicleCommuterTrain": "Zug",
+    "@instructionVehicleCommuterTrain": {
+        "description": "Vehicle name (Commuter train)"
+    },
+    "instructionVehicleGondola": "der Gondel",
+    "@instructionVehicleGondola": {
+        "description": "Vehicle name (Gondola)"
+    },
+    "instructionVehicleLightRail": "Stadtbahn",
+    "@instructionVehicleLightRail": {
+        "description": "Vehicle name (Light Rail Train)"
+    },
+    "instructionVehicleMetro": "U-Bahn",
+    "@instructionVehicleMetro": {
+        "description": "Vehicle name (Metro)"
+    },
+    "instructionVehicleMicro": "dem Micro",
+    "@instructionVehicleMicro": {
+        "description": "Vehicle name (Micro)"
+    },
+    "instructionVehicleMinibus": "dem Minibus",
+    "@instructionVehicleMinibus": {
+        "description": "Vehicle name (Minibus)"
+    },
+    "instructionVehicleTrufi": "der Trufi",
+    "@instructionVehicleTrufi": {
+        "description": "Vehicle name (Trufi)"
+    },
+    "instructionVehicleWalk": "Gehen",
+    "@instructionVehicleWalk": {
+        "description": "Vehicle name (Walk)"
+    },
+    "menuConnections": "Routenplaner",
+    "@menuConnections": {
+        "description": "Menu item that shows the map/planned trip"
+    },
+    "menuSocialMedia": "Soziale Medien",
+    "menuTransportList": "Verbindungen",
+    "@menuTransportList": {
+        "description": "Vehicle name (Metro)"
+    },
+    "noRouteError": "Wir konnten leider keine Route finden. Was möchten Sie tun?",
+    "@noRouteError": {
+        "description": "Message when no route could be found after a route search"
+    },
+    "noRouteErrorActionCancel": "Anderes Ziel auswählen",
+    "@noRouteErrorActionCancel": {
+        "description": "Button label to try another destination when no route could be found"
+    },
+    "noRouteErrorActionReportMissingRoute": "Fehlende Route melden",
+    "@noRouteErrorActionReportMissingRoute": {
+        "description": "Button label to report a missing route when no route could be found"
+    },
+    "noRouteErrorActionShowCarRoute": "Auto Route anzeigen",
+    "@noRouteErrorActionShowCarRoute": {
+        "description": "Button label to show the car route when no route could be found"
+    },
+    "readOurBlog": "Lies in unserem Blog",
+    "@readOurBlog": {
+        "description": "Website menu item"
+    },
+    "searchFailLoadingPlan": "Fehler beim Laden des Plans.",
+    "@searchFailLoadingPlan": {
+        "description": "Message that is displayed when the response of the trip planning request could not be received"
+    },
+    "searchHintDestination": "Ziel auswählen",
+    "@searchHintDestination": {
+        "description": "Placeholder text for the destination field (in search state)"
+    },
+    "searchHintOrigin": "Start auswählen",
+    "@searchHintOrigin": {
+        "description": "Placeholder text for the origin field (in search state)"
+    },
+    "searchPleaseSelectDestination": "Ziel auswählen",
+    "@searchPleaseSelectDestination": {
+        "description": "Placeholder text for the destination field (in map-visible state)"
+    },
+    "searchPleaseSelectOrigin": "Startpunkt auswählen",
+    "@searchPleaseSelectOrigin": {
+        "description": "Placeholder text for the origin field (in map-visible state)"
+    },
+    "shareAppText": "Hol' dir die {appTitle}, die App für den öffentlichen Nahverkehr in {cityName}, auf {url}",
+    "@shareAppText": {
+        "placeholders": {
+            "url": {
+                "example": "https://trufi.share.url"
+            },
+            "appTitle": {
+                "example": "Trufi App"
+            },
+            "cityName": {
+                "example": "Karlsruhe"
+            }
+        },
+        "description": "Text with URL that is used when sharing the app."
+    },
+    "themeModeDark": "Dunkles Thema",
+    "themeModeLight": "Leichtes Thema",
+    "themeModeSystem": "Systemeinstellung"
+}
