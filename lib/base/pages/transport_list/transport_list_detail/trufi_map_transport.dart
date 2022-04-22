@@ -4,6 +4,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/share_route_button.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/crop_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
@@ -63,6 +64,11 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
             key: _cropButtonKey,
             onPressed: _handleOnCropPressed,
           ),
+          const Padding(padding: EdgeInsets.all(4.0)),
+          if (widget.transportData != null)
+            ShareRouteButton(
+              transportData: widget.transportData!,
+            ),
         ],
       ),
       onPositionChanged: _handleOnMapPositionChanged,
