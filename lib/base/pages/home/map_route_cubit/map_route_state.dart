@@ -72,6 +72,9 @@ class MapRouteState extends Equatable {
 
   bool get isPlacesDefined => fromPlace != null && toPlace != null;
 
+  bool get isPlanCorrect =>
+      isPlacesDefined && plan != null && selectedItinerary != null;
+
   @override
   String toString() {
     return "{ fromPlace ${fromPlace?.description}, toPlace ${toPlace?.description}, "

@@ -11,6 +11,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/load_location.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/crop_button.dart';
+import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/share_itinerary_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
 import 'package:trufi_core/base/widgets/maps/utils/trufi_map_utils.dart';
@@ -86,7 +87,11 @@ class _TrufiMapRouteState extends State<TrufiMapRoute>
               floatingActionButtons: Column(
                 children: [
                   CropButton(
-                      key: _cropButtonKey, onPressed: _handleOnCropPressed),
+                    key: _cropButtonKey,
+                    onPressed: _handleOnCropPressed,
+                  ),
+                  const Padding(padding: EdgeInsets.all(4.0)),
+                  if (mapRouteState.isPlanCorrect) const ShareItineraryButton(),
                 ],
               ),
             );
