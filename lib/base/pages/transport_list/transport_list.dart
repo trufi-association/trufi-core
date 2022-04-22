@@ -5,10 +5,12 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
+import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
-class TransportList extends StatelessWidget {
+class TransportList extends StatefulWidget {
   static const String route = "/TransportList";
   final Widget Function(BuildContext) drawerBuilder;
 
@@ -16,6 +18,39 @@ class TransportList extends StatelessWidget {
     Key? key,
     required this.drawerBuilder,
   }) : super(key: key);
+
+  @override
+  State<TransportList> createState() => _TransportListState();
+}
+
+class _TransportListState extends State<TransportList> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (duration) => loadRoute(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant TransportList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (duration) => loadRoute(),
+    );
+  }
+
+  void loadRoute() {
+    final transportListId = RouteData.of(context).queryParameters['id'];
+    if (transportListId != null) {
+      showTrufiDialog(
+        context: context,
+        builder: (BuildContext context) => TransportListDetail(
+          id: Uri.decodeQueryComponent(transportListId),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +112,7 @@ class TransportList extends StatelessWidget {
               const SizedBox(width: 10),
             ],
           ),
-          drawer: drawerBuilder(context),
+          drawer: widget.drawerBuilder(context),
           body: Stack(
             children: [
               Scrollbar(
@@ -98,9 +133,10 @@ class TransportList extends StatelessWidget {
                             child: TileTransport(
                               patternOtp: transport,
                               onTap: () {
-                                final params =
-                                    '${TransportList.route}/${Uri.encodeQueryComponent(transport.code)}';
-                                Routemaster.of(context).push(params);
+                                Routemaster.of(context).push(
+                                  TransportList.route,
+                                  queryParameters: {'id': transport.code},
+                                );
                               },
                             ),
                           )

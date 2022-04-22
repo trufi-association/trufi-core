@@ -1,6 +1,7 @@
 import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
@@ -20,6 +21,7 @@ class HomePage extends StatefulWidget {
   final WidgetBuilder drawerBuilder;
   final MapRouteBuilder mapBuilder;
   final AsyncExecutor asyncExecutor;
+
   const HomePage({
     Key? key,
     required this.drawerBuilder,
@@ -44,6 +46,17 @@ class _HomePageState extends State<HomePage>
       final mapRouteState = mapRouteCubit.state;
       repaintMap(mapRouteCubit, mapRouteState);
     });
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (duration) => processUniLink(),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (duration) => processUniLink(),
+    );
   }
 
   @override
@@ -159,7 +172,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Future<void> _callFetchPlan(BuildContext context) async {
+  Future<void> _callFetchPlan(BuildContext context, {int? numItinerary}) async {
     final mapRouteCubit = context.read<MapRouteCubit>();
     final mapRouteState = mapRouteCubit.state;
     if (mapRouteState.toPlace == null || mapRouteState.fromPlace == null) {
@@ -167,11 +180,37 @@ class _HomePageState extends State<HomePage>
     }
     widget.asyncExecutor.run(
       context: context,
-      onExecute: mapRouteCubit.fetchPlan,
+      onExecute: () => mapRouteCubit.fetchPlan(numItinerary: numItinerary),
       onFinish: (_) {
         AppReviewProvider().incrementReviewWorthyActions();
       },
     );
+  }
+
+  Future<void> processUniLink() async {
+    final queryParameters = RouteData.of(context).queryParameters;
+    TrufiLocation? originLocation;
+    TrufiLocation? destinyLocation;
+    int? numItinerary;
+    if (queryParameters['from'] != null && queryParameters['to'] != null) {
+      final originData = queryParameters['from']!.split(",");
+      final destinyData = queryParameters['to']!.split(",");
+      originLocation = TrufiLocation(
+        description: originData[0],
+        latitude: double.tryParse(originData[1])!,
+        longitude: double.tryParse(originData[2])!,
+      );
+      destinyLocation = TrufiLocation(
+        description: destinyData[0],
+        latitude: double.tryParse(destinyData[1])!,
+        longitude: double.tryParse(destinyData[2])!,
+      );
+      numItinerary = int.tryParse(queryParameters['itinerary']??'0');
+      final mapRouteCubit = context.read<MapRouteCubit>();
+      await mapRouteCubit.setToPlace(destinyLocation);
+      await mapRouteCubit.setFromPlace(originLocation);
+      await _callFetchPlan(context, numItinerary: numItinerary);
+    }
   }
 
   @override

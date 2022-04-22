@@ -13,7 +13,6 @@ import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/drawer/trufi_drawer.dart';
@@ -122,16 +121,13 @@ abstract class DefaultValues {
                     drawerBuilder: generateDrawer(HomePage.route),
                   ),
                 ),
-            TransportList.route: (route) => NoAnimationPage(
-                  child: TransportList(
-                    drawerBuilder: generateDrawer(TransportList.route),
-                  ),
+            TransportList.route: (route) {
+              return NoAnimationPage(
+                child: TransportList(
+                  drawerBuilder: generateDrawer(TransportList.route),
                 ),
-            TransportListDetail.route: (route) => NoAnimationPage(
-                  child: TransportListDetail(
-                    id: Uri.decodeQueryComponent(route.pathParameters['id']!),
-                  ),
-                ),
+              );
+            },
             SavedPlacesPage.route: (route) => NoAnimationPage(
                   child: SavedPlacesPage(
                     drawerBuilder: generateDrawer(SavedPlacesPage.route),
