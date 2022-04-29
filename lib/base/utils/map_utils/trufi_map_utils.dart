@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
-import 'package:latlong2/latlong.dart';
 
-List<LatLng> decodePolyline(String? encoded) {
+import 'package:trufi_core/base/models/trufi_latlng.dart';
+
+List<TrufiLatLng> decodePolyline(String? encoded) {
   if (encoded == null) return [];
   if (kIsWeb) {
     return _decodePolylineWeb(encoded);
@@ -12,8 +12,8 @@ List<LatLng> decodePolyline(String? encoded) {
   }
 }
 
-List<LatLng> _decodePolylineDefault(String encoded) {
-  final List<LatLng> points = <LatLng>[];
+List<TrufiLatLng> _decodePolylineDefault(String encoded) {
+  final List<TrufiLatLng> points = <TrufiLatLng>[];
   int index = 0;
   final int len = encoded.length;
   int lat = 0, lng = 0;
@@ -37,7 +37,7 @@ List<LatLng> _decodePolylineDefault(String encoded) {
     final int dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
     lng += dlng;
     try {
-      final LatLng p = LatLng(lat / 1E5, lng / 1E5);
+      final TrufiLatLng p = TrufiLatLng(lat / 1E5, lng / 1E5);
       points.add(p);
     } catch (e) {
       log(e.toString());
@@ -46,8 +46,8 @@ List<LatLng> _decodePolylineDefault(String encoded) {
   return points;
 }
 
-List<LatLng> _decodePolylineWeb(String encoded) {
-  List<LatLng> poly = [];
+List<TrufiLatLng> _decodePolylineWeb(String encoded) {
+  List<TrufiLatLng> poly = [];
   int index = 0, len = encoded.length;
   int lat = 0, lng = 0;
   BigInt big0 = BigInt.from(0);
@@ -87,7 +87,7 @@ List<LatLng> _decodePolylineWeb(String encoded) {
     }
     lng += dLng;
 
-    poly.add(LatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble()));
+    poly.add(TrufiLatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble()));
   }
   return poly;
 }
