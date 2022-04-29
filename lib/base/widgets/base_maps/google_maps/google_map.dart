@@ -42,9 +42,11 @@ class TGoogleMap extends StatelessWidget {
                         currentLocation.latitude, currentLocation.longitude),
                     markerId: const MarkerId('MyLocationMarkerId'),
                     widget: SizedBox(
-                      height: 30,
-                      child: mapConfiguratiom
-                          .markersConfiguration.yourLocationMarker,
+                      height: 50,
+                      child: FittedBox(
+                        child: mapConfiguratiom
+                            .markersConfiguration.yourLocationMarker,
+                      ),
                     ),
                     anchor: const Offset(0.5, 0.5),
                     zIndex: 10,
