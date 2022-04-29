@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/map_configuration/marker_configurations/marker_configuration.dart';
 import 'package:trufi_core/base/const/consts.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
@@ -11,7 +12,6 @@ import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
-import 'package:trufi_core/base/widgets/base_maps/utils/markers/marker_configuration.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 typedef SelectLocationData = Future<LocationDetail?> Function(
