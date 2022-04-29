@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
+
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
-
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/share_route_button.dart';
-import 'package:trufi_core/base/widgets/maps/buttons/crop_button.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
+import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
+import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
+import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
+import 'package:trufi_core/base/widgets/base_maps/utils/buttons/crop_button.dart';
 
-class TrufiMapTransport extends StatefulWidget {
-  final TrufiMapController trufiMapController;
+class LeafletMapTransport extends StatefulWidget {
+  final LeafletMapController trufiMapController;
   final PatternOtp? transportData;
-  const TrufiMapTransport({
+  const LeafletMapTransport({
     Key? key,
     required this.trufiMapController,
     this.transportData,
   }) : super(key: key);
 
   @override
-  State<TrufiMapTransport> createState() => _TrufiMapTransportState();
+  State<LeafletMapTransport> createState() => _LeafletMapTransportState();
 }
 
-class _TrufiMapTransportState extends State<TrufiMapTransport>
+class _LeafletMapTransportState extends State<LeafletMapTransport>
     with TickerProviderStateMixin {
   final _cropButtonKey = GlobalKey<CropButtonState>();
 
@@ -35,13 +37,14 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
         tickerProvider: this,
       );
     }
-    return TrufiMap(
+    return LeafletMap(
       trufiMapController: widget.trufiMapController,
       layerOptionsBuilder: (context) => [
         PolylineLayerOptions(
           polylines: [
             Polyline(
-              points: widget.transportData?.geometry ?? [],
+              points: TrufiLatLng.toListLatLng(
+                  widget.transportData?.geometry ?? []),
               color: widget.transportData?.route?.primaryColor ?? Colors.black,
               strokeWidth: 6.0,
             ),
@@ -50,12 +53,13 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
         if (widget.transportData?.geometry != null)
           MarkerLayerOptions(markers: [
             if (widget.transportData!.geometry!.length > 2)
-              mapConfiguratiom.markersConfiguration
-                  .buildFromMarker(widget.transportData!.geometry![0]),
+              buildFromMarker(widget.transportData!.geometry![0],
+                  mapConfiguratiom.markersConfiguration.fromMarker),
             if (widget.transportData!.geometry!.length > 2)
-              mapConfiguratiom.markersConfiguration.buildToMarker(widget
-                  .transportData!
-                  .geometry![widget.transportData!.geometry!.length - 1]),
+              buildToMarker(
+                  widget.transportData!
+                      .geometry![widget.transportData!.geometry!.length - 1],
+                  mapConfiguratiom.markersConfiguration.toMarker),
           ]),
       ],
       floatingActionButtons: Column(
