@@ -14,7 +14,7 @@ import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_it
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
-import 'package:trufi_core/base/widgets/base_maps/utils/buttons/crop_button.dart';
+import 'package:trufi_core/base/widgets/base_maps/map_buttons/crop_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 

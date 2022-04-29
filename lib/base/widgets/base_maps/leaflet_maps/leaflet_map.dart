@@ -8,7 +8,7 @@ import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
-import 'package:trufi_core/base/widgets/base_maps/utils/buttons/your_location_button.dart';
+import 'package:trufi_core/base/widgets/base_maps/map_buttons/your_location_button.dart';
 
 typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
 
@@ -35,94 +35,55 @@ class LeafletMap extends StatelessWidget {
     final currentMapType = context.watch<MapTileProviderCubit>().state;
     return Stack(
       children: [
-        FlutterMap(
-          options: MapOptions(
-            interactiveFlags: InteractiveFlag.drag |
-                InteractiveFlag.flingAnimation |
-                InteractiveFlag.pinchMove |
-                InteractiveFlag.pinchZoom |
-                InteractiveFlag.doubleTapZoom,
-            minZoom: mapConfiguratiom.onlineMinZoom,
-            maxZoom: mapConfiguratiom.onlineMaxZoom,
-            zoom: mapConfiguratiom.onlineZoom,
-            onTap: onTap,
-            onLongPress: onLongPress,
-            center: mapConfiguratiom.center.toLatLng(),
-            onMapCreated: (c) {
-              trufiMapController.mapController = c;
-              if (!trufiMapController.readyCompleter.isCompleted) {
-                trufiMapController.readyCompleter.complete();
-              }
-            },
-            onPositionChanged: (
-              MapPosition position,
-              bool hasGesture,
-            ) {
-              if (onPositionChanged != null) {
-                Future.delayed(Duration.zero, () {
-                  onPositionChanged!(position, hasGesture);
-                });
-              }
-            },
-          ),
-          layers: [
-            ...currentMapType.currentMapTileProvider.buildTileLayerOptions(),
-            ...layerOptionsBuilder(context),
-            // MarkerLayerOptions(markers: [
-            //   buildYourLocationMarker(
-            //     currentLocation,
-            //     mapConfiguratiom.markersConfiguration.yourLocationMarker,
-            //   )
-            // ]),
-          ],
+        StreamBuilder<TrufiLatLng?>(
+          initialData: null,
+          stream: GPSLocationProvider().streamLocation,
+          builder: (context, snapshot) {
+            final currentLocation = snapshot.data;
+            return FlutterMap(
+              options: MapOptions(
+                interactiveFlags: InteractiveFlag.drag |
+                    InteractiveFlag.flingAnimation |
+                    InteractiveFlag.pinchMove |
+                    InteractiveFlag.pinchZoom |
+                    InteractiveFlag.doubleTapZoom,
+                minZoom: mapConfiguratiom.onlineMinZoom,
+                maxZoom: mapConfiguratiom.onlineMaxZoom,
+                zoom: mapConfiguratiom.onlineZoom,
+                onTap: onTap,
+                onLongPress: onLongPress,
+                center: mapConfiguratiom.center.toLatLng(),
+                onMapCreated: (c) {
+                  trufiMapController.mapController = c;
+                  if (!trufiMapController.readyCompleter.isCompleted) {
+                    trufiMapController.readyCompleter.complete();
+                  }
+                },
+                onPositionChanged: (
+                  MapPosition position,
+                  bool hasGesture,
+                ) {
+                  if (onPositionChanged != null) {
+                    Future.delayed(Duration.zero, () {
+                      onPositionChanged!(position, hasGesture);
+                    });
+                  }
+                },
+              ),
+              layers: [
+                ...currentMapType.currentMapTileProvider
+                    .buildTileLayerOptions(),
+                ...layerOptionsBuilder(context),
+                MarkerLayerOptions(markers: [
+                  buildYourLocationMarker(
+                    currentLocation,
+                    mapConfiguratiom.markersConfiguration.yourLocationMarker,
+                  )
+                ]),
+              ],
+            );
+          },
         ),
-        // StreamBuilder<TrufiLatLng?>(
-        //   initialData: null,
-        //   stream: GPSLocationProvider().streamLocation,
-        //   builder: (context, snapshot) {
-        //     final currentLocation = snapshot.data;
-        //     return FlutterMap(
-        //       mapController: trufiMapController.mapController,
-        //       options: MapOptions(
-        //         interactiveFlags: InteractiveFlag.drag |
-        //             InteractiveFlag.flingAnimation |
-        //             InteractiveFlag.pinchMove |
-        //             InteractiveFlag.pinchZoom |
-        //             InteractiveFlag.doubleTapZoom,
-        //         minZoom: mapConfiguratiom.onlineMinZoom,
-        //         maxZoom: mapConfiguratiom.onlineMaxZoom,
-        //         zoom: mapConfiguratiom.onlineZoom,
-        //         onTap: onTap,
-        //         onLongPress: onLongPress,
-        //         center: mapConfiguratiom.center.toLatLng(),
-        //         // onMapCreated: (c) {
-        //         //   trufiMapController.mapController= c;
-        //         // },
-        //         onPositionChanged: (
-        //           MapPosition position,
-        //           bool hasGesture,
-        //         ) {
-        //           if (onPositionChanged != null) {
-        //             Future.delayed(Duration.zero, () {
-        //               onPositionChanged!(position, hasGesture);
-        //             });
-        //           }
-        //         },
-        //       ),
-        //       layers: [
-        //         ...currentMapType.currentMapTileProvider
-        //             .buildTileLayerOptions(),
-        //         ...layerOptionsBuilder(context),
-        //         MarkerLayerOptions(markers: [
-        //           buildYourLocationMarker(
-        //             currentLocation,
-        //             mapConfiguratiom.markersConfiguration.yourLocationMarker,
-        //           )
-        //         ]),
-        //       ],
-        //     );
-        //   },
-        // ),
         Positioned(
           bottom: 16.0,
           right: 16.0,

@@ -8,7 +8,7 @@ import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
-import 'package:trufi_core/base/widgets/base_maps/utils/buttons/crop_button.dart';
+import 'package:trufi_core/base/widgets/base_maps/map_buttons/crop_button.dart';
 
 part 'google_map_state.dart';
 

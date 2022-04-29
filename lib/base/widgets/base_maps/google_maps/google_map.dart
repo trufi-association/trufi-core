@@ -7,7 +7,7 @@ import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/google_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/widget_marker/marker_generator.dart';
-import 'package:trufi_core/base/widgets/base_maps/utils/buttons/your_location_button.dart';
+import 'package:trufi_core/base/widgets/base_maps/map_buttons/your_location_button.dart';
 
 class TGoogleMap extends StatelessWidget {
   final TGoogleMapController trufiMapController;
