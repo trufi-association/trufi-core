@@ -34,6 +34,7 @@ dependencies:
   synchronized: ^3.0.0
   cached_network_image: ^3.2.0
   uni_links: ^0.5.1
+  google_maps_flutter: ^2.1.4
   
 dev_dependencies:
   flutter_test:
