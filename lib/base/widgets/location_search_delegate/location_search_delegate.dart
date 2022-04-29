@@ -3,15 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
+import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/location_search_delegate/build_street_results.dart';
 import 'package:trufi_core/base/widgets/location_search_delegate/suggestion_list.dart';
 
 class LocationSearchDelegate extends SearchDelegate<TrufiLocation?> {
   final bool isOrigin;
   final String hint;
+  final SelectLocationData selectPositionOnPage;
   LocationSearchDelegate({
     required this.isOrigin,
     required this.hint,
+    required this.selectPositionOnPage,
   }) : super(
           searchFieldLabel: hint,
         );
@@ -58,6 +61,7 @@ class LocationSearchDelegate extends SearchDelegate<TrufiLocation?> {
     return SuggestionList(
       query: query,
       isOrigin: isOrigin,
+      selectPositionOnPage: selectPositionOnPage,
       onSelected: (TrufiLocation suggestion) {
         _result = suggestion;
         close(context, suggestion);

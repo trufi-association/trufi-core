@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/widgets/dialog_edit_location.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
@@ -15,6 +15,7 @@ class LocationTiler extends StatelessWidget {
     Key? key,
     required this.location,
     required this.updateLocation,
+    required this.selectPositionOnPage,
     this.removeLocation,
     this.isDefaultLocation = false,
     this.enableSetIcon = false,
@@ -27,8 +28,10 @@ class LocationTiler extends StatelessWidget {
   final bool enableSetIcon;
   final bool enableLocation;
   final bool enableSetPosition;
+  final SelectLocationData selectPositionOnPage;
   final Function(TrufiLocation, TrufiLocation) updateLocation;
   final Function(TrufiLocation)? removeLocation;
+
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -157,17 +160,17 @@ class LocationTiler extends StatelessWidget {
         builder: (BuildContext context) {
           return DialogEditLocation(
             location: location,
+            selectPositionOnPage: selectPositionOnPage,
           );
         });
     if (newLocation != null) updateLocation(location, newLocation);
   }
 
   Future<void> _changePosition(BuildContext context) async {
-    final LocationDetail? chooseLocationDetail =
-        await ChooseLocationPage.selectPosition(
+    final LocationDetail? chooseLocationDetail = await selectPositionOnPage(
       context,
       position: location.isLatLngDefined
-          ? LatLng(location.latitude, location.longitude)
+          ? TrufiLatLng(location.latitude, location.longitude)
           : null,
     );
     if (chooseLocationDetail != null) {

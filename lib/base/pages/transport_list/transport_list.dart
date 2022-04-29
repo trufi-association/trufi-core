@@ -5,6 +5,7 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
@@ -13,10 +14,12 @@ import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 class TransportList extends StatefulWidget {
   static const String route = "/TransportList";
   final Widget Function(BuildContext) drawerBuilder;
+  final MapTransportProvider mapTransportProvider;
 
   const TransportList({
     Key? key,
     required this.drawerBuilder,
+    required this.mapTransportProvider,
   }) : super(key: key);
 
   @override
@@ -47,6 +50,7 @@ class _TransportListState extends State<TransportList> {
         context: context,
         builder: (BuildContext context) => TransportListDetail(
           id: Uri.decodeQueryComponent(transportListId),
+          mapTransportProvider: widget.mapTransportProvider,
         ),
       );
     }

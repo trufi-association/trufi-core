@@ -6,26 +6,29 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
-import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/trufi_map_route.dart';
+import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/map_route_provider.dart';
+import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
+import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = "/Home";
   static GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   final WidgetBuilder drawerBuilder;
-  final MapRouteBuilder mapBuilder;
+  final MapRouteProvider mapRouteProvider;
+  final MapChooseLocationProvider mapChooseLocationProvider;
   final AsyncExecutor asyncExecutor;
 
   const HomePage({
     Key? key,
     required this.drawerBuilder,
-    required this.mapBuilder,
+    required this.mapRouteProvider,
+    required this.mapChooseLocationProvider,
     required this.asyncExecutor,
   }) : super(key: key);
 
@@ -35,8 +38,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  final TrufiMapController trufiMapController = TrufiMapController();
-
   @override
   void initState() {
     super.initState();
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage>
               onSaveFrom: (TrufiLocation fromPlace) =>
                   mapRouteCubit.setFromPlace(fromPlace).then(
                 (value) {
-                  trufiMapController.move(
+                  widget.mapRouteProvider.trufiMapController.move(
                     center: fromPlace.latLng,
                     zoom: mapConfiguratiom.chooseLocationZoom,
                     tickerProvider: this,
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage>
               onSaveTo: (TrufiLocation toPlace) =>
                   mapRouteCubit.setToPlace(toPlace).then(
                 (value) {
-                  trufiMapController.move(
+                  widget.mapRouteProvider.trufiMapController.move(
                     center: toPlace.latLng,
                     zoom: mapConfiguratiom.chooseLocationZoom,
                     tickerProvider: this,
@@ -120,6 +121,7 @@ class _HomePageState extends State<HomePage>
               onSwap: () => mapRouteCubit
                   .swapLocations()
                   .then((value) => _callFetchPlan(context)),
+              selectPositionOnPage: _selectPosition,
             ),
           ),
           Expanded(
@@ -130,20 +132,21 @@ class _HomePageState extends State<HomePage>
               right: isPortrait,
               child: BlocListener<MapRouteCubit, MapRouteState>(
                 listener: (buildContext, state) {
-                  trufiMapController.mapController.onReady.then((_) {
+                  widget.mapRouteProvider.trufiMapController.onReady.then((_) {
                     repaintMap(mapRouteCubit, state);
                   });
                 },
                 child: CustomScrollableContainer(
                   openedPosition: 200,
-                  body: widget.mapBuilder(
+                  body: widget.mapRouteProvider.mapRouteBuilder(
                     context,
-                    trufiMapController,
+                    widget.asyncExecutor,
                   ),
                   panel: mapRouteCubit.state.plan != null
                       ? CustomItinerary(
                           moveTo: (center) {
-                            trufiMapController.move(center: center, zoom: 15);
+                            widget.mapRouteProvider.trufiMapController
+                                .move(center: center, zoom: 15);
                           },
                         )
                       : null,
@@ -158,17 +161,18 @@ class _HomePageState extends State<HomePage>
 
   void repaintMap(MapRouteCubit mapRouteCubit, MapRouteState mapRouteState) {
     if (mapRouteState.plan != null && mapRouteState.selectedItinerary != null) {
-      trufiMapController.selectedItinerary(
-          plan: mapRouteState.plan!,
-          from: mapRouteState.fromPlace!,
-          to: mapRouteState.toPlace!,
-          selectedItinerary: mapRouteState.selectedItinerary!,
-          tickerProvider: this,
-          onTap: (p1) {
-            mapRouteCubit.selectItinerary(p1);
-          });
+      widget.mapRouteProvider.trufiMapController.selectedItinerary(
+        plan: mapRouteState.plan!,
+        from: mapRouteState.fromPlace!,
+        to: mapRouteState.toPlace!,
+        selectedItinerary: mapRouteState.selectedItinerary!,
+        tickerProvider: this,
+        onTap: (p1) {
+          mapRouteCubit.selectItinerary(p1);
+        },
+      );
     } else {
-      trufiMapController.cleanMap();
+      widget.mapRouteProvider.trufiMapController.cleanMap();
     }
   }
 
@@ -205,12 +209,25 @@ class _HomePageState extends State<HomePage>
         latitude: double.tryParse(destinyData[1])!,
         longitude: double.tryParse(destinyData[2])!,
       );
-      numItinerary = int.tryParse(queryParameters['itinerary']??'0');
+      numItinerary = int.tryParse(queryParameters['itinerary'] ?? '0');
       final mapRouteCubit = context.read<MapRouteCubit>();
       await mapRouteCubit.setToPlace(destinyLocation);
       await mapRouteCubit.setFromPlace(originLocation);
       await _callFetchPlan(context, numItinerary: numItinerary);
     }
+  }
+
+  Future<LocationDetail?> _selectPosition(
+    BuildContext context, {
+    bool? isOrigin,
+    TrufiLatLng? position,
+  }) async {
+    return await ChooseLocationPage.selectPosition(
+      context,
+      mapChooseLocationProvider: widget.mapChooseLocationProvider,
+      position: position,
+      isOrigin: isOrigin,
+    );
   }
 
   @override

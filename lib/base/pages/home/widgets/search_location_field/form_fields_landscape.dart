@@ -7,6 +7,7 @@ import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart'
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/buttons.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/location_form_field.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class FormFieldsLandscape extends StatelessWidget {
   const FormFieldsLandscape({
@@ -16,6 +17,7 @@ class FormFieldsLandscape extends StatelessWidget {
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
+    required this.selectPositionOnPage,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -23,6 +25,8 @@ class FormFieldsLandscape extends StatelessWidget {
   final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
+  final SelectLocationData selectPositionOnPage;
+
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -39,13 +43,15 @@ class FormFieldsLandscape extends StatelessWidget {
             ),
             Flexible(
               child: LocationFormField(
-                isOrigin: true,
-                hintText: localization.searchPleaseSelectOrigin,
-                textLeadingImage:
-                    mapConfiguratiom.markersConfiguration.fromMarker,
-                onSaved: onSaveFrom,
-                value: mapRouteState.fromPlace,
-              ),
+                  isOrigin: true,
+                  hintText: localization.searchPleaseSelectOrigin,
+                  textLeadingImage: Container(
+                    padding: const EdgeInsets.all(3.5),
+                    child: mapConfiguratiom.markersConfiguration.fromMarker,
+                  ),
+                  onSaved: onSaveFrom,
+                  value: mapRouteState.fromPlace,
+                  selectPositionOnPage: selectPositionOnPage),
             ),
             SizedBox(
               width: 40.0,
@@ -58,13 +64,13 @@ class FormFieldsLandscape extends StatelessWidget {
             ),
             Flexible(
               child: LocationFormField(
-                isOrigin: false,
-                hintText: localization.searchPleaseSelectDestination,
-                textLeadingImage:
-                    mapConfiguratiom.markersConfiguration.toMarker,
-                onSaved: onSaveTo,
-                value: mapRouteState.toPlace,
-              ),
+                  isOrigin: false,
+                  hintText: localization.searchPleaseSelectDestination,
+                  textLeadingImage:
+                      mapConfiguratiom.markersConfiguration.toMarker,
+                  onSaved: onSaveTo,
+                  value: mapRouteState.toPlace,
+                  selectPositionOnPage: selectPositionOnPage),
             ),
             SizedBox(
               width: 40.0,

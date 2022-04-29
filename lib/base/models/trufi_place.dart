@@ -1,5 +1,4 @@
-import 'package:latlong2/latlong.dart';
-
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'enums/defaults_location.dart';
 
@@ -138,22 +137,39 @@ class TrufiLocation implements TrufiPlace {
         description == DefaultLocation.defaultHome.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationHome
-          : localization.defaultLocationAdd(localization.defaultLocationHome.toLowerCase());
+          : localization.defaultLocationAdd(
+              localization.defaultLocationHome.toLowerCase());
     } else if (type == DefaultLocation.defaultWork.initLocation.type &&
         description == DefaultLocation.defaultWork.initLocation.description) {
       translate = isLatLngDefined
           ? localization.defaultLocationWork
-          : localization.defaultLocationAdd(localization.defaultLocationWork.toLowerCase());
+          : localization.defaultLocationAdd(
+              localization.defaultLocationWork.toLowerCase());
     }
     return translate;
+  }
+
+  static bool sameLocations(TrufiLatLng location1, TrufiLatLng location2) {
+    return location1.latitude.toStringAsFixed(2) ==
+            location2.latitude.toStringAsFixed(2) &&
+        location1.longitude.toStringAsFixed(2) ==
+            location2.longitude.toStringAsFixed(2);
+  }
+
+  static TrufiLatLng centerLocation(
+      TrufiLatLng location1, TrufiLatLng location2) {
+    return TrufiLatLng(
+      (location1.latitude + location2.latitude) / 2,
+      (location1.longitude + location2.longitude) / 2,
+    );
   }
 
   bool get isLatLngDefined {
     return latitude != 0 && longitude != 0;
   }
 
-  LatLng get latLng {
-    return LatLng(latitude, longitude);
+  TrufiLatLng get latLng {
+    return TrufiLatLng(latitude, longitude);
   }
 }
 
@@ -222,7 +238,7 @@ class LevenshteinObject<T> {
 class LocationDetail {
   final String description;
   final String street;
-  final LatLng position;
+  final TrufiLatLng position;
 
   LocationDetail(this.description, this.street, this.position);
 }
