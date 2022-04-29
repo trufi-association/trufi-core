@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
-import 'package:latlong2/latlong.dart';
+
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/location_search_storage.dart';
 import '../search_location_repository.dart';
@@ -48,7 +48,7 @@ class DefaultSearchLocation implements SearchLocationRepository {
   }
 
   @override
-  Future<LocationDetail> reverseGeodecoding(LatLng location) async {
+  Future<LocationDetail> reverseGeodecoding(TrufiLatLng location) async {
     final response = await http.get(
       Uri.parse(
         "$photonUrl/reverse?lon=${location.longitude}&lat=${location.latitude}",

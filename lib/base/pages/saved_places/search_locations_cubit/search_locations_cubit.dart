@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
-import 'package:trufi_core/base/models/enums/defaults_location.dart';
 
+import 'package:trufi_core/base/models/enums/defaults_location.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/local_repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location_repository.dart';
@@ -205,7 +205,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             : 1;
   }
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location) =>
+  Future<LocationDetail> reverseGeodecoding(TrufiLatLng location) =>
       searchLocationRepository.reverseGeodecoding(
         location,
       );

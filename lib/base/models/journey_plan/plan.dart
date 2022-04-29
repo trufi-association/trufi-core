@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:collection/collection.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
 

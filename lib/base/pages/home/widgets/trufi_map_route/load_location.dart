@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:trufi_core/base/const/consts.dart';
 
+import 'package:trufi_core/base/const/consts.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/custom_location_selector.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 
 class LoadLocation extends StatefulWidget {
-  final LatLng location;
+  final TrufiLatLng location;
   final AsyncCallback onFetchPlan;
   const LoadLocation({
     Key? key,

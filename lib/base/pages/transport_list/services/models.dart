@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 
 class PatternOtp extends Equatable {
   final String id;
   final String name;
   final String code;
   final RouteEntity? route;
-  final List<LatLng>? geometry;
+  final List<TrufiLatLng>? geometry;
   final List<Stop>? stops;
 
   const PatternOtp({
@@ -25,7 +25,7 @@ class PatternOtp extends Equatable {
     String? name,
     String? code,
     RouteEntity? route,
-    List<LatLng>? geometry,
+    List<TrufiLatLng>? geometry,
     List<Stop>? stops,
   }) {
     return PatternOtp(
@@ -46,8 +46,8 @@ class PatternOtp extends Equatable {
         name: json['name'].toString(),
         code: json['code'].toString(),
         geometry: json['geometry'] != null
-            ? List<LatLng>.from((json["geometry"] as List<dynamic>).map(
-                (x) => LatLng(x['lat'] as double, x['lon'] as double),
+            ? List<TrufiLatLng>.from((json["geometry"] as List<dynamic>).map(
+                (x) => TrufiLatLng(x['lat'] as double, x['lon'] as double),
               ))
             : null,
         stops: json['stops'] != null

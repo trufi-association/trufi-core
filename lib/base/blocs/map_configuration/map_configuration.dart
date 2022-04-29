@@ -17,7 +17,7 @@ class MapConfiguration {
   final double chooseLocationZoom;
 
   /// Center of the map
-  final LatLng center;
+  final TrufiLatLng center;
 
   /// This widgetBuilder creates the Attribution Texts on top of the map
   WidgetBuilder? mapAttributionBuilder;

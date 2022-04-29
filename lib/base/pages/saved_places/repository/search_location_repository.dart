@@ -1,5 +1,4 @@
-import 'package:latlong2/latlong.dart';
-
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 
 abstract class SearchLocationRepository {
@@ -9,5 +8,5 @@ abstract class SearchLocationRepository {
     String? correlationId,
   });
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location);
+  Future<LocationDetail> reverseGeodecoding(TrufiLatLng location);
 }

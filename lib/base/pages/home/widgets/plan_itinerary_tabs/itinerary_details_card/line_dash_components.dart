@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/transit_leg.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
@@ -10,7 +10,7 @@ class TransportDash extends StatelessWidget {
   final Leg leg;
   final bool showBeforeLine;
   final bool showAfterLine;
-  final Function(LatLng) moveTo;
+  final Function(TrufiLatLng) moveTo;
 
   const TransportDash({
     Key? key,
@@ -35,7 +35,7 @@ class TransportDash extends StatelessWidget {
           color: leg.primaryColor,
           child: GestureDetector(
             onTap: () {
-              moveTo(LatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+              moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
             },
             child: TransitLeg(
               leg: leg,
