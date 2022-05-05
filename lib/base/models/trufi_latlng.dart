@@ -47,6 +47,11 @@ class TrufiLatLng extends Equatable {
     return listTrufiLatLng.map((e) => e.toLatLng()).toList();
   }
 
+  static List<google.LatLng> toListGoogleLatLng(
+      List<TrufiLatLng> listTrufiLatLng) {
+    return listTrufiLatLng.map((e) => e.toGoogleLatLng()).toList();
+  }
+
   static List<TrufiLatLng> fromListLatLng(List<LatLng> listTrufiLatLng) {
     return listTrufiLatLng.map((e) => TrufiLatLng.fromLatLng(e)).toList();
   }
