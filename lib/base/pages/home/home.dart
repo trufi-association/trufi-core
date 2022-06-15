@@ -70,8 +70,6 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final mapRouteCubit = context.watch<MapRouteCubit>();
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     final theme = Theme.of(context);
     return Scaffold(
       key: HomePage.scaffoldKey,
@@ -86,72 +84,87 @@ class _HomePageState extends State<HomePage>
       extendBody: true,
       body: Column(
         children: [
-          SafeArea(
-            bottom: false,
-            left: isPortrait,
-            right: isPortrait,
-            child: HomeAppBar(
-              onSaveFrom: (TrufiLocation fromPlace) =>
-                  mapRouteCubit.setFromPlace(fromPlace).then(
-                (value) {
-                  widget.mapRouteProvider.trufiMapController.move(
-                    center: fromPlace.latLng,
-                    zoom: mapConfiguratiom.chooseLocationZoom,
-                    tickerProvider: this,
-                  );
-                  _callFetchPlan(context);
-                },
-              ),
-              onSaveTo: (TrufiLocation toPlace) =>
-                  mapRouteCubit.setToPlace(toPlace).then(
-                (value) {
-                  widget.mapRouteProvider.trufiMapController.move(
-                    center: toPlace.latLng,
-                    zoom: mapConfiguratiom.chooseLocationZoom,
-                    tickerProvider: this,
-                  );
-                  _callFetchPlan(context);
-                },
-              ),
-              onBackButton: () {
-                HomePage.scaffoldKey.currentState?.openDrawer();
+          HomeAppBar(
+            onSaveFrom: (TrufiLocation fromPlace) =>
+                mapRouteCubit.setFromPlace(fromPlace).then(
+              (value) {
+                widget.mapRouteProvider.trufiMapController.move(
+                  center: fromPlace.latLng,
+                  zoom: mapConfiguratiom.chooseLocationZoom,
+                  tickerProvider: this,
+                );
+                _callFetchPlan(context);
               },
-              onFetchPlan: () => _callFetchPlan(context),
-              onReset: () => mapRouteCubit.reset(),
-              onSwap: () => mapRouteCubit
-                  .swapLocations()
-                  .then((value) => _callFetchPlan(context)),
-              selectPositionOnPage: _selectPosition,
             ),
+            onSaveTo: (TrufiLocation toPlace) =>
+                mapRouteCubit.setToPlace(toPlace).then(
+              (value) {
+                widget.mapRouteProvider.trufiMapController.move(
+                  center: toPlace.latLng,
+                  zoom: mapConfiguratiom.chooseLocationZoom,
+                  tickerProvider: this,
+                );
+                _callFetchPlan(context);
+              },
+            ),
+            onBackButton: () {
+              HomePage.scaffoldKey.currentState?.openDrawer();
+            },
+            onFetchPlan: () => _callFetchPlan(context),
+            onReset: () => mapRouteCubit.reset(),
+            onSwap: () => mapRouteCubit
+                .swapLocations()
+                .then((value) => _callFetchPlan(context)),
+            selectPositionOnPage: _selectPosition,
           ),
           Expanded(
-            child: SafeArea(
-              top: false,
-              bottom: false,
-              left: isPortrait,
-              right: isPortrait,
-              child: BlocListener<MapRouteCubit, MapRouteState>(
-                listener: (buildContext, state) {
-                  widget.mapRouteProvider.trufiMapController.onReady.then((_) {
+            child: Stack(
+              children: [
+                BlocListener<MapRouteCubit, MapRouteState>(
+                  listener: (buildContext, state) {
                     repaintMap(mapRouteCubit, state);
-                  });
-                },
-                child: CustomScrollableContainer(
-                  openedPosition: 200,
-                  body: widget.mapRouteProvider.mapRouteBuilder(
-                    context,
-                    widget.asyncExecutor,
+                    // TODO fix trufiMapController.onReady
+                    // widget.mapRouteProvider.trufiMapController.onReady
+                    //     .then((_) {});
+                  },
+                  child: CustomScrollableContainer(
+                    openedPosition: 200,
+                    body: widget.mapRouteProvider.mapRouteBuilder(
+                      context,
+                      widget.asyncExecutor,
+                    ),
+                    panel: mapRouteCubit.state.plan != null
+                        ? CustomItinerary(
+                            moveTo: (center) {
+                              widget.mapRouteProvider.trufiMapController
+                                  .move(center: center, zoom: 15);
+                            },
+                          )
+                        : null,
                   ),
-                  panel: mapRouteCubit.state.plan != null
-                      ? CustomItinerary(
-                          moveTo: (center) {
-                            widget.mapRouteProvider.trufiMapController
-                                .move(center: center, zoom: 15);
-                          },
-                        )
-                      : null,
                 ),
-              ),
+                Positioned(
+                  top: -3.5,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 3,
+                    decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(8.0),
+                          bottomLeft: Radius.circular(8.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xaa000000),
+                          offset: Offset(0, 1.5),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ],

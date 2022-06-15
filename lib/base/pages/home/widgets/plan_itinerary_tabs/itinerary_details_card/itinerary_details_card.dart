@@ -30,100 +30,106 @@ class ItineraryDetailsCard extends StatelessWidget {
     final mapRouteState = mapRouteCubit.state;
     final compresedLegs = itinerary.compressLegs;
     final sizeLegs = compresedLegs.length;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              BackButton(
-                onPressed: onBackPressed,
-              ),
-              Expanded(
-                child: BarItineraryDetails(
-                  itinerary: itinerary,
+    return Scrollbar(
+      child: SingleChildScrollView(
+        controller: ScrollController(),
+        primary: false,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                BackButton(
+                  onPressed: onBackPressed,
                 ),
-              ),
-            ],
-          ),
-          const Divider(height: 0),
-          ListView.builder(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: sizeLegs,
-            itemBuilder: (context, index) {
-              final itineraryLeg = compresedLegs[index];
-              return Column(
-                children: [
-                  // fromDashLine
-                  if (index == 0)
-                    DashLinePlace(
-                      date: itinerary.startTimeHHmm.toString(),
-                      location:
-                          mapRouteState.fromPlace?.displayName(localization) ??
-                              '',
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          const SizedBox(height: 18, width: 24),
-                          Positioned(
-                            top: -5,
-                            right: -1,
-                            left: -1,
-                            child: Container(
-                              height: 28,
-                              width: 28,
-                              padding: const EdgeInsets.all(4),
-                              child: mapConfiguratiom
-                                  .markersConfiguration.fromMarker,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                  // Route
-                  if (itineraryLeg.transitLeg)
-                    TransportDash(
-                      leg: itineraryLeg,
-                      showBeforeLine: index != 0,
-                      showAfterLine: index != sizeLegs - 1 &&
-                          !compresedLegs[index + 1].transitLeg,
-                      moveTo: moveTo,
-                    )
-                  else
-                    WalkDash(leg: itineraryLeg),
-
-                  // toDashLine
-                  if (index == sizeLegs - 1)
-                    DashLinePlace(
-                      date: itinerary.endTimeHHmm.toString(),
-                      location:
-                          mapRouteState.toPlace?.displayName(localization) ??
-                              '',
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          const SizedBox(height: 24, width: 24),
-                          Positioned(
-                            top: -3,
-                            child: SizedBox(
-                              height: 24,
-                              width: 24,
-                              child: FittedBox(
+                Expanded(
+                  child: BarItineraryDetails(
+                    itinerary: itinerary,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 0),
+            ListView.builder(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+              physics: const NeverScrollableScrollPhysics(),
+              controller: ScrollController(),
+              primary: false,
+              shrinkWrap: true,
+              itemCount: sizeLegs,
+              itemBuilder: (context, index) {
+                final itineraryLeg = compresedLegs[index];
+                return Column(
+                  children: [
+                    // fromDashLine
+                    if (index == 0)
+                      DashLinePlace(
+                        date: itinerary.startTimeHHmm.toString(),
+                        location:
+                            mapRouteState.fromPlace?.displayName(localization) ??
+                                '',
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            const SizedBox(height: 18, width: 24),
+                            Positioned(
+                              top: -5,
+                              right: -1,
+                              left: -1,
+                              child: Container(
+                                height: 28,
+                                width: 28,
+                                padding: const EdgeInsets.all(4),
                                 child: mapConfiguratiom
-                                    .markersConfiguration.toMarker,
+                                    .markersConfiguration.fromMarker,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
+
+                    // Route
+                    if (itineraryLeg.transitLeg)
+                      TransportDash(
+                        leg: itineraryLeg,
+                        showBeforeLine: index != 0,
+                        showAfterLine: index != sizeLegs - 1 &&
+                            !compresedLegs[index + 1].transitLeg,
+                        moveTo: moveTo,
+                      )
+                    else
+                      WalkDash(leg: itineraryLeg),
+
+                    // toDashLine
+                    if (index == sizeLegs - 1)
+                      DashLinePlace(
+                        date: itinerary.endTimeHHmm.toString(),
+                        location:
+                            mapRouteState.toPlace?.displayName(localization) ??
+                                '',
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            const SizedBox(height: 24, width: 24),
+                            Positioned(
+                              top: -3,
+                              child: SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: FittedBox(
+                                  child: mapConfiguratiom
+                                      .markersConfiguration.toMarker,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

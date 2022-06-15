@@ -40,49 +40,53 @@ class HomeAppBar extends StatelessWidget {
           bottom: Radius.circular(4),
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (!isPortrait) const SizedBox(width: 30),
-                IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.white,
+      child: SafeArea(
+        bottom: false,
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!isPortrait) const SizedBox(width: 30),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    splashRadius: 24,
+                    iconSize: 24,
+                    onPressed: onBackButton,
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
                   ),
-                  splashRadius: 24,
-                  iconSize: 24,
-                  onPressed: onBackButton,
-                  tooltip:
-                      MaterialLocalizations.of(context).openAppDrawerTooltip,
-                ),
-                Expanded(
-                  child: (isPortrait)
-                      ? FormFieldsPortrait(
-                          onFetchPlan: onFetchPlan,
-                          onReset: onReset,
-                          onSaveFrom: onSaveFrom,
-                          onSaveTo: onSaveTo,
-                          onSwap: onSwap,
-                          selectPositionOnPage: selectPositionOnPage,
-                        )
-                      : FormFieldsLandscape(
-                          onFetchPlan: onFetchPlan,
-                          onReset: onReset,
-                          onSaveFrom: onSaveFrom,
-                          onSaveTo: onSaveTo,
-                          onSwap: onSwap,
-                          selectPositionOnPage: selectPositionOnPage,
-                        ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  Expanded(
+                    child: (isPortrait)
+                        ? FormFieldsPortrait(
+                            onFetchPlan: onFetchPlan,
+                            onReset: onReset,
+                            onSaveFrom: onSaveFrom,
+                            onSaveTo: onSaveTo,
+                            onSwap: onSwap,
+                            selectPositionOnPage: selectPositionOnPage,
+                          )
+                        : FormFieldsLandscape(
+                            onFetchPlan: onFetchPlan,
+                            onReset: onReset,
+                            onSaveFrom: onSaveFrom,
+                            onSaveTo: onSaveTo,
+                            onSwap: onSwap,
+                            selectPositionOnPage: selectPositionOnPage,
+                          ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
