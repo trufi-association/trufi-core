@@ -259,9 +259,9 @@
     "@instructionVehicleMetro": {
         "description": "Vehicle name (Metro)"
     },
-    "instructionVehicleMicro": "Micro",
+    "instructionVehicleMicro": "Microbus",
     "@instructionVehicleMicro": {
-        "description": "Vehicle name (Micro)"
+        "description": "Vehicle name (Microbus)"
     },
     "instructionVehicleMinibus": "Minibus",
     "@instructionVehicleMinibus": {
