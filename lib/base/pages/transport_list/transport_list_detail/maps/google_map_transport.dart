@@ -6,7 +6,7 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
+// import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/google_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/google_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/widget_marker/marker_generator.dart';

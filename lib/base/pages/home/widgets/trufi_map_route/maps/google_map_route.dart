@@ -12,7 +12,7 @@ import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/load_location.dart';
-import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
+// import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/google_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/google_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/google_maps/widget_marker/marker_generator.dart';

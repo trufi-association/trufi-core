@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_void_to_null
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';

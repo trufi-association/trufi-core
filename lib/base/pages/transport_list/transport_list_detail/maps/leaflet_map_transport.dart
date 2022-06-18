@@ -5,7 +5,6 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
