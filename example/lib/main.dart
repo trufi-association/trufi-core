@@ -16,13 +16,13 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "https://cbba.trufi.dev/otp",
-          otpGraphqlEndpoint: "https://cbba.trufi.dev/otp/index/graphql",
+          otpEndpoint: "https://cbba.trufi.app/otp",
+          otpGraphqlEndpoint: "https://cbba.trufi.app/otp/index/graphql",
           mapConfiguration: MapConfiguration(
             center: const TrufiLatLng(-17.392600, -66.158787),
           ),
           searchAssetPath: "assets/data/search.json",
-          photonUrl: "https://cbba.trufi.dev/photon",
+          photonUrl: "https://cbba.trufi.app/photon",
           typeProviderMap: TypepProviderMap.lealetMap,
         ),
       ],
