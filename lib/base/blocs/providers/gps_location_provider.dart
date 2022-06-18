@@ -3,9 +3,9 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:rxdart/subjects.dart';
 
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/widgets/alerts/alerts_location_denied.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
@@ -19,10 +19,10 @@ class GPSLocationProvider {
 
   GPSLocationProvider._internal();
 
-  final _streamLocation = BehaviorSubject<LatLng?>.seeded(null);
+  final _streamLocation = BehaviorSubject<TrufiLatLng?>.seeded(null);
 
-  Stream<LatLng?> get streamLocation => _streamLocation.stream;
-  LatLng? get myLocation => _streamLocation.value;
+  Stream<TrufiLatLng?> get streamLocation => _streamLocation.stream;
+  TrufiLatLng? get myLocation => _streamLocation.value;
 
   Future<void> start() async {
     // GPS status reading
@@ -43,7 +43,7 @@ class GPSLocationProvider {
             accuracy: LocationAccuracy.high,
             distanceFilter: 10,
           )).listen((position) {
-            _streamLocation.add(LatLng(position.latitude, position.longitude));
+            _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
           });
         }
       });
@@ -70,7 +70,7 @@ class GPSLocationProvider {
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
     )).listen((position) {
-      _streamLocation.add(LatLng(position.latitude, position.longitude));
+      _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
     });
   }
 
@@ -85,7 +85,7 @@ class GPSLocationProvider {
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
     )).listen((position) {
-      _streamLocation.add(LatLng(position.latitude, position.longitude));
+      _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
     });
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/utils/packge_info_platform.dart';
@@ -50,7 +50,7 @@ class FeedbackPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           String version = await PackageInfoPlatform.version();
-          final LatLng? currentLocation = GPSLocationProvider().myLocation;
+          final TrufiLatLng? currentLocation = GPSLocationProvider().myLocation;
           launch(
             "$urlFeedback?lang=${localizationF.localeName}&geo=${currentLocation?.latitude},"
             "${currentLocation?.longitude}&app=$version",

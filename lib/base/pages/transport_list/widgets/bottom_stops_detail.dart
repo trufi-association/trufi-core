@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 
 import 'stop_item_tile.dart';
@@ -7,7 +7,7 @@ import 'stop_item_tile.dart';
 class BottomStopsDetails extends StatelessWidget {
   final RouteEntity routeOtp;
   final List<Stop> stops;
-  final Function(LatLng) moveTo;
+  final Function(TrufiLatLng) moveTo;
   const BottomStopsDetails({
     Key? key,
     required this.routeOtp,
@@ -30,7 +30,7 @@ class BottomStopsDetails extends StatelessWidget {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () => moveTo(LatLng(stop.lat, stop.lon)),
+                onTap: () => moveTo(TrufiLatLng(stop.lat, stop.lon)),
                 child: StopItemTile(
                   stop: stop,
                   color: routeOtp.primaryColor,

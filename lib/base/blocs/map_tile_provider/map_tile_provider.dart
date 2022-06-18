@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:trufi_core/base/widgets/maps/cache_map_tiles.dart';
 
 abstract class MapTileProvider {
   String get id;
@@ -21,6 +20,7 @@ class OSMDefaultMapTile extends MapTileProvider {
     return [
       TileLayerOptions(
         urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        tileProvider: const DefaultMapTileCaching(),
       ),
     ];
   }
@@ -52,9 +52,10 @@ class OSMMapLayer extends MapTileProvider {
   List<LayerOptions> buildTileLayerOptions() {
     return [
       TileLayerOptions(
-          urlTemplate: mapTilesUrl,
-          subdomains: ['a', 'b', 'c'],
-          tileProvider: const CachedTileProvider()),
+        urlTemplate: mapTilesUrl,
+        subdomains: ['a', 'b', 'c'],
+        tileProvider: const DefaultMapTileCaching(),
+      ),
     ];
   }
 
@@ -74,12 +75,7 @@ class OSMMapLayer extends MapTileProvider {
 }
 
 class DefaultMapTileCaching extends TileProvider {
-  Coords coords;
-  TileLayerOptions options;
-  DefaultMapTileCaching({
-    required this.coords,
-    required this.options,
-  });
+  const DefaultMapTileCaching();
 
   @override
   ImageProvider getImage(Coords coords, TileLayerOptions options) {

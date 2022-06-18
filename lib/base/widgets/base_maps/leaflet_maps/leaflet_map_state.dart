@@ -1,24 +1,20 @@
-part of 'trufi_map_cubit.dart';
+part of 'leaflet_map_controller.dart';
 
 @immutable
-class TrufiMapState extends Equatable {
-  final MarkerLayerOptions? fromMarkerLayer;
-  final MarkerLayerOptions? toMarkerLayer;
+class LeafletMapState extends Equatable {
   final MarkerLayerOptions? unselectedMarkersLayer;
   final PolylineLayerOptions? unselectedPolylinesLayer;
   final MarkerLayerOptions? selectedMarkersLayer;
   final PolylineLayerOptions? selectedPolylinesLayer;
 
-  const TrufiMapState({
-    this.fromMarkerLayer,
-    this.toMarkerLayer,
+  const LeafletMapState({
     this.unselectedMarkersLayer,
     this.unselectedPolylinesLayer,
     this.selectedMarkersLayer,
     this.selectedPolylinesLayer,
   });
 
-  TrufiMapState copyWith({
+  LeafletMapState copyWith({
     MarkerLayerOptions? fromMarkerLayer,
     MarkerLayerOptions? toMarkerLayer,
     MarkerLayerOptions? unselectedMarkersLayer,
@@ -26,9 +22,7 @@ class TrufiMapState extends Equatable {
     MarkerLayerOptions? selectedMarkersLayer,
     PolylineLayerOptions? selectedPolylinesLayer,
   }) {
-    return TrufiMapState(
-      fromMarkerLayer: fromMarkerLayer ?? this.fromMarkerLayer,
-      toMarkerLayer: toMarkerLayer ?? this.toMarkerLayer,
+    return LeafletMapState(
       unselectedMarkersLayer:
           unselectedMarkersLayer ?? this.unselectedMarkersLayer,
       unselectedPolylinesLayer:
@@ -41,8 +35,6 @@ class TrufiMapState extends Equatable {
 
   @override
   List<Object?> get props => [
-        fromMarkerLayer,
-        toMarkerLayer,
         unselectedMarkersLayer,
         unselectedPolylinesLayer,
         selectedMarkersLayer,

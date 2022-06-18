@@ -1,33 +1,38 @@
 import 'dart:async';
 import 'package:async/async.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
+import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/map_configuration/marker_configurations/marker_configuration.dart';
 import 'package:trufi_core/base/const/consts.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/widgets/maps/markers/marker_configuration.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
+import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
+
+typedef SelectLocationData = Future<LocationDetail?> Function(
+  BuildContext context, {
+  TrufiLatLng? position,
+  bool? isOrigin,
+});
 
 class ChooseLocationPage extends StatefulWidget {
   static Future<LocationDetail?> selectPosition(
-    BuildContext context, {
-    LatLng? position,
+    BuildContext buildContext, {
+    required MapChooseLocationProvider mapChooseLocationProvider,
+    TrufiLatLng? position,
     bool? isOrigin,
   }) async {
     return await showTrufiDialog<LocationDetail?>(
-      context: context,
+      context: buildContext,
       builder: (BuildContext context) => ChooseLocationPage(
         position: position,
         isOrigin: isOrigin ?? false,
+        mapChooseLocationProvider: mapChooseLocationProvider,
       ),
     );
   }
@@ -35,10 +40,12 @@ class ChooseLocationPage extends StatefulWidget {
   const ChooseLocationPage({
     Key? key,
     required this.isOrigin,
+    required this.mapChooseLocationProvider,
     this.position,
   }) : super(key: key);
 
-  final LatLng? position;
+  final TrufiLatLng? position;
+  final MapChooseLocationProvider mapChooseLocationProvider;
   final bool isOrigin;
 
   @override
@@ -47,8 +54,7 @@ class ChooseLocationPage extends StatefulWidget {
 
 class ChooseLocationPageState extends State<ChooseLocationPage>
     with TickerProviderStateMixin {
-  final TrufiMapController trufiMapController = TrufiMapController();
-  MapPosition? position;
+  TrufiLatLng? position;
   Widget? _chooseOnMapMarker;
 
   bool loading = true;
@@ -64,8 +70,8 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
       mapConfiguratiom.markersConfiguration,
     );
     if (widget.position != null) {
-      trufiMapController.mapController.onReady.then(
-        (value) => trufiMapController.move(
+      widget.mapChooseLocationProvider.trufiMapController.onReady.then(
+        (value) => widget.mapChooseLocationProvider.trufiMapController.move(
           center: widget.position!,
           zoom: mapConfiguratiom.chooseLocationZoom,
           tickerProvider: this,
@@ -130,15 +136,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
           Expanded(
             child: Stack(
               children: [
-                TrufiMap(
-                  trufiMapController: trufiMapController,
-                  layerOptionsBuilder: (context) => [],
-                  onPositionChanged: (mapPosition, hasGesture) {
+                widget.mapChooseLocationProvider.mapChooseLocationBuilder(
+                  context,
+                  (center) {
                     setState(() {
-                      position = mapPosition;
+                      position = center;
                     });
-                    if (mapPosition.center != null) {
-                      debounce(() => loadData(mapPosition.center!));
+                    if (center != null) {
+                      debounce(
+                        () => loadData(center),
+                      );
                     }
                   },
                 ),
@@ -151,10 +158,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
                     ),
                   ),
                 ),
+                if (loading)
+                  const Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: LinearProgressIndicator(),
+                  ),
               ],
             ),
           ),
-          if (loading) const LinearProgressIndicator(),
           Container(
             color: theme.cardColor,
             padding: const EdgeInsets.all(10),
@@ -181,12 +194,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
                     if (loading)
                       OutlinedButton(
                         onPressed: () async {
-                          if (position?.center != null) {
+                          if (position != null) {
                             Navigator.of(context).pop(
                               LocationDetail(
                                 '',
                                 '',
-                                position!.center!,
+                                position!,
                               ),
                             );
                           }
@@ -236,13 +249,16 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     MarkerConfiguration markerConfiguration,
   ) {
     return widget.isOrigin
-        ? markerConfiguration.fromMarker
+        ? Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: markerConfiguration.fromMarker,
+          )
         : markerConfiguration.toMarker;
   }
 
   CancelableOperation<LocationDetail>? cancelableOperation;
 
-  Future<void> loadData(LatLng location) async {
+  Future<void> loadData(TrufiLatLng location) async {
     if (!mounted) return;
 
     await Future.delayed(Duration.zero);
@@ -264,7 +280,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
     });
   }
 
-  Future<LocationDetail> _fetchData(LatLng location) async {
+  Future<LocationDetail> _fetchData(TrufiLatLng location) async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return searchLocationsCubit.reverseGeodecoding(location).catchError(
       (error) {

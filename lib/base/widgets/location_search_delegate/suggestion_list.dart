@@ -18,6 +18,7 @@ class SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelected;
   final ValueChanged<TrufiLocation> onSelectedMap;
   final ValueChanged<TrufiStreet> onStreetTapped;
+  final SelectLocationData selectPositionOnPage;
   const SuggestionList({
     Key? key,
     required this.query,
@@ -25,6 +26,7 @@ class SuggestionList extends StatelessWidget {
     required this.onSelected,
     required this.onSelectedMap,
     required this.onStreetTapped,
+    required this.selectPositionOnPage,
   }) : super(key: key);
 
   @override
@@ -42,8 +44,10 @@ class SuggestionList extends StatelessWidget {
               slivers: [
                 _BuildYourLocation(onSelected),
                 _BuildChooseOnMap(
-                    onSelectedMap: onSelectedMap,
-                    isOrigin: isOrigin),
+                  onSelectedMap: onSelectedMap,
+                  isOrigin: isOrigin,
+                  selectPositionOnPage: selectPositionOnPage,
+                ),
                 if (query.isEmpty)
                   _BuildYourPlaces(
                     title: localizationSP.menuYourPlaces,
@@ -162,9 +166,11 @@ class _BuildFutureBuilder extends StatelessWidget {
 
 class _BuildChooseOnMap extends StatelessWidget {
   final ValueChanged<TrufiLocation> onSelectedMap;
+  final SelectLocationData selectPositionOnPage;
   final bool isOrigin;
   const _BuildChooseOnMap({
     required this.onSelectedMap,
+    required this.selectPositionOnPage,
     required this.isOrigin,
   });
 
@@ -174,7 +180,7 @@ class _BuildChooseOnMap extends StatelessWidget {
     return SliverToBoxAdapter(
       child: BuildItem(
         onTap: () async {
-          final chooseLocationDetail = await ChooseLocationPage.selectPosition(
+          final chooseLocationDetail = await selectPositionOnPage(
             context,
             isOrigin: isOrigin,
           );
@@ -218,7 +224,8 @@ class _BuildYourPlaces extends StatelessWidget {
                 onTap: () {
                   onSelected(location);
                 },
-                iconData: typeToIconData(location.type,color: theme.iconTheme.color),
+                iconData:
+                    typeToIconData(location.type, color: theme.iconTheme.color),
                 title: location.displayName(localizationSP),
                 subtitle: location.address,
               ),
@@ -264,7 +271,8 @@ class _BuildObjectList extends StatelessWidget {
                 searchLocationsCubit.insertHistoryPlace(object);
                 onSelected(object);
               },
-              iconData: typeToIconData(object.type,color: theme.iconTheme.color),
+              iconData:
+                  typeToIconData(object.type, color: theme.iconTheme.color),
               title: object.displayName(localizationSP),
               subtitle: object.address,
               trailing: FavoriteButton(

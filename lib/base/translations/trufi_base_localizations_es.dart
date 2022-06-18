@@ -196,7 +196,7 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   String get instructionVehicleMetro => 'Metro';
 
   @override
-  String get instructionVehicleMicro => 'Micro';
+  String get instructionVehicleMicro => 'Microbus';
 
   @override
   String get instructionVehicleMinibus => 'Minibus';

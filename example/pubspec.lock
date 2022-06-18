@@ -228,6 +228,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   flutter_svg:
     dependency: transitive
     description:
@@ -280,6 +287,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  google_maps_flutter:
+    dependency: transitive
+    description:
+      name: google_maps_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.4"
+  google_maps_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.5"
   gql:
     dependency: transitive
     description:
@@ -719,6 +740,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   string_scanner:
     dependency: transitive
     description:
@@ -760,7 +788,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0"
+    version: "3.1.0"
   tuple:
     dependency: transitive
     description:
@@ -775,6 +803,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  uni_links:
+    dependency: transitive
+    description:
+      name: uni_links
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
+  uni_links_platform_interface:
+    dependency: transitive
+    description:
+      name: uni_links_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
+  uni_links_web:
+    dependency: transitive
+    description:
+      name: uni_links_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   unicode:
     dependency: transitive
     description:

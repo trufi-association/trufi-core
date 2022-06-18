@@ -28,7 +28,7 @@ class Leg extends Equatable {
   final DateTime endTime;
   final List<Place>? intermediatePlaces;
   final bool transitLeg;
-  final List<LatLng> accumulatedPoints;
+  final List<TrufiLatLng> accumulatedPoints;
 
   const Leg({
     required this.points,
@@ -120,7 +120,7 @@ class Leg extends Equatable {
     bool? transitLeg,
     bool? interlineWithPreviousLeg,
     List<Place>? intermediatePlaces,
-    List<LatLng>? accumulatedPoints,
+    List<TrufiLatLng>? accumulatedPoints,
   }) {
     return Leg(
       points: points ?? this.points,

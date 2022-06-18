@@ -85,7 +85,7 @@ class MapRouteCubit extends Cubit<MapRouteState> {
     emit(newState);
   }
 
-  Future<void> fetchPlan() async {
+  Future<void> fetchPlan({int? numItinerary}) async {
     if (state.toPlace != null && state.fromPlace != null) {
       await updateMapRouteState(state.copyWithNullable(
         plan: const Optional.value(null),
@@ -107,9 +107,13 @@ class MapRouteCubit extends Cubit<MapRouteState> {
           if (plan.error != null) {
             throw FetchOnlinePlanException(plan.error!.id, plan.error!.message);
           }
+          final numItineraryValue = numItinerary ?? 0;
           await updateMapRouteState(state.copyWith(
             plan: plan,
-            selectedItinerary: plan.itineraries![0],
+            selectedItinerary: plan.itineraries![
+                numItineraryValue < plan.itineraries!.length
+                    ? numItineraryValue
+                    : 0],
           ));
         } else {
           throw FetchCancelPlanException();

@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/const/consts.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/widgets/location_tiler.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
+import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 
 class SavedPlacesPage extends StatelessWidget {
-  static const String route = '/places';
+  static const String route = '/Places';
   final Widget Function(BuildContext) drawerBuilder;
+  final MapChooseLocationProvider mapChooseLocationProvider;
+
   const SavedPlacesPage({
     Key? key,
     required this.drawerBuilder,
+    required this.mapChooseLocationProvider,
   }) : super(key: key);
 
   @override
@@ -57,6 +62,7 @@ class SavedPlacesPage extends StatelessWidget {
                                   isDefaultLocation: true,
                                   updateLocation:
                                       searchLocationsCubit.updateMyDefaultPlace,
+                                  selectPositionOnPage: _selectPosition,
                                 );
                               },
                             ).toList(),
@@ -83,6 +89,7 @@ class SavedPlacesPage extends StatelessWidget {
                                         searchLocationsCubit.updateMyPlace,
                                     removeLocation:
                                         searchLocationsCubit.deleteMyPlace,
+                                    selectPositionOnPage: _selectPosition,
                                   ),
                                 )
                                 .toList(),
@@ -108,6 +115,7 @@ class SavedPlacesPage extends StatelessWidget {
                                         .updateFavoritePlace,
                                     removeLocation: searchLocationsCubit
                                         .deleteFavoritePlace,
+                                    selectPositionOnPage: _selectPosition,
                                   ),
                                 )
                                 .toList(),
@@ -137,10 +145,7 @@ class SavedPlacesPage extends StatelessWidget {
 
   Future<void> _addNewPlace(BuildContext context) async {
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
-    final LocationDetail? locationDetail =
-        await ChooseLocationPage.selectPosition(
-      context,
-    );
+    final LocationDetail? locationDetail = await _selectPosition(context);
     if (locationDetail != null) {
       searchLocationsCubit.insertMyPlace(TrufiLocation(
         description: locationDetail.description,
@@ -150,5 +155,18 @@ class SavedPlacesPage extends StatelessWidget {
         type: 'saved_place:map',
       ));
     }
+  }
+
+  Future<LocationDetail?> _selectPosition(
+    BuildContext context, {
+    bool? isOrigin,
+    TrufiLatLng? position,
+  }) async {
+    return await ChooseLocationPage.selectPosition(
+      context,
+      mapChooseLocationProvider: mapChooseLocationProvider,
+      position: position,
+      isOrigin: isOrigin,
+    );
   }
 }

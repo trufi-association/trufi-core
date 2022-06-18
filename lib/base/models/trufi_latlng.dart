@@ -1,18 +1,34 @@
 import 'package:equatable/equatable.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as google;
 
 class TrufiLatLng extends Equatable {
   final double latitude;
   final double longitude;
 
-  const TrufiLatLng({
-    required this.latitude,
-    required this.longitude,
-  });
+  const TrufiLatLng(
+    this.latitude,
+    this.longitude,
+  );
+
+  factory TrufiLatLng.fromLatLng(LatLng latLng) {
+    return TrufiLatLng(
+      latLng.latitude,
+      latLng.longitude,
+    );
+  }
+
+  factory TrufiLatLng.fromGoogleLatLng(google.LatLng latLng) {
+    return TrufiLatLng(
+      latLng.latitude,
+      latLng.longitude,
+    );
+  }
 
   factory TrufiLatLng.fromJson(Map<String, dynamic> json) {
     return TrufiLatLng(
-      latitude: json["latitude"] as double,
-      longitude: json["longitude"] as double,
+      json["latitude"] as double,
+      json["longitude"] as double,
     );
   }
 
@@ -21,6 +37,28 @@ class TrufiLatLng extends Equatable {
       "latitude": latitude,
       "longitude": longitude,
     };
+  }
+
+  LatLng toLatLng() => LatLng(latitude, longitude);
+
+  google.LatLng toGoogleLatLng() => google.LatLng(latitude, longitude);
+
+  static List<LatLng> toListLatLng(List<TrufiLatLng> listTrufiLatLng) {
+    return listTrufiLatLng.map((e) => e.toLatLng()).toList();
+  }
+
+  static List<google.LatLng> toListGoogleLatLng(
+      List<TrufiLatLng> listTrufiLatLng) {
+    return listTrufiLatLng.map((e) => e.toGoogleLatLng()).toList();
+  }
+
+  static List<TrufiLatLng> fromListLatLng(List<LatLng> listTrufiLatLng) {
+    return listTrufiLatLng.map((e) => TrufiLatLng.fromLatLng(e)).toList();
+  }
+
+  static List<google.LatLng> fromGoogleListLatLng(
+      List<TrufiLatLng> listTrufiLatLng) {
+    return listTrufiLatLng.map((e) => e.toGoogleLatLng()).toList();
   }
 
   @override

@@ -1,6 +1,6 @@
 name: trufi_core
 description: A Flutter Plugin for Public Transport.
-version: 3.0.0
+version: 3.1.0
 homepage: https://www.trufi-association.org/
 repository: https://github.com/trufi-association/trufi-core
 
@@ -33,6 +33,8 @@ dependencies:
   share_plus: ^3.0.4
   synchronized: ^3.0.0
   cached_network_image: ^3.2.0
+  uni_links: ^0.5.1
+  google_maps_flutter: ^2.1.4
   
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 // CertificatedLetsencryptAndroid is a WorkAround
 // for resolve internet certificated in androids <= 1.1.1
 
@@ -10,12 +12,14 @@ class CertificatedLetsencryptAndroid {
   CertificatedLetsencryptAndroid();
 
   static Future<void> workAroundCertificated() async {
-    if (Platform.isAndroid) {
-      try {
-        SecurityContext.defaultContext.setTrustedCertificatesBytes(
-            Uint8List.fromList(certBytes.codeUnits));
-      } catch (e) {
-        // ignore errors here, maybe it's already trusted
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        try {
+          SecurityContext.defaultContext.setTrustedCertificatesBytes(
+              Uint8List.fromList(certBytes.codeUnits));
+        } catch (e) {
+          // ignore errors here, maybe it's already trusted
+        }
       }
     }
   }

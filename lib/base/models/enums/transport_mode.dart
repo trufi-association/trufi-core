@@ -44,7 +44,7 @@ TransportMode getTransportMode({
     value = enumType.contains(TransportMode.trufi.name)
         ? TransportMode.trufi
         : enumType.contains(TransportMode.micro.name)
-            ? TransportMode.bus
+            ? TransportMode.micro
             : enumType.contains(TransportMode.miniBus.name)
                 ? TransportMode.miniBus
                 : enumType.contains(TransportMode.gondola.name)
@@ -86,7 +86,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.walk: "WALK",
     // route name keywords for specific types of transportation
     TransportMode.trufi: "TRUFI",
-    TransportMode.micro: "MICRO",
+    TransportMode.micro: "MICROBUS",
     TransportMode.miniBus: "MINIBUS",
     TransportMode.lightRail: "LIGHT RAIL",
   };

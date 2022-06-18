@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/location_search_delegate/location_search_delegate.dart';
 
 class LocationFormField extends StatelessWidget {
@@ -12,6 +13,7 @@ class LocationFormField extends StatelessWidget {
     required this.textLeadingImage,
     required this.onSaved,
     required this.isOrigin,
+    required this.selectPositionOnPage,
     this.value,
     this.leading,
     this.trailing,
@@ -21,6 +23,7 @@ class LocationFormField extends StatelessWidget {
   final String hintText;
   final Widget textLeadingImage;
   final Function(TrufiLocation) onSaved;
+  final SelectLocationData selectPositionOnPage;
   final TrufiLocation? value;
   final Widget? leading;
   final Widget? trailing;
@@ -46,6 +49,7 @@ class LocationFormField extends StatelessWidget {
                   hint: isOrigin
                       ? localization.searchHintOrigin
                       : localization.searchHintDestination,
+                  selectPositionOnPage: selectPositionOnPage,
                 ),
               );
               // Check result

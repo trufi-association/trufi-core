@@ -7,6 +7,7 @@ import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart'
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/buttons.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/location_form_field.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class FormFieldsPortrait extends StatelessWidget {
   const FormFieldsPortrait({
@@ -16,6 +17,7 @@ class FormFieldsPortrait extends StatelessWidget {
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
+    required this.selectPositionOnPage,
   }) : super(key: key);
 
   final void Function(TrufiLocation) onSaveFrom;
@@ -23,6 +25,8 @@ class FormFieldsPortrait extends StatelessWidget {
   final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
+  final SelectLocationData selectPositionOnPage;
+  
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -37,12 +41,15 @@ class FormFieldsPortrait extends StatelessWidget {
             isOrigin: true,
             onSaved: onSaveFrom,
             hintText: localization.searchPleaseSelectOrigin,
-            textLeadingImage:
-                mapConfiguratiom.markersConfiguration.fromMarker,
+            textLeadingImage: Container(
+              padding: const EdgeInsets.all(3.5),
+              child: mapConfiguratiom.markersConfiguration.fromMarker,
+            ),
             trailing: mapRouteState.isPlacesDefined
                 ? ResetButton(onReset: onReset)
                 : null,
             value: mapRouteState.fromPlace,
+            selectPositionOnPage: selectPositionOnPage,
           ),
           LocationFormField(
             isOrigin: false,
@@ -56,6 +63,7 @@ class FormFieldsPortrait extends StatelessWidget {
                   )
                 : null,
             value: mapRouteState.toPlace,
+            selectPositionOnPage: selectPositionOnPage,
           ),
         ],
       ),

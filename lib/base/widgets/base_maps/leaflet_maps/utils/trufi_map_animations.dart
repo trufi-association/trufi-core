@@ -3,15 +3,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class TrufiMapAnimations {
-  TrufiMapAnimations(this.mapController);
-
-  final MapController mapController;
-
   void move({
     required LatLng center,
     required double zoom,
     required TickerProvider tickerProvider,
     required int milliseconds,
+    required MapController mapController,
   }) {
     final latitudeTween = Tween<double>(
       begin: mapController.center.latitude,
@@ -53,6 +50,7 @@ class TrufiMapAnimations {
     required LatLngBounds bounds,
     required TickerProvider tickerProvider,
     required int milliseconds,
+    required MapController mapController,
   }) {
     final neLatitudeTween = Tween<double>(
       begin: mapController.bounds?.northEast?.latitude,

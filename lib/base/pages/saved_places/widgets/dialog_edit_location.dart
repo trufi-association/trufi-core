@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
@@ -8,9 +8,12 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class DialogEditLocation extends StatefulWidget {
   final TrufiLocation location;
+  final SelectLocationData selectPositionOnPage;
+
   const DialogEditLocation({
     Key? key,
     required this.location,
+    required this.selectPositionOnPage,
   }) : super(key: key);
 
   @override
@@ -124,10 +127,10 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                 OutlinedButton(
                   onPressed: () async {
                     final LocationDetail? chooseLocationDetail =
-                        await ChooseLocationPage.selectPosition(
+                        await widget.selectPositionOnPage(
                       context,
                       position: location.isLatLngDefined
-                          ? LatLng(location.latitude, location.longitude)
+                          ? TrufiLatLng(location.latitude, location.longitude)
                           : null,
                     );
                     if (chooseLocationDetail != null) {

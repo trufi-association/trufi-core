@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
 import 'package:trufi_core/base/const/consts.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
@@ -71,7 +71,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
   Future<void> _reportRouteError(String languageCode) async {
     const routeFeedbackUrl = urlsrouteFeedbackUrl;
     String version = await PackageInfoPlatform.version();
-    final LatLng? currentLocation = GPSLocationProvider().myLocation;
+    final TrufiLatLng? currentLocation = GPSLocationProvider().myLocation;
     launch(
       "$routeFeedbackUrl?lang=$languageCode&geo=${currentLocation?.latitude},"
       "${currentLocation?.longitude}&app=$version",

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
+import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
-import 'package:latlong2/latlong.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,13 +16,14 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "https://cbba.trufi.dev/otp",
-          otpGraphqlEndpoint: "https://cbba.trufi.dev/otp/index/graphql",
+          otpEndpoint: "https://cbba.trufi.app/otp",
+          otpGraphqlEndpoint: "https://cbba.trufi.app/otp/index/graphql",
           mapConfiguration: MapConfiguration(
-            center: LatLng(-17.392600, -66.158787),
+            center: const TrufiLatLng(-17.392600, -66.158787),
           ),
           searchAssetPath: "assets/data/search.json",
-          photonUrl: "https://cbba.trufi.dev/photon",
+          photonUrl: "https://cbba.trufi.app/photon",
+          typeProviderMap: TypepProviderMap.lealetMap,
         ),
       ],
       trufiRouter: TrufiRouter(
@@ -41,6 +43,7 @@ void main() async {
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',
           ),
+          typeProviderMap: TypepProviderMap.lealetMap,
         ),
       ),
     ),

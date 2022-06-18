@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
+import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
+import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
 
 class YourLocationButton extends StatefulWidget {
-  final TrufiMapController trufiMapController;
+  final ITrufiMapController trufiMapController;
 
   const YourLocationButton({
     Key? key,

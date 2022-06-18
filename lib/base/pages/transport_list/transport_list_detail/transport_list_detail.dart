@@ -5,29 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/bottom_stops_detail.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/trufi_map_transport.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
-import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
 
 class TransportListDetail extends StatefulWidget {
-  static const String route = "/TransportList/:id";
+  final String id;
+  final MapTransportProvider mapTransportProvider;
+
   const TransportListDetail({
     Key? key,
     required this.id,
+    required this.mapTransportProvider,
   }) : super(key: key);
-
-  final String id;
 
   @override
   State<TransportListDetail> createState() => _TransportListDetailState();
 }
 
 class _TransportListDetailState extends State<TransportListDetail> {
-  final trufiMapController = TrufiMapController();
-
   PatternOtp? transportData;
 
   @override
@@ -90,9 +88,9 @@ class _TransportListDetailState extends State<TransportListDetail> {
                     if (state.isGeometryLoading)
                       const LinearProgressIndicator(),
                     Expanded(
-                      child: TrufiMapTransport(
-                        trufiMapController: trufiMapController,
-                        transportData: transportData,
+                      child: widget.mapTransportProvider.mapTransportBuilder(
+                        context,
+                        transportData,
                       ),
                     ),
                   ],
@@ -106,7 +104,10 @@ class _TransportListDetailState extends State<TransportListDetail> {
                     routeOtp: transportData!.route!,
                     stops: transportData!.stops ?? [],
                     moveTo: (point) {
-                      trufiMapController.move(center: point, zoom: 18);
+                      widget.mapTransportProvider.trufiMapController.move(
+                        center: point,
+                        zoom: 18,
+                      );
                     },
                   )
                 : const Center(
