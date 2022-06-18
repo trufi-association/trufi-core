@@ -12,31 +12,39 @@ typedef MapChooseLocationBuilder = IMapChooseLocation Function(
   void Function(TrufiLatLng?) onCenterChanged,
 );
 
-class MapChooseLocationProvider {
+abstract class MapChooseLocationProvider {
+  ITrufiMapController get trufiMapController;
+  MapChooseLocationBuilder get mapChooseLocationBuilder;
+}
+
+class MapChooseLocationProviderImplementation
+    implements MapChooseLocationProvider {
+  @override
   final ITrufiMapController trufiMapController;
+  @override
   final MapChooseLocationBuilder mapChooseLocationBuilder;
 
-  const MapChooseLocationProvider({
+  const MapChooseLocationProviderImplementation({
     required this.trufiMapController,
     required this.mapChooseLocationBuilder,
   });
 
-  factory MapChooseLocationProvider.providerByTypepProviderMap({
+  factory MapChooseLocationProviderImplementation.providerByTypepProviderMap({
     required TypepProviderMap typeProviderMap,
   }) {
     switch (typeProviderMap) {
       case TypepProviderMap.lealetMap:
-        return MapChooseLocationProvider.leaftletMap();
+        return MapChooseLocationProviderImplementation.leaftletMap();
       case TypepProviderMap.googleMap:
-        return MapChooseLocationProvider.googleMap();
+        return MapChooseLocationProviderImplementation.googleMap();
       default:
         throw 'error TypeProviderMap not implement in MapChooseLocationProvider';
     }
   }
 
-  factory MapChooseLocationProvider.googleMap() {
+  factory MapChooseLocationProviderImplementation.googleMap() {
     final trufiMapController = TGoogleMapController();
-    return MapChooseLocationProvider(
+    return MapChooseLocationProviderImplementation(
       trufiMapController: trufiMapController,
       mapChooseLocationBuilder: (mapContext, onCenterChanged) {
         return GoogleMapChooseLocation(
@@ -46,9 +54,9 @@ class MapChooseLocationProvider {
       },
     );
   }
-  factory MapChooseLocationProvider.leaftletMap() {
+  factory MapChooseLocationProviderImplementation.leaftletMap() {
     final trufiMapController = LeafletMapController();
-    return MapChooseLocationProvider(
+    return MapChooseLocationProviderImplementation(
       trufiMapController: trufiMapController,
       mapChooseLocationBuilder: (mapContext, onCenterChanged) {
         return LeaftletMapChooseLocation(

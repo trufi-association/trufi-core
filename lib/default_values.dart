@@ -117,11 +117,11 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: HomePage(
                   drawerBuilder: generateDrawer(HomePage.route),
-                  mapRouteProvider: MapRouteProvider.providerByTypepProviderMap(
+                  mapRouteProvider: MapRouteProviderImplementation.providerByTypepProviderMap(
                     typeProviderMap: typeProviderMap,
                   ),
                   mapChooseLocationProvider:
-                      MapChooseLocationProvider.providerByTypepProviderMap(
+                      MapChooseLocationProviderImplementation.providerByTypepProviderMap(
                     typeProviderMap: typeProviderMap,
                   ),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
@@ -133,7 +133,7 @@ abstract class DefaultValues {
                 child: TransportList(
                   drawerBuilder: generateDrawer(TransportList.route),
                   mapTransportProvider:
-                      MapTransportProvider.providerByTypepProviderMap(
+                      MapTransportProviderImplementation.providerByTypepProviderMap(
                     typeProviderMap: typeProviderMap,
                   ),
                 ),
@@ -144,7 +144,7 @@ abstract class DefaultValues {
                 child: SavedPlacesPage(
                   drawerBuilder: generateDrawer(SavedPlacesPage.route),
                   mapChooseLocationProvider:
-                      MapChooseLocationProvider.providerByTypepProviderMap(
+                      MapChooseLocationProviderImplementation.providerByTypepProviderMap(
                     typeProviderMap: typeProviderMap,
                   ),
                 ),

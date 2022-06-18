@@ -11,32 +11,42 @@ typedef MapRouteBuilder = Widget Function(
   AsyncExecutor asyncExecutor,
 );
 
-class MapRouteProvider {
+abstract class MapRouteProvider {
+  ITrufiMapController get trufiMapController;
+  MapRouteBuilder get mapRouteBuilder;
+}
+
+class MapRouteProviderImplementation implements MapRouteProvider {
+  @override
   final ITrufiMapController trufiMapController;
+  @override
   final MapRouteBuilder mapRouteBuilder;
 
-  const MapRouteProvider({
+  const MapRouteProviderImplementation({
     required this.trufiMapController,
     required this.mapRouteBuilder,
   });
 
-  factory MapRouteProvider.providerByTypepProviderMap({
+  factory MapRouteProviderImplementation.providerByTypepProviderMap({
     required TypepProviderMap typeProviderMap,
     WidgetBuilder? overlapWidget,
   }) {
     switch (typeProviderMap) {
       case TypepProviderMap.lealetMap:
-        return MapRouteProvider.leaftletMap(overlapWidget: overlapWidget);
+        return MapRouteProviderImplementation.leaftletMap(
+            overlapWidget: overlapWidget);
       case TypepProviderMap.googleMap:
-        return MapRouteProvider.googleMap(overlapWidget: overlapWidget);
+        return MapRouteProviderImplementation.googleMap(
+            overlapWidget: overlapWidget);
       default:
         throw 'error TypeProviderMap not implement in MapRouteProvider';
     }
   }
 
-  factory MapRouteProvider.googleMap({WidgetBuilder? overlapWidget}) {
+  factory MapRouteProviderImplementation.googleMap(
+      {WidgetBuilder? overlapWidget}) {
     final trufiMapController = TGoogleMapController();
-    return MapRouteProvider(
+    return MapRouteProviderImplementation(
       trufiMapController: trufiMapController,
       mapRouteBuilder: (mapContext, asyncExecutor) {
         return TGoogleMapRoute(
@@ -48,9 +58,10 @@ class MapRouteProvider {
     );
   }
 
-  factory MapRouteProvider.leaftletMap({WidgetBuilder? overlapWidget}) {
+  factory MapRouteProviderImplementation.leaftletMap(
+      {WidgetBuilder? overlapWidget}) {
     final trufiMapController = LeafletMapController();
-    return MapRouteProvider(
+    return MapRouteProviderImplementation(
       trufiMapController: trufiMapController,
       mapRouteBuilder: (mapContext, asyncExecutor) {
         return LeafletMapRoute(

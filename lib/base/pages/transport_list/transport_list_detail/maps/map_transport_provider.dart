@@ -12,31 +12,38 @@ typedef MapTransportBuilder = Widget Function(
   PatternOtp? transportData,
 );
 
-class MapTransportProvider {
+abstract class MapTransportProvider {
+  ITrufiMapController get trufiMapController;
+  MapTransportBuilder get mapTransportBuilder;
+}
+
+class MapTransportProviderImplementation implements MapTransportProvider {
+  @override
   final ITrufiMapController trufiMapController;
+  @override
   final MapTransportBuilder mapTransportBuilder;
 
-  const MapTransportProvider({
+  const MapTransportProviderImplementation({
     required this.trufiMapController,
     required this.mapTransportBuilder,
   });
 
-  factory MapTransportProvider.providerByTypepProviderMap({
+  factory MapTransportProviderImplementation.providerByTypepProviderMap({
     required TypepProviderMap typeProviderMap,
   }) {
     switch (typeProviderMap) {
       case TypepProviderMap.lealetMap:
-        return MapTransportProvider.leaftletMap();
+        return MapTransportProviderImplementation.leaftletMap();
       case TypepProviderMap.googleMap:
-        return MapTransportProvider.googleMap();
+        return MapTransportProviderImplementation.googleMap();
       default:
         throw 'error TypeProviderMap not implement in MapTransportProvider';
     }
   }
 
-  factory MapTransportProvider.googleMap() {
+  factory MapTransportProviderImplementation.googleMap() {
     final trufiMapController = TGoogleMapController();
-    return MapTransportProvider(
+    return MapTransportProviderImplementation(
       trufiMapController: trufiMapController,
       mapTransportBuilder: (mapContext, transportData) {
         return TGoogleMapTransport(
@@ -46,9 +53,9 @@ class MapTransportProvider {
       },
     );
   }
-  factory MapTransportProvider.leaftletMap() {
+  factory MapTransportProviderImplementation.leaftletMap() {
     final trufiMapController = LeafletMapController();
-    return MapTransportProvider(
+    return MapTransportProviderImplementation(
       trufiMapController: trufiMapController,
       mapTransportBuilder: (mapContext, transportData) {
         return LeafletMapTransport(
