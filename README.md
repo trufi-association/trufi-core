@@ -61,7 +61,7 @@ Trufi Core is the base dependency used to create your public transport app. Have
 
 ## Contributing
 
-See [CONTRIBUTING](./CONTRIBUTION.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) prior to contributing.
+See [CONTRIBUTING](./CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) prior to contributing.
 
 ### Translations
 
