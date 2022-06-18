@@ -91,8 +91,8 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                     key: _cropButtonKey,
                     onPressed: _handleOnCropPressed,
                   ),
-                  const Padding(padding: EdgeInsets.all(4.0)),
-                  if (mapRouteState.isPlanCorrect) const ShareItineraryButton(),
+                  // const Padding(padding: EdgeInsets.all(4.0)),
+                  // if (mapRouteState.isPlanCorrect) const ShareItineraryButton(),
                 ],
               ),
             );

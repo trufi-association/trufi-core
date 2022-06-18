@@ -68,11 +68,11 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             key: _cropButtonKey,
             onPressed: _handleOnCropPressed,
           ),
-          const Padding(padding: EdgeInsets.all(4.0)),
-          if (widget.transportData != null)
-            ShareRouteButton(
-              transportData: widget.transportData!,
-            ),
+          // const Padding(padding: EdgeInsets.all(4.0)),
+          // if (widget.transportData != null)
+          //   ShareRouteButton(
+          //     transportData: widget.transportData!,
+          //   ),
         ],
       ),
       onPositionChanged: _handleOnMapPositionChanged,
