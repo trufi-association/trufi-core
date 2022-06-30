@@ -19,6 +19,7 @@ class LeafletMap extends StatelessWidget {
   final TapCallback? onTap;
   final LongPressCallback? onLongPress;
   final PositionCallback? onPositionChanged;
+  final double? bottomPaddingButtons;
   const LeafletMap({
     Key? key,
     required this.trufiMapController,
@@ -27,6 +28,7 @@ class LeafletMap extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.bottomPaddingButtons,
   }) : super(key: key);
 
   @override
@@ -85,7 +87,7 @@ class LeafletMap extends StatelessWidget {
           },
         ),
         Positioned(
-          bottom: 16.0,
+          bottom: bottomPaddingButtons ?? 16.0,
           right: 16.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
