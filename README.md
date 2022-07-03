@@ -9,7 +9,7 @@
 A cross-plattform multi-modal public transport app based on open data.
 Built in [Flutter](https://flutter.dev/) by the [Trufi Association](https://www.trufi-association.org/), a social startup.
 
-[<img alt="Trufi Logo" src="trufi.svg" width="120" />](https://www.trufi-association.org/)
+[<img alt="Trufi Logo" src="assets/images/trufi-logo.png" width="120" />](https://www.trufi-association.org/)
 
 <img src="https://www.trufi.app/wp-content/uploads/2019/02/device_pixel-497x1024.png" width="200" hspace="20"/><img src="https://www.trufi.app/wp-content/uploads/2019/02/device_iphone-507x1024.png" width="200" hspace="20" />
 
@@ -19,9 +19,9 @@ The mobile application is currently available for the following cities:
 
 * Cochabamba, Bolivia - [Website](https://www.trufi.app), [Google Play](https://play.google.com/store/apps/details?id=app.trufi.navigator), [App Store](https://apps.apple.com/bo/app/trufi/id1471411924)
 * Accra, Ghana - [Website](https://www.trotro.app/), [Google Play](https://play.google.com/store/apps/details?id=com.trotro.trotro), [App Store](https://apps.apple.com/bo/app/trotro/id1478620071)
-* Addis Abeba, Ethiopia
+* Addis Ababa, Ethiopia - [Website](https://yeneguzo.app/), [Google Play](https://play.google.com/store/apps/details?id=app.yeneguzo.navigator), [App Store](https://apps.apple.com/app/yeneguzo/id1493441355)
 
-Please contact the [Trufi Association](https://www.trufi-association.org/contact/) to get one for your city, too. But if you prefer to do it yourself then see below
+Please contact the [Trufi Association](https://www.trufi-association.org/contact/) to get one for your city, too. But if you prefer to do it yourself then see below:
 
 ### Getting started
 
@@ -85,7 +85,7 @@ If you need to overwrite translations of the Host app checkout the following art
 
 ## Free Software
 
-Copyright 2020 - [Trufi Association](https://www.trufi-association.org/)
+Copyright 2020-present - [Trufi Association](https://www.trufi-association.org/)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU General Public License version 3](./LICENSE) as published by the Free Software Foundation.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
