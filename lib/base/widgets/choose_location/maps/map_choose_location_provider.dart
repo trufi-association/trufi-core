@@ -33,7 +33,7 @@ class MapChooseLocationProviderImplementation
     required TypepProviderMap typeProviderMap,
   }) {
     switch (typeProviderMap) {
-      case TypepProviderMap.lealetMap:
+      case TypepProviderMap.leafletMap:
         return MapChooseLocationProviderImplementation.leaftletMap();
       case TypepProviderMap.googleMap:
         return MapChooseLocationProviderImplementation.googleMap();

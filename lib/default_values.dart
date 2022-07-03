@@ -75,7 +75,7 @@ abstract class DefaultValues {
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
       ),
-      if (typeProviderMap == TypepProviderMap.lealetMap)
+      if (typeProviderMap == TypepProviderMap.leafletMap)
         BlocProvider<MapTileProviderCubit>(
           create: (context) => MapTileProviderCubit(
             mapTileProviders: mapTileProviders ?? [OSMDefaultMapTile()],
