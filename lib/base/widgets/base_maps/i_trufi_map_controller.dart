@@ -7,7 +7,6 @@ import 'package:trufi_core/base/models/trufi_place.dart';
 
 enum TypepProviderMap {
   leafletMap,
-  googleMap,
 }
 
 abstract class ITrufiMapController {
