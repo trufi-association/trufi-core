@@ -32,8 +32,8 @@ class MapRouteProviderImplementation implements MapRouteProvider {
     WidgetBuilder? overlapWidget,
   }) {
     switch (typeProviderMap) {
-      case TypepProviderMap.lealetMap:
-        return MapRouteProviderImplementation.leaftletMap(
+      case TypepProviderMap.leafletMap:
+        return MapRouteProviderImplementation.leafletMap(
             overlapWidget: overlapWidget);
       case TypepProviderMap.googleMap:
         return MapRouteProviderImplementation.googleMap(
@@ -58,7 +58,7 @@ class MapRouteProviderImplementation implements MapRouteProvider {
     );
   }
 
-  factory MapRouteProviderImplementation.leaftletMap(
+  factory MapRouteProviderImplementation.leafletMap(
       {WidgetBuilder? overlapWidget}) {
     final trufiMapController = LeafletMapController();
     return MapRouteProviderImplementation(

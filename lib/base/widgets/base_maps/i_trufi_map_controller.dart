@@ -6,7 +6,7 @@ import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 
 enum TypepProviderMap {
-  lealetMap,
+  leafletMap,
   googleMap,
 }
 

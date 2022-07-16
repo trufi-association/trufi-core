@@ -32,7 +32,7 @@ class MapTransportProviderImplementation implements MapTransportProvider {
     required TypepProviderMap typeProviderMap,
   }) {
     switch (typeProviderMap) {
-      case TypepProviderMap.lealetMap:
+      case TypepProviderMap.leafletMap:
         return MapTransportProviderImplementation.leaftletMap();
       case TypepProviderMap.googleMap:
         return MapTransportProviderImplementation.googleMap();

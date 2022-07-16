@@ -23,7 +23,7 @@ void main() async {
           ),
           searchAssetPath: "assets/data/search.json",
           photonUrl: "https://cbba.trufi.app/photon",
-          typeProviderMap: TypepProviderMap.lealetMap,
+          typeProviderMap: TypepProviderMap.leafletMap,
         ),
       ],
       trufiRouter: TrufiRouter(
@@ -43,7 +43,7 @@ void main() async {
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',
           ),
-          typeProviderMap: TypepProviderMap.lealetMap,
+          typeProviderMap: TypepProviderMap.leafletMap,
         ),
       ),
     ),
