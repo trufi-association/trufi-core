@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
-import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
@@ -42,7 +41,6 @@ void main() async {
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',
           ),
-          typeProviderMap: TypepProviderMap.lealetMap,
         ),
       ),
     ),
