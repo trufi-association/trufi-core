@@ -9,6 +9,11 @@ class LeafletMapTransportProvider implements MapTransportProvider {
   @override
   final MapTransportBuilder mapTransportBuilder;
 
+  @override
+  MapTransportProvider rebuild() {
+    return LeafletMapTransportProvider.create();
+  }
+
   const LeafletMapTransportProvider({
     required this.trufiMapController,
     required this.mapTransportBuilder,

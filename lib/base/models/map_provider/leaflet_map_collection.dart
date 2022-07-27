@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/map_route_provider.dart';
@@ -10,8 +11,10 @@ class LeafletMapCollection implements ITrufiMapProvider {
   }
 
   @override
-  MapRouteProvider mapRouteProvider() {
-    return LeafletMapRouteProvider.create();
+  MapRouteProvider mapRouteProvider({
+    WidgetBuilder? overlapWidget,
+  }) {
+    return LeafletMapRouteProvider.create(overlapWidget: overlapWidget);
   }
 
   @override

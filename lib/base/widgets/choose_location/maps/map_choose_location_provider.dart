@@ -9,6 +9,11 @@ class LeafletMapChooseLocationProvider implements MapChooseLocationProvider {
   @override
   final MapChooseLocationBuilder mapChooseLocationBuilder;
 
+  @override
+  MapChooseLocationProvider rebuild() {
+    return LeafletMapChooseLocationProvider.create();
+  }
+
   const LeafletMapChooseLocationProvider({
     required this.trufiMapController,
     required this.mapChooseLocationBuilder,
@@ -26,4 +31,5 @@ class LeafletMapChooseLocationProvider implements MapChooseLocationProvider {
       },
     );
   }
+
 }
