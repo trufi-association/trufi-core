@@ -19,6 +19,7 @@ abstract class SocialMediaItem extends MenuItem {
             child: MenuItem.buildName(context, name(context)),
           ),
           onClick: (context, isSelected) {
+            // ignore: deprecated_member_use
             launch(url);
           },
         );

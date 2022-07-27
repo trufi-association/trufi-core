@@ -127,6 +127,7 @@ class AboutPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
+                                // ignore: deprecated_member_use
                                 launch(
                                     'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website');
                               },
@@ -145,6 +146,7 @@ class AboutPage extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
+                                // ignore: deprecated_member_use
                                 launch('https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
                               },
                             ),
@@ -215,6 +217,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   onTap: () {
                     final url = "mailto:$emailContact?subject=Contact";
+                    // ignore: deprecated_member_use
                     launch(url);
                   },
                 ),
@@ -236,6 +239,7 @@ class AboutPage extends StatelessWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
+                              // ignore: deprecated_member_use
                               launch(
                                 'https://github.com/trufi-association/trufi-core.git',
                               );
