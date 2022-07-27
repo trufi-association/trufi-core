@@ -48,6 +48,7 @@ class _TransportListState extends State<TransportList> {
     if (transportListId != null) {
       showTrufiDialog(
         context: context,
+        useSafeArea: false,
         builder: (BuildContext context) => TransportListDetail(
           id: Uri.decodeQueryComponent(transportListId),
           mapTransportProvider: widget.mapTransportProvider,
