@@ -9,7 +9,6 @@ import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search
 import 'package:trufi_core/base/pages/saved_places/widgets/location_tiler.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
-import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 
 class SavedPlacesPage extends StatelessWidget {
   static const String route = '/Places';

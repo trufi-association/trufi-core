@@ -13,7 +13,6 @@ import 'package:trufi_core/base/pages/about/translations/about_localizations.dar
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
-import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/map_route_provider.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
