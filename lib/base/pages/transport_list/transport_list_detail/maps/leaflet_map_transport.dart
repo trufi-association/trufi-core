@@ -5,6 +5,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
+import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
@@ -30,12 +31,15 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
   @override
   Widget build(BuildContext context) {
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
-    if (widget.transportData?.geometry != null) {
-      widget.trufiMapController.moveBounds(
-        points: widget.transportData!.geometry!,
-        tickerProvider: this,
-      );
-    }
+
+    widget.trufiMapController.mapController.onReady.then((value) {
+      if (widget.transportData?.geometry != null) {
+        widget.trufiMapController.moveBounds(
+          points: widget.transportData!.geometry!,
+          tickerProvider: this,
+        );
+      }
+    });
     return LeafletMap(
       trufiMapController: widget.trufiMapController,
       layerOptionsBuilder: (context) => [
@@ -67,11 +71,11 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             key: _cropButtonKey,
             onPressed: _handleOnCropPressed,
           ),
-          // const Padding(padding: EdgeInsets.all(4.0)),
-          // if (widget.transportData != null)
-          //   ShareRouteButton(
-          //     transportData: widget.transportData!,
-          //   ),
+          const Padding(padding: EdgeInsets.all(4.0)),
+          if (widget.transportData != null)
+            ShareRouteButton(
+              transportData: widget.transportData!,
+            ),
         ],
       ),
       onPositionChanged: _handleOnMapPositionChanged,

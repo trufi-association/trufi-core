@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 class TrufiMapAnimations {
-  void move({
+  static void move({
     required LatLng center,
     required double zoom,
     required TickerProvider tickerProvider,
@@ -46,7 +46,7 @@ class TrufiMapAnimations {
     controller.forward();
   }
 
-  void fitBounds({
+  static void fitBounds({
     required LatLngBounds bounds,
     required TickerProvider tickerProvider,
     required int milliseconds,

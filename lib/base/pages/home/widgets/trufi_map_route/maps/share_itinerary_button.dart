@@ -24,8 +24,8 @@ class ShareItineraryButton extends StatelessWidget {
             "${mapRouteState.toPlace?.description},${mapRouteState.toPlace?.latLng.latitude},${mapRouteState.toPlace?.latLng.longitude}";
         Share.share(Uri(
           scheme: "https",
-          host: "trufi-association.org",
-          path: "/Home",
+          host: "cbba.trufi.dev",
+          path: "/app/Home",
           queryParameters: {
             "from": from,
             "to": to,

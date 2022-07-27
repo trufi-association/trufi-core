@@ -16,8 +16,8 @@ class ShareRouteButton extends StatelessWidget {
       onPressed: () async {
         Share.share(Uri(
           scheme: "https",
-          host: "trufi-association.org",
-          path: "/TransportList",
+          host: "cbba.trufi.dev",
+          path: "/app/TransportList",
           queryParameters: {
             "id": transportData.code,
           },

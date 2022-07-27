@@ -122,10 +122,10 @@ class _HomePageState extends State<HomePage>
               children: [
                 BlocListener<MapRouteCubit, MapRouteState>(
                   listener: (buildContext, state) {
-                    repaintMap(mapRouteCubit, state);
-                    // TODO fix trufiMapController.onReady
-                    // widget.mapRouteProvider.trufiMapController.onReady
-                    //     .then((_) {});
+                    widget.mapRouteProvider.trufiMapController.onReady
+                        .then((_) {
+                      repaintMap(mapRouteCubit, state);
+                    });
                   },
                   child: CustomScrollableContainer(
                     openedPosition: 200,

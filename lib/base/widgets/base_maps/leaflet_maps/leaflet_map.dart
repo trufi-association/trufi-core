@@ -43,6 +43,8 @@ class LeafletMap extends StatelessWidget {
           builder: (context, snapshot) {
             final currentLocation = snapshot.data;
             return FlutterMap(
+              key: Key(trufiMapController.mapController.hashCode.toString()),
+              mapController: trufiMapController.mapController,
               options: MapOptions(
                 interactiveFlags: InteractiveFlag.drag |
                     InteractiveFlag.flingAnimation |
@@ -55,12 +57,12 @@ class LeafletMap extends StatelessWidget {
                 onTap: onTap,
                 onLongPress: onLongPress,
                 center: mapConfiguratiom.center.toLatLng(),
-                onMapCreated: (c) {
-                  if (!trufiMapController.readyCompleter.isCompleted) {
-                    trufiMapController.readyCompleter.complete();
-                  }
-                  trufiMapController.mapController = c;
-                },
+                // onMapCreated: (c) {
+                //   if (!trufiMapController.readyCompleter.isCompleted) {
+                //     trufiMapController.readyCompleter.complete();
+                //   }
+                //   trufiMapController.mapController = c;
+                // },
                 onPositionChanged: (
                   MapPosition position,
                   bool hasGesture,
