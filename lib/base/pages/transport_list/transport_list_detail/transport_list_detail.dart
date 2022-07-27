@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/bottom_stops_detail.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';

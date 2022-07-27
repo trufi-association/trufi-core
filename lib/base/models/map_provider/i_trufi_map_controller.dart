@@ -5,10 +5,6 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 
-enum TypepProviderMap {
-  leafletMap,
-}
-
 abstract class ITrufiMapController {
   Future<Null> get onReady;
   void cleanMap();
