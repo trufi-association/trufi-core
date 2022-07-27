@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';

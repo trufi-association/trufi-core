@@ -72,6 +72,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
     const routeFeedbackUrl = urlsrouteFeedbackUrl;
     String version = await PackageInfoPlatform.version();
     final TrufiLatLng? currentLocation = GPSLocationProvider().myLocation;
+    // ignore: deprecated_member_use
     launch(
       "$routeFeedbackUrl?lang=$languageCode&geo=${currentLocation?.latitude},"
       "${currentLocation?.longitude}&app=$version",

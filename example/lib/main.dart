@@ -23,7 +23,6 @@ void main() async {
           ),
           searchAssetPath: "assets/data/search.json",
           photonUrl: "https://cbba.trufi.app/photon",
-          typeProviderMap: TypepProviderMap.lealetMap,
         ),
       ],
       trufiRouter: TrufiRouter(

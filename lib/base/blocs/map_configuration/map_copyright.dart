@@ -25,6 +25,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
             text: "© OpenMapTiles ",
             recognizer: TapGestureRecognizer()
               ..onTap = () {
+                // ignore: deprecated_member_use
                 launch("https://openmaptiles.org/");
               },
           ),
@@ -36,6 +37,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
             text: "© OpenStreetMap contributors",
             recognizer: TapGestureRecognizer()
               ..onTap = () {
+                // ignore: deprecated_member_use
                 launch("https://www.openstreetmap.org/copyright");
               },
           ),

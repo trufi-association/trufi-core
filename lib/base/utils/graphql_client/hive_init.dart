@@ -31,16 +31,15 @@ Future<void> initHiveForFlutter({
     if (subDir != null) {
       path = join(path, subDir);
     }
-    Hive.init(path);
+    HiveStore.init(onPath: path);
   }
-
+  await HiveStore.open(boxName: HiveStore.defaultBoxName);
   for (var box in boxes) {
     await Hive.openBox(box);
   }
 }
 
 const listPathsHive = [
-  HiveStore.defaultBoxName,
   AppReviewProviderHiveLocalRepository.path,
   TrufiLocalizationHiveLocalRepository.path,
   TrufiBaseThemeHiveLocalRepository.path,

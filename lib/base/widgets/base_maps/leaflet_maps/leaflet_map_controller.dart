@@ -12,7 +12,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
-import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
+import 'package:trufi_core/base/models/map_provider/i_trufi_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/trufi_map_animations.dart';
 import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
