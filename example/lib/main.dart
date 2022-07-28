@@ -43,6 +43,10 @@ void main() async {
           urlSocialMedia: const UrlSocialMedia(
             urlFacebook: 'https://www.facebook.com/Example',
           ),
+          shareBaseUri: Uri(
+            scheme: "https",
+            host: "trufi.example",
+          ),
         ),
       ),
     ),
