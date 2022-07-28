@@ -5,8 +5,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 
 class ShareItineraryButton extends StatelessWidget {
+  final Uri shareBaseItineraryUri;
+  
   const ShareItineraryButton({
     Key? key,
+    required this.shareBaseItineraryUri,
   }) : super(key: key);
 
   @override
@@ -22,10 +25,7 @@ class ShareItineraryButton extends StatelessWidget {
             "${mapRouteState.fromPlace?.description},${mapRouteState.fromPlace?.latLng.latitude},${mapRouteState.fromPlace?.latLng.longitude}";
         final to =
             "${mapRouteState.toPlace?.description},${mapRouteState.toPlace?.latLng.latitude},${mapRouteState.toPlace?.latLng.longitude}";
-        Share.share(Uri(
-          scheme: "https",
-          host: "cbba.trufi.dev",
-          path: "/app/Home",
+        Share.share(shareBaseItineraryUri.replace(
           queryParameters: {
             "from": from,
             "to": to,

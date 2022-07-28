@@ -93,6 +93,7 @@ abstract class DefaultValues {
     required String emailContact,
     UrlSocialMedia? urlSocialMedia,
     ITrufiMapProvider? trufiMapProvider,
+    Uri? shareBaseUri,
   }) {
     final _trufiMapProvider = trufiMapProvider ?? LeafletMapCollection();
 
@@ -117,7 +118,11 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: HomePage(
                   drawerBuilder: generateDrawer(HomePage.route),
-                  mapRouteProvider: _trufiMapProvider.mapRouteProvider(),
+                  mapRouteProvider: _trufiMapProvider.mapRouteProvider(
+                    shareBaseItineraryUri: shareBaseUri?.replace(
+                      path: "/app/Home",
+                    ),
+                  ),
                   mapChooseLocationProvider:
                       _trufiMapProvider.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
@@ -128,8 +133,11 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: TransportList(
                   drawerBuilder: generateDrawer(TransportList.route),
-                  mapTransportProvider:
-                      _trufiMapProvider.mapTransportProvider(),
+                  mapTransportProvider: _trufiMapProvider.mapTransportProvider(
+                    shareBaseRouteUri: shareBaseUri?.replace(
+                      path: "/app/TransportList",
+                    ),
+                  ),
                 ),
               );
             },

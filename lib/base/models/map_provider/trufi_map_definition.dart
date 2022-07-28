@@ -8,9 +8,12 @@ import 'package:trufi_core/base/pages/transport_list/services/models.dart';
 abstract class ITrufiMapProvider {
   MapChooseLocationProvider mapChooseLocationProvider();
   MapRouteProvider mapRouteProvider({
+    Uri? shareBaseItineraryUri,
     WidgetBuilder? overlapWidget,
   });
-  MapTransportProvider mapTransportProvider();
+  MapTransportProvider mapTransportProvider({
+    Uri? shareBaseRouteUri,
+  });
 }
 
 ////////////////////////////////////////////////
@@ -52,6 +55,7 @@ typedef MapRouteBuilder = Widget Function(
 abstract class MapTransportProvider {
   ITrufiMapController get trufiMapController;
   MapTransportBuilder get mapTransportBuilder;
+  Uri? get shareBaseRouteUri;
   MapTransportProvider rebuild();
 }
 

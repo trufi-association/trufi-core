@@ -21,11 +21,13 @@ import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 class LeafletMapRoute extends StatefulWidget {
   final LeafletMapController trufiMapController;
   final AsyncExecutor asyncExecutor;
+  final Uri? shareBaseItineraryUri;
   final WidgetBuilder? overlapWidget;
   const LeafletMapRoute({
     Key? key,
     required this.trufiMapController,
     required this.asyncExecutor,
+    this.shareBaseItineraryUri,
     this.overlapWidget,
   }) : super(key: key);
 
@@ -92,7 +94,11 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                     onPressed: _handleOnCropPressed,
                   ),
                   const Padding(padding: EdgeInsets.all(4.0)),
-                  if (mapRouteState.isPlanCorrect) const ShareItineraryButton(),
+                  if (mapRouteState.isPlanCorrect &&
+                      widget.shareBaseItineraryUri != null)
+                    ShareItineraryButton(
+                      shareBaseItineraryUri: widget.shareBaseItineraryUri!,
+                    ),
                 ],
               ),
             );

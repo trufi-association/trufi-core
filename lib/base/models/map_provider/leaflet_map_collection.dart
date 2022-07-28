@@ -12,13 +12,21 @@ class LeafletMapCollection implements ITrufiMapProvider {
 
   @override
   MapRouteProvider mapRouteProvider({
+    Uri? shareBaseItineraryUri,
     WidgetBuilder? overlapWidget,
   }) {
-    return LeafletMapRouteProvider.create(overlapWidget: overlapWidget);
+    return LeafletMapRouteProvider.create(
+      shareBaseItineraryUri: shareBaseItineraryUri,
+      overlapWidget: overlapWidget,
+    );
   }
 
   @override
-  MapTransportProvider mapTransportProvider() {
-    return LeafletMapTransportProvider.create();
+  MapTransportProvider mapTransportProvider({
+    Uri? shareBaseRouteUri,
+  }) {
+    return LeafletMapTransportProvider.create(
+      shareBaseRouteUri: shareBaseRouteUri,
+    );
   }
 }

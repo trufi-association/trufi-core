@@ -14,10 +14,13 @@ import 'package:trufi_core/base/widgets/base_maps/map_buttons/crop_button.dart';
 class LeafletMapTransport extends StatefulWidget {
   final LeafletMapController trufiMapController;
   final PatternOtp? transportData;
+  final Uri? shareBaseRouteUri;
+
   const LeafletMapTransport({
     Key? key,
     required this.trufiMapController,
     this.transportData,
+    this.shareBaseRouteUri,
   }) : super(key: key);
 
   @override
@@ -72,9 +75,11 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             onPressed: _handleOnCropPressed,
           ),
           const Padding(padding: EdgeInsets.all(4.0)),
-          if (widget.transportData != null)
+          if (widget.transportData != null &&
+              widget.shareBaseRouteUri != null)
             ShareRouteButton(
               transportData: widget.transportData!,
+              shareBaseRouteUri: widget.shareBaseRouteUri!,
             ),
         ],
       ),
