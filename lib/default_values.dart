@@ -72,9 +72,6 @@ abstract class DefaultValues {
           customRequestPlanService: customRequestPlanService,
         ),
       ),
-      BlocProvider<MapRouteCubit>(
-        create: (context) => MapRouteCubit(otpEndpoint),
-      ),
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
       ),
