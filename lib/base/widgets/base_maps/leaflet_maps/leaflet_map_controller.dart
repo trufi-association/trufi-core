@@ -161,7 +161,7 @@ class LeafletMapController extends Cubit<LeafletMapState>
 
           final color = isSelected
               ? leg.transitLeg
-                  ? leg.route?.primaryColor ?? leg.transportMode.backgroundColor
+                  ? leg.backgroundColor
                   : leg.transportMode.color
               : Colors.grey;
 
