@@ -2,6 +2,10 @@
 
 This implementation demonstrates how to use the trufi_core Flutter plugin to build your own public transport app. You can use this folder as a skeleton to start your own app. We assume you have a working [Flutter environment](https://flutter.dev/docs/get-started/install).
 
+## Versions
+
+The example was tested against Flutter 2.8.1 and might cause [problems with Flutter 3](https://github.com/trufi-association/trufi-core/issues/604).
+
 ## Set up the backend
 
 The app needs to connect to a backend running on a server to be able to recommend routes. The app does not work without internet connection. But once it fetched the route it can operate without internet connection except for the map background tiles. So you can fetch your route at home and take your ride offline. But anyway you need a backend for the map background tiles and the routing at least. We build the backend called [trufi-server](https://github.com/trufi-association/trufi-server) which you can use. That backend just serves pre-generated data and that needs to be created. This is what we use [trufi-server-resources](https://github.com/trufi-association/trufi-server-resources) for.
