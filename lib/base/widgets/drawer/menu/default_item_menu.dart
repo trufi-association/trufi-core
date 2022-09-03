@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SimpleMenuItem extends MenuItem {
+class SimpleMenuItem extends TrufiMenuItem {
   SimpleMenuItem({
     required WidgetBuilder buildIcon,
     required WidgetBuilder name,

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 import 'package:share_plus/share_plus.dart';
 
 class TrufiDrawer extends StatelessWidget {
@@ -25,7 +25,7 @@ class TrufiDrawer extends StatelessWidget {
   final String countryName;
   final String urlShareApp;
   final String currentRoute;
-  final List<List<MenuItem>> menuItems;
+  final List<List<TrufiMenuItem>> menuItems;
   final WidgetBuilder? backgroundImageBuilder;
 
   @override
