@@ -10,6 +10,7 @@ import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
 import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
 import 'package:trufi_core/base/utils/packge_info_platform.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 
 class RestRequestPlanService implements RequestPlanService {
   static const String searchPath = '/geocode';
@@ -56,8 +57,9 @@ class RestRequestPlanService implements RequestPlanService {
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
       final packageInfoVersion = await PackageInfoPlatform.version();
+      final uniqueId = TrufiAppId.getUniqueId;
       return await http.get(request, headers: {
-        "User-Agent": "Trufi/$packageInfoVersion",
+        "User-Agent": "Trufi/$packageInfoVersion/$uniqueId",
       });
     } on Exception catch (e) {
       throw FetchOnlineRequestException(e);
