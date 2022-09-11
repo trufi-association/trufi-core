@@ -57,12 +57,6 @@ class LeafletMap extends StatelessWidget {
                 onTap: onTap,
                 onLongPress: onLongPress,
                 center: mapConfiguratiom.center.toLatLng(),
-                // onMapCreated: (c) {
-                //   if (!trufiMapController.readyCompleter.isCompleted) {
-                //     trufiMapController.readyCompleter.complete();
-                //   }
-                //   trufiMapController.mapController = c;
-                // },
                 onPositionChanged: (
                   MapPosition position,
                   bool hasGesture,
