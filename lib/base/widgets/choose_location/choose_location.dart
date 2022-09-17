@@ -32,7 +32,7 @@ class ChooseLocationPage extends StatefulWidget {
       builder: (BuildContext context) => ChooseLocationPage(
         position: position,
         isOrigin: isOrigin ?? false,
-        mapChooseLocationProvider: mapChooseLocationProvider,
+        mapChooseLocationProvider: mapChooseLocationProvider.rebuild(),
       ),
     );
   }

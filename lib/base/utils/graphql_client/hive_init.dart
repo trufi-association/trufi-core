@@ -13,6 +13,7 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/pages/home/repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/local_repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/transport_list/repository/hive_local_repository.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 
 /// Initializes Hive with the path from [getApplicationDocumentsDirectory].
 ///
@@ -47,4 +48,5 @@ const listPathsHive = [
   SearchLocationsHiveLocalRepository.path,
   RouteTransportsHiveLocalRepository.path,
   MapTileLocalStorage.customLayersStorage,
+  TrufiAppId.path,
 ];

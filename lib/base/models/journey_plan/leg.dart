@@ -7,6 +7,7 @@ class Leg extends Equatable {
   static const _points = "points";
   static const _mode = "mode";
   static const _route = "route";
+  static const _routeColor = "routeColor";
   static const _routeLongName = "routeLongName";
   static const _toPlace = "to";
   static const _fromPlace = "from";
@@ -18,6 +19,7 @@ class Leg extends Equatable {
   final String points;
   final TransportMode transportMode;
   final TransportRoute? route;
+  final String? routeColor;
   final String? shortName;
   final String? routeLongName;
   final double distance;
@@ -34,6 +36,7 @@ class Leg extends Equatable {
     required this.points,
     required this.transportMode,
     required this.route,
+    required this.routeColor,
     required this.shortName,
     required this.routeLongName,
     required this.distance,
@@ -58,6 +61,7 @@ class Leg extends Equatable {
               ? TransportRoute.fromJson(json[_route] as Map<String, dynamic>)
               : null)
           : null,
+      routeColor: json[_routeColor] as String?,
       shortName: json[_route] != null
           ? ((json[_route] is String) && json[_route] != ''
               ? json[_route] as String
@@ -90,6 +94,7 @@ class Leg extends Equatable {
       _legGeometry: {_points: points},
       _mode: transportMode.name,
       _route: route?.toJson() ?? shortName,
+      _routeColor: routeColor,
       _routeLongName: routeLongName,
       _distance: distance,
       _duration: duration.inSeconds,
@@ -107,6 +112,7 @@ class Leg extends Equatable {
     String? points,
     TransportMode? transportMode,
     TransportRoute? route,
+    String? routeColor,
     String? shortName,
     String? routeLongName,
     double? distance,
@@ -126,6 +132,7 @@ class Leg extends Equatable {
       points: points ?? this.points,
       transportMode: transportMode ?? this.transportMode,
       route: route ?? this.route,
+      routeColor: routeColor ?? this.routeColor,
       shortName: shortName ?? this.shortName,
       routeLongName: routeLongName ?? this.routeLongName,
       distance: distance ?? this.distance,
@@ -159,15 +166,17 @@ class Leg extends Equatable {
     return route?.shortName ?? (route?.longName ?? (shortName ?? ''));
   }
 
+  int? get codeColor => int.tryParse('0xFF${route?.color ?? routeColor}');
+
   Color get primaryColor {
-    return route?.color != null
-        ? Color(int.tryParse('0xFF${route?.color}')!)
+    return codeColor != null
+        ? Color(codeColor!)
         : transportMode.color;
   }
 
   Color get backgroundColor {
-    return route?.color != null
-        ? Color(int.tryParse('0xFF${route?.color}')!)
+    return codeColor!= null
+        ? Color(codeColor!)
         : transportMode.backgroundColor;
   }
 
@@ -176,6 +185,7 @@ class Leg extends Equatable {
         points,
         transportMode,
         route,
+        routeColor,
         shortName,
         routeLongName,
         distance,

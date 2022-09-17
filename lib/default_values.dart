@@ -13,6 +13,7 @@ import 'package:trufi_core/base/pages/about/translations/about_localizations.dar
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
+import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
@@ -49,6 +50,7 @@ abstract class DefaultValues {
     required MapConfiguration mapConfiguration,
     required String searchAssetPath,
     required String photonUrl,
+    RequestPlanService? customRequestPlanService,
     List<MapTileProvider>? mapTileProviders,
     bool useCustomMapProvider = false,
   }) {
@@ -65,10 +67,10 @@ abstract class DefaultValues {
         ),
       ),
       BlocProvider<MapRouteCubit>(
-        create: (context) => MapRouteCubit(otpEndpoint),
-      ),
-      BlocProvider<MapRouteCubit>(
-        create: (context) => MapRouteCubit(otpEndpoint),
+        create: (context) => MapRouteCubit(
+          otpEndpoint,
+          customRequestPlanService: customRequestPlanService,
+        ),
       ),
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
@@ -93,6 +95,7 @@ abstract class DefaultValues {
     required String emailContact,
     UrlSocialMedia? urlSocialMedia,
     ITrufiMapProvider? trufiMapProvider,
+    Uri? shareBaseUri,
   }) {
     final _trufiMapProvider = trufiMapProvider ?? LeafletMapCollection();
 
@@ -117,7 +120,11 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: HomePage(
                   drawerBuilder: generateDrawer(HomePage.route),
-                  mapRouteProvider: _trufiMapProvider.mapRouteProvider(),
+                  mapRouteProvider: _trufiMapProvider.mapRouteProvider(
+                    shareBaseItineraryUri: shareBaseUri?.replace(
+                      path: "/app/Home",
+                    ),
+                  ),
                   mapChooseLocationProvider:
                       _trufiMapProvider.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
@@ -128,8 +135,11 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: TransportList(
                   drawerBuilder: generateDrawer(TransportList.route),
-                  mapTransportProvider:
-                      _trufiMapProvider.mapTransportProvider(),
+                  mapTransportProvider: _trufiMapProvider.mapTransportProvider(
+                    shareBaseRouteUri: shareBaseUri?.replace(
+                      path: "/app/TransportList",
+                    ),
+                  ),
                 ),
               );
             },

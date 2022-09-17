@@ -8,13 +8,25 @@ class LeafletMapTransportProvider implements MapTransportProvider {
   final ITrufiMapController trufiMapController;
   @override
   final MapTransportBuilder mapTransportBuilder;
+  @override
+  final Uri? shareBaseRouteUri;
+
+  @override
+  MapTransportProvider rebuild() {
+    return LeafletMapTransportProvider.create(
+      shareBaseRouteUri: shareBaseRouteUri,
+    );
+  }
 
   const LeafletMapTransportProvider({
     required this.trufiMapController,
     required this.mapTransportBuilder,
+    this.shareBaseRouteUri,
   });
 
-  factory LeafletMapTransportProvider.create() {
+  factory LeafletMapTransportProvider.create({
+    Uri? shareBaseRouteUri,
+  }) {
     final trufiMapController = LeafletMapController();
     return LeafletMapTransportProvider(
       trufiMapController: trufiMapController,
@@ -22,8 +34,10 @@ class LeafletMapTransportProvider implements MapTransportProvider {
         return LeafletMapTransport(
           trufiMapController: trufiMapController,
           transportData: transportData,
+          shareBaseRouteUri: shareBaseRouteUri,
         );
       },
+      shareBaseRouteUri: shareBaseRouteUri,
     );
   }
 }

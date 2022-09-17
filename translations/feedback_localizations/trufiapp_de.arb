@@ -3,7 +3,7 @@
     "@menuFeedback": {
         "description": "Menu item that shows the feedback page"
     },
-    "feedbackTitle": "E-Mail senden",
+    "feedbackTitle": "Send us a comment",
     "@feedbackTitle": {
         "description": "Title displayed on the feedback page"
     },

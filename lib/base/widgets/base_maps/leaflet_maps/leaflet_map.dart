@@ -19,6 +19,7 @@ class LeafletMap extends StatelessWidget {
   final TapCallback? onTap;
   final LongPressCallback? onLongPress;
   final PositionCallback? onPositionChanged;
+  final double? bottomPaddingButtons;
   const LeafletMap({
     Key? key,
     required this.trufiMapController,
@@ -27,6 +28,7 @@ class LeafletMap extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.bottomPaddingButtons,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,8 @@ class LeafletMap extends StatelessWidget {
           builder: (context, snapshot) {
             final currentLocation = snapshot.data;
             return FlutterMap(
+              key: Key(trufiMapController.mapController.hashCode.toString()),
+              mapController: trufiMapController.mapController,
               options: MapOptions(
                 interactiveFlags: InteractiveFlag.drag |
                     InteractiveFlag.flingAnimation |
@@ -53,12 +57,6 @@ class LeafletMap extends StatelessWidget {
                 onTap: onTap,
                 onLongPress: onLongPress,
                 center: mapConfiguratiom.center.toLatLng(),
-                onMapCreated: (c) {
-                  if (!trufiMapController.readyCompleter.isCompleted) {
-                    trufiMapController.readyCompleter.complete();
-                  }
-                  trufiMapController.mapController = c;
-                },
                 onPositionChanged: (
                   MapPosition position,
                   bool hasGesture,
@@ -85,7 +83,7 @@ class LeafletMap extends StatelessWidget {
           },
         ),
         Positioned(
-          bottom: 16.0,
+          bottom: bottomPaddingButtons ?? 16.0,
           right: 16.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

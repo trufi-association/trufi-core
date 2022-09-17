@@ -29,19 +29,15 @@ class PolylineWithMarkers {
 class LeafletMapController extends Cubit<LeafletMapState>
     implements ITrufiMapController {
   static const int animationDuration = 500;
-  MapController? mapController;
+  MapController mapController = MapController();
 
   LeafletMapController() : super(const LeafletMapState());
-
-  final TrufiMapAnimations _animations = TrufiMapAnimations();
   Map<Itinerary, List<PolylineWithMarkers>> itineraries = {};
   LatLngBounds get selectedBounds => _selectedBounds;
   LatLngBounds _selectedBounds = LatLngBounds();
 
-  final Completer<Null> readyCompleter = Completer<Null>();
-  
   @override
-  Future<Null> get onReady => readyCompleter.future;
+  Future<Null> get onReady => mapController.onReady;
 
   @override
   void cleanMap() {
@@ -165,7 +161,7 @@ class LeafletMapController extends Cubit<LeafletMapState>
 
           final color = isSelected
               ? leg.transitLeg
-                  ? leg.route?.primaryColor ?? leg.transportMode.backgroundColor
+                  ? leg.backgroundColor
                   : leg.transportMode.color
               : Colors.grey;
 
@@ -214,14 +210,14 @@ class LeafletMapController extends Cubit<LeafletMapState>
     TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
-      mapController?.move(center.toLatLng(), zoom);
-    } else if (mapController != null) {
-      _animations.move(
+      mapController.move(center.toLatLng(), zoom);
+    } else {
+      TrufiMapAnimations.move(
         center: center.toLatLng(),
         zoom: zoom,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
-        mapController: mapController!,
+        mapController: mapController,
       );
     }
   }
@@ -231,13 +227,13 @@ class LeafletMapController extends Cubit<LeafletMapState>
     TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
-      mapController?.fitBounds(bounds);
-    } else if (mapController != null) {
-      _animations.fitBounds(
+      mapController.fitBounds(bounds);
+    } else {
+      TrufiMapAnimations.fitBounds(
         bounds: bounds,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
-        mapController: mapController!,
+        mapController: mapController,
       );
     }
   }

@@ -51,7 +51,7 @@ class _TransportListState extends State<TransportList> {
         useSafeArea: false,
         builder: (BuildContext context) => TransportListDetail(
           id: Uri.decodeQueryComponent(transportListId),
-          mapTransportProvider: widget.mapTransportProvider,
+          mapTransportProvider: widget.mapTransportProvider.rebuild(),
         ),
       );
     }

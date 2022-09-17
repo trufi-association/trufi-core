@@ -20,7 +20,11 @@ class ModeLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final perc = legLength.abs() / 10;
     return SizedBox(
-      width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
+      width: perc > 1
+          ? maxWidth
+          : (maxWidth * perc) >= 24
+              ? (maxWidth * perc)
+              : 24,
       height: 30,
       child: IconTransport(
         bacgroundColor: leg.backgroundColor,
@@ -53,7 +57,11 @@ class WaitLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final perc = legLength.abs() / 10;
     return SizedBox(
-      width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
+      width: perc > 1
+          ? maxWidth
+          : (maxWidth * perc) >= 24
+              ? (maxWidth * perc)
+              : 24,
       height: 30,
       child: IconTransport(
         bacgroundColor: TransportMode.walk.backgroundColor,
@@ -88,7 +96,11 @@ class RouteLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final perc = legLength.abs() / 10;
     return SizedBox(
-      width: (maxWidth * perc) >= 24 ? (maxWidth * perc) : 24,
+      width: perc > 1
+          ? maxWidth
+          : (maxWidth * perc) >= 24
+              ? (maxWidth * perc)
+              : 24,
       height: 30,
       child: ClipRRect(
         child: IconTransport(

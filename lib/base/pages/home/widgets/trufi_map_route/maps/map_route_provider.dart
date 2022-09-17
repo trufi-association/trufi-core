@@ -16,7 +16,10 @@ class LeafletMapRouteProvider implements MapRouteProvider {
     required this.mapRouteBuilder,
   });
 
-  factory LeafletMapRouteProvider.create({WidgetBuilder? overlapWidget}) {
+  factory LeafletMapRouteProvider.create({
+    Uri? shareBaseItineraryUri,
+    WidgetBuilder? overlapWidget,
+  }) {
     final trufiMapController = LeafletMapController();
     return LeafletMapRouteProvider(
       trufiMapController: trufiMapController,
@@ -24,6 +27,7 @@ class LeafletMapRouteProvider implements MapRouteProvider {
         return LeafletMapRoute(
           trufiMapController: trufiMapController,
           asyncExecutor: asyncExecutor,
+          shareBaseItineraryUri: shareBaseItineraryUri,
           overlapWidget: overlapWidget,
         );
       },
