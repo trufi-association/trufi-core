@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/default_item_menu.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart' ;
 import 'package:url_launcher/url_launcher.dart';
 
-abstract class SocialMediaItem extends MenuItem {
+abstract class SocialMediaItem extends TrufiMenuItem {
   final String url;
   SocialMediaItem({
     required this.url,
@@ -16,7 +16,7 @@ abstract class SocialMediaItem extends MenuItem {
           notSelectedIcon: buildIcon,
           name: (context) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: MenuItem.buildName(context, name(context)),
+            child: TrufiMenuItem.buildName(context, name(context)),
           ),
           onClick: (context, isSelected) {
             // ignore: deprecated_member_use
@@ -125,7 +125,7 @@ class UrlSocialMedia {
       urlYoutube != null;
 }
 
-MenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
+TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
   return SimpleMenuItem(
       buildIcon: (context) => const Icon(Icons.share),
       name: (context) {

@@ -17,7 +17,7 @@ import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
+import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/drawer/trufi_drawer.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
