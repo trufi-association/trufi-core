@@ -20,6 +20,8 @@ class TrufiLocalizationCubit extends Cubit<TrufiLocalization> {
         return 'Italiano';
       case 'pt':
         return 'Portuguese';
+      case 'am':
+        return 'አማርኛ';
       default:
         return 'English';
     }

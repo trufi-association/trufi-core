@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'about_localizations_am.dart';
 import 'about_localizations_de.dart';
 import 'about_localizations_en.dart';
 import 'about_localizations_es.dart';
@@ -13,14 +13,14 @@ import 'about_localizations_fr.dart';
 import 'about_localizations_it.dart';
 import 'about_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of AboutLocalization returned
-/// by `AboutLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of AboutLocalization
+/// returned by `AboutLocalization.of(context)`.
 ///
 /// Applications need to include `AboutLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/about_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +35,14 @@ import 'about_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -94,6 +94,7 @@ abstract class AboutLocalization {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('am'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
@@ -104,67 +105,67 @@ abstract class AboutLocalization {
 
   /// A short marketing sentence that describes the app
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.'**
   String get aboutCollapseContent;
 
   /// No description provided for @aboutCollapseContentFoot.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'We need mappers, developers, planners, testers, and many other hands.'**
   String get aboutCollapseContentFoot;
 
   /// No description provided for @aboutCollapseTitle.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'More About Trufi Association'**
   String get aboutCollapseTitle;
 
   /// Text displayed on the about page
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Need to go somewhere and don\'t know which trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, and we want to make it easier to use for everyone. So we developed this app. We hope you enjoy it.'**
   String aboutContent(Object appName);
 
   /// Button label to show licenses
   ///
-  /// In pt, this message translates to:
-  /// **'Licenças'**
+  /// In am, this message translates to:
+  /// **'ፈቃዶች'**
   String get aboutLicenses;
 
   /// A note about open source
   ///
-  /// In pt, this message translates to:
-  /// **'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.'**
+  /// In am, this message translates to:
+  /// **'ይህ መተግበሪያ በ GitHub ላይ እንደ ክፍት ምንጭ ተለቅቋል። ወደ የራስዎ ከተማ ለማበርከት ወይም ለማምጣት ነፃነት ይሰማዎ።'**
   String get aboutOpenSource;
 
   /// Menu item that shows the about page
   ///
-  /// In pt, this message translates to:
-  /// **'About us'**
+  /// In am, this message translates to:
+  /// **'ስለ'**
   String get menuAbout;
 
   /// A short marketing sentence that describes the app
   ///
-  /// In pt, this message translates to:
-  /// **'Transporte público em {city}'**
+  /// In am, this message translates to:
+  /// **'በ{city} የብዙሀን ትራንስፖርት'**
   String tagline(Object city);
 
   /// No description provided for @trufiWebsite.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Trufi Association Website'**
   String get trufiWebsite;
 
   /// The application's version
   ///
-  /// In pt, this message translates to:
-  /// **'Versão {version}'**
+  /// In am, this message translates to:
+  /// **'Version {version}'**
   String version(Object version);
 
   /// No description provided for @volunteerTrufi.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Volunteer For Trufi'**
   String get volunteerTrufi;
 }
@@ -178,7 +179,7 @@ class _AboutLocalizationDelegate extends LocalizationsDelegate<AboutLocalization
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['am', 'de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AboutLocalizationDelegate old) => false;
@@ -189,6 +190,7 @@ AboutLocalization lookupAboutLocalization(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'am': return AboutLocalizationAm();
     case 'de': return AboutLocalizationDe();
     case 'en': return AboutLocalizationEn();
     case 'es': return AboutLocalizationEs();

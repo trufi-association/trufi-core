@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'trufi_base_localizations_am.dart';
 import 'trufi_base_localizations_de.dart';
 import 'trufi_base_localizations_en.dart';
 import 'trufi_base_localizations_es.dart';
@@ -13,14 +13,14 @@ import 'trufi_base_localizations_fr.dart';
 import 'trufi_base_localizations_it.dart';
 import 'trufi_base_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of TrufiBaseLocalization returned
-/// by `TrufiBaseLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of TrufiBaseLocalization
+/// returned by `TrufiBaseLocalization.of(context)`.
 ///
 /// Applications need to include `TrufiBaseLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/trufi_base_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +35,14 @@ import 'trufi_base_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -94,6 +94,7 @@ abstract class TrufiBaseLocalization {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('am'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
@@ -104,487 +105,487 @@ abstract class TrufiBaseLocalization {
 
   /// Text of dialog that explains that access to location services was denied
   ///
-  /// In pt, this message translates to:
-  /// **'Verifique se o seu dispositivo possui GPS e se as configurações de localização estão ativadas.'**
+  /// In am, this message translates to:
+  /// **'ስልክዎ (መሳሪያዎ) የጂ.ፒ.ኤስ. ማገናኛ እንዳለው እና መገናኘቱንም ያረጋግጡ'**
   String get alertLocationServicesDeniedMessage;
 
   /// Title of dialog that explains that access to location services was denied
   ///
-  /// In pt, this message translates to:
-  /// **'Nenhuma localização'**
+  /// In am, this message translates to:
+  /// **'ቦታው አልተገኘም'**
   String get alertLocationServicesDeniedTitle;
 
   /// Accept button of the App Review Dialog used on Android
   ///
-  /// In pt, this message translates to:
-  /// **'Escrever análise'**
+  /// In am, this message translates to:
+  /// **'ምክር ፃፍ'**
   String get appReviewDialogButtonAccept;
 
   /// Decline button of the App Review Dialog used on Android
   ///
-  /// In pt, this message translates to:
-  /// **'Agora Não'**
+  /// In am, this message translates to:
+  /// **'አሁን አይሆንም'**
   String get appReviewDialogButtonDecline;
 
   /// Content of the App Review Dialog used on Android
   ///
-  /// In pt, this message translates to:
-  /// **'Ajude-nos com uma revisão na Google Play Store.'**
+  /// In am, this message translates to:
+  /// **'በ Google Play መደብር ላይ አንድ ምክር ጋር ይደግፉን.'**
   String get appReviewDialogContent;
 
   /// Title of the App Review Dialog used on Android
   ///
-  /// In pt, this message translates to:
-  /// **'Gostando de Trufi?'**
+  /// In am, this message translates to:
+  /// **'መተግበሪያ እየወደዱት ነው?'**
   String get appReviewDialogTitle;
 
   /// Page subtitle when choosing a location on the map
   ///
-  /// In pt, this message translates to:
-  /// **'Panoramizar e aplicar zoom ao mapa'**
+  /// In am, this message translates to:
+  /// **'ካርታውን ከፒንኬሽን አንቀሳቅስ & ያጉሉ'**
   String get chooseLocationPageSubtitle;
 
   /// Page title when choosing a location on the map
   ///
-  /// In pt, this message translates to:
-  /// **'Escolha um ponto'**
+  /// In am, this message translates to:
+  /// **'አንድ ነጥብ ይምረጡ'**
   String get chooseLocationPageTitle;
 
   /// Cancel button label
   ///
-  /// In pt, this message translates to:
-  /// **'Cancelar'**
+  /// In am, this message translates to:
+  /// **'ሰርዝ'**
   String get commonCancel;
 
   /// General Confirm location label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'Confirm location'**
   String get commonConfirmLocation;
 
   /// Destination field label
   ///
-  /// In pt, this message translates to:
-  /// **'Destino'**
+  /// In am, this message translates to:
+  /// **'መዳረሻ'**
   String get commonDestination;
 
   /// General Edit label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Edit'**
   String get commonEdit;
 
   /// Message when an error has occured
   ///
-  /// In pt, this message translates to:
-  /// **'Erro'**
+  /// In am, this message translates to:
+  /// **'ስህተት'**
   String get commonError;
 
   /// General from station  label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'from station'**
   String get commonFromStation;
 
   /// General from stop  label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'from stop'**
   String get commonFromStop;
 
   /// General Leave when it suits you label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'Leave when it suits you'**
   String get commonItineraryNoTransitLegs;
 
   /// General Leaves at  label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Leaves'**
   String get commonLeavesAt;
 
   /// General Loading label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'Loading...'**
   String get commonLoading;
 
   /// Message when internet connection is lost
   ///
-  /// In pt, this message translates to:
-  /// **'Sem conexão à internet.'**
+  /// In am, this message translates to:
+  /// **'ኢንተርኔት የለም'**
   String get commonNoInternet;
 
   /// Message that is displayed when no results were found for the search term that was provided
   ///
-  /// In pt, this message translates to:
-  /// **'Sem resultados'**
+  /// In am, this message translates to:
+  /// **'No results'**
   String get commonNoResults;
 
   /// OK button label
   ///
-  /// In pt, this message translates to:
-  /// **'Está bem'**
+  /// In am, this message translates to:
+  /// **'እሺ'**
   String get commonOK;
 
   /// Origin field label
   ///
-  /// In pt, this message translates to:
-  /// **'Origem'**
+  /// In am, this message translates to:
+  /// **'መነሻ'**
   String get commonOrigin;
 
   /// General Remove label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Remove'**
   String get commonRemove;
 
   /// General Save label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Save'**
   String get commonSave;
 
   /// General Tomorrow label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'Tomorrow'**
   String get commonTomorrow;
 
   /// Message when an unknown error has occured
   ///
-  /// In pt, this message translates to:
-  /// **'Erro desconhecido'**
+  /// In am, this message translates to:
+  /// **'ያልታወቀ ስህተት'**
   String get commonUnknownError;
 
   /// General Unkown place label
   ///
-  /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// In am, this message translates to:
+  /// **'Unkown place'**
   String get commonUnkownPlace;
 
   /// General wait label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Wait'**
   String get commonWait;
 
   /// General Walk label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Walk'**
   String get commonWalk;
 
   /// Search option that allows to use the current user location
   ///
-  /// In pt, this message translates to:
-  /// **'Sua localização'**
+  /// In am, this message translates to:
+  /// **'Your location'**
   String get commonYourLocation;
 
   /// Message that is displayed when a trip could not be planned, because the specified destination is ambiguous
   ///
-  /// In pt, this message translates to:
-  /// **'O planejador de viagem não tem certeza do local para o qual deseja ir. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// In am, this message translates to:
+  /// **'The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.'**
   String get errorAmbiguousDestination;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin is ambiguous
   ///
-  /// In pt, this message translates to:
-  /// **'O planejador de viagem não tem certeza do local em que deseja começar. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// In am, this message translates to:
+  /// **'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.'**
   String get errorAmbiguousOrigin;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous
   ///
-  /// In pt, this message translates to:
-  /// **'Tanto a origem quanto o destino são ambíguos. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// In am, this message translates to:
+  /// **'Both origin and destination are ambiguous. Please select from the following options, or be more specific.'**
   String get errorAmbiguousOriginDestination;
 
   /// Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible
   ///
-  /// In pt, this message translates to:
-  /// **'A origem e o destino não são acessíveis para cadeiras de rodas'**
+  /// In am, this message translates to:
+  /// **'Both origin and destination are not wheelchair accessible'**
   String get errorNoBarrierFree;
 
   /// Message when internet connection is lost
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'No connect with server.'**
   String get errorNoConnectServer;
 
   /// Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time
   ///
-  /// In pt, this message translates to:
-  /// **'Não há horários de trânsito disponíveis. A data pode ser passada ou muito distante no futuro ou pode não haver serviço de transporte público para a sua viagem na hora que você escolher.'**
+  /// In am, this message translates to:
+  /// **'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.'**
   String get errorNoTransitTimes;
 
   /// Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries
   ///
-  /// In pt, this message translates to:
-  /// **'Viagem não é possível. Você pode estar tentando planejar uma viagem fora dos limites dos dados do mapa.'**
+  /// In am, this message translates to:
+  /// **'ይህ ጉዞ የተሳሳተ ነው። ከተዘጋጄው የካርታ ክልል ውጭ ያለ ጉዞ ነው'**
   String get errorOutOfBoundary;
 
   /// Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible
   ///
-  /// In pt, this message translates to:
-  /// **'Viagem não é possível. Seu ponto inicial ou final pode não estar acessível com segurança (por exemplo, você pode estar começando em uma rua residencial conectada apenas a uma rodovia).'**
+  /// In am, this message translates to:
+  /// **'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).'**
   String get errorPathNotFound;
 
   /// Message that is displayed when a trip could not be planned, because the request had errors
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'The request has errors that the server is not willing or able to process.'**
   String get errorServerCanNotHandleRequest;
 
   /// Message that is displayed when a trip could not be planned, because the server is taking too long to respond
   ///
-  /// In pt, this message translates to:
-  /// **'O planejador de viagem está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.'**
+  /// In am, this message translates to:
+  /// **'The trip planner is taking way too long to process your request. Please try again later.'**
   String get errorServerTimeout;
 
   /// Message that is displayed when the trip planning server was not available
   ///
-  /// In pt, this message translates to:
-  /// **'Nós lamentamos. O planejador de viagem está temporariamente indisponível. Por favor, tente novamente mais tarde.'**
+  /// In am, this message translates to:
+  /// **'ይቅርታ. የጉዞ ዕቅድ መተግበሪያው ለጊዜው አገልግሎት አይሰጥም. እባክዎ ጥቂት ቆይተው ይሞክሩ'**
   String get errorServerUnavailable;
 
   /// Message that is displayed when a trip could not be planned, because origin and destination are too close to each other
   ///
-  /// In pt, this message translates to:
-  /// **'A origem está a uma distância trivial do destino.'**
+  /// In am, this message translates to:
+  /// **'Origin is within a trivial distance of the destination.'**
   String get errorTrivialDistance;
 
   /// Message that is displayed when a trip could not be planned, because the destination was not found
   ///
-  /// In pt, this message translates to:
-  /// **'O destino é desconhecido. Você pode ser um pouco mais descritivo?'**
+  /// In am, this message translates to:
+  /// **'Destination is unknown. Can you be a bit more descriptive?'**
   String get errorUnknownDestination;
 
   /// Message that is displayed when a trip could not be planned, because the origin was not found
   ///
-  /// In pt, this message translates to:
-  /// **'A origem é desconhecida. Você pode ser um pouco mais descritivo?'**
+  /// In am, this message translates to:
+  /// **'Origin is unknown. Can you be a bit more descriptive?'**
   String get errorUnknownOrigin;
 
   /// Message that is displayed when a trip could not be planned, because both origin and destination were not found
   ///
-  /// In pt, this message translates to:
-  /// **'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?'**
+  /// In am, this message translates to:
+  /// **'Both origin and destination are unknown. Can you be a bit more descriptive?'**
   String get errorUnknownOriginDestination;
 
   /// Facebook menu item
   ///
-  /// In pt, this message translates to:
-  /// **'Siga-nos no Facebook'**
+  /// In am, this message translates to:
+  /// **'ፌስቡክ ላይ ይከተሉን'**
   String get followOnFacebook;
 
   /// Instagram menu item
   ///
-  /// In pt, this message translates to:
-  /// **'Siga-nos no Instagram'**
+  /// In am, this message translates to:
+  /// **'በ ኢንስተግራም ላይ ይከተሉን'**
   String get followOnInstagram;
 
   /// Twitter menu item
   ///
-  /// In pt, this message translates to:
-  /// **'Siga-nos no Twitter'**
+  /// In am, this message translates to:
+  /// **'በትዊተር ላይ ይከተሉን'**
   String get followOnTwitter;
 
   /// Itinerary leg distance (km)
   ///
-  /// In pt, this message translates to:
-  /// **'{value} km'**
+  /// In am, this message translates to:
+  /// **'{value} ኪ.ሜ.'**
   String instructionDistanceKm(Object value);
 
   /// Itinerary leg distance (m)
   ///
-  /// In pt, this message translates to:
-  /// **'{value} m'**
+  /// In am, this message translates to:
+  /// **'{value} ሜ'**
   String instructionDistanceMeters(Object value);
 
   /// Itinerary leg duration in hours
   ///
-  /// In pt, this message translates to:
-  /// **'{value} min'**
+  /// In am, this message translates to:
+  /// **'{value} h'**
   String instructionDurationHours(Object value);
 
   /// Itinerary leg duration
   ///
-  /// In pt, this message translates to:
-  /// **'{value} min'**
+  /// In am, this message translates to:
+  /// **'{value} ደቂቃ'**
   String instructionDurationMinutes(Object value);
 
   /// Vehicle name (Bike)
   ///
-  /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// In am, this message translates to:
+  /// **'Bike'**
   String get instructionVehicleBike;
 
   /// Vehicle name (Bus)
   ///
-  /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// In am, this message translates to:
+  /// **'አውቶቡስ'**
   String get instructionVehicleBus;
 
   /// Vehicle name (Car)
   ///
-  /// In pt, this message translates to:
-  /// **'Carro'**
+  /// In am, this message translates to:
+  /// **'መኪና'**
   String get instructionVehicleCar;
 
   /// Vehicle name (Carpool)
   ///
-  /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// In am, this message translates to:
+  /// **'Carpool'**
   String get instructionVehicleCarpool;
 
   /// Vehicle name (Commuter train)
   ///
-  /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// In am, this message translates to:
+  /// **'Commuter train'**
   String get instructionVehicleCommuterTrain;
 
   /// Vehicle name (Gondola)
   ///
-  /// In pt, this message translates to:
-  /// **'Gôndola'**
+  /// In am, this message translates to:
+  /// **'Gondola'**
   String get instructionVehicleGondola;
 
   /// Vehicle name (Light Rail Train)
   ///
-  /// In pt, this message translates to:
-  /// **'Esvaziar'**
+  /// In am, this message translates to:
+  /// **'ቀላል ባቡር'**
   String get instructionVehicleLightRail;
 
   /// Vehicle name (Metro)
   ///
-  /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// In am, this message translates to:
+  /// **'Metro'**
   String get instructionVehicleMetro;
 
-  /// Vehicle name (Micro)
+  /// Vehicle name (Microbus)
   ///
-  /// In pt, this message translates to:
-  /// **'Micro'**
+  /// In am, this message translates to:
+  /// **'Microbus'**
   String get instructionVehicleMicro;
 
   /// Vehicle name (Minibus)
   ///
-  /// In pt, this message translates to:
-  /// **'Mini onibus'**
+  /// In am, this message translates to:
+  /// **'ሚኒባስ'**
   String get instructionVehicleMinibus;
 
   /// Vehicle name (Trufi)
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Trufi'**
   String get instructionVehicleTrufi;
 
   /// No description provided for @instructionVehicleWalk.
   ///
-  /// In pt, this message translates to:
-  /// **'Walk'**
+  /// In am, this message translates to:
+  /// **'ይሂዱ'**
   String get instructionVehicleWalk;
 
   /// Menu item that shows the map/planned trip
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Route planner'**
   String get menuConnections;
 
   /// No description provided for @menuSocialMedia.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Social media'**
   String get menuSocialMedia;
 
   /// Menu item that shows the bus list page
   ///
-  /// In pt, this message translates to:
-  /// **'Mostrar rotas'**
+  /// In am, this message translates to:
+  /// **'Show routes'**
   String get menuTransportList;
 
   /// Message when no route could be found after a route search
   ///
-  /// In pt, this message translates to:
-  /// **'Desculpe, não conseguimos encontrar uma rota. O que você quer fazer?'**
+  /// In am, this message translates to:
+  /// **'Sorry, we could not find a route. What do you want to do?'**
   String get noRouteError;
 
   /// Button label to try another destination when no route could be found
   ///
-  /// In pt, this message translates to:
-  /// **'Tente outro destino'**
+  /// In am, this message translates to:
+  /// **'Try another destination'**
   String get noRouteErrorActionCancel;
 
   /// Button label to report a missing route when no route could be found
   ///
-  /// In pt, this message translates to:
-  /// **'Relatar uma rota ausente'**
+  /// In am, this message translates to:
+  /// **'Report a missing route'**
   String get noRouteErrorActionReportMissingRoute;
 
   /// Button label to show the car route when no route could be found
   ///
-  /// In pt, this message translates to:
-  /// **'Mostrar percurso de carro'**
+  /// In am, this message translates to:
+  /// **'Show route by car'**
   String get noRouteErrorActionShowCarRoute;
 
   /// Website menu item
   ///
-  /// In pt, this message translates to:
-  /// **'Leia nosso blog'**
+  /// In am, this message translates to:
+  /// **'Read our blog'**
   String get readOurBlog;
 
   /// Message that is displayed when the response of the trip planning request could not be received
   ///
-  /// In pt, this message translates to:
-  /// **'Falha ao carregar o plano.'**
+  /// In am, this message translates to:
+  /// **'ዕቅድ መጫን አልተሳካም።'**
   String get searchFailLoadingPlan;
 
   /// Placeholder text for the destination field (in search state)
   ///
-  /// In pt, this message translates to:
-  /// **'Escolha o destino'**
+  /// In am, this message translates to:
+  /// **'መድረሻ ይምረጡ'**
   String get searchHintDestination;
 
   /// Placeholder text for the origin field (in search state)
   ///
-  /// In pt, this message translates to:
-  /// **'Escolha o ponto de partida'**
+  /// In am, this message translates to:
+  /// **'መነሻ ነጥብ ይምረጡ'**
   String get searchHintOrigin;
 
   /// Placeholder text for the destination field (in map-visible state)
   ///
-  /// In pt, this message translates to:
-  /// **'Selecionar destino'**
+  /// In am, this message translates to:
+  /// **'Select destination'**
   String get searchPleaseSelectDestination;
 
   /// Placeholder text for the origin field (in map-visible state)
   ///
-  /// In pt, this message translates to:
-  /// **'Selecionar origem'**
+  /// In am, this message translates to:
+  /// **'Select origin'**
   String get searchPleaseSelectOrigin;
 
   /// Text with URL that is used when sharing the app.
   ///
-  /// In pt, this message translates to:
-  /// **'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em {url}'**
+  /// In am, this message translates to:
+  /// **'Download {appTitle}, the public transport app for {cityName}, at {url}'**
   String shareAppText(Object url, Object appTitle, Object cityName);
 
   /// No description provided for @themeModeDark.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Dark Theme'**
   String get themeModeDark;
 
   /// No description provided for @themeModeLight.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Light theme'**
   String get themeModeLight;
 
   /// No description provided for @themeModeSystem.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'System Default'**
   String get themeModeSystem;
 }
@@ -598,7 +599,7 @@ class _TrufiBaseLocalizationDelegate extends LocalizationsDelegate<TrufiBaseLoca
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['am', 'de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_TrufiBaseLocalizationDelegate old) => false;
@@ -609,6 +610,7 @@ TrufiBaseLocalization lookupTrufiBaseLocalization(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'am': return TrufiBaseLocalizationAm();
     case 'de': return TrufiBaseLocalizationDe();
     case 'en': return TrufiBaseLocalizationEn();
     case 'es': return TrufiBaseLocalizationEs();

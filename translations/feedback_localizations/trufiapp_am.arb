@@ -1,0 +1,14 @@
+{
+    "menuFeedback": "ግብረ - መልስ ላክ",
+    "@menuFeedback": {
+        "description": "Menu item that shows the feedback page"
+    },
+    "feedbackTitle": "ኢሜል ይላኩልን",
+    "@feedbackTitle": {
+        "description": "Title displayed on the feedback page"
+    },
+    "feedbackContent": "ለመተግበሪያችን ጥቆማዎች አለዎት ወይም መተግበሪያ ውስጥ አንዳንድ ስህተቶች ከአገኙ? እኛ ከእርስዎ መስማት ደስ ይለናል! እኛ መልስ እንድንሰጥዎ የኢሜል አድራሻዎን ወይንም ስልክዎን ማከልዎን ያረጋግጡ ፡፡",
+    "@feedbackContent": {
+        "description": "Text displayed on the feedback page"
+    }
+}

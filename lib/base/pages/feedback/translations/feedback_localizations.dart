@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'feedback_localizations_am.dart';
 import 'feedback_localizations_de.dart';
 import 'feedback_localizations_en.dart';
 import 'feedback_localizations_es.dart';
@@ -13,14 +13,14 @@ import 'feedback_localizations_fr.dart';
 import 'feedback_localizations_it.dart';
 import 'feedback_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of FeedbackLocalization returned
-/// by `FeedbackLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of FeedbackLocalization
+/// returned by `FeedbackLocalization.of(context)`.
 ///
 /// Applications need to include `FeedbackLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/feedback_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +35,14 @@ import 'feedback_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -94,6 +94,7 @@ abstract class FeedbackLocalization {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('am'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
@@ -104,20 +105,20 @@ abstract class FeedbackLocalization {
 
   /// Menu item that shows the feedback page
   ///
-  /// In pt, this message translates to:
-  /// **'Enviar comentários.'**
+  /// In am, this message translates to:
+  /// **'ግብረ - መልስ ላክ'**
   String get menuFeedback;
 
   /// Title displayed on the feedback page
   ///
-  /// In pt, this message translates to:
-  /// **'Envie-nos um e-mail'**
+  /// In am, this message translates to:
+  /// **'ኢሜል ይላኩልን'**
   String get feedbackTitle;
 
   /// Text displayed on the feedback page
   ///
-  /// In pt, this message translates to:
-  /// **'Você tem sugestões para o nosso aplicativo ou encontrou alguns erros nos dados?\n Gostaríamos muito de ouvir de você!\nCertifique-se de adicionar seu endereço de e-mail ou telefone, para que possamos responder a você.'**
+  /// In am, this message translates to:
+  /// **'ለመተግበሪያችን ጥቆማዎች አለዎት ወይም መተግበሪያ ውስጥ አንዳንድ ስህተቶች ከአገኙ? እኛ ከእርስዎ መስማት ደስ ይለናል! እኛ መልስ እንድንሰጥዎ የኢሜል አድራሻዎን ወይንም ስልክዎን ማከልዎን ያረጋግጡ ፡፡'**
   String get feedbackContent;
 }
 
@@ -130,7 +131,7 @@ class _FeedbackLocalizationDelegate extends LocalizationsDelegate<FeedbackLocali
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['am', 'de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_FeedbackLocalizationDelegate old) => false;
@@ -141,6 +142,7 @@ FeedbackLocalization lookupFeedbackLocalization(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'am': return FeedbackLocalizationAm();
     case 'de': return FeedbackLocalizationDe();
     case 'en': return FeedbackLocalizationEn();
     case 'es': return FeedbackLocalizationEs();

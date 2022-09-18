@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'saved_places_localizations_am.dart';
 import 'saved_places_localizations_de.dart';
 import 'saved_places_localizations_en.dart';
 import 'saved_places_localizations_es.dart';
@@ -13,14 +13,14 @@ import 'saved_places_localizations_fr.dart';
 import 'saved_places_localizations_it.dart';
 import 'saved_places_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of SavedPlacesLocalization returned
-/// by `SavedPlacesLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of SavedPlacesLocalization
+/// returned by `SavedPlacesLocalization.of(context)`.
 ///
 /// Applications need to include `SavedPlacesLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/saved_places_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +35,14 @@ import 'saved_places_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -94,6 +94,7 @@ abstract class SavedPlacesLocalization {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('am'),
     Locale('de'),
     Locale('en'),
     Locale('es'),
@@ -104,139 +105,139 @@ abstract class SavedPlacesLocalization {
 
   /// No description provided for @chooseNowLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Choose now'**
   String get chooseNowLabel;
 
   /// Search option that allows to choose a point on the map
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Choose on map'**
   String get chooseOnMap;
 
   /// General CustomPlaces label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Custom places'**
   String get commonCustomPlaces;
 
   /// General Favorite places label
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Favorite places'**
   String get commonFavoritePlaces;
 
   /// The name Add for {defaultLocation}
   ///
-  /// In pt, this message translates to:
-  /// **'Versão {defaultLocation}'**
+  /// In am, this message translates to:
+  /// **'Set {defaultLocation} address'**
   String defaultLocationAdd(Object defaultLocation);
 
   /// The default location name Home
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Home'**
   String get defaultLocationHome;
 
   /// The default location name Work
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Work'**
   String get defaultLocationWork;
 
   /// No description provided for @iconlabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Icon'**
   String get iconlabel;
 
   /// Junction name of two streets
   ///
-  /// In pt, this message translates to:
-  /// **'Esvaziar'**
+  /// In am, this message translates to:
+  /// **'{street1} and {street2}'**
   String instructionJunction(Object street1, Object street2);
 
   /// A menu item that shows the saved places
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Your places'**
   String get menuYourPlaces;
 
   /// No description provided for @nameLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Name'**
   String get nameLabel;
 
   /// No description provided for @savedPlacesEditLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Edit place'**
   String get savedPlacesEditLabel;
 
   /// No description provided for @savedPlacesEnterNameTitle.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Enter name'**
   String get savedPlacesEnterNameTitle;
 
   /// No description provided for @savedPlacesEnterNameValidation.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'The name cannot be empty'**
   String get savedPlacesEnterNameValidation;
 
   /// No description provided for @savedPlacesRemoveLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Remove place'**
   String get savedPlacesRemoveLabel;
 
   /// No description provided for @savedPlacesSelectIconTitle.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Select symbol'**
   String get savedPlacesSelectIconTitle;
 
   /// No description provided for @savedPlacesSetIconLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Change symbol'**
   String get savedPlacesSetIconLabel;
 
   /// No description provided for @savedPlacesSetNameLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Edit name'**
   String get savedPlacesSetNameLabel;
 
   /// No description provided for @savedPlacesSetPositionLabel.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Edit position'**
   String get savedPlacesSetPositionLabel;
 
   /// Search section title for locations marked as favorites
   ///
-  /// In pt, this message translates to:
-  /// **'Favoritas'**
+  /// In am, this message translates to:
+  /// **'Favorites'**
   String get searchTitleFavorites;
 
   /// Search section title for recent location
   ///
-  /// In pt, this message translates to:
-  /// **'Recente'**
+  /// In am, this message translates to:
+  /// **'Recent'**
   String get searchTitleRecent;
 
   /// Search section title for results found for the provided search term
   ///
-  /// In pt, this message translates to:
-  /// **'Procurar Resultados'**
+  /// In am, this message translates to:
+  /// **'Search Results'**
   String get searchTitleResults;
 
   /// No description provided for @selectedOnMap.
   ///
-  /// In pt, this message translates to:
+  /// In am, this message translates to:
   /// **'Selected on the map'**
   String get selectedOnMap;
 }
@@ -250,7 +251,7 @@ class _SavedPlacesLocalizationDelegate extends LocalizationsDelegate<SavedPlaces
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['am', 'de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_SavedPlacesLocalizationDelegate old) => false;
@@ -261,6 +262,7 @@ SavedPlacesLocalization lookupSavedPlacesLocalization(Locale locale) {
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'am': return SavedPlacesLocalizationAm();
     case 'de': return SavedPlacesLocalizationDe();
     case 'en': return SavedPlacesLocalizationEn();
     case 'es': return SavedPlacesLocalizationEs();
