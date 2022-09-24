@@ -35,9 +35,10 @@ class LeafletMapController extends Cubit<LeafletMapState>
   Map<Itinerary, List<PolylineWithMarkers>> itineraries = {};
   LatLngBounds get selectedBounds => _selectedBounds;
   LatLngBounds _selectedBounds = LatLngBounds();
+  final Completer<Null> readyCompleter = Completer<Null>();
 
   @override
-  Future<Null> get onReady => mapController.onReady;
+  Future<Null> get onReady => readyCompleter.future;
 
   @override
   void cleanMap() {
@@ -128,12 +129,11 @@ class LeafletMapController extends Cubit<LeafletMapState>
     });
     emit(
       state.copyWith(
-        unselectedMarkersLayer: MarkerLayerOptions(markers: _unselectedMarkers),
+        unselectedMarkersLayer: MarkerLayer(markers: _unselectedMarkers),
         unselectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _unselectedPolylines),
-        selectedMarkersLayer: MarkerLayerOptions(markers: _selectedMarkers),
-        selectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _selectedPolylines),
+            PolylineLayer(polylines: _unselectedPolylines),
+        selectedMarkersLayer: MarkerLayer(markers: _selectedMarkers),
+        selectedPolylinesLayer: PolylineLayer(polylines: _selectedPolylines),
       ),
     );
     moveCurrentBounds(tickerProvider: tickerProvider);
