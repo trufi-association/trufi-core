@@ -17,7 +17,7 @@ class LoadLocation extends StatefulWidget {
     required this.onFetchPlan,
   }) : super(key: key);
   @override
-  _LoadLocationState createState() => _LoadLocationState();
+  State<LoadLocation> createState() => _LoadLocationState();
 }
 
 class _LoadLocationState extends State<LoadLocation> {
@@ -27,7 +27,7 @@ class _LoadLocationState extends State<LoadLocation> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData();
     });
   }

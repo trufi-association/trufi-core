@@ -14,7 +14,7 @@ class YourLocationButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _YourLocationButtonState createState() => _YourLocationButtonState();
+  State<YourLocationButton> createState() => _YourLocationButtonState();
 }
 
 class _YourLocationButtonState extends State<YourLocationButton>

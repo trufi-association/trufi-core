@@ -17,7 +17,7 @@ class CustomScrollableContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomScrollableContainerState createState() =>
+  State<CustomScrollableContainer> createState() =>
       _CustomScrollableContainerState();
 }
 

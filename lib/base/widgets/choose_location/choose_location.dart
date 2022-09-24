@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:async/async.dart';
+import 'package:async/async.dart' as async;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,10 +49,10 @@ class ChooseLocationPage extends StatefulWidget {
   final bool isOrigin;
 
   @override
-  ChooseLocationPageState createState() => ChooseLocationPageState();
+  State<ChooseLocationPage> createState() => _ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage>
+class _ChooseLocationPageState extends State<ChooseLocationPage>
     with TickerProviderStateMixin {
   TrufiLatLng? position;
   Widget? _chooseOnMapMarker;
@@ -78,7 +78,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         ),
       );
     }
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData(widget.position ?? mapConfiguratiom.center);
     });
   }
@@ -256,7 +256,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         : markerConfiguration.toMarker;
   }
 
-  CancelableOperation<LocationDetail>? cancelableOperation;
+  async.CancelableOperation<LocationDetail>? cancelableOperation;
 
   Future<void> loadData(TrufiLatLng location) async {
     if (!mounted) return;
@@ -269,7 +269,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
       fetchError = null;
       loading = true;
     });
-    cancelableOperation = CancelableOperation.fromFuture(_fetchData(location));
+    cancelableOperation = async.CancelableOperation.fromFuture(_fetchData(location));
     cancelableOperation?.valueOrCancellation().then((value) {
       if (mounted) {
         setState(() {
