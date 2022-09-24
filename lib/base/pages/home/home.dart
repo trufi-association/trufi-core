@@ -225,6 +225,7 @@ class _HomePageState extends State<HomePage>
       final mapRouteCubit = context.read<MapRouteCubit>();
       await mapRouteCubit.setToPlace(destinyLocation);
       await mapRouteCubit.setFromPlace(originLocation);
+      if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
     }
   }
@@ -245,7 +246,7 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      AppReviewProvider().reviewApp(context);
+      AppReviewProvider().reviewApp(context, mounted);
     }
   }
 }

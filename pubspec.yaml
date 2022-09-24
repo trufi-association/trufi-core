@@ -19,6 +19,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter 
   flutter_map: ^3.0.0
+  hive: ^2.2.3
+  intl: ^0.17.0
   device_info_plus: ^4.1.2
   diff_match_patch: ^0.4.1
   latlong2: ^0.8.1
@@ -36,6 +38,7 @@ dependencies:
   synchronized: ^3.0.0+3
   cached_network_image: ^3.2.2
   uni_links: ^0.5.1
+  url_launcher: ^6.1.5
   # Workaround fix version errors for device_info_plus
   device_info_plus_platform_interface: ^3.0.0
   

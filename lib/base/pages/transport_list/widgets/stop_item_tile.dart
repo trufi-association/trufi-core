@@ -45,7 +45,7 @@ class StopItemTile extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text(stop.name+"\n"),
+              child: Text("${stop.name}\n"),
             ),
           ),
         ],

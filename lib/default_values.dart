@@ -26,7 +26,6 @@ import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart'
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/default_search_location.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
-import 'base/blocs/localization/trufi_localization_cubit.dart';
 
 abstract class DefaultValues {
   static TrufiLocalization trufiLocalization({Locale? currentLocale}) =>
@@ -97,7 +96,7 @@ abstract class DefaultValues {
     ITrufiMapProvider? trufiMapProvider,
     Uri? shareBaseUri,
   }) {
-    final _trufiMapProvider = trufiMapProvider ?? LeafletMapCollection();
+    final mapCollectionSelected = trufiMapProvider ?? LeafletMapCollection();
 
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
@@ -120,13 +119,13 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: HomePage(
                   drawerBuilder: generateDrawer(HomePage.route),
-                  mapRouteProvider: _trufiMapProvider.mapRouteProvider(
+                  mapRouteProvider: mapCollectionSelected.mapRouteProvider(
                     shareBaseItineraryUri: shareBaseUri?.replace(
                       path: "/app/Home",
                     ),
                   ),
                   mapChooseLocationProvider:
-                      _trufiMapProvider.mapChooseLocationProvider(),
+                      mapCollectionSelected.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                 ),
               );
@@ -135,7 +134,8 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: TransportList(
                   drawerBuilder: generateDrawer(TransportList.route),
-                  mapTransportProvider: _trufiMapProvider.mapTransportProvider(
+                  mapTransportProvider:
+                      mapCollectionSelected.mapTransportProvider(
                     shareBaseRouteUri: shareBaseUri?.replace(
                       path: "/app/TransportList",
                     ),
@@ -148,7 +148,7 @@ abstract class DefaultValues {
                 child: SavedPlacesPage(
                   drawerBuilder: generateDrawer(SavedPlacesPage.route),
                   mapChooseLocationProvider:
-                      _trufiMapProvider.mapChooseLocationProvider(),
+                      mapCollectionSelected.mapChooseLocationProvider(),
                 ),
               );
             },

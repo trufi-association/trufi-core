@@ -100,40 +100,40 @@ class LeafletMapController extends Cubit<LeafletMapState>
       selectedItinerary: selectedItinerary,
       onTap: onTap,
     );
-    final _unselectedMarkers = <Marker>[];
-    final _unselectedPolylines = <Polyline>[];
-    final _selectedMarkers = <Marker>[];
-    final _selectedPolylines = <Polyline>[];
-    final _allPolylines = <Polyline>[];
+    final unselectedMarkers = <Marker>[];
+    final unselectedPolylines = <Polyline>[];
+    final selectedMarkers = <Marker>[];
+    final selectedPolylines = <Polyline>[];
+    final allPolylines = <Polyline>[];
     itineraries.forEach((itinerary, polylinesWithMarker) {
       final bool isSelected = itinerary == selectedItinerary;
       for (final polylineWithMarker in polylinesWithMarker) {
         for (final marker in polylineWithMarker.markers) {
           if (isSelected) {
-            _selectedMarkers.add(marker);
+            selectedMarkers.add(marker);
             _selectedBounds.extend(marker.point);
           } else {
-            _unselectedMarkers.add(marker);
+            unselectedMarkers.add(marker);
           }
         }
         if (isSelected) {
-          _selectedPolylines.add(polylineWithMarker.polyline);
+          selectedPolylines.add(polylineWithMarker.polyline);
           for (final point in polylineWithMarker.polyline.points) {
             _selectedBounds.extend(point);
           }
         } else {
-          _unselectedPolylines.add(polylineWithMarker.polyline);
+          unselectedPolylines.add(polylineWithMarker.polyline);
         }
-        _allPolylines.add(polylineWithMarker.polyline);
+        allPolylines.add(polylineWithMarker.polyline);
       }
     });
     emit(
       state.copyWith(
-        unselectedMarkersLayer: MarkerLayer(markers: _unselectedMarkers),
+        unselectedMarkersLayer: MarkerLayer(markers: unselectedMarkers),
         unselectedPolylinesLayer:
-            PolylineLayer(polylines: _unselectedPolylines),
-        selectedMarkersLayer: MarkerLayer(markers: _selectedMarkers),
-        selectedPolylinesLayer: PolylineLayer(polylines: _selectedPolylines),
+            PolylineLayer(polylines: unselectedPolylines),
+        selectedMarkersLayer: MarkerLayer(markers: selectedMarkers),
+        selectedPolylinesLayer: PolylineLayer(polylines: selectedPolylines),
       ),
     );
     moveCurrentBounds(tickerProvider: tickerProvider);

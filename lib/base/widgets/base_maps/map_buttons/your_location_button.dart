@@ -34,7 +34,7 @@ class _YourLocationButtonState extends State<YourLocationButton>
             tickerProvider: this,
           );
         } else {
-          await locationProvider.startLocation(context);
+          await locationProvider.startLocation(context, mounted);
         }
       },
       heroTag: null,

@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
 

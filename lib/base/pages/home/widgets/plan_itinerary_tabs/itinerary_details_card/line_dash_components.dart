@@ -33,6 +33,7 @@ class TransportDash extends StatelessWidget {
           ),
         SeparatorPlace(
           color: leg.primaryColor,
+          leading: leg.transportMode.getImage(color: theme.iconTheme.color),
           child: GestureDetector(
             onTap: () {
               moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
@@ -41,7 +42,6 @@ class TransportDash extends StatelessWidget {
               leg: leg,
             ),
           ),
-          leading: leg.transportMode.getImage(color: theme.iconTheme.color),
         ),
         if (showAfterLine)
           DashLinePlace(
@@ -70,9 +70,9 @@ class WalkDash extends StatelessWidget {
         SeparatorPlace(
           color: leg.primaryColor,
           height: 10,
+          leading: TransportMode.walk.getImage(color: theme.iconTheme.color),
           child: Text(
               '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
-          leading: TransportMode.walk.getImage(color: theme.iconTheme.color),
         ),
       ],
     );
