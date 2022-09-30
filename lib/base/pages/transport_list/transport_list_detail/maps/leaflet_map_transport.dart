@@ -35,7 +35,7 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
   Widget build(BuildContext context) {
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
 
-    widget.trufiMapController.mapController.onReady.then((value) {
+    widget.trufiMapController.onReady.then((value) {
       if (widget.transportData?.geometry != null) {
         widget.trufiMapController.moveBounds(
           points: widget.transportData!.geometry!,
@@ -46,7 +46,7 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
     return LeafletMap(
       trufiMapController: widget.trufiMapController,
       layerOptionsBuilder: (context) => [
-        PolylineLayerOptions(
+        PolylineLayer(
           polylines: [
             Polyline(
               points: TrufiLatLng.toListLatLng(
@@ -57,7 +57,7 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
           ],
         ),
         if (widget.transportData?.geometry != null)
-          MarkerLayerOptions(markers: [
+          MarkerLayer(markers: [
             if (widget.transportData!.geometry!.length > 2)
               buildFromMarker(widget.transportData!.geometry![0],
                   mapConfiguratiom.markersConfiguration.fromMarker),

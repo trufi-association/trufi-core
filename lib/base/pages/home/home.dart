@@ -40,13 +40,13 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       final mapRouteCubit = context.read<MapRouteCubit>();
       final mapRouteState = mapRouteCubit.state;
       repaintMap(mapRouteCubit, mapRouteState);
     });
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => processUniLink(),
     );
   }
@@ -54,14 +54,14 @@ class _HomePageState extends State<HomePage>
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => processUniLink(),
     );
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -225,6 +225,7 @@ class _HomePageState extends State<HomePage>
       final mapRouteCubit = context.read<MapRouteCubit>();
       await mapRouteCubit.setToPlace(destinyLocation);
       await mapRouteCubit.setFromPlace(originLocation);
+      if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
     }
   }
@@ -245,7 +246,7 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      AppReviewProvider().reviewApp(context);
+      AppReviewProvider().reviewApp(context, mounted);
     }
   }
 }

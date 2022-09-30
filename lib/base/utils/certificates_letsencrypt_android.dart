@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 // CertificatedLetsencryptAndroid is a WorkAround
 // for resolve internet certificated in androids <= 1.1.1

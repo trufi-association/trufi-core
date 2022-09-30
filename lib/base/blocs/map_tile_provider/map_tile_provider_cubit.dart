@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider.dart';
 
 import 'map_tile_local_storage.dart';

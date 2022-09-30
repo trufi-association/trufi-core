@@ -14,7 +14,7 @@ class YourLocationButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _YourLocationButtonState createState() => _YourLocationButtonState();
+  State<YourLocationButton> createState() => _YourLocationButtonState();
 }
 
 class _YourLocationButtonState extends State<YourLocationButton>
@@ -34,7 +34,7 @@ class _YourLocationButtonState extends State<YourLocationButton>
             tickerProvider: this,
           );
         } else {
-          await locationProvider.startLocation(context);
+          await locationProvider.startLocation(context, mounted);
         }
       },
       heroTag: null,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
@@ -68,9 +69,7 @@ class RestRequestPlanService implements RequestPlanService {
 
   String _todayMonthDayYear() {
     final today = DateTime.now();
-    return "${today.month.toString().padLeft(2, '0')}-"
-            "01-" +
-        today.year.toString();
+    return "${today.month.toString().padLeft(2, '0')}-01-${today.year}";
   }
 
   String _parseTransportModes(List<TransportMode> list) {

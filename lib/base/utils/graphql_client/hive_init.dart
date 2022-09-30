@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:hive/hive.dart' show Hive;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' show join;
 
 import 'package:graphql/client.dart' show HiveStore;

@@ -109,9 +109,19 @@ class AboutPage extends StatelessWidget {
                         localizationA.aboutCollapseTitle,
                         style: theme.textTheme.bodyText2?.copyWith(height: 1.5),
                       ),
+                      backgroundColor:
+                          theme.colorScheme.surface.withOpacity(0.8),
+                      collapsedBackgroundColor:
+                          theme.colorScheme.surface.withOpacity(0.8),
+                      collapsedIconColor: theme.iconTheme.color,
+                      iconColor: theme.iconTheme.color,
+                      tilePadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
+                      childrenPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
                       children: [
                         Text(
-                          localizationA.aboutCollapseContent + '\n',
+                          '${localizationA.aboutCollapseContent}\n',
                           style:
                               theme.textTheme.bodyText2?.copyWith(height: 1.5),
                         ),
@@ -119,7 +129,7 @@ class AboutPage extends StatelessWidget {
                           children: [
                             InkWell(
                               child: Text(
-                                localizationA.trufiWebsite + '\n',
+                                '${localizationA.trufiWebsite}\n',
                                 style: theme.textTheme.bodyText2?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -138,7 +148,7 @@ class AboutPage extends StatelessWidget {
                           children: [
                             InkWell(
                               child: Text(
-                                localizationA.volunteerTrufi + '\n',
+                                '${localizationA.volunteerTrufi}\n',
                                 style: theme.textTheme.bodyText2?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -153,21 +163,11 @@ class AboutPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          localizationA.aboutCollapseContentFoot + '\n',
+                          '${localizationA.aboutCollapseContentFoot}\n',
                           style:
                               theme.textTheme.bodyText2?.copyWith(height: 1.5),
                         )
                       ],
-                      backgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.8),
-                      collapsedBackgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.8),
-                      collapsedIconColor: theme.iconTheme.color,
-                      iconColor: theme.iconTheme.color,
-                      tilePadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
-                      childrenPadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
                     ),
                   ),
                 ),

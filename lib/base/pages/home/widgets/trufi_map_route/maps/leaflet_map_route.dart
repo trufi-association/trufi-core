@@ -60,7 +60,7 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                   state.selectedPolylinesLayer!,
                 if (state.selectedMarkersLayer != null)
                   state.selectedMarkersLayer!,
-                MarkerLayerOptions(
+                MarkerLayer(
                   markers: [
                     if (mapRouteState.fromPlace != null)
                       buildFromMarker(mapRouteState.fromPlace!.latLng,

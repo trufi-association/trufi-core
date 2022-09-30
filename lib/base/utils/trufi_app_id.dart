@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:uuid/uuid.dart';
 import 'package:hive/hive.dart' show Hive;
 

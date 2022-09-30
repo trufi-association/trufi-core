@@ -9,18 +9,18 @@ abstract class MapTileProvider {
   WidgetBuilder get imageBuilder;
 
   /// Build your own custom MapTiles
-  List<LayerOptions> buildTileLayerOptions();
+  List<Widget> buildTileLayerOptions();
 
   String name(BuildContext context);
 }
 
 class OSMDefaultMapTile extends MapTileProvider {
   @override
-  List<LayerOptions> buildTileLayerOptions() {
+  List<Widget> buildTileLayerOptions() {
     return [
-      TileLayerOptions(
+      TileLayer(
         urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        tileProvider: const DefaultMapTileCaching(),
+        tileProvider: DefaultMapTileCaching(),
       ),
     ];
   }
@@ -49,12 +49,12 @@ class OSMMapLayer extends MapTileProvider {
   }) : super();
 
   @override
-  List<LayerOptions> buildTileLayerOptions() {
+  List<Widget> buildTileLayerOptions() {
     return [
-      TileLayerOptions(
+      TileLayer(
         urlTemplate: mapTilesUrl,
-        subdomains: ['a', 'b', 'c'],
-        tileProvider: const DefaultMapTileCaching(),
+        subdomains: const ['a', 'b', 'c'],
+        tileProvider: DefaultMapTileCaching(),
       ),
     ];
   }
@@ -75,10 +75,10 @@ class OSMMapLayer extends MapTileProvider {
 }
 
 class DefaultMapTileCaching extends TileProvider {
-  const DefaultMapTileCaching();
+  DefaultMapTileCaching();
 
   @override
-  ImageProvider getImage(Coords coords, TileLayerOptions options) {
+  ImageProvider getImage(Coords coords, TileLayer options) {
     return CachedNetworkImageProvider(getTileUrl(coords, options));
   }
 }

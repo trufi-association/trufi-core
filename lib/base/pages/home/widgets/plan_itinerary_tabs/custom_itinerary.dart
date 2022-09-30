@@ -14,7 +14,7 @@ class CustomItinerary extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomItineraryState createState() => _CustomItineraryState();
+  State<CustomItinerary> createState() => _CustomItineraryState();
 }
 
 class _CustomItineraryState extends State<CustomItinerary> {

@@ -3,7 +3,7 @@ import 'package:trufi_core/base/utils/trufi_app_id.dart';
 
 GraphQLClient getClient(String endpoint) {
   final uniqueId = TrufiAppId.getUniqueId;
-  final HttpLink _httpLink = HttpLink(
+  final HttpLink httpLink = HttpLink(
     endpoint,
     defaultHeaders: {
       "User-Agent": "Trufi/GraphQL/$uniqueId",
@@ -14,6 +14,6 @@ GraphQLClient getClient(String endpoint) {
       store: HiveStore(),
       partialDataPolicy: PartialDataCachePolicy.accept,
     ),
-    link: _httpLink,
+    link: httpLink,
   );
 }

@@ -28,10 +28,11 @@ class AppReviewProvider {
     _localRepository.saveCurrentActionCount(currentActionCount);
   }
 
-  Future<void> reviewApp(BuildContext context) async {
+  Future<void> reviewApp(BuildContext context, bool mounted) async {
     if (!kIsWeb) {
       final packageInfo = await PackageInfo.fromPlatform();
       if (await _isAppReviewAppropriate(packageInfo)) {
+        if (!mounted) return;
         AppReviewDialog.showAppReviewDialog(context).then(
           (value) => _markReviewRequestedForCurrentVersion(packageInfo),
         );
