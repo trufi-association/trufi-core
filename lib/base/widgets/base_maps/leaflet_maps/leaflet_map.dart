@@ -10,7 +10,7 @@ import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_contr
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
 import 'package:trufi_core/base/widgets/base_maps/map_buttons/your_location_button.dart';
 
-typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
+typedef LayerOptionsBuilder = List<Widget> Function(BuildContext context);
 
 class LeafletMap extends StatelessWidget {
   final LeafletMapController trufiMapController;
@@ -19,6 +19,7 @@ class LeafletMap extends StatelessWidget {
   final TapCallback? onTap;
   final LongPressCallback? onLongPress;
   final PositionCallback? onPositionChanged;
+  final double? bottomPaddingButtons;
   const LeafletMap({
     Key? key,
     required this.trufiMapController,
@@ -27,6 +28,7 @@ class LeafletMap extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.onPositionChanged,
+    this.bottomPaddingButtons,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,8 @@ class LeafletMap extends StatelessWidget {
           builder: (context, snapshot) {
             final currentLocation = snapshot.data;
             return FlutterMap(
+              key: Key(trufiMapController.mapController.hashCode.toString()),
+              mapController: trufiMapController.mapController,
               options: MapOptions(
                 interactiveFlags: InteractiveFlag.drag |
                     InteractiveFlag.flingAnimation |
@@ -53,11 +57,10 @@ class LeafletMap extends StatelessWidget {
                 onTap: onTap,
                 onLongPress: onLongPress,
                 center: mapConfiguratiom.center.toLatLng(),
-                onMapCreated: (c) {
+                onMapReady: () {
                   if (!trufiMapController.readyCompleter.isCompleted) {
                     trufiMapController.readyCompleter.complete();
                   }
-                  trufiMapController.mapController = c;
                 },
                 onPositionChanged: (
                   MapPosition position,
@@ -70,11 +73,11 @@ class LeafletMap extends StatelessWidget {
                   }
                 },
               ),
-              layers: [
+              children: [
                 ...currentMapType.currentMapTileProvider
                     .buildTileLayerOptions(),
                 ...layerOptionsBuilder(context),
-                MarkerLayerOptions(markers: [
+                MarkerLayer(markers: [
                   buildYourLocationMarker(
                     currentLocation,
                     mapConfiguratiom.markersConfiguration.yourLocationMarker,
@@ -85,7 +88,7 @@ class LeafletMap extends StatelessWidget {
           },
         ),
         Positioned(
-          bottom: 16.0,
+          bottom: bottomPaddingButtons ?? 16.0,
           right: 16.0,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:hive/hive.dart' show Hive;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' show join;
 
 import 'package:graphql/client.dart' show HiveStore;
@@ -13,6 +14,7 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/pages/home/repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/local_repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/transport_list/repository/hive_local_repository.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 
 /// Initializes Hive with the path from [getApplicationDocumentsDirectory].
 ///
@@ -31,16 +33,15 @@ Future<void> initHiveForFlutter({
     if (subDir != null) {
       path = join(path, subDir);
     }
-    Hive.init(path);
+    HiveStore.init(onPath: path);
   }
-
+  await HiveStore.open(boxName: HiveStore.defaultBoxName);
   for (var box in boxes) {
     await Hive.openBox(box);
   }
 }
 
 const listPathsHive = [
-  HiveStore.defaultBoxName,
   AppReviewProviderHiveLocalRepository.path,
   TrufiLocalizationHiveLocalRepository.path,
   TrufiBaseThemeHiveLocalRepository.path,
@@ -48,4 +49,5 @@ const listPathsHive = [
   SearchLocationsHiveLocalRepository.path,
   RouteTransportsHiveLocalRepository.path,
   MapTileLocalStorage.customLayersStorage,
+  TrufiAppId.path,
 ];

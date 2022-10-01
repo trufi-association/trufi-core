@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 
+import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/services/models.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list_detail/transport_list_detail.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
@@ -30,7 +30,7 @@ class _TransportListState extends State<TransportList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => loadRoute(),
     );
   }
@@ -38,7 +38,7 @@ class _TransportListState extends State<TransportList> {
   @override
   void didUpdateWidget(covariant TransportList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => loadRoute(),
     );
   }
@@ -48,9 +48,10 @@ class _TransportListState extends State<TransportList> {
     if (transportListId != null) {
       showTrufiDialog(
         context: context,
+        useSafeArea: false,
         builder: (BuildContext context) => TransportListDetail(
           id: Uri.decodeQueryComponent(transportListId),
-          mapTransportProvider: widget.mapTransportProvider,
+          mapTransportProvider: widget.mapTransportProvider.rebuild(),
         ),
       );
     }
@@ -120,10 +121,9 @@ class _TransportListState extends State<TransportList> {
           body: Stack(
             children: [
               Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 interactive: true,
                 thickness: 8,
-                showTrackOnHover: true,
                 child: ListView.builder(
                   itemCount: listTransports.length,
                   padding:

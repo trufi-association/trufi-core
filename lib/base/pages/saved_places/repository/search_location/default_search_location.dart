@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:collection/collection.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/location_search_storage.dart';
+import 'package:trufi_core/base/utils/packge_info_platform.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import '../search_location_repository.dart';
 
 class DefaultSearchLocation implements SearchLocationRepository {
@@ -49,10 +52,15 @@ class DefaultSearchLocation implements SearchLocationRepository {
 
   @override
   Future<LocationDetail> reverseGeodecoding(TrufiLatLng location) async {
+    final packageInfoVersion = await PackageInfoPlatform.version();
+    final uniqueId = TrufiAppId.getUniqueId;
     final response = await http.get(
       Uri.parse(
         "$photonUrl/reverse?lon=${location.longitude}&lat=${location.latitude}",
       ),
+      headers: {
+        "User-Agent": "Trufi/$packageInfoVersion/$uniqueId",
+      },
     );
     final body = jsonDecode(utf8.decode(response.bodyBytes));
     if (body["type"] == "FeatureCollection") {

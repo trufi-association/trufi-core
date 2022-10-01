@@ -21,6 +21,12 @@ Widget trufiIcon({Color? color}) {
 
 // Social media svg icons
 
+Widget whatsappIcon({Color? color}) {
+  return SvgPicture.string(whatsapp(
+    color: decodeFillColor(color),
+  ));
+}
+
 Widget facebookIcon({Color? color}) {
   return SvgPicture.string(facebook(
     color: decodeFillColor(color),

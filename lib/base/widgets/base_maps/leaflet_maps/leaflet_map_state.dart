@@ -2,10 +2,10 @@ part of 'leaflet_map_controller.dart';
 
 @immutable
 class LeafletMapState extends Equatable {
-  final MarkerLayerOptions? unselectedMarkersLayer;
-  final PolylineLayerOptions? unselectedPolylinesLayer;
-  final MarkerLayerOptions? selectedMarkersLayer;
-  final PolylineLayerOptions? selectedPolylinesLayer;
+  final MarkerLayer? unselectedMarkersLayer;
+  final PolylineLayer? unselectedPolylinesLayer;
+  final MarkerLayer? selectedMarkersLayer;
+  final PolylineLayer? selectedPolylinesLayer;
 
   const LeafletMapState({
     this.unselectedMarkersLayer,
@@ -15,12 +15,12 @@ class LeafletMapState extends Equatable {
   });
 
   LeafletMapState copyWith({
-    MarkerLayerOptions? fromMarkerLayer,
-    MarkerLayerOptions? toMarkerLayer,
-    MarkerLayerOptions? unselectedMarkersLayer,
-    PolylineLayerOptions? unselectedPolylinesLayer,
-    MarkerLayerOptions? selectedMarkersLayer,
-    PolylineLayerOptions? selectedPolylinesLayer,
+    MarkerLayer? fromMarkerLayer,
+    MarkerLayer? toMarkerLayer,
+    MarkerLayer? unselectedMarkersLayer,
+    PolylineLayer? unselectedPolylinesLayer,
+    MarkerLayer? selectedMarkersLayer,
+    PolylineLayer? selectedPolylinesLayer,
   }) {
     return LeafletMapState(
       unselectedMarkersLayer:

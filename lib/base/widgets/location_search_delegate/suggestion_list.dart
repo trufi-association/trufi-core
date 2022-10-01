@@ -297,11 +297,16 @@ class _BuildObjectList extends StatelessWidget {
   }
 }
 
-class _BuildYourLocation extends StatelessWidget {
+class _BuildYourLocation extends StatefulWidget {
   final ValueChanged<TrufiLocation> onMapTapped;
 
   const _BuildYourLocation(this.onMapTapped);
 
+  @override
+  State<_BuildYourLocation> createState() => _BuildYourLocationState();
+}
+
+class _BuildYourLocationState extends State<_BuildYourLocation> {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
@@ -324,9 +329,9 @@ class _BuildYourLocation extends StatelessWidget {
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
       );
-      onMapTapped(value);
+      widget.onMapTapped(value);
     } else {
-      await locationProvider.startLocation(context);
+      await locationProvider.startLocation(context, mounted);
     }
   }
 }

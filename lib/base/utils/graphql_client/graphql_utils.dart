@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import "package:gql/ast.dart";
 
 DocumentNode addFragments(DocumentNode doc, List<DocumentNode> fragments) {

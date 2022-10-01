@@ -12,7 +12,7 @@ class AppLifecycleReactor extends StatefulWidget {
   final Widget child;
 
   @override
-  _AppLifecycleReactorState createState() => _AppLifecycleReactorState();
+  State<AppLifecycleReactor> createState() => _AppLifecycleReactorState();
 }
 
 class _AppLifecycleReactorState extends State<AppLifecycleReactor>
@@ -20,16 +20,16 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => GPSLocationProvider().start(),
     );
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     GPSLocationProvider().close();
     UniLinkProvider().dispose();
     super.dispose();

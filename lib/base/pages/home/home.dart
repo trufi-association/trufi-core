@@ -6,14 +6,13 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
-import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/map_route_provider.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
-import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
 
 class HomePage extends StatefulWidget {
@@ -41,13 +40,13 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       final mapRouteCubit = context.read<MapRouteCubit>();
       final mapRouteState = mapRouteCubit.state;
       repaintMap(mapRouteCubit, mapRouteState);
     });
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => processUniLink(),
     );
   }
@@ -55,14 +54,14 @@ class _HomePageState extends State<HomePage>
   @override
   void didUpdateWidget(covariant HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => processUniLink(),
     );
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -122,10 +121,10 @@ class _HomePageState extends State<HomePage>
               children: [
                 BlocListener<MapRouteCubit, MapRouteState>(
                   listener: (buildContext, state) {
-                    repaintMap(mapRouteCubit, state);
-                    // TODO fix trufiMapController.onReady
-                    // widget.mapRouteProvider.trufiMapController.onReady
-                    //     .then((_) {});
+                    widget.mapRouteProvider.trufiMapController.onReady
+                        .then((_) {
+                      repaintMap(mapRouteCubit, state);
+                    });
                   },
                   child: CustomScrollableContainer(
                     openedPosition: 200,
@@ -226,6 +225,7 @@ class _HomePageState extends State<HomePage>
       final mapRouteCubit = context.read<MapRouteCubit>();
       await mapRouteCubit.setToPlace(destinyLocation);
       await mapRouteCubit.setFromPlace(originLocation);
+      if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
     }
   }
@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      AppReviewProvider().reviewApp(context);
+      AppReviewProvider().reviewApp(context, mounted);
     }
   }
 }

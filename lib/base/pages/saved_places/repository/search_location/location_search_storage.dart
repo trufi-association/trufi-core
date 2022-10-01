@@ -183,8 +183,7 @@ LocationSearchData _parseSearchJson(String encoded) {
       });
       return LocationSearchData(places, streets.values.toList());
     } catch (e) {
-      // ignore: avoid_print
-      print('Failed to parse locations from JSON: $e');
+      debugPrint('Failed to parse locations from JSON: $e');
     }
   }
   return LocationSearchData([], []);

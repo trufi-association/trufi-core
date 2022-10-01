@@ -11,7 +11,7 @@ class FeedbackLocalizationEn extends FeedbackLocalization {
   String get menuFeedback => 'Send Feedback';
 
   @override
-  String get feedbackTitle => 'Please e-mail us';
+  String get feedbackTitle => 'Send us a comment';
 
   @override
   String get feedbackContent => 'Do you have suggestions for our app or found some errors in the data? We would love to hear from you! Please make sure to add your email address or telephone, so we can respond to you.';

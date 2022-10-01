@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
-import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
+import 'package:trufi_core/base/models/map_provider/i_trufi_map_controller.dart';
 
 class YourLocationButton extends StatefulWidget {
   final ITrufiMapController trufiMapController;
@@ -14,7 +14,7 @@ class YourLocationButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _YourLocationButtonState createState() => _YourLocationButtonState();
+  State<YourLocationButton> createState() => _YourLocationButtonState();
 }
 
 class _YourLocationButtonState extends State<YourLocationButton>
@@ -34,7 +34,7 @@ class _YourLocationButtonState extends State<YourLocationButton>
             tickerProvider: this,
           );
         } else {
-          await locationProvider.startLocation(context);
+          await locationProvider.startLocation(context, mounted);
         }
       },
       heroTag: null,

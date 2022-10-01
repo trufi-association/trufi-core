@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/widgets/choose_location/maps/i_map_choose_location.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 

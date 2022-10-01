@@ -26,7 +26,6 @@ class TransitLeg extends StatelessWidget {
           duration: leg.durationLeg(localization),
           distance: leg.distanceString(localization),
         ),
-        // TODO use code with OTP 2
         if (leg.intermediatePlaces != null &&
             leg.intermediatePlaces!.isNotEmpty)
           SizedBox(

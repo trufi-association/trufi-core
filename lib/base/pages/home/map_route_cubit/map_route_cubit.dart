@@ -22,8 +22,10 @@ class MapRouteCubit extends Cubit<MapRouteState> {
 
   CancelableOperation<Plan?>? currentFetchPlanOperation;
 
-  MapRouteCubit(String otpEndpoint)
-      : _requestManager = RestRequestPlanService(otpEndpoint: otpEndpoint),
+  MapRouteCubit(String otpEndpoint,
+      {RequestPlanService? customRequestPlanService})
+      : _requestManager = customRequestPlanService ??
+            RestRequestPlanService(otpEndpoint: otpEndpoint),
         super(const MapRouteState()) {
     _load();
   }

@@ -1,17 +1,17 @@
 import 'dart:async';
-import 'package:async/async.dart';
+import 'package:async/async.dart' as async;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/map_configuration/marker_configurations/marker_configuration.dart';
 import 'package:trufi_core/base/const/consts.dart';
+import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 typedef SelectLocationData = Future<LocationDetail?> Function(
@@ -32,7 +32,7 @@ class ChooseLocationPage extends StatefulWidget {
       builder: (BuildContext context) => ChooseLocationPage(
         position: position,
         isOrigin: isOrigin ?? false,
-        mapChooseLocationProvider: mapChooseLocationProvider,
+        mapChooseLocationProvider: mapChooseLocationProvider.rebuild(),
       ),
     );
   }
@@ -49,10 +49,10 @@ class ChooseLocationPage extends StatefulWidget {
   final bool isOrigin;
 
   @override
-  ChooseLocationPageState createState() => ChooseLocationPageState();
+  State<ChooseLocationPage> createState() => _ChooseLocationPageState();
 }
 
-class ChooseLocationPageState extends State<ChooseLocationPage>
+class _ChooseLocationPageState extends State<ChooseLocationPage>
     with TickerProviderStateMixin {
   TrufiLatLng? position;
   Widget? _chooseOnMapMarker;
@@ -78,7 +78,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         ),
       );
     }
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData(widget.position ?? mapConfiguratiom.center);
     });
   }
@@ -256,7 +256,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         : markerConfiguration.toMarker;
   }
 
-  CancelableOperation<LocationDetail>? cancelableOperation;
+  async.CancelableOperation<LocationDetail>? cancelableOperation;
 
   Future<void> loadData(TrufiLatLng location) async {
     if (!mounted) return;
@@ -269,7 +269,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
       fetchError = null;
       loading = true;
     });
-    cancelableOperation = CancelableOperation.fromFuture(_fetchData(location));
+    cancelableOperation = async.CancelableOperation.fromFuture(_fetchData(location));
     cancelableOperation?.valueOrCancellation().then((value) {
       if (mounted) {
         setState(() {

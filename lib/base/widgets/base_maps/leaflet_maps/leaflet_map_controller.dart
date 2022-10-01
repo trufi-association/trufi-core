@@ -12,7 +12,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
-import 'package:trufi_core/base/widgets/base_maps/i_trufi_map_controller.dart';
+import 'package:trufi_core/base/models/map_provider/i_trufi_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/trufi_map_animations.dart';
 import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
@@ -29,17 +29,14 @@ class PolylineWithMarkers {
 class LeafletMapController extends Cubit<LeafletMapState>
     implements ITrufiMapController {
   static const int animationDuration = 500;
-  MapController? mapController;
+  MapController mapController = MapController();
 
   LeafletMapController() : super(const LeafletMapState());
-
-  final TrufiMapAnimations _animations = TrufiMapAnimations();
   Map<Itinerary, List<PolylineWithMarkers>> itineraries = {};
   LatLngBounds get selectedBounds => _selectedBounds;
   LatLngBounds _selectedBounds = LatLngBounds();
-
   final Completer<Null> readyCompleter = Completer<Null>();
-  
+
   @override
   Future<Null> get onReady => readyCompleter.future;
 
@@ -103,41 +100,40 @@ class LeafletMapController extends Cubit<LeafletMapState>
       selectedItinerary: selectedItinerary,
       onTap: onTap,
     );
-    final _unselectedMarkers = <Marker>[];
-    final _unselectedPolylines = <Polyline>[];
-    final _selectedMarkers = <Marker>[];
-    final _selectedPolylines = <Polyline>[];
-    final _allPolylines = <Polyline>[];
+    final unselectedMarkers = <Marker>[];
+    final unselectedPolylines = <Polyline>[];
+    final selectedMarkers = <Marker>[];
+    final selectedPolylines = <Polyline>[];
+    final allPolylines = <Polyline>[];
     itineraries.forEach((itinerary, polylinesWithMarker) {
       final bool isSelected = itinerary == selectedItinerary;
       for (final polylineWithMarker in polylinesWithMarker) {
         for (final marker in polylineWithMarker.markers) {
           if (isSelected) {
-            _selectedMarkers.add(marker);
+            selectedMarkers.add(marker);
             _selectedBounds.extend(marker.point);
           } else {
-            _unselectedMarkers.add(marker);
+            unselectedMarkers.add(marker);
           }
         }
         if (isSelected) {
-          _selectedPolylines.add(polylineWithMarker.polyline);
+          selectedPolylines.add(polylineWithMarker.polyline);
           for (final point in polylineWithMarker.polyline.points) {
             _selectedBounds.extend(point);
           }
         } else {
-          _unselectedPolylines.add(polylineWithMarker.polyline);
+          unselectedPolylines.add(polylineWithMarker.polyline);
         }
-        _allPolylines.add(polylineWithMarker.polyline);
+        allPolylines.add(polylineWithMarker.polyline);
       }
     });
     emit(
       state.copyWith(
-        unselectedMarkersLayer: MarkerLayerOptions(markers: _unselectedMarkers),
+        unselectedMarkersLayer: MarkerLayer(markers: unselectedMarkers),
         unselectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _unselectedPolylines),
-        selectedMarkersLayer: MarkerLayerOptions(markers: _selectedMarkers),
-        selectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _selectedPolylines),
+            PolylineLayer(polylines: unselectedPolylines),
+        selectedMarkersLayer: MarkerLayer(markers: selectedMarkers),
+        selectedPolylinesLayer: PolylineLayer(polylines: selectedPolylines),
       ),
     );
     moveCurrentBounds(tickerProvider: tickerProvider);
@@ -165,7 +161,7 @@ class LeafletMapController extends Cubit<LeafletMapState>
 
           final color = isSelected
               ? leg.transitLeg
-                  ? leg.route?.primaryColor ?? leg.transportMode.backgroundColor
+                  ? leg.backgroundColor
                   : leg.transportMode.color
               : Colors.grey;
 
@@ -214,14 +210,14 @@ class LeafletMapController extends Cubit<LeafletMapState>
     TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
-      mapController?.move(center.toLatLng(), zoom);
-    } else if (mapController != null) {
-      _animations.move(
+      mapController.move(center.toLatLng(), zoom);
+    } else {
+      TrufiMapAnimations.move(
         center: center.toLatLng(),
         zoom: zoom,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
-        mapController: mapController!,
+        mapController: mapController,
       );
     }
   }
@@ -231,13 +227,13 @@ class LeafletMapController extends Cubit<LeafletMapState>
     TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
-      mapController?.fitBounds(bounds);
-    } else if (mapController != null) {
-      _animations.fitBounds(
+      mapController.fitBounds(bounds);
+    } else {
+      TrufiMapAnimations.fitBounds(
         bounds: bounds,
         tickerProvider: tickerProvider,
         milliseconds: animationDuration,
-        mapController: mapController!,
+        mapController: mapController,
       );
     }
   }

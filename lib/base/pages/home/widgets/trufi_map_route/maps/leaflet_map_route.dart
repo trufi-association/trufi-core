@@ -10,7 +10,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/load_location.dart';
-// import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
+import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
@@ -21,11 +21,13 @@ import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 class LeafletMapRoute extends StatefulWidget {
   final LeafletMapController trufiMapController;
   final AsyncExecutor asyncExecutor;
+  final Uri? shareBaseItineraryUri;
   final WidgetBuilder? overlapWidget;
   const LeafletMapRoute({
     Key? key,
     required this.trufiMapController,
     required this.asyncExecutor,
+    this.shareBaseItineraryUri,
     this.overlapWidget,
   }) : super(key: key);
 
@@ -58,7 +60,7 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                   state.selectedPolylinesLayer!,
                 if (state.selectedMarkersLayer != null)
                   state.selectedMarkersLayer!,
-                MarkerLayerOptions(
+                MarkerLayer(
                   markers: [
                     if (mapRouteState.fromPlace != null)
                       buildFromMarker(mapRouteState.fromPlace!.latLng,
@@ -91,8 +93,12 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                     key: _cropButtonKey,
                     onPressed: _handleOnCropPressed,
                   ),
-                  // const Padding(padding: EdgeInsets.all(4.0)),
-                  // if (mapRouteState.isPlanCorrect) const ShareItineraryButton(),
+                  const Padding(padding: EdgeInsets.all(4.0)),
+                  if (mapRouteState.isPlanCorrect &&
+                      widget.shareBaseItineraryUri != null)
+                    ShareItineraryButton(
+                      shareBaseItineraryUri: widget.shareBaseItineraryUri!,
+                    ),
                 ],
               ),
             );

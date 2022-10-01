@@ -109,53 +109,6 @@ class AboutPage extends StatelessWidget {
                         localizationA.aboutCollapseTitle,
                         style: theme.textTheme.bodyText2?.copyWith(height: 1.5),
                       ),
-                      children: [
-                        Text(
-                          localizationA.aboutCollapseContent + '\n',
-                          style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              child: Text(
-                                localizationA.trufiWebsite + '\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              onTap: () {
-                                launch(
-                                    'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website');
-                              },
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              child: Text(
-                                localizationA.volunteerTrufi + '\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              onTap: () {
-                                launch('https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
-                              },
-                            ),
-                          ],
-                        ),
-                        Text(
-                          localizationA.aboutCollapseContentFoot + '\n',
-                          style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
-                        )
-                      ],
                       backgroundColor:
                           theme.colorScheme.surface.withOpacity(0.8),
                       collapsedBackgroundColor:
@@ -166,6 +119,55 @@ class AboutPage extends StatelessWidget {
                           horizontal: 15, vertical: 0),
                       childrenPadding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 0),
+                      children: [
+                        Text(
+                          '${localizationA.aboutCollapseContent}\n',
+                          style:
+                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              child: Text(
+                                '${localizationA.trufiWebsite}\n',
+                                style: theme.textTheme.bodyText2?.copyWith(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              onTap: () {
+                                // ignore: deprecated_member_use
+                                launch(
+                                    'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website');
+                              },
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              child: Text(
+                                '${localizationA.volunteerTrufi}\n',
+                                style: theme.textTheme.bodyText2?.copyWith(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              onTap: () {
+                                // ignore: deprecated_member_use
+                                launch('https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
+                              },
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '${localizationA.aboutCollapseContentFoot}\n',
+                          style:
+                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -215,6 +217,7 @@ class AboutPage extends StatelessWidget {
                   ),
                   onTap: () {
                     final url = "mailto:$emailContact?subject=Contact";
+                    // ignore: deprecated_member_use
                     launch(url);
                   },
                 ),
@@ -236,6 +239,7 @@ class AboutPage extends StatelessWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
+                              // ignore: deprecated_member_use
                               launch(
                                 'https://github.com/trufi-association/trufi-core.git',
                               );
