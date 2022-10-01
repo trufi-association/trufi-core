@@ -121,10 +121,9 @@ class _TransportListState extends State<TransportList> {
           body: Stack(
             children: [
               Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 interactive: true,
                 thickness: 8,
-                showTrackOnHover: true,
                 child: ListView.builder(
                   itemCount: listTransports.length,
                   padding:

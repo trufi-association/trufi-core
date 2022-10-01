@@ -143,7 +143,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     minimumSize: const Size(50, 35),
-                    onPrimary: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.primary,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -171,7 +171,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                onPrimary: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.primary,
               ),
               child: Text(
                 localization.commonCancel.toUpperCase(),
@@ -186,7 +186,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                onPrimary: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.primary,
               ),
               child: Text(
                 localization.commonSave.toUpperCase(),
