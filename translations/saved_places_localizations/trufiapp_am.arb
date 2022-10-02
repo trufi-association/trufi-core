@@ -1,18 +1,18 @@
 {
-    "chooseNowLabel": "Choose now",
-    "chooseOnMap": "Choose on map",
+    "chooseNowLabel": "አሁን ይምረጡ",
+    "chooseOnMap": "ካርታው ላይ ይምረጡ",
     "@chooseOnMap": {
         "description": "Search option that allows to choose a point on the map"
     },
-    "commonCustomPlaces": "Custom places",
+    "commonCustomPlaces": "የተለዩ ቦታዎች",
     "@commonCustomPlaces": {
         "description": "General CustomPlaces label"
     },
-    "commonFavoritePlaces": "Favorite places",
+    "commonFavoritePlaces": "ተመራጭ ቦታዎቾ",
     "@commonFavoritePlaces": {
         "description": "General Favorite places label"
     },
-    "defaultLocationAdd": "Set {defaultLocation} address",
+    "defaultLocationAdd": "{defaultLocation} አድራሻዎን ያስቀምጡ",
     "@defaultLocationAdd": {
         "placeholders": {
             "defaultLocation": {
@@ -21,16 +21,16 @@
         },
         "description": "The name Add for {defaultLocation}"
     },
-    "defaultLocationHome": "Home",
+    "defaultLocationHome": "ቤት",
     "@defaultLocationHome": {
         "description": "The default location name Home"
     },
-    "defaultLocationWork": "Work",
+    "defaultLocationWork": "ስራ ቦታ",
     "@defaultLocationWork": {
         "description": "The default location name Work"
     },
-    "iconlabel": "Icon",
-    "instructionJunction": "{street1} and {street2}",
+    "iconlabel": "መለያ",
+    "instructionJunction": "{street1} እና {street2}",
     "@instructionJunction": {
         "type": "text",
         "placeholders": {
@@ -43,30 +43,30 @@
         },
         "description": "Junction name of two streets"
     },
-    "menuYourPlaces": "Your places",
+    "menuYourPlaces": "ቦታዎችዎ",
     "@menuYourPlaces": {
         "description": "A menu item that shows the saved places"
     },
-    "nameLabel": "Name",
-    "savedPlacesEditLabel": "Edit place",
-    "savedPlacesEnterNameTitle": "Enter name",
-    "savedPlacesEnterNameValidation": "The name cannot be empty",
-    "savedPlacesRemoveLabel": "Remove place",
-    "savedPlacesSelectIconTitle": "Select symbol",
-    "savedPlacesSetIconLabel": "Change symbol",
-    "savedPlacesSetNameLabel": "Edit name",
-    "savedPlacesSetPositionLabel": "Edit position",
-    "searchTitleFavorites": "Favorites",
+    "nameLabel": "ስም",
+    "savedPlacesEditLabel": "ቦታውን አርትዕ",
+    "savedPlacesEnterNameTitle": "ስም አስገባ",
+    "savedPlacesEnterNameValidation": "ስም ባዶ መሆን አይችልም",
+    "savedPlacesRemoveLabel": "ቦታውን አስወግድ",
+    "savedPlacesSelectIconTitle": "ምስሉን ምረጥ",
+    "savedPlacesSetIconLabel": "ምስሉን ለውጥ",
+    "savedPlacesSetNameLabel": "ስም አርትዕ",
+    "savedPlacesSetPositionLabel": "ቦታውን አርትዕ",
+    "searchTitleFavorites": "ተመራጮች",
     "@searchTitleFavorites": {
         "description": "Search section title for locations marked as favorites"
     },
-    "searchTitleRecent": "Recent",
+    "searchTitleRecent": "የቅርብ ጊዜ",
     "@searchTitleRecent": {
         "description": "Search section title for recent location"
     },
-    "searchTitleResults": "Search Results",
+    "searchTitleResults": "የፍለጋ ውጤቶች",
     "@searchTitleResults": {
         "description": "Search section title for results found for the provided search term"
     },
-    "selectedOnMap": "Selected on the map"
+    "selectedOnMap": "ካርታው ላይ የተመረጠ"
 }
