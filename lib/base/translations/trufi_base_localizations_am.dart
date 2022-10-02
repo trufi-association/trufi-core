@@ -32,37 +32,37 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get commonCancel => 'ሰርዝ';
 
   @override
-  String get commonConfirmLocation => 'Confirm location';
+  String get commonConfirmLocation => 'መገኛዎን ያረጋግጡ';
 
   @override
   String get commonDestination => 'መዳረሻ';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'አርትዕ';
 
   @override
   String get commonError => 'ስህተት';
 
   @override
-  String get commonFromStation => 'from station';
+  String get commonFromStation => 'ከጣቢያ';
 
   @override
-  String get commonFromStop => 'from stop';
+  String get commonFromStop => 'ከማቆሚያ';
 
   @override
-  String get commonItineraryNoTransitLegs => 'Leave when it suits you';
+  String get commonItineraryNoTransitLegs => 'ባሻዎ ጊዜ ያቁሙ';
 
   @override
-  String get commonLeavesAt => 'Leaves';
+  String get commonLeavesAt => 'ይሄዳል';
 
   @override
-  String get commonLoading => 'Loading...';
+  String get commonLoading => 'በመጫን ላይ...';
 
   @override
   String get commonNoInternet => 'ኢንተርኔት የለም';
 
   @override
-  String get commonNoResults => 'No results';
+  String get commonNoResults => 'ውጤት አልተገኘም';
 
   @override
   String get commonOK => 'እሺ';
@@ -71,73 +71,73 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get commonOrigin => 'መነሻ';
 
   @override
-  String get commonRemove => 'Remove';
+  String get commonRemove => 'አስወግድ';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'አስቀምጥ';
 
   @override
-  String get commonTomorrow => 'Tomorrow';
+  String get commonTomorrow => 'ነገ';
 
   @override
   String get commonUnknownError => 'ያልታወቀ ስህተት';
 
   @override
-  String get commonUnkownPlace => 'Unkown place';
+  String get commonUnkownPlace => 'ያልታወቀ ቦታ';
 
   @override
-  String get commonWait => 'Wait';
+  String get commonWait => 'ጠብቅ';
 
   @override
-  String get commonWalk => 'Walk';
+  String get commonWalk => 'ተራመድ';
 
   @override
-  String get commonYourLocation => 'Your location';
+  String get commonYourLocation => 'የርስዎ መገኛ';
 
   @override
-  String get errorAmbiguousDestination => 'The trip planner is unsure of the location you want to go to. Please select from the following options, or be more specific.';
+  String get errorAmbiguousDestination => 'የጉዞ ዕቅድ ማውጫው የሚሄዱበትን እርግጠኛ ሊሆን አልቻለም። እባክዎ ከተዘረዘሩት ውስጥ አንዱን ይምረጡ ወይም ቦታውን በደንብ ይግለጡ።';
 
   @override
-  String get errorAmbiguousOrigin => 'The trip planner is unsure of the location you want to start from. Please select from the following options, or be more specific.';
+  String get errorAmbiguousOrigin => 'የጉዞ ዕቅድ ማውጫው መነሻዎን እርግጠኛ ሊሆን አልቻለም። እባክዎ ከተዘረዘሩት ውስጥ አንዱን ይምረጡ ወይም ቦታውን በደንብ ይግለጡ።';
 
   @override
-  String get errorAmbiguousOriginDestination => 'Both origin and destination are ambiguous. Please select from the following options, or be more specific.';
+  String get errorAmbiguousOriginDestination => 'መነሻዎም መድረሻዎም አሻሚ ነው። እባክዎ ከተዘረዘሩት ውስጥ አንዱን ይምረጡ ወይም ቦታውን በደንብ ይግለጡ።';
 
   @override
-  String get errorNoBarrierFree => 'Both origin and destination are not wheelchair accessible';
+  String get errorNoBarrierFree => 'መነሻዎም መድረሻዎም በአካል ጉዳተኛ ተሽከርካሪ ለመሳፈር አመቺ አይደለም።';
 
   @override
-  String get errorNoConnectServer => 'No connect with server.';
+  String get errorNoConnectServer => 'ከሰርቨሩ (አገልግሎት) መስጫው ጋር መገናኘት አልተቻለም።';
 
   @override
-  String get errorNoTransitTimes => 'No transit times available. The date may be past or too far in the future or there may not be transit service for your trip at the time you chose.';
+  String get errorNoTransitTimes => 'የጉዞ ሰዓታት ማግኘት አልተቻለም። ቀኑ ያለፈ ወይም በጣም ወደፊት ነው ወይም ደግሞ በመረጡት ሰዓት በመስመሩ ላይ የህዝብ መጓጓዣ አይገኝም።';
 
   @override
   String get errorOutOfBoundary => 'ይህ ጉዞ የተሳሳተ ነው። ከተዘጋጄው የካርታ ክልል ውጭ ያለ ጉዞ ነው';
 
   @override
-  String get errorPathNotFound => 'Trip is not possible. Your start or end point might not be safely accessible (for instance, you might be starting on a residential street connected only to a highway).';
+  String get errorPathNotFound => 'ጉዞው የሚቻል አይደለም። መነሻዎ ወይም መድረሻዎ በደህና መገልገል የሚያስችል አይደለም ይሆናል (ለምሳሌ፦ ጉዞዎ ከመኖሪያ አካባቢ መንገድ ተነስቶ በቀጥታ ከዋና መንገድ ጋር ብቻ የተገናኘ ይሆናል)';
 
   @override
-  String get errorServerCanNotHandleRequest => 'The request has errors that the server is not willing or able to process.';
+  String get errorServerCanNotHandleRequest => 'ጥያቄዎ ይህ ሰርቨር (ማሽን) ሊፈታው ያልፈቀደው ወይም ያልቻለው ስህተት ይኖረው ይሆናል።';
 
   @override
-  String get errorServerTimeout => 'The trip planner is taking way too long to process your request. Please try again later.';
+  String get errorServerTimeout => 'የጉዞ ዕቅድ ማውጫው ጥያቄዎን ለመመለስ ረጅም ጊዜ እየወሰደ ነው። እባክዎ ጥቂት ቆይተው ይሞክሩ';
 
   @override
   String get errorServerUnavailable => 'ይቅርታ. የጉዞ ዕቅድ መተግበሪያው ለጊዜው አገልግሎት አይሰጥም. እባክዎ ጥቂት ቆይተው ይሞክሩ';
 
   @override
-  String get errorTrivialDistance => 'Origin is within a trivial distance of the destination.';
+  String get errorTrivialDistance => 'መነሻዎ ለመድረሻዎ በጣም ቅርብ እና ትራንስፖርት የማያስፈልገው ነው።';
 
   @override
-  String get errorUnknownDestination => 'Destination is unknown. Can you be a bit more descriptive?';
+  String get errorUnknownDestination => 'መዳረሻዎ አልታወቀም። እባክዎ በይበልጥ ግልፅ ሊያደርጉት ይችላሉ?';
 
   @override
-  String get errorUnknownOrigin => 'Origin is unknown. Can you be a bit more descriptive?';
+  String get errorUnknownOrigin => 'መነሻዎ አልታወቀም። እባክዎ በይበልጥ ግልፅ ሊያደርጉት ይችላሉ?';
 
   @override
-  String get errorUnknownOriginDestination => 'Both origin and destination are unknown. Can you be a bit more descriptive?';
+  String get errorUnknownOriginDestination => 'ሁለቱም መነሻዎም መዳረሻዎ አልታወቀም። እባክዎ በይበልጥ ግልፅ ሊያደርጉት ይችላሉ?';
 
   @override
   String get followOnFacebook => 'ፌስቡክ ላይ ይከተሉን';
@@ -169,7 +169,7 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   }
 
   @override
-  String get instructionVehicleBike => 'Bike';
+  String get instructionVehicleBike => 'ሳይክል';
 
   @override
   String get instructionVehicleBus => 'አውቶቡስ';
@@ -181,52 +181,52 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get instructionVehicleCarpool => 'Carpool';
 
   @override
-  String get instructionVehicleCommuterTrain => 'Commuter train';
+  String get instructionVehicleCommuterTrain => 'የመንገደኞች ባቡር';
 
   @override
-  String get instructionVehicleGondola => 'Gondola';
+  String get instructionVehicleGondola => 'ጎንዶላ';
 
   @override
   String get instructionVehicleLightRail => 'ቀላል ባቡር';
 
   @override
-  String get instructionVehicleMetro => 'Metro';
+  String get instructionVehicleMetro => 'ሜትሮ';
 
   @override
-  String get instructionVehicleMicro => 'Microbus';
+  String get instructionVehicleMicro => 'ማይክሮ ባስ';
 
   @override
   String get instructionVehicleMinibus => 'ሚኒባስ';
 
   @override
-  String get instructionVehicleTrufi => 'Trufi';
+  String get instructionVehicleTrufi => 'ትሩፊ';
 
   @override
   String get instructionVehicleWalk => 'ይሂዱ';
 
   @override
-  String get menuConnections => 'Route planner';
+  String get menuConnections => 'የጉዞ ዕቅድ ማውጫ';
 
   @override
-  String get menuSocialMedia => 'Social media';
+  String get menuSocialMedia => 'ማህበራዊ ሚዲያ';
 
   @override
-  String get menuTransportList => 'Show routes';
+  String get menuTransportList => 'መስመሮቹን አሳይ';
 
   @override
-  String get noRouteError => 'Sorry, we could not find a route. What do you want to do?';
+  String get noRouteError => 'ይቅርታ መስመሩ አልተገኘም። ምን ማድረግ ያሻሉ?';
 
   @override
-  String get noRouteErrorActionCancel => 'Try another destination';
+  String get noRouteErrorActionCancel => 'ሌላ መዳረሻ ይምረጡ';
 
   @override
-  String get noRouteErrorActionReportMissingRoute => 'Report a missing route';
+  String get noRouteErrorActionReportMissingRoute => 'ያልተገኙ መስመሮችን ያሳውቁ';
 
   @override
-  String get noRouteErrorActionShowCarRoute => 'Show route by car';
+  String get noRouteErrorActionShowCarRoute => 'መስመሩን በመኪና አሳይ';
 
   @override
-  String get readOurBlog => 'Read our blog';
+  String get readOurBlog => 'ፅሁፎቻችንን ያንብቡ';
 
   @override
   String get searchFailLoadingPlan => 'ዕቅድ መጫን አልተሳካም።';
@@ -238,10 +238,10 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get searchHintOrigin => 'መነሻ ነጥብ ይምረጡ';
 
   @override
-  String get searchPleaseSelectDestination => 'Select destination';
+  String get searchPleaseSelectDestination => 'መዳረሻዎን ይምረጡ';
 
   @override
-  String get searchPleaseSelectOrigin => 'Select origin';
+  String get searchPleaseSelectOrigin => 'መነሻዎን ይምረጡ';
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
