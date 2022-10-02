@@ -35,7 +35,7 @@
         },
         "description": "A short marketing sentence that describes the app"
     },
-    "trufiWebsite": "Trufi Association Website",
+    "trufiWebsite": "የአዲስማፕ ትራንዚት ድረ-ገፅ",
     "version": "Version {version}",
     "@version": {
         "placeholders": {
@@ -45,5 +45,5 @@
         },
         "description": "The application's version"
     },
-    "volunteerTrufi": "Volunteer For Trufi"
+    "volunteerTrufi": "አዲስማፕ ትራንዚትን በጎ ፈቃደኛ ሆነው ይቀላቀሉ።"
 }
