@@ -178,7 +178,7 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get instructionVehicleCar => 'መኪና';
 
   @override
-  String get instructionVehicleCarpool => 'Carpool';
+  String get instructionVehicleCarpool => 'የጋራ መኪናዎች';
 
   @override
   String get instructionVehicleCommuterTrain => 'የመንገደኞች ባቡር';
