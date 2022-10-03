@@ -9,7 +9,7 @@ import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/widgets/maps/buttons/your_location_button.dart';
 import 'package:trufi_core/base/widgets/maps/trufi_map_cubit/trufi_map_cubit.dart';
 
-typedef LayerOptionsBuilder = List<LayerOptions> Function(BuildContext context);
+typedef LayerOptionsBuilder = List<Widget> Function(BuildContext context);
 
 class TrufiMap extends StatelessWidget {
   final TrufiMapController trufiMapController;
@@ -47,6 +47,11 @@ class TrufiMap extends StatelessWidget {
                       InteractiveFlag.pinchMove |
                       InteractiveFlag.pinchZoom |
                       InteractiveFlag.doubleTapZoom,
+                  onMapReady: () {
+                    if (!trufiMapController.readyCompleter.isCompleted) {
+                      trufiMapController.readyCompleter.complete();
+                    }
+                  },
                   minZoom: mapConfiguratiom.onlineMinZoom,
                   maxZoom: mapConfiguratiom.onlineMaxZoom,
                   zoom: mapConfiguratiom.onlineZoom,
@@ -64,7 +69,7 @@ class TrufiMap extends StatelessWidget {
                     }
                   },
                 ),
-                layers: [
+                children: [
                   ...currentMapType.currentMapTileProvider
                       .buildTileLayerOptions(),
                   mapConfiguratiom.markersConfiguration

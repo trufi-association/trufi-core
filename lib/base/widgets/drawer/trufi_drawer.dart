@@ -25,7 +25,7 @@ class TrufiDrawer extends StatelessWidget {
   final String countryName;
   final String urlShareApp;
   final String currentRoute;
-  final List<List<MenuItem>> menuItems;
+  final List<List<TrufiMenuItem>> menuItems;
   final WidgetBuilder? backgroundImageBuilder;
 
   @override

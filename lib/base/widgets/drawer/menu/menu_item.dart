@@ -4,14 +4,14 @@ import 'package:trufi_core/base/widgets/drawer/menu/default_item_menu.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/default_pages_menu.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 
-abstract class MenuItem {
+abstract class TrufiMenuItem {
   final String? id;
   final WidgetBuilder selectedIcon;
   final WidgetBuilder notSelectedIcon;
   final WidgetBuilder name;
   final void Function(BuildContext, bool isSelected) onClick;
 
-  MenuItem({
+  TrufiMenuItem({
     this.id,
     required this.selectedIcon,
     required this.notSelectedIcon,
@@ -44,7 +44,7 @@ abstract class MenuItem {
   }
 }
 
-List<List<MenuItem>> defaultMenuItems({
+List<List<TrufiMenuItem>> defaultMenuItems({
   required UrlSocialMedia? defaultUrls,
 }) {
   return [

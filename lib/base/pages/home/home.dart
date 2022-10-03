@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage>
               right: isPortrait,
               child: BlocListener<MapRouteCubit, MapRouteState>(
                 listener: (buildContext, state) {
-                  trufiMapController.mapController.onReady.then((_) {
+                  trufiMapController.onReady.then((_) {
                     repaintMap(mapRouteCubit, state);
                   });
                 },

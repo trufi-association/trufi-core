@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -30,6 +32,10 @@ class TrufiMapController extends Cubit<TrufiMapState> {
     _selectedBounds = LatLngBounds();
     emit(const TrufiMapState());
   }
+final Completer<Null> readyCompleter = Completer<Null>();
+
+  @override
+  Future<Null> get onReady => readyCompleter.future;
 
   Future<void> moveToYourLocation({
     required BuildContext context,
@@ -110,12 +116,12 @@ class TrufiMapController extends Cubit<TrufiMapState> {
     });
     emit(
       state.copyWith(
-        unselectedMarkersLayer: MarkerLayerOptions(markers: _unselectedMarkers),
+        unselectedMarkersLayer: MarkerLayer(markers: _unselectedMarkers),
         unselectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _unselectedPolylines),
-        selectedMarkersLayer: MarkerLayerOptions(markers: _selectedMarkers),
+            PolylineLayer(polylines: _unselectedPolylines),
+        selectedMarkersLayer: MarkerLayer(markers: _selectedMarkers),
         selectedPolylinesLayer:
-            PolylineLayerOptions(polylines: _selectedPolylines),
+            PolylineLayer(polylines: _selectedPolylines),
       ),
     );
     moveCurrentBounds(tickerProvider: tickerProvider);

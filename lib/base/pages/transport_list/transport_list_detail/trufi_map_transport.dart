@@ -37,7 +37,7 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
     return TrufiMap(
       trufiMapController: widget.trufiMapController,
       layerOptionsBuilder: (context) => [
-        PolylineLayerOptions(
+        PolylineLayer(
           polylines: [
             Polyline(
               points: widget.transportData?.geometry ?? [],
@@ -47,7 +47,7 @@ class _TrufiMapTransportState extends State<TrufiMapTransport>
           ],
         ),
         if (widget.transportData?.geometry != null)
-          MarkerLayerOptions(markers: [
+          MarkerLayer(markers: [
             if (widget.transportData!.geometry!.length > 2)
               mapConfiguratiom.markersConfiguration
                   .buildFromMarker(widget.transportData!.geometry![0]),

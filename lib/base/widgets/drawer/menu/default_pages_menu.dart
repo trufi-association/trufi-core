@@ -11,7 +11,7 @@ import 'package:trufi_core/base/pages/saved_places/translations/saved_places_loc
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/menu_item.dart';
 
-class MenuPageItem extends MenuItem {
+class MenuPageItem extends TrufiMenuItem {
   MenuPageItem({
     required String id,
     required WidgetBuilder selectedIcon,
@@ -23,7 +23,7 @@ class MenuPageItem extends MenuItem {
           selectedIcon: selectedIcon,
           notSelectedIcon: notSelectedIcon,
           name: (context) {
-            return MenuItem.buildName(
+            return TrufiMenuItem.buildName(
               context,
               name(context),
               color: nameColor,
