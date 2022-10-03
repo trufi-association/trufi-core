@@ -33,7 +33,7 @@ class AboutLocalizationAm extends AboutLocalization {
   }
 
   @override
-  String get trufiWebsite => 'Trufi Association Website';
+  String get trufiWebsite => 'የአዲስማፕ ትራንዚት ድረ-ገፅ';
 
   @override
   String version(Object version) {
@@ -41,5 +41,5 @@ class AboutLocalizationAm extends AboutLocalization {
   }
 
   @override
-  String get volunteerTrufi => 'Volunteer For Trufi';
+  String get volunteerTrufi => 'አዲስማፕ ትራንዚትን በጎ ፈቃደኛ ሆነው ይቀላቀሉ።';
 }

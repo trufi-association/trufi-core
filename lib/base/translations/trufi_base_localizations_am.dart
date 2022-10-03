@@ -104,10 +104,10 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get errorAmbiguousOriginDestination => 'መነሻዎም መድረሻዎም አሻሚ ነው። እባክዎ ከተዘረዘሩት ውስጥ አንዱን ይምረጡ ወይም ቦታውን በደንብ ይግለጡ።';
 
   @override
-  String get errorNoBarrierFree => 'መነሻዎም መድረሻዎም በአካል ጉዳተኛ ተሽከርካሪ ለመሳፈር አመቺ አይደለም።';
+  String get errorNoBarrierFree => 'መነሻዎም መድረሻዎም በአካል ጉዳተኛ ተሽከርካሪ ለመገልገል አመቺ አይደለም።';
 
   @override
-  String get errorNoConnectServer => 'ከሰርቨሩ (አገልግሎት) መስጫው ጋር መገናኘት አልተቻለም።';
+  String get errorNoConnectServer => 'ከሰርቨሩ (አገልግሎት) መስጫው ጋር መገናኘት አልተቻለም';
 
   @override
   String get errorNoTransitTimes => 'የጉዞ ሰዓታት ማግኘት አልተቻለም። ቀኑ ያለፈ ወይም በጣም ወደፊት ነው ወይም ደግሞ በመረጡት ሰዓት በመስመሩ ላይ የህዝብ መጓጓዣ አይገኝም።';
@@ -178,7 +178,7 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get instructionVehicleCar => 'መኪና';
 
   @override
-  String get instructionVehicleCarpool => 'የጋራ መኪናዎች';
+  String get instructionVehicleCarpool => 'የጋራ መኪናዎች ';
 
   @override
   String get instructionVehicleCommuterTrain => 'የመንገደኞች ባቡር';
@@ -223,7 +223,7 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
   String get noRouteErrorActionReportMissingRoute => 'ያልተገኙ መስመሮችን ያሳውቁ';
 
   @override
-  String get noRouteErrorActionShowCarRoute => 'መስመሩን በመኪና አሳይ';
+  String get noRouteErrorActionShowCarRoute => 'የመኪና መስመሩን አሳይ';
 
   @override
   String get readOurBlog => 'ፅሁፎቻችንን ያንብቡ';
@@ -245,7 +245,7 @@ class TrufiBaseLocalizationAm extends TrufiBaseLocalization {
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return 'Download $appTitle, the public transport app for $cityName, at $url';
+    return '$appTitle የተባለውን የ$cityName ከተማ የብዙሀን መገናኛ ትራንስፖርት አፕሊኬሽን ከ$url ያውርዱ';
   }
 
   @override

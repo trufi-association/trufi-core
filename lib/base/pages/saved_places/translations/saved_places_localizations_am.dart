@@ -5,75 +5,75 @@ class SavedPlacesLocalizationAm extends SavedPlacesLocalization {
   SavedPlacesLocalizationAm([String locale = 'am']) : super(locale);
 
   @override
-  String get chooseNowLabel => 'Choose now';
+  String get chooseNowLabel => 'አሁን ይምረጡ';
 
   @override
-  String get chooseOnMap => 'Choose on map';
+  String get chooseOnMap => 'ካርታው ላይ ይምረጡ';
 
   @override
-  String get commonCustomPlaces => 'Custom places';
+  String get commonCustomPlaces => 'የተለዩ ቦታዎች';
 
   @override
-  String get commonFavoritePlaces => 'Favorite places';
+  String get commonFavoritePlaces => 'ተመራጭ ቦታዎቾ';
 
   @override
   String defaultLocationAdd(Object defaultLocation) {
-    return 'Set $defaultLocation address';
+    return '$defaultLocation አድራሻዎን ያስቀምጡ';
   }
 
   @override
-  String get defaultLocationHome => 'Home';
+  String get defaultLocationHome => 'ቤት';
 
   @override
-  String get defaultLocationWork => 'Work';
+  String get defaultLocationWork => 'ስራ ቦታ';
 
   @override
-  String get iconlabel => 'Icon';
+  String get iconlabel => 'መለያ';
 
   @override
   String instructionJunction(Object street1, Object street2) {
-    return '$street1 and $street2';
+    return '$street1 እና $street2';
   }
 
   @override
-  String get menuYourPlaces => 'Your places';
+  String get menuYourPlaces => 'ቦታዎችዎ';
 
   @override
-  String get nameLabel => 'Name';
+  String get nameLabel => 'ስም';
 
   @override
-  String get savedPlacesEditLabel => 'Edit place';
+  String get savedPlacesEditLabel => 'ቦታውን አርትዕ';
 
   @override
-  String get savedPlacesEnterNameTitle => 'Enter name';
+  String get savedPlacesEnterNameTitle => 'ስም አስገባ';
 
   @override
-  String get savedPlacesEnterNameValidation => 'The name cannot be empty';
+  String get savedPlacesEnterNameValidation => 'ስም ባዶ መሆን አይችልም';
 
   @override
-  String get savedPlacesRemoveLabel => 'Remove place';
+  String get savedPlacesRemoveLabel => 'ቦታውን አስወግድ';
 
   @override
-  String get savedPlacesSelectIconTitle => 'Select symbol';
+  String get savedPlacesSelectIconTitle => 'ምስሉን ምረጥ';
 
   @override
-  String get savedPlacesSetIconLabel => 'Change symbol';
+  String get savedPlacesSetIconLabel => 'ምስሉን ለውጥ';
 
   @override
-  String get savedPlacesSetNameLabel => 'Edit name';
+  String get savedPlacesSetNameLabel => 'ስም አርትዕ';
 
   @override
-  String get savedPlacesSetPositionLabel => 'Edit position';
+  String get savedPlacesSetPositionLabel => 'ቦታውን አርትዕ';
 
   @override
-  String get searchTitleFavorites => 'Favorites';
+  String get searchTitleFavorites => 'ተመራጮች';
 
   @override
-  String get searchTitleRecent => 'Recent';
+  String get searchTitleRecent => 'የቅርብ ጊዜ';
 
   @override
-  String get searchTitleResults => 'Search Results';
+  String get searchTitleResults => 'የፍለጋ ውጤቶች';
 
   @override
-  String get selectedOnMap => 'Selected on the map';
+  String get selectedOnMap => 'ካርታው ላይ የተመረጠ';
 }
