@@ -107,7 +107,7 @@
     "@commonUnkownPlace": {
         "description": "General Unkown place label"
     },
-    "commonWait": ጠብቅ",
+    "commonWait": "ጠብቅ",
     "@commonWait": {
         "description": "General wait label"
     },
