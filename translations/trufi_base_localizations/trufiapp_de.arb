@@ -300,6 +300,7 @@
     "@noRouteErrorActionShowCarRoute": {
         "description": "Button label to show the car route when no route could be found"
     },
+    "notShowAgain": "Nicht mehr anzeigen",
     "readOurBlog": "Lies in unserem Blog",
     "@readOurBlog": {
         "description": "Website menu item"

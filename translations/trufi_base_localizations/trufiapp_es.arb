@@ -297,6 +297,7 @@
     "@noRouteErrorActionShowCarRoute": {
         "description": "Button label to show the car route when no route could be found"
     },
+    "notShowAgain": "No mostrar de nuevo",
     "readOurBlog": "Lee nuestro blog",
     "@readOurBlog": {
         "description": "Website menu item"

@@ -1,6 +1,3 @@
-
-
-
 import 'trufi_base_localizations.dart';
 
 /// The translations for Spanish Castilian (`es`).
@@ -227,6 +224,9 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Mostrar ruta en auto';
+
+  @override
+  String get notShowAgain => 'No mostrar de nuevo';
 
   @override
   String get readOurBlog => 'Lee nuestro blog';
