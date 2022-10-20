@@ -6,6 +6,7 @@ import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart
 import 'package:trufi_core/base/blocs/providers/uni_link_provider.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 import 'package:trufi_core/base/widgets/screen/transition_page.dart';
 
 class BaseTrufiPage extends StatelessWidget {
@@ -34,11 +35,18 @@ class BaseTrufiPage extends StatelessWidget {
 }
 
 class NoAnimationPage<T> extends TransitionPage<T> {
-  NoAnimationPage({required Widget child})
-      : super(
+  NoAnimationPage({
+    required Widget child,
+    LifecycleReactorHandler? lifecycleReactorHandler,
+  }) : super(
           child: Builder(builder: (context) {
             UniLinkProvider().runService(context);
-            return BaseTrufiPage(child: child);
+            return BaseTrufiPage(
+              child: LifecycleReactorWrapper(
+                lifecycleReactorHandler: lifecycleReactorHandler,
+                child: (_) => child,
+              ),
+            );
           }),
           pushTransition: PageTransition.none,
           popTransition: PageTransition.none,
