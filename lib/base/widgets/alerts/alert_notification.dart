@@ -59,7 +59,6 @@ class _AlertNotificationState extends State<AlertNotification> {
           contentPadding: const EdgeInsets.symmetric(horizontal: 25),
           actionsPadding: const EdgeInsets.symmetric(horizontal: 15),
           iconPadding: EdgeInsets.zero,
-          insetPadding: EdgeInsets.zero,
           buttonPadding: EdgeInsets.zero,
           content: Column(
             mainAxisSize: MainAxisSize.min,
