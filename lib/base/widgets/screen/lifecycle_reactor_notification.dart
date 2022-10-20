@@ -10,8 +10,8 @@ import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 final notification = {
   "id": "dsadas3213122e",
   "title": "Eres un usuario de trufi?\n esta es la oportunidad de ganar",
-  // "description":
-  //     "Si vives en la ciudad de oruro, puedes participar de nuestra campania ofreciada por [Universidad de Alemania](https://www.studying-in-germany.org/list-of-universities-in-germany/) por medio del llenado de un formularioo.\n\nDicho esto, puede pasar a registrar sus datos, no llene dos veces el [formulario](https://www.google.com/forms/about/) para no quedar descalificado.",
+  "description":
+      "Si vives en la ciudad de oruro, puedes participar de nuestra campania ofreciada por [Universidad de Alemania](https://www.studying-in-germany.org/list-of-universities-in-germany/) por medio del llenado de un formularioo.\n\nDicho esto, puede pasar a registrar sus datos, no llene dos veces el [formulario](https://www.google.com/forms/about/) para no quedar descalificado.",
   "url": "https://www.trufi-association.org/"
 };
 
