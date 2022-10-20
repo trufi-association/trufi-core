@@ -29,6 +29,7 @@ dependencies:
   geolocator: ^9.0.2
   graphql: ^5.1.1
   hive: ^2.2.3
+  http: ^0.13.5
   intl: ^0.17.0
   latlong2: ^0.8.1
   package_info_plus: ^1.4.3+1
