@@ -100,7 +100,6 @@ abstract class DefaultValues {
     LifecycleReactorHandler? lifecycleReactorHandler,
   }) {
     final mapCollectionSelected = trufiMapProvider ?? LeafletMapCollection();
-    lifecycleReactorHandler = LifecycleReactorNotifications(url: '');
 
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(

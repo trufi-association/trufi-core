@@ -7,14 +7,6 @@ import 'package:trufi_core/base/widgets/alerts/alert_notification.dart';
 
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 
-final notification = {
-  "id": "dsadas3213122e",
-  "title": "Eres un usuario de trufi?\n esta es la oportunidad de ganar",
-  "description":
-      "Si vives en la ciudad de oruro, puedes participar de nuestra campania ofreciada por [Universidad de Alemania](https://www.studying-in-germany.org/list-of-universities-in-germany/) por medio del llenado de un formularioo.\n\nDicho esto, puede pasar a registrar sus datos, no llene dos veces el [formulario](https://www.google.com/forms/about/) para no quedar descalificado.",
-  "url": "https://www.trufi-association.org/"
-};
-
 class LifecycleReactorNotifications implements LifecycleReactorHandler {
   static const String path = "LifecycleReactorNotifications";
   static const String _lastId = 'lastId';
@@ -40,31 +32,31 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
   void onDispose() {}
 
   Future<void> handlerOnStartNotifications(BuildContext context) async {
-    // final response = await http.get(Uri.parse(url));
-
-    // if (response.statusCode == 200) {
-    // final data = jsonDecode(response.body);
-    // final notifications = data["notifications"] as List;
-    // if (notifications.isNotEmpty) {
-    // final notification = notifications[0];
-    final notificationId = notification["id"];
-    final isOtherNotification = getLastId() != notificationId;
-    if (getShowNotification() || isOtherNotification) {
-      if (isOtherNotification) {
-        await saveCurrentId(notificationId);
-        await saveShowNotification(true);
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final notification = jsonDecode(response.body);
+        final notificationId = notification["id"];
+        final isOtherNotification = getLastId() != notificationId;
+        if (getShowNotification() || isOtherNotification) {
+          if (isOtherNotification) {
+            await saveCurrentId(notificationId);
+            await saveShowNotification(true);
+          }
+          await AlertNotification.showNotification(
+            context: context,
+            title: notification["title"] ?? '',
+            description: notification["description"],
+            bttnText: notification["actionButton"]?["name"],
+            bttnUrl: notification["actionButton"]?["url"],
+            imageUrl: notification["imageUrl"],
+            makeDoNotShowAgain: () async {
+              await saveShowNotification(false);
+            },
+          );
+        }
       }
-      await AlertNotification.showNotification(
-          context: context,
-          title: notification["title"] ?? '',
-          description: notification["description"],
-          uri: notification["url"],
-          makeDoNotShowAgain: () async {
-            await saveShowNotification(false);
-          });
-    }
-    //   }
-    // }
+    } catch (e) {}
   }
 
   String? getLastId() {
