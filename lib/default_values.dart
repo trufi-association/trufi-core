@@ -20,7 +20,6 @@ import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/drawer/trufi_drawer.dart';
-import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_notification.dart';
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';

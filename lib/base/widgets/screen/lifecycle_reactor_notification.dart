@@ -65,7 +65,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
           );
         }
       }
-    } catch (e) {}
+    } catch (_) {}
   }
 
   String? getLastId() {
