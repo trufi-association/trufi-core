@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core/base/utils/packge_info_platform.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import 'package:trufi_core/base/widgets/alerts/alert_notification.dart';
 
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
@@ -32,8 +34,15 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
   void onDispose() {}
 
   Future<void> handlerOnStartNotifications(BuildContext context) async {
+    final packageInfoVersion = await PackageInfoPlatform.version();
+    final uniqueId = TrufiAppId.getUniqueId;
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "User-Agent": "Trufi/$packageInfoVersion/$uniqueId",
+        },
+      );
       if (response.statusCode == 200) {
         final notification = jsonDecode(response.body);
         final notificationId = notification["id"]!;
