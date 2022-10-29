@@ -36,7 +36,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final notification = jsonDecode(response.body);
-        final notificationId = notification["id"];
+        final notificationId = notification["id"]!;
         final isOtherNotification = getLastId() != notificationId;
         if (getShowNotification() || isOtherNotification) {
           if (isOtherNotification) {
@@ -45,7 +45,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
           }
           await AlertNotification.showNotification(
             context: context,
-            title: notification["title"] ?? '',
+            title: notification["title"]!,
             description: notification["description"],
             bttnText: notification["actionButton"]?["name"],
             bttnUrl: notification["actionButton"]?["url"],
