@@ -2,6 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
+class TransportModeConfiguration {
+  static final TransportModeConfiguration _singleton =
+      TransportModeConfiguration._internal();
+
+  factory TransportModeConfiguration() => _singleton;
+
+  TransportModeConfiguration._internal();
+
+  static configure({
+    Map<TransportMode, Color>? transportColors,
+    Map<TransportMode, Color>? transportBackgroundColors,
+  }) {
+    _colors = transportColors ?? {};
+    _backgroundColors = transportBackgroundColors ?? {};
+  }
+
+  static Map<TransportMode, Color> _colors = {};
+
+  static Map<TransportMode, Color> _backgroundColors = {};
+
+  static final _defaultColors = <TransportMode, Color?>{
+    TransportMode.airplane: null,
+    TransportMode.bicycle: const Color(0xff666666),
+    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.cableCar: null,
+    TransportMode.car: Colors.black,
+    TransportMode.carPool: const Color(0xff9fc726),
+    TransportMode.ferry: null,
+    TransportMode.flexible: null,
+    TransportMode.funicular: null,
+    TransportMode.gondola: null,
+    TransportMode.legSwitch: null,
+    TransportMode.rail: const Color(0xff018000),
+    TransportMode.subway: Colors.blueAccent[700],
+    TransportMode.tram: null,
+    TransportMode.transit: null,
+    TransportMode.walk: Colors.grey[700],
+    // route icons for specific types of transportation
+    TransportMode.trufi: const Color(0xffd81b60),
+    TransportMode.micro: const Color(0xffd81b60),
+    TransportMode.miniBus: const Color(0xffd81b60),
+    TransportMode.lightRail: const Color(0xffd81b60),
+    ..._colors,
+  };
+
+  static final _defaultBackgroundColors = <TransportMode, Color?>{
+    TransportMode.airplane: null,
+    TransportMode.bicycle: Colors.grey[200],
+    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.cableCar: null,
+    TransportMode.car: Colors.black,
+    TransportMode.carPool: const Color(0xff9fc726),
+    TransportMode.ferry: const Color(0xff1B3661),
+    TransportMode.flexible: null,
+    TransportMode.funicular: null,
+    TransportMode.gondola: null,
+    TransportMode.legSwitch: null,
+    TransportMode.rail: const Color(0xff018000),
+    TransportMode.subway: Colors.blueAccent[700],
+    TransportMode.tram: null,
+    TransportMode.transit: null,
+    TransportMode.walk: Colors.grey[200],
+    // route icons for specific types of transportation
+    TransportMode.trufi: const Color(0xffd81b60),
+    TransportMode.micro: const Color(0xffd81b60),
+    TransportMode.miniBus: const Color(0xffd81b60),
+    TransportMode.lightRail: const Color(0xffd81b60),
+    ..._backgroundColors,
+  };
+}
+
 enum TransportMode {
   error,
   airplane,
@@ -163,54 +234,6 @@ extension TransportModeExtension on TransportMode {
     }
   }
 
-  static final _colors = <TransportMode, Color?>{
-    TransportMode.airplane: null,
-    TransportMode.bicycle: const Color(0xff666666),
-    TransportMode.bus: const Color(0xffff260c),
-    TransportMode.cableCar: null,
-    TransportMode.car: Colors.black,
-    TransportMode.carPool: const Color(0xff9fc726),
-    TransportMode.ferry: null,
-    TransportMode.flexible: null,
-    TransportMode.funicular: null,
-    TransportMode.gondola: null,
-    TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff018000),
-    TransportMode.subway: Colors.blueAccent[700],
-    TransportMode.tram: null,
-    TransportMode.transit: null,
-    TransportMode.walk: Colors.grey[700],
-    // route icons for specific types of transportation
-    TransportMode.trufi: const Color(0xffd81b60),
-    TransportMode.micro: const Color(0xffd81b60),
-    TransportMode.miniBus: const Color(0xffd81b60),
-    TransportMode.lightRail: const Color(0xffd81b60),
-  };
-
-  static final _backgroundColors = <TransportMode, Color?>{
-    TransportMode.airplane: null,
-    TransportMode.bicycle: Colors.grey[200],
-    TransportMode.bus: const Color(0xffff260c),
-    TransportMode.cableCar: null,
-    TransportMode.car: Colors.black,
-    TransportMode.carPool: const Color(0xff9fc726),
-    TransportMode.ferry: const Color(0xff1B3661),
-    TransportMode.flexible: null,
-    TransportMode.funicular: null,
-    TransportMode.gondola: null,
-    TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff018000),
-    TransportMode.subway: Colors.blueAccent[700],
-    TransportMode.tram: null,
-    TransportMode.transit: null,
-    TransportMode.walk: Colors.grey[200],
-    // route icons for specific types of transportation
-    TransportMode.trufi: const Color(0xffd81b60),
-    TransportMode.micro: const Color(0xffd81b60),
-    TransportMode.miniBus: const Color(0xffd81b60),
-    TransportMode.lightRail: const Color(0xffd81b60),
-  };
-
   static const qualifiers = <TransportMode, String>{
     TransportMode.bicycle: 'RENT',
   };
@@ -248,10 +271,13 @@ extension TransportModeExtension on TransportMode {
   String getTranslate(TrufiBaseLocalization localization) =>
       _translates(this, localization) ?? 'No translate';
 
-  Color get color => _colors[this] ?? const Color(0xff1B3661);
+  Color get color =>
+      TransportModeConfiguration._defaultColors[this] ??
+      const Color(0xff1B3661);
 
   Color get backgroundColor =>
-      _backgroundColors[this] ?? const Color(0xff1B3661);
+      TransportModeConfiguration._defaultBackgroundColors[this] ??
+      const Color(0xff1B3661);
 
   Widget getImage({Color? color, double size = 24}) {
     return Container(
