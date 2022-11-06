@@ -175,7 +175,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
               ),
               child: Text(
                 localization.commonCancel.toUpperCase(),
-                style: TextStyle(color: theme.colorScheme.secondary),
+                style: TextStyle(color: theme.textTheme.displayLarge?.color),
               ),
             ),
             const SizedBox(width: 10),

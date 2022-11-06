@@ -41,7 +41,7 @@ class GPSLocationProvider {
           _locationStreamSubscription ??= Geolocator.getPositionStream(
               locationSettings: const LocationSettings(
             accuracy: LocationAccuracy.high,
-            distanceFilter: 10,
+            distanceFilter: 5,
           )).listen((position) {
             _streamLocation
                 .add(TrufiLatLng(position.latitude, position.longitude));
@@ -69,7 +69,7 @@ class GPSLocationProvider {
     _locationStreamSubscription ??= Geolocator.getPositionStream(
         locationSettings: const LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
+      distanceFilter: 5,
     )).listen((position) {
       _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
     });
@@ -85,7 +85,7 @@ class GPSLocationProvider {
     _locationStreamSubscription ??= Geolocator.getPositionStream(
         locationSettings: const LocationSettings(
       accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
+      distanceFilter: 5,
     )).listen((position) {
       _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
     });

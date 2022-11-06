@@ -1,6 +1,3 @@
-
-
-
 import 'trufi_base_localizations.dart';
 
 /// The translations for German (`de`).
@@ -227,6 +224,9 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Auto Route anzeigen';
+
+  @override
+  String get notShowAgain => 'Nicht mehr anzeigen';
 
   @override
   String get readOurBlog => 'Lies in unserem Blog';

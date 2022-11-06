@@ -54,3 +54,28 @@ class OKButton extends StatelessWidget {
     );
   }
 }
+
+class CancelButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const CancelButton({
+    Key? key,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = TrufiBaseLocalization.of(context);
+    final theme = Theme.of(context);
+    return TextButton(
+      onPressed: onPressed ?? () => Navigator.pop(context),
+      child: Text(
+        localization.commonCancel,
+        style: TextStyle(
+          color: theme.textTheme.displayMedium?.color,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+}

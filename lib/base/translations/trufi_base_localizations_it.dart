@@ -1,6 +1,3 @@
-
-
-
 import 'trufi_base_localizations.dart';
 
 /// The translations for Italian (`it`).
@@ -227,6 +224,9 @@ class TrufiBaseLocalizationIt extends TrufiBaseLocalization {
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Mostra strada in auto';
+
+  @override
+  String get notShowAgain => 'Non mostrare più';
 
   @override
   String get readOurBlog => 'Read our blog';

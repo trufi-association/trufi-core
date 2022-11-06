@@ -243,7 +243,7 @@ class AboutPage extends StatelessWidget {
                               launch(
                                 'https://github.com/trufi-association/trufi-core.git',
                               );
-                            }),
+                            },),
                     ],
                   ),
                 ),

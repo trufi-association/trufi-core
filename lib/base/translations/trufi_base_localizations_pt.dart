@@ -1,6 +1,3 @@
-
-
-
 import 'trufi_base_localizations.dart';
 
 /// The translations for Portuguese (`pt`).
@@ -227,6 +224,9 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Mostrar percurso de carro';
+
+  @override
+  String get notShowAgain => 'Não mostre novamente';
 
   @override
   String get readOurBlog => 'Leia nosso blog';

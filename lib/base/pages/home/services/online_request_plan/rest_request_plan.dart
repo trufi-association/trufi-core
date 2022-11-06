@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';

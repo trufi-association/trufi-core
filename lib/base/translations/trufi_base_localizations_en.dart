@@ -1,6 +1,3 @@
-
-
-
 import 'trufi_base_localizations.dart';
 
 /// The translations for English (`en`).
@@ -227,6 +224,9 @@ class TrufiBaseLocalizationEn extends TrufiBaseLocalization {
 
   @override
   String get noRouteErrorActionShowCarRoute => 'Show route by car';
+
+  @override
+  String get notShowAgain => 'Do not show again';
 
   @override
   String get readOurBlog => 'Read our blog';
