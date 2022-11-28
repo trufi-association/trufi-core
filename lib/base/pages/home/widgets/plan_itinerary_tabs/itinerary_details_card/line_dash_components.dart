@@ -34,13 +34,9 @@ class TransportDash extends StatelessWidget {
         SeparatorPlace(
           color: leg.primaryColor,
           leading: leg.transportMode.getImage(color: theme.iconTheme.color),
-          child: GestureDetector(
-            onTap: () {
-              moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
-            },
-            child: TransitLeg(
-              leg: leg,
-            ),
+          child: TransitLeg(
+            leg: leg,
+            moveTo: moveTo,
           ),
         ),
         if (showAfterLine)
