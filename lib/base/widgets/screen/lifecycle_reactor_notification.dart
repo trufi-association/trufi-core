@@ -44,7 +44,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
         },
       );
       if (response.statusCode == 200) {
-        final notification = jsonDecode(response.body);
+        final notification = jsonDecode(utf8.decode(response.bodyBytes));
         final notificationId = notification["id"]!;
         final isOtherNotification = getLastId() != notificationId;
         if (getShowNotification() || isOtherNotification) {

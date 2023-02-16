@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class TransitLeg extends StatelessWidget {
   final Leg leg;
+  final Function(TrufiLatLng) moveTo;
 
   const TransitLeg({
     Key? key,
     required this.leg,
+    required this.moveTo,
   }) : super(key: key);
 
   @override
@@ -18,63 +22,70 @@ class TransitLeg extends StatelessWidget {
     final localization = TrufiBaseLocalization.of(context);
     return Column(
       children: [
-        RouteNumber(
-          transportMode: leg.transportMode,
-          backgroundColor: leg.backgroundColor,
-          text: leg.headSign,
-          tripHeadSing: leg.headSign,
-          duration: leg.durationLeg(localization),
-          distance: leg.distanceString(localization),
+        GestureDetector(
+          onTap: () {
+            moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+          },
+          child: RouteNumber(
+            transportMode: leg.transportMode,
+            backgroundColor: leg.backgroundColor,
+            text: leg.headSign,
+            tripHeadSing: leg.headSign,
+            duration: leg.durationLeg(localization),
+            distance: leg.distanceString(localization),
+          ),
         ),
         if (leg.intermediatePlaces != null &&
             leg.intermediatePlaces!.isNotEmpty)
-          SizedBox(
-            width: 250,
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
             child: ExpansionTile(
               title: Text(
                 '${leg.intermediatePlaces!.length} ${localization.localeName == 'en' ? (leg.intermediatePlaces!.length > 1 ? 'stops' : 'stop') : (leg.intermediatePlaces!.length > 1 ? 'Zwischenstopps' : 'Zwischenstopp')}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
               ),
-              tilePadding: const EdgeInsets.symmetric(horizontal: 7),
-              textColor: theme.colorScheme.primary,
-              collapsedTextColor: theme.colorScheme.primary,
-              iconColor: theme.colorScheme.primary,
-              collapsedIconColor: theme.colorScheme.primary,
+              tilePadding:
+                  const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
+              textColor: theme.primaryColor,
+              collapsedTextColor: theme.primaryColor,
+              iconColor: theme.primaryColor,
+              collapsedIconColor: theme.primaryColor,
+              childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
               children: [
                 ...leg.intermediatePlaces!
-                    .map((e) => Container(
-                          width: 235,
-                          height: 30,
-                          padding: const EdgeInsets.symmetric(vertical: 3),
+                    .map((e) => Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
                           child: Material(
                             child: InkWell(
                               onTap: () {
-                                // if (planPageController != null &&
-                                //     e.stopEntity?.lat != null &&
-                                //     e.stopEntity?.lon != null) {
-                                //   planPageController.inSelectePosition.add(
-                                //       LatLng(
-                                //           e.stopEntity.lat, e.stopEntity.lon));
-                                // }
+                                moveTo(TrufiLatLng(e.lat, e.lon));
                               },
                               child: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Text(
-                                  //   DateFormat('HH:mm').format(
-                                  //       e.arrivalTime ?? DateTime.now()),
-                                  // ),
-                                  const SizedBox(width: 5),
-                                  Flexible(
-                                    child: Text(
-                                      e.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      softWrap: false,
+                                  Expanded(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          DateFormat('HH:mm')
+                                              .format(DateTime.now()),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Flexible(
+                                          child: Text(e.name),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(width: 5),
-                                  Icon(Icons.keyboard_arrow_right,
-                                      color: theme.colorScheme.primary),
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: theme.colorScheme.primary,
+                                  ),
                                 ],
                               ),
                             ),

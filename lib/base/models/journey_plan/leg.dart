@@ -13,7 +13,7 @@ class Leg extends Equatable {
   static const _fromPlace = "from";
   static const _startTime = "startTime";
   static const _endTime = "endTime";
-  static const _intermediatePlaces = "intermediatePlaces";
+  static const _intermediatePlaces = "intermediateStops";
   static const _transitLeg = "transitLeg";
 
   final String points;

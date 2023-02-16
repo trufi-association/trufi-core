@@ -225,6 +225,11 @@ class DescriptionDecoder extends StatelessWidget {
                 ),
             ]);
           }).toList(),
+          if (matchesUriText.isEmpty)
+            TextSpan(
+              text: description,
+              style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+            ),
         ],
       ),
     );
