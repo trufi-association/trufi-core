@@ -150,7 +150,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                     children: [
                       Text(
                         localizationSP.savedPlacesSetPositionLabel,
-                        style: theme.textTheme.bodyText2,
+                        style: theme.textTheme.bodyMedium,
                       ),
                       Icon(
                         Icons.edit_location_alt,

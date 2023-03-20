@@ -18,7 +18,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),
@@ -30,7 +30,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
               },
           ),
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),

@@ -52,6 +52,8 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
             await saveCurrentId(notificationId);
             await saveShowNotification(true);
           }
+          // ignore: use_build_context_synchronously
+          if (!context.mounted) return;
           await AlertNotification.showNotification(
             context: context,
             title: notification["title"]!,

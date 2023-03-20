@@ -333,7 +333,7 @@ class ErrorAlert extends StatelessWidget {
               TrufiBaseLocalization.of(context).localeName == "en"
                   ? 'You can set the location as an origin or destination point'
                   : "Puede establecer la ubicación como un punto de origen o de destino",
-              style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+              style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
             ),
           ),
           ElevatedButton(

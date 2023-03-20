@@ -45,7 +45,7 @@ class _YourLocationButtonState extends State<YourLocationButton>
             if (currentLocation != null) {
               widget.setTracking(!widget.isTrackingPosition);
             } else {
-              await GPSLocationProvider().startLocation(context, mounted);
+              await GPSLocationProvider().startLocation(context);
             }
           },
           heroTag: null,

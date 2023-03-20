@@ -28,6 +28,8 @@ class UniLinkProvider {
 
   Future<void> runService(BuildContext context) async {
     await _initFirstUri(context: context);
+    // ignore: use_build_context_synchronously
+    if (!context.mounted) return;
     _registerListening(context: context);
   }
 
@@ -39,6 +41,8 @@ class UniLinkProvider {
       try {
         final initialURI = await getInitialUri();
         if (initialURI != null) {
+          // ignore: use_build_context_synchronously
+          if (!context.mounted) return;
           _parseUniLink(context: context, uri: initialURI);
         }
       } catch (e) {
@@ -85,8 +89,18 @@ class UniLinkProvider {
       String point = '';
       if (uri!.path.contains('/maps/place')) {
         // Parsing path: /maps/place/Rutilio+Garde,+Cochabamba/@-17.4370721,-66.1291954,18.9z/data=!4m5!3m4!1s0x93e3719ca85149af:0xe58b826a1f7df603!8m2!3d-17.436793!4d-66.1293789
-        final name = uri.path.substring(12).split('/')[0].split(',')[0].replaceAll('+', ' ');
-        final location = uri.path.substring(11).split('@')[1].split('/')[0].split(',').take(2).join(',');
+        final name = uri.path
+            .substring(12)
+            .split('/')[0]
+            .split(',')[0]
+            .replaceAll('+', ' ');
+        final location = uri.path
+            .substring(11)
+            .split('@')[1]
+            .split('/')[0]
+            .split(',')
+            .take(2)
+            .join(',');
         point = "$name,$location";
       }
       _cleanNavigatorStore(

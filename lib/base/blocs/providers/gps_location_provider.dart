@@ -75,10 +75,10 @@ class GPSLocationProvider {
     });
   }
 
-  Future<void> startLocation(BuildContext context, bool mounted) async {
+  Future<void> startLocation(BuildContext context) async {
     final LocationPermission status = await Geolocator.checkPermission();
     // check GPS Permision Platform(Web, Android and iOS)
-    if (!mounted) return;
+    // ignore: use_build_context_synchronously
     await _checkGPSPermisionPlatform(context, status);
 
     // listen current location
@@ -112,6 +112,8 @@ class GPSLocationProvider {
         status == LocationPermission.whileInUse)) {
       final requestStatus = await Geolocator.requestPermission();
       if (requestStatus == LocationPermission.deniedForever) {
+        // ignore: use_build_context_synchronously
+        if (!context.mounted) return;
         await showTrufiDialog(
           context: context,
           barrierDismissible: false,

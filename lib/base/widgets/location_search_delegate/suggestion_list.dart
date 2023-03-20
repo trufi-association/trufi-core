@@ -331,7 +331,7 @@ class _BuildYourLocationState extends State<_BuildYourLocation> {
       );
       widget.onMapTapped(value);
     } else {
-      await locationProvider.startLocation(context, mounted);
+      await locationProvider.startLocation(context);
     }
   }
 }

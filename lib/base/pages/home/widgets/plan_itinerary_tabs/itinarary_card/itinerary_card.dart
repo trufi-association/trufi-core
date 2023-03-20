@@ -53,7 +53,7 @@ class ItineraryCard extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: itinerary.durationFormat(localization),
-                          style: theme.textTheme.bodyText2?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
