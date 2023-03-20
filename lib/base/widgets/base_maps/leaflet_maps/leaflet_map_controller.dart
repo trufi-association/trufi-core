@@ -130,8 +130,7 @@ class LeafletMapController extends Cubit<LeafletMapState>
     emit(
       state.copyWith(
         unselectedMarkersLayer: MarkerLayer(markers: unselectedMarkers),
-        unselectedPolylinesLayer:
-            PolylineLayer(polylines: unselectedPolylines),
+        unselectedPolylinesLayer: PolylineLayer(polylines: unselectedPolylines),
         selectedMarkersLayer: MarkerLayer(markers: selectedMarkers),
         selectedPolylinesLayer: PolylineLayer(polylines: selectedPolylines),
       ),
@@ -152,6 +151,11 @@ class LeafletMapController extends Cubit<LeafletMapState>
         final bool isSelected = itinerary == selectedItinerary;
 
         final List<Leg> compressedLegs = itinerary.compressLegs;
+
+          // TODO Implement a boolean to configure if the backend has a server or not
+          // Implement for otpServer without route color configuration
+        bool isPrimary = false;
+        
         for (int i = 0; i < compressedLegs.length; i++) {
           final Leg leg = compressedLegs[i];
           // Polyline
@@ -159,11 +163,18 @@ class LeafletMapController extends Cubit<LeafletMapState>
               ? leg.accumulatedPoints
               : decodePolyline(leg.points);
 
-          final color = isSelected
+          Color color = isSelected
               ? leg.transitLeg
                   ? leg.backgroundColor
                   : leg.transportMode.color
               : Colors.grey;
+
+          if (isSelected && leg.transitLeg && isPrimary) {
+            color = Colors.green;
+            isPrimary = !isPrimary;
+          } else if (isSelected && leg.transitLeg) {
+            isPrimary = !isPrimary;
+          }
 
           final Polyline polyline = Polyline(
             points: TrufiLatLng.toListLatLng(points),
@@ -193,6 +204,16 @@ class LeafletMapController extends Cubit<LeafletMapState>
                 onTap: () => onTap(itinerary),
               ),
             );
+          }
+
+          if (isSelected &&
+              leg.intermediatePlaces != null &&
+              leg.intermediatePlaces!.isNotEmpty) {
+            for (Place stop in leg.intermediatePlaces!) {
+              markers.add(
+                buildStopMarker(TrufiLatLng(stop.lat, stop.lon)),
+              );
+            }
           }
           polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
         }

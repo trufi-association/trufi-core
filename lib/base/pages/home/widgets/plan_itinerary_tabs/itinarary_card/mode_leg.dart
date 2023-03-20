@@ -84,12 +84,14 @@ class RouteLeg extends StatelessWidget {
   final double maxWidth;
   final Leg leg;
   final double legLength;
+  final Color? forcedColor;
 
   const RouteLeg({
     Key? key,
     required this.leg,
     required this.legLength,
     required this.maxWidth,
+    this.forcedColor,
   }) : super(key: key);
 
   @override
@@ -104,7 +106,7 @@ class RouteLeg extends StatelessWidget {
       height: 30,
       child: ClipRRect(
         child: IconTransport(
-          bacgroundColor: leg.primaryColor,
+          bacgroundColor: forcedColor??leg.primaryColor,
           color: Colors.white,
           icon: leg.transportMode.getImage(color: Colors.white),
           text: (maxWidth * perc - 24) >= ((leg.headSign.length) * 8.5)

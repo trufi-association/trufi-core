@@ -24,6 +24,35 @@ Marker buildTransferMarker(TrufiLatLng point) {
   );
 }
 
+Marker buildStopMarker(TrufiLatLng point) {
+  return Marker(
+    point: point.toLatLng(),
+    anchorPos: AnchorPos.align(AnchorAlign.center),
+    builder: (context) {
+      return Transform.scale(
+        scale: 0.30,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 3.5),
+            shape: BoxShape.circle,
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.circle,
+              color: Colors.grey[700],
+              size: 20,
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
 Marker buildTransportMarker(
   TrufiLatLng point,
   Color color,

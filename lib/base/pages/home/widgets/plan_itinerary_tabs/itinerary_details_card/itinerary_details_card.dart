@@ -30,6 +30,10 @@ class ItineraryDetailsCard extends StatelessWidget {
     final mapRouteState = mapRouteCubit.state;
     final compresedLegs = itinerary.compressLegs;
     final sizeLegs = compresedLegs.length;
+    // TODO Implement a boolean to configure if the backend has a server or not
+    // Implement for otpServer without route color configuration
+    bool isPrimary = false;
+
     return Scrollbar(
       child: SingleChildScrollView(
         controller: ScrollController(),
@@ -64,9 +68,9 @@ class ItineraryDetailsCard extends StatelessWidget {
                     if (index == 0)
                       DashLinePlace(
                         date: itinerary.startTimeHHmm.toString(),
-                        location:
-                            mapRouteState.fromPlace?.displayName(localization) ??
-                                '',
+                        location: mapRouteState.fromPlace
+                                ?.displayName(localization) ??
+                            '',
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -89,13 +93,17 @@ class ItineraryDetailsCard extends StatelessWidget {
 
                     // Route
                     if (itineraryLeg.transitLeg)
-                      TransportDash(
-                        leg: itineraryLeg,
-                        showBeforeLine: index != 0,
-                        showAfterLine: index != sizeLegs - 1 &&
-                            !compresedLegs[index + 1].transitLeg,
-                        moveTo: moveTo,
-                      )
+                      Builder(builder: (_) {
+                        isPrimary = !isPrimary;
+                        return TransportDash(
+                          leg: itineraryLeg,
+                          showBeforeLine: index != 0,
+                          showAfterLine: index != sizeLegs - 1 &&
+                              !compresedLegs[index + 1].transitLeg,
+                          moveTo: moveTo,
+                          forcedColor: isPrimary ? null : Colors.green,
+                        );
+                      })
                     else
                       WalkDash(leg: itineraryLeg),
 
