@@ -55,39 +55,36 @@ class _CustomButton2State extends State<CustomButton2> {
               selectedData = selectedValue;
             });
           },
-          child: Container(
-            // color: Colors.red,
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 5,
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 5,
+              ),
+              Icon(
+                selectedData != null ? Icons.check : Icons.error_outline,
+                size: 15,
+                color:
+                    selectedData != null ? theme.colorScheme.secondary : null,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                selectedData != null
+                    ? "Monitored security"
+                    : "Security onboard",
+                style: theme.textTheme.bodyText2?.copyWith(
+                  color: selectedData != null
+                      ? theme.colorScheme.secondary
+                      : null,
                 ),
-                Icon(
-                  selectedData != null ? Icons.check : Icons.error_outline,
-                  size: 15,
-                  color:
-                      selectedData != null ? theme.colorScheme.secondary : null,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  selectedData != null
-                      ? "Monitored security"
-                      : "Security onboard",
-                  style: theme.textTheme.bodyText2?.copyWith(
-                    color: selectedData != null
-                        ? theme.colorScheme.secondary
-                        : null,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_drop_down_rounded,
-                  color:
-                      selectedData != null ? theme.colorScheme.secondary : null,
-                ),
-              ],
-            ),
+              ),
+              Icon(
+                Icons.arrow_drop_down_rounded,
+                color:
+                    selectedData != null ? theme.colorScheme.secondary : null,
+              ),
+            ],
           ),
         ),
       ),
@@ -218,7 +215,7 @@ class _SingleSelectionOptionState extends State<SingleSelectionOption> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                           widget.leg.fromPlace.name,
                           style: const TextStyle(),
@@ -236,7 +233,7 @@ class _SingleSelectionOptionState extends State<SingleSelectionOption> {
               ),
               const SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                 child: Row(
                   children: [
                     Text(
@@ -307,7 +304,7 @@ class TileSigleSelection extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
             color: data.state == DataState.notUsed
-                ? Color(0xFF000000)
+                ? const Color(0xFF000000)
                 : data.state == DataState.enabled
                     ? theme.colorScheme.secondary
                     : Colors.red,

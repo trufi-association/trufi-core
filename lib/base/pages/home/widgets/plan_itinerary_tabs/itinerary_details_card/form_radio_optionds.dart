@@ -56,54 +56,51 @@ class _CustomButtonState extends State<CustomButton> {
               selectedData = selectedValue;
             });
           },
-          child: Container(
-            // color: Colors.red,
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  selectedData != null ? Icons.check : Icons.people_alt,
-                  size: 15,
-                  color: theme.colorScheme.secondary,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                RichText(
-                  text: TextSpan(
-                    style: theme.textTheme.bodyText2,
-                    // text: '${localizationA.aboutOpenSource} ',
-                    children: [
-                      if (selectedData != null)
-                        TextSpan(
-                          text: "Live ",
-                          style: theme.textTheme.bodyText2?.copyWith(
-                            color: theme.colorScheme.secondary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 5,
+              ),
+              Icon(
+                selectedData != null ? Icons.check : Icons.people_alt,
+                size: 15,
+                color: theme.colorScheme.secondary,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              RichText(
+                text: TextSpan(
+                  style: theme.textTheme.bodyText2,
+                  // text: '${localizationA.aboutOpenSource} ',
+                  children: [
+                    if (selectedData != null)
                       TextSpan(
-                        text: selectedData != null
-                            ? "${selectedData!.name}"
-                            : "Not too crowded",
+                        text: "Live ",
                         style: theme.textTheme.bodyText2?.copyWith(
-                          color: selectedData != null
-                              ? theme.colorScheme.secondary
-                              : null,
+                          color: theme.colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
+                    TextSpan(
+                      text: selectedData != null
+                          ? selectedData!.name
+                          : "Not too crowded",
+                      style: theme.textTheme.bodyText2?.copyWith(
+                        color: selectedData != null
+                            ? theme.colorScheme.secondary
+                            : null,
+                      ),
+                    ),
+                  ],
                 ),
-                Icon(
-                  Icons.arrow_drop_down_rounded,
-                  color:
-                      selectedData != null ? theme.colorScheme.secondary : null,
-                ),
-              ],
-            ),
+              ),
+              Icon(
+                Icons.arrow_drop_down_rounded,
+                color:
+                    selectedData != null ? theme.colorScheme.secondary : null,
+              ),
+            ],
           ),
         ),
       ),
@@ -209,7 +206,7 @@ class _SingleSelectionOptionState extends State<SingleSelectionOption> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                           widget.leg.fromPlace.name,
                           style: const TextStyle(),
@@ -227,7 +224,7 @@ class _SingleSelectionOptionState extends State<SingleSelectionOption> {
               ),
               const SizedBox(height: 10),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                 child: Row(
                   children: [
                     Text(
@@ -240,7 +237,7 @@ class _SingleSelectionOptionState extends State<SingleSelectionOption> {
               ),
               ...widget.options.map(
                 (e) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   child: TileSigleSelection(
                     data: e,
                     selectedData: selectedData,
@@ -297,12 +294,12 @@ class TileSigleSelection extends StatelessWidget {
       },
       child: Row(
         children: [
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Icon(
             data.icon,
             color: data == selectedData ? theme.colorScheme.secondary : null,
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

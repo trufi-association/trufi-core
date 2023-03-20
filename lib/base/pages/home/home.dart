@@ -207,7 +207,6 @@ class _HomePageState extends State<HomePage>
         if (Navigator.canPop(context)) {
           Navigator.pop(context);
         }
-        ;
       },
     );
   }

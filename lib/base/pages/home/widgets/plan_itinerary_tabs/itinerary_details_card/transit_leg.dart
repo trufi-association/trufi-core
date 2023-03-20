@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/form_multi_Selection.dart';
-import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/form_radio_optionds.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
