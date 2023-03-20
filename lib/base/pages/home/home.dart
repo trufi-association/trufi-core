@@ -12,8 +12,11 @@ import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
+import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
+import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = "/Home";
@@ -135,8 +138,10 @@ class _HomePageState extends State<HomePage>
                     panel: mapRouteCubit.state.plan != null
                         ? CustomItinerary(
                             moveTo: (center) {
-                              widget.mapRouteProvider.trufiMapController
-                                  .move(center: center, zoom: 15);
+                              widget.mapRouteProvider.trufiMapController.move(
+                                  center: center,
+                                  zoom: 16,
+                                  tickerProvider: this);
                             },
                           )
                         : null,
@@ -199,34 +204,54 @@ class _HomePageState extends State<HomePage>
       onExecute: () => mapRouteCubit.fetchPlan(numItinerary: numItinerary),
       onFinish: (_) {
         AppReviewProvider().incrementReviewWorthyActions();
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
       },
     );
   }
 
   Future<void> processUniLink() async {
     final queryParameters = RouteData.of(context).queryParameters;
-    TrufiLocation? originLocation;
-    TrufiLocation? destinyLocation;
-    int? numItinerary;
+    final mapRouteCubit = context.read<MapRouteCubit>();
     if (queryParameters['from'] != null && queryParameters['to'] != null) {
       final originData = queryParameters['from']!.split(",");
       final destinyData = queryParameters['to']!.split(",");
-      originLocation = TrufiLocation(
+      final originLocation = TrufiLocation(
         description: originData[0],
         latitude: double.tryParse(originData[1])!,
         longitude: double.tryParse(originData[2])!,
       );
-      destinyLocation = TrufiLocation(
+      final destinyLocation = TrufiLocation(
         description: destinyData[0],
         latitude: double.tryParse(destinyData[1])!,
         longitude: double.tryParse(destinyData[2])!,
       );
-      numItinerary = int.tryParse(queryParameters['itinerary'] ?? '0');
-      final mapRouteCubit = context.read<MapRouteCubit>();
+      final numItinerary = int.tryParse(queryParameters['itinerary'] ?? '0');
       await mapRouteCubit.setToPlace(destinyLocation);
       await mapRouteCubit.setFromPlace(originLocation);
       if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
+    } else if (queryParameters['googlePoint'] != null) {
+      final destinyData = queryParameters['googlePoint']!.split(",");
+      final location = TrufiLocation(
+        description: destinyData[0].trim(),
+        latitude: double.tryParse(destinyData[1])!,
+        longitude: double.tryParse(destinyData[2])!,
+      );
+      await ErrorAlert.showNotification(
+        context: context,
+        defineStartLocation: () async {
+          await mapRouteCubit.setFromPlace(location);
+          if (!mounted) return;
+          await _callFetchPlan(context, numItinerary: 0);
+        },
+        defineToLocation: () async {
+          await mapRouteCubit.setToPlace(location);
+          if (!mounted) return;
+          await _callFetchPlan(context, numItinerary: 0);
+        },
+      );
     }
   }
 
@@ -248,5 +273,109 @@ class _HomePageState extends State<HomePage>
     if (state == AppLifecycleState.resumed) {
       AppReviewProvider().reviewApp(context, mounted);
     }
+  }
+}
+
+class ErrorAlert extends StatelessWidget {
+  static Future<void> showNotification({
+    required BuildContext context,
+    required Future Function() defineStartLocation,
+    required Future Function() defineToLocation,
+  }) async {
+    await showTrufiDialog<void>(
+      context: context,
+      onWillPop: false,
+      builder: (_) {
+        return ErrorAlert(
+          defineFromLocation: defineStartLocation,
+          defineToLocation: defineToLocation,
+        );
+      },
+    );
+  }
+
+  final Future Function() defineFromLocation;
+  final Future Function() defineToLocation;
+  const ErrorAlert({
+    Key? key,
+    required this.defineFromLocation,
+    required this.defineToLocation,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AlertDialog(
+      titlePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 20),
+      iconPadding: EdgeInsets.zero,
+      buttonPadding: EdgeInsets.zero,
+      title: Text(
+        // TODO translate
+        TrufiBaseLocalization.of(context).localeName == "en"
+            ? "Set location on map"
+            : "Establecer ubicación en el mapa",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.secondary,
+          fontSize: 18,
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              // TODO translate
+              TrufiBaseLocalization.of(context).localeName == "en"
+                  ? 'You can set the location as an origin or destination point'
+                  : "Puede establecer la ubicación como un punto de origen o de destino",
+              style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              defineFromLocation();
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              minimumSize: const Size(50, 30),
+            ),
+            child: Text(
+              // TODO translate
+              TrufiBaseLocalization.of(context).localeName == "en"
+                  ? 'Set location as origin'
+                  : "Establecer como origen",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              defineToLocation();
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              minimumSize: const Size(50, 30),
+            ),
+            child: Text(
+              // TODO translate
+              TrufiBaseLocalization.of(context).localeName == "en"
+                  ? 'Set location as destiny'
+                  : "Establecer como destino",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const Divider(height: 0),
+        ],
+      ),
+      actions: const [
+        CancelButton(),
+      ],
+    );
   }
 }
