@@ -71,7 +71,7 @@ class TrufiMap extends StatelessWidget {
                 ),
                 children: [
                   ...currentMapType.currentMapTileProvider
-                      .buildTileLayerOptions(),
+                      .buildTileLayerOptions(context),
                   mapConfiguratiom.markersConfiguration
                       .buildYourLocationMarkerLayerOptions(currentLocation),
                   ...layerOptionsBuilder(context)

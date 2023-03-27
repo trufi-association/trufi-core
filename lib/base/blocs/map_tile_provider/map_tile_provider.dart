@@ -10,14 +10,14 @@ abstract class MapTileProvider {
   WidgetBuilder get imageBuilder;
 
   /// Build your own custom MapTiles
-  List<Widget> buildTileLayerOptions();
+  List<Widget> buildTileLayerOptions(BuildContext context);
 
   String name(BuildContext context);
 }
 
 class OSMDefaultMapTile extends MapTileProvider {
   @override
-  List<Widget> buildTileLayerOptions() {
+  List<Widget> buildTileLayerOptions(BuildContext context) {
     return [
       TileLayer(
         urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -49,7 +49,7 @@ class OSMMapLayer extends MapTileProvider {
   }) : super();
 
   @override
-  List<Widget> buildTileLayerOptions() {
+  List<Widget> buildTileLayerOptions(BuildContext context) {
     return [
       TileLayer(
           urlTemplate: mapTilesUrl,

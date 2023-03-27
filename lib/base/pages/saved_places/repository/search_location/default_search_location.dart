@@ -20,6 +20,7 @@ class DefaultSearchLocation implements SearchLocationRepository {
     String query, {
     String? correlationId,
     int limit = 30,
+    String? lang,
   }) async {
     final queryPlaces = await storage.fetchPlacesWithQuery(query);
     final queryStreets = await storage.fetchStreetsWithQuery(query);

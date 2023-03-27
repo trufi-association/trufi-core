@@ -7,6 +7,7 @@ abstract class SearchLocationRepository {
     String query, {
     int limit,
     String? correlationId,
+    String? lang,
   });
 
   Future<LocationDetail> reverseGeodecoding(LatLng location);

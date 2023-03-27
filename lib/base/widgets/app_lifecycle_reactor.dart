@@ -19,16 +19,16 @@ class _AppLifecycleReactorState extends State<AppLifecycleReactor>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (duration) => GPSLocationProvider().start(),
     );
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     GPSLocationProvider().close();
     super.dispose();
   }

@@ -72,7 +72,7 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
         ),
       );
     }
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData(widget.position ?? mapConfiguratiom.center);
     });
   }

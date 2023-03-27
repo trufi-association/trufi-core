@@ -9,7 +9,7 @@ import 'package:trufi_core/base/pages/saved_places/translations/saved_places_loc
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class SavedPlacesPage extends StatelessWidget {
-  static const String route = '/places';
+  static const String route = '/Home/places';
   final Widget Function(BuildContext) drawerBuilder;
   const SavedPlacesPage({
     Key? key,

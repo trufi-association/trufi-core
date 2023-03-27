@@ -129,6 +129,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     String query, {
     String? correlationId,
     int limit = 30,
+    String? lang,
   }) async {
     // Cancel running operation
     if (_fetchLocationOperation != null) {
@@ -137,19 +138,15 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     }
 
     // Allow only one running request
-    return (_fetchLocationLock.locked)
-        ? Future.value()
-        : _fetchLocationLock.synchronized(() async {
-            _fetchLocationOperation =
-                CancelableOperation<List<TrufiPlace>>.fromFuture(
-              searchLocationRepository.fetchLocations(
-                query,
-                limit: limit,
-                correlationId: correlationId,
-              ),
-            );
-            return _fetchLocationOperation?.valueOrCancellation(null);
-          });
+    _fetchLocationOperation = CancelableOperation<List<TrufiPlace>>.fromFuture(
+      searchLocationRepository.fetchLocations(
+        query,
+        limit: limit,
+        correlationId: correlationId,
+        lang: lang,
+      ),
+    );
+    return _fetchLocationOperation?.valueOrCancellation(null);
   }
 
   List<TrufiPlace> sortedByFavorites(

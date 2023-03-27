@@ -33,7 +33,7 @@ class _TransportListDetailState extends State<TransportListDetail> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((duration) async {
+    WidgetsBinding.instance.addPostFrameCallback((duration) async {
       final routeTransportsCubit = context.read<RouteTransportsCubit>();
       transportData = routeTransportsCubit.state.transports.firstWhereOrNull(
         (element) => element.code == widget.id,

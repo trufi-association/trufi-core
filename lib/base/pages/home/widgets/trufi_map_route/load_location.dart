@@ -27,7 +27,7 @@ class _LoadLocationState extends State<LoadLocation> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData();
     });
   }
