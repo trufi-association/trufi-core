@@ -92,6 +92,9 @@ class TrufiBaseLocalizationEn extends TrufiBaseLocalization {
   String get commonWalk => 'Walk';
 
   @override
+  String get commonCycling => 'Cycling';
+
+  @override
   String get commonYourLocation => 'Your location';
 
   @override

@@ -92,6 +92,9 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get commonWalk => 'Walk';
 
   @override
+  String get commonCycling => 'Cycling';
+
+  @override
   String get commonYourLocation => 'Sua localização';
 
   @override

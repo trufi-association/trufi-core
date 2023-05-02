@@ -115,6 +115,10 @@
     "@commonWalk": {
         "description": "General Walk label"
     },
+    "commonCycling": "Cyclisme",
+    "@commonCycling": {
+        "description": "General cycling label"
+    },
     "commonYourLocation": "Votre emplacement",
     "@commonYourLocation": {
         "description": "Search option that allows to use the current user location"

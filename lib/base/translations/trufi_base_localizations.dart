@@ -275,6 +275,12 @@ abstract class TrufiBaseLocalization {
   /// **'Walk'**
   String get commonWalk;
 
+  /// General cycling label
+  ///
+  /// In pt, this message translates to:
+  /// **'Cycling'**
+  String get commonCycling;
+
   /// Search option that allows to use the current user location
   ///
   /// In pt, this message translates to:
