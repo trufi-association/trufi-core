@@ -8,6 +8,7 @@ class Leg extends Equatable {
   static const _mode = "mode";
   static const _route = "route";
   static const _routeColor = "routeColor";
+  static const _routeShortName = "routeShortName";
   static const _routeLongName = "routeLongName";
   static const _toPlace = "to";
   static const _fromPlace = "from";
@@ -63,9 +64,11 @@ class Leg extends Equatable {
           : null,
       routeColor: json[_routeColor] as String?,
       shortName: json[_route] != null
-          ? ((json[_route] is String) && json[_route] != ''
-              ? json[_route] as String
-              : null)
+          ? json[_routeShortName] != null
+              ? json[_routeShortName] as String
+              : ((json[_route] is String) && json[_route] != ''
+                  ? json[_route] as String
+                  : null)
           : null,
       routeLongName: json[_routeLongName] as String?,
       distance: json[_distance] as double,
@@ -169,13 +172,11 @@ class Leg extends Equatable {
   int? get codeColor => int.tryParse('0xFF${route?.color ?? routeColor}');
 
   Color get primaryColor {
-    return codeColor != null
-        ? Color(codeColor!)
-        : transportMode.color;
+    return codeColor != null ? Color(codeColor!) : transportMode.color;
   }
 
   Color get backgroundColor {
-    return codeColor!= null
+    return codeColor != null
         ? Color(codeColor!)
         : transportMode.backgroundColor;
   }
