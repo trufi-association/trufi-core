@@ -6,33 +6,46 @@ labels: ''
 assignees: ''
 
 ---
+ 
+**Bug description**
 
-**Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**Severity**
+- [ ] Low: Minimal impact, such as cosmetic bugs that do not affect the functionality or usability of the system.
+- [ ] Medium: Cause inconvenience or annoyance, with temporary workarounds available.
+- [ ] High: Limit key system functions, with possible temporary workarounds available.
+- [ ] Critical: Cause a complete or severe system outage with no workarounds.
+
+**Steps to Reproduce**
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+**Current Result**
+
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+**Expected result**
+
+A clear and concise description of what you expected to happen.
+   
+**Attachments**
+
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
+**Environment**
+ - Device: [e.g. Mobile]
+ - Brand: [e.g. iPhone]
+ - Model: [P20 Lite]
  - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+ - Screen [e.g. 5"]
+   
+**Workaround**
 
-**Additional context**
+If applicable
+
+**Additional information**
+
 Add any other context about the problem here.
