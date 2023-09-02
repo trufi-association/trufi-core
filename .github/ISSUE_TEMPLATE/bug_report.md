@@ -12,10 +12,10 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **Severity**
-- [ ] Low: Minimal impact, such as cosmetic bugs that do not affect the functionality or usability of the system.
-- [ ] Medium: Cause inconvenience or annoyance, with temporary workarounds available.
-- [ ] High: Limit key system functions, with possible temporary workarounds available.
-- [ ] Critical: Cause a complete or severe system outage with no workarounds.
+:white_large_square: Low: Minimal impact, such as cosmetic bugs that do not affect the functionality or usability of the system.
+:white_check_mark: Medium: Cause inconvenience or annoyance, with temporary workarounds available.
+:white_large_square: High: Limit key system functions, with possible temporary workarounds available.
+:white_large_square: Critical: Cause a complete or severe system outage with no workarounds.
 
 **Steps to Reproduce**
 1. Go to '...'
