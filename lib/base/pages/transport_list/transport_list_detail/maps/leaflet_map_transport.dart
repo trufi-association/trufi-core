@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/plugin_api.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/pages/transport_list/services/models.dart';
-import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/share_route_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map_controller.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
@@ -13,7 +12,7 @@ import 'package:trufi_core/base/widgets/base_maps/map_buttons/crop_button.dart';
 
 class LeafletMapTransport extends StatefulWidget {
   final LeafletMapController trufiMapController;
-  final PatternOtp? transportData;
+  final TransitRoute? transportData;
   final Uri? shareBaseRouteUri;
 
   const LeafletMapTransport({
@@ -33,7 +32,7 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
 
   @override
   Widget build(BuildContext context) {
-    final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final mapConfiguration = context.read<MapConfigurationCubit>().state;
 
     widget.trufiMapController.onReady.then((value) {
       if (widget.transportData?.geometry != null) {
@@ -51,7 +50,7 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             Polyline(
               points: TrufiLatLng.toListLatLng(
                   widget.transportData?.geometry ?? []),
-              color: widget.transportData?.route?.primaryColor ?? Colors.black,
+              color: widget.transportData?.route?.backgroundColor ?? Colors.black,
               strokeWidth: 6.0,
             ),
           ],
@@ -60,12 +59,12 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
           MarkerLayer(markers: [
             if (widget.transportData!.geometry!.length > 2)
               buildFromMarker(widget.transportData!.geometry![0],
-                  mapConfiguratiom.markersConfiguration.fromMarker),
+                  mapConfiguration.markersConfiguration.fromMarker),
             if (widget.transportData!.geometry!.length > 2)
               buildToMarker(
                   widget.transportData!
                       .geometry![widget.transportData!.geometry!.length - 1],
-                  mapConfiguratiom.markersConfiguration.toMarker),
+                  mapConfiguration.markersConfiguration.toMarker),
           ]),
       ],
       floatingActionButtons: Column(
@@ -74,13 +73,6 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             key: _cropButtonKey,
             onPressed: _handleOnCropPressed,
           ),
-          const Padding(padding: EdgeInsets.all(4.0)),
-          if (widget.transportData != null &&
-              widget.shareBaseRouteUri != null)
-            ShareRouteButton(
-              transportData: widget.transportData!,
-              shareBaseRouteUri: widget.shareBaseRouteUri!,
-            ),
         ],
       ),
       onPositionChanged: _handleOnMapPositionChanged,
