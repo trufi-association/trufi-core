@@ -105,7 +105,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.legSwitch: Icons.warning,
     TransportMode.rail: Icons.train,
     TransportMode.subway: Icons.directions_subway,
-    TransportMode.tram: Icons.warning,
+    TransportMode.tram: Icons.train,
     TransportMode.transit: Icons.directions_transit,
     TransportMode.walk: Icons.directions_walk,
     // route icons for specific types of transportation
@@ -166,25 +166,25 @@ extension TransportModeExtension on TransportMode {
   static final _colors = <TransportMode, Color?>{
     TransportMode.airplane: null,
     TransportMode.bicycle: const Color(0xff666666),
-    TransportMode.bus: const Color(0xffff260c),
+    TransportMode.bus: null,
     TransportMode.cableCar: null,
-    TransportMode.car: Colors.black,
-    TransportMode.carPool: const Color(0xff9fc726),
+    TransportMode.car: null,
+    TransportMode.carPool: null,
     TransportMode.ferry: null,
     TransportMode.flexible: null,
     TransportMode.funicular: null,
-    TransportMode.gondola: null,
+    TransportMode.gondola: Colors.black,
     TransportMode.legSwitch: null,
-    TransportMode.rail: const Color(0xff018000),
-    TransportMode.subway: Colors.blueAccent[700],
+    TransportMode.rail: null,
+    TransportMode.subway: null,
     TransportMode.tram: null,
     TransportMode.transit: null,
     TransportMode.walk: Colors.grey[700],
     // route icons for specific types of transportation
-    TransportMode.trufi: const Color(0xffd81b60),
-    TransportMode.micro: const Color(0xffd81b60),
-    TransportMode.miniBus: const Color(0xffd81b60),
-    TransportMode.lightRail: const Color(0xffd81b60),
+    TransportMode.trufi: null,
+    TransportMode.micro: null,
+    TransportMode.miniBus: null,
+    TransportMode.lightRail: null,
   };
 
   static final _backgroundColors = <TransportMode, Color?>{
@@ -201,7 +201,7 @@ extension TransportModeExtension on TransportMode {
     TransportMode.legSwitch: null,
     TransportMode.rail: const Color(0xff018000),
     TransportMode.subway: Colors.blueAccent[700],
-    TransportMode.tram: null,
+    TransportMode.tram: const Color(0xff018000),
     TransportMode.transit: null,
     TransportMode.walk: Colors.grey[200],
     // route icons for specific types of transportation
@@ -248,7 +248,7 @@ extension TransportModeExtension on TransportMode {
   String getTranslate(TrufiBaseLocalization localization) =>
       _translates(this, localization) ?? 'No translate';
 
-  Color get color => _colors[this] ?? const Color(0xff1B3661);
+  Color get color => _colors[this] ?? Colors.white;
 
   Color get backgroundColor =>
       _backgroundColors[this] ?? const Color(0xff1B3661);

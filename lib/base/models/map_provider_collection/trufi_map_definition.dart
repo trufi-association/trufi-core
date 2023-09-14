@@ -1,9 +1,9 @@
 import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 
+import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/models/map_provider/i_trufi_map_controller.dart';
-import 'package:trufi_core/base/pages/transport_list/services/models.dart';
+import 'package:trufi_core/base/models/map_provider_collection/i_trufi_map_controller.dart';
 
 abstract class ITrufiMapProvider {
   MapChooseLocationProvider mapChooseLocationProvider();
@@ -14,6 +14,7 @@ abstract class ITrufiMapProvider {
   MapTransportProvider mapTransportProvider({
     Uri? shareBaseRouteUri,
   });
+  MapRouteEditorProvider mapRouteEditorProvider();
 }
 
 ////////////////////////////////////////////////
@@ -39,6 +40,29 @@ typedef MapChooseLocationBuilder = IMapChooseLocation Function(
 );
 
 ////////////////////////////////////////////////
+// MapRouteEditor interfaces
+
+abstract class MapRouteEditorProvider {
+  ITrufiMapController get trufiMapController;
+  MapRouteEditorBuilder get mapRouteEditorBuilder;
+  MapRouteEditorProvider rebuild({bool isSelectionArea = true});
+}
+
+abstract class IMapRouteEditor extends Widget {
+  const IMapRouteEditor({
+    Key? key,
+  }) : super(key: key);
+  ITrufiMapController get trufiMapController;
+  Function(List<TrufiLatLng>) get onAreaSelected;
+  bool get isSelectionArea;
+}
+
+typedef MapRouteEditorBuilder = IMapRouteEditor Function(
+  BuildContext context,
+  void Function(List<TrufiLatLng>) onAreaSelected,
+);
+
+////////////////////////////////////////////////
 // MapRoute interfaces
 abstract class MapRouteProvider {
   ITrufiMapController get trufiMapController;
@@ -61,5 +85,5 @@ abstract class MapTransportProvider {
 
 typedef MapTransportBuilder = Widget Function(
   BuildContext,
-  PatternOtp? transportData,
+  TransitRoute? transportData,
 );

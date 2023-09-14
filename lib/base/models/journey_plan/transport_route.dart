@@ -1,6 +1,6 @@
 part of 'plan.dart';
 
-class TransportRoute extends Equatable {
+class RouteInfo extends Equatable {
   final String id;
   final String gtfsId;
   final String? shortName;
@@ -12,7 +12,7 @@ class TransportRoute extends Equatable {
   final String? color;
   final String? textColor;
 
-  const TransportRoute({
+  const RouteInfo({
     required this.id,
     required this.gtfsId,
     this.shortName,
@@ -25,7 +25,7 @@ class TransportRoute extends Equatable {
     this.textColor,
   });
 
-  factory TransportRoute.fromJson(Map<String, dynamic> json) => TransportRoute(
+  factory RouteInfo.fromJson(Map<String, dynamic> json) => RouteInfo(
         id: json['id'] as String,
         gtfsId: json['gtfsId'] as String,
         shortName: json['shortName'] as String,

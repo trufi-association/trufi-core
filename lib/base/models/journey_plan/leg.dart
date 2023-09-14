@@ -19,7 +19,7 @@ class Leg extends Equatable {
 
   final String points;
   final TransportMode transportMode;
-  final TransportRoute? route;
+  final RouteInfo? route;
   final String? routeColor;
   final String? shortName;
   final String? routeLongName;
@@ -59,7 +59,7 @@ class Leg extends Equatable {
       ),
       route: json[_route] != null
           ? ((json[_route] is Map<String, dynamic>)
-              ? TransportRoute.fromJson(json[_route] as Map<String, dynamic>)
+              ? RouteInfo.fromJson(json[_route] as Map<String, dynamic>)
               : null)
           : null,
       routeColor: json[_routeColor] as String?,
@@ -114,7 +114,7 @@ class Leg extends Equatable {
   Leg copyWith({
     String? points,
     TransportMode? transportMode,
-    TransportRoute? route,
+    RouteInfo? route,
     String? routeColor,
     String? shortName,
     String? routeLongName,
@@ -171,9 +171,7 @@ class Leg extends Equatable {
 
   int? get codeColor => int.tryParse('0xFF${route?.color ?? routeColor}');
 
-  Color get primaryColor {
-    return codeColor != null ? Color(codeColor!) : transportMode.color;
-  }
+  Color get primaryColor => transportMode.color;
 
   Color get backgroundColor {
     return codeColor != null

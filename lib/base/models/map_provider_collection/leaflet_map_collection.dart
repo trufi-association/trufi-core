@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
+import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list_detail/maps/map_transport_provider.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/map_route_provider.dart';
 import 'package:trufi_core/base/widgets/choose_location/maps/map_choose_location_provider.dart';
+import 'package:trufi_core/base/widgets/route_editor/maps/map_route_editor_provider.dart';
 
 class LeafletMapCollection implements ITrufiMapProvider {
   @override
@@ -27,6 +28,13 @@ class LeafletMapCollection implements ITrufiMapProvider {
   }) {
     return LeafletMapTransportProvider.create(
       shareBaseRouteUri: shareBaseRouteUri,
+    );
+  }
+
+  @override
+  MapRouteEditorProvider mapRouteEditorProvider({bool isSelectionArea = true}) {
+    return LeafletMapRouteEditorProvider.create(
+      isSelectionArea: isSelectionArea,
     );
   }
 }
