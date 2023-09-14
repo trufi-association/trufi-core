@@ -33,6 +33,9 @@ dependencies:
   intl: ^0.17.0
   latlong2: ^0.8.1
   package_info_plus: ^1.4.3+1
+  flutter_map_line_editor: ^5.0.0
+  back_button_interceptor: ^6.0.2
+  flutter_map_marker_cluster: ^1.1.0
   path_provider: ^2.0.11
   provider: ^6.0.3
   routemaster: ^1.0.1
@@ -40,6 +43,7 @@ dependencies:
   share_plus: ^4.4.0
   synchronized: ^3.0.0+3
   uni_links: ^0.5.1
+  uuid: ^3.0.5
   url_launcher: ^6.1.6
 
 dev_dependencies:
@@ -55,7 +59,7 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
   assets:
-    - assets/images/trufi-logo.png
+    - assets/images/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
