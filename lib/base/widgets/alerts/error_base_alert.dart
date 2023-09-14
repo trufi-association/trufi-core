@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
+import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class ErrorAlert extends StatelessWidget {
+  static Future<void> showError({
+    required BuildContext context,
+    required String error,
+  }) async {
+    await showTrufiDialog<void>(
+      context: context,
+      onWillPop: false,
+      builder: (_) {
+        return ErrorAlert(
+          error: error,
+        );
+      },
+    );
+  }
+
   final String error;
   const ErrorAlert({
     Key? key,

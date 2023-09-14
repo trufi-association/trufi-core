@@ -19,62 +19,54 @@ class BuildStreetResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: BaseTrufiPage(
-        child: Builder(builder: (buildContext) {
-          final searchLocationsCubit = buildContext.watch<SearchLocationsCubit>();
-          final localizationSP = SavedPlacesLocalization.of(buildContext);
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: CustomScrollView(slivers: [
-              const SliverPadding(padding: EdgeInsets.all(4.0)),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    // Center
-                    if (index == 0) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(street.description),
+      ),
+      body: SafeArea(
+        bottom: false,
+        child: BaseTrufiPage(
+          child: Builder(builder: (buildContext) {
+            final searchLocationsCubit =
+                buildContext.watch<SearchLocationsCubit>();
+            final localizationSP = SavedPlacesLocalization.of(buildContext);
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CustomScrollView(slivers: [
+                const SliverPadding(padding: EdgeInsets.all(4.0)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      // Center
+                      // Junctions
+                      final junction = street.junctions[index];
                       return BuildItem(
                         onTap: () {
-                          searchLocationsCubit
-                              .insertHistoryPlace(street.location);
-                          onTap(street.location);
+                          searchLocationsCubit.insertHistoryPlace(
+                            junction.location(localizationSP),
+                          );
+                          onTap(
+                            junction.location(localizationSP),
+                          );
                         },
-                        iconData: const Icon(Icons.label),
-                        title: street.displayName(localizationSP),
+                        iconData: const Icon(Icons.label_outline),
+                        title: localizationSP.instructionJunction(
+                          "...",
+                          junction.street2.displayName(localizationSP),
+                        ),
                         trailing: FavoriteButton(
-                          location: street.location,
+                          location: junction.location(localizationSP),
                         ),
                       );
-                    }
-                    // Junctions
-                    final junction = street.junctions[index - 1];
-                    return BuildItem(
-                      onTap: () {
-                        searchLocationsCubit.insertHistoryPlace(
-                          junction.location(localizationSP),
-                        );
-                        onTap(
-                          junction.location(localizationSP),
-                        );
-                      },
-                      iconData: const Icon(Icons.label_outline),
-                      title: localizationSP.instructionJunction(
-                        "...",
-                        junction.street2.displayName(localizationSP),
-                      ),
-                      trailing: FavoriteButton(
-                        location: junction.location(localizationSP),
-                      ),
-                    );
-                  },
-                  childCount: street.junctions.length + 1,
+                    },
+                    childCount: street.junctions.length,
+                  ),
                 ),
-              ),
-              const SliverPadding(padding: EdgeInsets.all(4.0))
-            ]),
-          );
-        }),
+                const SliverPadding(padding: EdgeInsets.all(4.0))
+              ]),
+            );
+          }),
+        ),
       ),
     );
   }

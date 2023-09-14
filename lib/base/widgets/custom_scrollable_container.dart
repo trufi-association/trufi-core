@@ -18,11 +18,12 @@ class CustomScrollableContainer extends StatefulWidget {
 
   @override
   State<CustomScrollableContainer> createState() =>
-      _CustomScrollableContainerState();
+      CustomScrollableContainerState();
 }
 
-class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
+class CustomScrollableContainerState extends State<CustomScrollableContainer> {
   double? panelHeight;
+  double sizeHeight = 0;
   bool animated = false;
 
   @override
@@ -32,6 +33,7 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
       final openedPosition = constrains.maxHeight - widget.openedPosition;
       final bottomLimit = constrains.maxHeight -
           (35 + MediaQuery.of(context).padding.bottom + widget.bottomPadding);
+      sizeHeight = bottomLimit;
       // height validation
       panelHeight ??= openedPosition;
       // limits validations
@@ -168,6 +170,16 @@ class _CustomScrollableContainerState extends State<CustomScrollableContainer> {
           ],
         ),
       );
+    });
+  }
+
+  void scrollFunction({
+    required double scrollValue,
+  }) {
+    // Ensure that percent is within the range [0, 1]
+    double percent = scrollValue.clamp(0.0, 1.0);
+    setState(() {
+      panelHeight = sizeHeight * percent;
     });
   }
 }

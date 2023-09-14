@@ -39,7 +39,7 @@ class FacebookSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnFacebook;
+            return TrufiBaseLocalization.of(context).followOnSocialMedia("Facebook");
           },
         );
 }
@@ -58,7 +58,7 @@ class InstagramSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnInstagram;
+            return TrufiBaseLocalization.of(context).followOnSocialMedia("Instagram");
           },
         );
 }
@@ -77,7 +77,26 @@ class TwitterSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnTwitter;
+            return TrufiBaseLocalization.of(context).followOnSocialMedia("Twitter");
+          },
+        );
+}
+
+class TiktokSocialMedia extends SocialMediaItem {
+  TiktokSocialMedia(String url)
+      : super(
+          url: url,
+          buildIcon: (context) => SizedBox(
+            height: 24,
+            width: 24,
+            child: tiktokIcon(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.grey,
+            ),
+          ),
+          name: (BuildContext context) {
+            return TrufiBaseLocalization.of(context).followOnSocialMedia("Tiktok");
           },
         );
 }
@@ -107,14 +126,14 @@ class UrlSocialMedia {
   final String? urlInstagram;
   final String? urlTwitter;
   final String? urlWebSite;
-  final String? urlYoutube;
+  final String? urlTiktok;
 
   const UrlSocialMedia({
     this.urlFacebook,
     this.urlInstagram,
     this.urlTwitter,
     this.urlWebSite,
-    this.urlYoutube,
+    this.urlTiktok,
   });
 
   bool get existUrl =>
@@ -122,7 +141,7 @@ class UrlSocialMedia {
       urlInstagram != null ||
       urlTwitter != null ||
       urlWebSite != null ||
-      urlYoutube != null;
+      urlTiktok != null;
 }
 
 TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
@@ -151,6 +170,8 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
               InstagramSocialMedia(defaultUrls.urlInstagram!),
             if (defaultUrls.urlTwitter != null)
               TwitterSocialMedia(defaultUrls.urlTwitter!),
+            if (defaultUrls.urlTiktok != null)
+              TiktokSocialMedia(defaultUrls.urlTiktok!),
             if (defaultUrls.urlWebSite != null)
               WebSiteSocialMedia(defaultUrls.urlWebSite!),
           ].map((SocialMediaItem value) {
