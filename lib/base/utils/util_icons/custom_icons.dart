@@ -44,8 +44,14 @@ Widget twitterIcon({Color? color}) {
     color: decodeFillColor(color),
   ));
 }
-// trsnaport svg icons
 
+Widget tiktokIcon({Color? color}) {
+  return SvgPicture.string(tiktok(
+    color: decodeFillColor(color),
+  ));
+}
+
+// trasnport svg icons
 Widget waitIcon({Color? color}) {
   return SvgPicture.string(wait(
     color: decodeFillColor(color),
