@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
@@ -10,7 +11,7 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 import 'dialog_select_icon.dart';
 
-class LocationTiler extends StatelessWidget {
+class LocationTiler extends StatefulWidget {
   const LocationTiler({
     Key? key,
     required this.location,
@@ -33,12 +34,36 @@ class LocationTiler extends StatelessWidget {
   final Function(TrufiLocation)? removeLocation;
 
   @override
+  State<LocationTiler> createState() => _LocationTilerState();
+}
+
+class _LocationTilerState extends State<LocationTiler> {
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor, context: context);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (!stopDefaultButtonEvent) {
+      Navigator.of(context).pop();
+    }
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
     final localizationSP = SavedPlacesLocalization.of(context);
     return GestureDetector(
       onTap: () {
-        if (!location.isLatLngDefined) {
+        if (!widget.location.isLatLngDefined) {
           _changePosition(context);
         }
       },
@@ -47,18 +72,18 @@ class LocationTiler extends StatelessWidget {
           children: <Widget>[
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: typeToIconData(location.type),
+              child: typeToIconData(widget.location.type),
             ),
             Expanded(
               child: Text(
-                location.displayName(localizationSP),
+                widget.location.displayName(localizationSP),
                 maxLines: 1,
               ),
             ),
-            if (location.isLatLngDefined)
+            if (widget.location.isLatLngDefined)
               PopupMenuButton<int>(
                 itemBuilder: (BuildContext context) => [
-                  if (enableSetIcon)
+                  if (widget.enableSetIcon)
                     PopupMenuItem(
                       value: 1,
                       child: Row(
@@ -71,7 +96,7 @@ class LocationTiler extends StatelessWidget {
                         ],
                       ),
                     ),
-                  if (enableLocation)
+                  if (widget.enableLocation)
                     PopupMenuItem(
                       value: 2,
                       child: Row(
@@ -84,7 +109,7 @@ class LocationTiler extends StatelessWidget {
                         ],
                       ),
                     ),
-                  if (enableSetPosition)
+                  if (widget.enableSetPosition)
                     PopupMenuItem(
                       value: 3,
                       child: Row(
@@ -97,7 +122,8 @@ class LocationTiler extends StatelessWidget {
                         ],
                       ),
                     ),
-                  if (removeLocation != null || location.isLatLngDefined)
+                  if (widget.removeLocation != null ||
+                      widget.location.isLatLngDefined)
                     PopupMenuItem(
                       value: 4,
                       child: Row(
@@ -119,17 +145,18 @@ class LocationTiler extends StatelessWidget {
                   } else if (index == 3) {
                     await _changePosition(context);
                   } else if (index == 4) {
-                    if (isDefaultLocation && location.isLatLngDefined) {
-                      updateLocation(
-                        location,
-                        location.copyWith(
+                    if (widget.isDefaultLocation &&
+                        widget.location.isLatLngDefined) {
+                      widget.updateLocation(
+                        widget.location,
+                        widget.location.copyWith(
                           longitude: 0,
                           latitude: 0,
                         ),
                       );
                     } else {
-                      if (removeLocation != null) {
-                        removeLocation!(location);
+                      if (widget.removeLocation != null) {
+                        widget.removeLocation!(widget.location);
                       }
                     }
                   }
@@ -150,7 +177,8 @@ class LocationTiler extends StatelessWidget {
       context: context,
       builder: (context) => const DialogSelectIcon(),
     );
-    updateLocation(location, location.copyWith(type: type));
+    widget.updateLocation(
+        widget.location, widget.location.copyWith(type: type));
   }
 
   Future<void> _changeLocation(BuildContext context) async {
@@ -159,24 +187,26 @@ class LocationTiler extends StatelessWidget {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return DialogEditLocation(
-            location: location,
-            selectPositionOnPage: selectPositionOnPage,
+            location: widget.location,
+            selectPositionOnPage: widget.selectPositionOnPage,
           );
         });
-    if (newLocation != null) updateLocation(location, newLocation);
+    if (newLocation != null)
+      widget.updateLocation(widget.location, newLocation);
   }
 
   Future<void> _changePosition(BuildContext context) async {
-    final LocationDetail? chooseLocationDetail = await selectPositionOnPage(
+    final LocationDetail? chooseLocationDetail =
+        await widget.selectPositionOnPage(
       context,
-      position: location.isLatLngDefined
-          ? TrufiLatLng(location.latitude, location.longitude)
+      position: widget.location.isLatLngDefined
+          ? TrufiLatLng(widget.location.latitude, widget.location.longitude)
           : null,
     );
     if (chooseLocationDetail != null) {
-      updateLocation(
-        location,
-        location.copyWith(
+      widget.updateLocation(
+        widget.location,
+        widget.location.copyWith(
           longitude: chooseLocationDetail.position.longitude,
           latitude: chooseLocationDetail.position.latitude,
         ),
