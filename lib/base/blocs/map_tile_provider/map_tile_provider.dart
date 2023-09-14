@@ -66,11 +66,12 @@ class OSMMapLayer extends MapTileProvider {
   WidgetBuilder get imageBuilder => (context) => Image.asset(
         "assets/images/OpenMapTiles.png",
         fit: BoxFit.cover,
+        package: 'trufi_core',
       );
 
   @override
   String name(BuildContext context) {
-    return id;
+    return "Streets";
   }
 }
 

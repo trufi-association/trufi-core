@@ -1,5 +1,5 @@
 part of 'map_configuration_cubit.dart';
-
+// TODO: Rename class for global constant data
 class MapConfiguration {
   /// Default Zoom level of the map on start
   final double defaultZoom;
@@ -25,6 +25,9 @@ class MapConfiguration {
   /// To, From and yourLocation Marker
   final MarkerConfiguration markersConfiguration;
 
+  /// Link for report error in searchs
+  final String? feedbackForm;
+
   // /// Itinerari creator configuration
   // final ItinararyCreator itinararyCreator;
 
@@ -37,6 +40,7 @@ class MapConfiguration {
     this.chooseLocationZoom = 16.0,
     this.mapAttributionBuilder,
     this.markersConfiguration = const DefaultMarkerConfiguration(),
+    this.feedbackForm,
     // this.itinararyCreator = const DefaultItineraryCreator(),
   }) {
     mapAttributionBuilder =
