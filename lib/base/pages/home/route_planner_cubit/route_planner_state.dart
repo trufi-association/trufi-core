@@ -1,13 +1,13 @@
-part of 'map_route_cubit.dart';
+part of 'route_planner_cubit.dart';
 
 @immutable
-class MapRouteState extends Equatable {
+class RoutePlannerState extends Equatable {
   static const String _fromPlace = "fromPlace";
   static const String _toPlace = "toPlace";
   static const String _plan = "plan";
   static const String _itinerary = "itinerary";
 
-  const MapRouteState({
+  const RoutePlannerState({
     this.fromPlace,
     this.toPlace,
     this.plan,
@@ -19,13 +19,13 @@ class MapRouteState extends Equatable {
   final Plan? plan;
   final Itinerary? selectedItinerary;
 
-  MapRouteState copyWith({
+  RoutePlannerState copyWith({
     TrufiLocation? fromPlace,
     TrufiLocation? toPlace,
     Plan? plan,
     Itinerary? selectedItinerary,
   }) {
-    return MapRouteState(
+    return RoutePlannerState(
       fromPlace: fromPlace ?? this.fromPlace,
       toPlace: toPlace ?? this.toPlace,
       plan: plan ?? this.plan,
@@ -33,13 +33,13 @@ class MapRouteState extends Equatable {
     );
   }
 
-  MapRouteState copyWithNullable({
+  RoutePlannerState copyWithNullable({
     Optional<TrufiLocation?>? fromPlace = const Optional(),
     Optional<TrufiLocation?>? toPlace = const Optional(),
     Optional<Plan>? plan = const Optional(),
     Optional<Itinerary>? selectedItinerary = const Optional(),
   }) {
-    return MapRouteState(
+    return RoutePlannerState(
       fromPlace: fromPlace!.isValid ? fromPlace.value : this.fromPlace,
       toPlace: toPlace!.isValid ? toPlace.value : this.toPlace,
       plan: plan!.isValid ? plan.value : this.plan,
@@ -50,8 +50,8 @@ class MapRouteState extends Equatable {
   }
 
   // Json
-  factory MapRouteState.fromJson(Map<String, dynamic> json) {
-    return MapRouteState(
+  factory RoutePlannerState.fromJson(Map<String, dynamic> json) {
+    return RoutePlannerState(
       fromPlace:
           TrufiLocation.fromJson(json[_fromPlace] as Map<String, dynamic>),
       toPlace: TrufiLocation.fromJson(json[_toPlace] as Map<String, dynamic>),

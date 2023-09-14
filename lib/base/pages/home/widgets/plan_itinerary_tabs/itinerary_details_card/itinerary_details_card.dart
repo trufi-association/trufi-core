@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
+import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 
 import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
 
-class ItineraryDetailsCard extends StatelessWidget {
+class ItineraryDetailsCard extends StatefulWidget {
   final Itinerary itinerary;
   final void Function() onBackPressed;
-  final Function(TrufiLatLng) moveTo;
+  final bool Function(TrufiLatLng) moveTo;
 
   const ItineraryDetailsCard({
     Key? key,
@@ -23,12 +24,19 @@ class ItineraryDetailsCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ItineraryDetailsCard> createState() => _ItineraryDetailsCardState();
+}
+
+class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
   Widget build(BuildContext context) {
     final localization = SavedPlacesLocalization.of(context);
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
-    final mapRouteCubit = context.read<MapRouteCubit>();
-    final mapRouteState = mapRouteCubit.state;
-    final compresedLegs = itinerary.compressLegs;
+    final routePlannerCubit = context.read<RoutePlannerCubit>();
+    final routePlannerState = routePlannerCubit.state;
+    final compresedLegs = widget.itinerary.compressLegs;
     final sizeLegs = compresedLegs.length;
     // TODO Implement a boolean to configure if the backend has a server or not
     // Implement for otpServer without route color configuration
@@ -36,18 +44,18 @@ class ItineraryDetailsCard extends StatelessWidget {
 
     return Scrollbar(
       child: SingleChildScrollView(
-        controller: ScrollController(),
+        controller: _scrollController,
         primary: false,
         child: Column(
           children: [
             Row(
               children: [
                 BackButton(
-                  onPressed: onBackPressed,
+                  onPressed: widget.onBackPressed,
                 ),
                 Expanded(
                   child: BarItineraryDetails(
-                    itinerary: itinerary,
+                    itinerary: widget.itinerary,
                   ),
                 ),
               ],
@@ -67,10 +75,12 @@ class ItineraryDetailsCard extends StatelessWidget {
                     // fromDashLine
                     if (index == 0)
                       DashLinePlace(
-                        date: itinerary.startTimeHHmm.toString(),
-                        location: mapRouteState.fromPlace
+                        date: widget.itinerary.startTimeHHmm.toString(),
+                        location: routePlannerState.fromPlace
                                 ?.displayName(localization) ??
                             '',
+                        moveInMap: () =>
+                            widget.moveTo(routePlannerState.fromPlace!.latLng),
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -100,24 +110,44 @@ class ItineraryDetailsCard extends StatelessWidget {
                           showBeforeLine: index != 0,
                           showAfterLine: index != sizeLegs - 1 &&
                               !compresedLegs[index + 1].transitLeg,
-                          moveTo: moveTo,
+                          moveTo: (location) {
+                            final isRequiredScroll = widget.moveTo(location);
+                            if (isRequiredScroll) {
+                              _scrolling(index);
+                            }
+                          },
                           forcedColor: isPrimary ? null : Colors.green,
                         );
                       })
                     else
-                      WalkDash(leg: itineraryLeg),
+                      WalkDash(
+                        leg: itineraryLeg,
+                        moveTo: (location) {
+                          final isRequiredScroll = widget.moveTo(location);
+                          if (isRequiredScroll) {
+                            _scrolling(index);
+                          }
+                        },
+                      ),
 
                     // toDashLine
                     if (index == sizeLegs - 1)
                       DashLinePlace(
-                        date: itinerary.endTimeHHmm.toString(),
-                        location:
-                            mapRouteState.toPlace?.displayName(localization) ??
-                                '',
+                        date: widget.itinerary.endTimeHHmm.toString(),
+                        location: routePlannerState.toPlace
+                                ?.displayName(localization) ??
+                            '',
+                        moveInMap: () {
+                          final isRequiredScroll =
+                              widget.moveTo(routePlannerState.toPlace!.latLng);
+                          if (isRequiredScroll) {
+                            _scrolling(index);
+                          }
+                        },
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
-                            const SizedBox(height: 24, width: 24),
+                            const SizedBox(height: 18, width: 24),
                             Positioned(
                               top: -3,
                               child: SizedBox(
@@ -139,6 +169,15 @@ class ItineraryDetailsCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _scrolling(int index) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _scrollController.animateTo(
+      70.0 * index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
   }
 }

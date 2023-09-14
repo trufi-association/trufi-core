@@ -31,10 +31,12 @@ class TransportDash extends StatelessWidget {
           DashLinePlace(
             date: leg.startTimeString,
             location: leg.fromPlace.name,
-            color: forcedColor ?? leg.primaryColor,
+            color: forcedColor ?? leg.backgroundColor,
+            moveInMap: () =>
+                moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon)),
           ),
         SeparatorPlace(
-          color: forcedColor ?? leg.primaryColor,
+          color: forcedColor ?? leg.backgroundColor,
           leading: leg.transportMode.getImage(color: theme.iconTheme.color),
           child: TransitLeg(
             leg: leg,
@@ -46,7 +48,9 @@ class TransportDash extends StatelessWidget {
           DashLinePlace(
             date: leg.endTimeString.toString(),
             location: leg.toPlace.name.toString(),
-            color: forcedColor ?? leg.primaryColor,
+            color: forcedColor ?? leg.backgroundColor,
+            moveInMap: () =>
+                moveTo(TrufiLatLng(leg.toPlace.lat, leg.toPlace.lon)),
           ),
       ],
     );
@@ -55,9 +59,11 @@ class TransportDash extends StatelessWidget {
 
 class WalkDash extends StatelessWidget {
   final Leg leg;
+  final Function(TrufiLatLng) moveTo;
   const WalkDash({
     Key? key,
     required this.leg,
+    required this.moveTo,
   }) : super(key: key);
 
   @override
@@ -70,8 +76,20 @@ class WalkDash extends StatelessWidget {
           color: leg.primaryColor,
           height: 10,
           leading: TransportMode.walk.getImage(color: theme.iconTheme.color),
-          child: Text(
-              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () =>
+                    moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 3, 3, 5),
+                  child: Text(
+                      '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -155,11 +173,13 @@ class DashLinePlace extends StatelessWidget {
   final String location;
   final Widget? child;
   final Color? color;
+  final Function moveInMap;
 
   const DashLinePlace({
     Key? key,
     required this.date,
     required this.location,
+    required this.moveInMap,
     this.child,
     this.color,
   }) : super(key: key);
@@ -174,7 +194,8 @@ class DashLinePlace extends StatelessWidget {
         children: [
           SizedBox(
             width: 50,
-            child: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
               child: Container(
                 width: 40,
                 height: 1.5,
@@ -203,16 +224,49 @@ class DashLinePlace extends StatelessWidget {
             )
           else
             child!,
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(top: 1),
-              child: Text(
-                location,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+          Flexible(
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5, right: 4),
+                          child: Icon(
+                            Icons.location_searching,
+                            size: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+                Positioned(
+                  left: -5,
+                  right: -5,
+                  top: -5,
+                  bottom: -5,
+                  child: InkWell(
+                    onTap: () => moveInMap(),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                )
+              ],
             ),
           ),
         ],

@@ -12,9 +12,9 @@ import 'package:trufi_core/base/pages/home/services/exception/fetch_online_excep
 import 'package:trufi_core/base/pages/home/services/online_request_plan/rest_request_plan.dart';
 import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
 
-part 'map_route_state.dart';
+part 'route_planner_state.dart';
 
-class MapRouteCubit extends Cubit<MapRouteState> {
+class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   final MapRouteLocalRepository _localRepository =
       MapRouteHiveLocalRepository();
 
@@ -22,11 +22,11 @@ class MapRouteCubit extends Cubit<MapRouteState> {
 
   CancelableOperation<Plan?>? currentFetchPlanOperation;
 
-  MapRouteCubit(String otpEndpoint,
+  RoutePlannerCubit(String otpEndpoint,
       {RequestPlanService? customRequestPlanService})
       : _requestManager = customRequestPlanService ??
             RestRequestPlanService(otpEndpoint: otpEndpoint),
-        super(const MapRouteState()) {
+        super(const RoutePlannerState()) {
     _load();
   }
 
@@ -41,7 +41,7 @@ class MapRouteCubit extends Cubit<MapRouteState> {
   }
 
   Future<void> reset() async {
-    await updateMapRouteState(const MapRouteState());
+    await updateMapRouteState(const RoutePlannerState());
   }
 
   Future<void> swapLocations() async {
@@ -79,7 +79,7 @@ class MapRouteCubit extends Cubit<MapRouteState> {
         state.copyWithNullable(toPlace: const Optional.value(null)));
   }
 
-  Future<void> updateMapRouteState(MapRouteState newState) async {
+  Future<void> updateMapRouteState(RoutePlannerState newState) async {
     await _localRepository.savePlan(newState.plan);
     await _localRepository.saveFromPlace(newState.fromPlace);
     await _localRepository.saveToPlace(newState.toPlace);

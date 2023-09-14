@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
-import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
+import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
-import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
+import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
+import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
@@ -40,15 +42,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  final GlobalKey<CustomScrollableContainerState> scrollController =
+      GlobalKey();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
-      final mapRouteCubit = context.read<MapRouteCubit>();
-      final mapRouteState = mapRouteCubit.state;
-      repaintMap(mapRouteCubit, mapRouteState);
-    });
     WidgetsBinding.instance.addPostFrameCallback(
       (duration) => processUniLink(),
     );
@@ -70,9 +70,20 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    final mapRouteCubit = context.watch<MapRouteCubit>();
+    final routePlannerCubit = context.watch<RoutePlannerCubit>();
+    final panelCubit = context.watch<PanelCubit>();
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     final theme = Theme.of(context);
+    widget.mapRouteProvider.trufiMapController.onReady.then((value) {
+      if (panelCubit.state.panel != null &&
+          routePlannerCubit.state.plan == null) {
+        widget.mapRouteProvider.trufiMapController.move(
+          center: panelCubit.state.panel!.positon,
+          zoom: 17,
+          tickerProvider: this,
+        );
+      }
+    });
     return Scaffold(
       key: HomePage.scaffoldKey,
       drawer: widget.drawerBuilder(context),
@@ -84,124 +95,132 @@ class _HomePageState extends State<HomePage>
         elevation: 0,
       ),
       extendBody: true,
-      body: Column(
-        children: [
-          HomeAppBar(
-            onSaveFrom: (TrufiLocation fromPlace) =>
-                mapRouteCubit.setFromPlace(fromPlace).then(
-              (value) {
-                widget.mapRouteProvider.trufiMapController.move(
-                  center: fromPlace.latLng,
-                  zoom: mapConfiguratiom.chooseLocationZoom,
-                  tickerProvider: this,
-                );
-                _callFetchPlan(context);
-              },
-            ),
-            onSaveTo: (TrufiLocation toPlace) =>
-                mapRouteCubit.setToPlace(toPlace).then(
-              (value) {
-                widget.mapRouteProvider.trufiMapController.move(
-                  center: toPlace.latLng,
-                  zoom: mapConfiguratiom.chooseLocationZoom,
-                  tickerProvider: this,
-                );
-                _callFetchPlan(context);
-              },
-            ),
-            onBackButton: () {
-              HomePage.scaffoldKey.currentState?.openDrawer();
-            },
-            onFetchPlan: () => _callFetchPlan(context),
-            onReset: () => mapRouteCubit.reset(),
-            onSwap: () => mapRouteCubit
-                .swapLocations()
-                .then((value) => _callFetchPlan(context)),
-            selectPositionOnPage: _selectPosition,
-          ),
-          Expanded(
-            child: Stack(
-              children: [
-                BlocListener<MapRouteCubit, MapRouteState>(
-                  listener: (buildContext, state) {
-                    widget.mapRouteProvider.trufiMapController.onReady
-                        .then((_) {
-                      repaintMap(mapRouteCubit, state);
-                    });
+      body: Container(
+        color: theme.cardColor,
+        child: SafeArea(
+          child: Column(
+            children: [
+              HomeAppBar(
+                onSaveFrom: (TrufiLocation fromPlace) =>
+                    routePlannerCubit.setFromPlace(fromPlace).then(
+                  (value) {
+                    widget.mapRouteProvider.trufiMapController.move(
+                      center: fromPlace.latLng,
+                      zoom: mapConfiguratiom.chooseLocationZoom,
+                      tickerProvider: this,
+                    );
+                    _callFetchPlan(context);
                   },
-                  child: CustomScrollableContainer(
-                    openedPosition: 200,
-                    body: widget.mapRouteProvider.mapRouteBuilder(
-                      context,
-                      widget.asyncExecutor,
-                    ),
-                    panel: mapRouteCubit.state.plan != null
-                        ? CustomItinerary(
-                            moveTo: (center) {
-                              widget.mapRouteProvider.trufiMapController.move(
-                                  center: center,
-                                  zoom: 16,
-                                  tickerProvider: this);
-                            },
-                          )
-                        : null,
-                  ),
                 ),
-                Positioned(
-                  top: -3.5,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 3,
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(8.0),
-                          bottomLeft: Radius.circular(8.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xaa000000),
-                          offset: Offset(0, 1.5),
-                          blurRadius: 4,
+                onSaveTo: (TrufiLocation toPlace) =>
+                    routePlannerCubit.setToPlace(toPlace).then(
+                  (value) {
+                    widget.mapRouteProvider.trufiMapController.move(
+                      center: toPlace.latLng,
+                      zoom: mapConfiguratiom.chooseLocationZoom,
+                      tickerProvider: this,
+                    );
+                    _callFetchPlan(context);
+                  },
+                ),
+                onBackButton: () {
+                  HomePage.scaffoldKey.currentState?.openDrawer();
+                },
+                onFetchPlan: () => _callFetchPlan(context),
+                onReset: () {
+                  widget.mapRouteProvider.trufiMapController.cleanMap();
+                  routePlannerCubit.reset();
+                },
+                onSwap: () => routePlannerCubit
+                    .swapLocations()
+                    .then((value) => _callFetchPlan(context)),
+                selectPositionOnPage: _selectPosition,
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    CustomScrollableContainer(
+                      key: scrollController,
+                      openedPosition: 200,
+                      body: widget.mapRouteProvider.mapRouteBuilder(
+                        context,
+                        widget.asyncExecutor,
+                      ),
+                      bottomPadding: panelCubit.state.panel?.minSize ?? 0,
+                      panel: panelCubit.state.panel == null
+                          ? routePlannerCubit.state.plan != null
+                              ? CustomItinerary(
+                                  moveTo: (center) {
+                                    final callResize = scrollController
+                                                .currentState?.panelHeight !=
+                                            null &&
+                                        scrollController
+                                                .currentState!.panelHeight ==
+                                            0;
+                                    if (callResize) {
+                                      scrollController.currentState
+                                          ?.scrollFunction(
+                                        scrollValue: 0.7,
+                                      );
+                                    }
+                                    widget.mapRouteProvider.trufiMapController
+                                        .move(
+                                            center: center,
+                                            zoom: 16,
+                                            tickerProvider: this);
+                                    return callResize;
+                                  },
+                                )
+                              : null
+                          : panelCubit.state.panel?.panel(context, () {
+                              panelCubit.cleanPanel();
+                              _callFetchPlan(context);
+                            }),
+                      onClose: panelCubit.state.panel == null
+                          ? null
+                          : panelCubit.cleanPanel,
+                    ),
+                    Positioned(
+                      top: -3.5,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        height: 3,
+                        decoration: const BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xaa000000),
+                              offset: Offset(0, 1.5),
+                              blurRadius: 4,
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  void repaintMap(MapRouteCubit mapRouteCubit, MapRouteState mapRouteState) {
-    if (mapRouteState.plan != null && mapRouteState.selectedItinerary != null) {
-      widget.mapRouteProvider.trufiMapController.selectedItinerary(
-        plan: mapRouteState.plan!,
-        from: mapRouteState.fromPlace!,
-        to: mapRouteState.toPlace!,
-        selectedItinerary: mapRouteState.selectedItinerary!,
-        tickerProvider: this,
-        onTap: (p1) {
-          mapRouteCubit.selectItinerary(p1);
-        },
-      );
-    } else {
-      widget.mapRouteProvider.trufiMapController.cleanMap();
-    }
-  }
-
   Future<void> _callFetchPlan(BuildContext context, {int? numItinerary}) async {
-    final mapRouteCubit = context.read<MapRouteCubit>();
-    final mapRouteState = mapRouteCubit.state;
-    if (mapRouteState.toPlace == null || mapRouteState.fromPlace == null) {
+    final routePlannerCubit = context.read<RoutePlannerCubit>();
+    final routePlannerState = routePlannerCubit.state;
+    if (routePlannerState.toPlace == null ||
+        routePlannerState.fromPlace == null) {
       return;
     }
     widget.asyncExecutor.run(
       context: context,
-      onExecute: () => mapRouteCubit.fetchPlan(numItinerary: numItinerary),
+      onExecute: () => routePlannerCubit.fetchPlan(numItinerary: numItinerary),
       onFinish: (_) {
         AppReviewProvider().incrementReviewWorthyActions();
         if (Navigator.canPop(context)) {
@@ -213,8 +232,15 @@ class _HomePageState extends State<HomePage>
 
   Future<void> processUniLink() async {
     final queryParameters = RouteData.of(context).queryParameters;
-    final mapRouteCubit = context.read<MapRouteCubit>();
-    if (queryParameters['from'] != null && queryParameters['to'] != null) {
+    final routePlannerCubit = context.read<RoutePlannerCubit>();
+    if (queryParameters['hasError'] != null) {
+      ErrorAlert.showError(
+        context: context,
+        // TODO translation
+        error: "This link cannot be used to set it as a point.",
+      );
+    } else if (queryParameters['from'] != null &&
+        queryParameters['to'] != null) {
       final originData = queryParameters['from']!.split(",");
       final destinyData = queryParameters['to']!.split(",");
       final originLocation = TrufiLocation(
@@ -228,8 +254,8 @@ class _HomePageState extends State<HomePage>
         longitude: double.tryParse(destinyData[2])!,
       );
       final numItinerary = int.tryParse(queryParameters['itinerary'] ?? '0');
-      await mapRouteCubit.setToPlace(destinyLocation);
-      await mapRouteCubit.setFromPlace(originLocation);
+      await routePlannerCubit.setToPlace(destinyLocation);
+      await routePlannerCubit.setFromPlace(originLocation);
       if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
     } else if (queryParameters['googlePoint'] != null) {
@@ -239,15 +265,15 @@ class _HomePageState extends State<HomePage>
         latitude: double.tryParse(destinyData[1])!,
         longitude: double.tryParse(destinyData[2])!,
       );
-      await ErrorAlert.showNotification(
+      await UniLinkAlert.showNotification(
         context: context,
         defineStartLocation: () async {
-          await mapRouteCubit.setFromPlace(location);
+          await routePlannerCubit.setFromPlace(location);
           if (!mounted) return;
           await _callFetchPlan(context, numItinerary: 0);
         },
         defineToLocation: () async {
-          await mapRouteCubit.setToPlace(location);
+          await routePlannerCubit.setToPlace(location);
           if (!mounted) return;
           await _callFetchPlan(context, numItinerary: 0);
         },
@@ -276,7 +302,7 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class ErrorAlert extends StatelessWidget {
+class UniLinkAlert extends StatelessWidget {
   static Future<void> showNotification({
     required BuildContext context,
     required Future Function() defineStartLocation,
@@ -286,7 +312,7 @@ class ErrorAlert extends StatelessWidget {
       context: context,
       onWillPop: false,
       builder: (_) {
-        return ErrorAlert(
+        return UniLinkAlert(
           defineFromLocation: defineStartLocation,
           defineToLocation: defineToLocation,
         );
@@ -296,7 +322,7 @@ class ErrorAlert extends StatelessWidget {
 
   final Future Function() defineFromLocation;
   final Future Function() defineToLocation;
-  const ErrorAlert({
+  const UniLinkAlert({
     Key? key,
     required this.defineFromLocation,
     required this.defineToLocation,

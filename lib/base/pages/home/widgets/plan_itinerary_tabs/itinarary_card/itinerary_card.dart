@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/const/styles.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
-import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart';
+import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary_card/itinerary_summary_advanced.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
@@ -20,11 +20,11 @@ class ItineraryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiBaseLocalization.of(context);
-    final mapRouteCubit = context.read<MapRouteCubit>();
-    final mapRouteState = mapRouteCubit.state;
+    final routePlannerCubit = context.read<RoutePlannerCubit>();
+    final routePlannerState = routePlannerCubit.state;
     return GestureDetector(
       onTap: () async {
-        await mapRouteCubit.selectItinerary(itinerary);
+        await routePlannerCubit.selectItinerary(itinerary);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -75,7 +75,7 @@ class ItineraryCard extends StatelessWidget {
                 Container(
                   width: 5,
                   height: 50 * MediaQuery.of(context).textScaleFactor,
-                  color: itinerary == mapRouteState.selectedItinerary
+                  color: itinerary == routePlannerState.selectedItinerary
                       ? theme.colorScheme.secondary
                       : Colors.grey[400],
                   margin: const EdgeInsets.only(
@@ -91,10 +91,7 @@ class ItineraryCard extends StatelessWidget {
                   }),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    onTap();
-                    mapRouteCubit.selectItinerary(itinerary);
-                  },
+                  onTap: onTap,
                   child: Container(
                     color: Colors.transparent,
                     width: 30,

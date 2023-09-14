@@ -24,17 +24,21 @@ class TransitLeg extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () {
             moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
           },
-          child: RouteNumber(
-            transportMode: leg.transportMode,
-            backgroundColor: forcedColor ?? leg.backgroundColor,
-            text: leg.headSign,
-            tripHeadSing: leg.headSign,
-            duration: leg.durationLeg(localization),
-            distance: leg.distanceString(localization),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,5,5),
+            child: RouteNumber(
+              transportMode: leg.transportMode,
+              backgroundColor: forcedColor ?? leg.backgroundColor,
+              textColor: leg.primaryColor,
+              text: leg.headSign,
+              tripHeadSing: leg.headSign,
+              duration: leg.durationLeg(localization),
+              distance: leg.distanceString(localization),
+            ),
           ),
         ),
         // const SizedBox(height: 10),
