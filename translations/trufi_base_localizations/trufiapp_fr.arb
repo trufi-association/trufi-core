@@ -179,17 +179,14 @@
     "@errorUnknownOriginDestination": {
         "description": "Message that is displayed when a trip could not be planned, because both origin and destination were not found"
     },
-    "followOnFacebook": "Follow us on Facebook",
-    "@followOnFacebook": {
-        "description": "Facebook menu item"
-    },
-    "followOnInstagram": "Follow us on Instagram",
-    "@followOnInstagram": {
-        "description": "Instagram menu item"
-    },
-    "followOnTwitter": "Follow us on Twitter",
-    "@followOnTwitter": {
-        "description": "Twitter menu item"
+    "followOnSocialMedia": "Follow us on {value}",
+    "@followOnSocialMedia": {
+        "placeholders": {
+            "value": {
+                "example": "Facebook"
+            }
+        },
+        "description": "Follow us on (socialMedia)"
     },
     "instructionDistanceKm": "{value} km.",
     "@instructionDistanceKm": {
@@ -337,6 +334,19 @@
         },
         "description": "Text with URL that is used when sharing the app."
     },
+    "commonShowMap": "Show on map",
+    "@commonShowMap": {
+        "description": "General Show on map tilers label"
+    },
+    "commonMapSettings": "Map Settings",
+    "@commonMapSettings": {
+        "description": "General Map Settings label"
+    },
+    "mapTypeLabel": "Map Type",
+    "@mapTypeLabel": {
+        "description": "Label for the Map types"
+    },
+    "selectYourPointInterest": "Points of Interest",
     "themeModeDark": "Dark Theme",
     "themeModeLight": "Light theme",
     "themeModeSystem": "System Default"

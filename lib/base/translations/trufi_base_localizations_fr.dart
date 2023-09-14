@@ -140,13 +140,9 @@ class TrufiBaseLocalizationFr extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'L\'origine et la destination sont inconnues. Pouvez-vous être un peu plus descriptif?';
 
   @override
-  String get followOnFacebook => 'Follow us on Facebook';
-
-  @override
-  String get followOnInstagram => 'Follow us on Instagram';
-
-  @override
-  String get followOnTwitter => 'Follow us on Twitter';
+  String followOnSocialMedia(Object value) {
+    return 'Follow us on $value';
+  }
 
   @override
   String instructionDistanceKm(Object value) {
@@ -250,6 +246,18 @@ class TrufiBaseLocalizationFr extends TrufiBaseLocalization {
   String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Download $appTitle, the public transport app for $cityName, at $url';
   }
+
+  @override
+  String get commonShowMap => 'Show on map';
+
+  @override
+  String get commonMapSettings => 'Map Settings';
+
+  @override
+  String get mapTypeLabel => 'Map Type';
+
+  @override
+  String get selectYourPointInterest => 'Points of Interest';
 
   @override
   String get themeModeDark => 'Dark Theme';

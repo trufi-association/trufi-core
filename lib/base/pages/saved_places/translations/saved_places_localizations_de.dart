@@ -1,6 +1,3 @@
-
-
-
 import 'saved_places_localizations.dart';
 
 /// The translations for German (`de`).
@@ -11,7 +8,7 @@ class SavedPlacesLocalizationDe extends SavedPlacesLocalization {
   String get chooseNowLabel => 'Jetzt auswählen';
 
   @override
-  String get chooseOnMap => 'Choose on map';
+  String get chooseOnMap => 'Auf der Karte auswählen';
 
   @override
   String get commonCustomPlaces => 'Benutzerdefinierte Orte';

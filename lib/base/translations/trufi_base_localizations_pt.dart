@@ -5,130 +5,130 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   TrufiBaseLocalizationPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get alertLocationServicesDeniedMessage => 'Verifique se o seu dispositivo possui GPS e se as configurações de localização estão ativadas.';
+  String get alertLocationServicesDeniedMessage => 'Certifique-se de que seu dispositivo tenha GPS e que as configurações de localização estejam ativadas.';
 
   @override
   String get alertLocationServicesDeniedTitle => 'Nenhuma localização';
 
   @override
-  String get appReviewDialogButtonAccept => 'Escrever análise';
+  String get appReviewDialogButtonAccept => 'Escrever avaliação';
 
   @override
-  String get appReviewDialogButtonDecline => 'Agora Não';
+  String get appReviewDialogButtonDecline => 'Agora não';
 
   @override
-  String get appReviewDialogContent => 'Ajude-nos com uma revisão na Google Play Store.';
+  String get appReviewDialogContent => 'Apoie-nos com uma análise na Loja do Google Play.';
 
   @override
-  String get appReviewDialogTitle => 'Gostando de Trufi?';
+  String get appReviewDialogTitle => 'Gostando da Trufi?';
 
   @override
-  String get chooseLocationPageSubtitle => 'Panoramizar e aplicar zoom ao mapa';
+  String get chooseLocationPageSubtitle => 'Amplia e move o mapa para centralizar o marcador';
 
   @override
-  String get chooseLocationPageTitle => 'Escolha um ponto';
+  String get chooseLocationPageTitle => 'Escolha um ponto no mapa';
 
   @override
   String get commonCancel => 'Cancelar';
 
   @override
-  String get commonConfirmLocation => 'Show on map';
+  String get commonConfirmLocation => 'Confirmar localização';
 
   @override
-  String get commonDestination => 'Destino';
+  String get commonDestination => 'Endereço de destino';
 
   @override
-  String get commonEdit => 'Edit';
+  String get commonEdit => 'Editar';
 
   @override
   String get commonError => 'Erro';
 
   @override
-  String get commonFromStation => 'Show on map';
+  String get commonFromStation => 'Da estação';
 
   @override
-  String get commonFromStop => 'Show on map';
+  String get commonFromStop => 'Da parada';
 
   @override
-  String get commonItineraryNoTransitLegs => 'Show on map';
+  String get commonItineraryNoTransitLegs => 'Saia quando for melhor para você';
 
   @override
-  String get commonLeavesAt => 'Leaves';
+  String get commonLeavesAt => 'Sair';
 
   @override
-  String get commonLoading => 'Show on map';
+  String get commonLoading => 'Carregando...';
 
   @override
-  String get commonNoInternet => 'Sem conexão à internet.';
+  String get commonNoInternet => 'Sem conexão de internet';
 
   @override
   String get commonNoResults => 'Sem resultados';
 
   @override
-  String get commonOK => 'Está bem';
+  String get commonOK => 'OK';
 
   @override
   String get commonOrigin => 'Origem';
 
   @override
-  String get commonRemove => 'Remove';
+  String get commonRemove => 'Remover';
 
   @override
-  String get commonSave => 'Save';
+  String get commonSave => 'Salvar';
 
   @override
-  String get commonTomorrow => 'Show on map';
+  String get commonTomorrow => 'Amanhã';
 
   @override
   String get commonUnknownError => 'Erro desconhecido';
 
   @override
-  String get commonUnkownPlace => 'Show on map';
+  String get commonUnkownPlace => 'Local desconhecido';
 
   @override
-  String get commonWait => 'Wait';
+  String get commonWait => 'Aguarde';
 
   @override
-  String get commonWalk => 'Walk';
+  String get commonWalk => 'Caminhe';
 
   @override
   String get commonYourLocation => 'Sua localização';
 
   @override
-  String get errorAmbiguousDestination => 'O planejador de viagem não tem certeza do local para o qual deseja ir. Selecione uma das seguintes opções ou seja mais específico.';
+  String get errorAmbiguousDestination => 'O planejador de viagens não tem certeza do local para o qual deseja ir. Selecione uma das opções a seguir ou seja mais específico.';
 
   @override
-  String get errorAmbiguousOrigin => 'O planejador de viagem não tem certeza do local em que deseja começar. Selecione uma das seguintes opções ou seja mais específico.';
+  String get errorAmbiguousOrigin => 'O planejador de viagens não tem certeza do local de onde você deseja começar sua viagem. Selecione uma das opções a seguir ou seja mais específico.';
 
   @override
-  String get errorAmbiguousOriginDestination => 'Tanto a origem quanto o destino são ambíguos. Selecione uma das seguintes opções ou seja mais específico.';
+  String get errorAmbiguousOriginDestination => 'Tanto a origem quanto o destino são ambíguos. Selecione entre as seguintes opções ou seja mais específico.';
 
   @override
-  String get errorNoBarrierFree => 'A origem e o destino não são acessíveis para cadeiras de rodas';
+  String get errorNoBarrierFree => 'Tanto a origem quanto o destino não são acessíveis para pessoa em cadeira de rodas.';
 
   @override
-  String get errorNoConnectServer => 'No connect with server.';
+  String get errorNoConnectServer => 'Sem conexão com o servidor.';
 
   @override
-  String get errorNoTransitTimes => 'Não há horários de trânsito disponíveis. A data pode ser passada ou muito distante no futuro ou pode não haver serviço de transporte público para a sua viagem na hora que você escolher.';
+  String get errorNoTransitTimes => 'Não há horários de trânsito disponíveis. A data pode ser anterior à atual ou muito longe no futuro ou pode não haver serviço de trânsito para sua viagem no momento escolhido.';
 
   @override
-  String get errorOutOfBoundary => 'Viagem não é possível. Você pode estar tentando planejar uma viagem fora dos limites dos dados do mapa.';
+  String get errorOutOfBoundary => 'Essa viagem não é possível. Você pode estar tentando planejar uma viagem fora do limite de dados do mapa.';
 
   @override
-  String get errorPathNotFound => 'Viagem não é possível. Seu ponto inicial ou final pode não estar acessível com segurança (por exemplo, você pode estar começando em uma rua residencial conectada apenas a uma rodovia).';
+  String get errorPathNotFound => 'Essa viagem não é possível. Seu ponto de partida ou de chegada pode não ser acessível com segurança (por exemplo, você pode estar partindo de uma rua residencial conectada apenas a uma rodovia).';
 
   @override
-  String get errorServerCanNotHandleRequest => 'The request has errors that the server is not willing or able to process.';
+  String get errorServerCanNotHandleRequest => 'A solicitação tem erros que o servidor não pode ou não foi capaz de processar.';
 
   @override
-  String get errorServerTimeout => 'O planejador de viagem está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.';
+  String get errorServerTimeout => 'O planejador de viagens está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.';
 
   @override
-  String get errorServerUnavailable => 'Nós lamentamos. O planejador de viagem está temporariamente indisponível. Por favor, tente novamente mais tarde.';
+  String get errorServerUnavailable => 'Sentimos muito. O planeador de viagens está temporariamente indisponível. Por favor, tente novamente mais tarde.';
 
   @override
-  String get errorTrivialDistance => 'A origem está a uma distância trivial do destino.';
+  String get errorTrivialDistance => 'Origem é desconhecida. Você pode ser um pouco mais descritivo?';
 
   @override
   String get errorUnknownDestination => 'O destino é desconhecido. Você pode ser um pouco mais descritivo?';
@@ -137,16 +137,12 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get errorUnknownOrigin => 'A origem é desconhecida. Você pode ser um pouco mais descritivo?';
 
   @override
-  String get errorUnknownOriginDestination => 'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?';
+  String get errorUnknownOriginDestination => 'Tanto a origem quanto o destino são desconhecidos. Você pode ser um pouco mais descritivo?';
 
   @override
-  String get followOnFacebook => 'Siga-nos no Facebook';
-
-  @override
-  String get followOnInstagram => 'Siga-nos no Instagram';
-
-  @override
-  String get followOnTwitter => 'Siga-nos no Twitter';
+  String followOnSocialMedia(Object value) {
+    return 'Siga-nos no $value';
+  }
 
   @override
   String instructionDistanceKm(Object value) {
@@ -160,7 +156,7 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
 
   @override
   String instructionDurationHours(Object value) {
-    return '$value min';
+    return '$value h';
   }
 
   @override
@@ -169,7 +165,7 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   }
 
   @override
-  String get instructionVehicleBike => 'Ônibus';
+  String get instructionVehicleBike => 'Bicicleta';
 
   @override
   String get instructionVehicleBus => 'Ônibus';
@@ -178,37 +174,37 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get instructionVehicleCar => 'Carro';
 
   @override
-  String get instructionVehicleCarpool => 'Ônibus';
+  String get instructionVehicleCarpool => 'Carona';
 
   @override
-  String get instructionVehicleCommuterTrain => 'Ônibus';
+  String get instructionVehicleCommuterTrain => 'Trem suburbano';
 
   @override
   String get instructionVehicleGondola => 'Gôndola';
 
   @override
-  String get instructionVehicleLightRail => 'Esvaziar';
+  String get instructionVehicleLightRail => '(VLT) Veículo Leve sobre trilhos';
 
   @override
-  String get instructionVehicleMetro => 'Ônibus';
+  String get instructionVehicleMetro => 'Metrô';
 
   @override
-  String get instructionVehicleMicro => 'Micro';
+  String get instructionVehicleMicro => 'Micro ônibus';
 
   @override
-  String get instructionVehicleMinibus => 'Mini onibus';
+  String get instructionVehicleMinibus => 'Minibus';
 
   @override
   String get instructionVehicleTrufi => 'Trufi';
 
   @override
-  String get instructionVehicleWalk => 'Walk';
+  String get instructionVehicleWalk => 'A pé';
 
   @override
-  String get menuConnections => 'Route planner';
+  String get menuConnections => 'Planejador de rotas';
 
   @override
-  String get menuSocialMedia => 'Social media';
+  String get menuSocialMedia => 'Mídia social';
 
   @override
   String get menuTransportList => 'Mostrar rotas';
@@ -223,7 +219,7 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get noRouteErrorActionReportMissingRoute => 'Relatar uma rota ausente';
 
   @override
-  String get noRouteErrorActionShowCarRoute => 'Mostrar percurso de carro';
+  String get noRouteErrorActionShowCarRoute => 'Mostrar rota de carro';
 
   @override
   String get notShowAgain => 'Não mostre novamente';
@@ -232,31 +228,43 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   String get readOurBlog => 'Leia nosso blog';
 
   @override
-  String get searchFailLoadingPlan => 'Falha ao carregar o plano.';
+  String get searchFailLoadingPlan => 'Falha ao carregar o plano';
 
   @override
   String get searchHintDestination => 'Escolha o destino';
 
   @override
-  String get searchHintOrigin => 'Escolha o ponto de partida';
+  String get searchHintOrigin => 'Escolha a origem';
 
   @override
-  String get searchPleaseSelectDestination => 'Selecionar destino';
+  String get searchPleaseSelectDestination => 'Selecione o destino';
 
   @override
-  String get searchPleaseSelectOrigin => 'Selecionar origem';
+  String get searchPleaseSelectOrigin => 'Selecione a origem';
 
   @override
   String shareAppText(Object url, Object appTitle, Object cityName) {
-    return 'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em $url';
+    return 'Baixe $appTitle, o aplicativo de transporte público para $cityName, em $url';
   }
 
   @override
-  String get themeModeDark => 'Dark Theme';
+  String get commonShowMap => 'Show on map';
 
   @override
-  String get themeModeLight => 'Light theme';
+  String get commonMapSettings => 'Map Settings';
 
   @override
-  String get themeModeSystem => 'System Default';
+  String get mapTypeLabel => 'Map Type';
+
+  @override
+  String get selectYourPointInterest => 'Pontos de Interesse';
+
+  @override
+  String get themeModeDark => 'Tema escuro';
+
+  @override
+  String get themeModeLight => 'Tema claro';
+
+  @override
+  String get themeModeSystem => 'Sistema padrão';
 }
