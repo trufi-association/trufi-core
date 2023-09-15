@@ -3,6 +3,10 @@
 🎉 A new way of Custom Translations
 🎉 Usage of the gen-l10n way for translations
 
-## 0.0.1
+## 3.7.7
 
-* TODO: Describe initial release.
+🎉 Support for Flutter 3.7.7
+🎉 New Architecture with Flutter Bloc
+🎉 Implemented User tracking
+🎉 Implemented List routes
+🎉 Implemented App Links in Android and iOS
