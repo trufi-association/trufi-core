@@ -29,8 +29,12 @@ class GPSLocationProvider {
     // web platform no supported Geolocator.getServiceStatusStream()
     if (!kIsWeb) {
       _serviceStatusStreamSubscription ??=
-          Geolocator.getServiceStatusStream().listen((serviceStatus) {
-        if (serviceStatus == ServiceStatus.disabled) {
+          Geolocator.getServiceStatusStream().listen((serviceStatus) async {
+        final requestStatus = await Geolocator.requestPermission();
+        if (!(requestStatus == LocationPermission.always ||
+            requestStatus == LocationPermission.whileInUse)) {
+          return;
+        } else if (serviceStatus == ServiceStatus.disabled) {
           _streamLocation.add(null);
           _locationStreamSubscription?.cancel();
           _locationStreamSubscription = null;

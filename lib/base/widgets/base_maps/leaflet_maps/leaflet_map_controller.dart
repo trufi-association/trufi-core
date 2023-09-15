@@ -26,13 +26,22 @@ class PolylineWithMarkers {
   final List<Marker> markers;
 }
 
+typedef ItineraryBuilder = Map<Itinerary, List<PolylineWithMarkers>> Function({
+  required Plan plan,
+  required Itinerary selectedItinerary,
+  required Function(Itinerary p1) onTap,
+});
+
 class LeafletMapController extends Cubit<LeafletMapState>
     implements ITrufiMapController {
   static const int animationDuration = 500;
-  MapController mapController = MapController();
+  final ItineraryBuilder? itineraryBuilder;
 
-  LeafletMapController() : super(const LeafletMapState());
-  Map<Itinerary, List<PolylineWithMarkers>> itineraries = {};
+  LeafletMapController({
+    this.itineraryBuilder,
+  }) : super(const LeafletMapState());
+
+  MapController mapController = MapController();
   LatLngBounds get selectedBounds => _selectedBounds;
   LatLngBounds _selectedBounds = LatLngBounds();
   final Completer<Null> readyCompleter = Completer<Null>();
@@ -95,11 +104,17 @@ class LeafletMapController extends Cubit<LeafletMapState>
     _selectedBounds = LatLngBounds();
     _selectedBounds.extend(from.latLng.toLatLng());
     _selectedBounds.extend(to.latLng.toLatLng());
-    final itineraries = _buildItineraries(
-      plan: plan,
-      selectedItinerary: selectedItinerary,
-      onTap: onTap,
-    );
+    final itineraries = itineraryBuilder != null
+        ? itineraryBuilder!(
+            plan: plan,
+            selectedItinerary: selectedItinerary,
+            onTap: onTap,
+          )
+        : _defaultBuildItineraries(
+            plan: plan,
+            selectedItinerary: selectedItinerary,
+            onTap: onTap,
+          );
     final unselectedMarkers = <Marker>[];
     final unselectedPolylines = <Polyline>[];
     final selectedMarkers = <Marker>[];
@@ -138,12 +153,12 @@ class LeafletMapController extends Cubit<LeafletMapState>
     moveCurrentBounds(tickerProvider: tickerProvider);
   }
 
-  Map<Itinerary, List<PolylineWithMarkers>> _buildItineraries({
+  Map<Itinerary, List<PolylineWithMarkers>> _defaultBuildItineraries({
     required Plan plan,
     required Itinerary selectedItinerary,
     required Function(Itinerary p1) onTap,
   }) {
-    itineraries = {};
+    final itineraries = <Itinerary, List<PolylineWithMarkers>>{};
     if (plan.itineraries != null) {
       for (final itinerary in plan.itineraries!) {
         final List<Marker> markers = [];
@@ -152,8 +167,8 @@ class LeafletMapController extends Cubit<LeafletMapState>
 
         final List<Leg> compressedLegs = itinerary.compressLegs;
 
-          // TODO Implement a boolean to configure if the backend has a server or not
-          // Implement for otpServer without route color configuration
+        // TODO Implement a boolean to configure if the backend has a server or not
+        // Implement for otpServer without route color configuration
         bool isPrimary = false;
         
         for (int i = 0; i < compressedLegs.length; i++) {

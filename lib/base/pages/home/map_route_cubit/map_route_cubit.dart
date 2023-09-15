@@ -44,6 +44,11 @@ class MapRouteCubit extends Cubit<MapRouteState> {
     await updateMapRouteState(const MapRouteState());
   }
 
+  Future<void> resetPlan() async {
+    await updateMapRouteState(
+        state.copyWithNullable(plan: const Optional.value(null)));
+  }
+
   Future<void> swapLocations() async {
     await updateMapRouteState(
       state.copyWith(

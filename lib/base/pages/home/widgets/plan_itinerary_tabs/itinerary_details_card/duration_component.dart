@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/journey_plan/utils/duration_utils.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
@@ -20,16 +22,31 @@ class DurationComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
+    final showTimeItinerary =
+        context.read<MapConfigurationCubit>().state.showTimeItinerary;
     return Row(
       children: [
         const Icon(Icons.timer_sharp),
         const SizedBox(width: 2),
-        Text(
-          durationFormatString(localization, duration),
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              durationFormatString(localization, duration),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: showTimeItinerary ? 17 : null,
+              ),
+            ),
+            if (showTimeItinerary)
+              Text(
+                '${durationToHHmm(startTime)} - ${durationToHHmm(endTime)}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+          ],
         ),
       ],
     );

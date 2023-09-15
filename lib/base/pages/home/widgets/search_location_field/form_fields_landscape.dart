@@ -14,7 +14,6 @@ class FormFieldsLandscape extends StatelessWidget {
     Key? key,
     required this.onSaveFrom,
     required this.onSaveTo,
-    required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
     required this.selectPositionOnPage,
@@ -22,7 +21,6 @@ class FormFieldsLandscape extends StatelessWidget {
 
   final void Function(TrufiLocation) onSaveFrom;
   final void Function(TrufiLocation) onSaveTo;
-  final void Function() onFetchPlan;
   final void Function() onReset;
   final void Function() onSwap;
   final SelectLocationData selectPositionOnPage;

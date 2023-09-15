@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:async/async.dart' as async;
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -81,6 +82,7 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData(widget.position ?? mapConfiguratiom.center);
     });
+    BackButtonInterceptor.add(myInterceptor, context: context);
   }
 
   Timer? timer;
@@ -97,7 +99,15 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
   @override
   void dispose() {
     timer?.cancel();
+    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (!stopDefaultButtonEvent) {
+      Navigator.pop(context);
+    }
+    return true;
   }
 
   @override
@@ -269,7 +279,8 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
       fetchError = null;
       loading = true;
     });
-    cancelableOperation = async.CancelableOperation.fromFuture(_fetchData(location));
+    cancelableOperation =
+        async.CancelableOperation.fromFuture(_fetchData(location));
     cancelableOperation?.valueOrCancellation().then((value) {
       if (mounted) {
         setState(() {

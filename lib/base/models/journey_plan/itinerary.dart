@@ -131,6 +131,8 @@ class Itinerary extends Equatable {
   String getWalkDistanceString(TrufiBaseLocalization localization) =>
       distanceWithTranslation(localization, walkDistance.toDouble());
 
+  double get totalWalkingDistance => getTotalWalkingDistance(compressLegs);
+
   double get totalBikingDistance => getTotalBikingDistance(compressLegs);
 
   Duration get totalBikingDuration => getTotalBikingDuration(compressLegs);

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +15,7 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/location_search_delegate/favorite_button.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
-class SuggestionList extends StatelessWidget {
+class SuggestionList extends StatefulWidget {
   final String query;
   final bool isOrigin;
   final ValueChanged<TrufiLocation> onSelected;
@@ -30,6 +33,31 @@ class SuggestionList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SuggestionList> createState() => _SuggestionListState();
+}
+
+class _SuggestionListState extends State<SuggestionList> {
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor, context: context);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    log("data searc: ${info.ifRouteChanged(context).toString()}");
+    log("data searc2: ${info.currentRoute(context).toString()}");
+    if (!stopDefaultButtonEvent) {
+      Navigator.pop(context);
+    }
+    return true;
+  }
+  @override
   Widget build(BuildContext context) {
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
     return SafeArea(
@@ -42,13 +70,13 @@ class SuggestionList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
             child: CustomScrollView(
               slivers: [
-                _BuildYourLocation(onSelected),
+                _BuildYourLocation(widget.onSelected),
                 _BuildChooseOnMap(
-                  onSelectedMap: onSelectedMap,
-                  isOrigin: isOrigin,
-                  selectPositionOnPage: selectPositionOnPage,
+                  onSelectedMap: widget.onSelectedMap,
+                  isOrigin: widget.isOrigin,
+                  selectPositionOnPage: widget.selectPositionOnPage,
                 ),
-                if (query.isEmpty)
+                if (widget.query.isEmpty)
                   _BuildYourPlaces(
                     title: localizationSP.menuYourPlaces,
                     places: [
@@ -57,34 +85,34 @@ class SuggestionList extends StatelessWidget {
                           .toList(),
                       ...searchLocationsCubit.state.myPlaces
                     ],
-                    onSelected: onSelected,
+                    onSelected: widget.onSelected,
                   ),
-                if (query.isEmpty)
+                if (widget.query.isEmpty)
                   _BuildObjectList(
                     title: localizationSP.searchTitleFavorites,
                     iconData: Icons.place,
                     places: searchLocationsCubit.state.favoritePlaces,
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
+                    onSelected: widget.onSelected,
+                    onStreetTapped: widget.onStreetTapped,
                   ),
-                if (query.isEmpty)
+                if (widget.query.isEmpty)
                   _BuildObjectList(
                     title: localizationSP.searchTitleRecent,
                     iconData: Icons.history,
                     places: searchLocationsCubit.getHistoryList(),
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
+                    onSelected: widget.onSelected,
+                    onStreetTapped: widget.onStreetTapped,
                   ),
-                if (query.isNotEmpty)
+                if (widget.query.isNotEmpty)
                   _BuildFutureBuilder(
                     title: localizationSP.searchTitleResults,
                     future: searchLocationsCubit.fetchLocations(
-                      query,
+                      widget.query,
                     ),
                     iconData: Icons.place,
                     isVisibleWhenEmpty: true,
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
+                    onSelected: widget.onSelected,
+                    onStreetTapped: widget.onStreetTapped,
                   ),
               ],
             ),

@@ -12,11 +12,13 @@ class TransportDash extends StatelessWidget {
   final bool showAfterLine;
   final Function(TrufiLatLng) moveTo;
   final Color? forcedColor;
+  final bool showTimeItinerary;
 
   const TransportDash({
     Key? key,
     required this.leg,
     required this.moveTo,
+    required this.showTimeItinerary,
     this.showBeforeLine = true,
     this.showAfterLine = false,
     this.forcedColor,
@@ -29,7 +31,7 @@ class TransportDash extends StatelessWidget {
       children: [
         if (showBeforeLine)
           DashLinePlace(
-            date: leg.startTimeString,
+            date: showTimeItinerary ? leg.startTimeString : null,
             location: leg.fromPlace.name,
             color: forcedColor ?? leg.primaryColor,
           ),
@@ -44,7 +46,7 @@ class TransportDash extends StatelessWidget {
         ),
         if (showAfterLine)
           DashLinePlace(
-            date: leg.endTimeString.toString(),
+            date: showTimeItinerary ? leg.endTimeString.toString() : null,
             location: leg.toPlace.name.toString(),
             color: forcedColor ?? leg.primaryColor,
           ),
@@ -53,9 +55,9 @@ class TransportDash extends StatelessWidget {
   }
 }
 
-class WalkDash extends StatelessWidget {
+class NoTransportDash extends StatelessWidget {
   final Leg leg;
-  const WalkDash({
+  const NoTransportDash({
     Key? key,
     required this.leg,
   }) : super(key: key);
@@ -64,14 +66,17 @@ class WalkDash extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiBaseLocalization.of(context);
+    final modeTransport = leg.transportMode == TransportMode.bicycle
+        ? localization.commonCycling
+        : localization.commonWalk;
     return Column(
       children: [
         SeparatorPlace(
           color: leg.primaryColor,
           height: 10,
-          leading: TransportMode.walk.getImage(color: theme.iconTheme.color),
+          leading: leg.transportMode.getImage(color: theme.iconTheme.color),
           child: Text(
-              '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+              '$modeTransport ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
         ),
       ],
     );
@@ -151,15 +156,15 @@ class SeparatorPlace extends StatelessWidget {
 }
 
 class DashLinePlace extends StatelessWidget {
-  final String date;
   final String location;
+  final String? date;
   final Widget? child;
   final Color? color;
 
   const DashLinePlace({
     Key? key,
-    required this.date,
     required this.location,
+    this.date,
     this.child,
     this.color,
   }) : super(key: key);
@@ -175,11 +180,20 @@ class DashLinePlace extends StatelessWidget {
           SizedBox(
             width: 50,
             child: Center(
-              child: Container(
-                width: 40,
-                height: 1.5,
-                color: theme.dividerColor,
-              ),
+              child: date != null
+                  ? Text(
+                      date!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                    )
+                  : Container(
+                      width: 40,
+                      height: 1.5,
+                      color: theme.dividerColor,
+                    ),
             ),
           ),
           if (child == null)

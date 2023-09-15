@@ -80,7 +80,7 @@ class LocationFormField extends StatelessWidget {
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500),
                                 text:
-                                    "${value?.displayName(localizationSP)}${value?.address != null ? ", ${value?.address}" : ""}",
+                                    "${value?.displayName(localizationSP)}${value?.address != null && value?.address != "" ? ", ${value?.address}" : ""}",
                               )
                             : TextSpan(
                                 style: const TextStyle(

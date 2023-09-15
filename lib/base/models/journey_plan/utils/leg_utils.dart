@@ -47,6 +47,9 @@ bool continueWithNoTransit(Leg leg1, Leg leg2) {
   return isBicycle1 && isBicycle2;
 }
 
+double getTotalWalkingDistance(List<Leg> legs) =>
+    sumDistances(legs.where(isWalkingLeg).toList());
+
 double getTotalBikingDistance(List<Leg> legs) =>
     sumDistances(legs.where(isBikingLeg).toList());
 

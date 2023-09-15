@@ -16,6 +16,9 @@ class MapConfiguration {
   /// Choose Location Zoom
   final double chooseLocationZoom;
 
+  /// Show the time for each Itinerary
+  final bool showTimeItinerary;
+
   /// Center of the map
   final TrufiLatLng center;
 
@@ -35,6 +38,7 @@ class MapConfiguration {
     this.onlineMaxZoom = 18.0,
     this.onlineZoom = 13.0,
     this.chooseLocationZoom = 16.0,
+    this.showTimeItinerary = false,
     this.mapAttributionBuilder,
     this.markersConfiguration = const DefaultMarkerConfiguration(),
     // this.itinararyCreator = const DefaultItineraryCreator(),

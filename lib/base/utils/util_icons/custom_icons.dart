@@ -105,7 +105,7 @@ String decodeFillColor(Color? color) {
   if (color != null) {
     stringColor = color == Colors.transparent
         ? 'none'
-        : "#${color.value.toRadixString(16)}";
+        : "#${color.value.toRadixString(16).substring(2)}";
   }
   return stringColor;
 }

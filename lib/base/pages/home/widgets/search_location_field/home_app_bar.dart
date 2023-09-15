@@ -66,7 +66,6 @@ class HomeAppBar extends StatelessWidget {
                   Expanded(
                     child: (isPortrait)
                         ? FormFieldsPortrait(
-                            onFetchPlan: onFetchPlan,
                             onReset: onReset,
                             onSaveFrom: onSaveFrom,
                             onSaveTo: onSaveTo,
@@ -74,7 +73,6 @@ class HomeAppBar extends StatelessWidget {
                             selectPositionOnPage: selectPositionOnPage,
                           )
                         : FormFieldsLandscape(
-                            onFetchPlan: onFetchPlan,
                             onReset: onReset,
                             onSaveFrom: onSaveFrom,
                             onSaveTo: onSaveTo,

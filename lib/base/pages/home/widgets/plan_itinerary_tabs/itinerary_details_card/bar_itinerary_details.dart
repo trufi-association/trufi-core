@@ -31,7 +31,7 @@ class BarItineraryDetails extends StatelessWidget {
           ),
           Row(
             children: [
-              if (itinerary.walkDistance > 0)
+              if (itinerary.totalWalkingDistance > 0)
                 WalkDistance(
                   walkDistance: itinerary.walkDistance,
                   walkDuration: itinerary.walkTime,
