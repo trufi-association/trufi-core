@@ -125,9 +125,6 @@ class _TransportListState extends State<TransportList> {
                 itemCount: routeTransportsState.filterTransports.length,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                prototypeItem: Container(
-                  height: 79,
-                ),
                 itemBuilder: (buildContext, index) {
                   final TransitRoute transport =
                       routeTransportsState.filterTransports[index];

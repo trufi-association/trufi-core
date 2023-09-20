@@ -77,9 +77,8 @@ class TileTransport extends StatelessWidget {
                 Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                  height: 34,
                   padding:
-                      const EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 1.0,
