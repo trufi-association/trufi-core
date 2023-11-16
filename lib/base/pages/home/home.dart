@@ -1,11 +1,13 @@
-import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
+
+import 'package:async_executor/async_executor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
+
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
-
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
+import 'package:trufi_core/base/blocs/providers/uni_link_provider/geo_location.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
@@ -258,13 +260,8 @@ class _HomePageState extends State<HomePage>
       await routePlannerCubit.setFromPlace(originLocation);
       if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
-    } else if (queryParameters['googlePoint'] != null) {
-      final destinyData = queryParameters['googlePoint']!.split(",");
-      final location = TrufiLocation(
-        description: destinyData[0].trim(),
-        latitude: double.tryParse(destinyData[1])!,
-        longitude: double.tryParse(destinyData[2])!,
-      );
+    } else if (queryParameters['type'] == GeoLocation.type) {
+      final location = GeoLocation.fromJson(queryParameters).trufiLocation;
       await UniLinkAlert.showNotification(
         context: context,
         defineStartLocation: () async {

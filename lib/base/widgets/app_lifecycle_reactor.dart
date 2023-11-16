@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
-import 'package:trufi_core/base/blocs/providers/uni_link_provider.dart';
+import 'package:trufi_core/base/blocs/providers/uni_link_provider/uni_link_provider.dart';
 
 class AppLifecycleReactor extends StatefulWidget {
   const AppLifecycleReactor({
