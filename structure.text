@@ -1,0 +1,28 @@
+lib/
+|-- modules/                       # Feature-based modules
+|   |-- home/                      # Home module
+|   |   |-- bloc/                  # Home BLoC/Cubits
+|   |   |-- view/                  # Home Screens
+|   |   '-- home_module.dart       # Module root
+|   |-- search/                    # Search module
+|   |   '-- ...                    # Similar to home/
+|   |-- settings/                  # Settings module
+|   |   '-- ...                    # Similar to home/
+|-- shared/                        # Shared resources
+|   |-- blocs/                     # Global BLoCs/Cubits
+|   |-- widgets/                   # Shared Widgets
+|   |-- translations/              # Translations
+|   '-- theme/                     # Global theme data
+|-- core/                          # Core utilities, models, and services
+|   |-- models/                    # Data models
+|   |   '-- route.dart
+|   |-- services/                  # API services, Database services, etc.
+|   |   '-- gps_location_service.dart
+|   |-- material_widgets/                  # 
+|   '-- utils/                         # Helper functions, constants
+|   |-- providers/                     # Application-wide providers
+|   |   |-- books/                     
+|   |   |   |-- repository/            # Save data locally with Hive or SQL
+|   |   |   |-- services/              # Connect to API and contain DTOs
+|   |   |   '-- book_cubit/            # Global state management for updating books data
+|-- main.dart                      # Entry point
