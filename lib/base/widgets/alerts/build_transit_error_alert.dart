@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
-import 'package:trufi_core/base/const/consts.dart';
-import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/utils/packge_info_platform.dart';
 
 class BuildTransitErrorAlert extends StatelessWidget {
   final FetchOnlinePlanException exception;
@@ -19,6 +17,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
+    final mapConfiguration = context.read<MapConfigurationCubit>().state;
     final theme = Theme.of(context);
     final actionTextStyle = TextStyle(
       color: theme.colorScheme.secondary,
@@ -46,16 +45,18 @@ class BuildTransitErrorAlert extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           const SizedBox(height: 10),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _reportRouteError(localization.localeName);
-            },
-            child: Text(
-              localization.noRouteErrorActionReportMissingRoute,
-              style: actionTextStyle,
+          if (mapConfiguration.feedbackForm != null)
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // ignore: deprecated_member_use
+                launch(mapConfiguration.feedbackForm!);
+              },
+              child: Text(
+                localization.noRouteErrorActionReportMissingRoute,
+                style: actionTextStyle,
+              ),
             ),
-          ),
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
@@ -65,17 +66,6 @@ class BuildTransitErrorAlert extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _reportRouteError(String languageCode) async {
-    const routeFeedbackUrl = urlsrouteFeedbackUrl;
-    String version = await PackageInfoPlatform.version();
-    final TrufiLatLng? currentLocation = GPSLocationProvider().myLocation;
-    // ignore: deprecated_member_use
-    launch(
-      "$routeFeedbackUrl?lang=$languageCode&geo=${currentLocation?.latitude},"
-      "${currentLocation?.longitude}&app=$version",
     );
   }
 

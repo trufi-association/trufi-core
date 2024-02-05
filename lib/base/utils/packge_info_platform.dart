@@ -11,7 +11,17 @@ class PackageInfoPlatform {
       return packageInfo.version;
     } else {
       WebBrowserInfo webBrowserInfo = await DeviceInfoPlugin().webBrowserInfo;
-      return webBrowserInfo.userAgent??'webPlatform';
+      return webBrowserInfo.userAgent ?? 'webPlatform';
+    }
+  }
+
+  static Future<String> appName() async {
+    if (!kIsWeb) {
+      final packageInfo = await PackageInfo.fromPlatform();
+      return packageInfo.appName;
+    } else {
+      WebBrowserInfo webBrowserInfo = await DeviceInfoPlugin().webBrowserInfo;
+      return webBrowserInfo.appName ?? 'webPlatform';
     }
   }
 }

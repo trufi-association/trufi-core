@@ -104,7 +104,7 @@ abstract class TrufiBaseLocalization {
   /// Text of dialog that explains that access to location services was denied
   ///
   /// In pt, this message translates to:
-  /// **'Verifique se o seu dispositivo possui GPS e se as configurações de localização estão ativadas.'**
+  /// **'Certifique-se de que seu dispositivo tenha GPS e que as configurações de localização estejam ativadas.'**
   String get alertLocationServicesDeniedMessage;
 
   /// Title of dialog that explains that access to location services was denied
@@ -116,37 +116,37 @@ abstract class TrufiBaseLocalization {
   /// Accept button of the App Review Dialog used on Android
   ///
   /// In pt, this message translates to:
-  /// **'Escrever análise'**
+  /// **'Escrever avaliação'**
   String get appReviewDialogButtonAccept;
 
   /// Decline button of the App Review Dialog used on Android
   ///
   /// In pt, this message translates to:
-  /// **'Agora Não'**
+  /// **'Agora não'**
   String get appReviewDialogButtonDecline;
 
   /// Content of the App Review Dialog used on Android
   ///
   /// In pt, this message translates to:
-  /// **'Ajude-nos com uma revisão na Google Play Store.'**
+  /// **'Apoie-nos com uma análise na Loja do Google Play.'**
   String get appReviewDialogContent;
 
   /// Title of the App Review Dialog used on Android
   ///
   /// In pt, this message translates to:
-  /// **'Gostando de Trufi?'**
+  /// **'Gostando da Trufi?'**
   String get appReviewDialogTitle;
 
   /// Page subtitle when choosing a location on the map
   ///
   /// In pt, this message translates to:
-  /// **'Panoramizar e aplicar zoom ao mapa'**
+  /// **'Amplia e move o mapa para centralizar o marcador'**
   String get chooseLocationPageSubtitle;
 
   /// Page title when choosing a location on the map
   ///
   /// In pt, this message translates to:
-  /// **'Escolha um ponto'**
+  /// **'Escolha um ponto no mapa'**
   String get chooseLocationPageTitle;
 
   /// Cancel button label
@@ -158,19 +158,19 @@ abstract class TrufiBaseLocalization {
   /// General Confirm location label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Confirmar localização'**
   String get commonConfirmLocation;
 
   /// Destination field label
   ///
   /// In pt, this message translates to:
-  /// **'Destino'**
+  /// **'Endereço de destino'**
   String get commonDestination;
 
   /// General Edit label
   ///
   /// In pt, this message translates to:
-  /// **'Edit'**
+  /// **'Editar'**
   String get commonEdit;
 
   /// Message when an error has occured
@@ -182,37 +182,37 @@ abstract class TrufiBaseLocalization {
   /// General from station  label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Da estação'**
   String get commonFromStation;
 
   /// General from stop  label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Da parada'**
   String get commonFromStop;
 
   /// General Leave when it suits you label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Saia quando for melhor para você'**
   String get commonItineraryNoTransitLegs;
 
   /// General Leaves at  label
   ///
   /// In pt, this message translates to:
-  /// **'Leaves'**
+  /// **'Sair'**
   String get commonLeavesAt;
 
   /// General Loading label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Carregando...'**
   String get commonLoading;
 
   /// Message when internet connection is lost
   ///
   /// In pt, this message translates to:
-  /// **'Sem conexão à internet.'**
+  /// **'Sem conexão de internet'**
   String get commonNoInternet;
 
   /// Message that is displayed when no results were found for the search term that was provided
@@ -224,7 +224,7 @@ abstract class TrufiBaseLocalization {
   /// OK button label
   ///
   /// In pt, this message translates to:
-  /// **'Está bem'**
+  /// **'OK'**
   String get commonOK;
 
   /// Origin field label
@@ -236,19 +236,19 @@ abstract class TrufiBaseLocalization {
   /// General Remove label
   ///
   /// In pt, this message translates to:
-  /// **'Remove'**
+  /// **'Remover'**
   String get commonRemove;
 
   /// General Save label
   ///
   /// In pt, this message translates to:
-  /// **'Save'**
+  /// **'Salvar'**
   String get commonSave;
 
   /// General Tomorrow label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Amanhã'**
   String get commonTomorrow;
 
   /// Message when an unknown error has occured
@@ -260,19 +260,19 @@ abstract class TrufiBaseLocalization {
   /// General Unkown place label
   ///
   /// In pt, this message translates to:
-  /// **'Show on map'**
+  /// **'Local desconhecido'**
   String get commonUnkownPlace;
 
   /// General wait label
   ///
   /// In pt, this message translates to:
-  /// **'Wait'**
+  /// **'Aguarde'**
   String get commonWait;
 
   /// General Walk label
   ///
   /// In pt, this message translates to:
-  /// **'Walk'**
+  /// **'Caminhe'**
   String get commonWalk;
 
   /// Search option that allows to use the current user location
@@ -284,73 +284,73 @@ abstract class TrufiBaseLocalization {
   /// Message that is displayed when a trip could not be planned, because the specified destination is ambiguous
   ///
   /// In pt, this message translates to:
-  /// **'O planejador de viagem não tem certeza do local para o qual deseja ir. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// **'O planejador de viagens não tem certeza do local para o qual deseja ir. Selecione uma das opções a seguir ou seja mais específico.'**
   String get errorAmbiguousDestination;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin is ambiguous
   ///
   /// In pt, this message translates to:
-  /// **'O planejador de viagem não tem certeza do local em que deseja começar. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// **'O planejador de viagens não tem certeza do local de onde você deseja começar sua viagem. Selecione uma das opções a seguir ou seja mais específico.'**
   String get errorAmbiguousOrigin;
 
   /// Message that is displayed when a trip could not be planned, because the specified origin and destination are ambiguous
   ///
   /// In pt, this message translates to:
-  /// **'Tanto a origem quanto o destino são ambíguos. Selecione uma das seguintes opções ou seja mais específico.'**
+  /// **'Tanto a origem quanto o destino são ambíguos. Selecione entre as seguintes opções ou seja mais específico.'**
   String get errorAmbiguousOriginDestination;
 
   /// Message that is displayed when a trip could not be planned, because both origin and destination are not wheelchair accessible
   ///
   /// In pt, this message translates to:
-  /// **'A origem e o destino não são acessíveis para cadeiras de rodas'**
+  /// **'Tanto a origem quanto o destino não são acessíveis para pessoa em cadeira de rodas.'**
   String get errorNoBarrierFree;
 
   /// Message when internet connection is lost
   ///
   /// In pt, this message translates to:
-  /// **'No connect with server.'**
+  /// **'Sem conexão com o servidor.'**
   String get errorNoConnectServer;
 
   /// Message that is displayed when a trip could not be planned, because there were no valid transit times available for the requested time
   ///
   /// In pt, this message translates to:
-  /// **'Não há horários de trânsito disponíveis. A data pode ser passada ou muito distante no futuro ou pode não haver serviço de transporte público para a sua viagem na hora que você escolher.'**
+  /// **'Não há horários de trânsito disponíveis. A data pode ser anterior à atual ou muito longe no futuro ou pode não haver serviço de trânsito para sua viagem no momento escolhido.'**
   String get errorNoTransitTimes;
 
   /// Message that is displayed when a trip could not be planned, because it would be outside of map data boundaries
   ///
   /// In pt, this message translates to:
-  /// **'Viagem não é possível. Você pode estar tentando planejar uma viagem fora dos limites dos dados do mapa.'**
+  /// **'Essa viagem não é possível. Você pode estar tentando planejar uma viagem fora do limite de dados do mapa.'**
   String get errorOutOfBoundary;
 
   /// Message that is displayed when a trip could not be planned, because the start or end point is not safely accessible
   ///
   /// In pt, this message translates to:
-  /// **'Viagem não é possível. Seu ponto inicial ou final pode não estar acessível com segurança (por exemplo, você pode estar começando em uma rua residencial conectada apenas a uma rodovia).'**
+  /// **'Essa viagem não é possível. Seu ponto de partida ou de chegada pode não ser acessível com segurança (por exemplo, você pode estar partindo de uma rua residencial conectada apenas a uma rodovia).'**
   String get errorPathNotFound;
 
   /// Message that is displayed when a trip could not be planned, because the request had errors
   ///
   /// In pt, this message translates to:
-  /// **'The request has errors that the server is not willing or able to process.'**
+  /// **'A solicitação tem erros que o servidor não pode ou não foi capaz de processar.'**
   String get errorServerCanNotHandleRequest;
 
   /// Message that is displayed when a trip could not be planned, because the server is taking too long to respond
   ///
   /// In pt, this message translates to:
-  /// **'O planejador de viagem está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.'**
+  /// **'O planejador de viagens está demorando muito para processar sua solicitação. Por favor, tente novamente mais tarde.'**
   String get errorServerTimeout;
 
   /// Message that is displayed when the trip planning server was not available
   ///
   /// In pt, this message translates to:
-  /// **'Nós lamentamos. O planejador de viagem está temporariamente indisponível. Por favor, tente novamente mais tarde.'**
+  /// **'Sentimos muito. O planeador de viagens está temporariamente indisponível. Por favor, tente novamente mais tarde.'**
   String get errorServerUnavailable;
 
   /// Message that is displayed when a trip could not be planned, because origin and destination are too close to each other
   ///
   /// In pt, this message translates to:
-  /// **'A origem está a uma distância trivial do destino.'**
+  /// **'Origem é desconhecida. Você pode ser um pouco mais descritivo?'**
   String get errorTrivialDistance;
 
   /// Message that is displayed when a trip could not be planned, because the destination was not found
@@ -368,26 +368,14 @@ abstract class TrufiBaseLocalization {
   /// Message that is displayed when a trip could not be planned, because both origin and destination were not found
   ///
   /// In pt, this message translates to:
-  /// **'A origem e o destino são desconhecidos. Você pode ser um pouco mais descritivo?'**
+  /// **'Tanto a origem quanto o destino são desconhecidos. Você pode ser um pouco mais descritivo?'**
   String get errorUnknownOriginDestination;
 
-  /// Facebook menu item
+  /// Follow us on (socialMedia)
   ///
   /// In pt, this message translates to:
-  /// **'Siga-nos no Facebook'**
-  String get followOnFacebook;
-
-  /// Instagram menu item
-  ///
-  /// In pt, this message translates to:
-  /// **'Siga-nos no Instagram'**
-  String get followOnInstagram;
-
-  /// Twitter menu item
-  ///
-  /// In pt, this message translates to:
-  /// **'Siga-nos no Twitter'**
-  String get followOnTwitter;
+  /// **'Siga-nos no {value}'**
+  String followOnSocialMedia(Object value);
 
   /// Itinerary leg distance (km)
   ///
@@ -404,7 +392,7 @@ abstract class TrufiBaseLocalization {
   /// Itinerary leg duration in hours
   ///
   /// In pt, this message translates to:
-  /// **'{value} min'**
+  /// **'{value} h'**
   String instructionDurationHours(Object value);
 
   /// Itinerary leg duration
@@ -416,7 +404,7 @@ abstract class TrufiBaseLocalization {
   /// Vehicle name (Bike)
   ///
   /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// **'Bicicleta'**
   String get instructionVehicleBike;
 
   /// Vehicle name (Bus)
@@ -434,13 +422,13 @@ abstract class TrufiBaseLocalization {
   /// Vehicle name (Carpool)
   ///
   /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// **'Carona'**
   String get instructionVehicleCarpool;
 
   /// Vehicle name (Commuter train)
   ///
   /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// **'Trem suburbano'**
   String get instructionVehicleCommuterTrain;
 
   /// Vehicle name (Gondola)
@@ -452,25 +440,25 @@ abstract class TrufiBaseLocalization {
   /// Vehicle name (Light Rail Train)
   ///
   /// In pt, this message translates to:
-  /// **'Esvaziar'**
+  /// **'(VLT) Veículo Leve sobre trilhos'**
   String get instructionVehicleLightRail;
 
   /// Vehicle name (Metro)
   ///
   /// In pt, this message translates to:
-  /// **'Ônibus'**
+  /// **'Metrô'**
   String get instructionVehicleMetro;
 
   /// Vehicle name (Micro)
   ///
   /// In pt, this message translates to:
-  /// **'Micro'**
+  /// **'Micro ônibus'**
   String get instructionVehicleMicro;
 
   /// Vehicle name (Minibus)
   ///
   /// In pt, this message translates to:
-  /// **'Mini onibus'**
+  /// **'Minibus'**
   String get instructionVehicleMinibus;
 
   /// Vehicle name (Trufi)
@@ -482,7 +470,7 @@ abstract class TrufiBaseLocalization {
   /// No description provided for @instructionVehicleWalk.
   ///
   /// In pt, this message translates to:
-  /// **'Walk'**
+  /// **'A pé'**
   String get instructionVehicleWalk;
 
   /// Menu item that shows the map/planned trip
@@ -524,7 +512,7 @@ abstract class TrufiBaseLocalization {
   /// Button label to show the car route when no route could be found
   ///
   /// In pt, this message translates to:
-  /// **'Mostrar percurso de carro'**
+  /// **'Mostrar rota de carro'**
   String get noRouteErrorActionShowCarRoute;
 
   /// No description provided for @notShowAgain.
@@ -542,7 +530,7 @@ abstract class TrufiBaseLocalization {
   /// Message that is displayed when the response of the trip planning request could not be received
   ///
   /// In pt, this message translates to:
-  /// **'Falha ao carregar o plano.'**
+  /// **'Falha ao carregar o plano'**
   String get searchFailLoadingPlan;
 
   /// Placeholder text for the destination field (in search state)
@@ -554,43 +542,67 @@ abstract class TrufiBaseLocalization {
   /// Placeholder text for the origin field (in search state)
   ///
   /// In pt, this message translates to:
-  /// **'Escolha o ponto de partida'**
+  /// **'Escolha a origem'**
   String get searchHintOrigin;
 
   /// Placeholder text for the destination field (in map-visible state)
   ///
   /// In pt, this message translates to:
-  /// **'Selecionar destino'**
+  /// **'Selecione o destino'**
   String get searchPleaseSelectDestination;
 
   /// Placeholder text for the origin field (in map-visible state)
   ///
   /// In pt, this message translates to:
-  /// **'Selecionar origem'**
+  /// **'Selecione a origem'**
   String get searchPleaseSelectOrigin;
 
   /// Text with URL that is used when sharing the app.
   ///
   /// In pt, this message translates to:
-  /// **'Baixe o Trufi App, o aplicativo de transporte público para Cochabamba, em {url}'**
+  /// **'Baixe {appTitle}, o aplicativo de transporte público para {cityName}, em {url}'**
   String shareAppText(Object url, Object appTitle, Object cityName);
+
+  /// General Show on map tilers label
+  ///
+  /// In pt, this message translates to:
+  /// **'Show on map'**
+  String get commonShowMap;
+
+  /// General Map Settings label
+  ///
+  /// In pt, this message translates to:
+  /// **'Map Settings'**
+  String get commonMapSettings;
+
+  /// Label for the Map types
+  ///
+  /// In pt, this message translates to:
+  /// **'Map Type'**
+  String get mapTypeLabel;
+
+  /// No description provided for @selectYourPointInterest.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pontos de Interesse'**
+  String get selectYourPointInterest;
 
   /// No description provided for @themeModeDark.
   ///
   /// In pt, this message translates to:
-  /// **'Dark Theme'**
+  /// **'Tema escuro'**
   String get themeModeDark;
 
   /// No description provided for @themeModeLight.
   ///
   /// In pt, this message translates to:
-  /// **'Light theme'**
+  /// **'Tema claro'**
   String get themeModeLight;
 
   /// No description provided for @themeModeSystem.
   ///
   /// In pt, this message translates to:
-  /// **'System Default'**
+  /// **'Sistema padrão'**
   String get themeModeSystem;
 }
 

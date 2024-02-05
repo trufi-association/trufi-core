@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:diff_match_patch/diff_match_patch.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 
@@ -14,7 +13,6 @@ const String keyStreetJunctions = 'streetJunctions';
 class LocationSearchStorage {
   static const _levenshteinDistanceThreshold = 3;
 
-  final _diffMatchPatch = DiffMatchPatch();
   final _places = <TrufiLocation>[];
   final _streets = <TrufiStreet>[];
 
@@ -23,7 +21,7 @@ class LocationSearchStorage {
     _streets.clear();
     try {
       final locationData = await loadFromAssets(key);
-      _places.addAll(locationData.places);
+      // _places.addAll(locationData.places);
       _streets.addAll(locationData.streets);
     } catch (e) {
       if (kDebugMode) {
@@ -32,18 +30,17 @@ class LocationSearchStorage {
     }
   }
 
-  Future<List<TrufiLocation>> fetchPlaces(BuildContext context) async {
-    return _sortedByFavorites(_places.toList(), context);
-  }
-
   Future<List<LevenshteinObject<TrufiStreet>>> fetchStreetsWithQuery(
       String query) async {
+    final listValues = splitString(query, 3);
+
     return _streets.fold<List<LevenshteinObject<TrufiStreet>>>(
       [],
       (streets, street) {
-        final distance = _levenshteinDistanceForLocation(
+        final distance = getDistance(
           street.location,
-          query.toLowerCase(),
+          listValues,
+          query.length,
         );
         if (distance < _levenshteinDistanceThreshold) {
           streets.add(LevenshteinObject(street, distance));
@@ -53,74 +50,66 @@ class LocationSearchStorage {
     );
   }
 
-  Future<List<LevenshteinObject<TrufiLocation>>> fetchPlacesWithQuery(
-      String query) async {
-    return _places.fold<List<LevenshteinObject<TrufiLocation>>>(
-      [],
-      (locations, location) {
-        final distance = _levenshteinDistanceForLocation(
-          location,
-          query.toLowerCase(),
-        );
-        if (distance < _levenshteinDistanceThreshold) {
-          locations.add(LevenshteinObject(location, distance));
-        }
-        return locations;
-      },
-    );
-  }
-
-  int _levenshteinDistanceForLocation(
+  int getDistance(
     TrufiLocation location,
-    String query,
+    List<String> querySplited,
+    int queryLength,
   ) {
-    // Search in description
-    final distance = _levenshteinDistanceForString(
-      location.description.toLowerCase(),
-      query,
-    );
-
-    // Return distance
-    return distance;
-  }
-
-  int _levenshteinDistanceForString(
-    String text,
-    String query,
-  ) {
-    // Find match in text similar to query
-    final position = _diffMatchPatch.match(text, query, 0);
-    // If match found, calculate levenshtein distance
-    if (position != -1 && position < text.length) {
-      return position + query.length + 1 <= text.length
-          ? _diffMatchPatch.diff_levenshtein(
-              _diffMatchPatch.diff(
-                text.substring(position, position + query.length + 1),
-                query,
-              ),
-            )
-          : _diffMatchPatch.diff_levenshtein(
-              _diffMatchPatch.diff(
-                text.substring(position),
-                query,
-              ),
-            );
-    } else {
-      // If no match found, return distance 100
-      return 100;
+    final direction = location.description.toLowerCase();
+    // log(address.description);
+    for (final sectionQuery in querySplited) {
+      if (direction.contains(sectionQuery)) {
+        // results.add(address);
+        return queryLength - sectionQuery.length;
+      }
     }
+    return 100;
   }
 
-  Future<List<TrufiLocation>> _sortedByFavorites(
-    List<TrufiLocation> locations,
-    BuildContext context,
-  ) async {
-    // final favoriteLocationsCubit = context.read<FavoriteLocationsCubit>();
-    // locations.sort((a, b) {
-    //   return sortByFavoriteLocations(a, b, favoriteLocationsCubit.locations);
-    // });
-    return locations;
+  List<TrufiLocation> search(
+      TrufiLocation location, List<String> querySplited, String query) {
+    // if (query.length < 3) {
+    //   // If the query is less than 3 characters, return all addresses.
+    //   return _places;
+    // }
+
+    final results = <TrufiLocation>[];
+
+    for (final address in _places) {
+      final direction = address.description.toLowerCase();
+      // log(address.description);
+      for (final word in querySplited) {
+        if (direction.contains(word)) {
+          results.add(address);
+          break; // Break out of the inner loop to avoid duplicate entries.
+        }
+      }
+    }
+    results.forEach((element) => log(element.description));
+
+    return results;
   }
+
+  List<String> splitString(String input, int minLength) {
+    final List<String> substrings = [];
+
+    void recursiveSplit(String str) {
+      if (str.length < minLength) {
+        return;
+      }
+
+      substrings.add(str);
+
+      if (str.length > minLength) {
+        recursiveSplit(str.substring(0, str.length - 1));
+      }
+    }
+
+    recursiveSplit(input);
+
+    return substrings;
+  }
+
 }
 
 class LocationSearchData {

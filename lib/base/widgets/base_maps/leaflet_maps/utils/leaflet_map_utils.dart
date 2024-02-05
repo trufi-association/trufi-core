@@ -5,19 +5,27 @@ import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 
-Marker buildTransferMarker(TrufiLatLng point) {
+Marker buildTransferMarker({required TrufiLatLng point, required Color color}) {
   return Marker(
     point: point.toLatLng(),
     anchorPos: AnchorPos.align(AnchorAlign.center),
     builder: (context) {
       return Transform.scale(
-        scale: 0.4,
+        scale: 0.5,
         child: Container(
+          padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 3.5),
             shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 1),
+            color: color,
           ),
-          child: const Icon(Icons.circle_outlined, color: Colors.white),
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              border: Border.all(color: Colors.white, width: 3),
+              shape: BoxShape.circle,
+            ),
+          ),
         ),
       );
     },
@@ -56,6 +64,7 @@ Marker buildStopMarker(TrufiLatLng point) {
 Marker buildTransportMarker(
   TrufiLatLng point,
   Color color,
+  Color textColor,
   Leg leg, {
   VoidCallback? onTap,
   bool showIcon = true,
@@ -81,15 +90,17 @@ Marker buildTransportMarker(
                 SizedBox(
                   height: 28,
                   width: 28,
-                  child: leg.transportMode.getImage(color: Colors.white),
+                  child: leg.transportMode.getImage(
+                    color: textColor,
+                  ),
                 ),
               if (showText)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
                     leg.route?.shortName ?? leg.headSign,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: textColor,
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
                     ),

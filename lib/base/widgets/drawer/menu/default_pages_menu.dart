@@ -30,8 +30,17 @@ class MenuPageItem extends TrufiMenuItem {
             );
           },
           onClick: (context, isSelected) {
-            Navigator.pop(context);
-            Routemaster.of(context).push(id);
+            Navigator.of(context).pop();
+            if (HomePage.route == id) {
+              Routemaster.of(context).replace(id);
+            } else {
+              final beforePath = Routemaster.of(context).currentRoute.fullPath;
+              if (HomePage.route == beforePath) {
+                Routemaster.of(context).push(id);
+              } else {
+                Routemaster.of(context).replace(id);
+              }
+            }
           },
         );
 }

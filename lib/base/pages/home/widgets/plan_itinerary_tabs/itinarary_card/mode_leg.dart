@@ -18,6 +18,7 @@ class ModeLeg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final perc = legLength.abs() / 10;
     return SizedBox(
       width: perc > 1
@@ -34,7 +35,7 @@ class ModeLeg extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 2),
           width: 20,
           height: 20,
-          child: leg.transportMode.getImage(),
+          child: leg.transportMode.getImage(color: theme.colorScheme.secondary),
         ),
       ),
     );
@@ -106,9 +107,9 @@ class RouteLeg extends StatelessWidget {
       height: 30,
       child: ClipRRect(
         child: IconTransport(
-          bacgroundColor: forcedColor??leg.primaryColor,
-          color: Colors.white,
-          icon: leg.transportMode.getImage(color: Colors.white),
+          bacgroundColor: forcedColor ?? leg.backgroundColor,
+          color: leg.primaryColor,
+          icon: leg.transportMode.getImage(color: leg.primaryColor),
           text: (maxWidth * perc - 24) >= ((leg.headSign.length) * 8.5)
               ? leg.headSign
               : '',

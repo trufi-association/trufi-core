@@ -242,3 +242,68 @@ class LocationDetail {
 
   LocationDetail(this.description, this.street, this.position);
 }
+
+class LocationModel {
+  LocationModel({
+    this.geometry,
+    this.type,
+    this.name,
+    this.street,
+  });
+
+  Geometry? geometry;
+  String? type;
+  String? name;
+  String? street;
+
+  String get getCode => "$type $name $street";
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    final county = json["properties"]["county"] as String?;
+    final street = json["properties"]["street"] as String?;
+    final locality = json["properties"]["locality"] as String?;
+    final streetAll = <String>[
+      if (county != null) county,
+      if (street != null) street,
+      if (locality != null) locality,
+    ];
+
+    return LocationModel(
+      geometry: Geometry.fromJson(json["geometry"] as Map<String, dynamic>),
+      type: json["properties"]["type"],
+      name: json["properties"]["name"],
+      street: streetAll.join(", "),
+    );
+  }
+
+  TrufiLocation toTrufiLocation() {
+    return TrufiLocation(
+      description: name ?? 'Not description',
+      latitude: geometry?.coordinates?[1] ?? 0,
+      longitude: geometry?.coordinates?[0] ?? 0,
+      address: street,
+      type: type,
+    );
+  }
+}
+
+class Geometry {
+  Geometry({
+    this.coordinates,
+    this.type,
+  });
+
+  List<double>? coordinates;
+  String? type;
+
+  factory Geometry.fromJson(Map<String, dynamic> json) => Geometry(
+        coordinates: List<double>.from(
+            (json["coordinates"] as List).map((x) => x.toDouble())),
+        type: json["type"].toString(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "coordinates": List<dynamic>.from((coordinates ?? []).map((x) => x)),
+        "type": type,
+      };
+}

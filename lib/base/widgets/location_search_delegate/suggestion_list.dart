@@ -10,7 +10,6 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/util_icons/icons.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/location_search_delegate/favorite_button.dart';
-import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class SuggestionList extends StatelessWidget {
   final String query;
@@ -32,64 +31,59 @@ class SuggestionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchLocationsCubit = context.watch<SearchLocationsCubit>();
+    final localizationSP = SavedPlacesLocalization.of(context);
     return SafeArea(
       top: false,
       bottom: false,
-      child: BaseTrufiPage(
-        child: Builder(builder: (context) {
-          final localizationSP = SavedPlacesLocalization.of(context);
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-            child: CustomScrollView(
-              slivers: [
-                _BuildYourLocation(onSelected),
-                _BuildChooseOnMap(
-                  onSelectedMap: onSelectedMap,
-                  isOrigin: isOrigin,
-                  selectPositionOnPage: selectPositionOnPage,
-                ),
-                if (query.isEmpty)
-                  _BuildYourPlaces(
-                    title: localizationSP.menuYourPlaces,
-                    places: [
-                      ...searchLocationsCubit.state.myDefaultPlaces
-                          .where((element) => element.isLatLngDefined)
-                          .toList(),
-                      ...searchLocationsCubit.state.myPlaces
-                    ],
-                    onSelected: onSelected,
-                  ),
-                if (query.isEmpty)
-                  _BuildObjectList(
-                    title: localizationSP.searchTitleFavorites,
-                    iconData: Icons.place,
-                    places: searchLocationsCubit.state.favoritePlaces,
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
-                  ),
-                if (query.isEmpty)
-                  _BuildObjectList(
-                    title: localizationSP.searchTitleRecent,
-                    iconData: Icons.history,
-                    places: searchLocationsCubit.getHistoryList(),
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
-                  ),
-                if (query.isNotEmpty)
-                  _BuildFutureBuilder(
-                    title: localizationSP.searchTitleResults,
-                    future: searchLocationsCubit.fetchLocations(
-                      query,
-                    ),
-                    iconData: Icons.place,
-                    isVisibleWhenEmpty: true,
-                    onSelected: onSelected,
-                    onStreetTapped: onStreetTapped,
-                  ),
-              ],
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+        child: CustomScrollView(
+          slivers: [
+            _BuildYourLocation(onSelected),
+            _BuildChooseOnMap(
+              onSelectedMap: onSelectedMap,
+              isOrigin: isOrigin,
+              selectPositionOnPage: selectPositionOnPage,
             ),
-          );
-        }),
+            if (query.isEmpty)
+              _BuildYourPlaces(
+                title: localizationSP.menuYourPlaces,
+                places: [
+                  ...searchLocationsCubit.state.myDefaultPlaces
+                      .where((element) => element.isLatLngDefined)
+                      .toList(),
+                  ...searchLocationsCubit.state.myPlaces
+                ],
+                onSelected: onSelected,
+              ),
+            if (query.isEmpty)
+              _BuildObjectList(
+                title: localizationSP.searchTitleFavorites,
+                iconData: Icons.place,
+                places: searchLocationsCubit.state.favoritePlaces,
+                onSelected: onSelected,
+                onStreetTapped: onStreetTapped,
+              ),
+            if (query.isEmpty)
+              _BuildObjectList(
+                title: localizationSP.searchTitleRecent,
+                iconData: Icons.history,
+                places: searchLocationsCubit.getHistoryList(),
+                onSelected: onSelected,
+                onStreetTapped: onStreetTapped,
+              ),
+            _BuildFutureBuilder(
+              title: localizationSP.searchTitleResults,
+              query: query,
+              data: searchLocationsCubit.state.searchResult,
+              isLoading: searchLocationsCubit.state.isLoading,
+              iconData: Icons.place,
+              isVisibleWhenEmpty: true,
+              onSelected: onSelected,
+              onStreetTapped: onStreetTapped,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -97,7 +91,9 @@ class SuggestionList extends StatelessWidget {
 
 class _BuildFutureBuilder extends StatelessWidget {
   final String title;
-  final Future<List<TrufiPlace>?> future;
+  final String query;
+  final bool isLoading;
+  final List<TrufiPlace> data;
   final IconData iconData;
   final bool isVisibleWhenEmpty;
   final ValueChanged<TrufiLocation> onSelected;
@@ -105,7 +101,9 @@ class _BuildFutureBuilder extends StatelessWidget {
 
   const _BuildFutureBuilder({
     required this.title,
-    required this.future,
+    required this.query,
+    required this.isLoading,
+    required this.data,
     required this.iconData,
     required this.onSelected,
     required this.onStreetTapped,
@@ -115,52 +113,34 @@ class _BuildFutureBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context);
-    return FutureBuilder(
-      future: future,
-      initialData: null,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TrufiPlace>?> snapshot,
-      ) {
-        // Error
-        if (snapshot.hasError) {
-          return _BuildErrorList(
-              title: title, error: localization.errorNoConnectServer);
-        }
-        // Loading
-        if (snapshot.data == null) {
-          return SliverToBoxAdapter(
-            child: LinearProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(
-                  Theme.of(context).colorScheme.secondary),
-            ),
-          );
-        }
-        // No results
-        final int count =
-            snapshot.data!.isNotEmpty ? snapshot.data!.length + 1 : 0;
-        if (count == 0 && isVisibleWhenEmpty) {
-          return SliverToBoxAdapter(
-            child: Column(
-              children: <Widget>[
-                _BuildTitle(title: title),
-                _BuildErrorItem(title: localization.commonNoResults),
-              ],
-            ),
-          );
-        }
-        // Items
-        return _BuildObjectList(
-          title: title,
-          iconData: iconData,
-          places: context
-              .read<SearchLocationsCubit>()
-              .sortedByFavorites(snapshot.data!),
-          onSelected: onSelected,
-          onStreetTapped: onStreetTapped,
-        );
-      },
-    );
+    if (query.isEmpty) {
+      return const SliverToBoxAdapter();
+    } else if (isLoading) {
+      return SliverToBoxAdapter(
+        child: LinearProgressIndicator(
+          valueColor:
+              AlwaysStoppedAnimation(Theme.of(context).colorScheme.secondary),
+        ),
+      );
+    } else if (data.isNotEmpty) {
+      return _BuildObjectList(
+        title: title,
+        iconData: iconData,
+        places: context.read<SearchLocationsCubit>().sortedByFavorites(data),
+        onSelected: onSelected,
+        onStreetTapped: onStreetTapped,
+      );
+    } else if (!isLoading && data.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Column(
+          children: <Widget>[
+            _BuildTitle(title: title),
+            _BuildErrorItem(title: localization.commonNoResults),
+          ],
+        ),
+      );
+    }
+    return const SliverToBoxAdapter();
   }
 }
 

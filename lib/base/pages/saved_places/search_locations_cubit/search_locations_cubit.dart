@@ -1,6 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:synchronized/synchronized.dart';
-import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:trufi_core/base/models/enums/defaults_location.dart';
@@ -17,8 +17,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
       SearchLocationsHiveLocalRepository();
 
   final SearchLocationRepository searchLocationRepository;
-  final _fetchLocationLock = Lock();
-  CancelableOperation<List<TrufiPlace>>? _fetchLocationOperation;
+  Timer _debounceTimer = Timer(const Duration(milliseconds: 300), () {});
 
   SearchLocationsCubit({
     required this.searchLocationRepository,
@@ -125,31 +124,29 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
     return state.historyPlaces.reversed.toList();
   }
 
-  Future<List<TrufiPlace>?> fetchLocations(
+  Future<void> fetchLocations(
     String query, {
     String? correlationId,
     int limit = 30,
   }) async {
-    // Cancel running operation
-    if (_fetchLocationOperation != null) {
-      _fetchLocationOperation?.cancel();
-      _fetchLocationOperation = null;
-    }
-
-    // Allow only one running request
-    return (_fetchLocationLock.locked)
-        ? Future.value()
-        : _fetchLocationLock.synchronized(() async {
-            _fetchLocationOperation =
-                CancelableOperation<List<TrufiPlace>>.fromFuture(
-              searchLocationRepository.fetchLocations(
-                query,
-                limit: limit,
-                correlationId: correlationId,
-              ),
-            );
-            return _fetchLocationOperation?.valueOrCancellation(null);
-          });
+    _debounceTimer.cancel();
+    emit(state.copyWith(isLoading: true));
+    
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () async {
+      if (query.isNotEmpty) {
+        final results = await searchLocationRepository.fetchLocations(
+          query,
+          limit: limit,
+          correlationId: correlationId,
+        );
+        emit(state.copyWith(
+          searchResult: results,
+          isLoading: false,
+        ));
+      } else {
+        emit(state.copyWith(searchResult: [], isLoading: false));
+      }
+    });
   }
 
   List<TrufiPlace> sortedByFavorites(

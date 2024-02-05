@@ -8,7 +8,7 @@ import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_notification.da
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
-
+// TODO: Update example
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CertificatedLetsencryptAndroid.workAroundCertificated();
@@ -50,7 +50,7 @@ void main() async {
           ),
           lifecycleReactorHandler: LifecycleReactorNotifications(
             url:
-                'https://bo-cbba.sa.api.trufi-association.org/static_files/notification.json',
+                'https://api.busboy.app/static_files/notification.json',
           ),
         ),
       ),

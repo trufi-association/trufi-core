@@ -4,7 +4,7 @@ import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
-import 'package:trufi_core/base/widgets/location_search_delegate/location_search_delegate.dart';
+import 'package:trufi_core/base/widgets/location_search_delegate/location_search_screen.dart';
 
 class LocationFormField extends StatelessWidget {
   const LocationFormField({
@@ -29,7 +29,6 @@ class LocationFormField extends StatelessWidget {
   final Widget? trailing;
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
     final localizationSP = SavedPlacesLocalization.of(context);
     return Row(
       children: [
@@ -42,16 +41,22 @@ class LocationFormField extends StatelessWidget {
           child: GestureDetector(
             onTap: () async {
               // Show search
-              final TrufiLocation? location = await showSearch<TrufiLocation?>(
-                context: context,
-                delegate: LocationSearchDelegate(
-                  isOrigin: isOrigin,
-                  hint: isOrigin
-                      ? localization.searchHintOrigin
-                      : localization.searchHintDestination,
-                  selectPositionOnPage: selectPositionOnPage,
-                ),
+              final TrufiLocation? location =
+                  await LocationSearchScreen.searchLocation(
+                context,
+                isOrigin: isOrigin,
+                selectPositionOnPage: selectPositionOnPage,
               );
+              // final TrufiLocation? location = await showSearch<TrufiLocation?>(
+              //   context: context,
+              //   delegate: LocationSearchDelegate(
+              //     isOrigin: isOrigin,
+              //     hint: isOrigin
+              //         ? localization.searchHintOrigin
+              //         : localization.searchHintDestination,
+              //     selectPositionOnPage: selectPositionOnPage,
+              //   ),
+              // );
               // Check result
               if (location != null) {
                 onSaved(location);

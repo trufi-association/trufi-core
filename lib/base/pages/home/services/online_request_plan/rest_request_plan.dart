@@ -43,7 +43,8 @@ class RestRequestPlanService implements RequestPlanService {
       "toPlace": to.toString(),
       "date": _todayMonthDayYear(),
       "time": '12:00:00',
-      "numItineraries": "5",
+      "numItineraries": "7",
+      "maxWalkDistance": "1500",
       "mode": _parseTransportModes(transportModes),
     });
     final response = await _fetchRequest(request);
@@ -57,9 +58,10 @@ class RestRequestPlanService implements RequestPlanService {
   Future<http.Response> _fetchRequest(Uri request) async {
     try {
       final packageInfoVersion = await PackageInfoPlatform.version();
+      final appName = await PackageInfoPlatform.appName();
       final uniqueId = TrufiAppId.getUniqueId;
       return await http.get(request, headers: {
-        "User-Agent": "Trufi/$packageInfoVersion/$uniqueId",
+        "User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName",
       });
     } on Exception catch (e) {
       throw FetchOnlineRequestException(e);
@@ -76,6 +78,18 @@ class RestRequestPlanService implements RequestPlanService {
   }
 
   Plan _parsePlan(String responseBody) {
-    return Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+    final plan =
+        Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+    plan.itineraries?.sort((a, b) {
+      double weightedSumA = (a.transfers * 0.65) +
+          (a.walkDistance * 0.3) +
+          ((a.distance / 100) * 0.05);
+      double weightedSumB = (b.transfers * 0.65) +
+          (b.walkDistance * 0.3) +
+          ((b.distance / 100) * 0.05);
+      return weightedSumA.compareTo(weightedSumB);
+    });
+
+    return plan;
   }
 }

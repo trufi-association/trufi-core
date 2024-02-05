@@ -7,6 +7,7 @@ class Itinerary extends Equatable {
   static const String _duration = "duration";
   static const String _walkTime = "walkTime";
   static const String _walkDistance = "walkDistance";
+  static const String _transfers = "transfers";
 
   final List<Leg> legs;
   final DateTime startTime;
@@ -15,6 +16,7 @@ class Itinerary extends Equatable {
   final Duration walkTime;
   final double distance;
   final double walkDistance;
+  final int transfers;
 
   Itinerary({
     required this.legs,
@@ -23,6 +25,7 @@ class Itinerary extends Equatable {
     required this.walkTime,
     required this.duration,
     required this.walkDistance,
+    required this.transfers,
   }) : distance = sumDistances(legs);
 
   factory Itinerary.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,7 @@ class Itinerary extends Equatable {
       walkTime:
           Duration(seconds: int.tryParse(json[_walkTime].toString()) ?? 0),
       walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
+      transfers: int.tryParse(json[_transfers].toString()) ?? 5,
     );
   }
 
@@ -51,6 +55,7 @@ class Itinerary extends Equatable {
       _duration: duration.inSeconds,
       _walkTime: walkTime.inSeconds,
       _walkDistance: walkDistance,
+      _transfers: transfers,
     };
   }
 
@@ -61,6 +66,7 @@ class Itinerary extends Equatable {
     Duration? walkTime,
     Duration? duration,
     double? walkDistance,
+    int? transfers,
   }) {
     return Itinerary(
       legs: legs ?? this.legs,
@@ -69,6 +75,7 @@ class Itinerary extends Equatable {
       walkTime: walkTime ?? this.walkTime,
       duration: duration ?? this.duration,
       walkDistance: walkDistance ?? this.walkDistance,
+      transfers: transfers ?? this.transfers,
     );
   }
 

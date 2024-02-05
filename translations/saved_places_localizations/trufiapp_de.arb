@@ -1,6 +1,6 @@
 {
     "chooseNowLabel": "Jetzt auswählen",
-    "chooseOnMap": "Choose on map",
+    "chooseOnMap": "Auf der Karte auswählen",
     "@chooseOnMap": {
         "description": "Search option that allows to choose a point on the map"
     },

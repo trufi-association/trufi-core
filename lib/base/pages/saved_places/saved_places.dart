@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/const/consts.dart';
-import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
+import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
@@ -40,105 +40,91 @@ class SavedPlacesPage extends StatelessWidget {
         ],
       )),
       drawer: drawerBuilder(context),
-      body: Column(
-        children: [
-          Expanded(
-            child: Stack(
+      body: BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
+        builder: (context, state) {
+          return Scrollbar(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 5, vertical: 15),
               children: [
-                BlocBuilder<SearchLocationsCubit, SearchLocationsState>(
-                  builder: (context, state) {
-                    return Scrollbar(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 15),
-                        children: [
-                          Column(
-                            children:
-                                searchLocationsCubit.state.myDefaultPlaces.map(
-                              (place) {
-                                return LocationTiler(
-                                  location: place,
-                                  enableSetPosition: true,
-                                  isDefaultLocation: true,
-                                  updateLocation:
-                                      searchLocationsCubit.updateMyDefaultPlace,
-                                  selectPositionOnPage: _selectPosition,
-                                );
-                              },
-                            ).toList(),
-                          ),
-                          if (searchLocationsCubit
-                              .state.myPlaces.isNotEmpty) ...[
-                            const Divider(),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 5),
-                              child: Text(
-                                localizationSP.commonCustomPlaces,
-                                style: titleStyle,
-                              ),
-                            ),
-                          ],
-                          Column(
-                            children: searchLocationsCubit.state.myPlaces
-                                .map(
-                                  (place) => LocationTiler(
-                                    location: place,
-                                    enableLocation: true,
-                                    updateLocation:
-                                        searchLocationsCubit.updateMyPlace,
-                                    removeLocation:
-                                        searchLocationsCubit.deleteMyPlace,
-                                    selectPositionOnPage: _selectPosition,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                          if (searchLocationsCubit
-                              .state.favoritePlaces.isNotEmpty) ...[
-                            const Divider(),
-                            Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 5),
-                              child: Text(
-                                localizationSP.commonFavoritePlaces,
-                                style: titleStyle,
-                              ),
-                            ),
-                          ],
-                          Column(
-                            children: searchLocationsCubit.state.favoritePlaces
-                                .map(
-                                  (place) => LocationTiler(
-                                    location: place,
-                                    updateLocation: searchLocationsCubit
-                                        .updateFavoritePlace,
-                                    removeLocation: searchLocationsCubit
-                                        .deleteFavoritePlace,
-                                    selectPositionOnPage: _selectPosition,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                Positioned(
-                  right: 15,
-                  bottom: 15,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      _addNewPlace(context);
+                Column(
+                  children:
+                      searchLocationsCubit.state.myDefaultPlaces.map(
+                    (place) {
+                      return LocationTiler(
+                        location: place,
+                        enableSetPosition: true,
+                        isDefaultLocation: true,
+                        updateLocation:
+                            searchLocationsCubit.updateMyDefaultPlace,
+                        selectPositionOnPage: _selectPosition,
+                      );
                     },
-                    child: const Icon(Icons.add),
+                  ).toList(),
+                ),
+                if (searchLocationsCubit
+                    .state.myPlaces.isNotEmpty) ...[
+                  const Divider(),
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 10, bottom: 5),
+                    child: Text(
+                      localizationSP.commonCustomPlaces,
+                      style: titleStyle,
+                    ),
                   ),
+                ],
+                Column(
+                  children: searchLocationsCubit.state.myPlaces
+                      .map(
+                        (place) => LocationTiler(
+                          location: place,
+                          enableLocation: true,
+                          updateLocation:
+                              searchLocationsCubit.updateMyPlace,
+                          removeLocation:
+                              searchLocationsCubit.deleteMyPlace,
+                          selectPositionOnPage: _selectPosition,
+                        ),
+                      )
+                      .toList(),
+                ),
+                if (searchLocationsCubit
+                    .state.favoritePlaces.isNotEmpty) ...[
+                  const Divider(),
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 10, bottom: 5),
+                    child: Text(
+                      localizationSP.commonFavoritePlaces,
+                      style: titleStyle,
+                    ),
+                  ),
+                ],
+                Column(
+                  children: searchLocationsCubit.state.favoritePlaces
+                      .map(
+                        (place) => LocationTiler(
+                          location: place,
+                          updateLocation: searchLocationsCubit
+                              .updateFavoritePlace,
+                          removeLocation: searchLocationsCubit
+                              .deleteFavoritePlace,
+                          selectPositionOnPage: _selectPosition,
+                        ),
+                      )
+                      .toList(),
                 ),
               ],
             ),
-          ),
-        ],
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addNewPlace(context);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

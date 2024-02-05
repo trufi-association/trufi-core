@@ -32,6 +32,10 @@ final theme = ThemeData.from(
     backgroundColor: Colors.white,
     foregroundColor: Color(0xff263238),
   ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: const Color(0xffd81b60),
+    selectionColor: const Color(0xffd81b60).withOpacity(0.7),
+  ),
 );
 
 final themeDark = ThemeData.from(
@@ -70,5 +74,9 @@ final themeDark = ThemeData.from(
   ),
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: Color(0xffd81b60),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: const Color(0xffd81b60),
+    selectionColor: const Color(0xffd81b60).withOpacity(0.7),
   ),
 );

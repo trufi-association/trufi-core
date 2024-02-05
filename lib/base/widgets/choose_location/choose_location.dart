@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:async/async.dart' as async;
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/map_configuration/marker_configurations/marker_configuration.dart';
 import 'package:trufi_core/base/const/consts.dart';
-import 'package:trufi_core/base/models/map_provider/trufi_map_definition.dart';
+import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
@@ -81,6 +82,7 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadData(widget.position ?? mapConfiguratiom.center);
     });
+    BackButtonInterceptor.add(_myInterceptor, context: context);
   }
 
   Timer? timer;
@@ -97,7 +99,15 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
   @override
   void dispose() {
     timer?.cancel();
+    BackButtonInterceptor.remove(_myInterceptor);
     super.dispose();
+  }
+
+  bool _myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (!stopDefaultButtonEvent) {
+      Navigator.pop(context);
+    }
+    return true;
   }
 
   @override
@@ -269,7 +279,8 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
       fetchError = null;
       loading = true;
     });
-    cancelableOperation = async.CancelableOperation.fromFuture(_fetchData(location));
+    cancelableOperation =
+        async.CancelableOperation.fromFuture(_fetchData(location));
     cancelableOperation?.valueOrCancellation().then((value) {
       if (mounted) {
         setState(() {

@@ -35,12 +35,13 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
 
   Future<void> handlerOnStartNotifications(BuildContext context) async {
     final packageInfoVersion = await PackageInfoPlatform.version();
+    final appName = await PackageInfoPlatform.appName();
     final uniqueId = TrufiAppId.getUniqueId;
     try {
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          "User-Agent": "Trufi/$packageInfoVersion/$uniqueId",
+          "User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName",
         },
       );
       if (response.statusCode == 200) {
@@ -56,6 +57,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
             context: context,
             title: notification["title"]!,
             description: notification["description"],
+            isPersistent: notification["isPersistent"] ?? true,
             bttnText: notification["actionButton"]?["name"],
             bttnUrl: notification["actionButton"]?["url"],
             imageUrl: notification["imageUrl"],

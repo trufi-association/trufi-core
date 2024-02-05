@@ -12,6 +12,7 @@ class AlertNotification extends StatefulWidget {
     required String title,
     required Future<void> Function() makeDoNotShowAgain,
     required String? description,
+    required bool isPersistent,
     String? imageUrl,
     String? bttnText,
     String? bttnUrl,
@@ -24,6 +25,7 @@ class AlertNotification extends StatefulWidget {
           title: title,
           makeDoNotShowAgain: makeDoNotShowAgain,
           description: description,
+          isPersistent: isPersistent,
           imageUrl: imageUrl,
           bttnText: bttnText,
           bttnUrl: bttnUrl,
@@ -36,6 +38,7 @@ class AlertNotification extends StatefulWidget {
   final Future<void> Function() makeDoNotShowAgain;
   final String? description;
   final String? imageUrl;
+  final bool isPersistent;
   final String? bttnText;
   final String? bttnUrl;
 
@@ -43,6 +46,7 @@ class AlertNotification extends StatefulWidget {
     super.key,
     required this.title,
     required this.makeDoNotShowAgain,
+    required this.isPersistent,
     this.description,
     this.imageUrl,
     this.bttnText,
@@ -123,45 +127,51 @@ class _AlertNotificationState extends State<AlertNotification> {
               ],
             ),
             actions: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    check = !check;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.only(left: 8, right: 4),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        localization.notShowAgain,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
+              if (widget.isPersistent)
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      check = !check;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 8, right: 4),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          localization.notShowAgain,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                      Transform.scale(
-                        scale: 0.8,
-                        child: Checkbox(
-                          value: check,
-                          onChanged: (data) {
-                            setState(() {
-                              check = !check;
-                            });
-                          },
-                          activeColor: theme.colorScheme.secondary,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Checkbox(
+                            value: check,
+                            onChanged: (data) {
+                              setState(() {
+                                check = !check;
+                              });
+                            },
+                            activeColor: theme.colorScheme.secondary,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                )
+              else
+                Container(),
               OKButton(
                 onPressed: () async {
                   if (check) {
+                    await widget.makeDoNotShowAgain();
+                  }
+                  if (!widget.isPersistent) {
                     await widget.makeDoNotShowAgain();
                   }
                   if (!mounted) return;

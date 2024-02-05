@@ -5,6 +5,7 @@ import 'package:trufi_core/base/models/enums/transport_mode.dart';
 
 class RouteNumber extends StatelessWidget {
   final TransportMode? transportMode;
+  final Color? textColor;
   final Color? backgroundColor;
   final String text;
   final String? tripHeadSing;
@@ -16,6 +17,7 @@ class RouteNumber extends StatelessWidget {
   const RouteNumber({
     Key? key,
     this.transportMode,
+    this.textColor,
     this.backgroundColor,
     required this.text,
     this.tripHeadSing,
@@ -29,6 +31,7 @@ class RouteNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (transportMode != TransportMode.bicycle &&
             transportMode != TransportMode.car)
@@ -44,9 +47,9 @@ class RouteNumber extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   child: Text(
                     text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                   ),
                 ),

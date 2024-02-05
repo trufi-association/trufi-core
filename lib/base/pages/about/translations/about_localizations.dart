@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -13,14 +12,14 @@ import 'about_localizations_fr.dart';
 import 'about_localizations_it.dart';
 import 'about_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of AboutLocalization returned
-/// by `AboutLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of AboutLocalization
+/// returned by `AboutLocalization.of(context)`.
 ///
 /// Applications need to include `AboutLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/about_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +34,14 @@ import 'about_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -105,26 +104,26 @@ abstract class AboutLocalization {
   /// A short marketing sentence that describes the app
   ///
   /// In pt, this message translates to:
-  /// **'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.'**
+  /// **'A Trufi Association é uma ONG internacional que promove acesso mais fácil ao transporte público. Nossos aplicativos ajudam as pessoas a encontrar a melhor maneira de ir do ponto A ao ponto B dentro de suas cidades.\n\nEm muitas cidades não há mapas, rotas, aplicativos ou horários oficiais. Por isso, compilamos as informações disponíveis e, às vezes, também mapeamos rotas do zero, trabalhando com pessoas locais que conhecem a cidade. Um sistema de transporte fácil de usar contribui para maior sustentabilidade, ar mais limpo e melhor qualidade de vida.'**
   String get aboutCollapseContent;
 
   /// No description provided for @aboutCollapseContentFoot.
   ///
   /// In pt, this message translates to:
-  /// **'We need mappers, developers, planners, testers, and many other hands.'**
+  /// **'Torne-se parte dos nosso time de voluntários! Nós precisamos de pessoas para fazer o mapeamento, de desenvolvedores, de planejadores, pessoas que nos ajudem a fazer testes e outras muitas mãos!'**
   String get aboutCollapseContentFoot;
 
   /// No description provided for @aboutCollapseTitle.
   ///
   /// In pt, this message translates to:
-  /// **'More About Trufi Association'**
+  /// **'Mais sobre a Trufi Association'**
   String get aboutCollapseTitle;
 
   /// Text displayed on the about page
   ///
   /// In pt, this message translates to:
-  /// **'Need to go somewhere and don\'t know which trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, and we want to make it easier to use for everyone. So we developed this app. We hope you enjoy it.'**
-  String aboutContent(Object appName);
+  /// **'Precisa ir a algum lugar e não sabe qual trufi ou ônibus pegar?\nO aplicativo Trufi facilita isso!\nA Trufi Association é uma equipe da Bolívia e de outros países. Adoramos La Llajta e o transporte público, por isso desenvolvemos este aplicativo para facilitar o transporte. Nosso objetivo é fornecer uma ferramenta prática que lhe permita navegar com confiança.\nEstamos comprometidos com a melhoria contínua do {appName} para oferecer a você informações cada vez mais precisas e úteis. Sabemos que o sistema de transporte em {city} passa por mudanças devido a diferentes motivos, portanto, é possível que algumas rotas não estejam completamente atualizadas.\nPara tornar o {appName} uma ferramenta eficaz, contamos com a colaboração de nossos usuários. Se tiver conhecimento de alterações em algumas rotas ou paradas, recomendamos que compartilhe essas informações conosco. Sua contribuição não apenas ajudará a manter o aplicativo atualizado, mas também beneficiará outros usuários que dependem do {appName}.\nObrigado por escolher o {appName} para se locomover em {city}, esperamos que aproveite sua experiência conosco!'**
+  String aboutContent(Object appName, Object city);
 
   /// Button label to show licenses
   ///
@@ -135,13 +134,13 @@ abstract class AboutLocalization {
   /// A note about open source
   ///
   /// In pt, this message translates to:
-  /// **'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.'**
+  /// **'Este aplicativo é lançado como código aberto no GitHub. Sinta-se à vontade para contribuir com o código ou trazer um aplicativo para sua própria cidade.'**
   String get aboutOpenSource;
 
   /// Menu item that shows the about page
   ///
   /// In pt, this message translates to:
-  /// **'About us'**
+  /// **'Sobre Nós'**
   String get menuAbout;
 
   /// A short marketing sentence that describes the app
@@ -153,7 +152,7 @@ abstract class AboutLocalization {
   /// No description provided for @trufiWebsite.
   ///
   /// In pt, this message translates to:
-  /// **'Trufi Association Website'**
+  /// **'Website da Trufi Association'**
   String get trufiWebsite;
 
   /// The application's version
@@ -165,7 +164,7 @@ abstract class AboutLocalization {
   /// No description provided for @volunteerTrufi.
   ///
   /// In pt, this message translates to:
-  /// **'Volunteer For Trufi'**
+  /// **'Torne-se um voluntário da Trufi'**
   String get volunteerTrufi;
 }
 

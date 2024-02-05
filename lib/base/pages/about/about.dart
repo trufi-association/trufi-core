@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/widgets/basic_widgets/trufi_expansion_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
@@ -73,57 +74,38 @@ class AboutPage extends StatelessWidget {
                     );
                   },
                 ),
-                Text(
-                  appName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 16.0),
+                TrufiExpansionTile(
+                  title: appName,
+                  typeTitle: ExpansionTileTitleType.secondary,
+                  body: null,
+                ),
+                const SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    localizationA.tagline("$cityName, $countryName"),
+                    style: theme.textTheme.subtitle2?.copyWith(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                Text(
-                  localizationA.tagline("$cityName, $countryName"),
-                  style: theme.textTheme.subtitle2?.copyWith(),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  localizationA.aboutContent(appName),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    localizationA.aboutContent(appName, cityName),
+                  ),
                 ),
                 const SizedBox(height: 24),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: const Offset(1, 2),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(3),
-                    child: ExpansionTile(
-                      title: Text(
-                        localizationA.aboutCollapseTitle,
-                        style: theme.textTheme.bodyText2?.copyWith(height: 1.5),
-                      ),
-                      backgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.8),
-                      collapsedBackgroundColor:
-                          theme.colorScheme.surface.withOpacity(0.8),
-                      collapsedIconColor: theme.iconTheme.color,
-                      iconColor: theme.iconTheme.color,
-                      tilePadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
-                      childrenPadding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
+                TrufiExpansionTile(
+                  title: localizationA.aboutCollapseTitle,
+                  typeTitle: ExpansionTileTitleType.secondary,
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
                       children: [
                         Text(
                           '${localizationA.aboutCollapseContent}\n',
-                          style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                          style: TrufiExpansionTile.styleTextContent,
                         ),
                         Row(
                           children: [
@@ -157,15 +139,15 @@ class AboutPage extends StatelessWidget {
                               ),
                               onTap: () {
                                 // ignore: deprecated_member_use
-                                launch('https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
+                                launch(
+                                    'https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi');
                               },
                             ),
                           ],
                         ),
                         Text(
                           '${localizationA.aboutCollapseContentFoot}\n',
-                          style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                          style: TrufiExpansionTile.styleTextContent,
                         )
                       ],
                     ),
@@ -206,9 +188,10 @@ class AboutPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
+                const SelectableText('EMAIL'),
                 InkWell(
                   child: Text(
-                    'Email',
+                    emailContact,
                     style: theme.textTheme.bodyText2?.copyWith(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
@@ -221,29 +204,30 @@ class AboutPage extends StatelessWidget {
                     launch(url);
                   },
                 ),
-                SelectableText(
-                  emailContact,
-                ),
                 const SizedBox(height: 20),
                 RichText(
                   text: TextSpan(
                     style: theme.textTheme.bodyText2,
-                    text: '${localizationA.aboutOpenSource} ',
+                    text: localizationA.aboutOpenSource.split("GitHub")[0],
                     children: [
                       TextSpan(
-                          text: 'Github',
-                          style: theme.textTheme.bodyText2?.copyWith(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // ignore: deprecated_member_use
-                              launch(
-                                'https://github.com/trufi-association/trufi-core.git',
-                              );
-                            },),
+                        text: 'Github',
+                        style: theme.textTheme.bodyText2?.copyWith(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // ignore: deprecated_member_use
+                            launch(
+                              'https://github.com/trufi-association/trufi-core.git',
+                            );
+                          },
+                      ),
+                      TextSpan(
+                        text: localizationA.aboutOpenSource.split("GitHub")[1],
+                      )
                     ],
                   ),
                 ),

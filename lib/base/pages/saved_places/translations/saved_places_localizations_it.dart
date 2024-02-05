@@ -1,6 +1,3 @@
-
-
-
 import 'saved_places_localizations.dart';
 
 /// The translations for Italian (`it`).

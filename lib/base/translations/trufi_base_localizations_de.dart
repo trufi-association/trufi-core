@@ -140,13 +140,9 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
   String get errorUnknownOriginDestination => 'Startpunkt und Ziel sind unbekannt. Können Sie ein bisschen genauer sein?';
 
   @override
-  String get followOnFacebook => 'Folge uns auf Facebook';
-
-  @override
-  String get followOnInstagram => 'Folge uns auf Instagram';
-
-  @override
-  String get followOnTwitter => 'Folge uns auf Twitter';
+  String followOnSocialMedia(Object value) {
+    return 'Folge uns auf $value';
+  }
 
   @override
   String instructionDistanceKm(Object value) {
@@ -250,6 +246,18 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
   String shareAppText(Object url, Object appTitle, Object cityName) {
     return 'Hol\' dir die $appTitle, die App für den öffentlichen Nahverkehr in $cityName, auf $url';
   }
+
+  @override
+  String get commonShowMap => 'Was soll auf der Karte angezeigt werden?';
+
+  @override
+  String get commonMapSettings => 'Karteneinstellungen';
+
+  @override
+  String get mapTypeLabel => 'Kartentyp';
+
+  @override
+  String get selectYourPointInterest => 'Interessenspunkte';
 
   @override
   String get themeModeDark => 'Dunkles Thema';

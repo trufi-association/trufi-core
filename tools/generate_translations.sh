@@ -2,9 +2,9 @@
 list='trufiapp_de.arb trufiapp_en.arb trufiapp_es.arb trufiapp_fr.arb trufiapp_it.arb trufiapp_pt.arb'
 
 #base command translations
-# for i in $list; do
-# flutter gen-l10n --arb-dir=translations/trufi_base_localizations --template-arb-file=$i --output-localization-file=trufi_base_localizations.dart --output-class=TrufiBaseLocalization --output-dir=lib/base/translations --no-synthetic-package
-# done
+for i in $list; do
+flutter gen-l10n --arb-dir=translations/trufi_base_localizations --template-arb-file=$i --output-localization-file=trufi_base_localizations.dart --output-class=TrufiBaseLocalization --output-dir=lib/base/translations --no-synthetic-package
+done
 
 
 #SavedPlaces command translations
@@ -19,6 +19,12 @@ list='trufiapp_de.arb trufiapp_en.arb trufiapp_es.arb trufiapp_fr.arb trufiapp_i
 # done
 
 #Aboud command translations
-for i in $list; do
-    flutter gen-l10n --arb-dir=translations/about_localizations --template-arb-file=$i --output-localization-file=about_localizations.dart --output-class=AboutLocalization --output-dir=lib/base/pages/about/translations --no-synthetic-package
-done
+# for i in $list; do
+#     flutter gen-l10n --arb-dir=translations/about_localizations --template-arb-file=$i --output-localization-file=about_localizations.dart --output-class=AboutLocalization --output-dir=lib/base/pages/about/translations --no-synthetic-package
+# done
+
+
+# TransportList command translations transport_list
+# for i in $list; do
+#     flutter gen-l10n --arb-dir=translations/transport_list_localizations --template-arb-file=$i --output-localization-file=transport_list_localizations.dart --output-class=TransportListLocalization --output-dir=lib/base/pages/transport_list/translations --no-synthetic-package
+# done
