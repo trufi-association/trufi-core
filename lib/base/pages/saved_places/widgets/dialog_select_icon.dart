@@ -12,7 +12,7 @@ class DialogSelectIcon extends StatelessWidget {
     'saved_place:school': Icons.school,
   };
 
-  const DialogSelectIcon({Key? key}) : super(key: key);
+  const DialogSelectIcon({super.key});
 
   @override
   Widget build(BuildContext context) {

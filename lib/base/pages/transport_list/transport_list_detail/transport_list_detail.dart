@@ -42,11 +42,11 @@ class TransportListDetail extends StatefulWidget {
   final MapRouteEditorProvider mapRouteEditorProvider;
 
   const TransportListDetail({
-    Key? key,
+    super.key,
     required this.id,
     required this.mapTransportProvider,
     required this.mapRouteEditorProvider,
-  }) : super(key: key);
+  });
 
   @override
   State<TransportListDetail> createState() => _TransportListDetailState();
@@ -88,6 +88,7 @@ class _TransportListDetailState extends State<TransportListDetail> {
           );
         }
       } catch (e) {
+        // ignore: use_build_context_synchronously
         onFetchError(context, e as Exception);
       }
     });
@@ -109,7 +110,7 @@ class _TransportListDetailState extends State<TransportListDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final localizationTL = TransportListLocalization.of(context);
     final theme = Theme.of(context);
     return Scaffold(

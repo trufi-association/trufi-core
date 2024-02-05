@@ -7,19 +7,19 @@ import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 Future<dynamic> onFetchError(BuildContext context, dynamic exception) async {
-  final localization = TrufiBaseLocalization.of(context);
+  final localization = TrufiBaseLocalization.of(context)!;
   switch (exception.runtimeType) {
-    case FetchOnlineRequestException:
+    case const (FetchOnlineRequestException):
       return _showErrorAlert(
         context: context,
         error: localization.commonNoInternet,
       );
-    case FetchOnlineResponseException:
+    case const (FetchOnlineResponseException):
       return _showErrorAlert(
         context: context,
         error: localization.searchFailLoadingPlan,
       );
-    case FetchOnlinePlanException:
+    case const (FetchOnlinePlanException):
       return showTrufiDialog(
         context: context,
         builder: (dialogContext) =>

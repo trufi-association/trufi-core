@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -102,29 +104,24 @@ class MapAreaSelectorState extends State<MapAreaSelector> {
   }
 
   void _getCoordinates() {
-    LatLng? topLeft = widget.mapController.pointToLatLng(
-        CustomPoint(_position.dx + _padding, _position.dy + _padding));
+    LatLng topLeft = widget.mapController.camera
+        .pointToLatLng(Point(_position.dx + _padding, _position.dy + _padding));
 
-    LatLng? topRight = widget.mapController.pointToLatLng(CustomPoint(
-        _position.dx + _size.width + _padding, _position.dy + _padding));
+    LatLng topRight = widget.mapController.camera.pointToLatLng(
+        Point(_position.dx + _size.width + _padding, _position.dy + _padding));
 
-    LatLng? bottomLeft = widget.mapController.pointToLatLng(CustomPoint(
-        _position.dx + _padding, _position.dy + _size.height + _padding));
+    LatLng bottomLeft = widget.mapController.camera.pointToLatLng(
+        Point(_position.dx + _padding, _position.dy + _size.height + _padding));
 
-    LatLng? bottomRight = widget.mapController.pointToLatLng(CustomPoint(
+    LatLng bottomRight = widget.mapController.camera.pointToLatLng(Point(
         _position.dx + _size.width + _padding,
         _position.dy + _size.height + _padding));
 
-    if (topLeft != null &&
-        bottomLeft != null &&
-        bottomRight != null &&
-        topRight != null) {
-      widget.paint([
-        topLeft,
-        bottomLeft,
-        bottomRight,
-        topRight,
-      ]);
-    }
+    widget.paint([
+      topLeft,
+      bottomLeft,
+      bottomRight,
+      topRight,
+    ]);
   }
 }

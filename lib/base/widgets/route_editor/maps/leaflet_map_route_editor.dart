@@ -1,8 +1,7 @@
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
@@ -23,11 +22,11 @@ class LeafletMapRouteEditor extends StatefulWidget implements IMapRouteEditor {
   final bool isSelectionArea;
 
   const LeafletMapRouteEditor({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     required this.onAreaSelected,
     this.isSelectionArea = true,
-  }) : super(key: key);
+  });
 
   @override
   State<LeafletMapRouteEditor> createState() => _LeafletMapRouteEditorState();
@@ -52,8 +51,6 @@ class _LeafletMapRouteEditorState extends State<LeafletMapRouteEditor> {
   @override
   Widget build(BuildContext context) {
     final mapConfiguration = context.read<MapConfigurationCubit>().state;
-    final routeTransportsCubit = context.watch<RouteTransportsCubit>();
-    final routeTransportsState = routeTransportsCubit.state;
     return Stack(
       children: [
         LeafletMap(
@@ -96,7 +93,7 @@ class _LeafletMapRouteEditorState extends State<LeafletMapRouteEditor> {
         ),
         TextButton(
           onPressed: () {},
-          child: Text("Save"),
+          child: const Text("Save"),
         ),
         Positioned(
           bottom: 100,
@@ -105,7 +102,7 @@ class _LeafletMapRouteEditorState extends State<LeafletMapRouteEditor> {
           child: Center(
             child: Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               width: 50,
               child: RotatedBox(
                 quarterTurns: -1,

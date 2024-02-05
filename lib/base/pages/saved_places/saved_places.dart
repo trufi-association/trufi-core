@@ -16,10 +16,10 @@ class SavedPlacesPage extends StatelessWidget {
   final MapChooseLocationProvider mapChooseLocationProvider;
 
   const SavedPlacesPage({
-    Key? key,
+    super.key,
     required this.drawerBuilder,
     required this.mapChooseLocationProvider,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

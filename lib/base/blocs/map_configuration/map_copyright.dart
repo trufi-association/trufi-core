@@ -5,7 +5,7 @@ import 'package:trufi_core/base/utils/text/outlined_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapTileAndOSMCopyright extends StatelessWidget {
-  const MapTileAndOSMCopyright({Key? key}) : super(key: key);
+  const MapTileAndOSMCopyright({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),
@@ -30,7 +30,7 @@ class MapTileAndOSMCopyright extends StatelessWidget {
               },
           ),
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),

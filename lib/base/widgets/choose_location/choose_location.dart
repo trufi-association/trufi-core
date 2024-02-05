@@ -39,11 +39,11 @@ class ChooseLocationPage extends StatefulWidget {
   }
 
   const ChooseLocationPage({
-    Key? key,
+    super.key,
     required this.isOrigin,
     required this.mapChooseLocationProvider,
     this.position,
-  }) : super(key: key);
+  });
 
   final TrufiLatLng? position;
   final MapChooseLocationProvider mapChooseLocationProvider;
@@ -113,7 +113,7 @@ class _ChooseLocationPageState extends State<ChooseLocationPage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final localizationSP = SavedPlacesLocalization.of(context);
     // final trufiConfiguration = context.read<ConfigurationCubit>().state;
     return Scaffold(

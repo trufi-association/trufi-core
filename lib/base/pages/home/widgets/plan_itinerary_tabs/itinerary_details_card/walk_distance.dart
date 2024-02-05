@@ -10,15 +10,15 @@ class WalkDistance extends StatelessWidget {
   final Widget icon;
 
   const WalkDistance({
-    Key? key,
+    super.key,
     required this.walkDistance,
     required this.walkDuration,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

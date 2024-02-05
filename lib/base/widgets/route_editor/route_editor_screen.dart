@@ -44,7 +44,7 @@ class _RouteEditorScreenState extends State<RouteEditorScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [Text("Editor")]),
+        title: const Row(children: [Text("Editor")]),
       ),
       body: Column(
         children: [
@@ -66,7 +66,7 @@ class _RouteEditorScreenState extends State<RouteEditorScreen>
                 );
               }
             },
-            child: Text("next"),
+            child: const Text("next"),
           )
         ],
       ),

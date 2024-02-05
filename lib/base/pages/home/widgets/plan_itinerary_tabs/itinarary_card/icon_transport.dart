@@ -8,13 +8,13 @@ class IconTransport extends StatelessWidget {
   final Widget? secondaryIcon;
 
   const IconTransport({
-    Key? key,
+    super.key,
     required this.color,
     required this.bacgroundColor,
     required this.text,
     required this.icon,
     this.secondaryIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

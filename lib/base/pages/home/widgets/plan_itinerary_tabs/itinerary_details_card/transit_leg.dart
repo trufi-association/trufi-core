@@ -11,16 +11,16 @@ class TransitLeg extends StatelessWidget {
   final Color? forcedColor;
 
   const TransitLeg({
-    Key? key,
+    super.key,
     required this.leg,
     required this.moveTo,
     this.forcedColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,7 +29,7 @@ class TransitLeg extends StatelessWidget {
             moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
           },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,5,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
             child: RouteNumber(
               transportMode: leg.transportMode,
               backgroundColor: forcedColor ?? leg.backgroundColor,
@@ -129,45 +129,42 @@ class TransitLeg extends StatelessWidget {
               collapsedIconColor: theme.primaryColor,
               childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
               children: [
-                ...leg.intermediatePlaces!
-                    .map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Material(
-                          child: InkWell(
-                            onTap: () {
-                              moveTo(TrufiLatLng(e.lat, e.lon));
-                            },
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Text(
-                                      //   DateFormat('HH:mm')
-                                      //       .format(DateTime.now()),
-                                      // ),
-                                      // const SizedBox(width: 5),
-                                      Flexible(
-                                        child: Text(e.name),
-                                      ),
-                                    ],
+                ...leg.intermediatePlaces!.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Material(
+                      child: InkWell(
+                        onTap: () {
+                          moveTo(TrufiLatLng(e.lat, e.lon));
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Text(
+                                  //   DateFormat('HH:mm')
+                                  //       .format(DateTime.now()),
+                                  // ),
+                                  // const SizedBox(width: 5),
+                                  Flexible(
+                                    child: Text(e.name),
                                   ),
-                                ),
-                                const SizedBox(width: 5),
-                                Icon(
-                                  Icons.keyboard_arrow_right,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 5),
+                            Icon(
+                              Icons.keyboard_arrow_right,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ],
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -85,7 +85,9 @@ class LocationSearchStorage {
         }
       }
     }
-    results.forEach((element) => log(element.description));
+    for (final element in results) {
+      log(element.description);
+    }
 
     return results;
   }

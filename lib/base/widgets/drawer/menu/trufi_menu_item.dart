@@ -36,7 +36,7 @@ abstract class TrufiMenuItem {
   static Widget buildName(BuildContext context, String name, {Color? color}) {
     return Text(
       name,
-      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: color,
             fontWeight: FontWeight.w500,
           ),
@@ -52,9 +52,7 @@ List<List<TrufiMenuItem>> defaultMenuItems({
     [
       if (defaultUrls != null && defaultUrls.existUrl)
         defaultSocialMedia(defaultUrls),
-      ...DefaultItemsMenu.values
-          .map((menuPage) => menuPage.toMenuItem())
-          .toList(),
+      ...DefaultItemsMenu.values.map((menuPage) => menuPage.toMenuItem()),
     ]
   ];
 }

@@ -11,15 +11,15 @@ class ItineraryCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ItineraryCard({
-    Key? key,
+    super.key,
     required this.itinerary,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final routePlannerCubit = context.read<RoutePlannerCubit>();
     final routePlannerState = routePlannerCubit.state;
     return GestureDetector(
@@ -48,12 +48,12 @@ class ItineraryCard extends StatelessWidget {
                   )),
                   const SizedBox(width: 8),
                   RichText(
-                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                    textScaler: MediaQuery.of(context).textScaler,
                     text: TextSpan(
                       children: [
                         TextSpan(
                           text: itinerary.durationFormat(localization),
-                          style: theme.textTheme.bodyText2?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -74,7 +74,8 @@ class ItineraryCard extends StatelessWidget {
               children: [
                 Container(
                   width: 5,
-                  height: 50 * MediaQuery.of(context).textScaleFactor,
+                  // ignore: deprecated_member_use
+                  height: 50.0 * MediaQuery.of(context).textScaler.textScaleFactor,
                   color: itinerary == routePlannerState.selectedItinerary
                       ? theme.colorScheme.secondary
                       : Colors.grey[400],

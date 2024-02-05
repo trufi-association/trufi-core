@@ -112,6 +112,7 @@ class GPSLocationProvider {
         status == LocationPermission.whileInUse)) {
       final requestStatus = await Geolocator.requestPermission();
       if (requestStatus == LocationPermission.deniedForever) {
+        // ignore: use_build_context_synchronously
         await showTrufiDialog(
           context: context,
           barrierDismissible: false,

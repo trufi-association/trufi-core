@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:flutter_map_marker_cluster/src/node/marker_node.dart';
 
 class ShowOverlappingData extends StatelessWidget {
@@ -14,12 +15,13 @@ class ShowOverlappingData extends StatelessWidget {
   Widget build(BuildContext context) {
     final keyString = (keyData as ValueKey).value.toString();
     final name = keyString.split("---")[1];
+
     return Container(
         height: 50,
         padding: const EdgeInsets.only(top: 5),
         child: InkWell(
           onTap: () {
-            final data = markerNode.builder(context) as GestureDetector;
+            final data = markerNode.child as GestureDetector;
             data.onTap!();
             Navigator.of(context).pop();
           },
@@ -28,8 +30,8 @@ class ShowOverlappingData extends StatelessWidget {
               Container(
                 width: 40,
                 height: 40,
-                padding: EdgeInsets.all(5),
-                child: markerNode.builder(context),
+                padding: const EdgeInsets.all(5),
+                child: markerNode.child,
               ),
               const SizedBox(width: 5),
               Expanded(

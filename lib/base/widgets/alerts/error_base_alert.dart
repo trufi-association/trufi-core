@@ -12,7 +12,7 @@ class ErrorAlert extends StatelessWidget {
   }) async {
     await showTrufiDialog<void>(
       context: context,
-      onWillPop: false,
+      canPop: false,
       builder: (_) {
         return ErrorAlert(
           title: title,
@@ -25,14 +25,14 @@ class ErrorAlert extends StatelessWidget {
   final String? title;
   final String error;
   const ErrorAlert({
-    Key? key,
+    super.key,
     this.title,
     required this.error,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final theme = Theme.of(context);
     return BaseBuildAlert(
       title: Text(

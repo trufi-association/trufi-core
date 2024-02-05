@@ -12,23 +12,22 @@ import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/trufi_router.dart';
 import 'default_values.dart';
 
-class TrufiApp extends StatelessWidget {
+class TrufiCore extends StatelessWidget {
   final String appNameTitle;
   final TrufiBaseTheme? trufiBaseTheme;
   final TrufiRouter trufiRouter;
   final List<BlocProvider> blocProviders;
   final TrufiLocalization _trufiLocalization;
 
-  TrufiApp({
-    Key? key,
+  TrufiCore({
+    super.key,
     required this.appNameTitle,
     required this.trufiRouter,
     required this.blocProviders,
     this.trufiBaseTheme,
     TrufiLocalization? trufiLocalization,
   })  : _trufiLocalization =
-            trufiLocalization ?? DefaultValues.trufiLocalization(),
-        super(key: key);
+            trufiLocalization ?? DefaultValues.trufiLocalization();
 
   @override
   Widget build(BuildContext context) {

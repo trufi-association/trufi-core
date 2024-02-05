@@ -10,11 +10,11 @@ class YourLocationButton extends StatefulWidget {
   final bool isTrackingPosition;
 
   const YourLocationButton({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     required this.setTracking,
     required this.isTrackingPosition,
-  }) : super(key: key);
+  });
 
   @override
   State<YourLocationButton> createState() => _YourLocationButtonState();
@@ -50,8 +50,8 @@ class _YourLocationButtonState extends State<YourLocationButton>
           },
           heroTag: null,
           child: currentLocation == null
-              ? Stack(
-                  children: const [
+              ? const Stack(
+                  children: [
                     Center(
                       child: Icon(
                         Icons.location_searching,

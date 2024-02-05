@@ -19,14 +19,14 @@ class SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiStreet> onStreetTapped;
   final SelectLocationData selectPositionOnPage;
   const SuggestionList({
-    Key? key,
+    super.key,
     required this.query,
     required this.isOrigin,
     required this.onSelected,
     required this.onSelectedMap,
     required this.onStreetTapped,
     required this.selectPositionOnPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +50,7 @@ class SuggestionList extends StatelessWidget {
                 title: localizationSP.menuYourPlaces,
                 places: [
                   ...searchLocationsCubit.state.myDefaultPlaces
-                      .where((element) => element.isLatLngDefined)
-                      .toList(),
+                      .where((element) => element.isLatLngDefined),
                   ...searchLocationsCubit.state.myPlaces
                 ],
                 onSelected: onSelected,
@@ -112,7 +111,7 @@ class _BuildFutureBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     if (query.isEmpty) {
       return const SliverToBoxAdapter();
     } else if (isLoading) {
@@ -289,7 +288,7 @@ class _BuildYourLocation extends StatefulWidget {
 class _BuildYourLocationState extends State<_BuildYourLocation> {
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return SliverToBoxAdapter(
       child: BuildItem(
         onTap: () => _handleOnYourLocationTapped(context),
@@ -300,7 +299,7 @@ class _BuildYourLocationState extends State<_BuildYourLocation> {
   }
 
   Future<void> _handleOnYourLocationTapped(BuildContext context) async {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final locationProvider = GPSLocationProvider();
     final currentLocation = locationProvider.myLocation;
     if (currentLocation != null) {
@@ -316,36 +315,12 @@ class _BuildYourLocationState extends State<_BuildYourLocation> {
   }
 }
 
-class _BuildErrorList extends StatelessWidget {
-  final String title;
-  final String error;
-
-  const _BuildErrorList({
-    Key? key,
-    required this.title,
-    required this.error,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          _BuildTitle(title: title),
-          _BuildErrorItem(title: error),
-        ],
-      ),
-    );
-  }
-}
-
 class _BuildTitle extends StatelessWidget {
   final String title;
 
   const _BuildTitle({
-    Key? key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -372,9 +347,8 @@ class _BuildErrorItem extends StatelessWidget {
   final String title;
 
   const _BuildErrorItem({
-    Key? key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -394,13 +368,13 @@ class BuildItem extends StatelessWidget {
   final Widget? trailing;
 
   const BuildItem({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.iconData,
     required this.title,
     this.subtitle,
     this.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/widgets/route_editor/route_editor_section_screen.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class RouteReportScreen extends StatefulWidget {
@@ -45,7 +44,7 @@ class _RouteReportScreenState extends State<RouteReportScreen>
     return Scaffold(
       appBar: AppBar(
         // TODO translate
-        title: Row(children: [Text("Report Route")]),
+        title: const Row(children: [Text("Report Route")]),
       ),
       body: Column(
         children: [

@@ -12,10 +12,10 @@ class LeaftletMapChooseLocation extends StatelessWidget
   final Function(TrufiLatLng?) onCenterChanged;
 
   const LeaftletMapChooseLocation({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     required this.onCenterChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -68,8 +68,8 @@ abstract class TrufiBaseLocalization {
 
   final String localeName;
 
-  static TrufiBaseLocalization of(BuildContext context) {
-    return Localizations.of<TrufiBaseLocalization>(context, TrufiBaseLocalization)!;
+  static TrufiBaseLocalization? of(BuildContext context) {
+    return Localizations.of<TrufiBaseLocalization>(context, TrufiBaseLocalization);
   }
 
   static const LocalizationsDelegate<TrufiBaseLocalization> delegate = _TrufiBaseLocalizationDelegate();
@@ -476,13 +476,13 @@ abstract class TrufiBaseLocalization {
   /// Menu item that shows the map/planned trip
   ///
   /// In pt, this message translates to:
-  /// **'Route planner'**
+  /// **'Planejador de rotas'**
   String get menuConnections;
 
   /// No description provided for @menuSocialMedia.
   ///
   /// In pt, this message translates to:
-  /// **'Social media'**
+  /// **'Mídia social'**
   String get menuSocialMedia;
 
   /// Menu item that shows the bus list page

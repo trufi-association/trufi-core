@@ -13,7 +13,7 @@ import 'dialog_select_icon.dart';
 
 class LocationTiler extends StatefulWidget {
   const LocationTiler({
-    Key? key,
+    super.key,
     required this.location,
     required this.updateLocation,
     required this.selectPositionOnPage,
@@ -22,7 +22,7 @@ class LocationTiler extends StatefulWidget {
     this.enableSetIcon = false,
     this.enableLocation = false,
     this.enableSetPosition = false,
-  }) : super(key: key);
+  });
 
   final TrufiLocation location;
   final bool isDefaultLocation;
@@ -59,7 +59,7 @@ class _LocationTilerState extends State<LocationTiler> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final localizationSP = SavedPlacesLocalization.of(context);
     return GestureDetector(
       onTap: () {
@@ -191,8 +191,9 @@ class _LocationTilerState extends State<LocationTiler> {
             selectPositionOnPage: widget.selectPositionOnPage,
           );
         });
-    if (newLocation != null)
+    if (newLocation != null) {
       widget.updateLocation(widget.location, newLocation);
+    }
   }
 
   Future<void> _changePosition(BuildContext context) async {

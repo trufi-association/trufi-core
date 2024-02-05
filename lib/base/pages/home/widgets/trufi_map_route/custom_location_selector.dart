@@ -7,17 +7,17 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class CustomLocationSelector extends StatelessWidget {
   const CustomLocationSelector({
-    Key? key,
+    super.key,
     required this.locationData,
     required this.onFetchPlan,
-  }) : super(key: key);
+  });
 
   final LocationDetail locationData;
   final void Function() onFetchPlan;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final routePlannerCubit = context.read<RoutePlannerCubit>();
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return Row(

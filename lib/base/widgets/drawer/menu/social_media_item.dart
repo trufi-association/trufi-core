@@ -39,7 +39,7 @@ class FacebookSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnSocialMedia("Facebook");
+            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Facebook");
           },
         );
 }
@@ -58,7 +58,7 @@ class InstagramSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnSocialMedia("Instagram");
+            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Instagram");
           },
         );
 }
@@ -77,7 +77,7 @@ class TwitterSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnSocialMedia("Twitter");
+            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Twitter");
           },
         );
 }
@@ -96,7 +96,7 @@ class TiktokSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).followOnSocialMedia("Tiktok");
+            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Tiktok");
           },
         );
 }
@@ -116,7 +116,7 @@ class WebSiteSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context).readOurBlog;
+            return TrufiBaseLocalization.of(context)!.readOurBlog;
           },
         );
 }
@@ -152,8 +152,8 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
           icon: Row(
             children: [
               Text(
-                TrufiBaseLocalization.of(context).menuSocialMedia,
-                style: Theme.of(context).textTheme.bodyText2,
+                TrufiBaseLocalization.of(context)!.menuSocialMedia,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Icon(Icons.arrow_drop_down),
             ],

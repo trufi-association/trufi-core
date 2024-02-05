@@ -11,15 +11,15 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
   final Itinerary itinerary;
 
   const ItinerarySummaryAdvanced({
-    Key? key,
+    super.key,
     required this.itinerary,
     required this.maxWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
 
     final compressLegs = itinerary.compressLegs;
 

@@ -1,8 +1,5 @@
-import 'dart:io';
-
-import 'package:app_review/app_review.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
@@ -11,14 +8,14 @@ import 'package:share_plus/share_plus.dart';
 class TrufiDrawer extends StatelessWidget {
   const TrufiDrawer(
     this.currentRoute, {
-    Key? key,
+    super.key,
     required this.appName,
     required this.cityName,
     required this.countryName,
     this.backgroundImageBuilder,
     required this.urlShareApp,
     required this.menuItems,
-  }) : super(key: key);
+  });
 
   final String appName;
   final String cityName;
@@ -30,6 +27,7 @@ class TrufiDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final inAppReview = InAppReview.instance;
     return Drawer(
       child: Column(
         children: [
@@ -90,21 +88,28 @@ class TrufiDrawer extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              if (!kIsWeb && !Platform.isAndroid)
-                                IconButton(
-                                  onPressed: () async {
-                                    await AppReview.writeReview;
-                                  },
-                                  icon: const Icon(
-                                    Icons.star_rate,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                              FutureBuilder(
+                                future: inAppReview.isAvailable(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      (snapshot.data ?? false)) {
+                                    return IconButton(
+                                      onPressed: () async {
+                                        await inAppReview.requestReview();
+                                      },
+                                      icon: const Icon(
+                                        Icons.star_rate,
+                                        color: Colors.white,
+                                      ),
+                                    );
+                                  }
+                                  return Container();
+                                },
+                              ),
                               IconButton(
                                 onPressed: () {
                                   final localization =
-                                      TrufiBaseLocalization.of(context);
-
+                                      TrufiBaseLocalization.of(context)!;
                                   Share.share(
                                     localization.shareAppText(
                                       urlShareApp,

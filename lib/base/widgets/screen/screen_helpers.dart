@@ -10,7 +10,7 @@ import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 import 'package:trufi_core/base/widgets/screen/transition_page.dart';
 
 class BaseTrufiPage extends StatelessWidget {
-  const BaseTrufiPage({Key? key, required this.child}) : super(key: key);
+  const BaseTrufiPage({super.key, required this.child});
 
   final Widget child;
   @override
@@ -59,7 +59,7 @@ Future<T?> showTrufiDialog<T>({
   Color barrierColor = Colors.black54,
   bool barrierDismissible = true,
   bool useSafeArea = true,
-  bool onWillPop = true,
+  bool canPop = true,
 }) {
   return showDialog<T>(
     context: context,
@@ -68,8 +68,8 @@ Future<T?> showTrufiDialog<T>({
     useSafeArea: useSafeArea,
     builder: (buildContext) {
       return BaseTrufiPage(
-        child: WillPopScope(
-          onWillPop: () async => onWillPop,
+        child: PopScope(
+          canPop: canPop,
           child: Builder(
             builder: builder,
           ),

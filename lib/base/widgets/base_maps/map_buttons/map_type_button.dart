@@ -9,7 +9,7 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class MapTypeButton extends StatelessWidget {
-  const MapTypeButton({Key? key}) : super(key: key);
+  const MapTypeButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _MapItemsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Column(
       children: [
         Container(
@@ -45,7 +45,7 @@ class _MapItemsSelector extends StatelessWidget {
           child: Text(
             localization.commonShowMap,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyText1
+            style: theme.textTheme.bodyLarge
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -62,7 +62,7 @@ class _MapItemsSelector extends StatelessWidget {
 }
 
 class _CustomExpansionPanel extends StatefulWidget {
-  const _CustomExpansionPanel({Key? key}) : super(key: key);
+  const _CustomExpansionPanel();
 
   @override
   __CustomExpansionPanelState createState() => __CustomExpansionPanelState();
@@ -109,12 +109,12 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                         );
                       },
                       child: (containerStatus == null)
-                          ? SizedBox(
+                          ? const SizedBox(
                               height: 48,
                               width: 48,
                               child: Stack(
                                 alignment: Alignment.center,
-                                children: const [
+                                children: [
                                   Icon(Icons.crop_square),
                                   Icon(
                                     Icons.remove,
@@ -153,7 +153,7 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                     Expanded(
                       child: Text(
                         element.name(context),
-                        style: theme.textTheme.bodyText1
+                        style: theme.textTheme.bodyLarge
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -215,9 +215,8 @@ class _MapOptionsPage extends StatefulWidget {
   final Widget child;
 
   const _MapOptionsPage({
-    Key? key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   State<_MapOptionsPage> createState() => _MapOptionsPageState();
@@ -245,7 +244,7 @@ class _MapOptionsPageState extends State<_MapOptionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Scaffold(
         appBar: AppBar(
           title: Text(localization.commonMapSettings),
@@ -258,7 +257,7 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final mapTileProviderCubit = context.watch<MapTileProviderCubit>();
     return SafeArea(
       child: Column(
@@ -274,7 +273,7 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       localization.mapTypeLabel,
-                      style: theme.textTheme.bodyText1
+                      style: theme.textTheme.bodyLarge
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -316,12 +315,11 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
   final bool active;
 
   const _BuildMapTypeOptionButton({
-    Key? key,
     required this.image,
     required this.label,
     required this.onPressed,
     this.active = false,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -354,7 +352,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                    fontSize: theme.textTheme.caption?.fontSize,
+                    fontSize: theme.textTheme.bodySmall?.fontSize,
                     color: active
                         ? theme.colorScheme.secondary
                         : (isDarkMode ? Colors.grey[400] : Colors.grey)),

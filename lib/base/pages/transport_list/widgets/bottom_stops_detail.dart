@@ -12,12 +12,12 @@ class BottomStopsDetails extends StatelessWidget {
   final List<TrufiLatLng> geometry;
   final Function(TrufiLatLng) moveTo;
   const BottomStopsDetails({
-    Key? key,
+    super.key,
     required this.routeOtp,
     required this.stops,
     required this.geometry,
     required this.moveTo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

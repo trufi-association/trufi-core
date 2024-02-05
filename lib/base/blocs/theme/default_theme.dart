@@ -17,7 +17,8 @@ final theme = ThemeData.from(
         900: Color(0xff263238),
       },
     ),
-    primaryColorDark: const Color(0xff000000),
+    // TODO replace primaryColorDark in ColorSchema
+    // primaryColorDark: const Color(0xff000000),
     accentColor: const Color(0xffd81b60),
     cardColor: Colors.white,
     backgroundColor: Colors.grey[50],

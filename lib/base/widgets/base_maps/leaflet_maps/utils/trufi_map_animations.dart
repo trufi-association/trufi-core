@@ -11,14 +11,14 @@ class TrufiMapAnimations {
     required MapController mapController,
   }) {
     final latitudeTween = Tween<double>(
-      begin: mapController.center.latitude,
+      begin: mapController.camera.center.latitude,
       end: center.latitude,
     );
     final longitudeTween = Tween<double>(
-      begin: mapController.center.longitude,
+      begin: mapController.camera.center.longitude,
       end: center.longitude,
     );
-    final zoomTween = Tween<double>(begin: mapController.zoom, end: zoom);
+    final zoomTween = Tween<double>(begin: mapController.camera.zoom, end: zoom);
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),
       vsync: tickerProvider,
@@ -53,20 +53,20 @@ class TrufiMapAnimations {
     required MapController mapController,
   }) {
     final neLatitudeTween = Tween<double>(
-      begin: mapController.bounds?.northEast?.latitude,
-      end: bounds.northEast?.latitude,
+      begin: mapController.camera.visibleBounds.northEast.latitude,
+      end: bounds.northEast.latitude,
     );
     final neLongitudeTween = Tween<double>(
-      begin: mapController.bounds?.northEast?.longitude,
-      end: bounds.northEast?.longitude,
+      begin: mapController.camera.visibleBounds.northEast.longitude,
+      end: bounds.northEast.longitude,
     );
     final swLatitudeTween = Tween<double>(
-      begin: mapController.bounds?.southWest?.latitude,
-      end: bounds.southWest?.latitude,
+      begin: mapController.camera.visibleBounds.southWest.latitude,
+      end: bounds.southWest.latitude,
     );
     final swLongitudeTween = Tween<double>(
-      begin: mapController.bounds?.southWest?.longitude,
-      end: bounds.southWest?.longitude,
+      begin: mapController.camera.visibleBounds.southWest.longitude,
+      end: bounds.southWest.longitude,
     );
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),

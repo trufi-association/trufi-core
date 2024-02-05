@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
@@ -46,7 +45,7 @@ class _RouteEditorSectionScreenState extends State<RouteEditorSectionScreen>
     super.initState();
 
     widget.mapRouteEditorProvider.trufiMapController.onReady.then((_) async {
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
       widget.mapRouteEditorProvider.trufiMapController
           .moveBounds(points: widget.areaSelected, tickerProvider: this);
     });
@@ -56,7 +55,7 @@ class _RouteEditorSectionScreenState extends State<RouteEditorSectionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(children: [Text("Editor Section")]),
+        title: const Row(children: [Text("Editor Section")]),
       ),
       body: Column(
         children: [

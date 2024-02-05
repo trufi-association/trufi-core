@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/map_provider_collection/i_trufi_map_controller.dart';
@@ -12,7 +13,8 @@ class LeafletMapController implements ITrufiMapController {
   LeafletMapController() : super();
 
   LatLngBounds get selectedBounds => _selectedBounds;
-  LatLngBounds _selectedBounds = LatLngBounds();
+  LatLngBounds _selectedBounds =
+      LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
   // ignore: prefer_void_to_null
   final Completer<Null> readyCompleter = Completer<Null>();
 
@@ -22,7 +24,7 @@ class LeafletMapController implements ITrufiMapController {
 
   @override
   void cleanMap() {
-    _selectedBounds = LatLngBounds();
+    _selectedBounds = LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
   }
 
   @override
@@ -45,7 +47,7 @@ class LeafletMapController implements ITrufiMapController {
     required List<TrufiLatLng> points,
     required TickerProvider tickerProvider,
   }) {
-    _selectedBounds = LatLngBounds();
+    _selectedBounds = LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
     for (final point in points) {
       _selectedBounds.extend(point.toLatLng());
     }

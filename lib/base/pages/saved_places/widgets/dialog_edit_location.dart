@@ -11,10 +11,10 @@ class DialogEditLocation extends StatefulWidget {
   final SelectLocationData selectPositionOnPage;
 
   const DialogEditLocation({
-    Key? key,
+    super.key,
     required this.location,
     required this.selectPositionOnPage,
-  }) : super(key: key);
+  });
 
   @override
   State<DialogEditLocation> createState() => _DialogEditLocationState();
@@ -33,7 +33,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final localizationSP = SavedPlacesLocalization.of(context);
     return Center(
       child: SingleChildScrollView(
@@ -150,7 +150,7 @@ class _DialogEditLocationState extends State<DialogEditLocation> {
                     children: [
                       Text(
                         localizationSP.savedPlacesSetPositionLabel,
-                        style: theme.textTheme.bodyText2,
+                        style: theme.textTheme.bodyMedium,
                       ),
                       Icon(
                         Icons.edit_location_alt,

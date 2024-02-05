@@ -19,7 +19,7 @@ class AlertNotification extends StatefulWidget {
   }) async {
     await showTrufiDialog<void>(
       context: context,
-      onWillPop: false,
+      canPop: false,
       builder: (_) {
         return AlertNotification(
           title: title,
@@ -63,7 +63,7 @@ class _AlertNotificationState extends State<AlertNotification> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Center(
       child: SingleChildScrollView(
         child: ConstrainedBox(
@@ -213,11 +213,11 @@ class DescriptionDecoder extends StatelessWidget {
             return TextSpan(children: [
               TextSpan(
                 text: textSimple,
-                style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+                style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
               ),
               TextSpan(
                 text: uriText,
-                style: theme.textTheme.bodyText2?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.blue,
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -231,14 +231,14 @@ class DescriptionDecoder extends StatelessWidget {
               if (index == matchesUriText.length)
                 TextSpan(
                   text: textsSimples[index],
-                  style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+                  style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
                 ),
             ]);
-          }).toList(),
+          }),
           if (matchesUriText.isEmpty)
             TextSpan(
               text: description,
-              style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+              style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
             ),
         ],
       ),

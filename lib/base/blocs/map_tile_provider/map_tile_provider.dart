@@ -79,7 +79,7 @@ class DefaultMapTileCaching extends TileProvider {
   DefaultMapTileCaching();
 
   @override
-  ImageProvider getImage(Coords coords, TileLayer options) {
-    return CachedNetworkImageProvider(getTileUrl(coords, options));
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
+    return CachedNetworkImageProvider(getTileUrl(coordinates, options));
   }
 }

@@ -8,12 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SimpleMenuItem extends TrufiMenuItem {
   SimpleMenuItem({
     required WidgetBuilder buildIcon,
-    required WidgetBuilder name,
+    required super.name,
     void Function()? onClick,
   }) : super(
           selectedIcon: buildIcon,
           notSelectedIcon: buildIcon,
-          name: name,
           onClick: (context, isSelected) {
             if (onClick != null) onClick();
           },
@@ -47,7 +46,7 @@ extension LayerIdsToString on DefaultItemsMenu {
                   value: value,
                   child: Text(
                     TrufiLocalizationCubit.localeDisplayName(value),
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 );
               }).toList(),
@@ -69,10 +68,10 @@ extension LayerIdsToString on DefaultItemsMenu {
                   value: value,
                   child: Text(
                     ThemeCubit.themeModeDisplayName(
-                      TrufiBaseLocalization.of(context),
+                      TrufiBaseLocalization.of(context)!,
                       value,
                     ),
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     softWrap: false,
                     maxLines: 1,
                   ),

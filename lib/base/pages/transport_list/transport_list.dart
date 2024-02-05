@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
@@ -11,7 +9,6 @@ import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
-import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class TransportList extends StatefulWidget {
   static const String route = "/TransportList";
@@ -20,11 +17,11 @@ class TransportList extends StatefulWidget {
   final MapRouteEditorProvider mapRouteEditorProvider;
 
   const TransportList({
-    Key? key,
+    super.key,
     required this.drawerBuilder,
     required this.mapTransportProvider,
     required this.mapRouteEditorProvider,
-  }) : super(key: key);
+  });
 
   @override
   State<TransportList> createState() => _TransportListState();
@@ -63,7 +60,7 @@ class _TransportListState extends State<TransportList> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final routeTransportsCubit = context.watch<RouteTransportsCubit>();
     final routeTransportsState = routeTransportsCubit.state;
     return Scaffold(

@@ -10,11 +10,11 @@ class ModeLeg extends StatelessWidget {
   final double legLength;
 
   const ModeLeg({
-    Key? key,
+    super.key,
     required this.leg,
     required this.legLength,
     required this.maxWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +48,11 @@ class WaitLeg extends StatelessWidget {
   final int duration;
 
   const WaitLeg({
-    Key? key,
+    super.key,
     required this.legLength,
     required this.duration,
     required this.maxWidth,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +88,12 @@ class RouteLeg extends StatelessWidget {
   final Color? forcedColor;
 
   const RouteLeg({
-    Key? key,
+    super.key,
     required this.leg,
     required this.legLength,
     required this.maxWidth,
     this.forcedColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

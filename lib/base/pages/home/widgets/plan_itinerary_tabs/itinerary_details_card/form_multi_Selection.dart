@@ -73,7 +73,7 @@ class _CustomButton2State extends State<CustomButton2> {
                 selectedData != null
                     ? "Monitored security"
                     : "Security onboard",
-                style: theme.textTheme.bodyText2?.copyWith(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: selectedData != null
                       ? theme.colorScheme.secondary
                       : null,
@@ -336,7 +336,7 @@ class TileSigleSelection extends StatelessWidget {
             ),
             Text(
               data.name,
-              style: theme.textTheme.bodyText2?.copyWith(
+              style: theme.textTheme.bodyMedium?.copyWith(
                 color: data.state == DataState.notUsed
                     ? null
                     : data.state == DataState.enabled

@@ -14,8 +14,8 @@ class MapLayerLocalStorage {
   }
 
   Future<Map<String, bool>> load() async {
-    final _box = Hive.box(path);
-    final jsonString = _box.get(path);
+    final box = Hive.box(path);
+    final jsonString = box.get(path);
     return jsonString != null
         ? (jsonDecode(jsonString) as Map<String, dynamic>?)?.map<String, bool>(
                 (key, value) => MapEntry(key, value as bool)) ??

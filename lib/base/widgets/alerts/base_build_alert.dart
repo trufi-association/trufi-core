@@ -8,11 +8,11 @@ class BaseBuildAlert extends StatelessWidget {
   final List<Widget>? actions;
 
   const BaseBuildAlert({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     this.actions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,13 @@ class OKButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const OKButton({
-    Key? key,
+    super.key,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final theme = Theme.of(context);
     return TextButton(
       onPressed: onPressed ?? () => Navigator.pop(context),
@@ -59,13 +59,13 @@ class CancelButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const CancelButton({
-    Key? key,
+    super.key,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final theme = Theme.of(context);
     return TextButton(
       onPressed: onPressed ?? () => Navigator.pop(context),

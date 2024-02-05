@@ -7,10 +7,9 @@ import 'package:trufi_core/base/models/trufi_latlng.dart';
 
 Marker buildTransferMarker({required TrufiLatLng point, required Color color}) {
   return Marker(
-    point: point.toLatLng(),
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) {
-      return Transform.scale(
+      point: point.toLatLng(),
+      alignment: Alignment.center,
+      child: Transform.scale(
         scale: 0.5,
         child: Container(
           padding: const EdgeInsets.all(4),
@@ -27,37 +26,33 @@ Marker buildTransferMarker({required TrufiLatLng point, required Color color}) {
             ),
           ),
         ),
-      );
-    },
-  );
+      ));
 }
 
 Marker buildStopMarker(TrufiLatLng point) {
   return Marker(
     point: point.toLatLng(),
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) {
-      return Transform.scale(
-        scale: 0.30,
+    alignment: Alignment.center,
+    child: Transform.scale(
+      scale: 0.30,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 3.5),
+          shape: BoxShape.circle,
+        ),
         child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 3.5),
+          decoration: const BoxDecoration(
+            color: Colors.white,
             shape: BoxShape.circle,
           ),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.circle,
-              color: Colors.grey[700],
-              size: 20,
-            ),
+          child: Icon(
+            Icons.circle,
+            color: Colors.grey[700],
+            size: 20,
           ),
         ),
-      );
-    },
+      ),
+    ),
   );
 }
 
@@ -73,8 +68,8 @@ Marker buildTransportMarker(
   return Marker(
     width: 50.0,
     point: point.toLatLng(),
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) => GestureDetector(
+    alignment: Alignment.center,
+    child: GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(4.0),
@@ -117,19 +112,17 @@ Marker buildTransportMarker(
 Marker buildMarker(
   TrufiLatLng point,
   IconData iconData,
-  AnchorPos anchorPos,
+  Alignment alignment,
   Color color, {
   Decoration? decoration,
 }) {
   return Marker(
     point: point.toLatLng(),
-    anchorPos: anchorPos,
-    builder: (context) {
-      return Container(
-        decoration: decoration,
-        child: Icon(iconData, color: color),
-      );
-    },
+    alignment: alignment,
+    child: Container(
+      decoration: decoration,
+      child: Icon(iconData, color: color),
+    ),
   );
 }
 
@@ -138,20 +131,16 @@ Marker buildFromMarker(TrufiLatLng point, Widget fromMarker) {
     point: point.toLatLng(),
     width: 18,
     height: 18,
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) {
-      return fromMarker;
-    },
+    alignment: Alignment.center,
+    child: fromMarker,
   );
 }
 
 Marker buildToMarker(TrufiLatLng point, Widget toMarker) {
   return Marker(
     point: point.toLatLng(),
-    anchorPos: AnchorPos.align(AnchorAlign.top),
-    builder: (context) {
-      return toMarker;
-    },
+    alignment: Alignment.topCenter,
+    child: toMarker,
   );
 }
 
@@ -161,14 +150,15 @@ Marker buildYourLocationMarker(TrufiLatLng? point, Widget toMarker) {
           width: 50.0,
           height: 50.0,
           point: point.toLatLng(),
-          anchorPos: AnchorPos.align(AnchorAlign.center),
-          builder: (context) => toMarker,
+          alignment: Alignment.center,
+          child: toMarker,
         )
       : Marker(
           width: 0,
           height: 0,
           point: const TrufiLatLng(0, 0).toLatLng(),
-          builder: (_) => Container());
+          child: Container(),
+        );
 }
 
 // @override

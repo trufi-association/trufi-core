@@ -13,15 +13,12 @@ import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 
 class MenuPageItem extends TrufiMenuItem {
   MenuPageItem({
-    required String id,
-    required WidgetBuilder selectedIcon,
-    required WidgetBuilder notSelectedIcon,
+    required String super.id,
+    required super.selectedIcon,
+    required super.notSelectedIcon,
     required String Function(BuildContext) name,
     Color? nameColor,
   }) : super(
-          id: id,
-          selectedIcon: selectedIcon,
-          notSelectedIcon: notSelectedIcon,
           name: (context) {
             return TrufiMenuItem.buildName(
               context,
@@ -63,7 +60,7 @@ extension LayerIdsToString on DefaultPagesMenu {
           color: Colors.grey,
         ),
         name: (context) {
-          return TrufiBaseLocalization.of(context).menuConnections;
+          return TrufiBaseLocalization.of(context)!.menuConnections;
         },
       ),
       DefaultPagesMenu.savedPlaces: MenuPageItem(
@@ -111,7 +108,7 @@ extension LayerIdsToString on DefaultPagesMenu {
           color: Colors.grey,
         ),
         name: (context) {
-          return TrufiBaseLocalization.of(context).menuTransportList;
+          return TrufiBaseLocalization.of(context)!.menuTransportList;
         },
       ),
       DefaultPagesMenu.about: MenuPageItem(

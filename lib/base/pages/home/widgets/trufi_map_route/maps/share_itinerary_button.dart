@@ -8,9 +8,9 @@ class ShareItineraryButton extends StatelessWidget {
   final Uri shareBaseItineraryUri;
   
   const ShareItineraryButton({
-    Key? key,
+    super.key,
     required this.shareBaseItineraryUri,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

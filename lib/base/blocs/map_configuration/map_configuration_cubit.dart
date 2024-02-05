@@ -9,6 +9,6 @@ part 'map_configuration.dart';
 
 class MapConfigurationCubit extends Cubit<MapConfiguration> {
   MapConfigurationCubit(
-    MapConfiguration initialState,
-  ) : super(initialState);
+    super.initialState,
+  );
 }

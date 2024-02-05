@@ -10,16 +10,16 @@ class DurationComponent extends StatelessWidget {
   final String futureText;
 
   const DurationComponent({
-    Key? key,
+    super.key,
     required this.duration,
     required this.startTime,
     required this.endTime,
     this.futureText = '',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Row(
       children: [
         const Icon(Icons.timer_sharp),

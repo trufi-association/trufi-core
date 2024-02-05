@@ -32,6 +32,7 @@ class UniLinkProvider {
 
   Future<void> runService(BuildContext context) async {
     await _initFirstUri(context: context);
+    // ignore: use_build_context_synchronously
     _registerListening(context: context);
   }
 
@@ -43,6 +44,7 @@ class UniLinkProvider {
       try {
         final initialURI = await getInitialUri();
         if (initialURI != null) {
+          // ignore: use_build_context_synchronously
           _parseUniLink(context: context, uri: initialURI);
         }
       } catch (e) {

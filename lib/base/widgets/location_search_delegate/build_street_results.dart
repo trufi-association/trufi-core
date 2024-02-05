@@ -12,10 +12,10 @@ class BuildStreetResults extends StatelessWidget {
   final void Function(TrufiLocation) onTap;
 
   const BuildStreetResults({
-    Key? key,
+    super.key,
     required this.street,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

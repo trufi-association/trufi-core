@@ -14,13 +14,13 @@ class TransportDash extends StatelessWidget {
   final Color? forcedColor;
 
   const TransportDash({
-    Key? key,
+    super.key,
     required this.leg,
     required this.moveTo,
     this.showBeforeLine = true,
     this.showAfterLine = false,
     this.forcedColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +61,15 @@ class WalkDash extends StatelessWidget {
   final Leg leg;
   final Function(TrufiLatLng) moveTo;
   const WalkDash({
-    Key? key,
+    super.key,
     required this.leg,
     required this.moveTo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Column(
       children: [
         SeparatorPlace(
@@ -104,13 +104,13 @@ class SeparatorPlace extends StatelessWidget {
   final double? height;
 
   const SeparatorPlace({
-    Key? key,
+    super.key,
     required this.child,
     this.leading,
     this.color,
     this.separator,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -176,13 +176,13 @@ class DashLinePlace extends StatelessWidget {
   final Function moveInMap;
 
   const DashLinePlace({
-    Key? key,
+    super.key,
     required this.date,
     required this.location,
     required this.moveInMap,
     this.child,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

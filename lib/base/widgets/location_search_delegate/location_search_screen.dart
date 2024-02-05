@@ -65,7 +65,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     final searchLocationsCubit = context.read<SearchLocationsCubit>();
     return Theme(
       data: theme.copyWith(
@@ -77,7 +77,7 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
         ),
         hintColor: Colors.grey[300],
         textTheme: theme.textTheme.copyWith(
-          headline6: const TextStyle(
+          titleLarge: const TextStyle(
             color: Colors.white,
             fontSize: 16,
           ),

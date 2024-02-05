@@ -9,14 +9,14 @@ import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 class BarItineraryDetails extends StatelessWidget {
   final Itinerary itinerary;
   const BarItineraryDetails({
-    Key? key,
+    super.key,
     required this.itinerary,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final localization = TrufiBaseLocalization.of(context);
+    final localization = TrufiBaseLocalization.of(context)!;
     return Container(
       height: itinerary.startDateText(localization) == '' ? 40 : 54,
       padding: const EdgeInsets.only(right: 15),

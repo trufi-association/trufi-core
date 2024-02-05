@@ -11,12 +11,12 @@ class StopItemTile extends StatelessWidget {
   final bool isLastElement;
 
   const StopItemTile({
-    Key? key,
+    super.key,
     required this.stop,
     required this.color,
     this.isFirstElement = false,
     this.isLastElement = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
