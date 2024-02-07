@@ -1,4 +1,4 @@
-package com.example.trufi_app
+package com.example.trufi_core_example
 
 import io.flutter.embedding.android.FlutterActivity
 
