@@ -3,28 +3,30 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/utils/certificates_letsencrypt_android.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
+import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_notification.dart';
 import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
-// TODO: Update example
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CertificatedLetsencryptAndroid.workAroundCertificated();
   await initHiveForFlutter();
+  await TrufiAppId.initialize();
   runApp(
-    TrufiApp(
+    TrufiCore(
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "https://bo-cbba.sa.api.trufi-association.org/otp",
-          otpGraphqlEndpoint: "https://bo-cbba.sa.api.trufi-association.org/otp/index/graphql",
+          otpEndpoint: "https://navigator.trufi.app/otp",
+          otpGraphqlEndpoint: "https://navigator.trufi.app/otp/index/graphql",
           mapConfiguration: MapConfiguration(
             center: const TrufiLatLng(-17.392600, -66.158787),
           ),
           searchAssetPath: "assets/data/search.json",
-          photonUrl: "https://bo-cbba.sa.api.trufi-association.org/photon",
+          photonUrl: "https://navigator.trufi.app/photon",
         ),
       ],
       trufiRouter: TrufiRouter(
@@ -49,8 +51,7 @@ void main() async {
             host: "trufi.example",
           ),
           lifecycleReactorHandler: LifecycleReactorNotifications(
-            url:
-                'https://api.busboy.app/static_files/notification.json',
+            url: 'https://navigator.trufi.app/static_files/notification.json',
           ),
         ),
       ),
