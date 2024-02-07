@@ -1,6 +1,6 @@
 {
-    "name": "trufi_app",
-    "short_name": "trufi_app",
+    "name": "trufi_core_example",
+    "short_name": "trufi_core_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
