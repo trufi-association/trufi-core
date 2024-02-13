@@ -178,12 +178,11 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
     MapPosition position,
     bool hasGesture,
   ) {
-    if (
-        // widget.trufiMapController.selectedBounds.isValid &&
+    if (widget.trufiMapController.selectedBounds != null &&
         position.bounds != null) {
       _cropButtonKey.currentState?.setVisible(
         visible: !position.bounds!
-            .containsBounds(widget.trufiMapController.selectedBounds),
+            .containsBounds(widget.trufiMapController.selectedBounds!),
       );
     }
   }

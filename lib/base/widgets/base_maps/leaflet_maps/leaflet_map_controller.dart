@@ -12,9 +12,8 @@ class LeafletMapController implements ITrufiMapController {
   MapController mapController = MapController();
   LeafletMapController() : super();
 
-  LatLngBounds get selectedBounds => _selectedBounds;
-  LatLngBounds _selectedBounds =
-      LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
+  LatLngBounds? get selectedBounds => _selectedBounds;
+  LatLngBounds? _selectedBounds;
   // ignore: prefer_void_to_null
   final Completer<Null> readyCompleter = Completer<Null>();
 
@@ -24,7 +23,7 @@ class LeafletMapController implements ITrufiMapController {
 
   @override
   void cleanMap() {
-    _selectedBounds = LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
+    _selectedBounds = null;
   }
 
   @override
@@ -47,11 +46,14 @@ class LeafletMapController implements ITrufiMapController {
     required List<TrufiLatLng> points,
     required TickerProvider tickerProvider,
   }) {
-    _selectedBounds = LatLngBounds(const LatLng(0, 0), const LatLng(0, 0));
+    _selectedBounds = LatLngBounds(
+      points.first.toLatLng(),
+      points.last.toLatLng(),
+    );
     for (final point in points) {
-      _selectedBounds.extend(point.toLatLng());
+      _selectedBounds!.extend(point.toLatLng());
     }
-    _fitBounds(bounds: _selectedBounds, tickerProvider: tickerProvider);
+    _fitBounds(bounds: _selectedBounds!, tickerProvider: tickerProvider);
   }
 
   @override
@@ -59,7 +61,7 @@ class LeafletMapController implements ITrufiMapController {
     required TickerProvider tickerProvider,
   }) {
     _fitBounds(
-      bounds: _selectedBounds,
+      bounds: _selectedBounds!,
       tickerProvider: tickerProvider,
     );
   }
