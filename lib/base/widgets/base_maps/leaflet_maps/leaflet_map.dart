@@ -53,6 +53,8 @@ class _LeafletMapState extends State<LeafletMap> {
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     final currentMapType = context.watch<MapTileProviderCubit>().state;
     final customLayersCubit = context.watch<MapLayersCubit>();
+    final showCustomLayers =
+        widget.showPOILayers && customLayersCubit.layersContainer.isNotEmpty;
     int? clusterSize;
     Size? markerClusterSize;
     switch (mapZoom) {
@@ -127,7 +129,7 @@ class _LeafletMapState extends State<LeafletMap> {
               children: [
                 ...currentMapType.currentMapTileProvider
                     .buildTileLayerOptions(),
-                if (widget.showPOILayers)
+                if (showCustomLayers)
                   ...customLayersCubit.activeCustomLayers(
                     zoom: mapZoom,
                     layers: widget.layerOptionsBuilder(context),
@@ -165,7 +167,7 @@ class _LeafletMapState extends State<LeafletMap> {
             );
           },
         ),
-        if (widget.showPOILayers)
+        if (showCustomLayers)
           const Positioned(
             top: 16.0,
             right: 16.0,
