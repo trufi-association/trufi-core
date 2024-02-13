@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/map_provider_collection/i_trufi_map_controller.dart';
@@ -90,6 +89,7 @@ class LeafletMapController implements ITrufiMapController {
     TickerProvider? tickerProvider,
   }) {
     if (tickerProvider == null) {
+      // TODO update fitBounds
       mapController.fitBounds(bounds);
     } else {
       TrufiMapAnimations.fitBounds(

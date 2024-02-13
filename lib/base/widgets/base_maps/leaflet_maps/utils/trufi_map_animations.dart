@@ -18,7 +18,8 @@ class TrufiMapAnimations {
       begin: mapController.camera.center.longitude,
       end: center.longitude,
     );
-    final zoomTween = Tween<double>(begin: mapController.camera.zoom, end: zoom);
+    final zoomTween =
+        Tween<double>(begin: mapController.camera.zoom, end: zoom);
     final controller = AnimationController(
       duration: Duration(milliseconds: milliseconds),
       vsync: tickerProvider,
@@ -77,6 +78,7 @@ class TrufiMapAnimations {
       curve: Curves.fastOutSlowIn,
     );
     controller.addListener(() {
+      // TODO update fitBounds
       mapController.fitBounds(
         LatLngBounds(
           LatLng(
@@ -88,6 +90,7 @@ class TrufiMapAnimations {
             swLongitudeTween.evaluate(animation),
           ),
         ),
+        // TODO update FitBoundsOptions
         options: const FitBoundsOptions(
           padding: EdgeInsets.all(50),
         ),

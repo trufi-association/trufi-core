@@ -87,6 +87,7 @@ class _LeafletMapState extends State<LeafletMap> {
                   widget.trufiMapController.mapController.hashCode.toString()),
               mapController: widget.trufiMapController.mapController,
               options: MapOptions(
+                // TODO update interactiveFlags
                 interactiveFlags: InteractiveFlag.drag |
                     InteractiveFlag.flingAnimation |
                     InteractiveFlag.pinchMove |
