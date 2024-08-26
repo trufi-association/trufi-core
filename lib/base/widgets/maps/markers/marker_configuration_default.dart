@@ -18,10 +18,8 @@ class DefaultMarkerConfiguration implements MarkerConfiguration {
       point: point,
       width: 24.0,
       height: 24.0,
-      anchorPos: AnchorPos.align(AnchorAlign.center),
-      builder: (context) {
-        return fromMarker;
-      },
+      alignment: Alignment.center,
+      child: fromMarker,
     );
   }
 
@@ -29,10 +27,8 @@ class DefaultMarkerConfiguration implements MarkerConfiguration {
   Marker buildToMarker(LatLng point) {
     return Marker(
       point: point,
-      anchorPos: AnchorPos.align(AnchorAlign.top),
-      builder: (context) {
-        return toMarker;
-      },
+      alignment: Alignment.topCenter,
+      child: toMarker,
     );
   }
 
@@ -43,14 +39,15 @@ class DefaultMarkerConfiguration implements MarkerConfiguration {
             width: 50.0,
             height: 50.0,
             point: point,
-            anchorPos: AnchorPos.align(AnchorAlign.center),
-            builder: (context) => const MyLocationMarker(),
+            alignment: Alignment.center,
+            child: toMarker,
           )
         : Marker(
             width: 0,
             height: 0,
             point: LatLng(0, 0),
-            builder: (_) => Container());
+            child: Container(),
+          );
   }
 
   @override

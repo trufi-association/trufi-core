@@ -36,7 +36,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
               exception.message,
               localization,
             ),
-            style: theme.textTheme.bodyText2,
+            style: theme.textTheme.bodyMedium,
           ),
         ],
       ),

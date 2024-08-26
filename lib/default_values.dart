@@ -23,7 +23,6 @@ import 'package:trufi_core/base/pages/home/map_route_cubit/map_route_cubit.dart'
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/default_search_location.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/transport_list/route_transports_cubit/route_transports_cubit.dart';
-import 'base/blocs/localization/trufi_localization_cubit.dart';
 import 'base/pages/home/widgets/trufi_map_route/trufi_map_route.dart';
 
 abstract class DefaultValues {

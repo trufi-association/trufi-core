@@ -83,7 +83,7 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 Text(
                   localizationA.tagline("$cityName, $countryName"),
-                  style: theme.textTheme.subtitle2?.copyWith(),
+                  style: theme.textTheme.titleSmall?.copyWith(),
                 ),
                 const SizedBox(height: 16.0),
                 Text(
@@ -107,20 +107,20 @@ class AboutPage extends StatelessWidget {
                     child: ExpansionTile(
                       title: Text(
                         localizationA.aboutCollapseTitle,
-                        style: theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                        style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                       ),
                       children: [
                         Text(
                           localizationA.aboutCollapseContent + '\n',
                           style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                              theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                         ),
                         Row(
                           children: [
                             InkWell(
                               child: Text(
                                 localizationA.trufiWebsite + '\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -138,7 +138,7 @@ class AboutPage extends StatelessWidget {
                             InkWell(
                               child: Text(
                                 localizationA.volunteerTrufi + '\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -153,7 +153,7 @@ class AboutPage extends StatelessWidget {
                         Text(
                           localizationA.aboutCollapseContentFoot + '\n',
                           style:
-                              theme.textTheme.bodyText2?.copyWith(height: 1.5),
+                              theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                         )
                       ],
                       backgroundColor:
@@ -207,7 +207,7 @@ class AboutPage extends StatelessWidget {
                 InkWell(
                   child: Text(
                     'Email',
-                    style: theme.textTheme.bodyText2?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
@@ -224,12 +224,12 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 RichText(
                   text: TextSpan(
-                    style: theme.textTheme.bodyText2,
+                    style: theme.textTheme.bodyMedium,
                     text: '${localizationA.aboutOpenSource} ',
                     children: [
                       TextSpan(
                           text: 'Github',
-                          style: theme.textTheme.bodyText2?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,

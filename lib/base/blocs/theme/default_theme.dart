@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final theme = ThemeData.from(
+  useMaterial3: false,
   colorScheme: ColorScheme.fromSwatch(
     primarySwatch: const MaterialColor(
       0xff263238,
@@ -17,7 +18,6 @@ final theme = ThemeData.from(
         900: Color(0xff263238),
       },
     ),
-    primaryColorDark: const Color(0xff000000),
     accentColor: const Color(0xffd81b60),
     cardColor: Colors.white,
     backgroundColor: Colors.grey[50],
@@ -27,14 +27,20 @@ final theme = ThemeData.from(
   scaffoldBackgroundColor: Colors.grey[200],
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xff263238),
+    // foregroundColor: Color(0xff263238),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Color(0xff263238),
   ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: const Color(0xffd81b60),
+    selectionColor: const Color(0xffd81b60).withOpacity(0.7),
+  ),
 );
 
 final themeDark = ThemeData.from(
+  useMaterial3: false,
   colorScheme: ColorScheme.fromSwatch(
     primarySwatch: const MaterialColor(
       0xff263238,
@@ -70,5 +76,9 @@ final themeDark = ThemeData.from(
   ),
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: Color(0xffd81b60),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: const Color(0xffd81b60),
+    selectionColor: const Color(0xffd81b60).withOpacity(0.7),
   ),
 );

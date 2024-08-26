@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:synchronized/synchronized.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
@@ -17,7 +16,7 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
       SearchLocationsHiveLocalRepository();
 
   final SearchLocationRepository searchLocationRepository;
-  final _fetchLocationLock = Lock();
+  // final _fetchLocationLock = Lock();
   CancelableOperation<List<TrufiPlace>>? _fetchLocationOperation;
 
   SearchLocationsCubit({

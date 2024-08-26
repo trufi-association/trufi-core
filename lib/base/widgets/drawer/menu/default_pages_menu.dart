@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/pages/about/about.dart';

@@ -39,7 +39,7 @@ class TransportList extends StatelessWidget {
                       ),
                       hintColor: Colors.grey[300],
                       textTheme: theme.textTheme.copyWith(
-                        headline6: const TextStyle(
+                        headlineSmall: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                         ),
@@ -81,10 +81,10 @@ class TransportList extends StatelessWidget {
           body: Stack(
             children: [
               Scrollbar(
-                isAlwaysShown: true,
+                trackVisibility: true,
                 interactive: true,
                 thickness: 8,
-                showTrackOnHover: true,
+                thumbVisibility: true,
                 child: ListView.builder(
                   itemCount: listTransports.length,
                   padding:

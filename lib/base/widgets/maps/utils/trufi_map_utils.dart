@@ -57,19 +57,17 @@ Polyline? _polylineHitTest(List<Polyline> polylines, LatLng point) {
 Marker buildTransferMarker(LatLng point) {
   return Marker(
     point: point,
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) {
-      return Transform.scale(
-        scale: 0.4,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 3.5),
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.circle_outlined, color: Colors.white),
+    alignment: Alignment.center,
+    child: Transform.scale(
+      scale: 0.4,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey, width: 3.5),
+          shape: BoxShape.circle,
         ),
-      );
-    },
+        child: const Icon(Icons.circle_outlined, color: Colors.white),
+      ),
+    ),
   );
 }
 
@@ -84,8 +82,8 @@ Marker buildTransportMarker(
   return Marker(
     width: 50.0,
     point: point,
-    anchorPos: AnchorPos.align(AnchorAlign.center),
-    builder: (context) => GestureDetector(
+    alignment: Alignment.center,
+    child: GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(4.0),
@@ -126,19 +124,17 @@ Marker buildTransportMarker(
 Marker buildMarker(
   LatLng point,
   IconData iconData,
-  AnchorPos anchorPos,
+  Alignment alignment,
   Color color, {
   Decoration? decoration,
 }) {
   return Marker(
     point: point,
-    anchorPos: anchorPos,
-    builder: (context) {
-      return Container(
-        decoration: decoration,
-        child: Icon(iconData, color: color),
-      );
-    },
+    alignment: alignment,
+    child: Container(
+      decoration: decoration,
+      child: Icon(iconData, color: color),
+    ),
   );
 }
 

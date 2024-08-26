@@ -3,11 +3,11 @@ import 'package:async/async.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 
 import 'package:trufi_core/base/const/consts.dart';
+import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
@@ -48,7 +48,7 @@ class ChooseLocationPage extends StatefulWidget {
 class ChooseLocationPageState extends State<ChooseLocationPage>
     with TickerProviderStateMixin {
   final TrufiMapController trufiMapController = TrufiMapController();
-  MapPosition? position;
+  TrufiLatLng? position;
   Widget? _chooseOnMapMarker;
 
   bool loading = true;
@@ -133,13 +133,11 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
                 TrufiMap(
                   trufiMapController: trufiMapController,
                   layerOptionsBuilder: (context) => [],
-                  onPositionChanged: (mapPosition, hasGesture) {
+                  onPositionChanged: (mapCamera, hasGesture) {
                     setState(() {
-                      position = mapPosition;
+                      position = TrufiLatLng.fromLatLng(mapCamera.center);
                     });
-                    if (mapPosition.center != null) {
-                      debounce(() => loadData(mapPosition.center!));
-                    }
+                    debounce(() => loadData(mapCamera.center));
                   },
                 ),
                 Positioned.fill(
@@ -181,12 +179,12 @@ class ChooseLocationPageState extends State<ChooseLocationPage>
                     if (loading)
                       OutlinedButton(
                         onPressed: () async {
-                          if (position?.center != null) {
+                          if (position != null) {
                             Navigator.of(context).pop(
                               LocationDetail(
                                 '',
                                 '',
-                                position!.center!,
+                                position!.toLatLng(),
                               ),
                             );
                           }

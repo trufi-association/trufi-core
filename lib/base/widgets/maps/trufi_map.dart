@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
@@ -42,11 +42,13 @@ class TrufiMap extends StatelessWidget {
               return FlutterMap(
                 mapController: trufiMapController.mapController,
                 options: MapOptions(
-                  interactiveFlags: InteractiveFlag.drag |
-                      InteractiveFlag.flingAnimation |
-                      InteractiveFlag.pinchMove |
-                      InteractiveFlag.pinchZoom |
-                      InteractiveFlag.doubleTapZoom,
+                  interactionOptions: InteractionOptions(
+                    flags: InteractiveFlag.drag |
+                        InteractiveFlag.flingAnimation |
+                        InteractiveFlag.pinchMove |
+                        InteractiveFlag.pinchZoom |
+                        InteractiveFlag.doubleTapZoom,
+                  ),
                   onMapReady: () {
                     if (!trufiMapController.readyCompleter.isCompleted) {
                       trufiMapController.readyCompleter.complete();
@@ -54,12 +56,12 @@ class TrufiMap extends StatelessWidget {
                   },
                   minZoom: mapConfiguratiom.onlineMinZoom,
                   maxZoom: mapConfiguratiom.onlineMaxZoom,
-                  zoom: mapConfiguratiom.onlineZoom,
+                  initialZoom: mapConfiguratiom.onlineZoom,
                   onTap: onTap,
                   onLongPress: onLongPress,
-                  center: mapConfiguratiom.center,
+                  initialCenter: mapConfiguratiom.center,
                   onPositionChanged: (
-                    MapPosition position,
+                    MapCamera position,
                     bool hasGesture,
                   ) {
                     if (onPositionChanged != null) {

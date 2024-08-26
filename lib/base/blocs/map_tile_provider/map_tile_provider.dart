@@ -74,7 +74,7 @@ class OSMMapLayer extends MapTileProvider {
 }
 
 class DefaultMapTileCaching extends TileProvider {
-  Coords coords;
+  TileCoordinates coords;
   TileLayer options;
   DefaultMapTileCaching({
     required this.coords,
@@ -82,7 +82,7 @@ class DefaultMapTileCaching extends TileProvider {
   });
 
   @override
-  ImageProvider getImage(Coords coords, TileLayer options) {
+  ImageProvider getImage(TileCoordinates coords, TileLayer options) {
     return CachedNetworkImageProvider(getTileUrl(coords, options));
   }
 }

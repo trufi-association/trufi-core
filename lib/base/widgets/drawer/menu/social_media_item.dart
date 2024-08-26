@@ -133,7 +133,7 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
             children: [
               Text(
                 TrufiBaseLocalization.of(context).menuSocialMedia,
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Icon(Icons.arrow_drop_down),
             ],

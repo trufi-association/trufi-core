@@ -18,25 +18,25 @@ class MapTileAndOSMCopyright extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),
             text: "© OpenMapTiles ",
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch("https://openmaptiles.org/");
+                launchUrl(Uri.parse("https://openmaptiles.org/"));
               },
           ),
           TextSpan(
-            style: theme.textTheme.caption?.copyWith(
+            style: theme.textTheme.bodySmall?.copyWith(
               color: Colors.black,
               shadows: shadows,
             ),
             text: "© OpenStreetMap contributors",
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch("https://www.openstreetmap.org/copyright");
+                launchUrl(Uri.parse("https://www.openstreetmap.org/copyright"));
               },
           ),
         ],
