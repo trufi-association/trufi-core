@@ -1,5 +1,5 @@
-## 3.22.2-stadtnavi-lts
-🎉 Migrated sdk to Flutter 3.22.2
+## 3.24.0-stadtnavi-lts
+🎉 Migrated sdk to Flutter 3.24.0
 🎉 Updated Trufi Core to ensure compatibility with Stadtnavi Core version 2.0.0 and above.
 🎉 Example project has not been migrated.
 
