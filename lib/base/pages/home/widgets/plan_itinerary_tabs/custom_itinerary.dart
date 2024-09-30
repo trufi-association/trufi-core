@@ -10,9 +10,9 @@ import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary
 class CustomItinerary extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
   const CustomItinerary({
-    Key? key,
+    super.key,
     required this.moveTo,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomItinerary> createState() => _CustomItineraryState();

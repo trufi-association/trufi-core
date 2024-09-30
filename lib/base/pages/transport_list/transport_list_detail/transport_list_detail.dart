@@ -42,11 +42,11 @@ class TransportListDetail extends StatefulWidget {
   final MapRouteEditorProvider mapRouteEditorProvider;
 
   const TransportListDetail({
-    Key? key,
+    super.key,
     required this.id,
     required this.mapTransportProvider,
     required this.mapRouteEditorProvider,
-  }) : super(key: key);
+  });
 
   @override
   State<TransportListDetail> createState() => _TransportListDetailState();

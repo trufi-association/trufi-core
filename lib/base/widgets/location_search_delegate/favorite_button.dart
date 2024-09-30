@@ -6,9 +6,9 @@ import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search
 
 class FavoriteButton extends StatelessWidget {
   const FavoriteButton({
-    Key? key,
+    super.key,
     required this.location,
-  }) : super(key: key);
+  });
 
   final TrufiLocation location;
 

@@ -15,7 +15,7 @@ class HomeAppBar extends StatelessWidget {
   final SelectLocationData selectPositionOnPage;
 
   const HomeAppBar({
-    Key? key,
+    super.key,
     required this.onSaveFrom,
     required this.onSaveTo,
     required this.onBackButton,
@@ -23,7 +23,7 @@ class HomeAppBar extends StatelessWidget {
     required this.onReset,
     required this.onSwap,
     required this.selectPositionOnPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

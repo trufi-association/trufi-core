@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/map_provider_collection/i_trufi_map_controller.dart';
@@ -11,8 +11,8 @@ class LeafletMapController implements ITrufiMapController {
   MapController mapController = MapController();
   LeafletMapController() : super();
 
-  LatLngBounds get selectedBounds => _selectedBounds;
-  LatLngBounds _selectedBounds = LatLngBounds();
+  LatLngBounds? get selectedBounds => _selectedBounds;
+  LatLngBounds? _selectedBounds;
   // ignore: prefer_void_to_null
   final Completer<Null> readyCompleter = Completer<Null>();
 
@@ -22,7 +22,7 @@ class LeafletMapController implements ITrufiMapController {
 
   @override
   void cleanMap() {
-    _selectedBounds = LatLngBounds();
+    _selectedBounds = null;
   }
 
   @override
@@ -45,9 +45,12 @@ class LeafletMapController implements ITrufiMapController {
     required List<TrufiLatLng> points,
     required TickerProvider tickerProvider,
   }) {
-    _selectedBounds = LatLngBounds();
+    _selectedBounds = LatLngBounds(
+      points.first.toLatLng(),
+      points.last.toLatLng(),
+    );
     for (final point in points) {
-      _selectedBounds.extend(point.toLatLng());
+      _selectedBounds!.extend(point.toLatLng());
     }
     _fitBounds(bounds: _selectedBounds, tickerProvider: tickerProvider);
   }
@@ -74,24 +77,26 @@ class LeafletMapController implements ITrufiMapController {
       TrufiMapAnimations.move(
         center: center.toLatLng(),
         zoom: zoom,
-        tickerProvider: tickerProvider,
-        milliseconds: animationDuration,
+        vsync: tickerProvider,
         mapController: mapController,
       );
     }
   }
 
   void _fitBounds({
-    required LatLngBounds bounds,
+    required LatLngBounds? bounds,
     TickerProvider? tickerProvider,
   }) {
+    if (bounds == null) return;
     if (tickerProvider == null) {
-      mapController.fitBounds(bounds);
+      mapController.fitCamera(CameraFit.bounds(
+        bounds: bounds,
+        padding: EdgeInsets.all(50),
+      ));
     } else {
       TrufiMapAnimations.fitBounds(
         bounds: bounds,
-        tickerProvider: tickerProvider,
-        milliseconds: animationDuration,
+        vsync: tickerProvider,
         mapController: mapController,
       );
     }

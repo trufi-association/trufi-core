@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SwapButton extends StatelessWidget {
   const SwapButton({
-    Key? key,
+    super.key,
     required this.orientation,
     required this.onSwap,
-  }) : super(key: key);
+  });
   final Orientation orientation;
   final void Function() onSwap;
   @override
@@ -26,9 +26,9 @@ class SwapButton extends StatelessWidget {
 
 class ResetButton extends StatelessWidget {
   const ResetButton({
-    Key? key,
+    super.key,
     required this.onReset,
-  }) : super(key: key);
+  });
   final void Function() onReset;
   @override
   Widget build(BuildContext context) {

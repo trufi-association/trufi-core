@@ -20,15 +20,14 @@ class TrufiApp extends StatelessWidget {
   final TrufiLocalization _trufiLocalization;
 
   TrufiApp({
-    Key? key,
+    super.key,
     required this.appNameTitle,
     required this.trufiRouter,
     required this.blocProviders,
     this.trufiBaseTheme,
     TrufiLocalization? trufiLocalization,
   })  : _trufiLocalization =
-            trufiLocalization ?? DefaultValues.trufiLocalization(),
-        super(key: key);
+            trufiLocalization ?? DefaultValues.trufiLocalization();
 
   @override
   Widget build(BuildContext context) {

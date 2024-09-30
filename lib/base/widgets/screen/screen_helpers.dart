@@ -10,7 +10,7 @@ import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 import 'package:trufi_core/base/widgets/screen/transition_page.dart';
 
 class BaseTrufiPage extends StatelessWidget {
-  const BaseTrufiPage({Key? key, required this.child}) : super(key: key);
+  const BaseTrufiPage({super.key, required this.child});
 
   final Widget child;
   @override

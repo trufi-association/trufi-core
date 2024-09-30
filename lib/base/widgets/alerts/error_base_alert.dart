@@ -25,10 +25,10 @@ class ErrorAlert extends StatelessWidget {
   final String? title;
   final String error;
   const ErrorAlert({
-    Key? key,
+    super.key,
     this.title,
     required this.error,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

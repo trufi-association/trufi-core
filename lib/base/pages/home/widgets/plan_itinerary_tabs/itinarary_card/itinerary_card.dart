@@ -11,10 +11,10 @@ class ItineraryCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const ItineraryCard({
-    Key? key,
+    super.key,
     required this.itinerary,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class ItineraryCard extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: itinerary.durationFormat(localization),
-                          style: theme.textTheme.bodyText2?.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
                         ),

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:async_executor/async_executor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
@@ -26,12 +26,12 @@ class LeafletMapRoute extends StatefulWidget {
   final Uri? shareBaseItineraryUri;
   final WidgetBuilder? overlapWidget;
   const LeafletMapRoute({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     required this.asyncExecutor,
     this.shareBaseItineraryUri,
     this.overlapWidget,
-  }) : super(key: key);
+  });
 
   @override
   State<LeafletMapRoute> createState() => _LeafletMapRouteState();
@@ -175,14 +175,13 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
   }
 
   void _handleOnMapPositionChanged(
-    MapPosition position,
+    MapCamera mapCamera,
     bool hasGesture,
   ) {
-    if (widget.trufiMapController.selectedBounds.isValid &&
-        position.bounds != null) {
+    if (widget.trufiMapController.selectedBounds != null) {
       _cropButtonKey.currentState?.setVisible(
-        visible: !position.bounds!
-            .containsBounds(widget.trufiMapController.selectedBounds),
+        visible: !mapCamera.visibleBounds
+            .containsBounds(widget.trufiMapController.selectedBounds!),
       );
     }
   }

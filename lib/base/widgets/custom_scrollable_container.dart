@@ -8,13 +8,13 @@ class CustomScrollableContainer extends StatefulWidget {
   final void Function()? onClose;
 
   const CustomScrollableContainer({
-    Key? key,
+    super.key,
     required this.body,
     this.panel,
     required this.openedPosition,
     this.bottomPadding = 0,
     this.onClose,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomScrollableContainer> createState() =>

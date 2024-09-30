@@ -47,7 +47,7 @@ extension LayerIdsToString on DefaultItemsMenu {
                   value: value,
                   child: Text(
                     TrufiLocalizationCubit.localeDisplayName(value),
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 );
               }).toList(),
@@ -72,7 +72,7 @@ extension LayerIdsToString on DefaultItemsMenu {
                       TrufiBaseLocalization.of(context),
                       value,
                     ),
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     softWrap: false,
                     maxLines: 1,
                   ),
