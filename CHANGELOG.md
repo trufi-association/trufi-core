@@ -1,3 +1,7 @@
+## 4.1.0
+🎉 Migrated sdk to Flutter 3.24.3
+🎉 Example project was deleted.
+
 ## 4.0.0
 
 ### Flutter Version = 3.3.3
