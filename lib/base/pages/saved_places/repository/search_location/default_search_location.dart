@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
@@ -35,8 +36,8 @@ class DefaultSearchLocation implements SearchLocationRepository {
       "$photonUrl/api",
     ).replace(queryParameters: {
       "q": query,
-      "bbox": "-66.453088,-17.762296,-65.758056,-17.238372",
-      ...extraQueryParameters
+      "bbox": CitySelectionManager().currentCity.bbox,
+      ...extraQueryParameters,
     });
     final response = await _fetchRequest(request);
     if (response.statusCode != 200) {
@@ -56,11 +57,11 @@ class DefaultSearchLocation implements SearchLocationRepository {
             (x) => x.toTrufiLocation(),
           )
           .toList();
-
+      // TODO undo Mexico
       // Streets results
-      final streetData = await storage.fetchStreetsWithQuery(query)
-        ..sort((a, b) => a.distance.compareTo(b.distance));
-
+      // final streetData = await storage.fetchStreetsWithQuery(query)
+      //   ..sort((a, b) => a.distance.compareTo(b.distance));
+      final streetData = <LevenshteinObject<TrufiStreet>>[];
       final streetsFiltered = streetData
           .map((LevenshteinObject<TrufiPlace> l) => l.object)
           .take(4)

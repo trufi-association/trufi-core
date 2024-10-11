@@ -167,7 +167,7 @@ class _LeafletMapState extends State<LeafletMap> {
             );
           },
         ),
-        if (widget.showPOILayers)
+        if (widget.showPOILayers && customLayersCubit.layersContainer.isNotEmpty)
           const Positioned(
             top: 16.0,
             right: 16.0,

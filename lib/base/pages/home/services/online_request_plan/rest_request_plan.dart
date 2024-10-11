@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -37,7 +38,7 @@ class RestRequestPlanService implements RequestPlanService {
     List<TransportMode> transportModes,
   ) async {
     final Uri request = Uri.parse(
-      otpEndpoint + planPath,
+      CitySelectionManager().currentCity.otpEndpoint + planPath,
     ).replace(queryParameters: {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),

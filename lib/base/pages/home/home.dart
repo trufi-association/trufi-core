@@ -7,6 +7,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/blocs/providers/uni_link_provider/geo_location.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage>
       if (panelCubit.state.panel != null &&
           routePlannerCubit.state.plan == null) {
         widget.mapRouteProvider.trufiMapController.move(
-          center: panelCubit.state.panel!.positon,
+          center: panelCubit.state.panel!.position,
           zoom: 17,
           tickerProvider: this,
         );
@@ -200,6 +201,104 @@ class _HomePageState extends State<HomePage>
                               blurRadius: 4,
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 22.0,
+                      left: 8.0,
+                      child: Container(
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: CitySelectionManager().currentCity ==
+                                  CityInstance.zitacuaro
+                              ? theme.floatingActionButtonTheme.backgroundColor
+                              : CitySelectionManager().currentCity ==
+                                      CityInstance.zamora
+                                  ? theme.colorScheme.primary
+                                  : Colors.blue,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xaa000000),
+                              offset: Offset(0, 1.5),
+                              blurRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              CitySelectionManager().assignNextCity();
+                              setState(() {});
+                              widget.mapRouteProvider.trufiMapController.onReady
+                                  .then((value) {
+                                widget.mapRouteProvider.trufiMapController.move(
+                                  center:
+                                      CitySelectionManager().currentCity.center,
+                                  zoom: 13,
+                                );
+                              });
+                              widget.mapRouteProvider.trufiMapController
+                                  .cleanMap();
+                              routePlannerCubit.reset();
+                            },
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    CitySelectionManager().currentCity ==
+                                            CityInstance.zitacuaro
+                                        ? "Zitácuaro"
+                                        : CitySelectionManager().currentCity ==
+                                                CityInstance.zamora
+                                            ? "Zamora"
+                                            : "Uruapan",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          CitySelectionManager().currentCity ==
+                                                  CityInstance.zitacuaro
+                                              ? theme.colorScheme.onSurface
+                                              : theme.colorScheme.surface,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Tooltip(
+                                  triggerMode: TooltipTriggerMode.tap,
+                                  message:
+                                      "Press the button for change the city, current support Zitacuaro and Zamora",
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  verticalOffset: 18,
+                                  showDuration: const Duration(seconds: 10),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        bottomRight: Radius.circular(8),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 7,
+                                      horizontal: 11,
+                                    ),
+                                    child: const Icon(
+                                      Icons.info_outline,
+                                      color: Colors.white,
+                                      size: 22,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

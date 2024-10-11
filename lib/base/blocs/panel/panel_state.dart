@@ -16,19 +16,19 @@ class MarkerPanel extends Equatable {
     void Function() onFetchPlan, {
     bool? isOnlyDestination,
   }) panel;
-  final TrufiLatLng positon;
+  final TrufiLatLng position;
   final double minSize;
 
   const MarkerPanel({
     required this.panel,
-    required this.positon,
+    required this.position,
     required this.minSize,
   });
 
   @override
   List<Object?> get props => [
         panel,
-        positon,
+        position,
         minSize,
       ];
 }
