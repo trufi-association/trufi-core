@@ -98,7 +98,7 @@ enum TransportMode {
   lightRail,
 }
 
-const defaultTransportModes = <TransportMode>[
+final defaultTransportModes = <TransportMode>[
   TransportMode.bus,
   TransportMode.rail,
   TransportMode.subway,
@@ -186,6 +186,31 @@ extension TransportModeExtension on TransportMode {
     TransportMode.lightRail: Icons.train,
   };
 
+  static final visibleSettings = <TransportMode, bool>{
+    TransportMode.error: false,
+    TransportMode.airplane: false,
+    TransportMode.bicycle: false,
+    TransportMode.bus: true,
+    TransportMode.cableCar: false,
+    TransportMode.car: false,
+    TransportMode.carPool: true,
+    TransportMode.ferry: false,
+    TransportMode.flexible: false,
+    TransportMode.funicular: false,
+    TransportMode.gondola: false,
+    TransportMode.legSwitch: false,
+    TransportMode.rail: true,
+    TransportMode.subway: true,
+    TransportMode.tram: false,
+    TransportMode.transit: false,
+    TransportMode.walk: false,
+    // route name keywords for specific types of transportation
+    TransportMode.trufi: false,
+    TransportMode.micro: false,
+    TransportMode.miniBus: false,
+    TransportMode.lightRail: false,
+  };
+
   static Widget? _images(TransportMode transportMode, Color? color) {
     switch (transportMode) {
       case TransportMode.airplane:
@@ -205,7 +230,7 @@ extension TransportModeExtension on TransportMode {
       case TransportMode.flexible:
         return null;
       case TransportMode.funicular:
-        return gondolaIcon(color: color ?? const Color(0xff000000));
+        return funicularIcon(color: color ?? const Color(0xffFFCC00));
       case TransportMode.gondola:
         return gondolaIcon(color: color ?? const Color(0xff000000));
       case TransportMode.legSwitch:
@@ -298,4 +323,6 @@ extension TransportModeExtension on TransportMode {
       ),
     );
   }
+
+  bool get visible => visibleSettings[this] ?? false;
 }

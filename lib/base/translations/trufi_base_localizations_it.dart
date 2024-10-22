@@ -1,7 +1,6 @@
-
-
-
 import 'trufi_base_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for Italian (`it`).
 class TrufiBaseLocalizationIt extends TrufiBaseLocalization {
@@ -179,6 +178,9 @@ class TrufiBaseLocalizationIt extends TrufiBaseLocalization {
 
   @override
   String get instructionVehicleCar => 'Auto';
+
+  @override
+  String get instructionVehicleFunicular => 'Funicular';
 
   @override
   String get instructionVehicleCarpool => 'Autobus';

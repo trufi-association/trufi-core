@@ -239,6 +239,10 @@
     "@instructionVehicleCar": {
         "description": "Vehicle name (Car)"
     },
+    "instructionVehicleFunicular": "Funicular",
+    "@instructionVehicleFunicular": {
+        "description": "Vehicle name (Funicular)"
+    },
     "instructionVehicleCarpool": "Compartir coche",
     "@instructionVehicleCarpool": {
         "description": "Vehicle name (Carpool)"

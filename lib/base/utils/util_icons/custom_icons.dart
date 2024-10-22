@@ -82,6 +82,12 @@ Widget gondolaIcon({Color? color}) {
   ));
 }
 
+Widget funicularIcon({Color? color}) {
+  return SvgPicture.string(funicular(
+    color: decodeFillColor(color),
+  ));
+}
+
 Widget carIcon({Color? color}) {
   return SvgPicture.string(car(
     color: decodeFillColor(color),

@@ -1,7 +1,6 @@
-
-
-
 import 'trufi_base_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for Portuguese (`pt`).
 class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
@@ -179,6 +178,9 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
 
   @override
   String get instructionVehicleCar => 'Carro';
+
+  @override
+  String get instructionVehicleFunicular => 'Funicular';
 
   @override
   String get instructionVehicleCarpool => 'Ônibus';

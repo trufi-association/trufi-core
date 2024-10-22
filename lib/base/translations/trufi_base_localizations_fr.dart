@@ -1,7 +1,6 @@
-
-
-
 import 'trufi_base_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for French (`fr`).
 class TrufiBaseLocalizationFr extends TrufiBaseLocalization {
@@ -179,6 +178,9 @@ class TrufiBaseLocalizationFr extends TrufiBaseLocalization {
 
   @override
   String get instructionVehicleCar => 'Voiture';
+
+  @override
+  String get instructionVehicleFunicular => 'Funicular';
 
   @override
   String get instructionVehicleCarpool => 'Bus';

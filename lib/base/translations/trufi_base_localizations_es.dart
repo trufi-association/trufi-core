@@ -1,7 +1,6 @@
-
-
-
 import 'trufi_base_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for Spanish Castilian (`es`).
 class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
@@ -179,6 +178,9 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String get instructionVehicleCar => 'Coche';
+
+  @override
+  String get instructionVehicleFunicular => 'Funicular';
 
   @override
   String get instructionVehicleCarpool => 'Compartir coche';

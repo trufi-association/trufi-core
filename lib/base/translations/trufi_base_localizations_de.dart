@@ -1,7 +1,6 @@
-
-
-
 import 'trufi_base_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for German (`de`).
 class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
@@ -179,6 +178,9 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
 
   @override
   String get instructionVehicleCar => 'Auto';
+
+  @override
+  String get instructionVehicleFunicular => 'Seilbahn';
 
   @override
   String get instructionVehicleCarpool => 'Fahrgemeinschaft';

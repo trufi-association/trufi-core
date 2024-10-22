@@ -239,6 +239,10 @@
     "@instructionVehicleCar": {
         "description": "Vehicle name (Car)"
     },
+    "instructionVehicleFunicular": "Seilbahn",
+    "@instructionVehicleFunicular": {
+        "description": "Vehicle name (Funicular)"
+    },
     "instructionVehicleCarpool": "Fahrgemeinschaft",
     "@instructionVehicleCarpool": {
         "description": "Vehicle name (Carpool)"

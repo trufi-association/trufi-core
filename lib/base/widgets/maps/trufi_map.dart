@@ -30,7 +30,7 @@ class TrufiMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final mapConfiguration = context.read<MapConfigurationCubit>().state;
     final currentMapType = context.watch<MapTileProviderCubit>().state;
     return Stack(
       children: [
@@ -42,7 +42,7 @@ class TrufiMap extends StatelessWidget {
               return FlutterMap(
                 mapController: trufiMapController.mapController,
                 options: MapOptions(
-                  interactionOptions: InteractionOptions(
+                  interactionOptions: const InteractionOptions(
                     flags: InteractiveFlag.drag |
                         InteractiveFlag.flingAnimation |
                         InteractiveFlag.pinchMove |
@@ -54,12 +54,12 @@ class TrufiMap extends StatelessWidget {
                       trufiMapController.readyCompleter.complete();
                     }
                   },
-                  minZoom: mapConfiguratiom.onlineMinZoom,
-                  maxZoom: mapConfiguratiom.onlineMaxZoom,
-                  initialZoom: mapConfiguratiom.onlineZoom,
+                  minZoom: mapConfiguration.onlineMinZoom,
+                  maxZoom: mapConfiguration.onlineMaxZoom,
+                  initialZoom: mapConfiguration.onlineZoom,
                   onTap: onTap,
                   onLongPress: onLongPress,
-                  initialCenter: mapConfiguratiom.center,
+                  initialCenter: mapConfiguration.center,
                   onPositionChanged: (
                     MapCamera position,
                     bool hasGesture,
@@ -74,7 +74,7 @@ class TrufiMap extends StatelessWidget {
                 children: [
                   ...currentMapType.currentMapTileProvider
                       .buildTileLayerOptions(context),
-                  mapConfiguratiom.markersConfiguration
+                  mapConfiguration.markersConfiguration
                       .buildYourLocationMarkerLayerOptions(currentLocation),
                   ...layerOptionsBuilder(context)
                 ],
@@ -98,7 +98,7 @@ class TrufiMap extends StatelessWidget {
         Positioned(
           bottom: 10,
           left: 10,
-          child: mapConfiguratiom.mapAttributionBuilder!(context),
+          child: mapConfiguration.mapAttributionBuilder!(context),
         ),
       ],
     );

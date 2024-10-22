@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -13,14 +12,16 @@ import 'trufi_base_localizations_fr.dart';
 import 'trufi_base_localizations_it.dart';
 import 'trufi_base_localizations_pt.dart';
 
-/// Callers can lookup localized strings with an instance of TrufiBaseLocalization returned
-/// by `TrufiBaseLocalization.of(context)`.
+// ignore_for_file: type=lint
+
+/// Callers can lookup localized strings with an instance of TrufiBaseLocalization
+/// returned by `TrufiBaseLocalization.of(context)`.
 ///
 /// Applications need to include `TrufiBaseLocalization.delegate()` in their app's
-/// localizationDelegates list, and the locales they support in the app's
-/// supportedLocales list. For example:
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
 ///
-/// ```
+/// ```dart
 /// import 'translations/trufi_base_localizations.dart';
 ///
 /// return MaterialApp(
@@ -35,14 +36,14 @@ import 'trufi_base_localizations_pt.dart';
 /// Please make sure to update your pubspec.yaml to include the following
 /// packages:
 ///
-/// ```
+/// ```yaml
 /// dependencies:
 ///   # Internationalization support.
 ///   flutter_localizations:
 ///     sdk: flutter
 ///   intl: any # Use the pinned version from flutter_localizations
 ///
-///   # rest of dependencies
+///   # Rest of dependencies
 /// ```
 ///
 /// ## iOS Applications
@@ -431,6 +432,12 @@ abstract class TrufiBaseLocalization {
   /// In pt, this message translates to:
   /// **'Carro'**
   String get instructionVehicleCar;
+
+  /// Vehicle name (Funicular)
+  ///
+  /// In pt, this message translates to:
+  /// **'Funicular'**
+  String get instructionVehicleFunicular;
 
   /// Vehicle name (Carpool)
   ///
