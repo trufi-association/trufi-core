@@ -120,7 +120,6 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
           Color textColor = isSelected ? leg.primaryColor : Colors.white;
 
           if (isSelected && leg.transitLeg && isPrimary) {
-            color = Colors.green;
             isPrimary = !isPrimary;
           } else if (isSelected && leg.transitLeg) {
             isPrimary = !isPrimary;

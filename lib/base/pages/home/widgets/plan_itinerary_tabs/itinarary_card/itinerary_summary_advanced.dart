@@ -40,7 +40,6 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
 
     // TODO Implement a boolean to configure if the backend has a server or not
     // Implement for otpServer without route color configuration
-    bool isPrimary = false;
 
     compressLegs.asMap().forEach((index, leg) {
       double? waitTime;
@@ -86,9 +85,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
         ));
-        isPrimary = !isPrimary;
       } else if (leg.transportMode == TransportMode.bicycle && renderBar) {
         legs.add(ModeLeg(
           maxWidth: newMaxWidth,
@@ -101,9 +98,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
         ));
-        isPrimary = !isPrimary;
       }
       // if (waiting) {
       //   legs.add(WaitLeg(

@@ -39,7 +39,6 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
     final sizeLegs = compresedLegs.length;
     // TODO Implement a boolean to configure if the backend has a server or not
     // Implement for otpServer without route color configuration
-    bool isPrimary = false;
 
     return Scrollbar(
       child: SingleChildScrollView(
@@ -102,22 +101,18 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
 
                     // Route
                     if (itineraryLeg.transitLeg)
-                      Builder(builder: (_) {
-                        isPrimary = !isPrimary;
-                        return TransportDash(
-                          leg: itineraryLeg,
-                          showBeforeLine: index != 0,
-                          showAfterLine: index != sizeLegs - 1 &&
-                              !compresedLegs[index + 1].transitLeg,
-                          moveTo: (location) {
-                            final isRequiredScroll = widget.moveTo(location);
-                            if (isRequiredScroll) {
-                              _scrolling(index);
-                            }
-                          },
-                          forcedColor: isPrimary ? null : Colors.green,
-                        );
-                      })
+                      TransportDash(
+                        leg: itineraryLeg,
+                        showBeforeLine: index != 0,
+                        showAfterLine: index != sizeLegs - 1 &&
+                            !compresedLegs[index + 1].transitLeg,
+                        moveTo: (location) {
+                          final isRequiredScroll = widget.moveTo(location);
+                          if (isRequiredScroll) {
+                            _scrolling(index);
+                          }
+                        },
+                      )
                     else
                       WalkDash(
                         leg: itineraryLeg,
