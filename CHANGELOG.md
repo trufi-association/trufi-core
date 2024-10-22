@@ -1,3 +1,7 @@
+## 3.25.0-stadtnavi-lts
+🎉 Supported Flutter 3.24.3
+🎉 Support Funicular-Transport
+
 ## 3.24.0-stadtnavi-lts
 🎉 Migrated sdk to Flutter 3.24.0
 🎉 Updated Trufi Core to ensure compatibility with Stadtnavi Core version 2.0.0 and above.
