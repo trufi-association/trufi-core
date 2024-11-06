@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -8,7 +10,9 @@ import 'package:trufi_core/base/pages/transport_list/transport_list_detail/trans
 import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart';
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/utils/text/outlined_text.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
+import 'package:trufi_core/base/widgets/basic_widgets/trufi_expansion_tile.dart';
 
 class TransportList extends StatefulWidget {
   static const String route = "/TransportList";
@@ -63,6 +67,9 @@ class _TransportListState extends State<TransportList> {
     final localization = TrufiBaseLocalization.of(context)!;
     final routeTransportsCubit = context.watch<RouteTransportsCubit>();
     final routeTransportsState = routeTransportsCubit.state;
+    final groupedRoutesMap =
+        groupTransitRoutesByAgencyName(routeTransportsState.filterTransports);
+    final groupedRoutesList = createGroupedTransitRoutesList(groupedRoutesMap);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -105,7 +112,8 @@ class _TransportListState extends State<TransportList> {
       drawer: widget.drawerBuilder(context),
       body: Stack(
         children: [
-          if (routeTransportsState.filterTransports.isEmpty && !routeTransportsState.isLoading)
+          if (routeTransportsState.filterTransports.isEmpty &&
+              !routeTransportsState.isLoading)
             Center(
               child: Text(
                 localization.commonNoResults,
@@ -119,22 +127,56 @@ class _TransportListState extends State<TransportList> {
               interactive: true,
               thickness: 8.0,
               child: ListView.builder(
-                itemCount: routeTransportsState.filterTransports.length,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                itemCount: groupedRoutesList.length,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
                 itemBuilder: (buildContext, index) {
-                  final TransitRoute transport =
-                      routeTransportsState.filterTransports[index];
+                  final agencyRoutes = groupedRoutesList[index];
+                  final agencyName =
+                      agencyRoutes.first.route?.agency?.name ?? 'Unknown';
+
                   return Container(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    child: TileTransport(
-                      patternOtp: transport,
-                      onTap: () {
-                        Routemaster.of(context).replace(
-                          TransportList.route,
-                          queryParameters: {'id': transport.code},
-                        );
-                      },
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: TrufiExpansionTile(
+                      typeTitle: ExpansionTileTitleType.secondary,
+                      padding: EdgeInsets.zero,
+                      title: "Operador: $agencyName",
+                      titleColor: agencyRoutes.first.route?.backgroundColor,
+                      textStyle: TextStyle(
+                        color: getContrastColor(
+                          agencyRoutes.first.route?.backgroundColor ??
+                              Colors.white,
+                        ),
+                      ),
+                      body: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: agencyRoutes.length,
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (buildContext, index) {
+                              final TransitRoute transport = agencyRoutes[index];
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 4),
+                                child: TileTransport(
+                                  patternOtp: transport,
+                                  onTap: () {
+                                    Routemaster.of(buildContext).replace(
+                                      TransportList.route,
+                                      queryParameters: {'id': transport.code},
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -150,5 +192,27 @@ class _TransportListState extends State<TransportList> {
         ],
       ),
     );
+  }
+
+  Map<String, List<TransitRoute>> groupTransitRoutesByAgencyName(
+      List<TransitRoute> routes) {
+    final Map<String, List<TransitRoute>> groupedRoutes = {};
+
+    for (var route in routes) {
+      final agencyName = route.route?.agency?.name ?? 'Unknown';
+
+      if (!groupedRoutes.containsKey(agencyName)) {
+        groupedRoutes[agencyName] = [];
+      }
+
+      groupedRoutes[agencyName]!.add(route);
+    }
+
+    return groupedRoutes;
+  }
+
+  List<List<TransitRoute>> createGroupedTransitRoutesList(
+      Map<String, List<TransitRoute>> groupedRoutes) {
+    return groupedRoutes.values.toList();
   }
 }

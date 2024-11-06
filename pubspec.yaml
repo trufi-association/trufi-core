@@ -5,16 +5,16 @@ homepage: https://www.trufi-association.org/
 repository: https://github.com/trufi-association/trufi-core
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ^3.5.0
   flutter: ">=1.17.0"
 
 dependencies:
-  in_app_review: ^2.0.8
+  in_app_review: ^2.0.9
   async: ^2.11.0
   async_executor: ^0.0.2
-  cached_network_image: ^3.3.1
+  cached_network_image: ^3.4.1
   collection: ^1.18.0
-  device_info_plus: ^9.1.2
+  device_info_plus: ^10.1.2
   # device_info_plus_platform_interface: ^7.0.0
   diff_match_patch: ^0.4.1
   equatable: ^2.0.5
@@ -23,35 +23,32 @@ dependencies:
     sdk: flutter  
   flutter_localizations:
     sdk: flutter
-  flutter_bloc: ^8.1.3
-  flutter_map: ^6.1.0
-  flutter_svg: ^2.0.9
-  geolocator: ^10.1.0
+  flutter_bloc: ^8.1.6
+  flutter_map: ^6.0.0
+  flutter_svg: ^2.0.10+1
+  geolocator: ^13.0.1
   graphql: ^5.1.3
   hive: ^2.2.3
   http: ^1.2.0
-  intl: ^0.18.1
-  latlong2: ^0.9.0
-  package_info_plus: ^5.0.1
+  intl: ^0.19.0
+  latlong2: ^0.9.1
+  package_info_plus: ^8.0.2
   flutter_map_line_editor: ^6.0.0
   back_button_interceptor: ^7.0.1
   flutter_map_marker_cluster: ^1.3.4
-  path_provider: ^2.1.2
-  provider: ^6.1.1
+  path_provider: ^2.1.4
   routemaster: ^1.0.1
-  rxdart: ^0.27.7
-  share_plus: ^7.2.2
-  synchronized: ^3.1.0+1
-  uni_links: ^0.5.1
+  share_plus: ^10.0.2
+  app_links: ^6.3.2
   uuid: ^4.3.3
-  url_launcher: ^6.2.4
-  meta: ^1.10.0
+  url_launcher: ^6.3.0
   bloc: ^8.1.2
+  lottie: ^3.1.2 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,6 +59,8 @@ flutter:
   # To add assets to your package, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/Buses-SITransporte/
+    - assets/splash_screen.json
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

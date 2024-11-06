@@ -6,6 +6,8 @@ import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary_card/itinerary_card.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/itinerary_details_card.dart';
+import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_request_plan.dart';
+import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.dart';
 
 class CustomItinerary extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
@@ -19,12 +21,13 @@ class CustomItinerary extends StatefulWidget {
 }
 
 class _CustomItineraryState extends State<CustomItinerary> {
-  final ScrollController _scrollController = ScrollController();
+  late ScrollController _scrollController;
   bool showDetail = false;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback(
       (duration) {
         final routePlannerState = context.read<RoutePlannerCubit>().state;
@@ -73,23 +76,25 @@ class _CustomItineraryState extends State<CustomItinerary> {
                 _scrolling(index);
               }
             },
-            child: ListView.builder(
+            child: Scrollbar(
               controller: _scrollController,
-              primary: false,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              itemCount: routePlannerState.plan?.itineraries?.length ?? 0,
-              itemBuilder: (buildContext, index) {
-                final itinerary = routePlannerState.plan!.itineraries![index];
-                return ItineraryCard(
-                  itinerary: itinerary,
-                  onTap: () {
-                    setState(() {
-                      showDetail = true;
-                    });
-                    routePlannerCubit.selectItinerary(itinerary);
-                  },
-                );
-              },
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                itemCount: routePlannerState.plan?.itineraries?.length ?? 0,
+                itemBuilder: (buildContext, index) {
+                  final itinerary = routePlannerState.plan!.itineraries![index];
+                  return ItineraryCard(
+                    itinerary: itinerary,
+                    onTap: () {
+                      setState(() {
+                        showDetail = true;
+                      });
+                      routePlannerCubit.selectItinerary(itinerary);
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -112,11 +117,14 @@ class _CustomItineraryState extends State<CustomItinerary> {
   }
 
   Future<void> _scrolling(int index) async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    _scrollController.animateTo(
-      105.0 * index,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
+    WidgetsBinding.instance.addPostFrameCallback(
+      (duration) {
+        // _scrollController.animateTo(
+        //   105.0 * index,
+        //   duration: const Duration(milliseconds: 500),
+        //   curve: Curves.easeInOut,
+        // );
+      },
     );
   }
 }

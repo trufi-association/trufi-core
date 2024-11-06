@@ -14,10 +14,15 @@ import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
 part 'route_map_manager_state.dart';
 
 class PolylineWithMarkers {
-  PolylineWithMarkers(this.polyline, this.markers);
+  PolylineWithMarkers(
+    this.polyline,
+    this.markers,
+    this.secondaryMarkers,
+  );
 
   final Polyline polyline;
   final List<Marker> markers;
+  final List<Marker> secondaryMarkers;
 }
 
 class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
@@ -50,6 +55,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
     final unselectedMarkers = <Marker>[];
     final unselectedPolylines = <Polyline>[];
     final selectedMarkers = <Marker>[];
+    final selectedSecondaryMarkers = <Marker>[];
     final selectedPolylines = <Polyline>[];
     itineraries.forEach((itinerary, polylinesWithMarker) {
       final bool isSelected = itinerary == selectedItinerary;
@@ -60,6 +66,12 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
             _selectedBounds.add(TrufiLatLng.fromLatLng(marker.point));
           } else {
             unselectedMarkers.add(marker);
+          }
+        }
+        for (final marker in polylineWithMarker.secondaryMarkers) {
+          if (isSelected) {
+            selectedSecondaryMarkers.add(marker);
+            _selectedBounds.add(TrufiLatLng.fromLatLng(marker.point));
           }
         }
         if (isSelected) {
@@ -78,6 +90,8 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
         unselectedPolylinesLayer: PolylineLayer(polylines: unselectedPolylines),
         selectedMarkersLayer: MarkerLayer(markers: selectedMarkers),
         selectedPolylinesLayer: PolylineLayer(polylines: selectedPolylines),
+        selectedSecondaryMarkersLayer:
+            MarkerLayer(markers: selectedSecondaryMarkers),
       ),
     );
     getBounds(_selectedBounds);
@@ -93,6 +107,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
     if (plan.itineraries != null) {
       for (final itinerary in plan.itineraries!) {
         final List<Marker> markers = [];
+        final List<Marker> secondaryMarkers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
 
@@ -115,14 +130,12 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                   : leg.transportMode == TransportMode.walk
                       ? (walkColor ?? leg.transportMode.color)
                       : leg.transportMode.color
-              : Colors.grey;
+              : Colors.grey[400]!;
 
-          Color textColor = isSelected
-              ? leg.primaryColor
-              : Colors.white;
+          Color textColor = isSelected ? leg.primaryColor : Colors.white;
 
           if (isSelected && leg.transitLeg && isPrimary) {
-            color = Colors.green;
+            // color = Colors.green;
             isPrimary = !isPrimary;
           } else if (isSelected && leg.transitLeg) {
             isPrimary = !isPrimary;
@@ -133,6 +146,9 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
             color: color,
             strokeWidth: isSelected ? 6.0 : 3.0,
             isDotted: leg.transportMode == TransportMode.walk,
+            borderStrokeWidth:
+                isSelected && leg.transportMode != TransportMode.walk ? 1 : 0,
+            borderColor: Colors.black,
           );
 
           // Transfer marker
@@ -140,7 +156,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
               leg.transitLeg &&
               i < compressedLegs.length - 1 &&
               points.isNotEmpty) {
-            markers.add(
+            secondaryMarkers.add(
               buildTransferMarker(
                 point: points.first,
                 color: color,
@@ -157,20 +173,25 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                 textColor,
                 leg,
                 onTap: () => onTap(itinerary),
+                showBorder: isSelected,
               ),
             );
           }
 
-          if (isSelected &&
-              leg.intermediatePlaces != null &&
-              leg.intermediatePlaces!.isNotEmpty) {
-            for (Place stop in leg.intermediatePlaces!) {
-              markers.add(
-                buildStopMarker(TrufiLatLng(stop.lat, stop.lon)),
-              );
-            }
-          }
-          polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
+          // if (isSelected &&
+          //     leg.intermediatePlaces != null &&
+          //     leg.intermediatePlaces!.isNotEmpty) {
+          //   for (Place stop in leg.intermediatePlaces!) {
+          //     markers.add(
+          //       buildStopMarker(TrufiLatLng(stop.lat, stop.lon)),
+          //     );
+          //   }
+          // }
+          polylinesWithMarkers.add(PolylineWithMarkers(
+            polyline,
+            markers,
+            secondaryMarkers,
+          ));
         }
 
         itineraries.addAll({itinerary: polylinesWithMarkers});

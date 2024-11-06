@@ -19,6 +19,7 @@ import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map
 import 'package:trufi_core/base/widgets/base_maps/map_buttons/crop_button.dart';
 import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
+import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.dart';
 
 class LeafletMapRoute extends StatefulWidget {
   final LeafletMapController trufiMapController;
@@ -63,6 +64,8 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     final theme = Theme.of(context);
     final routePlannerCubit = context.watch<RoutePlannerCubit>();
+    final realtimeRoutesCubit = context.read<RealtimeRoutesCubit>();
+    final realtimeRoutesState = realtimeRoutesCubit.state;
     final routePlannerState = routePlannerCubit.state;
     return Stack(
       children: [
@@ -87,8 +90,20 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                     state.unselectedPolylinesLayer!,
                   if (state.unselectedMarkersLayer != null)
                     state.unselectedMarkersLayer!,
+                  if (realtimeRoutesState.transitRoute?.geometry != null)
+                    PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: TrufiLatLng.toListLatLng(
+                            realtimeRoutesState.transitRoute!.geometry!,
+                          ),
+                        ),
+                      ],
+                    ),
                   if (state.selectedPolylinesLayer != null)
                     state.selectedPolylinesLayer!,
+                  if (state.selectedSecondaryMarkersLayer != null)
+                    state.selectedSecondaryMarkersLayer!,
                   if (state.selectedMarkersLayer != null)
                     state.selectedMarkersLayer!,
                 ],

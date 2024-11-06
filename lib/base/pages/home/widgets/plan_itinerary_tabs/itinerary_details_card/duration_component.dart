@@ -21,15 +21,32 @@ class DurationComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = TrufiBaseLocalization.of(context)!;
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Icon(Icons.timer_sharp),
+        const Icon(
+          Icons.timer_sharp,
+          size: 24,
+        ),
         const SizedBox(width: 2),
-        Text(
-          durationFormatString(localization, duration),
-          style: const TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              durationFormatString(localization, duration),
+              style: const TextStyle(
+                  fontSize: 15, fontWeight: FontWeight.bold, height: 0),
+            ),
+            Text(
+              localization.localeName == 'en'
+                  ? "(Estimated time)"
+                  : "(Tiempo aproximado)",
+              style: const TextStyle(
+                height: 0,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ],
     );

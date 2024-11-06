@@ -26,16 +26,16 @@ class RouteInfo extends Equatable {
   });
 
   factory RouteInfo.fromJson(Map<String, dynamic> json) => RouteInfo(
-        id: json['id'] as String,
-        gtfsId: json['gtfsId'] as String,
-        shortName: json['shortName'] as String,
-        longName: json['longName'] as String,
+        id: json['id'],
+        gtfsId: json['gtfsId'],
+        shortName: json['shortName'],
+        longName: json['longName'],
         mode: getTransportMode(mode: json['mode'].toString()),
         type: int.tryParse(json['type'].toString()) ?? 0,
-        desc: json['desc'] as String,
-        url: json['url'] as String,
-        color: json['color'] as String,
-        textColor: json['textColor'] as String,
+        desc: json['desc'],
+        url: json['url'],
+        color: json['color'],
+        textColor: json['textColor'],
       );
 
   Map<String, dynamic> toJson() => {

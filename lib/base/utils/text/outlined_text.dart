@@ -28,3 +28,30 @@ List<Shadow> outlinedText({
   }
   return result.toList();
 }
+
+Color getContrastColor(Color backgroundColor) {
+  // Calculate the relative luminance of the background color
+  double luminance = backgroundColor.computeLuminance();
+
+  // Choose black or white text based on the luminance
+  // Threshold of 0.5 is commonly used, but you can adjust for your specific needs
+  return luminance > 0.5 ? Colors.black : Colors.white;
+}
+
+double calculateTextWidth(
+  String text,
+  TextStyle style,
+) {
+  final textPainter = TextPainter(
+    text: TextSpan(text: text, style: style),
+    maxLines: 1,
+    textDirection: TextDirection.ltr,
+    strutStyle: StrutStyle(
+      fontFamily: style.fontFamily,
+      fontSize: style.fontSize,
+      height: style.height,
+    ),
+  );
+  textPainter.layout();
+  return textPainter.size.width;
+}

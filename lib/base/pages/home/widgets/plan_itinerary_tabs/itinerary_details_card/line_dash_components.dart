@@ -84,8 +84,13 @@ class WalkDash extends StatelessWidget {
                     moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon)),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 3, 3, 5),
+                  // TODO trufiChange
                   child: Text(
-                      '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})'),
+                    '${localization.commonWalk} (${leg.distanceString(localization)})',
+                  ),
+                  // child: Text(
+                  //   '${localization.commonWalk} ${leg.durationLeg(localization)} (${leg.distanceString(localization)})',
+                  // ),
                 ),
               ),
             ],

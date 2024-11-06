@@ -31,6 +31,7 @@ import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/default_search_location.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
+import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.dart';
 
 abstract class DefaultValues {
   static TrufiLocalization trufiLocalization({Locale? currentLocale}) =>
@@ -59,11 +60,13 @@ abstract class DefaultValues {
     List<MapLayerContainer>? layersContainer,
     RequestPlanService? customRequestPlanService,
     List<MapTileProvider>? mapTileProviders,
+    List<BlocProvider> additionalProviders = const [],
     bool useCustomMapProvider = false,
   }) {
+    final routeTransportsCubit = RouteTransportsCubit(otpGraphqlEndpoint);
     return [
       BlocProvider<RouteTransportsCubit>(
-        create: (context) => RouteTransportsCubit(otpGraphqlEndpoint),
+        create: (context) => routeTransportsCubit,
       ),
       BlocProvider<SearchLocationsCubit>(
         create: (context) => SearchLocationsCubit(
@@ -95,6 +98,14 @@ abstract class DefaultValues {
             mapTileProviders: mapTileProviders ?? [OSMDefaultMapTile()],
           ),
         ),
+      BlocProvider<RealtimeRoutesCubit>(
+        create: (context) => RealtimeRoutesCubit(
+          otpEndpoint:
+              "https://arequipabus.app/otp/routers/default/index/graphql",
+          routeTransportsCubit: routeTransportsCubit,
+        ),
+      ),
+      ...additionalProviders
     ];
   }
 
@@ -113,7 +124,6 @@ abstract class DefaultValues {
     LifecycleReactorHandler? lifecycleReactorHandler,
   }) {
     final mapCollectionSelected = trufiMapProvider ?? LeafletMapCollection();
-
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
             currentRoute,

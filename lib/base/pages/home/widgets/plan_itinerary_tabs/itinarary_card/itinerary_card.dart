@@ -51,15 +51,16 @@ class ItineraryCard extends StatelessWidget {
                     textScaler: MediaQuery.of(context).textScaler,
                     text: TextSpan(
                       children: [
-                        TextSpan(
-                          text: itinerary.durationFormat(localization),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        // TrufiChanged
+                        // TextSpan(
+                        //   text: itinerary.durationFormat(localization),
+                        //   style: theme.textTheme.bodyMedium?.copyWith(
+                        //     fontWeight: FontWeight.w500,
+                        //   ),
+                        // ),
                         TextSpan(
                           text:
-                              " (${itinerary.getDistanceString(localization)})",
+                              "(${itinerary.getDistanceString(localization)})",
                           style: TextStyle(
                             color: theme.colorScheme.secondary,
                           ),
@@ -75,7 +76,8 @@ class ItineraryCard extends StatelessWidget {
                 Container(
                   width: 5,
                   // ignore: deprecated_member_use
-                  height: 50.0 * MediaQuery.of(context).textScaler.textScaleFactor,
+                  height:
+                      50.0 * MediaQuery.of(context).textScaler.textScaleFactor,
                   color: itinerary == routePlannerState.selectedItinerary
                       ? theme.colorScheme.secondary
                       : Colors.grey[400],

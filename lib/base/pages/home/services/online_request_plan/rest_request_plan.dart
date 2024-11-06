@@ -26,6 +26,8 @@ class RestRequestPlanService implements RequestPlanService {
     required TrufiLocation from,
     required TrufiLocation to,
     required List<TransportMode> transportModes,
+    DateTime? dateTime,
+    bool? enableDebugOutput,
     String? localeName,
   }) {
     return _fetchPlan(from, to, transportModes);
@@ -42,14 +44,22 @@ class RestRequestPlanService implements RequestPlanService {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
       "date": _todayMonthDayYear(),
-      "time": '12:00:00',
-      "numItineraries": "7",
+      "time": '11:00:00',
+      "numItineraries": "5",
       "maxWalkDistance": "1500",
+      // "walkSpeed": "5",
+      // "walkReluctance": "1",
+      // "transferPenalty":"7000",
+      // "maxWalkDistance": "300",
+      // "walkBoardCost": "3600",
+      // "transfers": "1",
       "mode": _parseTransportModes(transportModes),
+      "showIntermediateStops": "true",
     });
     final response = await _fetchRequest(request);
     if (response.statusCode == 200) {
-      return compute(_parsePlan, utf8.decode(response.bodyBytes));
+      return compute(_parsePlan,
+          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>);
     } else {
       throw FetchOnlineResponseException('Server Error');
     }
@@ -77,17 +87,41 @@ class RestRequestPlanService implements RequestPlanService {
     return list.map((e) => e.name).join(",");
   }
 
-  Plan _parsePlan(String responseBody) {
-    final plan =
-        Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+  // Plan _parsePlan(String responseBody) {
+  //   // This works for TrufiApp-Cochabamba-Bolivia
+  //   final plan =
+  //       Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
+  //   plan.itineraries?.sort((a, b) {
+  //     double weightedSumA = (a.transfers * 0.65) +
+  //         (a.walkDistance * 0.3) +
+  //         ((a.distance / 100) * 0.05);
+  //     double weightedSumB = (b.transfers * 0.65) +
+  //         (b.walkDistance * 0.3) +
+  //         ((b.distance / 100) * 0.05);
+  //     return weightedSumA.compareTo(weightedSumB);
+  //   });
+
+  //   return plan;
+  // }
+
+  Plan _parsePlan(Map<String, dynamic> responseBody) {
+    final plan = Plan.fromJson(responseBody);
+
     plan.itineraries?.sort((a, b) {
-      double weightedSumA = (a.transfers * 0.65) +
-          (a.walkDistance * 0.3) +
-          ((a.distance / 100) * 0.05);
-      double weightedSumB = (b.transfers * 0.65) +
-          (b.walkDistance * 0.3) +
-          ((b.distance / 100) * 0.05);
-      return weightedSumA.compareTo(weightedSumB);
+      // First criterion: Transfers (minor)
+      int transfersComparison = a.transfers.compareTo(b.transfers);
+      if (transfersComparison != 0) return transfersComparison;
+
+      // Second criterion: Distance (minor)
+      int distanceComparison = a.distance.compareTo(b.distance);
+      if (distanceComparison != 0) return distanceComparison;
+
+      // Third criterion: Duration (minor)
+      int durationComparison = a.duration.compareTo(b.duration);
+      if (durationComparison != 0) return durationComparison;
+
+      // Fourth criterion: Walk Distance (minor)
+      return a.walkDistance.compareTo(b.walkDistance);
     });
 
     return plan;

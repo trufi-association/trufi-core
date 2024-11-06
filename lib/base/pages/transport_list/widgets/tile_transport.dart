@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/utils/text/outlined_text.dart';
 
 class TileTransport extends StatelessWidget {
   final TransitRoute patternOtp;
@@ -41,7 +42,10 @@ class TileTransport extends StatelessWidget {
                             Text(
                               patternOtp.route?.shortName ?? '',
                               style: TextStyle(
-                                color: patternOtp.route?.primaryColor,
+                                color: getContrastColor(
+                                  patternOtp.route?.backgroundColor ??
+                                      Colors.white,
+                                ),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -50,7 +54,10 @@ class TileTransport extends StatelessWidget {
                             Text(
                               patternOtp.route?.longNameLast ?? '',
                               style: TextStyle(
-                                color: patternOtp.route?.primaryColor,
+                                color: getContrastColor(
+                                  patternOtp.route?.backgroundColor ??
+                                      Colors.white,
+                                ),
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                               ),

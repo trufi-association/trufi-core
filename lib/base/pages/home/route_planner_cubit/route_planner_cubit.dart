@@ -37,6 +37,8 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
       toPlace: await _localRepository.getToPlace(),
       plan: await _localRepository.getPlan(),
       selectedItinerary: await _localRepository.getSelectedItinerary(),
+      selectedDateTime: await _localRepository.getDateTime(),
+      enableDebugOutput: await _localRepository.getEnableDebugOutput(),
     ));
   }
 
@@ -84,6 +86,8 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     await _localRepository.saveFromPlace(newState.fromPlace);
     await _localRepository.saveToPlace(newState.toPlace);
     await _localRepository.saveSelectedItinerary(newState.selectedItinerary);
+    await _localRepository.saveDateTime(newState.selectedDateTime);
+    await _localRepository.saveEnableDebugOutput(newState.enableDebugOutput);
     emit(newState);
   }
 
@@ -101,6 +105,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
               from: state.fromPlace!,
               to: state.toPlace!,
               transportModes: [TransportMode.transit, TransportMode.walk],
+              enableDebugOutput: state.enableDebugOutput,
             );
           }(),
         );
@@ -134,5 +139,20 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   Future<void> selectItinerary(Itinerary selectedItinerary) async {
     await updateMapRouteState(
         state.copyWith(selectedItinerary: selectedItinerary));
+  }
+
+  Future<void> setDataDate({
+    DateTime? date,
+    bool? arriveBy,
+  }) async {
+    await updateMapRouteState(state.copyWithNullable(
+      selectedDateTime: Optional.value(date),
+    ));
+  }
+
+  Future<void> activeDebugOutput(bool? value) async {
+    await updateMapRouteState(state.copyWith(
+      enableDebugOutput: value ?? false,
+    ));
   }
 }

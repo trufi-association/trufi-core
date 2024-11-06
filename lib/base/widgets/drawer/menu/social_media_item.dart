@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/default_item_menu.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart' ;
+import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 abstract class SocialMediaItem extends TrufiMenuItem {
@@ -39,7 +39,8 @@ class FacebookSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Facebook");
+            return TrufiBaseLocalization.of(context)!
+                .followOnSocialMedia("Facebook");
           },
         );
 }
@@ -58,7 +59,8 @@ class InstagramSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Instagram");
+            return TrufiBaseLocalization.of(context)!
+                .followOnSocialMedia("Instagram");
           },
         );
 }
@@ -77,7 +79,7 @@ class TwitterSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Twitter");
+            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("X");
           },
         );
 }
@@ -96,7 +98,24 @@ class TiktokSocialMedia extends SocialMediaItem {
             ),
           ),
           name: (BuildContext context) {
-            return TrufiBaseLocalization.of(context)!.followOnSocialMedia("Tiktok");
+            return TrufiBaseLocalization.of(context)!
+                .followOnSocialMedia("Tiktok");
+          },
+        );
+}
+
+class YoutubeSocialMedia extends SocialMediaItem {
+  YoutubeSocialMedia(String url)
+      : super(
+          url: url,
+          buildIcon: (context) => youtubeIcon(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.grey,
+          ),
+          name: (BuildContext context) {
+            return TrufiBaseLocalization.of(context)!
+                .followOnSocialMedia("YouTube");
           },
         );
 }
@@ -127,6 +146,7 @@ class UrlSocialMedia {
   final String? urlTwitter;
   final String? urlWebSite;
   final String? urlTiktok;
+  final String? urlYoutube;
 
   const UrlSocialMedia({
     this.urlFacebook,
@@ -134,6 +154,7 @@ class UrlSocialMedia {
     this.urlTwitter,
     this.urlWebSite,
     this.urlTiktok,
+    this.urlYoutube,
   });
 
   bool get existUrl =>
@@ -141,7 +162,8 @@ class UrlSocialMedia {
       urlInstagram != null ||
       urlTwitter != null ||
       urlWebSite != null ||
-      urlTiktok != null;
+      urlTiktok != null ||
+      urlYoutube != null;
 }
 
 TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
@@ -174,6 +196,8 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
               TiktokSocialMedia(defaultUrls.urlTiktok!),
             if (defaultUrls.urlWebSite != null)
               WebSiteSocialMedia(defaultUrls.urlWebSite!),
+            if (defaultUrls.urlYoutube != null)
+              YoutubeSocialMedia(defaultUrls.urlYoutube!),
           ].map((SocialMediaItem value) {
             return DropdownMenuItem<SocialMediaItem>(
               value: value,

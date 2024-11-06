@@ -6,6 +6,7 @@ class TransitInfo extends Equatable {
   final String? shortName;
   final String? longName;
   final TransportMode? mode;
+  final Agency? agency;
   final String? color;
   final String? textColor;
 
@@ -13,6 +14,7 @@ class TransitInfo extends Equatable {
     this.shortName,
     this.longName,
     this.mode,
+    this.agency,
     this.color,
     this.textColor,
   });
@@ -23,6 +25,9 @@ class TransitInfo extends Equatable {
         mode: getTransportMode(
             mode: json['mode'].toString(),
             specificTransport: (json['longName'] ?? '') as String),
+        agency: json["agency"] != null
+            ? Agency.fromJson(json["agency"] as Map<String, dynamic>)
+            : null,
         color: json['color'] as String?,
         textColor: json['textColor'] as String?,
       );
@@ -31,6 +36,7 @@ class TransitInfo extends Equatable {
         'shortName': shortName,
         'longName': longName,
         'mode': mode?.name,
+        'agency': agency,
         'color': color,
         'textColor': textColor,
       };
@@ -52,7 +58,7 @@ class TransitInfo extends Equatable {
   }
 
   Color get primaryColor {
-    return  mode?.color ?? Colors.white;
+    return mode?.color ?? Colors.white;
   }
 
   Color get backgroundColor {
@@ -69,4 +75,29 @@ class TransitInfo extends Equatable {
         color,
         textColor,
       ];
+}
+
+class Agency extends Equatable {
+  static const _name = 'name';
+
+  final String name;
+
+  const Agency({
+    this.name = 'Not name',
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      _name: name,
+    };
+  }
+
+  factory Agency.fromJson(Map<String, dynamic> map) {
+    return Agency(
+      name: map[_name],
+    );
+  }
+
+  @override
+  List<Object?> get props => [name];
 }

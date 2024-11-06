@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +8,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
+import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.dart';
 
 import 'bar_itinerary_details.dart';
 import 'line_dash_components.dart';
@@ -27,7 +30,35 @@ class ItineraryDetailsCard extends StatefulWidget {
 }
 
 class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
+  late RealtimeRoutesCubit _realtimeRoutesCubit;
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _realtimeRoutesCubit = context.read<RealtimeRoutesCubit>();
+    String? routeId;
+    String? patternCode;
+    for (final leg in widget.itinerary.legs) {
+      if (leg.realTime) {
+        routeId = leg.route?.gtfsId;
+        patternCode = leg.tripPatternCode;
+      }
+    }
+    if (routeId != null && patternCode != null) {
+      _realtimeRoutesCubit.enableRealtime(
+        routeId: routeId,
+        patternCode: patternCode,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _realtimeRoutesCubit.disableRealtime();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +73,7 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
     bool isPrimary = false;
 
     return Scrollbar(
+      controller: _scrollController,
       child: SingleChildScrollView(
         controller: _scrollController,
         primary: false,
@@ -115,7 +147,7 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
                               _scrolling(index);
                             }
                           },
-                          forcedColor: isPrimary ? null : Colors.green,
+                          // forcedColor: isPrimary ? null : Colors.green,
                         );
                       })
                     else

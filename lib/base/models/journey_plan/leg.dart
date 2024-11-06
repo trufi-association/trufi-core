@@ -12,10 +12,12 @@ class Leg extends Equatable {
   static const _routeLongName = "routeLongName";
   static const _toPlace = "to";
   static const _fromPlace = "from";
+  static const _agency = "agencyName";
   static const _startTime = "startTime";
   static const _endTime = "endTime";
   static const _intermediatePlaces = "intermediateStops";
   static const _transitLeg = "transitLeg";
+  static const _realTime = "realTime";
 
   final String points;
   final TransportMode transportMode;
@@ -27,11 +29,14 @@ class Leg extends Equatable {
   final Duration duration;
   final Place toPlace;
   final Place fromPlace;
+  final String? agencyName;
   final DateTime startTime;
   final DateTime endTime;
   final List<Place>? intermediatePlaces;
   final bool transitLeg;
+  final String? tripPatternCode;
   final List<TrufiLatLng> accumulatedPoints;
+  final bool realTime;
 
   const Leg({
     required this.points,
@@ -44,13 +49,33 @@ class Leg extends Equatable {
     required this.duration,
     required this.toPlace,
     required this.fromPlace,
+    required this.agencyName,
     required this.startTime,
     required this.endTime,
     required this.intermediatePlaces,
     required this.transitLeg,
+    this.tripPatternCode,
     this.accumulatedPoints = const [],
+    required this.realTime,
   });
   factory Leg.fromJson(Map<String, dynamic> json) {
+    final tripPatternCode = json["trip"]?["pattern"]?["code"];
+    final intermediatePlacesTemp = json[_intermediatePlaces] != null
+        ? List<Place>.from(
+            (json[_intermediatePlaces] as List<dynamic>).map(
+              (x) => Place.fromJson(x as Map<String, dynamic>),
+            ),
+          )
+        : <Place>[];
+
+    final intermediatePlacesFiltered = <String, Place>{};
+
+    for (final item in intermediatePlacesTemp) {
+      if (!intermediatePlacesFiltered.containsKey(item.name)) {
+        intermediatePlacesFiltered[item.name] = item;
+      }
+    }
+
     return Leg(
       points: json[_legGeometry][_points] as String,
       transportMode: getTransportMode(
@@ -63,32 +88,29 @@ class Leg extends Equatable {
               : null)
           : null,
       routeColor: json[_routeColor] as String?,
-      shortName: json[_route] != null
-          ? json[_routeShortName] != null
-              ? json[_routeShortName] as String
-              : ((json[_route] is String) && json[_route] != ''
-                  ? json[_route] as String
-                  : null)
-          : null,
-      routeLongName: json[_routeLongName] as String?,
+      shortName: json[_transitLeg] ? (json[_routeShortName]) : null,
+      routeLongName: json[_transitLeg] ? (json[_routeLongName]) : null,
+      // shortName:
+      //     json[_transitLeg] ? (json[_route][_routeShortName]) as String? : null,
+      // routeLongName:
+      //     json[_transitLeg] ? (json[_route][_routeLongName]) as String? : null,
       distance: json[_distance] as double,
       duration: Duration(
           seconds: (double.tryParse(json[_duration].toString()) ?? 0).toInt()),
       toPlace: Place.fromJson(json[_toPlace] as Map<String, dynamic>),
       fromPlace: Place.fromJson(json[_fromPlace] as Map<String, dynamic>),
+      agencyName: json["agencyName"],
       startTime: DateTime.fromMillisecondsSinceEpoch(
           int.tryParse(json[_startTime].toString()) ?? 0),
       endTime: DateTime.fromMillisecondsSinceEpoch(
           int.tryParse(json[_endTime].toString()) ?? 0),
-      intermediatePlaces: json[_intermediatePlaces] != null
-          ? List<Place>.from(
-              (json[_intermediatePlaces] as List<dynamic>).map(
-                (x) => Place.fromJson(x as Map<String, dynamic>),
-              ),
-            )
+      intermediatePlaces: intermediatePlacesFiltered.isNotEmpty
+          ? intermediatePlacesFiltered.values.toList()
           : null,
+      tripPatternCode: tripPatternCode,
       transitLeg: json[_transitLeg] as bool,
       accumulatedPoints: decodePolyline(json[_legGeometry][_points] as String),
+      realTime: json[_realTime],
     );
   }
 
@@ -98,16 +120,22 @@ class Leg extends Equatable {
       _mode: transportMode.name,
       _route: route?.toJson() ?? shortName,
       _routeColor: routeColor,
+      _routeShortName: shortName,
       _routeLongName: routeLongName,
       _distance: distance,
       _duration: duration.inSeconds,
       _toPlace: toPlace.toJson(),
       _fromPlace: fromPlace.toJson(),
+      _agency: agencyName,
       _startTime: startTime.millisecondsSinceEpoch,
       _endTime: endTime.millisecondsSinceEpoch,
       _intermediatePlaces:
           intermediatePlaces?.map((itinerary) => itinerary.toJson()).toList(),
+      "trip": {
+        "pattern": {"code": tripPatternCode}
+      },
       _transitLeg: transitLeg,
+      _realTime: realTime,
     };
   }
 
@@ -122,6 +150,7 @@ class Leg extends Equatable {
     Duration? duration,
     Place? toPlace,
     Place? fromPlace,
+    String? agencyName,
     DateTime? startTime,
     DateTime? endTime,
     bool? rentedBike,
@@ -130,6 +159,7 @@ class Leg extends Equatable {
     bool? interlineWithPreviousLeg,
     List<Place>? intermediatePlaces,
     List<TrufiLatLng>? accumulatedPoints,
+    bool? realTime,
   }) {
     return Leg(
       points: points ?? this.points,
@@ -142,11 +172,13 @@ class Leg extends Equatable {
       duration: duration ?? this.duration,
       toPlace: toPlace ?? this.toPlace,
       fromPlace: fromPlace ?? this.fromPlace,
+      agencyName: agencyName ?? this.agencyName,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       transitLeg: transitLeg ?? this.transitLeg,
       intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
       accumulatedPoints: accumulatedPoints ?? this.accumulatedPoints,
+      realTime: realTime ?? this.realTime,
     );
   }
 
@@ -196,5 +228,6 @@ class Leg extends Equatable {
         intermediatePlaces,
         transitLeg,
         accumulatedPoints,
+        realTime,
       ];
 }

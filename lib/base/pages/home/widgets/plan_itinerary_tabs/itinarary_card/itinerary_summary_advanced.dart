@@ -47,6 +47,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
       bool renderBar = true;
 
       Leg? nextLeg;
+      final isNextLast = index == compressLegs.length - 1;
       final isNextLegLast = index + 1 == compressLegs.length - 1;
 
       final bool shouldRenderLastLeg =
@@ -80,13 +81,15 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
+          isEnd: isNextLast,
         ));
       } else if (leg.transportMode == TransportMode.car) {
         legs.add(RouteLeg(
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
+          isEnd: isNextLast,
+          // forcedColor: isPrimary ? Colors.green : null,
         ));
         isPrimary = !isPrimary;
       } else if (leg.transportMode == TransportMode.bicycle && renderBar) {
@@ -94,6 +97,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
+          isEnd: isNextLast,
         ));
       }
       if ((leg.route != null || leg.shortName != null)) {
@@ -101,7 +105,8 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
+          isEnd: isNextLast,
+          // forcedColor: isPrimary ? Colors.green : null,
         ));
         isPrimary = !isPrimary;
       }

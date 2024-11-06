@@ -50,6 +50,7 @@ class TrufiDrawer extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
+                        Colors.black54,
                         Colors.transparent,
                         Colors.black12,
                         Colors.black87,

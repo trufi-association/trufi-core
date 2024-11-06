@@ -51,6 +51,16 @@ Widget tiktokIcon({Color? color}) {
   ));
 }
 
+Widget youtubeIcon({Color? color}) {
+  return SvgPicture.string(
+    youtube(
+      color: decodeFillColor(color),
+    ),
+    height: 25,
+    width: 25,
+  );
+}
+
 // trasnport svg icons
 Widget waitIcon({Color? color}) {
   return SvgPicture.string(wait(

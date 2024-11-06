@@ -6,7 +6,7 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class WalkDistance extends StatelessWidget {
   final double walkDistance;
-  final Duration walkDuration;
+  final Duration? walkDuration;
   final Widget icon;
 
   const WalkDistance({
@@ -33,10 +33,11 @@ class WalkDistance extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              durationFormatString(localization, walkDuration),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            if (walkDuration != null)
+              Text(
+                durationFormatString(localization, walkDuration!),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             Text(
               distanceWithTranslation(localization, walkDistance),
               style: const TextStyle(fontWeight: FontWeight.w400),

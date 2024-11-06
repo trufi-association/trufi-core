@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:trufi_core/base/const/consts.dart';
 
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
@@ -23,24 +26,48 @@ class TransitLeg extends StatelessWidget {
     final localization = TrufiBaseLocalization.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () {
-            moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
-          },
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
-            child: RouteNumber(
-              transportMode: leg.transportMode,
-              backgroundColor: forcedColor ?? leg.backgroundColor,
-              textColor: leg.primaryColor,
-              text: leg.headSign,
-              tripHeadSing: leg.headSign,
-              duration: leg.durationLeg(localization),
-              distance: leg.distanceString(localization),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(2, 5, 5, 5),
+                  child: RouteNumber(
+                    transportMode: leg.transportMode,
+                    realTime: leg.realTime,
+                    backgroundColor: forcedColor ?? leg.backgroundColor,
+                    textColor: leg.primaryColor,
+                    text: leg.headSign,
+                    agencyName: leg.agencyName,
+                    lastStopName: leg.routeLongName?.split("→")[1],
+                    tripHeadSing: leg.headSign,
+                    // TODO TrufiChange
+                    // duration: leg.durationLeg(localization),
+                    distance: leg.distanceString(localization),
+                  ),
+                ),
+              ),
             ),
-          ),
+            InkWell(
+              onTap: () {
+                moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
+              },
+              overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+              child: Image.asset(
+                selectBusImage(forcedColor ?? leg.backgroundColor),
+                package: 'trufi_core',
+                width: 90,
+              ),
+            ),
+          ],
         ),
+
         // const SizedBox(height: 10),
         // Text(
         //   "What's it like on board?",
@@ -111,22 +138,25 @@ class TransitLeg extends StatelessWidget {
         // ),
         if (leg.intermediatePlaces != null &&
             leg.intermediatePlaces!.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
+          Container(
+            padding: const EdgeInsets.only(top: 0),
+            // height: 50,
             child: ExpansionTile(
               title: Text(
-                '${leg.intermediatePlaces!.length} ${localization.localeName == 'en' ? (leg.intermediatePlaces!.length > 1 ? 'stops' : 'stop') : (leg.intermediatePlaces!.length > 1 ? 'Zwischenstopps' : 'Zwischenstopp')}',
-                style: const TextStyle(
+                '${leg.intermediatePlaces!.length} ${localization.localeName == 'en' ? 'Journey' : 'Recorrido'}',
+                style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 15,
+                  color: theme.colorScheme.onSurface,
+                  fontSize: 14,
                 ),
               ),
+              dense: true,
               tilePadding:
                   const EdgeInsets.symmetric(horizontal: 7, vertical: 0),
-              textColor: theme.primaryColor,
-              collapsedTextColor: theme.primaryColor,
-              iconColor: theme.primaryColor,
-              collapsedIconColor: theme.primaryColor,
+              textColor: theme.colorScheme.onSurface,
+              collapsedTextColor: theme.colorScheme.onSurface,
+              iconColor: theme.colorScheme.onSurface,
+              collapsedIconColor: theme.colorScheme.onSurface,
               childrenPadding: const EdgeInsets.symmetric(horizontal: 10),
               children: [
                 ...leg.intermediatePlaces!.map(
@@ -157,7 +187,7 @@ class TransitLeg extends StatelessWidget {
                             const SizedBox(width: 5),
                             Icon(
                               Icons.keyboard_arrow_right,
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ],
                         ),
@@ -170,5 +200,48 @@ class TransitLeg extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  String selectBusImage(Color color) {
+    String hexColor = colorToHexString(color);
+    String? imageAsset;
+    switch (hexColor.toUpperCase()) {
+      case "FFDBD9D1":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C2.png';
+        break;
+      case "FFFEDD00":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C3.png';
+        break;
+      case "FFFF6900":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C4.png';
+        break;
+      case "FFFF0000":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C5.png';
+        break;
+      case "FF8D4925":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C6.png';
+        break;
+      case "FFAFA96E":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C7.png';
+        break;
+      case "FF00C996":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C8.png';
+        break;
+      case "FF10069F":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C9.png';
+        break;
+      case "FFDF1995":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C10.png';
+        break;
+      case "FF2F4F4F":
+        imageAsset = 'assets/Buses-SITransporte/Hyundai_County_V13C11.png';
+        break;
+    }
+    return imageAsset ?? 'assets/Buses-SITransporte/Hyundai_County_V13C2.png';
+  }
+
+  String colorToHexString(Color color) {
+    return '${color.alpha.toRadixString(16).padLeft(2, '0')}${color.red.toRadixString(16).padLeft(2, '0')}${color.green.toRadixString(16).padLeft(2, '0')}${color.blue.toRadixString(16).padLeft(2, '0')}'
+        .toUpperCase();
   }
 }

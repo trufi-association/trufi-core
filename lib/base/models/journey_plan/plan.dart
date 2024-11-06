@@ -11,6 +11,7 @@ import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
 import 'utils/leg_utils.dart';
 import 'utils/duration_utils.dart';
 
+part 'agency.dart';
 part 'itinerary.dart';
 part 'leg.dart';
 part 'place.dart';
@@ -21,6 +22,7 @@ class Plan extends Equatable {
   static List<Itinerary> removePlanItineraryDuplicates(
     List<Itinerary> itineraries,
   ) {
+    // return itineraries;
     final usedRoutes = <String>{};
     // Fold the itinerary list to build up list without duplicates
     return itineraries.fold<List<Itinerary>>(
@@ -31,12 +33,15 @@ class Plan extends Equatable {
             itinerary.legs.firstWhereOrNull((leg) => leg.transitLeg);
         // If no bus leg exist just add the itinerary
         if (firstBusLeg == null) {
-          itineraries.add(itinerary);
         } else {
+          final codeLegs = itinerary.legs
+              .where((leg) => leg.transitLeg)
+              .map((e) => e.shortName)
+              .join();
           // If a bus leg exist and the first route isn't used yet just add the itinerary
-          if (!usedRoutes.contains(firstBusLeg.shortName)) {
+          if (!usedRoutes.contains(codeLegs)) {
             itineraries.add(itinerary);
-            usedRoutes.add(firstBusLeg.shortName!);
+            usedRoutes.add(codeLegs);
           }
         }
         // Return current list
@@ -70,13 +75,20 @@ class Plan extends Equatable {
       return Plan(
           error: PlanError.fromJson(json[_error] as Map<String, dynamic>));
     } else {
-      final Map<String, dynamic> planJson = json[_plan] as Map<String, dynamic>;
+      final Map<String, dynamic> planJson = json[_plan];
       return Plan(
-        itineraries: removePlanItineraryDuplicates(planJson[_itineraries]
-                ?.map<Itinerary>((dynamic itineraryJson) =>
-                    Itinerary.fromJson(itineraryJson as Map<String, dynamic>))
-                .toList() as List<Itinerary>? ??
-            []),
+        itineraries: removePlanItineraryDuplicates(
+          planJson[_itineraries]
+                  ?.map<Itinerary>((dynamic itineraryJson) =>
+                      Itinerary.fromJson(itineraryJson as Map<String, dynamic>))
+                  .toList() as List<Itinerary>? ??
+              [],
+        ),
+        // itineraries: planJson[_itineraries]
+        //         ?.map<Itinerary>((dynamic itineraryJson) =>
+        //             Itinerary.fromJson(itineraryJson as Map<String, dynamic>))
+        //         .toList() as List<Itinerary>? ??
+        //     [],
       );
     }
   }
@@ -101,7 +113,7 @@ class Plan extends Equatable {
           itineraries![0].legs[0].transportMode == TransportMode.walk;
 
   bool get hasError => error != null;
-  
+
   @override
   List<Object?> get props => [
         itineraries,

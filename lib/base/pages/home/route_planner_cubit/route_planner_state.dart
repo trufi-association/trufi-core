@@ -6,30 +6,40 @@ class RoutePlannerState extends Equatable {
   static const String _toPlace = "toPlace";
   static const String _plan = "plan";
   static const String _itinerary = "itinerary";
+  static const String _dateTime = "selectedDateTime";
+  static const String _enableDebugOutput = "enableDebugOutput";
 
   const RoutePlannerState({
     this.fromPlace,
     this.toPlace,
     this.plan,
     this.selectedItinerary,
+    this.selectedDateTime,
+    this.enableDebugOutput,
   });
 
   final TrufiLocation? fromPlace;
   final TrufiLocation? toPlace;
   final Plan? plan;
   final Itinerary? selectedItinerary;
+  final DateTime? selectedDateTime;
+  final bool? enableDebugOutput;
 
   RoutePlannerState copyWith({
     TrufiLocation? fromPlace,
     TrufiLocation? toPlace,
     Plan? plan,
     Itinerary? selectedItinerary,
+    DateTime? selectedDateTime,
+    bool? enableDebugOutput,
   }) {
     return RoutePlannerState(
       fromPlace: fromPlace ?? this.fromPlace,
       toPlace: toPlace ?? this.toPlace,
       plan: plan ?? this.plan,
       selectedItinerary: selectedItinerary ?? this.selectedItinerary,
+      selectedDateTime: selectedDateTime ?? this.selectedDateTime,
+      enableDebugOutput: enableDebugOutput ?? this.enableDebugOutput,
     );
   }
 
@@ -38,6 +48,8 @@ class RoutePlannerState extends Equatable {
     Optional<TrufiLocation?>? toPlace = const Optional(),
     Optional<Plan>? plan = const Optional(),
     Optional<Itinerary>? selectedItinerary = const Optional(),
+    Optional<DateTime>? selectedDateTime = const Optional(),
+    Optional<bool>? enableDebugOutput = const Optional(),
   }) {
     return RoutePlannerState(
       fromPlace: fromPlace!.isValid ? fromPlace.value : this.fromPlace,
@@ -46,6 +58,12 @@ class RoutePlannerState extends Equatable {
       selectedItinerary: selectedItinerary!.isValid
           ? selectedItinerary.value
           : this.selectedItinerary,
+      selectedDateTime: selectedDateTime!.isValid
+          ? selectedDateTime.value
+          : this.selectedDateTime,
+      enableDebugOutput: enableDebugOutput!.isValid
+          ? enableDebugOutput.value
+          : this.enableDebugOutput,
     );
   }
 
@@ -58,6 +76,9 @@ class RoutePlannerState extends Equatable {
       plan: Plan.fromJson(json[_plan] as Map<String, dynamic>),
       selectedItinerary:
           Itinerary.fromJson(json[_itinerary] as Map<String, dynamic>),
+      selectedDateTime:
+          json[_dateTime] != null ? DateTime.parse(json[_dateTime]) : null,
+      enableDebugOutput: json[_enableDebugOutput],
     );
   }
 
@@ -67,6 +88,8 @@ class RoutePlannerState extends Equatable {
       _toPlace: toPlace?.toJson(),
       _plan: plan?.toJson(),
       _itinerary: selectedItinerary?.toJson(),
+      _dateTime: selectedDateTime?.toIso8601String(),
+      _enableDebugOutput: enableDebugOutput,
     };
   }
 
@@ -87,6 +110,8 @@ class RoutePlannerState extends Equatable {
         toPlace,
         plan,
         selectedItinerary,
+        selectedDateTime,
+        enableDebugOutput,
       ];
 }
 

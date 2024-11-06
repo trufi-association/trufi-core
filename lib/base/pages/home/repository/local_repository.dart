@@ -15,4 +15,10 @@ abstract class MapRouteLocalRepository {
 
   Future<void> saveSelectedItinerary(Itinerary? data);
   Future<Itinerary?> getSelectedItinerary();
+
+  Future<void> saveDateTime(DateTime? data);
+  Future<DateTime?> getDateTime();
+
+  Future<void> saveEnableDebugOutput(bool? data);
+  Future<bool?> getEnableDebugOutput();
 }

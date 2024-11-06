@@ -21,6 +21,7 @@ import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
+// import 'package:trufi_core/realtime/realtime_routes_cubit/realtime_routes_cubit.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = "/Home";
@@ -74,7 +75,9 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final routePlannerCubit = context.watch<RoutePlannerCubit>();
     final panelCubit = context.watch<PanelCubit>();
-    final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final mapConfiguration = context.read<MapConfigurationCubit>().state;
+    // final realtimeRoutesCubit = context.watch<RealtimeRoutesCubit>();
+    // final realtimeRoutesState = realtimeRoutesCubit.state;
     final theme = Theme.of(context);
     widget.mapRouteProvider.trufiMapController.onReady.then((value) {
       if (panelCubit.state.panel != null &&
@@ -108,7 +111,7 @@ class _HomePageState extends State<HomePage>
                   (value) {
                     widget.mapRouteProvider.trufiMapController.move(
                       center: fromPlace.latLng,
-                      zoom: mapConfiguratiom.chooseLocationZoom,
+                      zoom: mapConfiguration.chooseLocationZoom,
                       tickerProvider: this,
                     );
                     _callFetchPlan(context);
@@ -119,7 +122,7 @@ class _HomePageState extends State<HomePage>
                   (value) {
                     widget.mapRouteProvider.trufiMapController.move(
                       center: toPlace.latLng,
-                      zoom: mapConfiguratiom.chooseLocationZoom,
+                      zoom: mapConfiguration.chooseLocationZoom,
                       tickerProvider: this,
                     );
                     _callFetchPlan(context);
@@ -203,6 +206,31 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                     ),
+                    // if (realtimeRoutesState.hasRealtime)
+                    //   Positioned(
+                    //     top: 20,
+                    //     right: 20,
+                    //     child: InkWell(
+                    //       onTap: (){
+                    //         realtimeRoutesCubit.disableRealtime();
+                    //       },
+                    //       child: Container(
+                    //         height: 20,
+                    //         width: 20,
+                    //         decoration: const BoxDecoration(
+                    //           color: Colors.green,
+                    //           boxShadow: [
+                    //             BoxShadow(
+                    //               color: Color(0xaa000000),
+                    //               offset: Offset(0, 1.5),
+                    //               blurRadius: 4,
+                    //             ),
+                    //           ],
+                    //           shape: BoxShape.circle,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
                   ],
                 ),
               ),

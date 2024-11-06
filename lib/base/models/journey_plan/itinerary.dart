@@ -8,6 +8,7 @@ class Itinerary extends Equatable {
   static const String _walkTime = "walkTime";
   static const String _walkDistance = "walkDistance";
   static const String _transfers = "transfers";
+  static const String _transfersGraphql = "numberOfTransfers";
 
   final List<Leg> legs;
   final DateTime startTime;
@@ -43,7 +44,9 @@ class Itinerary extends Equatable {
       walkTime:
           Duration(seconds: int.tryParse(json[_walkTime].toString()) ?? 0),
       walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
-      transfers: int.tryParse(json[_transfers].toString()) ?? 5,
+      transfers: int.tryParse(json[_transfers].toString()) ??
+          json[_transfersGraphql] ??
+          5,
     );
   }
 

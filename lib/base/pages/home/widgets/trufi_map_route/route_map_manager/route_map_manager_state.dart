@@ -6,12 +6,14 @@ class RouteMapManagerState extends Equatable {
   final PolylineLayer? unselectedPolylinesLayer;
   final MarkerLayer? selectedMarkersLayer;
   final PolylineLayer? selectedPolylinesLayer;
+  final MarkerLayer? selectedSecondaryMarkersLayer;
 
   const RouteMapManagerState({
     this.unselectedMarkersLayer,
     this.unselectedPolylinesLayer,
     this.selectedMarkersLayer,
     this.selectedPolylinesLayer,
+    this.selectedSecondaryMarkersLayer,
   });
 
   RouteMapManagerState copyWith({
@@ -19,6 +21,7 @@ class RouteMapManagerState extends Equatable {
     PolylineLayer? unselectedPolylinesLayer,
     MarkerLayer? selectedMarkersLayer,
     PolylineLayer? selectedPolylinesLayer,
+    MarkerLayer? selectedSecondaryMarkersLayer,
   }) {
     return RouteMapManagerState(
       unselectedMarkersLayer:
@@ -28,6 +31,8 @@ class RouteMapManagerState extends Equatable {
       selectedMarkersLayer: selectedMarkersLayer ?? this.selectedMarkersLayer,
       selectedPolylinesLayer:
           selectedPolylinesLayer ?? this.selectedPolylinesLayer,
+      selectedSecondaryMarkersLayer:
+          selectedSecondaryMarkersLayer ?? this.selectedSecondaryMarkersLayer,
     );
   }
 
@@ -37,6 +42,7 @@ class RouteMapManagerState extends Equatable {
         unselectedPolylinesLayer,
         selectedMarkersLayer,
         selectedPolylinesLayer,
+        selectedSecondaryMarkersLayer,
       ];
 
   @override

@@ -3,7 +3,6 @@ library trufi_core;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
 
 import 'package:trufi_core/base/widgets/app_lifecycle_reactor.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
@@ -17,22 +16,23 @@ class TrufiCore extends StatelessWidget {
   final TrufiBaseTheme? trufiBaseTheme;
   final TrufiRouter trufiRouter;
   final List<BlocProvider> blocProviders;
-  final TrufiLocalization _trufiLocalization;
+  final TrufiLocalization? trufiLocalization;
 
-  TrufiCore({
+  const TrufiCore({
     super.key,
     required this.appNameTitle,
     required this.trufiRouter,
     required this.blocProviders,
     this.trufiBaseTheme,
-    TrufiLocalization? trufiLocalization,
-  })  : _trufiLocalization =
-            trufiLocalization ?? DefaultValues.trufiLocalization();
+    this.trufiLocalization,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final currentTrufiLocalization =
+        trufiLocalization ?? DefaultValues.trufiLocalization();
     return AppLifecycleReactor(
-      child: MultiProvider(
+      child: MultiBlocProvider(
         providers: [
           BlocProvider<ThemeCubit>(
             create: (context) => ThemeCubit(
@@ -47,7 +47,7 @@ class TrufiCore extends StatelessWidget {
           ),
           BlocProvider<TrufiLocalizationCubit>(
             create: (context) => TrufiLocalizationCubit(
-              state: _trufiLocalization,
+              state: currentTrufiLocalization,
             ),
           ),
           ...blocProviders
@@ -63,7 +63,7 @@ class TrufiCore extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          supportedLocales: _trufiLocalization.supportedLocales,
+          supportedLocales: currentTrufiLocalization.supportedLocales,
           debugShowCheckedModeBanner: false,
           routeInformationParser: trufiRouter.routeInformationParser,
           routerDelegate: trufiRouter.routerDelegate,

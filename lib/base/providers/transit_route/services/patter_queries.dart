@@ -10,6 +10,9 @@ const String allPatterns = r'''
       color
       mode
       textColor
+      agency{
+        name
+      }
     }
   }
 }

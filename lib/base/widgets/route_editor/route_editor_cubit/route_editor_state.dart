@@ -1,6 +1,4 @@
 part of 'route_editor_cubit.dart';
-
-@immutable
 class RouteEditorState extends Equatable {
   
   // const RouteEditorState({

@@ -23,18 +23,22 @@ class BarItineraryDetails extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          DurationComponent(
-            duration: itinerary.duration,
-            startTime: itinerary.startTime,
-            endTime: itinerary.endTime,
-            futureText: itinerary.startDateText(localization),
-          ),
+          Container(),
+          // TODO TrufiChange
+          // DurationComponent(
+          //   duration: itinerary.duration,
+          //   startTime: itinerary.startTime,
+          //   endTime: itinerary.endTime,
+          //   futureText: itinerary.startDateText(localization),
+          // ),
           Row(
             children: [
               if (itinerary.walkDistance > 0)
                 WalkDistance(
                   walkDistance: itinerary.walkDistance,
-                  walkDuration: itinerary.walkTime,
+                  // TODO TrufiChange
+                  walkDuration: null,
+                  // walkDuration: itinerary.walkTime,
                   icon: walkIcon(color: theme.iconTheme.color),
                 ),
               const SizedBox(width: 10),

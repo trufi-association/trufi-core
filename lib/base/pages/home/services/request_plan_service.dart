@@ -7,6 +7,7 @@ abstract class RequestPlanService {
     required TrufiLocation from,
     required TrufiLocation to,
     required List<TransportMode> transportModes,
+    bool? enableDebugOutput,
     String? localeName,
   });
 }

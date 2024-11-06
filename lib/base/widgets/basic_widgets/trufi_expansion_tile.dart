@@ -52,6 +52,8 @@ class TrufiExpansionTile extends StatelessWidget {
   final EdgeInsets padding;
   final ExpansionTileTitleType typeTitle;
   final TextAlign? textAlign;
+  final TextStyle? textStyle;
+  final Color? titleColor;
 
   const TrufiExpansionTile({
     super.key,
@@ -60,6 +62,8 @@ class TrufiExpansionTile extends StatelessWidget {
     this.padding = const EdgeInsets.all(15),
     this.typeTitle = ExpansionTileTitleType.primary,
     this.textAlign,
+    this.textStyle,
+    this.titleColor,
   });
 
   @override
@@ -85,11 +89,11 @@ class TrufiExpansionTile extends StatelessWidget {
           maintainState: true,
           collapsedIconColor: Colors.white,
           iconColor: Colors.white,
-          titleColor: typeTitle.getBackgroundColor,
+          titleColor: titleColor ?? typeTitle.getBackgroundColor,
           trailing: body != null ? null : Container(width: 1),
           title: Text(
             title,
-            style: typeTitle.getStyle,
+            style: typeTitle.getStyle.merge(textStyle),
             textAlign: textAlign,
           ),
           children: [

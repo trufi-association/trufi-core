@@ -34,19 +34,20 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     emit(state.copyWith(isLoading: true));
     try {
       final transports = await routeTransportsRepository.fetchPatterns();
-      transports.sort((a, b) {
-        int res = -1;
-        final aShortName = int.tryParse(a.route?.shortName ?? '');
-        final bShortName = int.tryParse(b.route?.shortName ?? '');
-        if (aShortName != null && bShortName != null) {
-          res = aShortName.compareTo(bShortName);
-        } else if (aShortName == null && bShortName == null) {
-          res = a.route?.shortName?.compareTo(b.route?.shortName ?? '') ?? 1;
-        } else if (aShortName != null) {
-          res = 1;
-        }
-        return res;
-      });
+      sortTransitRoutesByAgencyNameAndShortName(transports);
+      // transports.sort((a, b) {
+      //   int res = -1;
+      //   final aShortName = int.tryParse(a.route?.shortName ?? '');
+      //   final bShortName = int.tryParse(b.route?.shortName ?? '');
+      //   if (aShortName != null && bShortName != null) {
+      //     res = aShortName.compareTo(bShortName);
+      //   } else if (aShortName == null && bShortName == null) {
+      //     res = a.route?.shortName?.compareTo(b.route?.shortName ?? '') ?? 1;
+      //   } else if (aShortName != null) {
+      //     res = 1;
+      //   }
+      //   return res;
+      // });
       emit(state.copyWith(
         transports: transports,
         filterTransports: transports,
@@ -57,6 +58,24 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
       rethrow;
     }
     await localRepository.saveTransports(state.transports);
+  }
+
+  void sortTransitRoutesByAgencyNameAndShortName(List<TransitRoute> routes) {
+    routes.sort((a, b) {
+      final nameA = a.route?.agency?.name.toLowerCase() ?? '';
+      final nameB = b.route?.agency?.name.toLowerCase() ?? '';
+      final shortNameA = a.route?.shortName?.toLowerCase() ?? '';
+      final shortNameB = b.route?.shortName?.toLowerCase() ?? '';
+
+      // First compare by Agency name
+      final agencyNameComparison = nameA.compareTo(nameB);
+      if (agencyNameComparison != 0) {
+        return agencyNameComparison;
+      }
+
+      // If Agency names are the same, compare by shortName
+      return shortNameA.compareTo(shortNameB);
+    });
   }
 
   Future<TransitRoute> fetchDataPattern(TransitRoute pattern) async {

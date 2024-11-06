@@ -11,6 +11,8 @@ class MapRouteHiveLocalRepository implements MapRouteLocalRepository {
   static const _itineraryKey = 'MapRouteCubitItinerary';
   static const _fromPlaceKey = 'MapRouteCubitFromPlace';
   static const _toPlaceKey = 'MapRouteCubitToPlace';
+  static const _toDateTimeKey = 'MapRouteCubitDateTime';
+  static const _enableDebugOutput = 'MapRouteCubitEnableDebugOutput';
   late Box _box;
 
   @override
@@ -47,6 +49,20 @@ class MapRouteHiveLocalRepository implements MapRouteLocalRepository {
   }
 
   @override
+  Future<DateTime?> getDateTime() async {
+    final data = _box.get(_toDateTimeKey);
+    if (data == null) return null;
+    return DateTime.parse(jsonDecode(data));
+  }
+
+  @override
+  Future<bool?> getEnableDebugOutput() async {
+    final data = _box.get(_enableDebugOutput);
+    if (data == null) return null;
+    return jsonDecode(data);
+  }
+
+  @override
   Future<void> saveFromPlace(TrufiLocation? data) async {
     await _box.put(_fromPlaceKey, data != null ? jsonEncode(data) : null);
   }
@@ -64,5 +80,21 @@ class MapRouteHiveLocalRepository implements MapRouteLocalRepository {
   @override
   Future<void> saveSelectedItinerary(Itinerary? data) async {
     await _box.put(_itineraryKey, data != null ? jsonEncode(data) : null);
+  }
+
+  @override
+  Future<void> saveDateTime(DateTime? data) async {
+    await _box.put(
+        _toDateTimeKey,
+        data != null
+            ? jsonEncode(
+                data.toIso8601String(),
+              )
+            : null);
+  }
+
+  @override
+  Future<void> saveEnableDebugOutput(bool? data) async {
+    await _box.put(_enableDebugOutput, data != null ? jsonEncode(data) : null);
   }
 }

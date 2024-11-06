@@ -53,6 +53,8 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
               color:
                   widget.transportData?.route?.backgroundColor ?? Colors.black,
               strokeWidth: 6.0,
+              borderStrokeWidth: 1,
+              borderColor: Colors.black,
             ),
           ],
         ),

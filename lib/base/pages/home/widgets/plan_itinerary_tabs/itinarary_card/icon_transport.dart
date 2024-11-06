@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/utils/text/outlined_text.dart';
 
 class IconTransport extends StatelessWidget {
   final Color color;
@@ -6,6 +8,7 @@ class IconTransport extends StatelessWidget {
   final String text;
   final Widget icon;
   final Widget? secondaryIcon;
+  final bool isEnd;
 
   const IconTransport({
     super.key,
@@ -14,10 +17,12 @@ class IconTransport extends StatelessWidget {
     required this.text,
     required this.icon,
     this.secondaryIcon,
+    required this.isEnd,
   });
 
   @override
   Widget build(BuildContext context) {
+    final contrastColor = getContrastColor(bacgroundColor);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 1),
       decoration: BoxDecoration(
@@ -40,18 +45,30 @@ class IconTransport extends StatelessWidget {
                 child: secondaryIcon,
               ),
             ),
-          Flexible(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: color,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(right: 2),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: contrastColor,
+                ),
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.clip,
               ),
-              maxLines: 1,
-              softWrap: false,
-              overflow: TextOverflow.clip,
             ),
           ),
+          if (!isEnd)
+            Padding(
+              padding: const EdgeInsets.only(right: 2),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: contrastColor,
+                size: 15,
+              ),
+            ),
         ],
       ),
     );

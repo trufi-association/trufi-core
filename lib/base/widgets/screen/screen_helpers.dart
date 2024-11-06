@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/uni_link_provider/uni_link_provider.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';

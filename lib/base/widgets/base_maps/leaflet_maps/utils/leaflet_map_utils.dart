@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core/base/utils/text/outlined_text.dart';
 
 Marker buildTransferMarker({required TrufiLatLng point, required Color color}) {
   return Marker(
@@ -64,45 +65,63 @@ Marker buildTransportMarker(
   VoidCallback? onTap,
   bool showIcon = true,
   bool showText = true,
+  bool showBorder = true,
 }) {
+  final textMarker = leg.route?.shortName ?? leg.headSign;
+  final textComponent = Text(
+    textMarker,
+    style: TextStyle(
+      color: getContrastColor(color),
+      fontSize: 13,
+      fontWeight: FontWeight.w700,
+    ),
+    maxLines: 1,
+    softWrap: false,
+    textAlign: TextAlign.start,
+    overflow: TextOverflow.clip,
+  );
+  final widthComponent = calculateTextWidth(textMarker, textComponent.style!) + 24;
   return Marker(
-    width: 50.0,
+    width: widthComponent >= 75
+        ? 75
+        : widthComponent <= 50
+            ? 50
+            : widthComponent,
     point: point.toLatLng(),
     alignment: Alignment.center,
     child: GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(0.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-        ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            children: [
-              if (showIcon)
-                SizedBox(
-                  height: 28,
-                  width: 28,
-                  child: leg.transportMode.getImage(
-                    color: textColor,
-                  ),
-                ),
-              if (showText)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    leg.route?.shortName ?? leg.headSign,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+          border: showBorder
+              ? Border.all(
+                  color: Colors.black,
+                  width: 0.5,
                 )
-            ],
-          ),
+              : null,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (showIcon)
+              SizedBox(
+                height: 20,
+                width: 20,
+                child: leg.transportMode.getImage(
+                  color: getContrastColor(color),
+                ),
+              ),
+            if (showText)
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: textComponent,
+                ),
+              )
+          ],
         ),
       ),
     ),
