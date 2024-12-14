@@ -28,6 +28,9 @@ class MapConfiguration {
   // /// Itinerari creator configuration
   // final ItinararyCreator itinararyCreator;
 
+  /// CO2 emission URL information
+  final String? co2EmmissionUrl;
+
   MapConfiguration({
     required this.center,
     this.defaultZoom = 12.0,
@@ -38,6 +41,7 @@ class MapConfiguration {
     this.mapAttributionBuilder,
     this.markersConfiguration = const DefaultMarkerConfiguration(),
     // this.itinararyCreator = const DefaultItineraryCreator(),
+    this.co2EmmissionUrl,
   }) {
     mapAttributionBuilder =
         mapAttributionBuilder ?? (context) => const MapTileAndOSMCopyright();
