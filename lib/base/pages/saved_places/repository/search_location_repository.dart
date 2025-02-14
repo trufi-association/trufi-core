@@ -10,5 +10,8 @@ abstract class SearchLocationRepository {
     String? lang,
   });
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location);
+  Future<LocationDetail> reverseGeodecoding(
+    LatLng location, {
+    String? lang,
+  });
 }

@@ -49,7 +49,10 @@ class DefaultSearchLocation implements SearchLocationRepository {
   }
 
   @override
-  Future<LocationDetail> reverseGeodecoding(LatLng location) async {
+  Future<LocationDetail> reverseGeodecoding(
+    LatLng location, {
+    String? lang,
+  }) async {
     final response = await http.get(
       Uri.parse(
         "$photonUrl/reverse?lon=${location.longitude}&lat=${location.latitude}",

@@ -201,8 +201,12 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
             : 1;
   }
 
-  Future<LocationDetail> reverseGeodecoding(LatLng location) =>
+  Future<LocationDetail> reverseGeodecoding(
+    LatLng location, {
+    String? lang,
+  }) =>
       searchLocationRepository.reverseGeodecoding(
         location,
+        lang: lang,
       );
 }
