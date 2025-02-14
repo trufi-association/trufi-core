@@ -1,3 +1,7 @@
+## 3.26.1-stadtnavi-lts
+🎉 Add lang param to reverseGeocoding
+
+
 ## 3.25.0-stadtnavi-lts
 🎉 Supported Flutter 3.24.3
 🎉 Support Funicular-Transport
