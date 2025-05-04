@@ -1,3 +1,6 @@
+## 3.29.3-stadtnavi-lts
+🎉 Supported Flutter 3.29.3
+
 ## 3.26.1-stadtnavi-lts
 🎉 Add lang param to reverseGeocoding
 
