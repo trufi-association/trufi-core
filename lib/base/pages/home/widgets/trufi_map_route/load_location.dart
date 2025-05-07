@@ -12,10 +12,10 @@ class LoadLocation extends StatefulWidget {
   final TrufiLatLng location;
   final AsyncCallback onFetchPlan;
   const LoadLocation({
-    Key? key,
+    super.key,
     required this.location,
     required this.onFetchPlan,
-  }) : super(key: key);
+  });
   @override
   State<LoadLocation> createState() => _LoadLocationState();
 }

@@ -13,7 +13,7 @@ import 'dialog_select_icon.dart';
 
 class LocationTiler extends StatefulWidget {
   const LocationTiler({
-    Key? key,
+    super.key,
     required this.location,
     required this.updateLocation,
     required this.selectPositionOnPage,
@@ -22,7 +22,7 @@ class LocationTiler extends StatefulWidget {
     this.enableSetIcon = false,
     this.enableLocation = false,
     this.enableSetPosition = false,
-  }) : super(key: key);
+  });
 
   final TrufiLocation location;
   final bool isDefaultLocation;

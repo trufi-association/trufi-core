@@ -128,16 +128,12 @@ class TransitionPage<T> extends TransitionBuilderPage<T> {
     this.maintainState = true,
     this.fullscreenDialog = false,
     this.opaque = true,
-    LocalKey? key,
-    String? name,
-    Object? arguments,
-    String? restorationId,
+    super.key,
+    super.name,
+    super.arguments,
+    super.restorationId,
   }) : super(
           child: child,
-          key: key,
-          name: name,
-          arguments: arguments,
-          restorationId: restorationId,
         );
 
   /// Configures the transition animation used when this page is pushed.
@@ -223,16 +219,11 @@ abstract class TransitionBuilderPage<T> extends Page<T> {
     this.maintainState = true,
     this.fullscreenDialog = false,
     this.opaque = true,
-    LocalKey? key,
-    String? name,
-    Object? arguments,
-    String? restorationId,
-  }) : super(
-          key: key,
-          name: name,
-          arguments: arguments,
-          restorationId: restorationId,
-        );
+    super.key,
+    super.name,
+    super.arguments,
+    super.restorationId,
+  });
 
   /// Called when this page is pushed, returns a [PageTransition] to configure
   /// the push animation.

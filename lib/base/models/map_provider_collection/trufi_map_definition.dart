@@ -28,8 +28,8 @@ abstract class MapChooseLocationProvider {
 
 abstract class IMapChooseLocation extends Widget {
   const IMapChooseLocation({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   ITrufiMapController get trufiMapController;
   Function(TrufiLatLng?) get onCenterChanged;
 }
@@ -50,8 +50,8 @@ abstract class MapRouteEditorProvider {
 
 abstract class IMapRouteEditor extends Widget {
   const IMapRouteEditor({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   ITrufiMapController get trufiMapController;
   Function(List<TrufiLatLng>) get onAreaSelected;
   bool get isSelectionArea;

@@ -71,13 +71,13 @@ class _CustomButtonState extends State<CustomButton> {
               ),
               RichText(
                 text: TextSpan(
-                  style: theme.textTheme.bodyText2,
+                  style: theme.textTheme.bodyMedium,
                   // text: '${localizationA.aboutOpenSource} ',
                   children: [
                     if (selectedData != null)
                       TextSpan(
                         text: "Live ",
-                        style: theme.textTheme.bodyText2?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.secondary,
                           fontWeight: FontWeight.bold,
                         ),
@@ -86,7 +86,7 @@ class _CustomButtonState extends State<CustomButton> {
                       text: selectedData != null
                           ? selectedData!.name
                           : "Not too crowded",
-                      style: theme.textTheme.bodyText2?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: selectedData != null
                             ? theme.colorScheme.secondary
                             : null,

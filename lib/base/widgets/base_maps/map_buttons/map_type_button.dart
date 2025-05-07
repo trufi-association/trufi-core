@@ -45,7 +45,7 @@ class _MapItemsSelector extends StatelessWidget {
           child: Text(
             localization.commonShowMap,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyText1
+            style: theme.textTheme.bodyLarge
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -153,7 +153,7 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                     Expanded(
                       child: Text(
                         element.name(context),
-                        style: theme.textTheme.bodyText1
+                        style: theme.textTheme.bodyLarge
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -215,9 +215,9 @@ class _MapOptionsPage extends StatefulWidget {
   final Widget child;
 
   const _MapOptionsPage({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   State<_MapOptionsPage> createState() => _MapOptionsPageState();
@@ -274,7 +274,7 @@ class _BuildMapTypeBottomSheet extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       localization.mapTypeLabel,
-                      style: theme.textTheme.bodyText1
+                      style: theme.textTheme.bodyLarge
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -316,12 +316,12 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
   final bool active;
 
   const _BuildMapTypeOptionButton({
-    Key? key,
+    super.key,
     required this.image,
     required this.label,
     required this.onPressed,
     this.active = false,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -354,7 +354,7 @@ class _BuildMapTypeOptionButton extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                    fontSize: theme.textTheme.caption?.fontSize,
+                    fontSize: theme.textTheme.bodySmall?.fontSize,
                     color: active
                         ? theme.colorScheme.secondary
                         : (isDarkMode ? Colors.grey[400] : Colors.grey)),

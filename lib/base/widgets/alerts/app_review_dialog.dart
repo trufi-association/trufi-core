@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:app_review/app_review.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
@@ -10,7 +10,7 @@ class AppReviewDialog extends StatelessWidget {
   static Future<void> showAppReviewDialog(BuildContext context) async {
     if (Platform.isIOS) {
       // Show native app review dialog for iOS users
-      await AppReview.requestReview;
+      await InAppReview.instance.requestReview();
     } else {
       // Show a custom dialog for Android users
       showTrufiDialog(
@@ -24,8 +24,8 @@ class AppReviewDialog extends StatelessWidget {
   }
 
   const AppReviewDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class AppReviewDialog extends StatelessWidget {
         TextButton(
           onPressed: () async {
             Navigator.of(context).pop();
-            await AppReview.writeReview;
+            await InAppReview.instance.requestReview();
           },
           child: Text(
             localization.appReviewDialogButtonAccept,

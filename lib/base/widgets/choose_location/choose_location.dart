@@ -39,11 +39,11 @@ class ChooseLocationPage extends StatefulWidget {
   }
 
   const ChooseLocationPage({
-    Key? key,
+    super.key,
     required this.isOrigin,
     required this.mapChooseLocationProvider,
     this.position,
-  }) : super(key: key);
+  });
 
   final TrufiLatLng? position;
   final MapChooseLocationProvider mapChooseLocationProvider;

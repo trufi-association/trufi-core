@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -117,9 +117,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                       : leg.transportMode.color
               : Colors.grey;
 
-          Color textColor = isSelected
-              ? leg.primaryColor
-              : Colors.white;
+          Color textColor = isSelected ? leg.primaryColor : Colors.white;
 
           if (isSelected && leg.transitLeg && isPrimary) {
             color = Colors.green;
@@ -132,7 +130,9 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
             points: TrufiLatLng.toListLatLng(points),
             color: color,
             strokeWidth: isSelected ? 6.0 : 3.0,
-            isDotted: leg.transportMode == TransportMode.walk,
+            pattern: leg.transportMode == TransportMode.walk
+                ? StrokePattern.dotted()
+                : StrokePattern.solid(),
           );
 
           // Transfer marker

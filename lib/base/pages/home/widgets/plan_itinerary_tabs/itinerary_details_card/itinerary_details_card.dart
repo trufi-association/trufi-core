@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:latlong2/latlong.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
@@ -17,11 +16,11 @@ class ItineraryDetailsCard extends StatefulWidget {
   final bool Function(TrufiLatLng) moveTo;
 
   const ItineraryDetailsCard({
-    Key? key,
+    super.key,
     required this.itinerary,
     required this.onBackPressed,
     required this.moveTo,
-  }) : super(key: key);
+  });
 
   @override
   State<ItineraryDetailsCard> createState() => _ItineraryDetailsCardState();

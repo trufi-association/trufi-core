@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 import 'package:trufi_core/base/blocs/map_layer/map_layers_cubit.dart';
@@ -29,7 +29,7 @@ class LeafletMap extends StatefulWidget {
   final double? bottomPaddingButtons;
   final bool showPOILayers;
   const LeafletMap({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     required this.layerOptionsBuilder,
     this.layerOptionsBuilderTop,
@@ -39,7 +39,7 @@ class LeafletMap extends StatefulWidget {
     this.onPositionChanged,
     this.bottomPaddingButtons,
     this.showPOILayers = false,
-  }) : super(key: key);
+  });
 
   @override
   State<LeafletMap> createState() => _LeafletMapState();
@@ -50,7 +50,7 @@ class _LeafletMapState extends State<LeafletMap> {
   int mapZoom = 0;
   @override
   Widget build(BuildContext context) {
-    final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
+    final mapConfiguration = context.read<MapConfigurationCubit>().state;
     final currentMapType = context.watch<MapTileProviderCubit>().state;
     final customLayersCubit = context.watch<MapLayersCubit>();
     int? clusterSize;
@@ -85,24 +85,26 @@ class _LeafletMapState extends State<LeafletMap> {
                   widget.trufiMapController.mapController.hashCode.toString()),
               mapController: widget.trufiMapController.mapController,
               options: MapOptions(
-                interactiveFlags: InteractiveFlag.drag |
-                    InteractiveFlag.flingAnimation |
-                    InteractiveFlag.pinchMove |
-                    InteractiveFlag.pinchZoom |
-                    InteractiveFlag.doubleTapZoom,
-                minZoom: mapConfiguratiom.onlineMinZoom,
-                maxZoom: mapConfiguratiom.onlineMaxZoom,
-                zoom: mapConfiguratiom.onlineZoom,
+                interactionOptions: InteractionOptions(
+                  flags: InteractiveFlag.drag |
+                      InteractiveFlag.flingAnimation |
+                      InteractiveFlag.pinchMove |
+                      InteractiveFlag.pinchZoom |
+                      InteractiveFlag.doubleTapZoom,
+                ),
+                minZoom: mapConfiguration.onlineMinZoom,
+                maxZoom: mapConfiguration.onlineMaxZoom,
+                initialZoom: mapConfiguration.onlineZoom,
                 onTap: widget.onTap,
                 onLongPress: widget.onLongPress,
-                center: mapConfiguratiom.center.toLatLng(),
+                initialCenter: mapConfiguration.center.toLatLng(),
                 onMapReady: () {
                   if (!widget.trufiMapController.readyCompleter.isCompleted) {
                     widget.trufiMapController.readyCompleter.complete();
                   }
                 },
                 onPositionChanged: (
-                  MapPosition position,
+                  MapCamera position,
                   bool hasGesture,
                 ) {
                   if (widget.onPositionChanged != null) {
@@ -117,7 +119,7 @@ class _LeafletMapState extends State<LeafletMap> {
                   }
                   // fix render issue
                   Future.delayed(Duration.zero, () {
-                    final int zoom = position.zoom?.round() ?? 0;
+                    final int zoom = position.zoom.round();
                     if (mapZoom != zoom) {
                       setState(() => mapZoom = zoom);
                     }
@@ -136,7 +138,7 @@ class _LeafletMapState extends State<LeafletMap> {
                         builder: (context, markers) {
                           return Container();
                         },
-                        anchor: AnchorPos.align(AnchorAlign.center),
+                        alignment: Alignment.center,
                         maxClusterRadius: clusterSize ?? 80,
                         size: markerClusterSize ?? const Size(30, 30),
                         centerMarkerOnClick: false,
@@ -158,7 +160,7 @@ class _LeafletMapState extends State<LeafletMap> {
                 MarkerLayer(markers: [
                   buildYourLocationMarker(
                     currentLocation,
-                    mapConfiguratiom.markersConfiguration.yourLocationMarker,
+                    mapConfiguration.markersConfiguration.yourLocationMarker,
                   )
                 ]),
               ],
@@ -199,7 +201,7 @@ class _LeafletMapState extends State<LeafletMap> {
           bottom: 5.0,
           left: 10,
           child:
-              SafeArea(child: mapConfiguratiom.mapAttributionBuilder!(context)),
+              SafeArea(child: mapConfiguration.mapAttributionBuilder!(context)),
         ),
       ],
     );

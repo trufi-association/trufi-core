@@ -10,9 +10,9 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 class BuildTransitErrorAlert extends StatelessWidget {
   final FetchOnlinePlanException exception;
   const BuildTransitErrorAlert({
-    Key? key,
+    super.key,
     required this.exception,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class BuildTransitErrorAlert extends StatelessWidget {
               exception.message,
               localization,
             ),
-            style: theme.textTheme.bodyText2,
+            style: theme.textTheme.bodyMedium,
           ),
         ],
       ),

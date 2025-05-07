@@ -11,14 +11,14 @@ import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
 
 class FormFieldsLandscape extends StatelessWidget {
   const FormFieldsLandscape({
-    Key? key,
+    super.key,
     required this.onSaveFrom,
     required this.onSaveTo,
     required this.onFetchPlan,
     required this.onReset,
     required this.onSwap,
     required this.selectPositionOnPage,
-  }) : super(key: key);
+  });
 
   final void Function(TrufiLocation) onSaveFrom;
   final void Function(TrufiLocation) onSaveTo;

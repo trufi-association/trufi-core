@@ -11,11 +11,11 @@ class TransitLeg extends StatelessWidget {
   final Color? forcedColor;
 
   const TransitLeg({
-    Key? key,
+    super.key,
     required this.leg,
     required this.moveTo,
     this.forcedColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

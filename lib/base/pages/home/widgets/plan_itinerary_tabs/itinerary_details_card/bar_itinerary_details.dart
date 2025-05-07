@@ -9,9 +9,9 @@ import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 class BarItineraryDetails extends StatelessWidget {
   final Itinerary itinerary;
   const BarItineraryDetails({
-    Key? key,
+    super.key,
     required this.itinerary,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

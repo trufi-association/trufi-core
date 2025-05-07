@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 final theme = ThemeData.from(
+  useMaterial3: false,
   colorScheme: ColorScheme.fromSwatch(
     primarySwatch: const MaterialColor(
       0xff263238,
@@ -17,7 +18,6 @@ final theme = ThemeData.from(
         900: Color(0xff263238),
       },
     ),
-    primaryColorDark: const Color(0xff000000),
     accentColor: const Color(0xffd81b60),
     cardColor: Colors.white,
     backgroundColor: Colors.grey[50],
@@ -39,6 +39,7 @@ final theme = ThemeData.from(
 );
 
 final themeDark = ThemeData.from(
+  useMaterial3: false,
   colorScheme: ColorScheme.fromSwatch(
     primarySwatch: const MaterialColor(
       0xff263238,

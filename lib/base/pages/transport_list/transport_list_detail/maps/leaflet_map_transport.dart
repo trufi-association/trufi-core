@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
@@ -16,11 +16,11 @@ class LeafletMapTransport extends StatefulWidget {
   final Uri? shareBaseRouteUri;
 
   const LeafletMapTransport({
-    Key? key,
+    super.key,
     required this.trufiMapController,
     this.transportData,
     this.shareBaseRouteUri,
-  }) : super(key: key);
+  });
 
   @override
   State<LeafletMapTransport> createState() => _LeafletMapTransportState();
@@ -50,7 +50,8 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             Polyline(
               points: TrufiLatLng.toListLatLng(
                   widget.transportData?.geometry ?? []),
-              color: widget.transportData?.route?.backgroundColor ?? Colors.black,
+              color:
+                  widget.transportData?.route?.backgroundColor ?? Colors.black,
               strokeWidth: 6.0,
             ),
           ],
@@ -84,14 +85,13 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
   }
 
   void _handleOnMapPositionChanged(
-    MapPosition position,
+    MapCamera mapCamera,
     bool hasGesture,
   ) {
-    if (widget.trufiMapController.selectedBounds.isValid &&
-        position.bounds != null) {
+    if (widget.trufiMapController.selectedBounds != null) {
       _cropButtonKey.currentState?.setVisible(
-        visible: !position.bounds!
-            .containsBounds(widget.trufiMapController.selectedBounds),
+        visible: !mapCamera.visibleBounds
+            .containsBounds(widget.trufiMapController.selectedBounds!),
       );
     }
   }

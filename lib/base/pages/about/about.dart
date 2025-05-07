@@ -17,13 +17,13 @@ class AboutPage extends StatelessWidget {
   final Widget Function(BuildContext) drawerBuilder;
 
   const AboutPage({
-    Key? key,
+    super.key,
     required this.appName,
     required this.cityName,
     required this.countryName,
     required this.emailContact,
     required this.drawerBuilder,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class AboutPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     localizationA.tagline("$cityName, $countryName"),
-                    style: theme.textTheme.subtitle2?.copyWith(),
+                    style: theme.textTheme.titleSmall?.copyWith(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -112,7 +112,7 @@ class AboutPage extends StatelessWidget {
                             InkWell(
                               child: Text(
                                 '${localizationA.trufiWebsite}\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -131,7 +131,7 @@ class AboutPage extends StatelessWidget {
                             InkWell(
                               child: Text(
                                 '${localizationA.volunteerTrufi}\n',
-                                style: theme.textTheme.bodyText2?.copyWith(
+                                style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -192,7 +192,7 @@ class AboutPage extends StatelessWidget {
                 InkWell(
                   child: Text(
                     emailContact,
-                    style: theme.textTheme.bodyText2?.copyWith(
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.blue,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
@@ -207,12 +207,12 @@ class AboutPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 RichText(
                   text: TextSpan(
-                    style: theme.textTheme.bodyText2,
+                    style: theme.textTheme.bodyMedium,
                     text: localizationA.aboutOpenSource.split("GitHub")[0],
                     children: [
                       TextSpan(
                         text: 'Github',
-                        style: theme.textTheme.bodyText2?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
                           decoration: TextDecoration.underline,

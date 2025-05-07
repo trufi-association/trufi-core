@@ -10,12 +10,12 @@ class DurationComponent extends StatelessWidget {
   final String futureText;
 
   const DurationComponent({
-    Key? key,
+    super.key,
     required this.duration,
     required this.startTime,
     required this.endTime,
     this.futureText = '',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

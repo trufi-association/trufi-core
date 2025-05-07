@@ -15,7 +15,7 @@ class RouteNumber extends StatelessWidget {
   final String? mode;
 
   const RouteNumber({
-    Key? key,
+    super.key,
     this.transportMode,
     this.textColor,
     this.backgroundColor,
@@ -25,7 +25,7 @@ class RouteNumber extends StatelessWidget {
     this.duration,
     this.textContainer,
     this.mode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

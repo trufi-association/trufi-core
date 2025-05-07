@@ -5,9 +5,9 @@ import 'package:trufi_core/base/blocs/providers/uni_link_provider/uni_link_provi
 
 class AppLifecycleReactor extends StatefulWidget {
   const AppLifecycleReactor({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

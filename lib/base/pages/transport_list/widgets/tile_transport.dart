@@ -7,10 +7,10 @@ class TileTransport extends StatelessWidget {
   final GestureTapCallback onTap;
 
   const TileTransport({
-    Key? key,
+    super.key,
     required this.patternOtp,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

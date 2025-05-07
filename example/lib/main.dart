@@ -18,13 +18,13 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "https://bo-cbba.sa.api.trufi-association.org/otp",
-          otpGraphqlEndpoint: "https://bo-cbba.sa.api.trufi-association.org/otp/index/graphql",
+          otpEndpoint: "https://navigator.trufi.app/otp",
+          otpGraphqlEndpoint: "https://navigator.trufi.app/otp/index/graphql",
           mapConfiguration: MapConfiguration(
             center: const TrufiLatLng(-17.392600, -66.158787),
           ),
           searchAssetPath: "assets/data/search.json",
-          photonUrl: "https://bo-cbba.sa.api.trufi-association.org/photon",
+          photonUrl: "https://navigator.trufi.app/photon",
         ),
       ],
       trufiRouter: TrufiRouter(
@@ -46,11 +46,11 @@ void main() async {
           ),
           shareBaseUri: Uri(
             scheme: "https",
-            host: "trufi.example",
+            host: "navigator.trufi.app",
           ),
           lifecycleReactorHandler: LifecycleReactorNotifications(
             url:
-                'https://api.busboy.app/static_files/notification.json',
+                'https://navigator.trufi.app/static_files/notification.json',
           ),
         ),
       ),

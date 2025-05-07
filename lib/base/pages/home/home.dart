@@ -31,12 +31,12 @@ class HomePage extends StatefulWidget {
   final AsyncExecutor asyncExecutor;
 
   const HomePage({
-    Key? key,
+    super.key,
     required this.drawerBuilder,
     required this.mapRouteProvider,
     required this.mapChooseLocationProvider,
     required this.asyncExecutor,
-  }) : super(key: key);
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -320,10 +320,10 @@ class UniLinkAlert extends StatelessWidget {
   final Future Function() defineFromLocation;
   final Future Function() defineToLocation;
   const UniLinkAlert({
-    Key? key,
+    super.key,
     required this.defineFromLocation,
     required this.defineToLocation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -356,7 +356,7 @@ class UniLinkAlert extends StatelessWidget {
               TrufiBaseLocalization.of(context).localeName == "en"
                   ? 'You can set the location as an origin or destination point'
                   : "Puede establecer la ubicación como un punto de origen o de destino",
-              style: theme.textTheme.bodyText2?.copyWith(fontSize: 14),
+              style: theme.textTheme.bodyMedium?.copyWith(fontSize: 14),
             ),
           ),
           ElevatedButton(

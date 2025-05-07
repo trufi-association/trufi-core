@@ -19,14 +19,14 @@ class SuggestionList extends StatelessWidget {
   final ValueChanged<TrufiStreet> onStreetTapped;
   final SelectLocationData selectPositionOnPage;
   const SuggestionList({
-    Key? key,
+    super.key,
     required this.query,
     required this.isOrigin,
     required this.onSelected,
     required this.onSelectedMap,
     required this.onStreetTapped,
     required this.selectPositionOnPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -321,10 +321,10 @@ class _BuildErrorList extends StatelessWidget {
   final String error;
 
   const _BuildErrorList({
-    Key? key,
+    super.key,
     required this.title,
     required this.error,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -343,9 +343,9 @@ class _BuildTitle extends StatelessWidget {
   final String title;
 
   const _BuildTitle({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -372,9 +372,9 @@ class _BuildErrorItem extends StatelessWidget {
   final String title;
 
   const _BuildErrorItem({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -394,13 +394,13 @@ class BuildItem extends StatelessWidget {
   final Widget? trailing;
 
   const BuildItem({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.iconData,
     required this.title,
     this.subtitle,
     this.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
