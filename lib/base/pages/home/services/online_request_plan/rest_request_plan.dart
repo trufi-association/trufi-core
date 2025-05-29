@@ -82,13 +82,11 @@ class RestRequestPlanService implements RequestPlanService {
     final plan =
         Plan.fromJson(json.decode(responseBody) as Map<String, dynamic>);
     plan.itineraries?.sort((a, b) {
-      double weightedSumA = (a.transfers * 0.65) +
-          (a.walkDistance * 0.3) +
-          ((a.distance / 100) * 0.05);
-      double weightedSumB = (b.transfers * 0.65) +
-          (b.walkDistance * 0.3) +
-          ((b.distance / 100) * 0.05);
-      return weightedSumA.compareTo(weightedSumB);
+      int cmp = a.transfers.compareTo(b.transfers);
+      if (cmp != 0) return cmp;
+      cmp = a.walkDistance.compareTo(b.walkDistance);
+      if (cmp != 0) return cmp;
+      return a.distance.compareTo(b.distance);
     });
 
     return plan;
