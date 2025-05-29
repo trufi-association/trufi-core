@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/simple_opening_hours.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class TransitLeg extends StatelessWidget {
@@ -21,15 +22,55 @@ class TransitLeg extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiBaseLocalization.of(context);
+    SimpleOpeningHours? openingHours = leg.getOpeningHours;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (openingHours == null)
+          Container()
+        else if (openingHours.isOpenNow())
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: Colors.black, width: 0.5)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.circle,
+                  color: Color(0xFF55FF33),
+                  size: 10,
+                ),
+                SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  localization.openingHoursServiceActive,
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          )
+        else
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            decoration: BoxDecoration(
+              color: Color(0xFFD72A2A),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              localization.openingHoursCurrentlyOutService,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            ),
+          ),
         InkWell(
           onTap: () {
             moveTo(TrufiLatLng(leg.fromPlace.lat, leg.fromPlace.lon));
           },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,5,5),
+            padding: const EdgeInsets.fromLTRB(0, 5, 5, 5),
             child: RouteNumber(
               transportMode: leg.transportMode,
               backgroundColor: forcedColor ?? leg.backgroundColor,

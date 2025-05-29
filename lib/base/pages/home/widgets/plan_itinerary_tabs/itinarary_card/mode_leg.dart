@@ -105,15 +105,37 @@ class RouteLeg extends StatelessWidget {
               ? (maxWidth * perc)
               : 24,
       height: 30,
-      child: ClipRRect(
-        child: IconTransport(
-          bacgroundColor: forcedColor ?? leg.backgroundColor,
-          color: leg.primaryColor,
-          icon: leg.transportMode.getImage(color: leg.primaryColor),
-          text: (maxWidth * perc - 24) >= ((leg.headSign.length) * 8.5)
-              ? leg.headSign
-              : '',
-        ),
+      child: Stack(
+        fit: StackFit.expand,
+        clipBehavior: Clip.none,
+        children: [
+          ClipRRect(
+            child: IconTransport(
+              bacgroundColor: forcedColor ?? leg.backgroundColor,
+              color: leg.primaryColor,
+              icon: leg.transportMode.getImage(color: leg.primaryColor),
+              text: (maxWidth * perc - 24) >= ((leg.headSign.length) * 8.5)
+                  ? leg.headSign
+                  : '',
+            ),
+          ),
+          if (leg.getOpeningHours != null && !leg.getOpeningHours!.isOpenNow())
+            Positioned(
+              top: -10,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50)
+                ),
+                child: Icon(
+                  Icons.error,
+                  size: 20,
+                  color: Color(0xFFD72A2A),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

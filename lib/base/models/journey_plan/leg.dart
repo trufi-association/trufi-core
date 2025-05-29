@@ -10,6 +10,7 @@ class Leg extends Equatable {
   static const _routeColor = "routeColor";
   static const _routeShortName = "routeShortName";
   static const _routeLongName = "routeLongName";
+  static const _routeId = "routeId";
   static const _toPlace = "to";
   static const _fromPlace = "from";
   static const _startTime = "startTime";
@@ -23,6 +24,7 @@ class Leg extends Equatable {
   final String? routeColor;
   final String? shortName;
   final String? routeLongName;
+  final String? routeId;
   final double distance;
   final Duration duration;
   final Place toPlace;
@@ -40,6 +42,7 @@ class Leg extends Equatable {
     required this.routeColor,
     required this.shortName,
     required this.routeLongName,
+    required this.routeId,
     required this.distance,
     required this.duration,
     required this.toPlace,
@@ -71,6 +74,7 @@ class Leg extends Equatable {
                   : null)
           : null,
       routeLongName: json[_routeLongName] as String?,
+      routeId: json[_routeId],
       distance: json[_distance] as double,
       duration: Duration(
           seconds: (double.tryParse(json[_duration].toString()) ?? 0).toInt()),
@@ -99,6 +103,7 @@ class Leg extends Equatable {
       _route: route?.toJson() ?? shortName,
       _routeColor: routeColor,
       _routeLongName: routeLongName,
+      _routeId: routeId,
       _distance: distance,
       _duration: duration.inSeconds,
       _toPlace: toPlace.toJson(),
@@ -118,6 +123,7 @@ class Leg extends Equatable {
     String? routeColor,
     String? shortName,
     String? routeLongName,
+    String? routeId,
     double? distance,
     Duration? duration,
     Place? toPlace,
@@ -138,6 +144,7 @@ class Leg extends Equatable {
       routeColor: routeColor ?? this.routeColor,
       shortName: shortName ?? this.shortName,
       routeLongName: routeLongName ?? this.routeLongName,
+      routeId: routeId ?? this.routeId,
       distance: distance ?? this.distance,
       duration: duration ?? this.duration,
       toPlace: toPlace ?? this.toPlace,
@@ -179,6 +186,17 @@ class Leg extends Equatable {
         : transportMode.backgroundColor;
   }
 
+  SimpleOpeningHours? get getOpeningHours {
+    SimpleOpeningHours? openingHours;
+    String? id = routeId?.split(':').last;
+    if (routeId != null && oaxacaTransportOpenningHours.containsKey(id)) {
+      openingHours = SimpleOpeningHours(
+        oaxacaTransportOpenningHours[id]!,
+      );
+    }
+    return openingHours;
+  }
+
   @override
   List<Object?> get props => [
         points,
@@ -187,6 +205,7 @@ class Leg extends Equatable {
         routeColor,
         shortName,
         routeLongName,
+        routeId,
         distance,
         duration,
         toPlace,
