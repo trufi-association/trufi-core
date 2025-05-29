@@ -1,5 +1,7 @@
 import 'trufi_base_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Spanish Castilian (`es`).
 class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
   TrufiBaseLocalizationEs([String locale = 'es']) : super(locale);
@@ -258,6 +260,12 @@ class TrufiBaseLocalizationEs extends TrufiBaseLocalization {
 
   @override
   String get selectYourPointInterest => 'Puntos de Interés';
+
+  @override
+  String get openingHoursServiceActive => 'Servicio activo';
+
+  @override
+  String get openingHoursCurrentlyOutService => '¡Actualmente fuera de servicio!';
 
   @override
   String get themeModeDark => 'Modo oscuro';

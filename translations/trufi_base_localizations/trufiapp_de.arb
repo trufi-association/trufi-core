@@ -350,6 +350,8 @@
         "description": "Label for the Map types"
     },
     "selectYourPointInterest": "Interessenspunkte",
+    "openingHoursServiceActive": "Dienst aktiv",
+    "openingHoursCurrentlyOutService": "Derzeit außer Betrieb!",
     "themeModeDark": "Dunkles Thema",
     "themeModeLight": "Leichtes Thema",
     "themeModeSystem": "Systemeinstellung"

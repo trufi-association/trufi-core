@@ -1,5 +1,7 @@
 import 'trufi_base_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for English (`en`).
 class TrufiBaseLocalizationEn extends TrufiBaseLocalization {
   TrufiBaseLocalizationEn([String locale = 'en']) : super(locale);
@@ -258,6 +260,12 @@ class TrufiBaseLocalizationEn extends TrufiBaseLocalization {
 
   @override
   String get selectYourPointInterest => 'Points of Interest';
+
+  @override
+  String get openingHoursServiceActive => 'Service active';
+
+  @override
+  String get openingHoursCurrentlyOutService => 'Currently out of service!';
 
   @override
   String get themeModeDark => 'Dark Theme';

@@ -1,5 +1,7 @@
 import 'trufi_base_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Portuguese (`pt`).
 class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
   TrufiBaseLocalizationPt([String locale = 'pt']) : super(locale);
@@ -258,6 +260,12 @@ class TrufiBaseLocalizationPt extends TrufiBaseLocalization {
 
   @override
   String get selectYourPointInterest => 'Pontos de Interesse';
+
+  @override
+  String get openingHoursServiceActive => 'Service active';
+
+  @override
+  String get openingHoursCurrentlyOutService => 'Currently out of service!';
 
   @override
   String get themeModeDark => 'Tema escuro';

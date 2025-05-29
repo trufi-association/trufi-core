@@ -12,6 +12,8 @@ import 'trufi_base_localizations_fr.dart';
 import 'trufi_base_localizations_it.dart';
 import 'trufi_base_localizations_pt.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of TrufiBaseLocalization
 /// returned by `TrufiBaseLocalization.of(context)`.
 ///
@@ -586,6 +588,18 @@ abstract class TrufiBaseLocalization {
   /// In pt, this message translates to:
   /// **'Pontos de Interesse'**
   String get selectYourPointInterest;
+
+  /// No description provided for @openingHoursServiceActive.
+  ///
+  /// In pt, this message translates to:
+  /// **'Service active'**
+  String get openingHoursServiceActive;
+
+  /// No description provided for @openingHoursCurrentlyOutService.
+  ///
+  /// In pt, this message translates to:
+  /// **'Currently out of service!'**
+  String get openingHoursCurrentlyOutService;
 
   /// No description provided for @themeModeDark.
   ///
