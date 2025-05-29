@@ -5,6 +5,7 @@ enum CityInstance {
   zitacuaro,
   zamora,
   uruapan,
+  oaxaca,
 }
 
 extension CityInstanceExtension on CityInstance {
@@ -12,6 +13,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.zitacuaro: 'zitacuaro',
     CityInstance.zamora: 'zamora',
     CityInstance.uruapan: 'uruapan',
+    CityInstance.oaxaca: 'oaxaca',
   };
 
   static final Map<String, CityInstance> _fromValueMap = _toValueMap.map(
@@ -22,18 +24,21 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.zitacuaro: "https://rutometro.trufi.dev/otp",
     CityInstance.zamora: "https://rutometro.trufi.dev/zamora/otp",
     CityInstance.uruapan: "https://rutometro.trufi.dev/uruapan/otp",
+    CityInstance.oaxaca: "https://2-4-0.otp.oaxaca.trufi.dev/otp/routers/default",
   };
 
   static final bboxValues = <CityInstance, String>{
     CityInstance.zitacuaro: "-100.477837,19.201667,-100.211988,19.545306",
     CityInstance.zamora: "-102.50253,19.920427,-102.1755,20.106905",
     CityInstance.uruapan: "-102.108526,19.337806,-101.99688,19.50949",
+    CityInstance.oaxaca: "-98.552707,15.657169,-93.867427,18.669688",
   };
 
   static final centerValues = <CityInstance, TrufiLatLng>{
     CityInstance.zitacuaro: TrufiLatLng(19.4323039, -100.3554035),
     CityInstance.zamora: TrufiLatLng(19.9807, -102.2835),
     CityInstance.uruapan: TrufiLatLng(19.4136, -102.0565),
+    CityInstance.oaxaca: TrufiLatLng(17.065, -96.721),
   };
 
   String toValue() => _toValueMap[this]!;

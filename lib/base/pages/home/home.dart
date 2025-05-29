@@ -216,7 +216,10 @@ class _HomePageState extends State<HomePage>
                               : CitySelectionManager().currentCity ==
                                       CityInstance.zamora
                                   ? theme.colorScheme.primary
-                                  : Colors.blue,
+                                  : CitySelectionManager().currentCity ==
+                                          CityInstance.oaxaca
+                                      ? Colors.purple
+                                      : Colors.blue,
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: const [
                             BoxShadow(
@@ -255,7 +258,11 @@ class _HomePageState extends State<HomePage>
                                         : CitySelectionManager().currentCity ==
                                                 CityInstance.zamora
                                             ? "Zamora"
-                                            : "Uruapan",
+                                            : CitySelectionManager()
+                                                        .currentCity ==
+                                                    CityInstance.oaxaca
+                                                ? "Oaxaca"
+                                                : "Uruapan",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color:
