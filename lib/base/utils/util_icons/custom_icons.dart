@@ -107,11 +107,17 @@ Widget carpoolIcon({Color? color}) {
 }
 
 String decodeFillColor(Color? color) {
+  // Default color is black
   String stringColor = '#000000';
   if (color != null) {
-    stringColor = color == Colors.transparent
-        ? 'none'
-        : "#${color.value.toRadixString(16)}";
+    if (color == Colors.transparent) {
+      stringColor = 'none';
+    } else {
+      // Extract ARGB components
+      int value = color.value;
+      // Format to #RRGGBB (skip alpha value)
+      stringColor = '#${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
+    }
   }
   return stringColor;
 }
