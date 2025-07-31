@@ -86,7 +86,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
+          // forcedColor: isPrimary ? Colors.green : null,
         ));
         isPrimary = !isPrimary;
       } else if (leg.transportMode == TransportMode.bicycle && renderBar) {
@@ -101,7 +101,7 @@ class ItinerarySummaryAdvanced extends StatelessWidget {
           maxWidth: newMaxWidth,
           leg: leg,
           legLength: legLength,
-          forcedColor: isPrimary ? Colors.green : null,
+          // forcedColor: isPrimary ? Colors.green : null,
         ));
         isPrimary = !isPrimary;
       }

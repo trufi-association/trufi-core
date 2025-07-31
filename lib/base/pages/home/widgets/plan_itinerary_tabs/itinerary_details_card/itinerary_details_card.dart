@@ -115,7 +115,7 @@ class _ItineraryDetailsCardState extends State<ItineraryDetailsCard> {
                               _scrolling(index);
                             }
                           },
-                          forcedColor: isPrimary ? null : Colors.green,
+                          // forcedColor: isPrimary ? null : Colors.green,
                         );
                       })
                     else
