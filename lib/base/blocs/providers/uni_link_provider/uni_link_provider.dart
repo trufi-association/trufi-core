@@ -10,7 +10,7 @@ import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
 import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
 
 import 'exception_parse.dart';
 import 'geo_location.dart';
@@ -41,7 +41,7 @@ class UniLinkProvider {
     if (!_isUsedInitialUri) {
       _isUsedInitialUri = true;
       try {
-        final initialURI = await getInitialUri();
+        final initialURI = await AppLinks().getInitialLink();
         if (initialURI != null) {
           _parseUniLink(context: context, uri: initialURI);
         }
@@ -55,7 +55,7 @@ class UniLinkProvider {
     required BuildContext context,
   }) {
     if (!kIsWeb && !_isRegisteredListening) {
-      _streamSubscription = uriLinkStream.listen((Uri? uri) {
+      _streamSubscription = AppLinks().uriLinkStream.listen((Uri? uri) {
         _parseUniLink(context: context, uri: uri);
       }, onError: (e) {
         debugPrint(e.toString());
