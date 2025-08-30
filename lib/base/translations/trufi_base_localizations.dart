@@ -478,13 +478,13 @@ abstract class TrufiBaseLocalization {
   /// Menu item that shows the map/planned trip
   ///
   /// In pt, this message translates to:
-  /// **'Route planner'**
+  /// **'Planejador de rotas'**
   String get menuConnections;
 
   /// No description provided for @menuSocialMedia.
   ///
   /// In pt, this message translates to:
-  /// **'Social media'**
+  /// **'Mídia social'**
   String get menuSocialMedia;
 
   /// Menu item that shows the bus list page
@@ -600,6 +600,66 @@ abstract class TrufiBaseLocalization {
   /// In pt, this message translates to:
   /// **'Currently out of service!'**
   String get openingHoursCurrentlyOutService;
+
+  /// No description provided for @commonOpenAlways.
+  ///
+  /// In pt, this message translates to:
+  /// **'Open 24/7'**
+  String get commonOpenAlways;
+
+  /// No description provided for @commonClosed.
+  ///
+  /// In pt, this message translates to:
+  /// **'Closed'**
+  String get commonClosed;
+
+  /// No description provided for @weekdayMO.
+  ///
+  /// In pt, this message translates to:
+  /// **'Monday'**
+  String get weekdayMO;
+
+  /// No description provided for @weekdayTU.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tuesday'**
+  String get weekdayTU;
+
+  /// No description provided for @weekdayWE.
+  ///
+  /// In pt, this message translates to:
+  /// **'Wednesday'**
+  String get weekdayWE;
+
+  /// No description provided for @weekdayTH.
+  ///
+  /// In pt, this message translates to:
+  /// **'Thursday'**
+  String get weekdayTH;
+
+  /// No description provided for @weekdayFR.
+  ///
+  /// In pt, this message translates to:
+  /// **'Friday'**
+  String get weekdayFR;
+
+  /// No description provided for @weekdaySA.
+  ///
+  /// In pt, this message translates to:
+  /// **'Saturday'**
+  String get weekdaySA;
+
+  /// No description provided for @weekdaySU.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sunday'**
+  String get weekdaySU;
+
+  /// No description provided for @weekdayPH.
+  ///
+  /// In pt, this message translates to:
+  /// **'Public holiday'**
+  String get weekdayPH;
 
   /// No description provided for @themeModeDark.
   ///

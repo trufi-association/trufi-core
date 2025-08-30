@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/route_number.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/transit_service_hours/opening_time_table.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/simple_opening_hours.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class TransitLeg extends StatelessWidget {
   final Leg leg;
@@ -28,42 +30,10 @@ class TransitLeg extends StatelessWidget {
       children: [
         if (openingHours == null)
           Container()
-        else if (openingHours.isOpenNow())
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: Colors.black, width: 0.5)),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.circle,
-                  color: Color(0xFF55FF33),
-                  size: 10,
-                ),
-                SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  localization.openingHoursServiceActive,
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          )
         else
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-            decoration: BoxDecoration(
-              color: Color(0xFFD72A2A),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              localization.openingHoursCurrentlyOutService,
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-            ),
+          OpeningTimeTable(
+            openingHours: openingHours,
+            isSimpleComponent: true,
           ),
         InkWell(
           onTap: () {
@@ -74,7 +44,9 @@ class TransitLeg extends StatelessWidget {
             child: RouteNumber(
               transportMode: leg.transportMode,
               backgroundColor: forcedColor ?? leg.backgroundColor,
-              textColor: leg.primaryColor,
+              textColor: leg.routeTextColor != null
+                  ? hexToColor(leg.routeTextColor)
+                  : leg.primaryColor,
               text: leg.headSign,
               tripHeadSing: leg.headSign,
               duration: leg.durationLeg(localization),

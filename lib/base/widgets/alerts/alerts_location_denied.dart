@@ -14,12 +14,13 @@ class AlertLocationServicesDenied extends StatelessWidget {
       title: Text(localization.alertLocationServicesDeniedTitle),
       content: Text(localization.alertLocationServicesDeniedMessage),
       actions: [
+        CancelButton(),
         OKButton(
           onPressed: () async {
             Navigator.pop(context);
             await Geolocator.openAppSettings();
           },
-        )
+        ),
       ],
     );
   }
@@ -34,7 +35,7 @@ class AlertLocationServicesDeniedWeb extends StatelessWidget {
     return BaseBuildAlert(
       title: Text(localization.alertLocationServicesDeniedTitle),
       content: Text(localization.alertLocationServicesDeniedMessage),
-      actions: const [OKButton()],
+      actions: const [CancelButton(), OKButton()],
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/transit_service_hours/opening_time_table.dart';
 import 'package:trufi_core/base/pages/transport_list/translations/transport_list_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/bottom_stops_detail.dart';
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
@@ -112,164 +115,202 @@ class _TransportListDetailState extends State<TransportListDetail> {
     final localization = TrufiBaseLocalization.of(context);
     final localizationTL = TransportListLocalization.of(context);
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(65),
-        child: AppBar(
-          titleSpacing: 0,
-          toolbarHeight: 65,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (transitRoute?.route?.mode != null)
-                Text(
-                  '${transitRoute!.route!.mode!.getTranslate(localization)} - ${transitRoute!.route?.shortName ?? ''}',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              Row(
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(65),
+            child: AppBar(
+              titleSpacing: 0,
+              toolbarHeight: 65,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Text(
-                      transitRoute?.route?.longNameData ?? '',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.grey[400],
-                        fontSize: 13,
-                      ),
-                      maxLines: 2,
+                  if (transitRoute?.route?.mode != null)
+                    Text(
+                      '${transitRoute!.route!.mode!.getTranslate(localization)} - ${transitRoute!.route?.shortName ?? ''}',
+                      style: const TextStyle(fontSize: 18),
                     ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          transitRoute?.route?.longNameData ?? '',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[400],
+                            fontSize: 13,
+                          ),
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-          actions: [
-            TrufiPopupMenuButton(
-              position: PopupMenuPosition.over,
-              offset: const Offset(0, 56),
-              icon: const Icon(Icons.more_vert),
-              splashRadius: 20,
-              itemBuilder: (BuildContext itemContext) =>
-                  <PopupMenuEntry<String>>[
-                if (transitRoute != null &&
-                    widget.mapTransportProvider.shareBaseRouteUri != null)
-                  PopupMenuItem(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                    value: "ShareRoute",
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.share,
-                          color: theme.iconTheme.color,
+              actions: [
+                TrufiPopupMenuButton(
+                  position: PopupMenuPosition.over,
+                  offset: const Offset(0, 56),
+                  icon: const Icon(Icons.more_vert),
+                  splashRadius: 20,
+                  itemBuilder: (BuildContext itemContext) =>
+                      <PopupMenuEntry<String>>[
+                    if (transitRoute != null &&
+                        widget.mapTransportProvider.shareBaseRouteUri != null)
+                      PopupMenuItem(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 10),
+                        value: "ShareRoute",
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.share,
+                              color: theme.iconTheme.color,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(localizationTL.shareRoute)
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Text(localizationTL.shareRoute)
-                      ],
-                    ),
-                  ),
-                // PopupMenuItem(
-                //   padding:
-                //       const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                //   value: "OpenEditor",
-                //   child: Row(
-                //     children: [
-                //       Icon(
-                //         Icons.edit_location_alt,
-                //         color: theme.iconTheme.color,
-                //       ),
-                //       const SizedBox(width: 8),
-                //       const Text('Open with editor'),
-                //     ],
-                //   ),
-                // ),
-                // PopupMenuItem(
-                //   padding:
-                //       const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                //   value: "ReportRoute",
-                //   child: Row(
-                //     children: [
-                //       Icon(
-                //         Icons.error,
-                //         color: theme.iconTheme.color,
-                //       ),
-                //       const SizedBox(width: 8),
-                //       const Text('Report Route')
-                //     ],
-                //   ),
-                // ),
+                      ),
+                    // PopupMenuItem(
+                    //   padding:
+                    //       const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    //   value: "OpenEditor",
+                    //   child: Row(
+                    //     children: [
+                    //       Icon(
+                    //         Icons.edit_location_alt,
+                    //         color: theme.iconTheme.color,
+                    //       ),
+                    //       const SizedBox(width: 8),
+                    //       const Text('Open with editor'),
+                    //     ],
+                    //   ),
+                    // ),
+                    // PopupMenuItem(
+                    //   padding:
+                    //       const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    //   value: "ReportRoute",
+                    //   child: Row(
+                    //     children: [
+                    //       Icon(
+                    //         Icons.error,
+                    //         color: theme.iconTheme.color,
+                    //       ),
+                    //       const SizedBox(width: 8),
+                    //       const Text('Report Route')
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                  onSelected: (value) async {
+                    switch (value) {
+                      case 'ShareRoute':
+                        Share.share(widget
+                            .mapTransportProvider.shareBaseRouteUri!
+                            .replace(
+                          queryParameters: {
+                            "id": transitRoute!.code,
+                          },
+                        ).toString());
+                        break;
+                      case 'OpenEditor':
+                        // await RouteEditorScreen.editRoute(
+                        //   context,
+                        //   mapTransportProvider: widget.mapTransportProvider,
+                        // );
+                        break;
+                      case 'ReportRoute':
+                        break;
+                      default:
+                    }
+                  },
+                ),
               ],
-              onSelected: (value) async {
-                switch (value) {
-                  case 'ShareRoute':
-                    Share.share(
-                        widget.mapTransportProvider.shareBaseRouteUri!.replace(
-                      queryParameters: {
-                        "id": transitRoute!.code,
-                      },
-                    ).toString());
-                    break;
-                  case 'OpenEditor':
-                    // await RouteEditorScreen.editRoute(
-                    //   context,
-                    //   mapTransportProvider: widget.mapTransportProvider,
-                    // );
-                    break;
-                  case 'ReportRoute':
-                    break;
-                  default:
-                }
-              },
             ),
-          ],
-        ),
-      ),
-      body: Container(
-        color: theme.cardColor,
-        child: SafeArea(
-          child: BlocBuilder<RouteTransportsCubit, RouteTransportsState>(
-            builder: (context, state) {
-              return CustomScrollableContainer(
-                openedPosition: 200,
-                bottomPadding: 0,
-                body: Stack(
-                  children: [
-                    Column(
+          ),
+          body: Container(
+            color: theme.cardColor,
+            child: SafeArea(
+              child: BlocBuilder<RouteTransportsCubit, RouteTransportsState>(
+                builder: (context, state) {
+                  return CustomScrollableContainer(
+                    openedPosition: 200,
+                    bottomPadding: 0,
+                    body: Stack(
                       children: [
-                        if (state.isGeometryLoading)
-                          const LinearProgressIndicator(),
-                        Expanded(
-                          child: widget.mapTransportProvider.mapTransportBuilder(
-                            context,
-                            transitRoute,
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: transitRoute?.getOpeningHours != null
+                                  ? 30
+                                  : 0),
+                          child: Column(
+                            children: [
+                              if (state.isGeometryLoading)
+                                const LinearProgressIndicator(),
+                              Expanded(
+                                child: widget.mapTransportProvider
+                                    .mapTransportBuilder(
+                                  context,
+                                  transitRoute,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-                panel: !state.isGeometryLoading &&
-                        transitRoute != null &&
-                        transitRoute!.stops != null
-                    ? BottomStopsDetails(
-                        routeOtp: transitRoute!.route!,
-                        stops: transitRoute!.stops ?? [],
-                        geometry: transitRoute!.geometry!,
-                        moveTo: (point) {
-                          widget.mapTransportProvider.trufiMapController.move(
-                            center: point,
-                            zoom: 18,
-                          );
-                        },
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-              );
-            },
+                    panel: !state.isGeometryLoading &&
+                            transitRoute != null &&
+                            transitRoute!.stops != null
+                        ? BottomStopsDetails(
+                            routeOtp: transitRoute!.route!,
+                            stops: transitRoute!.stops ?? [],
+                            geometry: transitRoute!.geometry!,
+                            moveTo: (point) {
+                              widget.mapTransportProvider.trufiMapController
+                                  .move(
+                                center: point,
+                                zoom: 18,
+                              );
+                            },
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                  );
+                },
+              ),
+            ),
           ),
         ),
-      ),
+        if (transitRoute == null || transitRoute?.getOpeningHours != null)
+          Positioned(
+            top: Platform.isAndroid ? 117 : 127,
+            left: 0,
+            right: 0,
+            child: Material(
+              color: theme.appBarTheme.backgroundColor,
+              // color: Colors.green,
+              child: Container(
+                height: Platform.isAndroid ? 35 : 30,
+              ),
+            ),
+          ),
+        if (transitRoute?.getOpeningHours != null)
+          Positioned(
+            top: 110,
+            left: 23,
+            right: 0,
+            child: Material(
+              color: Colors.transparent,
+              child: OpeningTimeTable(
+                openingHours: transitRoute!.getOpeningHours!,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

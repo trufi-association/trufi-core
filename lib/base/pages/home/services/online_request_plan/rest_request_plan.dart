@@ -37,8 +37,14 @@ class RestRequestPlanService implements RequestPlanService {
     TrufiLocation to,
     List<TransportMode> transportModes,
   ) async {
+    final fromCity = CitySelectionManager().detectCityByLocation(from.latLng);
+    final toCity = CitySelectionManager().detectCityByLocation(to.latLng);
+    if (fromCity == null || toCity == null || fromCity != toCity) {
+      throw FetchOnlineResponseException(
+          'El punto de inicio o destino no se encuentra dentro del área habilitada.');
+    }
     final Uri request = Uri.parse(
-      CitySelectionManager().currentCity.otpEndpoint + planPath,
+      toCity.otpEndpoint + planPath,
     ).replace(queryParameters: {
       "fromPlace": from.toString(),
       "toPlace": to.toString(),
@@ -88,7 +94,14 @@ class RestRequestPlanService implements RequestPlanService {
       if (cmp != 0) return cmp;
       return a.distance.compareTo(b.distance);
     });
+    final itinerariesExcludingOnlyWalk = plan.itineraries
+        ?.where(
+          (itinerary) => !itinerary.legs.every(
+            (leg) => leg.transportMode == TransportMode.walk,
+          ),
+        )
+        .toList();
 
-    return plan;
+    return plan.copyWith(itineraries: itinerariesExcludingOnlyWalk ?? []);
   }
 }

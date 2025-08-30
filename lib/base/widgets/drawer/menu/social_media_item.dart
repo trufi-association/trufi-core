@@ -100,6 +100,24 @@ class TiktokSocialMedia extends SocialMediaItem {
           },
         );
 }
+class LinkedinSocialMedia extends SocialMediaItem {
+  LinkedinSocialMedia(String url)
+      : super(
+          url: url,
+          buildIcon: (context) => SizedBox(
+            height: 24,
+            width: 24,
+            child: linkedinIcon(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.grey,
+            ),
+          ),
+          name: (BuildContext context) {
+            return TrufiBaseLocalization.of(context).followOnSocialMedia("Linkedin");
+          },
+        );
+}
 
 class WebSiteSocialMedia extends SocialMediaItem {
   WebSiteSocialMedia(String url)
@@ -127,6 +145,7 @@ class UrlSocialMedia {
   final String? urlTwitter;
   final String? urlWebSite;
   final String? urlTiktok;
+  final String? urlLinkedin;
 
   const UrlSocialMedia({
     this.urlFacebook,
@@ -134,6 +153,7 @@ class UrlSocialMedia {
     this.urlTwitter,
     this.urlWebSite,
     this.urlTiktok,
+    this.urlLinkedin,
   });
 
   bool get existUrl =>
@@ -141,7 +161,8 @@ class UrlSocialMedia {
       urlInstagram != null ||
       urlTwitter != null ||
       urlWebSite != null ||
-      urlTiktok != null;
+      urlTiktok != null ||
+      urlLinkedin != null;
 }
 
 TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
@@ -174,6 +195,8 @@ TrufiMenuItem defaultSocialMedia(UrlSocialMedia defaultUrls) {
               TiktokSocialMedia(defaultUrls.urlTiktok!),
             if (defaultUrls.urlWebSite != null)
               WebSiteSocialMedia(defaultUrls.urlWebSite!),
+            if (defaultUrls.urlLinkedin != null)
+              LinkedinSocialMedia(defaultUrls.urlLinkedin!),
           ].map((SocialMediaItem value) {
             return DropdownMenuItem<SocialMediaItem>(
               value: value,

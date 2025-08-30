@@ -17,7 +17,7 @@ Future<dynamic> onFetchError(BuildContext context, dynamic exception) async {
     case FetchOnlineResponseException:
       return _showErrorAlert(
         context: context,
-        error: localization.searchFailLoadingPlan,
+        error: (exception as FetchOnlineResponseException).toString(),
       );
     case FetchOnlinePlanException:
       return showTrufiDialog(

@@ -8,6 +8,7 @@ class Leg extends Equatable {
   static const _mode = "mode";
   static const _route = "route";
   static const _routeColor = "routeColor";
+  static const _routeTextColor = "routeTextColor";
   static const _routeShortName = "routeShortName";
   static const _routeLongName = "routeLongName";
   static const _routeId = "routeId";
@@ -22,6 +23,7 @@ class Leg extends Equatable {
   final TransportMode transportMode;
   final RouteInfo? route;
   final String? routeColor;
+  final String? routeTextColor;
   final String? shortName;
   final String? routeLongName;
   final String? routeId;
@@ -40,6 +42,7 @@ class Leg extends Equatable {
     required this.transportMode,
     required this.route,
     required this.routeColor,
+    required this.routeTextColor,
     required this.shortName,
     required this.routeLongName,
     required this.routeId,
@@ -66,6 +69,7 @@ class Leg extends Equatable {
               : null)
           : null,
       routeColor: json[_routeColor] as String?,
+      routeTextColor: json[_routeTextColor] as String?,
       shortName: json[_route] != null
           ? json[_routeShortName] != null
               ? json[_routeShortName] as String
@@ -102,6 +106,7 @@ class Leg extends Equatable {
       _mode: transportMode.name,
       _route: route?.toJson() ?? shortName,
       _routeColor: routeColor,
+      _routeTextColor: routeTextColor,
       _routeLongName: routeLongName,
       _routeId: routeId,
       _distance: distance,
@@ -121,6 +126,7 @@ class Leg extends Equatable {
     TransportMode? transportMode,
     RouteInfo? route,
     String? routeColor,
+    String? routeTextColor,
     String? shortName,
     String? routeLongName,
     String? routeId,
@@ -142,6 +148,7 @@ class Leg extends Equatable {
       transportMode: transportMode ?? this.transportMode,
       route: route ?? this.route,
       routeColor: routeColor ?? this.routeColor,
+      routeTextColor: routeTextColor ?? this.routeTextColor,
       shortName: shortName ?? this.shortName,
       routeLongName: routeLongName ?? this.routeLongName,
       routeId: routeId ?? this.routeId,
@@ -203,6 +210,7 @@ class Leg extends Equatable {
         transportMode,
         route,
         routeColor,
+        routeTextColor,
         shortName,
         routeLongName,
         routeId,

@@ -124,7 +124,7 @@ class TrufiLocation implements TrufiPlace {
 
   @override
   String toString() {
-    return '$latitude,$longitude';
+    return '$description::$latitude,$longitude';
   }
 
   String displayName(

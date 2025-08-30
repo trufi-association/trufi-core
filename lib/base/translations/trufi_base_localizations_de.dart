@@ -268,6 +268,36 @@ class TrufiBaseLocalizationDe extends TrufiBaseLocalization {
   String get openingHoursCurrentlyOutService => 'Derzeit außer Betrieb!';
 
   @override
+  String get commonOpenAlways => 'Durchgängig geöffnet';
+
+  @override
+  String get commonClosed => 'Geschlossen';
+
+  @override
+  String get weekdayMO => 'Montag';
+
+  @override
+  String get weekdayTU => 'Dienstag';
+
+  @override
+  String get weekdayWE => 'Mittwoch';
+
+  @override
+  String get weekdayTH => 'Donnerstag';
+
+  @override
+  String get weekdayFR => 'Freitag';
+
+  @override
+  String get weekdaySA => 'Samstag';
+
+  @override
+  String get weekdaySU => 'Sonntag';
+
+  @override
+  String get weekdayPH => 'Gesetzlicher Feiertag';
+
+  @override
   String get themeModeDark => 'Dunkles Thema';
 
   @override

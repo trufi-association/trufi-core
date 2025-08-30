@@ -1,5 +1,5 @@
 const String allPatterns = r'''
- {
+query {
   patterns{
     id
     name

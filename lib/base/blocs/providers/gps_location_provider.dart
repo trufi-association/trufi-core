@@ -75,20 +75,60 @@ class GPSLocationProvider {
     });
   }
 
-  Future<void> startLocation(BuildContext context, bool mounted) async {
+  Future<TrufiLatLng?> startLocation(BuildContext context, bool mounted) async {
     final LocationPermission status = await Geolocator.checkPermission();
     // check GPS Permision Platform(Web, Android and iOS)
-    if (!mounted) return;
+    if (!mounted) return null;
     await _checkGPSPermisionPlatform(context, status);
 
     // listen current location
-    _locationStreamSubscription ??= Geolocator.getPositionStream(
-        locationSettings: const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 5,
-    )).listen((position) {
-      _streamLocation.add(TrufiLatLng(position.latitude, position.longitude));
+    final locationStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 5,
+      ),
+    );
+
+    final firstPosition = await locationStream.first;
+    final firstLocation =
+        TrufiLatLng(firstPosition.latitude, firstPosition.longitude);
+
+    _locationStreamSubscription ??= locationStream.listen((position) {
+      final liveLocation = TrufiLatLng(position.latitude, position.longitude);
+      _streamLocation.add(liveLocation);
     });
+
+    return firstLocation;
+  }
+
+  Future<TrufiLatLng?> startCityLocation(
+      BuildContext context, bool mounted) async {
+    final LocationPermission status = await Geolocator.checkPermission();
+    if ([
+      LocationPermission.denied,
+      LocationPermission.deniedForever,
+      LocationPermission.unableToDetermine,
+    ].contains(status)) {
+      return null;
+    }
+    // listen current location
+    final locationStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 5,
+      ),
+    );
+
+    final firstPosition = await locationStream.first;
+    final firstLocation =
+        TrufiLatLng(firstPosition.latitude, firstPosition.longitude);
+
+    _locationStreamSubscription ??= locationStream.listen((position) {
+      final liveLocation = TrufiLatLng(position.latitude, position.longitude);
+      _streamLocation.add(liveLocation);
+    });
+
+    return firstLocation;
   }
 
   Future<void> _checkGPSPermisionPlatform(
@@ -96,11 +136,11 @@ class GPSLocationProvider {
     LocationPermission status,
   ) async {
     if (kIsWeb) {
-      _checkWebPermision(context, status);
+      await _checkWebPermision(context, status);
     } else if (Platform.isIOS) {
-      _checkIOSPermision(context, status);
+      await _checkIOSPermision(context, status);
     } else {
-      _checkAndroidPermision(context, status);
+      await _checkAndroidPermision(context, status);
     }
   }
 
@@ -114,7 +154,7 @@ class GPSLocationProvider {
       if (requestStatus == LocationPermission.deniedForever) {
         await showTrufiDialog(
           context: context,
-          barrierDismissible: false,
+          barrierDismissible: true,
           builder: (context) => const AlertLocationServicesDenied(),
         );
         return;
@@ -132,7 +172,7 @@ class GPSLocationProvider {
     if (status == LocationPermission.deniedForever) {
       await showTrufiDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => const AlertLocationServicesDenied(),
       );
       return;
@@ -153,7 +193,7 @@ class GPSLocationProvider {
     if (status == LocationPermission.deniedForever) {
       await showTrufiDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) => const AlertLocationServicesDeniedWeb(),
       );
       return;

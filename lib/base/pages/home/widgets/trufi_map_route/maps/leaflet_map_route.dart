@@ -11,6 +11,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/load_location.dart';
+import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
 // import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/maps/share_itinerary_button.dart';
 import 'package:trufi_core/base/pages/home/widgets/trufi_map_route/route_map_manager/route_map_manager_cubit.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/leaflet_map.dart';
@@ -126,12 +127,11 @@ class _LeafletMapRouteState extends State<LeafletMapRoute>
                       onPressed: _handleOnCropPressed,
                     ),
                     const Padding(padding: EdgeInsets.all(4.0)),
-                    // TODO undo comment
-                    // if (routePlannerState.isPlanCorrect &&
-                    //     widget.shareBaseItineraryUri != null)
-                    //   ShareItineraryButton(
-                    //     shareBaseItineraryUri: widget.shareBaseItineraryUri!,
-                    //   ),
+                    if (routePlannerState.isPlanCorrect &&
+                        widget.shareBaseItineraryUri != null)
+                      ShareItineraryButton(
+                        shareBaseItineraryUri: widget.shareBaseItineraryUri!,
+                      ),
                   ],
                 ),
               );

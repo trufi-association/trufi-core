@@ -112,8 +112,8 @@ class RouteLeg extends StatelessWidget {
           ClipRRect(
             child: IconTransport(
               bacgroundColor: forcedColor ?? leg.backgroundColor,
-              color: leg.primaryColor,
-              icon: leg.transportMode.getImage(color: leg.primaryColor),
+              color: hexToColor(leg.routeTextColor),
+              icon: leg.transportMode.getImage(color: hexToColor(leg.routeTextColor)),
               text: (maxWidth * perc - 24) >= ((leg.headSign.length) * 8.5)
                   ? leg.headSign
                   : '',

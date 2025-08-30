@@ -17,3 +17,17 @@ GraphQLClient getClient(String endpoint) {
     link: httpLink,
   );
 }
+
+GraphQLClient updateClient({
+  required GraphQLClient graphQLClient,
+  required String endpoint,
+}) {
+  final uniqueId = TrufiAppId.getUniqueId;
+  final httpLink = HttpLink(
+    endpoint,
+    defaultHeaders: {
+      "User-Agent": "Trufi/GraphQL/$uniqueId",
+    },
+  );
+  return graphQLClient.copyWith(link: httpLink);
+}

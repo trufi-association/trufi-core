@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:trufi_core/base/models/transit_route/transit_info.dart';
 import 'package:trufi_core/base/models/transit_route/stops.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/simple_opening_hours.dart';
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/transport_opening_hours.dart';
 
 import 'route_report_history.dart';
 
@@ -83,6 +85,18 @@ class TransitRoute extends Equatable {
             : null,
         'reportHistory': reportHistory?.toJson(),
       };
+
+  SimpleOpeningHours? get getOpeningHours {
+    SimpleOpeningHours? openingHours;
+
+    String? id = code.split(':')[1];
+    if (oaxacaTransportOpenningHours.containsKey(id)) {
+      openingHours = SimpleOpeningHours(
+        oaxacaTransportOpenningHours[id]!,
+      );
+    }
+    return openingHours;
+  }
 
   @override
   List<Object?> get props => [

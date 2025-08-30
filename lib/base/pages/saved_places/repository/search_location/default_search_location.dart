@@ -32,11 +32,16 @@ class DefaultSearchLocation implements SearchLocationRepository {
     String? lang = "es",
   }) async {
     final extraQueryParameters = queryParameters ?? {};
+    final currentCity = CitySelectionManager().currentCity;
+    final lat = currentCity.center.latitude.toString();
+    final lon = currentCity.center.longitude.toString();
     final Uri request = Uri.parse(
       "$photonUrl/api",
     ).replace(queryParameters: {
       "q": query,
-      "bbox": CitySelectionManager().currentCity.bbox,
+      "bbox": currentCity.bboxString,
+      "lat": lat,
+      "lon": lon,
       ...extraQueryParameters,
     });
     final response = await _fetchRequest(request);

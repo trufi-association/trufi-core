@@ -1,5 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:flutter/material.dart';
+import 'package:routemaster/routemaster.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
+import 'package:trufi_core/base/pages/home/home.dart';
+import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
+import 'package:trufi_core/base/pages/home/widgets/city_selector/city_selector_dialog.dart';
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
@@ -15,6 +21,7 @@ class TrufiDrawer extends StatelessWidget {
     this.backgroundImageBuilder,
     required this.urlShareApp,
     required this.menuItems,
+    this.refreshPage,
   });
 
   final String appName;
@@ -24,6 +31,7 @@ class TrufiDrawer extends StatelessWidget {
   final String currentRoute;
   final List<List<TrufiMenuItem>> menuItems;
   final WidgetBuilder? backgroundImageBuilder;
+  final void Function()? refreshPage;
 
   @override
   Widget build(BuildContext context) {
@@ -65,25 +73,47 @@ class TrufiDrawer extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  appName,
-                                  style: const TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
+                          InkWell(
+                            onTap: () async {
+                              final city = await CitySelectorDialog.showModal(
+                                context,
+                                hideCloseButton: false,
+                                barrierDismissible: false,
+                              );
+                              await CitySelectionManager().assignCity(city!);
+                              await context.read<RoutePlannerCubit>().reset();
+                              Navigator.of(context).pop();
+                              Routemaster.of(context)
+                                  .replace('${HomePage.route}?refresh=true');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    appName,
+                                    style: const TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '$cityName - $countryName',
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${CitySelectionManager().currentCity.getText} - $countryName',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down_sharp,
+                                        color: Colors.white,
+                                      )
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                           Row(

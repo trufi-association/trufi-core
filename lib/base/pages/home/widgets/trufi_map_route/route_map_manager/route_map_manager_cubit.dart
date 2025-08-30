@@ -8,6 +8,7 @@ import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
+import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 import 'package:trufi_core/base/widgets/base_maps/leaflet_maps/utils/leaflet_map_utils.dart';
 import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
 
@@ -117,7 +118,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                       : leg.transportMode.color
               : Colors.grey;
 
-          Color textColor = isSelected ? leg.primaryColor : Colors.white;
+          Color textColor = isSelected ? hexToColor(leg.routeTextColor) : Colors.white;
 
           if (isSelected && leg.transitLeg && isPrimary) {
             isPrimary = !isPrimary;

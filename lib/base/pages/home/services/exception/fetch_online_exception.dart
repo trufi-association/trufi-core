@@ -40,7 +40,7 @@ class FetchOnlineResponseException implements Exception {
 
   @override
   String toString() {
-    return "Fetch online response exception: $_message";
+    return _message;
   }
 }
 

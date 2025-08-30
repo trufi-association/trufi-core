@@ -51,6 +51,12 @@ Widget tiktokIcon({Color? color}) {
   ));
 }
 
+Widget linkedinIcon({Color? color}) {
+  return SvgPicture.string(linkedin(
+    color: decodeFillColor(color),
+  ));
+}
+
 // trasnport svg icons
 Widget waitIcon({Color? color}) {
   return SvgPicture.string(wait(
@@ -120,4 +126,13 @@ String decodeFillColor(Color? color) {
     }
   }
   return stringColor;
+}
+
+Color hexToColor(String? hex) {
+  String hexAux = hex ?? "000000";
+  hexAux = hexAux.replaceFirst('#', '');
+  if (hexAux.length == 6) {
+    hexAux = 'FF$hexAux';
+  }
+  return Color(int.parse('0x$hexAux'));
 }

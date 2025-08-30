@@ -31,9 +31,11 @@ class _TransportListState extends State<TransportList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
+    WidgetsBinding.instance.addPostFrameCallback((duration) async {
+      final routeTransportsCubit = context.read<RouteTransportsCubit>();
       loadRoute();
-      context.read<RouteTransportsCubit>().filterTransports("");
+      await routeTransportsCubit.refreshIfNeededByCity();
+      routeTransportsCubit.filterTransports("");
     });
   }
 

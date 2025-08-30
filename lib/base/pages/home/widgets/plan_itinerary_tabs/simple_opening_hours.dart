@@ -1,5 +1,3 @@
-
-
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class SimpleOpeningHours {
@@ -19,17 +17,16 @@ class SimpleOpeningHours {
     parse(inp);
   }
 
-  static String getDayName(
-      String key, TrufiBaseLocalization localizationST) {
+  static String getDayName(String key, TrufiBaseLocalization localizationST) {
     final openingHours = <String, String>{
-      "mo": 'localizationST.weekdayMO',
-      "tu": 'localizationST.weekdayTU',
-      "we": 'localizationST.weekdayWE',
-      "th": 'localizationST.weekdayTH',
-      "fr": 'localizationST.weekdayFR',
-      "sa": 'localizationST.weekdaySA',
-      "su": 'localizationST.weekdaySU',
-      "ph": 'localizationST.weekdayPH',
+      "mo": localizationST.weekdayMO,
+      "tu": localizationST.weekdayTU,
+      "we": localizationST.weekdayWE,
+      "th": localizationST.weekdayTH,
+      "fr": localizationST.weekdayFR,
+      "sa": localizationST.weekdaySA,
+      "su": localizationST.weekdaySU,
+      "ph": localizationST.weekdayPH,
     };
     return openingHours[key]!;
   }
@@ -287,5 +284,22 @@ class SimpleOpeningHours {
       }
     }
     return false;
+  }
+
+  String? getClosingTimeOfDay(DateTime date) {
+    int weekdayIndex = date.weekday - 1; // DateTime.weekday: 1=Monday → 0-based
+    final keys = ["mo", "tu", "we", "th", "fr", "sa", "su"];
+    final key = keys[weekdayIndex];
+
+    final times = openingHours[key];
+    if (times != null && times.isEmpty) return null;
+
+    // Obtener el último horario del día
+    final lastTimeRange = times!.last;
+    final parts = lastTimeRange.split('-');
+
+    if (parts.length != 2) return null;
+
+    return formatTimeString(parts[1]);
   }
 }

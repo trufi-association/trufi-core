@@ -6,6 +6,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:trufi_core/base/blocs/map_layer/map_layers_cubit.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider_cubit.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
@@ -97,7 +98,7 @@ class _LeafletMapState extends State<LeafletMap> {
                 initialZoom: mapConfiguration.onlineZoom,
                 onTap: widget.onTap,
                 onLongPress: widget.onLongPress,
-                initialCenter: mapConfiguration.center.toLatLng(),
+                initialCenter: CitySelectionManager().currentCity.center.toLatLng(),
                 onMapReady: () {
                   if (!widget.trufiMapController.readyCompleter.isCompleted) {
                     widget.trufiMapController.readyCompleter.complete();

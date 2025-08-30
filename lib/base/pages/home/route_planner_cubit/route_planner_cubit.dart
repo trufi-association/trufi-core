@@ -106,8 +106,9 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
         );
         Plan? plan = await currentFetchPlanOperation?.valueOrCancellation();
         if (plan != null) {
-          if (plan.error != null) {
-            throw FetchOnlinePlanException(plan.error!.id, plan.error!.message);
+          if (plan.error != null ||
+              (plan.itineraries != null && plan.itineraries!.isEmpty)) {
+            throw FetchOnlinePlanException(400, "");
           }
           final numItineraryValue = numItinerary ?? 0;
           await updateMapRouteState(state.copyWith(

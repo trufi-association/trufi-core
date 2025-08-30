@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class TileTransport extends StatelessWidget {
   final TransitRoute patternOtp;
@@ -25,54 +26,45 @@ class TileTransport extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 30,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          // height: 30,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: patternOtp.route?.backgroundColor,
+                            borderRadius: const BorderRadius.horizontal(
+                                left: Radius.circular(5)),
+                          ),
+                          child: Text(
+                            '${patternOtp.route?.shortName ?? ''}  ${patternOtp.route?.longNameLast ?? ''}',
+                            style: TextStyle(
+                              color: hexToColor(patternOtp.route?.textColor),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        // height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
-                          color: patternOtp.route?.backgroundColor,
+                          color: theme.appBarTheme.backgroundColor,
                           borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(5)),
+                              right: Radius.circular(5)),
                         ),
-                        child: Row(
-                          children: [
-                            Text(
-                              patternOtp.route?.shortName ?? '',
-                              style: TextStyle(
-                                color: patternOtp.route?.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              patternOtp.route?.longNameLast ?? '',
-                              style: TextStyle(
-                                color: patternOtp.route?.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                        child: patternOtp.route!.mode?.getImage(
+                          color: Colors.white,
+                          size: 20,
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 30,
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: theme.appBarTheme.backgroundColor,
-                        borderRadius: const BorderRadius.horizontal(
-                            right: Radius.circular(5)),
-                      ),
-                      child: patternOtp.route!.mode?.getImage(
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Container(
                   margin:

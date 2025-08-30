@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:gql/language.dart';
 import 'package:graphql/client.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 
 import 'package:trufi_core/base/models/transit_route/stops.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
@@ -9,11 +10,16 @@ import 'package:trufi_core/base/utils/graphql_client/graphql_client.dart';
 import '../services/patter_queries.dart' as pattern_query;
 
 class RouteTransportsServices {
-  final GraphQLClient client;
+  GraphQLClient client;
 
   RouteTransportsServices(String endpoint) : client = getClient(endpoint);
 
   Future<List<TransitRoute>> fetchPatterns() async {
+    client = updateClient(
+      graphQLClient: client,
+      endpoint: CitySelectionManager().currentCity.otpGraphqlEndpoint,
+    );
+
     final WatchQueryOptions listPatterns = WatchQueryOptions(
       document: parseString(pattern_query.allPatterns),
       fetchResults: true,
@@ -34,6 +40,10 @@ class RouteTransportsServices {
   }
 
   Future<TransitRoute> fetchDataPattern(String idStop) async {
+    client = updateClient(
+      graphQLClient: client,
+      endpoint: CitySelectionManager().currentCity.otpGraphqlEndpoint,
+    );
     final WatchQueryOptions pattern = WatchQueryOptions(
       document: parseString(pattern_query.dataPattern),
       fetchResults: true,

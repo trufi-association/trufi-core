@@ -19,6 +19,7 @@ import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
+import 'package:trufi_core/base/pages/splash_screen/splash_screen.dart';
 import 'package:trufi_core/base/pages/transport_list/translations/transport_list_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/transport_list.dart';
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
@@ -129,9 +130,16 @@ abstract class DefaultValues {
     return RoutemasterDelegate(
       routesBuilder: (routeContext) {
         return RouteMap(
-          onUnknownRoute: (_) => const Redirect(HomePage.route),
+          onUnknownRoute: (_) => const Redirect(SplashScreen.route),
           routes: {
+            SplashScreen.route: (route) {
+              return NoAnimationPage(
+                lifecycleReactorHandler: lifecycleReactorHandler,
+                child: const SplashScreen(),
+              );
+            },
             HomePage.route: (route) {
+              final refresh = route.queryParameters['refresh'] == 'true';
               return NoAnimationPage(
                 lifecycleReactorHandler: lifecycleReactorHandler,
                 child: HomePage(
@@ -144,6 +152,7 @@ abstract class DefaultValues {
                   mapChooseLocationProvider:
                       mapCollectionSelected.mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
+                  refreshPage: refresh,
                 ),
               );
             },

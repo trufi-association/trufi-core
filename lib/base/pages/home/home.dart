@@ -8,12 +8,15 @@ import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
+import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/blocs/providers/uni_link_provider/geo_location.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
+import 'package:trufi_core/base/pages/home/widgets/city_selector/city_selector_dialog.dart';
+import 'package:trufi_core/base/pages/home/widgets/city_selector/route_city_mismatch_dialog.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
@@ -30,6 +33,7 @@ class HomePage extends StatefulWidget {
   final MapRouteProvider mapRouteProvider;
   final MapChooseLocationProvider mapChooseLocationProvider;
   final AsyncExecutor asyncExecutor;
+  final bool refreshPage;
 
   const HomePage({
     super.key,
@@ -37,6 +41,7 @@ class HomePage extends StatefulWidget {
     required this.mapRouteProvider,
     required this.mapChooseLocationProvider,
     required this.asyncExecutor,
+    required this.refreshPage,
   });
 
   @override
@@ -53,7 +58,11 @@ class _HomePageState extends State<HomePage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback(
-      (duration) => processUniLink(),
+      (duration) {
+        processUniLink();
+        showCitySelectorDialog();
+        refreshPage();
+      },
     );
   }
 
@@ -61,7 +70,10 @@ class _HomePageState extends State<HomePage>
   void didUpdateWidget(covariant HomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback(
-      (duration) => processUniLink(),
+      (duration) {
+        processUniLink();
+        refreshPage();
+      },
     );
   }
 
@@ -204,111 +216,6 @@ class _HomePageState extends State<HomePage>
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 22.0,
-                      left: 8.0,
-                      child: Container(
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: CitySelectionManager().currentCity ==
-                                  CityInstance.zitacuaro
-                              ? theme.floatingActionButtonTheme.backgroundColor
-                              : CitySelectionManager().currentCity ==
-                                      CityInstance.zamora
-                                  ? theme.colorScheme.primary
-                                  : CitySelectionManager().currentCity ==
-                                          CityInstance.oaxaca
-                                      ? Colors.purple
-                                      : Colors.blue,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xaa000000),
-                              offset: Offset(0, 1.5),
-                              blurRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              CitySelectionManager().assignNextCity();
-                              setState(() {});
-                              widget.mapRouteProvider.trufiMapController.onReady
-                                  .then((value) {
-                                widget.mapRouteProvider.trufiMapController.move(
-                                  center:
-                                      CitySelectionManager().currentCity.center,
-                                  zoom: 13,
-                                );
-                              });
-                              widget.mapRouteProvider.trufiMapController
-                                  .cleanMap();
-                              routePlannerCubit.reset();
-                            },
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    CitySelectionManager().currentCity ==
-                                            CityInstance.zitacuaro
-                                        ? "Zitácuaro"
-                                        : CitySelectionManager().currentCity ==
-                                                CityInstance.zamora
-                                            ? "Zamora"
-                                            : CitySelectionManager()
-                                                        .currentCity ==
-                                                    CityInstance.oaxaca
-                                                ? "Oaxaca"
-                                                : "Uruapan",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color:
-                                          CitySelectionManager().currentCity ==
-                                                  CityInstance.zitacuaro
-                                              ? theme.colorScheme.onSurface
-                                              : theme.colorScheme.surface,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Tooltip(
-                                  triggerMode: TooltipTriggerMode.tap,
-                                  message:
-                                      "Press the button for change the city, current support Zitacuaro and Zamora",
-                                  padding: const EdgeInsets.all(10),
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                  ),
-                                  verticalOffset: 18,
-                                  showDuration: const Duration(seconds: 10),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(8),
-                                        bottomRight: Radius.circular(8),
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 7,
-                                      horizontal: 11,
-                                    ),
-                                    child: const Icon(
-                                      Icons.info_outline,
-                                      color: Colors.white,
-                                      size: 22,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -344,9 +251,9 @@ class _HomePageState extends State<HomePage>
     if (queryParameters['hasError'] != null) {
       ErrorAlert.showError(
         context: context,
-        // TODO translation
         error: "This link cannot be used to set it as a point.",
       );
+      return;
     } else if (queryParameters['from'] != null &&
         queryParameters['to'] != null) {
       final originData = queryParameters['from']!.split(",");
@@ -361,11 +268,28 @@ class _HomePageState extends State<HomePage>
         latitude: double.tryParse(destinyData[1])!,
         longitude: double.tryParse(destinyData[2])!,
       );
+
+      final detectedCity =
+          CitySelectionManager().detectCityByLocation(originLocation.latLng);
+      if (detectedCity == null) {
+        ErrorAlert.showError(
+          context: context,
+          error:
+              "The shared link is outside the supported cities, so it cannot be used to set a route.”",
+        );
+        return;
+      }
+      final proceed = await _ensureCorrectCitySelected(
+        context: context,
+        targetCity: detectedCity,
+      );
+      if (!proceed) return;
       final numItinerary = int.tryParse(queryParameters['itinerary'] ?? '0');
       await routePlannerCubit.setToPlace(destinyLocation);
       await routePlannerCubit.setFromPlace(originLocation);
       if (!mounted) return;
       await _callFetchPlan(context, numItinerary: numItinerary);
+      return;
     } else if (queryParameters['type'] == GeoLocation.type) {
       final location = GeoLocation.fromJson(queryParameters).trufiLocation;
       await UniLinkAlert.showNotification(
@@ -381,6 +305,70 @@ class _HomePageState extends State<HomePage>
           await _callFetchPlan(context, numItinerary: 0);
         },
       );
+    }
+  }
+
+  Future<bool> _ensureCorrectCitySelected({
+    required BuildContext context,
+    required CityInstance targetCity,
+  }) async {
+    final citySelectionManager = CitySelectionManager();
+    final current = citySelectionManager.currentCity;
+
+    if (current == targetCity) return true;
+
+    final shouldSwitchCity = await RouteCityMismatchDialog.showModal(
+      context,
+      currentCity: current,
+      targetCity: targetCity,
+    );
+
+    if (!shouldSwitchCity) return false;
+
+    await citySelectionManager.assignCity(targetCity);
+    return true;
+  }
+
+  void refreshPage() async {
+    if (widget.refreshPage) {
+      widget.mapRouteProvider.trufiMapController.cleanMap();
+      widget.mapRouteProvider.trufiMapController.onReady.then((value) {
+        widget.mapRouteProvider.trufiMapController.move(
+          center: CitySelectionManager().currentCity.center,
+          zoom: 13,
+        );
+      });
+    }
+  }
+
+  Future<void> showCitySelectorDialog() async {
+    final city = await CitySelectionManager().getCityInstance;
+
+    if (city == null) {
+      if (!mounted) return;
+      final myLocation =
+          await GPSLocationProvider().startCityLocation(context, mounted);
+      if (myLocation != null) {
+        final wasAsignated = await CitySelectionManager()
+            .detectAndAssignCityByLocation(myLocation);
+        if (!wasAsignated) {
+          if (!mounted) return;
+          final city =
+              await CitySelectorDialog.showModal(context);
+          CitySelectionManager().assignCity(city!);
+        }
+      } else {
+        if (!mounted) return;
+        final city = await CitySelectorDialog.showModal(context);
+        CitySelectionManager().assignCity(city!);
+      }
+      setState(() {});
+      widget.mapRouteProvider.trufiMapController.onReady.then((value) {
+        widget.mapRouteProvider.trufiMapController.move(
+          center: CitySelectionManager().currentCity.center,
+          zoom: 13,
+        );
+      });
     }
   }
 

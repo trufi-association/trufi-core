@@ -15,6 +15,7 @@ import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/pages/home/repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/local_repository/hive_local_repository.dart';
+import 'package:trufi_core/base/pages/splash_screen/splash_screen.dart';
 import 'package:trufi_core/base/providers/transit_route/repository/hive_local_repository.dart';
 import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_notification.dart';
@@ -56,4 +57,5 @@ const listPathsHive = [
   LifecycleReactorNotifications.path,
   MapLayerLocalStorage.path,
   CitySelectionManagerHiveLocalRepository.path,
+  SplashScreen.route,
 ];

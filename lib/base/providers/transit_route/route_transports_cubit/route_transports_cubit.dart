@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 
@@ -26,8 +27,18 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
     await localRepository.loadRepository();
     final transports = await localRepository.getTransports();
     emit(state.copyWith(transports: transports, filterTransports: transports));
+    await localRepository.saveCityInstance(CitySelectionManager().currentCity);
     if (state.transports.isNotEmpty) return;
     await refresh();
+  }
+
+  Future<void> refreshIfNeededByCity() async {
+    if (CitySelectionManager().currentCity !=
+        await localRepository.getCityInstance()) {
+      await localRepository
+          .saveCityInstance(CitySelectionManager().currentCity);
+      await refresh();
+    }
   }
 
   Future<void> refresh() async {

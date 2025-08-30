@@ -60,8 +60,8 @@ Future<T?> showTrufiDialog<T>({
   bool barrierDismissible = true,
   bool useSafeArea = true,
   bool onWillPop = true,
-}) {
-  return showDialog<T>(
+}) async {
+  return await showDialog<T>(
     context: context,
     barrierDismissible: barrierDismissible,
     barrierColor: barrierColor,
