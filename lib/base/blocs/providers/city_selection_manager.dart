@@ -47,8 +47,9 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.salinaCruz:
         "https://otp.salinacruz.trufi.dev/otp/routers/default",
     CityInstance.jilotepec:
-        "https://otp.salinacruz.trufi.dev/otp/routers/default",
+        "https://otp.jilotepec.trufi.dev/otp/routers/default",
   };
+
   static final otpGraphqlEndpointValues = <CityInstance, String>{
     CityInstance.zitacuaro: "https://rutometro.trufi.dev/otp/index/graphql",
     CityInstance.zamora: "https://rutometro.trufi.dev/zamora/otp/index/graphql",
@@ -61,7 +62,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.salinaCruz:
         "https://otp.salinacruz.trufi.dev/otp/routers/default/index/graphql",
     CityInstance.jilotepec:
-        "https://otp.salinacruz.trufi.dev/otp/routers/default/index/graphql",
+        "https://otp.jilotepec.trufi.dev/otp/routers/default/index/graphql",
   };
 
   static final _bboxValues = <CityInstance, List<double>>{
@@ -71,7 +72,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.oaxaca: [-98.552707, 15.657169, -93.867427, 18.669688],
     CityInstance.toluca: [-99.900696, 18.712811, -99.210725, 19.648171],
     CityInstance.salinaCruz: [-95.229601, 16.157866, -95.156508, 16.246881],
-    CityInstance.jilotepec: [-95.229601, 16.157866, -95.156508, 16.246881],
+    CityInstance.jilotepec: [-99.703615, 19.849161, -99.436664, 20.171306],
   };
 
   static final centerValues = <CityInstance, TrufiLatLng>{
@@ -81,7 +82,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.oaxaca: TrufiLatLng(17.065, -96.721),
     CityInstance.toluca: TrufiLatLng(19.288, -99.666),
     CityInstance.salinaCruz: TrufiLatLng(16.184, -95.201),
-    CityInstance.jilotepec: TrufiLatLng(16.184, -95.201),
+    CityInstance.jilotepec: TrufiLatLng(19.95194, -99.53278),
   };
 
   static final splashScreenAssets = <CityInstance, String>{
