@@ -11,6 +11,7 @@ enum CityInstance {
   oaxaca,
   toluca,
   jilotepec,
+  puertoEscondido,
 }
 
 extension CityInstanceExtension on CityInstance {
@@ -22,6 +23,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.toluca: 'toluca',
     CityInstance.salinaCruz: 'salinaCruz',
     CityInstance.jilotepec: 'jilotepec',
+    CityInstance.puertoEscondido: 'puertoEscondido',
   };
   static final Map<CityInstance, String> _oficialText = {
     CityInstance.zitacuaro: 'Zitácuaro',
@@ -31,6 +33,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.toluca: 'Toluca',
     CityInstance.salinaCruz: 'Salina Cruz',
     CityInstance.jilotepec: 'Jilotepec',
+    CityInstance.puertoEscondido: 'Puerto Escondido',
   };
 
   static final Map<String, CityInstance> _fromValueMap = _toValueMap.map(
@@ -48,6 +51,8 @@ extension CityInstanceExtension on CityInstance {
         "https://otp.salinacruz.trufi.dev/otp/routers/default",
     CityInstance.jilotepec:
         "https://otp.jilotepec.trufi.dev/otp/routers/default",
+    CityInstance.puertoEscondido:
+        "https://otp.puertoescondido.trufi.dev/otp/routers/default",
   };
 
   static final otpGraphqlEndpointValues = <CityInstance, String>{
@@ -63,16 +68,19 @@ extension CityInstanceExtension on CityInstance {
         "https://otp.salinacruz.trufi.dev/otp/routers/default/index/graphql",
     CityInstance.jilotepec:
         "https://otp.jilotepec.trufi.dev/otp/routers/default/index/graphql",
+    CityInstance.puertoEscondido:
+        "https://otp.puertoescondido.trufi.dev/otp/routers/default/index/graphql",
   };
 
   static final _bboxValues = <CityInstance, List<double>>{
     CityInstance.zitacuaro: [-100.477837, 19.201667, -100.211988, 19.545306],
     CityInstance.zamora: [-102.50253, 19.920427, -102.1755, 20.106905],
     CityInstance.uruapan: [-102.108526, 19.337806, -101.99688, 19.50949],
-    CityInstance.oaxaca: [-98.552707, 15.657169, -93.867427, 18.669688],
+    CityInstance.oaxaca: [ -96.777, 17.022, -96.668, 17.113 ],
     CityInstance.toluca: [-99.900696, 18.712811, -99.210725, 19.648171],
     CityInstance.salinaCruz: [-95.229601, 16.157866, -95.156508, 16.246881],
     CityInstance.jilotepec: [-99.703615, 19.849161, -99.436664, 20.171306],
+    CityInstance.puertoEscondido: [-97.119519, 15.830408, -97.034392, 15.937529],
   };
 
   static final centerValues = <CityInstance, TrufiLatLng>{
@@ -83,6 +91,7 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.toluca: TrufiLatLng(19.288, -99.666),
     CityInstance.salinaCruz: TrufiLatLng(16.184, -95.201),
     CityInstance.jilotepec: TrufiLatLng(19.95194, -99.53278),
+    CityInstance.puertoEscondido: TrufiLatLng(15.8700, -97.0770),
   };
 
   static final splashScreenAssets = <CityInstance, String>{
@@ -100,6 +109,8 @@ extension CityInstanceExtension on CityInstance {
         "assets/images/splash-screens/splash-screen-salinaCruz.png",
     CityInstance.jilotepec:
         "assets/images/splash-screens/splash-screen-jilotepec.png",
+    CityInstance.puertoEscondido:
+        "assets/images/splash-screens/splash-screen-puertoEscondido.png",
   };
 
   String toValue() => _toValueMap[this]!;
