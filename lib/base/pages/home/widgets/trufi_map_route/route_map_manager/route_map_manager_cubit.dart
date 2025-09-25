@@ -15,11 +15,17 @@ import 'package:trufi_core/base/widgets/base_maps/utils/trufi_map_utils.dart';
 part 'route_map_manager_state.dart';
 
 class PolylineWithMarkers {
-  PolylineWithMarkers(this.polyline, this.markers);
+  PolylineWithMarkers(
+    this.polyline,
+    this.markers,
+    this.secondaryMarkers,
+  );
 
   final Polyline polyline;
   final List<Marker> markers;
+  final List<Marker> secondaryMarkers;
 }
+
 
 class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
   RouteMapManagerCubit() : super(const RouteMapManagerState());
@@ -84,6 +90,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
     getBounds(_selectedBounds);
   }
 
+
   Map<Itinerary, List<PolylineWithMarkers>> _buildItineraries({
     required Plan plan,
     required Itinerary selectedItinerary,
@@ -94,6 +101,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
     if (plan.itineraries != null) {
       for (final itinerary in plan.itineraries!) {
         final List<Marker> markers = [];
+        final List<Marker> secondaryMarkers = [];
         final List<PolylineWithMarkers> polylinesWithMarkers = [];
         final bool isSelected = itinerary == selectedItinerary;
 
@@ -116,11 +124,12 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                   : leg.transportMode == TransportMode.walk
                       ? (walkColor ?? leg.transportMode.color)
                       : leg.transportMode.color
-              : Colors.grey;
+              : Colors.grey[400]!;
 
-          Color textColor = isSelected ? hexToColor(leg.routeTextColor) : Colors.white;
+          Color textColor = isSelected ? hexToColor(leg.routeTextColor): Colors.white;
 
           if (isSelected && leg.transitLeg && isPrimary) {
+            // color = Colors.green;
             isPrimary = !isPrimary;
           } else if (isSelected && leg.transitLeg) {
             isPrimary = !isPrimary;
@@ -133,6 +142,9 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
             pattern: leg.transportMode == TransportMode.walk
                 ? StrokePattern.dotted()
                 : StrokePattern.solid(),
+            borderStrokeWidth:
+                isSelected && leg.transportMode != TransportMode.walk ? 1 : 0,
+            borderColor: Colors.black,
           );
 
           // Transfer marker
@@ -140,7 +152,7 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
               leg.transitLeg &&
               i < compressedLegs.length - 1 &&
               points.isNotEmpty) {
-            markers.add(
+            secondaryMarkers.add(
               buildTransferMarker(
                 point: points.first,
                 color: color,
@@ -157,20 +169,16 @@ class RouteMapManagerCubit extends Cubit<RouteMapManagerState> {
                 textColor,
                 leg,
                 onTap: () => onTap(itinerary),
+                showBorder: isSelected,
               ),
             );
           }
 
-          if (isSelected &&
-              leg.intermediatePlaces != null &&
-              leg.intermediatePlaces!.isNotEmpty) {
-            for (Place stop in leg.intermediatePlaces!) {
-              markers.add(
-                buildStopMarker(TrufiLatLng(stop.lat, stop.lon)),
-              );
-            }
-          }
-          polylinesWithMarkers.add(PolylineWithMarkers(polyline, markers));
+          polylinesWithMarkers.add(PolylineWithMarkers(
+            polyline,
+            markers,
+            secondaryMarkers,
+          ));
         }
 
         itineraries.addAll({itinerary: polylinesWithMarkers});

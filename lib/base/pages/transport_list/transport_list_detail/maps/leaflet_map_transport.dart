@@ -50,6 +50,12 @@ class _LeafletMapTransportState extends State<LeafletMapTransport>
             Polyline(
               points: TrufiLatLng.toListLatLng(
                   widget.transportData?.geometry ?? []),
+              color: Colors.black,
+              strokeWidth: 7.0,
+            ),
+            Polyline(
+              points: TrufiLatLng.toListLatLng(
+                  widget.transportData?.geometry ?? []),
               color:
                   widget.transportData?.route?.backgroundColor ?? Colors.black,
               strokeWidth: 6.0,
