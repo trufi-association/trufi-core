@@ -196,9 +196,9 @@ class Leg extends Equatable {
   SimpleOpeningHours? get getOpeningHours {
     SimpleOpeningHours? openingHours;
     String? id = routeId?.split(':').last;
-    if (routeId != null && oaxacaTransportOpenningHours.containsKey(id)) {
+    if (routeId != null && transportOpeningHours.containsKey(id)) {
       openingHours = SimpleOpeningHours(
-        oaxacaTransportOpenningHours[id]!,
+        transportOpeningHours[id]!,
       );
     }
     return openingHours;

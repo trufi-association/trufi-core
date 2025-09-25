@@ -90,9 +90,9 @@ class TransitRoute extends Equatable {
     SimpleOpeningHours? openingHours;
 
     String? id = code.split(':')[1];
-    if (oaxacaTransportOpenningHours.containsKey(id)) {
+    if (transportOpeningHours.containsKey(id)) {
       openingHours = SimpleOpeningHours(
-        oaxacaTransportOpenningHours[id]!,
+        transportOpeningHours[id]!,
       );
     }
     return openingHours;
