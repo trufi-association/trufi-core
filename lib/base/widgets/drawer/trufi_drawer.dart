@@ -71,90 +71,87 @@ class TrufiDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          InkWell(
-                            onTap: () async {
-                              final city = await CitySelectorDialog.showModal(
-                                context,
-                                hideCloseButton: false,
-                                barrierDismissible: false,
-                              );
-                              await CitySelectionManager().assignCity(city!);
-                              await context.read<RoutePlannerCubit>().reset();
-                              Navigator.of(context).pop();
-                              Routemaster.of(context)
-                                  .replace('${HomePage.route}?refresh=true');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    appName,
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${CitySelectionManager().currentCity.getText} - $countryName',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down_sharp,
+                          Expanded(
+                            child: InkWell(
+                              onTap: () async {
+                                final city = await CitySelectorDialog.showModal(
+                                  context,
+                                  hideCloseButton: false,
+                                  barrierDismissible: false,
+                                );
+                                await CitySelectionManager().assignCity(city!);
+                                await context.read<RoutePlannerCubit>().reset();
+                                Navigator.of(context).pop();
+                                Routemaster.of(context)
+                                    .replace('${HomePage.route}?refresh=true');
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      appName,
+                                      style: const TextStyle(
+                                        fontSize: 25,
                                         color: Colors.white,
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${CitySelectionManager().currentCity.getText} - $countryName',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_drop_down_sharp,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          Row(
-                            children: [
-                              FutureBuilder<bool>(
-                                future: inAppReview.isAvailable(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData &&
-                                      (snapshot.data ?? false)) {
-                                    return IconButton(
-                                      onPressed: () async {
-                                        await inAppReview.requestReview();
-                                      },
-                                      icon: const Icon(
-                                        Icons.star_rate,
-                                        color: Colors.white,
-                                      ),
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  final localization =
-                                      TrufiBaseLocalization.of(context);
-
-                                  Share.share(
-                                    localization.shareAppText(
-                                      urlShareApp,
-                                      appName,
-                                      cityName,
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.share,
-                                  color: Colors.white,
+                          FutureBuilder<bool>(
+                            future: inAppReview.isAvailable(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  (snapshot.data ?? false)) {
+                                return IconButton(
+                                  onPressed: () async {
+                                    await inAppReview.requestReview();
+                                  },
+                                  icon: const Icon(
+                                    Icons.star_rate,
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }
+                              return Container();
+                            },
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              final localization =
+                                  TrufiBaseLocalization.of(context);
+                          
+                              Share.share(
+                                localization.shareAppText(
+                                  urlShareApp,
+                                  appName,
+                                  cityName,
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.share,
+                              color: Colors.white,
+                            ),
                           )
                         ],
                       ),

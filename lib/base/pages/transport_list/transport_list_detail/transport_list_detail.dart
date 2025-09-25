@@ -287,20 +287,20 @@ class _TransportListDetailState extends State<TransportListDetail> {
         ),
         if (transitRoute == null || transitRoute?.getOpeningHours != null)
           Positioned(
-            top: Platform.isAndroid ? 117 : 127,
+            top: Platform.isAndroid ? 117 : 110,
             left: 0,
             right: 0,
             child: Material(
               color: theme.appBarTheme.backgroundColor,
               // color: Colors.green,
               child: Container(
-                height: Platform.isAndroid ? 35 : 30,
+                height: Platform.isAndroid ? 35 : 40,
               ),
             ),
           ),
         if (transitRoute?.getOpeningHours != null)
           Positioned(
-            top: 110,
+            top: 105,
             left: 23,
             right: 0,
             child: Material(
