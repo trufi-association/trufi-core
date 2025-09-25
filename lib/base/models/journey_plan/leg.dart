@@ -14,6 +14,7 @@ class Leg extends Equatable {
   static const _routeId = "routeId";
   static const _toPlace = "to";
   static const _fromPlace = "from";
+  static const _agencyName = "agencyName";
   static const _startTime = "startTime";
   static const _endTime = "endTime";
   static const _intermediatePlaces = "intermediateStops";
@@ -31,6 +32,7 @@ class Leg extends Equatable {
   final Duration duration;
   final Place toPlace;
   final Place fromPlace;
+  final String? agencyName;
   final DateTime startTime;
   final DateTime endTime;
   final List<Place>? intermediatePlaces;
@@ -50,6 +52,7 @@ class Leg extends Equatable {
     required this.duration,
     required this.toPlace,
     required this.fromPlace,
+    required this.agencyName,
     required this.startTime,
     required this.endTime,
     required this.intermediatePlaces,
@@ -84,6 +87,7 @@ class Leg extends Equatable {
           seconds: (double.tryParse(json[_duration].toString()) ?? 0).toInt()),
       toPlace: Place.fromJson(json[_toPlace] as Map<String, dynamic>),
       fromPlace: Place.fromJson(json[_fromPlace] as Map<String, dynamic>),
+      agencyName: json[_agencyName],
       startTime: DateTime.fromMillisecondsSinceEpoch(
           int.tryParse(json[_startTime].toString()) ?? 0),
       endTime: DateTime.fromMillisecondsSinceEpoch(
@@ -113,6 +117,7 @@ class Leg extends Equatable {
       _duration: duration.inSeconds,
       _toPlace: toPlace.toJson(),
       _fromPlace: fromPlace.toJson(),
+      _agencyName: agencyName,
       _startTime: startTime.millisecondsSinceEpoch,
       _endTime: endTime.millisecondsSinceEpoch,
       _intermediatePlaces:
@@ -134,6 +139,7 @@ class Leg extends Equatable {
     Duration? duration,
     Place? toPlace,
     Place? fromPlace,
+    String? agencyName,
     DateTime? startTime,
     DateTime? endTime,
     bool? rentedBike,
@@ -156,6 +162,7 @@ class Leg extends Equatable {
       duration: duration ?? this.duration,
       toPlace: toPlace ?? this.toPlace,
       fromPlace: fromPlace ?? this.fromPlace,
+      agencyName: agencyName ?? this.agencyName,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       transitLeg: transitLeg ?? this.transitLeg,
@@ -218,6 +225,7 @@ class Leg extends Equatable {
         duration,
         toPlace,
         fromPlace,
+        agencyName,
         startTime,
         endTime,
         intermediatePlaces,

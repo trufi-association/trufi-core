@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
@@ -7,6 +8,9 @@ import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/simple_opening_hours.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
+
+Color hintTextColor(ThemeData theme) =>
+    ThemeCubit.isDarkMode(theme) ? Colors.grey[400]! : Colors.grey[700]!;
 
 class TransitLeg extends StatelessWidget {
   final Leg leg;
@@ -54,6 +58,42 @@ class TransitLeg extends StatelessWidget {
             ),
           ),
         ),
+
+        if (leg.routeLongName != null)
+          Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              child: Text(
+                leg.routeLongName!,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: hintTextColor(theme),
+                ),
+              )),
+        if (leg.agencyName != null)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Operador: ",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: theme.colorScheme.onSurface,
+                      fontWeight: FontWeight.w600
+                    ),
+                  ),
+                  TextSpan(
+                    text: leg.agencyName!,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: hintTextColor(theme),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
         // const SizedBox(height: 10),
         // Text(
         //   "What's it like on board?",
