@@ -1,9 +1,13 @@
+import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/toluca_times.dart';
+
 const Map<String, String> transportOpeningHours = {
   ...oaxacaTransportOpenningHours,
   ...jilotepecTransportOpenningHours,
   ...salinaCruzTransportOpenningHours,
   ...puertoEscondidoTransportOpenningHours,
   ...zitacuaroTransportOpeningHours,
+  ...tolucaTransportOpeningHours,
+  ...zamoreTransportOpeningHours,
 };
 
 const oaxacaTransportOpenningHours = {
@@ -513,7 +517,7 @@ const uruapanTransportOpeningHours = {
   "16160511": "Mo-Su 6:00-21:00",
 };
 
-const zamore = {
+const zamoreTransportOpeningHours = {
   "17706527": "Mo-Su 05:30-19:30",
   "17775421": "Mo-Su 05:30-19:30",
   "17775434": "Mo-Su 06:00-18:46",
