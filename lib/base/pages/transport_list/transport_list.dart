@@ -9,6 +9,7 @@ import 'package:trufi_core/base/pages/transport_list/widgets/tile_transport.dart
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
+import 'package:trufi_core/base/widgets/basic_widgets/trufi_expansion_tile.dart';
 
 class TransportList extends StatefulWidget {
   static const String route = "/TransportList";
@@ -28,6 +29,7 @@ class TransportList extends StatefulWidget {
 }
 
 class _TransportListState extends State<TransportList> {
+  bool isGroupedByOperator = false;
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,7 @@ class _TransportListState extends State<TransportList> {
       loadRoute();
       await routeTransportsCubit.refreshIfNeededByCity();
       routeTransportsCubit.filterTransports("");
+      _calculateIsGroupedByOperator();
     });
   }
 
@@ -44,6 +47,7 @@ class _TransportListState extends State<TransportList> {
     super.didUpdateWidget(oldWidget);
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       loadRoute();
+      _calculateIsGroupedByOperator();
     });
   }
 
@@ -59,12 +63,24 @@ class _TransportListState extends State<TransportList> {
     }
   }
 
+  void _calculateIsGroupedByOperator() {
+    final routeTransportsCubit = context.read<RouteTransportsCubit>();
+    final groupedAllRoutesMap =
+        groupTransitRoutesByAgencyName(routeTransportsCubit.state.transports);
+    setState(() {
+      isGroupedByOperator = groupedAllRoutesMap.length > 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = TrufiBaseLocalization.of(context);
     final routeTransportsCubit = context.watch<RouteTransportsCubit>();
     final routeTransportsState = routeTransportsCubit.state;
+    final groupedRoutesMap =
+        groupTransitRoutesByAgencyName(routeTransportsState.filterTransports);
+    final groupedRoutesList = createGroupedTransitRoutesList(groupedRoutesMap);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -95,9 +111,10 @@ class _TransportListState extends State<TransportList> {
         actions: [
           if (!routeTransportsState.isLoading)
             IconButton(
-              onPressed: () {
-                routeTransportsCubit.refresh().catchError(
+              onPressed: () async {
+                await routeTransportsCubit.refresh().catchError(
                     (error) => onFetchError(context, error as Exception));
+                _calculateIsGroupedByOperator();
               },
               icon: const Icon(Icons.refresh),
             ),
@@ -121,27 +138,11 @@ class _TransportListState extends State<TransportList> {
               trackVisibility: true,
               interactive: true,
               thickness: 8.0,
-              child: ListView.builder(
-                itemCount: routeTransportsState.filterTransports.length,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                itemBuilder: (buildContext, index) {
-                  final TransitRoute transport =
-                      routeTransportsState.filterTransports[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 15),
-                    child: TileTransport(
-                      patternOtp: transport,
-                      onTap: () {
-                        Routemaster.of(context).replace(
-                          TransportList.route,
-                          queryParameters: {'id': transport.code},
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+              child: isGroupedByOperator
+                  ? TransportListByOperator(
+                      groupedRoutesList: groupedRoutesList)
+                  : SimpleTransportList(
+                      filterTransports: routeTransportsState.filterTransports),
             ),
           if (routeTransportsState.isLoading)
             Container(
@@ -152,6 +153,112 @@ class _TransportListState extends State<TransportList> {
             ),
         ],
       ),
+    );
+  }
+
+  Map<String, List<TransitRoute>> groupTransitRoutesByAgencyName(
+      List<TransitRoute> routes) {
+    final Map<String, List<TransitRoute>> groupedRoutes = {};
+
+    for (var route in routes) {
+      final agencyName = route.route?.agency?.name ?? 'Unknown';
+
+      if (!groupedRoutes.containsKey(agencyName)) {
+        groupedRoutes[agencyName] = [];
+      }
+
+      groupedRoutes[agencyName]!.add(route);
+    }
+
+    return groupedRoutes;
+  }
+
+  List<List<TransitRoute>> createGroupedTransitRoutesList(
+      Map<String, List<TransitRoute>> groupedRoutes) {
+    return groupedRoutes.values.toList();
+  }
+}
+
+class SimpleTransportList extends StatelessWidget {
+  final List<TransitRoute> filterTransports;
+  const SimpleTransportList({super.key, required this.filterTransports});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: filterTransports.length,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      itemBuilder: (buildContext, index) {
+        final TransitRoute transport = filterTransports[index];
+        return Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          child: TileTransport(
+            patternOtp: transport,
+            onTap: () {
+              Routemaster.of(context).replace(
+                TransportList.route,
+                queryParameters: {'id': transport.code},
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class TransportListByOperator extends StatelessWidget {
+  final List<List<TransitRoute>> groupedRoutesList;
+  const TransportListByOperator({super.key, required this.groupedRoutesList});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: groupedRoutesList.length,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      itemBuilder: (buildContext, index) {
+        final agencyRoutes = groupedRoutesList[index];
+        final agencyName = agencyRoutes.first.route?.agency?.name ?? 'Unknown';
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 8),
+          child: TrufiExpansionTile(
+            typeTitle: ExpansionTileTitleType.secondary,
+            padding: EdgeInsets.zero,
+            title: "Operador: $agencyName",
+            titleColor: agencyRoutes.first.route?.backgroundColor,
+            textStyle: TextStyle(
+              color: agencyRoutes.first.route?.parsedTextColor,
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: agencyRoutes.length,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (buildContext, index) {
+                    final TransitRoute transport = agencyRoutes[index];
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 4),
+                      child: TileTransport(
+                        patternOtp: transport,
+                        onTap: () {
+                          Routemaster.of(buildContext).replace(
+                            TransportList.route,
+                            queryParameters: {'id': transport.code},
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

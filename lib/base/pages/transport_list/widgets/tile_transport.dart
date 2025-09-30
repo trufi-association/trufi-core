@@ -44,7 +44,7 @@ class TileTransport extends StatelessWidget {
                             '${patternOtp.route?.shortName ?? ''}  ${patternOtp.route?.longNameLast ?? ''}',
                             style: TextStyle(
                               color: hexToColor(patternOtp.route?.textColor),
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                           ),

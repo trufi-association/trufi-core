@@ -1,5 +1,5 @@
 const String allPatterns = r'''
-query {
+ {
   patterns{
     id
     name
@@ -10,6 +10,9 @@ query {
       color
       mode
       textColor
+      agency{
+        name
+      }
     }
   }
 }
