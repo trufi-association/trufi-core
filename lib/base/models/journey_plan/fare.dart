@@ -8,9 +8,9 @@ class Fare {
   static const String _cents = 'cents';
 
   factory Fare.fromJson(Map<String, dynamic> jsonData) {
-    final regularFare = jsonData['fare']['regular'];
+    final regularFare = jsonData['fare']?['regular'] ?? {};
     return Fare(
-      currency: regularFare[_currency][_currency],
+      currency: regularFare[_currency]?[_currency],
       cents: regularFare[_cents],
     );
   }

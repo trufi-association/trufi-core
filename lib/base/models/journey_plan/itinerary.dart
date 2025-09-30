@@ -47,8 +47,8 @@ class Itinerary extends Equatable {
           Duration(seconds: int.tryParse(json[_walkTime].toString()) ?? 0),
       walkDistance: double.tryParse(json[_walkDistance].toString()) ?? 0,
       transfers: int.tryParse(json[_transfers].toString()) ?? 5,
-      fare: json['fare'] != null
-          ? Fare.fromJson(json['fare'] as Map<String, dynamic>)
+      fare: json[_fare] != null
+          ? Fare.fromJson(json[_fare] as Map<String, dynamic>)
           : null,
     );
   }
