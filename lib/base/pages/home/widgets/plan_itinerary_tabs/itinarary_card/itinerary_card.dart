@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/const/styles.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
@@ -41,32 +42,84 @@ class ItineraryCard extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
+                  if (CitySelectionManager().currentCity ==
+                      CityInstance.toluca) ...[
+                    RichText(
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: itinerary.durationFormat(localization),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                " (${itinerary.getDistanceString(localization)})",
+                            style: TextStyle(
+                              color: theme.colorScheme.secondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                  ],
                   Expanded(
                       child: Container(
                     height: 1.5,
                     color: theme.dividerColor,
                   )),
                   const SizedBox(width: 8),
-                  RichText(
-                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: itinerary.durationFormat(localization),
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
+                  if (CitySelectionManager().currentCity != CityInstance.toluca)
+                    RichText(
+                      textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: itinerary.durationFormat(localization),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text:
-                              " (${itinerary.getDistanceString(localization)})",
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
+                          TextSpan(
+                            text:
+                                " (${itinerary.getDistanceString(localization)})",
+                            style: TextStyle(
+                              color: theme.colorScheme.secondary,
+                            ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  if (CitySelectionManager().currentCity == CityInstance.toluca)
+                    Container(
+                      height: 20,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            itinerary.fare?.formattedFare ?? 'N/A',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(
+                            Icons.monetization_on,
+                            color: Colors.white,
+                            size: 12,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),

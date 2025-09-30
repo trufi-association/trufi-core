@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
 
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/models/journey_plan/fare.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/simple_opening_hours.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/transport_opening_hours.dart';
