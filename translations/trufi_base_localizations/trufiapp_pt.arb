@@ -360,6 +360,8 @@
     "weekdaySA": "Saturday",
     "weekdaySU": "Sunday",
     "weekdayPH": "Public holiday",
+    "stops": "Stops",
+    "busStops": "Bus Stop",
     "themeModeDark": "Tema escuro",
     "themeModeLight": "Tema claro",
     "themeModeSystem": "Sistema padrão"

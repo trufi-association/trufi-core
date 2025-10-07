@@ -359,6 +359,8 @@
     "weekdaySA": "Saturday",
     "weekdaySU": "Sunday",
     "weekdayPH": "Public holiday",
+    "stops": "Stops",
+    "busStops": "Bus Stop",
     "themeModeDark": "Dark Theme",
     "themeModeLight": "Light theme",
     "themeModeSystem": "System Default"

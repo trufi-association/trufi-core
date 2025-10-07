@@ -125,16 +125,9 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                             )
                           : Checkbox(
                               value: containerStatus,
-                              fillColor:
-                                  MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) {
-                                  return theme.colorScheme.secondary;
-                                } else {
-                                  return isDarkMode
-                                      ? Colors.white
-                                      : Colors.black;
-                                }
-                              }),
+                              checkColor:
+                                  isDarkMode ? Colors.white : Colors.white,
+                              activeColor: theme.colorScheme.secondary,
                               onChanged: (value) {
                                 customLayersCubit
                                     .changeCustomMapLayerContainerState(
@@ -171,16 +164,19 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                             Checkbox(
                               value: customLayersCubit
                                   .state.layersSatus[customLayer.id],
-                              fillColor:
-                                  MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) {
-                                  return theme.colorScheme.secondary;
-                                } else {
-                                  return isDarkMode
-                                      ? Colors.grey[200]
-                                      : Colors.grey;
-                                }
-                              }),
+                              // fillColor:
+                              //     MaterialStateProperty.resolveWith((states) {
+                              //   if (states.contains(MaterialState.selected)) {
+                              //     return theme.colorScheme.secondary;
+                              //   } else {
+                              //     return isDarkMode
+                              //         ? Colors.grey[200]
+                              //         : Colors.grey;
+                              //   }
+                              // }),
+                              checkColor:
+                                  isDarkMode ? Colors.grey[200] : Colors.white,
+                              activeColor: theme.colorScheme.secondary,
                               onChanged: (value) {
                                 customLayersCubit.changeCustomMapLayerState(
                                   customLayer: customLayer,

@@ -358,6 +358,8 @@
     "weekdayFR": "Viernes",
     "weekdaySA": "Sábado",
     "weekdaySU": "Domingo",
+    "stops": "Paradas",
+    "busStops": "Parada de bus",
     "themeModeDark": "Modo oscuro",
     "themeModeLight": "Modo claro",
     "themeModeSystem": "Predeterminado del sistema"

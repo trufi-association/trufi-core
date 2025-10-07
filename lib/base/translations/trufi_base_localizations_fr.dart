@@ -298,6 +298,12 @@ class TrufiBaseLocalizationFr extends TrufiBaseLocalization {
   String get weekdayPH => 'Public holiday';
 
   @override
+  String get stops => 'Stops';
+
+  @override
+  String get busStops => 'Bus Stop';
+
+  @override
   String get themeModeDark => 'Dark Theme';
 
   @override

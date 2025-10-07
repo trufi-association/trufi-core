@@ -661,6 +661,18 @@ abstract class TrufiBaseLocalization {
   /// **'Public holiday'**
   String get weekdayPH;
 
+  /// No description provided for @stops.
+  ///
+  /// In pt, this message translates to:
+  /// **'Stops'**
+  String get stops;
+
+  /// No description provided for @busStops.
+  ///
+  /// In pt, this message translates to:
+  /// **'Bus Stop'**
+  String get busStops;
+
   /// No description provided for @themeModeDark.
   ///
   /// In pt, this message translates to:

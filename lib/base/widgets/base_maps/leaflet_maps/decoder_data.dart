@@ -19,7 +19,7 @@ class ShowOverlappingData extends StatelessWidget {
         padding: const EdgeInsets.only(top: 5),
         child: InkWell(
           onTap: () {
-            final data = markerNode.child as GestureDetector;
+            final data = (markerNode.child as Builder).builder(context) as GestureDetector;
             data.onTap!();
             Navigator.of(context).pop();
           },

@@ -362,6 +362,8 @@
     "weekdaySA": "Samstag",
     "weekdaySU": "Sonntag",
     "weekdayPH": "Gesetzlicher Feiertag",
+    "stops": "Stops",
+    "busStops": "Bus Stop",
     "themeModeDark": "Dunkles Thema",
     "themeModeLight": "Leichtes Thema",
     "themeModeSystem": "Systemeinstellung"
