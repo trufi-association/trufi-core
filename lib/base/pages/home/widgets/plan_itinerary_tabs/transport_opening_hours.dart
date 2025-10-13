@@ -7,7 +7,8 @@ const Map<String, String> transportOpeningHours = {
   ...puertoEscondidoTransportOpenningHours,
   ...zitacuaroTransportOpeningHours,
   ...tolucaTransportOpeningHours,
-  ...zamoreTransportOpeningHours,
+  ...uruapanTransportOpeningHours,
+  ...zamoraTransportOpeningHours,
 };
 
 const oaxacaTransportOpenningHours = {
@@ -517,7 +518,7 @@ const uruapanTransportOpeningHours = {
   "16160511": "Mo-Su 6:00-21:00",
 };
 
-const zamoreTransportOpeningHours = {
+const zamoraTransportOpeningHours = {
   "17706527": "Mo-Su 05:30-19:30",
   "17775421": "Mo-Su 05:30-19:30",
   "17775434": "Mo-Su 06:00-18:46",
