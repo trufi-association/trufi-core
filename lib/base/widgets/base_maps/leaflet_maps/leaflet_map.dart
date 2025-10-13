@@ -98,7 +98,8 @@ class _LeafletMapState extends State<LeafletMap> {
                 initialZoom: mapConfiguration.onlineZoom,
                 onTap: widget.onTap,
                 onLongPress: widget.onLongPress,
-                initialCenter: CitySelectionManager().currentCity.center.toLatLng(),
+                initialCenter:
+                    CitySelectionManager().currentCity.center.toLatLng(),
                 onMapReady: () {
                   if (!widget.trufiMapController.readyCompleter.isCompleted) {
                     widget.trufiMapController.readyCompleter.complete();
@@ -168,7 +169,9 @@ class _LeafletMapState extends State<LeafletMap> {
             );
           },
         ),
-        if (widget.showPOILayers && customLayersCubit.layersContainer.isNotEmpty)
+        if (widget.showPOILayers &&
+            customLayersCubit.layersContainer.isNotEmpty &&
+            CitySelectionManager().currentCity == CityInstance.jilotepec)
           const Positioned(
             top: 16.0,
             right: 16.0,
