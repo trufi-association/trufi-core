@@ -76,11 +76,16 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.zitacuaro: [-100.477837, 19.201667, -100.211988, 19.545306],
     CityInstance.zamora: [-102.50253, 19.920427, -102.1755, 20.106905],
     CityInstance.uruapan: [-102.108526, 19.337806, -101.99688, 19.50949],
-    CityInstance.oaxaca: [ -96.777, 17.022, -96.668, 17.113 ],
+    CityInstance.oaxaca: [-96.777, 17.022, -96.668, 17.113],
     CityInstance.toluca: [-99.900696, 18.712811, -99.210725, 19.648171],
     CityInstance.salinaCruz: [-95.229601, 16.157866, -95.156508, 16.246881],
     CityInstance.jilotepec: [-99.703615, 19.849161, -99.436664, 20.171306],
-    CityInstance.puertoEscondido: [-97.119519, 15.830408, -97.034392, 15.937529],
+    CityInstance.puertoEscondido: [
+      -97.119519,
+      15.830408,
+      -97.034392,
+      15.937529
+    ],
   };
 
   static final centerValues = <CityInstance, TrufiLatLng>{
@@ -131,6 +136,12 @@ extension CityInstanceExtension on CityInstance {
     final ne = LatLng(corners[3], corners[2]);
     final bounds = LatLngBounds(sw, ne);
     return bounds.contains(point.toLatLng());
+  }
+
+  static List<CityInstance> get orderedByOficialText {
+    final entries = _oficialText.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+    return entries.map((e) => e.key).toList();
   }
 }
 

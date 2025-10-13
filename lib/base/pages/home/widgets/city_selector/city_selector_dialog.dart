@@ -34,7 +34,7 @@ class CitySelectorDialog extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ...CityInstance.values.map(
+                  ...CityInstanceExtension.orderedByOficialText.map(
                     (city) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: InkWell(
