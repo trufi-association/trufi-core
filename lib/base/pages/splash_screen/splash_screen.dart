@@ -40,9 +40,11 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: splashAssetPath == null
           ? const SizedBox.shrink()
-          : Image.asset(
-              splashAssetPath!,
-              fit: BoxFit.fitWidth,
+          : SizedBox.expand(
+              child: Image.asset(
+                splashAssetPath!,
+                fit: BoxFit.fill,
+              ),
             ),
     );
   }
