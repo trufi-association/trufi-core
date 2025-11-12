@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:trufi_core/base/blocs/map_layer/map_layers_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
@@ -86,6 +87,11 @@ class TrufiDrawer extends StatelessWidget {
                                 );
                                 await CitySelectionManager().assignCity(city!);
                                 await context.read<RoutePlannerCubit>().reset();
+                                if (city == CityInstance.jilotepec) {
+                                  context
+                                      .read<MapLayersCubit>()
+                                      .activeAllLayers();
+                                }
                                 Navigator.of(context).pop();
                                 Routemaster.of(context).replace(
                                     '${SplashScreen.route}?refresh=true');

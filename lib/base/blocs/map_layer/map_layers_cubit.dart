@@ -19,7 +19,7 @@ class MapLayersCubit extends Cubit<MapLayersState> {
                     (previousValue, element) =>
                         [...previousValue, ...element.layers])
                 .asMap()
-                .map((key, value) => MapEntry(value.id, false)),
+                .map((key, value) => MapEntry(value.id, true)),
             layers: layersContainer.fold<List<MapLayer>>(
                 [],
                 (previousValue, element) =>
@@ -77,6 +77,17 @@ class MapLayersCubit extends Cubit<MapLayersState> {
     final allList =
         listSort.map((element) => element.buildLayerMarkers(zoom)).toList();
     return allList.expand((list) => list ?? <Marker>[]).toList();
+  }
+
+  void activeAllLayers() {
+    for (var layerContainer in layersContainer) {
+      for (var layer in layerContainer.layers) {
+        changeCustomMapLayerState(
+          customLayer: layer,
+          newState: true,
+        );
+      }
+    }
   }
 
   List<Widget> activeCustomLayers({
