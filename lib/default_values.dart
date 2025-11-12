@@ -133,9 +133,12 @@ abstract class DefaultValues {
           onUnknownRoute: (_) => const Redirect(SplashScreen.route),
           routes: {
             SplashScreen.route: (route) {
+              final refresh = route.queryParameters['refresh'] == 'true';
               return NoAnimationPage(
                 lifecycleReactorHandler: lifecycleReactorHandler,
-                child: const SplashScreen(),
+                child: SplashScreen(
+                  enableRefresh: refresh,
+                ),
               );
             },
             HomePage.route: (route) {

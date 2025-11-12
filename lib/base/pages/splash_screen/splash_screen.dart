@@ -6,7 +6,9 @@ import 'package:trufi_core/base/pages/home/home.dart';
 class SplashScreen extends StatefulWidget {
   static const String route = "/SplashScreen";
 
-  const SplashScreen({super.key});
+  const SplashScreen({super.key, this.enableRefresh = false});
+
+  final bool enableRefresh;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -19,7 +21,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Routemaster.of(context).replace(HomePage.route);
+      Routemaster.of(context).replace(
+          '${HomePage.route}${widget.enableRefresh ? '?refresh=true' : ''}');
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final splashScreenAsset =

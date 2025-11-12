@@ -19,6 +19,7 @@ import 'package:trufi_core/base/pages/home/widgets/city_selector/city_selector_d
 import 'package:trufi_core/base/pages/home/widgets/city_selector/route_city_mismatch_dialog.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
+import 'package:trufi_core/base/pages/splash_screen/splash_screen.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
 import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
@@ -353,14 +354,17 @@ class _HomePageState extends State<HomePage>
             .detectAndAssignCityByLocation(myLocation);
         if (!wasAsignated) {
           if (!mounted) return;
-          final city =
-              await CitySelectorDialog.showModal(context);
-          CitySelectionManager().assignCity(city!);
+          final city = await CitySelectorDialog.showModal(context);
+          await CitySelectionManager().assignCity(city!);
+          if (!mounted) return;
+          Routemaster.of(context).replace('${SplashScreen.route}?refresh=true');
         }
       } else {
         if (!mounted) return;
         final city = await CitySelectorDialog.showModal(context);
-        CitySelectionManager().assignCity(city!);
+        await CitySelectionManager().assignCity(city!);
+          if (!mounted) return;
+        Routemaster.of(context).replace('${SplashScreen.route}?refresh=true');
       }
       setState(() {});
       widget.mapRouteProvider.trufiMapController.onReady.then((value) {

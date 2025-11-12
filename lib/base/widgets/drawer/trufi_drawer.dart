@@ -6,6 +6,7 @@ import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/home/widgets/city_selector/city_selector_dialog.dart';
+import 'package:trufi_core/base/pages/splash_screen/splash_screen.dart';
 
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
@@ -83,8 +84,8 @@ class TrufiDrawer extends StatelessWidget {
                                 await CitySelectionManager().assignCity(city!);
                                 await context.read<RoutePlannerCubit>().reset();
                                 Navigator.of(context).pop();
-                                Routemaster.of(context)
-                                    .replace('${HomePage.route}?refresh=true');
+                                Routemaster.of(context).replace(
+                                    '${SplashScreen.route}?refresh=true');
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -139,7 +140,7 @@ class TrufiDrawer extends StatelessWidget {
                             onPressed: () {
                               final localization =
                                   TrufiBaseLocalization.of(context);
-                          
+
                               Share.share(
                                 localization.shareAppText(
                                   urlShareApp,
