@@ -41,35 +41,34 @@ extension CityInstanceExtension on CityInstance {
   );
 
   static final otpEndpointValues = <CityInstance, String>{
-    CityInstance.zitacuaro: "https://rutometro.trufi.dev/otp",
-    CityInstance.zamora: "https://rutometro.trufi.dev/zamora/otp",
-    CityInstance.uruapan: "https://rutometro.trufi.dev/uruapan/otp",
-    CityInstance.oaxaca:
-        "https://2-4-0.otp.oaxaca.trufi.dev/otp/routers/default",
-    CityInstance.toluca: "https://otp.toluca.trufi.dev/otp/routers/default",
-    CityInstance.salinaCruz:
-        "https://otp.salinacruz.trufi.dev/otp/routers/default",
-    CityInstance.jilotepec:
-        "https://otp.jilotepec.trufi.dev/otp/routers/default",
+    CityInstance.zitacuaro: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.zamora: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.uruapan: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.oaxaca: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.toluca: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.salinaCruz: "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.jilotepec: "http://165.232.145.99:8081/otp/routers/default",
     CityInstance.puertoEscondido:
-        "https://otp.puertoescondido.trufi.dev/otp/routers/default",
+        "http://165.232.145.99:8081/otp/routers/default",
   };
 
   static final otpGraphqlEndpointValues = <CityInstance, String>{
-    CityInstance.zitacuaro: "https://rutometro.trufi.dev/otp/index/graphql",
-    CityInstance.zamora: "https://rutometro.trufi.dev/zamora/otp/index/graphql",
+    CityInstance.zitacuaro:
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
+    CityInstance.zamora:
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.uruapan:
-        "https://rutometro.trufi.dev/uruapan/otp/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.oaxaca:
-        "https://2-4-0.otp.oaxaca.trufi.dev/otp/routers/default/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.toluca:
-        "https://otp.toluca.trufi.dev/otp/routers/default/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.salinaCruz:
-        "https://otp.salinacruz.trufi.dev/otp/routers/default/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.jilotepec:
-        "https://otp.jilotepec.trufi.dev/otp/routers/default/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
     CityInstance.puertoEscondido:
-        "https://otp.puertoescondido.trufi.dev/otp/routers/default/index/graphql",
+        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
   };
 
   static final _bboxValues = <CityInstance, List<double>>{
