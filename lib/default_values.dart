@@ -106,7 +106,7 @@ abstract class DefaultValues {
     WidgetBuilder? backgroundImageBuilder,
     AsyncExecutor? asyncExecutor,
     required String urlShareApp,
-    required String urlFeedback,
+    required String email,
     required String emailContact,
     UrlSocialMedia? urlSocialMedia,
     ITrufiMapProvider? trufiMapProvider,
@@ -185,7 +185,7 @@ abstract class DefaultValues {
             },
             FeedbackPage.route: (route) => NoAnimationPage(
                   child: FeedbackPage(
-                    urlFeedback: urlFeedback,
+                    email: email,
                     drawerBuilder: generateDrawer(FeedbackPage.route),
                   ),
                 ),

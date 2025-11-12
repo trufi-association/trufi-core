@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core/base/blocs/providers/city_selection_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/utils/packge_info_platform.dart';
 
 class FeedbackPage extends StatelessWidget {
   static const String route = "/Feedback";
-  final String urlFeedback;
+  final String email;
   final Widget Function(BuildContext) drawerBuilder;
 
   const FeedbackPage({
     super.key,
     required this.drawerBuilder,
-    required this.urlFeedback,
+    required this.email,
   });
 
   @override
@@ -49,13 +48,17 @@ class FeedbackPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final cityName =
+              (await CitySelectionManager().getCityInstance)?.getText;
           String version = await PackageInfoPlatform.version();
-          final TrufiLatLng? currentLocation = GPSLocationProvider().myLocation;
-          // ignore: deprecated_member_use
-          launch(
-            "$urlFeedback?lang=${localizationF.localeName}&geo=${currentLocation?.latitude},"
-            "${currentLocation?.longitude}&app=$version",
-          );
+          final subject = Uri.encodeComponent(
+              'Comentario Rutómetro (v$version) - $cityName');
+
+          final uri = Uri.parse('mailto:$email?subject=$subject');
+
+          if (!await launchUrl(uri)) {
+            throw 'No se pudo abrir el cliente de correo.';
+          }
         },
         heroTag: null,
         child: const Icon(Icons.feedback),

@@ -38,7 +38,7 @@ void main() async {
               fit: BoxFit.cover,
             );
           },
-          urlFeedback: 'https://example/feedback',
+          email: 'https://example/feedback',
           emailContact: 'example@example.com',
           urlShareApp: 'https://example/share',
           urlSocialMedia: const UrlSocialMedia(
