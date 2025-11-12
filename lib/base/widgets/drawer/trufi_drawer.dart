@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:flutter/material.dart';
@@ -141,12 +144,19 @@ class TrufiDrawer extends StatelessWidget {
                               final localization =
                                   TrufiBaseLocalization.of(context);
 
+                              final box =
+                                  context.findRenderObject() as RenderBox?;
                               Share.share(
                                 localization.shareAppText(
                                   urlShareApp,
                                   appName,
                                   cityName,
                                 ),
+                                sharePositionOrigin: !kIsWeb &&
+                                        Platform.isIOS &&
+                                        box != null
+                                    ? box.localToGlobal(Offset.zero) & box.size
+                                    : null,
                               );
                             },
                             icon: const Icon(

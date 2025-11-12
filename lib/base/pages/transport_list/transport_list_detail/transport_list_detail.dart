@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -207,13 +208,19 @@ class _TransportListDetailState extends State<TransportListDetail> {
                   onSelected: (value) async {
                     switch (value) {
                       case 'ShareRoute':
-                        Share.share(widget
-                            .mapTransportProvider.shareBaseRouteUri!
-                            .replace(
-                          queryParameters: {
-                            "id": transitRoute!.code,
-                          },
-                        ).toString());
+                        final box = context.findRenderObject() as RenderBox?;
+                        Share.share(
+                          widget.mapTransportProvider.shareBaseRouteUri!
+                              .replace(
+                            queryParameters: {
+                              "id": transitRoute!.code,
+                            },
+                          ).toString(),
+                          sharePositionOrigin:
+                              !kIsWeb && Platform.isIOS && box != null
+                                  ? box.localToGlobal(Offset.zero) & box.size
+                                  : null,
+                        );
                         break;
                       case 'OpenEditor':
                         // await RouteEditorScreen.editRoute(
