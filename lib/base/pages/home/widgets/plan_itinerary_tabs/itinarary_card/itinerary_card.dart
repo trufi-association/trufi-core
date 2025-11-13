@@ -106,7 +106,7 @@ class ItineraryCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            itinerary.fare?.formattedFare ?? 'N/A',
+                            itinerary.calculateTotalFare,
                             style: theme.textTheme.bodySmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),

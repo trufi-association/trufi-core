@@ -196,6 +196,34 @@ class Itinerary extends Equatable {
     });
   }
 
+  String get calculateTotalFare {
+    final prices = fare?.detailsFares ?? [];
+    final transportLegs = legs.where((e) => e.transitLeg).toList();
+
+    if (transportLegs.length != prices.length && prices.isEmpty) return 'NA';
+    final currency = prices.first.currency;
+
+    double total = 0;
+
+    for (int i = 0; i < transportLegs.length; i++) {
+      final leg = transportLegs[i];
+      final fare = prices[i];
+
+      final meters = leg.distance;
+      final km = meters / 1000.0;
+
+      final basePrice = (fare.cents ?? 0) / 100.0;
+
+      final extraKmRaw = km > 5 ? km - 5 : 0.0;
+      final extraKm = extraKmRaw.floor();
+
+      final extraCharge = extraKm * 0.25;
+
+      total += basePrice + extraCharge;
+    }
+    return '${total.toStringAsFixed(2)} $currency';
+  }
+
   @override
   List<Object?> get props => [
         legs,
