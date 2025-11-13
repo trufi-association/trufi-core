@@ -83,7 +83,7 @@ class TileTransport extends StatelessWidget {
                   ),
                   alignment: FractionalOffset.centerLeft,
                   child: Text(
-                    patternOtp.route?.longName ?? '',
+                    '${patternOtp.route?.shortName}: ${patternOtp.route?.longName}',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
