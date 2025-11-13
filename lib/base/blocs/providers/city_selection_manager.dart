@@ -107,18 +107,16 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.puertoEscondido:
         "assets/images/splash-screens/splash-screen-puertoEscondido.png",
   };
-// flutter: Data: oaxaca-me
-// flutter: Data: zamora-me
-// flutter: Data: puerto_escondido_feed
+
   static final feedIds = <CityInstance, String>{
     CityInstance.zitacuaro: "zitacuaro",
-    CityInstance.zamora: "zamora-me",
+    CityInstance.zamora: "zamora",
     CityInstance.uruapan: "uruapan",
     CityInstance.oaxaca: "oaxaca",
     CityInstance.toluca: "toluca",
-    CityInstance.salinaCruz: "salina_cruz",
-    CityInstance.jilotepec: "oaxaca-me",
-    CityInstance.puertoEscondido: "puerto_escondido_feed",
+    CityInstance.salinaCruz: "salina-cruz",
+    CityInstance.jilotepec: "jilotepec",
+    CityInstance.puertoEscondido: "puerto-escondido",
   };
 
   String toValue() => _toValueMap[this]!;
