@@ -36,6 +36,12 @@ class RouteTransportsServices {
             TransitRoute.fromJson(json as Map<String, dynamic>))
         ?.toList() as List<TransitRoute>;
 
+    final city = await CitySelectionManager().getCityInstance;
+
+    if (city != null) {
+      return patterns.where((p) => p.code.split(':')[0] == city.getFeedId).toList();
+    }
+
     return patterns;
   }
 

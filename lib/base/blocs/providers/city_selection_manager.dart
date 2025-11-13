@@ -41,34 +41,25 @@ extension CityInstanceExtension on CityInstance {
   );
 
   static final otpEndpointValues = <CityInstance, String>{
-    CityInstance.zitacuaro: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.zamora: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.uruapan: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.oaxaca: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.toluca: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.salinaCruz: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.jilotepec: "http://165.232.145.99:8081/otp/routers/default",
-    CityInstance.puertoEscondido:
-        "http://165.232.145.99:8081/otp/routers/default",
+    CityInstance.zitacuaro: "https://rutometro.app/otp",
+    CityInstance.zamora: "https://rutometro.app/otp",
+    CityInstance.uruapan: "https://rutometro.app/otp",
+    CityInstance.oaxaca: "https://rutometro.app/otp",
+    CityInstance.toluca: "https://rutometro.app/otp",
+    CityInstance.salinaCruz: "https://rutometro.app/otp",
+    CityInstance.jilotepec: "https://rutometro.app/otp",
+    CityInstance.puertoEscondido: "https://rutometro.app/otp",
   };
 
   static final otpGraphqlEndpointValues = <CityInstance, String>{
-    CityInstance.zitacuaro:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.zamora:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.uruapan:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.oaxaca:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.toluca:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.salinaCruz:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.jilotepec:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
-    CityInstance.puertoEscondido:
-        "http://165.232.145.99:8081/otp/routers/default/index/graphql",
+    CityInstance.zitacuaro: "https://rutometro.app/otp/index/graphql",
+    CityInstance.zamora: "https://rutometro.app/otp/index/graphql",
+    CityInstance.uruapan: "https://rutometro.app/otp/index/graphql",
+    CityInstance.oaxaca: "https://rutometro.app/otp/index/graphql",
+    CityInstance.toluca: "https://rutometro.app/otp/index/graphql",
+    CityInstance.salinaCruz: "https://rutometro.app/otp/index/graphql",
+    CityInstance.jilotepec: "https://rutometro.app/otp/index/graphql",
+    CityInstance.puertoEscondido: "https://rutometro.app/otp/index/graphql",
   };
 
   static final _bboxValues = <CityInstance, List<double>>{
@@ -116,6 +107,19 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.puertoEscondido:
         "assets/images/splash-screens/splash-screen-puertoEscondido.png",
   };
+// flutter: Data: oaxaca-me
+// flutter: Data: zamora-me
+// flutter: Data: puerto_escondido_feed
+  static final feedIds = <CityInstance, String>{
+    CityInstance.zitacuaro: "zitacuaro",
+    CityInstance.zamora: "zamora-me",
+    CityInstance.uruapan: "uruapan",
+    CityInstance.oaxaca: "oaxaca",
+    CityInstance.toluca: "toluca",
+    CityInstance.salinaCruz: "salina_cruz",
+    CityInstance.jilotepec: "oaxaca-me",
+    CityInstance.puertoEscondido: "puerto_escondido_feed",
+  };
 
   String toValue() => _toValueMap[this]!;
 
@@ -128,6 +132,7 @@ extension CityInstanceExtension on CityInstance {
   TrufiLatLng get center => centerValues[this]!;
   String get getText => _oficialText[this]!;
   String get getSplashScreenAsset => splashScreenAssets[this]!;
+  String get getFeedId => feedIds[this]!;
 
   bool contains(TrufiLatLng point) {
     final corners = bbox;
