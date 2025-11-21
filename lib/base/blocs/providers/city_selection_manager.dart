@@ -114,9 +114,9 @@ extension CityInstanceExtension on CityInstance {
     CityInstance.uruapan: "uruapan",
     CityInstance.oaxaca: "oaxaca",
     CityInstance.toluca: "toluca",
-    CityInstance.salinaCruz: "salina-cruz",
+    CityInstance.salinaCruz: "salina_cruz",
     CityInstance.jilotepec: "jilotepec",
-    CityInstance.puertoEscondido: "puerto-escondido",
+    CityInstance.puertoEscondido: "puerto_escondido",
   };
 
   String toValue() => _toValueMap[this]!;
