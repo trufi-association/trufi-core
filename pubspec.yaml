@@ -9,7 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  in_app_review: ^2.0.9
+  in_app_review: ^2.0.11
   async: ^2.11.0
   async_executor: ^0.0.2
   cached_network_image: ^3.4.1

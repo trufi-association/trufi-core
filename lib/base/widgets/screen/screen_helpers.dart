@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart';
-import 'package:trufi_core/base/blocs/providers/uni_link_provider/uni_link_provider.dart';
+import 'package:trufi_core/base/blocs/providers/deeplink_provider/deeplink.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
@@ -40,7 +40,7 @@ class NoAnimationPage<T> extends TransitionPage<T> {
     LifecycleReactorHandler? lifecycleReactorHandler,
   }) : super(
           child: Builder(builder: (context) {
-            UniLinkProvider().runService(context);
+            DeeplinkProvider().runService(context);
             return BaseTrufiPage(
               child: LifecycleReactorWrapper(
                 lifecycleReactorHandler: lifecycleReactorHandler,
