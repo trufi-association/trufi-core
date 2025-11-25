@@ -7,7 +7,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
-import 'package:trufi_core/base/blocs/providers/uni_link_provider/geo_location.dart';
+import 'package:trufi_core/base/blocs/providers/deeplink_provider/geo_location.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';

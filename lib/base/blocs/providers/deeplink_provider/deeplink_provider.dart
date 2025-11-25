@@ -15,11 +15,11 @@ import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
 import 'exception_parse.dart';
 import 'geo_location.dart';
 
-class UniLinkProvider {
-  static final UniLinkProvider _singleton = UniLinkProvider._internal();
+class DeeplinkProvider {
+  static final DeeplinkProvider _singleton = DeeplinkProvider._internal();
 
-  factory UniLinkProvider() => _singleton;
-  UniLinkProvider._internal();
+  factory DeeplinkProvider() => _singleton;
+  DeeplinkProvider._internal();
 
   bool _isUsedInitialUri = false;
   bool _isRegisteredListening = false;

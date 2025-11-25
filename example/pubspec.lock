@@ -465,10 +465,10 @@ packages:
     dependency: transitive
     description:
       name: in_app_review
-      sha256: "99869244d09adc76af16bf8fd731dd13cef58ecafd5917847589c49f378cbb30"
+      sha256: ab26ac54dbd802896af78c670b265eaeab7ecddd6af4d0751e9604b60574817f
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.9"
+    version: "2.0.11"
   in_app_review_platform_interface:
     dependency: transitive
     description:
