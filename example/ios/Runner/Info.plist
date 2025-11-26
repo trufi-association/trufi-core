@@ -51,5 +51,28 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
+	<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>com.example.trufiCoreExample</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>trufi</string>
+        </array>
+    </dict>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>geo</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>geo</string>
+        </array>
+    </dict>
+</array>
 </dict>
 </plist>
