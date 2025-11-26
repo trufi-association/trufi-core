@@ -3,16 +3,6 @@ allprojects {
         google()
         mavenCentral()
     }
-
-    subprojects {
-      afterEvaluate { project ->
-        if (project.name == 'uni_links') {
-           project.android {
-               namespace 'name.avioli.unilinks'
-           }
-       }
-    }
-}
 }
 
 rootProject.buildDir = "../build"
@@ -26,4 +16,3 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
