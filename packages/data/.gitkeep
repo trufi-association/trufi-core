@@ -1,0 +1,5 @@
+This "layer" should keep track of data receiving.
+
+Responsiblities
+- HTTP Requests (dio, http, retrofit)
+- GraphQL

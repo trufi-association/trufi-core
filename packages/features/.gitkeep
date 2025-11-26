@@ -1,0 +1,5 @@
+This package would contain larger features for example the maps with all its UIs.
+
+Responsibilities
+- Ask the Repository layer for data
+- Show them in an UI
