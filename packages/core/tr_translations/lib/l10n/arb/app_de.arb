@@ -1,0 +1,46 @@
+{
+  "@@locale": "de",
+  "instruction_distance_meters": "{distance} m",
+  "@instruction_distance_meters": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "instruction_distance_km": "{distance} km",
+  "@instruction_distance_km": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "selected_on_map": "Auf der Karte ausgewählt",
+  "default_location_home": "Zuhause",
+  "default_location_work": "Arbeit",
+  "default_location_add": "{location}-Standort festlegen",
+  "@default_location_add": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "default_location_setLocation": "Standort festlegen",
+  "yourPlaces_menu": "Deine Orte",
+  "feedback_menu": "Feedback senden",
+  "feedback_title": "Bitte senden Sie uns eine E-Mail",
+  "feedback_content": "Haben Sie Vorschläge für unsere App oder Fehler in den Daten gefunden? Wir würden uns freuen, von Ihnen zu hören! Bitte geben Sie Ihre E-Mail-Adresse oder Telefonnummer an, damit wir Ihnen antworten können.",
+  "aboutUs_menu": "Über diesen Dienst",
+  "aboutUs_version": "Version {version}",
+  "@aboutUs_version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutUs_licenses": "Lizenzen",
+  "aboutUs_openSource": "Diese App wird als Open Source auf GitHub veröffentlicht. Sie können gerne zum Code beitragen oder eine App in Ihre eigene Stadt bringen."
+}

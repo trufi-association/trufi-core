@@ -1,0 +1,3 @@
+The core package is allowed to be dependent from everywhere but itself is not allowed to depend on something.
+This package can be used to provide global information like models that multiple layers need.
+An example is translations which are mostly used in different features but also from the app itself.
