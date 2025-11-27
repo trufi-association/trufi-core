@@ -3,7 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/localization/app_localization.dart';
 
 import 'package:trufi_core/pages/saved_places/widgets/dialog_edit_location.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/utils/icon_utils/icons.dart';
 import 'dialog_select_icon.dart';
 

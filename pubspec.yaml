@@ -2,10 +2,37 @@ name: trufi_core
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
+publish_to: none
 
 environment:
   sdk: ^3.9.2
   flutter: ">=1.17.0"
+
+workspace:
+  - packages/trufi_core_maps
+  - packages/trufi_core_map_layers
+  - example
+
+melos:
+  command:
+    bootstrap:
+      runPubGetInParallel: true
+    version:
+      branch: main
+      workspaceChangelog: true
+  scripts:
+    analyze:
+      run: melos exec -c 1 -- flutter analyze --no-fatal-infos
+      description: Run flutter analyze in all packages
+    format:
+      run: melos exec -c 1 -- dart format .
+      description: Run dart format in all packages
+    test:
+      run: melos exec -c 1 -- flutter test
+      description: Run flutter test in all packages
+    clean:
+      run: melos exec -c 1 -- flutter clean
+      description: Run flutter clean in all packages
 
 dependencies:
   dio: ^5.9.0
@@ -14,6 +41,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_map: ^8.2.2
+  trufi_core_maps:
+    path: packages/trufi_core_maps
+  trufi_core_map_layers:
+    path: packages/trufi_core_map_layers
   flutter_svg: ^2.2.1
   graphql: ^5.2.2
   http: ^1.2.2

@@ -10,7 +10,8 @@ import 'package:trufi_core/consts.dart';
 import 'package:trufi_core/models/enums/transport_mode.dart';
 import 'package:trufi_core/models/plan_entity.dart';
 import 'package:trufi_core/pages/home/service/i_plan_repository.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 abstract class IRoutingMapComponent extends TrufiLayer {
   IRoutingMapComponent(super.controller) : super(id: layerId, layerLevel: 2) {

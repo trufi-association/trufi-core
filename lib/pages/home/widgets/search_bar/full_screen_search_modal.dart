@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/localization/app_localization.dart';
 import 'package:trufi_core/repositories/location/location_repository.dart';
 import 'package:trufi_core/repositories/location/models/defaults_location.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/utils/icon_utils/icons.dart';
 import 'package:trufi_core/widgets/maps/choose_location/choose_location.dart';
 

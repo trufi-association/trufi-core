@@ -8,7 +8,7 @@ import 'package:trufi_core/pages/home/service/graphql_client.dart';
 import 'package:trufi_core/pages/home/service/routing_service/otp_2_7/grapqhql_queries/otp_schema_models_v2_7.dart';
 import 'package:trufi_core/pages/home/service/routing_service/otp_2_7/grapqhql_queries/plan_queries_otp2_7.dart';
 import 'package:trufi_core/pages/home/service/i_plan_repository.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 class GraphQLPlanDataSource extends IPlanRepository {
   final GraphQLClient client;

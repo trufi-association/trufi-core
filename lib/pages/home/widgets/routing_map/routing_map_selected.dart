@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core/widgets/utils.dart';
 import 'package:trufi_core/models/enums/transport_mode.dart';
 import 'package:trufi_core/models/plan_entity.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 class RoutingMapSelected extends TrufiLayer {
   static const String layerId = 'routing-map-selected';

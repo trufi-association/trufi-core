@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:latlong2/latlong.dart' as latlng;
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 class TrufiCameraFit {
   static const double _tileSize = 256.0;

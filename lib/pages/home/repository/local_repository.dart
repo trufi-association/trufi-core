@@ -1,5 +1,5 @@
 import 'package:trufi_core/models/plan_entity.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 abstract class MapRouteLocalRepository {
   Future<void> loadRepository();

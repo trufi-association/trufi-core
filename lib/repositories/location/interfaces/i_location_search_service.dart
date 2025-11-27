@@ -1,5 +1,5 @@
 import 'package:latlong2/latlong.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 abstract class ILocationSearchService {
   Future<List<TrufiLocation>> fetchLocations(String query, {int limit});

@@ -11,7 +11,7 @@ import 'package:trufi_core/pages/home/service/routing_service/otp_stadtnavi/grap
     as plan_fragment;
 import 'package:trufi_core/pages/home/service/routing_service/otp_stadtnavi/grapqhql_queries/plan_queries.dart'
     as plan_queries;
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/widgets/graphql_utils.dart';
 
 class StadtnaviGraphQLPlanDataSource extends IPlanRepository {

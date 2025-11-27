@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:trufi_core/models/plan_entity.dart';
 import 'package:trufi_core/pages/home/repository/local_repository.dart';
 import 'package:trufi_core/repositories/storage/i_local_storage.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 /// Implementation of MapRouteLocalRepository using generic local storage
 /// 

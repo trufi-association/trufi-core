@@ -2,7 +2,7 @@ import 'package:trufi_core/models/enums/mode.dart';
 import 'package:trufi_core/models/plan_entity.dart';
 import 'package:trufi_core/pages/home/service/i_plan_repository.dart';
 import 'package:trufi_core/pages/home/service/routing_service/otp_2_7/graphql_plan_data_source.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 class OnlineGraphQLRepository {
   final String graphQLEndPoint;

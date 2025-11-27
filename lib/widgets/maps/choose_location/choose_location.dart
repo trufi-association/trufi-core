@@ -5,8 +5,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:trufi_core/consts.dart';
 
 import 'package:trufi_core/repositories/location/location_repository.dart';
-import 'package:trufi_core/screens/route_navigation/maps/maplibre_gl.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/widgets/base_marker/to_marker.dart';
 
 class ChooseLocationPage extends StatefulWidget {

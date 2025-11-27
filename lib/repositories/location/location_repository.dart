@@ -10,7 +10,7 @@ import 'package:trufi_core/repositories/location/interfaces/i_location_service.d
 import 'package:trufi_core/repositories/location/models/defaults_location.dart';
 import 'package:trufi_core/repositories/location/services/storage_location_service.dart';
 import 'package:trufi_core/repositories/storage/shared_preferences_storage.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 class LocationRepository {
   final ILocationService locationService = 
