@@ -11,9 +11,9 @@ import '../layer/base/layer.dart';
 import '../map/controller.dart';
 import '../misc/color_utils.dart';
 import '../misc/image_tool.dart';
-import 'trufi_map_render.dart';
+import 'trufi_map.dart';
 
-class TrufiMapLibreMap extends StatefulWidget implements TrufiMapRender {
+class TrufiMapLibreMap extends StatefulWidget implements TrufiMap {
   const TrufiMapLibreMap({
     super.key,
     required this.controller,

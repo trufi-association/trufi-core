@@ -10,11 +10,9 @@ export 'src/models/line.dart';
 
 // Map
 export 'src/map/controller.dart';
-
-// Render
-export 'src/render/trufi_map_render.dart';
-export 'src/render/flutter_map_render.dart';
-export 'src/render/maplibre_render.dart';
+export 'src/map/trufi_map.dart';
+export 'src/map/flutter_map.dart';
+export 'src/map/maplibre_map.dart';
 
 // Layer - Base
 export 'src/layer/base/layer.dart';

@@ -4,9 +4,9 @@ import 'package:latlong2/latlong.dart' as latlng;
 
 import '../models/bounds.dart';
 import '../map/controller.dart';
-import 'trufi_map_render.dart';
+import 'trufi_map.dart';
 
-class TrufiFlutterMap extends StatefulWidget implements TrufiMapRender {
+class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
   const TrufiFlutterMap({
     super.key,
     required this.controller,
