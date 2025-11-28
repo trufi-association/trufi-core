@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:latlong2/latlong.dart' as latlng;
 
-import 'marker.dart';
+import '../../domain/entities/marker.dart';
 
 class MarkersContainer {
   final Map<String, MarkerIndex> _markersByLayer = {};

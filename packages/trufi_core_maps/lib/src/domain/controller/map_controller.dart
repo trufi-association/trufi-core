@@ -3,10 +3,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../models/bounds.dart';
-import '../models/camera.dart';
-import '../layer/base/layer.dart';
-import '../models/marker.dart';
+import '../entities/bounds.dart';
+import '../entities/camera.dart';
+import '../entities/marker.dart';
+import '../layers/trufi_layer.dart';
 
 class TrufiMapController {
   TrufiMapController({required TrufiCameraPosition initialCameraPosition})

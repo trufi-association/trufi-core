@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../models/marker.dart';
+import '../../domain/entities/marker.dart';
 
 abstract class ImageTool {
   static Future<Uint8List> svgToPng(String svgString) async {

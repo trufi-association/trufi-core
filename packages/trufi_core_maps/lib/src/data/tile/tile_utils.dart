@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../../models/bounds.dart';
+import '../../domain/entities/bounds.dart';
 
 class TileRange {
   final int minX, maxX, minY, maxY;

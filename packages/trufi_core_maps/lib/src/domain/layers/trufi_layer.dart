@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../../map/controller.dart';
-import '../../models/marker.dart';
-import '../../models/marker_index.dart';
-import '../../models/line.dart';
+import '../controller/map_controller.dart';
+import '../entities/marker.dart';
+import '../entities/line.dart';
+import '../../data/spatial/marker_index.dart';
 
 abstract class TrufiLayer {
   TrufiLayer(

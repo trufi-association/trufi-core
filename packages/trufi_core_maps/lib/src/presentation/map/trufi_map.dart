@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
-import 'controller.dart';
+import '../../domain/controller/map_controller.dart';
 
 abstract class TrufiMap extends Widget {
   final TrufiMapController controller;

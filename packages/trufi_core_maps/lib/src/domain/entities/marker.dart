@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../misc/image_tool.dart';
+import '../../data/utils/image_tool.dart';
 
 class TrufiMarker {
   TrufiMarker({

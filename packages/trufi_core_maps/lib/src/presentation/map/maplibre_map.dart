@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart' hide LatLngBounds;
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../models/bounds.dart';
-import '../models/camera.dart';
-import '../models/marker_index.dart';
-import '../layer/base/layer.dart';
-import '../map/controller.dart';
-import '../misc/color_utils.dart';
-import '../misc/image_tool.dart';
+import '../../domain/entities/bounds.dart';
+import '../../domain/entities/camera.dart';
+import '../../domain/layers/trufi_layer.dart';
+import '../../domain/controller/map_controller.dart';
+import '../../data/utils/color_utils.dart';
+import '../../data/utils/image_tool.dart';
+import '../../data/spatial/marker_index.dart';
 import 'trufi_map.dart';
 
 class TrufiMapLibreMap extends StatefulWidget implements TrufiMap {

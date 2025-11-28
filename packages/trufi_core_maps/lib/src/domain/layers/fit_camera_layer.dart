@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../base/layer.dart';
-import '../../models/marker.dart';
-import '../../models/line.dart';
+import 'trufi_layer.dart';
+import '../entities/marker.dart';
+import '../entities/line.dart';
 
 abstract class IFitCameraLayer extends TrufiLayer {
   IFitCameraLayer(
@@ -184,12 +184,12 @@ class FitCameraLayer extends IFitCameraLayer {
     final cosT = math.cos(theta);
     final sinT = math.sin(theta);
 
-    final Wcss = math.max(
+    final wCss = math.max(
       1.0,
       (_viewportLogical.width - combinedInset.left - combinedInset.right) *
           _dpr,
     );
-    final Hcss = math.max(
+    final hCss = math.max(
       1.0,
       (_viewportLogical.height - combinedInset.top - combinedInset.bottom) *
           _dpr,
@@ -214,8 +214,8 @@ class FitCameraLayer extends IFitCameraLayer {
     final cx = cx0 + shiftMercX;
     final cy = cy0 + shiftMercY;
 
-    final halfW = (Wcss / 2.0) * mercPerCssPx;
-    final halfH = (Hcss / 2.0) * mercPerCssPx;
+    final halfW = (wCss / 2.0) * mercPerCssPx;
+    final halfH = (hCss / 2.0) * mercPerCssPx;
 
     // Esquinas del rectángulo visible (para debug)
     final cornersLocal = <Offset>[
@@ -258,7 +258,7 @@ class FitCameraLayer extends IFitCameraLayer {
         TrufiLine(
           id: '$id:viewport-rect',
           position: rect,
-          color: Colors.cyan.withOpacity(0.9),
+          color: Colors.cyan.withValues(alpha: 0.9),
           lineWidth: 3,
           layerLevel: layerLevel,
         ),
@@ -272,7 +272,7 @@ class FitCameraLayer extends IFitCameraLayer {
               _fitBounds!.corners[3], // br
               _fitBounds!.corners[0], // bl
             ],
-            color: Colors.pink.withOpacity(0.7),
+            color: Colors.pink.withValues(alpha: 0.7),
             lineWidth: 2,
             layerLevel: layerLevel,
           ),
@@ -402,23 +402,23 @@ class FitCameraLayer extends IFitCameraLayer {
       left: _viewPadding.left + _padding.left,
     );
 
-    final Wcss = math.max(
+    final wCss = math.max(
       1.0,
       (_viewportLogical.width - combinedInset.left - combinedInset.right) *
           _dpr,
     );
-    final Hcss = math.max(
+    final hCss = math.max(
       1.0,
       (_viewportLogical.height - combinedInset.top - combinedInset.bottom) *
           _dpr,
     );
 
     // Proyección del viewport rotado al bbox axis-aligned
-    final Wproj = Wcss * absCos + Hcss * absSin;
-    final Hproj = Wcss * absSin + Hcss * absCos;
+    final wProj = wCss * absCos + hCss * absSin;
+    final hProj = wCss * absSin + hCss * absCos;
 
-    final zX = math.log(Wproj / (tileSize * fb.dx)) / math.ln2;
-    final zY = math.log(Hproj / (tileSize * fb.dy)) / math.ln2;
+    final zX = math.log(wProj / (tileSize * fb.dx)) / math.ln2;
+    final zY = math.log(hProj / (tileSize * fb.dy)) / math.ln2;
     final zoom = _zoomClamp(
       (zX.isFinite && zY.isFinite) ? math.min(zX, zY) : cam.zoom,
       minZoom,

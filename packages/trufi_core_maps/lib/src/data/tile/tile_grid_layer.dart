@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:vector_tile/vector_tile.dart';
 
-import '../../models/line.dart';
-import '../base/layer.dart';
+import '../../domain/entities/line.dart';
+import '../../domain/layers/trufi_layer.dart';
 import 'cached_fetch.dart';
 import 'tile_utils.dart';
 

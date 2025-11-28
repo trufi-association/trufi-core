@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:latlong2/latlong.dart' as latlng;
 
-import '../models/bounds.dart';
-import '../map/controller.dart';
+import '../../domain/entities/bounds.dart';
+import '../../domain/controller/map_controller.dart';
 import 'trufi_map.dart';
 
 class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
