@@ -13,6 +13,7 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMapRender {
     this.onMapClick,
     this.onMapLongClick,
     required this.tileUrl,
+    this.userAgentPackageName,
   });
 
   @override
@@ -23,6 +24,7 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMapRender {
   final void Function(latlng.LatLng)? onMapLongClick;
 
   final String tileUrl;
+  final String? userAgentPackageName;
 
   @override
   State<TrufiFlutterMap> createState() => _TrufiFlutterMapState();
@@ -100,7 +102,11 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
         onLongPress: (_, position) => widget.onMapLongClick?.call(position),
       ),
       children: [
-        Opacity(opacity: 1, child: fm.TileLayer(urlTemplate: widget.tileUrl)),
+        fm.TileLayer(
+          urlTemplate: widget.tileUrl,
+          userAgentPackageName:
+              widget.userAgentPackageName ?? 'com.example.trufi_core_maps',
+        ),
         for (final layer in visibleLayers)
           fm.MarkerLayer(
             markers: [
