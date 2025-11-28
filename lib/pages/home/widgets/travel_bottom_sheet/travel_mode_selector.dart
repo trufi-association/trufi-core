@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/pages/home/widgets/routing_map/routing_map_controller.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 import 'package:trufi_core/widgets/tabs/responsive_tab.dart';
 
 class TravelModeSelector extends StatelessWidget {
-  final RoutingMapComponent routingMapComponent;
-  const TravelModeSelector({super.key, required this.routingMapComponent});
+  final RoutingMapController routingMapController;
+  const TravelModeSelector({super.key, required this.routingMapController});
 
   @override
   Widget build(BuildContext context) {

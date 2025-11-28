@@ -13,7 +13,12 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 ///       await initializeDateFormatting('en');
 ///       await loadData();
 ///     },
-///     onInitialized: (context) => const TrufiApp(),
+///     onInitialized: (context) => const TrufiApp(
+///       routingConfig: OtpRoutingConfig(
+///         otpEndpoint: 'https://otp.example.com/otp/routers/default/index/graphql',
+///         otpVersion: OtpVersion.v2_8, // or OtpVersion.v2_4
+///       ),
+///     ),
 ///   );
 /// }
 /// ```

@@ -3,15 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core/consts.dart';
-import 'package:trufi_core/pages/home/service/i_plan_repository.dart';
-import 'package:trufi_core/pages/home/widgets/routing_map/routing_map_controller.dart';
+import 'package:trufi_core/routing/trufi_routing_config.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
+import 'package:trufi_core/adapters/plan_entity_adapter.dart';
 import 'package:trufi_core/pages/home/widgets/search_bar/location_search_bar.dart';
 import 'package:trufi_core/pages/home/widgets/travel_bottom_sheet/travel_bottom_sheet.dart';
 import 'package:trufi_core/repositories/services/gps_lcoation/gps_location.dart';
-import 'package:trufi_core/screens/route_navigation/map_layers/fit_camera_layer.dart';
-import 'package:trufi_core/screens/route_navigation/maps/flutter_map.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
-import 'package:trufi_core/screens/route_navigation/maps/maplibre_gl.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/screens/route_navigation/widgets/map_type_button.dart';
 import 'package:trufi_core/widgets/app_lifecycle_reactor.dart';
 import 'package:trufi_core/widgets/bottom_sheet/trufi_bottom_sheet.dart';
@@ -20,14 +19,18 @@ import 'package:trufi_core/widgets/bottom_sheet/location_selector_bottom_sheet.d
 class RouteNavigationScreen extends StatefulWidget {
   const RouteNavigationScreen({
     super.key,
+    required this.routingConfig,
     this.mapBuilder = defaultMapBuilder,
     this.mapLayerBuilder = defaultMapLayerBuilder,
-    this.routingMapComponent = defaultRoutingMapComponent,
+    this.routingMapControllerBuilder,
     this.fitCameraLayer = defaultFitCameraLayer,
     this.routeSearchBuilder = defaultRouteSearchBuilder,
   });
 
-  final List<TrufiMapRender> Function(
+  /// Configuration for the routing service.
+  final TrufiRoutingConfig routingConfig;
+
+  final List<TrufiMap> Function(
     TrufiMapController controller,
     void Function(latlng.LatLng)? onMapClick,
     void Function(latlng.LatLng)? onMapLongClick,
@@ -39,14 +42,11 @@ class RouteNavigationScreen extends StatefulWidget {
 
   final RouteSearchBuilder routeSearchBuilder;
 
-  final IRoutingMapComponent Function(
-    TrufiMapController controller,
-    IPlanRepository? planRepository,
-  )
-  routingMapComponent;
+  final RoutingMapController Function(TrufiMapController controller)?
+  routingMapControllerBuilder;
   final IFitCameraLayer Function(TrufiMapController controller) fitCameraLayer;
 
-  static List<TrufiMapRender> defaultMapBuilder(
+  static List<TrufiMap> defaultMapBuilder(
     TrufiMapController controller,
     void Function(latlng.LatLng)? onMapClick,
     void Function(latlng.LatLng)? onMapLongClick,
@@ -71,16 +71,6 @@ class RouteNavigationScreen extends StatefulWidget {
     TrufiMapController controller,
   ) {
     return [];
-  }
-
-  static IRoutingMapComponent defaultRoutingMapComponent(
-    TrufiMapController controller,
-    IPlanRepository? customPlanRepository,
-  ) {
-    return RoutingMapComponent(
-      controller,
-      customPlanRepository: customPlanRepository,
-    );
   }
 
   static Widget defaultRouteSearchBuilder({
@@ -135,11 +125,17 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
     ),
   );
 
-  late final IRoutingMapComponent routingMapComponent;
+  late final RoutingMapController routingMapController;
   late final IFitCameraLayer fitCameraLayer;
   TrufiMarker? selectedMarker;
   late List<TrufiLayer> mapLayerRenders;
-  late List<TrufiMapRender> mapRenders;
+  late List<TrufiMap> mapRenders;
+
+  RoutingMapController _createDefaultRoutingMapController(
+    TrufiMapController controller,
+  ) {
+    return widget.routingConfig.createRoutingController(controller);
+  }
 
   @override
   void initState() {
@@ -162,29 +158,27 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
           context,
           selectedLocation: coord,
           onSetAsOrigin: () async {
-            await routingMapComponent.addOrigin(
-              TrufiLocation(
+            await routingMapController.addOrigin(
+              RoutingLocation(
                 description: '',
                 position: coord,
-                type: TrufiLocationType.selectedOnMap,
               ),
             );
             await _fetchPlanWithLoading();
           },
           onSetAsDestination: () async {
-            await routingMapComponent.addDestination(
-              TrufiLocation(
+            await routingMapController.addDestination(
+              RoutingLocation(
                 description: '',
                 position: coord,
-                type: TrufiLocationType.selectedOnMap,
               ),
             );
             // Auto-set origin to current location if not set
-            if (routingMapComponent.origin == null) {
+            if (routingMapController.origin == null) {
               final currentLocation = GPSLocationProvider().current;
               if (currentLocation != null) {
-                await routingMapComponent.addOrigin(
-                  TrufiLocation(
+                await routingMapController.addOrigin(
+                  RoutingLocation(
                     description: 'Your Location',
                     position: currentLocation,
                   ),
@@ -198,14 +192,15 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
     );
 
     mapLayerRenders = widget.mapLayerBuilder(mapController);
-    routingMapComponent = widget.routingMapComponent(mapController, null);
+    routingMapController = widget.routingMapControllerBuilder?.call(mapController) ??
+        _createDefaultRoutingMapController(mapController);
     fitCameraLayer = widget.fitCameraLayer(mapController);
   }
 
   @override
   void dispose() {
     mapController.dispose();
-    routingMapComponent.dispose();
+    routingMapController.dispose();
     fitCameraLayer.dispose();
     for (var layer in mapLayerRenders) {
       layer.dispose();
@@ -221,7 +216,7 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
     );
 
     try {
-      await routingMapComponent.fetchPlan(context);
+      await routingMapController.fetchPlan();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -232,6 +227,12 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
         Navigator.of(context, rootNavigator: true).pop();
       }
     }
+  }
+
+  /// Converts routing location to TrufiLocation for UI components.
+  TrufiLocation? _toTrufiLocation(RoutingLocation? loc) {
+    if (loc == null) return null;
+    return PlanEntityAdapter.toTrufiLocation(loc);
   }
 
   @override
@@ -252,27 +253,43 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
                   valueListenable: mapController.layersNotifier,
                   builder: (context, value, child) {
                     final selectedItinerary =
-                        routingMapComponent.selectedItinerary;
-                    final plan = routingMapComponent.plan;
-                    final origin = routingMapComponent.origin;
-                    final destination = routingMapComponent.destination;
+                        routingMapController.selectedItinerary;
+                    final plan = routingMapController.plan;
+                    final origin = _toTrufiLocation(routingMapController.origin);
+                    final destination = _toTrufiLocation(routingMapController.destination);
+
+                    // Convert domain plan to UI plan for TransitBottomSheet
+                    final uiPlan = plan != null
+                        ? PlanEntityAdapter.fromRoutingPlan(plan)
+                        : null;
+                    final uiSelectedItinerary = selectedItinerary != null && uiPlan != null
+                        ? uiPlan.itineraries?.firstWhere(
+                            (it) => it.startTime == selectedItinerary.startTime,
+                            orElse: () => uiPlan.itineraries!.first,
+                          )
+                        : null;
+
                     return Stack(
                       children: [
                         widget.routeSearchBuilder(
                           onSaveFrom: (location) async {
-                            await routingMapComponent.addOrigin(location);
+                            await routingMapController.addOrigin(
+                              PlanEntityAdapter.toRoutingLocation(location),
+                            );
 
                             await _fetchPlanWithLoading();
                           },
                           onClearFrom: () {},
                           onSaveTo: (location) async {
-                            await routingMapComponent.addDestination(location);
-                            if (routingMapComponent.origin == null) {
+                            await routingMapController.addDestination(
+                              PlanEntityAdapter.toRoutingLocation(location),
+                            );
+                            if (routingMapController.origin == null) {
                               final currentLocation =
                                   GPSLocationProvider().current;
                               if (currentLocation != null) {
-                                await routingMapComponent.addOrigin(
-                                  TrufiLocation(
+                                await routingMapController.addOrigin(
+                                  RoutingLocation(
                                     description: 'Your Location',
                                     position: currentLocation,
                                   ),
@@ -283,26 +300,26 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
                             await _fetchPlanWithLoading();
                           },
                           onClearTo: () async {
-                            routingMapComponent.cleanOriginAndDestination();
+                            routingMapController.clearAll();
                             await _fetchPlanWithLoading();
                           },
                           onFetchPlan: () {},
                           onReset: () {},
                           onSwap: () async {
-                            if (routingMapComponent.destination != null &&
-                                routingMapComponent.origin != null) {
-                              final temp = routingMapComponent.origin;
-                              await routingMapComponent.addOrigin(
-                                routingMapComponent.destination!,
+                            if (routingMapController.destination != null &&
+                                routingMapController.origin != null) {
+                              final temp = routingMapController.origin;
+                              await routingMapController.addOrigin(
+                                routingMapController.destination!,
                               );
-                              await routingMapComponent.addDestination(temp!);
+                              await routingMapController.addDestination(temp!);
                               await _fetchPlanWithLoading();
                             }
                           },
                           origin: origin,
                           destination: destination,
                         ),
-                        if (plan != null)
+                        if (uiPlan != null)
                           TrufiBottomSheet(
                             onHeightChanged: (height) {
                               final currentHeight = constraints.maxHeight / 2;
@@ -316,27 +333,32 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
                               );
                             },
                             child: TransitBottomSheet(
-                              plan: plan,
-                              selectedItinerary: selectedItinerary,
+                              plan: uiPlan,
+                              selectedItinerary: uiSelectedItinerary,
                               updateCamera:
                                   ({bearing, target, visibleRegion, zoom}) {
-                                    return routingMapComponent.controller
+                                    return routingMapController.controller
                                         .updateCamera(target: target, zoom: 18);
                                   },
                               onClose: () {
-                                routingMapComponent.cleanOriginAndDestination();
+                                routingMapController.clearAll();
                               },
                               onSelectItinerary: (itinerary) {
-                                if (itinerary != null) {
-                                  routingMapComponent.changeItinerary(
-                                    itinerary,
+                                if (itinerary != null && plan?.itineraries != null) {
+                                  // Find matching domain itinerary by startTime
+                                  final domainItinerary = plan!.itineraries!.firstWhere(
+                                    (it) => it.startTime == itinerary.startTime,
+                                    orElse: () => plan.itineraries!.first,
+                                  );
+                                  routingMapController.changeItinerary(
+                                    domainItinerary,
                                   );
                                   final points = itinerary.legs
                                       .expand((leg) => leg.accumulatedPoints)
                                       .toList();
                                   fitCameraLayer.fitBoundsOnCamera(points);
                                 } else {
-                                  routingMapComponent.changeItinerary(null);
+                                  routingMapController.changeItinerary(null);
                                   fitCameraLayer.fitBoundsOnCamera([]);
                                 }
                               },

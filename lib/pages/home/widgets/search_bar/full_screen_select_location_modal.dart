@@ -4,7 +4,7 @@
 // import 'package:trufi_core/pages/home/widgets/search_bar/location_search_bar.dart';
 // import 'package:trufi_core/pages/home/widgets/search_bar/search_bar_utils.dart';
 // import 'package:trufi_core/repositories/location/location_repository.dart';
-// import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+// import 'package:trufi_core/models/trufi_location.dart';
 // import 'package:trufi_core/utils/icon_utils/icons.dart';
 // import 'package:trufi_core/widgets/base_marker/from_marker.dart';
 // import 'package:trufi_core/widgets/base_marker/to_marker.dart';

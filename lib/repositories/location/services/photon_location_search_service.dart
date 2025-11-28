@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/repositories/location/interfaces/i_location_search_service.dart';
 import 'package:trufi_core/repositories/location/models/location_search_model.dart';
 import 'package:trufi_core/utils/packge_info_platform.dart';

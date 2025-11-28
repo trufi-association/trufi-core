@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 
 /// Defines a callback function signature for building route search widgets.
 ///

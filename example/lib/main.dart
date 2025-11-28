@@ -2,6 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:trufi_core/trufi_app.dart';
 import 'package:trufi_core/trufi_initialization.dart';
+import 'package:trufi_core/routing/otp_routing_config.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 void main() {
   initializeTrufiApp(
@@ -12,6 +14,10 @@ void main() {
       await initializeDateFormatting(appLocale);
     },
     onInitialized: (context) => const TrufiApp(
+      routingConfig: OtpRoutingConfig(
+        otpEndpoint: 'https://otp.kigali.trufi.dev/otp/routers/default/index/graphql',
+        otpVersion: OtpVersion.v2_7,
+      ),
       title: 'Kigali Mobility',
       appName: 'Kigali Mobility',
       cityName: 'Kigali',

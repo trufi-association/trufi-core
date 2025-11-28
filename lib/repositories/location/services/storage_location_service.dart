@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:trufi_core/repositories/storage/i_local_storage.dart';
-import 'package:trufi_core/screens/route_navigation/maps/trufi_map_controller.dart';
+import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/repositories/location/interfaces/i_location_service.dart';
 
 /// Implementation of ILocationService using generic local storage
