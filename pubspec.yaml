@@ -10,6 +10,7 @@ environment:
 
 workspace:
   - packages/trufi_core_maps
+  - packages/trufi_core_routing
   - example
 
 melos:
@@ -42,6 +43,8 @@ dependencies:
     sdk: flutter
   trufi_core_maps:
     path: packages/trufi_core_maps
+  trufi_core_routing:
+    path: packages/trufi_core_routing
   flutter_svg: ^2.2.3
   geolocator: ^14.0.1
   go_router: ^14.6.2

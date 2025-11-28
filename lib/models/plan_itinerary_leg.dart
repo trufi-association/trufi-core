@@ -27,7 +27,9 @@ class PlanItineraryLeg {
     this.trip,
   }) : selectedMarker = TrufiMarker(
          id: "$shortName",
-         position: accumulatedPoints[(accumulatedPoints.length / 2).floor()],
+         position: accumulatedPoints.isNotEmpty
+             ? accumulatedPoints[(accumulatedPoints.length / 2).floor()]
+             : const LatLng(0, 0),
          widget: Container(
            padding: const EdgeInsets.all(4.0),
            decoration: BoxDecoration(
@@ -66,7 +68,9 @@ class PlanItineraryLeg {
        ),
        unSelectedMarker = TrufiMarker(
          id: "${shortName}",
-         position: accumulatedPoints[(accumulatedPoints.length / 2).floor()],
+         position: accumulatedPoints.isNotEmpty
+             ? accumulatedPoints[(accumulatedPoints.length / 2).floor()]
+             : const LatLng(0, 0),
          widget: Container(
            padding: const EdgeInsets.all(4.0),
            decoration: BoxDecoration(

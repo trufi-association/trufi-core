@@ -34,6 +34,11 @@ export 'src/presentation/map/flutter_map.dart';
 export 'src/presentation/map/maplibre_map.dart';
 
 // ============================================
+// PRESENTATION LAYER - Utils
+// ============================================
+export 'src/presentation/utils/trufi_camera_fit.dart';
+
+// ============================================
 // DATA LAYER - Tile System
 // ============================================
 export 'src/data/tile/tile_utils.dart';

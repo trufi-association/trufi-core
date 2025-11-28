@@ -10,8 +10,6 @@ import 'package:trufi_core/models/pickup_booking_info.dart';
 import 'package:trufi_core/models/step_entity.dart';
 import 'package:trufi_core/models/trip.dart';
 import 'package:trufi_core/models/trufi_map_utils.dart';
-import 'package:trufi_core/models/trufi_location.dart';
-import 'package:trufi_core/widgets/utils.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:collection/collection.dart';
 
