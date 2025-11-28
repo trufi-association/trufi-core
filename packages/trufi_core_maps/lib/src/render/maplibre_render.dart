@@ -87,7 +87,8 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     }
     final ctl = _mapCtl;
     if (ctl == null) return;
-    final cam = await ctl.cameraPosition!;
+    final cam = ctl.cameraPosition;
+    if (cam == null) return;
     final visibleRegion = await ctl.getVisibleRegion();
     widget.controller.updateCamera(
       target: latlng.LatLng(cam.target.latitude, cam.target.longitude),

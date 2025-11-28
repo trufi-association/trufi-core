@@ -34,35 +34,30 @@ melos:
       description: Run flutter clean in all packages
 
 dependencies:
-  dio: ^5.9.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_map: ^8.2.2
+  flutter_web_plugins:
+    sdk: flutter
   trufi_core_maps:
     path: packages/trufi_core_maps
-  flutter_svg: ^2.2.1
+  flutter_svg: ^2.2.3
+  geolocator: ^14.0.1
+  go_router: ^14.6.2
   graphql: ^5.2.2
   http: ^1.2.2
   latlong2: ^0.9.1
-  maplibre_gl: ^0.22.0
   package_info_plus: ^9.0.0
-  path_provider: ^2.1.5
   provider: ^6.1.5+1
-  vector_tile: ^3.0.0
-  url_launcher: ^6.3.2
-  geolocator: ^14.0.1
   shared_preferences: ^2.3.3
+  url_launcher: ^6.3.2
   uuid: ^4.5.1
-  go_router: ^14.6.2
-  flutter_web_plugins:
-    sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
