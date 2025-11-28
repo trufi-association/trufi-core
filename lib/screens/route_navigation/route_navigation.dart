@@ -25,7 +25,7 @@ class RouteNavigationScreen extends StatefulWidget {
     this.routeSearchBuilder = defaultRouteSearchBuilder,
   });
 
-  final List<TrufiMapRender> Function(
+  final List<TrufiMap> Function(
     TrufiMapController controller,
     void Function(latlng.LatLng)? onMapClick,
     void Function(latlng.LatLng)? onMapLongClick,
@@ -44,7 +44,7 @@ class RouteNavigationScreen extends StatefulWidget {
   routingMapComponent;
   final IFitCameraLayer Function(TrufiMapController controller) fitCameraLayer;
 
-  static List<TrufiMapRender> defaultMapBuilder(
+  static List<TrufiMap> defaultMapBuilder(
     TrufiMapController controller,
     void Function(latlng.LatLng)? onMapClick,
     void Function(latlng.LatLng)? onMapLongClick,
@@ -137,7 +137,7 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
   late final IFitCameraLayer fitCameraLayer;
   TrufiMarker? selectedMarker;
   late List<TrufiLayer> mapLayerRenders;
-  late List<TrufiMapRender> mapRenders;
+  late List<TrufiMap> mapRenders;
 
   @override
   void initState() {
