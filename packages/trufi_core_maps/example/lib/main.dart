@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
+import 'layers/click_markers_layer.dart';
 import 'layers/debug_grid_layer.dart';
 import 'layers/points_layer.dart';
 import 'layers/route_layer.dart';
@@ -43,10 +44,12 @@ class _MapExamplePageState extends State<MapExamplePage> {
   late final PointsLayer _pointsLayer;
   late final RouteLayer _routeLayer;
   late final DebugGridLayer _debugGridLayer;
+  late final ClickMarkersLayer _clickMarkersLayer;
 
   MapRenderType _currentRender = MapRenderType.flutterMap;
   bool _showGrid = false;
   int _granularityLevels = 0;
+  bool _clickMarkersEnabled = false;
 
   // Kigali, Rwanda coordinates
   static const _initialPosition = latlng.LatLng(-1.9403, 29.8739);
@@ -72,6 +75,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
     _pointsLayer = PointsLayer(_controller);
     _routeLayer = RouteLayer(_controller);
     _debugGridLayer = DebugGridLayer(_controller);
+    _clickMarkersLayer = ClickMarkersLayer(_controller);
 
     // Add sample data
     _addSampleData();
@@ -105,6 +109,9 @@ class _MapExamplePageState extends State<MapExamplePage> {
 
   void _onMapClick(latlng.LatLng position) {
     debugPrint('Map clicked at: ${position.latitude}, ${position.longitude}');
+    if (_clickMarkersEnabled) {
+      _clickMarkersLayer.addMarkerAt(position);
+    }
   }
 
   void _onMapLongClick(latlng.LatLng position) {
@@ -223,10 +230,21 @@ class _MapExamplePageState extends State<MapExamplePage> {
                         icon: Icons.route,
                         visible: _routeLayer.visible,
                       ),
+                      LayerInfo(
+                        id: _clickMarkersLayer.id,
+                        name: 'Tap',
+                        icon: Icons.touch_app,
+                        visible: _clickMarkersEnabled,
+                      ),
                     ],
                     onLayerToggle: (layerId, visible) {
                       setState(() {
-                        _controller.toggleLayer(layerId, visible);
+                        if (layerId == _clickMarkersLayer.id) {
+                          _clickMarkersEnabled = visible;
+                          _clickMarkersLayer.visible = visible;
+                        } else {
+                          _controller.toggleLayer(layerId, visible);
+                        }
                       });
                     },
                     gridConfig: GridConfig(
