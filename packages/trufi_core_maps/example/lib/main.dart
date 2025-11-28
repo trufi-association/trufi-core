@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
+import 'layers/debug_grid_layer.dart';
 import 'layers/points_layer.dart';
 import 'layers/route_layer.dart';
 import 'widgets/map_controls.dart';
@@ -41,8 +42,11 @@ class _MapExamplePageState extends State<MapExamplePage> {
   late final FitCameraLayer _fitCameraLayer;
   late final PointsLayer _pointsLayer;
   late final RouteLayer _routeLayer;
+  late final DebugGridLayer _debugGridLayer;
 
   MapRenderType _currentRender = MapRenderType.flutterMap;
+  bool _showGrid = false;
+  int _granularityLevels = 0;
 
   // Kigali, Rwanda coordinates
   static const _initialPosition = latlng.LatLng(-1.9403, 29.8739);
@@ -67,6 +71,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
 
     _pointsLayer = PointsLayer(_controller);
     _routeLayer = RouteLayer(_controller);
+    _debugGridLayer = DebugGridLayer(_controller);
 
     // Add sample data
     _addSampleData();
@@ -93,6 +98,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
 
   @override
   void dispose() {
+    _debugGridLayer.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -120,6 +126,20 @@ class _MapExamplePageState extends State<MapExamplePage> {
 
   void _resetCamera() {
     _controller.updateCamera(target: _initialPosition, zoom: _initialZoom);
+  }
+
+  void _onGridToggle(bool showGrid) {
+    setState(() {
+      _showGrid = showGrid;
+      _debugGridLayer.setVisible(showGrid);
+    });
+  }
+
+  void _onGranularityChanged(int level) {
+    setState(() {
+      _granularityLevels = level;
+      _debugGridLayer.granularityLevels = level;
+    });
   }
 
   Widget _buildMap() {
@@ -180,13 +200,12 @@ class _MapExamplePageState extends State<MapExamplePage> {
                 ),
               ),
 
-              // Bottom Controls (Map Render + Layers)
+              // Bottom Controls (Map Render + Layers + Grid) - centered
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Center(
-                  child: MapControls(
+                child: MapControls(
                     currentRender: _currentRender,
                     onRenderChanged: (render) {
                       setState(() => _currentRender = render);
@@ -210,7 +229,12 @@ class _MapExamplePageState extends State<MapExamplePage> {
                         _controller.toggleLayer(layerId, visible);
                       });
                     },
-                  ),
+                    gridConfig: GridConfig(
+                      showGrid: _showGrid,
+                      granularityLevels: _granularityLevels,
+                    ),
+                    onGridToggle: _onGridToggle,
+                    onGranularityChanged: _onGranularityChanged,
                 ),
               ),
             ],

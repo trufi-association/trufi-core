@@ -16,11 +16,24 @@ class LayerInfo {
   });
 }
 
+class GridConfig {
+  final bool showGrid;
+  final int granularityLevels;
+
+  const GridConfig({
+    this.showGrid = false,
+    this.granularityLevels = 0,
+  });
+}
+
 class MapControls extends StatelessWidget {
   final MapRenderType currentRender;
   final void Function(MapRenderType) onRenderChanged;
   final List<LayerInfo> layers;
   final void Function(String layerId, bool visible) onLayerToggle;
+  final GridConfig gridConfig;
+  final void Function(bool showGrid) onGridToggle;
+  final void Function(int level) onGranularityChanged;
 
   const MapControls({
     super.key,
@@ -28,28 +41,33 @@ class MapControls extends StatelessWidget {
     required this.onRenderChanged,
     required this.layers,
     required this.onLayerToggle,
+    required this.gridConfig,
+    required this.onGridToggle,
+    required this.onGranularityChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Wrap(
+            spacing: 24,
+            runSpacing: 16,
+            alignment: WrapAlignment.start,
             children: [
               // Map Render Section
               _buildSection(
@@ -71,13 +89,6 @@ class MapControls extends StatelessWidget {
                 ),
               ),
 
-              // Divider
-              Container(
-                width: 1,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                color: Colors.grey.shade200,
-              ),
-
               // Layers Section
               _buildSection(
                 icon: Icons.visibility_outlined,
@@ -86,13 +97,42 @@ class MapControls extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: layers
                       .map(
-                        (layer) => _LayerButton(
-                          layer: layer,
-                          onToggle: () =>
-                              onLayerToggle(layer.id, !layer.visible),
+                        (layer) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: _LayerChip(
+                            layer: layer,
+                            onToggle: () =>
+                                onLayerToggle(layer.id, !layer.visible),
+                          ),
                         ),
                       )
                       .toList(),
+                ),
+              ),
+
+              // Grid Section
+              _buildSection(
+                icon: Icons.grid_4x4_outlined,
+                title: 'Grid',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _GridToggle(
+                      isEnabled: gridConfig.showGrid,
+                      onToggle: () => onGridToggle(!gridConfig.showGrid),
+                    ),
+                    const SizedBox(width: 12),
+                    Opacity(
+                      opacity: gridConfig.showGrid ? 1.0 : 0.4,
+                      child: IgnorePointer(
+                        ignoring: !gridConfig.showGrid,
+                        child: _GranularityStepper(
+                          value: gridConfig.granularityLevels,
+                          onChanged: onGranularityChanged,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -166,7 +206,7 @@ class _SegmentedControl extends StatelessWidget {
             onTap: item.onTap,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: item.isSelected ? Colors.white : Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
@@ -186,8 +226,9 @@ class _SegmentedControl extends StatelessWidget {
                   fontSize: 13,
                   fontWeight:
                       item.isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color:
-                      item.isSelected ? Colors.blue.shade700 : Colors.grey.shade600,
+                  color: item.isSelected
+                      ? Colors.blue.shade700
+                      : Colors.grey.shade600,
                 ),
               ),
             ),
@@ -198,62 +239,195 @@ class _SegmentedControl extends StatelessWidget {
   }
 }
 
-class _LayerButton extends StatelessWidget {
+class _LayerChip extends StatelessWidget {
   final LayerInfo layer;
   final VoidCallback onToggle;
 
-  const _LayerButton({
+  const _LayerChip({
     required this.layer,
     required this.onToggle,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onToggle,
-          borderRadius: BorderRadius.circular(10),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: layer.visible ? Colors.blue.shade50 : Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: layer.visible
-                    ? Colors.blue.shade200
-                    : Colors.grey.shade200,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  layer.icon,
-                  size: 16,
-                  color: layer.visible
-                      ? Colors.blue.shade700
-                      : Colors.grey.shade500,
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  layer.name,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight:
-                        layer.visible ? FontWeight.w600 : FontWeight.w500,
-                    color: layer.visible
-                        ? Colors.blue.shade700
-                        : Colors.grey.shade600,
-                  ),
-                ),
-              ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onToggle,
+        borderRadius: BorderRadius.circular(10),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: layer.visible ? Colors.blue.shade50 : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color:
+                  layer.visible ? Colors.blue.shade200 : Colors.grey.shade200,
+              width: 1,
             ),
           ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                layer.icon,
+                size: 16,
+                color:
+                    layer.visible ? Colors.blue.shade700 : Colors.grey.shade500,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                layer.name,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: layer.visible ? FontWeight.w600 : FontWeight.w500,
+                  color: layer.visible
+                      ? Colors.blue.shade700
+                      : Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GridToggle extends StatelessWidget {
+  final bool isEnabled;
+  final VoidCallback onToggle;
+
+  const _GridToggle({
+    required this.isEnabled,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onToggle,
+        borderRadius: BorderRadius.circular(10),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: isEnabled ? Colors.red.shade50 : Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isEnabled ? Colors.red.shade200 : Colors.grey.shade200,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.grid_on_rounded,
+                size: 16,
+                color: isEnabled ? Colors.red.shade700 : Colors.grey.shade500,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                isEnabled ? 'On' : 'Off',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isEnabled ? FontWeight.w600 : FontWeight.w500,
+                  color: isEnabled ? Colors.red.shade700 : Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GranularityStepper extends StatelessWidget {
+  final int value;
+  final void Function(int) onChanged;
+
+  const _GranularityStepper({
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(3),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _StepperButton(
+            icon: Icons.remove,
+            onTap: value > -3 ? () => onChanged(value - 1) : null,
+          ),
+          Container(
+            constraints: const BoxConstraints(minWidth: 28),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              '$value',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey.shade700,
+              ),
+            ),
+          ),
+          _StepperButton(
+            icon: Icons.add,
+            onTap: value < 5 ? () => onChanged(value + 1) : null,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StepperButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  const _StepperButton({
+    required this.icon,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isEnabled = onTap != null;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: isEnabled ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ]
+              : null,
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: isEnabled ? Colors.grey.shade700 : Colors.grey.shade400,
         ),
       ),
     );
