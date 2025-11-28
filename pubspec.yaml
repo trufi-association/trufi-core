@@ -10,7 +10,6 @@ environment:
 
 workspace:
   - packages/trufi_core_maps
-  - packages/trufi_core_map_layers
   - example
 
 melos:
@@ -43,8 +42,6 @@ dependencies:
   flutter_map: ^8.2.2
   trufi_core_maps:
     path: packages/trufi_core_maps
-  trufi_core_map_layers:
-    path: packages/trufi_core_map_layers
   flutter_svg: ^2.2.1
   graphql: ^5.2.2
   http: ^1.2.2

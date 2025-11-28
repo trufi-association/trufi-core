@@ -8,7 +8,6 @@ import 'package:trufi_core/pages/home/widgets/routing_map/routing_map_controller
 import 'package:trufi_core/pages/home/widgets/search_bar/location_search_bar.dart';
 import 'package:trufi_core/pages/home/widgets/travel_bottom_sheet/travel_bottom_sheet.dart';
 import 'package:trufi_core/repositories/services/gps_lcoation/gps_location.dart';
-import 'package:trufi_core_map_layers/trufi_core_map_layers.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core/models/trufi_location.dart';
 import 'package:trufi_core/screens/route_navigation/widgets/map_type_button.dart';
