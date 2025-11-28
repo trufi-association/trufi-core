@@ -39,6 +39,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   trufi_core:
     path: ../
+  trufi_core_routing:
+    path: ../packages/trufi_core_routing
   provider: ^6.1.5+1
   intl: ^0.20.2
 

@@ -14,6 +14,7 @@ class Place {
     this.stopId,
     this.stopCode,
     this.platformCode,
+    this.bikeRentalStationId,
   });
 
   final String name;
@@ -25,6 +26,7 @@ class Place {
   final String? stopId;
   final String? stopCode;
   final String? platformCode;
+  final String? bikeRentalStationId;
 
   /// Creates a [Place] from JSON.
   factory Place.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class Place {
       stopId: json['stopId'] as String?,
       stopCode: json['stopCode'] as String?,
       platformCode: json['platformCode'] as String?,
+      bikeRentalStationId: json['bikeRentalStationId'] as String?,
     );
   }
 
@@ -57,6 +60,7 @@ class Place {
       'stopId': stopId,
       'stopCode': stopCode,
       'platformCode': platformCode,
+      'bikeRentalStationId': bikeRentalStationId,
     };
   }
 

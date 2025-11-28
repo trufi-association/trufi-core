@@ -40,11 +40,30 @@ export 'src/data/graphql/graphql_client_factory.dart';
 export 'src/data/graphql/polyline_decoder.dart';
 
 // ============================================
-// DATA LAYER - OTP Implementation
+// DATA LAYER - OTP Version Selection
 // ============================================
-export 'src/data/otp/otp_plan_repository.dart';
-export 'src/data/otp/otp_queries.dart';
-export 'src/data/otp/otp_response_parser.dart';
+export 'src/data/otp_version.dart';
+
+// ============================================
+// DATA LAYER - OTP 2.4 Implementation
+// ============================================
+export 'src/data/otp_2_4/otp_2_4_plan_repository.dart';
+export 'src/data/otp_2_4/otp_2_4_queries.dart';
+export 'src/data/otp_2_4/otp_2_4_response_parser.dart';
+
+// ============================================
+// DATA LAYER - OTP 2.7 Implementation
+// ============================================
+export 'src/data/otp_2_7/otp_2_7_plan_repository.dart';
+export 'src/data/otp_2_7/otp_2_7_queries.dart';
+export 'src/data/otp_2_7/otp_2_7_response_parser.dart';
+
+// ============================================
+// DATA LAYER - OTP 2.8 Implementation
+// ============================================
+export 'src/data/otp_2_8/otp_2_8_plan_repository.dart';
+export 'src/data/otp_2_8/otp_2_8_queries.dart';
+export 'src/data/otp_2_8/otp_2_8_response_parser.dart';
 
 // ============================================
 // DATA LAYER - Storage

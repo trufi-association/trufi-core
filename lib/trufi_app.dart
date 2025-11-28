@@ -9,12 +9,14 @@ import 'package:trufi_core/pages/feedback/feedback.dart';
 import 'package:trufi_core/pages/home/widgets/app_drawer.dart';
 import 'package:trufi_core/pages/saved_places/saved_places.dart';
 import 'package:trufi_core/pages/tickets/tickets_page.dart';
+import 'package:trufi_core/routing/trufi_routing_config.dart';
 import 'package:trufi_core/screens/route_navigation/route_navigation.dart';
 
 /// Main Trufi App widget with GoRouter configuration
 class TrufiApp extends StatelessWidget {
   const TrufiApp({
     super.key,
+    required this.routingConfig,
     this.title = 'Trufi App',
     this.appName = 'Trufi Transit',
     this.cityName,
@@ -35,6 +37,9 @@ class TrufiApp extends StatelessWidget {
     this.drawerHeaderImageUrl,
     this.drawerLogoUrl,
   });
+
+  /// Configuration for the routing service.
+  final TrufiRoutingConfig routingConfig;
 
   final String title;
   final String appName;
@@ -84,7 +89,9 @@ class TrufiApp extends StatelessWidget {
                     logoUrl: drawerLogoUrl ??
                         'https://trufi.app/wp-content/uploads/2019/02/48.png',
                   ),
-              body: const RouteNavigationScreen(),
+              body: RouteNavigationScreen(
+                routingConfig: routingConfig,
+              ),
             );
           },
           routes: [

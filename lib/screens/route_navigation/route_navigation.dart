@@ -3,16 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:trufi_core/consts.dart';
+import 'package:trufi_core/routing/trufi_routing_config.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 import 'package:trufi_core/adapters/plan_entity_adapter.dart';
 import 'package:trufi_core/pages/home/widgets/search_bar/location_search_bar.dart';
 import 'package:trufi_core/pages/home/widgets/travel_bottom_sheet/travel_bottom_sheet.dart';
 import 'package:trufi_core/repositories/services/gps_lcoation/gps_location.dart';
-import 'package:trufi_core/repositories/storage/shared_preferences_storage.dart';
-import 'package:trufi_core/repositories/storage/local_storage_adapter.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core/models/trufi_location.dart';
-import 'package:trufi_core/models/enums/transport_mode.dart' as app_mode;
 import 'package:trufi_core/screens/route_navigation/widgets/map_type_button.dart';
 import 'package:trufi_core/widgets/app_lifecycle_reactor.dart';
 import 'package:trufi_core/widgets/bottom_sheet/trufi_bottom_sheet.dart';
@@ -21,12 +19,16 @@ import 'package:trufi_core/widgets/bottom_sheet/location_selector_bottom_sheet.d
 class RouteNavigationScreen extends StatefulWidget {
   const RouteNavigationScreen({
     super.key,
+    required this.routingConfig,
     this.mapBuilder = defaultMapBuilder,
     this.mapLayerBuilder = defaultMapLayerBuilder,
-    this.routingMapControllerBuilder = defaultRoutingMapController,
+    this.routingMapControllerBuilder,
     this.fitCameraLayer = defaultFitCameraLayer,
     this.routeSearchBuilder = defaultRouteSearchBuilder,
   });
+
+  /// Configuration for the routing service.
+  final TrufiRoutingConfig routingConfig;
 
   final List<TrufiMap> Function(
     TrufiMapController controller,
@@ -40,7 +42,7 @@ class RouteNavigationScreen extends StatefulWidget {
 
   final RouteSearchBuilder routeSearchBuilder;
 
-  final RoutingMapController Function(TrufiMapController controller)
+  final RoutingMapController Function(TrufiMapController controller)?
   routingMapControllerBuilder;
   final IFitCameraLayer Function(TrufiMapController controller) fitCameraLayer;
 
@@ -69,27 +71,6 @@ class RouteNavigationScreen extends StatefulWidget {
     TrufiMapController controller,
   ) {
     return [];
-  }
-
-  static RoutingMapController defaultRoutingMapController(
-    TrufiMapController controller,
-  ) {
-    return RoutingMapController(
-      controller,
-      routingService: RoutingService(
-        repository: OtpPlanRepository(endpoint: ApiConfig().openTripPlannerUrl),
-      ),
-      cacheRepository: StorageMapRouteRepository(
-        LocalStorageAdapter(SharedPreferencesStorage()),
-      ),
-      transportIconBuilder: (leg) => _buildTransportIcon(leg),
-    );
-  }
-
-  /// Builds a transport icon widget for a given leg.
-  static Widget _buildTransportIcon(ItineraryLeg leg) {
-    final mode = app_mode.getTransportMode(mode: leg.transportMode.otpName);
-    return mode.getImage();
   }
 
   static Widget defaultRouteSearchBuilder({
@@ -150,6 +131,12 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
   late List<TrufiLayer> mapLayerRenders;
   late List<TrufiMap> mapRenders;
 
+  RoutingMapController _createDefaultRoutingMapController(
+    TrufiMapController controller,
+  ) {
+    return widget.routingConfig.createRoutingController(controller);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -205,7 +192,8 @@ class _RouteNavigationScreenState extends State<RouteNavigationScreen> {
     );
 
     mapLayerRenders = widget.mapLayerBuilder(mapController);
-    routingMapController = widget.routingMapControllerBuilder(mapController);
+    routingMapController = widget.routingMapControllerBuilder?.call(mapController) ??
+        _createDefaultRoutingMapController(mapController);
     fitCameraLayer = widget.fitCameraLayer(mapController);
   }
 
