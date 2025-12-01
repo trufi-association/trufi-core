@@ -1,87 +1,11 @@
-name: trufi_core
-description: A Flutter Plugin for Public Transport.
-version: 4.1.0
-homepage: https://www.trufi-association.org/
-repository: https://github.com/trufi-association/trufi-core
-
+name: trufi_core_mono
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.9.0
   flutter: ">=1.17.0"
 
-dependencies:
-  in_app_review: ^2.0.11
-  async: ^2.11.0
-  async_executor: ^0.0.2
-  cached_network_image: ^3.4.1
-  collection: ^1.18.0
-  device_info_plus: ^10.1.2
-  diff_match_patch: ^0.4.1
-  equatable: ^2.0.5
-  flare_flutter: ^3.0.2
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  flutter_bloc: ^8.1.6
-  flutter_map: ^7.0.2
-  flutter_svg: ^2.0.10+1
-  geolocator: ^13.0.1
-  graphql: ^5.1.3
-  hive: ^2.2.3
-  http: ^1.2.2
-  intl: ^0.20.2
-  latlong2: ^0.9.1
-  package_info_plus: ^8.0.2
-  back_button_interceptor: ^7.0.3
-  flutter_map_marker_cluster: ^1.4.0
-  path_provider: ^2.1.4
-  provider: ^6.1.2
-  routemaster: ^1.0.1
-  rxdart: ^0.28.0
-  share_plus: ^10.0.2
-  synchronized: ^3.2.0
-  uuid: ^4.5.1
-  url_launcher: ^6.3.0
-  bloc: ^8.1.4
-  app_links: ^7.0.0
+workspace:
+  - apps/trufi_core
+  - apps/example
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^5.0.0
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
-flutter:
-
-  # To add assets to your package, add an assets section, like this:
-  assets:
-    - assets/images/
-  #
-  # For details regarding assets in packages, see
-  # https://flutter.dev/to/asset-from-package
-  #
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-
-  # To add custom fonts to your package, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts in packages, see
-  # https://flutter.dev/to/font-from-package
+  melos: ^7.3.0
