@@ -311,7 +311,7 @@ packages:
     source: hosted
     version: "3.4.1"
   flutter_lints:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: flutter_lints
       sha256: "5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1"
