@@ -27,9 +27,5 @@ jobs:
           flutter-version: "3.38.3"
       - name: Bootstrap with Melos
         uses: bluefireteam/melos-action@v3
-      - name: Get dependencies for trufi_core_maps
-        run: |
-          cd packages/trufi_core_maps
-          flutter pub get
       - name: Run Flutter Analyze
         run: melos exec -- flutter analyze --no-fatal-infos --no-fatal-warnings
