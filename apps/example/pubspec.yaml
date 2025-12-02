@@ -15,7 +15,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   trufi_core:
-    path: ../
+    path: ../trufi_core
 
 dev_dependencies:
   flutter_test:

@@ -25,7 +25,7 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: "3.38.3"
-      - name: Flutter get Dependencies
-        run: flutter pub get
+      - name: Bootstrap with Melos
+        uses: bluefireteam/melos-action@v3
       - name: Run Flutter Analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: melos exec -- flutter analyze --no-fatal-infos --no-fatal-warnings
