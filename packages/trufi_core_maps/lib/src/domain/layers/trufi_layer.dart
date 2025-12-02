@@ -18,7 +18,7 @@ abstract class TrufiLayer {
   }
 
   final TrufiMapController controller;
-  String id;
+  final String id;
   final int layerLevel;
   bool visible;
   final MarkerIndex markerIndex = MarkerIndex();

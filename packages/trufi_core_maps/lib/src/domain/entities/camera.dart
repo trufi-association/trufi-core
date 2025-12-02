@@ -28,7 +28,7 @@ class TrufiCameraPosition {
     target: target ?? this.target,
     zoom: zoom ?? this.zoom,
     bearing: bearing ?? this.bearing,
-    viewportSize: viewportSize ?? const Size(411.4, 923.4),
+    viewportSize: viewportSize ?? this.viewportSize,
     visibleRegion: visibleRegion ?? this.visibleRegion,
   );
 

@@ -33,7 +33,7 @@ class FitCameraLayer extends IFitCameraLayer {
   bool debugFlag;
 
   /// Device pixel ratio (logical -> CSS px).
-  final double _dpr = 1.0;
+  final double _dpr;
   Size _viewportLogical = Size.zero;
 
   /// BBox actual a encuadrar (máximo 4 esquinas).
@@ -47,9 +47,11 @@ class FitCameraLayer extends IFitCameraLayer {
   FitCameraLayer(
     super.controller, {
     EdgeInsets padding = EdgeInsets.zero,
+    double devicePixelRatio = 1.0,
     this.showCornerDots = false,
     this.debugFlag = false,
   }) : _padding = padding,
+       _dpr = devicePixelRatio,
        super(id: layerId, layerLevel: 9) {
     _cameraListener = _computeAndRender;
     controller.cameraPositionNotifier.addListener(_cameraListener);

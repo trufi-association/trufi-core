@@ -22,13 +22,38 @@ class TrufiMarker {
   final latlng.LatLng position;
   final Widget widget;
   final WidgetBuilder? buildPanel;
-  Uint8List? widgetBytes;
+  final Uint8List? widgetBytes;
   final int layerLevel;
   final Size size;
   final double rotation;
   final Alignment alignment;
 
-  Future<void> generateBytes(BuildContext context) async {
-    widgetBytes = await ImageTool.widgetToBytes(this, context);
+  TrufiMarker copyWith({
+    String? id,
+    latlng.LatLng? position,
+    Widget? widget,
+    WidgetBuilder? buildPanel,
+    Uint8List? widgetBytes,
+    int? layerLevel,
+    Size? size,
+    double? rotation,
+    Alignment? alignment,
+  }) {
+    return TrufiMarker(
+      id: id ?? this.id,
+      position: position ?? this.position,
+      widget: widget ?? this.widget,
+      buildPanel: buildPanel ?? this.buildPanel,
+      widgetBytes: widgetBytes ?? this.widgetBytes,
+      layerLevel: layerLevel ?? this.layerLevel,
+      size: size ?? this.size,
+      rotation: rotation ?? this.rotation,
+      alignment: alignment ?? this.alignment,
+    );
+  }
+
+  Future<TrufiMarker> withGeneratedBytes(BuildContext context) async {
+    final bytes = await ImageTool.widgetToBytes(this, context);
+    return copyWith(widgetBytes: bytes);
   }
 }

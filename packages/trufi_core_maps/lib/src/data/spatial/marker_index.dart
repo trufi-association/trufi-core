@@ -28,12 +28,7 @@ class MarkersContainer {
     if (layer != null) layer.rebuild(layer.all());
   }
 
-  List<TrufiMarker> getMakers(
-    String layerId,
-    latlng.LatLng target,
-    double radiusMeters, {
-    int? limit,
-  }) => getMarkers(layerId, target, radiusMeters, limit: limit);
+
 
   List<TrufiMarker> getMarkers(
     String layerId,
