@@ -10,3 +10,22 @@ workspace:
 dev_dependencies:
   melos: ^7.3.0
   flutter_lints: ^5.0.0
+
+melos:
+  
+  command:
+    bootstrap:
+      runPubGetInParallel: true
+
+  scripts:
+    analyze:
+      run: flutter analyze --no-fatal-infos
+      description: Run Flutter analyze on all packages
+    
+    format:
+      run: dart format .
+      description: Format all Dart files
+    
+    test:
+      run: flutter test
+      description: Run tests for all packages
