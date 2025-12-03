@@ -7,6 +7,7 @@ workspace:
   - apps/trufi_core
   - apps/example
   - packages/trufi_core_interfaces
+  - packages/trufi_core_storage
 
 dev_dependencies:
   melos: ^7.3.0
