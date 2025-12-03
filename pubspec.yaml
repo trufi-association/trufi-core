@@ -8,6 +8,8 @@ workspace:
   - apps/example
   - packages/trufi_core_interfaces
   - packages/trufi_core_storage
+  - packages/trufi_core_maps
+  - packages/trufi_core_routing
 
 dev_dependencies:
   melos: ^7.3.0

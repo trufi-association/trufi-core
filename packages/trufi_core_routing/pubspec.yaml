@@ -1,5 +1,5 @@
-name: trufi_core_maps
-description: A Flutter package for map rendering with support for flutter_map and maplibre_gl.
+name: trufi_core_routing
+description: A Flutter package for route planning with OTP (OpenTripPlanner) integration.
 version: 0.0.1
 homepage: https://github.com/trufi-association/trufi-core
 publish_to: none
@@ -12,16 +12,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^5.9.0
-  flutter_map: ^7.0.2
-  flutter_svg: ^2.2.3
+  graphql: ^5.2.2
+  gql: ^1.0.1-alpha+1705015029973
+  http: ^1.2.0
   latlong2: ^0.9.1
-  maplibre_gl: ^0.24.1
-  vector_tile: ^3.0.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-
-flutter:
+  mocktail: ^1.0.4
