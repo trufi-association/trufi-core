@@ -9,7 +9,7 @@ import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class MapTypeButton extends StatelessWidget {
-  const MapTypeButton({Key? key}) : super(key: key);
+  const MapTypeButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _MapItemsSelector extends StatelessWidget {
 }
 
 class _CustomExpansionPanel extends StatefulWidget {
-  const _CustomExpansionPanel({Key? key}) : super(key: key);
+  const _CustomExpansionPanel({super.key});
 
   @override
   __CustomExpansionPanelState createState() => __CustomExpansionPanelState();
@@ -126,8 +126,8 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                           : Checkbox(
                               value: containerStatus,
                               fillColor:
-                                  MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) {
+                                  WidgetStateProperty.resolveWith((states) {
+                                if (states.contains(WidgetState.selected)) {
                                   return theme.colorScheme.secondary;
                                 } else {
                                   return isDarkMode
@@ -172,8 +172,8 @@ class __CustomExpansionPanelState extends State<_CustomExpansionPanel> {
                               value: customLayersCubit
                                   .state.layersSatus[customLayer.id],
                               fillColor:
-                                  MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.selected)) {
+                                  WidgetStateProperty.resolveWith((states) {
+                                if (states.contains(WidgetState.selected)) {
                                   return theme.colorScheme.secondary;
                                 } else {
                                   return isDarkMode
