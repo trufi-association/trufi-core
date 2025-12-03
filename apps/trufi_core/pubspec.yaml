@@ -41,10 +41,12 @@ dependencies:
   rxdart: ^0.28.0
   share_plus: ^10.0.2
   synchronized: ^3.2.0
+  trufi_core_interfaces: ^0.0.1
   uuid: ^4.5.1
   url_launcher: ^6.3.0
   bloc: ^8.1.4
   app_links: ^7.0.0
+  get_it: ^9.1.1
 
 dev_dependencies:
   flutter_test:
