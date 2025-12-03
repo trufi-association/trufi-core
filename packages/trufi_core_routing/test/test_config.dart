@@ -6,7 +6,8 @@ class TestConfig {
   TestConfig._();
 
   /// OTP 1.5 endpoint (Cochabamba - REST API)
-  static const otp15Endpoint = 'https://otp-150.trufi-core.trufi.dev';
+  static const otp15Endpoint =
+      'https://otp-150.trufi-core.trufi.dev/otp/routers/default/plan';
 
   /// OTP 2.4 endpoint (Cochabamba - GraphQL)
   static const otp24Endpoint =

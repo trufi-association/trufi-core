@@ -27,7 +27,7 @@ void main() {
     setUp(() {
       mockHttpClient = MockHttpClient();
       repository = Otp15PlanRepository(
-        endpoint: 'https://test-otp.example.com',
+        endpoint: 'https://test-otp.example.com/otp/routers/default/plan',
         httpClient: mockHttpClient,
       );
     });
@@ -174,7 +174,7 @@ void main() {
 
     test('fetchPlan removes trailing slash from endpoint', () async {
       final repoWithSlash = Otp15PlanRepository(
-        endpoint: 'https://test-otp.example.com/',
+        endpoint: 'https://test-otp.example.com/otp/routers/default/plan/',
         httpClient: mockHttpClient,
       );
 

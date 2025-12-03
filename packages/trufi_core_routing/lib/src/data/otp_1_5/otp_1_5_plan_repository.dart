@@ -18,12 +18,12 @@ class Otp15PlanRepository implements PlanRepository {
   Otp15PlanRepository({
     required String endpoint,
     http.Client? httpClient,
-  })  : _baseUrl = endpoint.endsWith('/')
+  })  : _endpoint = endpoint.endsWith('/')
             ? endpoint.substring(0, endpoint.length - 1)
             : endpoint,
         _httpClient = httpClient ?? http.Client();
 
-  final String _baseUrl;
+  final String _endpoint;
   final http.Client _httpClient;
 
   @override
@@ -44,7 +44,7 @@ class Otp15PlanRepository implements PlanRepository {
       queryParams['locale'] = locale;
     }
 
-    final uri = Uri.parse('$_baseUrl/otp/routers/default/plan')
+    final uri = Uri.parse(_endpoint)
         .replace(queryParameters: queryParams);
 
     // Debug: print('OTP 1.5 Request: $uri');
