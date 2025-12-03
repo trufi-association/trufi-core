@@ -316,34 +316,10 @@ class _BuildYourLocationState extends State<_BuildYourLocation> {
   }
 }
 
-class _BuildErrorList extends StatelessWidget {
-  final String title;
-  final String error;
-
-  const _BuildErrorList({
-    super.key,
-    required this.title,
-    required this.error,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          _BuildTitle(title: title),
-          _BuildErrorItem(title: error),
-        ],
-      ),
-    );
-  }
-}
-
 class _BuildTitle extends StatelessWidget {
   final String title;
 
   const _BuildTitle({
-    super.key,
     required this.title,
   });
 
@@ -372,7 +348,6 @@ class _BuildErrorItem extends StatelessWidget {
   final String title;
 
   const _BuildErrorItem({
-    super.key,
     required this.title,
   });
 

@@ -9,7 +9,6 @@ import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
 
-// TODO: Update example
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CertificatedLetsencryptAndroid.workAroundCertificated();

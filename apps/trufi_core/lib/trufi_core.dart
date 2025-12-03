@@ -1,5 +1,3 @@
-library trufi_core;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,7 +24,7 @@ class TrufiApp extends StatelessWidget {
     required this.blocProviders,
     this.trufiBaseTheme,
     TrufiLocalization? trufiLocalization,
-  })  : _trufiLocalization =
+  }) : _trufiLocalization =
             trufiLocalization ?? DefaultValues.trufiLocalization();
 
   @override

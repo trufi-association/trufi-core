@@ -18,8 +18,6 @@ class ThemeCubit extends Cubit<TrufiBaseTheme> {
         return localization.themeModeLight;
       case ThemeMode.dark:
         return localization.themeModeDark;
-      default:
-        return localization.themeModeSystem;
     }
   }
 
