@@ -1,7 +1,6 @@
 import '../domain/repositories/plan_repository.dart';
 import 'otp_1_5/otp_1_5_plan_repository.dart';
 import 'otp_2_4/otp_2_4_plan_repository.dart';
-import 'otp_2_7/otp_2_7_plan_repository.dart';
 import 'otp_2_8/otp_2_8_plan_repository.dart';
 
 /// Supported OTP (OpenTripPlanner) versions.
@@ -20,14 +19,6 @@ enum OtpVersion {
   /// Times: milliseconds since epoch
   v2_4,
 
-  /// OTP 2.7 - Standard OTP GraphQL schema.
-  ///
-  /// Uses: plan query, itineraries, route, agency, stops.
-  /// Similar to 2.8 but without emissions data.
-  /// Location format: "name::lat,lon"
-  /// Times: milliseconds since epoch
-  v2_7,
-
   /// OTP 2.8 - Latest standard OTP GraphQL schema.
   ///
   /// Uses: plan query, itineraries with emissions, enhanced booking info.
@@ -45,8 +36,6 @@ extension OtpVersionExtension on OtpVersion {
         return 'OTP 1.5';
       case OtpVersion.v2_4:
         return 'OTP 2.4';
-      case OtpVersion.v2_7:
-        return 'OTP 2.7';
       case OtpVersion.v2_8:
         return 'OTP 2.8';
     }
@@ -59,8 +48,6 @@ extension OtpVersionExtension on OtpVersion {
         return 'Legacy REST API (/otp/routers/default/plan)';
       case OtpVersion.v2_4:
         return 'Standard OTP GraphQL schema (plan → itineraries → legs)';
-      case OtpVersion.v2_7:
-        return 'Standard OTP GraphQL schema without emissions data';
       case OtpVersion.v2_8:
         return 'Enhanced OTP GraphQL schema with emissions and booking support';
     }
@@ -89,11 +76,6 @@ class OtpRepositoryFactory {
         );
       case OtpVersion.v2_4:
         return Otp24PlanRepository(
-          endpoint: endpoint,
-          useSimpleQuery: useSimpleQuery,
-        );
-      case OtpVersion.v2_7:
-        return Otp27PlanRepository(
           endpoint: endpoint,
           useSimpleQuery: useSimpleQuery,
         );

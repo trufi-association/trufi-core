@@ -2,7 +2,7 @@
 ///
 /// This package provides:
 /// - **Domain Layer**: Business logic (entities, repositories, services)
-/// - **Data Layer**: OTP implementations (REST API for 1.5, GraphQL for 2.4, 2.7, 2.8)
+/// - **Data Layer**: OTP implementations (REST API for 1.5, GraphQL for 2.4, 2.8)
 ///
 /// This is a pure routing package without UI dependencies.
 /// For map visualization, use this package with trufi_core_maps separately.
@@ -58,13 +58,6 @@ export 'src/data/otp_1_5/otp_1_5_response_parser.dart';
 export 'src/data/otp_2_4/otp_2_4_plan_repository.dart';
 export 'src/data/otp_2_4/otp_2_4_queries.dart';
 export 'src/data/otp_2_4/otp_2_4_response_parser.dart';
-
-// ============================================
-// DATA LAYER - OTP 2.7 Implementation
-// ============================================
-export 'src/data/otp_2_7/otp_2_7_plan_repository.dart';
-export 'src/data/otp_2_7/otp_2_7_queries.dart';
-export 'src/data/otp_2_7/otp_2_7_response_parser.dart';
 
 // ============================================
 // DATA LAYER - OTP 2.8 Implementation

@@ -21,12 +21,7 @@ query plan(
   $walkReluctance: Float,
   $walkSpeed: Float,
   $bikeSpeed: Float,
-  $bicycleOptimizeType: BicycleOptimizeType,
-  $triangleTimeFactor: Float,
-  $triangleSlopeFactor: Float,
-  $triangleSafetyFactor: Float,
   $wheelchair: Boolean,
-  $maxWalkDistance: Float,
   $locale: String
 ) {
   plan(
@@ -42,14 +37,7 @@ query plan(
     walkReluctance: $walkReluctance,
     walkSpeed: $walkSpeed,
     bikeSpeed: $bikeSpeed,
-    bicycleOptimizeType: $bicycleOptimizeType,
-    triangle: {
-      timeFactor: $triangleTimeFactor,
-      slopeFactor: $triangleSlopeFactor,
-      safetyFactor: $triangleSafetyFactor
-    },
     wheelchair: $wheelchair,
-    maxWalkDistance: $maxWalkDistance,
     locale: $locale
   ) {
     from {
@@ -185,32 +173,6 @@ query plan(
         headsign
         rentedBike
         interlineWithPreviousLeg
-        pickupType
-        dropoffType
-        pickupBookingInfo {
-          contactInfo {
-            phoneNumber
-            infoUrl
-            bookingUrl
-          }
-          earliestBookingTime {
-            daysPrior
-          }
-          latestBookingTime {
-            daysPrior
-          }
-          message
-          dropInWindowStart
-          dropInWindowEnd
-        }
-        dropOffBookingInfo {
-          contactInfo {
-            phoneNumber
-            infoUrl
-            bookingUrl
-          }
-          message
-        }
       }
     }
   }

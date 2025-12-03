@@ -1,0 +1,14 @@
+# Test configuration for trufi_core_routing package
+tags:
+  integration:
+    # Integration tests require network access and real OTP servers
+    # Run with: flutter test --tags integration
+    # Skip with: flutter test --exclude-tags integration
+    timeout: 60s
+
+# Default test timeout
+timeout: 30s
+
+# Platform-specific configuration
+platforms:
+  - vm
