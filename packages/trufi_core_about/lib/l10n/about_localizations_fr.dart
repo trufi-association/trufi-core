@@ -1,0 +1,52 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'about_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for French (`fr`).
+class AboutLocalizationsFr extends AboutLocalizations {
+  AboutLocalizationsFr([String locale = 'fr']) : super(locale);
+
+  @override
+  String get aboutCollapseContent =>
+      'Trufi Association est une ONG internationale qui favorise un accès plus facile aux transports publics. Nos applications aident tout le monde à trouver le meilleur moyen d\'aller du point A au point B dans leurs villes.\n\nDans de nombreuses villes, il n\'y a pas de cartes officielles, d\'itinéraires, d\'applications ou d\'horaires. Nous compilons donc les informations disponibles et cartographions parfois même des itinéraires à partir de zéro en travaillant avec des habitants qui connaissent la ville. Un système de transport facile à utiliser contribue à une plus grande durabilité, un air plus pur et une meilleure qualité de vie.';
+
+  @override
+  String get aboutCollapseContentFoot =>
+      'Nous avons besoin de cartographes, de développeurs, de planificateurs, de testeurs et de nombreuses autres mains.';
+
+  @override
+  String get aboutCollapseTitle => 'En savoir plus sur Trufi Association';
+
+  @override
+  String aboutContent(String appName, String city) {
+    return 'Vous devez aller quelque part et ne savez pas quel Trufi ou bus prendre?\nLa $appName facilite les choses!\n\nTrufi Association est une équipe de Bolivie et du monde entier. Nous aimons La Llajta et les transports publics, c\'est pourquoi nous avons développé cette application pour rendre les transports publics plus accessibles. Notre objectif est de vous fournir un outil pratique qui vous permet de vous déplacer en toute sécurité.\n\nNous nous efforçons d\'améliorer constamment la $appName pour vous fournir toujours des informations précises et utiles. Nous savons que le système de transport à $city est en constante évolution pour diverses raisons, il est donc possible que certains itinéraires ne soient pas complètement à jour.\n\nPour faire de la $appName un outil efficace, nous comptons sur votre collaboration. Si vous connaissez des modifications de certains itinéraires ou arrêts, nous vous demandons de partager ces informations avec nous. Votre contribution aide non seulement à maintenir l\'application à jour, mais profite également aux autres utilisateurs qui comptent sur la $appName.\n\nMerci d\'utiliser la $appName pour vous déplacer à $city. Nous espérons que vous apprécierez votre temps avec nous!';
+  }
+
+  @override
+  String get aboutLicenses => 'Licences';
+
+  @override
+  String get aboutOpenSource =>
+      'Cette application est publiée en open source sur GitHub. Nous accueillons les contributions au code ou le développement d\'une application pour votre propre ville.';
+
+  @override
+  String get menuAbout => 'À propos';
+
+  @override
+  String tagline(String city) {
+    return 'Transports publics à $city';
+  }
+
+  @override
+  String get trufiWebsite => 'Site web de Trufi Association';
+
+  @override
+  String version(String version) {
+    return 'Version $version';
+  }
+
+  @override
+  String get volunteerTrufi => 'Devenir bénévole pour Trufi';
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:trufi_core_about/l10n/about_localizations.dart';
 import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
-import 'package:trufi_core_about/translations/about_localizations.dart';
 import 'package:trufi_core_utils/packge_info_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,10 +25,12 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizationA = AboutLocalization.of(context);
+    final localizationA = AboutLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Row(children: [Text(localizationA.menuAbout)])),
+      appBar: AppBar(
+        title: Row(children: [Text(localizationA?.menuAbout ?? 'About us')]),
+      ),
       drawer: drawerBuilder(context),
       body: SafeArea(
         child: Stack(
@@ -58,7 +60,7 @@ class AboutPage extends StatelessWidget {
                           return const Text("");
                         }
                         return Text(
-                          localizationA.version(snapshot.data ?? ''),
+                          localizationA?.version(snapshot.data ?? '') ?? '',
                           style: const TextStyle(fontWeight: FontWeight.w100),
                           textAlign: TextAlign.right,
                         );
@@ -74,32 +76,34 @@ class AboutPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    localizationA.tagline("$cityName, $countryName"),
+                    localizationA?.tagline("$cityName, $countryName") ?? '',
                     style: theme.textTheme.titleSmall?.copyWith(),
                   ),
                 ),
                 const SizedBox(height: 16.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(localizationA.aboutContent(appName, cityName)),
+                  child: Text(
+                    localizationA?.aboutContent(appName, cityName) ?? '',
+                  ),
                 ),
                 const SizedBox(height: 24),
                 TrufiExpansionTile(
-                  title: localizationA.aboutCollapseTitle,
+                  title: localizationA?.aboutCollapseTitle ?? '',
                   typeTitle: ExpansionTileTitleType.secondary,
                   body: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Column(
                       children: [
                         Text(
-                          '${localizationA.aboutCollapseContent}\n',
+                          '${localizationA?.aboutCollapseContent}\n',
                           style: TrufiExpansionTile.styleTextContent,
                         ),
                         Row(
                           children: [
                             InkWell(
                               child: Text(
-                                '${localizationA.trufiWebsite}\n',
+                                '${localizationA?.trufiWebsite}\n',
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -109,7 +113,7 @@ class AboutPage extends StatelessWidget {
                               onTap: () {
                                 launchUrl(
                                   Uri.parse(
-                                    'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website',
+                                    'https://www.trufi-association.org/?utm_source=$cityName-$countryName&utm_medium=${localizationA?.localeName}&utm_campaign=in-app-referral&utm_content=trufi-association-website',
                                   ),
                                 );
                               },
@@ -120,7 +124,7 @@ class AboutPage extends StatelessWidget {
                           children: [
                             InkWell(
                               child: Text(
-                                '${localizationA.volunteerTrufi}\n',
+                                '${localizationA?.volunteerTrufi}\n',
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -130,7 +134,7 @@ class AboutPage extends StatelessWidget {
                               onTap: () {
                                 launchUrl(
                                   Uri.parse(
-                                    'https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi',
+                                    'https://www.trufi-association.org/volunteering/?utm_source=$cityName-$countryName&utm_medium=${localizationA?.localeName}&utm_campaign=in-app-referral&utm_content=volunteer-for-trufi',
                                   ),
                                 );
                               },
@@ -138,7 +142,7 @@ class AboutPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          '${localizationA.aboutCollapseContentFoot}\n',
+                          '${localizationA?.aboutCollapseContentFoot}\n',
                           style: TrufiExpansionTile.styleTextContent,
                         ),
                       ],
@@ -149,7 +153,7 @@ class AboutPage extends StatelessWidget {
                 Column(
                   children: [
                     ElevatedButton(
-                      child: Text(localizationA.aboutLicenses),
+                      child: Text(localizationA?.aboutLicenses ?? ''),
                       onPressed: () {
                         return showLicensePage(
                           context: context,
@@ -197,7 +201,8 @@ class AboutPage extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     style: theme.textTheme.bodyMedium,
-                    text: localizationA.aboutOpenSource.split("GitHub")[0],
+                    text:
+                        localizationA?.aboutOpenSource.split("GitHub")[0] ?? '',
                     children: [
                       TextSpan(
                         text: 'Github',
@@ -216,7 +221,9 @@ class AboutPage extends StatelessWidget {
                           },
                       ),
                       TextSpan(
-                        text: localizationA.aboutOpenSource.split("GitHub")[1],
+                        text:
+                            localizationA?.aboutOpenSource.split("GitHub")[1] ??
+                            '',
                       ),
                     ],
                   ),

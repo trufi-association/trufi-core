@@ -1,0 +1,38 @@
+{
+  "@@locale": "en",
+  "aboutCollapseContent": "Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.",
+  "aboutCollapseContentFoot": "We need mappers, developers, planners, testers, and many other hands.",
+  "aboutCollapseTitle": "More About Trufi Association",
+  "aboutContent": "Need to get somewhere and don't know which Trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and around the world. We love La Llajta and public transportation, so we developed this application to make public transit more accessible. Our goal is to provide you with a practical tool that allows you to move around safely.\n\nWe strive to constantly improve the {appName} to always provide you with accurate and useful information. We know that the transportation system in {city} is constantly changing for various reasons, so it's possible that some routes may not be completely up to date.\n\nTo make the {appName} an effective tool, we rely on your collaboration. If you know of changes to some routes or stops, we ask you to share this information with us. Your contribution not only helps keep the app up to date, but also benefits other users who rely on the {appName}.\n\nThank you for using the {appName} to get around {city}. We hope you enjoy your time with us!",
+  "@aboutContent": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      },
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutLicenses": "Licenses",
+  "aboutOpenSource": "This app is released as open source on GitHub. We welcome contributions to the code or development of an app for your own city.",
+  "menuAbout": "About Us",
+  "tagline": "Public transport in {city}",
+  "@tagline": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "trufiWebsite": "Trufi Association Website",
+  "version": "Version {version}",
+  "@version": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "volunteerTrufi": "Volunteer For Trufi"
+}

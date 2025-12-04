@@ -1,0 +1,5 @@
+arb-dir: lib/l10n/arb
+template-arb-file: about_en.arb
+output-localization-file: about_localizations.dart
+output-class: AboutLocalizations  # Optional, aber gut für spezifische Namen
+output-dir: lib/l10n/
