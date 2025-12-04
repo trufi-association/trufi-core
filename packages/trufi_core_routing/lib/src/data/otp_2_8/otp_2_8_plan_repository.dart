@@ -34,14 +34,13 @@ class Otp28PlanRepository implements PlanRepository {
     required RoutingLocation to,
     int numItineraries = 5,
     String? locale,
-    DateTime? dateTime,
+    required DateTime dateTime,
   }) async {
     final queryString =
         useSimpleQuery ? otp28SimplePlanQuery : otp28PlanQuery;
 
-    final effectiveDateTime = dateTime ?? DateTime.now();
-    final date = '${effectiveDateTime.year}-${effectiveDateTime.month.toString().padLeft(2, '0')}-${effectiveDateTime.day.toString().padLeft(2, '0')}';
-    final time = '${effectiveDateTime.hour.toString().padLeft(2, '0')}:${effectiveDateTime.minute.toString().padLeft(2, '0')}';
+    final date = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+    final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
 
     final query = QueryOptions(
       document: parseString(queryString),
