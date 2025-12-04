@@ -11,8 +11,7 @@ import 'package:trufi_core/base/blocs/map_tile_provider/map_tile_provider_cubit.
 import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/base/models/map_provider_collection/leaflet_map_collection.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
-import 'package:trufi_core/base/pages/about/about.dart';
-import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
+import 'package:trufi_core_about/trufi_core_about.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
@@ -42,11 +41,7 @@ abstract class DefaultValues {
           AboutLocalization.delegate,
           TransportListLocalization.delegate,
         ],
-        supportedLocales: const [
-          Locale('de'),
-          Locale('en'),
-          Locale('es'),
-        ],
+        supportedLocales: const [Locale('de'), Locale('en'), Locale('es')],
       );
 
   static List<BlocProvider> blocProviders({
@@ -83,12 +78,8 @@ abstract class DefaultValues {
       BlocProvider<MapConfigurationCubit>(
         create: (context) => MapConfigurationCubit(mapConfiguration),
       ),
-      BlocProvider<MapLayersCubit>(
-        create: (context) => MapLayersCubit([]),
-      ),
-      BlocProvider<PanelCubit>(
-        create: (context) => PanelCubit(),
-      ),
+      BlocProvider<MapLayersCubit>(create: (context) => MapLayersCubit([])),
+      BlocProvider<PanelCubit>(create: (context) => PanelCubit()),
       if (!useCustomMapProvider)
         BlocProvider<MapTileProviderCubit>(
           create: (context) => MapTileProviderCubit(
@@ -116,14 +107,14 @@ abstract class DefaultValues {
 
     generateDrawer(String currentRoute) {
       return (BuildContext _) => TrufiDrawer(
-            currentRoute,
-            appName: appName,
-            countryName: countryName,
-            cityName: cityName,
-            backgroundImageBuilder: backgroundImageBuilder,
-            urlShareApp: urlShareApp,
-            menuItems: defaultMenuItems(defaultUrls: urlSocialMedia),
-          );
+        currentRoute,
+        appName: appName,
+        countryName: countryName,
+        cityName: cityName,
+        backgroundImageBuilder: backgroundImageBuilder,
+        urlShareApp: urlShareApp,
+        menuItems: defaultMenuItems(defaultUrls: urlSocialMedia),
+      );
     }
 
     return RoutemasterDelegate(
@@ -141,8 +132,8 @@ abstract class DefaultValues {
                       path: "/app/Home",
                     ),
                   ),
-                  mapChooseLocationProvider:
-                      mapCollectionSelected.mapChooseLocationProvider(),
+                  mapChooseLocationProvider: mapCollectionSelected
+                      .mapChooseLocationProvider(),
                   asyncExecutor: asyncExecutor ?? AsyncExecutor(),
                 ),
               );
@@ -151,14 +142,14 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: TransportList(
                   drawerBuilder: generateDrawer(TransportList.route),
-                  mapTransportProvider:
-                      mapCollectionSelected.mapTransportProvider(
-                    shareBaseRouteUri: shareBaseUri?.replace(
-                      path: "/app/TransportList",
-                    ),
-                  ),
-                  mapRouteEditorProvider:
-                      mapCollectionSelected.mapRouteEditorProvider(),
+                  mapTransportProvider: mapCollectionSelected
+                      .mapTransportProvider(
+                        shareBaseRouteUri: shareBaseUri?.replace(
+                          path: "/app/TransportList",
+                        ),
+                      ),
+                  mapRouteEditorProvider: mapCollectionSelected
+                      .mapRouteEditorProvider(),
                 ),
               );
             },
@@ -166,26 +157,26 @@ abstract class DefaultValues {
               return NoAnimationPage(
                 child: SavedPlacesPage(
                   drawerBuilder: generateDrawer(SavedPlacesPage.route),
-                  mapChooseLocationProvider:
-                      mapCollectionSelected.mapChooseLocationProvider(),
+                  mapChooseLocationProvider: mapCollectionSelected
+                      .mapChooseLocationProvider(),
                 ),
               );
             },
             FeedbackPage.route: (route) => NoAnimationPage(
-                  child: FeedbackPage(
-                    urlFeedback: urlFeedback,
-                    drawerBuilder: generateDrawer(FeedbackPage.route),
-                  ),
-                ),
+              child: FeedbackPage(
+                urlFeedback: urlFeedback,
+                drawerBuilder: generateDrawer(FeedbackPage.route),
+              ),
+            ),
             AboutPage.route: (route) => NoAnimationPage(
-                  child: AboutPage(
-                    appName: appName,
-                    cityName: cityName,
-                    countryName: countryName,
-                    emailContact: emailContact,
-                    drawerBuilder: generateDrawer(AboutPage.route),
-                  ),
-                ),
+              child: AboutPage(
+                appName: appName,
+                cityName: cityName,
+                countryName: countryName,
+                emailContact: emailContact,
+                drawerBuilder: generateDrawer(AboutPage.route),
+              ),
+            ),
           },
         );
       },

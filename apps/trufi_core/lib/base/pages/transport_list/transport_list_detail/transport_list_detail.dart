@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 
+import 'package:trufi_core_custom_material/custom_material_widgets.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 import 'package:trufi_core/base/models/enums/transport_mode.dart';
@@ -13,7 +14,6 @@ import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/r
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/fetch_error_handler.dart';
 import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
-import 'package:trufi_core/base/widgets/material_widgets/custom_material_widgets.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class TransportListDetail extends StatefulWidget {
@@ -77,15 +77,15 @@ class _TransportListDetailState extends State<TransportListDetail> {
           );
         }
         if (transitRoute != null) {
-          await routeTransportsCubit.fetchDataPattern(transitRoute!).then(
-            (value) {
-              if (mounted) {
-                setState(() {
-                  transitRoute = value;
-                });
-              }
-            },
-          );
+          await routeTransportsCubit.fetchDataPattern(transitRoute!).then((
+            value,
+          ) {
+            if (mounted) {
+              setState(() {
+                transitRoute = value;
+              });
+            }
+          });
         }
       } catch (e) {
         onFetchError(context, e as Exception);
@@ -149,22 +149,20 @@ class _TransportListDetailState extends State<TransportListDetail> {
               offset: const Offset(0, 56),
               icon: const Icon(Icons.more_vert),
               splashRadius: 20,
-              itemBuilder: (BuildContext itemContext) =>
-                  <PopupMenuEntry<String>>[
+              itemBuilder: (BuildContext itemContext) => <PopupMenuEntry<String>>[
                 if (transitRoute != null &&
                     widget.mapTransportProvider.shareBaseRouteUri != null)
                   PopupMenuItem(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 10,
+                    ),
                     value: "ShareRoute",
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.share,
-                          color: theme.iconTheme.color,
-                        ),
+                        Icon(Icons.share, color: theme.iconTheme.color),
                         const SizedBox(width: 8),
-                        Text(localizationTL.shareRoute)
+                        Text(localizationTL.shareRoute),
                       ],
                     ),
                   ),
@@ -203,11 +201,10 @@ class _TransportListDetailState extends State<TransportListDetail> {
                 switch (value) {
                   case 'ShareRoute':
                     Share.share(
-                        widget.mapTransportProvider.shareBaseRouteUri!.replace(
-                      queryParameters: {
-                        "id": transitRoute!.code,
-                      },
-                    ).toString());
+                      widget.mapTransportProvider.shareBaseRouteUri!
+                          .replace(queryParameters: {"id": transitRoute!.code})
+                          .toString(),
+                    );
                     break;
                   case 'OpenEditor':
                     // await RouteEditorScreen.editRoute(
@@ -239,16 +236,15 @@ class _TransportListDetailState extends State<TransportListDetail> {
                         if (state.isGeometryLoading)
                           const LinearProgressIndicator(),
                         Expanded(
-                          child: widget.mapTransportProvider.mapTransportBuilder(
-                            context,
-                            transitRoute,
-                          ),
+                          child: widget.mapTransportProvider
+                              .mapTransportBuilder(context, transitRoute),
                         ),
                       ],
                     ),
                   ],
                 ),
-                panel: !state.isGeometryLoading &&
+                panel:
+                    !state.isGeometryLoading &&
                         transitRoute != null &&
                         transitRoute!.stops != null
                     ? BottomStopsDetails(
@@ -262,9 +258,7 @@ class _TransportListDetailState extends State<TransportListDetail> {
                           );
                         },
                       )
-                    : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                    : const Center(child: CircularProgressIndicator()),
               );
             },
           ),
