@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:async/async.dart';
 import 'package:equatable/equatable.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show OtpConfiguration, TransportMode;
 
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/repository/hive_local_repository.dart';
 import 'package:trufi_core/base/pages/home/repository/local_repository.dart';
 import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
-import 'package:trufi_core/base/pages/home/services/online_request_plan/rest_request_plan.dart';
 import 'package:trufi_core/base/pages/home/services/request_plan_service.dart';
+import 'package:trufi_core/base/pages/home/services/routing_request_plan_service.dart';
 
 part 'route_planner_state.dart';
 
@@ -22,10 +23,11 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
 
   CancelableOperation<Plan?>? currentFetchPlanOperation;
 
-  RoutePlannerCubit(String otpEndpoint,
-      {RequestPlanService? customRequestPlanService})
-      : _requestManager = customRequestPlanService ??
-            RestRequestPlanService(otpEndpoint: otpEndpoint),
+  RoutePlannerCubit(
+    OtpConfiguration otpConfiguration, {
+    RequestPlanService? customRequestPlanService,
+  }) : _requestManager = customRequestPlanService ??
+            RoutingRequestPlanService(otpConfiguration),
         super(const RoutePlannerState()) {
     _load();
   }

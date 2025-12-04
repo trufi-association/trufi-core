@@ -15,12 +15,14 @@ workspace:
   - packages/trufi_core_about
   - packages/trufi_core_maps
   - packages/trufi_core_routing
+  - packages/trufi_core_routing_ui
   - packages/trufi_core_utils
   - packages/trufi_core_base_widgets
   - packages/trufi_core_custom_material
 
 dev_dependencies:
   melos: ^7.3.0
+  flutter_lints: ^6.0.0
 
 melos:
   

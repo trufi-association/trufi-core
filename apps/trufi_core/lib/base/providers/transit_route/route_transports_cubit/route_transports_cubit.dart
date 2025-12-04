@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' show OtpConfiguration;
 
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
 
@@ -15,8 +16,9 @@ class RouteTransportsCubit extends Cubit<RouteTransportsState> {
       RouteTransportsHiveLocalRepository();
   final RouteTransportsServices routeTransportsRepository;
 
-  RouteTransportsCubit(String otpEndpoint)
-      : routeTransportsRepository = RouteTransportsServices(otpEndpoint),
+  RouteTransportsCubit(OtpConfiguration otpConfiguration)
+      : routeTransportsRepository =
+            RouteTransportsServices(otpConfiguration),
         super(const RouteTransportsState()) {
     load().catchError((error) {});
   }

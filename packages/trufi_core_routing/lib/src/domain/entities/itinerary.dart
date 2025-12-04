@@ -1,4 +1,4 @@
-import 'itinerary_leg.dart';
+import 'leg.dart';
 import 'transport_mode.dart';
 
 /// A complete itinerary for a trip plan.
@@ -10,21 +10,23 @@ class Itinerary {
     required this.walkTime,
     required this.duration,
     required this.walkDistance,
+    this.transfers,
     this.arrivedAtDestinationWithRentedBicycle = false,
     this.emissionsPerPerson,
   }) : distance = _calculateDistance(legs);
 
-  final List<ItineraryLeg> legs;
+  final List<Leg> legs;
   final DateTime startTime;
   final DateTime endTime;
   final Duration walkTime;
   final Duration duration;
   final double walkDistance;
+  final int? transfers;
   final bool arrivedAtDestinationWithRentedBicycle;
   final double? emissionsPerPerson;
   final int distance;
 
-  static int _calculateDistance(List<ItineraryLeg> legs) {
+  static int _calculateDistance(List<Leg> legs) {
     return legs.fold<int>(0, (sum, leg) => sum + leg.distance.ceil());
   }
 
@@ -35,13 +37,14 @@ class Itinerary {
   }) {
     return Itinerary(
       legs: (json['legs'] as List<dynamic>)
-          .map((e) => ItineraryLeg.fromJson(e as Map<String, dynamic>))
+          .map((e) => Leg.fromJson(e as Map<String, dynamic>))
           .toList(),
       startTime: DateTime.fromMillisecondsSinceEpoch(json['startTime'] as int),
       endTime: DateTime.fromMillisecondsSinceEpoch(json['endTime'] as int),
       walkTime: Duration(seconds: json['walkTime'] as int),
       duration: Duration(seconds: json['duration'] as int),
       walkDistance: (json['walkDistance'] as num).toDouble(),
+      transfers: json['transfers'] as int?,
       arrivedAtDestinationWithRentedBicycle:
           json['arrivedAtDestinationWithRentedBicycle'] as bool? ?? false,
       emissionsPerPerson:
@@ -59,15 +62,43 @@ class Itinerary {
       'walkTime': walkTime.inSeconds,
       'duration': duration.inSeconds,
       'walkDistance': walkDistance,
+      'transfers': transfers,
       'arrivedAtDestinationWithRentedBicycle':
           arrivedAtDestinationWithRentedBicycle,
       'emissionsPerPerson': {'emissionsPerPersonCo2': emissionsPerPerson},
     };
   }
 
+  /// Creates a copy of this itinerary with the given fields replaced.
+  Itinerary copyWith({
+    List<Leg>? legs,
+    DateTime? startTime,
+    DateTime? endTime,
+    Duration? walkTime,
+    Duration? duration,
+    double? walkDistance,
+    int? transfers,
+    bool? arrivedAtDestinationWithRentedBicycle,
+    double? emissionsPerPerson,
+  }) {
+    return Itinerary(
+      legs: legs ?? this.legs,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      walkTime: walkTime ?? this.walkTime,
+      duration: duration ?? this.duration,
+      walkDistance: walkDistance ?? this.walkDistance,
+      transfers: transfers ?? this.transfers,
+      arrivedAtDestinationWithRentedBicycle:
+          arrivedAtDestinationWithRentedBicycle ??
+              this.arrivedAtDestinationWithRentedBicycle,
+      emissionsPerPerson: emissionsPerPerson ?? this.emissionsPerPerson,
+    );
+  }
+
   /// Returns the first transit leg (bus, train, etc.) or null.
-  ItineraryLeg? get firstTransitLeg {
-    return legs.cast<ItineraryLeg?>().firstWhere(
+  Leg? get firstTransitLeg {
+    return legs.cast<Leg?>().firstWhere(
           (leg) => leg?.transitLeg ?? false,
           orElse: () => null,
         );
@@ -81,12 +112,13 @@ class Itinerary {
   }
 
   /// Returns all transit legs.
-  List<ItineraryLeg> get transitLegs {
+  List<Leg> get transitLegs {
     return legs.where((leg) => leg.transitLeg).toList();
   }
 
-  /// Returns the number of transfers.
+  /// Returns the number of transfers (from JSON or calculated).
   int get numberOfTransfers {
+    if (transfers != null) return transfers!;
     final transit = transitLegs;
     return transit.isEmpty ? 0 : transit.length - 1;
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:trufi_core/base/models/journey_plan/utils/duration_utils.dart';
-import 'package:trufi_core/base/models/journey_plan/utils/leg_utils.dart';
+import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 
 class WalkDistance extends StatelessWidget {

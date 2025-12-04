@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/duration_component.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinerary_details_card/walk_distance.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
-import 'package:trufi_core/base/utils/util_icons/custom_icons.dart';
 
 class BarItineraryDetails extends StatelessWidget {
   final Itinerary itinerary;

@@ -30,6 +30,7 @@ import 'package:trufi_core/base/blocs/localization/trufi_localization_cubit.dart
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/default_search_location.dart';
 import 'package:trufi_core/base/pages/saved_places/search_locations_cubit/search_locations_cubit.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 abstract class DefaultValues {
   static TrufiLocalization trufiLocalization({Locale? currentLocale}) =>
@@ -45,8 +46,7 @@ abstract class DefaultValues {
       );
 
   static List<BlocProvider> blocProviders({
-    required String otpEndpoint,
-    required String otpGraphqlEndpoint,
+    required OtpConfiguration otpConfiguration,
     required MapConfiguration mapConfiguration,
     required String searchAssetPath,
     required String photonUrl,
@@ -58,7 +58,7 @@ abstract class DefaultValues {
   }) {
     return [
       BlocProvider<RouteTransportsCubit>(
-        create: (context) => RouteTransportsCubit(otpGraphqlEndpoint),
+        create: (context) => RouteTransportsCubit(otpConfiguration),
       ),
       BlocProvider<SearchLocationsCubit>(
         create: (context) => SearchLocationsCubit(
@@ -71,7 +71,7 @@ abstract class DefaultValues {
       ),
       BlocProvider<RoutePlannerCubit>(
         create: (context) => RoutePlannerCubit(
-          otpEndpoint,
+          otpConfiguration,
           customRequestPlanService: customRequestPlanService,
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import 'package:trufi_core/base/const/consts.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 
 class RouteNumber extends StatelessWidget {
   final TransportMode? transportMode;

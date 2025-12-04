@@ -7,7 +7,7 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:trufi_core_custom_material/custom_material_widgets.dart';
 import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definition.dart';
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core/base/models/enums/transport_mode_ui.dart';
 import 'package:trufi_core/base/pages/transport_list/translations/transport_list_localizations.dart';
 import 'package:trufi_core/base/pages/transport_list/widgets/bottom_stops_detail.dart';
 import 'package:trufi_core/base/providers/transit_route/route_transports_cubit/route_transports_cubit.dart';

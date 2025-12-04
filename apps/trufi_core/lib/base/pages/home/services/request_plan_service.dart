@@ -1,4 +1,5 @@
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' show TransportMode;
+
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 

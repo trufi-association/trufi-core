@@ -1,5 +1,7 @@
 /// Transport modes supported by OpenTripPlanner.
 enum TransportMode {
+  /// Represents an error or unrecognized transport mode.
+  error,
   airplane,
   bicycle,
   bus,
@@ -21,6 +23,8 @@ enum TransportMode {
   micro,
   miniBus,
   lightRail,
+  /// @deprecated Use [error] instead.
+  @Deprecated('Use TransportMode.error instead')
   unknown,
 }
 
@@ -28,6 +32,7 @@ enum TransportMode {
 extension TransportModeExtension on TransportMode {
   /// OTP string representation.
   static const _names = <TransportMode, String>{
+    TransportMode.error: 'ERROR',
     TransportMode.airplane: 'AIRPLANE',
     TransportMode.bicycle: 'BICYCLE',
     TransportMode.bus: 'BUS',
@@ -56,7 +61,7 @@ extension TransportModeExtension on TransportMode {
 
   /// Creates a [TransportMode] from an OTP mode string.
   static TransportMode fromString(String? mode, {String? specificTransport}) {
-    if (mode == null) return TransportMode.unknown;
+    if (mode == null) return TransportMode.error;
 
     if (specificTransport != null) {
       final enumType = specificTransport.toUpperCase();
@@ -70,7 +75,7 @@ extension TransportModeExtension on TransportMode {
     return _names.entries
         .firstWhere(
           (entry) => entry.value == mode.toUpperCase(),
-          orElse: () => const MapEntry(TransportMode.unknown, 'UNKNOWN'),
+          orElse: () => const MapEntry(TransportMode.error, 'ERROR'),
         )
         .key;
   }

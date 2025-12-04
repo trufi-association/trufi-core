@@ -1,7 +1,7 @@
-import 'package:equatable/equatable.dart';
-import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:latlong2/latlong.dart';
 
-class Stop extends Equatable {
+/// Represents a transit stop from OTP.
+class Stop {
   final String name;
   final double lat;
   final double lon;
@@ -11,13 +11,6 @@ class Stop extends Equatable {
     required this.lat,
     required this.lon,
   });
-
-  /// Creates a [Stop] from the routing package model.
-  factory Stop.fromRouting(routing.Stop stop) => Stop(
-        name: stop.name,
-        lat: stop.lat,
-        lon: stop.lon,
-      );
 
   factory Stop.fromJson(Map<String, dynamic> json) => Stop(
         name: json['name'] as String,
@@ -31,10 +24,17 @@ class Stop extends Equatable {
         'lon': lon,
       };
 
+  LatLng toLatLng() => LatLng(lat, lon);
+
   @override
-  List<Object?> get props => [
-        name,
-        lat,
-        lon,
-      ];
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Stop &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          lat == other.lat &&
+          lon == other.lon;
+
+  @override
+  int get hashCode => name.hashCode ^ lat.hashCode ^ lon.hashCode;
 }

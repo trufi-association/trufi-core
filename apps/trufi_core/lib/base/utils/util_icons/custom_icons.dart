@@ -3,9 +3,8 @@ import 'package:flutter_svg/svg.dart';
 
 part './svg_definitions/other_svg_definitions.dart';
 part './svg_definitions/social_svg_definitions.dart';
-part './svg_definitions/transport_svg_definitions.dart';
 
-// other svg icons
+// App-specific icons (not in trufi_core_routing_ui)
 
 Widget busStopIcon({Color? color}) {
   return SvgPicture.string(busStop(
@@ -19,7 +18,7 @@ Widget trufiIcon({Color? color}) {
   ));
 }
 
-// Social media svg icons
+// Social media icons
 
 Widget whatsappIcon({Color? color}) {
   return SvgPicture.string(whatsapp(
@@ -51,61 +50,6 @@ Widget tiktokIcon({Color? color}) {
   ));
 }
 
-// trasnport svg icons
-Widget waitIcon({Color? color}) {
-  return SvgPicture.string(wait(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget walkIcon({Color? color}) {
-  return SvgPicture.string(walk(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget bikeIcon({Color? color}) {
-  return SvgPicture.string(bike(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget busIcon({Color? color}) {
-  return SvgPicture.string(bus(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget railIcon({Color? color}) {
-  return SvgPicture.string(rail(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget subwayIcon({Color? color}) {
-  return SvgPicture.string(subway(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget gondolaIcon({Color? color}) {
-  return SvgPicture.string(gondola(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget carIcon({Color? color}) {
-  return SvgPicture.string(car(
-    color: decodeFillColor(color),
-  ));
-}
-
-Widget carpoolIcon({Color? color}) {
-  return SvgPicture.string(carpool(
-    color: decodeFillColor(color),
-  ));
-}
-
 String decodeFillColor(Color? color) {
   String stringColor = '#000000';
   if (color != null) {
@@ -115,3 +59,7 @@ String decodeFillColor(Color? color) {
   }
   return stringColor;
 }
+
+// Transport icons are now in trufi_core_routing_ui package
+// Import from: package:trufi_core_routing_ui/trufi_core_routing_ui.dart
+// Available: waitIcon, walkIcon, bikeIcon, busIcon, railIcon, subwayIcon, gondolaIcon, carIcon, carpoolIcon

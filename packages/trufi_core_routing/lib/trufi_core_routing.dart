@@ -13,7 +13,7 @@ library;
 // ============================================
 export 'src/domain/entities/agency.dart';
 export 'src/domain/entities/itinerary.dart';
-export 'src/domain/entities/itinerary_leg.dart';
+export 'src/domain/entities/leg.dart';
 export 'src/domain/entities/place.dart';
 export 'src/domain/entities/plan.dart';
 export 'src/domain/entities/plan_location.dart';
@@ -21,6 +21,8 @@ export 'src/domain/entities/realtime_state.dart';
 export 'src/domain/entities/route.dart';
 export 'src/domain/entities/routing_location.dart';
 export 'src/domain/entities/step.dart';
+export 'src/domain/entities/stop.dart';
+export 'src/domain/entities/transit_route.dart';
 export 'src/domain/entities/transport_mode.dart';
 export 'src/domain/entities/vertex_type.dart';
 
@@ -29,6 +31,7 @@ export 'src/domain/entities/vertex_type.dart';
 // ============================================
 export 'src/domain/repositories/plan_repository.dart';
 export 'src/domain/repositories/map_route_repository.dart';
+export 'src/domain/repositories/transit_route_repository.dart';
 
 // ============================================
 // DOMAIN LAYER - Services
@@ -42,8 +45,9 @@ export 'src/data/graphql/graphql_client_factory.dart';
 export 'src/data/graphql/polyline_decoder.dart';
 
 // ============================================
-// DATA LAYER - OTP Version Selection
+// DATA LAYER - OTP Configuration & Version Selection
 // ============================================
+export 'src/otp_configuration.dart';
 export 'src/data/otp_version.dart';
 
 // ============================================
@@ -57,7 +61,9 @@ export 'src/data/otp_1_5/otp_1_5_response_parser.dart';
 // ============================================
 export 'src/data/otp_2_4/otp_2_4_plan_repository.dart';
 export 'src/data/otp_2_4/otp_2_4_queries.dart';
+export 'src/data/otp_2_4/otp_2_4_pattern_queries.dart';
 export 'src/data/otp_2_4/otp_2_4_response_parser.dart';
+export 'src/data/otp_2_4/otp_2_4_transit_route_repository.dart';
 
 // ============================================
 // DATA LAYER - OTP 2.8 Implementation

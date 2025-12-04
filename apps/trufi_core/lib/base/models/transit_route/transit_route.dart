@@ -2,9 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:trufi_core/base/models/transit_route/transit_info.dart';
 import 'package:trufi_core/base/models/transit_route/stops.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
 import 'route_report_history.dart';
 
+/// UI model for transit routes that wraps the routing package model.
+///
+/// This class extends the base [routing.TransitRoute] with UI-specific
+/// features like [TrufiLatLng] coordinates and [RouteReportHistory].
 class TransitRoute extends Equatable {
   final String id;
   final String name;
@@ -23,6 +28,22 @@ class TransitRoute extends Equatable {
     this.stops,
     this.reportHistory,
   });
+
+  /// Creates a [TransitRoute] from the routing package model.
+  factory TransitRoute.fromRouting(routing.TransitRoute route) {
+    return TransitRoute(
+      id: route.id,
+      name: route.name,
+      code: route.code,
+      route: route.route != null
+          ? TransitInfo.fromRouting(route.route!)
+          : null,
+      geometry: route.geometry
+          ?.map((latLng) => TrufiLatLng(latLng.latitude, latLng.longitude))
+          .toList(),
+      stops: route.stops?.map((stop) => Stop.fromRouting(stop)).toList(),
+    );
+  }
 
   TransitRoute copyWith({
     String? id,
@@ -90,8 +111,6 @@ class TransitRoute extends Equatable {
         name,
         code,
         route,
-        // geometry,
-        // stops,
         reportHistory,
       ];
 }
