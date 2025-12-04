@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 
 class TransitInfo extends Equatable {
   final String? shortName;
@@ -17,11 +18,20 @@ class TransitInfo extends Equatable {
     this.textColor,
   });
 
+  /// Creates a [TransitInfo] from the routing package model.
+  factory TransitInfo.fromRouting(TransitRouteInfo info) => TransitInfo(
+        shortName: info.shortName,
+        longName: info.longName,
+        mode: info.mode,
+        color: info.color,
+        textColor: info.textColor,
+      );
+
   factory TransitInfo.fromJson(Map<String, dynamic> json) => TransitInfo(
         shortName: json['shortName'] as String?,
         longName: json['longName'] as String?,
-        mode: getTransportMode(
-            mode: json['mode'].toString(),
+        mode: TransportModeExtension.fromString(
+            json['mode'].toString(),
             specificTransport: (json['longName'] ?? '') as String),
         color: json['color'] as String?,
         textColor: json['textColor'] as String?,
@@ -30,7 +40,7 @@ class TransitInfo extends Equatable {
   Map<String, dynamic> toJson() => {
         'shortName': shortName,
         'longName': longName,
-        'mode': mode?.name,
+        'mode': mode?.otpName,
         'color': color,
         'textColor': textColor,
       };

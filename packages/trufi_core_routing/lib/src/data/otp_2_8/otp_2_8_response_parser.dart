@@ -2,7 +2,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../domain/entities/agency.dart';
 import '../../domain/entities/itinerary.dart';
-import '../../domain/entities/itinerary_leg.dart';
+import '../../domain/entities/leg.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/plan.dart';
 import '../../domain/entities/plan_location.dart';
@@ -78,7 +78,7 @@ class Otp28ResponseParser {
     );
   }
 
-  static ItineraryLeg _parseLeg(Map<String, dynamic> json) {
+  static Leg _parseLeg(Map<String, dynamic> json) {
     final mode = json['mode'] as String? ?? 'WALK';
     final encodedPoints = json['legGeometry']?['points'] as String?;
     final decodedPoints = encodedPoints != null
@@ -91,7 +91,7 @@ class Otp28ResponseParser {
     final startTime = json['startTime'] as int?;
     final endTime = json['endTime'] as int?;
 
-    return ItineraryLeg(
+    return Leg(
       mode: mode,
       startTime: startTime != null
           ? DateTime.fromMillisecondsSinceEpoch(startTime)

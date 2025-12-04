@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 

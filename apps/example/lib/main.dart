@@ -9,6 +9,7 @@ import 'package:trufi_core/default_values.dart';
 import 'package:trufi_core/module/trufi_core.module.dart';
 import 'package:trufi_core/trufi_core.dart';
 import 'package:trufi_core/trufi_router.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart';
 import 'package:trufi_core_storage/trufi_core_storage.dart';
 
 void main() async {
@@ -24,8 +25,10 @@ void main() async {
       appNameTitle: 'ExampleApp',
       blocProviders: [
         ...DefaultValues.blocProviders(
-          otpEndpoint: "https://navigator.trufi.app/otp",
-          otpGraphqlEndpoint: "https://navigator.trufi.app/otp/index/graphql",
+          otpConfiguration: const OtpConfiguration(
+            endpoint: "https://otp-150.trufi-core.trufi.dev",
+            version: OtpVersion.v1_5,
+          ),
           mapConfiguration: MapConfiguration(
             center: const TrufiLatLng(-17.392600, -66.158787),
           ),

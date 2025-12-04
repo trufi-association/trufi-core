@@ -10,6 +10,7 @@ workspace:
   - packages/trufi_core_storage
   - packages/trufi_core_maps
   - packages/trufi_core_routing
+  - packages/trufi_core_routing_ui
 
 dev_dependencies:
   melos: ^7.3.0

@@ -9,8 +9,8 @@ import 'step.dart';
 import 'transport_mode.dart';
 
 /// A leg of an itinerary (walking, transit, etc.).
-class ItineraryLeg {
-  const ItineraryLeg({
+class Leg {
+  const Leg({
     required this.mode,
     required this.startTime,
     required this.endTime,
@@ -60,18 +60,17 @@ class ItineraryLeg {
         specificTransport: routeLongName,
       );
 
-  /// Creates an [ItineraryLeg] from JSON.
-  factory ItineraryLeg.fromJson(
+  /// Creates a [Leg] from JSON.
+  factory Leg.fromJson(
     Map<String, dynamic> json, {
     List<LatLng> Function(String)? polylineDecoder,
   }) {
     final encodedPoints = json['legGeometry']?['points'] as String?;
     final decoder = polylineDecoder ?? PolylineDecoder.decode;
-    final decodedPoints = encodedPoints != null
-        ? decoder(encodedPoints)
-        : <LatLng>[];
+    final decodedPoints =
+        encodedPoints != null ? decoder(encodedPoints) : <LatLng>[];
 
-    return ItineraryLeg(
+    return Leg(
       mode: json['mode'] as String,
       startTime: DateTime.fromMillisecondsSinceEpoch(json['startTime'] as int),
       endTime: DateTime.fromMillisecondsSinceEpoch(json['endTime'] as int),
@@ -146,12 +145,64 @@ class ItineraryLeg {
       'fromPlace': fromPlace?.toJson(),
       'toPlace': toPlace?.toJson(),
       'steps': steps?.map((e) => e.toJson()).toList(),
-      'intermediatePlaces': intermediatePlaces?.map((e) => e.toJson()).toList(),
+      'intermediatePlaces':
+          intermediatePlaces?.map((e) => e.toJson()).toList(),
       'rentedBike': rentedBike,
       'interlineWithPreviousLeg': interlineWithPreviousLeg,
       'headsign': headsign,
     };
   }
+
+  /// Creates a copy of this leg with the given fields replaced.
+  Leg copyWith({
+    String? mode,
+    DateTime? startTime,
+    DateTime? endTime,
+    Duration? duration,
+    double? distance,
+    bool? transitLeg,
+    String? encodedPoints,
+    List<LatLng>? decodedPoints,
+    Route? route,
+    String? shortName,
+    String? routeLongName,
+    Agency? agency,
+    RealtimeState? realtimeState,
+    Place? fromPlace,
+    Place? toPlace,
+    List<Step>? steps,
+    List<Place>? intermediatePlaces,
+    bool? rentedBike,
+    bool? interlineWithPreviousLeg,
+    String? headsign,
+  }) {
+    return Leg(
+      mode: mode ?? this.mode,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      duration: duration ?? this.duration,
+      distance: distance ?? this.distance,
+      transitLeg: transitLeg ?? this.transitLeg,
+      encodedPoints: encodedPoints ?? this.encodedPoints,
+      decodedPoints: decodedPoints ?? this.decodedPoints,
+      route: route ?? this.route,
+      shortName: shortName ?? this.shortName,
+      routeLongName: routeLongName ?? this.routeLongName,
+      agency: agency ?? this.agency,
+      realtimeState: realtimeState ?? this.realtimeState,
+      fromPlace: fromPlace ?? this.fromPlace,
+      toPlace: toPlace ?? this.toPlace,
+      steps: steps ?? this.steps,
+      intermediatePlaces: intermediatePlaces ?? this.intermediatePlaces,
+      rentedBike: rentedBike ?? this.rentedBike,
+      interlineWithPreviousLeg:
+          interlineWithPreviousLeg ?? this.interlineWithPreviousLeg,
+      headsign: headsign ?? this.headsign,
+    );
+  }
+
+  /// Returns true if this is a walking leg.
+  bool get isLegOnFoot => transportMode == TransportMode.walk;
 
   /// Returns the route color or a default color.
   String get routeColor => route?.color ?? 'd81b60';
@@ -159,3 +210,7 @@ class ItineraryLeg {
   /// Returns the display name for the route.
   String get displayName => route?.shortName ?? shortName ?? '';
 }
+
+/// Backwards compatibility alias.
+@Deprecated('Use Leg instead')
+typedef ItineraryLeg = Leg;

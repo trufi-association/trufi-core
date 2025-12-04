@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    hide Plan, Itinerary, Leg, Place;
 
 import 'package:trufi_core/base/const/consts.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/itinarary_card/mode_leg.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';

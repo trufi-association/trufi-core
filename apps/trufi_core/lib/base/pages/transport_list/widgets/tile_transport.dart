@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
+
 import 'package:trufi_core/base/models/transit_route/transit_route.dart';
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 
 class TileTransport extends StatelessWidget {
   final TransitRoute patternOtp;

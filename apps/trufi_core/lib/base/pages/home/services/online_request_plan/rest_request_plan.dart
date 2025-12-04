@@ -3,8 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:trufi_core_routing/trufi_core_routing.dart'
+    show TransportMode, TransportModeExtension;
 
-import 'package:trufi_core/base/models/enums/transport_mode.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
@@ -74,7 +75,7 @@ class RestRequestPlanService implements RequestPlanService {
   }
 
   String _parseTransportModes(List<TransportMode> list) {
-    return list.map((e) => e.name).join(",");
+    return list.map((e) => e.otpName).join(",");
   }
 
   Plan _parsePlan(String responseBody) {
