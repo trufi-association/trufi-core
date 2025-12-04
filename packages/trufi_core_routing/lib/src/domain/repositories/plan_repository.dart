@@ -9,10 +9,12 @@ abstract class PlanRepository {
   /// [to] - The destination location.
   /// [numItineraries] - Number of itineraries to request.
   /// [locale] - Locale for localized responses.
+  /// [dateTime] - The date and time for the trip. If null, uses current time.
   Future<Plan> fetchPlan({
     required RoutingLocation from,
     required RoutingLocation to,
     int numItineraries = 5,
     String? locale,
+    DateTime? dateTime,
   });
 }

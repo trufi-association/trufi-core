@@ -131,12 +131,16 @@ const String otp24SimplePlanQuery = r'''
 query plan(
   $fromPlace: String!,
   $toPlace: String!,
+  $date: String,
+  $time: String,
   $numItineraries: Int,
   $locale: String
 ) {
   plan(
     fromPlace: $fromPlace,
     toPlace: $toPlace,
+    date: $date,
+    time: $time,
     numItineraries: $numItineraries,
     locale: $locale
   ) {
