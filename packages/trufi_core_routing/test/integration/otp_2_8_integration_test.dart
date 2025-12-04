@@ -13,11 +13,15 @@ import '../test_config.dart';
 void main() {
   group('OTP 2.8 Integration Tests', () {
     late Otp28PlanRepository repository;
+    late DateTime testDateTime;
 
     setUp(() {
       repository = Otp28PlanRepository(
         endpoint: TestConfig.otp28Endpoint,
       );
+      
+      // Set test time to December 1, 2025 at 12:00 PM (noon)
+      testDateTime = DateTime(2025, 12, 1, 12, 0);
     });
 
     test('fetchPlan returns valid plan with itineraries', () async {
@@ -25,6 +29,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -39,6 +44,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       expect(plan.itineraries, isNotEmpty);
@@ -55,6 +61,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       final itinerary = plan.itineraries!.first;
@@ -76,6 +83,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 5,
+        dateTime: testDateTime,
       );
 
       // Find a transit leg
@@ -118,6 +126,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -130,6 +139,7 @@ void main() {
         to: TestConfig.destinationLocation,
         numItineraries: 1,
         locale: 'es',
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -141,6 +151,7 @@ void main() {
         from: TestConfig.alternativeOrigin,
         to: TestConfig.destinationLocation,
         numItineraries: 2,
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -152,6 +163,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       final itinerary = plan.itineraries!.first;

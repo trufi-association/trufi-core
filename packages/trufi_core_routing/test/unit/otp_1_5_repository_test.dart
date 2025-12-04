@@ -37,18 +37,27 @@ void main() {
     });
 
     test('fetchPlan makes correct HTTP request', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       await repository.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
+        dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.host, equals('test-otp.example.com'));
       expect(captured.path, equals('/otp/routers/default/plan'));
@@ -59,17 +68,26 @@ void main() {
     });
 
     test('fetchPlan formats location as lat,lon', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       await repository.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
+        dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       // OTP 1.5 uses "lat,lon" format
       expect(
@@ -83,29 +101,42 @@ void main() {
     });
 
     test('fetchPlan includes locale when provided', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       await repository.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         locale: 'es',
+        dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       expect(captured.queryParameters['locale'], equals('es'));
     });
 
     test('fetchPlan parses successful response', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       final plan = await repository.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
+        dateTime: fixedDate,
       );
 
       expect(plan.from, isNotNull);
@@ -114,13 +145,17 @@ void main() {
     });
 
     test('fetchPlan throws on HTTP error', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response('Server Error', 500));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response('Server Error', 500));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
         () => repository.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
+          dateTime: fixedDate,
         ),
         throwsA(isA<Otp15Exception>()),
       );
@@ -128,45 +163,54 @@ void main() {
 
     test('fetchPlan throws on OTP error in response', () async {
       final errorResponse = jsonEncode({
-        'error': {
-          'id': 404,
-          'msg': 'PATH_NOT_FOUND',
-        },
+        'error': {'id': 404, 'msg': 'PATH_NOT_FOUND'},
       });
 
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(errorResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(errorResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
         () => repository.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
+          dateTime: fixedDate,
         ),
         throwsA(isA<Otp15Exception>()),
       );
     });
 
     test('fetchPlan throws on invalid JSON response', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response('invalid json', 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response('invalid json', 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
         () => repository.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
+          dateTime: fixedDate,
         ),
         throwsA(isA<Otp15Exception>()),
       );
     });
 
     test('fetchPlan handles network error', () async {
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenThrow(http.ClientException('Connection refused'));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenThrow(http.ClientException('Connection refused'));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       expect(
         () => repository.fetchPlan(
           from: TestConfig.originLocation,
           to: TestConfig.destinationLocation,
+          dateTime: fixedDate,
         ),
         throwsA(isA<Otp15Exception>()),
       );
@@ -178,17 +222,26 @@ void main() {
         httpClient: mockHttpClient,
       );
 
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => http.Response(fixtureResponse, 200));
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => http.Response(fixtureResponse, 200));
+
+      final fixedDate = DateTime(2025, 12, 1, 12, 0);
 
       await repoWithSlash.fetchPlan(
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
+        dateTime: fixedDate,
       );
 
-      final captured = verify(
-        () => mockHttpClient.get(captureAny(), headers: any(named: 'headers')),
-      ).captured.first as Uri;
+      final captured =
+          verify(
+                () => mockHttpClient.get(
+                  captureAny(),
+                  headers: any(named: 'headers'),
+                ),
+              ).captured.first
+              as Uri;
 
       // Should not have double slash in path (https:// is ok)
       expect(captured.path, isNot(contains('//')));

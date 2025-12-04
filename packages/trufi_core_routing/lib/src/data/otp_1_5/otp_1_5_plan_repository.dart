@@ -32,12 +32,18 @@ class Otp15PlanRepository implements PlanRepository {
     required RoutingLocation to,
     int numItineraries = 5,
     String? locale,
+    required DateTime dateTime,
   }) async {
+    final date = '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}-${dateTime.year}';
+    final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+
     final queryParams = <String, String>{
       'fromPlace': _formatLocation(from),
       'toPlace': _formatLocation(to),
       'numItineraries': numItineraries.toString(),
       'mode': 'TRANSIT,WALK',
+      'date': date,
+      'time': time,
     };
 
     if (locale != null) {

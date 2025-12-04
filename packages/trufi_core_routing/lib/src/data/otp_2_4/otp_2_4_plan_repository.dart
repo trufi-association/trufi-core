@@ -34,9 +34,13 @@ class Otp24PlanRepository implements PlanRepository {
     required RoutingLocation to,
     int numItineraries = 5,
     String? locale,
+    required DateTime dateTime,
   }) async {
     final queryString =
         useSimpleQuery ? otp24SimplePlanQuery : otp24PlanQuery;
+
+    final date = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+    final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
 
     final query = QueryOptions(
       document: parseString(queryString),
@@ -44,6 +48,8 @@ class Otp24PlanRepository implements PlanRepository {
         'fromPlace': _formatLocation(from),
         'toPlace': _formatLocation(to),
         'numItineraries': numItineraries,
+        'date': date,
+        'time': time,
         if (locale != null) 'locale': locale,
       },
     );

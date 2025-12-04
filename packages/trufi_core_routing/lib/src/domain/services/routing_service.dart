@@ -6,7 +6,8 @@ import '../repositories/plan_repository.dart';
 
 /// High-level routing service that provides trip planning with business logic.
 class RoutingService {
-  RoutingService({required PlanRepository repository}) : _repository = repository;
+  RoutingService({required PlanRepository repository})
+    : _repository = repository;
 
   final PlanRepository _repository;
 
@@ -19,12 +20,14 @@ class RoutingService {
     int numItineraries = 10,
     String? locale,
     bool filterWalkOnly = true,
+    DateTime? dateTime,
   }) async {
     var plan = await _repository.fetchPlan(
       from: from,
       to: to,
       numItineraries: numItineraries,
       locale: locale,
+      dateTime: dateTime ?? DateTime.now(),
     );
 
     if (filterWalkOnly) {
@@ -41,12 +44,14 @@ class RoutingService {
     int numItineraries = 5,
     String? locale,
     bool filterWalkOnly = true,
+    DateTime? dateTime,
   }) async {
     var plan = await _repository.fetchPlan(
       from: from,
       to: to,
       numItineraries: numItineraries,
       locale: locale,
+      dateTime: dateTime ?? DateTime.now(),
     );
 
     if (filterWalkOnly) {
@@ -62,15 +67,13 @@ class RoutingService {
       return !_isWalkOnlyItinerary(itinerary);
     }).toList();
 
-    return Plan(
-      from: plan.from,
-      to: plan.to,
-      itineraries: filtered,
-    );
+    return Plan(from: plan.from, to: plan.to, itineraries: filtered);
   }
 
   /// Checks if an itinerary contains only walking legs.
   bool _isWalkOnlyItinerary(Itinerary itinerary) {
-    return itinerary.legs.every((leg) => leg.transportMode == TransportMode.walk);
+    return itinerary.legs.every(
+      (leg) => leg.transportMode == TransportMode.walk,
+    );
   }
 }

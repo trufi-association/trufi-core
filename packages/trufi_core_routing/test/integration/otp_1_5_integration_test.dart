@@ -13,11 +13,15 @@ import '../test_config.dart';
 void main() {
   group('OTP 1.5 Integration Tests', () {
     late Otp15PlanRepository repository;
+    late DateTime testDateTime;
 
     setUp(() {
       repository = Otp15PlanRepository(
         endpoint: TestConfig.otp15Endpoint,
       );
+      
+      // Set test time to December 1, 2025 at 12:00 PM (noon)
+      testDateTime = DateTime(2025, 12, 1, 12, 0);
     });
 
     tearDown(() {
@@ -29,6 +33,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 3,
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -43,6 +48,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       expect(plan.itineraries, isNotEmpty);
@@ -59,6 +65,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 1,
+        dateTime: testDateTime,
       );
 
       final itinerary = plan.itineraries!.first;
@@ -80,6 +87,7 @@ void main() {
         from: TestConfig.originLocation,
         to: TestConfig.destinationLocation,
         numItineraries: 5,
+        dateTime: testDateTime,
       );
 
       // Find a transit leg
@@ -107,6 +115,7 @@ void main() {
         to: TestConfig.destinationLocation,
         numItineraries: 1,
         locale: 'es',
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
@@ -118,6 +127,7 @@ void main() {
         from: TestConfig.alternativeOrigin,
         to: TestConfig.destinationLocation,
         numItineraries: 2,
+        dateTime: testDateTime,
       );
 
       expect(plan, isNotNull);
