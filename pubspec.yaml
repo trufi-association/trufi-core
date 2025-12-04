@@ -1,6 +1,6 @@
 name: trufi_core_mono
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.10.0
   flutter: ">=3.0.0 <4.0.0"
 
 workspace:
@@ -20,9 +20,9 @@ melos:
   command:
     bootstrap:
       runPubGetInParallel: true
-    environment:
-      sdk: ">=3.0.0 <4.0.0"
-      flutter: ">=3.0.0 <4.0.0"
+      environment:
+        sdk: ^3.10.0
+        flutter: ">=3.0.0 <4.0.0"
   scripts:
     analyze:
       run: flutter analyze --no-fatal-infos
