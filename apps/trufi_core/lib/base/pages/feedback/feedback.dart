@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/blocs/providers/gps_location_provider.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
-import 'package:trufi_core/base/utils/packge_info_platform.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 class FeedbackPage extends StatelessWidget {
   static const String route = "/Feedback";
@@ -22,9 +22,7 @@ class FeedbackPage extends StatelessWidget {
     final localizationF = FeedbackLocalization.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Row(children: [Text(localizationF.menuFeedback)]),
-      ),
+      appBar: AppBar(title: Row(children: [Text(localizationF.menuFeedback)])),
       drawer: drawerBuilder(context),
       body: Scrollbar(
         child: ListView(
@@ -33,9 +31,7 @@ class FeedbackPage extends StatelessWidget {
           children: <Widget>[
             Text(
               localizationF.feedbackTitle,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontSize: 20,
-              ),
+              style: theme.textTheme.bodyLarge?.copyWith(fontSize: 20),
             ),
             Container(
               padding: const EdgeInsets.only(top: 16.0),
@@ -43,7 +39,7 @@ class FeedbackPage extends StatelessWidget {
                 localizationF.feedbackContent,
                 style: theme.textTheme.bodyMedium,
               ),
-            )
+            ),
           ],
         ),
       ),

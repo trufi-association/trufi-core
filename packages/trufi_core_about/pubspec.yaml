@@ -1,4 +1,4 @@
-name: trufi_core_storage
+name: trufi_core_about
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
@@ -11,8 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.5.3
-  trufi_core_interfaces: ^0.0.1
+  flutter_localizations:
+    sdk: flutter
+  url_launcher: ^6.3.2
+  trufi_core_utils: ^0.0.1
+  trufi_core_base_widgets: ^0.0.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
