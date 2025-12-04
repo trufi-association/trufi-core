@@ -149,7 +149,7 @@ class AboutPage extends StatelessWidget {
                     ElevatedButton(
                       child: Text(localizationA.aboutLicenses),
                       onPressed: () {
-                        return customShowLicensePage(
+                        return showLicensePage(
                           context: context,
                           applicationName: appName,
                           applicationLegalese: cityName,
@@ -222,27 +222,6 @@ class AboutPage extends StatelessWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  void customShowLicensePage({
-    required BuildContext context,
-    String? applicationName,
-    String? applicationVersion,
-    Widget? applicationIcon,
-    String? applicationLegalese,
-    bool useRootNavigator = false,
-  }) {
-    Navigator.of(context, rootNavigator: useRootNavigator).push(
-      MaterialPageRoute<void>(
-        // TODO(md-weber): removed the TrufiBasePage for now, we need to check how theme and translation is provided
-        builder: (BuildContext context) => LicensePage(
-          applicationName: applicationName,
-          applicationVersion: applicationVersion,
-          applicationIcon: applicationIcon,
-          applicationLegalese: applicationLegalese,
         ),
       ),
     );
