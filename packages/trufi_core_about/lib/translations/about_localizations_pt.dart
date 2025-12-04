@@ -2,13 +2,15 @@ import 'about_localizations.dart';
 
 /// The translations for Portuguese (`pt`).
 class AboutLocalizationPt extends AboutLocalization {
-  AboutLocalizationPt([String locale = 'pt']) : super(locale);
+  AboutLocalizationPt([super.locale = 'pt']);
 
   @override
-  String get aboutCollapseContent => 'A Trufi Association é uma ONG internacional que promove acesso mais fácil ao transporte público. Nossos aplicativos ajudam as pessoas a encontrar a melhor maneira de ir do ponto A ao ponto B dentro de suas cidades.\n\nEm muitas cidades não há mapas, rotas, aplicativos ou horários oficiais. Por isso, compilamos as informações disponíveis e, às vezes, também mapeamos rotas do zero, trabalhando com pessoas locais que conhecem a cidade. Um sistema de transporte fácil de usar contribui para maior sustentabilidade, ar mais limpo e melhor qualidade de vida.';
+  String get aboutCollapseContent =>
+      'A Trufi Association é uma ONG internacional que promove acesso mais fácil ao transporte público. Nossos aplicativos ajudam as pessoas a encontrar a melhor maneira de ir do ponto A ao ponto B dentro de suas cidades.\n\nEm muitas cidades não há mapas, rotas, aplicativos ou horários oficiais. Por isso, compilamos as informações disponíveis e, às vezes, também mapeamos rotas do zero, trabalhando com pessoas locais que conhecem a cidade. Um sistema de transporte fácil de usar contribui para maior sustentabilidade, ar mais limpo e melhor qualidade de vida.';
 
   @override
-  String get aboutCollapseContentFoot => 'Torne-se parte dos nosso time de voluntários! Nós precisamos de pessoas para fazer o mapeamento, de desenvolvedores, de planejadores, pessoas que nos ajudem a fazer testes e outras muitas mãos!';
+  String get aboutCollapseContentFoot =>
+      'Torne-se parte dos nosso time de voluntários! Nós precisamos de pessoas para fazer o mapeamento, de desenvolvedores, de planejadores, pessoas que nos ajudem a fazer testes e outras muitas mãos!';
 
   @override
   String get aboutCollapseTitle => 'Mais sobre a Trufi Association';
@@ -22,7 +24,8 @@ class AboutLocalizationPt extends AboutLocalization {
   String get aboutLicenses => 'Licenças';
 
   @override
-  String get aboutOpenSource => 'Este aplicativo é lançado como código aberto no GitHub. Sinta-se à vontade para contribuir com o código ou trazer um aplicativo para sua própria cidade.';
+  String get aboutOpenSource =>
+      'Este aplicativo é lançado como código aberto no GitHub. Sinta-se à vontade para contribuir com o código ou trazer um aplicativo para sua própria cidade.';
 
   @override
   String get menuAbout => 'Sobre Nós';

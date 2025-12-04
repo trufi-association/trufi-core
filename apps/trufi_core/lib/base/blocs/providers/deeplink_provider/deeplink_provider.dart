@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:routemaster/routemaster.dart';
-import 'package:trufi_core/base/pages/about/about.dart';
+import 'package:trufi_core_about/trufi_core_about.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
 import 'package:trufi_core/base/pages/saved_places/saved_places.dart';
@@ -36,9 +36,7 @@ class DeeplinkProvider {
     _registerListening(context: context);
   }
 
-  Future<void> _initFirstUri({
-    required BuildContext context,
-  }) async {
+  Future<void> _initFirstUri({required BuildContext context}) async {
     if (!_isUsedInitialUri) {
       _isUsedInitialUri = true;
       try {
@@ -52,55 +50,47 @@ class DeeplinkProvider {
     }
   }
 
-  void _registerListening({
-    required BuildContext context,
-  }) {
+  void _registerListening({required BuildContext context}) {
     if (!kIsWeb && !_isRegisteredListening) {
-      _streamSubscription = AppLinks().uriLinkStream.listen((Uri? uri) {
-        if (!context.mounted) return;
-        _parseUniLink(context: context, uri: uri);
-      }, onError: (e) {
-        debugPrint(e.toString());
-      });
+      _streamSubscription = AppLinks().uriLinkStream.listen(
+        (Uri? uri) {
+          if (!context.mounted) return;
+          _parseUniLink(context: context, uri: uri);
+        },
+        onError: (e) {
+          debugPrint(e.toString());
+        },
+      );
       _isRegisteredListening = true;
     }
   }
 
-  void _parseUniLink({
-    required BuildContext context,
-    Uri? uri,
-  }) {
+  void _parseUniLink({required BuildContext context, Uri? uri}) {
     try {
       if (uri?.scheme == GeoLocation.schema) {
         final geoLocation = GeoLocation.fromURI(uri!);
         _cleanNavigatorStore(
           context,
-          () => Routemaster.of(context).push(
-            HomePage.route,
-            queryParameters: geoLocation.toJson(),
-          ),
+          () => Routemaster.of(
+            context,
+          ).push(HomePage.route, queryParameters: geoLocation.toJson()),
         );
       } else if (uri != null) {
         switch ('/${uri.pathSegments.last}') {
           case HomePage.route:
             _cleanNavigatorStore(
               context,
-              () => Routemaster.of(context).push(
-                HomePage.route,
-                queryParameters: uri.queryParameters,
-              ),
+              () => Routemaster.of(
+                context,
+              ).push(HomePage.route, queryParameters: uri.queryParameters),
             );
             break;
           case TransportList.route:
-            _cleanNavigatorStore(
-              context,
-              () {
-                Routemaster.of(context).push(
-                  TransportList.route,
-                  queryParameters: uri.queryParameters,
-                );
-              },
-            );
+            _cleanNavigatorStore(context, () {
+              Routemaster.of(
+                context,
+              ).push(TransportList.route, queryParameters: uri.queryParameters);
+            });
             break;
           case SavedPlacesPage.route:
             _cleanNavigatorStore(
@@ -131,10 +121,7 @@ class DeeplinkProvider {
           error: e.message,
         );
       } else {
-        ErrorAlert.showError(
-          context: context,
-          error: e.toString(),
-        );
+        ErrorAlert.showError(context: context, error: e.toString());
       }
     }
   }

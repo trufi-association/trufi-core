@@ -3,9 +3,9 @@ import 'package:hive/hive.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:trufi_core/base/utils/packge_info_platform.dart';
 import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import 'package:trufi_core/base/widgets/alerts/alert_notification.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_wrapper.dart';
 
@@ -17,17 +17,15 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
   final String url;
   late Box _box;
 
-  LifecycleReactorNotifications({
-    required this.url,
-  }) {
+  LifecycleReactorNotifications({required this.url}) {
     _box = Hive.box(path);
   }
 
   @override
   void onInitState(context) {
-    handlerOnStartNotifications(context)
-        .then((value) => null)
-        .catchError((error) {});
+    handlerOnStartNotifications(
+      context,
+    ).then((value) => null).catchError((error) {});
   }
 
   @override
@@ -40,9 +38,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
     try {
       final response = await http.get(
         Uri.parse(url),
-        headers: {
-          "User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName",
-        },
+        headers: {"User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName"},
       );
       if (response.statusCode == 200) {
         final notification = jsonDecode(utf8.decode(response.bodyBytes));
@@ -53,6 +49,7 @@ class LifecycleReactorNotifications implements LifecycleReactorHandler {
             await saveCurrentId(notificationId);
             await saveShowNotification(true);
           }
+          if (!context.mounted) return;
           await AlertNotification.showNotification(
             context: context,
             title: notification["title"]!,

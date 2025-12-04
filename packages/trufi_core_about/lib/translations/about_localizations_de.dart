@@ -2,13 +2,15 @@ import 'about_localizations.dart';
 
 /// The translations for German (`de`).
 class AboutLocalizationDe extends AboutLocalization {
-  AboutLocalizationDe([String locale = 'de']) : super(locale);
+  AboutLocalizationDe([super.locale = 'de']);
 
   @override
-  String get aboutCollapseContent => 'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.';
+  String get aboutCollapseContent =>
+      'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.';
 
   @override
-  String get aboutCollapseContentFoot => 'We need mappers, developers, planners, testers, and many other hands.';
+  String get aboutCollapseContentFoot =>
+      'We need mappers, developers, planners, testers, and many other hands.';
 
   @override
   String get aboutCollapseTitle => 'More About Trufi Association';
@@ -22,7 +24,8 @@ class AboutLocalizationDe extends AboutLocalization {
   String get aboutLicenses => 'Lizenzen';
 
   @override
-  String get aboutOpenSource => 'Diese App ist als Open Source auf GitHub veröffentlicht. Wir freuen uns, wenn Du zum Code beiträgst oder eine App für Deine eigene Stadt entwickelst.';
+  String get aboutOpenSource =>
+      'Diese App ist als Open Source auf GitHub veröffentlicht. Wir freuen uns, wenn Du zum Code beiträgst oder eine App für Deine eigene Stadt entwickelst.';
 
   @override
   String get menuAbout => 'Über Uns';

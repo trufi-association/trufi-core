@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/base/widgets/material_widgets/custom_material_widgets.dart';
+import 'package:trufi_core_custom_material/custom_material_widgets.dart';
 
-enum ExpansionTileTitleType {
-  primary,
-  secondary,
-  tertiary,
-}
+enum ExpansionTileTitleType { primary, secondary, tertiary }
 
 extension ExpansionTileTitleTypeExtension on ExpansionTileTitleType {
   static final textStyles = <ExpansionTileTitleType, TextStyle>{
@@ -43,10 +39,7 @@ extension ExpansionTileTitleTypeExtension on ExpansionTileTitleType {
 }
 
 class TrufiExpansionTile extends StatelessWidget {
-  static const styleTextContent = TextStyle(
-    height: 1.3,
-    fontSize: 15,
-  );
+  static const styleTextContent = TextStyle(height: 1.3, fontSize: 15);
   final String title;
   final Widget? body;
   final EdgeInsets padding;
@@ -87,17 +80,9 @@ class TrufiExpansionTile extends StatelessWidget {
           iconColor: Colors.white,
           titleColor: typeTitle.getBackgroundColor,
           trailing: body != null ? null : Container(width: 1),
-          title: Text(
-            title,
-            style: typeTitle.getStyle,
-            textAlign: textAlign,
-          ),
+          title: Text(title, style: typeTitle.getStyle, textAlign: textAlign),
           children: [
-            if (body != null)
-              Container(
-                padding: padding,
-                child: body,
-              ),
+            if (body != null) Container(padding: padding, child: body),
           ],
         ),
       ),

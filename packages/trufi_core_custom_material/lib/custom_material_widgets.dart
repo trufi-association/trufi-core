@@ -1,5 +1,5 @@
 // custom_material_widgets.dart
-library custom_material_widgets;
+library;
 
 /// Material Design Custom Widgets
 ///

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:trufi_core/base/pages/about/about.dart';
-import 'package:trufi_core/base/pages/about/translations/about_localizations.dart';
+import 'package:trufi_core_about/trufi_core_about.dart';
 import 'package:trufi_core/base/pages/feedback/feedback.dart';
 import 'package:trufi_core/base/pages/feedback/translations/feedback_localizations.dart';
 import 'package:trufi_core/base/pages/home/home.dart';
@@ -13,36 +12,33 @@ import 'package:trufi_core/base/widgets/drawer/menu/trufi_menu_item.dart';
 
 class MenuPageItem extends TrufiMenuItem {
   MenuPageItem({
-    required String id,
-    required WidgetBuilder selectedIcon,
-    required WidgetBuilder notSelectedIcon,
+    required String super.id,
+    required super.selectedIcon,
+    required super.notSelectedIcon,
     required String Function(BuildContext) name,
     Color? nameColor,
   }) : super(
-          id: id,
-          selectedIcon: selectedIcon,
-          notSelectedIcon: notSelectedIcon,
-          name: (context) {
-            return TrufiMenuItem.buildName(
-              context,
-              name(context),
-              color: nameColor,
-            );
-          },
-          onClick: (context, isSelected) {
-            Navigator.of(context).pop();
-            if (HomePage.route == id) {
-              Routemaster.of(context).replace(id);
-            } else {
-              final beforePath = Routemaster.of(context).currentRoute.fullPath;
-              if (HomePage.route == beforePath) {
-                Routemaster.of(context).push(id);
-              } else {
-                Routemaster.of(context).replace(id);
-              }
-            }
-          },
-        );
+         name: (context) {
+           return TrufiMenuItem.buildName(
+             context,
+             name(context),
+             color: nameColor,
+           );
+         },
+         onClick: (context, isSelected) {
+           Navigator.of(context).pop();
+           if (HomePage.route == id) {
+             Routemaster.of(context).replace(id);
+           } else {
+             final beforePath = Routemaster.of(context).currentRoute.fullPath;
+             if (HomePage.route == beforePath) {
+               Routemaster.of(context).push(id);
+             } else {
+               Routemaster.of(context).replace(id);
+             }
+           }
+         },
+       );
 }
 
 enum DefaultPagesMenu { homePage, transportList, savedPlaces, feedback, about }
@@ -58,10 +54,8 @@ extension LayerIdsToString on DefaultPagesMenu {
               ? Colors.white
               : Colors.black,
         ),
-        notSelectedIcon: (context) => const Icon(
-          Icons.linear_scale,
-          color: Colors.grey,
-        ),
+        notSelectedIcon: (context) =>
+            const Icon(Icons.linear_scale, color: Colors.grey),
         name: (context) {
           return TrufiBaseLocalization.of(context).menuConnections;
         },
@@ -74,10 +68,8 @@ extension LayerIdsToString on DefaultPagesMenu {
               ? Colors.white
               : Colors.black,
         ),
-        notSelectedIcon: (context) => const Icon(
-          Icons.room,
-          color: Colors.grey,
-        ),
+        notSelectedIcon: (context) =>
+            const Icon(Icons.room, color: Colors.grey),
         name: (context) {
           return SavedPlacesLocalization.of(context).menuYourPlaces;
         },
@@ -90,10 +82,8 @@ extension LayerIdsToString on DefaultPagesMenu {
               ? Colors.white
               : Colors.black,
         ),
-        notSelectedIcon: (context) => const Icon(
-          Icons.feedback,
-          color: Colors.grey,
-        ),
+        notSelectedIcon: (context) =>
+            const Icon(Icons.feedback, color: Colors.grey),
         name: (context) {
           return FeedbackLocalization.of(context).menuFeedback;
         },
@@ -106,10 +96,8 @@ extension LayerIdsToString on DefaultPagesMenu {
               ? Colors.white
               : Colors.black,
         ),
-        notSelectedIcon: (context) => const Icon(
-          Icons.list,
-          color: Colors.grey,
-        ),
+        notSelectedIcon: (context) =>
+            const Icon(Icons.list, color: Colors.grey),
         name: (context) {
           return TrufiBaseLocalization.of(context).menuTransportList;
         },
@@ -122,10 +110,8 @@ extension LayerIdsToString on DefaultPagesMenu {
               ? Colors.white
               : Colors.black,
         ),
-        notSelectedIcon: (context) => const Icon(
-          Icons.info,
-          color: Colors.grey,
-        ),
+        notSelectedIcon: (context) =>
+            const Icon(Icons.info, color: Colors.grey),
         name: (context) {
           return AboutLocalization.of(context).menuAbout;
         },

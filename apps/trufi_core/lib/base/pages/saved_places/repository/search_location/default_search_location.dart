@@ -6,7 +6,7 @@ import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/services/exception/fetch_online_exception.dart';
 import 'package:trufi_core/base/pages/saved_places/repository/search_location/location_search_storage.dart';
-import 'package:trufi_core/base/utils/packge_info_platform.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 import 'package:trufi_core/base/utils/trufi_app_id.dart';
 import '../search_location_repository.dart';
 
@@ -31,30 +31,29 @@ class DefaultSearchLocation implements SearchLocationRepository {
     String? lang = "es",
   }) async {
     final extraQueryParameters = queryParameters ?? {};
-    final Uri request = Uri.parse(
-      "$photonUrl/api",
-    ).replace(queryParameters: {
-      "q": query,
-      "bbox": "-66.453088,-17.762296,-65.758056,-17.238372",
-      ...extraQueryParameters
-    });
+    final Uri request = Uri.parse("$photonUrl/api").replace(
+      queryParameters: {
+        "q": query,
+        "bbox": "-66.453088,-17.762296,-65.758056,-17.238372",
+        ...extraQueryParameters,
+      },
+    );
     final response = await _fetchRequest(request);
     if (response.statusCode != 200) {
       throw "Not found locations";
     } else {
       // location results
       final json = jsonDecode(utf8.decode(response.bodyBytes));
-      final locationData = List<Map<String, dynamic>>.from(json["features"])
-          .map((e) => LocationModel.fromJson(e));
+      final locationData = List<Map<String, dynamic>>.from(
+        json["features"],
+      ).map((e) => LocationModel.fromJson(e));
       final locationDataCleaned = <String, LocationModel>{};
 
       for (final element in locationData) {
         locationDataCleaned[element.getCode] = element;
       }
       final trufiLocationList = locationDataCleaned.values
-          .map(
-            (x) => x.toTrufiLocation(),
-          )
+          .map((x) => x.toTrufiLocation())
           .toList();
 
       // Streets results
@@ -77,9 +76,7 @@ class DefaultSearchLocation implements SearchLocationRepository {
       final uniqueId = TrufiAppId.getUniqueId;
       return await http.get(
         request,
-        headers: {
-          "User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName",
-        },
+        headers: {"User-Agent": "Trufi/$packageInfoVersion/$uniqueId/$appName"},
       );
     } on Exception catch (e) {
       throw FetchOnlineRequestException(e);
@@ -100,7 +97,10 @@ class DefaultSearchLocation implements SearchLocationRepository {
         final feature = features.first;
         final properties = feature["properties"];
         return LocationDetail(
-            properties["name"], properties["street"] ?? "", location);
+          properties["name"],
+          properties["street"] ?? "",
+          location,
+        );
       }
     }
     throw Exception("no data found");

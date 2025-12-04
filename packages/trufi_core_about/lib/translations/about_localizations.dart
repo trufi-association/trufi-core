@@ -64,7 +64,8 @@ import 'about_localizations_pt.dart';
 /// be consistent with the languages listed in the AboutLocalization.supportedLocales
 /// property.
 abstract class AboutLocalization {
-  AboutLocalization(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AboutLocalization(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,7 +73,8 @@ abstract class AboutLocalization {
     return Localizations.of<AboutLocalization>(context, AboutLocalization)!;
   }
 
-  static const LocalizationsDelegate<AboutLocalization> delegate = _AboutLocalizationDelegate();
+  static const LocalizationsDelegate<AboutLocalization> delegate =
+      _AboutLocalizationDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,12 +86,13 @@ abstract class AboutLocalization {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -98,7 +101,7 @@ abstract class AboutLocalization {
     Locale('es'),
     Locale('fr'),
     Locale('it'),
-    Locale('pt')
+    Locale('pt'),
   ];
 
   /// A short marketing sentence that describes the app
@@ -168,38 +171,52 @@ abstract class AboutLocalization {
   String get volunteerTrufi;
 }
 
-class _AboutLocalizationDelegate extends LocalizationsDelegate<AboutLocalization> {
+class _AboutLocalizationDelegate
+    extends LocalizationsDelegate<AboutLocalization> {
   const _AboutLocalizationDelegate();
 
   @override
   Future<AboutLocalization> load(Locale locale) {
-    return SynchronousFuture<AboutLocalization>(lookupAboutLocalization(locale));
+    return SynchronousFuture<AboutLocalization>(
+      lookupAboutLocalization(locale),
+    );
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+    'pt',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AboutLocalizationDelegate old) => false;
 }
 
 AboutLocalization lookupAboutLocalization(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AboutLocalizationDe();
-    case 'en': return AboutLocalizationEn();
-    case 'es': return AboutLocalizationEs();
-    case 'fr': return AboutLocalizationFr();
-    case 'it': return AboutLocalizationIt();
-    case 'pt': return AboutLocalizationPt();
+    case 'de':
+      return AboutLocalizationDe();
+    case 'en':
+      return AboutLocalizationEn();
+    case 'es':
+      return AboutLocalizationEs();
+    case 'fr':
+      return AboutLocalizationFr();
+    case 'it':
+      return AboutLocalizationIt();
+    case 'pt':
+      return AboutLocalizationPt();
   }
 
   throw FlutterError(
     'AboutLocalization.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

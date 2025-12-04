@@ -1,14 +1,16 @@
 import 'about_localizations.dart';
 
-/// The translations for Italian (`it`).
-class AboutLocalizationIt extends AboutLocalization {
-  AboutLocalizationIt([String locale = 'it']) : super(locale);
+/// The translations for English (`en`).
+class AboutLocalizationEn extends AboutLocalization {
+  AboutLocalizationEn([super.locale = 'en']);
 
   @override
-  String get aboutCollapseContent => 'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.';
+  String get aboutCollapseContent =>
+      'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.';
 
   @override
-  String get aboutCollapseContentFoot => 'We need mappers, developers, planners, testers, and many other hands.';
+  String get aboutCollapseContentFoot =>
+      'We need mappers, developers, planners, testers, and many other hands.';
 
   @override
   String get aboutCollapseTitle => 'More About Trufi Association';
@@ -19,17 +21,18 @@ class AboutLocalizationIt extends AboutLocalization {
   }
 
   @override
-  String get aboutLicenses => 'Licenze';
+  String get aboutLicenses => 'Licenses';
 
   @override
-  String get aboutOpenSource => 'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.';
+  String get aboutOpenSource =>
+      'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.';
 
   @override
   String get menuAbout => 'About us';
 
   @override
   String tagline(Object city) {
-    return 'Trasporto pubblico a $city';
+    return 'Public transportation in $city';
   }
 
   @override
@@ -37,7 +40,7 @@ class AboutLocalizationIt extends AboutLocalization {
 
   @override
   String version(Object version) {
-    return 'Versione $version';
+    return 'Version $version';
   }
 
   @override
