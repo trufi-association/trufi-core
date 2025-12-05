@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.404954, 52.5200066]
+      },
+      "properties": {
+        "osm_id": 62422,
+        "osm_type": "R",
+        "osm_key": "place",
+        "osm_value": "city",
+        "name": "Berlin",
+        "city": "Berlin",
+        "state": "Berlin",
+        "country": "Germany",
+        "countrycode": "DE",
+        "type": "city"
+      }
+    }
+  ]
+}

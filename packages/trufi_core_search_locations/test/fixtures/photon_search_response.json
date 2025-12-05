@@ -1,0 +1,65 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.404954, 52.5200066]
+      },
+      "properties": {
+        "osm_id": 62422,
+        "osm_type": "R",
+        "osm_key": "place",
+        "osm_value": "city",
+        "name": "Berlin",
+        "city": "Berlin",
+        "state": "Berlin",
+        "country": "Germany",
+        "countrycode": "DE",
+        "type": "city"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3777041, 52.5162746]
+      },
+      "properties": {
+        "osm_id": 26995159,
+        "osm_type": "W",
+        "osm_key": "tourism",
+        "osm_value": "attraction",
+        "name": "Brandenburger Tor",
+        "street": "Pariser Platz",
+        "city": "Berlin",
+        "state": "Berlin",
+        "country": "Germany",
+        "countrycode": "DE",
+        "type": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.3761, 52.5096]
+      },
+      "properties": {
+        "osm_id": 12345678,
+        "osm_type": "N",
+        "osm_key": "amenity",
+        "osm_value": "restaurant",
+        "name": "Berlin Döner",
+        "housenumber": "100",
+        "street": "Friedrichstraße",
+        "city": "Berlin",
+        "state": "Berlin",
+        "country": "Germany",
+        "countrycode": "DE",
+        "type": "restaurant"
+      }
+    }
+  ]
+}
