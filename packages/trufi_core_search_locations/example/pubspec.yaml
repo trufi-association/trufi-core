@@ -1,0 +1,20 @@
+name: trufi_core_search_locations_example
+description: Example app demonstrating trufi_core_search_locations package.
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  trufi_core_search_locations:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

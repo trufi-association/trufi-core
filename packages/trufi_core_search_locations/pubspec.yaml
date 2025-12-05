@@ -1,0 +1,24 @@
+name: trufi_core_search_locations
+description: Independent search location bar widgets for origin/destination selection in routing apps.
+version: 0.0.1
+homepage: https://github.com/trufi-association/trufi-core
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  trufi_core_maps:
+    path: ../trufi_core_maps
+  latlong2: ^0.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.4
