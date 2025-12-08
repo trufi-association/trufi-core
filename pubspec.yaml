@@ -6,7 +6,7 @@ environment:
 workspace:
   - apps/trufi_core
   - apps/example
-
+tes
   # General Packages
   - packages/trufi_core_interfaces
   - packages/trufi_core_storage
