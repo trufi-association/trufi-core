@@ -1,12 +1,16 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart' as base;
 
-part 'theme_state.dart';
+// Re-export from trufi_core_base_widgets for backward compatibility
+export 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart'
+    show TrufiBaseTheme, TrufiBaseThemeHiveLocalRepository;
 
-class ThemeCubit extends Cubit<TrufiBaseTheme> {
+/// Extended ThemeCubit with localization support for display names.
+class ThemeCubit extends base.ThemeCubit {
+  ThemeCubit({required super.themeState});
+
+  /// Returns a localized display name for the given theme mode.
   static String themeModeDisplayName(
     TrufiBaseLocalization localization,
     ThemeMode themeMode,
@@ -21,42 +25,8 @@ class ThemeCubit extends Cubit<TrufiBaseTheme> {
     }
   }
 
-  final _localRepository = TrufiBaseThemeHiveLocalRepository();
-
-  ThemeCubit({
-    required TrufiBaseTheme themeState,
-  }) : super(themeState) {
-    _load();
-  }
-
-  Future<void> _load() async {
-    _localRepository.loadRepository();
-    emit(state.copyWith(themeMode: await _localRepository.getThemeMode()));
-  }
-
-  void updateTheme({
-    ThemeMode? themeMode,
-  }) {
-    emit(state.copyWith(
-      themeMode: themeMode,
-    ));
-    _localRepository.saveThemeMode(state.themeMode);
-  }
-
-  ThemeData themeData(BuildContext context) {
-    final ThemeMode mode = state.themeMode;
-    final Brightness platformBrightness =
-        MediaQuery.platformBrightnessOf(context);
-    final bool useDarkTheme = mode == ThemeMode.dark ||
-        (mode == ThemeMode.system && platformBrightness == Brightness.dark);
-    if (useDarkTheme) {
-      return state.darkTheme;
-    } else {
-      return state.theme;
-    }
-  }
-
+  /// Checks if the given theme data is in dark mode.
   static bool isDarkMode(ThemeData themeData) {
-    return themeData.brightness == Brightness.dark;
+    return base.ThemeCubit.isDarkMode(themeData);
   }
 }

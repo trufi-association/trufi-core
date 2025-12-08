@@ -1,12 +1,3 @@
-import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/models/trufi_place.dart';
-
-abstract class SearchLocationRepository {
-  Future<List<TrufiPlace>> fetchLocations(
-    String query, {
-    int limit,
-    String? correlationId,
-  });
-
-  Future<LocationDetail> reverseGeodecoding(TrufiLatLng location);
-}
+// Re-export from trufi_core_search_locations for backward compatibility
+export 'package:trufi_core_search_locations/trufi_core_search_locations.dart'
+    show SearchLocationRepository;

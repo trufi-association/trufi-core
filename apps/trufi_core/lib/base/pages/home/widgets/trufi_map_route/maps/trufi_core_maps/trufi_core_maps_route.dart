@@ -69,6 +69,11 @@ class _TrufiCoreMapsRouteState extends State<TrufiCoreMapsRoute>
   void initState() {
     super.initState();
     _currentEngine = widget.mapEngine;
+
+    // Listen to out-of-focus state to show/hide crop button
+    widget.trufiMapController.fitCameraLayer?.outOfFocusNotifier
+        .addListener(_onOutOfFocusChanged);
+
     WidgetsBinding.instance.addPostFrameCallback((duration) {
       _initializeLayers();
       final theme = Theme.of(context);
@@ -80,6 +85,13 @@ class _TrufiCoreMapsRouteState extends State<TrufiCoreMapsRoute>
         walkColor: theme.colorScheme.secondary,
       );
     });
+  }
+
+  void _onOutOfFocusChanged() {
+    final outOfFocus =
+        widget.trufiMapController.fitCameraLayer?.outOfFocusNotifier.value ??
+            false;
+    _cropButtonKey.currentState?.setVisible(visible: outOfFocus);
   }
 
   void _initializeLayers() {
@@ -116,6 +128,8 @@ class _TrufiCoreMapsRouteState extends State<TrufiCoreMapsRoute>
 
   @override
   void dispose() {
+    widget.trufiMapController.fitCameraLayer?.outOfFocusNotifier
+        .removeListener(_onOutOfFocusChanged);
     _routeLayer?.dispose();
     _locationMarkerLayer?.dispose();
     _tempMarkerLayer?.dispose();
@@ -291,7 +305,7 @@ class _TrufiCoreMapsRouteState extends State<TrufiCoreMapsRoute>
     BuildContext context,
     RoutePlannerState routePlannerState,
   ) {
-    return _currentEngine.buildMap(
+    return _currentEngine.buildMapWithController(
       controller: widget.trufiMapController.mapController,
       onMapClick: (point) => _handleOnMapTap(context, point, routePlannerState),
       onMapLongClick: (point) => _onLongMapPress(context, point),

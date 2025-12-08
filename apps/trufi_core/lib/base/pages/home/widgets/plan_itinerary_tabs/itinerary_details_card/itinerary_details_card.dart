@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
 import 'package:trufi_core/base/models/journey_plan/plan.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
 import 'package:trufi_core/base/pages/saved_places/translations/saved_places_localizations.dart';
 

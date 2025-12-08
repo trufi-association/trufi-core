@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart' as interfaces;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-/// Interface for map engines.
+/// Interface for map engines that use TrufiMapController.
 ///
-/// Implement this interface to create custom map engines that can be
-/// used with TrufiCoreMapsCollection.
-abstract class ITrufiMapEngine {
-  /// Unique identifier for this engine
-  String get id;
+/// Extends the base ITrufiMapEngine interface with concrete controller type.
+abstract class ITrufiMapEngine implements interfaces.ITrufiMapEngine {
+  const ITrufiMapEngine();
 
-  /// Display name for UI
-  String get name;
-
-  /// Optional description
-  String get description;
-
-  /// Build the map widget
-  Widget buildMap({
+  /// Build the map widget with concrete controller type
+  Widget buildMapWithController({
     required TrufiMapController controller,
     void Function(TrufiLatLng)? onMapClick,
     void Function(TrufiLatLng)? onMapLongClick,
   });
+
+  @override
+  Widget buildMap({
+    required dynamic controller,
+    void Function(interfaces.TrufiLatLng)? onMapClick,
+    void Function(interfaces.TrufiLatLng)? onMapLongClick,
+  }) {
+    return buildMapWithController(
+      controller: controller as TrufiMapController,
+      onMapClick: onMapClick != null
+          ? (p) => onMapClick(interfaces.TrufiLatLng(p.latitude, p.longitude))
+          : null,
+      onMapLongClick: onMapLongClick != null
+          ? (p) => onMapLongClick(interfaces.TrufiLatLng(p.latitude, p.longitude))
+          : null,
+    );
+  }
 }
 
 /// MapLibre GL engine implementation
-class MapLibreEngine implements ITrufiMapEngine {
+class MapLibreEngine extends ITrufiMapEngine {
   /// Style URL for MapLibre (e.g., 'https://tiles.openfreemap.org/styles/liberty')
   final String styleString;
 
@@ -43,7 +53,7 @@ class MapLibreEngine implements ITrufiMapEngine {
   String get description => 'Vector map with modern styling and better performance';
 
   @override
-  Widget buildMap({
+  Widget buildMapWithController({
     required TrufiMapController controller,
     void Function(TrufiLatLng)? onMapClick,
     void Function(TrufiLatLng)? onMapLongClick,
@@ -62,7 +72,7 @@ class MapLibreEngine implements ITrufiMapEngine {
 }
 
 /// FlutterMap (OpenStreetMap raster tiles) engine implementation
-class FlutterMapEngine implements ITrufiMapEngine {
+class FlutterMapEngine extends ITrufiMapEngine {
   /// Tile URL template (e.g., 'https://tile.openstreetmap.org/{z}/{x}/{y}.png')
   final String tileUrl;
 
@@ -80,7 +90,7 @@ class FlutterMapEngine implements ITrufiMapEngine {
   String get description => 'Classic OpenStreetMap with raster tiles';
 
   @override
-  Widget buildMap({
+  Widget buildMapWithController({
     required TrufiMapController controller,
     void Function(TrufiLatLng)? onMapClick,
     void Function(TrufiLatLng)? onMapLongClick,

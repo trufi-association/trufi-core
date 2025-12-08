@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart' as interfaces;
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_routing_ui/trufi_core_routing_ui.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
@@ -21,9 +22,12 @@ import 'package:trufi_core/base/utils/map_utils/trufi_map_utils.dart';
 // Place - wrapper around package Place
 // ============================================
 
-class Place extends Equatable {
+class Place extends Equatable implements interfaces.IPlace {
+  @override
   final String name;
+  @override
   final double lat;
+  @override
   final double lon;
 
   const Place({
@@ -66,16 +70,21 @@ class Place extends Equatable {
 // RouteInfo - wrapper around package Route
 // ============================================
 
-class RouteInfo extends Equatable {
+class RouteInfo extends Equatable implements interfaces.IRouteInfo {
+  @override
   final String id;
   final String gtfsId;
+  @override
   final String? shortName;
+  @override
   final String? longName;
   final routing.TransportMode? mode;
   final int? type;
   final String? desc;
   final String? url;
+  @override
   final String? color;
+  @override
   final String? textColor;
 
   const RouteInfo({
@@ -150,20 +159,28 @@ class RouteInfo extends Equatable {
 // Leg - wrapper around package Leg with UI
 // ============================================
 
-class Leg extends Equatable {
+class Leg extends Equatable implements interfaces.ILeg {
+  @override
   final String points;
   final routing.TransportMode transportMode;
   final RouteInfo? route;
   final String? routeColor;
   final String? shortName;
   final String? routeLongName;
+  @override
   final double distance;
+  @override
   final Duration duration;
+  @override
   final Place toPlace;
+  @override
   final Place fromPlace;
+  @override
   final DateTime startTime;
+  @override
   final DateTime endTime;
   final List<Place>? intermediatePlaces;
+  @override
   final bool transitLeg;
   final List<TrufiLatLng> accumulatedPoints;
 
@@ -353,14 +370,22 @@ class Leg extends Equatable {
 // Itinerary - wrapper around package Itinerary
 // ============================================
 
-class Itinerary extends Equatable {
+class Itinerary extends Equatable implements interfaces.IItinerary {
+  @override
   final List<Leg> legs;
+  @override
   final DateTime startTime;
+  @override
   final DateTime endTime;
+  @override
   final Duration duration;
+  @override
   final Duration walkTime;
+  @override
   final double distance;
+  @override
   final double walkDistance;
+  @override
   final int transfers;
 
   Itinerary({
@@ -566,7 +591,8 @@ class Itinerary extends Equatable {
 // Plan - app-specific Plan with error handling
 // ============================================
 
-class Plan extends Equatable {
+class Plan extends Equatable implements interfaces.IPlan {
+  @override
   final List<Itinerary>? itineraries;
   final PlanError? error;
 
@@ -643,7 +669,11 @@ class Plan extends Equatable {
               itineraries![0].legs[0].transportMode ==
                   routing.TransportMode.walk));
 
+  @override
   bool get hasError => error != null;
+
+  @override
+  String? get errorMessage => error?.message;
 
   @override
   List<Object?> get props => [itineraries, error];
