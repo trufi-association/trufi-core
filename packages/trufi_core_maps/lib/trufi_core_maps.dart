@@ -4,7 +4,22 @@
 /// - **Presentation Layer**: Map widgets (TrufiMap, TrufiFlutterMap, TrufiMapLibreMap)
 /// - **Domain Layer**: Business logic (TrufiMapController, TrufiLayer, entities)
 /// - **Data Layer**: Data access (tile fetching, spatial indexing, utilities)
+/// - **Configuration**: Map configuration, markers, and copyright
 library;
+
+// ============================================
+// CONFIGURATION
+// ============================================
+export 'src/configuration/map_configuration.dart';
+export 'src/configuration/marker_configuration.dart';
+export 'src/configuration/map_copyright.dart';
+export 'src/configuration/map_tile_provider.dart';
+export 'src/configuration/map_layer/map_layer.dart';
+export 'src/configuration/map_layer/map_layer_local_storage.dart';
+export 'src/configuration/map_layer/map_layers_cubit.dart';
+export 'src/configuration/markers/from_marker.dart';
+export 'src/configuration/markers/to_marker.dart';
+export 'src/configuration/markers/my_location_marker.dart';
 
 // ============================================
 // DOMAIN LAYER - Entities

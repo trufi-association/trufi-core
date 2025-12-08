@@ -13,6 +13,7 @@ workspace:
 
   # Feature Packages
   - packages/trufi_core_about
+  - packages/trufi_core_home_screen
   - packages/trufi_core_maps
   - packages/trufi_core_routing
   - packages/trufi_core_routing_ui
