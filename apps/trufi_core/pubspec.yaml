@@ -47,6 +47,8 @@ dependencies:
     path: ../../packages/trufi_core_routing
   trufi_core_routing_ui:
     path: ../../packages/trufi_core_routing_ui
+  trufi_core_maps:
+    path: ../../packages/trufi_core_maps
   trufi_core_utils: ^0.0.1
   trufi_core_custom_material: ^0.0.1
   trufi_core_about: ^0.0.1

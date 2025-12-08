@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
+import 'package:trufi_core/base/models/map_provider_collection/map_engine.dart';
+import 'package:trufi_core/base/models/map_provider_collection/trufi_core_maps_collection.dart';
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/utils/certificates_letsencrypt_android.dart';
 import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
@@ -59,6 +61,16 @@ void main() async {
           ),
           lifecycleReactorHandler: LifecycleReactorNotifications(
             url: 'https://navigator.trufi.app/static_files/notification.json',
+          ),
+          // Use MapLibre GL for map rendering
+          trufiMapProvider: const TrufiCoreMapsCollection(
+            mapEngines: [
+              MapLibreEngine(
+                styleString: 'https://tiles.openfreemap.org/styles/liberty',
+              ),
+              FlutterMapEngine(),
+            ],
+            defaultEngineIndex: 0, // MapLibre as default
           ),
         ),
       ),

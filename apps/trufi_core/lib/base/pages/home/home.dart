@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routemaster/routemaster.dart';
 
 import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
-import 'package:trufi_core/base/blocs/panel/panel_cubit.dart';
 import 'package:trufi_core/base/blocs/providers/app_review_provider.dart';
 import 'package:trufi_core/base/blocs/providers/deeplink_provider/geo_location.dart';
 import 'package:trufi_core/base/blocs/theme/theme_cubit.dart';
@@ -13,13 +12,11 @@ import 'package:trufi_core/base/models/map_provider_collection/trufi_map_definit
 import 'package:trufi_core/base/models/trufi_latlng.dart';
 import 'package:trufi_core/base/models/trufi_place.dart';
 import 'package:trufi_core/base/pages/home/route_planner_cubit/route_planner_cubit.dart';
-import 'package:trufi_core/base/pages/home/widgets/plan_itinerary_tabs/custom_itinerary.dart';
 import 'package:trufi_core/base/pages/home/widgets/search_location_field/home_app_bar.dart';
 import 'package:trufi_core/base/translations/trufi_base_localizations.dart';
 import 'package:trufi_core/base/widgets/alerts/base_build_alert.dart';
 import 'package:trufi_core/base/widgets/alerts/error_base_alert.dart';
 import 'package:trufi_core/base/widgets/choose_location/choose_location.dart';
-import 'package:trufi_core/base/widgets/custom_scrollable_container.dart';
 import 'package:trufi_core/base/widgets/screen/screen_helpers.dart';
 
 class HomePage extends StatefulWidget {
@@ -44,9 +41,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  final GlobalKey<CustomScrollableContainerState> scrollController =
-      GlobalKey();
-
   @override
   void initState() {
     super.initState();
@@ -73,19 +67,8 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     final routePlannerCubit = context.watch<RoutePlannerCubit>();
-    final panelCubit = context.watch<PanelCubit>();
     final mapConfiguratiom = context.read<MapConfigurationCubit>().state;
     final theme = Theme.of(context);
-    widget.mapRouteProvider.trufiMapController.onReady.then((value) {
-      if (panelCubit.state.panel != null &&
-          routePlannerCubit.state.plan == null) {
-        widget.mapRouteProvider.trufiMapController.move(
-          center: panelCubit.state.panel!.positon,
-          zoom: 17,
-          tickerProvider: this,
-        );
-      }
-    });
     return Scaffold(
       key: HomePage.scaffoldKey,
       drawer: widget.drawerBuilder(context),
@@ -141,47 +124,12 @@ class _HomePageState extends State<HomePage>
               Expanded(
                 child: Stack(
                   children: [
-                    CustomScrollableContainer(
-                      key: scrollController,
-                      openedPosition: 200,
-                      body: widget.mapRouteProvider.mapRouteBuilder(
-                        context,
-                        widget.asyncExecutor,
-                      ),
-                      bottomPadding: panelCubit.state.panel?.minSize ?? 0,
-                      panel: panelCubit.state.panel == null
-                          ? routePlannerCubit.state.plan != null
-                              ? CustomItinerary(
-                                  moveTo: (center) {
-                                    final callResize = scrollController
-                                                .currentState?.panelHeight !=
-                                            null &&
-                                        scrollController
-                                                .currentState!.panelHeight ==
-                                            0;
-                                    if (callResize) {
-                                      scrollController.currentState
-                                          ?.scrollFunction(
-                                        scrollValue: 0.7,
-                                      );
-                                    }
-                                    widget.mapRouteProvider.trufiMapController
-                                        .move(
-                                            center: center,
-                                            zoom: 16,
-                                            tickerProvider: this);
-                                    return callResize;
-                                  },
-                                )
-                              : null
-                          : panelCubit.state.panel?.panel(context, () {
-                              panelCubit.cleanPanel();
-                              _callFetchPlan(context);
-                            }),
-                      onClose: panelCubit.state.panel == null
-                          ? null
-                          : panelCubit.cleanPanel,
+                    // Map widget with integrated bottom sheet
+                    widget.mapRouteProvider.mapRouteBuilder(
+                      context,
+                      widget.asyncExecutor,
                     ),
+                    // Shadow under the app bar
                     Positioned(
                       top: -3.5,
                       left: 0,
