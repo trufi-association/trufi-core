@@ -1,0 +1,53 @@
+{
+  "@@locale": "en",
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Settings screen title"
+  },
+
+  "settingsLanguage": "Language",
+  "@settingsLanguage": {
+    "description": "Language setting"
+  },
+
+  "settingsSelectLanguage": "Select your preferred language:",
+  "@settingsSelectLanguage": {
+    "description": "Language selection instruction"
+  },
+
+  "settingsTheme": "Theme",
+  "@settingsTheme": {
+    "description": "Theme setting"
+  },
+
+  "settingsThemeLight": "Light Mode",
+  "@settingsThemeLight": {
+    "description": "Light theme option"
+  },
+
+  "settingsThemeDark": "Dark Mode",
+  "@settingsThemeDark": {
+    "description": "Dark theme option"
+  },
+
+  "settingsThemeSystem": "System Default",
+  "@settingsThemeSystem": {
+    "description": "System theme option"
+  },
+
+  "settingsTranslationDemo": "Translation Demo",
+  "@settingsTranslationDemo": {
+    "description": "Demo section title"
+  },
+
+  "settingsTranslationDemoDesc": "Change the language above to see these translations update dynamically:",
+  "@settingsTranslationDemoDesc": {
+    "description": "Demo section description"
+  },
+
+  "settingsRegisteredModules": "Registered Modules",
+  "@settingsRegisteredModules": {
+    "description": "Registered modules section"
+  }
+}

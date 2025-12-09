@@ -1,0 +1,12 @@
+{
+  "@@locale": "es",
+
+  "searchTitle": "Buscar Ubicación",
+  "searchOrigin": "Origen",
+  "searchDestination": "Destino",
+  "searchMyLocation": "Mi ubicación",
+  "searchChooseOnMap": "Elegir en el mapa",
+  "searchSwap": "Intercambiar",
+  "searchNoResults": "No se encontraron resultados",
+  "searchSearching": "Buscando..."
+}

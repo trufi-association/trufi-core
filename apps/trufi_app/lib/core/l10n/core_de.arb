@@ -1,0 +1,16 @@
+{
+  "@@locale": "de",
+
+  "appName": "Trufi App",
+  "appLoading": "Laden...",
+  "navHome": "Startseite",
+  "navSearch": "Suchen",
+  "navFeedback": "Feedback",
+  "navSettings": "Einstellungen",
+  "navAbout": "Über",
+  "actionSave": "Speichern",
+  "actionCancel": "Abbrechen",
+  "actionConfirm": "Bestätigen",
+  "errorGeneric": "Ein Fehler ist aufgetreten",
+  "errorNetwork": "Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung."
+}

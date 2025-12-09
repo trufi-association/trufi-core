@@ -1,0 +1,33 @@
+{
+  "@@locale": "en",
+
+  "homeTitle": "Welcome to Trufi",
+  "@homeTitle": {
+    "description": "Home screen title"
+  },
+
+  "homeSubtitle": "Your journey starts here",
+  "@homeSubtitle": {
+    "description": "Home screen subtitle"
+  },
+
+  "homeSearchPlaceholder": "Where do you want to go?",
+  "@homeSearchPlaceholder": {
+    "description": "Search placeholder on home"
+  },
+
+  "homeQuickActions": "Quick Actions",
+  "@homeQuickActions": {
+    "description": "Quick actions section title"
+  },
+
+  "homeFavorites": "Favorites",
+  "@homeFavorites": {
+    "description": "Favorites button text"
+  },
+
+  "homePocFeatures": "POC Features",
+  "@homePocFeatures": {
+    "description": "POC features section title"
+  }
+}

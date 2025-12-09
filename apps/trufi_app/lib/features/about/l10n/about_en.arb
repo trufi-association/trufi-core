@@ -1,0 +1,53 @@
+{
+  "@@locale": "en",
+
+  "aboutTitle": "About",
+  "@aboutTitle": {
+    "description": "About screen title"
+  },
+
+  "aboutVersion": "Version",
+  "@aboutVersion": {
+    "description": "Version label"
+  },
+
+  "aboutDescription": "Trufi App is a POC demonstrating the v5 architecture with dynamic screens, translations, and GoRouter.",
+  "@aboutDescription": {
+    "description": "App description"
+  },
+
+  "aboutArchitectureDetails": "Architecture Details",
+  "@aboutArchitectureDetails": {
+    "description": "Architecture section title"
+  },
+
+  "aboutPattern": "Pattern",
+  "@aboutPattern": {
+    "description": "Pattern label"
+  },
+
+  "aboutNavigation": "Navigation",
+  "@aboutNavigation": {
+    "description": "Navigation label"
+  },
+
+  "aboutTranslations": "Translations",
+  "@aboutTranslations": {
+    "description": "Translations label"
+  },
+
+  "aboutState": "State",
+  "@aboutState": {
+    "description": "State label"
+  },
+
+  "aboutFeaturesImplemented": "Features Implemented",
+  "@aboutFeaturesImplemented": {
+    "description": "Features section title"
+  },
+
+  "aboutReferenceIssue": "Reference Issue",
+  "@aboutReferenceIssue": {
+    "description": "Reference issue section"
+  }
+}
