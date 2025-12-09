@@ -1,0 +1,16 @@
+{
+  "@@locale": "es",
+
+  "appName": "Trufi App",
+  "appLoading": "Cargando...",
+  "navHome": "Inicio",
+  "navSearch": "Buscar",
+  "navFeedback": "Comentarios",
+  "navSettings": "Configuración",
+  "navAbout": "Acerca de",
+  "actionSave": "Guardar",
+  "actionCancel": "Cancelar",
+  "actionConfirm": "Confirmar",
+  "errorGeneric": "Ocurrió un error",
+  "errorNetwork": "Error de red. Por favor verifica tu conexión."
+}

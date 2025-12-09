@@ -1,0 +1,63 @@
+{
+  "@@locale": "en",
+
+  "appName": "Trufi App",
+  "@appName": {
+    "description": "The application name"
+  },
+
+  "appLoading": "Loading...",
+  "@appLoading": {
+    "description": "Loading indicator text"
+  },
+
+  "navHome": "Home",
+  "@navHome": {
+    "description": "Navigation item for Home"
+  },
+
+  "navSearch": "Search",
+  "@navSearch": {
+    "description": "Navigation item for Search"
+  },
+
+  "navFeedback": "Feedback",
+  "@navFeedback": {
+    "description": "Navigation item for Feedback"
+  },
+
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Navigation item for Settings"
+  },
+
+  "navAbout": "About",
+  "@navAbout": {
+    "description": "Navigation item for About"
+  },
+
+  "actionSave": "Save",
+  "@actionSave": {
+    "description": "Save button text"
+  },
+
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Cancel button text"
+  },
+
+  "actionConfirm": "Confirm",
+  "@actionConfirm": {
+    "description": "Confirm button text"
+  },
+
+  "errorGeneric": "An error occurred",
+  "@errorGeneric": {
+    "description": "Generic error message"
+  },
+
+  "errorNetwork": "Network error. Please check your connection.",
+  "@errorNetwork": {
+    "description": "Network error message"
+  }
+}

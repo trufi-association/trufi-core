@@ -1,0 +1,10 @@
+{
+  "@@locale": "es",
+
+  "homeTitle": "Bienvenido a Trufi",
+  "homeSubtitle": "Tu viaje comienza aquí",
+  "homeSearchPlaceholder": "¿A dónde quieres ir?",
+  "homeQuickActions": "Acciones Rápidas",
+  "homeFavorites": "Favoritos",
+  "homePocFeatures": "Características del POC"
+}

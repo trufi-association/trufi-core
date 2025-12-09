@@ -1,0 +1,14 @@
+{
+  "@@locale": "es",
+
+  "settingsTitle": "Configuración",
+  "settingsLanguage": "Idioma",
+  "settingsSelectLanguage": "Selecciona tu idioma preferido:",
+  "settingsTheme": "Tema",
+  "settingsThemeLight": "Modo Claro",
+  "settingsThemeDark": "Modo Oscuro",
+  "settingsThemeSystem": "Predeterminado del Sistema",
+  "settingsTranslationDemo": "Demo de Traducción",
+  "settingsTranslationDemoDesc": "Cambia el idioma arriba para ver estas traducciones actualizarse dinámicamente:",
+  "settingsRegisteredModules": "Módulos Registrados"
+}

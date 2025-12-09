@@ -1,0 +1,43 @@
+{
+  "@@locale": "en",
+
+  "searchTitle": "Search Location",
+  "@searchTitle": {
+    "description": "Search screen title"
+  },
+
+  "searchOrigin": "Origin",
+  "@searchOrigin": {
+    "description": "Origin field label"
+  },
+
+  "searchDestination": "Destination",
+  "@searchDestination": {
+    "description": "Destination field label"
+  },
+
+  "searchMyLocation": "My Location",
+  "@searchMyLocation": {
+    "description": "My location button"
+  },
+
+  "searchChooseOnMap": "Choose on map",
+  "@searchChooseOnMap": {
+    "description": "Choose on map button"
+  },
+
+  "searchSwap": "Swap",
+  "@searchSwap": {
+    "description": "Swap origin/destination button"
+  },
+
+  "searchNoResults": "No results found",
+  "@searchNoResults": {
+    "description": "No search results message"
+  },
+
+  "searchSearching": "Searching...",
+  "@searchSearching": {
+    "description": "Searching indicator"
+  }
+}

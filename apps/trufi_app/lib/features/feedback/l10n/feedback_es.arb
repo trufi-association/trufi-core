@@ -1,0 +1,21 @@
+{
+  "@@locale": "es",
+
+  "feedbackTitle": "Enviar Comentarios",
+  "feedbackSubtitle": "Tus comentarios nos ayudan a mejorar la app",
+  "feedbackType": "Tipo de Comentario",
+  "feedbackTypeGeneral": "General",
+  "feedbackTypeBug": "Reporte de Error",
+  "feedbackTypeFeature": "Solicitud de Función",
+  "feedbackTypeRoute": "Problema de Ruta",
+  "feedbackRating": "Califica tu experiencia",
+  "feedbackMessage": "Tu Mensaje",
+  "feedbackMessageHint": "Cuéntanos qué piensas...",
+  "feedbackSubmit": "Enviar",
+  "feedbackSuccess": "¡Comentarios enviados exitosamente!",
+  "feedbackRatingPoor": "Malo",
+  "feedbackRatingFair": "Regular",
+  "feedbackRatingGood": "Bueno",
+  "feedbackRatingVeryGood": "Muy Bueno",
+  "feedbackRatingExcellent": "¡Excelente!"
+}
