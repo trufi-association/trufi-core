@@ -104,12 +104,6 @@ class DeeplinkProvider {
               () => Routemaster.of(context).push(FeedbackPage.route),
             );
             break;
-          case AboutPage.route:
-            _cleanNavigatorStore(
-              context,
-              () => Routemaster.of(context).push(AboutPage.route),
-            );
-            break;
           default:
         }
       }

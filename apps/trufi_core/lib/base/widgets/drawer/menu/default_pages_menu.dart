@@ -102,20 +102,6 @@ extension LayerIdsToString on DefaultPagesMenu {
           return TrufiBaseLocalization.of(context).menuTransportList;
         },
       ),
-      DefaultPagesMenu.about: MenuPageItem(
-        id: AboutPage.route,
-        selectedIcon: (context) => Icon(
-          Icons.info,
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : Colors.black,
-        ),
-        notSelectedIcon: (context) =>
-            const Icon(Icons.info, color: Colors.grey),
-        name: (context) {
-          return AboutLocalization.of(context).menuAbout;
-        },
-      ),
     };
 
     return map[this]!;

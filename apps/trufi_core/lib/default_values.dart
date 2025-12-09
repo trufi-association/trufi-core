@@ -168,15 +168,6 @@ abstract class DefaultValues {
                 drawerBuilder: generateDrawer(FeedbackPage.route),
               ),
             ),
-            AboutPage.route: (route) => NoAnimationPage(
-              child: AboutPage(
-                appName: appName,
-                cityName: cityName,
-                countryName: countryName,
-                emailContact: emailContact,
-                drawerBuilder: generateDrawer(AboutPage.route),
-              ),
-            ),
           },
         );
       },

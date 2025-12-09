@@ -1,6 +1,7 @@
+import 'package:trufi_core_about/trufi_core_about.dart';
+
 import 'core/trufi_app.dart';
 
-import 'features/about/about_screen.dart';
 import 'features/feedback/feedback_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/search/search_screen.dart';
@@ -15,7 +16,14 @@ void main() {
         SearchTrufiScreen(),
         FeedbackTrufiScreen(),
         SettingsTrufiScreen(),
-        AboutTrufiScreen(),
+        AboutTrufiScreen(
+          config: AboutScreenConfig(
+            appName: 'Trufi App',
+            cityName: 'Cochabamba',
+            countryName: 'Bolivia',
+            emailContact: 'info@trufi-association.org',
+          ),
+        ),
       ],
     ),
   );
