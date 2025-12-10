@@ -2,6 +2,7 @@ name: trufi_core_about
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
+publish_to: none
 resolution: workspace
 
 environment:
@@ -14,8 +15,12 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   url_launcher: ^6.3.2
-  trufi_core_utils: ^0.0.1
-  trufi_core_base_widgets: ^0.0.1
+  trufi_core_utils:
+    path: ../trufi_core_utils
+  trufi_core_base_widgets:
+    path: ../trufi_core_base_widgets
+  trufi_core_interfaces:
+    path: ../trufi_core_interfaces
   intl: ^0.20.2
 
 dev_dependencies:

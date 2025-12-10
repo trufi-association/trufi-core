@@ -1,8 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'about_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for German (`de`).
 class AboutLocalizationDe extends AboutLocalization {
-  AboutLocalizationDe([super.locale = 'de']);
+  AboutLocalizationDe([String locale = 'de']) : super(locale);
 
   @override
   String get aboutCollapseContent =>
@@ -16,7 +20,7 @@ class AboutLocalizationDe extends AboutLocalization {
   String get aboutCollapseTitle => 'More About Trufi Association';
 
   @override
-  String aboutContent(Object appName, Object city) {
+  String aboutContent(String appName, String city) {
     return 'Du musst irgendwo hin und weißt nicht, welchen Trufi oder Bus Du nehmen sollst?\nDie $appName macht es einfach!\n\nDie Trufi Association ist ein Team aus Bolivien und aus aller Welt. Wir lieben La Llajta und die öffentlichen Verkehrsmittel, deshalb haben wir diese Anwendung entwickelt, um den ÖPNV zugänglicher zu machen. Unser Ziel ist es, Dir ein praktisches Werkzeug an die Hand zu geben, mit dem Du Dich sicher bewegen kannst.\n\nWir sind bestrebt, die $appName ständig zu verbessern, um Dir immer richtige und nützliche Informationen bereitstellen zu können. Wir wissen, dass das Verkehrssystem in $city aus verschiedenen Gründen ständig im Wandel ist und es so möglich ist, dass einige Routen nicht ganz aktuell sind.\n\nUm die $appName zu einem effektiven Werkzeug zu machen, sind wir auf Deine Mitarbeit angewiesen. Wenn Dir Änderungen an einigen Routen oder Haltestellen bekannt sind, bitten wir Dich, diese Informationen mit uns zu teilen. Dein Beitrag trägt nicht nur dazu bei, die App auf dem neuesten Stand zu halten, sondern kommt auch anderen Nutzern zugute, die sich auf die $appName verlassen.\n\nVielen Dank, dass Du die $appName dazu nutzt, um Dich in $city fortzubewegen. Wir hoffen, dass Du Deine Zeit mit uns genießt!';
   }
 
@@ -31,7 +35,7 @@ class AboutLocalizationDe extends AboutLocalization {
   String get menuAbout => 'Über Uns';
 
   @override
-  String tagline(Object city) {
+  String tagline(String city) {
     return 'Öffentliche Verkehrsmittel in $city';
   }
 
@@ -39,7 +43,7 @@ class AboutLocalizationDe extends AboutLocalization {
   String get trufiWebsite => 'Trufi Association Website';
 
   @override
-  String version(Object version) {
+  String version(String version) {
     return 'Version $version';
   }
 

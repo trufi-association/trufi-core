@@ -43,6 +43,8 @@ dependencies:
     path: ../../packages/trufi_core_interfaces
   trufi_core_utils:
     path: ../../packages/trufi_core_utils
+  trufi_core_about:
+    path: ../../packages/trufi_core_about
 
 dev_dependencies:
   flutter_test:

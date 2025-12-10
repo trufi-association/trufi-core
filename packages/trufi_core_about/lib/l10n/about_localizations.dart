@@ -8,9 +8,8 @@ import 'package:intl/intl.dart' as intl;
 import 'about_localizations_de.dart';
 import 'about_localizations_en.dart';
 import 'about_localizations_es.dart';
-import 'about_localizations_fr.dart';
-import 'about_localizations_it.dart';
-import 'about_localizations_pt.dart';
+
+// ignore_for_file: type=lint
 
 /// Callers can lookup localized strings with an instance of AboutLocalization
 /// returned by `AboutLocalization.of(context)`.
@@ -20,7 +19,7 @@ import 'about_localizations_pt.dart';
 /// `supportedLocales` list. For example:
 ///
 /// ```dart
-/// import 'translations/about_localizations.dart';
+/// import 'l10n/about_localizations.dart';
 ///
 /// return MaterialApp(
 ///   localizationsDelegates: AboutLocalization.localizationsDelegates,
@@ -69,8 +68,8 @@ abstract class AboutLocalization {
 
   final String localeName;
 
-  static AboutLocalization of(BuildContext context) {
-    return Localizations.of<AboutLocalization>(context, AboutLocalization)!;
+  static AboutLocalization? of(BuildContext context) {
+    return Localizations.of<AboutLocalization>(context, AboutLocalization);
   }
 
   static const LocalizationsDelegate<AboutLocalization> delegate =
@@ -99,75 +98,72 @@ abstract class AboutLocalization {
     Locale('de'),
     Locale('en'),
     Locale('es'),
-    Locale('fr'),
-    Locale('it'),
-    Locale('pt'),
   ];
 
   /// A short marketing sentence that describes the app
   ///
-  /// In pt, this message translates to:
-  /// **'A Trufi Association é uma ONG internacional que promove acesso mais fácil ao transporte público. Nossos aplicativos ajudam as pessoas a encontrar a melhor maneira de ir do ponto A ao ponto B dentro de suas cidades.\n\nEm muitas cidades não há mapas, rotas, aplicativos ou horários oficiais. Por isso, compilamos as informações disponíveis e, às vezes, também mapeamos rotas do zero, trabalhando com pessoas locais que conhecem a cidade. Um sistema de transporte fácil de usar contribui para maior sustentabilidade, ar mais limpo e melhor qualidade de vida.'**
+  /// In en, this message translates to:
+  /// **'Trufi Association is an international NGO that promotes easier access to public transport. Our apps help everyone find the best way to get from point A to point B within their cities.\n\nIn many cities there are no official maps, routes, apps or timetables. So we compile the available information, and sometimes even map routes from scratch working with local people who know the city.  An easy-to-use transportation system contributes to greater sustainability, cleaner air and a better quality of life.'**
   String get aboutCollapseContent;
 
-  /// No description provided for @aboutCollapseContentFoot.
+  /// Call to action for volunteers
   ///
-  /// In pt, this message translates to:
-  /// **'Torne-se parte dos nosso time de voluntários! Nós precisamos de pessoas para fazer o mapeamento, de desenvolvedores, de planejadores, pessoas que nos ajudem a fazer testes e outras muitas mãos!'**
+  /// In en, this message translates to:
+  /// **'We need mappers, developers, planners, testers, and many other hands.'**
   String get aboutCollapseContentFoot;
 
-  /// No description provided for @aboutCollapseTitle.
+  /// Title for expandable section about Trufi
   ///
-  /// In pt, this message translates to:
-  /// **'Mais sobre a Trufi Association'**
+  /// In en, this message translates to:
+  /// **'More About Trufi Association'**
   String get aboutCollapseTitle;
 
   /// Text displayed on the about page
   ///
-  /// In pt, this message translates to:
-  /// **'Precisa ir a algum lugar e não sabe qual trufi ou ônibus pegar?\nO aplicativo Trufi facilita isso!\nA Trufi Association é uma equipe da Bolívia e de outros países. Adoramos La Llajta e o transporte público, por isso desenvolvemos este aplicativo para facilitar o transporte. Nosso objetivo é fornecer uma ferramenta prática que lhe permita navegar com confiança.\nEstamos comprometidos com a melhoria contínua do {appName} para oferecer a você informações cada vez mais precisas e úteis. Sabemos que o sistema de transporte em {city} passa por mudanças devido a diferentes motivos, portanto, é possível que algumas rotas não estejam completamente atualizadas.\nPara tornar o {appName} uma ferramenta eficaz, contamos com a colaboração de nossos usuários. Se tiver conhecimento de alterações em algumas rotas ou paradas, recomendamos que compartilhe essas informações conosco. Sua contribuição não apenas ajudará a manter o aplicativo atualizado, mas também beneficiará outros usuários que dependem do {appName}.\nObrigado por escolher o {appName} para se locomover em {city}, esperamos que aproveite sua experiência conosco!'**
-  String aboutContent(Object appName, Object city);
+  /// In en, this message translates to:
+  /// **'Need to go somewhere and don\'t know which trufi or bus to take?\nThe {appName} makes it easy!\n\nTrufi Association is a team from Bolivia and beyond. We love La Llajta and public transportation, that\'s why we developed this application to make transportation easy. Our goal is to provide you with a practical tool that allows you to navigate with confidence.\n\nWe are committed to the continuous improvement of {appName} to offer you more and more accurate and useful information. We know that the transportation system in {city} undergoes changes due to different reasons, so it is possible that some routes are not completely up to date.\n\nTo make {appName} an effective tool, we rely on the collaboration of our users. If you are aware of changes in some routes or stops, we encourage you to share this information with us. Your contribution will not only help keep the app up to date, but will also benefit other users who rely on {appName}.\n\nThank you for choosing {appName} to move around {city}, we hope you enjoy your experience with us!'**
+  String aboutContent(String appName, String city);
 
   /// Button label to show licenses
   ///
-  /// In pt, this message translates to:
-  /// **'Licenças'**
+  /// In en, this message translates to:
+  /// **'Licenses'**
   String get aboutLicenses;
 
   /// A note about open source
   ///
-  /// In pt, this message translates to:
-  /// **'Este aplicativo é lançado como código aberto no GitHub. Sinta-se à vontade para contribuir com o código ou trazer um aplicativo para sua própria cidade.'**
+  /// In en, this message translates to:
+  /// **'This app is released as open source on GitHub. Feel free to contribute to the code, or bring an app to your own city.'**
   String get aboutOpenSource;
 
   /// Menu item that shows the about page
   ///
-  /// In pt, this message translates to:
-  /// **'Sobre Nós'**
+  /// In en, this message translates to:
+  /// **'About us'**
   String get menuAbout;
 
   /// A short marketing sentence that describes the app
   ///
-  /// In pt, this message translates to:
-  /// **'Transporte público em {city}'**
-  String tagline(Object city);
+  /// In en, this message translates to:
+  /// **'Public transportation in {city}'**
+  String tagline(String city);
 
-  /// No description provided for @trufiWebsite.
+  /// Link text to Trufi website
   ///
-  /// In pt, this message translates to:
-  /// **'Website da Trufi Association'**
+  /// In en, this message translates to:
+  /// **'Trufi Association Website'**
   String get trufiWebsite;
 
   /// The application's version
   ///
-  /// In pt, this message translates to:
-  /// **'Versão {version}'**
-  String version(Object version);
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String version(String version);
 
-  /// No description provided for @volunteerTrufi.
+  /// Link text to volunteer page
   ///
-  /// In pt, this message translates to:
-  /// **'Torne-se um voluntário da Trufi'**
+  /// In en, this message translates to:
+  /// **'Volunteer For Trufi'**
   String get volunteerTrufi;
 }
 
@@ -183,14 +179,8 @@ class _AboutLocalizationDelegate
   }
 
   @override
-  bool isSupported(Locale locale) => <String>[
-    'de',
-    'en',
-    'es',
-    'fr',
-    'it',
-    'pt',
-  ].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AboutLocalizationDelegate old) => false;
@@ -205,12 +195,6 @@ AboutLocalization lookupAboutLocalization(Locale locale) {
       return AboutLocalizationEn();
     case 'es':
       return AboutLocalizationEs();
-    case 'fr':
-      return AboutLocalizationFr();
-    case 'it':
-      return AboutLocalizationIt();
-    case 'pt':
-      return AboutLocalizationPt();
   }
 
   throw FlutterError(
