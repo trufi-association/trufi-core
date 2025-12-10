@@ -173,63 +173,7 @@ class _SettingsScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Theme settings card (placeholder)
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.palette, color: Colors.green),
-                      const SizedBox(width: 12),
-                      Text(
-                        settingsL10n.settingsTheme,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  ListTile(
-                    leading: const Icon(Icons.light_mode),
-                    title: Text(settingsL10n.settingsThemeLight),
-                    trailing: Radio<String>(
-                      value: 'light',
-                      groupValue: 'light',
-                      onChanged: (value) {},
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.dark_mode),
-                    title: Text(settingsL10n.settingsThemeDark),
-                    trailing: Radio<String>(
-                      value: 'dark',
-                      groupValue: 'light',
-                      onChanged: (value) {},
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings_system_daydream),
-                    title: Text(settingsL10n.settingsThemeSystem),
-                    trailing: Radio<String>(
-                      value: 'system',
-                      groupValue: 'light',
-                      onChanged: (value) {},
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Theme switching is a placeholder for this POC.',
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          const _ThemeSettingsCard(),
 
           const SizedBox(height: 16),
 
@@ -286,6 +230,120 @@ class _SettingsScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ThemeSettingsCard extends StatefulWidget {
+  const _ThemeSettingsCard();
+
+  @override
+  State<_ThemeSettingsCard> createState() => _ThemeSettingsCardState();
+}
+
+class _ThemeSettingsCardState extends State<_ThemeSettingsCard> {
+  String _selectedTheme = 'light';
+
+  @override
+  Widget build(BuildContext context) {
+    final settingsL10n = SettingsLocalizations.of(context);
+    
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.palette, color: Colors.green),
+                const SizedBox(width: 12),
+                Text(
+                  settingsL10n.settingsTheme,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _ThemeOptionTile(
+              value: 'light',
+              selectedValue: _selectedTheme,
+              icon: Icons.light_mode,
+              title: settingsL10n.settingsThemeLight,
+              onTap: () {
+                setState(() {
+                  _selectedTheme = 'light';
+                });
+              },
+            ),
+            _ThemeOptionTile(
+              value: 'dark',
+              selectedValue: _selectedTheme,
+              icon: Icons.dark_mode,
+              title: settingsL10n.settingsThemeDark,
+              onTap: () {
+                setState(() {
+                  _selectedTheme = 'dark';
+                });
+              },
+            ),
+            _ThemeOptionTile(
+              value: 'system',
+              selectedValue: _selectedTheme,
+              icon: Icons.settings_system_daydream,
+              title: settingsL10n.settingsThemeSystem,
+              onTap: () {
+                setState(() {
+                  _selectedTheme = 'system';
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Theme switching is a placeholder for this POC.',
+              style: TextStyle(
+                color: Colors.grey[500],
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemeOptionTile extends StatelessWidget {
+  final String value;
+  final String selectedValue;
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _ThemeOptionTile({
+    required this.value,
+    required this.selectedValue,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = value == selectedValue;
+    
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: isSelected
+          ? const Icon(Icons.check_circle, color: Colors.green)
+          : const Icon(Icons.circle_outlined),
+      selected: isSelected,
+      onTap: onTap,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
     );
   }
