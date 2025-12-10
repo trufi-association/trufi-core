@@ -1,5 +1,6 @@
 import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_about/trufi_core_about.dart';
+import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 
 import 'core/trufi_app.dart';
@@ -15,6 +16,12 @@ void main() {
       appName: 'Trufi App',
       screens: [
         HomeTrufiScreen(),
+        SavedPlacesTrufiScreen(
+          config: SavedPlacesConfig(
+            defaultLatitude: -17.3988354,
+            defaultLongitude: -66.1626903,
+          ),
+        ),
         TransportListTrufiScreen(
           config: TransportListOtpConfig(
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',

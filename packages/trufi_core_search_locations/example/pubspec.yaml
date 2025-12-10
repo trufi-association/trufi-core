@@ -8,8 +8,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.2
   trufi_core_search_locations:
     path: ../
+  trufi_core_maps:
+    path: ../../trufi_core_maps
 
 dev_dependencies:
   flutter_test:

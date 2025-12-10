@@ -51,6 +51,8 @@ dependencies:
     path: ../../packages/trufi_core_maps
   trufi_core_routing:
     path: ../../packages/trufi_core_routing
+  trufi_core_saved_places:
+    path: ../../packages/trufi_core_saved_places
   latlong2: ^0.9.1
   maplibre_gl: ^0.24.1
 
