@@ -1,5 +1,5 @@
-name: trufi_core_search_locations_example
-description: Example app demonstrating trufi_core_search_locations package.
+name: trufi_core_saved_places_example
+description: Example app demonstrating trufi_core_saved_places package.
 publish_to: none
 
 environment:
@@ -8,11 +8,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  hive_flutter: ^1.1.0
   provider: ^6.1.2
-  trufi_core_search_locations:
-    path: ../
   trufi_core_maps:
     path: ../../trufi_core_maps
+  trufi_core_saved_places:
+    path: ../
 
 dev_dependencies:
   flutter_test:

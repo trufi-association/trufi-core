@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 void main() {
@@ -10,13 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Search Locations Example',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => MapEngineManager(engines: defaultMapEngines),
+      child: MaterialApp(
+        title: 'Search Locations Example',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          useMaterial3: true,
+        ),
+        home: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }
@@ -74,29 +79,31 @@ class _HomeScreenState extends State<HomeScreen> {
             latitude: -17.3900,
             longitude: -66.1560,
           ),
-          onChooseOnMap: () => Navigator.push<SearchLocation>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChooseOnMapScreen(
-                configuration: const ChooseOnMapConfiguration(
-                  initialLatitude: -17.3920,
-                  initialLongitude: -66.1575,
-                ),
-                mapBuilder: ({
-                  required initialLatitude,
-                  required initialLongitude,
-                  required initialZoom,
-                  required onCenterChanged,
-                }) =>
-                    MapLibreMapPicker(
-                  initialLatitude: initialLatitude,
-                  initialLongitude: initialLongitude,
-                  initialZoom: initialZoom,
-                  onCenterChanged: onCenterChanged,
+          onChooseOnMap: () async {
+            final result = await Navigator.push<MapLocationResult>(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChooseOnMapScreen(
+                  configuration: ChooseOnMapConfiguration(
+                    initialLatitude: -17.3920,
+                    initialLongitude: -66.1575,
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+
+            if (result != null) {
+              return SearchLocation(
+                id: 'map_${DateTime.now().millisecondsSinceEpoch}',
+                displayName: 'Selected Location',
+                address:
+                    '${result.latitude.toStringAsFixed(4)}, ${result.longitude.toStringAsFixed(4)}',
+                latitude: result.latitude,
+                longitude: result.longitude,
+              );
+            }
+            return null;
+          },
         ),
       ),
     );
