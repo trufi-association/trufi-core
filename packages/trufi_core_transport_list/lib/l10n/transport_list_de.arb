@@ -1,0 +1,15 @@
+{
+  "@@locale": "de",
+  "menuTransportList": "Linien",
+  "searchRoutes": "Linien suchen",
+  "noRoutesFound": "Keine Linien gefunden",
+  "shareRoute": "Linie teilen",
+  "stops": "{count} Haltestellen",
+  "@stops": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

@@ -20,6 +20,16 @@ const String allPatterns = r'''
 const String patternById = r'''
 query pattern($id: String!) {
   pattern(id: $id) {
+    id
+    name
+    code
+    route {
+      longName
+      shortName
+      color
+      mode
+      textColor
+    }
     geometry {
       lat
       lon

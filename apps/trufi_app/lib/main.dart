@@ -1,4 +1,6 @@
+import 'package:latlong2/latlong.dart';
 import 'package:trufi_core_about/trufi_core_about.dart';
+import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
 
 import 'core/trufi_app.dart';
 
@@ -13,6 +15,12 @@ void main() {
       appName: 'Trufi App',
       screens: [
         HomeTrufiScreen(),
+        TransportListTrufiScreen(
+          config: TransportListOtpConfig(
+            otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
+            defaultCenter: LatLng(-17.3988354, -66.1626903),
+          ),
+        ),
         SearchTrufiScreen(),
         FeedbackTrufiScreen(),
         SettingsTrufiScreen(),

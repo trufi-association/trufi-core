@@ -45,6 +45,14 @@ dependencies:
     path: ../../packages/trufi_core_utils
   trufi_core_about:
     path: ../../packages/trufi_core_about
+  trufi_core_transport_list:
+    path: ../../packages/trufi_core_transport_list
+  trufi_core_maps:
+    path: ../../packages/trufi_core_maps
+  trufi_core_routing:
+    path: ../../packages/trufi_core_routing
+  latlong2: ^0.9.1
+  maplibre_gl: ^0.24.1
 
 dev_dependencies:
   flutter_test:

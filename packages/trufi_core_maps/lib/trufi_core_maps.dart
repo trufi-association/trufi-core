@@ -20,6 +20,11 @@ export 'src/configuration/map_layer/map_layers_cubit.dart';
 export 'src/configuration/markers/from_marker.dart';
 export 'src/configuration/markers/to_marker.dart';
 export 'src/configuration/markers/my_location_marker.dart';
+export 'src/configuration/map_engine/trufi_map_engine.dart';
+export 'src/configuration/map_engine/maplibre_engine.dart';
+export 'src/configuration/map_engine/flutter_map_engine.dart';
+export 'src/configuration/map_engine/map_engine_manager.dart';
+export 'src/configuration/map_engine/default_map_engines.dart';
 
 // ============================================
 // DOMAIN LAYER - Entities
@@ -52,6 +57,13 @@ export 'src/presentation/map/maplibre_map.dart';
 // PRESENTATION LAYER - Utils
 // ============================================
 export 'src/presentation/utils/trufi_camera_fit.dart';
+
+// ============================================
+// PRESENTATION LAYER - Widgets
+// ============================================
+export 'src/presentation/widgets/map_type_button.dart';
+export 'src/presentation/widgets/map_type_option.dart';
+export 'src/presentation/widgets/map_type_settings_screen.dart';
 
 // ============================================
 // DATA LAYER - Tile System
