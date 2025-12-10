@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/saved_place.dart';
 import 'saved_places_repository.dart';
@@ -15,12 +15,21 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
 
   static const int _maxHistoryItems = 50;
 
+  static bool _hiveInitialized = false;
+
   late Box _box;
   bool _isInitialized = false;
 
   @override
   Future<void> initialize() async {
     if (_isInitialized) return;
+
+    // Initialize Hive Flutter only once
+    if (!_hiveInitialized) {
+      await Hive.initFlutter();
+      _hiveInitialized = true;
+    }
+
     _box = await Hive.openBox(_boxName);
     _isInitialized = true;
   }

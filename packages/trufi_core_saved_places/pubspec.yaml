@@ -18,9 +18,12 @@ dependencies:
   equatable: ^2.0.5
   flutter_bloc: ^8.1.3
   hive: ^2.2.3
+  hive_flutter: ^1.1.0
   provider: ^6.1.5
   trufi_core_interfaces:
     path: ../trufi_core_interfaces
+  trufi_core_maps:
+    path: ../trufi_core_maps
 
 dev_dependencies:
   flutter_test:

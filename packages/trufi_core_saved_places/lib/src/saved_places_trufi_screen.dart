@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 import '../l10n/saved_places_localizations.dart';
 import 'cubit/saved_places_cubit.dart';
 import 'models/saved_place.dart';
 import 'repository/hive_saved_places_repository.dart';
 import 'repository/saved_places_repository.dart';
+import 'widgets/edit_place_dialog.dart';
 import 'widgets/saved_places_list.dart';
 
 /// Configuration for the Saved Places screen
@@ -18,13 +20,17 @@ class SavedPlacesConfig {
   /// Callback when a place is selected
   final void Function(SavedPlace place)? onPlaceSelected;
 
-  /// Callback when a place needs to be edited (e.g., show map picker)
-  final void Function(BuildContext context, SavedPlace place)? onEditPlace;
+  /// Default latitude for new places
+  final double defaultLatitude;
+
+  /// Default longitude for new places
+  final double defaultLongitude;
 
   const SavedPlacesConfig({
     this.repository,
     this.onPlaceSelected,
-    this.onEditPlace,
+    this.defaultLatitude = 0.0,
+    this.defaultLongitude = 0.0,
   });
 }
 
@@ -69,7 +75,7 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
   @override
   ScreenMenuItem? get menuItem => const ScreenMenuItem(
         icon: Icons.bookmark,
-        order: 2,
+        order: 50,
       );
 
   @override
@@ -97,22 +103,66 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
     required this.repository,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    final localization = SavedPlacesLocalizations.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localization?.yourPlaces ?? 'Your Places'),
-      ),
-      body: SavedPlacesList(
-        onPlaceTap: config.onPlaceSelected,
-        onPlaceEdit: config.onEditPlace != null
-            ? (place) => config.onEditPlace!(context, place)
-            : null,
-        onPlaceDelete: (place) => _showDeleteConfirmation(context, place),
+  Future<({double latitude, double longitude})?> _openMapPicker(
+    BuildContext context, {
+    double? initialLatitude,
+    double? initialLongitude,
+  }) async {
+    final result = await Navigator.of(context).push<MapLocationResult>(
+      MaterialPageRoute(
+        builder: (context) => ChooseOnMapScreen(
+          configuration: ChooseOnMapConfiguration(
+            title: SavedPlacesLocalizations.of(context)?.chooseOnMap ?? 'Choose on Map',
+            initialLatitude: initialLatitude ?? config.defaultLatitude,
+            initialLongitude: initialLongitude ?? config.defaultLongitude,
+            initialZoom: 15,
+            confirmButtonText: SavedPlacesLocalizations.of(context)?.save ?? 'Confirm Location',
+          ),
+        ),
       ),
     );
+
+    if (result == null) return null;
+    return (latitude: result.latitude, longitude: result.longitude);
+  }
+
+  void _showAddPlaceDialog(BuildContext context) async {
+    final cubit = context.read<SavedPlacesCubit>();
+
+    final place = await EditPlaceDialog.show(
+      context,
+      onChooseOnMap: ({initialLatitude, initialLongitude}) => _openMapPicker(
+        context,
+        initialLatitude: initialLatitude,
+        initialLongitude: initialLongitude,
+      ),
+      defaultLatitude: config.defaultLatitude,
+      defaultLongitude: config.defaultLongitude,
+    );
+
+    if (place != null) {
+      cubit.savePlace(place);
+    }
+  }
+
+  void _showEditPlaceDialog(BuildContext context, SavedPlace place) async {
+    final cubit = context.read<SavedPlacesCubit>();
+
+    final updatedPlace = await EditPlaceDialog.show(
+      context,
+      place: place,
+      onChooseOnMap: ({initialLatitude, initialLongitude}) => _openMapPicker(
+        context,
+        initialLatitude: initialLatitude,
+        initialLongitude: initialLongitude,
+      ),
+      defaultLatitude: config.defaultLatitude,
+      defaultLongitude: config.defaultLongitude,
+    );
+
+    if (updatedPlace != null) {
+      cubit.updatePlace(updatedPlace);
+    }
   }
 
   void _showDeleteConfirmation(BuildContext context, SavedPlace place) {
@@ -138,10 +188,33 @@ class _SavedPlacesScreenWidget extends StatelessWidget {
             },
             child: Text(
               localization?.remove ?? 'Remove',
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
+              style: TextStyle(color: Theme.of(dialogContext).colorScheme.error),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = SavedPlacesLocalizations.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localization?.yourPlaces ?? 'Your Places'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => _showAddPlaceDialog(context),
+            tooltip: localization?.addPlace ?? 'Add Place',
+          ),
+        ],
+      ),
+      body: SavedPlacesList(
+        onPlaceTap: config.onPlaceSelected,
+        onPlaceEdit: (place) => _showEditPlaceDialog(context, place),
+        onPlaceDelete: (place) => _showDeleteConfirmation(context, place),
       ),
     );
   }
