@@ -1,0 +1,15 @@
+{
+  "@@locale": "es",
+  "menuTransportList": "Rutas",
+  "searchRoutes": "Buscar rutas",
+  "noRoutesFound": "No se encontraron rutas",
+  "shareRoute": "Compartir ruta",
+  "stops": "{count} paradas",
+  "@stops": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

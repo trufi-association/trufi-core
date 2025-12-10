@@ -82,12 +82,15 @@ class OtpConfiguration {
   /// Returns the GraphQL endpoint URL.
   ///
   /// If the endpoint already contains '/graphql', uses it as-is.
-  /// Otherwise, appends '/index/graphql' for standard OTP setup.
+  /// Otherwise, appends '/otp/routers/default/index/graphql' for standard OTP setup.
   String get _graphqlEndpoint {
     if (endpoint.contains('/graphql')) {
       return endpoint;
     }
     // Standard OTP 2.x GraphQL endpoint
-    return '$endpoint/index/graphql';
+    final base = endpoint.endsWith('/')
+        ? endpoint.substring(0, endpoint.length - 1)
+        : endpoint;
+    return '$base/otp/routers/default/index/graphql';
   }
 }

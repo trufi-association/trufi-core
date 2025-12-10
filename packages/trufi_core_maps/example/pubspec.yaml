@@ -12,6 +12,7 @@ dependencies:
   trufi_core_maps:
     path: ../
   latlong2: ^0.9.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

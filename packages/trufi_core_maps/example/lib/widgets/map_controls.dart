@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../main.dart';
-
 class LayerInfo {
   final String id;
   final String name;
@@ -27,8 +25,9 @@ class GridConfig {
 }
 
 class MapControls extends StatelessWidget {
-  final MapRenderType currentRender;
-  final void Function(MapRenderType) onRenderChanged;
+  final int currentEngineIndex;
+  final List<String> engineNames;
+  final void Function(int) onEngineChanged;
   final List<LayerInfo> layers;
   final void Function(String layerId, bool visible) onLayerToggle;
   final GridConfig gridConfig;
@@ -37,8 +36,9 @@ class MapControls extends StatelessWidget {
 
   const MapControls({
     super.key,
-    required this.currentRender,
-    required this.onRenderChanged,
+    required this.currentEngineIndex,
+    required this.engineNames,
+    required this.onEngineChanged,
     required this.layers,
     required this.onLayerToggle,
     required this.gridConfig,
@@ -74,18 +74,14 @@ class MapControls extends StatelessWidget {
                 icon: Icons.layers_outlined,
                 title: 'Map',
                 child: _SegmentedControl(
-                  items: [
-                    _SegmentItem(
-                      label: 'OSM',
-                      isSelected: currentRender == MapRenderType.flutterMap,
-                      onTap: () => onRenderChanged(MapRenderType.flutterMap),
+                  items: List.generate(
+                    engineNames.length,
+                    (index) => _SegmentItem(
+                      label: engineNames[index],
+                      isSelected: currentEngineIndex == index,
+                      onTap: () => onEngineChanged(index),
                     ),
-                    _SegmentItem(
-                      label: 'Vector',
-                      isSelected: currentRender == MapRenderType.mapLibre,
-                      onTap: () => onRenderChanged(MapRenderType.mapLibre),
-                    ),
-                  ],
+                  ),
                 ),
               ),
 

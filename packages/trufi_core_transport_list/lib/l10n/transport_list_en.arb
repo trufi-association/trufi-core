@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "menuTransportList": "Routes",
+  "searchRoutes": "Search routes",
+  "noRoutesFound": "No routes found",
+  "shareRoute": "Share route",
+  "stops": "{count} stops",
+  "@stops": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart' as latlng;
+import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
 import 'layers/click_markers_layer.dart';
@@ -15,21 +16,41 @@ void main() {
 class TrufiMapsExampleApp extends StatelessWidget {
   const TrufiMapsExampleApp({super.key});
 
+  // Define available map engines
+  static final List<ITrufiMapEngine> mapEngines = [
+    const FlutterMapEngine(
+      tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      userAgentPackageName: 'com.example.trufi_core_maps_example',
+      displayName: 'OpenStreetMap',
+      displayDescription: 'Standard OSM raster tiles',
+    ),
+    const MapLibreEngine(
+      styleString: 'https://tiles.openfreemap.org/styles/liberty',
+      displayName: 'MapLibre GL',
+      displayDescription: 'Vector map with Liberty style',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Trufi Core Maps Example',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MapEngineManager(engines: mapEngines),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Trufi Core Maps Example',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: const MapExamplePage(),
       ),
-      home: const MapExamplePage(),
     );
   }
 }
-
-enum MapRenderType { flutterMap, mapLibre }
 
 class MapExamplePage extends StatefulWidget {
   const MapExamplePage({super.key});
@@ -46,7 +67,6 @@ class _MapExamplePageState extends State<MapExamplePage> {
   late final DebugGridLayer _debugGridLayer;
   late final ClickMarkersLayer _clickMarkersLayer;
 
-  MapRenderType _currentRender = MapRenderType.flutterMap;
   bool _showGrid = false;
   int _granularityLevels = 0;
   bool _clickMarkersEnabled = false;
@@ -149,30 +169,19 @@ class _MapExamplePageState extends State<MapExamplePage> {
     });
   }
 
-  Widget _buildMap() {
-    switch (_currentRender) {
-      case MapRenderType.flutterMap:
-        return TrufiFlutterMap(
-          key: const ValueKey('flutter_map'),
-          controller: _controller,
-          onMapClick: _onMapClick,
-          onMapLongClick: _onMapLongClick,
-          tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.trufi_core_maps_example',
-        );
-      case MapRenderType.mapLibre:
-        return TrufiMapLibreMap(
-          key: const ValueKey('maplibre'),
-          controller: _controller,
-          onMapClick: _onMapClick,
-          onMapLongClick: _onMapLongClick,
-          styleString: 'https://tiles.openfreemap.org/styles/liberty',
-        );
-    }
+  Widget _buildMap(ITrufiMapEngine engine) {
+    return engine.buildMap(
+      controller: _controller,
+      onMapClick: _onMapClick,
+      onMapLongClick: _onMapLongClick,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Watch the MapEngineManager for changes
+    final mapEngineManager = MapEngineManager.watch(context);
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -188,7 +197,7 @@ class _MapExamplePageState extends State<MapExamplePage> {
           return Stack(
             children: [
               // Map (full screen)
-              _buildMap(),
+              _buildMap(mapEngineManager.currentEngine),
 
               // Action Buttons (top-right, over the map)
               Positioned(
@@ -207,52 +216,72 @@ class _MapExamplePageState extends State<MapExamplePage> {
                 ),
               ),
 
+              // Map Type Button (top-left)
+              Positioned(
+                top: 16,
+                left: 16,
+                child: SafeArea(
+                  child: MapTypeButton.fromEngines(
+                    engines: mapEngineManager.engines,
+                    currentEngineIndex: mapEngineManager.currentIndex,
+                    onEngineChanged: (engine) {
+                      mapEngineManager.setEngine(engine);
+                    },
+                    settingsAppBarTitle: 'Map Settings',
+                    settingsSectionTitle: 'Map Type',
+                    settingsApplyButtonText: 'Apply Changes',
+                  ),
+                ),
+              ),
+
               // Bottom Controls (Map Render + Layers + Grid) - centered
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
                 child: MapControls(
-                    currentRender: _currentRender,
-                    onRenderChanged: (render) {
-                      setState(() => _currentRender = render);
-                    },
-                    layers: [
-                      LayerInfo(
-                        id: _pointsLayer.id,
-                        name: 'Points',
-                        icon: Icons.place,
-                        visible: _pointsLayer.visible,
-                      ),
-                      LayerInfo(
-                        id: _routeLayer.id,
-                        name: 'Route',
-                        icon: Icons.route,
-                        visible: _routeLayer.visible,
-                      ),
-                      LayerInfo(
-                        id: _clickMarkersLayer.id,
-                        name: 'Tap',
-                        icon: Icons.touch_app,
-                        visible: _clickMarkersEnabled,
-                      ),
-                    ],
-                    onLayerToggle: (layerId, visible) {
-                      setState(() {
-                        if (layerId == _clickMarkersLayer.id) {
-                          _clickMarkersEnabled = visible;
-                          _clickMarkersLayer.visible = visible;
-                        } else {
-                          _controller.toggleLayer(layerId, visible);
-                        }
-                      });
-                    },
-                    gridConfig: GridConfig(
-                      showGrid: _showGrid,
-                      granularityLevels: _granularityLevels,
+                  currentEngineIndex: mapEngineManager.currentIndex,
+                  engineNames:
+                      mapEngineManager.engines.map((e) => e.name).toList(),
+                  onEngineChanged: (index) {
+                    mapEngineManager.setEngineByIndex(index);
+                  },
+                  layers: [
+                    LayerInfo(
+                      id: _pointsLayer.id,
+                      name: 'Points',
+                      icon: Icons.place,
+                      visible: _pointsLayer.visible,
                     ),
-                    onGridToggle: _onGridToggle,
-                    onGranularityChanged: _onGranularityChanged,
+                    LayerInfo(
+                      id: _routeLayer.id,
+                      name: 'Route',
+                      icon: Icons.route,
+                      visible: _routeLayer.visible,
+                    ),
+                    LayerInfo(
+                      id: _clickMarkersLayer.id,
+                      name: 'Tap',
+                      icon: Icons.touch_app,
+                      visible: _clickMarkersEnabled,
+                    ),
+                  ],
+                  onLayerToggle: (layerId, visible) {
+                    setState(() {
+                      if (layerId == _clickMarkersLayer.id) {
+                        _clickMarkersEnabled = visible;
+                        _clickMarkersLayer.visible = visible;
+                      } else {
+                        _controller.toggleLayer(layerId, visible);
+                      }
+                    });
+                  },
+                  gridConfig: GridConfig(
+                    showGrid: _showGrid,
+                    granularityLevels: _granularityLevels,
+                  ),
+                  onGridToggle: _onGridToggle,
+                  onGranularityChanged: _onGranularityChanged,
                 ),
               ),
             ],
