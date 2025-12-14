@@ -1,0 +1,41 @@
+name: trufi_core_home_screen_example
+description: Example app demonstrating trufi_core_home_screen package.
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  trufi_core_home_screen:
+    path: ../
+  trufi_core_maps:
+    path: ../../../trufi_core_maps
+  trufi_core_search_locations:
+    path: ../../../trufi_core_search_locations
+  flutter_bloc: ^8.1.3
+  latlong2: ^0.9.1
+  provider: ^6.0.0
+
+dependency_overrides:
+  trufi_core_interfaces:
+    path: ../../../trufi_core_interfaces
+  trufi_core_maps:
+    path: ../../../trufi_core_maps
+  trufi_core_routing:
+    path: ../../../trufi_core_routing
+  trufi_core_routing_ui:
+    path: ../../../trufi_core_routing_ui
+  trufi_core_search_locations:
+    path: ../../../trufi_core_search_locations
+  trufi_core_saved_places:
+    path: ../../trufi_core_saved_places
+  trufi_core_storage:
+    path: ../../../trufi_core_storage
+
+flutter:
+  uses-material-design: true

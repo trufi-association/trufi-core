@@ -1,0 +1,27 @@
+name: trufi_core_fares_example
+description: "Example app for trufi_core_fares package"
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  trufi_core_fares:
+    path: ../
+
+dependency_overrides:
+  trufi_core_interfaces:
+    path: ../../../trufi_core_interfaces
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

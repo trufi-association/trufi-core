@@ -1,6 +1,6 @@
 name: trufi_core_base_widgets
 description: "A new Flutter package project."
-version: 0.0.1
+version: 1.0.0
 homepage:
 resolution: workspace
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  trufi_core_custom_material: ^0.0.1
+  trufi_core_custom_material: ^1.0.0
 
 dev_dependencies:
   flutter_test:

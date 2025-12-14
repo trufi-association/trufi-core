@@ -1,67 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:trufi_core/base/blocs/map_configuration/map_configuration_cubit.dart';
-import 'package:trufi_core/base/models/trufi_latlng.dart';
-import 'package:trufi_core/base/utils/certificates_letsencrypt_android.dart';
-import 'package:trufi_core/base/utils/graphql_client/hive_init.dart';
-import 'package:trufi_core/base/widgets/drawer/menu/social_media_item.dart';
-import 'package:trufi_core/base/widgets/screen/lifecycle_reactor_notification.dart';
-import 'package:trufi_core/default_values.dart';
-import 'package:trufi_core/module/trufi_core.module.dart';
-import 'package:trufi_core/trufi_core.dart';
-import 'package:trufi_core/trufi_router.dart';
-import 'package:trufi_core_routing/trufi_core_routing.dart';
-import 'package:trufi_core_storage/trufi_core_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
+import 'package:trufi_core_about/trufi_core_about.dart';
+import 'package:trufi_core_fares/trufi_core_fares.dart';
+import 'package:trufi_core_feedback/trufi_core_feedback.dart';
+import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
+import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
+import 'package:trufi_core_settings/trufi_core_settings.dart';
+import 'package:trufi_core_transport_list/trufi_core_transport_list.dart';
+import 'package:trufi_core_ui/trufi_core_ui.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await CertificatedLetsencryptAndroid.workAroundCertificated();
-  await initHiveForFlutter();
+const _defaultCenter = LatLng(-17.3988354, -66.1626903);
 
-  TrufiCoreModule()
-      .addModule(StorageModule(configuration: StorageConfiguration()));
-
-  runApp(
-    TrufiApp(
-      appNameTitle: 'ExampleApp',
-      blocProviders: [
-        ...DefaultValues.blocProviders(
-          otpConfiguration: const OtpConfiguration(
-            endpoint: "https://otp-150.trufi-core.trufi.dev",
-            version: OtpVersion.v1_5,
+void main() {
+  runTrufiApp(
+    AppConfiguration(
+      appName: 'Trufi App',
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MapEngineManager(
+            engines: defaultMapEngines,
+            defaultCenter: _defaultCenter,
           ),
-          mapConfiguration: MapConfiguration(
-            center: const TrufiLatLng(-17.392600, -66.158787),
+        ),
+        BlocProvider(
+          create: (_) => SearchLocationsCubit(
+            searchLocationService: PhotonSearchService(
+              biasLatitude: _defaultCenter.latitude,
+              biasLongitude: _defaultCenter.longitude,
+            ),
           ),
-          searchAssetPath: "assets/data/search.json",
-          photonUrl: "https://navigator.trufi.app/photon",
         ),
       ],
-      trufiRouter: TrufiRouter(
-        routerDelegate: DefaultValues.routerDelegate(
-          appName: 'ExampleApp',
-          cityName: 'City',
-          countryName: 'Country',
-          backgroundImageBuilder: (_) {
-            return Image.asset(
-              'assets/images/drawer-bg.jpg',
-              fit: BoxFit.cover,
-            );
-          },
-          urlFeedback: 'https://example/feedback',
-          emailContact: 'example@example.com',
-          urlShareApp: 'https://example/share',
-          urlSocialMedia: const UrlSocialMedia(
-            urlFacebook: 'https://www.facebook.com/Example',
-          ),
-          shareBaseUri: Uri(
-            scheme: "https",
-            host: "navigator.trufi.app",
-          ),
-          lifecycleReactorHandler: LifecycleReactorNotifications(
-            url: 'https://navigator.trufi.app/static_files/notification.json',
+      screens: [
+        HomeScreenTrufiScreen(
+          config: HomeScreenConfig(
+            otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
           ),
         ),
-      ),
+        SavedPlacesTrufiScreen(),
+        TransportListTrufiScreen(
+          config: TransportListOtpConfig(
+            otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
+          ),
+        ),
+        FaresTrufiScreen(
+          config: FaresConfig(
+            currency: 'Bs.',
+            lastUpdated: DateTime(2024, 1, 15),
+            fares: [
+              const FareInfo(
+                transportType: 'Trufi',
+                icon: Icons.directions_bus,
+                regularFare: '2.00',
+                studentFare: '1.50',
+                seniorFare: '1.00',
+              ),
+              const FareInfo(
+                transportType: 'Micro',
+                icon: Icons.airport_shuttle,
+                regularFare: '1.50',
+                studentFare: '1.00',
+                seniorFare: '0.75',
+              ),
+              const FareInfo(
+                transportType: 'Minibus',
+                icon: Icons.directions_bus_filled,
+                regularFare: '2.50',
+                studentFare: '2.00',
+              ),
+            ],
+          ),
+        ),
+        FeedbackTrufiScreen(
+          config: FeedbackConfig(
+            feedbackUrl: 'https://www.trufi-association.org/feedback/',
+          ),
+        ),
+        SettingsTrufiScreen(),
+        AboutTrufiScreen(
+          config: AboutScreenConfig(
+            appName: 'Trufi App',
+            cityName: 'Cochabamba',
+            countryName: 'Bolivia',
+            emailContact: 'info@trufi-association.org',
+          ),
+        ),
+      ],
     ),
   );
 }

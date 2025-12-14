@@ -1,0 +1,29 @@
+name: trufi_core_transport_list
+description: "Transport list screen for Trufi apps - displays routes and route details"
+version: 1.0.0
+homepage:
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  provider: ^6.1.5
+  latlong2: ^0.9.1
+  trufi_core_interfaces: ^1.0.0
+  trufi_core_routing: ^1.0.0
+  trufi_core_maps: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:

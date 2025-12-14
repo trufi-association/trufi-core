@@ -1,35 +1,43 @@
 name: trufi_core_example
-description: "A new Flutter project."
+description: "Example app showcasing Trufi Core packages."
 resolution: workspace
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
   sdk: ^3.10.0
-  flutter: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  trufi_core:
-    path: ../trufi_core
-  trufi_core_routing:
-    path: ../../packages/trufi_core_routing
-  trufi_core_storage: ^0.0.1
+  flutter_bloc: ^8.1.6
+  provider: ^6.1.2
+  flutter_localizations:
+    sdk: flutter
+  go_router: ^17.0.0
+  trufi_core_interfaces: ^1.0.0
+  trufi_core_utils: ^1.0.0
+  trufi_core_about: ^1.0.0
+  trufi_core_transport_list: ^1.0.0
+  trufi_core_maps: ^1.0.0
+  trufi_core_routing: ^1.0.0
+  trufi_core_saved_places: ^1.0.0
+  trufi_core_home_screen: ^1.0.0
+  trufi_core_search_locations: ^1.0.0
+  trufi_core_feedback: ^1.0.0
+  trufi_core_fares: ^1.0.0
+  trufi_core_settings: ^1.0.0
+  trufi_core_ui: ^1.0.0
+  latlong2: ^0.9.1
+  maplibre_gl: ^0.24.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
 
-
 flutter:
   uses-material-design: true
-
-  assets:
-    - assets/data/
-    - assets/images/
-
