@@ -1,0 +1,21 @@
+{
+  "@@locale": "de",
+  "menuHome": "Startseite",
+  "searchOrigin": "Startort auswählen",
+  "searchDestination": "Zielort auswählen",
+  "selectLocations": "Wähle Start und Ziel, um Routen zu finden",
+  "noRoutesFound": "Keine Routen gefunden",
+  "errorNoRoutes": "Fehler beim Laden der Routen",
+  "durationMinutes": "{minutes} Min",
+  "durationHoursMinutes": "{hours}h {minutes}Min",
+  "distanceMeters": "{meters} m",
+  "distanceKilometers": "{km} km",
+  "walk": "Zu Fuß",
+  "transfers": "{count, plural, =0{Keine Umstiege} =1{1 Umstieg} other{{count} Umstiege}}",
+  "departureAt": "Abfahrt um {time}",
+  "arrivalAt": "Ankunft um {time}",
+  "yourLocation": "Dein Standort",
+  "chooseOnMap": "Auf der Karte wählen",
+  "confirmLocation": "Standort bestätigen",
+  "selectedLocation": "Ausgewählter Standort"
+}

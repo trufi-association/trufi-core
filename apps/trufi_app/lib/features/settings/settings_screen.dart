@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
-import '../../core/l10n/core_localizations.dart';
-import '../home/l10n/home_localizations.dart';
-import '../search/l10n/search_localizations.dart';
 import 'l10n/settings_localizations.dart';
 
 /// Settings screen module
@@ -16,7 +15,8 @@ class SettingsTrufiScreen extends TrufiScreen {
   String get path => '/settings';
 
   @override
-  Widget Function(BuildContext context) get builder => (_) => const _SettingsScreen();
+  Widget Function(BuildContext context) get builder =>
+      (_) => const _SettingsScreenWidget();
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
@@ -30,202 +30,100 @@ class SettingsTrufiScreen extends TrufiScreen {
       );
 
   @override
+  bool get hasOwnAppBar => true;
+
+  @override
   String getLocalizedTitle(BuildContext context) {
     return SettingsLocalizations.of(context).settingsTitle;
   }
 }
 
-/// Settings screen widget
-class _SettingsScreen extends StatelessWidget {
-  const _SettingsScreen();
+/// Settings screen widget with header and content
+class _SettingsScreenWidget extends StatelessWidget {
+  const _SettingsScreenWidget();
+
+  /// Try to open the drawer from the nearest ancestor Scaffold
+  void _tryOpenDrawer(BuildContext context) {
+    HapticFeedback.lightImpact();
+    final scaffold = Scaffold.maybeOf(context);
+    if (scaffold?.hasDrawer ?? false) {
+      scaffold!.openDrawer();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
-    final coreL10n = CoreLocalizations.of(context);
-    final homeL10n = HomeLocalizations.of(context);
-    final searchL10n = SearchLocalizations.of(context);
-    final localeManager = LocaleManager.read(context);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Container(
+      color: colorScheme.surface,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Modern header
+            _SettingsHeader(
+              title: settingsL10n.settingsTitle,
+              onMenuPressed: () => _tryOpenDrawer(context),
+            ),
+            // Content
+            const Expanded(
+              child: _SettingsContent(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Modern header for settings screen
+class _SettingsHeader extends StatelessWidget {
+  final String title;
+  final VoidCallback onMenuPressed;
+
+  const _SettingsHeader({
+    required this.title,
+    required this.onMenuPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: Row(
         children: [
-          // Language settings card
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.translate, color: Colors.green),
-                      const SizedBox(width: 12),
-                      Text(
-                        settingsL10n.settingsLanguage,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    settingsL10n.settingsSelectLanguage,
-                    style: TextStyle(color: Colors.grey[600]),
-                  ),
-                  const SizedBox(height: 12),
-                  ListenableBuilder(
-                    listenable: localeManager,
-                    builder: (context, child) {
-                      return Column(
-                        children: [
-                          _LanguageOption(
-                            languageCode: 'en',
-                            languageName: 'English',
-                            flag: '🇬🇧',
-                            isSelected:
-                                localeManager.currentLocale.languageCode == 'en',
-                            onSelect: () => localeManager.setLocaleByCode('en'),
-                          ),
-                          _LanguageOption(
-                            languageCode: 'es',
-                            languageName: 'Español',
-                            flag: '🇪🇸',
-                            isSelected:
-                                localeManager.currentLocale.languageCode == 'es',
-                            onSelect: () => localeManager.setLocaleByCode('es'),
-                          ),
-                          _LanguageOption(
-                            languageCode: 'de',
-                            languageName: 'Deutsch',
-                            flag: '🇩🇪',
-                            isSelected:
-                                localeManager.currentLocale.languageCode == 'de',
-                            onSelect: () => localeManager.setLocaleByCode('de'),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
+          // Menu button
+          Material(
+            color: colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(14),
+            child: InkWell(
+              onTap: onMenuPressed,
+              borderRadius: BorderRadius.circular(14),
+              child: Container(
+                width: 48,
+                height: 48,
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.menu_rounded,
+                  color: colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
               ),
             ),
           ),
-
-          const SizedBox(height: 16),
-
-          // Dynamic translation demo card
-          Card(
-            color: Colors.blue[50],
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.science, color: Colors.blue[700]),
-                      const SizedBox(width: 12),
-                      Text(
-                        settingsL10n.settingsTranslationDemo,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Colors.blue[700],
-                            ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    settingsL10n.settingsTranslationDemoDesc,
-                    style: TextStyle(color: Colors.blue[800]),
-                  ),
-                  const SizedBox(height: 16),
-                  _TranslationDemo(
-                    key_: 'coreL10n.navHome',
-                    value: coreL10n.navHome,
-                  ),
-                  _TranslationDemo(
-                    key_: 'coreL10n.navSearch',
-                    value: coreL10n.navSearch,
-                  ),
-                  _TranslationDemo(
-                    key_: 'coreL10n.navSettings',
-                    value: coreL10n.navSettings,
-                  ),
-                  _TranslationDemo(
-                    key_: 'homeL10n.homeTitle',
-                    value: homeL10n.homeTitle,
-                  ),
-                  _TranslationDemo(
-                    key_: 'searchL10n.searchOrigin',
-                    value: searchL10n.searchOrigin,
-                  ),
-                  _TranslationDemo(
-                    key_: 'searchL10n.searchDestination',
-                    value: searchL10n.searchDestination,
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Theme settings card (placeholder)
-          const _ThemeSettingsCard(),
-
-          const SizedBox(height: 16),
-
-          // Module info card
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.extension, color: Colors.green),
-                      const SizedBox(width: 12),
-                      Text(
-                        settingsL10n.settingsRegisteredModules,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('AppModule'),
-                  ),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('HomeScreen'),
-                  ),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('SearchScreen'),
-                  ),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('FeedbackScreen'),
-                  ),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('SettingsScreen'),
-                  ),
-                  const ListTile(
-                    dense: true,
-                    leading: Icon(Icons.check_circle, color: Colors.green),
-                    title: Text('AboutScreen'),
-                  ),
-                ],
+          const SizedBox(width: 16),
+          // Title
+          Expanded(
+            child: Text(
+              title,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
               ),
             ),
           ),
@@ -235,120 +133,341 @@ class _SettingsScreen extends StatelessWidget {
   }
 }
 
-class _ThemeSettingsCard extends StatefulWidget {
-  const _ThemeSettingsCard();
+/// Settings content with staggered animations
+class _SettingsContent extends StatefulWidget {
+  const _SettingsContent();
 
   @override
-  State<_ThemeSettingsCard> createState() => _ThemeSettingsCardState();
+  State<_SettingsContent> createState() => _SettingsContentState();
 }
 
-class _ThemeSettingsCardState extends State<_ThemeSettingsCard> {
-  String _selectedTheme = 'light';
+class _SettingsContentState extends State<_SettingsContent>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _staggerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _staggerController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _staggerController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _staggerController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildAnimatedItem({
+    required int index,
+    required Widget child,
+    int totalItems = 6,
+  }) {
+    final startTime = (index / totalItems).clamp(0.0, 0.6);
+    final endTime = ((index / totalItems) + 0.4).clamp(0.0, 1.0);
+
+    final animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _staggerController,
+        curve: Interval(startTime, endTime, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - animation.value)),
+          child: Opacity(
+            opacity: animation.value,
+            child: child,
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Language settings card
+          _buildAnimatedItem(
+            index: 0,
+            child: const _LanguageSettingsCard(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Theme settings card
+          _buildAnimatedItem(
+            index: 1,
+            child: const _ThemeSettingsCard(),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Map settings card
+          _buildAnimatedItem(
+            index: 2,
+            child: const _MapSettingsCard(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Language settings card with modern styling
+class _LanguageSettingsCard extends StatelessWidget {
+  const _LanguageSettingsCard();
 
   @override
   Widget build(BuildContext context) {
     final settingsL10n = SettingsLocalizations.of(context);
-    
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.palette, color: Colors.green),
-                const SizedBox(width: 12),
-                Text(
-                  settingsL10n.settingsTheme,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _ThemeOptionTile(
-              value: 'light',
-              selectedValue: _selectedTheme,
-              icon: Icons.light_mode,
-              title: settingsL10n.settingsThemeLight,
-              onTap: () {
-                setState(() {
-                  _selectedTheme = 'light';
-                });
-              },
-            ),
-            _ThemeOptionTile(
-              value: 'dark',
-              selectedValue: _selectedTheme,
-              icon: Icons.dark_mode,
-              title: settingsL10n.settingsThemeDark,
-              onTap: () {
-                setState(() {
-                  _selectedTheme = 'dark';
-                });
-              },
-            ),
-            _ThemeOptionTile(
-              value: 'system',
-              selectedValue: _selectedTheme,
-              icon: Icons.settings_system_daydream,
-              title: settingsL10n.settingsThemeSystem,
-              onTap: () {
-                setState(() {
-                  _selectedTheme = 'system';
-                });
-              },
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Theme switching is a placeholder for this POC.',
-              style: TextStyle(
-                color: Colors.grey[500],
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ),
+    final localeManager = LocaleManager.watch(context);
+
+    return _SettingsCard(
+      icon: Icons.translate_rounded,
+      iconColor: Colors.blue,
+      title: settingsL10n.settingsLanguage,
+      subtitle: settingsL10n.settingsSelectLanguage,
+      child: Column(
+        children: [
+          _LanguageOption(
+            languageCode: 'en',
+            languageName: 'English',
+            flag: '🇬🇧',
+            isSelected: localeManager.currentLocale.languageCode == 'en',
+            onSelect: () {
+              HapticFeedback.selectionClick();
+              localeManager.setLocaleByCode('en');
+            },
+          ),
+          const SizedBox(height: 8),
+          _LanguageOption(
+            languageCode: 'es',
+            languageName: 'Español',
+            flag: '🇪🇸',
+            isSelected: localeManager.currentLocale.languageCode == 'es',
+            onSelect: () {
+              HapticFeedback.selectionClick();
+              localeManager.setLocaleByCode('es');
+            },
+          ),
+          const SizedBox(height: 8),
+          _LanguageOption(
+            languageCode: 'de',
+            languageName: 'Deutsch',
+            flag: '🇩🇪',
+            isSelected: localeManager.currentLocale.languageCode == 'de',
+            onSelect: () {
+              HapticFeedback.selectionClick();
+              localeManager.setLocaleByCode('de');
+            },
+          ),
+        ],
       ),
     );
   }
 }
 
-class _ThemeOptionTile extends StatelessWidget {
-  final String value;
-  final String selectedValue;
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
+/// Theme settings card with modern styling
+class _ThemeSettingsCard extends StatelessWidget {
+  const _ThemeSettingsCard();
 
-  const _ThemeOptionTile({
-    required this.value,
-    required this.selectedValue,
+  @override
+  Widget build(BuildContext context) {
+    final settingsL10n = SettingsLocalizations.of(context);
+    final themeManager = ThemeManager.watch(context);
+
+    return _SettingsCard(
+      icon: Icons.palette_rounded,
+      iconColor: Colors.purple,
+      title: settingsL10n.settingsTheme,
+      subtitle: settingsL10n.settingsSelectTheme,
+      child: Row(
+        children: [
+          Expanded(
+            child: _ThemeOptionChip(
+              icon: Icons.light_mode_rounded,
+              label: settingsL10n.settingsThemeLight,
+              isSelected: themeManager.isLight,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                themeManager.setThemeMode(ThemeMode.light);
+              },
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _ThemeOptionChip(
+              icon: Icons.dark_mode_rounded,
+              label: settingsL10n.settingsThemeDark,
+              isSelected: themeManager.isDark,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                themeManager.setThemeMode(ThemeMode.dark);
+              },
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _ThemeOptionChip(
+              icon: Icons.auto_mode_rounded,
+              label: settingsL10n.settingsThemeSystem,
+              isSelected: themeManager.isSystem,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                themeManager.setThemeMode(ThemeMode.system);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Map settings card with modern styling
+class _MapSettingsCard extends StatelessWidget {
+  const _MapSettingsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final settingsL10n = SettingsLocalizations.of(context);
+    final mapEngineManager = MapEngineManager.maybeWatch(context);
+
+    // If no MapEngineManager is available, don't show this card
+    if (mapEngineManager == null || mapEngineManager.engines.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return _SettingsCard(
+      icon: Icons.map_rounded,
+      iconColor: Colors.teal,
+      title: settingsL10n.settingsMap,
+      subtitle: settingsL10n.settingsSelectMapType,
+      child: Column(
+        children: mapEngineManager.engines.asMap().entries.map((entry) {
+          final index = entry.key;
+          final engine = entry.value;
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: index < mapEngineManager.engines.length - 1 ? 8 : 0,
+            ),
+            child: _MapOptionTile(
+              name: engine.name,
+              description: engine.description,
+              isSelected: index == mapEngineManager.currentIndex,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                mapEngineManager.setEngineByIndex(index);
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Base settings card with consistent styling
+class _SettingsCard extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final Widget child;
+
+  const _SettingsCard({
     required this.icon,
+    required this.iconColor,
     required this.title,
-    required this.onTap,
+    required this.subtitle,
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = value == selectedValue;
-    
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: isSelected
-          ? const Icon(Icons.check_circle, color: Colors.green)
-          : const Icon(Icons.circle_outlined),
-      selected: isSelected,
-      onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(19)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: iconColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 26),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: child,
+          ),
+        ],
       ),
     );
   }
 }
 
+/// Language option with flag and selection state
 class _LanguageOption extends StatelessWidget {
   final String languageCode;
   final String languageName;
@@ -366,58 +485,282 @@ class _LanguageOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(flag, style: const TextStyle(fontSize: 24)),
-      title: Text(languageName),
-      subtitle: Text(languageCode.toUpperCase()),
-      trailing: isSelected
-          ? const Icon(Icons.check_circle, color: Colors.green)
-          : null,
-      selected: isSelected,
-      onTap: onSelect,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isSelected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.5)
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onSelect,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Flag
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                alignment: Alignment.center,
+                child: Text(flag, style: const TextStyle(fontSize: 22)),
+              ),
+              const SizedBox(width: 14),
+              // Language info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      languageName,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      languageCode.toUpperCase(),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Selection indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant,
+                    width: 2,
+                  ),
+                ),
+                child: isSelected
+                    ? Icon(
+                        Icons.check_rounded,
+                        size: 16,
+                        color: colorScheme.onPrimary,
+                      )
+                    : null,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class _TranslationDemo extends StatelessWidget {
-  final String key_;
-  final String value;
+/// Theme option chip with icon
+class _ThemeOptionChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
 
-  const _TranslationDemo({
-    required this.key_,
-    required this.value,
+  const _ThemeOptionChip({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              key_,
-              style: TextStyle(
-                fontFamily: 'monospace',
-                color: Colors.blue[700],
-                fontSize: 12,
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isSelected
+          ? colorScheme.primaryContainer
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Column(
+            children: [
+              Icon(
+                icon,
+                size: 28,
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
               ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  color: isSelected
+                      ? colorScheme.onPrimaryContainer
+                      : colorScheme.onSurfaceVariant,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (isSelected) ...[
+                const SizedBox(height: 6),
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Map option tile with description
+class _MapOptionTile extends StatelessWidget {
+  final String name;
+  final String description;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _MapOptionTile({
+    required this.name,
+    required this.description,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isSelected
+          ? colorScheme.primaryContainer.withValues(alpha: 0.5)
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
             ),
           ),
-          const Icon(Icons.arrow_forward, size: 16),
-          const SizedBox(width: 8),
-          Expanded(
-            flex: 2,
-            child: Text(
-              value,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+          child: Row(
+            children: [
+              // Map icon
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? colorScheme.primary.withValues(alpha: 0.15)
+                      : colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.layers_rounded,
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 14),
+              // Map info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      description,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              // Selection indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: isSelected ? colorScheme.primary : Colors.transparent,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.outlineVariant,
+                    width: 2,
+                  ),
+                ),
+                child: isSelected
+                    ? Icon(
+                        Icons.check_rounded,
+                        size: 16,
+                        color: colorScheme.onPrimary,
+                      )
+                    : null,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

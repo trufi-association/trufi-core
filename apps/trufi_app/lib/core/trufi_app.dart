@@ -27,11 +27,15 @@ Future<void> runTrufiApp(AppConfiguration config) async {
 class TrufiApp extends StatelessWidget {
   final AppConfiguration config;
   final LocaleManager _localeManager;
+  final ThemeManager _themeManager;
   final AppRouter _router;
 
   TrufiApp({super.key, required this.config})
       : _localeManager = LocaleManager(
           defaultLocale: config.localeConfig.defaultLocale,
+        ),
+        _themeManager = ThemeManager(
+          defaultThemeMode: config.themeConfig.themeMode,
         ),
         _router = AppRouter(screens: config.screens);
 
@@ -47,18 +51,34 @@ class TrufiApp extends StatelessWidget {
       ),
     );
 
+    final defaultDarkTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: Colors.green,
+        brightness: Brightness.dark,
+      ),
+      useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.green[700],
+        foregroundColor: Colors.white,
+        elevation: 2,
+      ),
+    );
+
     final screenDelegates = config.screens.expand((s) => s.localizationsDelegates).toList();
     final screenProviders = config.screens.expand((s) => s.providers).toList();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _localeManager),
+        ChangeNotifierProvider.value(value: _themeManager),
+        ...config.providers,
         ...screenProviders,
       ],
       child: _TrufiMaterialApp(
         config: config,
         router: _router,
         defaultTheme: defaultTheme,
+        defaultDarkTheme: defaultDarkTheme,
         screenDelegates: screenDelegates,
       ),
     );
@@ -69,25 +89,28 @@ class _TrufiMaterialApp extends StatelessWidget {
   final AppConfiguration config;
   final AppRouter router;
   final ThemeData defaultTheme;
+  final ThemeData defaultDarkTheme;
   final List<LocalizationsDelegate> screenDelegates;
 
   const _TrufiMaterialApp({
     required this.config,
     required this.router,
     required this.defaultTheme,
+    required this.defaultDarkTheme,
     required this.screenDelegates,
   });
 
   @override
   Widget build(BuildContext context) {
     final localeManager = LocaleManager.watch(context);
+    final themeManager = ThemeManager.watch(context);
 
     return MaterialApp.router(
       title: config.appName,
       debugShowCheckedModeBanner: false,
       theme: config.themeConfig.theme ?? defaultTheme,
-      darkTheme: config.themeConfig.darkTheme,
-      themeMode: config.themeConfig.themeMode,
+      darkTheme: config.themeConfig.darkTheme ?? defaultDarkTheme,
+      themeMode: themeManager.themeMode,
       routerConfig: router.router,
       locale: localeManager.currentLocale,
       supportedLocales: config.localeConfig.supportedLocales,

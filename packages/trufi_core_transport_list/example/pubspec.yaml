@@ -8,14 +8,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   latlong2: ^0.9.1
   provider: ^6.1.5
   trufi_core_transport_list:
     path: ../
   trufi_core_maps:
     path: ../../trufi_core_maps
-  trufi_core_routing:
-    path: ../../trufi_core_routing
 
 dev_dependencies:
   flutter_test:

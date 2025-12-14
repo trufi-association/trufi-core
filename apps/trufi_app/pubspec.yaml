@@ -35,6 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_bloc: ^8.1.6
   provider: ^6.1.2
   flutter_localizations:
     sdk: flutter
@@ -53,6 +54,14 @@ dependencies:
     path: ../../packages/trufi_core_routing
   trufi_core_saved_places:
     path: ../../packages/trufi_core_saved_places
+  trufi_core_home_screen:
+    path: ../../packages/trufi_core_home_screen
+  trufi_core_search_locations:
+    path: ../../packages/trufi_core_search_locations
+  trufi_core_feedback:
+    path: ../../packages/trufi_core_feedback
+  trufi_core_fares:
+    path: ../../packages/trufi_core_fares
   latlong2: ^0.9.1
   maplibre_gl: ^0.24.1
 

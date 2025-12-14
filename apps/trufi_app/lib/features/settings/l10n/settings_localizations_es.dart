@@ -30,11 +30,11 @@ class SettingsLocalizationsEs extends SettingsLocalizations {
   String get settingsThemeSystem => 'Predeterminado del Sistema';
 
   @override
-  String get settingsTranslationDemo => 'Demo de Traducción';
+  String get settingsSelectTheme => 'Selecciona tu tema preferido:';
 
   @override
-  String get settingsTranslationDemoDesc => 'Cambia el idioma arriba para ver estas traducciones actualizarse dinámicamente:';
+  String get settingsMap => 'Mapa';
 
   @override
-  String get settingsRegisteredModules => 'Módulos Registrados';
+  String get settingsSelectMapType => 'Selecciona tu tipo de mapa preferido:';
 }

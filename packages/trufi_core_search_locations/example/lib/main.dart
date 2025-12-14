@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
@@ -10,10 +11,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const _defaultCenter = LatLng(-17.3920, -66.1575);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => MapEngineManager(engines: defaultMapEngines),
+      create: (_) => MapEngineManager(
+        engines: defaultMapEngines,
+        defaultCenter: _defaultCenter,
+      ),
       child: MaterialApp(
         title: 'Search Locations Example',
         theme: ThemeData(
@@ -80,15 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
             longitude: -66.1560,
           ),
           onChooseOnMap: () async {
+            // ChooseOnMapScreen uses MapEngineManager.defaultCenter by default
             final result = await Navigator.push<MapLocationResult>(
               context,
               MaterialPageRoute(
-                builder: (context) => const ChooseOnMapScreen(
-                  configuration: ChooseOnMapConfiguration(
-                    initialLatitude: -17.3920,
-                    initialLongitude: -66.1575,
-                  ),
-                ),
+                builder: (context) => const ChooseOnMapScreen(),
               ),
             );
 

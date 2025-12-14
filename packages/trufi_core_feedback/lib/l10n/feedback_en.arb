@@ -1,0 +1,35 @@
+{
+  "@@locale": "en",
+  "menuFeedback": "Feedback",
+  "@menuFeedback": {
+    "description": "Menu item for feedback screen"
+  },
+  "feedbackTitle": "We'd love to hear from you!",
+  "@feedbackTitle": {
+    "description": "Title on feedback screen"
+  },
+  "feedbackContent": "Your feedback helps us improve the app and provide better public transportation information for everyone in the city.",
+  "@feedbackContent": {
+    "description": "Main content explaining feedback importance"
+  },
+  "feedbackWhatWeWant": "What we'd love to hear about",
+  "@feedbackWhatWeWant": {
+    "description": "Section title for feedback types"
+  },
+  "feedbackBugs": "Bugs or issues you've encountered",
+  "@feedbackBugs": {
+    "description": "Feedback type: bugs"
+  },
+  "feedbackRoutes": "Route changes or missing stops",
+  "@feedbackRoutes": {
+    "description": "Feedback type: routes"
+  },
+  "feedbackSuggestions": "Ideas to improve the app",
+  "@feedbackSuggestions": {
+    "description": "Feedback type: suggestions"
+  },
+  "feedbackSend": "Send Feedback",
+  "@feedbackSend": {
+    "description": "Button to open feedback form"
+  }
+}

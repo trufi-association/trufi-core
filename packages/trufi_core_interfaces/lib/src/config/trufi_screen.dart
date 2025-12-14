@@ -36,6 +36,10 @@ abstract class TrufiScreen {
   /// Providers for this screen
   List<SingleChildWidget> get providers => [];
 
+  /// Whether this screen provides its own AppBar (default: false)
+  /// Set to true if the screen needs a custom AppBar instead of the shared one
+  bool get hasOwnAppBar => false;
+
   Future<void> initialize() async {}
   Future<void> dispose() async {}
 

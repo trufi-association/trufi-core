@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import 'trufi_map_engine.dart';
@@ -33,10 +34,14 @@ import 'trufi_map_engine.dart';
 /// ```
 class MapEngineManager extends ChangeNotifier {
   final List<ITrufiMapEngine> _engines;
+  final LatLng defaultCenter;
+  final double defaultZoom;
   int _currentIndex;
 
   MapEngineManager({
     required List<ITrufiMapEngine> engines,
+    required this.defaultCenter,
+    this.defaultZoom = 12.0,
     int defaultIndex = 0,
   })  : assert(engines.isNotEmpty, 'At least one engine is required'),
         assert(

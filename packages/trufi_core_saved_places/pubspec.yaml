@@ -24,6 +24,8 @@ dependencies:
     path: ../trufi_core_interfaces
   trufi_core_maps:
     path: ../trufi_core_maps
+  trufi_core_storage:
+    path: ../trufi_core_storage
 
 dev_dependencies:
   flutter_test:

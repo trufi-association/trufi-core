@@ -1,0 +1,41 @@
+{
+  "@@locale": "de",
+  "menuFares": "Tarife",
+  "@menuFares": {
+    "description": "Menu item for fares screen"
+  },
+  "faresTitle": "Tarifinformationen",
+  "@faresTitle": {
+    "description": "Title on fares screen"
+  },
+  "faresSubtitle": "Aktuelle Preise für den öffentlichen Nahverkehr",
+  "@faresSubtitle": {
+    "description": "Subtitle explaining the fares screen"
+  },
+  "faresRegular": "Normal",
+  "@faresRegular": {
+    "description": "Label for regular fare"
+  },
+  "faresStudent": "Schüler/Student",
+  "@faresStudent": {
+    "description": "Label for student fare"
+  },
+  "faresSenior": "Senior",
+  "@faresSenior": {
+    "description": "Label for senior/elderly fare"
+  },
+  "faresLastUpdated": "Zuletzt aktualisiert: {date}",
+  "@faresLastUpdated": {
+    "description": "Shows when fare info was last updated",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "01/01/2024"
+      }
+    }
+  },
+  "faresMoreInfo": "Weitere Informationen",
+  "@faresMoreInfo": {
+    "description": "Button to open external fare information"
+  }
+}

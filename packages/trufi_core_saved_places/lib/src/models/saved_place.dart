@@ -62,6 +62,32 @@ class SavedPlace extends Equatable {
     );
   }
 
+  /// Converts this SavedPlace to a MyPlace for use with search_locations
+  MyPlace toMyPlace() {
+    return MyPlace(
+      id: id,
+      name: name,
+      address: address,
+      latitude: latitude,
+      longitude: longitude,
+      placeType: _toMyPlaceType(),
+      iconName: iconName,
+    );
+  }
+
+  MyPlaceType _toMyPlaceType() {
+    switch (type) {
+      case SavedPlaceType.home:
+        return MyPlaceType.home;
+      case SavedPlaceType.work:
+        return MyPlaceType.work;
+      case SavedPlaceType.other:
+        return MyPlaceType.other;
+      case SavedPlaceType.history:
+        return MyPlaceType.history;
+    }
+  }
+
   String _getLocationType() {
     switch (type) {
       case SavedPlaceType.home:

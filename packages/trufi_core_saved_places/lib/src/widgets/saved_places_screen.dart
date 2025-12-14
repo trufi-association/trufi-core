@@ -9,8 +9,30 @@ import 'edit_place_dialog.dart';
 import 'saved_places_list.dart';
 
 /// Main screen for displaying and managing saved places.
+///
+/// Can be used in two ways:
+/// 1. With [repository]: Creates its own [SavedPlacesCubit] internally
+/// 2. Without [repository]: Uses existing [SavedPlacesCubit] from context
+///
+/// Example with external cubit (recommended for state sharing):
+/// ```dart
+/// MultiProvider(
+///   providers: [
+///     BlocProvider(
+///       create: (_) => SavedPlacesCubit(repository: HiveSavedPlacesRepository())
+///         ..initialize(),
+///     ),
+///   ],
+///   child: SavedPlacesScreen(
+///     onPlaceSelected: (place) => print(place.name),
+///   ),
+/// )
+/// ```
 class SavedPlacesScreen extends StatelessWidget {
-  final SavedPlacesRepository repository;
+  /// Repository for saved places persistence.
+  /// If null, expects [SavedPlacesCubit] to be provided in context.
+  final SavedPlacesRepository? repository;
+
   final void Function(SavedPlace place)? onPlaceSelected;
   final Widget Function(BuildContext context)? drawerBuilder;
   final String? title;
@@ -27,7 +49,7 @@ class SavedPlacesScreen extends StatelessWidget {
 
   const SavedPlacesScreen({
     super.key,
-    required this.repository,
+    this.repository,
     this.onPlaceSelected,
     this.drawerBuilder,
     this.title,
@@ -38,17 +60,26 @@ class SavedPlacesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SavedPlacesCubit(repository: repository)..initialize(),
-      child: _SavedPlacesScreenContent(
-        onPlaceSelected: onPlaceSelected,
-        drawerBuilder: drawerBuilder,
-        title: title,
-        onChooseOnMap: onChooseOnMap,
-        defaultLatitude: defaultLatitude,
-        defaultLongitude: defaultLongitude,
-      ),
+    final content = _SavedPlacesScreenContent(
+      onPlaceSelected: onPlaceSelected,
+      drawerBuilder: drawerBuilder,
+      title: title,
+      onChooseOnMap: onChooseOnMap,
+      defaultLatitude: defaultLatitude,
+      defaultLongitude: defaultLongitude,
     );
+
+    // If repository is provided, create our own cubit
+    // Otherwise, expect cubit to be in context
+    if (repository != null) {
+      return BlocProvider(
+        create: (context) =>
+            SavedPlacesCubit(repository: repository!)..initialize(),
+        child: content,
+      );
+    }
+
+    return content;
   }
 }
 

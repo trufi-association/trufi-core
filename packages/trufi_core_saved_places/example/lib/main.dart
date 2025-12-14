@@ -1,81 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Hive.initFlutter();
-  await Hive.openBox('saved_places');
-
-  runApp(const MyApp());
+  await SavedPlacesTrufiScreen.init();
+  runApp(const SavedPlacesExampleApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SavedPlacesExampleApp extends StatelessWidget {
+  static const _defaultCenter = LatLng(-17.3895, -66.1568);
+
+  const SavedPlacesExampleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => MapEngineManager(engines: defaultMapEngines),
+    final screen = SavedPlacesTrufiScreen(
+      config: SavedPlacesConfig(
+        onPlaceSelected: (place) {
+          debugPrint('Selected: ${place.name}');
+        },
+      ),
+    );
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MapEngineManager(
+            engines: defaultMapEngines,
+            defaultCenter: _defaultCenter,
+          ),
+        ),
+        ...screen.providers,
+      ],
       child: MaterialApp(
         title: 'Saved Places Example',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: const SavedPlacesExample(),
-        localizationsDelegates: SavedPlacesLocalizations.localizationsDelegates,
-        supportedLocales: SavedPlacesLocalizations.supportedLocales,
+        home: Builder(builder: screen.builder),
+        localizationsDelegates: [
+          ...screen.localizationsDelegates,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: screen.supportedLocales,
       ),
-    );
-  }
-}
-
-class SavedPlacesExample extends StatelessWidget {
-  const SavedPlacesExample({super.key});
-
-  Future<({double latitude, double longitude})?> _openMapPicker(
-    BuildContext context, {
-    double? initialLatitude,
-    double? initialLongitude,
-  }) async {
-    final result = await Navigator.of(context).push<MapLocationResult>(
-      MaterialPageRoute(
-        builder: (context) => ChooseOnMapScreen(
-          configuration: ChooseOnMapConfiguration(
-            title: 'Choose Location',
-            initialLatitude: initialLatitude ?? -17.3895,
-            initialLongitude: initialLongitude ?? -66.1568,
-            initialZoom: 15,
-            confirmButtonText: 'Use this location',
-          ),
-        ),
-      ),
-    );
-
-    if (result == null) return null;
-    return (latitude: result.latitude, longitude: result.longitude);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SavedPlacesScreen(
-      repository: HiveSavedPlacesRepository(),
-      onPlaceSelected: (place) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Selected: ${place.name}')),
-        );
-      },
-      onChooseOnMap: ({initialLatitude, initialLongitude}) => _openMapPicker(
-        context,
-        initialLatitude: initialLatitude,
-        initialLongitude: initialLongitude,
-      ),
-      defaultLatitude: -17.3895,
-      defaultLongitude: -66.1568,
     );
   }
 }

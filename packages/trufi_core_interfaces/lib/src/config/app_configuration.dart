@@ -1,3 +1,5 @@
+import 'package:provider/single_child_widget.dart';
+
 import 'trufi_screen.dart';
 import 'trufi_theme_config.dart';
 import 'trufi_locale_config.dart';
@@ -9,10 +11,15 @@ class AppConfiguration {
   final TrufiLocaleConfig localeConfig;
   final TrufiThemeConfig themeConfig;
 
+  /// Global providers that will be available to all screens.
+  /// Use this to inject shared state like MapEngineManager, SavedPlacesCubit, etc.
+  final List<SingleChildWidget> providers;
+
   const AppConfiguration({
     required this.appName,
     required this.screens,
     this.localeConfig = const TrufiLocaleConfig(),
     this.themeConfig = const TrufiThemeConfig(),
+    this.providers = const [],
   });
 }

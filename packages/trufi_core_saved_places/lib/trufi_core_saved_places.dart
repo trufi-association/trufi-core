@@ -35,6 +35,8 @@ export 'src/models/saved_place.dart';
 // Repository
 export 'src/repository/saved_places_repository.dart';
 export 'src/repository/hive_saved_places_repository.dart';
+export 'src/repository/saved_places_my_places_provider.dart';
+export 'src/repository/saved_places_cubit_provider.dart';
 
 // Cubit (State Management)
 export 'src/cubit/saved_places_cubit.dart';

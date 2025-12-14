@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_storage/trufi_core_storage.dart';
 
 import 'search_locations_local_repository.dart';
 
 /// Hive-based implementation of SearchLocationsLocalRepository.
 class SearchLocationsHiveLocalRepository
     implements SearchLocationsLocalRepository {
-  static const String path = "SearchLocationsCubit";
+  static const String _boxName = "SearchLocationsCubit";
   static const _favoritePlacesKey = 'SearchLocationsCubitFavoritePlaces';
   static const _historyPlacesKey = 'SearchLocationsCubitHistoryPlaces';
   static const _myDefaultPlacesKey = 'SearchLocationsCubitMyDefaultPlaces';
@@ -17,7 +18,8 @@ class SearchLocationsHiveLocalRepository
 
   @override
   Future<void> loadRepository() async {
-    _box = Hive.box(path);
+    await TrufiHive.ensureInitialized();
+    _box = await Hive.openBox(_boxName);
   }
 
   @override

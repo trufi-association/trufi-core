@@ -53,7 +53,6 @@ export 'src/services/nominatim_search_service.dart';
 
 // Saved Places - Repository
 export 'src/saved_places/repository/search_locations_local_repository.dart';
-export 'src/saved_places/repository/search_location_repository.dart';
 export 'src/saved_places/repository/hive_local_repository.dart';
 
 // Saved Places - Cubit
