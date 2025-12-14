@@ -1,0 +1,121 @@
+{
+  "@@locale": "en",
+  "menuHome": "Home",
+  "@menuHome": {
+    "description": "Menu item title for home screen"
+  },
+  "searchOrigin": "Select origin",
+  "@searchOrigin": {
+    "description": "Hint text for origin field"
+  },
+  "searchDestination": "Select destination",
+  "@searchDestination": {
+    "description": "Hint text for destination field"
+  },
+  "selectLocations": "Select origin and destination to find routes",
+  "@selectLocations": {
+    "description": "Message shown when no locations are selected"
+  },
+  "noRoutesFound": "No routes found",
+  "@noRoutesFound": {
+    "description": "Message shown when no routes are available"
+  },
+  "errorNoRoutes": "Error loading routes",
+  "@errorNoRoutes": {
+    "description": "Error message when routes fail to load"
+  },
+  "durationMinutes": "{minutes} min",
+  "@durationMinutes": {
+    "description": "Duration in minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "15"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours}h {minutes}min",
+  "@durationHoursMinutes": {
+    "description": "Duration in hours and minutes",
+    "placeholders": {
+      "hours": {
+        "type": "int",
+        "example": "1"
+      },
+      "minutes": {
+        "type": "int",
+        "example": "30"
+      }
+    }
+  },
+  "distanceMeters": "{meters} m",
+  "@distanceMeters": {
+    "description": "Distance in meters",
+    "placeholders": {
+      "meters": {
+        "type": "int",
+        "example": "500"
+      }
+    }
+  },
+  "distanceKilometers": "{km} km",
+  "@distanceKilometers": {
+    "description": "Distance in kilometers",
+    "placeholders": {
+      "km": {
+        "type": "String",
+        "example": "2.5"
+      }
+    }
+  },
+  "walk": "Walk",
+  "@walk": {
+    "description": "Walking transport mode"
+  },
+  "transfers": "{count, plural, =0{No transfers} =1{1 transfer} other{{count} transfers}}",
+  "@transfers": {
+    "description": "Number of transfers",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "departureAt": "Departure at {time}",
+  "@departureAt": {
+    "description": "Departure time label",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "14:30"
+      }
+    }
+  },
+  "arrivalAt": "Arrival at {time}",
+  "@arrivalAt": {
+    "description": "Arrival time label",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "15:00"
+      }
+    }
+  },
+  "yourLocation": "Your Location",
+  "@yourLocation": {
+    "description": "Label for using current location"
+  },
+  "chooseOnMap": "Choose on Map",
+  "@chooseOnMap": {
+    "description": "Label for choosing location on map"
+  },
+  "confirmLocation": "Confirm Location",
+  "@confirmLocation": {
+    "description": "Button text to confirm selected location"
+  },
+  "selectedLocation": "Selected Location",
+  "@selectedLocation": {
+    "description": "Label for a location selected on map"
+  }
+}

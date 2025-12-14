@@ -1,0 +1,35 @@
+{
+  "@@locale": "es",
+  "menuFeedback": "Comentarios",
+  "@menuFeedback": {
+    "description": "Menu item for feedback screen"
+  },
+  "feedbackTitle": "Nos encantaría saber de ti!",
+  "@feedbackTitle": {
+    "description": "Title on feedback screen"
+  },
+  "feedbackContent": "Tus comentarios nos ayudan a mejorar la aplicación y proporcionar mejor información de transporte público para todos en la ciudad.",
+  "@feedbackContent": {
+    "description": "Main content explaining feedback importance"
+  },
+  "feedbackWhatWeWant": "Qué nos gustaría saber",
+  "@feedbackWhatWeWant": {
+    "description": "Section title for feedback types"
+  },
+  "feedbackBugs": "Errores o problemas que hayas encontrado",
+  "@feedbackBugs": {
+    "description": "Feedback type: bugs"
+  },
+  "feedbackRoutes": "Cambios de rutas o paradas faltantes",
+  "@feedbackRoutes": {
+    "description": "Feedback type: routes"
+  },
+  "feedbackSuggestions": "Ideas para mejorar la aplicación",
+  "@feedbackSuggestions": {
+    "description": "Feedback type: suggestions"
+  },
+  "feedbackSend": "Enviar Comentarios",
+  "@feedbackSend": {
+    "description": "Button to open feedback form"
+  }
+}

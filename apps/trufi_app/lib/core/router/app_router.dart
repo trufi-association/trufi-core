@@ -14,8 +14,8 @@ class AppRouter {
     required this.screens,
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
-  })  : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
-        shellNavigatorKey = shellNavigatorKey ?? GlobalKey<NavigatorState>();
+  }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
+       shellNavigatorKey = shellNavigatorKey ?? GlobalKey<NavigatorState>();
 
   /// Get or create the router
   GoRouter get router {
@@ -25,11 +25,15 @@ class AppRouter {
 
   GoRouter _createRouter() {
     // Convert screens directly to GoRoutes
-    final routes = screens.map((s) => GoRoute(
-      path: s.path,
-      name: s.id,
-      builder: (context, state) => s.builder(context),
-    )).toList();
+    final routes = screens
+        .map(
+          (s) => GoRoute(
+            path: s.path,
+            name: s.id,
+            builder: (context, state) => s.builder(context),
+          ),
+        )
+        .toList();
 
     return GoRouter(
       navigatorKey: rootNavigatorKey,
@@ -57,9 +61,8 @@ class AppRouter {
     return GoRoute(
       path: '/',
       name: 'home',
-      builder: (context, state) => const Center(
-        child: Text('No screens registered'),
-      ),
+      builder: (context, state) =>
+          const Center(child: Text('No screens registered')),
     );
   }
 
@@ -84,14 +87,36 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Verificar si la pantalla actual tiene su propio AppBar
+    final currentScreen = screens.firstWhere(
+      (s) => s.path == currentPath,
+      orElse: () => screens.first,
+    );
+    final hasOwnAppBar = currentScreen.hasOwnAppBar;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_getTitle(context)),
-      ),
-      drawer: AppDrawer(
-        currentPath: currentPath,
-        screens: screens,
-      ),
+      appBar: hasOwnAppBar
+          ? null // La pantalla maneja su propio AppBar
+          : AppBar(
+              title: Text(_getTitle(context)),
+              elevation: 2,
+              actions: [
+                // Placeholder para acciones adicionales si se necesitan
+                IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  tooltip: 'About',
+                  onPressed: () {
+                    // Navegar a la pantalla de About si existe
+                    final aboutScreen = screens.firstWhere(
+                      (s) => s.id == 'about',
+                      orElse: () => screens.first,
+                    );
+                    context.go(aboutScreen.path);
+                  },
+                ),
+              ],
+            ),
+      drawer: AppDrawer(currentPath: currentPath, screens: screens),
       body: child,
     );
   }
@@ -106,7 +131,7 @@ class AppShell extends StatelessWidget {
   }
 }
 
-/// Navigation drawer with dynamic menu items
+/// Modern navigation drawer with Material 3 design
 class AppDrawer extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
@@ -119,43 +144,34 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      backgroundColor: colorScheme.surface,
+      child: Column(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.green,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Trufi App',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Modular Architecture',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+          // Modern header with layered design
+          _DrawerHeader(theme: theme),
+
+          const SizedBox(height: 8),
+
+          // Menu items with Material 3 styling
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: _buildMenuItems(context, theme),
             ),
           ),
-          ..._buildMenuItems(context),
+
+          // Modern footer
+          _DrawerFooter(theme: theme),
         ],
       ),
     );
   }
 
-  List<Widget> _buildMenuItems(BuildContext context) {
+  List<Widget> _buildMenuItems(BuildContext context, ThemeData theme) {
     final widgets = <Widget>[];
 
     // Collect screens with menu items
@@ -164,15 +180,24 @@ class AppDrawer extends StatelessWidget {
     // Sort by order
     menuScreens.sort((a, b) => a.menuItem!.order.compareTo(b.menuItem!.order));
 
-    for (final screen in menuScreens) {
+    for (int i = 0; i < menuScreens.length; i++) {
+      final screen = menuScreens[i];
       final item = screen.menuItem!;
 
       if (item.showDividerBefore) {
-        widgets.add(const Divider());
+        widgets.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Divider(
+              height: 1,
+              color: theme.colorScheme.outlineVariant,
+            ),
+          ),
+        );
       }
 
       widgets.add(
-        DrawerMenuItem(
+        _DrawerMenuItem(
           icon: item.icon,
           title: screen.getLocalizedTitle(context),
           isSelected: currentPath == screen.path,
@@ -188,15 +213,82 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
-/// Drawer menu item widget
-class DrawerMenuItem extends StatelessWidget {
+/// Modern drawer header with layered design
+class _DrawerHeader extends StatelessWidget {
+  final ThemeData theme;
+
+  const _DrawerHeader({required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Logo/Avatar with modern styling
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.directions_bus_rounded,
+                  size: 32,
+                  color: colorScheme.onPrimary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              // App name
+              Text(
+                'Trufi App',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Tagline
+              Text(
+                'Tu compañero de transporte público',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Material 3 styled drawer menu item
+class _DrawerMenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final VoidCallback onTap;
   final bool isSelected;
 
-  const DrawerMenuItem({
-    super.key,
+  const _DrawerMenuItem({
     required this.icon,
     required this.title,
     required this.onTap,
@@ -205,20 +297,117 @@ class DrawerMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Colors.green : null,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Colors.green : null,
-          fontWeight: isSelected ? FontWeight.bold : null,
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(28),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(28),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? colorScheme.secondaryContainer
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 24,
+                  color: isSelected
+                      ? colorScheme.onSecondaryContainer
+                      : colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: isSelected
+                          ? colorScheme.onSecondaryContainer
+                          : colorScheme.onSurfaceVariant,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+                  ),
+                ),
+                // Selection indicator
+                if (isSelected)
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
-      selected: isSelected,
-      onTap: onTap,
+    );
+  }
+}
+
+/// Modern drawer footer with version and optional actions
+class _DrawerFooter extends StatelessWidget {
+  final ThemeData theme;
+
+  const _DrawerFooter({required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Version info
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.info_outline_rounded,
+                size: 14,
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Versión 1.0.0',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Powered by text
+          Text(
+            'Powered by Trufi Association',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -239,10 +428,7 @@ class ErrorScreen extends StatelessWidget {
           children: [
             const Icon(Icons.error_outline, size: 64, color: Colors.red),
             const SizedBox(height: 16),
-            const Text(
-              'Page not found',
-              style: TextStyle(fontSize: 24),
-            ),
+            const Text('Page not found', style: TextStyle(fontSize: 24)),
             const SizedBox(height: 8),
             if (error != null)
               Text(

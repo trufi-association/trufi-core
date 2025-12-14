@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/transport_route.dart';
 
-/// Tile widget displaying a transport route in the list
+/// Modern tile widget displaying a transport route in the list
 class TransportTile extends StatelessWidget {
   final TransportRoute route;
   final VoidCallback onTap;
@@ -17,77 +17,186 @@ class TransportTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final routeColor = route.backgroundColor ?? colorScheme.primary;
 
-    return Card(
-      margin: EdgeInsets.zero,
+    return Material(
+      color: colorScheme.surface,
+      borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+              width: 1,
+            ),
+          ),
           child: Row(
             children: [
-              // Route badge
+              // Color accent bar
               Container(
-                constraints: const BoxConstraints(minWidth: 48),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                width: 4,
+                height: 72,
                 decoration: BoxDecoration(
-                  color: route.backgroundColor ?? colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (route.modeIcon != null) ...[
-                      route.modeIcon!,
-                      const SizedBox(width: 4),
-                    ],
-                    Text(
-                      route.displayName,
-                      style: TextStyle(
-                        color: route.textColor ?? colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+                  color: routeColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
                 ),
               ),
-              const SizedBox(width: 12),
-              // Route info
+
+              // Main content
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (route.longNameLast.isNotEmpty)
-                      Text(
-                        route.longNameLast,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+                  child: Row(
+                    children: [
+                      // Route badge with icon
+                      _RouteBadge(route: route),
+                      const SizedBox(width: 14),
+
+                      // Route info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Destination (primary info)
+                            if (route.longNameLast.isNotEmpty)
+                              Text(
+                                route.longNameLast,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurface,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            const SizedBox(height: 4),
+                            // Full route (secondary info)
+                            if (route.longNameFull.isNotEmpty)
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.route_rounded,
+                                    size: 14,
+                                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      route.longNameFull,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
+                                        height: 1.3,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    if (route.longNameFull.isNotEmpty)
-                      Text(
-                        route.longNameFull,
-                        style: theme.textTheme.bodySmall?.copyWith(
+
+                      // Chevron indicator
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.chevron_right_rounded,
                           color: colorScheme.onSurfaceVariant,
+                          size: 20,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: colorScheme.onSurfaceVariant,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+/// Modern route badge with transport type icon
+class _RouteBadge extends StatelessWidget {
+  final TransportRoute route;
+
+  const _RouteBadge({required this.route});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final routeColor = route.backgroundColor ?? colorScheme.primary;
+    final textColor = route.textColor ?? _getContrastColor(routeColor);
+
+    return Container(
+      constraints: const BoxConstraints(minWidth: 56, minHeight: 48),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: routeColor,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: routeColor.withValues(alpha: 0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Transport mode icon
+          if (route.modeIcon != null)
+            SizedBox(
+              width: 18,
+              height: 18,
+              child: IconTheme(
+                data: IconThemeData(color: textColor, size: 18),
+                child: route.modeIcon!,
+              ),
+            )
+          else
+            Icon(
+              Icons.directions_bus_rounded,
+              size: 18,
+              color: textColor,
+            ),
+          const SizedBox(height: 2),
+          // Route number
+          Text(
+            route.displayName,
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+              letterSpacing: 0.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Calculate contrast color for text based on background
+  Color _getContrastColor(Color background) {
+    final luminance = background.computeLuminance();
+    return luminance > 0.5 ? Colors.black87 : Colors.white;
   }
 }

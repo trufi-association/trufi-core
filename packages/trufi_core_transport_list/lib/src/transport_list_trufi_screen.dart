@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     hide ITrufiMapEngine;
@@ -18,14 +17,10 @@ import 'transport_list_data_provider.dart';
 class TransportListOtpConfig {
   final String otpEndpoint;
   final OtpVersion otpVersion;
-  final LatLng defaultCenter;
-  final List<ITrufiMapEngine> mapEngines;
 
   const TransportListOtpConfig({
     required this.otpEndpoint,
-    required this.defaultCenter,
     this.otpVersion = OtpVersion.v2_4,
-    this.mapEngines = const [],
   });
 }
 
@@ -51,15 +46,13 @@ class TransportListTrufiScreen extends TrufiScreen {
       ];
 
   @override
-  List<SingleChildWidget> get providers => [
-        ChangeNotifierProvider(
-          create: (_) => MapEngineManager(
-            engines: config.mapEngines.isNotEmpty
-                ? config.mapEngines
-                : defaultMapEngines,
-          ),
-        ),
-      ];
+  List<Locale> get supportedLocales => TransportListLocalizations.supportedLocales;
+
+  @override
+  List<SingleChildWidget> get providers => [];
+
+  @override
+  bool get hasOwnAppBar => true;
 
   @override
   ScreenMenuItem? get menuItem => const ScreenMenuItem(
@@ -116,7 +109,6 @@ class _TransportListScreenWidgetState
           getRouteDetails: _dataProvider.getRouteDetails,
           mapBuilder: (context, routeDetails) => _RouteMapView(
             route: routeDetails,
-            defaultCenter: widget.config.defaultCenter,
           ),
         );
       },
@@ -127,11 +119,9 @@ class _TransportListScreenWidgetState
 /// Map view for displaying a route
 class _RouteMapView extends StatefulWidget {
   final TransportRouteDetails? route;
-  final LatLng defaultCenter;
 
   const _RouteMapView({
     required this.route,
-    required this.defaultCenter,
   });
 
   @override
@@ -139,29 +129,29 @@ class _RouteMapView extends StatefulWidget {
 }
 
 class _RouteMapViewState extends State<_RouteMapView> {
-  late final TrufiMapController _mapController;
-  late final FitCameraLayer _fitCameraLayer;
+  TrufiMapController? _mapController;
+  FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
 
-  @override
-  void initState() {
-    super.initState();
-    _mapController = TrufiMapController(
-      initialCameraPosition: TrufiCameraPosition(
-        target: widget.defaultCenter,
-        zoom: 13,
-      ),
-    );
-    _fitCameraLayer = FitCameraLayer(
-      _mapController,
-      devicePixelRatio: MediaQueryData.fromView(
-        WidgetsBinding.instance.platformDispatcher.views.first,
-      ).devicePixelRatio,
-    );
+  void _initializeIfNeeded(MapEngineManager mapEngineManager) {
+    if (_mapController == null) {
+      _mapController = TrufiMapController(
+        initialCameraPosition: TrufiCameraPosition(
+          target: mapEngineManager.defaultCenter,
+          zoom: mapEngineManager.defaultZoom,
+        ),
+      );
+      _fitCameraLayer = FitCameraLayer(
+        _mapController!,
+        devicePixelRatio: MediaQueryData.fromView(
+          WidgetsBinding.instance.platformDispatcher.views.first,
+        ).devicePixelRatio,
+      );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateRoute();
-    });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateRoute();
+      });
+    }
   }
 
   @override
@@ -174,15 +164,17 @@ class _RouteMapViewState extends State<_RouteMapView> {
 
   void _updateRoute() {
     final route = widget.route;
-    if (route == null || route.geometry == null) return;
+    if (route == null || route.geometry == null || _mapController == null) {
+      return;
+    }
 
     // Remove old layer if exists
     if (_routeLayer != null) {
-      _mapController.removeLayer(_routeLayer!.id);
+      _mapController!.removeLayer(_routeLayer!.id);
     }
 
     // Create new route layer
-    _routeLayer = _RouteLayer(_mapController);
+    _routeLayer = _RouteLayer(_mapController!);
     _routeLayer!.setRoute(route);
 
     // Fit camera to route bounds
@@ -190,29 +182,30 @@ class _RouteMapViewState extends State<_RouteMapView> {
         route.geometry!.map((p) => LatLng(p.latitude, p.longitude)).toList();
 
     if (points.length > 1) {
-      _fitCameraLayer.setFitPoints(points);
+      _fitCameraLayer?.setFitPoints(points);
     }
   }
 
   @override
   void dispose() {
-    _mapController.dispose();
+    _mapController?.dispose();
     super.dispose();
   }
 
   Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
-      controller: _mapController,
+      controller: _mapController!,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final mapEngineManager = MapEngineManager.watch(context);
+    _initializeIfNeeded(mapEngineManager);
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        _fitCameraLayer.updateViewport(
+        _fitCameraLayer?.updateViewport(
           Size(constraints.maxWidth, constraints.maxHeight),
           MediaQuery.of(context).viewPadding,
         );
@@ -222,22 +215,23 @@ class _RouteMapViewState extends State<_RouteMapView> {
             _buildMap(mapEngineManager.currentEngine),
 
             // Map Type Button (top-left)
-            Positioned(
-              top: 16,
-              left: 16,
-              child: SafeArea(
-                child: MapTypeButton.fromEngines(
-                  engines: mapEngineManager.engines,
-                  currentEngineIndex: mapEngineManager.currentIndex,
-                  onEngineChanged: (engine) {
-                    mapEngineManager.setEngine(engine);
-                  },
-                  settingsAppBarTitle: 'Map Settings',
-                  settingsSectionTitle: 'Map Type',
-                  settingsApplyButtonText: 'Apply Changes',
+            if (mapEngineManager.engines.length > 1)
+              Positioned(
+                top: 16,
+                left: 16,
+                child: SafeArea(
+                  child: MapTypeButton.fromEngines(
+                    engines: mapEngineManager.engines,
+                    currentEngineIndex: mapEngineManager.currentIndex,
+                    onEngineChanged: (engine) {
+                      mapEngineManager.setEngine(engine);
+                    },
+                    settingsAppBarTitle: 'Map Settings',
+                    settingsSectionTitle: 'Map Type',
+                    settingsApplyButtonText: 'Apply Changes',
+                  ),
                 ),
               ),
-            ),
 
             // Recenter button (top-right)
             Positioned(
@@ -245,7 +239,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
               right: 16,
               child: SafeArea(
                 child: ValueListenableBuilder<bool>(
-                  valueListenable: _fitCameraLayer.outOfFocusNotifier,
+                  valueListenable: _fitCameraLayer!.outOfFocusNotifier,
                   builder: (context, outOfFocus, _) {
                     if (!outOfFocus) return const SizedBox.shrink();
                     return Material(
@@ -253,7 +247,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
                       borderRadius: BorderRadius.circular(12),
                       elevation: 2,
                       child: InkWell(
-                        onTap: _fitCameraLayer.reFitCamera,
+                        onTap: _fitCameraLayer!.reFitCamera,
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
                           width: 44,

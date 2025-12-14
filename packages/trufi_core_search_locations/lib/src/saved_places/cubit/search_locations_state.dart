@@ -6,7 +6,7 @@ class SearchLocationsState extends Equatable {
   final List<TrufiLocation> myDefaultPlaces;
   final List<TrufiLocation> historyPlaces;
   final List<TrufiLocation> favoritePlaces;
-  final List<TrufiPlace> searchResult;
+  final List<SearchLocation> searchResult;
   final bool isLoading;
 
   const SearchLocationsState({
@@ -23,7 +23,7 @@ class SearchLocationsState extends Equatable {
     List<TrufiLocation>? myDefaultPlaces,
     List<TrufiLocation>? historyPlaces,
     List<TrufiLocation>? favoritePlaces,
-    List<TrufiPlace>? searchResult,
+    List<SearchLocation>? searchResult,
     bool? isLoading,
   }) {
     return SearchLocationsState(

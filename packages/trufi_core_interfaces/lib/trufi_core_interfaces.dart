@@ -18,3 +18,6 @@ export './src/models/journey_plan.dart';
 // Map interfaces
 export './src/map/map_engine.dart';
 export './src/map/map_provider.dart';
+
+// Places interfaces
+export './src/places/my_places_provider.dart';

@@ -11,8 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  hive_flutter: ^1.1.0
   shared_preferences: ^2.5.3
-  trufi_core_interfaces: ^0.0.1
+  trufi_core_interfaces:
+    path: ../trufi_core_interfaces
 
 dev_dependencies:
   flutter_test:

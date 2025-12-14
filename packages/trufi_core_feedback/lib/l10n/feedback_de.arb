@@ -1,0 +1,35 @@
+{
+  "@@locale": "de",
+  "menuFeedback": "Feedback",
+  "@menuFeedback": {
+    "description": "Menu item for feedback screen"
+  },
+  "feedbackTitle": "Wir freuen uns über Ihr Feedback!",
+  "@feedbackTitle": {
+    "description": "Title on feedback screen"
+  },
+  "feedbackContent": "Ihr Feedback hilft uns, die App zu verbessern und bessere Informationen zum öffentlichen Nahverkehr für alle in der Stadt bereitzustellen.",
+  "@feedbackContent": {
+    "description": "Main content explaining feedback importance"
+  },
+  "feedbackWhatWeWant": "Worüber wir gerne hören würden",
+  "@feedbackWhatWeWant": {
+    "description": "Section title for feedback types"
+  },
+  "feedbackBugs": "Fehler oder Probleme, die Sie gefunden haben",
+  "@feedbackBugs": {
+    "description": "Feedback type: bugs"
+  },
+  "feedbackRoutes": "Routenänderungen oder fehlende Haltestellen",
+  "@feedbackRoutes": {
+    "description": "Feedback type: routes"
+  },
+  "feedbackSuggestions": "Ideen zur Verbesserung der App",
+  "@feedbackSuggestions": {
+    "description": "Feedback type: suggestions"
+  },
+  "feedbackSend": "Feedback senden",
+  "@feedbackSend": {
+    "description": "Button to open feedback form"
+  }
+}

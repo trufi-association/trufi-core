@@ -139,23 +139,23 @@ abstract class SettingsLocalizations {
   /// **'System Default'**
   String get settingsThemeSystem;
 
-  /// Demo section title
+  /// Theme selection instruction
   ///
   /// In en, this message translates to:
-  /// **'Translation Demo'**
-  String get settingsTranslationDemo;
+  /// **'Select your preferred theme:'**
+  String get settingsSelectTheme;
 
-  /// Demo section description
+  /// Map settings section
   ///
   /// In en, this message translates to:
-  /// **'Change the language above to see these translations update dynamically:'**
-  String get settingsTranslationDemoDesc;
+  /// **'Map'**
+  String get settingsMap;
 
-  /// Registered modules section
+  /// Map type selection instruction
   ///
   /// In en, this message translates to:
-  /// **'Registered Modules'**
-  String get settingsRegisteredModules;
+  /// **'Select your preferred map type:'**
+  String get settingsSelectMapType;
 }
 
 class _SettingsLocalizationsDelegate extends LocalizationsDelegate<SettingsLocalizations> {

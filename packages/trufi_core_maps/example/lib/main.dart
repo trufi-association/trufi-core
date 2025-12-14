@@ -36,7 +36,10 @@ class TrufiMapsExampleApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => MapEngineManager(engines: mapEngines),
+          create: (_) => MapEngineManager(
+            engines: mapEngines,
+            defaultCenter: const latlng.LatLng(-1.9403, 29.8739), // Kigali
+          ),
         ),
       ],
       child: MaterialApp(

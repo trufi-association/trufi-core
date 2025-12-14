@@ -21,6 +21,11 @@
     "description": "Theme setting"
   },
 
+  "settingsSelectTheme": "Select your preferred theme:",
+  "@settingsSelectTheme": {
+    "description": "Theme selection instruction"
+  },
+
   "settingsThemeLight": "Light Mode",
   "@settingsThemeLight": {
     "description": "Light theme option"
@@ -36,18 +41,13 @@
     "description": "System theme option"
   },
 
-  "settingsTranslationDemo": "Translation Demo",
-  "@settingsTranslationDemo": {
-    "description": "Demo section title"
+  "settingsMap": "Map",
+  "@settingsMap": {
+    "description": "Map settings section"
   },
 
-  "settingsTranslationDemoDesc": "Change the language above to see these translations update dynamically:",
-  "@settingsTranslationDemoDesc": {
-    "description": "Demo section description"
-  },
-
-  "settingsRegisteredModules": "Registered Modules",
-  "@settingsRegisteredModules": {
-    "description": "Registered modules section"
+  "settingsSelectMapType": "Select your preferred map type:",
+  "@settingsSelectMapType": {
+    "description": "Map type selection instruction"
   }
 }

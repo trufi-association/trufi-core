@@ -30,11 +30,11 @@ class SettingsLocalizationsDe extends SettingsLocalizations {
   String get settingsThemeSystem => 'Systemstandard';
 
   @override
-  String get settingsTranslationDemo => 'Übersetzungs-Demo';
+  String get settingsSelectTheme => 'Wählen Sie Ihr bevorzugtes Design:';
 
   @override
-  String get settingsTranslationDemoDesc => 'Ändern Sie die Sprache oben, um diese Übersetzungen dynamisch zu aktualisieren:';
+  String get settingsMap => 'Karte';
 
   @override
-  String get settingsRegisteredModules => 'Registrierte Module';
+  String get settingsSelectMapType => 'Wählen Sie Ihren bevorzugten Kartentyp:';
 }

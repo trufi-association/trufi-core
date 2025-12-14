@@ -16,6 +16,12 @@ workspace:
   - packages/trufi_core_about
   - packages/trufi_core_saved_places
   - packages/trufi_core_transport_list
+  - packages/trufi_core_home_screen
+  - packages/trufi_core_home_screen/example
+  - packages/trufi_core_feedback
+  - packages/trufi_core_feedback/example
+  - packages/trufi_core_fares
+  - packages/trufi_core_fares/example
   - packages/trufi_core_maps
   - packages/trufi_core_routing
   - packages/trufi_core_routing_ui
