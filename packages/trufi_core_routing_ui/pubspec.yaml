@@ -1,6 +1,6 @@
 name: trufi_core_routing_ui
 description: UI extensions for trufi_core_routing - colors, icons, and translations for transport modes.
-version: 0.0.1
+version: 1.0.0
 homepage: https://github.com/trufi-association/trufi-core
 publish_to: none
 resolution: workspace
@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^2.0.10+1
   intl: ^0.20.2
-  trufi_core_routing: ^0.0.1
+  trufi_core_routing: ^1.0.0
 
 dev_dependencies:
   flutter_test:

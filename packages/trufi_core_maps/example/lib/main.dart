@@ -10,11 +10,11 @@ import 'layers/route_layer.dart';
 import 'widgets/map_controls.dart';
 
 void main() {
-  runApp(const TrufiMapsExampleApp());
+  runApp(const MyApp());
 }
 
-class TrufiMapsExampleApp extends StatelessWidget {
-  const TrufiMapsExampleApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   // Define available map engines
   static final List<ITrufiMapEngine> mapEngines = [

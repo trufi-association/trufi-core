@@ -1,0 +1,28 @@
+name: trufi_core_settings
+description: "Settings screen module for Trufi Core apps."
+version: 1.0.0
+homepage:
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  trufi_core_interfaces: ^1.0.0
+  trufi_core_utils: ^1.0.0
+  trufi_core_maps: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

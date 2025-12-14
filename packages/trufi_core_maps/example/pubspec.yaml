@@ -1,6 +1,6 @@
 name: trufi_core_maps_example
 description: Example app demonstrating trufi_core_maps features.
-publish_to: 'none'
+publish_to: none
 
 environment:
   sdk: ^3.10.0
@@ -13,6 +13,10 @@ dependencies:
     path: ../
   latlong2: ^0.9.1
   provider: ^6.1.2
+
+dependency_overrides:
+  trufi_core_interfaces:
+    path: ../../trufi_core_interfaces
 
 dev_dependencies:
   flutter_test:

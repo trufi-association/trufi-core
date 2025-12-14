@@ -1,0 +1,34 @@
+name: trufi_core_settings_example
+description: "Example app for trufi_core_settings package"
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  provider: ^6.1.2
+  trufi_core_settings:
+    path: ../
+  trufi_core_utils:
+    path: ../../../trufi_core_utils
+
+dependency_overrides:
+  trufi_core_interfaces:
+    path: ../../../trufi_core_interfaces
+  trufi_core_utils:
+    path: ../../../trufi_core_utils
+  trufi_core_maps:
+    path: ../../../trufi_core_maps
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
