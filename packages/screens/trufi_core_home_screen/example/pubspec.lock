@@ -733,6 +733,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  trufi_core_base_widgets:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_base_widgets"
+      relative: true
+    source: path
+    version: "1.0.0"
+  trufi_core_custom_material:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_custom_material"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_home_screen:
     dependency: "direct main"
     description:

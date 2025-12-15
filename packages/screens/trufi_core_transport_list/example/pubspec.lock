@@ -818,6 +818,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.7"
+  trufi_core_base_widgets:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_base_widgets"
+      relative: true
+    source: path
+    version: "1.0.0"
+  trufi_core_custom_material:
+    dependency: "direct overridden"
+    description:
+      path: "../../../trufi_core_custom_material"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_interfaces:
     dependency: "direct overridden"
     description:

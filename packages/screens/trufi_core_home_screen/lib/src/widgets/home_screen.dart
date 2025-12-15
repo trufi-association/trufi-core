@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     hide ITrufiMapEngine;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
@@ -298,21 +301,25 @@ class _HomeScreenState extends State<HomeScreen>
 
                   // Draggable bottom sheet for itineraries
                   if (hasResults)
-                    DraggableScrollableSheet(
+                    TrufiBottomSheet(
                       controller: _sheetController,
                       initialChildSize: _sheetMidSize,
                       minChildSize: _sheetMinSize,
                       maxChildSize: _sheetMaxSize,
                       snap: true,
                       snapSizes: const [_sheetMinSize, _sheetMidSize],
-                      builder: (context, scrollController) {
-                        return _buildBottomSheet(
-                          context,
-                          scrollController,
-                          state,
-                          theme,
+                      onHeightChanged: (height) {
+                        final maxHeight = constraints.maxHeight;
+                        _fitCameraLayer?.updatePadding(
+                          EdgeInsets.only(
+                            bottom: math.min(maxHeight * 0.5, height),
+                            left: 30,
+                            right: 30,
+                            top: 120,
+                          ),
                         );
                       },
+                      child: _buildBottomSheetContent(state, theme),
                     ),
                 ],
               );
@@ -328,109 +335,67 @@ class _HomeScreenState extends State<HomeScreen>
     MapEngineManager mapEngineManager,
     bool hasResults,
   ) {
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
+    return Positioned(
       right: 16,
-      bottom: hasResults
-          ? MediaQuery.of(context).size.height * _sheetMidSize + 16
-          : 100,
+      top: 0,
       child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Map type button (original)
-            if (mapEngineManager.engines.length > 1) ...[
-              MapTypeButton.fromEngines(
-                engines: mapEngineManager.engines,
-                currentEngineIndex: mapEngineManager.currentIndex,
-                onEngineChanged: (engine) {
-                  mapEngineManager.setEngine(engine);
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 120), // Below SearchLocationBar
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Map type button
+              if (mapEngineManager.engines.length > 1) ...[
+                MapTypeButton.fromEngines(
+                  engines: mapEngineManager.engines,
+                  currentEngineIndex: mapEngineManager.currentIndex,
+                  onEngineChanged: (engine) {
+                    mapEngineManager.setEngine(engine);
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+              // Recenter button
+              ValueListenableBuilder<bool>(
+                valueListenable: _fitCameraLayer!.outOfFocusNotifier,
+                builder: (context, outOfFocus, _) {
+                  return AnimatedOpacity(
+                    opacity: outOfFocus ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedScale(
+                      scale: outOfFocus ? 1.0 : 0.8,
+                      duration: const Duration(milliseconds: 200),
+                      child: _MapControlButton(
+                        icon: Icons.my_location_rounded,
+                        onPressed: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                      ),
+                    ),
+                  );
                 },
               ),
-              const SizedBox(height: 8),
             ],
-            // Recenter button
-            ValueListenableBuilder<bool>(
-              valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-              builder: (context, outOfFocus, _) {
-                return AnimatedOpacity(
-                  opacity: outOfFocus ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 200),
-                  child: AnimatedScale(
-                    scale: outOfFocus ? 1.0 : 0.8,
-                    duration: const Duration(milliseconds: 200),
-                    child: _MapControlButton(
-                      icon: Icons.my_location_rounded,
-                      onPressed: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBottomSheet(
-    BuildContext context,
-    ScrollController scrollController,
-    RoutePlannerState state,
-    ThemeData theme,
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Drag handle
-          GestureDetector(
-            onTap: _toggleSheet,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Summary row when collapsed
-          _buildSummaryRow(state, theme),
-          // Itinerary list
-          Expanded(
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverToBoxAdapter(
-                  child: ItineraryList(
-                    onItineraryDetails: widget.onItineraryDetails,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  Widget _buildBottomSheetContent(RoutePlannerState state, ThemeData theme) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Summary row when collapsed
+        GestureDetector(
+          onTap: _toggleSheet,
+          behavior: HitTestBehavior.opaque,
+          child: _buildSummaryRow(state, theme),
+        ),
+        // Itinerary list
+        ItineraryList(
+          onItineraryDetails: widget.onItineraryDetails,
+        ),
+      ],
     );
   }
 

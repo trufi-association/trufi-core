@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
-import 'widgets/transport_detail_sheet.dart';
 
 /// Screen showing transport route details with map and stops
 class TransportDetailScreen extends StatefulWidget {
@@ -341,23 +341,21 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         _buildTopBar(context, theme, colorScheme),
 
         // Bottom sheet with stops only
-        DraggableScrollableSheet(
+        TrufiBottomSheet(
           controller: _sheetController,
           initialChildSize: 0.30,
           minChildSize: 0.10,
           maxChildSize: 0.75,
           snap: true,
           snapSizes: const [0.10, 0.30, 0.75],
-          builder: (context, scrollController) {
-            return _StopsSheet(
-              route: _route!,
-              scrollController: scrollController,
-              onStopTap: (lat, lng) {
-                HapticFeedback.selectionClick();
-                // Could trigger map movement here
-              },
-            );
-          },
+          builder: (context, scrollController) => _StopsSheetContent(
+            route: _route!,
+            scrollController: scrollController,
+            onStopTap: (lat, lng) {
+              HapticFeedback.selectionClick();
+              // Could trigger map movement here
+            },
+          ),
         ),
       ],
     );
@@ -417,13 +415,13 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   }
 }
 
-/// Simplified bottom sheet showing only stops
-class _StopsSheet extends StatelessWidget {
+/// Content for the stops bottom sheet
+class _StopsSheetContent extends StatelessWidget {
   final TransportRouteDetails route;
   final ScrollController scrollController;
   final void Function(double lat, double lng)? onStopTap;
 
-  const _StopsSheet({
+  const _StopsSheetContent({
     required this.route,
     required this.scrollController,
     this.onStopTap,
@@ -433,35 +431,15 @@ class _StopsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final stops = route.stops ?? [];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Drag handle
-          Container(
-            margin: const EdgeInsets.only(top: 10, bottom: 6),
-            width: 36,
-            height: 4,
-            decoration: BoxDecoration(
-              color: colorScheme.outlineVariant,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-
-          // Stops count header
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+    return CustomScrollView(
+      controller: scrollController,
+      slivers: [
+        // Stops count header
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
             child: Row(
               children: [
                 Container(
@@ -480,7 +458,7 @@ class _StopsSheet extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${route.stops?.length ?? 0} stops',
+                        '${stops.length} stops',
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
@@ -498,15 +476,129 @@ class _StopsSheet extends StatelessWidget {
               ],
             ),
           ),
+        ),
 
-          // Stops list
-          Expanded(
-            child: TransportDetailSheet(
-              route: route,
-              onStopTap: onStopTap,
+        // Stops list
+        if (stops.isEmpty)
+          const SliverFillRemaining(
+            child: _EmptyStopsInline(),
+          )
+        else
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final stop = stops[index];
+                final isFirst = index == 0;
+                final isLast = index == stops.length - 1;
+                final routeColor = route.backgroundColor ?? colorScheme.primary;
+
+                return _StopTimelineItem(
+                  stop: stop,
+                  isFirst: isFirst,
+                  isLast: isLast,
+                  routeColor: routeColor,
+                  onTap: onStopTap != null
+                      ? () {
+                          HapticFeedback.selectionClick();
+                          onStopTap!(stop.latitude, stop.longitude);
+                        }
+                      : null,
+                );
+              },
+              childCount: stops.length,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// Inline empty stops state for sliver
+class _EmptyStopsInline extends StatelessWidget {
+  const _EmptyStopsInline();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.location_off_rounded,
+            size: 48,
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'No stops available',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Timeline stop item
+class _StopTimelineItem extends StatelessWidget {
+  final TransportStop stop;
+  final bool isFirst;
+  final bool isLast;
+  final Color routeColor;
+  final VoidCallback? onTap;
+
+  const _StopTimelineItem({
+    required this.stop,
+    required this.isFirst,
+    required this.isLast,
+    required this.routeColor,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Row(
+            children: [
+              // Timeline indicator
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: (isFirst || isLast) ? routeColor : colorScheme.surface,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: routeColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Stop name
+              Expanded(
+                child: Text(
+                  stop.name,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: (isFirst || isLast) ? FontWeight.w600 : FontWeight.normal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
