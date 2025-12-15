@@ -162,21 +162,21 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void _onOriginSelected(SearchLocation location) {
+  Future<void> _onOriginSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setFromPlace(_searchLocationToTrufiLocation(location));
+    await cubit.setFromPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
   }
 
-  void _onDestinationSelected(SearchLocation location) {
+  Future<void> _onDestinationSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setToPlace(_searchLocationToTrufiLocation(location));
+    await cubit.setToPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
   }
 
-  void _onSwapLocations() {
+  Future<void> _onSwapLocations() async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.swapLocations();
+    await cubit.swapLocations();
     _fetchPlanIfReady();
   }
 

@@ -26,6 +26,8 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
 
   /// Initialize and load saved state.
   Future<void> initialize() async {
+    await _repository.initialize();
+
     final fromPlace = await _repository.getFromPlace();
     final toPlace = await _repository.getToPlace();
     final plan = await _repository.getPlan();
