@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
               biasLatitude: _defaultCenter.latitude,
               biasLongitude: _defaultCenter.longitude,
             ),
+            localRepository: SearchLocationsHiveLocalRepository(),
           ),
         ),
         ...screen.providers,

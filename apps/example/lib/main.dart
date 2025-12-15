@@ -32,6 +32,7 @@ void main() {
               biasLatitude: _defaultCenter.latitude,
               biasLongitude: _defaultCenter.longitude,
             ),
+            localRepository: SearchLocationsHiveLocalRepository(),
           ),
         ),
       ],

@@ -24,6 +24,7 @@ dependencies:
   url_launcher: ^6.3.0
   vector_tile: ^3.0.0
   trufi_core_interfaces: ^1.0.0
+  trufi_core_storage: ^1.0.0
 
 dev_dependencies:
   flutter_test:
