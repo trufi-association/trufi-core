@@ -142,6 +142,25 @@ class AnimatedMarkersLayer extends TrufiLayer {
     _updateMarkers();
   }
 
+  /// Updates all marker positions on the map.
+  ///
+  /// ## Performance Note: imageKey
+  ///
+  /// The [imageKey] is critical for MapLibre rendering performance.
+  /// MapLibre converts each marker's widget to a PNG image and caches it
+  /// using the widget's hashCode as the key. However, since widgets are
+  /// recreated every frame, their hashCode changes each time, causing:
+  ///
+  /// 1. Repeated widget-to-PNG conversions (expensive CPU operation)
+  /// 2. Multiple JNI calls to upload images to the native layer
+  /// 3. Memory pressure from duplicate cached images
+  ///
+  /// By providing a stable [imageKey] based on the visual properties
+  /// (color + icon), markers with identical appearance share the same
+  /// cached image, regardless of how many times the widget is recreated.
+  ///
+  /// Example: 50 markers with 8 colors × 5 icons = max 40 unique images
+  /// instead of 50 new images every frame.
   void _updateMarkers() {
     final markers = <TrufiMarker>[];
 
@@ -157,6 +176,8 @@ class AnimatedMarkersLayer extends TrufiLayer {
           size: const Size(36, 36),
           alignment: Alignment.center,
           layerLevel: layerLevel,
+          // IMPORTANT: Stable key for image caching - see method docs above
+          imageKey: 'vehicle_${vehicle.color.toARGB32()}_${vehicle.icon.codePoint}',
         ),
       );
     }
