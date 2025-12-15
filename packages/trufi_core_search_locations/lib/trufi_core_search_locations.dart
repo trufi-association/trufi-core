@@ -52,8 +52,8 @@ export 'src/services/photon_search_service.dart';
 export 'src/services/nominatim_search_service.dart';
 
 // Saved Places - Repository
-export 'src/saved_places/repository/search_locations_local_repository.dart';
-export 'src/saved_places/repository/hive_local_repository.dart';
+export 'src/saved_places/repository/search_locations_repository.dart';
+export 'src/saved_places/repository/search_locations_repository_impl.dart';
 
 // Saved Places - Cubit
 export 'src/saved_places/cubit/search_locations_cubit.dart';

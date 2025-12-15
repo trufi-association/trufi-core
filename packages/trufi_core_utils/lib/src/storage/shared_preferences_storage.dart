@@ -1,25 +1,31 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './storage_configuration.dart';
-import './storage_service.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
+/// SharedPreferences implementation of [StorageService].
 class SharedPreferencesStorage implements StorageService {
-  final StorageConfiguration config;
+  final bool enableLogging;
   SharedPreferences? _prefs;
 
-  SharedPreferencesStorage(this.config);
+  SharedPreferencesStorage({this.enableLogging = false});
 
   @override
   Future<void> initialize() async {
     _prefs = await SharedPreferences.getInstance();
-    if (config.enableLogging) {
-      print('[Storage] Initialized with SharedPreferences');
+    if (enableLogging) {
+      debugPrint('[Storage] Initialized with SharedPreferences');
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    _prefs = null;
   }
 
   SharedPreferences get prefs {
     if (_prefs == null) {
       throw StateError(
-        'StorageService not initialized. Call initialize() first.',
+        'SharedPreferencesStorage not initialized. Call initialize() first.',
       );
     }
     return _prefs!;
@@ -113,8 +119,8 @@ class SharedPreferencesStorage implements StorageService {
   }
 
   void _log(String operation, String key, dynamic value) {
-    if (config.enableLogging) {
-      print('[Storage] $operation: $key = $value');
+    if (enableLogging) {
+      debugPrint('[Storage] $operation: $key = $value');
     }
   }
 }

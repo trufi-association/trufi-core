@@ -1,46 +1,47 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
-import 'package:trufi_core_storage/trufi_core_storage.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
-import 'search_locations_local_repository.dart';
+import 'search_locations_repository.dart';
 
-/// Hive-based implementation of SearchLocationsLocalRepository.
-class SearchLocationsHiveLocalRepository
-    implements SearchLocationsLocalRepository {
-  static const String _boxName = "SearchLocationsCubit";
-  static const _favoritePlacesKey = 'SearchLocationsCubitFavoritePlaces';
-  static const _historyPlacesKey = 'SearchLocationsCubitHistoryPlaces';
-  static const _myDefaultPlacesKey = 'SearchLocationsCubitMyDefaultPlaces';
-  static const _myPlacesKey = 'SearchLocationsCubitMyPlaces';
+/// Default local implementation of [SearchLocationsRepository].
+///
+/// Uses [StorageService] for persistence. By default uses [SharedPreferencesStorage],
+/// but can be configured with any [StorageService] implementation for testing or
+/// alternative storage backends.
+class SearchLocationsRepositoryImpl implements SearchLocationsRepository {
+  static const _favoritePlacesKey = 'trufi_search_favorite_places';
+  static const _historyPlacesKey = 'trufi_search_history_places';
+  static const _myDefaultPlacesKey = 'trufi_search_my_default_places';
+  static const _myPlacesKey = 'trufi_search_my_places';
 
-  Box? _box;
+  final StorageService _storage;
   bool _isInitialized = false;
 
-  Box get _safeBox {
-    if (!_isInitialized || _box == null) {
+  SearchLocationsRepositoryImpl({StorageService? storage})
+      : _storage = storage ?? SharedPreferencesStorage();
+
+  void _ensureInitialized() {
+    if (!_isInitialized) {
       throw StateError(
-        'SearchLocationsHiveLocalRepository not initialized. '
+        'SearchLocationsRepositoryImpl not initialized. '
         'Call loadRepository() first.',
       );
     }
-    return _box!;
   }
 
   @override
   Future<void> loadRepository() async {
     if (_isInitialized) return;
-    await TrufiHive.ensureInitialized();
-    _box = await Hive.openBox(_boxName);
+    await _storage.initialize();
     _isInitialized = true;
   }
 
   @override
   Future<void> dispose() async {
-    await _box?.close();
-    _box = null;
+    await _storage.dispose();
     _isInitialized = false;
   }
 
@@ -88,11 +89,10 @@ class SearchLocationsHiveLocalRepository
 
   Future<List<TrufiLocation>> _getPlacesList(String key) async {
     try {
-      final box = _safeBox;
-      if (!box.containsKey(key)) return [];
-      final data = box.get(key);
+      _ensureInitialized();
+      final data = await _storage.read(key);
       if (data == null) return [];
-      final List<dynamic> jsonList = jsonDecode(data as String) as List<dynamic>;
+      final List<dynamic> jsonList = jsonDecode(data) as List<dynamic>;
       return jsonList
           .map<TrufiLocation>(
             (dynamic json) =>
@@ -107,7 +107,8 @@ class SearchLocationsHiveLocalRepository
 
   Future<void> _savePlacesList(String key, List<TrufiLocation> data) async {
     try {
-      await _safeBox.put(key, jsonEncode(data));
+      _ensureInitialized();
+      await _storage.write(key, jsonEncode(data));
     } catch (e) {
       debugPrint('Error saving places to $key: $e');
     }

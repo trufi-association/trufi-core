@@ -24,6 +24,8 @@ dependency_overrides:
     path: ../../../trufi_core_maps
   trufi_core_routing:
     path: ../../../trufi_core_routing
+  trufi_core_utils:
+    path: ../../../trufi_core_utils
 
 dev_dependencies:
   flutter_test:

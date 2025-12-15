@@ -34,8 +34,8 @@ dependency_overrides:
     path: ../../../trufi_core_search_locations
   trufi_core_saved_places:
     path: ../../trufi_core_saved_places
-  trufi_core_storage:
-    path: ../../../trufi_core_storage
+  trufi_core_utils:
+    path: ../../../trufi_core_utils
 
 flutter:
   uses-material-design: true

@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
-import 'package:trufi_core_storage/trufi_core_storage.dart';
 
 import '../l10n/home_screen_localizations.dart';
 import 'config/home_screen_config.dart';
 import 'cubit/route_planner_cubit.dart';
-import 'repository/hive_home_screen_repository.dart';
 import 'repository/home_screen_repository.dart';
+import 'repository/home_screen_repository_impl.dart';
 import 'services/request_plan_service.dart';
 import 'services/routing_request_plan_service.dart';
 import 'widgets/home_screen.dart';
@@ -26,7 +25,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
   static Future<void> init() async {
-    await TrufiHive.ensureInitialized();
+    // No initialization needed for SharedPreferences
   }
 
   HomeScreenTrufiScreen({
@@ -35,7 +34,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     RequestPlanService? requestService,
     this.onItineraryDetails,
   }) {
-    _repository = repository ?? HiveHomeScreenRepository();
+    _repository = repository ?? HomeScreenRepositoryImpl();
     _requestService =
         requestService ??
         RoutingRequestPlanService(

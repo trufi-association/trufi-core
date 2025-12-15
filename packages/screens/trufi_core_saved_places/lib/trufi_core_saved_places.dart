@@ -5,7 +5,7 @@
 /// - **SavedPlace**: Data model for saved locations with metadata
 /// - **SavedPlacesCubit**: State management using flutter_bloc
 /// - **SavedPlacesRepository**: Abstract interface for persistence
-/// - **HiveSavedPlacesRepository**: Hive-based local storage implementation
+/// - **SavedPlacesRepositoryImpl**: Default implementation using StorageService
 /// - **SavedPlacesScreen**: Ready-to-use screen widget
 /// - **SavedPlacesTrufiScreen**: TrufiScreen integration for modular apps
 ///
@@ -14,7 +14,7 @@
 /// ```dart
 /// // Using the ready-made screen
 /// SavedPlacesScreen(
-///   repository: HiveSavedPlacesRepository(),
+///   repository: SavedPlacesRepositoryImpl(),
 ///   onPlaceSelected: (place) {
 ///     // Navigate or use the selected place
 ///   },
@@ -34,7 +34,7 @@ export 'src/models/saved_place.dart';
 
 // Repository
 export 'src/repository/saved_places_repository.dart';
-export 'src/repository/hive_saved_places_repository.dart';
+export 'src/repository/saved_places_repository_impl.dart';
 export 'src/repository/saved_places_my_places_provider.dart';
 export 'src/repository/saved_places_cubit_provider.dart';
 

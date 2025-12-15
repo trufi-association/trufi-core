@@ -5,9 +5,12 @@ import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 
 import '../models/route_planner_state.dart';
 import '../repository/home_screen_repository.dart';
+import '../repository/home_screen_repository_impl.dart';
 import '../services/request_plan_service.dart';
 
 /// Cubit for managing route planning state.
+///
+/// If [repository] is not provided, uses [HomeScreenRepositoryImpl] by default.
 class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   final HomeScreenRepository _repository;
   final RequestPlanService _requestService;
@@ -15,9 +18,9 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   CancelableOperation<routing.Plan>? _currentFetchOperation;
 
   RoutePlannerCubit({
-    required HomeScreenRepository repository,
+    HomeScreenRepository? repository,
     required RequestPlanService requestService,
-  })  : _repository = repository,
+  })  : _repository = repository ?? HomeScreenRepositoryImpl(),
         _requestService = requestService,
         super(const RoutePlannerState());
 
