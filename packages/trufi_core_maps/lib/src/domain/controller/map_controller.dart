@@ -104,6 +104,7 @@ class TrufiMapController {
     int? globalLimit,
   }) {
     final leafletZoom = cameraPositionNotifier.value.zoom;
+    // Flutter Map zoom = MapLibre zoom + 1 (for same visual scale)
     final mapLibreZoom = leafletZoom - 1.0;
     final radiusMeters = _hitboxPxToMeters(
       centerLatDeg: tap.latitude,
