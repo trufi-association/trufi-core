@@ -70,15 +70,8 @@ class _SavedPlacesListState extends State<SavedPlacesList>
           );
         }
 
-        // Check if there are any places at all
-        final hasAnyPlaces = state.home != null ||
-            state.work != null ||
-            state.otherPlaces.isNotEmpty ||
-            (widget.showHistory && state.history.isNotEmpty);
-
-        if (!hasAnyPlaces) {
-          return _EmptyState();
-        }
+        // Always show default places section (Home/Work placeholders)
+        // Only show empty state if explicitly requested in the future
 
         // Trigger stagger animation when content is ready
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -651,58 +644,6 @@ class _ShimmerPlaceTile extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Empty state when no places are saved
-class _EmptyState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final localization = SavedPlacesLocalizations.of(context);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Decorative icon
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.bookmark_add_rounded,
-                size: 48,
-                color: colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              localization?.noPlacesSaved ?? 'No places saved yet',
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Add your home, work, and favorite places\nfor quick access',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
