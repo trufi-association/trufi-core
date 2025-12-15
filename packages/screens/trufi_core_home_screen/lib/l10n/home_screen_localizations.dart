@@ -204,6 +204,18 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Selected Location'**
   String get selectedLocation;
+
+  /// Option to set location as origin
+  ///
+  /// In en, this message translates to:
+  /// **'Set as Origin'**
+  String get setAsOrigin;
+
+  /// Option to set location as destination
+  ///
+  /// In en, this message translates to:
+  /// **'Set as Destination'**
+  String get setAsDestination;
 }
 
 class _HomeScreenLocalizationsDelegate extends LocalizationsDelegate<HomeScreenLocalizations> {

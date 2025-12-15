@@ -222,8 +222,141 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  void _onMapLongPress(LatLng position) async {
+    final l10n = HomeScreenLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    // Add haptic feedback
+    HapticFeedback.mediumImpact();
+
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                // Header
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.location_on_rounded,
+                        size: 40,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.selectedLocation,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                // Action buttons
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.trip_origin_rounded,
+                      color: Color(0xFF4CAF50),
+                      size: 24,
+                    ),
+                  ),
+                  title: Text(
+                    l10n.setAsOrigin,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () => Navigator.of(context).pop('origin'),
+                ),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE91E63).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.place_rounded,
+                      color: Color(0xFFE91E63),
+                      size: 24,
+                    ),
+                  ),
+                  title: Text(
+                    l10n.setAsDestination,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () => Navigator.of(context).pop('destination'),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (result == 'origin') {
+      final location = TrufiLocation(
+        description: l10n.selectedLocation,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        address:
+            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      );
+      final cubit = context.read<RoutePlannerCubit>();
+      await cubit.setFromPlace(location);
+      _fetchPlanIfReady();
+    } else if (result == 'destination') {
+      final location = TrufiLocation(
+        description: l10n.selectedLocation,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        address:
+            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      );
+      final cubit = context.read<RoutePlannerCubit>();
+      await cubit.setToPlace(location);
+      _fetchPlanIfReady();
+    }
+  }
+
   Widget _buildMap(ITrufiMapEngine engine) {
-    return engine.buildMap(controller: _mapController!);
+    return engine.buildMap(
+      controller: _mapController!,
+      onMapLongClick: _onMapLongPress,
+    );
   }
 
   @override
@@ -293,11 +426,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
 
                   // Floating action buttons (map controls)
-                  _buildMapControls(
-                    context,
-                    mapEngineManager,
-                    hasResults,
-                  ),
+                  _buildMapControls(context, mapEngineManager, hasResults),
 
                   // Draggable bottom sheet for itineraries
                   if (hasResults)
@@ -368,7 +497,9 @@ class _HomeScreenState extends State<HomeScreen>
                       duration: const Duration(milliseconds: 200),
                       child: _MapControlButton(
                         icon: Icons.my_location_rounded,
-                        onPressed: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                        onPressed: outOfFocus
+                            ? _fitCameraLayer!.reFitCamera
+                            : null,
                       ),
                     ),
                   );
@@ -392,9 +523,7 @@ class _HomeScreenState extends State<HomeScreen>
           child: _buildSummaryRow(state, theme),
         ),
         // Itinerary list
-        ItineraryList(
-          onItineraryDetails: widget.onItineraryDetails,
-        ),
+        ItineraryList(onItineraryDetails: widget.onItineraryDetails),
       ],
     );
   }
@@ -462,11 +591,7 @@ class _HomeScreenState extends State<HomeScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          Icon(
-            Icons.route_rounded,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(Icons.route_rounded, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
           Text(
             '${itineraries.length} ${itineraries.length == 1 ? 'route' : 'routes'} found',
@@ -475,10 +600,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           const Spacer(),
-          Icon(
-            Icons.keyboard_arrow_up_rounded,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.keyboard_arrow_up_rounded, color: Colors.grey[400]),
         ],
       ),
     );
@@ -489,7 +611,9 @@ class _HomeScreenState extends State<HomeScreen>
 
     HapticFeedback.selectionClick();
     final currentSize = _sheetController.size;
-    final targetSize = currentSize > _sheetMidSize ? _sheetMinSize : _sheetMidSize;
+    final targetSize = currentSize > _sheetMidSize
+        ? _sheetMinSize
+        : _sheetMidSize;
 
     _sheetController.animateTo(
       targetSize,
@@ -704,7 +828,9 @@ class _TransitStopMarker extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            isBoarding ? Icons.arrow_circle_up_rounded : Icons.arrow_circle_down_rounded,
+            isBoarding
+                ? Icons.arrow_circle_up_rounded
+                : Icons.arrow_circle_down_rounded,
             color: Colors.white,
             size: 14,
           ),
@@ -730,10 +856,7 @@ class _MapControlButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
 
-  const _MapControlButton({
-    required this.icon,
-    this.onPressed,
-  });
+  const _MapControlButton({required this.icon, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

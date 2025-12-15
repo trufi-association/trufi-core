@@ -82,4 +82,10 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get selectedLocation => 'Ausgewählter Standort';
+
+  @override
+  String get setAsOrigin => 'Als Startort festlegen';
+
+  @override
+  String get setAsDestination => 'Als Zielort festlegen';
 }

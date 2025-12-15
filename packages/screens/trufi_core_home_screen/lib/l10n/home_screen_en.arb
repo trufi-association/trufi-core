@@ -117,5 +117,13 @@
   "selectedLocation": "Selected Location",
   "@selectedLocation": {
     "description": "Label for a location selected on map"
+  },
+  "setAsOrigin": "Set as Origin",
+  "@setAsOrigin": {
+    "description": "Option to set location as origin"
+  },
+  "setAsDestination": "Set as Destination",
+  "@setAsDestination": {
+    "description": "Option to set location as destination"
   }
 }
