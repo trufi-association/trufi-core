@@ -21,3 +21,6 @@ export './src/map/map_provider.dart';
 
 // Places interfaces
 export './src/places/my_places_provider.dart';
+
+// Storage interfaces
+export './src/storage/storage_service.dart';

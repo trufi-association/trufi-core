@@ -1,45 +1,47 @@
 import 'dart:convert';
 
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trufi_core_storage/trufi_core_storage.dart';
+import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../models/saved_place.dart';
 import 'saved_places_repository.dart';
 
-/// Hive-based implementation of SavedPlacesRepository.
-class HiveSavedPlacesRepository implements SavedPlacesRepository {
-  static const String _boxName = 'saved_places';
-  static const String _homePlaceKey = 'home_place';
-  static const String _workPlaceKey = 'work_place';
-  static const String _otherPlacesKey = 'other_places';
-  static const String _historyKey = 'history';
+/// Default implementation of [SavedPlacesRepository].
+///
+/// Uses [StorageService] for persistence. By default uses [SharedPreferencesStorage],
+/// but can be configured with any [StorageService] implementation for testing or
+/// alternative storage backends.
+class SavedPlacesRepositoryImpl implements SavedPlacesRepository {
+  static const String _homePlaceKey = 'trufi_saved_home_place';
+  static const String _workPlaceKey = 'trufi_saved_work_place';
+  static const String _otherPlacesKey = 'trufi_saved_other_places';
+  static const String _historyKey = 'trufi_saved_history';
 
   static const int _maxHistoryItems = 50;
 
-  late Box _box;
+  final StorageService _storage;
   bool _isInitialized = false;
+
+  SavedPlacesRepositoryImpl({StorageService? storage})
+      : _storage = storage ?? SharedPreferencesStorage();
 
   @override
   Future<void> initialize() async {
     if (_isInitialized) return;
-
-    await TrufiHive.ensureInitialized();
-    _box = await Hive.openBox(_boxName);
+    await _storage.initialize();
     _isInitialized = true;
   }
 
   @override
   Future<void> dispose() async {
-    if (_isInitialized) {
-      await _box.close();
-      _isInitialized = false;
-    }
+    await _storage.dispose();
+    _isInitialized = false;
   }
 
   void _ensureInitialized() {
     if (!_isInitialized) {
       throw StateError(
-        'HiveSavedPlacesRepository not initialized. Call initialize() first.',
+        'SavedPlacesRepositoryImpl not initialized. Call initialize() first.',
       );
     }
   }
@@ -47,45 +49,27 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
   @override
   Future<SavedPlace?> getHome() async {
     _ensureInitialized();
-    final data = _box.get(_homePlaceKey);
+    final data = await _storage.read(_homePlaceKey);
     if (data == null) return null;
     return SavedPlace.fromJson(
-      jsonDecode(data as String) as Map<String, dynamic>,
+      jsonDecode(data) as Map<String, dynamic>,
     );
   }
 
   @override
   Future<SavedPlace?> getWork() async {
     _ensureInitialized();
-    final data = _box.get(_workPlaceKey);
+    final data = await _storage.read(_workPlaceKey);
     if (data == null) return null;
     return SavedPlace.fromJson(
-      jsonDecode(data as String) as Map<String, dynamic>,
+      jsonDecode(data) as Map<String, dynamic>,
     );
   }
 
   @override
   Future<List<SavedPlace>> getOtherPlaces() async {
     _ensureInitialized();
-    // Also migrate old data from favorites and custom_places keys
-    final otherPlaces = await _getPlacesList(_otherPlacesKey);
-    final oldFavorites = await _getPlacesList('favorites');
-    final oldCustomPlaces = await _getPlacesList('custom_places');
-
-    if (oldFavorites.isNotEmpty || oldCustomPlaces.isNotEmpty) {
-      // Migrate old data
-      final migrated = [
-        ...otherPlaces,
-        ...oldFavorites.map((p) => p.copyWith(type: SavedPlaceType.other)),
-        ...oldCustomPlaces.map((p) => p.copyWith(type: SavedPlaceType.other)),
-      ];
-      await _savePlacesList(_otherPlacesKey, migrated);
-      await _box.delete('favorites');
-      await _box.delete('custom_places');
-      return migrated;
-    }
-
-    return otherPlaces;
+    return _getPlacesList(_otherPlacesKey);
   }
 
   @override
@@ -132,10 +116,10 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
     _ensureInitialized();
     switch (place.type) {
       case SavedPlaceType.home:
-        await _box.put(_homePlaceKey, jsonEncode(place.toJson()));
+        await _storage.write(_homePlaceKey, jsonEncode(place.toJson()));
         break;
       case SavedPlaceType.work:
-        await _box.put(_workPlaceKey, jsonEncode(place.toJson()));
+        await _storage.write(_workPlaceKey, jsonEncode(place.toJson()));
         break;
       case SavedPlaceType.other:
         await _addToList(_otherPlacesKey, place);
@@ -151,10 +135,10 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
     _ensureInitialized();
     switch (place.type) {
       case SavedPlaceType.home:
-        await _box.put(_homePlaceKey, jsonEncode(place.toJson()));
+        await _storage.write(_homePlaceKey, jsonEncode(place.toJson()));
         break;
       case SavedPlaceType.work:
-        await _box.put(_workPlaceKey, jsonEncode(place.toJson()));
+        await _storage.write(_workPlaceKey, jsonEncode(place.toJson()));
         break;
       case SavedPlaceType.other:
         await _updateInList(_otherPlacesKey, place);
@@ -172,14 +156,14 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
     // Check home
     final home = await getHome();
     if (home?.id == id) {
-      await _box.delete(_homePlaceKey);
+      await _storage.delete(_homePlaceKey);
       return;
     }
 
     // Check work
     final work = await getWork();
     if (work?.id == id) {
-      await _box.delete(_workPlaceKey);
+      await _storage.delete(_workPlaceKey);
       return;
     }
 
@@ -195,16 +179,16 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
     _ensureInitialized();
     switch (type) {
       case SavedPlaceType.home:
-        await _box.delete(_homePlaceKey);
+        await _storage.delete(_homePlaceKey);
         break;
       case SavedPlaceType.work:
-        await _box.delete(_workPlaceKey);
+        await _storage.delete(_workPlaceKey);
         break;
       case SavedPlaceType.other:
-        await _box.delete(_otherPlacesKey);
+        await _storage.delete(_otherPlacesKey);
         break;
       case SavedPlaceType.history:
-        await _box.delete(_historyKey);
+        await _storage.delete(_historyKey);
         break;
     }
   }
@@ -212,7 +196,7 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
   @override
   Future<void> clearHistory() async {
     _ensureInitialized();
-    await _box.delete(_historyKey);
+    await _storage.delete(_historyKey);
   }
 
   @override
@@ -243,10 +227,10 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
   // Helper methods
 
   Future<List<SavedPlace>> _getPlacesList(String key) async {
-    final data = _box.get(key);
+    final data = await _storage.read(key);
     if (data == null) return [];
 
-    final List<dynamic> jsonList = jsonDecode(data as String) as List<dynamic>;
+    final List<dynamic> jsonList = jsonDecode(data) as List<dynamic>;
     return jsonList
         .map((json) => SavedPlace.fromJson(json as Map<String, dynamic>))
         .toList();
@@ -254,7 +238,7 @@ class HiveSavedPlacesRepository implements SavedPlacesRepository {
 
   Future<void> _savePlacesList(String key, List<SavedPlace> places) async {
     final jsonList = places.map((p) => p.toJson()).toList();
-    await _box.put(key, jsonEncode(jsonList));
+    await _storage.write(key, jsonEncode(jsonList));
   }
 
   Future<void> _addToList(String key, SavedPlace place) async {

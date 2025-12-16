@@ -19,8 +19,7 @@ import 'saved_places_list.dart';
 /// MultiProvider(
 ///   providers: [
 ///     BlocProvider(
-///       create: (_) => SavedPlacesCubit(repository: HiveSavedPlacesRepository())
-///         ..initialize(),
+///       create: (_) => SavedPlacesCubit()..initialize(),
 ///     ),
 ///   ],
 ///   child: SavedPlacesScreen(

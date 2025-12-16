@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/saved_place.dart';
 import '../repository/saved_places_repository.dart';
+import '../repository/saved_places_repository_impl.dart';
 
 part 'saved_places_state.dart';
 
@@ -10,12 +11,14 @@ part 'saved_places_state.dart';
 ///
 /// Home and Work are special singleton places - only one of each can exist.
 /// When setting a new Home/Work, it replaces any existing one.
+///
+/// If [repository] is not provided, uses [SavedPlacesRepositoryImpl] by default.
 class SavedPlacesCubit extends Cubit<SavedPlacesState> {
   final SavedPlacesRepository _repository;
 
   SavedPlacesCubit({
-    required SavedPlacesRepository repository,
-  })  : _repository = repository,
+    SavedPlacesRepository? repository,
+  })  : _repository = repository ?? SavedPlacesRepositoryImpl(),
         super(const SavedPlacesState());
 
   /// Initializes the cubit and loads all saved places.

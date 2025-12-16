@@ -4,13 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
-import 'package:trufi_core_storage/trufi_core_storage.dart';
 
 import '../l10n/saved_places_localizations.dart';
 import 'cubit/saved_places_cubit.dart';
 import 'models/saved_place.dart';
-import 'repository/hive_saved_places_repository.dart';
 import 'repository/saved_places_repository.dart';
+import 'repository/saved_places_repository_impl.dart';
 import 'widgets/edit_place_dialog.dart';
 import 'widgets/saved_places_list.dart';
 
@@ -36,12 +35,12 @@ class SavedPlacesTrufiScreen extends TrufiScreen {
   /// Static initialization for the module.
   /// Call this once at app startup before using any SavedPlaces functionality.
   static Future<void> init() async {
-    await TrufiHive.ensureInitialized();
+    // No initialization needed for SharedPreferences
   }
 
   SavedPlacesTrufiScreen({SavedPlacesConfig? config})
       : config = config ?? const SavedPlacesConfig() {
-    _repository = this.config.repository ?? HiveSavedPlacesRepository();
+    _repository = this.config.repository ?? SavedPlacesRepositoryImpl();
   }
 
   @override

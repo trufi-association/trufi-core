@@ -9,10 +9,14 @@ part 'map_layers_state.dart';
 
 /// Cubit for managing map layer visibility states.
 class MapLayersCubit extends Cubit<MapLayersState> {
-  final MapLayerLocalStorage _localStorage = MapLayerLocalStorage();
+  final MapLayerLocalStorage _localStorage;
   final List<MapLayerContainer> layersContainer;
-  MapLayersCubit(this.layersContainer)
-      : super(
+
+  MapLayersCubit({
+    required this.layersContainer,
+    required MapLayerLocalStorage localStorage,
+  })  : _localStorage = localStorage,
+        super(
           MapLayersState(
             layersSatus: layersContainer
                 .fold<List<MapLayer>>(
@@ -27,6 +31,11 @@ class MapLayersCubit extends Cubit<MapLayersState> {
                     [...previousValue, ...element.layers]),
           ),
         ) {
+    _setupLayerCallbacks();
+    _initialize();
+  }
+
+  void _setupLayerCallbacks() {
     for (final MapLayerContainer layerContainer in layersContainer) {
       for (final MapLayer layer in layerContainer.layers) {
         layer.onRefresh = () {
@@ -37,8 +46,13 @@ class MapLayersCubit extends Cubit<MapLayersState> {
         };
       }
     }
-    _loadSavedStatus();
   }
+
+  Future<void> _initialize() async {
+    await _localStorage.initialize();
+    await _loadSavedStatus();
+  }
+
   Future<void> _loadSavedStatus() async {
     final savedMap = await _localStorage.load();
     emit(state.copyWith(layersSatus: {...state.layersSatus, ...savedMap}));
@@ -116,5 +130,11 @@ class MapLayersCubit extends Cubit<MapLayersState> {
                 ...layers,
               ]
         : layers;
+  }
+
+  @override
+  Future<void> close() async {
+    await _localStorage.dispose();
+    return super.close();
   }
 }

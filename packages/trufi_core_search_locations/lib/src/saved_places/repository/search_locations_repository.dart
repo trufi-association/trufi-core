@@ -1,8 +1,12 @@
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 
 /// Abstract interface for storing saved places locally.
-abstract class SearchLocationsLocalRepository {
+abstract class SearchLocationsRepository {
+  /// Initialize the repository and open storage.
   Future<void> loadRepository();
+
+  /// Close the repository and release resources.
+  Future<void> dispose();
 
   Future<List<TrufiLocation>> getMyPlaces();
   Future<void> saveMyPlaces(List<TrufiLocation> data);

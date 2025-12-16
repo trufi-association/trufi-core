@@ -6,25 +6,27 @@ import 'package:equatable/equatable.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import '../../models/search_location.dart';
 import '../../services/search_location_service.dart';
-import '../repository/hive_local_repository.dart';
-import '../repository/search_locations_local_repository.dart';
+import '../repository/search_locations_repository.dart';
+import '../repository/search_locations_repository_impl.dart';
 
 part 'search_locations_state.dart';
 
 /// Cubit for managing location search and saved places.
 ///
 /// Uses [SearchLocationService] for search operations and reverse geocoding,
-/// and [SearchLocationsLocalRepository] for persisting saved places.
+/// and [SearchLocationsRepository] for persisting saved places.
+///
+/// If [localRepository] is not provided, uses [SearchLocationsRepositoryImpl] by default.
 class SearchLocationsCubit extends Cubit<SearchLocationsState> {
-  final SearchLocationsLocalRepository _localRepository =
-      SearchLocationsHiveLocalRepository();
-
+  final SearchLocationsRepository _localRepository;
   final SearchLocationService searchLocationService;
   Timer _debounceTimer = Timer(const Duration(milliseconds: 300), () {});
 
   SearchLocationsCubit({
     required this.searchLocationService,
-  }) : super(const SearchLocationsState()) {
+    SearchLocationsRepository? localRepository,
+  })  : _localRepository = localRepository ?? SearchLocationsRepositoryImpl(),
+        super(const SearchLocationsState()) {
     _initLoad();
   }
 
@@ -231,9 +233,10 @@ class SearchLocationsCubit extends Cubit<SearchLocationsState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     _debounceTimer.cancel();
     searchLocationService.dispose();
+    await _localRepository.dispose();
     return super.close();
   }
 }

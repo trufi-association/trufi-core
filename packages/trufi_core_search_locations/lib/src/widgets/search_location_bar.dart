@@ -184,23 +184,33 @@ class SearchLocationBar extends StatelessWidget {
   }
 
   Widget _buildLocationDot({required bool isOrigin}) {
-    final color = isOrigin ? const Color(0xFF4CAF50) : const Color(0xFFE53935);
-    return Container(
-      width: 12,
-      height: 12,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.3),
-            blurRadius: 4,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-    );
+    const originColor = Color(0xFF4CAF50);
+    const destinationColor = Color(0xFFE53935);
+
+    if (isOrigin) {
+      return Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          color: originColor,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: originColor.withValues(alpha: 0.3),
+              blurRadius: 4,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return const Icon(
+        Icons.place_rounded,
+        color: destinationColor,
+        size: 16,
+      );
+    }
   }
 
   Widget _buildLandscapeLayout(BuildContext context, ThemeData theme) {
@@ -467,32 +477,39 @@ class _LocationFieldModern extends StatelessWidget {
       return SizedBox(width: 24, height: 24, child: leadingWidget);
     }
 
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: isOrigin
-            ? const Color(0xFF4CAF50).withValues(alpha: 0.15)
-            : const Color(0xFFE53935).withValues(alpha: 0.15),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(
-            color: isOrigin ? const Color(0xFF4CAF50) : const Color(0xFFE53935),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: isOrigin
-                  ? const Color(0xFF4CAF50).withValues(alpha: 0.3)
-                  : const Color(0xFFE53935).withValues(alpha: 0.3),
-              width: 2,
+    const originColor = Color(0xFF4CAF50);
+    const destinationColor = Color(0xFFE53935);
+
+    if (isOrigin) {
+      return Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          color: originColor.withValues(alpha: 0.15),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              color: originColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: originColor.withValues(alpha: 0.3),
+                width: 2,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return const Icon(
+        Icons.place_rounded,
+        color: destinationColor,
+        size: 24,
+      );
+    }
   }
 }
 

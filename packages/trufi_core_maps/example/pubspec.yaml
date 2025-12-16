@@ -17,6 +17,8 @@ dependencies:
 dependency_overrides:
   trufi_core_interfaces:
     path: ../../trufi_core_interfaces
+  trufi_core_utils:
+    path: ../../trufi_core_utils
 
 dev_dependencies:
   flutter_test:

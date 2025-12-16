@@ -8,7 +8,7 @@ import 'saved_places_repository.dart';
 ///
 /// Example:
 /// ```dart
-/// final repository = HiveSavedPlacesRepository();
+/// final repository = SavedPlacesRepositoryImpl(); // or use custom repository
 /// await repository.initialize();
 ///
 /// final provider = SavedPlacesMyPlacesProvider(repository);

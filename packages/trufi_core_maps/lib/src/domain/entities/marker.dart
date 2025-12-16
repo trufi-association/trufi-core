@@ -16,6 +16,7 @@ class TrufiMarker {
     this.size = const Size(30, 30),
     this.rotation = 0,
     this.alignment = Alignment.center,
+    this.imageKey,
   });
 
   final String id;
@@ -28,6 +29,32 @@ class TrufiMarker {
   final double rotation;
   final Alignment alignment;
 
+  /// Optional stable key for image caching in MapLibre.
+  ///
+  /// When rendering markers, MapLibre converts each widget to a PNG image.
+  /// By default, it uses `widget.hashCode` as the cache key. However,
+  /// since Flutter widgets are immutable and recreated each frame,
+  /// the hashCode changes every time, causing:
+  ///
+  /// - Repeated expensive widget-to-PNG conversions
+  /// - Multiple JNI calls to upload images to native layer
+  /// - Memory pressure from duplicate cached images
+  ///
+  /// By providing a stable [imageKey] based on visual properties,
+  /// markers with identical appearance share the same cached image.
+  ///
+  /// Example for animated markers:
+  /// ```dart
+  /// TrufiMarker(
+  ///   id: 'vehicle-1',
+  ///   position: currentPosition,
+  ///   widget: VehicleWidget(color: Colors.blue, icon: Icons.bus),
+  ///   // Key based on visual properties, not position or id
+  ///   imageKey: 'vehicle_${Colors.blue.toARGB32()}_${Icons.bus.codePoint}',
+  /// )
+  /// ```
+  final String? imageKey;
+
   TrufiMarker copyWith({
     String? id,
     latlng.LatLng? position,
@@ -38,6 +65,7 @@ class TrufiMarker {
     Size? size,
     double? rotation,
     Alignment? alignment,
+    String? imageKey,
   }) {
     return TrufiMarker(
       id: id ?? this.id,
@@ -49,6 +77,7 @@ class TrufiMarker {
       size: size ?? this.size,
       rotation: rotation ?? this.rotation,
       alignment: alignment ?? this.alignment,
+      imageKey: imageKey ?? this.imageKey,
     );
   }
 

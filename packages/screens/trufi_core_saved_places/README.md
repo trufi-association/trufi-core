@@ -49,7 +49,7 @@ MultiProvider(
 ```dart
 BlocProvider(
   create: (_) => SavedPlacesCubit(
-    repository: HiveSavedPlacesRepository(),
+    repository: SharedPreferencesSavedPlacesRepository(),
   )..initialize(),
   child: SavedPlacesScreen(
     onPlaceSelected: (place) => Navigator.pop(context, place),

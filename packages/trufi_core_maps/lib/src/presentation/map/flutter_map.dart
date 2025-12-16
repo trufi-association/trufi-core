@@ -107,20 +107,7 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
           userAgentPackageName:
               widget.userAgentPackageName ?? 'com.example.trufi_core_maps',
         ),
-        for (final layer in visibleLayers)
-          fm.MarkerLayer(
-            markers: [
-              for (final marker in layer.markers)
-                fm.Marker(
-                  point: marker.position,
-                  width: marker.size.width,
-                  height: marker.size.height,
-                  rotate: true,
-                  alignment: marker.alignment,
-                  child: marker.widget,
-                ),
-            ],
-          ),
+        // Polylines rendered first (below markers)
         fm.PolylineLayer(
           polylines: [
             for (final layer in visibleLayers)
@@ -135,6 +122,23 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
                 ),
           ],
         ),
+        // Markers sorted by layerLevel (lower levels rendered first/below)
+        for (final layer in visibleLayers)
+          fm.MarkerLayer(
+            markers: [
+              for (final marker
+                  in (layer.markers.toList()
+                    ..sort((a, b) => a.layerLevel.compareTo(b.layerLevel))))
+                fm.Marker(
+                  point: marker.position,
+                  width: marker.size.width,
+                  height: marker.size.height,
+                  rotate: true,
+                  alignment: marker.alignment,
+                  child: marker.widget,
+                ),
+            ],
+          ),
       ],
     );
   }

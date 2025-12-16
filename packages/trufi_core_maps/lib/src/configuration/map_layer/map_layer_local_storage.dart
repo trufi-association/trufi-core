@@ -1,26 +1,14 @@
-import 'dart:convert';
-import 'package:hive/hive.dart';
+/// Abstract interface for persisting map layer visibility states.
+abstract class MapLayerLocalStorage {
+  /// Initialize the storage.
+  Future<void> initialize();
 
-/// Local storage for persisting map layer visibility states.
-class MapLayerLocalStorage {
-  static const String path = "MapLayerLocalStorage";
-  Future<bool> save(Map<String, bool> currentState) async {
-    try {
-      final box = Hive.box(path);
-      await box.put(path, jsonEncode(currentState));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  /// Close the storage and release resources.
+  Future<void> dispose();
 
-  Future<Map<String, bool>> load() async {
-    final box = Hive.box(path);
-    final jsonString = box.get(path);
-    return jsonString != null
-        ? (jsonDecode(jsonString) as Map<String, dynamic>?)?.map<String, bool>(
-                (key, value) => MapEntry(key, value as bool)) ??
-            {}
-        : {};
-  }
+  /// Save the layer visibility states.
+  Future<bool> save(Map<String, bool> currentState);
+
+  /// Load the saved layer visibility states.
+  Future<Map<String, bool>> load();
 }

@@ -1,7 +1,10 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     hide ITrufiMapEngine;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
@@ -42,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen>
   TrufiMapController? _mapController;
   FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
+  _LocationMarkersLayer? _locationMarkersLayer;
 
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -162,21 +166,21 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void _onOriginSelected(SearchLocation location) {
+  Future<void> _onOriginSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setFromPlace(_searchLocationToTrufiLocation(location));
+    await cubit.setFromPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
   }
 
-  void _onDestinationSelected(SearchLocation location) {
+  Future<void> _onDestinationSelected(SearchLocation location) async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.setToPlace(_searchLocationToTrufiLocation(location));
+    await cubit.setToPlace(_searchLocationToTrufiLocation(location));
     _fetchPlanIfReady();
   }
 
-  void _onSwapLocations() {
+  Future<void> _onSwapLocations() async {
     final cubit = context.read<RoutePlannerCubit>();
-    cubit.swapLocations();
+    await cubit.swapLocations();
     _fetchPlanIfReady();
   }
 
@@ -195,9 +199,34 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _clearRouteFromMap() {
     if (_routeLayer != null) {
+      _routeLayer!.clearMarkers();
+      _routeLayer!.clearLines();
       _mapController?.removeLayer(_routeLayer!.id);
       _routeLayer = null;
     }
+  }
+
+  void _updateLocationMarkers(RoutePlannerState state) {
+    if (_mapController == null) return;
+
+    // Don't show location markers when we have a route (route has its own markers)
+    if (state.selectedItinerary != null) {
+      if (_locationMarkersLayer != null) {
+        _locationMarkersLayer!.clearMarkers();
+        _mapController?.removeLayer(_locationMarkersLayer!.id);
+        _locationMarkersLayer = null;
+      }
+      return;
+    }
+
+    // Create layer if needed
+    _locationMarkersLayer ??= _LocationMarkersLayer(_mapController!);
+
+    // Update markers
+    _locationMarkersLayer!.updateMarkers(
+      origin: state.fromPlace,
+      destination: state.toPlace,
+    );
   }
 
   void _updateRouteOnMap(routing.Itinerary? itinerary) {
@@ -219,8 +248,152 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  void _onMapLongPress(LatLng position) async {
+    final l10n = HomeScreenLocalizations.of(context);
+    final theme = Theme.of(context);
+
+    // Add haptic feedback
+    HapticFeedback.mediumImpact();
+
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 12, bottom: 8),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                // Header
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.location_on_rounded,
+                        size: 40,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        l10n.selectedLocation,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                // Action buttons
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4CAF50),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    l10n.setAsOrigin,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () => Navigator.of(context).pop('origin'),
+                ),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE53935).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.place_rounded,
+                      color: Color(0xFFE53935),
+                      size: 24,
+                    ),
+                  ),
+                  title: Text(
+                    l10n.setAsDestination,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  onTap: () => Navigator.of(context).pop('destination'),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (result == 'origin') {
+      final location = TrufiLocation(
+        description: l10n.selectedLocation,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        address:
+            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      );
+      final cubit = context.read<RoutePlannerCubit>();
+      await cubit.setFromPlace(location);
+      _fetchPlanIfReady();
+    } else if (result == 'destination') {
+      final location = TrufiLocation(
+        description: l10n.selectedLocation,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        address:
+            '${position.latitude.toStringAsFixed(5)}, ${position.longitude.toStringAsFixed(5)}',
+      );
+      final cubit = context.read<RoutePlannerCubit>();
+      await cubit.setToPlace(location);
+      _fetchPlanIfReady();
+    }
+  }
+
   Widget _buildMap(ITrufiMapEngine engine) {
-    return engine.buildMap(controller: _mapController!);
+    return engine.buildMap(
+      controller: _mapController!,
+      onMapLongClick: _onMapLongPress,
+    );
   }
 
   @override
@@ -233,6 +406,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
         listener: (context, state) {
+          _updateLocationMarkers(state);
           _updateRouteOnMap(state.selectedItinerary);
           _expandSheetIfNeeded(state);
         },
@@ -290,29 +464,29 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
 
                   // Floating action buttons (map controls)
-                  _buildMapControls(
-                    context,
-                    mapEngineManager,
-                    hasResults,
-                  ),
+                  _buildMapControls(context, mapEngineManager, hasResults),
 
                   // Draggable bottom sheet for itineraries
                   if (hasResults)
-                    DraggableScrollableSheet(
+                    TrufiBottomSheet(
                       controller: _sheetController,
                       initialChildSize: _sheetMidSize,
                       minChildSize: _sheetMinSize,
                       maxChildSize: _sheetMaxSize,
                       snap: true,
                       snapSizes: const [_sheetMinSize, _sheetMidSize],
-                      builder: (context, scrollController) {
-                        return _buildBottomSheet(
-                          context,
-                          scrollController,
-                          state,
-                          theme,
+                      onHeightChanged: (height) {
+                        final maxHeight = constraints.maxHeight;
+                        _fitCameraLayer?.updatePadding(
+                          EdgeInsets.only(
+                            bottom: math.min(maxHeight * 0.5, height),
+                            left: 30,
+                            right: 30,
+                            top: 120,
+                          ),
                         );
                       },
+                      child: _buildBottomSheetContent(state, theme),
                     ),
                 ],
               );
@@ -328,109 +502,67 @@ class _HomeScreenState extends State<HomeScreen>
     MapEngineManager mapEngineManager,
     bool hasResults,
   ) {
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOutCubic,
+    return Positioned(
       right: 16,
-      bottom: hasResults
-          ? MediaQuery.of(context).size.height * _sheetMidSize + 16
-          : 100,
+      top: 0,
       child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Map type button (original)
-            if (mapEngineManager.engines.length > 1) ...[
-              MapTypeButton.fromEngines(
-                engines: mapEngineManager.engines,
-                currentEngineIndex: mapEngineManager.currentIndex,
-                onEngineChanged: (engine) {
-                  mapEngineManager.setEngine(engine);
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 120), // Below SearchLocationBar
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Map type button
+              if (mapEngineManager.engines.length > 1) ...[
+                MapTypeButton.fromEngines(
+                  engines: mapEngineManager.engines,
+                  currentEngineIndex: mapEngineManager.currentIndex,
+                  onEngineChanged: (engine) {
+                    mapEngineManager.setEngine(engine);
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+              // Recenter button
+              ValueListenableBuilder<bool>(
+                valueListenable: _fitCameraLayer!.outOfFocusNotifier,
+                builder: (context, outOfFocus, _) {
+                  return AnimatedOpacity(
+                    opacity: outOfFocus ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: AnimatedScale(
+                      scale: outOfFocus ? 1.0 : 0.8,
+                      duration: const Duration(milliseconds: 200),
+                      child: _MapControlButton(
+                        icon: Icons.my_location_rounded,
+                        onPressed: outOfFocus
+                            ? _fitCameraLayer!.reFitCamera
+                            : null,
+                      ),
+                    ),
+                  );
                 },
               ),
-              const SizedBox(height: 8),
             ],
-            // Recenter button
-            ValueListenableBuilder<bool>(
-              valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-              builder: (context, outOfFocus, _) {
-                return AnimatedOpacity(
-                  opacity: outOfFocus ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 200),
-                  child: AnimatedScale(
-                    scale: outOfFocus ? 1.0 : 0.8,
-                    duration: const Duration(milliseconds: 200),
-                    child: _MapControlButton(
-                      icon: Icons.my_location_rounded,
-                      onPressed: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBottomSheet(
-    BuildContext context,
-    ScrollController scrollController,
-    RoutePlannerState state,
-    ThemeData theme,
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Drag handle
-          GestureDetector(
-            onTap: _toggleSheet,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Summary row when collapsed
-          _buildSummaryRow(state, theme),
-          // Itinerary list
-          Expanded(
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverToBoxAdapter(
-                  child: ItineraryList(
-                    onItineraryDetails: widget.onItineraryDetails,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  Widget _buildBottomSheetContent(RoutePlannerState state, ThemeData theme) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Summary row when collapsed
+        GestureDetector(
+          onTap: _toggleSheet,
+          behavior: HitTestBehavior.opaque,
+          child: _buildSummaryRow(state, theme),
+        ),
+        // Itinerary list
+        ItineraryList(onItineraryDetails: widget.onItineraryDetails),
+      ],
     );
   }
 
@@ -497,11 +629,7 @@ class _HomeScreenState extends State<HomeScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          Icon(
-            Icons.route_rounded,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(Icons.route_rounded, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
           Text(
             '${itineraries.length} ${itineraries.length == 1 ? 'route' : 'routes'} found',
@@ -510,10 +638,7 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           const Spacer(),
-          Icon(
-            Icons.keyboard_arrow_up_rounded,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.keyboard_arrow_up_rounded, color: Colors.grey[400]),
         ],
       ),
     );
@@ -524,7 +649,9 @@ class _HomeScreenState extends State<HomeScreen>
 
     HapticFeedback.selectionClick();
     final currentSize = _sheetController.size;
-    final targetSize = currentSize > _sheetMidSize ? _sheetMinSize : _sheetMidSize;
+    final targetSize = currentSize > _sheetMidSize
+        ? _sheetMinSize
+        : _sheetMidSize;
 
     _sheetController.animateTo(
       targetSize,
@@ -571,6 +698,7 @@ class _RouteLayer extends TrufiLayer {
 
       allPoints.addAll(leg.decodedPoints);
 
+      // Use routeColor which now has proper defaults assigned by Itinerary
       final color = leg.transitLeg ? _parseColor(leg.routeColor) : Colors.grey;
 
       // Add route line with different style for transit vs walking
@@ -584,37 +712,26 @@ class _RouteLayer extends TrufiLayer {
         ),
       );
 
-      // Add transit stop markers for transit legs
+      // Add route label at midpoint for transit legs
       if (leg.transitLeg && leg.decodedPoints.length > 1) {
-        // Add boarding point marker
+        final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+        final midIndex = leg.decodedPoints.length ~/ 2;
+        final midPoint = leg.decodedPoints[midIndex];
+        final modeIcon = _getModeIcon(leg.transportMode);
+
         addMarker(
           TrufiMarker(
-            id: 'board-$i',
-            position: leg.decodedPoints.first,
-            widget: _TransitStopMarker(
+            id: 'transit-label-$i',
+            position: midPoint,
+            widget: _TransitRouteLabel(
               color: color,
-              routeName: leg.shortName ?? leg.route?.shortName ?? '',
-              isBoarding: true,
+              routeName: routeName,
+              icon: modeIcon,
             ),
-            size: const Size(32, 32),
+            size: const Size(72, 28),
+            layerLevel: 0,
           ),
         );
-
-        // Add alighting point marker (if not last leg)
-        if (i < itinerary.legs.length - 1) {
-          addMarker(
-            TrufiMarker(
-              id: 'alight-$i',
-              position: leg.decodedPoints.last,
-              widget: _TransitStopMarker(
-                color: color,
-                routeName: leg.shortName ?? leg.route?.shortName ?? '',
-                isBoarding: false,
-              ),
-              size: const Size(32, 32),
-            ),
-          );
-        }
       }
     }
 
@@ -624,12 +741,8 @@ class _RouteLayer extends TrufiLayer {
         TrufiMarker(
           id: 'start-marker',
           position: allPoints.first,
-          widget: const _EndpointMarker(
-            icon: Icons.trip_origin_rounded,
-            color: Color(0xFF4CAF50),
-            label: 'A',
-          ),
-          size: const Size(40, 40),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
         ),
       );
 
@@ -638,12 +751,8 @@ class _RouteLayer extends TrufiLayer {
         TrufiMarker(
           id: 'end-marker',
           position: allPoints.last,
-          widget: const _EndpointMarker(
-            icon: Icons.location_on_rounded,
-            color: Color(0xFFE53935),
-            label: 'B',
-          ),
-          size: const Size(40, 40),
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
         ),
       );
     }
@@ -657,79 +766,106 @@ class _RouteLayer extends TrufiLayer {
       return const Color(0xFF1976D2);
     }
   }
+
+  IconData _getModeIcon(routing.TransportMode mode) {
+    switch (mode) {
+      case routing.TransportMode.bus:
+      case routing.TransportMode.trufi:
+      case routing.TransportMode.micro:
+      case routing.TransportMode.miniBus:
+        return Icons.directions_bus_rounded;
+      case routing.TransportMode.rail:
+      case routing.TransportMode.lightRail:
+        return Icons.train_rounded;
+      case routing.TransportMode.subway:
+        return Icons.subway_rounded;
+      case routing.TransportMode.tram:
+        return Icons.tram_rounded;
+      case routing.TransportMode.ferry:
+        return Icons.directions_ferry_rounded;
+      case routing.TransportMode.cableCar:
+      case routing.TransportMode.gondola:
+      case routing.TransportMode.funicular:
+        return Icons.airline_seat_legroom_reduced_rounded;
+      default:
+        return Icons.directions_transit_rounded;
+    }
+  }
 }
 
-/// Marker for origin/destination endpoints
-class _EndpointMarker extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String label;
+/// Origin marker - green circle (same color as search bar)
+class _OriginMarker extends StatelessWidget {
+  const _OriginMarker();
 
-  const _EndpointMarker({
-    required this.icon,
-    required this.color,
-    required this.label,
-  });
+  static const _color = Color(0xFF4CAF50);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 24,
+      height: 24,
       decoration: BoxDecoration(
-        color: color,
+        color: _color,
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 3),
         boxShadow: [
           BoxShadow(
-            color: color.withValues(alpha: 0.4),
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ),
     );
   }
 }
 
-/// Marker for transit boarding/alighting points
-class _TransitStopMarker extends StatelessWidget {
+/// Destination marker - red pin icon (same as long press panel)
+class _DestinationMarker extends StatelessWidget {
+  const _DestinationMarker();
+
+  static const _color = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.place_rounded,
+      color: _color,
+      size: 32,
+      shadows: [
+        Shadow(
+          color: Colors.black38,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    );
+  }
+}
+
+/// Label for transit route displayed at midpoint of the leg
+class _TransitRouteLabel extends StatelessWidget {
   final Color color;
   final String routeName;
-  final bool isBoarding;
+  final IconData icon;
 
-  const _TransitStopMarker({
+  const _TransitRouteLabel({
     required this.color,
     required this.routeName,
-    required this.isBoarding,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -738,19 +874,15 @@ class _TransitStopMarker extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isBoarding ? Icons.arrow_circle_up_rounded : Icons.arrow_circle_down_rounded,
-            color: Colors.white,
-            size: 14,
-          ),
+          Icon(icon, color: Colors.white, size: 16),
           if (routeName.isNotEmpty) ...[
-            const SizedBox(width: 2),
+            const SizedBox(width: 4),
             Text(
               routeName,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 10,
+                fontSize: 12,
               ),
             ),
           ],
@@ -765,10 +897,7 @@ class _MapControlButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
 
-  const _MapControlButton({
-    required this.icon,
-    this.onPressed,
-  });
+  const _MapControlButton({required this.icon, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -801,5 +930,40 @@ class _MapControlButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Layer for displaying origin/destination markers before route is found
+class _LocationMarkersLayer extends TrufiLayer {
+  _LocationMarkersLayer(super.controller)
+      : super(id: 'location-markers-layer', layerLevel: 2);
+
+  void updateMarkers({
+    TrufiLocation? origin,
+    TrufiLocation? destination,
+  }) {
+    clearMarkers();
+
+    if (origin != null) {
+      addMarker(
+        TrufiMarker(
+          id: 'origin-preview',
+          position: LatLng(origin.latitude, origin.longitude),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
+        ),
+      );
+    }
+
+    if (destination != null) {
+      addMarker(
+        TrufiMarker(
+          id: 'destination-preview',
+          position: LatLng(destination.latitude, destination.longitude),
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
+        ),
+      );
+    }
   }
 }

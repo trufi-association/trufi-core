@@ -17,5 +17,7 @@
   "yourLocation": "Tu ubicación",
   "chooseOnMap": "Elegir en el mapa",
   "confirmLocation": "Confirmar ubicación",
-  "selectedLocation": "Ubicación seleccionada"
+  "selectedLocation": "Ubicación seleccionada",
+  "setAsOrigin": "Establecer como origen",
+  "setAsDestination": "Establecer como destino"
 }

@@ -3,11 +3,11 @@ import 'package:latlong2/latlong.dart' as latlng;
 import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
+import 'layers/animated_markers_layer.dart';
+import 'layers/animated_routes_layer.dart';
 import 'layers/click_markers_layer.dart';
 import 'layers/debug_grid_layer.dart';
-import 'layers/points_layer.dart';
-import 'layers/route_layer.dart';
-import 'widgets/map_controls.dart';
+import 'widgets/performance_overlay.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // Define available map engines
   static final List<ITrufiMapEngine> mapEngines = [
     const FlutterMapEngine(
       tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -38,44 +37,48 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => MapEngineManager(
             engines: mapEngines,
-            defaultCenter: const latlng.LatLng(-1.9403, 29.8739), // Kigali
+            defaultCenter: const latlng.LatLng(-17.3895, -66.1568),
           ),
         ),
       ],
       child: MaterialApp(
-        title: 'Trufi Core Maps Example',
+        title: 'Trufi Maps - Performance Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: const MapExamplePage(),
+        home: const PerformanceDemoPage(),
       ),
     );
   }
 }
 
-class MapExamplePage extends StatefulWidget {
-  const MapExamplePage({super.key});
+class PerformanceDemoPage extends StatefulWidget {
+  const PerformanceDemoPage({super.key});
 
   @override
-  State<MapExamplePage> createState() => _MapExamplePageState();
+  State<PerformanceDemoPage> createState() => _PerformanceDemoPageState();
 }
 
-class _MapExamplePageState extends State<MapExamplePage> {
+class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
   late final TrufiMapController _controller;
   late final FitCameraLayer _fitCameraLayer;
-  late final PointsLayer _pointsLayer;
-  late final RouteLayer _routeLayer;
+  late final AnimatedMarkersLayer _animatedMarkersLayer;
+  late final AnimatedRoutesLayer _animatedRoutesLayer;
   late final DebugGridLayer _debugGridLayer;
   late final ClickMarkersLayer _clickMarkersLayer;
 
+  bool _isAnimating = false;
   bool _showGrid = false;
-  int _granularityLevels = 0;
-  bool _clickMarkersEnabled = false;
 
-  // Kigali, Rwanda coordinates
-  static const _initialPosition = latlng.LatLng(-1.9403, 29.8739);
+  // Performance test parameters
+  int _markerCount = 100;
+  int _lineCount = 20;
+  int _fps = 30;
+
+  // Cochabamba, Bolivia coordinates
+  static const _initialPosition = latlng.LatLng(-17.3895, -66.1568);
   static const _initialZoom = 13.0;
 
   @override
@@ -88,107 +91,93 @@ class _MapExamplePageState extends State<MapExamplePage> {
       ),
     );
 
-    // Initialize layers
     _fitCameraLayer = FitCameraLayer(
       _controller,
       showCornerDots: false,
       debugFlag: false,
     );
 
-    _pointsLayer = PointsLayer(_controller);
-    _routeLayer = RouteLayer(_controller);
+    _animatedMarkersLayer = AnimatedMarkersLayer(_controller);
+    _animatedRoutesLayer = AnimatedRoutesLayer(_controller);
     _debugGridLayer = DebugGridLayer(_controller);
     _clickMarkersLayer = ClickMarkersLayer(_controller);
-
-    // Add sample data
-    _addSampleData();
-  }
-
-  void _addSampleData() {
-    // Sample points around Kigali
-    _pointsLayer.addSamplePoints([
-      const latlng.LatLng(-1.9403, 29.8739), // Center
-      const latlng.LatLng(-1.9350, 29.8800), // North-East
-      const latlng.LatLng(-1.9450, 29.8650), // South-West
-      const latlng.LatLng(-1.9380, 29.8680), // North-West
-      const latlng.LatLng(-1.9480, 29.8820), // South-East
-    ]);
-
-    // Sample route
-    _routeLayer.addSampleRoute([
-      const latlng.LatLng(-1.9403, 29.8739),
-      const latlng.LatLng(-1.9380, 29.8760),
-      const latlng.LatLng(-1.9350, 29.8800),
-      const latlng.LatLng(-1.9320, 29.8850),
-    ]);
   }
 
   @override
   void dispose() {
+    _animatedMarkersLayer.dispose();
+    _animatedRoutesLayer.dispose();
     _debugGridLayer.dispose();
+    _clickMarkersLayer.dispose();
     _controller.dispose();
     super.dispose();
   }
 
+  void _applySettings() {
+    final center = _controller.cameraPositionNotifier.value.target;
+
+    debugPrint('Applying settings: markers=$_markerCount, lines=$_lineCount, fps=$_fps');
+    debugPrint('Center: ${center.latitude}, ${center.longitude}');
+
+    // Generate markers
+    _animatedMarkersLayer.generateVehicles(
+      center: center,
+      count: _markerCount,
+      spreadRadius: 0.03,
+    );
+
+    debugPrint('Generated ${_animatedMarkersLayer.vehicleCount} vehicles');
+
+    // Generate routes
+    _animatedRoutesLayer.generateRoutes(
+      center: center,
+      count: _lineCount,
+      spreadRadius: 0.04,
+      pointsPerRoute: 15,
+    );
+
+    debugPrint('Generated ${_animatedRoutesLayer.routeCount} routes');
+
+    // Start animation
+    _animatedMarkersLayer.startAnimation(fps: _fps);
+    _animatedRoutesLayer.startAnimation(fps: _fps);
+
+    setState(() {
+      _isAnimating = true;
+    });
+
+    debugPrint('Animation started, isAnimating=$_isAnimating');
+  }
+
+  void _stopAll() {
+    _animatedMarkersLayer.clearVehicles();
+    _animatedRoutesLayer.clearRoutes();
+    _clickMarkersLayer.clearClickMarkers();
+
+    setState(() {
+      _isAnimating = false;
+    });
+  }
+
   void _onMapClick(latlng.LatLng position) {
     debugPrint('Map clicked at: ${position.latitude}, ${position.longitude}');
-    if (_clickMarkersEnabled) {
-      _clickMarkersLayer.addMarkerAt(position);
-    }
-  }
-
-  void _onMapLongClick(latlng.LatLng position) {
-    debugPrint(
-      'Map long-clicked at: ${position.latitude}, ${position.longitude}',
-    );
-  }
-
-  void _fitToAllPoints() {
-    final allPoints = <latlng.LatLng>[
-      ..._pointsLayer.getPoints(),
-      ..._routeLayer.getRoutePoints(),
-    ];
-
-    if (allPoints.isNotEmpty) {
-      _fitCameraLayer.fitBoundsOnCamera(allPoints);
-    }
-  }
-
-  void _resetCamera() {
-    _controller.updateCamera(target: _initialPosition, zoom: _initialZoom);
-  }
-
-  void _onGridToggle(bool showGrid) {
-    setState(() {
-      _showGrid = showGrid;
-      _debugGridLayer.setVisible(showGrid);
-    });
-  }
-
-  void _onGranularityChanged(int level) {
-    setState(() {
-      _granularityLevels = level;
-      _debugGridLayer.granularityLevels = level;
-    });
+    _clickMarkersLayer.addMarkerAt(position);
   }
 
   Widget _buildMap(ITrufiMapEngine engine) {
     return engine.buildMap(
       controller: _controller,
       onMapClick: _onMapClick,
-      onMapLongClick: _onMapLongClick,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // Watch the MapEngineManager for changes
     final mapEngineManager = MapEngineManager.watch(context);
 
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Update viewport for fit camera
           WidgetsBinding.instance.addPostFrameCallback((_) {
             final padding = MediaQuery.of(context).viewPadding;
             _fitCameraLayer.updateViewport(
@@ -199,97 +188,123 @@ class _MapExamplePageState extends State<MapExamplePage> {
 
           return Stack(
             children: [
-              // Map (full screen)
+              // Map
               _buildMap(mapEngineManager.currentEngine),
 
-              // Action Buttons (top-right, over the map)
-              Positioned(
-                top: 16,
-                right: 16,
-                child: ValueListenableBuilder<bool>(
-                  valueListenable: _fitCameraLayer.outOfFocusNotifier,
-                  builder: (context, outOfFocus, _) {
-                    return MapActionButtons(
-                      onFitToPoints: _fitToAllPoints,
-                      onResetCamera: _resetCamera,
-                      showRecenter: outOfFocus,
-                      onRecenter: _fitCameraLayer.reFitCamera,
-                    );
-                  },
-                ),
-              ),
-
-              // Map Type Button (top-left)
+              // Performance Stats (top-left)
               Positioned(
                 top: 16,
                 left: 16,
                 child: SafeArea(
-                  child: MapTypeButton.fromEngines(
-                    engines: mapEngineManager.engines,
-                    currentEngineIndex: mapEngineManager.currentIndex,
-                    onEngineChanged: (engine) {
-                      mapEngineManager.setEngine(engine);
-                    },
-                    settingsAppBarTitle: 'Map Settings',
-                    settingsSectionTitle: 'Map Type',
-                    settingsApplyButtonText: 'Apply Changes',
+                  child: PerformanceStatsOverlay(
+                    statsNotifier: _animatedMarkersLayer.statsNotifier,
+                    lineCount: _animatedRoutesLayer.routeCount,
                   ),
                 ),
               ),
 
-              // Bottom Controls (Map Render + Layers + Grid) - centered
+              // Action buttons (top-right)
+              Positioned(
+                top: 16,
+                right: 16,
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      MapTypeButton.fromEngines(
+                        engines: mapEngineManager.engines,
+                        currentEngineIndex: mapEngineManager.currentIndex,
+                        onEngineChanged: (engine) {
+                          mapEngineManager.setEngine(engine);
+                        },
+                        settingsAppBarTitle: 'Map Settings',
+                        settingsSectionTitle: 'Map Type',
+                        settingsApplyButtonText: 'Apply Changes',
+                      ),
+                      const SizedBox(height: 8),
+                      _ActionButton(
+                        icon: Icons.grid_on,
+                        onPressed: () {
+                          setState(() => _showGrid = !_showGrid);
+                          _debugGridLayer.setVisible(_showGrid);
+                        },
+                        highlighted: _showGrid,
+                      ),
+                      const SizedBox(height: 8),
+                      _ActionButton(
+                        icon: Icons.my_location,
+                        onPressed: () => _controller.updateCamera(
+                          target: _initialPosition,
+                          zoom: _initialZoom,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Control Panel (bottom)
               Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: MapControls(
-                  currentEngineIndex: mapEngineManager.currentIndex,
-                  engineNames:
-                      mapEngineManager.engines.map((e) => e.name).toList(),
-                  onEngineChanged: (index) {
-                    mapEngineManager.setEngineByIndex(index);
-                  },
-                  layers: [
-                    LayerInfo(
-                      id: _pointsLayer.id,
-                      name: 'Points',
-                      icon: Icons.place,
-                      visible: _pointsLayer.visible,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: PerformanceControlPanel(
+                      markerCount: _markerCount,
+                      lineCount: _lineCount,
+                      fps: _fps,
+                      isAnimating: _isAnimating,
+                      hasData: _animatedMarkersLayer.vehicleCount > 0,
+                      onMarkerCountChanged: (v) =>
+                          setState(() => _markerCount = v),
+                      onLineCountChanged: (v) => setState(() => _lineCount = v),
+                      onFpsChanged: (v) => setState(() => _fps = v),
+                      onStart: _applySettings,
+                      onStop: _stopAll,
                     ),
-                    LayerInfo(
-                      id: _routeLayer.id,
-                      name: 'Route',
-                      icon: Icons.route,
-                      visible: _routeLayer.visible,
-                    ),
-                    LayerInfo(
-                      id: _clickMarkersLayer.id,
-                      name: 'Tap',
-                      icon: Icons.touch_app,
-                      visible: _clickMarkersEnabled,
-                    ),
-                  ],
-                  onLayerToggle: (layerId, visible) {
-                    setState(() {
-                      if (layerId == _clickMarkersLayer.id) {
-                        _clickMarkersEnabled = visible;
-                        _clickMarkersLayer.visible = visible;
-                      } else {
-                        _controller.toggleLayer(layerId, visible);
-                      }
-                    });
-                  },
-                  gridConfig: GridConfig(
-                    showGrid: _showGrid,
-                    granularityLevels: _granularityLevels,
                   ),
-                  onGridToggle: _onGridToggle,
-                  onGranularityChanged: _onGranularityChanged,
                 ),
               ),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final bool highlighted;
+
+  const _ActionButton({
+    required this.icon,
+    required this.onPressed,
+    this.highlighted = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: highlighted ? Colors.blue : Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 2,
+      shadowColor: Colors.black.withValues(alpha: 0.15),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: 44,
+          height: 44,
+          alignment: Alignment.center,
+          child: Icon(
+            icon,
+            size: 22,
+            color: highlighted ? Colors.white : Colors.grey.shade700,
+          ),
+        ),
       ),
     );
   }

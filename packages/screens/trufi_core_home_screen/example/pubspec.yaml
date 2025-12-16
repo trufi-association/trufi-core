@@ -22,6 +22,10 @@ dependencies:
   provider: ^6.0.0
 
 dependency_overrides:
+  trufi_core_base_widgets:
+    path: ../../../trufi_core_base_widgets
+  trufi_core_custom_material:
+    path: ../../../trufi_core_custom_material
   trufi_core_interfaces:
     path: ../../../trufi_core_interfaces
   trufi_core_maps:
@@ -34,8 +38,8 @@ dependency_overrides:
     path: ../../../trufi_core_search_locations
   trufi_core_saved_places:
     path: ../../trufi_core_saved_places
-  trufi_core_storage:
-    path: ../../../trufi_core_storage
+  trufi_core_utils:
+    path: ../../../trufi_core_utils
 
 flutter:
   uses-material-design: true

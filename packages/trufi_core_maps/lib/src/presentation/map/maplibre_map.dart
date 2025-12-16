@@ -39,6 +39,8 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
   MapLibreMapController? _mapCtl;
   bool _mapReady = false;
   bool _suppressSync = false;
+  bool _syncInProgress = false;
+  bool _syncPending = false;
 
   final Set<String> _loadedImages = {};
   final Map<String, Future<void>> _imageLoaders = {};
@@ -74,9 +76,33 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
   }
 
   void _layersListener() {
-    final visibleLayers = widget.controller.visibleLayers;
-    if (_mapReady && _mapCtl != null) {
-      _syncLayers(visibleLayers);
+    if (!_mapReady || _mapCtl == null) return;
+
+    // If sync is already in progress, mark as pending and return
+    if (_syncInProgress) {
+      _syncPending = true;
+      return;
+    }
+
+    _runSync();
+  }
+
+  Future<void> _runSync() async {
+    if (_syncInProgress) return;
+    _syncInProgress = true;
+    _syncPending = false;
+
+    try {
+      final visibleLayers = widget.controller.visibleLayers;
+      await _syncLayers(visibleLayers);
+    } finally {
+      _syncInProgress = false;
+
+      // If another sync was requested while we were busy, run it now
+      if (_syncPending && mounted) {
+        _syncPending = false;
+        _runSync();
+      }
     }
   }
 
@@ -227,7 +253,9 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     final features = <Map<String, dynamic>>[];
     final markers = [...layer.markers];
     for (final marker in markers) {
-      final imageId = marker.widget.hashCode.toString();
+      // Use imageKey if provided, otherwise fall back to widget.hashCode
+      final imageId = marker.imageKey ?? '${marker.widget.hashCode}';
+
       await _ensureImageLoaded(imageId, () async {
         if (!mounted) return;
         final bytes =
@@ -235,7 +263,9 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
             await ImageTool.widgetToBytes(marker, context);
         await ctl.addImage(imageId, bytes);
       });
+
       final offset = _alignmentOffsetPx(marker.alignment, marker.size);
+
       features.add({
         "type": "Feature",
         "id": marker.id,
@@ -320,7 +350,8 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
         _loadedImages.clear();
         _sourceInit.clear();
 
-        await _syncLayers(widget.controller.visibleLayers);
+        final layers = widget.controller.visibleLayers;
+        await _syncLayers(layers);
       },
       onCameraIdle: _handleCameraIdle,
       onMapLongClick: (point, coordinates) {

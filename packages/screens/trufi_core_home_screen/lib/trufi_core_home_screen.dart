@@ -4,7 +4,7 @@
 ///
 /// - **RoutePlannerCubit**: State management for route planning
 /// - **HomeScreenRepository**: Interface for local storage
-/// - **HiveHomeScreenRepository**: Hive-based implementation
+/// - **HomeScreenRepositoryImpl**: Default implementation using StorageService
 /// - **RequestPlanService**: Abstract interface for routing requests
 /// - **RoutingRequestPlanService**: Implementation using trufi_core_routing
 /// - **HomeScreen**: Main home screen widget
@@ -29,7 +29,7 @@ export 'src/models/route_planner_state.dart';
 
 // Repository
 export 'src/repository/home_screen_repository.dart';
-export 'src/repository/hive_home_screen_repository.dart';
+export 'src/repository/home_screen_repository_impl.dart';
 
 // Services
 export 'src/services/request_plan_service.dart';

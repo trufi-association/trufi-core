@@ -17,6 +17,7 @@ export 'src/configuration/map_tile_provider.dart';
 export 'src/configuration/map_layer/map_layer.dart';
 export 'src/configuration/map_layer/map_layer_local_storage.dart';
 export 'src/configuration/map_layer/map_layers_cubit.dart';
+export 'src/configuration/map_layer/map_layer_storage_impl.dart';
 export 'src/configuration/markers/from_marker.dart';
 export 'src/configuration/markers/to_marker.dart';
 export 'src/configuration/markers/my_location_marker.dart';
