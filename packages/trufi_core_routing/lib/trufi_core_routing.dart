@@ -25,6 +25,7 @@ export 'src/domain/entities/stop.dart';
 export 'src/domain/entities/transit_route.dart';
 export 'src/domain/entities/transport_mode.dart';
 export 'src/domain/entities/vertex_type.dart';
+export 'src/domain/entities/routing_preferences.dart';
 
 // ============================================
 // DOMAIN LAYER - Repositories
@@ -37,6 +38,7 @@ export 'src/domain/repositories/transit_route_repository.dart';
 // DOMAIN LAYER - Services
 // ============================================
 export 'src/domain/services/routing_service.dart';
+export 'src/domain/services/routing_preferences_manager.dart';
 
 // ============================================
 // DATA LAYER - GraphQL Utilities

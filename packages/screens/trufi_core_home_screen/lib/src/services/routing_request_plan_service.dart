@@ -18,6 +18,7 @@ class RoutingRequestPlanService implements RequestPlanService {
     List<routing.TransportMode>? transportModes,
     String? locale,
     DateTime? dateTime,
+    routing.RoutingPreferences? preferences,
   }) async {
     final plan = await _repository.fetchPlan(
       from: routing.RoutingLocation(
@@ -30,6 +31,7 @@ class RoutingRequestPlanService implements RequestPlanService {
       ),
       locale: locale,
       dateTime: dateTime ?? DateTime.now(),
+      preferences: preferences,
     );
 
     // Sort itineraries by weighted sum (transfers, walk distance, total distance)

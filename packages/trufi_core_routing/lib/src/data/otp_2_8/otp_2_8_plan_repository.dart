@@ -3,6 +3,7 @@ import 'package:gql/language.dart';
 
 import '../../domain/entities/plan.dart';
 import '../../domain/entities/routing_location.dart';
+import '../../domain/entities/routing_preferences.dart';
 import '../../domain/repositories/plan_repository.dart';
 import '../graphql/graphql_client_factory.dart';
 import 'otp_2_8_queries.dart';
@@ -35,6 +36,7 @@ class Otp28PlanRepository implements PlanRepository {
     int numItineraries = 5,
     String? locale,
     required DateTime dateTime,
+    RoutingPreferences? preferences,
   }) async {
     final queryString =
         useSimpleQuery ? otp28SimplePlanQuery : otp28PlanQuery;
@@ -42,16 +44,38 @@ class Otp28PlanRepository implements PlanRepository {
     final date = '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
     final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
 
+    final variables = <String, dynamic>{
+      'fromPlace': _formatLocation(from),
+      'toPlace': _formatLocation(to),
+      'numItineraries': numItineraries,
+      'date': date,
+      'time': time,
+      if (locale != null) 'locale': locale,
+    };
+
+    // Add routing preferences if provided and not using simple query
+    if (preferences != null && !useSimpleQuery) {
+      if (preferences.wheelchair) {
+        variables['wheelchair'] = true;
+      }
+      variables['walkSpeed'] = preferences.walkSpeed;
+      variables['walkReluctance'] = preferences.walkReluctance;
+      if (preferences.maxWalkDistance != null) {
+        variables['maxWalkDistance'] = preferences.maxWalkDistance;
+      }
+      // Add bike speed if bicycle mode is selected
+      if (preferences.transportModes.contains(RoutingMode.bicycle)) {
+        variables['bikeSpeed'] = preferences.bikeSpeed;
+      }
+      // Transport modes
+      variables['transportModes'] = preferences.transportModes
+          .map((m) => {'mode': m.otpName})
+          .toList();
+    }
+
     final query = QueryOptions(
       document: parseString(queryString),
-      variables: <String, dynamic>{
-        'fromPlace': _formatLocation(from),
-        'toPlace': _formatLocation(to),
-        'numItineraries': numItineraries,
-        'date': date,
-        'time': time,
-        if (locale != null) 'locale': locale,
-      },
+      variables: variables,
     );
 
     final result = await _client.query(query);

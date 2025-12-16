@@ -17,6 +17,7 @@ import '../config/home_screen_config.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
 import 'itinerary_list.dart';
+import 'routing_settings_sheet.dart';
 
 /// Main home screen widget with route planning functionality.
 class HomeScreen extends StatefulWidget {
@@ -46,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen>
   FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
   _LocationMarkersLayer? _locationMarkersLayer;
+  bool _viewportReady = false;
+  List<LatLng>? _pendingFitPoints;
 
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -187,6 +190,23 @@ class _HomeScreenState extends State<HomeScreen>
     _clearRouteFromMap();
   }
 
+  void _onClearLocation({required bool isOrigin}) {
+    final cubit = context.read<RoutePlannerCubit>();
+    if (isOrigin) {
+      cubit.resetFromPlace();
+    } else {
+      cubit.resetToPlace();
+    }
+    _clearRouteFromMap();
+  }
+
+  Future<void> _onRoutingSettings() async {
+    final shouldRefetch = await showRoutingSettingsSheet(context);
+    if (shouldRefetch == true) {
+      _fetchPlanIfReady();
+    }
+  }
+
   void _fetchPlanIfReady() {
     final cubit = context.read<RoutePlannerCubit>();
     if (cubit.state.isPlacesDefined) {
@@ -255,8 +275,13 @@ class _HomeScreenState extends State<HomeScreen>
     }
 
     if (allPoints.isNotEmpty) {
-      _fitCameraLayer?.setFitPoints(allPoints);
+      // Save points for when viewport is ready
+      _pendingFitPoints = allPoints;
+      if (_viewportReady) {
+        _fitCameraLayer?.setFitPoints(allPoints);
+      }
     } else {
+      _pendingFitPoints = null;
       _fitCameraLayer?.clearFitPoints();
     }
   }
@@ -444,6 +469,25 @@ class _HomeScreenState extends State<HomeScreen>
                 MediaQuery.of(context).viewPadding,
               );
 
+              // Apply pending fit points once viewport is ready
+              if (!_viewportReady) {
+                _viewportReady = true;
+                if (_pendingFitPoints != null && _pendingFitPoints!.isNotEmpty) {
+                  // Set initial padding considering search bar and expanded sheet
+                  final sheetHeight = constraints.maxHeight * _sheetMidSize;
+                  _fitCameraLayer?.updatePadding(
+                    EdgeInsets.only(
+                      top: 120, // SearchLocationBar height
+                      bottom: sheetHeight,
+                      left: 30,
+                      right: 30,
+                    ),
+                    recenter: false,
+                  );
+                  _fitCameraLayer?.setFitPoints(_pendingFitPoints!);
+                }
+              }
+
               return Stack(
                 children: [
                   // Map (full screen)
@@ -471,6 +515,8 @@ class _HomeScreenState extends State<HomeScreen>
                           onDestinationSelected: _onDestinationSelected,
                           onSwap: _onSwapLocations,
                           onReset: _onReset,
+                          onClearLocation: _onClearLocation,
+                          onRoutingSettings: _onRoutingSettings,
                           onMenuPressed: widget.onMenuPressed,
                         ),
                       ),
@@ -597,12 +643,15 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
             const SizedBox(width: 12),
-            Text(
-              'Finding routes...',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.primary,
+            Expanded(
+              child: Text(
+                'Finding routes...',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ),
+            _buildCloseButton(),
           ],
         ),
       );
@@ -629,6 +678,7 @@ class _HomeScreenState extends State<HomeScreen>
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            _buildCloseButton(),
           ],
         ),
       );
@@ -645,15 +695,37 @@ class _HomeScreenState extends State<HomeScreen>
         children: [
           Icon(Icons.route_rounded, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
-          Text(
-            '${itineraries.length} ${itineraries.length == 1 ? 'route' : 'routes'} found',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              '${itineraries.length} ${itineraries.length == 1 ? 'route' : 'routes'} found',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          const Spacer(),
-          Icon(Icons.keyboard_arrow_up_rounded, color: Colors.grey[400]),
+          _buildCloseButton(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCloseButton() {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        _onReset();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: const Color(0xFFE53935).withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.close_rounded,
+          size: 18,
+          color: Color(0xFFE53935),
+        ),
       ),
     );
   }
@@ -712,17 +784,36 @@ class _RouteLayer extends TrufiLayer {
 
       allPoints.addAll(leg.decodedPoints);
 
-      // Use routeColor which now has proper defaults assigned by Itinerary
-      final color = leg.transitLeg ? _parseColor(leg.routeColor) : Colors.grey;
+      // Determine color based on leg type
+      final Color color;
+      final double lineWidth;
+      final bool useDots;
 
-      // Add route line with different style for transit vs walking
+      if (leg.transitLeg) {
+        // Transit legs use route color
+        color = _parseColor(leg.routeColor);
+        lineWidth = 6;
+        useDots = false;
+      } else if (leg.transportMode == routing.TransportMode.bicycle) {
+        // Bicycle legs are green
+        color = const Color(0xFF4CAF50);
+        lineWidth = 5;
+        useDots = false;
+      } else {
+        // Walking legs are grey with dots
+        color = Colors.grey;
+        lineWidth = 4;
+        useDots = true;
+      }
+
+      // Add route line
       addLine(
         TrufiLine(
           id: 'leg-$i-${leg.startTime.millisecondsSinceEpoch}',
           position: leg.decodedPoints,
           color: color,
-          lineWidth: leg.transitLeg ? 6 : 4,
-          activeDots: !leg.transitLeg,
+          lineWidth: lineWidth,
+          activeDots: useDots,
         ),
       );
 
@@ -741,6 +832,28 @@ class _RouteLayer extends TrufiLayer {
               color: color,
               routeName: routeName,
               icon: modeIcon,
+            ),
+            size: const Size(72, 28),
+            layerLevel: 0,
+          ),
+        );
+      }
+
+      // Add bicycle label at midpoint for bicycle legs
+      if (leg.transportMode == routing.TransportMode.bicycle &&
+          leg.decodedPoints.length > 1) {
+        final midIndex = leg.decodedPoints.length ~/ 2;
+        final midPoint = leg.decodedPoints[midIndex];
+        final durationMin = leg.duration.inMinutes;
+
+        addMarker(
+          TrufiMarker(
+            id: 'bike-label-$i',
+            position: midPoint,
+            widget: _TransitRouteLabel(
+              color: color,
+              routeName: '$durationMin\'',
+              icon: Icons.directions_bike_rounded,
             ),
             size: const Size(72, 28),
             layerLevel: 0,
@@ -767,6 +880,7 @@ class _RouteLayer extends TrufiLayer {
           position: allPoints.last,
           widget: const _DestinationMarker(),
           size: const Size(32, 32),
+          alignment: Alignment.topCenter,
         ),
       );
     }
@@ -976,6 +1090,7 @@ class _LocationMarkersLayer extends TrufiLayer {
           position: LatLng(destination.latitude, destination.longitude),
           widget: const _DestinationMarker(),
           size: const Size(32, 32),
+          alignment: Alignment.topCenter,
         ),
       );
     }
