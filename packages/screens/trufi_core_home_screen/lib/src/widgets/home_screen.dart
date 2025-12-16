@@ -65,9 +65,6 @@ class _HomeScreenState extends State<HomeScreen>
       );
       _fitCameraLayer = FitCameraLayer(
         _mapController!,
-        devicePixelRatio: MediaQueryData.fromView(
-          WidgetsBinding.instance.platformDispatcher.views.first,
-        ).devicePixelRatio,
       );
     }
   }
@@ -236,15 +233,31 @@ class _HomeScreenState extends State<HomeScreen>
 
     _routeLayer = _RouteLayer(_mapController!);
     _routeLayer!.setItinerary(itinerary);
+  }
 
-    // Fit camera to route
+  /// Updates the fit camera layer with all visible points from markers and routes.
+  void _updateFitCameraPoints(RoutePlannerState state) {
     final allPoints = <LatLng>[];
-    for (final leg in itinerary.legs) {
-      allPoints.addAll(leg.decodedPoints);
+
+    // If there's a selected itinerary, use the route points
+    if (state.selectedItinerary != null) {
+      for (final leg in state.selectedItinerary!.legs) {
+        allPoints.addAll(leg.decodedPoints);
+      }
+    } else {
+      // Otherwise, use the origin/destination markers
+      if (state.fromPlace != null) {
+        allPoints.add(LatLng(state.fromPlace!.latitude, state.fromPlace!.longitude));
+      }
+      if (state.toPlace != null) {
+        allPoints.add(LatLng(state.toPlace!.latitude, state.toPlace!.longitude));
+      }
     }
 
-    if (allPoints.length > 1) {
+    if (allPoints.isNotEmpty) {
       _fitCameraLayer?.setFitPoints(allPoints);
+    } else {
+      _fitCameraLayer?.clearFitPoints();
     }
   }
 
@@ -408,6 +421,7 @@ class _HomeScreenState extends State<HomeScreen>
         listener: (context, state) {
           _updateLocationMarkers(state);
           _updateRouteOnMap(state.selectedItinerary);
+          _updateFitCameraPoints(state);
           _expandSheetIfNeeded(state);
         },
         builder: (context, state) {
@@ -534,7 +548,7 @@ class _HomeScreenState extends State<HomeScreen>
                       scale: outOfFocus ? 1.0 : 0.8,
                       duration: const Duration(milliseconds: 200),
                       child: _MapControlButton(
-                        icon: Icons.my_location_rounded,
+                        icon: Icons.crop_free_rounded,
                         onPressed: outOfFocus
                             ? _fitCameraLayer!.reFitCamera
                             : null,
