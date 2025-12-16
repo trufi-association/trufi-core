@@ -4,8 +4,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
 import 'trufi_layer.dart';
+import '../entities/bounds.dart';
 import '../entities/marker.dart';
 import '../entities/line.dart';
+import '../../presentation/utils/trufi_camera_fit.dart';
 
 abstract class IFitCameraLayer extends TrufiLayer {
   IFitCameraLayer(
@@ -32,8 +34,6 @@ class FitCameraLayer extends IFitCameraLayer {
   bool showCornerDots;
   bool debugFlag;
 
-  /// Device pixel ratio (logical -> CSS px).
-  final double _dpr;
   Size _viewportLogical = Size.zero;
 
   /// BBox actual a encuadrar (máximo 4 esquinas).
@@ -47,11 +47,10 @@ class FitCameraLayer extends IFitCameraLayer {
   FitCameraLayer(
     super.controller, {
     EdgeInsets padding = EdgeInsets.zero,
-    double devicePixelRatio = 1.0,
+    @Deprecated('devicePixelRatio is no longer used') double devicePixelRatio = 1.0,
     this.showCornerDots = false,
     this.debugFlag = false,
   }) : _padding = padding,
-       _dpr = devicePixelRatio,
        super(id: layerId, layerLevel: 9) {
     _cameraListener = _computeAndRender;
     controller.cameraPositionNotifier.addListener(_cameraListener);
@@ -186,15 +185,14 @@ class FitCameraLayer extends IFitCameraLayer {
     final cosT = math.cos(theta);
     final sinT = math.sin(theta);
 
+    // Calculate viewport size in CSS pixels (without DPR multiplication for viewport calculation)
     final wCss = math.max(
       1.0,
-      (_viewportLogical.width - combinedInset.left - combinedInset.right) *
-          _dpr,
+      _viewportLogical.width - combinedInset.left - combinedInset.right,
     );
     final hCss = math.max(
       1.0,
-      (_viewportLogical.height - combinedInset.top - combinedInset.bottom) *
-          _dpr,
+      _viewportLogical.height - combinedInset.top - combinedInset.bottom,
     );
 
     final cx0 = _lngToMercX(center.longitude);
@@ -204,11 +202,9 @@ class FitCameraLayer extends IFitCameraLayer {
     final mercPerCssPx = 1.0 / worldPx;
 
     final shiftMercXLocal =
-        ((combinedInset.left - combinedInset.right) * 0.5 * _dpr) *
-        mercPerCssPx;
+        ((combinedInset.left - combinedInset.right) * 0.5) * mercPerCssPx;
     final shiftMercYLocal =
-        ((combinedInset.top - combinedInset.bottom) * 0.5 * _dpr) *
-        mercPerCssPx;
+        ((combinedInset.top - combinedInset.bottom) * 0.5) * mercPerCssPx;
 
     final shiftMercX = shiftMercXLocal * cosT - shiftMercYLocal * sinT;
     final shiftMercY = shiftMercXLocal * sinT + shiftMercYLocal * cosT;
@@ -242,15 +238,15 @@ class FitCameraLayer extends IFitCameraLayer {
 
     final rect = <latlng.LatLng>[bl, tl, tr, br, bl];
 
+    // Calculate viewport bounds (SW and NE corners)
+    // bl is bottom-left (southwest), tr is top-right (northeast)
+    final viewportSW = bl;
+    final viewportNE = tr;
+
     // Estado de foco (si hay bbox activo)
     final bool anyOutside = _isBBoxOutside(
-      cx: cx,
-      cy: cy,
-      cosT: cosT,
-      sinT: sinT,
-      halfW: halfW,
-      halfH: halfH,
-      mercPerCssPx: mercPerCssPx,
+      viewportSW: viewportSW,
+      viewportNE: viewportNE,
     );
     _updateOutOfFocusAsync(anyOutside);
 
@@ -260,8 +256,8 @@ class FitCameraLayer extends IFitCameraLayer {
         TrufiLine(
           id: '$id:viewport-rect',
           position: rect,
-          color: Colors.cyan.withValues(alpha: 0.9),
-          lineWidth: 3,
+          color: Colors.green.withValues(alpha: 0.9),
+          lineWidth: 8,
           layerLevel: layerLevel,
         ),
         if (_fitBounds != null)
@@ -274,8 +270,8 @@ class FitCameraLayer extends IFitCameraLayer {
               _fitBounds!.corners[3], // br
               _fitBounds!.corners[0], // bl
             ],
-            color: Colors.pink.withValues(alpha: 0.7),
-            lineWidth: 2,
+            color: Colors.pink.withValues(alpha: 0.9),
+            lineWidth: 6,
             layerLevel: layerLevel,
           ),
       ];
@@ -330,45 +326,29 @@ class FitCameraLayer extends IFitCameraLayer {
     }
   }
 
-  // ======= Lógica de "fuera de foco" usando solo las 4 esquinas del bbox =======
+  // ======= Lógica de "fuera de foco" usando bounds simples =======
   bool _isBBoxOutside({
-    required double cx,
-    required double cy,
-    required double cosT,
-    required double sinT,
-    required double halfW,
-    required double halfH,
-    required double mercPerCssPx,
+    required latlng.LatLng viewportSW,
+    required latlng.LatLng viewportNE,
   }) {
     if (_fitBounds == null) return false;
 
-    final double slackMerc = (focusSlackCss * _dpr) * mercPerCssPx;
+    // Get fitBounds corners: [bl, tl, tr, br]
+    final fitSW = _fitBounds!.corners[0]; // bottom-left = southwest
+    final fitNE = _fitBounds!.corners[2]; // top-right = northeast
 
-    bool testLatLng(latlng.LatLng p) {
-      final x = _lngToMercX(p.longitude);
-      final y = _latToMercY(p.latitude);
+    // Add slack in degrees (approximately)
+    final slackLat = focusSlackCss * 0.0001; // rough conversion
+    final slackLng = focusSlackCss * 0.0001;
 
-      double dx = x - cx;
-      if (dx > 0.5) dx -= 1.0; // wrap antimeridiano
-      if (dx < -0.5) dx += 1.0;
-      final dy = y - cy;
+    // Check if fitBounds is fully contained within viewport (with slack)
+    final containsLat = fitSW.latitude >= (viewportSW.latitude - slackLat) &&
+        fitNE.latitude <= (viewportNE.latitude + slackLat);
+    final containsLng = fitSW.longitude >= (viewportSW.longitude - slackLng) &&
+        fitNE.longitude <= (viewportNE.longitude + slackLng);
 
-      // coords locales (des-rotadas)
-      final localX = dx * cosT + dy * sinT;
-      final localY = -dx * sinT + dy * cosT;
-
-      final insideX =
-          (localX >= -halfW - slackMerc) && (localX <= halfW + slackMerc);
-      final insideY =
-          (localY >= -halfH - slackMerc) && (localY <= halfH + slackMerc);
-      return insideX && insideY;
-    }
-
-    // Si alguna esquina del bbox está fuera, marcamos fuera de foco.
-    for (final corner in _fitBounds!.corners) {
-      if (!testLatLng(corner)) return true;
-    }
-    return false;
+    // Return true if bbox is outside (not fully contained)
+    return !(containsLat && containsLng);
   }
 
   // ======= Encadre de cámara usando solo bbox =======
@@ -393,68 +373,32 @@ class FitCameraLayer extends IFitCameraLayer {
     required double maxZoom,
   }) {
     final cam = controller.cameraPositionNotifier.value;
-    final theta = cam.bearing * math.pi / 180.0;
-    final absCos = math.cos(theta).abs();
-    final absSin = math.sin(theta).abs();
 
-    final combinedInset = EdgeInsets.only(
+    // Create LatLngBounds from the fit bounds corners
+    // corners are [bl, tl, tr, br]
+    final bounds = LatLngBounds(
+      fb.corners[0], // southwest (bottom-left)
+      fb.corners[2], // northeast (top-right)
+    );
+
+    final combinedPadding = EdgeInsets.only(
       top: _viewPadding.top + _padding.top,
       right: _viewPadding.right + _padding.right,
       bottom: _viewPadding.bottom + _padding.bottom,
       left: _viewPadding.left + _padding.left,
     );
 
-    final wCss = math.max(
-      1.0,
-      (_viewportLogical.width - combinedInset.left - combinedInset.right) *
-          _dpr,
-    );
-    final hCss = math.max(
-      1.0,
-      (_viewportLogical.height - combinedInset.top - combinedInset.bottom) *
-          _dpr,
+    // Use TrufiCameraFit for proper bounds fitting
+    final newCam = TrufiCameraFit.fitBoundsOnCamera(
+      camera: cam.copyWith(viewportSize: _viewportLogical),
+      bounds: bounds,
+      padding: combinedPadding,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
     );
 
-    // Proyección del viewport rotado al bbox axis-aligned
-    final wProj = wCss * absCos + hCss * absSin;
-    final hProj = wCss * absSin + hCss * absCos;
-
-    final zX = math.log(wProj / (tileSize * fb.dx)) / math.ln2;
-    final zY = math.log(hProj / (tileSize * fb.dy)) / math.ln2;
-    final zoom = _zoomClamp(
-      (zX.isFinite && zY.isFinite) ? math.min(zX, zY) : cam.zoom,
-      minZoom,
-      maxZoom,
-    );
-
-    final worldPx = tileSize * math.pow(2.0, zoom);
-    final mercPerCssPx = 1.0 / worldPx;
-
-    final shiftXLocal =
-        ((combinedInset.left - combinedInset.right) * 0.5 * _dpr) *
-        mercPerCssPx;
-    final shiftYLocal =
-        ((combinedInset.top - combinedInset.bottom) * 0.5 * _dpr) *
-        mercPerCssPx;
-
-    final shiftX =
-        shiftXLocal * math.cos(theta) - shiftYLocal * math.sin(theta);
-    final shiftY =
-        shiftXLocal * math.sin(theta) + shiftYLocal * math.cos(theta);
-
-    final cxc = _norm01(fb.cx - shiftX);
-    final cyc = (fb.cy - shiftY).clamp(0.0, 1.0);
-
-    final target = latlng.LatLng(_mercYToLat(cyc), _mercXToLng(cxc));
-
-    controller.updateCamera(target: target, zoom: zoom);
+    controller.updateCamera(target: newCam.target, zoom: newCam.zoom);
     _computeAndRender();
-  }
-
-  double _zoomClamp(double z, double minZ, double maxZ) {
-    if (z < minZ) return minZ;
-    if (z > maxZ) return maxZ;
-    return z;
   }
 
   void _updateOutOfFocusAsync(bool newValue) {
