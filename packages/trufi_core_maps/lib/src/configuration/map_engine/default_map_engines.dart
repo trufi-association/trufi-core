@@ -4,15 +4,15 @@ import 'trufi_map_engine.dart';
 
 /// Default map engines for Trufi apps
 const List<ITrufiMapEngine> defaultMapEngines = [
+  MapLibreEngine(
+    styleString: 'https://tiles.openfreemap.org/styles/liberty',
+    displayName: 'MapLibre GL',
+    displayDescription: 'Vector map with Liberty style',
+  ),
   FlutterMapEngine(
     tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     userAgentPackageName: 'com.trufi.app',
     displayName: 'OpenStreetMap',
     displayDescription: 'Standard OSM raster tiles',
-  ),
-  MapLibreEngine(
-    styleString: 'https://tiles.openfreemap.org/styles/liberty',
-    displayName: 'MapLibre GL',
-    displayDescription: 'Vector map with Liberty style',
   ),
 ];

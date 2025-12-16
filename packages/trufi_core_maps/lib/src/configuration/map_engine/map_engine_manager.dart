@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'trufi_map_engine.dart';
 
-/// Manages the current map engine for the app.
+/// Manages the current map engine for the app with persistence.
 ///
 /// This is a ChangeNotifier that can be used with Provider to manage
 /// the selected map engine across the app.
@@ -33,6 +34,8 @@ import 'trufi_map_engine.dart';
 /// MapEngineManager.read(context).setEngine(newEngine);
 /// ```
 class MapEngineManager extends ChangeNotifier {
+  static const _storageKey = 'trufi_map_engine_id';
+
   final List<ITrufiMapEngine> _engines;
   final LatLng defaultCenter;
   final double defaultZoom;
@@ -49,7 +52,21 @@ class MapEngineManager extends ChangeNotifier {
           'defaultIndex must be valid',
         ),
         _engines = engines,
-        _currentIndex = defaultIndex;
+        _currentIndex = defaultIndex {
+    _loadSavedEngine();
+  }
+
+  Future<void> _loadSavedEngine() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedId = prefs.getString(_storageKey);
+    if (savedId != null) {
+      final index = _engines.indexWhere((e) => e.id == savedId);
+      if (index != -1 && index != _currentIndex) {
+        _currentIndex = index;
+        notifyListeners();
+      }
+    }
+  }
 
   /// List of available engines.
   List<ITrufiMapEngine> get engines => List.unmodifiable(_engines);
@@ -72,8 +89,14 @@ class MapEngineManager extends ChangeNotifier {
   void setEngineByIndex(int index) {
     if (index >= 0 && index < _engines.length && _currentIndex != index) {
       _currentIndex = index;
+      _persistEngine(currentEngine.id);
       notifyListeners();
     }
+  }
+
+  Future<void> _persistEngine(String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_storageKey, id);
   }
 
   /// Sets the current engine by its id.
