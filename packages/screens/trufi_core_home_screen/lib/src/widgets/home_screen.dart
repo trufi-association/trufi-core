@@ -685,7 +685,8 @@ class _RouteLayer extends TrufiLayer {
               routeName: leg.shortName ?? leg.route?.shortName ?? '',
               isBoarding: true,
             ),
-            size: const Size(32, 32),
+            size: const Size(56, 32),
+            layerLevel: 0,
           ),
         );
 
@@ -700,7 +701,8 @@ class _RouteLayer extends TrufiLayer {
                 routeName: leg.shortName ?? leg.route?.shortName ?? '',
                 isBoarding: false,
               ),
-              size: const Size(32, 32),
+              size: const Size(56, 32),
+              layerLevel: 0,
             ),
           );
         }
