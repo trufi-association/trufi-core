@@ -198,6 +198,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   void _clearRouteFromMap() {
     if (_routeLayer != null) {
+      _routeLayer!.clearMarkers();
+      _routeLayer!.clearLines();
       _mapController?.removeLayer(_routeLayer!.id);
       _routeLayer = null;
     }
@@ -660,6 +662,7 @@ class _RouteLayer extends TrufiLayer {
 
       allPoints.addAll(leg.decodedPoints);
 
+      // Use routeColor which now has proper defaults assigned by Itinerary
       final color = leg.transitLeg ? _parseColor(leg.routeColor) : Colors.grey;
 
       // Add route line with different style for transit vs walking
@@ -673,39 +676,26 @@ class _RouteLayer extends TrufiLayer {
         ),
       );
 
-      // Add transit stop markers for transit legs
+      // Add route label at midpoint for transit legs
       if (leg.transitLeg && leg.decodedPoints.length > 1) {
-        // Add boarding point marker
+        final routeName = leg.shortName ?? leg.route?.shortName ?? '';
+        final midIndex = leg.decodedPoints.length ~/ 2;
+        final midPoint = leg.decodedPoints[midIndex];
+        final modeIcon = _getModeIcon(leg.transportMode);
+
         addMarker(
           TrufiMarker(
-            id: 'board-$i',
-            position: leg.decodedPoints.first,
-            widget: _TransitStopMarker(
+            id: 'transit-label-$i',
+            position: midPoint,
+            widget: _TransitRouteLabel(
               color: color,
-              routeName: leg.shortName ?? leg.route?.shortName ?? '',
-              isBoarding: true,
+              routeName: routeName,
+              icon: modeIcon,
             ),
-            size: const Size(56, 32),
+            size: const Size(72, 28),
             layerLevel: 0,
           ),
         );
-
-        // Add alighting point marker (if not last leg)
-        if (i < itinerary.legs.length - 1) {
-          addMarker(
-            TrufiMarker(
-              id: 'alight-$i',
-              position: leg.decodedPoints.last,
-              widget: _TransitStopMarker(
-                color: color,
-                routeName: leg.shortName ?? leg.route?.shortName ?? '',
-                isBoarding: false,
-              ),
-              size: const Size(56, 32),
-              layerLevel: 0,
-            ),
-          );
-        }
       }
     }
 
@@ -715,12 +705,8 @@ class _RouteLayer extends TrufiLayer {
         TrufiMarker(
           id: 'start-marker',
           position: allPoints.first,
-          widget: const _EndpointMarker(
-            icon: Icons.trip_origin_rounded,
-            color: Color(0xFF4CAF50),
-            label: 'A',
-          ),
-          size: const Size(40, 40),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
         ),
       );
 
@@ -729,12 +715,8 @@ class _RouteLayer extends TrufiLayer {
         TrufiMarker(
           id: 'end-marker',
           position: allPoints.last,
-          widget: const _EndpointMarker(
-            icon: Icons.location_on_rounded,
-            color: Color(0xFFE53935),
-            label: 'B',
-          ),
-          size: const Size(40, 40),
+          widget: const _DestinationMarker(),
+          size: const Size(24, 24),
         ),
       );
     }
@@ -748,79 +730,110 @@ class _RouteLayer extends TrufiLayer {
       return const Color(0xFF1976D2);
     }
   }
+
+  IconData _getModeIcon(routing.TransportMode mode) {
+    switch (mode) {
+      case routing.TransportMode.bus:
+      case routing.TransportMode.trufi:
+      case routing.TransportMode.micro:
+      case routing.TransportMode.miniBus:
+        return Icons.directions_bus_rounded;
+      case routing.TransportMode.rail:
+      case routing.TransportMode.lightRail:
+        return Icons.train_rounded;
+      case routing.TransportMode.subway:
+        return Icons.subway_rounded;
+      case routing.TransportMode.tram:
+        return Icons.tram_rounded;
+      case routing.TransportMode.ferry:
+        return Icons.directions_ferry_rounded;
+      case routing.TransportMode.cableCar:
+      case routing.TransportMode.gondola:
+      case routing.TransportMode.funicular:
+        return Icons.airline_seat_legroom_reduced_rounded;
+      default:
+        return Icons.directions_transit_rounded;
+    }
+  }
 }
 
-/// Marker for origin/destination endpoints
-class _EndpointMarker extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String label;
+/// Origin marker - green circle (same color as search bar)
+class _OriginMarker extends StatelessWidget {
+  const _OriginMarker();
 
-  const _EndpointMarker({
-    required this.icon,
-    required this.color,
-    required this.label,
-  });
+  static const _color = Color(0xFF4CAF50);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 24,
+      height: 24,
       decoration: BoxDecoration(
-        color: color,
+        color: _color,
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: 3),
         boxShadow: [
           BoxShadow(
-            color: color.withValues(alpha: 0.4),
-            blurRadius: 8,
-            spreadRadius: 2,
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+    );
+  }
+}
+
+/// Destination marker - red circle (same color as search bar)
+class _DestinationMarker extends StatelessWidget {
+  const _DestinationMarker();
+
+  static const _color = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: _color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-/// Marker for transit boarding/alighting points
-class _TransitStopMarker extends StatelessWidget {
+/// Label for transit route displayed at midpoint of the leg
+class _TransitRouteLabel extends StatelessWidget {
   final Color color;
   final String routeName;
-  final bool isBoarding;
+  final IconData icon;
 
-  const _TransitStopMarker({
+  const _TransitRouteLabel({
     required this.color,
     required this.routeName,
-    required this.isBoarding,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -829,21 +842,15 @@ class _TransitStopMarker extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            isBoarding
-                ? Icons.arrow_circle_up_rounded
-                : Icons.arrow_circle_down_rounded,
-            color: Colors.white,
-            size: 14,
-          ),
+          Icon(icon, color: Colors.white, size: 16),
           if (routeName.isNotEmpty) ...[
-            const SizedBox(width: 2),
+            const SizedBox(width: 4),
             Text(
               routeName,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 10,
+                fontSize: 12,
               ),
             ),
           ],

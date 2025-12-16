@@ -1,10 +1,11 @@
 import 'leg.dart';
+import 'route.dart';
 import 'transport_mode.dart';
 
 /// A complete itinerary for a trip plan.
 class Itinerary {
   Itinerary({
-    required this.legs,
+    required List<Leg> legs,
     required this.startTime,
     required this.endTime,
     required this.walkTime,
@@ -13,7 +14,8 @@ class Itinerary {
     this.transfers,
     this.arrivedAtDestinationWithRentedBicycle = false,
     this.emissionsPerPerson,
-  }) : distance = _calculateDistance(legs);
+  })  : legs = _assignDefaultColors(legs),
+        distance = _calculateDistance(legs);
 
   final List<Leg> legs;
   final DateTime startTime;
@@ -30,15 +32,21 @@ class Itinerary {
     return legs.fold<int>(0, (sum, leg) => sum + leg.distance.ceil());
   }
 
+  // Default colors for transit legs without route color
+  static const _defaultTransitColors = ['1976D2', 'E91E63', '4CAF50', 'FF9800'];
+
   /// Creates an [Itinerary] from JSON.
   factory Itinerary.fromJson(
     Map<String, dynamic> json, {
     List<dynamic> Function(String)? polylineDecoder,
   }) {
+    final parsedLegs = (json['legs'] as List<dynamic>)
+        .map((e) => Leg.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    // Colors are now assigned in the constructor
     return Itinerary(
-      legs: (json['legs'] as List<dynamic>)
-          .map((e) => Leg.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      legs: parsedLegs,
       startTime: DateTime.fromMillisecondsSinceEpoch(json['startTime'] as int),
       endTime: DateTime.fromMillisecondsSinceEpoch(json['endTime'] as int),
       walkTime: Duration(seconds: json['walkTime'] as int),
@@ -51,6 +59,22 @@ class Itinerary {
           (json['emissionsPerPerson']?['emissionsPerPersonCo2'] as num?)
               ?.toDouble(),
     );
+  }
+
+  static List<Leg> _assignDefaultColors(List<Leg> legs) {
+    int transitIndex = 0;
+    return legs.map((leg) {
+      if (leg.transitLeg && (leg.route?.color == null || leg.route!.color!.isEmpty)) {
+        final defaultColor = _defaultTransitColors[transitIndex % _defaultTransitColors.length];
+        transitIndex++;
+        return leg.copyWith(
+          route: leg.route?.copyWith(color: defaultColor) ??
+                 Route(color: defaultColor, shortName: leg.shortName),
+        );
+      }
+      if (leg.transitLeg) transitIndex++;
+      return leg;
+    }).toList();
   }
 
   /// Converts this itinerary to JSON.

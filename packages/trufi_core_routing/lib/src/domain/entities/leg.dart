@@ -204,8 +204,8 @@ class Leg {
   /// Returns true if this is a walking leg.
   bool get isLegOnFoot => transportMode == TransportMode.walk;
 
-  /// Returns the route color or a default color.
-  String get routeColor => route?.color ?? 'd81b60';
+  /// Returns the route color (should be set by Itinerary._assignDefaultColors).
+  String get routeColor => route?.color ?? '';
 
   /// Returns the display name for the route.
   String get displayName => route?.shortName ?? shortName ?? '';

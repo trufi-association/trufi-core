@@ -67,6 +67,35 @@ class Route {
     };
   }
 
+  /// Creates a copy of this route with the given fields replaced.
+  Route copyWith({
+    String? id,
+    String? gtfsId,
+    Agency? agency,
+    String? shortName,
+    String? longName,
+    TransportMode? mode,
+    int? type,
+    String? desc,
+    String? url,
+    String? color,
+    String? textColor,
+  }) {
+    return Route(
+      id: id ?? this.id,
+      gtfsId: gtfsId ?? this.gtfsId,
+      agency: agency ?? this.agency,
+      shortName: shortName ?? this.shortName,
+      longName: longName ?? this.longName,
+      mode: mode ?? this.mode,
+      type: type ?? this.type,
+      desc: desc ?? this.desc,
+      url: url ?? this.url,
+      color: color ?? this.color,
+      textColor: textColor ?? this.textColor,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       other is Route && other.id == id && other.gtfsId == gtfsId;
