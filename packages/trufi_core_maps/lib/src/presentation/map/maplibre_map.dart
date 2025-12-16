@@ -236,6 +236,17 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     MapLibreMapController ctl,
   ) async {
     final geojson = await _buildGeoJsonForLayer(layer, ctl);
+
+    // MapLibre GL sometimes doesn't properly clear symbols when updating to
+    // an empty FeatureCollection. Force a double-update to ensure clearing.
+    final features = geojson['features'] as List;
+    if (features.isEmpty) {
+      // First set empty, then set again to force refresh
+      await ctl.setGeoJsonSource(layer.id, geojson);
+      // Small delay to allow MapLibre to process the empty source
+      await Future<void>.delayed(const Duration(milliseconds: 16));
+    }
+
     await ctl.setGeoJsonSource(layer.id, geojson);
     _markers.setLayerMarkers(layer.id, layer.markers);
   }
