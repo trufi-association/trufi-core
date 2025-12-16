@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen>
   TrufiMapController? _mapController;
   FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
+  _LocationMarkersLayer? _locationMarkersLayer;
 
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -205,6 +206,29 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  void _updateLocationMarkers(RoutePlannerState state) {
+    if (_mapController == null) return;
+
+    // Don't show location markers when we have a route (route has its own markers)
+    if (state.selectedItinerary != null) {
+      if (_locationMarkersLayer != null) {
+        _locationMarkersLayer!.clearMarkers();
+        _mapController?.removeLayer(_locationMarkersLayer!.id);
+        _locationMarkersLayer = null;
+      }
+      return;
+    }
+
+    // Create layer if needed
+    _locationMarkersLayer ??= _LocationMarkersLayer(_mapController!);
+
+    // Update markers
+    _locationMarkersLayer!.updateMarkers(
+      origin: state.fromPlace,
+      destination: state.toPlace,
+    );
+  }
+
   void _updateRouteOnMap(routing.Itinerary? itinerary) {
     _clearRouteFromMap();
 
@@ -290,10 +314,21 @@ class _HomeScreenState extends State<HomeScreen>
                       color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(
-                      Icons.trip_origin_rounded,
-                      color: Color(0xFF4CAF50),
-                      size: 24,
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF4CAF50),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   title: Text(
@@ -306,12 +341,12 @@ class _HomeScreenState extends State<HomeScreen>
                   leading: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE91E63).withValues(alpha: 0.1),
+                      color: const Color(0xFFE53935).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
                       Icons.place_rounded,
-                      color: Color(0xFFE91E63),
+                      color: Color(0xFFE53935),
                       size: 24,
                     ),
                   ),
@@ -371,6 +406,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: BlocConsumer<RoutePlannerCubit, RoutePlannerState>(
         listener: (context, state) {
+          _updateLocationMarkers(state);
           _updateRouteOnMap(state.selectedItinerary);
           _expandSheetIfNeeded(state);
         },
@@ -716,7 +752,7 @@ class _RouteLayer extends TrufiLayer {
           id: 'end-marker',
           position: allPoints.last,
           widget: const _DestinationMarker(),
-          size: const Size(24, 24),
+          size: const Size(32, 32),
         ),
       );
     }
@@ -784,7 +820,7 @@ class _OriginMarker extends StatelessWidget {
   }
 }
 
-/// Destination marker - red circle (same color as search bar)
+/// Destination marker - red pin icon (same as long press panel)
 class _DestinationMarker extends StatelessWidget {
   const _DestinationMarker();
 
@@ -792,21 +828,17 @@ class _DestinationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: _color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return const Icon(
+      Icons.place_rounded,
+      color: _color,
+      size: 32,
+      shadows: [
+        Shadow(
+          color: Colors.black38,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
     );
   }
 }
@@ -898,5 +930,40 @@ class _MapControlButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Layer for displaying origin/destination markers before route is found
+class _LocationMarkersLayer extends TrufiLayer {
+  _LocationMarkersLayer(super.controller)
+      : super(id: 'location-markers-layer', layerLevel: 2);
+
+  void updateMarkers({
+    TrufiLocation? origin,
+    TrufiLocation? destination,
+  }) {
+    clearMarkers();
+
+    if (origin != null) {
+      addMarker(
+        TrufiMarker(
+          id: 'origin-preview',
+          position: LatLng(origin.latitude, origin.longitude),
+          widget: const _OriginMarker(),
+          size: const Size(24, 24),
+        ),
+      );
+    }
+
+    if (destination != null) {
+      addMarker(
+        TrufiMarker(
+          id: 'destination-preview',
+          position: LatLng(destination.latitude, destination.longitude),
+          widget: const _DestinationMarker(),
+          size: const Size(32, 32),
+        ),
+      );
+    }
   }
 }
