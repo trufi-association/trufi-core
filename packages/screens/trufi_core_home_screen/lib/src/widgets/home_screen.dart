@@ -69,8 +69,6 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     // Listen to location updates
     _locationService.addListener(_onLocationUpdate);
-    // Try to start GPS tracking automatically
-    _tryAutoStartTracking();
   }
 
   /// Attempts to start GPS tracking automatically on app start.
@@ -78,7 +76,16 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> _tryAutoStartTracking() async {
     final status = await _locationService.checkPermission();
     if (status == LocationPermissionStatus.granted) {
-      await _locationService.startTracking();
+      final started = await _locationService.startTracking();
+      if (started && mounted) {
+        // Get initial location to show marker immediately
+        final location = _locationService.currentLocation;
+        if (location != null && _mapController != null) {
+          final position = LatLng(location.latitude, location.longitude);
+          _myLocationLayer ??= _MyLocationLayer(_mapController!);
+          _myLocationLayer!.setLocation(position, location.accuracy);
+        }
+      }
     }
   }
 
@@ -93,6 +100,8 @@ class _HomeScreenState extends State<HomeScreen>
       _fitCameraLayer = FitCameraLayer(
         _mapController!,
       );
+      // Try to start GPS tracking now that map controller is ready
+      _tryAutoStartTracking();
     }
   }
 
@@ -107,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   /// Called when location updates from the GPS tracking
   void _onLocationUpdate() {
+    if (!mounted) return;
+
     final location = _locationService.currentLocation;
     if (location != null && _mapController != null) {
       final position = LatLng(location.latitude, location.longitude);
@@ -114,6 +125,9 @@ class _HomeScreenState extends State<HomeScreen>
       // Update my location marker on map
       _myLocationLayer ??= _MyLocationLayer(_mapController!);
       _myLocationLayer!.setLocation(position, location.accuracy);
+
+      // Force rebuild to update UI (e.g., location button icon)
+      setState(() {});
     }
   }
 
@@ -1800,19 +1814,19 @@ class _MyLocationLayer extends TrufiLayer {
   void setLocation(LatLng position, double? accuracy) {
     clearMarkers();
 
-    // Add accuracy circle if available (shown as a subtle ring)
+    // Add accuracy circle if available (scales with zoom using metersRadius)
     if (accuracy != null && accuracy > 0) {
       addMarker(
         TrufiMarker(
           id: 'my-location-accuracy',
           position: position,
-          widget: _MyLocationAccuracyCircle(accuracy: accuracy),
-          size: Size(accuracy * 2, accuracy * 2),
+          widget: const _MyLocationAccuracyCircle(),
+          metersRadius: accuracy, // This makes the marker scale with zoom
         ),
       );
     }
 
-    // Add the blue dot marker
+    // Add the blue dot marker (fixed size in pixels)
     addMarker(
       TrufiMarker(
         id: 'my-location-dot',
@@ -1855,19 +1869,15 @@ class _MyLocationMarker extends StatelessWidget {
   }
 }
 
-/// Accuracy circle around the location marker
+/// Accuracy circle around the location marker.
+/// Size is controlled by the parent marker's metersRadius property.
 class _MyLocationAccuracyCircle extends StatelessWidget {
-  final double accuracy;
-
-  const _MyLocationAccuracyCircle({required this.accuracy});
+  const _MyLocationAccuracyCircle();
 
   @override
   Widget build(BuildContext context) {
-    // Scale accuracy to a reasonable visual size (capped)
-    final size = (accuracy * 2).clamp(40.0, 200.0);
+    // Fill the entire marker size (which scales with zoom via metersRadius)
     return Container(
-      width: size,
-      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: const Color(0xFF4285F4).withValues(alpha: 0.15),

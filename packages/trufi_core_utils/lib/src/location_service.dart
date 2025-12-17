@@ -238,9 +238,27 @@ class LocationService extends ChangeNotifier {
           // Handle stream errors silently, tracking continues
           debugPrint('Location stream error: $error');
         },
+        cancelOnError: false, // Keep listening even after errors
       );
 
       _isTracking = true;
+
+      // Get initial position immediately so the marker shows right away
+      try {
+        final initialPosition = await Geolocator.getCurrentPosition(
+          locationSettings: LocationSettings(accuracy: accuracy),
+        );
+        _lastKnownPosition = initialPosition;
+        _currentLocation = LocationResult(
+          latitude: initialPosition.latitude,
+          longitude: initialPosition.longitude,
+          accuracy: initialPosition.accuracy,
+        );
+        notifyListeners();
+      } catch (_) {
+        // Ignore error, stream will provide updates
+      }
+
       notifyListeners();
       return true;
     } catch (e) {
