@@ -255,23 +255,20 @@ class _HomeScreenState extends State<HomeScreen>
     _routeLayer!.setItinerary(itinerary);
   }
 
-  /// Updates the fit camera layer with all visible points from markers and routes.
+  /// Updates the fit camera layer with route points.
+  /// Only fits camera when there's a route (itinerary), not for individual markers.
   void _updateFitCameraPoints(RoutePlannerState state) {
-    final allPoints = <LatLng>[];
+    // Only fit camera when there's a selected itinerary (route)
+    // Don't auto-fit when just selecting origin/destination markers
+    if (state.selectedItinerary == null) {
+      _pendingFitPoints = null;
+      _fitCameraLayer?.clearFitPoints();
+      return;
+    }
 
-    // If there's a selected itinerary, use the route points
-    if (state.selectedItinerary != null) {
-      for (final leg in state.selectedItinerary!.legs) {
-        allPoints.addAll(leg.decodedPoints);
-      }
-    } else {
-      // Otherwise, use the origin/destination markers
-      if (state.fromPlace != null) {
-        allPoints.add(LatLng(state.fromPlace!.latitude, state.fromPlace!.longitude));
-      }
-      if (state.toPlace != null) {
-        allPoints.add(LatLng(state.toPlace!.latitude, state.toPlace!.longitude));
-      }
+    final allPoints = <LatLng>[];
+    for (final leg in state.selectedItinerary!.legs) {
+      allPoints.addAll(leg.decodedPoints);
     }
 
     if (allPoints.isNotEmpty) {
