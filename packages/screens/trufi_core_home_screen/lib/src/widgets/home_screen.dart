@@ -613,10 +613,11 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  Widget _buildMap(ITrufiMapEngine engine) {
+  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
     return engine.buildMap(
       controller: _mapController!,
       onMapLongClick: _onMapLongPress,
+      isDarkMode: isDarkMode,
     );
   }
 
@@ -674,11 +675,16 @@ class _HomeScreenState extends State<HomeScreen>
                 }
               }
 
+              final isDarkMode = theme.brightness == Brightness.dark;
+
               return Stack(
                 children: [
                   // Map (full screen)
                   Positioned.fill(
-                    child: _buildMap(mapEngineManager.currentEngine),
+                    child: _buildMap(
+                      mapEngineManager.currentEngine,
+                      isDarkMode: isDarkMode,
+                    ),
                   ),
 
                   // SearchLocationBar at top

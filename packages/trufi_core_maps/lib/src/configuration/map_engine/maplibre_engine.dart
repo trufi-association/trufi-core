@@ -13,15 +13,25 @@ import 'trufi_map_engine.dart';
 /// ```dart
 /// MapLibreEngine(
 ///   styleString: 'https://tiles.openfreemap.org/styles/liberty',
+///   darkStyleString: 'https://tiles.openfreemap.org/styles/dark', // optional
 /// )
 /// ```
 class MapLibreEngine implements ITrufiMapEngine {
-  /// Style URL for MapLibre.
+  /// Style URL for MapLibre (light mode).
   ///
   /// Common styles:
   /// - OpenFreeMap Liberty: 'https://tiles.openfreemap.org/styles/liberty'
   /// - MapLibre Demo: 'https://demotiles.maplibre.org/style.json'
   final String styleString;
+
+  /// Style URL for dark mode (optional).
+  ///
+  /// If not provided, the light style will be used for both modes.
+  ///
+  /// Common dark styles:
+  /// - OpenFreeMap Dark: 'https://tiles.openfreemap.org/styles/dark'
+  /// - Stadia Alidade Dark: 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json'
+  final String? darkStyleString;
 
   /// Custom display name (optional).
   final String? displayName;
@@ -34,6 +44,7 @@ class MapLibreEngine implements ITrufiMapEngine {
 
   const MapLibreEngine({
     this.styleString = 'https://demotiles.maplibre.org/style.json',
+    this.darkStyleString,
     this.displayName,
     this.displayDescription,
     this.preview,
@@ -64,10 +75,15 @@ class MapLibreEngine implements ITrufiMapEngine {
     required TrufiMapController controller,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
+    bool isDarkMode = false,
   }) {
+    final effectiveStyle = isDarkMode && darkStyleString != null
+        ? darkStyleString!
+        : styleString;
+
     return TrufiMapLibreMap(
       controller: controller,
-      styleString: styleString,
+      styleString: effectiveStyle,
       onMapClick: onMapClick,
       onMapLongClick: onMapLongClick,
     );

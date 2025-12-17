@@ -14,6 +14,7 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
     this.onMapLongClick,
     required this.tileUrl,
     this.userAgentPackageName,
+    this.useDarkModeFilter = false,
   });
 
   @override
@@ -25,6 +26,9 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
 
   final String tileUrl;
   final String? userAgentPackageName;
+
+  /// Whether to apply a dark mode color filter to tiles.
+  final bool useDarkModeFilter;
 
   @override
   State<TrufiFlutterMap> createState() => _TrufiFlutterMapState();
@@ -106,6 +110,7 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
           urlTemplate: widget.tileUrl,
           userAgentPackageName:
               widget.userAgentPackageName ?? 'com.example.trufi_core_maps',
+          tileBuilder: widget.useDarkModeFilter ? fm.darkModeTileBuilder : null,
         ),
         // Polylines rendered first (below markers)
         fm.PolylineLayer(

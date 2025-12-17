@@ -192,9 +192,10 @@ class _RouteMapViewState extends State<_RouteMapView> {
     super.dispose();
   }
 
-  Widget _buildMap(ITrufiMapEngine engine) {
+  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
     return engine.buildMap(
       controller: _mapController!,
+      isDarkMode: isDarkMode,
     );
   }
 
@@ -209,10 +210,15 @@ class _RouteMapViewState extends State<_RouteMapView> {
           Size(constraints.maxWidth, constraints.maxHeight),
           MediaQuery.of(context).viewPadding,
         );
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
         return Stack(
           children: [
             // Map (full area)
-            _buildMap(mapEngineManager.currentEngine),
+            _buildMap(
+              mapEngineManager.currentEngine,
+              isDarkMode: isDarkMode,
+            ),
 
             // Map Type Button (top-left)
             if (mapEngineManager.engines.length > 1)
