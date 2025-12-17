@@ -1,5 +1,17 @@
 import 'package:equatable/equatable.dart';
 
+/// Time mode for departure/arrival planning.
+enum TimeMode {
+  /// Leave now (default).
+  leaveNow,
+
+  /// Depart at a specific time.
+  departAt,
+
+  /// Arrive by a specific time.
+  arriveBy,
+}
+
 /// User preferences for route planning.
 ///
 /// These preferences map directly to OpenTripPlanner API parameters.
@@ -23,6 +35,13 @@ class RoutingPreferences extends Equatable {
   /// Transport modes to consider for routing.
   final Set<RoutingMode> transportModes;
 
+  /// Time mode for departure/arrival planning.
+  final TimeMode timeMode;
+
+  /// The specific date/time for departure or arrival.
+  /// Only used when [timeMode] is not [TimeMode.leaveNow].
+  final DateTime? dateTime;
+
   const RoutingPreferences({
     this.wheelchair = false,
     this.walkSpeed = 1.33,
@@ -30,6 +49,8 @@ class RoutingPreferences extends Equatable {
     this.walkReluctance = 2.0,
     this.bikeSpeed = 5.0,
     this.transportModes = const {RoutingMode.transit, RoutingMode.walk},
+    this.timeMode = TimeMode.leaveNow,
+    this.dateTime,
   });
 
   /// Default preferences for most users.
@@ -64,6 +85,9 @@ class RoutingPreferences extends Equatable {
     double? walkReluctance,
     double? bikeSpeed,
     Set<RoutingMode>? transportModes,
+    TimeMode? timeMode,
+    DateTime? dateTime,
+    bool clearDateTime = false,
   }) {
     return RoutingPreferences(
       wheelchair: wheelchair ?? this.wheelchair,
@@ -73,6 +97,8 @@ class RoutingPreferences extends Equatable {
       walkReluctance: walkReluctance ?? this.walkReluctance,
       bikeSpeed: bikeSpeed ?? this.bikeSpeed,
       transportModes: transportModes ?? this.transportModes,
+      timeMode: timeMode ?? this.timeMode,
+      dateTime: clearDateTime ? null : (dateTime ?? this.dateTime),
     );
   }
 
@@ -91,6 +117,8 @@ class RoutingPreferences extends Equatable {
         walkReluctance,
         bikeSpeed,
         transportModes,
+        timeMode,
+        dateTime,
       ];
 }
 

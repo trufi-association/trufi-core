@@ -20,6 +20,11 @@ class RoutingRequestPlanService implements RequestPlanService {
     DateTime? dateTime,
     routing.RoutingPreferences? preferences,
   }) async {
+    // Use dateTime from preferences if timeMode is not leaveNow
+    final effectiveDateTime = _getEffectiveDateTime(preferences, dateTime);
+    // Determine if this is an "arrive by" query
+    final arriveBy = preferences?.timeMode == routing.TimeMode.arriveBy;
+
     final plan = await _repository.fetchPlan(
       from: routing.RoutingLocation(
         position: LatLng(from.latitude, from.longitude),
@@ -30,7 +35,8 @@ class RoutingRequestPlanService implements RequestPlanService {
         description: to.description,
       ),
       locale: locale,
-      dateTime: dateTime ?? DateTime.now(),
+      dateTime: effectiveDateTime,
+      arriveBy: arriveBy,
       preferences: preferences,
     );
 
@@ -52,5 +58,21 @@ class RoutingRequestPlanService implements RequestPlanService {
     return (itinerary.numberOfTransfers * 0.65) +
         (itinerary.walkDistance * 0.3) +
         ((itinerary.distance / 100) * 0.05);
+  }
+
+  /// Gets the effective dateTime based on preferences.
+  DateTime _getEffectiveDateTime(
+    routing.RoutingPreferences? preferences,
+    DateTime? fallback,
+  ) {
+    if (preferences == null) return fallback ?? DateTime.now();
+
+    // If timeMode is leaveNow, always use current time
+    if (preferences.timeMode == routing.TimeMode.leaveNow) {
+      return DateTime.now();
+    }
+
+    // Otherwise use the dateTime from preferences, or fallback to now
+    return preferences.dateTime ?? fallback ?? DateTime.now();
   }
 }

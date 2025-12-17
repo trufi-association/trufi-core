@@ -501,20 +501,33 @@ class _HomeScreenState extends State<HomeScreen>
                       bottom: false,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: SearchLocationBar(
-                          state: locationState,
-                          configuration: SearchLocationBarConfiguration(
-                            originHintText: l10n.searchOrigin,
-                            destinationHintText: l10n.searchDestination,
-                          ),
-                          onSearch: _showSearchScreen,
-                          onOriginSelected: _onOriginSelected,
-                          onDestinationSelected: _onDestinationSelected,
-                          onSwap: _onSwapLocations,
-                          onReset: _onReset,
-                          onClearLocation: _onClearLocation,
-                          onRoutingSettings: _onRoutingSettings,
-                          onMenuPressed: widget.onMenuPressed,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SearchLocationBar(
+                              state: locationState,
+                              configuration: SearchLocationBarConfiguration(
+                                originHintText: l10n.searchOrigin,
+                                destinationHintText: l10n.searchDestination,
+                              ),
+                              onSearch: _showSearchScreen,
+                              onOriginSelected: _onOriginSelected,
+                              onDestinationSelected: _onDestinationSelected,
+                              onSwap: _onSwapLocations,
+                              onReset: _onReset,
+                              onClearLocation: _onClearLocation,
+                              onRoutingSettings: _onRoutingSettings,
+                              onMenuPressed: widget.onMenuPressed,
+                            ),
+                            // Departure time chip (visible when locations are set)
+                            if (state.fromPlace != null || state.toPlace != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: _DepartureTimeChip(
+                                  onTimeChanged: _fetchPlanIfReady,
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
@@ -1091,5 +1104,472 @@ class _LocationMarkersLayer extends TrufiLayer {
         ),
       );
     }
+  }
+}
+
+/// Compact departure time chip displayed below search bar
+class _DepartureTimeChip extends StatelessWidget {
+  final VoidCallback onTimeChanged;
+
+  const _DepartureTimeChip({required this.onTimeChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final manager = routing.RoutingPreferencesManager.maybeWatch(context);
+
+    if (manager == null) return const SizedBox.shrink();
+
+    final timeMode = manager.timeMode;
+    final dateTime = manager.dateTime;
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Material(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        elevation: 2,
+        shadowColor: Colors.black.withValues(alpha: 0.15),
+        child: InkWell(
+          onTap: () => _showTimePicker(context, manager),
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _getTimeModeIcon(timeMode),
+                  size: 18,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  _getTimeModeLabel(timeMode, dateTime),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.arrow_drop_down_rounded,
+                  size: 20,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  IconData _getTimeModeIcon(routing.TimeMode mode) {
+    switch (mode) {
+      case routing.TimeMode.leaveNow:
+        return Icons.access_time_rounded;
+      case routing.TimeMode.departAt:
+        return Icons.departure_board_rounded;
+      case routing.TimeMode.arriveBy:
+        return Icons.schedule_rounded;
+    }
+  }
+
+  String _getTimeModeLabel(routing.TimeMode mode, DateTime? dateTime) {
+    switch (mode) {
+      case routing.TimeMode.leaveNow:
+        return 'Leave now';
+      case routing.TimeMode.departAt:
+        if (dateTime != null) {
+          return 'Depart ${_formatDateTime(dateTime)}';
+        }
+        return 'Depart at...';
+      case routing.TimeMode.arriveBy:
+        if (dateTime != null) {
+          return 'Arrive by ${_formatDateTime(dateTime)}';
+        }
+        return 'Arrive by...';
+    }
+  }
+
+  String _formatDateTime(DateTime dt) {
+    final now = DateTime.now();
+    final isToday = dt.year == now.year && dt.month == now.month && dt.day == now.day;
+    final isTomorrow = dt.year == now.year &&
+        dt.month == now.month &&
+        dt.day == now.day + 1;
+
+    final time = '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+
+    if (isToday) {
+      return time;
+    } else if (isTomorrow) {
+      return 'Tomorrow $time';
+    } else {
+      return '${dt.day}/${dt.month} $time';
+    }
+  }
+
+  void _showTimePicker(BuildContext context, routing.RoutingPreferencesManager manager) {
+    HapticFeedback.selectionClick();
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _DepartureTimeSheet(
+        manager: manager,
+        onTimeChanged: onTimeChanged,
+      ),
+    );
+  }
+}
+
+/// Bottom sheet for selecting departure time mode and date/time
+class _DepartureTimeSheet extends StatefulWidget {
+  final routing.RoutingPreferencesManager manager;
+  final VoidCallback onTimeChanged;
+
+  const _DepartureTimeSheet({
+    required this.manager,
+    required this.onTimeChanged,
+  });
+
+  @override
+  State<_DepartureTimeSheet> createState() => _DepartureTimeSheetState();
+}
+
+class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
+  late routing.TimeMode _selectedMode;
+  late DateTime _selectedDateTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedMode = widget.manager.timeMode;
+    _selectedDateTime = widget.manager.dateTime ?? DateTime.now();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              margin: const EdgeInsets.only(top: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.schedule_rounded,
+                    color: colorScheme.primary,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'When do you want to travel?',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            // Time mode options
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  _TimeModeOption(
+                    icon: Icons.access_time_rounded,
+                    label: 'Leave now',
+                    isSelected: _selectedMode == routing.TimeMode.leaveNow,
+                    onTap: () {
+                      setState(() => _selectedMode = routing.TimeMode.leaveNow);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  _TimeModeOption(
+                    icon: Icons.departure_board_rounded,
+                    label: 'Depart at',
+                    isSelected: _selectedMode == routing.TimeMode.departAt,
+                    onTap: () {
+                      setState(() => _selectedMode = routing.TimeMode.departAt);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  _TimeModeOption(
+                    icon: Icons.schedule_rounded,
+                    label: 'Arrive by',
+                    isSelected: _selectedMode == routing.TimeMode.arriveBy,
+                    onTap: () {
+                      setState(() => _selectedMode = routing.TimeMode.arriveBy);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            // Date/time picker (only shown when not "Leave now")
+            if (_selectedMode != routing.TimeMode.leaveNow) ...[
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _DateTimeButton(
+                        icon: Icons.calendar_today_rounded,
+                        label: _formatDate(_selectedDateTime),
+                        onTap: () => _selectDate(context),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _DateTimeButton(
+                        icon: Icons.access_time_rounded,
+                        label: _formatTime(_selectedDateTime),
+                        onTap: () => _selectTime(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            // Apply button
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: _applyChanges,
+                  icon: const Icon(Icons.check_rounded),
+                  label: const Text('Apply'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatDate(DateTime dt) {
+    final now = DateTime.now();
+    final isToday = dt.year == now.year && dt.month == now.month && dt.day == now.day;
+    final isTomorrow = dt.year == now.year &&
+        dt.month == now.month &&
+        dt.day == now.day + 1;
+
+    if (isToday) return 'Today';
+    if (isTomorrow) return 'Tomorrow';
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '${months[dt.month - 1]} ${dt.day}';
+  }
+
+  String _formatTime(DateTime dt) {
+    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDateTime = DateTime(
+          picked.year,
+          picked.month,
+          picked.day,
+          _selectedDateTime.hour,
+          _selectedDateTime.minute,
+        );
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDateTime = DateTime(
+          _selectedDateTime.year,
+          _selectedDateTime.month,
+          _selectedDateTime.day,
+          picked.hour,
+          picked.minute,
+        );
+      });
+    }
+  }
+
+  void _applyChanges() {
+    HapticFeedback.mediumImpact();
+    widget.manager.setTimeMode(_selectedMode);
+    if (_selectedMode != routing.TimeMode.leaveNow) {
+      widget.manager.setDateTime(_selectedDateTime);
+    }
+    Navigator.of(context).pop();
+    widget.onTimeChanged();
+  }
+}
+
+/// Time mode selection option
+class _TimeModeOption extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _TimeModeOption({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : Colors.transparent,
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                label,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: isSelected
+                      ? colorScheme.onPrimaryContainer
+                      : colorScheme.onSurface,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              if (isSelected)
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 22,
+                  color: colorScheme.primary,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Date/time selection button
+class _DateTimeButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _DateTimeButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Material(
+      color: colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 20,
+                color: colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

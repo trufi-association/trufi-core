@@ -34,6 +34,7 @@ class Otp15PlanRepository implements PlanRepository {
     int numItineraries = 5,
     String? locale,
     required DateTime dateTime,
+    bool arriveBy = false,
     RoutingPreferences? preferences,
   }) async {
     final date = '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}-${dateTime.year}';
@@ -52,6 +53,7 @@ class Otp15PlanRepository implements PlanRepository {
       'mode': modes,
       'date': date,
       'time': time,
+      if (arriveBy) 'arriveBy': 'true',
     };
 
     // Add routing preferences

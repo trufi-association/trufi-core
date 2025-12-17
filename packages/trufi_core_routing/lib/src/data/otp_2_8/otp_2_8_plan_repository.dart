@@ -36,6 +36,7 @@ class Otp28PlanRepository implements PlanRepository {
     int numItineraries = 5,
     String? locale,
     required DateTime dateTime,
+    bool arriveBy = false,
     RoutingPreferences? preferences,
   }) async {
     final queryString =
@@ -50,6 +51,7 @@ class Otp28PlanRepository implements PlanRepository {
       'numItineraries': numItineraries,
       'date': date,
       'time': time,
+      if (arriveBy) 'arriveBy': true,
       if (locale != null) 'locale': locale,
     };
 

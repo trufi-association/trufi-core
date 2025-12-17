@@ -46,6 +46,12 @@ class RoutingPreferencesManager extends ChangeNotifier {
   /// Transport modes enabled for routing.
   Set<RoutingMode> get transportModes => _preferences.transportModes;
 
+  /// Time mode for departure/arrival planning.
+  TimeMode get timeMode => _preferences.timeMode;
+
+  /// The specific date/time for departure or arrival.
+  DateTime? get dateTime => _preferences.dateTime;
+
   Future<void> _loadSavedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_storageKey);
@@ -141,6 +147,35 @@ class RoutingPreferencesManager extends ChangeNotifier {
     setTransportModes(modes);
   }
 
+  /// Sets the time mode (leave now, depart at, arrive by).
+  void setTimeMode(TimeMode mode) {
+    if (_preferences.timeMode != mode) {
+      if (mode == TimeMode.leaveNow) {
+        // Clear dateTime when switching to "Leave now"
+        _preferences = _preferences.copyWith(timeMode: mode, clearDateTime: true);
+      } else {
+        // Set default dateTime to now if not already set
+        _preferences = _preferences.copyWith(
+          timeMode: mode,
+          dateTime: _preferences.dateTime ?? DateTime.now(),
+        );
+      }
+      _persistPreferences();
+      notifyListeners();
+    }
+  }
+
+  /// Sets the date/time for departure or arrival.
+  void setDateTime(DateTime? dateTime) {
+    if (_preferences.dateTime != dateTime) {
+      _preferences = dateTime != null
+          ? _preferences.copyWith(dateTime: dateTime)
+          : _preferences.copyWith(clearDateTime: true);
+      _persistPreferences();
+      notifyListeners();
+    }
+  }
+
   /// Resets to default preferences.
   void reset() {
     _preferences = const RoutingPreferences();
@@ -156,6 +191,7 @@ class RoutingPreferencesManager extends ChangeNotifier {
       'walkReluctance': prefs.walkReluctance,
       'bikeSpeed': prefs.bikeSpeed,
       'transportModes': prefs.transportModes.map((m) => m.name).toList(),
+      // Note: timeMode and dateTime are NOT persisted - they reset to "Leave now" each session
     };
   }
 
@@ -173,6 +209,7 @@ class RoutingPreferencesManager extends ChangeNotifier {
                   ))
               .toSet() ??
           const {RoutingMode.transit, RoutingMode.walk},
+      // timeMode defaults to leaveNow, dateTime defaults to null
     );
   }
 
