@@ -147,12 +147,7 @@ class _RouteMapViewState extends State<_RouteMapView> {
           zoom: mapEngineManager.defaultZoom,
         ),
       );
-      _fitCameraLayer = FitCameraLayer(
-        _mapController!,
-        devicePixelRatio: MediaQueryData.fromView(
-          WidgetsBinding.instance.platformDispatcher.views.first,
-        ).devicePixelRatio,
-      );
+      _fitCameraLayer = FitCameraLayer(_mapController!);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _updateRoute();
@@ -212,11 +207,23 @@ class _RouteMapViewState extends State<_RouteMapView> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        final viewPadding = MediaQuery.of(context).viewPadding;
+        // Add extra padding for top bar (~70px) and bottom sheet (~30% of screen)
+        final sheetHeight = constraints.maxHeight * 0.30;
+        final adjustedPadding = EdgeInsets.only(
+          top: viewPadding.top + 70,
+          bottom: viewPadding.bottom + sheetHeight,
+          left: viewPadding.left,
+          right: viewPadding.right,
+        );
         _fitCameraLayer?.updateViewport(
           Size(constraints.maxWidth, constraints.maxHeight),
-          MediaQuery.of(context).viewPadding,
+          adjustedPadding,
         );
         final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+        // Calculate safe offset to avoid overlapping with TransportDetailScreen topbar
+        final topOffset = viewPadding.top + 70;
 
         return Stack(
           children: [
@@ -226,55 +233,62 @@ class _RouteMapViewState extends State<_RouteMapView> {
               isDarkMode: isDarkMode,
             ),
 
-            // Map Type Button (top-left)
-            if (mapEngineManager.engines.length > 1)
-              Positioned(
-                top: 16,
-                left: 16,
-                child: SafeArea(
-                  child: MapTypeButton.fromEngines(
-                    engines: mapEngineManager.engines,
-                    currentEngineIndex: mapEngineManager.currentIndex,
-                    onEngineChanged: (engine) {
-                      mapEngineManager.setEngine(engine);
-                    },
-                    settingsAppBarTitle: 'Map Settings',
-                    settingsSectionTitle: 'Map Type',
-                    settingsApplyButtonText: 'Apply Changes',
-                  ),
-                ),
-              ),
-
-            // Recenter button (top-right)
+            // Map controls (right side, below top bar)
             Positioned(
-              top: 16,
+              top: topOffset,
               right: 16,
-              child: SafeArea(
-                child: ValueListenableBuilder<bool>(
-                  valueListenable: _fitCameraLayer!.outOfFocusNotifier,
-                  builder: (context, outOfFocus, _) {
-                    if (!outOfFocus) return const SizedBox.shrink();
-                    return Material(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(12),
-                      elevation: 2,
-                      child: InkWell(
-                        onTap: _fitCameraLayer!.reFitCamera,
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.center_focus_strong_rounded,
-                            size: 22,
-                            color: Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Map Type Button
+                  if (mapEngineManager.engines.length > 1) ...[
+                    MapTypeButton.fromEngines(
+                      engines: mapEngineManager.engines,
+                      currentEngineIndex: mapEngineManager.currentIndex,
+                      onEngineChanged: (engine) {
+                        mapEngineManager.setEngine(engine);
+                      },
+                      settingsAppBarTitle: 'Map Settings',
+                      settingsSectionTitle: 'Map Type',
+                      settingsApplyButtonText: 'Apply Changes',
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  // Recenter button (only visible when route is out of focus)
+                  ValueListenableBuilder<bool>(
+                    valueListenable: _fitCameraLayer!.outOfFocusNotifier,
+                    builder: (context, outOfFocus, _) {
+                      return AnimatedOpacity(
+                        opacity: outOfFocus ? 1.0 : 0.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: AnimatedScale(
+                          scale: outOfFocus ? 1.0 : 0.8,
+                          duration: const Duration(milliseconds: 200),
+                          child: Material(
+                            color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.95),
+                            borderRadius: BorderRadius.circular(12),
+                            elevation: 2,
+                            shadowColor: Colors.black26,
+                            child: InkWell(
+                              onTap: outOfFocus ? _fitCameraLayer!.reFitCamera : null,
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                width: 44,
+                                height: 44,
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.crop_free_rounded,
+                                  size: 22,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ],
