@@ -71,6 +71,18 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     emit(state.copyWithNullable(toPlace: const Optional(null)));
   }
 
+  /// Clear the current plan and selected itinerary.
+  Future<void> clearPlan() async {
+    await _cancelCurrentFetch();
+    await _repository.savePlan(null);
+    await _repository.saveSelectedItinerary(null);
+    emit(state.copyWithNullable(
+      plan: const Optional(null),
+      selectedItinerary: const Optional(null),
+      error: const Optional(null),
+    ));
+  }
+
   /// Swap origin and destination.
   Future<void> swapLocations() async {
     final newFromPlace = state.toPlace;

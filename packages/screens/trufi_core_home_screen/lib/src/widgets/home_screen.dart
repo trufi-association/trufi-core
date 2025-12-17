@@ -257,6 +257,7 @@ class _HomeScreenState extends State<HomeScreen>
     } else {
       cubit.resetToPlace();
     }
+    cubit.clearPlan();
     _clearRouteFromMap();
   }
 
