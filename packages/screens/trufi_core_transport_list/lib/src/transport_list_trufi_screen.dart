@@ -113,8 +113,10 @@ class _TransportListScreenWidgetState
           context,
           routeCode: route.code,
           getRouteDetails: _dataProvider.getRouteDetails,
-          mapBuilder: (context, routeDetails) => _RouteMapView(
+          mapBuilder: (context, routeDetails, registerMapMoveCallback) =>
+              _RouteMapView(
             route: routeDetails,
+            registerMapMoveCallback: registerMapMoveCallback,
           ),
         );
       },
@@ -125,9 +127,11 @@ class _TransportListScreenWidgetState
 /// Map view for displaying a route
 class _RouteMapView extends StatefulWidget {
   final TransportRouteDetails? route;
+  final void Function(MapMoveCallback) registerMapMoveCallback;
 
   const _RouteMapView({
     required this.route,
+    required this.registerMapMoveCallback,
   });
 
   @override
@@ -138,6 +142,22 @@ class _RouteMapViewState extends State<_RouteMapView> {
   TrufiMapController? _mapController;
   FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Register the callback for moving the map
+    widget.registerMapMoveCallback(_moveToLocation);
+  }
+
+  void _moveToLocation(double latitude, double longitude) {
+    _mapController?.setCameraPosition(
+      TrufiCameraPosition(
+        target: LatLng(latitude, longitude),
+        zoom: 16,
+      ),
+    );
+  }
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
     if (_mapController == null) {
@@ -308,6 +328,7 @@ class _RouteLayer extends TrufiLayer {
 
     if (route.geometry == null || route.geometry!.isEmpty) return;
 
+    final routeColor = route.backgroundColor ?? Colors.blue;
     final points =
         route.geometry!.map((p) => LatLng(p.latitude, p.longitude)).toList();
 
@@ -315,52 +336,71 @@ class _RouteLayer extends TrufiLayer {
     addLine(TrufiLine(
       id: 'route-line',
       position: points,
-      color: route.backgroundColor ?? Colors.blue,
+      color: routeColor,
       lineWidth: 5,
     ));
 
-    // Add start marker
-    addMarker(TrufiMarker(
-      id: 'start-marker',
-      position: points.first,
-      widget: Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 3),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 4,
-            ),
-          ],
-        ),
-      ),
-      size: const Size(20, 20),
-    ));
+    // Add stop markers (intermediate stops)
+    final stops = route.stops ?? [];
+    // Create stable imageKeys based on visual properties (color + isTerminal)
+    final colorHex = routeColor.toARGB32().toRadixString(16);
+    final terminalImageKey = 'stop_terminal_$colorHex';
+    final intermediateImageKey = 'stop_intermediate_$colorHex';
 
-    // Add end marker
-    addMarker(TrufiMarker(
-      id: 'end-marker',
-      position: points.last,
-      widget: Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 3),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 4,
-            ),
-          ],
+    for (int i = 0; i < stops.length; i++) {
+      final stop = stops[i];
+      final isFirst = i == 0;
+      final isLast = i == stops.length - 1;
+      final isTerminal = isFirst || isLast;
+
+      addMarker(TrufiMarker(
+        id: 'stop-$i',
+        position: LatLng(stop.latitude, stop.longitude),
+        widget: _StopMarker(
+          color: routeColor,
+          isTerminal: isTerminal,
         ),
+        size: Size(isTerminal ? 16 : 12, isTerminal ? 16 : 12),
+        layerLevel: isTerminal ? 2 : 1,
+        imageKey: isTerminal ? terminalImageKey : intermediateImageKey,
+      ));
+    }
+  }
+}
+
+/// Marker widget for stops
+class _StopMarker extends StatelessWidget {
+  final Color color;
+  final bool isTerminal;
+
+  const _StopMarker({
+    required this.color,
+    this.isTerminal = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final size = isTerminal ? 16.0 : 12.0;
+    final borderWidth = isTerminal ? 3.0 : 2.0;
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: isTerminal ? color : Colors.white,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: isTerminal ? Colors.white : color,
+          width: borderWidth,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.25),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
-      size: const Size(20, 20),
-    ));
+    );
   }
 }
