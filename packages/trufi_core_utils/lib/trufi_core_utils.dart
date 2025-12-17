@@ -4,3 +4,6 @@ export './theme_manager.dart';
 
 // Storage
 export './src/storage/shared_preferences_storage.dart';
+
+// Location
+export './src/location_service.dart';

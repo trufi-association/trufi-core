@@ -11,6 +11,7 @@ import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../../l10n/home_screen_localizations.dart';
 import '../config/home_screen_config.dart';
@@ -47,8 +48,13 @@ class _HomeScreenState extends State<HomeScreen>
   FitCameraLayer? _fitCameraLayer;
   _RouteLayer? _routeLayer;
   _LocationMarkersLayer? _locationMarkersLayer;
+  _MyLocationLayer? _myLocationLayer;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
+
+  // GPS location service
+  final LocationService _locationService = LocationService();
+  bool _isLocating = false;
 
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
@@ -57,6 +63,24 @@ class _HomeScreenState extends State<HomeScreen>
   static const double _sheetMinSize = 0.08;
   static const double _sheetMidSize = 0.35;
   static const double _sheetMaxSize = 0.85;
+
+  @override
+  void initState() {
+    super.initState();
+    // Listen to location updates
+    _locationService.addListener(_onLocationUpdate);
+    // Try to start GPS tracking automatically
+    _tryAutoStartTracking();
+  }
+
+  /// Attempts to start GPS tracking automatically on app start.
+  /// Silently fails if permissions are not granted - user can enable via button.
+  Future<void> _tryAutoStartTracking() async {
+    final status = await _locationService.checkPermission();
+    if (status == LocationPermissionStatus.granted) {
+      await _locationService.startTracking();
+    }
+  }
 
   void _initializeIfNeeded(MapEngineManager mapEngineManager) {
     if (_mapController == null) {
@@ -74,9 +98,23 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    _locationService.removeListener(_onLocationUpdate);
+    _locationService.dispose();
     _sheetController.dispose();
     _mapController?.dispose();
     super.dispose();
+  }
+
+  /// Called when location updates from the GPS tracking
+  void _onLocationUpdate() {
+    final location = _locationService.currentLocation;
+    if (location != null && _mapController != null) {
+      final position = LatLng(location.latitude, location.longitude);
+
+      // Update my location marker on map
+      _myLocationLayer ??= _MyLocationLayer(_mapController!);
+      _myLocationLayer!.setLocation(position, location.accuracy);
+    }
   }
 
   /// Expand sheet when results are available
@@ -127,12 +165,34 @@ class _HomeScreenState extends State<HomeScreen>
             yourLocationText: l10n.yourLocation,
             chooseOnMapText: l10n.chooseOnMap,
           ),
-          onYourLocation: () => SearchLocation(
-            id: 'current_location',
-            displayName: l10n.yourLocation,
-            latitude: defaultCenter.latitude,
-            longitude: defaultCenter.longitude,
-          ),
+          onYourLocation: () async {
+            // Try to get GPS location
+            var status = await _locationService.checkPermission();
+
+            if (status == LocationPermissionStatus.denied) {
+              status = await _locationService.requestPermission();
+            }
+
+            if (status == LocationPermissionStatus.granted) {
+              final location = await _locationService.getCurrentLocation();
+              if (location != null) {
+                return SearchLocation(
+                  id: 'current_location',
+                  displayName: l10n.yourLocation,
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                );
+              }
+            }
+
+            // Fallback to default center if GPS not available
+            return SearchLocation(
+              id: 'current_location',
+              displayName: l10n.yourLocation,
+              latitude: defaultCenter.latitude,
+              longitude: defaultCenter.longitude,
+            );
+          },
           onChooseOnMap: () async {
             final result = await Navigator.push<MapLocationResult>(
               context,
@@ -281,6 +341,134 @@ class _HomeScreenState extends State<HomeScreen>
       _pendingFitPoints = null;
       _fitCameraLayer?.clearFitPoints();
     }
+  }
+
+  Future<void> _onMyLocationPressed() async {
+    // If already tracking, just center the map on current location
+    if (_locationService.isTracking) {
+      final location = _locationService.currentLocation;
+      if (location != null) {
+        _mapController?.setCameraPosition(
+          TrufiCameraPosition(
+            target: LatLng(location.latitude, location.longitude),
+            zoom: 16,
+          ),
+        );
+      }
+      return;
+    }
+
+    if (_isLocating) return;
+
+    setState(() => _isLocating = true);
+
+    try {
+      // Check permission first
+      var status = await _locationService.checkPermission();
+
+      if (status == LocationPermissionStatus.denied) {
+        // Request permission
+        status = await _locationService.requestPermission();
+      }
+
+      if (status == LocationPermissionStatus.granted) {
+        // Start tracking location continuously
+        final started = await _locationService.startTracking();
+
+        if (started && mounted) {
+          // Get initial location to center the map
+          final location = await _locationService.getCurrentLocation();
+          if (location != null && mounted) {
+            final position = LatLng(location.latitude, location.longitude);
+
+            // Move camera to location
+            _mapController?.setCameraPosition(
+              TrufiCameraPosition(target: position, zoom: 16),
+            );
+          }
+        }
+      } else if (status == LocationPermissionStatus.deniedForever) {
+        // Show dialog to open app settings
+        if (mounted) {
+          _showPermissionDeniedDialog();
+        }
+      } else if (status == LocationPermissionStatus.serviceDisabled) {
+        // Show dialog to open location settings
+        if (mounted) {
+          _showLocationDisabledDialog();
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLocating = false);
+      }
+    }
+  }
+
+  void _showPermissionDeniedDialog() {
+    final theme = Theme.of(context);
+
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.location_off_rounded, color: theme.colorScheme.error),
+            const SizedBox(width: 12),
+            const Expanded(child: Text('Location Permission')),
+          ],
+        ),
+        content: const Text(
+          'Location permission is permanently denied. Please enable it in your device settings to use this feature.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _locationService.openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLocationDisabledDialog() {
+    final theme = Theme.of(context);
+
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.location_disabled_rounded, color: theme.colorScheme.error),
+            const SizedBox(width: 12),
+            const Expanded(child: Text('Location Disabled')),
+          ],
+        ),
+        content: const Text(
+          'Location services are disabled on your device. Please enable them to use this feature.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _locationService.openLocationSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _onMapLongPress(LatLng position) async {
@@ -593,7 +781,16 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 const SizedBox(height: 8),
               ],
-              // Recenter button
+              // My location button
+              _MapControlButton(
+                icon: _locationService.isTracking
+                    ? Icons.my_location_rounded  // Filled when tracking
+                    : Icons.my_location_outlined, // Outlined when not tracking
+                onPressed: _onMyLocationPressed,
+                isLoading: _isLocating,
+              ),
+              const SizedBox(height: 8),
+              // Recenter button (only visible when route is out of focus)
               ValueListenableBuilder<bool>(
                 valueListenable: _fitCameraLayer!.outOfFocusNotifier,
                 builder: (context, outOfFocus, _) {
@@ -1034,8 +1231,13 @@ class _TransitRouteLabel extends StatelessWidget {
 class _MapControlButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
+  final bool isLoading;
 
-  const _MapControlButton({required this.icon, this.onPressed});
+  const _MapControlButton({
+    required this.icon,
+    this.onPressed,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1047,7 +1249,7 @@ class _MapControlButton extends StatelessWidget {
       elevation: 4,
       shadowColor: Colors.black.withValues(alpha: 0.2),
       child: InkWell(
-        onTap: onPressed != null
+        onTap: onPressed != null && !isLoading
             ? () {
                 HapticFeedback.lightImpact();
                 onPressed!();
@@ -1058,13 +1260,22 @@ class _MapControlButton extends StatelessWidget {
           width: 48,
           height: 48,
           alignment: Alignment.center,
-          child: Icon(
-            icon,
-            size: 22,
-            color: onPressed != null
-                ? theme.colorScheme.primary
-                : theme.disabledColor,
-          ),
+          child: isLoading
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: theme.colorScheme.primary,
+                  ),
+                )
+              : Icon(
+                  icon,
+                  size: 22,
+                  color: onPressed != null
+                      ? theme.colorScheme.primary
+                      : theme.disabledColor,
+                ),
         ),
       ),
     );
@@ -1568,6 +1779,94 @@ class _DateTimeButton extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Layer for displaying user's current location on the map
+class _MyLocationLayer extends TrufiLayer {
+  _MyLocationLayer(super.controller)
+      : super(id: 'my-location-layer', layerLevel: 0); // Below origin/destination markers
+
+  void setLocation(LatLng position, double? accuracy) {
+    clearMarkers();
+
+    // Add accuracy circle if available (shown as a subtle ring)
+    if (accuracy != null && accuracy > 0) {
+      addMarker(
+        TrufiMarker(
+          id: 'my-location-accuracy',
+          position: position,
+          widget: _MyLocationAccuracyCircle(accuracy: accuracy),
+          size: Size(accuracy * 2, accuracy * 2),
+        ),
+      );
+    }
+
+    // Add the blue dot marker
+    addMarker(
+      TrufiMarker(
+        id: 'my-location-dot',
+        position: position,
+        widget: const _MyLocationMarker(),
+        size: const Size(24, 24),
+        layerLevel: 1,
+      ),
+    );
+  }
+}
+
+/// Blue dot marker for current location (Google Maps style)
+class _MyLocationMarker extends StatelessWidget {
+  const _MyLocationMarker();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: const Color(0xFF4285F4), // Google blue
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF4285F4).withValues(alpha: 0.4),
+            blurRadius: 8,
+            spreadRadius: 2,
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Accuracy circle around the location marker
+class _MyLocationAccuracyCircle extends StatelessWidget {
+  final double accuracy;
+
+  const _MyLocationAccuracyCircle({required this.accuracy});
+
+  @override
+  Widget build(BuildContext context) {
+    // Scale accuracy to a reasonable visual size (capped)
+    final size = (accuracy * 2).clamp(40.0, 200.0);
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF4285F4).withValues(alpha: 0.15),
+        border: Border.all(
+          color: const Color(0xFF4285F4).withValues(alpha: 0.3),
+          width: 1,
         ),
       ),
     );

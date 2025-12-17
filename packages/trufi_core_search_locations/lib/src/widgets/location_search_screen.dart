@@ -67,7 +67,8 @@ class LocationSearchScreen extends StatefulWidget {
   final MyPlacesProvider? myPlacesProvider;
 
   /// Callback to get current location.
-  final SearchLocation Function()? onYourLocation;
+  /// This is async to support GPS location retrieval.
+  final Future<SearchLocation?> Function()? onYourLocation;
 
   /// Callback to open map picker.
   final Future<SearchLocation?> Function()? onChooseOnMap;
@@ -270,10 +271,12 @@ class _LocationSearchScreenState extends State<LocationSearchScreen>
                       index: 1,
                       child: _QuickActionsSection(
                         onYourLocation: widget.onYourLocation != null
-                            ? () {
+                            ? () async {
                                 HapticFeedback.lightImpact();
-                                final location = widget.onYourLocation!();
-                                Navigator.pop(context, location);
+                                final location = await widget.onYourLocation!();
+                                if (location != null && context.mounted) {
+                                  Navigator.pop(context, location);
+                                }
                               }
                             : null,
                         onChooseOnMap: widget.onChooseOnMap != null

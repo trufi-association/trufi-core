@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           isOrigin: isOrigin,
           myPlaces: _myPlaces,
           searchService: _searchService,
-          onYourLocation: () => const SearchLocation(
+          onYourLocation: () async => const SearchLocation(
             id: 'current',
             displayName: 'Your Location',
             latitude: -17.3900,
