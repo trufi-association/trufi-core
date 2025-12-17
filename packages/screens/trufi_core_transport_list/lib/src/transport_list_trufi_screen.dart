@@ -9,6 +9,7 @@ import 'package:trufi_core_routing/trufi_core_routing.dart';
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
 import 'otp_transport_data_provider.dart';
+import 'repository/transport_list_cache.dart';
 import 'transport_detail_screen.dart';
 import 'transport_list_content.dart';
 import 'transport_list_data_provider.dart';
@@ -80,21 +81,26 @@ class _TransportListScreenWidget extends StatefulWidget {
 class _TransportListScreenWidgetState
     extends State<_TransportListScreenWidget> {
   late final TransportListDataProvider _dataProvider;
+  late final TransportListCache _cache;
 
   @override
   void initState() {
     super.initState();
+    _cache = TransportListCache();
+    _cache.initialize();
     _dataProvider = OtpTransportDataProvider(
       otpConfiguration: OtpConfiguration(
         endpoint: widget.config.otpEndpoint,
         version: widget.config.otpVersion,
       ),
+      cache: _cache,
     );
   }
 
   @override
   void dispose() {
     _dataProvider.dispose();
+    _cache.dispose();
     super.dispose();
   }
 
