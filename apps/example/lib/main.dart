@@ -20,6 +20,7 @@ void main() {
   runTrufiApp(
     AppConfiguration(
       appName: 'Trufi App',
+      deepLinkScheme: 'trufiapp',
       socialMediaLinks: const [
         SocialMediaLink(
           url: 'https://facebook.com/trufiapp',
@@ -57,6 +58,8 @@ void main() {
         HomeScreenTrufiScreen(
           config: HomeScreenConfig(
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
+            appName: 'Trufi App',
+            deepLinkScheme: 'trufiapp',
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(

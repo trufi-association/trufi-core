@@ -25,3 +25,6 @@ export './src/places/my_places_provider.dart';
 
 // Storage interfaces
 export './src/storage/storage_service.dart';
+
+// Deep link
+export './src/deep_link/shared_route.dart';

@@ -125,5 +125,87 @@
   "setAsDestination": "Set as Destination",
   "@setAsDestination": {
     "description": "Option to set location as destination"
+  },
+  "shareRoute": "Share route",
+  "@shareRoute": {
+    "description": "Tooltip for share route button"
+  },
+  "shareRouteTitle": "{appName} - Shared route",
+  "@shareRouteTitle": {
+    "description": "Title for shared route text",
+    "placeholders": {
+      "appName": {
+        "type": "String",
+        "example": "Trufi App"
+      }
+    }
+  },
+  "shareRouteOrigin": "Origin: {location}",
+  "@shareRouteOrigin": {
+    "description": "Origin label in shared route",
+    "placeholders": {
+      "location": {
+        "type": "String",
+        "example": "Main Square"
+      }
+    }
+  },
+  "shareRouteDestination": "Destination: {location}",
+  "@shareRouteDestination": {
+    "description": "Destination label in shared route",
+    "placeholders": {
+      "location": {
+        "type": "String",
+        "example": "Airport"
+      }
+    }
+  },
+  "shareRouteDate": "Date: {date}",
+  "@shareRouteDate": {
+    "description": "Date label in shared route",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "18/12/2024"
+      }
+    }
+  },
+  "shareRouteTimes": "Departure: {departure} → Arrival: {arrival}",
+  "@shareRouteTimes": {
+    "description": "Times label in shared route",
+    "placeholders": {
+      "departure": {
+        "type": "String",
+        "example": "14:30"
+      },
+      "arrival": {
+        "type": "String",
+        "example": "15:15"
+      }
+    }
+  },
+  "shareRouteDuration": "Duration: {duration}",
+  "@shareRouteDuration": {
+    "description": "Duration label in shared route",
+    "placeholders": {
+      "duration": {
+        "type": "String",
+        "example": "45 min"
+      }
+    }
+  },
+  "shareRouteItinerary": "Route: {summary}",
+  "@shareRouteItinerary": {
+    "description": "Route summary label in shared route",
+    "placeholders": {
+      "summary": {
+        "type": "String",
+        "example": "Walk 5min → Bus L1 → Walk 3min"
+      }
+    }
+  },
+  "shareRouteOpenInApp": "Open in app:",
+  "@shareRouteOpenInApp": {
+    "description": "Label before deep link URL"
   }
 }

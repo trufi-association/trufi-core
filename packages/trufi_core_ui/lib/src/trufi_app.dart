@@ -6,9 +6,11 @@ import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import 'l10n/core_localizations.dart';
 import 'router/app_router.dart';
+import 'services/deep_link_service.dart';
 
 export 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     show AppConfiguration, TrufiScreen, ScreenMenuItem, ScreenThemeData, TrufiLocaleConfig, TrufiThemeConfig, SocialMediaLink;
+export 'services/deep_link_service.dart' show SharedRoute, SharedRouteNotifier;
 
 /// Run the Trufi app with the given configuration
 Future<void> runTrufiApp(AppConfiguration config) async {
@@ -24,23 +26,55 @@ Future<void> runTrufiApp(AppConfiguration config) async {
 }
 
 /// Main Trufi App widget
-class TrufiApp extends StatelessWidget {
+class TrufiApp extends StatefulWidget {
   final AppConfiguration config;
-  final LocaleManager _localeManager;
-  final ThemeManager _themeManager;
-  final AppRouter _router;
 
-  TrufiApp({super.key, required this.config})
-      : _localeManager = LocaleManager(
-          defaultLocale: config.localeConfig.defaultLocale,
-        ),
-        _themeManager = ThemeManager(
-          defaultThemeMode: config.themeConfig.themeMode,
-        ),
-        _router = AppRouter(
-          screens: config.screens,
-          socialMediaLinks: config.socialMediaLinks,
-        );
+  const TrufiApp({super.key, required this.config});
+
+  @override
+  State<TrufiApp> createState() => _TrufiAppState();
+}
+
+class _TrufiAppState extends State<TrufiApp> {
+  late final LocaleManager _localeManager;
+  late final ThemeManager _themeManager;
+  late final AppRouter _router;
+  late final SharedRouteNotifier _sharedRouteNotifier;
+  DeepLinkService? _deepLinkService;
+
+  @override
+  void initState() {
+    super.initState();
+    _localeManager = LocaleManager(
+      defaultLocale: widget.config.localeConfig.defaultLocale,
+    );
+    _themeManager = ThemeManager(
+      defaultThemeMode: widget.config.themeConfig.themeMode,
+    );
+    _router = AppRouter(
+      screens: widget.config.screens,
+      socialMediaLinks: widget.config.socialMediaLinks,
+    );
+    _sharedRouteNotifier = SharedRouteNotifier();
+
+    // Initialize deep link service if scheme is configured
+    if (widget.config.deepLinkScheme != null) {
+      _deepLinkService = DeepLinkService(
+        scheme: widget.config.deepLinkScheme,
+        onRouteReceived: (route) {
+          _sharedRouteNotifier.setPendingRoute(route);
+        },
+      );
+      _deepLinkService!.initialize();
+    }
+  }
+
+  @override
+  void dispose() {
+    _deepLinkService?.dispose();
+    _sharedRouteNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,18 +101,19 @@ class TrufiApp extends StatelessWidget {
       ),
     );
 
-    final screenDelegates = config.screens.expand((s) => s.localizationsDelegates).toList();
-    final screenProviders = config.screens.expand((s) => s.providers).toList();
+    final screenDelegates = widget.config.screens.expand((s) => s.localizationsDelegates).toList();
+    final screenProviders = widget.config.screens.expand((s) => s.providers).toList();
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _localeManager),
         ChangeNotifierProvider.value(value: _themeManager),
-        ...config.providers,
+        ChangeNotifierProvider.value(value: _sharedRouteNotifier),
+        ...widget.config.providers,
         ...screenProviders,
       ],
       child: _TrufiMaterialApp(
-        config: config,
+        config: widget.config,
         router: _router,
         defaultTheme: defaultTheme,
         defaultDarkTheme: defaultDarkTheme,

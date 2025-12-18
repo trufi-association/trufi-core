@@ -216,6 +216,7 @@ class ItineraryList extends StatelessWidget {
       ),
     );
   }
+
 }
 
 /// Shimmer loading card placeholder

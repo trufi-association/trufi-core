@@ -88,4 +88,45 @@ class HomeScreenLocalizationsDe extends HomeScreenLocalizations {
 
   @override
   String get setAsDestination => 'Als Zielort festlegen';
+
+  @override
+  String get shareRoute => 'Route teilen';
+
+  @override
+  String shareRouteTitle(String appName) {
+    return '$appName - Geteilte Route';
+  }
+
+  @override
+  String shareRouteOrigin(String location) {
+    return 'Start: $location';
+  }
+
+  @override
+  String shareRouteDestination(String location) {
+    return 'Ziel: $location';
+  }
+
+  @override
+  String shareRouteDate(String date) {
+    return 'Datum: $date';
+  }
+
+  @override
+  String shareRouteTimes(String departure, String arrival) {
+    return 'Abfahrt: $departure → Ankunft: $arrival';
+  }
+
+  @override
+  String shareRouteDuration(String duration) {
+    return 'Dauer: $duration';
+  }
+
+  @override
+  String shareRouteItinerary(String summary) {
+    return 'Route: $summary';
+  }
+
+  @override
+  String get shareRouteOpenInApp => 'In der App öffnen:';
 }

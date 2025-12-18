@@ -17,6 +17,7 @@ import '../../l10n/home_screen_localizations.dart';
 import '../config/home_screen_config.dart';
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
+import '../services/share_route_service.dart';
 import 'itinerary_list.dart';
 import 'routing_settings_sheet.dart';
 
@@ -74,11 +75,65 @@ class _HomeScreenState extends State<HomeScreen>
   static const double _sheetMidSize = 0.35;
   static const double _sheetMaxSize = 0.85;
 
+  // Deep link handling
+  SharedRouteNotifier? _sharedRouteNotifier;
+
   @override
   void initState() {
     super.initState();
     // Listen to location updates
     _locationService.addListener(_onLocationUpdate);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Listen to shared route notifier for deep links
+    _setupSharedRouteListener();
+  }
+
+  void _setupSharedRouteListener() {
+    // Try to get SharedRouteNotifier from context (it may not be available)
+    try {
+      final notifier = context.read<SharedRouteNotifier>();
+      if (_sharedRouteNotifier != notifier) {
+        _sharedRouteNotifier?.removeListener(_onSharedRouteChanged);
+        _sharedRouteNotifier = notifier;
+        _sharedRouteNotifier!.addListener(_onSharedRouteChanged);
+        // Check if there's already a pending route
+        _onSharedRouteChanged();
+      }
+    } catch (_) {
+      // SharedRouteNotifier not available (deep links not configured)
+    }
+  }
+
+  void _onSharedRouteChanged() {
+    final route = _sharedRouteNotifier?.pendingRoute;
+    if (route == null) return;
+
+    // Clear the pending route immediately to prevent duplicate handling
+    _sharedRouteNotifier!.clearPendingRoute();
+
+    // Set origin and destination from the shared route
+    final cubit = context.read<RoutePlannerCubit>();
+
+    final fromPlace = TrufiLocation(
+      description: route.fromName,
+      latitude: route.fromLat,
+      longitude: route.fromLng,
+    );
+
+    final toPlace = TrufiLocation(
+      description: route.toName,
+      latitude: route.toLat,
+      longitude: route.toLng,
+    );
+
+    // Set locations and fetch plan with selected itinerary index
+    cubit.setFromPlace(fromPlace);
+    cubit.setToPlace(toPlace);
+    cubit.fetchPlan(selectedItineraryIndex: route.selectedItineraryIndex);
   }
 
   /// Attempts to start GPS tracking automatically on app start.
@@ -117,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    _sharedRouteNotifier?.removeListener(_onSharedRouteChanged);
     _locationService.removeListener(_onLocationUpdate);
     _locationService.dispose();
     _sheetController.dispose();
@@ -938,10 +994,60 @@ class _HomeScreenState extends State<HomeScreen>
       return const SizedBox.shrink();
     }
 
+    // Find selected itinerary index
+    final selectedIndex = state.selectedItinerary != null
+        ? itineraries.indexOf(state.selectedItinerary!)
+        : null;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
+          // Share button on the left
+          if (state.selectedItinerary != null &&
+              state.fromPlace != null &&
+              state.toPlace != null)
+            GestureDetector(
+              onTap: () {
+                HapticFeedback.lightImpact();
+                final l10n = HomeScreenLocalizations.of(context);
+                final appName = widget.config.appName ?? 'Trufi App';
+                ShareRouteService.shareRoute(
+                  from: state.fromPlace!,
+                  to: state.toPlace!,
+                  itinerary: state.selectedItinerary!,
+                  selectedItineraryIndex: selectedIndex != -1 ? selectedIndex : null,
+                  appName: appName,
+                  deepLinkScheme: widget.config.deepLinkScheme,
+                  strings: ShareRouteStrings(
+                    title: l10n.shareRouteTitle,
+                    origin: l10n.shareRouteOrigin,
+                    destination: l10n.shareRouteDestination,
+                    date: l10n.shareRouteDate,
+                    times: l10n.shareRouteTimes,
+                    duration: l10n.shareRouteDuration,
+                    itinerary: l10n.shareRouteItinerary,
+                    openInApp: l10n.shareRouteOpenInApp,
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.share_rounded,
+                  size: 18,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ),
+          if (state.selectedItinerary != null &&
+              state.fromPlace != null &&
+              state.toPlace != null)
+            const SizedBox(width: 8),
           Icon(Icons.route_rounded, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
           Expanded(
