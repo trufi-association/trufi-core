@@ -24,9 +24,34 @@ class TransportRoute {
 
   String get displayName => shortName ?? name;
 
-  String get longNameLast => longName?.split("→ ").last ?? '';
+  /// Gets the route name prefix (e.g., "MiniBus 1" from "MiniBus 1: Origen → Destino")
+  String get longNamePrefix {
+    if (longName == null) return '';
+    final colonIndex = longName!.indexOf(': ');
+    if (colonIndex != -1) {
+      return longName!.substring(0, colonIndex);
+    }
+    return '';
+  }
+
+  /// Gets the route description without the route name prefix (e.g., "MiniBus 1:")
+  String get _longNameWithoutPrefix {
+    if (longName == null) return '';
+    // Remove prefix like "MiniBus 1: " if present
+    final colonIndex = longName!.indexOf(': ');
+    if (colonIndex != -1) {
+      return longName!.substring(colonIndex + 2);
+    }
+    return longName!;
+  }
+
+  String get longNameStart => _longNameWithoutPrefix.split(" → ").first;
+
+  String get longNameLast => _longNameWithoutPrefix.split(" → ").last;
 
   String get longNameFull => longName ?? '';
+
+  bool get hasOriginDestination => _longNameWithoutPrefix.contains(" → ");
 }
 
 /// Represents a stop on a transport route

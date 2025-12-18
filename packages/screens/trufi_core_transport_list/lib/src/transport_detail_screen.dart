@@ -231,33 +231,21 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                             ),
                           ),
                           const SizedBox(width: 10),
-                          // Route name
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (_route!.modeName != null)
-                                  Text(
-                                    _route!.modeName!,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                if (_route!.longNameFull.isNotEmpty)
-                                  Text(
-                                    _route!.longNameFull,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: colorScheme.onSurface,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              ],
-                            ),
-                          ),
+                          // Route name (show prefix like "MiniBus 1", origin/destination is in bottom sheet)
+                          if (_route!.longNamePrefix.isNotEmpty)
+                            Expanded(
+                              child: Text(
+                                _route!.longNamePrefix,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          else
+                            const Spacer(),
                         ],
                       ),
                     ),
@@ -358,11 +346,11 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         // Bottom sheet with stops only
         TrufiBottomSheet(
           controller: _sheetController,
-          initialChildSize: 0.30,
-          minChildSize: 0.10,
-          maxChildSize: 0.75,
+          initialChildSize: 0.35,
+          minChildSize: 0.15,
+          maxChildSize: 0.85,
           snap: true,
-          snapSizes: const [0.10, 0.30, 0.75],
+          snapSizes: const [0.15, 0.35, 0.85],
           builder: (context, scrollController) => _StopsSheetContent(
             route: _route!,
             scrollController: scrollController,
@@ -455,7 +443,88 @@ class _StopsSheetContent extends StatelessWidget {
     return CustomScrollView(
       controller: scrollController,
       slivers: [
-        // Stops count header
+        // Origin/Destination header (Google Maps style)
+        if (route.hasOriginDestination)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Timeline indicators (green dot, dotted line, red dot)
+                  Column(
+                    children: [
+                      // Green origin dot
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.green.shade700,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                      // Dotted line
+                      CustomPaint(
+                        size: const Size(2, 28),
+                        painter: _DottedLinePainter(
+                          color: colorScheme.outlineVariant,
+                        ),
+                      ),
+                      // Red destination dot
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.red.shade700,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 12),
+                  // Origin and destination text
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Origin
+                        Text(
+                          route.longNameStart,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 16),
+                        // Destination
+                        Text(
+                          route.longNameLast,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        // Stops count header with divider
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -763,4 +832,35 @@ class _ErrorState extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Custom painter for dotted line between origin and destination
+class _DottedLinePainter extends CustomPainter {
+  final Color color;
+
+  _DottedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+
+    const dashHeight = 4.0;
+    const dashSpace = 4.0;
+    double startY = 0;
+
+    while (startY < size.height) {
+      canvas.drawLine(
+        Offset(size.width / 2, startY),
+        Offset(size.width / 2, startY + dashHeight),
+        paint,
+      );
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
