@@ -160,8 +160,12 @@ class NavigationCubit extends Cubit<NavigationState> {
     final isGpsWeak = location.accuracy != null &&
         location.accuracy! > _config.gpsAccuracyWarningThreshold;
 
+    // Calculate current leg index based on user position
+    final currentLegIndex = _getCurrentLegIndex(location);
+
     emit(state.copyWith(
       currentLocation: location,
+      currentLegIndex: currentLegIndex,
       isGpsWeak: isGpsWeak,
     ));
 
@@ -336,6 +340,33 @@ class NavigationCubit extends Cubit<NavigationState> {
         distanceFromRoute: null,
       ));
     }
+  }
+
+  /// Determines which leg index the user is currently on based on their position.
+  int _getCurrentLegIndex(LocationResult location) {
+    final route = state.route;
+    if (route == null || route.legs.isEmpty) return 0;
+
+    double minDist = double.infinity;
+    int closestLegIndex = 0;
+
+    for (int i = 0; i < route.legs.length; i++) {
+      final leg = route.legs[i];
+      for (final point in leg.points) {
+        final dist = _locationService.distanceBetween(
+          location.latitude,
+          location.longitude,
+          point.latitude,
+          point.longitude,
+        );
+        if (dist < minDist) {
+          minDist = dist;
+          closestLegIndex = i;
+        }
+      }
+    }
+
+    return closestLegIndex;
   }
 
   int _findNearestStopIndex(List<NavigationStop> stops, LocationResult location) {

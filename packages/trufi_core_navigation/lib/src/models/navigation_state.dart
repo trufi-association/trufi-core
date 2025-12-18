@@ -50,6 +50,44 @@ class NavigationStop extends Equatable {
   List<Object?> get props => [id, name, position];
 }
 
+/// Represents a leg segment for rendering in navigation.
+class NavigationLeg extends Equatable {
+  final String id;
+  final List<LatLng> points;
+  final bool isTransit;
+  final bool isWalking;
+  final bool isBicycle;
+  final int? color;
+  final String? routeName;
+  final String? modeName;
+  final Duration duration;
+
+  const NavigationLeg({
+    required this.id,
+    required this.points,
+    this.isTransit = false,
+    this.isWalking = false,
+    this.isBicycle = false,
+    this.color,
+    this.routeName,
+    this.modeName,
+    this.duration = Duration.zero,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        points,
+        isTransit,
+        isWalking,
+        isBicycle,
+        color,
+        routeName,
+        modeName,
+        duration,
+      ];
+}
+
 /// Route information for navigation.
 class NavigationRoute extends Equatable {
   final String id;
@@ -61,6 +99,7 @@ class NavigationRoute extends Equatable {
   final int? textColor;
   final List<LatLng> geometry;
   final List<NavigationStop> stops;
+  final List<NavigationLeg> legs;
   final String? modeName;
 
   const NavigationRoute({
@@ -73,6 +112,7 @@ class NavigationRoute extends Equatable {
     this.textColor,
     required this.geometry,
     required this.stops,
+    this.legs = const [],
     this.modeName,
   });
 
@@ -89,6 +129,7 @@ class NavigationRoute extends Equatable {
         textColor,
         geometry,
         stops,
+        legs,
         modeName,
       ];
 }
@@ -106,6 +147,9 @@ class NavigationState extends Equatable {
 
   /// Index of current/last passed stop.
   final int currentStopIndex;
+
+  /// Index of current leg (walking, transit, etc.).
+  final int currentLegIndex;
 
   /// Total number of stops.
   final int totalStops;
@@ -154,6 +198,7 @@ class NavigationState extends Equatable {
     this.segmentType = NavigationSegmentType.transit,
     this.route,
     this.currentStopIndex = 0,
+    this.currentLegIndex = 0,
     this.totalStops = 0,
     this.remainingStops = 0,
     this.currentInstruction,
@@ -199,11 +244,19 @@ class NavigationState extends Equatable {
     return route!.stops.last;
   }
 
+  /// The current leg being navigated.
+  NavigationLeg? get currentLeg {
+    if (route == null || route!.legs.isEmpty) return null;
+    if (currentLegIndex >= route!.legs.length) return route!.legs.last;
+    return route!.legs[currentLegIndex];
+  }
+
   NavigationState copyWith({
     NavigationStatus? status,
     NavigationSegmentType? segmentType,
     NavigationRoute? route,
     int? currentStopIndex,
+    int? currentLegIndex,
     int? totalStops,
     int? remainingStops,
     NavigationInstruction? currentInstruction,
@@ -224,6 +277,7 @@ class NavigationState extends Equatable {
       segmentType: segmentType ?? this.segmentType,
       route: route ?? this.route,
       currentStopIndex: currentStopIndex ?? this.currentStopIndex,
+      currentLegIndex: currentLegIndex ?? this.currentLegIndex,
       totalStops: totalStops ?? this.totalStops,
       remainingStops: remainingStops ?? this.remainingStops,
       currentInstruction: currentInstruction ?? this.currentInstruction,
@@ -258,6 +312,7 @@ class NavigationState extends Equatable {
         segmentType,
         route,
         currentStopIndex,
+        currentLegIndex,
         totalStops,
         remainingStops,
         currentInstruction,

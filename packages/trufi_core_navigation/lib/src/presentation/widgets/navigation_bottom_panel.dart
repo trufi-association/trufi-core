@@ -37,6 +37,9 @@ class NavigationBottomPanel extends StatelessWidget {
               etaToDestination: state.etaToDestination,
               isOffRoute: state.isOffRoute,
               isGpsWeak: state.isGpsWeak,
+              legs: state.route?.legs ?? [],
+              currentLeg: state.currentLeg,
+              totalDuration: state.etaToDestination,
             ),
 
           // Exit navigation button

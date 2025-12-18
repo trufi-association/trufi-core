@@ -21,13 +21,22 @@ class NavigationLayer extends TrufiLayer {
     if (route == null || route.geometry.isEmpty) return;
 
     final currentStopIndex = state.currentStopIndex;
-    final stops = route.stops;
+
+    // Get user position if available
+    final userPosition = state.currentLocation != null
+        ? LatLng(
+            state.currentLocation!.latitude,
+            state.currentLocation!.longitude,
+          )
+        : null;
+
+    // Determine current leg index based on user position
+    final currentLegIndex = route.legs.isNotEmpty
+        ? _getCurrentLegIndex(route, currentStopIndex, userPosition)
+        : 0;
 
     // Draw route lines
-    _drawRouteLines(route, currentStopIndex);
-
-    // Draw stop markers
-    _drawStopMarkers(stops, currentStopIndex, route);
+    _drawRouteLinesWithProgress(route, currentLegIndex, currentStopIndex, userPosition);
 
     // Draw user location marker
     _drawUserLocation(state);
@@ -61,7 +70,219 @@ class NavigationLayer extends TrufiLayer {
     ));
   }
 
-  void _drawRouteLines(NavigationRoute route, int currentStopIndex) {
+  void _drawRouteLinesWithProgress(
+    NavigationRoute route,
+    int currentLegIndex,
+    int currentStopIndex,
+    LatLng? userPosition,
+  ) {
+    // Use legs for proper rendering with colors and styles
+    if (route.legs.isNotEmpty) {
+      _drawLegsWithStyles(
+        route,
+        currentLegIndex,
+        currentStopIndex,
+        userPosition: userPosition,
+      );
+    } else {
+      // Fallback to simple geometry rendering
+      _drawSimpleGeometry(route, currentStopIndex);
+    }
+  }
+
+  /// Determines which leg index the user is currently on based on their position.
+  /// Also calculates progress within the current leg to determine what's "passed".
+  int _getCurrentLegIndex(
+    NavigationRoute route,
+    int currentStopIndex,
+    LatLng? userPosition,
+  ) {
+    if (route.legs.isEmpty) return 0;
+
+    // If we have user position, find which leg they're on
+    if (userPosition != null) {
+      double minDist = double.infinity;
+      int closestLegIndex = 0;
+
+      for (int i = 0; i < route.legs.length; i++) {
+        final leg = route.legs[i];
+        for (int j = 0; j < leg.points.length; j++) {
+          final dist = _distanceBetween(leg.points[j], userPosition);
+          if (dist < minDist) {
+            minDist = dist;
+            closestLegIndex = i;
+          }
+        }
+      }
+
+      return closestLegIndex;
+    }
+
+    // Fallback: use stop index to estimate leg
+    if (route.stops.isEmpty) return 0;
+    if (currentStopIndex >= route.stops.length) {
+      return route.legs.length - 1;
+    }
+
+    final currentStop = route.stops[currentStopIndex];
+
+    // Find which leg contains this stop
+    double minDist = double.infinity;
+    int closestLegIndex = 0;
+
+    for (int i = 0; i < route.legs.length; i++) {
+      final leg = route.legs[i];
+      for (final point in leg.points) {
+        final dist = _distanceBetween(point, currentStop.position);
+        if (dist < minDist) {
+          minDist = dist;
+          closestLegIndex = i;
+        }
+      }
+    }
+
+    return closestLegIndex;
+  }
+
+  /// Draws each leg with its own color and style.
+  /// Legs that have been passed are shown in gray.
+  /// The current leg is split at user position: passed portion in gray, remaining in color.
+  void _drawLegsWithStyles(
+    NavigationRoute route,
+    int currentLegIndex,
+    int currentStopIndex, {
+    LatLng? userPosition,
+  }) {
+    for (int i = 0; i < route.legs.length; i++) {
+      final leg = route.legs[i];
+      if (leg.points.isEmpty) continue;
+
+      // Check if this leg has been completely passed
+      final isCompletelyPassed = i < currentLegIndex;
+      final isCurrentLeg = i == currentLegIndex;
+
+      // Determine the active color for this leg type
+      final Color activeColor;
+      final double lineWidth;
+      final bool useDots;
+
+      if (leg.isTransit) {
+        activeColor = leg.color != null ? Color(leg.color!) : Colors.blue;
+        lineWidth = 6;
+        useDots = false;
+      } else if (leg.isBicycle) {
+        activeColor = const Color(0xFF4CAF50);
+        lineWidth = 5;
+        useDots = false;
+      } else {
+        // Walking legs
+        activeColor = Colors.grey;
+        lineWidth = 4;
+        useDots = true;
+      }
+
+      if (isCompletelyPassed) {
+        // Entire leg is passed - draw in gray
+        addLine(TrufiLine(
+          id: 'leg-$i',
+          position: leg.points,
+          color: Colors.grey.withValues(alpha: 0.5),
+          lineWidth: 4,
+          activeDots: false,
+          layerLevel: 0,
+        ));
+      } else if (isCurrentLeg && userPosition != null) {
+        // Current leg - split at user position
+        final splitIndex = _findClosestPointIndex(leg.points, userPosition);
+
+        // Draw passed portion (gray)
+        if (splitIndex > 0) {
+          final passedPoints = leg.points.sublist(0, splitIndex + 1);
+          addLine(TrufiLine(
+            id: 'leg-$i-passed',
+            position: passedPoints,
+            color: Colors.grey.withValues(alpha: 0.5),
+            lineWidth: 4,
+            activeDots: false,
+            layerLevel: 0,
+          ));
+        }
+
+        // Draw remaining portion (active color)
+        if (splitIndex < leg.points.length - 1) {
+          final remainingPoints = leg.points.sublist(splitIndex);
+          addLine(TrufiLine(
+            id: 'leg-$i-remaining',
+            position: remainingPoints,
+            color: activeColor,
+            lineWidth: lineWidth,
+            activeDots: useDots,
+            layerLevel: 1,
+          ));
+        }
+      } else {
+        // Future leg - draw in active color
+        addLine(TrufiLine(
+          id: 'leg-$i',
+          position: leg.points,
+          color: activeColor,
+          lineWidth: lineWidth,
+          activeDots: useDots,
+          layerLevel: 1,
+        ));
+      }
+    }
+
+    // Add origin marker always (at start of route)
+    if (route.legs.isNotEmpty) {
+      final firstLegPoints = route.legs.first.points;
+      if (firstLegPoints.isNotEmpty) {
+        addMarker(TrufiMarker(
+          id: 'origin-marker',
+          position: firstLegPoints.first,
+          widget: const _OriginMarkerWidget(),
+          size: const Size(24, 24),
+          layerLevel: 3,
+          imageKey: 'nav_origin_marker',
+        ));
+      }
+    }
+
+    // Add destination marker at the last point of the last leg
+    if (route.legs.isNotEmpty) {
+      final lastLegPoints = route.legs.last.points;
+      if (lastLegPoints.isNotEmpty) {
+        addMarker(TrufiMarker(
+          id: 'destination-marker',
+          position: lastLegPoints.last,
+          widget: const _DestinationMarkerWidget(),
+          size: const Size(32, 32),
+          alignment: Alignment.topCenter,
+          layerLevel: 3,
+          imageKey: 'nav_destination_marker',
+        ));
+      }
+    }
+  }
+
+  /// Finds the index of the closest point in a list to the given position.
+  int _findClosestPointIndex(List<LatLng> points, LatLng position) {
+    double minDist = double.infinity;
+    int closestIndex = 0;
+
+    for (int i = 0; i < points.length; i++) {
+      final dist = _distanceBetween(points[i], position);
+      if (dist < minDist) {
+        minDist = dist;
+        closestIndex = i;
+      }
+    }
+
+    return closestIndex;
+  }
+
+  /// Fallback simple geometry rendering.
+  void _drawSimpleGeometry(NavigationRoute route, int currentStopIndex) {
     final geometry = route.geometry;
     if (geometry.isEmpty) return;
 
@@ -77,10 +298,7 @@ class NavigationLayer extends TrufiLayer {
 
       for (int i = 0; i < geometry.length; i++) {
         final point = geometry[i];
-        final dist = _distanceBetween(
-          point,
-          currentStop.position,
-        );
+        final dist = _distanceBetween(point, currentStop.position);
         if (dist < minDist) {
           minDist = dist;
           splitIndex = i;
@@ -113,109 +331,9 @@ class NavigationLayer extends TrufiLayer {
     }
   }
 
-  void _drawStopMarkers(
-    List<NavigationStop> stops,
-    int currentStopIndex,
-    NavigationRoute route,
-  ) {
-    if (stops.isEmpty) return;
-
-    final routeColor = route.backgroundColor != null
-        ? Color(route.backgroundColor!)
-        : Colors.blue;
-
-    for (int i = 0; i < stops.length; i++) {
-      final stop = stops[i];
-      final isPassed = i < currentStopIndex;
-      final isCurrent = i == currentStopIndex;
-      final isFirst = i == 0;
-      final isLast = i == stops.length - 1;
-
-      // Only show first, last, and passed stops as small markers
-      // Current stop is shown via the user location marker
-      if (!isFirst && !isLast && !isPassed) continue;
-
-      addMarker(TrufiMarker(
-        id: 'stop_$i',
-        position: stop.position,
-        widget: _StopMarkerWidget(
-          isPassed: isPassed,
-          isCurrent: isCurrent,
-          isFirst: isFirst,
-          isLast: isLast,
-          routeColor: routeColor,
-        ),
-        size: const Size(12, 12),
-        layerLevel: 5,
-        imageKey: 'nav_stop_${isPassed}_${isCurrent}_${isFirst}_${isLast}_${routeColor.toARGB32()}',
-      ));
-    }
-  }
-
   double _distanceBetween(LatLng a, LatLng b) {
     const distance = Distance();
     return distance.as(LengthUnit.Meter, a, b);
-  }
-}
-
-/// Widget for rendering a stop marker.
-class _StopMarkerWidget extends StatelessWidget {
-  final bool isPassed;
-  final bool isCurrent;
-  final bool isFirst;
-  final bool isLast;
-  final Color routeColor;
-
-  const _StopMarkerWidget({
-    required this.isPassed,
-    required this.isCurrent,
-    required this.isFirst,
-    required this.isLast,
-    required this.routeColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (isFirst) {
-      return _buildTerminalMarker(Colors.green);
-    }
-
-    if (isLast) {
-      return _buildTerminalMarker(Colors.red);
-    }
-
-    return _buildRegularMarker();
-  }
-
-  Widget _buildTerminalMarker(Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
-        ),
-      ),
-      child: Icon(
-        isFirst ? Icons.trip_origin_rounded : Icons.flag_rounded,
-        color: Colors.white,
-        size: 8,
-      ),
-    );
-  }
-
-  Widget _buildRegularMarker() {
-    return Container(
-      decoration: BoxDecoration(
-        color: isPassed ? routeColor : Colors.white,
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: routeColor,
-          width: 2,
-        ),
-      ),
-    );
   }
 }
 
@@ -270,6 +388,56 @@ class _UserLocationMarker extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Origin marker - green circle (matches home screen style).
+class _OriginMarkerWidget extends StatelessWidget {
+  const _OriginMarkerWidget();
+
+  static const _color = Color(0xFF4CAF50);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: _color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Destination marker - red pin icon (matches home screen style).
+class _DestinationMarkerWidget extends StatelessWidget {
+  const _DestinationMarkerWidget();
+
+  static const _color = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.place_rounded,
+      color: _color,
+      size: 32,
+      shadows: [
+        Shadow(
+          color: Colors.black38,
+          blurRadius: 4,
+          offset: Offset(0, 2),
         ),
       ],
     );

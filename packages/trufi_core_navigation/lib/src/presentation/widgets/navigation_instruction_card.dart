@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/navigation_instruction.dart';
+import '../../models/navigation_state.dart';
 
 /// Card displaying the current navigation instruction.
 class NavigationInstructionCard extends StatelessWidget {
@@ -13,6 +14,9 @@ class NavigationInstructionCard extends StatelessWidget {
   final Duration? etaToDestination;
   final bool isOffRoute;
   final bool isGpsWeak;
+  final List<NavigationLeg> legs;
+  final NavigationLeg? currentLeg;
+  final Duration? totalDuration;
 
   const NavigationInstructionCard({
     super.key,
@@ -25,6 +29,9 @@ class NavigationInstructionCard extends StatelessWidget {
     this.etaToDestination,
     this.isOffRoute = false,
     this.isGpsWeak = false,
+    this.legs = const [],
+    this.currentLeg,
+    this.totalDuration,
   });
 
   @override
@@ -50,6 +57,9 @@ class NavigationInstructionCard extends StatelessWidget {
         children: [
           // Warning banner if off route or GPS weak
           if (isOffRoute || isGpsWeak) _buildWarningBanner(context),
+
+          // Itinerary summary bar (like home screen)
+          if (legs.isNotEmpty) _buildItinerarySummary(context),
 
           // Main instruction
           Padding(
@@ -114,9 +124,6 @@ class NavigationInstructionCard extends StatelessWidget {
             ),
           ),
 
-          // Progress indicator
-          _buildProgressIndicator(context),
-
           // Next instruction preview
           if (nextInstruction != null && remainingStops > 1)
             _buildNextPreview(context),
@@ -167,6 +174,73 @@ class NavigationInstructionCard extends StatelessWidget {
 
   Widget _buildInstructionIcon(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    // Use currentLeg info if available, otherwise fall back to instruction
+    final leg = currentLeg;
+    if (leg != null) {
+      // Determine color and content based on leg type
+      final Color bgColor;
+      final Widget content;
+
+      if (leg.isTransit) {
+        bgColor = leg.color != null ? Color(leg.color!) : colorScheme.primary;
+        final routeName = leg.routeName ?? '';
+        // Show icon + route name for transit
+        content = Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getModeIcon(leg.modeName),
+              color: Colors.white,
+              size: 22,
+            ),
+            if (routeName.isNotEmpty) ...[
+              const SizedBox(width: 4),
+              Text(
+                routeName,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: routeName.length > 3 ? 14 : 16,
+                ),
+              ),
+            ],
+          ],
+        );
+      } else if (leg.isBicycle) {
+        bgColor = const Color(0xFF4CAF50);
+        content = const Icon(
+          Icons.directions_bike_rounded,
+          color: Colors.white,
+          size: 28,
+        );
+      } else {
+        // Walking
+        bgColor = colorScheme.primaryContainer;
+        content = Icon(
+          Icons.directions_walk_rounded,
+          color: colorScheme.onPrimaryContainer,
+          size: 28,
+        );
+      }
+
+      // Use wider container for transit with route name
+      final isWideTransit = leg.isTransit && (leg.routeName?.isNotEmpty ?? false);
+
+      return Container(
+        width: isWideTransit ? 80 : 56,
+        height: 56,
+        padding: isWideTransit ? const EdgeInsets.symmetric(horizontal: 8) : null,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Center(child: content),
+      );
+    }
+
+    // Fallback to instruction-based icon
     final routeColor = instruction.routeColor ?? colorScheme.primary;
 
     return Container(
@@ -199,71 +273,27 @@ class NavigationInstructionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressIndicator(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final routeColor = instruction.routeColor ?? colorScheme.primary;
-
-    // Use actual total stops, limit to 12 dots for display
-    final displayStops = totalStops.clamp(2, 12);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          // Stop indicators
-          SizedBox(
-            height: 24,
-            child: Row(
-              children: List.generate(
-                displayStops,
-                (index) {
-                  // Map display index to actual stop index
-                  final actualIndex = totalStops > 12
-                      ? (index * (totalStops - 1) / (displayStops - 1)).round()
-                      : index;
-
-                  final isPassed = actualIndex <= currentStopIndex;
-                  final isCurrent = actualIndex == currentStopIndex;
-                  final isNext = actualIndex == currentStopIndex + 1;
-                  final isLast = index == displayStops - 1;
-
-                  return Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: (isCurrent || isNext) ? 12 : 8,
-                          height: (isCurrent || isNext) ? 12 : 8,
-                          decoration: BoxDecoration(
-                            color: isPassed
-                                ? routeColor
-                                : (isNext
-                                    ? Colors.white
-                                    : colorScheme.outline.withValues(alpha: 0.5)),
-                            shape: BoxShape.circle,
-                            border: (isCurrent || isNext)
-                                ? Border.all(color: routeColor, width: 2)
-                                : null,
-                          ),
-                        ),
-                        if (!isLast)
-                          Expanded(
-                            child: Container(
-                              height: 2,
-                              color: isPassed && actualIndex < currentStopIndex
-                                  ? routeColor
-                                  : colorScheme.outlineVariant,
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  IconData _getModeIcon(String? mode) {
+    switch (mode?.toUpperCase()) {
+      case 'BUS':
+        return Icons.directions_bus_rounded;
+      case 'RAIL':
+      case 'TRAIN':
+        return Icons.train_rounded;
+      case 'SUBWAY':
+      case 'METRO':
+        return Icons.subway_rounded;
+      case 'TRAM':
+        return Icons.tram_rounded;
+      case 'FERRY':
+        return Icons.directions_boat_rounded;
+      case 'WALK':
+        return Icons.directions_walk_rounded;
+      case 'BICYCLE':
+        return Icons.directions_bike_rounded;
+      default:
+        return Icons.directions_transit_rounded;
+    }
   }
 
   Widget _buildNextPreview(BuildContext context) {
@@ -321,5 +351,194 @@ class NavigationInstructionCard extends StatelessWidget {
     final hours = duration.inHours;
     final minutes = duration.inMinutes % 60;
     return '${hours}h ${minutes}m';
+  }
+
+  Widget _buildItinerarySummary(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final routeColor = instruction.routeColor ?? colorScheme.primary;
+
+    // Calculate progress percentage
+    final progressPercent = totalStops > 1 ? currentStopIndex / (totalStops - 1) : 0.0;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top row: Duration chip and transport legs
+          Row(
+            children: [
+              // Duration chip
+              if (totalDuration != null)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    _formatDuration(totalDuration!),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              if (totalDuration != null) const SizedBox(width: 8),
+              // Transport legs summary (scrollable)
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < legs.length; i++) ...[
+                        _LegChipWidget(leg: legs[i]),
+                        if (i < legs.length - 1)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: Icon(
+                              Icons.chevron_right_rounded,
+                              size: 14,
+                              color: Colors.grey[400],
+                            ),
+                          ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          // Progress bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: SizedBox(
+              height: 6,
+              child: Row(
+                children: [
+                  // Passed portion (gray)
+                  if (progressPercent > 0)
+                    Expanded(
+                      flex: (progressPercent * 100).round(),
+                      child: Container(
+                        color: Colors.grey.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  // Remaining portion (route color)
+                  if (progressPercent < 1)
+                    Expanded(
+                      flex: ((1 - progressPercent) * 100).round(),
+                      child: Container(
+                        color: routeColor,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Chip showing transport leg information for navigation.
+class _LegChipWidget extends StatelessWidget {
+  final NavigationLeg leg;
+
+  const _LegChipWidget({required this.leg});
+
+  @override
+  Widget build(BuildContext context) {
+    if (leg.isWalking || leg.isBicycle) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              leg.isWalking
+                  ? Icons.directions_walk_rounded
+                  : Icons.directions_bike_rounded,
+              size: 16,
+              color: Colors.grey[600],
+            ),
+            const SizedBox(width: 3),
+            Text(
+              '${leg.duration.inMinutes}\'',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Transit leg
+    final color = leg.color != null ? Color(leg.color!) : Colors.blue;
+    final routeName = leg.routeName ?? '';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getModeIcon(leg.modeName),
+            size: 14,
+            color: Colors.white,
+          ),
+          if (routeName.isNotEmpty) ...[
+            const SizedBox(width: 3),
+            Text(
+              routeName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 11,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  IconData _getModeIcon(String? mode) {
+    switch (mode?.toUpperCase()) {
+      case 'BUS':
+        return Icons.directions_bus_rounded;
+      case 'RAIL':
+      case 'TRAIN':
+        return Icons.train_rounded;
+      case 'SUBWAY':
+      case 'METRO':
+        return Icons.subway_rounded;
+      case 'TRAM':
+        return Icons.tram_rounded;
+      case 'FERRY':
+        return Icons.directions_boat_rounded;
+      case 'WALK':
+        return Icons.directions_walk_rounded;
+      case 'BICYCLE':
+        return Icons.directions_bike_rounded;
+      default:
+        return Icons.directions_transit_rounded;
+    }
   }
 }
