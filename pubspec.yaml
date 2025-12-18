@@ -26,6 +26,9 @@ workspace:
   - packages/screens/trufi_core_settings
   - packages/screens/trufi_core_transport_list
 
+  # Navigation Package
+  - packages/trufi_core_navigation
+
 dev_dependencies:
   melos: ^7.3.0
   flutter_lints: ^6.0.0

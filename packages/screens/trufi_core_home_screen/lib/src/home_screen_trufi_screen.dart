@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/home_screen_localizations.dart';
 import 'config/home_screen_config.dart';
@@ -24,6 +25,15 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   /// Callback when itinerary details are requested.
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
 
+  /// Callback when navigation is started for an itinerary.
+  /// Receives the BuildContext, itinerary, and LocationService so the caller
+  /// can show the navigation screen using the same location service.
+  final void Function(
+    BuildContext context,
+    routing.Itinerary itinerary,
+    LocationService locationService,
+  )? onStartNavigation;
+
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
   static Future<void> init() async {
@@ -35,6 +45,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     HomeScreenRepository? repository,
     RequestPlanService? requestService,
     this.onItineraryDetails,
+    this.onStartNavigation,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
     _requestService =
@@ -59,6 +70,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       },
       config: config,
       onItineraryDetails: onItineraryDetails,
+      onStartNavigation: onStartNavigation,
     );
   };
 

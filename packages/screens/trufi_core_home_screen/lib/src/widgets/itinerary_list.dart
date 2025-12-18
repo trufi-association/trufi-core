@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../cubit/route_planner_cubit.dart';
 import '../models/route_planner_state.dart';
@@ -10,10 +11,18 @@ import 'itinerary_card.dart';
 /// List of itinerary options with improved loading states.
 class ItineraryList extends StatelessWidget {
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
+  final void Function(
+    BuildContext context,
+    routing.Itinerary itinerary,
+    LocationService locationService,
+  )? onStartNavigation;
+  final LocationService? locationService;
 
   const ItineraryList({
     super.key,
     this.onItineraryDetails,
+    this.onStartNavigation,
+    this.locationService,
   });
 
   @override
@@ -79,6 +88,9 @@ class ItineraryList extends StatelessWidget {
                   onTap: () => cubit.selectItinerary(itinerary),
                   onDetailsTap: onItineraryDetails != null
                       ? () => onItineraryDetails!(itinerary)
+                      : null,
+                  onStartNavigation: onStartNavigation != null && locationService != null
+                      ? () => onStartNavigation!(context, itinerary, locationService!)
                       : null,
                 ),
               );

@@ -11,6 +11,7 @@ class ItineraryCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final VoidCallback? onDetailsTap;
+  final VoidCallback? onStartNavigation;
 
   const ItineraryCard({
     super.key,
@@ -18,6 +19,7 @@ class ItineraryCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     this.onDetailsTap,
+    this.onStartNavigation,
   });
 
   @override
@@ -117,8 +119,22 @@ class ItineraryCard extends StatelessWidget {
             ],
           ),
         ),
-        // Selection indicator
-        if (isSelected)
+        // Go button or selection indicator
+        if (isSelected && onStartNavigation != null)
+          FilledButton.icon(
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              onStartNavigation!();
+            },
+            icon: const Icon(Icons.navigation_rounded, size: 16),
+            label: const Text('Go'),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              visualDensity: VisualDensity.compact,
+              textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+          )
+        else if (isSelected)
           Icon(
             Icons.check_circle_rounded,
             color: theme.colorScheme.primary,

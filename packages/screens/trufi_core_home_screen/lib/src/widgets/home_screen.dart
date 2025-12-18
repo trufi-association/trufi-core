@@ -31,11 +31,21 @@ class HomeScreen extends StatefulWidget {
   /// Callback when itinerary details are requested.
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
 
+  /// Callback when navigation is started for an itinerary.
+  /// Receives the BuildContext, itinerary, and LocationService so the caller
+  /// can show the navigation screen using the same location service.
+  final void Function(
+    BuildContext context,
+    routing.Itinerary itinerary,
+    LocationService locationService,
+  )? onStartNavigation;
+
   const HomeScreen({
     super.key,
     required this.onMenuPressed,
     required this.config,
     this.onItineraryDetails,
+    this.onStartNavigation,
   });
 
   @override
@@ -849,7 +859,18 @@ class _HomeScreenState extends State<HomeScreen>
           child: _buildSummaryRow(state, theme),
         ),
         // Itinerary list
-        ItineraryList(onItineraryDetails: widget.onItineraryDetails),
+        ItineraryList(
+          onItineraryDetails: widget.onItineraryDetails,
+          onStartNavigation: widget.onStartNavigation != null
+              ? (context, itinerary, locationService) {
+                  // Clear the home screen's location marker before starting navigation
+                  // to avoid duplicate markers on the navigation screen
+                  _myLocationLayer?.clearMarkers();
+                  widget.onStartNavigation!(context, itinerary, locationService);
+                }
+              : null,
+          locationService: _locationService,
+        ),
       ],
     );
   }
