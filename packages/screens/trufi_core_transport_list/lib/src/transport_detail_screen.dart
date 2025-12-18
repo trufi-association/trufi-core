@@ -355,9 +355,9 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           controller: _sheetController,
           initialChildSize: 0.35,
           minChildSize: 0.15,
-          maxChildSize: 0.85,
+          maxChildSize: 0.5,
           snap: true,
-          snapSizes: const [0.15, 0.35, 0.85],
+          snapSizes: const [0.15, 0.35, 0.5],
           builder: (context, scrollController) => _StopsSheetContent(
             route: _route!,
             scrollController: scrollController,
@@ -448,164 +448,175 @@ class _StopsSheetContent extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final stops = route.stops ?? [];
 
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: [
+    return Column(
+      children: [
+        // Fixed header section
+        _buildHeader(context, theme, colorScheme, stops),
+
+        // Scrollable stops list
+        Expanded(
+          child: stops.isEmpty
+              ? const _EmptyStopsInline()
+              : ListView.builder(
+                  controller: scrollController,
+                  padding: EdgeInsets.zero,
+                  itemCount: stops.length,
+                  itemBuilder: (context, index) {
+                    final stop = stops[index];
+                    final isFirst = index == 0;
+                    final isLast = index == stops.length - 1;
+                    final isSelected = selectedStopIndex == index;
+                    final routeColor =
+                        route.backgroundColor ?? colorScheme.primary;
+
+                    return _StopTimelineItem(
+                      stop: stop,
+                      isFirst: isFirst,
+                      isLast: isLast,
+                      isSelected: isSelected,
+                      routeColor: routeColor,
+                      onTap: onStopTap != null
+                          ? () {
+                              HapticFeedback.selectionClick();
+                              onStopTap!(index, stop.latitude, stop.longitude);
+                            }
+                          : null,
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    List<TransportStop> stops,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
         // Origin/Destination header (Google Maps style)
         if (route.hasOriginDestination)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Timeline indicators (green dot, dotted line, red dot)
-                  Column(
-                    children: [
-                      // Green origin dot
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.green.shade700,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      // Dotted line
-                      CustomPaint(
-                        size: const Size(2, 28),
-                        painter: _DottedLinePainter(
-                          color: colorScheme.outlineVariant,
-                        ),
-                      ),
-                      // Red destination dot
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.red.shade700,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 12),
-                  // Origin and destination text
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Origin
-                        Text(
-                          route.longNameStart,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 16),
-                        // Destination
-                        Text(
-                          route.longNameLast,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-        // Stops count header with divider
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.location_on_rounded,
-                        size: 14,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${stops.length} stops',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
+                // Timeline indicators (green dot, dotted line, red dot)
+                Column(
+                  children: [
+                    // Green origin dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.green.shade700,
+                          width: 2,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    // Dotted line
+                    CustomPaint(
+                      size: const Size(2, 28),
+                      painter: _DottedLinePainter(
+                        color: colorScheme.outlineVariant,
+                      ),
+                    ),
+                    // Red destination dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.red.shade700,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(width: 12),
+                // Origin and destination text
                 Expanded(
-                  child: Divider(
-                    color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Origin
+                      Text(
+                        route.longNameStart,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 16),
+                      // Destination
+                      Text(
+                        route.longNameLast,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ),
 
-        // Stops list
-        if (stops.isEmpty)
-          const SliverFillRemaining(
-            child: _EmptyStopsInline(),
-          )
-        else
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final stop = stops[index];
-                final isFirst = index == 0;
-                final isLast = index == stops.length - 1;
-                final isSelected = selectedStopIndex == index;
-                final routeColor = route.backgroundColor ?? colorScheme.primary;
-
-                return _StopTimelineItem(
-                  stop: stop,
-                  isFirst: isFirst,
-                  isLast: isLast,
-                  isSelected: isSelected,
-                  routeColor: routeColor,
-                  onTap: onStopTap != null
-                      ? () {
-                          HapticFeedback.selectionClick();
-                          onStopTap!(index, stop.latitude, stop.longitude);
-                        }
-                      : null,
-                );
-              },
-              childCount: stops.length,
-            ),
+        // Stops count header with divider
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+          child: Row(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.location_on_rounded,
+                      size: 14,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${stops.length} stops',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Divider(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                ),
+              ),
+            ],
           ),
+        ),
       ],
     );
   }
