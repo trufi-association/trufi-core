@@ -8,7 +8,7 @@ import 'l10n/core_localizations.dart';
 import 'router/app_router.dart';
 
 export 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
-    show AppConfiguration, TrufiScreen, ScreenMenuItem, ScreenThemeData, TrufiLocaleConfig, TrufiThemeConfig;
+    show AppConfiguration, TrufiScreen, ScreenMenuItem, ScreenThemeData, TrufiLocaleConfig, TrufiThemeConfig, SocialMediaLink;
 
 /// Run the Trufi app with the given configuration
 Future<void> runTrufiApp(AppConfiguration config) async {
@@ -37,7 +37,10 @@ class TrufiApp extends StatelessWidget {
         _themeManager = ThemeManager(
           defaultThemeMode: config.themeConfig.themeMode,
         ),
-        _router = AppRouter(screens: config.screens);
+        _router = AppRouter(
+          screens: config.screens,
+          socialMediaLinks: config.socialMediaLinks,
+        );
 
   @override
   Widget build(BuildContext context) {

@@ -20,6 +20,23 @@ void main() {
   runTrufiApp(
     AppConfiguration(
       appName: 'Trufi App',
+      socialMediaLinks: const [
+        SocialMediaLink(
+          url: 'https://facebook.com/trufiapp',
+          icon: Icons.facebook,
+          label: 'Facebook',
+        ),
+        SocialMediaLink(
+          url: 'https://x.com/trufiapp',
+          icon: Icons.close,
+          label: 'X (Twitter)',
+        ),
+        SocialMediaLink(
+          url: 'https://instagram.com/trufiapp',
+          icon: Icons.camera_alt_outlined,
+          label: 'Instagram',
+        ),
+      ],
       providers: [
         ChangeNotifierProvider(
           create: (_) => MapEngineManager(

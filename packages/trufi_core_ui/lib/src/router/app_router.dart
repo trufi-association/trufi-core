@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Application router using GoRouter with dynamic screen support
 class AppRouter {
   final List<TrufiScreen> screens;
+  final List<SocialMediaLink> socialMediaLinks;
   final GlobalKey<NavigatorState> rootNavigatorKey;
   final GlobalKey<NavigatorState> shellNavigatorKey;
 
@@ -12,6 +14,7 @@ class AppRouter {
 
   AppRouter({
     required this.screens,
+    this.socialMediaLinks = const [],
     GlobalKey<NavigatorState>? rootNavigatorKey,
     GlobalKey<NavigatorState>? shellNavigatorKey,
   }) : rootNavigatorKey = rootNavigatorKey ?? GlobalKey<NavigatorState>(),
@@ -46,6 +49,7 @@ class AppRouter {
             return AppShell(
               currentPath: state.uri.path,
               screens: screens,
+              socialMediaLinks: socialMediaLinks,
               child: child,
             );
           },
@@ -77,12 +81,14 @@ class AppShell extends StatelessWidget {
   final Widget child;
   final String currentPath;
   final List<TrufiScreen> screens;
+  final List<SocialMediaLink> socialMediaLinks;
 
   const AppShell({
     super.key,
     required this.child,
     required this.currentPath,
     required this.screens,
+    this.socialMediaLinks = const [],
   });
 
   @override
@@ -116,7 +122,11 @@ class AppShell extends StatelessWidget {
                 ),
               ],
             ),
-      drawer: AppDrawer(currentPath: currentPath, screens: screens),
+      drawer: AppDrawer(
+        currentPath: currentPath,
+        screens: screens,
+        socialMediaLinks: socialMediaLinks,
+      ),
       body: child,
     );
   }
@@ -135,11 +145,13 @@ class AppShell extends StatelessWidget {
 class AppDrawer extends StatelessWidget {
   final String currentPath;
   final List<TrufiScreen> screens;
+  final List<SocialMediaLink> socialMediaLinks;
 
   const AppDrawer({
     super.key,
     required this.currentPath,
     required this.screens,
+    this.socialMediaLinks = const [],
   });
 
   @override
@@ -165,7 +177,10 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // Modern footer
-          _DrawerFooter(theme: theme),
+          _DrawerFooter(
+            theme: theme,
+            socialMediaLinks: socialMediaLinks,
+          ),
         ],
       ),
     );
@@ -361,8 +376,12 @@ class _DrawerMenuItem extends StatelessWidget {
 /// Modern drawer footer with version and optional actions
 class _DrawerFooter extends StatelessWidget {
   final ThemeData theme;
+  final List<SocialMediaLink> socialMediaLinks;
 
-  const _DrawerFooter({required this.theme});
+  const _DrawerFooter({
+    required this.theme,
+    this.socialMediaLinks = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -397,7 +416,25 @@ class _DrawerFooter extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          if (socialMediaLinks.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            // Social media icons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < socialMediaLinks.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 8),
+                  _SocialIconButton(
+                    icon: socialMediaLinks[i].icon,
+                    url: socialMediaLinks[i].url,
+                    label: socialMediaLinks[i].label,
+                    colorScheme: colorScheme,
+                  ),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 12),
           // Powered by text
           Text(
             'Powered by Trufi Association',
@@ -408,6 +445,37 @@ class _DrawerFooter extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Social media icon button for the drawer footer
+class _SocialIconButton extends StatelessWidget {
+  final IconData icon;
+  final String url;
+  final String? label;
+  final ColorScheme colorScheme;
+
+  const _SocialIconButton({
+    required this.icon,
+    required this.url,
+    this.label,
+    required this.colorScheme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon),
+      iconSize: 20,
+      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+      onPressed: () => launchUrl(Uri.parse(url)),
+      tooltip: label ?? url,
+      constraints: const BoxConstraints(
+        minWidth: 36,
+        minHeight: 36,
+      ),
+      padding: EdgeInsets.zero,
     );
   }
 }
