@@ -12,7 +12,6 @@ import '../models/navigation_state.dart';
 import '../utils/itinerary_converter.dart';
 import 'layers/navigation_layer.dart';
 import 'widgets/navigation_bottom_panel.dart';
-import 'widgets/navigation_top_bar.dart';
 
 /// Factory function to create a NavigationLayer with a controller.
 typedef NavigationLayerFactory = NavigationLayer Function(
@@ -251,27 +250,6 @@ class _NavigationScreenState extends State<NavigationScreen>
                   Positioned.fill(
                     child: _mapWidget!,
                   ),
-
-                // Top bar
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: NavigationTopBar(
-                    routeName: widget.route.name,
-                    routeShortName: widget.route.shortName,
-                    routeColor: widget.route.backgroundColor != null
-                        ? Color(widget.route.backgroundColor!)
-                        : null,
-                    textColor: widget.route.textColor != null
-                        ? Color(widget.route.textColor!)
-                        : null,
-                    modeIcon: widget.modeIcon,
-                    onClose: () => _exitNavigation(context),
-                    onRecenter: () => _cubit.recenterMap(),
-                    isFollowingUser: state.isMapFollowingUser,
-                  ),
-                ),
 
                 // Bottom panel
                 Positioned(
