@@ -113,10 +113,12 @@ class _TransportListScreenWidgetState
           context,
           routeCode: route.code,
           getRouteDetails: _dataProvider.getRouteDetails,
-          mapBuilder: (context, routeDetails, registerMapMoveCallback) =>
+          mapBuilder: (context, routeDetails, registerMapMoveCallback,
+                  registerStopSelectionCallback) =>
               _RouteMapView(
             route: routeDetails,
             registerMapMoveCallback: registerMapMoveCallback,
+            registerStopSelectionCallback: registerStopSelectionCallback,
           ),
         );
       },
@@ -128,10 +130,12 @@ class _TransportListScreenWidgetState
 class _RouteMapView extends StatefulWidget {
   final TransportRouteDetails? route;
   final void Function(MapMoveCallback) registerMapMoveCallback;
+  final void Function(StopSelectionCallback) registerStopSelectionCallback;
 
   const _RouteMapView({
     required this.route,
     required this.registerMapMoveCallback,
+    required this.registerStopSelectionCallback,
   });
 
   @override
@@ -148,6 +152,12 @@ class _RouteMapViewState extends State<_RouteMapView> {
     super.initState();
     // Register the callback for moving the map
     widget.registerMapMoveCallback(_moveToLocation);
+    // Register the callback for stop selection
+    widget.registerStopSelectionCallback(_onStopSelected);
+  }
+
+  void _onStopSelected(int? stopIndex) {
+    _routeLayer?.setSelectedStop(stopIndex);
   }
 
   void _moveToLocation(double latitude, double longitude) {
@@ -322,7 +332,18 @@ class _RouteMapViewState extends State<_RouteMapView> {
 class _RouteLayer extends TrufiLayer {
   _RouteLayer(super.controller) : super(id: 'route-layer', layerLevel: 1);
 
+  TransportRouteDetails? _currentRoute;
+  int? _selectedStopIndex;
+
+  void setSelectedStop(int? stopIndex) {
+    _selectedStopIndex = stopIndex;
+    if (_currentRoute != null) {
+      _updateStopMarkers(_currentRoute!);
+    }
+  }
+
   void setRoute(TransportRouteDetails route) {
+    _currentRoute = route;
     clearMarkers();
     clearLines();
 
@@ -340,64 +361,192 @@ class _RouteLayer extends TrufiLayer {
       lineWidth: 5,
     ));
 
-    // Add stop markers (intermediate stops)
+    // Add stop markers
+    _updateStopMarkers(route);
+  }
+
+  void _updateStopMarkers(TransportRouteDetails route) {
+    // Remove existing stop markers
     final stops = route.stops ?? [];
-    // Create stable imageKeys based on visual properties (color + isTerminal)
+    for (int i = 0; i < stops.length; i++) {
+      removeMarkerById('stop-$i');
+    }
+    removeMarkerById('selected-stop');
+    removeMarkerById('origin-marker');
+    removeMarkerById('destination-marker');
+
+    if (stops.isEmpty) return;
+
+    final routeColor = route.backgroundColor ?? Colors.blue;
+    // Create stable imageKeys based on visual properties (color + isTerminal + isSelected)
     final colorHex = routeColor.toARGB32().toRadixString(16);
-    final terminalImageKey = 'stop_terminal_$colorHex';
     final intermediateImageKey = 'stop_intermediate_$colorHex';
+    final selectedImageKey = 'stop_selected_$colorHex';
 
     for (int i = 0; i < stops.length; i++) {
       final stop = stops[i];
       final isFirst = i == 0;
       final isLast = i == stops.length - 1;
-      final isTerminal = isFirst || isLast;
+      final isSelected = i == _selectedStopIndex;
+
+      // Skip origin, destination, and selected - they have special markers
+      if (isFirst || isLast || isSelected) continue;
 
       addMarker(TrufiMarker(
         id: 'stop-$i',
         position: LatLng(stop.latitude, stop.longitude),
-        widget: _StopMarker(
-          color: routeColor,
-          isTerminal: isTerminal,
-        ),
-        size: Size(isTerminal ? 16 : 12, isTerminal ? 16 : 12),
-        layerLevel: isTerminal ? 2 : 1,
-        imageKey: isTerminal ? terminalImageKey : intermediateImageKey,
+        widget: _StopMarker(color: routeColor),
+        size: const Size(12, 12),
+        layerLevel: 1,
+        imageKey: intermediateImageKey,
+      ));
+    }
+
+    // Add origin marker (green circle) - unless it's selected
+    final firstStop = stops.first;
+    if (_selectedStopIndex != 0) {
+      addMarker(TrufiMarker(
+        id: 'origin-marker',
+        position: LatLng(firstStop.latitude, firstStop.longitude),
+        widget: const _OriginMarker(),
+        size: const Size(24, 24),
+        layerLevel: 3,
+        imageKey: 'origin_marker',
+      ));
+    }
+
+    // Add destination marker (red pin) - unless it's selected
+    final lastStop = stops.last;
+    if (_selectedStopIndex != stops.length - 1) {
+      addMarker(TrufiMarker(
+        id: 'destination-marker',
+        position: LatLng(lastStop.latitude, lastStop.longitude),
+        widget: const _DestinationMarker(),
+        size: const Size(32, 32),
+        alignment: Alignment.topCenter,
+        layerLevel: 3,
+        imageKey: 'destination_marker',
+      ));
+    }
+
+    // Add selected stop marker with higher priority
+    if (_selectedStopIndex != null && _selectedStopIndex! < stops.length) {
+      final selectedStop = stops[_selectedStopIndex!];
+      addMarker(TrufiMarker(
+        id: 'selected-stop',
+        position: LatLng(selectedStop.latitude, selectedStop.longitude),
+        widget: _SelectedStopMarker(color: routeColor),
+        size: const Size(24, 24),
+        layerLevel: 10,
+        imageKey: selectedImageKey,
       ));
     }
   }
 }
 
-/// Marker widget for stops
+/// Marker widget for intermediate stops
 class _StopMarker extends StatelessWidget {
   final Color color;
-  final bool isTerminal;
 
-  const _StopMarker({
-    required this.color,
-    this.isTerminal = false,
-  });
+  const _StopMarker({required this.color});
 
   @override
   Widget build(BuildContext context) {
-    final size = isTerminal ? 16.0 : 12.0;
-    final borderWidth = isTerminal ? 3.0 : 2.0;
-
     return Container(
-      width: size,
-      height: size,
+      width: 12,
+      height: 12,
       decoration: BoxDecoration(
-        color: isTerminal ? color : Colors.white,
+        color: Colors.white,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isTerminal ? Colors.white : color,
-          width: borderWidth,
+          color: color,
+          width: 2,
         ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.25),
             blurRadius: 3,
             offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Origin marker - green circle (same as home screen)
+class _OriginMarker extends StatelessWidget {
+  const _OriginMarker();
+
+  static const _color = Color(0xFF4CAF50);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: _color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Destination marker - red pin icon (same as home screen)
+class _DestinationMarker extends StatelessWidget {
+  const _DestinationMarker();
+
+  static const _color = Color(0xFFE53935);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.place_rounded,
+      color: _color,
+      size: 32,
+      shadows: [
+        Shadow(
+          color: Colors.black38,
+          blurRadius: 4,
+          offset: Offset(0, 2),
+        ),
+      ],
+    );
+  }
+}
+
+/// Marker widget for selected stop - larger solid circle
+class _SelectedStopMarker extends StatelessWidget {
+  final Color color;
+
+  const _SelectedStopMarker({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: Colors.white,
+          width: 3,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),

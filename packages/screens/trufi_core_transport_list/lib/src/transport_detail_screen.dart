@@ -8,6 +8,9 @@ import 'models/transport_route.dart';
 /// Callback type for moving the map to a specific location
 typedef MapMoveCallback = void Function(double latitude, double longitude);
 
+/// Callback type for selecting a stop on the map
+typedef StopSelectionCallback = void Function(int? stopIndex);
+
 /// Screen showing transport route details with map and stops
 class TransportDetailScreen extends StatefulWidget {
   final String routeCode;
@@ -16,6 +19,7 @@ class TransportDetailScreen extends StatefulWidget {
     BuildContext context,
     TransportRouteDetails? route,
     void Function(MapMoveCallback) registerMapMoveCallback,
+    void Function(StopSelectionCallback) registerStopSelectionCallback,
   )? mapBuilder;
   final Uri? shareBaseUri;
 
@@ -36,6 +40,7 @@ class TransportDetailScreen extends StatefulWidget {
       BuildContext context,
       TransportRouteDetails? route,
       void Function(MapMoveCallback) registerMapMoveCallback,
+      void Function(StopSelectionCallback) registerStopSelectionCallback,
     )? mapBuilder,
     Uri? shareBaseUri,
   }) {
@@ -80,6 +85,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
       DraggableScrollableController();
   late AnimationController _fadeController;
   MapMoveCallback? _mapMoveCallback;
+  StopSelectionCallback? _stopSelectionCallback;
   int? _selectedStopIndex;
 
   @override
@@ -323,6 +329,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                 context,
                 _route,
                 (callback) => _mapMoveCallback = callback,
+                (callback) => _stopSelectionCallback = callback,
               ),
             ),
           )
@@ -359,6 +366,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
               HapticFeedback.selectionClick();
               setState(() => _selectedStopIndex = index);
               _mapMoveCallback?.call(lat, lng);
+              _stopSelectionCallback?.call(index);
             },
           ),
         ),
