@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
+
 import 'leg.dart';
 import 'route.dart';
 import 'transport_mode.dart';
 
 /// A complete itinerary for a trip plan.
-class Itinerary {
+class Itinerary extends Equatable {
   Itinerary({
     required List<Leg> legs,
     required this.startTime,
@@ -146,4 +148,18 @@ class Itinerary {
     final transit = transitLegs;
     return transit.isEmpty ? 0 : transit.length - 1;
   }
+
+  @override
+  List<Object?> get props => [
+        startTime,
+        endTime,
+        duration,
+        walkTime,
+        walkDistance,
+        transfers,
+        arrivedAtDestinationWithRentedBicycle,
+        emissionsPerPerson,
+        distance,
+        legs,
+      ];
 }

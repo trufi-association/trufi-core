@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../data/graphql/polyline_decoder.dart';
@@ -9,7 +10,7 @@ import 'step.dart';
 import 'transport_mode.dart';
 
 /// A leg of an itinerary (walking, transit, etc.).
-class Leg {
+class Leg extends Equatable {
   const Leg({
     required this.mode,
     required this.startTime,
@@ -209,6 +210,21 @@ class Leg {
 
   /// Returns the display name for the route.
   String get displayName => route?.shortName ?? shortName ?? '';
+
+  @override
+  List<Object?> get props => [
+        mode,
+        startTime,
+        endTime,
+        duration,
+        distance,
+        transitLeg,
+        encodedPoints,
+        route,
+        shortName,
+        routeLongName,
+        headsign,
+      ];
 }
 
 /// Backwards compatibility alias.
