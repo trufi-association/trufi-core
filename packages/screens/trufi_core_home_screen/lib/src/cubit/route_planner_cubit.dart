@@ -8,20 +8,26 @@ import '../repository/home_screen_repository.dart';
 import '../repository/home_screen_repository_impl.dart';
 import '../services/request_plan_service.dart';
 
+/// Callback to get current routing preferences.
+typedef GetRoutingPreferences = routing.RoutingPreferences? Function();
+
 /// Cubit for managing route planning state.
 ///
 /// If [repository] is not provided, uses [HomeScreenRepositoryImpl] by default.
 class RoutePlannerCubit extends Cubit<RoutePlannerState> {
   final HomeScreenRepository _repository;
   final RequestPlanService _requestService;
+  final GetRoutingPreferences? _getRoutingPreferences;
 
   CancelableOperation<routing.Plan>? _currentFetchOperation;
 
   RoutePlannerCubit({
     HomeScreenRepository? repository,
     required RequestPlanService requestService,
+    GetRoutingPreferences? getRoutingPreferences,
   })  : _repository = repository ?? HomeScreenRepositoryImpl(),
         _requestService = requestService,
+        _getRoutingPreferences = getRoutingPreferences,
         super(const RoutePlannerState());
 
   /// Initialize and load saved state.
@@ -65,6 +71,18 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
     emit(state.copyWithNullable(toPlace: const Optional(null)));
   }
 
+  /// Clear the current plan and selected itinerary.
+  Future<void> clearPlan() async {
+    await _cancelCurrentFetch();
+    await _repository.savePlan(null);
+    await _repository.saveSelectedItinerary(null);
+    emit(state.copyWithNullable(
+      plan: const Optional(null),
+      selectedItinerary: const Optional(null),
+      error: const Optional(null),
+    ));
+  }
+
   /// Swap origin and destination.
   Future<void> swapLocations() async {
     final newFromPlace = state.toPlace;
@@ -104,6 +122,7 @@ class RoutePlannerCubit extends Cubit<RoutePlannerState> {
         _requestService.fetchPlan(
           from: state.fromPlace!,
           to: state.toPlace!,
+          preferences: _getRoutingPreferences?.call(),
         ),
       );
 

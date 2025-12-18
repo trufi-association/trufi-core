@@ -85,10 +85,14 @@ abstract class TrufiLayer {
   }
 
   void clearMarkers() {
-    if (_markers.isEmpty) return;
+    final hadMarkers = _markers.isNotEmpty;
     _markers.clear();
     markerIndex.rebuild(const []);
-    mutateLayers();
+    // Always notify even if already empty to ensure map implementations
+    // properly clear any cached/stale marker data
+    if (hadMarkers) {
+      mutateLayers();
+    }
   }
 
   void setLines(Iterable<TrufiLine> items) {

@@ -73,6 +73,16 @@
             <string>geo</string>
         </array>
     </dict>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>trufiapp</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>trufiapp</string>
+        </array>
+    </dict>
 </array>
 </dict>
 </plist>

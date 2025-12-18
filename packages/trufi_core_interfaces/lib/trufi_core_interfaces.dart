@@ -9,6 +9,7 @@ export './src/config/screen_theme_data.dart';
 export './src/config/trufi_locale_config.dart';
 export './src/config/trufi_screen.dart';
 export './src/config/trufi_theme_config.dart';
+export './src/config/social_media_config.dart';
 // Core models
 export './src/models/trufi_latlng.dart';
 export './src/models/trufi_location.dart';
@@ -24,3 +25,6 @@ export './src/places/my_places_provider.dart';
 
 // Storage interfaces
 export './src/storage/storage_service.dart';
+
+// Deep link
+export './src/deep_link/shared_route.dart';

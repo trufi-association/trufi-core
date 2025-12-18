@@ -58,3 +58,9 @@ typedef OnSearchRoute = void Function();
 
 /// Callback type for the menu button press.
 typedef OnMenuPressed = void Function();
+
+/// Callback type for clearing a single location (origin or destination).
+typedef OnClearLocation = void Function({required bool isOrigin});
+
+/// Callback type for opening routing settings.
+typedef OnRoutingSettings = void Function();

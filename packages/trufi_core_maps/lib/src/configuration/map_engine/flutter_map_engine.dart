@@ -13,15 +13,25 @@ import 'trufi_map_engine.dart';
 /// ```dart
 /// FlutterMapEngine(
 ///   tileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+///   darkTileUrl: 'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
 /// )
 /// ```
 class FlutterMapEngine implements ITrufiMapEngine {
-  /// Tile URL template.
+  /// Tile URL template (light mode).
   ///
   /// Common templates:
   /// - OSM Standard: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
   /// - OSM Humanitarian: 'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png'
   final String tileUrl;
+
+  /// Tile URL template for dark mode (optional).
+  ///
+  /// If not provided, a color filter will be applied to simulate dark mode.
+  ///
+  /// Common dark tile templates:
+  /// - CartoDB Dark Matter: 'https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'
+  /// - Stamen Toner: 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}.png'
+  final String? darkTileUrl;
 
   /// User agent package name for tile requests.
   final String? userAgentPackageName;
@@ -37,6 +47,7 @@ class FlutterMapEngine implements ITrufiMapEngine {
 
   const FlutterMapEngine({
     this.tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    this.darkTileUrl,
     this.userAgentPackageName,
     this.displayName,
     this.displayDescription,
@@ -68,13 +79,20 @@ class FlutterMapEngine implements ITrufiMapEngine {
     required TrufiMapController controller,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
+    bool isDarkMode = false,
   }) {
+    final effectiveTileUrl = isDarkMode && darkTileUrl != null
+        ? darkTileUrl!
+        : tileUrl;
+    final useDarkFilter = isDarkMode && darkTileUrl == null;
+
     return TrufiFlutterMap(
       controller: controller,
-      tileUrl: tileUrl,
+      tileUrl: effectiveTileUrl,
       userAgentPackageName: userAgentPackageName,
       onMapClick: onMapClick,
       onMapLongClick: onMapLongClick,
+      useDarkModeFilter: useDarkFilter,
     );
   }
 }

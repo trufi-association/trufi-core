@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:latlong2/latlong.dart' as latlng;
@@ -5,6 +7,21 @@ import 'package:latlong2/latlong.dart' as latlng;
 import '../../domain/entities/bounds.dart';
 import '../../domain/controller/map_controller.dart';
 import 'trufi_map.dart';
+
+/// Convert meters to pixels at a given latitude and zoom level.
+/// Based on Web Mercator projection.
+double _metersToPixels(double meters, double latitude, double zoom) {
+  // Earth's circumference at equator in meters
+  const earthCircumference = 40075016.686;
+  // Pixels per tile
+  const tileSize = 256.0;
+
+  // Ground resolution (meters per pixel) at given latitude and zoom
+  final groundResolution = (earthCircumference * math.cos(latitude * math.pi / 180)) /
+      (tileSize * math.pow(2, zoom));
+
+  return meters / groundResolution;
+}
 
 class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
   const TrufiFlutterMap({
@@ -14,6 +31,7 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
     this.onMapLongClick,
     required this.tileUrl,
     this.userAgentPackageName,
+    this.useDarkModeFilter = false,
   });
 
   @override
@@ -25,6 +43,9 @@ class TrufiFlutterMap extends StatefulWidget implements TrufiMap {
 
   final String tileUrl;
   final String? userAgentPackageName;
+
+  /// Whether to apply a dark mode color filter to tiles.
+  final bool useDarkModeFilter;
 
   @override
   State<TrufiFlutterMap> createState() => _TrufiFlutterMapState();
@@ -106,6 +127,7 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
           urlTemplate: widget.tileUrl,
           userAgentPackageName:
               widget.userAgentPackageName ?? 'com.example.trufi_core_maps',
+          tileBuilder: widget.useDarkModeFilter ? fm.darkModeTileBuilder : null,
         ),
         // Polylines rendered first (below markers)
         fm.PolylineLayer(
@@ -129,14 +151,28 @@ class _TrufiFlutterMapState extends State<TrufiFlutterMap> {
               for (final marker
                   in (layer.markers.toList()
                     ..sort((a, b) => a.layerLevel.compareTo(b.layerLevel))))
-                fm.Marker(
-                  point: marker.position,
-                  width: marker.size.width,
-                  height: marker.size.height,
-                  rotate: true,
-                  alignment: marker.alignment,
-                  child: marker.widget,
-                ),
+                () {
+                  // Calculate size based on metersRadius if provided
+                  double width = marker.size.width;
+                  double height = marker.size.height;
+                  if (marker.metersRadius != null) {
+                    final pixels = _metersToPixels(
+                      marker.metersRadius!,
+                      marker.position.latitude,
+                      camera.zoom,
+                    );
+                    width = pixels * 2;
+                    height = pixels * 2;
+                  }
+                  return fm.Marker(
+                    point: marker.position,
+                    width: width,
+                    height: height,
+                    rotate: true,
+                    alignment: marker.alignment,
+                    child: marker.widget,
+                  );
+                }(),
             ],
           ),
       ],

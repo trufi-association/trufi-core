@@ -19,5 +19,14 @@
   "confirmLocation": "Standort bestätigen",
   "selectedLocation": "Ausgewählter Standort",
   "setAsOrigin": "Als Startort festlegen",
-  "setAsDestination": "Als Zielort festlegen"
+  "setAsDestination": "Als Zielort festlegen",
+  "shareRoute": "Route teilen",
+  "shareRouteTitle": "{appName} - Geteilte Route",
+  "shareRouteOrigin": "Start: {location}",
+  "shareRouteDestination": "Ziel: {location}",
+  "shareRouteDate": "Datum: {date}",
+  "shareRouteTimes": "Abfahrt: {departure} → Ankunft: {arrival}",
+  "shareRouteDuration": "Dauer: {duration}",
+  "shareRouteItinerary": "Route: {summary}",
+  "shareRouteOpenInApp": "In der App öffnen:"
 }

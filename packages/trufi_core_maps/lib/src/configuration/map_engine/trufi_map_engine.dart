@@ -44,10 +44,12 @@ abstract class ITrufiMapEngine {
   /// [controller] - The TrufiMapController to control the map.
   /// [onMapClick] - Callback when the map is tapped.
   /// [onMapLongClick] - Callback when the map is long-pressed.
+  /// [isDarkMode] - Whether dark mode is enabled for the map style.
   Widget buildMap({
     required TrufiMapController controller,
     void Function(LatLng)? onMapClick,
     void Function(LatLng)? onMapLongClick,
+    bool isDarkMode = false,
   });
 }
 

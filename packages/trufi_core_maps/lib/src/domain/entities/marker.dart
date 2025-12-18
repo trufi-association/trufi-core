@@ -17,6 +17,7 @@ class TrufiMarker {
     this.rotation = 0,
     this.alignment = Alignment.center,
     this.imageKey,
+    this.metersRadius,
   });
 
   final String id;
@@ -28,6 +29,11 @@ class TrufiMarker {
   final Size size;
   final double rotation;
   final Alignment alignment;
+
+  /// Optional radius in meters for geo-scaled markers.
+  /// When set, the marker size will scale with map zoom to represent
+  /// real-world distance. The [size] property is ignored when this is set.
+  final double? metersRadius;
 
   /// Optional stable key for image caching in MapLibre.
   ///
@@ -66,6 +72,7 @@ class TrufiMarker {
     double? rotation,
     Alignment? alignment,
     String? imageKey,
+    double? metersRadius,
   }) {
     return TrufiMarker(
       id: id ?? this.id,
@@ -78,6 +85,7 @@ class TrufiMarker {
       rotation: rotation ?? this.rotation,
       alignment: alignment ?? this.alignment,
       imageKey: imageKey ?? this.imageKey,
+      metersRadius: metersRadius ?? this.metersRadius,
     );
   }
 

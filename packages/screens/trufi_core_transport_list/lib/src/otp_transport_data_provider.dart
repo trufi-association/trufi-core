@@ -2,22 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart';
 
 import 'models/transport_route.dart';
+import 'repository/transport_list_cache.dart';
 import 'transport_list_data_provider.dart';
 
-/// Data provider that connects to OpenTripPlanner to fetch transport routes
+/// Data provider that connects to OpenTripPlanner to fetch transport routes.
+///
+/// Supports optional [cache] parameter for persisting routes between sessions.
+/// When cache is provided:
+/// - Routes are loaded from cache first (instant display)
+/// - Network fetch only happens on explicit refresh
 class OtpTransportDataProvider extends TransportListDataProvider {
   final OtpConfiguration _otpConfiguration;
   final TransitRouteRepository? _repository;
+  final TransportListCache? _cache;
 
   TransportListState _state = const TransportListState();
 
-  /// Cache of full route details (with geometry and stops)
+  /// In-memory cache of full route details (with geometry and stops)
   final Map<String, TransportRouteDetails> _detailsCache = {};
 
   OtpTransportDataProvider({
     required OtpConfiguration otpConfiguration,
+    TransportListCache? cache,
   })  : _otpConfiguration = otpConfiguration,
-        _repository = otpConfiguration.createTransitRouteRepository();
+        _repository = otpConfiguration.createTransitRouteRepository(),
+        _cache = cache;
 
   @override
   TransportListState get state => _state;
@@ -35,8 +44,28 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     _state = _state.copyWith(isLoading: true);
     _notifySafe();
 
+    // Try loading from cache first
+    if (_cache != null) {
+      try {
+        final cachedRoutes = await _cache.getCachedRoutes();
+        if (cachedRoutes != null && cachedRoutes.isNotEmpty) {
+          final routes = cachedRoutes.map(_convertCachedToTransportRoute).toList();
+          _state = _state.copyWith(
+            routes: routes,
+            filteredRoutes: routes,
+            isLoading: false,
+          );
+          _notifySafe();
+          return; // Loaded from cache, no network needed
+        }
+      } catch (e) {
+        debugPrint('OtpTransportDataProvider: Error loading from cache: $e');
+      }
+    }
+
+    // No cache, fetch from network
     try {
-      await refresh();
+      await _fetchAndCacheRoutes();
     } catch (e) {
       _state = _state.copyWith(isLoading: false);
       _notifySafe();
@@ -56,36 +85,51 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     _notifySafe();
 
     try {
-      final patterns = await _repository.fetchPatterns();
-
-      // Sort routes by shortName (numeric first, then alphabetic)
-      patterns.sort((a, b) {
-        final aShortName = int.tryParse(a.route?.shortName ?? '');
-        final bShortName = int.tryParse(b.route?.shortName ?? '');
-
-        if (aShortName != null && bShortName != null) {
-          return aShortName.compareTo(bShortName);
-        } else if (aShortName == null && bShortName == null) {
-          return (a.route?.shortName ?? '').compareTo(b.route?.shortName ?? '');
-        } else if (aShortName != null) {
-          return -1;
-        }
-        return 1;
-      });
-
-      final routes = patterns.map(_convertToTransportRoute).toList();
-
-      _state = _state.copyWith(
-        routes: routes,
-        filteredRoutes: routes,
-        isLoading: false,
-      );
-      _notifySafe();
+      await _fetchAndCacheRoutes();
     } catch (e) {
       _state = _state.copyWith(isLoading: false);
       _notifySafe();
       rethrow;
     }
+  }
+
+  /// Fetch routes from network and save to cache.
+  Future<void> _fetchAndCacheRoutes() async {
+    final patterns = await _repository!.fetchPatterns();
+
+    // Sort routes by shortName (numeric first, then alphabetic)
+    patterns.sort((a, b) {
+      final aShortName = int.tryParse(a.route?.shortName ?? '');
+      final bShortName = int.tryParse(b.route?.shortName ?? '');
+
+      if (aShortName != null && bShortName != null) {
+        return aShortName.compareTo(bShortName);
+      } else if (aShortName == null && bShortName == null) {
+        return (a.route?.shortName ?? '').compareTo(b.route?.shortName ?? '');
+      } else if (aShortName != null) {
+        return -1;
+      }
+      return 1;
+    });
+
+    final routes = patterns.map(_convertToTransportRoute).toList();
+
+    // Cache the patterns if cache is available
+    if (_cache != null) {
+      try {
+        final cachedPatterns = patterns.map(_convertToCachedPattern).toList();
+        await _cache.cacheRoutes(cachedPatterns);
+      } catch (e) {
+        debugPrint('OtpTransportDataProvider: Error caching routes: $e');
+      }
+    }
+
+    _state = _state.copyWith(
+      routes: routes,
+      filteredRoutes: routes,
+      isLoading: false,
+    );
+    _notifySafe();
   }
 
   @override
@@ -109,9 +153,23 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   Future<TransportRouteDetails?> getRouteDetails(String code) async {
     if (_repository == null) return null;
 
-    // Check cache first
+    // Check in-memory cache first
     if (_detailsCache.containsKey(code)) {
       return _detailsCache[code];
+    }
+
+    // Check persistent cache
+    if (_cache != null) {
+      try {
+        final cachedDetails = await _cache.getCachedDetails(code);
+        if (cachedDetails != null) {
+          final details = _convertCachedToTransportRouteDetails(cachedDetails);
+          _detailsCache[code] = details;
+          return details;
+        }
+      } catch (e) {
+        debugPrint('OtpTransportDataProvider: Error loading cached details: $e');
+      }
     }
 
     _state = _state.copyWith(isLoadingDetails: true);
@@ -121,8 +179,17 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       final pattern = await _repository.fetchPatternById(code);
       final details = _convertToTransportRouteDetails(pattern);
 
-      // Cache the result
+      // Cache the result in memory
       _detailsCache[code] = details;
+
+      // Cache to persistent storage
+      if (_cache != null) {
+        try {
+          await _cache.cacheDetails(code, _convertToCachedDetails(pattern));
+        } catch (e) {
+          debugPrint('OtpTransportDataProvider: Error caching details: $e');
+        }
+      }
 
       _state = _state.copyWith(isLoadingDetails: false);
       _notifySafe();
@@ -141,6 +208,8 @@ class OtpTransportDataProvider extends TransportListDataProvider {
       notifyListeners();
     });
   }
+
+  // ============ Conversion methods ============
 
   /// Convert routing TransitRoute to transport_list TransportRoute
   TransportRoute _convertToTransportRoute(TransitRoute route) {
@@ -185,6 +254,92 @@ class OtpTransportDataProvider extends TransportListDataProvider {
     );
   }
 
+  /// Convert TransitRoute to CachedRoutePattern for storage
+  CachedRoutePattern _convertToCachedPattern(TransitRoute route) {
+    return CachedRoutePattern(
+      id: route.id,
+      code: route.code,
+      name: route.name,
+      shortName: route.route?.shortName,
+      longName: route.route?.longName,
+      color: route.route?.color,
+      textColor: route.route?.textColor,
+      mode: route.route?.mode?.name,
+    );
+  }
+
+  /// Convert TransitRoute to CachedRouteDetails for storage
+  CachedRouteDetails _convertToCachedDetails(TransitRoute route) {
+    return CachedRouteDetails(
+      id: route.id,
+      code: route.code,
+      name: route.name,
+      shortName: route.route?.shortName,
+      longName: route.route?.longName,
+      color: route.route?.color,
+      textColor: route.route?.textColor,
+      mode: route.route?.mode?.name,
+      geometry: route.geometry
+          ?.map((latLng) => CachedLatLng(
+                latitude: latLng.latitude,
+                longitude: latLng.longitude,
+              ))
+          .toList(),
+      stops: route.stops
+          ?.map((stop) => CachedStop(
+                id: stop.name,
+                name: stop.name,
+                latitude: stop.lat,
+                longitude: stop.lon,
+              ))
+          .toList(),
+    );
+  }
+
+  /// Convert CachedRoutePattern to TransportRoute
+  TransportRoute _convertCachedToTransportRoute(CachedRoutePattern cached) {
+    return TransportRoute(
+      id: cached.id,
+      code: cached.code,
+      name: cached.name,
+      shortName: cached.shortName,
+      longName: cached.longName,
+      backgroundColor: _parseColor(cached.color),
+      textColor: _parseColor(cached.textColor),
+      modeIcon: _getModeIconFromString(cached.mode),
+    );
+  }
+
+  /// Convert CachedRouteDetails to TransportRouteDetails
+  TransportRouteDetails _convertCachedToTransportRouteDetails(
+      CachedRouteDetails cached) {
+    return TransportRouteDetails(
+      id: cached.id,
+      code: cached.code,
+      name: cached.name,
+      shortName: cached.shortName,
+      longName: cached.longName,
+      backgroundColor: _parseColor(cached.color),
+      textColor: _parseColor(cached.textColor),
+      modeIcon: _getModeIconFromString(cached.mode),
+      modeName: cached.mode,
+      geometry: cached.geometry
+          ?.map((latLng) => (
+                latitude: latLng.latitude,
+                longitude: latLng.longitude,
+              ))
+          .toList(),
+      stops: cached.stops
+          ?.map((stop) => TransportStop(
+                id: stop.id,
+                name: stop.name,
+                latitude: stop.latitude,
+                longitude: stop.longitude,
+              ))
+          .toList(),
+    );
+  }
+
   /// Parse hex color string to Color
   Color? _parseColor(String? colorHex) {
     if (colorHex == null || colorHex.isEmpty) return null;
@@ -199,29 +354,35 @@ class OtpTransportDataProvider extends TransportListDataProvider {
   /// Get icon widget for transport mode
   Widget? _getModeIcon(TransportMode? mode) {
     if (mode == null) return null;
+    return _getModeIconFromString(mode.name);
+  }
+
+  /// Get icon widget for transport mode from string name
+  Widget? _getModeIconFromString(String? modeName) {
+    if (modeName == null) return null;
 
     IconData iconData;
-    switch (mode) {
-      case TransportMode.bus:
+    switch (modeName.toLowerCase()) {
+      case 'bus':
         iconData = Icons.directions_bus;
         break;
-      case TransportMode.tram:
+      case 'tram':
         iconData = Icons.tram;
         break;
-      case TransportMode.subway:
+      case 'subway':
         iconData = Icons.subway;
         break;
-      case TransportMode.rail:
+      case 'rail':
         iconData = Icons.train;
         break;
-      case TransportMode.ferry:
+      case 'ferry':
         iconData = Icons.directions_ferry;
         break;
-      case TransportMode.gondola:
-      case TransportMode.cableCar:
+      case 'gondola':
+      case 'cablecar':
         iconData = Icons.airline_seat_recline_extra;
         break;
-      case TransportMode.funicular:
+      case 'funicular':
         iconData = Icons.terrain;
         break;
       default:

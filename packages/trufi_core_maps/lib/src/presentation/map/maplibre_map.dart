@@ -140,6 +140,18 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     final sorted = [...visibleLayers]
       ..sort((a, b) => a.layerLevel.compareTo(b.layerLevel));
 
+    // Get the set of current layer IDs
+    final currentLayerIds = sorted.map((l) => l.id).toSet();
+
+    // Find and remove layers that no longer exist
+    final removedSources = _initializedSources
+        .where((id) => !currentLayerIds.contains(id))
+        .toList();
+
+    for (final sourceId in removedSources) {
+      await _removeMapLibreLayer(sourceId, ctl);
+    }
+
     for (final layer in sorted) {
       await _ensureLayerInitialized(layer, ctl);
     }
@@ -148,6 +160,24 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
       sorted.map((l) => _updateLayerData(l, ctl)),
       eagerError: true,
     );
+  }
+
+  Future<void> _removeMapLibreLayer(
+    String sourceId,
+    MapLibreMapController ctl,
+  ) async {
+    try {
+      // Remove the three layers associated with this source
+      await ctl.removeLayer('${sourceId}_marker');
+      await ctl.removeLayer('${sourceId}_solid');
+      await ctl.removeLayer('${sourceId}_dotted');
+      // Remove the source
+      await ctl.removeSource(sourceId);
+    } catch (_) {
+      // Ignore errors if layers/source don't exist
+    }
+    _initializedSources.remove(sourceId);
+    _markers.clearLayer(sourceId);
   }
 
   Future<void> _ensureLayerInitialized(
@@ -236,6 +266,17 @@ class _TrufiMapLibreMapState extends State<TrufiMapLibreMap> {
     MapLibreMapController ctl,
   ) async {
     final geojson = await _buildGeoJsonForLayer(layer, ctl);
+
+    // MapLibre GL sometimes doesn't properly clear symbols when updating to
+    // an empty FeatureCollection. Force a double-update to ensure clearing.
+    final features = geojson['features'] as List;
+    if (features.isEmpty) {
+      // First set empty, then set again to force refresh
+      await ctl.setGeoJsonSource(layer.id, geojson);
+      // Small delay to allow MapLibre to process the empty source
+      await Future<void>.delayed(const Duration(milliseconds: 16));
+    }
+
     await ctl.setGeoJsonSource(layer.id, geojson);
     _markers.setLayerMarkers(layer.id, layer.markers);
   }

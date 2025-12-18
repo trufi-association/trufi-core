@@ -37,6 +37,12 @@ class SearchLocationBar extends StatelessWidget {
   /// Called when the menu button is pressed.
   final OnMenuPressed? onMenuPressed;
 
+  /// Called when a single location should be cleared.
+  final OnClearLocation? onClearLocation;
+
+  /// Called when routing settings should be opened.
+  final OnRoutingSettings? onRoutingSettings;
+
   /// Whether to show the menu button.
   final bool showMenuButton;
 
@@ -50,6 +56,8 @@ class SearchLocationBar extends StatelessWidget {
     this.onSwap,
     this.onReset,
     this.onMenuPressed,
+    this.onClearLocation,
+    this.onRoutingSettings,
     this.showMenuButton = true,
   });
 
@@ -119,26 +127,38 @@ class SearchLocationBar extends StatelessWidget {
                 ],
               ),
               const SizedBox(width: 12),
-              // Text fields
+              // Text fields with individual clear buttons
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Origin field
-                    _LocationFieldCompact(
+                    // Origin field with clear button
+                    _LocationFieldWithClear(
                       isOrigin: true,
                       hintText: configuration.originHintText,
                       value: state.origin,
                       onTap: () => _handleSearch(context, isOrigin: true),
+                      onClear: onClearLocation != null
+                          ? () {
+                              HapticFeedback.lightImpact();
+                              onClearLocation!(isOrigin: true);
+                            }
+                          : null,
                       theme: theme,
                     ),
                     const SizedBox(height: 8),
-                    // Destination field
-                    _LocationFieldCompact(
+                    // Destination field with clear button
+                    _LocationFieldWithClear(
                       isOrigin: false,
                       hintText: configuration.destinationHintText,
                       value: state.destination,
                       onTap: () => _handleSearch(context, isOrigin: false),
+                      onClear: onClearLocation != null
+                          ? () {
+                              HapticFeedback.lightImpact();
+                              onClearLocation!(isOrigin: false);
+                            }
+                          : null,
                       theme: theme,
                     ),
                   ],
@@ -148,37 +168,41 @@ class SearchLocationBar extends StatelessWidget {
           ),
         ),
 
-        // Action buttons column (swap & reset)
-        if (state.isComplete && (onSwap != null || onReset != null)) ...[
-          const SizedBox(width: 8),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (onSwap != null)
-                _ActionButton(
-                  icon: Icons.swap_vert_rounded,
-                  color: theme.colorScheme.primaryContainer,
-                  iconColor: theme.colorScheme.onPrimaryContainer,
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    onSwap!();
-                  },
-                ),
-              if (onSwap != null && onReset != null)
-                const SizedBox(height: 8),
-              if (onReset != null)
-                _ActionButton(
-                  icon: Icons.close_rounded,
-                  color: theme.colorScheme.errorContainer,
-                  iconColor: theme.colorScheme.error,
-                  onPressed: () {
-                    HapticFeedback.mediumImpact();
-                    onReset!();
-                  },
-                ),
-            ],
-          ),
-        ],
+        // Action buttons column (swap & routing settings)
+        const SizedBox(width: 8),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (onSwap != null)
+              _ActionButton(
+                icon: Icons.swap_vert_rounded,
+                color: state.isComplete
+                    ? theme.colorScheme.primaryContainer
+                    : theme.colorScheme.surfaceContainerHighest,
+                iconColor: state.isComplete
+                    ? theme.colorScheme.onPrimaryContainer
+                    : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                onPressed: state.isComplete
+                    ? () {
+                        HapticFeedback.lightImpact();
+                        onSwap!();
+                      }
+                    : null,
+              ),
+            if (onSwap != null && onRoutingSettings != null)
+              const SizedBox(height: 8),
+            if (onRoutingSettings != null)
+              _ActionButton(
+                icon: Icons.tune_rounded,
+                color: theme.colorScheme.secondaryContainer,
+                iconColor: theme.colorScheme.onSecondaryContainer,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  onRoutingSettings!();
+                },
+              ),
+          ],
+        ),
       ],
     );
   }
@@ -222,56 +246,74 @@ class SearchLocationBar extends StatelessWidget {
           const SizedBox(width: 8),
         ],
 
-        // Origin field
+        // Origin field with clear button
         Expanded(
-          child: _LocationFieldModern(
+          child: _LocationFieldModernWithClear(
             isOrigin: true,
             hintText: configuration.originHintText,
             value: state.origin,
             onTap: () => _handleSearch(context, isOrigin: true),
+            onClear: onClearLocation != null && state.origin != null
+                ? () {
+                    HapticFeedback.lightImpact();
+                    onClearLocation!(isOrigin: true);
+                  }
+                : null,
             theme: theme,
             leadingWidget: configuration.originLeadingWidget,
           ),
         ),
 
-        // Swap button
-        if (state.isComplete && onSwap != null) ...[
+        // Swap button (always visible when onSwap provided, but disabled when incomplete)
+        if (onSwap != null) ...[
           const SizedBox(width: 8),
           _ActionButton(
             icon: Icons.swap_horiz_rounded,
-            color: theme.colorScheme.primaryContainer,
-            iconColor: theme.colorScheme.onPrimaryContainer,
-            onPressed: () {
-              HapticFeedback.lightImpact();
-              onSwap!();
-            },
+            color: state.isComplete
+                ? theme.colorScheme.primaryContainer
+                : theme.colorScheme.surfaceContainerHighest,
+            iconColor: state.isComplete
+                ? theme.colorScheme.onPrimaryContainer
+                : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+            onPressed: state.isComplete
+                ? () {
+                    HapticFeedback.lightImpact();
+                    onSwap!();
+                  }
+                : null,
           ),
           const SizedBox(width: 8),
         ] else
           const SizedBox(width: 12),
 
-        // Destination field
+        // Destination field with clear button
         Expanded(
-          child: _LocationFieldModern(
+          child: _LocationFieldModernWithClear(
             isOrigin: false,
             hintText: configuration.destinationHintText,
             value: state.destination,
             onTap: () => _handleSearch(context, isOrigin: false),
+            onClear: onClearLocation != null && state.destination != null
+                ? () {
+                    HapticFeedback.lightImpact();
+                    onClearLocation!(isOrigin: false);
+                  }
+                : null,
             theme: theme,
             leadingWidget: configuration.destinationLeadingWidget,
           ),
         ),
 
-        // Reset button
-        if (state.isComplete && onReset != null) ...[
+        // Routing settings button
+        if (onRoutingSettings != null) ...[
           const SizedBox(width: 8),
           _ActionButton(
-            icon: Icons.close_rounded,
-            color: theme.colorScheme.errorContainer,
-            iconColor: theme.colorScheme.error,
+            icon: Icons.tune_rounded,
+            color: theme.colorScheme.secondaryContainer,
+            iconColor: theme.colorScheme.onSecondaryContainer,
             onPressed: () {
-              HapticFeedback.mediumImpact();
-              onReset!();
+              HapticFeedback.lightImpact();
+              onRoutingSettings!();
             },
           ),
         ],
@@ -292,19 +334,21 @@ class SearchLocationBar extends StatelessWidget {
   }
 }
 
-/// Compact location field without leading icon (used with external dots)
-class _LocationFieldCompact extends StatelessWidget {
+/// Compact location field with optional clear button
+class _LocationFieldWithClear extends StatelessWidget {
   final bool isOrigin;
   final String hintText;
   final dynamic value;
   final VoidCallback onTap;
+  final VoidCallback? onClear;
   final ThemeData theme;
 
-  const _LocationFieldCompact({
+  const _LocationFieldWithClear({
     required this.isOrigin,
     required this.hintText,
     required this.value,
     required this.onTap,
+    this.onClear,
     required this.theme,
   });
 
@@ -320,25 +364,63 @@ class _LocationFieldCompact extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: Container(
           height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.only(left: 12, right: 4),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              displayText,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: hasValue
-                  ? theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    )
-                  : theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-            ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  displayText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: hasValue
+                      ? theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        )
+                      : theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                ),
+              ),
+              if (hasValue && onClear != null)
+                _ClearButton(onPressed: onClear!),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Small clear button for location fields
+class _ClearButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const _ClearButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.close_rounded,
+            color: theme.colorScheme.onSurfaceVariant,
+            size: 16,
           ),
         ),
       ),
@@ -351,13 +433,13 @@ class _ActionButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final Color iconColor;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _ActionButton({
     required this.icon,
     required this.color,
     required this.iconColor,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override
@@ -385,20 +467,22 @@ class _ActionButton extends StatelessWidget {
   }
 }
 
-/// Modern styled location input field (for landscape)
-class _LocationFieldModern extends StatelessWidget {
+/// Modern styled location input field with clear button (for landscape)
+class _LocationFieldModernWithClear extends StatelessWidget {
   final bool isOrigin;
   final String hintText;
   final dynamic value;
   final VoidCallback onTap;
+  final VoidCallback? onClear;
   final ThemeData theme;
   final Widget? leadingWidget;
 
-  const _LocationFieldModern({
+  const _LocationFieldModernWithClear({
     required this.isOrigin,
     required this.hintText,
     required this.value,
     required this.onTap,
+    this.onClear,
     required this.theme,
     this.leadingWidget,
   });
@@ -416,7 +500,10 @@ class _LocationFieldModern extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.only(
+            left: 12,
+            right: hasValue && onClear != null ? 4 : 12,
+          ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
@@ -465,6 +552,9 @@ class _LocationFieldModern extends StatelessWidget {
                   ],
                 ),
               ),
+              // Clear button
+              if (hasValue && onClear != null)
+                _ClearButton(onPressed: onClear!),
             ],
           ),
         ),

@@ -164,10 +164,11 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
     _clickMarkersLayer.addMarkerAt(position);
   }
 
-  Widget _buildMap(ITrufiMapEngine engine) {
+  Widget _buildMap(ITrufiMapEngine engine, {required bool isDarkMode}) {
     return engine.buildMap(
       controller: _controller,
       onMapClick: _onMapClick,
+      isDarkMode: isDarkMode,
     );
   }
 
@@ -186,10 +187,15 @@ class _PerformanceDemoPageState extends State<PerformanceDemoPage> {
             );
           });
 
+          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
           return Stack(
             children: [
               // Map
-              _buildMap(mapEngineManager.currentEngine),
+              _buildMap(
+                mapEngineManager.currentEngine,
+                isDarkMode: isDarkMode,
+              ),
 
               // Performance Stats (top-left)
               Positioned(

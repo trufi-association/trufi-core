@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
+import 'package:trufi_core_utils/trufi_core_utils.dart';
 
 import '../l10n/home_screen_localizations.dart';
 import 'config/home_screen_config.dart';
@@ -18,9 +20,19 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   final HomeScreenConfig config;
   late final HomeScreenRepository _repository;
   late final RequestPlanService _requestService;
+  late final routing.RoutingPreferencesManager _routingPreferencesManager;
 
   /// Callback when itinerary details are requested.
   final void Function(routing.Itinerary itinerary)? onItineraryDetails;
+
+  /// Callback when navigation is started for an itinerary.
+  /// Receives the BuildContext, itinerary, and LocationService so the caller
+  /// can show the navigation screen using the same location service.
+  final void Function(
+    BuildContext context,
+    routing.Itinerary itinerary,
+    LocationService locationService,
+  )? onStartNavigation;
 
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
@@ -33,6 +45,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     HomeScreenRepository? repository,
     RequestPlanService? requestService,
     this.onItineraryDetails,
+    this.onStartNavigation,
   }) {
     _repository = repository ?? HomeScreenRepositoryImpl();
     _requestService =
@@ -40,6 +53,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
         RoutingRequestPlanService(
           routing.OtpConfiguration(endpoint: config.otpEndpoint),
         );
+    _routingPreferencesManager = routing.RoutingPreferencesManager();
   }
 
   @override
@@ -56,6 +70,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
       },
       config: config,
       onItineraryDetails: onItineraryDetails,
+      onStartNavigation: onStartNavigation,
     );
   };
 
@@ -69,10 +84,14 @@ class HomeScreenTrufiScreen extends TrufiScreen {
 
   @override
   List<SingleChildWidget> get providers => [
+    ChangeNotifierProvider<routing.RoutingPreferencesManager>.value(
+      value: _routingPreferencesManager,
+    ),
     BlocProvider<RoutePlannerCubit>(
       create: (_) => RoutePlannerCubit(
         repository: _repository,
         requestService: _requestService,
+        getRoutingPreferences: () => _routingPreferencesManager.preferences,
       )..initialize(),
     ),
   ];
@@ -92,6 +111,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   @override
   Future<void> initialize() async {
     await _repository.initialize();
+    await _routingPreferencesManager.initialize();
   }
 
   @override

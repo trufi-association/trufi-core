@@ -216,6 +216,60 @@ abstract class HomeScreenLocalizations {
   /// In en, this message translates to:
   /// **'Set as Destination'**
   String get setAsDestination;
+
+  /// Tooltip for share route button
+  ///
+  /// In en, this message translates to:
+  /// **'Share route'**
+  String get shareRoute;
+
+  /// Title for shared route text
+  ///
+  /// In en, this message translates to:
+  /// **'{appName} - Shared route'**
+  String shareRouteTitle(String appName);
+
+  /// Origin label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Origin: {location}'**
+  String shareRouteOrigin(String location);
+
+  /// Destination label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Destination: {location}'**
+  String shareRouteDestination(String location);
+
+  /// Date label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {date}'**
+  String shareRouteDate(String date);
+
+  /// Times label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Departure: {departure} → Arrival: {arrival}'**
+  String shareRouteTimes(String departure, String arrival);
+
+  /// Duration label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Duration: {duration}'**
+  String shareRouteDuration(String duration);
+
+  /// Route summary label in shared route
+  ///
+  /// In en, this message translates to:
+  /// **'Route: {summary}'**
+  String shareRouteItinerary(String summary);
+
+  /// Label before deep link URL
+  ///
+  /// In en, this message translates to:
+  /// **'Open in app:'**
+  String get shareRouteOpenInApp;
 }
 
 class _HomeScreenLocalizationsDelegate extends LocalizationsDelegate<HomeScreenLocalizations> {

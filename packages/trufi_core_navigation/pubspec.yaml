@@ -1,0 +1,28 @@
+name: trufi_core_navigation
+description: Turn-by-turn navigation for transport routes in Trufi Core apps.
+version: 1.0.0
+homepage:
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.3
+  equatable: ^2.0.0
+  latlong2: ^0.9.1
+  wakelock_plus: ^1.2.8
+  trufi_core_utils: ^1.0.0
+  trufi_core_maps: ^1.0.0
+  trufi_core_routing: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:

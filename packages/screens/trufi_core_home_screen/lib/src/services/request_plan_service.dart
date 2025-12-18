@@ -10,5 +10,6 @@ abstract class RequestPlanService {
     List<routing.TransportMode>? transportModes,
     String? locale,
     DateTime? dateTime,
+    routing.RoutingPreferences? preferences,
   });
 }

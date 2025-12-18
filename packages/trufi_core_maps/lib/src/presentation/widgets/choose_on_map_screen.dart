@@ -181,6 +181,8 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
     final colorScheme = theme.colorScheme;
     _initializeIfNeeded(mapEngineManager);
 
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       body: Stack(
@@ -188,6 +190,7 @@ class _ChooseOnMapScreenState extends State<ChooseOnMapScreen> {
           // Map using the current engine
           mapEngineManager.currentEngine.buildMap(
             controller: _mapController!,
+            isDarkMode: isDarkMode,
           ),
 
           // Center marker with modern design

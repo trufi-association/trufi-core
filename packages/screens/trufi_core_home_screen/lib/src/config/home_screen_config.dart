@@ -18,11 +18,20 @@ class HomeScreenConfig {
   /// Only used if SavedPlacesCubit is not available in context.
   final List<SearchLocation> myPlaces;
 
+  /// App name to show in shared route text
+  final String? appName;
+
+  /// Deep link scheme for route sharing (e.g., 'trufiapp').
+  /// When set, shared routes will include a deep link URL.
+  final String? deepLinkScheme;
+
   const HomeScreenConfig({
     required this.otpEndpoint,
     this.chooseLocationZoom = 16.0,
     this.searchService,
     this.photonUrl = 'https://photon.komoot.io/api/',
     this.myPlaces = const [],
+    this.appName,
+    this.deepLinkScheme,
   });
 }

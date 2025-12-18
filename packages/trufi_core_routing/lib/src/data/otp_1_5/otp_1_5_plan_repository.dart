@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/entities/plan.dart';
 import '../../domain/entities/routing_location.dart';
+import '../../domain/entities/routing_preferences.dart';
 import '../../domain/repositories/plan_repository.dart';
 import 'otp_1_5_response_parser.dart';
 
@@ -33,18 +34,43 @@ class Otp15PlanRepository implements PlanRepository {
     int numItineraries = 5,
     String? locale,
     required DateTime dateTime,
+    bool arriveBy = false,
+    RoutingPreferences? preferences,
   }) async {
     final date = '${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}-${dateTime.year}';
     final time = '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+
+    // Build transport modes string from preferences
+    final modes = preferences?.transportModes
+            .map((m) => m.otpName)
+            .join(',') ??
+        'TRANSIT,WALK';
 
     final queryParams = <String, String>{
       'fromPlace': _formatLocation(from),
       'toPlace': _formatLocation(to),
       'numItineraries': numItineraries.toString(),
-      'mode': 'TRANSIT,WALK',
+      'mode': modes,
       'date': date,
       'time': time,
+      if (arriveBy) 'arriveBy': 'true',
     };
+
+    // Add routing preferences
+    if (preferences != null) {
+      if (preferences.wheelchair) {
+        queryParams['wheelchair'] = 'true';
+      }
+      queryParams['walkSpeed'] = preferences.walkSpeed.toString();
+      queryParams['walkReluctance'] = preferences.walkReluctance.toString();
+      if (preferences.maxWalkDistance != null) {
+        queryParams['maxWalkDistance'] = preferences.maxWalkDistance.toString();
+      }
+      // Add bike speed if bicycle mode is selected
+      if (preferences.transportModes.contains(RoutingMode.bicycle)) {
+        queryParams['bikeSpeed'] = preferences.bikeSpeed.toString();
+      }
+    }
 
     if (locale != null) {
       queryParams['locale'] = locale;

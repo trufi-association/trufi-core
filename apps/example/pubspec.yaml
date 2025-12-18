@@ -31,6 +31,7 @@ dependencies:
   trufi_core_fares: ^1.0.0
   trufi_core_settings: ^1.0.0
   trufi_core_ui: ^1.0.0
+  trufi_core_navigation: ^1.0.0
   latlong2: ^0.9.1
   maplibre_gl: ^0.24.1
 

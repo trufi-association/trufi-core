@@ -5,12 +5,22 @@ import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import '../l10n/transport_list_localizations.dart';
 import 'models/transport_route.dart';
 
+/// Callback type for moving the map to a specific location
+typedef MapMoveCallback = void Function(double latitude, double longitude);
+
+/// Callback type for selecting a stop on the map
+typedef StopSelectionCallback = void Function(int? stopIndex);
+
 /// Screen showing transport route details with map and stops
 class TransportDetailScreen extends StatefulWidget {
   final String routeCode;
   final Future<TransportRouteDetails?> Function(String code) getRouteDetails;
-  final Widget Function(BuildContext context, TransportRouteDetails? route)?
-      mapBuilder;
+  final Widget Function(
+    BuildContext context,
+    TransportRouteDetails? route,
+    void Function(MapMoveCallback) registerMapMoveCallback,
+    void Function(StopSelectionCallback) registerStopSelectionCallback,
+  )? mapBuilder;
   final Uri? shareBaseUri;
 
   const TransportDetailScreen({
@@ -26,8 +36,12 @@ class TransportDetailScreen extends StatefulWidget {
     required String routeCode,
     required Future<TransportRouteDetails?> Function(String code)
         getRouteDetails,
-    Widget Function(BuildContext context, TransportRouteDetails? route)?
-        mapBuilder,
+    Widget Function(
+      BuildContext context,
+      TransportRouteDetails? route,
+      void Function(MapMoveCallback) registerMapMoveCallback,
+      void Function(StopSelectionCallback) registerStopSelectionCallback,
+    )? mapBuilder,
     Uri? shareBaseUri,
   }) {
     return Navigator.of(context).push(
@@ -70,6 +84,9 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
   final DraggableScrollableController _sheetController =
       DraggableScrollableController();
   late AnimationController _fadeController;
+  MapMoveCallback? _mapMoveCallback;
+  StopSelectionCallback? _stopSelectionCallback;
+  int? _selectedStopIndex;
 
   @override
   void initState() {
@@ -220,33 +237,21 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                             ),
                           ),
                           const SizedBox(width: 10),
-                          // Route name
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (_route!.modeName != null)
-                                  Text(
-                                    _route!.modeName!,
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: colorScheme.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                if (_route!.longNameFull.isNotEmpty)
-                                  Text(
-                                    _route!.longNameFull,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: colorScheme.onSurface,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              ],
-                            ),
-                          ),
+                          // Route name (show prefix like "MiniBus 1", origin/destination is in bottom sheet)
+                          if (_route!.longNamePrefix.isNotEmpty)
+                            Expanded(
+                              child: Text(
+                                _route!.longNamePrefix,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurface,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          else
+                            const Spacer(),
                         ],
                       ),
                     ),
@@ -320,7 +325,12 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
           Positioned.fill(
             child: FadeTransition(
               opacity: _fadeController,
-              child: widget.mapBuilder!(context, _route),
+              child: widget.mapBuilder!(
+                context,
+                _route,
+                (callback) => _mapMoveCallback = callback,
+                (callback) => _stopSelectionCallback = callback,
+              ),
             ),
           )
         else
@@ -343,17 +353,20 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
         // Bottom sheet with stops only
         TrufiBottomSheet(
           controller: _sheetController,
-          initialChildSize: 0.30,
-          minChildSize: 0.10,
-          maxChildSize: 0.75,
+          initialChildSize: 0.35,
+          minChildSize: 0.15,
+          maxChildSize: 0.5,
           snap: true,
-          snapSizes: const [0.10, 0.30, 0.75],
+          snapSizes: const [0.15, 0.35, 0.5],
           builder: (context, scrollController) => _StopsSheetContent(
             route: _route!,
             scrollController: scrollController,
-            onStopTap: (lat, lng) {
+            selectedStopIndex: _selectedStopIndex,
+            onStopTap: (index, lat, lng) {
               HapticFeedback.selectionClick();
-              // Could trigger map movement here
+              setState(() => _selectedStopIndex = index);
+              _mapMoveCallback?.call(lat, lng);
+              _stopSelectionCallback?.call(index);
             },
           ),
         ),
@@ -419,11 +432,13 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
 class _StopsSheetContent extends StatelessWidget {
   final TransportRouteDetails route;
   final ScrollController scrollController;
-  final void Function(double lat, double lng)? onStopTap;
+  final int? selectedStopIndex;
+  final void Function(int index, double lat, double lng)? onStopTap;
 
   const _StopsSheetContent({
     required this.route,
     required this.scrollController,
+    this.selectedStopIndex,
     this.onStopTap,
   });
 
@@ -433,81 +448,175 @@ class _StopsSheetContent extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final stops = route.stops ?? [];
 
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: [
-        // Stops count header
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+    return Column(
+      children: [
+        // Fixed header section
+        _buildHeader(context, theme, colorScheme, stops),
+
+        // Scrollable stops list
+        Expanded(
+          child: stops.isEmpty
+              ? const _EmptyStopsInline()
+              : ListView.builder(
+                  controller: scrollController,
+                  padding: EdgeInsets.zero,
+                  itemCount: stops.length,
+                  itemBuilder: (context, index) {
+                    final stop = stops[index];
+                    final isFirst = index == 0;
+                    final isLast = index == stops.length - 1;
+                    final isSelected = selectedStopIndex == index;
+                    final routeColor =
+                        route.backgroundColor ?? colorScheme.primary;
+
+                    return _StopTimelineItem(
+                      stop: stop,
+                      isFirst: isFirst,
+                      isLast: isLast,
+                      isSelected: isSelected,
+                      routeColor: routeColor,
+                      onTap: onStopTap != null
+                          ? () {
+                              HapticFeedback.selectionClick();
+                              onStopTap!(index, stop.latitude, stop.longitude);
+                            }
+                          : null,
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    List<TransportStop> stops,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Origin/Destination header (Google Maps style)
+        if (route.hasOriginDestination)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.location_on_rounded,
-                        size: 14,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${stops.length} stops',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
+                // Timeline indicators (green dot, dotted line, red dot)
+                Column(
+                  children: [
+                    // Green origin dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.green.shade700,
+                          width: 2,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    // Dotted line
+                    CustomPaint(
+                      size: const Size(2, 28),
+                      painter: _DottedLinePainter(
+                        color: colorScheme.outlineVariant,
+                      ),
+                    ),
+                    // Red destination dot
+                    Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.red.shade700,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(width: 12),
+                // Origin and destination text
                 Expanded(
-                  child: Divider(
-                    color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Origin
+                      Text(
+                        route.longNameStart,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 16),
+                      // Destination
+                      Text(
+                        route.longNameLast,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.onSurface,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ),
 
-        // Stops list
-        if (stops.isEmpty)
-          const SliverFillRemaining(
-            child: _EmptyStopsInline(),
-          )
-        else
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final stop = stops[index];
-                final isFirst = index == 0;
-                final isLast = index == stops.length - 1;
-                final routeColor = route.backgroundColor ?? colorScheme.primary;
-
-                return _StopTimelineItem(
-                  stop: stop,
-                  isFirst: isFirst,
-                  isLast: isLast,
-                  routeColor: routeColor,
-                  onTap: onStopTap != null
-                      ? () {
-                          HapticFeedback.selectionClick();
-                          onStopTap!(stop.latitude, stop.longitude);
-                        }
-                      : null,
-                );
-              },
-              childCount: stops.length,
-            ),
+        // Stops count header with divider
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+          child: Row(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.location_on_rounded,
+                      size: 14,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${stops.length} stops',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Divider(
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+                ),
+              ),
+            ],
           ),
+        ),
       ],
     );
   }
@@ -549,6 +658,7 @@ class _StopTimelineItem extends StatelessWidget {
   final TransportStop stop;
   final bool isFirst;
   final bool isLast;
+  final bool isSelected;
   final Color routeColor;
   final VoidCallback? onTap;
 
@@ -556,6 +666,7 @@ class _StopTimelineItem extends StatelessWidget {
     required this.stop,
     required this.isFirst,
     required this.isLast,
+    this.isSelected = false,
     required this.routeColor,
     this.onTap,
   });
@@ -564,39 +675,74 @@ class _StopTimelineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isTerminal = isFirst || isLast;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: Row(
-            children: [
-              // Timeline indicator
-              Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: (isFirst || isLast) ? routeColor : colorScheme.surface,
-                  shape: BoxShape.circle,
-                  border: Border.all(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? routeColor.withValues(alpha: 0.12)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                // Timeline indicator
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: isSelected ? 16 : 12,
+                  height: isSelected ? 16 : 12,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? routeColor
+                        : (isTerminal ? routeColor : colorScheme.surface),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected ? Colors.white : routeColor,
+                      width: isSelected ? 3 : 2,
+                    ),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: routeColor.withValues(alpha: 0.4),
+                              blurRadius: 6,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Stop name
+                Expanded(
+                  child: Text(
+                    stop.name,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: (isTerminal || isSelected)
+                          ? FontWeight.w600
+                          : FontWeight.normal,
+                      color: isSelected ? routeColor : null,
+                    ),
+                  ),
+                ),
+                // Selected indicator icon
+                if (isSelected)
+                  Icon(
+                    Icons.location_on_rounded,
+                    size: 18,
                     color: routeColor,
-                    width: 2,
                   ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              // Stop name
-              Expanded(
-                child: Text(
-                  stop.name,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: (isFirst || isLast) ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -705,4 +851,35 @@ class _ErrorState extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Custom painter for dotted line between origin and destination
+class _DottedLinePainter extends CustomPainter {
+  final Color color;
+
+  _DottedLinePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round;
+
+    const dashHeight = 4.0;
+    const dashSpace = 4.0;
+    double startY = 0;
+
+    while (startY < size.height) {
+      canvas.drawLine(
+        Offset(size.width / 2, startY),
+        Offset(size.width / 2, startY + dashHeight),
+        paint,
+      );
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
