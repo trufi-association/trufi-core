@@ -1,0 +1,11 @@
+{
+  "name": "trufi_core_poi_layers_example",
+  "short_name": "POI Layers",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0175C2",
+  "theme_color": "#0175C2",
+  "description": "POI Layers Example",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}

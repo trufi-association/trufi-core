@@ -1,0 +1,3515 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 910409803,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569342,
+          -17.3932289
+        ]
+      },
+      "properties": {
+        "id": 910409803,
+        "name": "Policía Inspectora de Transparencia",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "271",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:short": "PNB",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "police": "offices",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1364970028,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1898475,
+          -17.3740525
+        ]
+      },
+      "properties": {
+        "id": 1364970028,
+        "name": "Módulo Policial 407 Sarcobamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Arawaqui",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "407"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1865085849,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.174083,
+          -17.3796685
+        ]
+      },
+      "properties": {
+        "id": 1865085849,
+        "name": "Módulo Policial 606 Parque Demetrio Canelas",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Verbo Divino",
+        "addr:street": "Avenida Gabriel René Moreno",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "606"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1865085925,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1722724,
+          -17.3742047
+        ]
+      },
+      "properties": {
+        "id": 1865085925,
+        "name": "Módulo Policial 604 Cala Cala",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Gabriel René Moreno",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Nacional de Bolivia",
+        "operator:short": "PNB",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Boliviana",
+        "phone": "800140149",
+        "ref": "604"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1870795442,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.141483,
+          -17.3891555
+        ]
+      },
+      "properties": {
+        "id": 1870795442,
+        "name": "Dirección Departamental Interpol",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Pedro",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "police",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:00-12:00,14:30-16:00; Sa-Su Off",
+        "operator": "Policía Boliviana",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2399903756,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1452003,
+          -17.3982152
+        ]
+      },
+      "properties": {
+        "id": 2399903756,
+        "name": "Módulo Policial 605 Muyurina",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Kantutas",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "605"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2604131881,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.179045,
+          -17.4143175
+        ]
+      },
+      "properties": {
+        "id": 2604131881,
+        "name": "",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2956787165,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1102785,
+          -17.3833008
+        ]
+      },
+      "properties": {
+        "id": 2956787165,
+        "name": "Módulo Policial Quintanilla",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3250373465,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1580032,
+          -17.3997085
+        ]
+      },
+      "properties": {
+        "id": 3250373465,
+        "name": "SAR FAB",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "fire_station",
+        "operator": "Fuerza Aerea Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3277793351,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1855477,
+          -17.3669443
+        ]
+      },
+      "properties": {
+        "id": 3277793351,
+        "name": "Módulo Policial 412 Urbanización Profesional",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle José María Velasco",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "412"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3728588470,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1673243,
+          -17.3761498
+        ]
+      },
+      "properties": {
+        "id": 3728588470,
+        "name": "Módulo Policial 607 Parque Franz Tamayo",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Adela Zamudio",
+        "addr:street": "Calle Modesto Omiste",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Boliviana",
+        "ref": "607"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3861900211,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2034276,
+          -17.3899454
+        ]
+      },
+      "properties": {
+        "id": 3861900211,
+        "name": "Estación Policial Integral Coña Coña",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "short_name": "EPI Coña Coña"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4108195389,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2344799,
+          -17.3659462
+        ]
+      },
+      "properties": {
+        "id": 4108195389,
+        "name": "Módulo Policial San José Kami",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Colcapirhua",
+        "addr:neighbourhood": "San José Kami",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4113358359,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1187713,
+          -17.3873122
+        ]
+      },
+      "properties": {
+        "id": 4113358359,
+        "name": "Módulo Policial 209 El Castillo",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Sacaba",
+        "addr:street": "Avenida Perú",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "209"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4281387005,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2139616,
+          -17.3428035
+        ]
+      },
+      "properties": {
+        "id": 4281387005,
+        "name": "Estación Policial Integral Tiquipaya",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Tiquipaya",
+        "addr:neighbourhood": "Piña Pata",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "short_name": "EPI Tiquipaya",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4542419437,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581957,
+          -17.4034757
+        ]
+      },
+      "properties": {
+        "id": 4542419437,
+        "name": "Policía de Tránsito Terminal de Buses Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Ayacucho",
+        "addr:street": "Avenida Bartolomé Guzmán",
+        "amenity": "police",
+        "checkpoint": "police",
+        "operator": "Policía Boliviana",
+        "police": "traffic_police"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4567966093,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2186253,
+          -17.3384792
+        ]
+      },
+      "properties": {
+        "id": 4567966093,
+        "name": "PNB - Tiquipaya",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Tiquipaya",
+        "addr:street": "Calle Loa",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4989092573,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1485868,
+          -17.3872952
+        ]
+      },
+      "properties": {
+        "id": 4989092573,
+        "name": "",
+        "type": "gate",
+        "category": "emergency",
+        "osmType": "node",
+        "barrier": "gate",
+        "emergency": "emergency_ward_entrance",
+        "entrance": "yes",
+        "foot": "yes",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5029708081,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1942221,
+          -17.390742
+        ]
+      },
+      "properties": {
+        "id": 5029708081,
+        "name": "Módulo Policial 403 Villa Busch Norte",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Busch Norte",
+        "addr:street": "Calle Moisés Monroy",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "403"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5084260702,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572931,
+          -17.3924755
+        ]
+      },
+      "properties": {
+        "id": 5084260702,
+        "name": "Unidad Táctica de Operaciones Policiales",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "short_name": "UTOP"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217956983,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568283,
+          -17.3932117
+        ]
+      },
+      "properties": {
+        "id": 5217956983,
+        "name": "Policía Turística",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "271",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "police": "offices",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5519533352,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2018374,
+          -17.381237
+        ]
+      },
+      "properties": {
+        "id": 5519533352,
+        "name": "Módulo Policial 402 Urbanización Las Magnolias",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Quijarro",
+        "addr:street": "Avenida Tadeo Haenke",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "402"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5578423937,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2080475,
+          -17.3973288
+        ]
+      },
+      "properties": {
+        "id": 5578423937,
+        "name": "Módulo Policial 405 Pampa Grande",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Pampa Grande",
+        "addr:street": "Avenida Víctor Ustariz",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "405"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6141558685,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.176894,
+          -17.3498214
+        ]
+      },
+      "properties": {
+        "id": 6141558685,
+        "name": "Módulo Policial 201 Condebamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "201"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6141558686,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154651,
+          -17.3639385
+        ]
+      },
+      "properties": {
+        "id": 6141558686,
+        "name": "Modulo Policial 202 Temporal Pampa",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Kiwi",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "202"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6141565387,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1425601,
+          -17.3606762
+        ]
+      },
+      "properties": {
+        "id": 6141565387,
+        "name": "Módulo Policial 204 Alto Aranjuez",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Eudoro Galindo Q.",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "204"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143122385,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1714964,
+          -17.3402174
+        ]
+      },
+      "properties": {
+        "id": 6143122385,
+        "name": "Módulo Policial 207 Villa Candelaria",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Candelaria",
+        "addr:street": "Calle Rucui",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "207"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143192985,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577422,
+          -17.4211961
+        ]
+      },
+      "properties": {
+        "id": 6143192985,
+        "name": "Módulo Policial 301 Villa Loreto",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Panamericana",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "301"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143204686,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573225,
+          -17.4355332
+        ]
+      },
+      "properties": {
+        "id": 6143204686,
+        "name": "Módulo Policial 302 Villa México",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "302"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143204687,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1487295,
+          -17.4249024
+        ]
+      },
+      "properties": {
+        "id": 6143204687,
+        "name": "Modulo Policial 303 Alto Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Walter Guevara Arze",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "303"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143228186,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1466509,
+          -17.4140397
+        ]
+      },
+      "properties": {
+        "id": 6143228186,
+        "name": "Módulo Policial 305 Cerro Verde",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Rafael Bustillo-Norte",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "305"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143321685,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1979047,
+          -17.385482
+        ]
+      },
+      "properties": {
+        "id": 6143321685,
+        "name": "Módulo Policial 401 Coña Coña",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Urbanización ENDE",
+        "addr:street": "Calle Bernardino de Almanza",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "ref": "401"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143339585,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1881269,
+          -17.3881564
+        ]
+      },
+      "properties": {
+        "id": 6143339585,
+        "name": "Módulo Policial 406 Villa Busch Norte",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Mercedes",
+        "addr:street": "Calle Adrian Patiño",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "406"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143374185,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1908112,
+          -17.365956
+        ]
+      },
+      "properties": {
+        "id": 6143374185,
+        "name": "Módulo Policial 409 Colquiri Sud",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Luis H. Berlios",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Nacional de Bolivia",
+        "operator:short": "PNB",
+        "operator:wikidata": "Q3065571",
+        "ref": "409"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143396486,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1811942,
+          -17.3695799
+        ]
+      },
+      "properties": {
+        "id": 6143396486,
+        "name": "Módulo Policial 413 Sarcobamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Magisterio",
+        "addr:street": "Calle Antonio Ibañez",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "413"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143498894,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1240729,
+          -17.4229489
+        ]
+      },
+      "properties": {
+        "id": 6143498894,
+        "name": "Módulo Policial 502 Rinconada",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Guayacán",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "502"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143498895,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.115624,
+          -17.4465463
+        ]
+      },
+      "properties": {
+        "id": 6143498895,
+        "name": "Módulo Policial 503 Villa Pagador",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Incachaca",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "503"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143498896,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1308871,
+          -17.4391916
+        ]
+      },
+      "properties": {
+        "id": 6143498896,
+        "name": "Módulo Policial 504 Valle Hermoso",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida de los Derechos Humanos",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "504"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6143498897,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1284712,
+          -17.4475531
+        ]
+      },
+      "properties": {
+        "id": 6143498897,
+        "name": "Módulo Policial 505 Valle Hermoso",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Valle Hermoso Central",
+        "addr:street": "Calle Bélgica",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "505"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6280006624,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1911137,
+          -17.367231
+        ]
+      },
+      "properties": {
+        "id": 6280006624,
+        "name": "Módulo Policial 19 OTB Hallein",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Hallein",
+        "addr:street": "Calle Luis H. Berlios",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "ref": "19"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6291642385,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1630313,
+          -17.3593054
+        ]
+      },
+      "properties": {
+        "id": 6291642385,
+        "name": "PAC",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6845758229,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2095189,
+          -17.3933686
+        ]
+      },
+      "properties": {
+        "id": 6845758229,
+        "name": "",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6909809621,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2187746,
+          -17.3368919
+        ]
+      },
+      "properties": {
+        "id": 6909809621,
+        "name": "Policia Municipal de Tiquipaya",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Tiquipaya",
+        "addr:street": "Calle Toribio Torrico",
+        "admin_level": "8",
+        "amenity": "police",
+        "operator": "Gobierno Autónomo Municipal de Tiquipaya"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7244214330,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1952656,
+          -17.3467817
+        ]
+      },
+      "properties": {
+        "id": 7244214330,
+        "name": "Módulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7703868573,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.2176988,
+          -17.336963
+        ]
+      },
+      "properties": {
+        "id": 7703868573,
+        "name": "",
+        "type": "Tiquipaya",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Tiquipaya",
+        "addr:street": "Calle Gualberto Villaroel",
+        "emergency": "emergency_ward_entrance",
+        "emergency_ward_entrance": "all",
+        "entrance": "yes",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7994040325,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575876,
+          -17.392823
+        ]
+      },
+      "properties": {
+        "id": 7994040325,
+        "name": "Dirección Departamental de Recaudación de Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "police",
+        "level": "0",
+        "operator": "Policía Boliviana",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8547321462,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1653201,
+          -17.3909362
+        ]
+      },
+      "properties": {
+        "id": 8547321462,
+        "name": "Grupo Especial de Operaciones de Salvamento",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Rafael Urquidi",
+        "amenity": "fire_station",
+        "contact:facebook": "https://www.facebook.com/geosbolivia/",
+        "email": "coordinador@geosbolivia.org",
+        "emergency": "mountain_rescue",
+        "fire_station:type": "voluntary",
+        "loc_name": "GEOS Bolivia",
+        "operator": "Fundación de Voluntarios de Salvamento y Rescate",
+        "operator:type": "ngo",
+        "phone": "800140202",
+        "rescue_station": "yes",
+        "short_name": "GEOS",
+        "start_date": "2014-06",
+        "website": "http://www.geosbolivia.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8587411362,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1629531,
+          -17.3765279
+        ]
+      },
+      "properties": {
+        "id": 8587411362,
+        "name": "",
+        "type": "emergency_ward_entrance",
+        "category": "emergency",
+        "osmType": "node",
+        "emergency": "emergency_ward_entrance",
+        "entrance": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9099413767,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1052906,
+          -17.3704933
+        ]
+      },
+      "properties": {
+        "id": 9099413767,
+        "name": "",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Sacaba",
+        "addr:street": "Calle Max Fernández",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9586681169,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.10263,
+          -17.3806297
+        ]
+      },
+      "properties": {
+        "id": 9586681169,
+        "name": "Módulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Sacaba",
+        "amenity": "police"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10677712699,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1594701,
+          -17.3807572
+        ]
+      },
+      "properties": {
+        "id": 10677712699,
+        "name": "Sistema Emergencias Médicas SAR Bolivia",
+        "type": "Cochabamba",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Portales",
+        "addr:street": "Calle Oblitas",
+        "branch": "Filial Cochabamba",
+        "brand": "SAR Bolivia",
+        "contact:facebook": "https://www.facebook.com/sarboliviacbba/",
+        "description": "El SAR Bolivia brinda el servicio voluntario de búsqueda y rescate, cuerpo de bomberos voluntarios, y emergencias médicas.",
+        "email": "sar.bolivia.cochabamba@gmail.com",
+        "emergency": "ambulance_station",
+        "operator": "Grupo Voluntario de Salvamento SAR Bolivia",
+        "operator:short": "SAR Bolivia",
+        "operator:type": "ngo",
+        "phone": "123;+591 62629999",
+        "short_name": "SEM SAR Bolivia",
+        "start_date": "1999",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11827808109,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1298016,
+          -17.4209754
+        ]
+      },
+      "properties": {
+        "id": 11827808109,
+        "name": "Policía Boliviana",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Campo Ferial",
+        "addr:street": "Calle Daniel Salamanca",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11994143071,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1879971,
+          -17.3541351
+        ]
+      },
+      "properties": {
+        "id": 11994143071,
+        "name": "Interpol",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "amenity": "police",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13351766698,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536941,
+          -17.3931771
+        ]
+      },
+      "properties": {
+        "id": 13351766698,
+        "name": "",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "amenity": "police",
+        "level": "0",
+        "operator": "Policía Boliviana",
+        "police": "offices"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 135321799,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1230111,
+              -17.3731218
+            ],
+            [
+              -66.1229561,
+              -17.3731189
+            ],
+            [
+              -66.1229524,
+              -17.3731829
+            ],
+            [
+              -66.1230074,
+              -17.3731858
+            ],
+            [
+              -66.1230111,
+              -17.3731218
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 135321799,
+        "name": "Modulo Policial 203 Pacata Baja",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Aeronáutica FAB",
+        "addr:street": "Avenida Circunvalación Beijing",
+        "amenity": "police",
+        "building": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 192559423,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1457615,
+              -17.4011064
+            ],
+            [
+              -66.1457921,
+              -17.400934
+            ],
+            [
+              -66.1458046,
+              -17.4008534
+            ],
+            [
+              -66.1458095,
+              -17.4008214
+            ],
+            [
+              -66.1458372,
+              -17.4006427
+            ],
+            [
+              -66.1462191,
+              -17.4007003
+            ],
+            [
+              -66.1464886,
+              -17.4007407
+            ],
+            [
+              -66.1464847,
+              -17.400764
+            ],
+            [
+              -66.1464626,
+              -17.4009282
+            ],
+            [
+              -66.146444,
+              -17.4010488
+            ],
+            [
+              -66.1464113,
+              -17.401257
+            ],
+            [
+              -66.1461343,
+              -17.4011917
+            ],
+            [
+              -66.1459662,
+              -17.4011563
+            ],
+            [
+              -66.1459055,
+              -17.4011408
+            ],
+            [
+              -66.1457615,
+              -17.4011064
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 192559423,
+        "name": "Fuerza de Lucha Contra el Crimen",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "9 de Abril",
+        "addr:street": "Avenida Circuito Bolivia",
+        "amenity": "police",
+        "barrier": "wall",
+        "operator": "Policía Boliviana",
+        "operator:short": "PB",
+        "operator:type": "police",
+        "phone": "800140191",
+        "short_name": "FELCC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 192559424,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1453448,
+              -17.4005733
+            ],
+            [
+              -66.145299,
+              -17.400868
+            ],
+            [
+              -66.1452831,
+              -17.4009736
+            ],
+            [
+              -66.1452761,
+              -17.4010173
+            ],
+            [
+              -66.1457615,
+              -17.4011064
+            ],
+            [
+              -66.1457921,
+              -17.400934
+            ],
+            [
+              -66.1458046,
+              -17.4008534
+            ],
+            [
+              -66.1458095,
+              -17.4008214
+            ],
+            [
+              -66.1458372,
+              -17.4006427
+            ],
+            [
+              -66.1453448,
+              -17.4005733
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 192559424,
+        "name": "Unidad de Bomberos Nataniel Aguirre",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "9 de Abril",
+        "addr:street": "Avenida Circuito Bolivia",
+        "amenity": "fire_station",
+        "barrier": "yes",
+        "operator": "Policía Boliviana",
+        "start_date": "1963-09-14"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 228170253,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1562337,
+              -17.348605
+            ],
+            [
+              -66.1562971,
+              -17.3488114
+            ],
+            [
+              -66.1563478,
+              -17.3490382
+            ],
+            [
+              -66.1563648,
+              -17.3491049
+            ],
+            [
+              -66.1563802,
+              -17.3491756
+            ],
+            [
+              -66.1559748,
+              -17.3492752
+            ],
+            [
+              -66.1562245,
+              -17.3499112
+            ],
+            [
+              -66.1561543,
+              -17.3500947
+            ],
+            [
+              -66.1560521,
+              -17.3501407
+            ],
+            [
+              -66.1561158,
+              -17.3502319
+            ],
+            [
+              -66.155942,
+              -17.350385
+            ],
+            [
+              -66.1558137,
+              -17.350422
+            ],
+            [
+              -66.1558592,
+              -17.3506033
+            ],
+            [
+              -66.155826,
+              -17.35062
+            ],
+            [
+              -66.1557918,
+              -17.3506232
+            ],
+            [
+              -66.155343,
+              -17.3488947
+            ],
+            [
+              -66.1554596,
+              -17.3488568
+            ],
+            [
+              -66.1561833,
+              -17.3486214
+            ],
+            [
+              -66.1562337,
+              -17.348605
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 228170253,
+        "name": "Dirección de Prevención de Robo de Vehículos",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle E. Diaz de Medina",
+        "amenity": "police",
+        "barrier": "wall",
+        "operator": "Policía Boliviana",
+        "short_name": "DIPROVE"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 233807824,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1759976,
+              -17.4168619
+            ],
+            [
+              -66.1761139,
+              -17.4169886
+            ],
+            [
+              -66.1763138,
+              -17.4168215
+            ],
+            [
+              -66.1761975,
+              -17.4166948
+            ],
+            [
+              -66.1759976,
+              -17.4168619
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 233807824,
+        "name": "Bomberos Aeronaúticos Bolivia",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "amenity": "fire_station",
+        "building": "fire_station",
+        "fire_station:type": "airport",
+        "roof:shape": "flat"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 254606873,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.177777,
+              -17.4121514
+            ],
+            [
+              -66.1777727,
+              -17.4121903
+            ],
+            [
+              -66.1778324,
+              -17.4121963
+            ],
+            [
+              -66.1778366,
+              -17.4121573
+            ],
+            [
+              -66.177777,
+              -17.4121514
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 254606873,
+        "name": "Policía Boliviana",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "amenity": "police",
+        "building": "office",
+        "building:levels": "1",
+        "name:en": "Bolivian Police",
+        "operator": "Policía Boliviana",
+        "roof:shape": "hipped"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 256448799,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1770176,
+              -17.3898683
+            ],
+            [
+              -66.1769874,
+              -17.389923
+            ],
+            [
+              -66.176921,
+              -17.3898896
+            ],
+            [
+              -66.1769512,
+              -17.3898349
+            ],
+            [
+              -66.1770176,
+              -17.3898683
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 256448799,
+        "name": "Modulo Policial 608 Villa Berdecio",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Carlos Berdecio",
+        "addr:street": "Avenida Madrid",
+        "amenity": "police",
+        "building": "public",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "608"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 322808836,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1616066,
+              -17.4010181
+            ],
+            [
+              -66.1615785,
+              -17.4008092
+            ],
+            [
+              -66.1615664,
+              -17.4007503
+            ],
+            [
+              -66.1615281,
+              -17.4007123
+            ],
+            [
+              -66.1614862,
+              -17.4006928
+            ],
+            [
+              -66.1614542,
+              -17.4006733
+            ],
+            [
+              -66.1614517,
+              -17.4005895
+            ],
+            [
+              -66.1615023,
+              -17.4005951
+            ],
+            [
+              -66.1615795,
+              -17.4006333
+            ],
+            [
+              -66.1616228,
+              -17.4006711
+            ],
+            [
+              -66.16166,
+              -17.4007056
+            ],
+            [
+              -66.1616943,
+              -17.4007595
+            ],
+            [
+              -66.1617201,
+              -17.4008331
+            ],
+            [
+              -66.1617349,
+              -17.4009201
+            ],
+            [
+              -66.1617291,
+              -17.4010017
+            ],
+            [
+              -66.1616066,
+              -17.4010181
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 322808836,
+        "name": "Estación Policial Integral Ecológica",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Bartolomé Guzmán",
+        "addr:street": "Avenida Bartolomé Guzmán",
+        "amenity": "police",
+        "building": "police",
+        "building:levels": "1",
+        "loc_name": "EPI Ecológica",
+        "operator": "Policía Boliviana",
+        "roof:shape": "flat"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 367283946,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1490884,
+              -17.449538
+            ],
+            [
+              -66.1485636,
+              -17.4495543
+            ],
+            [
+              -66.1485645,
+              -17.4498458
+            ],
+            [
+              -66.148565,
+              -17.4500031
+            ],
+            [
+              -66.1485743,
+              -17.450024
+            ],
+            [
+              -66.148594,
+              -17.450034
+            ],
+            [
+              -66.1487757,
+              -17.4500289
+            ],
+            [
+              -66.149071,
+              -17.4500207
+            ],
+            [
+              -66.1490907,
+              -17.4500119
+            ],
+            [
+              -66.1491023,
+              -17.4499854
+            ],
+            [
+              -66.1490884,
+              -17.449538
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 367283946,
+        "name": "Unidad de Patrullaje de Acción y Reacción Delta",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Urbanización Las Delicias",
+        "addr:street": "Calle Serranía de Tarija",
+        "amenity": "police",
+        "barrier": "wall",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "sort_name": "UPAR"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 388160464,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1778716,
+              -17.3849207
+            ],
+            [
+              -66.1778311,
+              -17.3849074
+            ],
+            [
+              -66.1778193,
+              -17.3849403
+            ],
+            [
+              -66.1778598,
+              -17.3849535
+            ],
+            [
+              -66.1778716,
+              -17.3849207
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 388160464,
+        "name": "Módulo Policial 411 Parque Ex-Combatientes",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "18 de Mayo",
+        "addr:street": "Avenida Topater",
+        "amenity": "police",
+        "building": "public",
+        "operator": "Policía Boliviana",
+        "ref": "411"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 390522750,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1553952,
+              -17.376745
+            ],
+            [
+              -66.1551983,
+              -17.3767551
+            ],
+            [
+              -66.1551037,
+              -17.3767595
+            ],
+            [
+              -66.15499,
+              -17.3767666
+            ],
+            [
+              -66.1550362,
+              -17.3770955
+            ],
+            [
+              -66.1551161,
+              -17.3770899
+            ],
+            [
+              -66.1553852,
+              -17.3770712
+            ],
+            [
+              -66.1553969,
+              -17.3770561
+            ],
+            [
+              -66.1554083,
+              -17.3770414
+            ],
+            [
+              -66.155401,
+              -17.3768772
+            ],
+            [
+              -66.1553973,
+              -17.3767917
+            ],
+            [
+              -66.1553952,
+              -17.376745
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 390522750,
+        "name": "Fuerza Especial de Lucha Contra el Narcotráfico",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Portales",
+        "addr:street": "Calle Tomas Frías",
+        "amenity": "police",
+        "barrier": "wall",
+        "branch": "Dirección Departamental FELCN Cochabamba",
+        "brand": "FELCN",
+        "contact:facebook": "https://www.facebook.com/BOLIVIA.FELCN",
+        "description": "La Fuerza Especial de Lucha Contra el Narcotráfico (FELCN), es un organismo especializado de la Policía Boliviana, cuyo propósito es defender y proteger a la sociedad de la problemática del narcotráfico y delitos conexos.",
+        "level": "0",
+        "operator": "Policía Boliviana",
+        "operator:type": "police",
+        "phone": "+591 4 4142911",
+        "short_name": "FELCN",
+        "website": "https://www.felcn.gob.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 393231685,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1467,
+              -17.3742641
+            ],
+            [
+              -66.1467821,
+              -17.3744758
+            ],
+            [
+              -66.1468233,
+              -17.3745795
+            ],
+            [
+              -66.1468427,
+              -17.3746288
+            ],
+            [
+              -66.1467444,
+              -17.3746484
+            ],
+            [
+              -66.1459903,
+              -17.3747747
+            ],
+            [
+              -66.1459545,
+              -17.3747648
+            ],
+            [
+              -66.1459318,
+              -17.3746701
+            ],
+            [
+              -66.1459208,
+              -17.3746036
+            ],
+            [
+              -66.1459268,
+              -17.3745561
+            ],
+            [
+              -66.1459561,
+              -17.3745153
+            ],
+            [
+              -66.1466028,
+              -17.3742968
+            ],
+            [
+              -66.1467,
+              -17.3742641
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 393231685,
+        "name": "Radio Patrulla 110",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Bajo Aranjuez",
+        "addr:street": "Calle Buenos Aires",
+        "amenity": "police",
+        "barrier": "wall",
+        "disused:landuse": "cemetery",
+        "old_name": "Cementerio de Tupuraya",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:type": "police",
+        "police": "offices",
+        "related_law": "OM 188/1987",
+        "source": "Ordenanza Municipal 188/1987",
+        "start_date": "1987-06-16"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 396642045,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1632544,
+              -17.3597022
+            ],
+            [
+              -66.1633267,
+              -17.3598857
+            ],
+            [
+              -66.1634004,
+              -17.3598592
+            ],
+            [
+              -66.1634355,
+              -17.3599483
+            ],
+            [
+              -66.1632714,
+              -17.3600071
+            ],
+            [
+              -66.163164,
+              -17.3597347
+            ],
+            [
+              -66.1632544,
+              -17.3597022
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 396642045,
+        "name": "Módulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "amenity": "police",
+        "building": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 436444116,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1664746,
+              -17.390894
+            ],
+            [
+              -66.1663965,
+              -17.3909058
+            ],
+            [
+              -66.166382,
+              -17.390818
+            ],
+            [
+              -66.1664601,
+              -17.3908062
+            ],
+            [
+              -66.1664746,
+              -17.390894
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 436444116,
+        "name": "Módulo Policial 602 Villa Galindo",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Galindo",
+        "addr:street": "Avenida Rivereña",
+        "amenity": "police",
+        "building": "police",
+        "building:levels": "1",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "602",
+        "roof:shape": "pyramidal"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 466294481,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1573568,
+              -17.4014076
+            ],
+            [
+              -66.1573804,
+              -17.401211
+            ],
+            [
+              -66.1573964,
+              -17.4010778
+            ],
+            [
+              -66.157389,
+              -17.4010621
+            ],
+            [
+              -66.1573713,
+              -17.4010356
+            ],
+            [
+              -66.1570119,
+              -17.4009781
+            ],
+            [
+              -66.1569771,
+              -17.401264
+            ],
+            [
+              -66.1569652,
+              -17.4013615
+            ],
+            [
+              -66.1572244,
+              -17.4013919
+            ],
+            [
+              -66.157267,
+              -17.401397
+            ],
+            [
+              -66.1573568,
+              -17.4014076
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 466294481,
+        "name": "Estación Policial Integral Central",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "police",
+        "barrier": "wall",
+        "description": "Terrenos expropiados por la Ley 3/1945 a favor del estado.",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:type": "police",
+        "ref": "8",
+        "short_name": "EPI Central"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 513450203,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569219,
+              -17.4029654
+            ],
+            [
+              -66.1567114,
+              -17.4029313
+            ],
+            [
+              -66.1566854,
+              -17.4029515
+            ],
+            [
+              -66.1566595,
+              -17.4029717
+            ],
+            [
+              -66.1566524,
+              -17.4030971
+            ],
+            [
+              -66.1568938,
+              -17.4031109
+            ],
+            [
+              -66.1569219,
+              -17.4029654
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 513450203,
+        "name": "Primer Batallón de Seguridad Física",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Calle Tarata",
+        "amenity": "police",
+        "building": "office",
+        "building:levels": "2",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 589327975,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1722835,
+              -17.3616943
+            ],
+            [
+              -66.1726029,
+              -17.3622818
+            ],
+            [
+              -66.1726551,
+              -17.3623778
+            ],
+            [
+              -66.1726714,
+              -17.3624079
+            ],
+            [
+              -66.1726977,
+              -17.3625385
+            ],
+            [
+              -66.172808,
+              -17.3625188
+            ],
+            [
+              -66.1731652,
+              -17.3624233
+            ],
+            [
+              -66.1731881,
+              -17.3624085
+            ],
+            [
+              -66.1731968,
+              -17.3623759
+            ],
+            [
+              -66.1731887,
+              -17.3623368
+            ],
+            [
+              -66.1731764,
+              -17.3623016
+            ],
+            [
+              -66.1730955,
+              -17.3621704
+            ],
+            [
+              -66.1729864,
+              -17.3619931
+            ],
+            [
+              -66.1729328,
+              -17.3619009
+            ],
+            [
+              -66.1728851,
+              -17.3618188
+            ],
+            [
+              -66.172823,
+              -17.3616744
+            ],
+            [
+              -66.1728068,
+              -17.3616366
+            ],
+            [
+              -66.1727617,
+              -17.3615154
+            ],
+            [
+              -66.1727428,
+              -17.3614904
+            ],
+            [
+              -66.1727175,
+              -17.3614822
+            ],
+            [
+              -66.1722835,
+              -17.3616943
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 589327975,
+        "name": "Estación Policial Integral del Norte",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Beato Salomón",
+        "addr:street": "Avenida Melchor Pérez de Olguín",
+        "alt_name": "EPI del Norte",
+        "amenity": "police",
+        "barrier": "fence",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 673790477,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1676564,
+              -17.4051157
+            ],
+            [
+              -66.1676993,
+              -17.4052819
+            ],
+            [
+              -66.1677437,
+              -17.4053258
+            ],
+            [
+              -66.1677814,
+              -17.4054631
+            ],
+            [
+              -66.1677655,
+              -17.405538
+            ],
+            [
+              -66.1678023,
+              -17.4056804
+            ],
+            [
+              -66.1678229,
+              -17.4057657
+            ],
+            [
+              -66.167851,
+              -17.4058303
+            ],
+            [
+              -66.1678889,
+              -17.405918
+            ],
+            [
+              -66.1680051,
+              -17.405864
+            ],
+            [
+              -66.1681764,
+              -17.4057843
+            ],
+            [
+              -66.1683129,
+              -17.4057208
+            ],
+            [
+              -66.1683371,
+              -17.4057095
+            ],
+            [
+              -66.1682221,
+              -17.4054989
+            ],
+            [
+              -66.1681814,
+              -17.4054246
+            ],
+            [
+              -66.1681408,
+              -17.4053502
+            ],
+            [
+              -66.1680774,
+              -17.4052341
+            ],
+            [
+              -66.168039,
+              -17.4050336
+            ],
+            [
+              -66.1680141,
+              -17.4050135
+            ],
+            [
+              -66.1679866,
+              -17.4050118
+            ],
+            [
+              -66.1678396,
+              -17.4050385
+            ],
+            [
+              -66.1676741,
+              -17.4050697
+            ],
+            [
+              -66.1676608,
+              -17.4050874
+            ],
+            [
+              -66.1676564,
+              -17.4051157
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 673790477,
+        "name": "Dirección Departamental de Tránsito, Transporte y Seguridad Vial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Coronilla",
+        "addr:street": "Calle Titicaca",
+        "amenity": "police",
+        "barrier": "fence",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 837273560,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1882065,
+              -17.3539152
+            ],
+            [
+              -66.1881994,
+              -17.3539492
+            ],
+            [
+              -66.1879792,
+              -17.3541372
+            ],
+            [
+              -66.1877915,
+              -17.3538274
+            ],
+            [
+              -66.188064,
+              -17.3536751
+            ],
+            [
+              -66.1882065,
+              -17.3539152
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 837273560,
+        "name": "Módulo Policial 210 Cruce Taquiña",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barrio Policial",
+        "addr:street": "Avenida Simón Lopez",
+        "amenity": "police",
+        "barrier": "wall",
+        "operator": "Policía Boliviana",
+        "ref": "210"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 888055525,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1658122,
+              -17.4447074
+            ],
+            [
+              -66.1658106,
+              -17.4446767
+            ],
+            [
+              -66.1657778,
+              -17.4443705
+            ],
+            [
+              -66.1657393,
+              -17.4440097
+            ],
+            [
+              -66.1650235,
+              -17.4440667
+            ],
+            [
+              -66.1650887,
+              -17.4447441
+            ],
+            [
+              -66.1650951,
+              -17.4447708
+            ],
+            [
+              -66.1658122,
+              -17.4447074
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 888055525,
+        "name": "Estación Policial Integral Sur",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Tamborada San Marcos",
+        "amenity": "police",
+        "barrier": "yes",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "short_name": "EPI del Sur"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 896916454,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1593083,
+              -17.3805763
+            ],
+            [
+              -66.1593028,
+              -17.3806069
+            ],
+            [
+              -66.1592675,
+              -17.3808017
+            ],
+            [
+              -66.159229,
+              -17.3809662
+            ],
+            [
+              -66.1594649,
+              -17.3810028
+            ],
+            [
+              -66.1595139,
+              -17.3810112
+            ],
+            [
+              -66.1596653,
+              -17.3810421
+            ],
+            [
+              -66.1596392,
+              -17.3809617
+            ],
+            [
+              -66.1596497,
+              -17.3808481
+            ],
+            [
+              -66.1596554,
+              -17.3808151
+            ],
+            [
+              -66.159522,
+              -17.3806849
+            ],
+            [
+              -66.1594916,
+              -17.3806553
+            ],
+            [
+              -66.159447,
+              -17.3806188
+            ],
+            [
+              -66.1594124,
+              -17.3806003
+            ],
+            [
+              -66.1593831,
+              -17.3805927
+            ],
+            [
+              -66.1593083,
+              -17.3805763
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 896916454,
+        "name": "Bomberos Voluntarios SAR Bolivia",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Portales",
+        "addr:street": "Calle Oblitas",
+        "amenity": "fire_station",
+        "branch": "Filial Cochabamba",
+        "brand": "SAR Bolivia",
+        "contact:facebook": "https://www.facebook.com/sarboliviacbba/",
+        "description": "El SAR Bolivia brinda el servicio voluntario de búsqueda y rescate, cuerpo de bomberos voluntarios, y emergencias médicas.",
+        "email": "sar.bolivia.cochabamba@gmail.com",
+        "operator": "Grupo Voluntario de Salvamento SAR Bolivia",
+        "operator:short": "SAR Bolivia",
+        "operator:type": "ngo",
+        "phone": "123;+591 62629999",
+        "start_date": "1998",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 920576631,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1728805,
+              -17.3620406
+            ],
+            [
+              -66.1729103,
+              -17.362099
+            ],
+            [
+              -66.1727064,
+              -17.3621937
+            ],
+            [
+              -66.1726861,
+              -17.3622031
+            ],
+            [
+              -66.1726564,
+              -17.3621447
+            ],
+            [
+              -66.1728805,
+              -17.3620406
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 920576631,
+        "name": "Bomberos Estación Policial Integral del Norte",
+        "type": "fire_station",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Beato Salomón",
+        "addr:street": "Avenida Melchor Pérez de Olguín",
+        "amenity": "fire_station",
+        "building": "police",
+        "building:levels": "2",
+        "operator": "Policía Boliviana",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 924972036,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1416282,
+              -17.3891273
+            ],
+            [
+              -66.1416083,
+              -17.3892217
+            ],
+            [
+              -66.1415987,
+              -17.3892666
+            ],
+            [
+              -66.1415732,
+              -17.3892616
+            ],
+            [
+              -66.141563,
+              -17.3893092
+            ],
+            [
+              -66.1413492,
+              -17.3892684
+            ],
+            [
+              -66.141333,
+              -17.3892601
+            ],
+            [
+              -66.1413105,
+              -17.3892352
+            ],
+            [
+              -66.1413022,
+              -17.3892097
+            ],
+            [
+              -66.1413022,
+              -17.3891757
+            ],
+            [
+              -66.1413248,
+              -17.3890583
+            ],
+            [
+              -66.1413842,
+              -17.3891353
+            ],
+            [
+              -66.1414178,
+              -17.3891127
+            ],
+            [
+              -66.1414288,
+              -17.3890654
+            ],
+            [
+              -66.1414876,
+              -17.3890273
+            ],
+            [
+              -66.1415506,
+              -17.3891123
+            ],
+            [
+              -66.1416282,
+              -17.3891273
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 924972036,
+        "name": "Módulo Policial 603 Las Cuadras",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Pedro",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "police",
+        "old_name": "Estación de Servicio Heroínas",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "ref": "603",
+        "start_date": "2011-04-12",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 940660716,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569632,
+              -17.3932773
+            ],
+            [
+              -66.156857,
+              -17.3932596
+            ],
+            [
+              -66.1567234,
+              -17.3932374
+            ],
+            [
+              -66.1567522,
+              -17.3930925
+            ],
+            [
+              -66.1567571,
+              -17.393069
+            ],
+            [
+              -66.1567784,
+              -17.3930733
+            ],
+            [
+              -66.156817,
+              -17.392887
+            ],
+            [
+              -66.1568571,
+              -17.3928942
+            ],
+            [
+              -66.1568649,
+              -17.3928588
+            ],
+            [
+              -66.1569223,
+              -17.3928685
+            ],
+            [
+              -66.1569537,
+              -17.3927076
+            ],
+            [
+              -66.1570091,
+              -17.3927177
+            ],
+            [
+              -66.1570523,
+              -17.3924862
+            ],
+            [
+              -66.1570575,
+              -17.3924605
+            ],
+            [
+              -66.1570679,
+              -17.3924087
+            ],
+            [
+              -66.1570853,
+              -17.3924114
+            ],
+            [
+              -66.1572957,
+              -17.3924491
+            ],
+            [
+              -66.1575527,
+              -17.3924952
+            ],
+            [
+              -66.1575069,
+              -17.3927328
+            ],
+            [
+              -66.1576214,
+              -17.392754
+            ],
+            [
+              -66.1576028,
+              -17.3928532
+            ],
+            [
+              -66.1576206,
+              -17.3928739
+            ],
+            [
+              -66.1576133,
+              -17.3929128
+            ],
+            [
+              -66.1574854,
+              -17.3928909
+            ],
+            [
+              -66.1574895,
+              -17.3928695
+            ],
+            [
+              -66.1573518,
+              -17.3928459
+            ],
+            [
+              -66.1573024,
+              -17.3928372
+            ],
+            [
+              -66.1573128,
+              -17.3927814
+            ],
+            [
+              -66.1570678,
+              -17.3927318
+            ],
+            [
+              -66.1570152,
+              -17.3929987
+            ],
+            [
+              -66.1569632,
+              -17.3932773
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 940660716,
+        "name": "Comando Departamental de Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "contact:facebook": "https://www.facebook.com/PoliciaBolivianaCochabamba",
+        "historic": "monastery",
+        "not:operator:wikidata": "Q3065571",
+        "old_name:1578-1826": "Convento de la Orden de San Agustín",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "police": "offices",
+        "website": "https://www.policia.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1020585836,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1474668,
+              -17.407822
+            ],
+            [
+              -66.1475557,
+              -17.4078107
+            ],
+            [
+              -66.1477005,
+              -17.4078846
+            ],
+            [
+              -66.1478116,
+              -17.4079545
+            ],
+            [
+              -66.1478782,
+              -17.4079909
+            ],
+            [
+              -66.1478712,
+              -17.4080018
+            ],
+            [
+              -66.1479423,
+              -17.4080404
+            ],
+            [
+              -66.1479565,
+              -17.4080725
+            ],
+            [
+              -66.1479653,
+              -17.4080897
+            ],
+            [
+              -66.1478746,
+              -17.4081314
+            ],
+            [
+              -66.1477902,
+              -17.4081616
+            ],
+            [
+              -66.1475489,
+              -17.4079832
+            ],
+            [
+              -66.1474668,
+              -17.407822
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1020585836,
+        "name": "Módulo Policial 306 Barrio Petrolero",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida 6 de Agosto",
+        "amenity": "police",
+        "barrier": "fence",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "ref": "306"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1085210282,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1614623,
+              -17.4270183
+            ],
+            [
+              -66.1614692,
+              -17.4268574
+            ],
+            [
+              -66.1614707,
+              -17.4268204
+            ],
+            [
+              -66.1617123,
+              -17.4269252
+            ],
+            [
+              -66.1617749,
+              -17.426947
+            ],
+            [
+              -66.1619382,
+              -17.4269509
+            ],
+            [
+              -66.1620117,
+              -17.4269333
+            ],
+            [
+              -66.1620688,
+              -17.42691
+            ],
+            [
+              -66.1621288,
+              -17.4268749
+            ],
+            [
+              -66.1622519,
+              -17.4268798
+            ],
+            [
+              -66.1622484,
+              -17.4270482
+            ],
+            [
+              -66.1617079,
+              -17.4270279
+            ],
+            [
+              -66.1615851,
+              -17.4270231
+            ],
+            [
+              -66.1614623,
+              -17.4270183
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1085210282,
+        "name": "Estación Policial Integral 3 Jaihuayco",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Lindo",
+        "addr:street": "Calle Manuel Virreira",
+        "amenity": "police",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "short_name": "EPI 3"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1171706053,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1228853,
+              -17.3680472
+            ],
+            [
+              -66.1228648,
+              -17.3679825
+            ],
+            [
+              -66.1229267,
+              -17.3679647
+            ],
+            [
+              -66.1229471,
+              -17.3680294
+            ],
+            [
+              -66.1228853,
+              -17.3680472
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1171706053,
+        "name": "Modulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "amenity": "police",
+        "building": "yes",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1171706054,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1120446,
+              -17.3681366
+            ],
+            [
+              -66.1119762,
+              -17.3681955
+            ],
+            [
+              -66.1119387,
+              -17.3681558
+            ],
+            [
+              -66.1120071,
+              -17.3680969
+            ],
+            [
+              -66.1120446,
+              -17.3681366
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1171706054,
+        "name": "Modulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "amenity": "police",
+        "building": "yes",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1171706055,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1195494,
+              -17.3772695
+            ],
+            [
+              -66.1194964,
+              -17.3772881
+            ],
+            [
+              -66.119479,
+              -17.3772459
+            ],
+            [
+              -66.119534,
+              -17.3772279
+            ],
+            [
+              -66.1195494,
+              -17.3772695
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1171706055,
+        "name": "Modulo Policial",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "amenity": "police",
+        "building": "yes",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1171706056,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1280949,
+              -17.3674371
+            ],
+            [
+              -66.1280949,
+              -17.3675037
+            ],
+            [
+              -66.1280145,
+              -17.367496
+            ],
+            [
+              -66.1280252,
+              -17.367432
+            ],
+            [
+              -66.1280949,
+              -17.3674371
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1171706056,
+        "name": "Modulo Policial 205 Pacata Alta",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:street": "Calle José F. Guevara",
+        "amenity": "police",
+        "building": "yes",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1294688934,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1848262,
+              -17.4029822
+            ],
+            [
+              -66.1849013,
+              -17.4036471
+            ],
+            [
+              -66.1851996,
+              -17.4036163
+            ],
+            [
+              -66.1851626,
+              -17.4032886
+            ],
+            [
+              -66.1851349,
+              -17.4030432
+            ],
+            [
+              -66.1851245,
+              -17.4029514
+            ],
+            [
+              -66.1848262,
+              -17.4029822
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1294688934,
+        "name": "Fuerza Especial de Lucha Contra la Violencia Integral Heroínas de la Coronilla",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Amazonas",
+        "addr:street": "Calle Antonio Villavicencio",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:type": "police",
+        "related_law": "LM 1468/2024",
+        "short_name": "FELCV Intgeral Heroínas de la Coronilla",
+        "source": "Ley Municipal 1468/2024",
+        "start_date": "2025-10-30",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1329398617,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1786392,
+              -17.3980085
+            ],
+            [
+              -66.1786313,
+              -17.3979387
+            ],
+            [
+              -66.1786231,
+              -17.3978671
+            ],
+            [
+              -66.1787107,
+              -17.3978641
+            ],
+            [
+              -66.1787458,
+              -17.3978656
+            ],
+            [
+              -66.1787641,
+              -17.3978784
+            ],
+            [
+              -66.1787775,
+              -17.3978959
+            ],
+            [
+              -66.1787896,
+              -17.3979962
+            ],
+            [
+              -66.1786392,
+              -17.3980085
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1329398617,
+        "name": "Módulo Policial Villa Rosario",
+        "type": "police",
+        "category": "emergency",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Rosario",
+        "addr:street": "Avenida Daniel Campos",
+        "amenity": "police",
+        "barrier": "fence",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana"
+      }
+    }
+  ]
+}
