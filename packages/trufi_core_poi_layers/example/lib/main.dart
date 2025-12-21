@@ -60,11 +60,13 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
   late final TrufiMapController _mapController;
   late final POILayersCubit _poiCubit;
   late final POITrufiLayer _poiLayer;
+  late final POIPolygonOutlineLayer _polygonLayer;
   POI? _selectedPOI;
   double _currentZoom = _initialZoom;
   latlng.LatLng _currentCenter = _initialPosition;
   LatLngBounds? _currentBounds;
   static const String _poiLayerId = 'poi_markers';
+  static const String _polygonLayerId = 'poi_polygon_outlines';
 
   // Debounce timer for camera updates
   Timer? _debounceTimer;
@@ -81,9 +83,6 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
   // This includes POIs hidden due to overlap filtering
   List<POI> _allViewportPOIs = [];
 
-  // POIs actually shown on map (subset of _allViewportPOIs)
-  List<POI> _displayedPOIs = [];
-
   @override
   void initState() {
     super.initState();
@@ -95,8 +94,9 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
       ),
     );
 
-    // Create POI layer
+    // Create POI layers
     _poiLayer = POITrufiLayer(_mapController, id: _poiLayerId);
+    _polygonLayer = POIPolygonOutlineLayer(_mapController, id: _polygonLayerId);
 
     _poiCubit = POILayersCubit(
       config: const POILayerConfig(
@@ -157,8 +157,9 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
   final Map<POICategory, Widget> _fullMarkerCache = {};
   final Map<POICategory, Widget> _dotMarkerCache = {};
 
-  // Zoom threshold: show full icons when zoom >= minZoom + 2
-  static const int _fullIconZoomOffset = 2;
+  // Zoom thresholds for POI display
+  static const int _minZoomForDots = 14; // Show dots from zoom 14
+  static const int _minZoomForFullIcons = 17; // Show full icons from zoom 17
 
   // Minimum distance between markers in degrees (adjusted by zoom)
   // This prevents overlapping markers
@@ -169,13 +170,13 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
     return 0.015 / math.pow(2, zoom - 10);
   }
 
-  /// Get full marker widget with icon (optimized size: 36x36)
+  /// Get full marker widget with icon
   Widget _getFullMarkerWidget(POICategory category) {
     return _fullMarkerCache.putIfAbsent(
       category,
       () => Container(
-        width: 36,
-        height: 36,
+        width: 30,
+        height: 30,
         decoration: BoxDecoration(
           color: Colors.white,
           shape: BoxShape.circle,
@@ -191,28 +192,27 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
         child: Icon(
           category.icon,
           color: category.color,
-          size: 20,
+          size: 17,
         ),
       ),
     );
   }
 
-  /// Get simple dot marker (colored circle without icon, 14x14)
+  /// Get simple dot marker (colored circle without icon)
   Widget _getDotMarkerWidget(POICategory category) {
     return _dotMarkerCache.putIfAbsent(
       category,
       () => Container(
-        width: 14,
-        height: 14,
+        width: 4,
+        height: 4,
         decoration: BoxDecoration(
           color: category.color,
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white, width: 2),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x50000000),
-              blurRadius: 2,
-              offset: Offset(0, 1),
+              color: Color(0x30000000),
+              blurRadius: 1,
+              offset: Offset(0, 0.5),
             ),
           ],
         ),
@@ -238,18 +238,30 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
     if (!state.isInitialized) return;
 
     final markers = <TrufiMarker>[];
+    final polygonLines = <TrufiLine>[];
     final zoomInt = zoom.floor();
+
+    // Don't show any POIs below zoom 14
+    if (zoomInt < _minZoomForDots) {
+      _poiLayer.setMarkers(markers);
+      _polygonLayer.setLines(polygonLines);
+      return;
+    }
 
     // Collect POIs visible in viewport, prioritizing named POIs
     final namedPOIs = <POI>[];
     final unnamedPOIs = <POI>[];
 
     for (final category in state.enabledCategoriesSet) {
+      // Skip if zoom is too low for this category
       if (zoomInt < category.minZoom) continue;
 
       final layer = state.layers[category];
       if (layer != null) {
         for (final poi in layer.pois) {
+          // Skip if POI is not enabled (category/subcategory filtering)
+          if (!state.isPOIEnabled(poi)) continue;
+
           // Skip large areas at lower zoom
           if (poi.isLargeArea && zoomInt < 15) continue;
 
@@ -281,7 +293,8 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
     // Create markers for non-overlapping POIs
     for (final poi in poisToShow) {
       final category = poi.category;
-      final showFullIcon = zoomInt >= category.minZoom + _fullIconZoomOffset;
+      // Show full icons at zoom 15+, dots below that
+      final showFullIcon = zoomInt >= _minZoomForFullIcons;
 
       final imageKey = showFullIcon
           ? 'poi_full_${category.name}'
@@ -289,7 +302,10 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
       final markerWidget = showFullIcon
           ? _getFullMarkerWidget(category)
           : _getDotMarkerWidget(category);
-      final markerSize = showFullIcon ? const Size(36, 36) : const Size(14, 14);
+
+      // Use fixed sizes in pixels
+      // Full icons: 30x30, Dots: 4x4 (very small and subtle)
+      final markerSize = showFullIcon ? const Size(30, 30) : const Size(4, 4);
 
       markers.add(
         TrufiMarker(
@@ -306,16 +322,46 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
       );
     }
 
+    // Render polygon outlines for POIs with area geometry
+    // Show polygons starting from zoom 15
+    if (zoomInt >= 15) {
+      for (final category in state.enabledCategoriesSet) {
+        final layer = state.layers[category];
+        if (layer != null) {
+          for (final poi in layer.pois) {
+            // Skip if POI is not enabled (category/subcategory filtering)
+            if (!state.isPOIEnabled(poi)) continue;
+
+            // Only render POIs with polygon geometry
+            if (poi.isArea && poi.polygonPoints != null && poi.polygonPoints!.isNotEmpty) {
+              // Filter by viewport
+              if (!_isInViewport(poi, _currentBounds)) continue;
+
+              // Create line for polygon outline
+              polygonLines.add(
+                TrufiLine(
+                  id: 'polygon_${category.name}_${poi.id}',
+                  position: poi.polygonPoints!,
+                  color: category.color.withValues(alpha: 0.3),
+                  lineWidth: 2,
+                ),
+              );
+            }
+          }
+        }
+      }
+    }
+
     debugPrint(
-      'POI layer: ${markers.length} markers shown (${allVisiblePOIs.length - visiblePOIs.length} hidden due to overlap) at zoom $zoomInt',
+      'POI layer: ${markers.length} markers, ${polygonLines.length} polygons shown at zoom $zoomInt',
     );
 
     // Store ALL viewport POIs for tap detection (needed for MapLibre)
     // This includes POIs hidden due to overlap filtering
     _allViewportPOIs = allVisiblePOIs;
-    _displayedPOIs = poisToShow;
 
     _poiLayer.setMarkers(markers);
+    _polygonLayer.setLines(polygonLines);
   }
 
   /// Filter out POIs that would overlap with already visible ones
@@ -591,8 +637,16 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
                     child: SingleChildScrollView(
                       child: POILayersSettingsSection(
                         enabledCategories: state.enabledCategories,
+                        enabledSubcategories: state.enabledSubcategories,
+                        availableSubcategories: {
+                          for (final cat in POICategory.values)
+                            cat: cubit.getSubcategories(cat),
+                        },
                         onCategoryToggled: (category, enabled) {
                           _poiCubit.toggleCategory(category, enabled);
+                        },
+                        onSubcategoryToggled: (category, subcategory, enabled) {
+                          _poiCubit.toggleSubcategory(category, subcategory, enabled);
                         },
                       ),
                     ),
@@ -657,6 +711,14 @@ class POITrufiLayer extends TrufiLayer {
     super.controller, {
     required super.id,
   }) : super(layerLevel: 100);
+}
+
+/// TrufiLayer for POI polygon outlines (rendered below markers)
+class POIPolygonOutlineLayer extends TrufiLayer {
+  POIPolygonOutlineLayer(
+    super.controller, {
+    required super.id,
+  }) : super(layerLevel: 50);
 }
 
 /// Animated bottom sheet for POI details - works with both FlutterMap and MapLibre

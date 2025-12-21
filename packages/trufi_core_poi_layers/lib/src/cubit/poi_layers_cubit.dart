@@ -13,6 +13,10 @@ class POILayersState {
   /// Enabled state for each category
   final Map<POICategory, bool> enabledCategories;
 
+  /// Enabled subcategories per category (category -> Set of subcategory names)
+  /// If null or empty for a category, all subcategories are enabled
+  final Map<POICategory, Set<String>> enabledSubcategories;
+
   /// Loaded layers
   final Map<POICategory, POIMapLayer> layers;
 
@@ -21,17 +25,20 @@ class POILayersState {
 
   const POILayersState({
     this.enabledCategories = const {},
+    this.enabledSubcategories = const {},
     this.layers = const {},
     this.isInitialized = false,
   });
 
   POILayersState copyWith({
     Map<POICategory, bool>? enabledCategories,
+    Map<POICategory, Set<String>>? enabledSubcategories,
     Map<POICategory, POIMapLayer>? layers,
     bool? isInitialized,
   }) {
     return POILayersState(
       enabledCategories: enabledCategories ?? this.enabledCategories,
+      enabledSubcategories: enabledSubcategories ?? this.enabledSubcategories,
       layers: layers ?? this.layers,
       isInitialized: isInitialized ?? this.isInitialized,
     );
@@ -57,6 +64,30 @@ class POILayersState {
 
   /// Get all layers
   List<POIMapLayer> get allLayers => layers.values.toList();
+
+  /// Check if a POI is enabled based on category and subcategory
+  bool isPOIEnabled(POI poi) {
+    // Check if category is enabled
+    if (!(enabledCategories[poi.category] ?? false)) {
+      return false;
+    }
+
+    // If no subcategory info, POI is enabled (backwards compatibility)
+    if (poi.subcategory == null) {
+      return true;
+    }
+
+    // Get enabled subcategories for this category
+    final subcats = enabledSubcategories[poi.category];
+
+    // If no subcategory filter set, all subcategories are enabled
+    if (subcats == null || subcats.isEmpty) {
+      return true;
+    }
+
+    // Check if this subcategory is enabled
+    return subcats.contains(poi.subcategory);
+  }
 }
 
 /// Cubit for managing POI layer visibility and state.
@@ -151,6 +182,43 @@ class POILayersCubit extends Cubit<POILayersState> {
     };
     emit(state.copyWith(enabledCategories: newEnabled));
     _syncWithMapLayersCubit();
+  }
+
+  /// Toggle a subcategory on/off within a category
+  void toggleSubcategory(POICategory category, String subcategory, bool enabled) {
+    final newSubcats = Map<POICategory, Set<String>>.from(state.enabledSubcategories);
+
+    // Get current subcategories for this category
+    final currentSubcats = newSubcats[category] ?? <String>{};
+    final updatedSubcats = Set<String>.from(currentSubcats);
+
+    if (enabled) {
+      updatedSubcats.add(subcategory);
+    } else {
+      updatedSubcats.remove(subcategory);
+    }
+
+    newSubcats[category] = updatedSubcats;
+    emit(state.copyWith(enabledSubcategories: newSubcats));
+  }
+
+  /// Enable all subcategories for a category
+  void enableAllSubcategories(POICategory category) {
+    final newSubcats = Map<POICategory, Set<String>>.from(state.enabledSubcategories);
+    // Empty set means all subcategories are enabled
+    newSubcats[category] = {};
+    emit(state.copyWith(enabledSubcategories: newSubcats));
+  }
+
+  /// Get available subcategories for a category
+  Set<String> getSubcategories(POICategory category) {
+    final layer = state.layers[category];
+    if (layer == null) return {};
+
+    return layer.pois
+        .where((poi) => poi.subcategory != null)
+        .map((poi) => poi.subcategory!)
+        .toSet();
   }
 
   /// Sync all layer states with MapLayersCubit

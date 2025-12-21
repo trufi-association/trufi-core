@@ -11,12 +11,14 @@ class _GeometryInfo {
   final double lon;
   final POIGeometryType geometryType;
   final double? areaMeters;
+  final List<LatLng>? polygonPoints;
 
   const _GeometryInfo({
     required this.lat,
     required this.lon,
     required this.geometryType,
     this.areaMeters,
+    this.polygonPoints,
   });
 }
 
@@ -44,6 +46,9 @@ class POI extends Equatable {
   /// Category this POI belongs to
   final POICategory category;
 
+  /// Subcategory within the category (e.g., pharmacy within healthcare)
+  final String? subcategory;
+
   /// Original geometry type from GeoJSON
   final POIGeometryType geometryType;
 
@@ -53,15 +58,20 @@ class POI extends Equatable {
   /// Additional properties from OSM tags
   final Map<String, dynamic> properties;
 
+  /// Polygon coordinates for area POIs (list of LatLng points)
+  final List<LatLng>? polygonPoints;
+
   const POI({
     required this.id,
     required this.position,
     this.name,
     required this.type,
     required this.category,
+    this.subcategory,
     this.geometryType = POIGeometryType.point,
     this.areaMeters,
     this.properties = const {},
+    this.polygonPoints,
   });
 
   /// Whether this POI is an area (polygon)
@@ -89,15 +99,19 @@ class POI extends Equatable {
       orElse: () => type.category,
     );
 
+    final subcategoryStr = properties['subcategory'] as String?;
+
     return POI(
       id: (feature['id'] ?? properties['id'] ?? '').toString(),
       position: LatLng(geoInfo.lat, geoInfo.lon),
       name: properties['name'] as String?,
       type: type,
       category: category,
+      subcategory: subcategoryStr,
       geometryType: geoInfo.geometryType,
       areaMeters: geoInfo.areaMeters,
       properties: properties,
+      polygonPoints: geoInfo.polygonPoints,
     );
   }
 
@@ -122,11 +136,19 @@ class POI extends Equatable {
         final firstRing = rings[0] as List<dynamic>;
         final (lat, lon) = _calculateCentroid(firstRing);
         final area = _calculatePolygonArea(firstRing);
+        final points = firstRing.map((coord) {
+          final c = coord as List<dynamic>;
+          return LatLng(
+            (c[1] as num).toDouble(),
+            (c[0] as num).toDouble(),
+          );
+        }).toList();
         return _GeometryInfo(
           lat: lat,
           lon: lon,
           geometryType: POIGeometryType.polygon,
           areaMeters: area,
+          polygonPoints: points,
         );
 
       case 'MultiPolygon':
@@ -136,11 +158,19 @@ class POI extends Equatable {
         final firstRing = firstPolygon[0] as List<dynamic>;
         final (lat, lon) = _calculateCentroid(firstRing);
         final area = _calculatePolygonArea(firstRing);
+        final points = firstRing.map((coord) {
+          final c = coord as List<dynamic>;
+          return LatLng(
+            (c[1] as num).toDouble(),
+            (c[0] as num).toDouble(),
+          );
+        }).toList();
         return _GeometryInfo(
           lat: lat,
           lon: lon,
           geometryType: POIGeometryType.polygon,
           areaMeters: area,
+          polygonPoints: points,
         );
 
       case 'LineString':

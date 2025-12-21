@@ -589,7 +589,7 @@ class POILayersLocalizationsEs extends POILayersLocalizations {
   @override
   String get pointsOfInterest => 'Puntos de Interés';
   @override
-  String get toggleLayersOnTheMap => 'Activar capas en el mapa';
+  String get toggleLayersOnTheMap => 'Selecciona las capas del mapa';
   @override
   String get done => 'Listo';
 
