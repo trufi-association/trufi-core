@@ -1,0 +1,3877 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 843384160,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558133,
+          -17.3918751
+        ]
+      },
+      "properties": {
+        "id": 843384160,
+        "name": "Biblioteca Municipal Jesús Lara",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "399",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "library",
+        "description": "Biblioteca Municipal con más de 50 mil libros y más de 10 sucursales en los 15 distritos.",
+        "level": "2",
+        "old_name:1844-1987": "Biblioteca Municipal",
+        "opening_hours": "Mo-Fr 08:00-12:00, 14:30-18:30",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "related_law": "OM 274/1987",
+        "source": "Ordenanza Municipal 274/1987",
+        "start_date": "1844",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2317965871,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1608199,
+          -17.389404
+        ]
+      },
+      "properties": {
+        "id": 2317965871,
+        "name": "Biblioteca La Salle",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "access": "private",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "200",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "library",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "operator": "Unidad Educativa La Salle",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2327838985,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565026,
+          -17.3892692
+        ]
+      },
+      "properties": {
+        "id": 2327838985,
+        "name": "Biblioteca Pública Bilingüe Abraham Lincoln",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "N-0365",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "library",
+        "email": "info@cbacoch.org",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "operator": "Centro Boliviano Americano",
+        "operator:type": "private",
+        "phone": "+591 4 4221288;+591 4 4222518",
+        "website": "https://opac.libraryworld.com/opac/signin.php?libraryname=BIBLIOTECA%20CBA%20COCHABAMBA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2354283168,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587817,
+          -17.3874301
+        ]
+      },
+      "properties": {
+        "id": 2354283168,
+        "name": "Unidad Educativa Ricardo Jaimes Freyre",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944392,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602474,
+          -17.3924545
+        ]
+      },
+      "properties": {
+        "id": 2398944392,
+        "name": "Unidad Educativa Juan Crisóstomo Carrillo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "amenity": "school",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944576,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15891,
+          -17.3951575
+        ]
+      },
+      "properties": {
+        "id": 2398944576,
+        "name": "Colegio Nacional Nocturno Franz Tamayo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "school",
+        "fee": "no",
+        "operator:type": "public",
+        "school": "adult"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541117,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587043,
+          -17.3901195
+        ]
+      },
+      "properties": {
+        "id": 2408541117,
+        "name": "Unidad Educativa Cobija",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "179",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school",
+        "fee": "no",
+        "short_name": "Cobija"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541247,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1610964,
+          -17.3902814
+        ]
+      },
+      "properties": {
+        "id": 2408541247,
+        "name": "Unidad Educativa 8 de Mayo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school",
+        "short_name": "René Barrientos"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2426356012,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570545,
+          -17.3970349
+        ]
+      },
+      "properties": {
+        "id": 2426356012,
+        "name": "U.E. 27 de Mayo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2630687675,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532201,
+          -17.3936199
+        ]
+      },
+      "properties": {
+        "id": 2630687675,
+        "name": "Unidad Educativa Bolivariano Nacional Sucre",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "585",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "old_name": "Colegio Bolivariano Nacional Sucre",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2630687676,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533138,
+          -17.3929265
+        ]
+      },
+      "properties": {
+        "id": 2630687676,
+        "name": "Unidad Educativa Daniel Sánchez Bustamante",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "585",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2630687679,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532449,
+          -17.3932914
+        ]
+      },
+      "properties": {
+        "id": 2630687679,
+        "name": "Unidad Educativa Teodomiro Beltrán",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "585",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2630687696,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151351,
+          -17.3919306
+        ]
+      },
+      "properties": {
+        "id": 2630687696,
+        "name": "Unidad Educativa Wilge Rodriguez",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2634812291,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1585324,
+          -17.3951014
+        ]
+      },
+      "properties": {
+        "id": 2634812291,
+        "name": "Colegio Nacional Abaroa",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "school",
+        "check_date": "2024-11-15",
+        "fee": "no",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2634812293,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590865,
+          -17.3861035
+        ]
+      },
+      "properties": {
+        "id": 2634812293,
+        "name": "Unidad Educativa José Quintín Mendoza",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle La Paz",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2694171673,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600114,
+          -17.3930378
+        ]
+      },
+      "properties": {
+        "id": 2694171673,
+        "name": "Unidad Educativa Eufronio Viscarra",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Junín",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3579599730,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583302,
+          -17.3900681
+        ]
+      },
+      "properties": {
+        "id": 3579599730,
+        "name": "Unidad Educativa Josefina Goytia",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "179",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school",
+        "fee": "no",
+        "short_name": "Mejillones B"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3707526671,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515918,
+          -17.3884805
+        ]
+      },
+      "properties": {
+        "id": 3707526671,
+        "name": "Centro Educativo Juan Bosco",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719465028,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543577,
+          -17.3978262
+        ]
+      },
+      "properties": {
+        "id": 3719465028,
+        "name": "U. E. Catolica England Cristo Rey",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3726395594,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611856,
+          -17.3928103
+        ]
+      },
+      "properties": {
+        "id": 3726395594,
+        "name": "Instituto Técnico ICEPAL",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "316",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "college",
+        "contact:facebook": "https://www.facebook.com/icepal/",
+        "description": "Instituto técnico de educación en Contaduría General, Administración de Empresas, Sistemas Informáticos, Electrónica y Secretariado Administrativo.",
+        "email": "contacto@icepal.edu.bo",
+        "level": "2",
+        "opening_hours": "Mo-Fr 08:00-12:20,14:30-22:00;Sa 08:00-12:30;Su,PH Off",
+        "operator": "Instituto Técnico ICEPAL",
+        "phone": "+591 44589409",
+        "short_name": "ICEPAL",
+        "start_date": "2004",
+        "website": "https://www.icepal.edu.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3879231458,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.158456,
+          -17.3968437
+        ]
+      },
+      "properties": {
+        "id": 3879231458,
+        "name": "Heidi",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Calama",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902772,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514182,
+          -17.3896158
+        ]
+      },
+      "properties": {
+        "id": 3952902772,
+        "name": "",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4067960930,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563208,
+          -17.3920014
+        ]
+      },
+      "properties": {
+        "id": 4067960930,
+        "name": "Instituto de Educación Bancaria",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:housenumber": "E-341",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "college",
+        "contact:facebook": "https://www.facebook.com/idebcb/",
+        "contact:whatsapp": "+591 77946622",
+        "email": "info-cbba@educacionbancaria.com",
+        "old_name:1945-01-25--1961-01-20": "Escuela Bancaria",
+        "opening_hours": "Mo-Fr 08:30-12:30,14:30-20:00",
+        "operator": "Instituto de Educación Bancaria",
+        "phone": "+591 4 4503893;+591 4 4228695;+591 4 4222088;+591 77946622",
+        "short_name": "IDEB",
+        "start_date": "1945-01-25",
+        "website": "https://educacionbancaria.com/cochabamba/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4675306302,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1605777,
+          -17.3923844
+        ]
+      },
+      "properties": {
+        "id": 4675306302,
+        "name": "Unidad Educativa Juana Azurduy de Padilla",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "amenity": "school",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4675306303,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.160852,
+          -17.3921156
+        ]
+      },
+      "properties": {
+        "id": 4675306303,
+        "name": "Unidad Educativa Julio Terán Rocha",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "amenity": "school",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740851787,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576628,
+          -17.3944194
+        ]
+      },
+      "properties": {
+        "id": 4740851787,
+        "name": "",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "library"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4806920703,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514865,
+          -17.3891217
+        ]
+      },
+      "properties": {
+        "id": 4806920703,
+        "name": "Kinder TkTe",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4857918510,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513136,
+          -17.3921013
+        ]
+      },
+      "properties": {
+        "id": 4857918510,
+        "name": "Unidad Educativa Sara de Ugarte de Salamanca",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4857919729,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513637,
+          -17.391816
+        ]
+      },
+      "properties": {
+        "id": 4857919729,
+        "name": "Unidad Educativa Darío Montaño",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224260,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570267,
+          -17.3971595
+        ]
+      },
+      "properties": {
+        "id": 4959224260,
+        "name": "U.E. Nestor Galindo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224261,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570137,
+          -17.3972465
+        ]
+      },
+      "properties": {
+        "id": 4959224261,
+        "name": "U.E. Roberto Alvarado",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224262,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570414,
+          -17.3970942
+        ]
+      },
+      "properties": {
+        "id": 4959224262,
+        "name": "U.E. CEA 27 de Mayo",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5014297814,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562805,
+          -17.399868
+        ]
+      },
+      "properties": {
+        "id": 5014297814,
+        "name": "Unidad Educativa Melchor Urquidi",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5014299530,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562578,
+          -17.3999728
+        ]
+      },
+      "properties": {
+        "id": 5014299530,
+        "name": "Unidad Educativa. 12 de Abril",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102210118,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545704,
+          -17.3854052
+        ]
+      },
+      "properties": {
+        "id": 5102210118,
+        "name": "IDLA",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Chuquisaca",
+        "amenity": "college"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5111368690,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1636773,
+          -17.390688
+        ]
+      },
+      "properties": {
+        "id": 5111368690,
+        "name": "Little People",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117995212,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1610991,
+          -17.3871253
+        ]
+      },
+      "properties": {
+        "id": 5117995212,
+        "name": "Centro Infantil",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5166826259,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1632725,
+          -17.3958453
+        ]
+      },
+      "properties": {
+        "id": 5166826259,
+        "name": "Unidad Educativa Rebeca de la Vega Viuda de Unzuaga",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5166827221,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1633082,
+          -17.3956152
+        ]
+      },
+      "properties": {
+        "id": 5166827221,
+        "name": "Unidad Educativa Daniel Salamanca",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217961558,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.158365,
+          -17.3935989
+        ]
+      },
+      "properties": {
+        "id": 5217961558,
+        "name": "Gisbert y Cia",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "amenity": "library"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5277836426,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565273,
+          -17.3960973
+        ]
+      },
+      "properties": {
+        "id": 5277836426,
+        "name": "Facultad de Ciencias Sociales",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "235",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Calama",
+        "amenity": "university",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:type": "public",
+        "phone": "+591 4 4502821",
+        "short_name": "FACSO",
+        "university": "faculty",
+        "website": "http://www.facso.umss.edu.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5280987329,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1628029,
+          -17.3872584
+        ]
+      },
+      "properties": {
+        "id": 5280987329,
+        "name": "Unidad Educativa Montessori Gonzaga",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Tumusla",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274260,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1610651,
+          -17.3904961
+        ]
+      },
+      "properties": {
+        "id": 5319274260,
+        "name": "Unidad Educativa René Barrientos Ortuño",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319275329,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1606932,
+          -17.3861008
+        ]
+      },
+      "properties": {
+        "id": 5319275329,
+        "name": "Sol de Caramelo",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "amenity": "kindergarten"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5350197562,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159013,
+          -17.3873009
+        ]
+      },
+      "properties": {
+        "id": 5350197562,
+        "name": "Unidad Educativa Nocturno Ricardo Jaimes Freyre",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5350197563,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589065,
+          -17.3873736
+        ]
+      },
+      "properties": {
+        "id": 5350197563,
+        "name": "Unidad Educativa Mariano Baptista",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5371441320,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1631239,
+          -17.3953245
+        ]
+      },
+      "properties": {
+        "id": 5371441320,
+        "name": "Colegio Anglo Japones",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5425991361,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150009,
+          -17.3869562
+        ]
+      },
+      "properties": {
+        "id": 5425991361,
+        "name": "Biblioteca Julio Rodrigues Rivas",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Venezuela",
+        "amenity": "library",
+        "level": "0",
+        "operator": "Facultad de Medicina Doctor Aurelio Melean",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5645184894,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513633,
+          -17.3972391
+        ]
+      },
+      "properties": {
+        "id": 5645184894,
+        "name": "Colegio Hispano Boliviano",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8547321421,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.162906,
+          -17.3904649
+        ]
+      },
+      "properties": {
+        "id": 8547321421,
+        "name": "Club de Patinaje Dragones",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "amenity": "school",
+        "contact:facebook": "https://www.facebook.com/scrapy58/",
+        "fee": "yes",
+        "opening_hours": "Mo,We,Fr 19:00-20:30",
+        "operator": "PatinHouse",
+        "operator:type": "private",
+        "school": "sport",
+        "sport": "roller_skating"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8565997052,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603748,
+          -17.3931387
+        ]
+      },
+      "properties": {
+        "id": 8565997052,
+        "name": "Unidad Educativa Don Bosco D",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Junín",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8565997064,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602003,
+          -17.3931138
+        ]
+      },
+      "properties": {
+        "id": 8565997064,
+        "name": "Unidad Educativa La Paz Mixta",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Junín",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8912760518,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592974,
+          -17.386138
+        ]
+      },
+      "properties": {
+        "id": 8912760518,
+        "name": "Unidad Educativa Mariano Ricardo Terrazas",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle La Paz",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964738138,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543528,
+          -17.3922197
+        ]
+      },
+      "properties": {
+        "id": 8964738138,
+        "name": "",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle San Martín",
+        "amenity": "university",
+        "university": "postgraduate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752696,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534512,
+          -17.3936524
+        ]
+      },
+      "properties": {
+        "id": 8964752696,
+        "name": "Unidad Educativa Nacional Bolívar",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "old_name": "Colegio Nacional Bolívar",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752697,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534946,
+          -17.3934059
+        ]
+      },
+      "properties": {
+        "id": 8964752697,
+        "name": "Unidad Educativa Nacional Junín",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "old_name": "Colegio Nacional Junín",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752698,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535453,
+          -17.3929971
+        ]
+      },
+      "properties": {
+        "id": 8964752698,
+        "name": "Unidad Educativa José Antonio Arze",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "school",
+        "education": "school",
+        "fee": "no",
+        "operator:type": "government",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752762,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542105,
+          -17.3959337
+        ]
+      },
+      "properties": {
+        "id": 8964752762,
+        "name": "U.E. República Argentina",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "460",
+        "addr:street": "Calle Calama",
+        "amenity": "school",
+        "fee": "no",
+        "operator:type": "public",
+        "school": "primary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752763,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542467,
+          -17.3957655
+        ]
+      },
+      "properties": {
+        "id": 8964752763,
+        "name": "U.E. Julio Paz Terrazas",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "460",
+        "addr:street": "Calle Calama",
+        "amenity": "school",
+        "fee": "no",
+        "operator:type": "public",
+        "school": "secondary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752764,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542757,
+          -17.3955916
+        ]
+      },
+      "properties": {
+        "id": 8964752764,
+        "name": "U.E. María Josefa Mujía",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "460",
+        "addr:street": "Calle Calama",
+        "amenity": "school",
+        "fee": "no",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9884650379,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584964,
+          -17.3902094
+        ]
+      },
+      "properties": {
+        "id": 9884650379,
+        "name": "Unidad Educativa Mejillones B",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "179",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school",
+        "fee": "no",
+        "short_name": "Mejillones B"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10279156720,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573168,
+          -17.3954184
+        ]
+      },
+      "properties": {
+        "id": 10279156720,
+        "name": "Biblioteca INIAM",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "access": "yes",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "199",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "amenity": "library",
+        "operator": "Instituto de Investigaciones Antropológicas y Museo Arqueológico",
+        "operator:type": "public",
+        "website": "https://museo.umss.edu.bo/biblioteca/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10770094674,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1594928,
+          -17.3902998
+        ]
+      },
+      "properties": {
+        "id": 10770094674,
+        "name": "Instituto Tecnológico Mundial OMIE",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "309",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "college",
+        "contact:facebook": "https://www.facebook.com/OMIEInstitutoTecnologicoMundial/",
+        "contact:whatsapp": "+591 65501911",
+        "description": "Instituto de educación superior que ofrece calidad en capacitación y la formación de profesionales técnicos medios y superiores.",
+        "operator": "Instituto Tecnológico Mundial OMIE",
+        "operator:type": "private",
+        "phone": "+591 4 4581759;+591 4 4589845;+591 65501911",
+        "website": "https://www.tecomie.com/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10920181902,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558245,
+          -17.3931618
+        ]
+      },
+      "properties": {
+        "id": 10920181902,
+        "name": "Biblioteca Padro Julio Murillo",
+        "type": "library",
+        "category": "education",
+        "subcategory": "library",
+        "osmType": "node",
+        "access": "yes",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "E0368",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Bolívar",
+        "amenity": "library",
+        "description": "Biblioteca de la Compañía de Jesús en Bolivia, cuenta con 17 mil volúmenes en disciplinas como filosofía, literatura, arte, historia, teología, sociología y política.",
+        "email": "bibliopjm@gmail.com",
+        "level": "0",
+        "operator": "Jesuitas Bolivia",
+        "operator:type": "religious",
+        "phone": "+591 4 4254137",
+        "website": "https://bibliotecajuliom.webcindario.com/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11105974900,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603804,
+          -17.3857792
+        ]
+      },
+      "properties": {
+        "id": 11105974900,
+        "name": "Pecas",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "kindergarten",
+        "operator": "Pecas",
+        "operator:type": "private",
+        "preschool": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11105974903,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1604539,
+          -17.3853061
+        ]
+      },
+      "properties": {
+        "id": 11105974903,
+        "name": "Nanitas",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0749",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "kindergarten",
+        "branch": "Sucursal Ayacucho",
+        "brand": "Nanitas",
+        "contact:facebook": "https://www.facebook.com/Boliviananitas/",
+        "contact:whatsapp": "+591 79771060",
+        "email": "nanitascbba@gmail.com",
+        "operator": "Nanitas",
+        "operator:type": "private",
+        "phone": "+591 79771060",
+        "preschool": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28436293,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1617493,
+              -17.3886617
+            ],
+            [
+              -66.1617014,
+              -17.3886529
+            ],
+            [
+              -66.1615192,
+              -17.3886197
+            ],
+            [
+              -66.1613304,
+              -17.3885852
+            ],
+            [
+              -66.161081,
+              -17.3885383
+            ],
+            [
+              -66.1609193,
+              -17.3885089
+            ],
+            [
+              -66.1608805,
+              -17.3885016
+            ],
+            [
+              -66.1608658,
+              -17.3884989
+            ],
+            [
+              -66.1608106,
+              -17.3884887
+            ],
+            [
+              -66.1607936,
+              -17.3884856
+            ],
+            [
+              -66.1607642,
+              -17.3885004
+            ],
+            [
+              -66.1607314,
+              -17.3886839
+            ],
+            [
+              -66.1606318,
+              -17.3892406
+            ],
+            [
+              -66.16063,
+              -17.3892519
+            ],
+            [
+              -66.1605966,
+              -17.3894371
+            ],
+            [
+              -66.1606063,
+              -17.3894582
+            ],
+            [
+              -66.1606167,
+              -17.3894808
+            ],
+            [
+              -66.1608668,
+              -17.3895288
+            ],
+            [
+              -66.1608786,
+              -17.389531
+            ],
+            [
+              -66.1613514,
+              -17.3896218
+            ],
+            [
+              -66.1615681,
+              -17.3896634
+            ],
+            [
+              -66.1615918,
+              -17.3896449
+            ],
+            [
+              -66.1616135,
+              -17.389535
+            ],
+            [
+              -66.1616199,
+              -17.3895016
+            ],
+            [
+              -66.161627,
+              -17.3894665
+            ],
+            [
+              -66.1616534,
+              -17.3893401
+            ],
+            [
+              -66.1617338,
+              -17.3889398
+            ],
+            [
+              -66.1617776,
+              -17.3887033
+            ],
+            [
+              -66.1617665,
+              -17.3886759
+            ],
+            [
+              -66.1617493,
+              -17.3886617
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28436293,
+        "name": "Unidad Educativa La Salle",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "200",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "school",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/ColegioLaSalleCochabamba/",
+        "denomination": "roman_catholic",
+        "education": "school",
+        "email": "comunicaciones@lasallecbb.edu.bo",
+        "fee": "yes",
+        "name:etymology:wikidata": "Q312758",
+        "old_name": "Colegio La Salle",
+        "operator": "Hermanos de las Escuelas Cristianas",
+        "operator:type": "religious",
+        "phone": "+591 78350611",
+        "religion": "christian",
+        "start_date": "1925-01-15",
+        "website": "https://www.lasallecbb.edu.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 222851366,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1611772,
+              -17.3887538
+            ],
+            [
+              -66.161196,
+              -17.3886542
+            ],
+            [
+              -66.1613133,
+              -17.3886763
+            ],
+            [
+              -66.1613304,
+              -17.3885852
+            ],
+            [
+              -66.161081,
+              -17.3885383
+            ],
+            [
+              -66.1609193,
+              -17.3885089
+            ],
+            [
+              -66.1608805,
+              -17.3885016
+            ],
+            [
+              -66.1608658,
+              -17.3884989
+            ],
+            [
+              -66.1608106,
+              -17.3884887
+            ],
+            [
+              -66.1607936,
+              -17.3884856
+            ],
+            [
+              -66.1607642,
+              -17.3885004
+            ],
+            [
+              -66.1607314,
+              -17.3886839
+            ],
+            [
+              -66.1608273,
+              -17.3887021
+            ],
+            [
+              -66.1608422,
+              -17.388705
+            ],
+            [
+              -66.1608809,
+              -17.3887123
+            ],
+            [
+              -66.1609102,
+              -17.3887178
+            ],
+            [
+              -66.1609144,
+              -17.3886959
+            ],
+            [
+              -66.1609843,
+              -17.3887091
+            ],
+            [
+              -66.1609896,
+              -17.3886808
+            ],
+            [
+              -66.1610519,
+              -17.3886927
+            ],
+            [
+              -66.161045,
+              -17.3887289
+            ],
+            [
+              -66.1611772,
+              -17.3887538
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 222851366,
+        "name": "Unidad Educativa La Salle",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle México",
+        "amenity": "kindergarten",
+        "education": "kindergarten",
+        "name:etymology:wikidata": "Q312758",
+        "old_name": "Kinder Colegio La Salle",
+        "old_operator": "Colegio La Salle",
+        "operator": "Hermanos de las Escuelas Cristianas",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 504327011,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1582618,
+              -17.3949955
+            ],
+            [
+              -66.1580965,
+              -17.3949655
+            ],
+            [
+              -66.1581477,
+              -17.3947086
+            ],
+            [
+              -66.1582462,
+              -17.3947265
+            ],
+            [
+              -66.1582557,
+              -17.3946784
+            ],
+            [
+              -66.1582843,
+              -17.3946836
+            ],
+            [
+              -66.1582929,
+              -17.3946407
+            ],
+            [
+              -66.1583312,
+              -17.3946476
+            ],
+            [
+              -66.1582618,
+              -17.3949955
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 504327011,
+        "name": "Universidad de Aquino Bolivia",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "311",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "university",
+        "building": "university",
+        "building:levels": "7",
+        "operator": "UDABOL",
+        "operator:type": "private",
+        "short_name": "UDABOL"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506153988,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1587332,
+              -17.3902854
+            ],
+            [
+              -66.1587483,
+              -17.3902055
+            ],
+            [
+              -66.1587624,
+              -17.3901303
+            ],
+            [
+              -66.1587779,
+              -17.3900407
+            ],
+            [
+              -66.1587845,
+              -17.3900036
+            ],
+            [
+              -66.1587871,
+              -17.3899894
+            ],
+            [
+              -66.1586546,
+              -17.3899679
+            ],
+            [
+              -66.1586328,
+              -17.3899644
+            ],
+            [
+              -66.1584801,
+              -17.3899397
+            ],
+            [
+              -66.1583805,
+              -17.3899235
+            ],
+            [
+              -66.1582944,
+              -17.3899095
+            ],
+            [
+              -66.1582416,
+              -17.3902057
+            ],
+            [
+              -66.1584874,
+              -17.3902456
+            ],
+            [
+              -66.1587332,
+              -17.3902854
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506153988,
+        "name": "",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "179",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "school",
+        "barrier": "wall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 550050545,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1527982,
+              -17.3935758
+            ],
+            [
+              -66.1528202,
+              -17.3934598
+            ],
+            [
+              -66.1528294,
+              -17.3934116
+            ],
+            [
+              -66.1528391,
+              -17.3933607
+            ],
+            [
+              -66.152437,
+              -17.393291
+            ],
+            [
+              -66.1524429,
+              -17.3932624
+            ],
+            [
+              -66.152459,
+              -17.3931829
+            ],
+            [
+              -66.1524889,
+              -17.3930362
+            ],
+            [
+              -66.1525572,
+              -17.3930481
+            ],
+            [
+              -66.1525882,
+              -17.3928862
+            ],
+            [
+              -66.1529653,
+              -17.3929522
+            ],
+            [
+              -66.1529497,
+              -17.3930376
+            ],
+            [
+              -66.1530134,
+              -17.3930482
+            ],
+            [
+              -66.1529948,
+              -17.3931505
+            ],
+            [
+              -66.1530657,
+              -17.3931623
+            ],
+            [
+              -66.1530184,
+              -17.3934242
+            ],
+            [
+              -66.1529952,
+              -17.3935558
+            ],
+            [
+              -66.152982,
+              -17.3935725
+            ],
+            [
+              -66.1529648,
+              -17.3935909
+            ],
+            [
+              -66.1529348,
+              -17.3936009
+            ],
+            [
+              -66.1527982,
+              -17.3935758
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 550050545,
+        "name": "Colegio Santa Ana",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "291",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Lanza",
+        "amenity": "school",
+        "barrier": "wall",
+        "denomination": "roman_catholic",
+        "old_name": "Educandas",
+        "operator": "Hijas de Santa Ana",
+        "operator:type": "religious",
+        "religion": "christian",
+        "start_date": "1884-07-26"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 554371098,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1587667,
+              -17.386389
+            ],
+            [
+              -66.1586704,
+              -17.3863718
+            ],
+            [
+              -66.1585639,
+              -17.3863531
+            ],
+            [
+              -66.1584039,
+              -17.3863251
+            ],
+            [
+              -66.1584098,
+              -17.3863072
+            ],
+            [
+              -66.158133,
+              -17.3862124
+            ],
+            [
+              -66.1580743,
+              -17.3862776
+            ],
+            [
+              -66.1580721,
+              -17.3863892
+            ],
+            [
+              -66.1582609,
+              -17.3864232
+            ],
+            [
+              -66.1583769,
+              -17.386444
+            ],
+            [
+              -66.1585366,
+              -17.3864728
+            ],
+            [
+              -66.1586501,
+              -17.3864933
+            ],
+            [
+              -66.1587455,
+              -17.3865108
+            ],
+            [
+              -66.1587667,
+              -17.386389
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 554371098,
+        "name": "Colegio Evangélico Emanuel",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Baptista",
+        "amenity": "school",
+        "barrier": "wall",
+        "denomination": "evangelical",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 579368181,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1579664,
+              -17.3914997
+            ],
+            [
+              -66.1579392,
+              -17.3916425
+            ],
+            [
+              -66.158189,
+              -17.3916852
+            ],
+            [
+              -66.1583408,
+              -17.3917112
+            ],
+            [
+              -66.1583953,
+              -17.3917202
+            ],
+            [
+              -66.1584489,
+              -17.3917294
+            ],
+            [
+              -66.1584702,
+              -17.391599
+            ],
+            [
+              -66.1584737,
+              -17.3915776
+            ],
+            [
+              -66.1584764,
+              -17.3915627
+            ],
+            [
+              -66.1582096,
+              -17.39154
+            ],
+            [
+              -66.1581489,
+              -17.3915299
+            ],
+            [
+              -66.1579664,
+              -17.3914997
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 579368181,
+        "name": "Unidad Educativa Boliviano Argentino",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "177",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "school",
+        "barrier": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 579368294,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.159227,
+              -17.3941258
+            ],
+            [
+              -66.159048,
+              -17.3940899
+            ],
+            [
+              -66.1590185,
+              -17.394246
+            ],
+            [
+              -66.1586471,
+              -17.3941743
+            ],
+            [
+              -66.1586103,
+              -17.3943277
+            ],
+            [
+              -66.1587233,
+              -17.3943477
+            ],
+            [
+              -66.158875,
+              -17.3943666
+            ],
+            [
+              -66.1590473,
+              -17.3943854
+            ],
+            [
+              -66.1590506,
+              -17.3943649
+            ],
+            [
+              -66.159064,
+              -17.3943672
+            ],
+            [
+              -66.1590801,
+              -17.3942714
+            ],
+            [
+              -66.1592008,
+              -17.3942896
+            ],
+            [
+              -66.1592026,
+              -17.3942781
+            ],
+            [
+              -66.159227,
+              -17.3941258
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 579368294,
+        "name": "Universidad Privada del Valle",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "256",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "university",
+        "building": "university",
+        "building:levels": "7",
+        "operator": "Universidad Privada del Valle",
+        "operator:type": "private",
+        "short_name": "UNIVALLE",
+        "start_date": "1988-10-04"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 581364617,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.159602,
+              -17.3958483
+            ],
+            [
+              -66.1598999,
+              -17.3958978
+            ],
+            [
+              -66.1599456,
+              -17.3956307
+            ],
+            [
+              -66.1598624,
+              -17.3956157
+            ],
+            [
+              -66.1597036,
+              -17.3955871
+            ],
+            [
+              -66.1596913,
+              -17.3956605
+            ],
+            [
+              -66.1595793,
+              -17.3956518
+            ],
+            [
+              -66.1595591,
+              -17.395773
+            ],
+            [
+              -66.1596144,
+              -17.3957769
+            ],
+            [
+              -66.159602,
+              -17.3958483
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 581364617,
+        "name": "CEICO",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Jordán",
+        "amenity": "school"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 821656777,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1586902,
+              -17.3906589
+            ],
+            [
+              -66.1586675,
+              -17.3907789
+            ],
+            [
+              -66.158658,
+              -17.3908289
+            ],
+            [
+              -66.1586375,
+              -17.3908253
+            ],
+            [
+              -66.1585519,
+              -17.3908106
+            ],
+            [
+              -66.1585264,
+              -17.3908061
+            ],
+            [
+              -66.1584042,
+              -17.390785
+            ],
+            [
+              -66.1582325,
+              -17.3907554
+            ],
+            [
+              -66.1581156,
+              -17.3907352
+            ],
+            [
+              -66.1581479,
+              -17.3905652
+            ],
+            [
+              -66.1582439,
+              -17.3905818
+            ],
+            [
+              -66.158265,
+              -17.3905854
+            ],
+            [
+              -66.1586443,
+              -17.390651
+            ],
+            [
+              -66.1586902,
+              -17.3906589
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 821656777,
+        "name": "Kinder Cochabamba",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "kindergarten",
+        "barrier": "wall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 858735190,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1586675,
+              -17.3907789
+            ],
+            [
+              -66.1588473,
+              -17.3908088
+            ],
+            [
+              -66.1588228,
+              -17.390941
+            ],
+            [
+              -66.1588073,
+              -17.3910245
+            ],
+            [
+              -66.1587918,
+              -17.3911078
+            ],
+            [
+              -66.1586173,
+              -17.3910766
+            ],
+            [
+              -66.1586368,
+              -17.3909708
+            ],
+            [
+              -66.1586133,
+              -17.3909669
+            ],
+            [
+              -66.158087,
+              -17.3908805
+            ],
+            [
+              -66.1581156,
+              -17.3907352
+            ],
+            [
+              -66.1582325,
+              -17.3907554
+            ],
+            [
+              -66.1584042,
+              -17.390785
+            ],
+            [
+              -66.1585264,
+              -17.3908061
+            ],
+            [
+              -66.1585519,
+              -17.3908106
+            ],
+            [
+              -66.1586375,
+              -17.3908253
+            ],
+            [
+              -66.158658,
+              -17.3908289
+            ],
+            [
+              -66.1586675,
+              -17.3907789
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 858735190,
+        "name": "",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "school",
+        "barrier": "wall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 871557211,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1557815,
+              -17.3914294
+            ],
+            [
+              -66.1560982,
+              -17.3914845
+            ],
+            [
+              -66.1561156,
+              -17.3914876
+            ],
+            [
+              -66.1560861,
+              -17.3916377
+            ],
+            [
+              -66.1557528,
+              -17.3915796
+            ],
+            [
+              -66.1557815,
+              -17.3914294
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 871557211,
+        "name": "Postgrado Odontología",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "university",
+        "barrier": "wall",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:type": "public",
+        "university": "postgraduate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 886036410,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1523917,
+              -17.3989433
+            ],
+            [
+              -66.152609,
+              -17.3989534
+            ],
+            [
+              -66.1526061,
+              -17.3990111
+            ],
+            [
+              -66.1523888,
+              -17.399001
+            ],
+            [
+              -66.1523917,
+              -17.3989433
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 886036410,
+        "name": "Kinder Plaza Calatayud",
+        "type": "kindergarten",
+        "category": "education",
+        "subcategory": "kindergarten",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "amenity": "kindergarten",
+        "building": "school",
+        "building:levels": "1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 900528183,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1566981,
+              -17.3868959
+            ],
+            [
+              -66.156827,
+              -17.3867267
+            ],
+            [
+              -66.156849,
+              -17.3867153
+            ],
+            [
+              -66.1568775,
+              -17.3867117
+            ],
+            [
+              -66.1569052,
+              -17.38672
+            ],
+            [
+              -66.1570764,
+              -17.3868058
+            ],
+            [
+              -66.1570184,
+              -17.3868923
+            ],
+            [
+              -66.1569836,
+              -17.3869442
+            ],
+            [
+              -66.1569285,
+              -17.3870263
+            ],
+            [
+              -66.1566981,
+              -17.3868959
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 900528183,
+        "name": "Rectorado Universidad Mayor de San Simón",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "university",
+        "disused:amenity": "bank",
+        "old_name": "Banco BIDESA",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:type": "public",
+        "university": "office",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 918159750,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1608825,
+              -17.3854645
+            ],
+            [
+              -66.1609104,
+              -17.3853072
+            ],
+            [
+              -66.1607997,
+              -17.3852894
+            ],
+            [
+              -66.1605799,
+              -17.3852539
+            ],
+            [
+              -66.1605332,
+              -17.3855179
+            ],
+            [
+              -66.1605654,
+              -17.3855231
+            ],
+            [
+              -66.1605935,
+              -17.3855277
+            ],
+            [
+              -66.1606124,
+              -17.385421
+            ],
+            [
+              -66.1606767,
+              -17.3854314
+            ],
+            [
+              -66.160684,
+              -17.38539
+            ],
+            [
+              -66.1608098,
+              -17.3854102
+            ],
+            [
+              -66.1608025,
+              -17.3854516
+            ],
+            [
+              -66.1608825,
+              -17.3854645
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 918159750,
+        "name": "Unidad Educativa Kochapampa",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "amenity": "school",
+        "barrier": "wall",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482149,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1581155,
+              -17.394521
+            ],
+            [
+              -66.1581305,
+              -17.3944497
+            ],
+            [
+              -66.1581567,
+              -17.3943194
+            ],
+            [
+              -66.1581891,
+              -17.3941492
+            ],
+            [
+              -66.1581118,
+              -17.3941358
+            ],
+            [
+              -66.1580841,
+              -17.3941327
+            ],
+            [
+              -66.1581037,
+              -17.3940108
+            ],
+            [
+              -66.1580246,
+              -17.393996
+            ],
+            [
+              -66.157996,
+              -17.3941109
+            ],
+            [
+              -66.1579849,
+              -17.3941585
+            ],
+            [
+              -66.1579616,
+              -17.3942845
+            ],
+            [
+              -66.157914,
+              -17.394276
+            ],
+            [
+              -66.1578999,
+              -17.3943466
+            ],
+            [
+              -66.1579637,
+              -17.3943577
+            ],
+            [
+              -66.1579384,
+              -17.3944898
+            ],
+            [
+              -66.1581155,
+              -17.394521
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482149,
+        "name": "Instituto Tecnológico Boliviano",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "141",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "college",
+        "barrier": "yes",
+        "contact:facebook": "https://www.facebook.com/Instituto-Tecnol%C3%B3gico-Boliviano-Intebol-107765187329851/",
+        "operator": "Instituto Tecnológico Boliviano",
+        "operator:type": "private",
+        "short_name": "INTEBOL"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 927368764,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1594766,
+              -17.3939757
+            ],
+            [
+              -66.1595133,
+              -17.3937623
+            ],
+            [
+              -66.1595942,
+              -17.3937758
+            ],
+            [
+              -66.159675,
+              -17.3937892
+            ],
+            [
+              -66.1596946,
+              -17.3938221
+            ],
+            [
+              -66.1596609,
+              -17.3940065
+            ],
+            [
+              -66.1594766,
+              -17.3939757
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 927368764,
+        "name": "Tecnológico Nacional Ceicom",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "185",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle General Achá",
+        "alt_name": "Centro Tecnológico de Informática y Computación",
+        "amenity": "college",
+        "contact:facebook": "https://www.facebook.com/Tecnologico-Nacional-Ceicom-1514836345437565/",
+        "contact:phone": "+591 4 4582065;+591 4 4581705"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 930950598,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1576986,
+              -17.3950167
+            ],
+            [
+              -66.1576887,
+              -17.3950708
+            ],
+            [
+              -66.1578093,
+              -17.3950908
+            ],
+            [
+              -66.1577799,
+              -17.3952642
+            ],
+            [
+              -66.1575343,
+              -17.3952236
+            ],
+            [
+              -66.1573434,
+              -17.395192
+            ],
+            [
+              -66.1572627,
+              -17.3951787
+            ],
+            [
+              -66.157304,
+              -17.3949514
+            ],
+            [
+              -66.1575788,
+              -17.3949969
+            ],
+            [
+              -66.1576986,
+              -17.3950167
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 930950598,
+        "name": "Facultad de Ciencias Sociales",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "360",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "university",
+        "barrier": "wall",
+        "description": "Oficina Educativa, Unidad de Tecnologías de Información (UTI), Biblioteca Marcos Camperos, Instituto de Investigaciones en Ciencias Sociales 2 (INCISO)",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:short": "UMSS",
+        "operator:type": "public",
+        "phone": "+591 4 4502821",
+        "short_name": "FACSO",
+        "university": "faculty",
+        "website": "http://www.facso.umss.edu.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 930950599,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1577799,
+              -17.3952642
+            ],
+            [
+              -66.1575343,
+              -17.3952236
+            ],
+            [
+              -66.1573434,
+              -17.395192
+            ],
+            [
+              -66.1572627,
+              -17.3951787
+            ],
+            [
+              -66.157226,
+              -17.3953946
+            ],
+            [
+              -66.1572423,
+              -17.3954209
+            ],
+            [
+              -66.1572504,
+              -17.3954339
+            ],
+            [
+              -66.1572586,
+              -17.3954471
+            ],
+            [
+              -66.1572789,
+              -17.3954505
+            ],
+            [
+              -66.1575555,
+              -17.3954968
+            ],
+            [
+              -66.1576531,
+              -17.3955132
+            ],
+            [
+              -66.1576639,
+              -17.3954563
+            ],
+            [
+              -66.1576759,
+              -17.3954584
+            ],
+            [
+              -66.1576795,
+              -17.3954392
+            ],
+            [
+              -66.1576829,
+              -17.3954218
+            ],
+            [
+              -66.1577442,
+              -17.3954324
+            ],
+            [
+              -66.1577615,
+              -17.3953349
+            ],
+            [
+              -66.1578395,
+              -17.3953483
+            ],
+            [
+              -66.1578508,
+              -17.3952875
+            ],
+            [
+              -66.1578942,
+              -17.3952944
+            ],
+            [
+              -66.1579169,
+              -17.395298
+            ],
+            [
+              -66.1579517,
+              -17.3951133
+            ],
+            [
+              -66.1578093,
+              -17.3950908
+            ],
+            [
+              -66.1577799,
+              -17.3952642
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 930950599,
+        "name": "Facultad de Enfermería",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "amenity": "university",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/EnfermeriaUmssOficial/",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:short": "UMSS",
+        "operator:type": "public",
+        "university": "faculty"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 936567919,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565494,
+              -17.39576
+            ],
+            [
+              -66.1560399,
+              -17.3956735
+            ],
+            [
+              -66.1560267,
+              -17.3957443
+            ],
+            [
+              -66.1560135,
+              -17.3958152
+            ],
+            [
+              -66.156523,
+              -17.3959016
+            ],
+            [
+              -66.1565494,
+              -17.39576
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 936567919,
+        "name": "CATEC",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "446",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "college",
+        "barrier": "wall",
+        "branch": "CATEC Cochabamba",
+        "contact:facebook": "https://www.facebook.com/CATECcochabamba/",
+        "email": "cateccbba@catec.com.bo",
+        "operator": "CATEC",
+        "operator:type": "private",
+        "phone": "+591 4 69414549;+591 77909183;+591 79382114",
+        "short_name": "CATEC",
+        "website": "http://www.catec.com.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 936567920,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1566782,
+              -17.3961506
+            ],
+            [
+              -66.1566326,
+              -17.3964125
+            ],
+            [
+              -66.1565865,
+              -17.3964052
+            ],
+            [
+              -66.1564993,
+              -17.3963913
+            ],
+            [
+              -66.1564121,
+              -17.3963774
+            ],
+            [
+              -66.1563932,
+              -17.3963744
+            ],
+            [
+              -66.1562886,
+              -17.3963578
+            ],
+            [
+              -66.1563162,
+              -17.3961995
+            ],
+            [
+              -66.1563522,
+              -17.3962052
+            ],
+            [
+              -66.1563559,
+              -17.3961842
+            ],
+            [
+              -66.1563703,
+              -17.3961015
+            ],
+            [
+              -66.1563988,
+              -17.396106
+            ],
+            [
+              -66.1564291,
+              -17.3961108
+            ],
+            [
+              -66.1564392,
+              -17.3960529
+            ],
+            [
+              -66.156613,
+              -17.3960805
+            ],
+            [
+              -66.1566029,
+              -17.3961386
+            ],
+            [
+              -66.1566581,
+              -17.3961474
+            ],
+            [
+              -66.1566782,
+              -17.3961506
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 936567920,
+        "name": "",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "235",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Calama",
+        "amenity": "university",
+        "barrier": "wall",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1007437776,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1580703,
+              -17.3956675
+            ],
+            [
+              -66.1580906,
+              -17.3956801
+            ],
+            [
+              -66.1580981,
+              -17.3956914
+            ],
+            [
+              -66.1581048,
+              -17.3957016
+            ],
+            [
+              -66.1581107,
+              -17.3957303
+            ],
+            [
+              -66.1581093,
+              -17.3957591
+            ],
+            [
+              -66.1580859,
+              -17.395884
+            ],
+            [
+              -66.1579747,
+              -17.3958651
+            ],
+            [
+              -66.1579421,
+              -17.3958596
+            ],
+            [
+              -66.1579187,
+              -17.395984
+            ],
+            [
+              -66.157892,
+              -17.3961342
+            ],
+            [
+              -66.1576372,
+              -17.3960911
+            ],
+            [
+              -66.1577265,
+              -17.3956083
+            ],
+            [
+              -66.1577372,
+              -17.3956102
+            ],
+            [
+              -66.1577466,
+              -17.3956119
+            ],
+            [
+              -66.1580406,
+              -17.3956621
+            ],
+            [
+              -66.1580703,
+              -17.3956675
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1007437776,
+        "name": "Instituto Técnico Superior de Comercio Federico Alvarez Plata",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "S-0415",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "college",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/Federico.Alvarez.Plata.Cbba/",
+        "email": "alvarezplatad@gmail.com",
+        "old_name:1954-1964": "Escuela Nacional de Comercio",
+        "operator": "Instituto Técnico Superior de Comercio Federico Alvarez Plata",
+        "operator:type": "public",
+        "phone": "+591 4 4258041",
+        "short_name": "INCOS FAP",
+        "start_date": "1954-03-24",
+        "website": "https://incosdiurno.edu.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1038909641,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1590572,
+              -17.3949831
+            ],
+            [
+              -66.1590481,
+              -17.3950292
+            ],
+            [
+              -66.1589886,
+              -17.3953307
+            ],
+            [
+              -66.1588768,
+              -17.3953119
+            ],
+            [
+              -66.1587982,
+              -17.3952987
+            ],
+            [
+              -66.1587818,
+              -17.3953581
+            ],
+            [
+              -66.1584221,
+              -17.3952971
+            ],
+            [
+              -66.1584892,
+              -17.3949362
+            ],
+            [
+              -66.1584939,
+              -17.3949109
+            ],
+            [
+              -66.1584966,
+              -17.3948963
+            ],
+            [
+              -66.1585533,
+              -17.3949051
+            ],
+            [
+              -66.1588173,
+              -17.394946
+            ],
+            [
+              -66.1589346,
+              -17.3949641
+            ],
+            [
+              -66.1589475,
+              -17.3949661
+            ],
+            [
+              -66.159035,
+              -17.3949797
+            ],
+            [
+              -66.1590572,
+              -17.3949831
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1038909641,
+        "name": "",
+        "type": "school",
+        "category": "education",
+        "subcategory": "school",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "school",
+        "barrier": "wall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1085738935,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1558307,
+              -17.3854008
+            ],
+            [
+              -66.1557724,
+              -17.3854879
+            ],
+            [
+              -66.155619,
+              -17.3853944
+            ],
+            [
+              -66.1556596,
+              -17.3853336
+            ],
+            [
+              -66.1556772,
+              -17.3853073
+            ],
+            [
+              -66.1558307,
+              -17.3854008
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1085738935,
+        "name": "CEMLA",
+        "type": "college",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "amenity": "college"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1175175366,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.156037,
+              -17.3925883
+            ],
+            [
+              -66.1560003,
+              -17.3927862
+            ],
+            [
+              -66.1559754,
+              -17.3929185
+            ],
+            [
+              -66.1559461,
+              -17.3930743
+            ],
+            [
+              -66.1562131,
+              -17.3931208
+            ],
+            [
+              -66.1562434,
+              -17.392966
+            ],
+            [
+              -66.1562844,
+              -17.3927566
+            ],
+            [
+              -66.1563004,
+              -17.3926742
+            ],
+            [
+              -66.1561733,
+              -17.3926515
+            ],
+            [
+              -66.1561807,
+              -17.3926139
+            ],
+            [
+              -66.156037,
+              -17.3925883
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1175175366,
+        "name": "Universidad Técnica Privada Cosmos",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Fidelia Corral de Sánchez",
+        "alt_name": "Campus Universitario Colonial",
+        "amenity": "university",
+        "branch": "Campus Universitario Colonial",
+        "brand": "UNITEPC",
+        "contact:facebook": "https://www.facebook.com/unitepc",
+        "contact:whatsapp": "+591 72228283",
+        "description": "Institución de Educación Superior.",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "operator": "Universidad Técnica Privada Cosmos",
+        "operator:type": "private",
+        "phone": "+591 4 4250549;800 10 2627",
+        "short_name": "UNITEPC",
+        "start_date": "1993-03-08",
+        "website": "https://unitepc.edu.bo/cochabamba/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1367090383,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1503034,
+              -17.387177
+            ],
+            [
+              -66.1501976,
+              -17.3870605
+            ],
+            [
+              -66.1500563,
+              -17.3869049
+            ],
+            [
+              -66.1499777,
+              -17.3868183
+            ],
+            [
+              -66.1499668,
+              -17.3868063
+            ],
+            [
+              -66.149956,
+              -17.3867944
+            ],
+            [
+              -66.1498702,
+              -17.3866999
+            ],
+            [
+              -66.1496626,
+              -17.3864791
+            ],
+            [
+              -66.1494879,
+              -17.3866206
+            ],
+            [
+              -66.1495392,
+              -17.3866763
+            ],
+            [
+              -66.1495799,
+              -17.3867227
+            ],
+            [
+              -66.1495442,
+              -17.3867513
+            ],
+            [
+              -66.149599,
+              -17.3868137
+            ],
+            [
+              -66.1493618,
+              -17.3870036
+            ],
+            [
+              -66.1493407,
+              -17.3871257
+            ],
+            [
+              -66.1491707,
+              -17.3872513
+            ],
+            [
+              -66.1491821,
+              -17.3872653
+            ],
+            [
+              -66.1491756,
+              -17.3872704
+            ],
+            [
+              -66.1490479,
+              -17.38737
+            ],
+            [
+              -66.1489978,
+              -17.3873063
+            ],
+            [
+              -66.1487093,
+              -17.3875038
+            ],
+            [
+              -66.1489028,
+              -17.3877849
+            ],
+            [
+              -66.1490722,
+              -17.3880333
+            ],
+            [
+              -66.1490776,
+              -17.3880387
+            ],
+            [
+              -66.1493761,
+              -17.3877914
+            ],
+            [
+              -66.1494697,
+              -17.3877139
+            ],
+            [
+              -66.1494783,
+              -17.3876967
+            ],
+            [
+              -66.1495572,
+              -17.3875387
+            ],
+            [
+              -66.1496206,
+              -17.3874061
+            ],
+            [
+              -66.1496366,
+              -17.3874131
+            ],
+            [
+              -66.1496488,
+              -17.3873878
+            ],
+            [
+              -66.149844,
+              -17.3874735
+            ],
+            [
+              -66.1499168,
+              -17.3873224
+            ],
+            [
+              -66.1499269,
+              -17.3872989
+            ],
+            [
+              -66.14997,
+              -17.3872133
+            ],
+            [
+              -66.1501653,
+              -17.3872938
+            ],
+            [
+              -66.1503034,
+              -17.387177
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1367090383,
+        "name": "Campus Salud",
+        "type": "university",
+        "category": "education",
+        "subcategory": "university",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "amenity": "university",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:short": "UMSS",
+        "operator:type": "public",
+        "university": "campus",
+        "website": "https://www.umss.edu.bo/",
+        "wheelchair": "limited"
+      }
+    }
+  ]
+}

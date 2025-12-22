@@ -1,0 +1,5560 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 843386849,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1559417,
+          -17.3919299
+        ]
+      },
+      "properties": {
+        "id": 843386849,
+        "name": "Teatro Adela Zamudio",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "399",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "theatre",
+        "description": "Espacio de difusión de actividades artísticas y culturales (música, danza, teatro, vídeo, cine), actos oficiales, académicos, evento y concursos, y conferencias, seminarios y talleres.",
+        "level": "0",
+        "opening_hours": "Tu-Sa 14:30-21:00;Su 16:30-21:00;PH off",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "payment:cash": "yes",
+        "related_law": "DM 397/2024",
+        "source": "Decreto Municipal 397/2024",
+        "theatre:genre": "variety",
+        "toilets": "yes",
+        "toilets:access": "customers",
+        "toilets:handwashing": "yes",
+        "toilets:wheelchair": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2317965873,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1607047,
+          -17.389432
+        ]
+      },
+      "properties": {
+        "id": 2317965873,
+        "name": "Teatro La Salle",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "access": "private",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "200",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "theatre",
+        "events_venue": "yes",
+        "level": "5",
+        "operator": "Unidad Educativa La Salle",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541000,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612674,
+          -17.3886183
+        ]
+      },
+      "properties": {
+        "id": 2408541000,
+        "name": "",
+        "type": "playground",
+        "category": "recreation",
+        "subcategory": "playground",
+        "osmType": "node",
+        "access": "private",
+        "leisure": "playground"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540106,
+          -17.391614
+        ]
+      },
+      "properties": {
+        "id": 2631418270,
+        "name": "Holyday Gym",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "553",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "contact:facebook": "https://www.facebook.com/p/Holiday-Gym-100063478543319/",
+        "leisure": "fitness_centre",
+        "level": "0",
+        "opening_hours": "Mo-Fr 06:00-22:00; Sa 07:00-18:00; Su 07:00-13:00",
+        "phone": "+591 75943197",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418272,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544764,
+          -17.3915173
+        ]
+      },
+      "properties": {
+        "id": 2631418272,
+        "name": "Megathlon Fitness Club",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida General José de San Martín",
+        "branch": "Megatlon Heroínas",
+        "brand": "Megatlon;Premier",
+        "contact:facebook": "https://www.facebook.com/MegatlonFitnessClub/",
+        "email": "info@premier.com.bo",
+        "fee": "yes",
+        "leisure": "fitness_centre",
+        "level": "1",
+        "payment:cash": "yes",
+        "phone": "+591 4 4508844",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4143792257,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530112,
+          -17.3948043
+        ]
+      },
+      "properties": {
+        "id": 4143792257,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "leisure": "fitness_centre",
+        "level": "-1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4357611195,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593501,
+          -17.387332
+        ]
+      },
+      "properties": {
+        "id": 4357611195,
+        "name": "Golden Fitness Gym",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "leisure": "fitness_centre",
+        "level": "0",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224266,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578699,
+          -17.3965632
+        ]
+      },
+      "properties": {
+        "id": 4959224266,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "leisure": "fitness_centre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217961362,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548359,
+          -17.3855566
+        ]
+      },
+      "properties": {
+        "id": 5217961362,
+        "name": "New Life Fitness",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Chuquisaca",
+        "leisure": "fitness_centre",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5237955691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507051,
+          -17.3936002
+        ]
+      },
+      "properties": {
+        "id": 5237955691,
+        "name": "Casa de la Juventud",
+        "type": "community_centre",
+        "category": "recreation",
+        "subcategory": "community",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "community_centre",
+        "community_centre": "youth_centre",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5281284798,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527845,
+          -17.3967816
+        ]
+      },
+      "properties": {
+        "id": 5281284798,
+        "name": "Gimnasio Alyhens",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0589",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Ladislao Cabrera",
+        "contact:facebook": "https://www.facebook.com/gimnasioalyhens/",
+        "leisure": "fitness_centre",
+        "sport": "fitness",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5281284817,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511507,
+          -17.3975765
+        ]
+      },
+      "properties": {
+        "id": 5281284817,
+        "name": "",
+        "type": "nightclub",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "amenity": "nightclub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5296641029,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527603,
+          -17.3867874
+        ]
+      },
+      "properties": {
+        "id": 5296641029,
+        "name": "Teatro Hecho a Mano",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Paccieri",
+        "amenity": "theatre",
+        "office": "company"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274470,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1609637,
+          -17.3908036
+        ]
+      },
+      "properties": {
+        "id": 5319274470,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "leisure": "fitness_centre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5371441979,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611025,
+          -17.3949766
+        ]
+      },
+      "properties": {
+        "id": 5371441979,
+        "name": "Sede Social del Maestro Rural",
+        "type": "community_centre",
+        "category": "recreation",
+        "subcategory": "community",
+        "osmType": "node",
+        "amenity": "community_centre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5402909270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152082,
+          -17.3921172
+        ]
+      },
+      "properties": {
+        "id": 5402909270,
+        "name": "WorkOut Gym",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Antezana",
+        "leisure": "fitness_centre",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5497524722,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600802,
+          -17.3893412
+        ]
+      },
+      "properties": {
+        "id": 5497524722,
+        "name": "CUBE - Centro una Brisa de Esperanza",
+        "type": "community_centre",
+        "category": "recreation",
+        "subcategory": "community",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0166",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "community_centre",
+        "phone": "+591 4 4527505"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6503126732,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1521658,
+          -17.3915899
+        ]
+      },
+      "properties": {
+        "id": 6503126732,
+        "name": "Sky Box",
+        "type": "cinema",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "cinema",
+        "contact:facebook": "https://www.facebook.com/SkyBoxCinemas/",
+        "email": "contacto@skyboxcinemas.com.bo",
+        "level": "9",
+        "opening_hours": "Mo-Fr 09:30-23:00;Sa-Su 09:00-23:00",
+        "operator": "Sky Box",
+        "payment:cash": "yes",
+        "phone": "+591 4 4255304",
+        "website": "https://skyboxcinemas.com.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6503126733,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520445,
+          -17.3916356
+        ]
+      },
+      "properties": {
+        "id": 6503126733,
+        "name": "Premier Fitness Club",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "branch": "Premier Antezana",
+        "brand": "Premier",
+        "contact:facebook": "https://www.facebook.com/premierfitnessclubSkyBox/",
+        "email": "info@premier.com.bo",
+        "fee": "yes",
+        "leisure": "fitness_centre",
+        "level": "5",
+        "loc_name": "Premier Fitness Club SkyBox",
+        "opening_hours": "Mo-Fr 06:00-22:30; Sa 08:00-20:00; Su 09:00-13:00",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "personal_trainer": "yes",
+        "phone": "+591 70341888",
+        "reservation": "yes",
+        "sport": "fitness",
+        "website": "https://www.premier.com.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6744094486,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535835,
+          -17.397634
+        ]
+      },
+      "properties": {
+        "id": 6744094486,
+        "name": "Gimnasio Aliens 1",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "leisure": "fitness_centre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6744094585,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533367,
+          -17.3975987
+        ]
+      },
+      "properties": {
+        "id": 6744094585,
+        "name": "Gimnacio Aliens 2",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "leisure": "fitness_centre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677785853,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557206,
+          -17.3946089
+        ]
+      },
+      "properties": {
+        "id": 8677785853,
+        "name": "Teatro Wálter Antezana",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Sucre",
+        "amenity": "theatre",
+        "capacity": "200",
+        "contact:phone": "+591 4 4257715",
+        "level": "0",
+        "operator": "Cámara de Comercio y Servicios de Cochabamba",
+        "start_date": "2018"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9181462627,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562445,
+          -17.3915717
+        ]
+      },
+      "properties": {
+        "id": 9181462627,
+        "name": "Auditorio Colegio de Abogados de Cochabamba",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "theatre",
+        "operator": "Colegio de Abogados de Cochabamba",
+        "theatre:type": "auditorium"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9414036520,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543507,
+          -17.3919635
+        ]
+      },
+      "properties": {
+        "id": 9414036520,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Heroínas",
+        "leisure": "fitness_centre",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9591270753,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151241,
+          -17.3907438
+        ]
+      },
+      "properties": {
+        "id": 9591270753,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "leisure": "fitness_centre",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9802955953,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1609514,
+          -17.3896942
+        ]
+      },
+      "properties": {
+        "id": 9802955953,
+        "name": "",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "leisure": "fitness_centre",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9863266988,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507027,
+          -17.3912625
+        ]
+      },
+      "properties": {
+        "id": 9863266988,
+        "name": "Gimnasio Work out",
+        "type": "fitness_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas",
+        "leisure": "fitness_centre",
+        "level": "-1",
+        "sport": "fitness"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12220697842,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550388,
+          -17.3869381
+        ]
+      },
+      "properties": {
+        "id": 12220697842,
+        "name": "Centro Comunitario Trans",
+        "type": "community_centre",
+        "category": "recreation",
+        "subcategory": "community",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "577",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Daniel Salamanca",
+        "amenity": "community_centre",
+        "community_centre:for": "lgbtq",
+        "contact:facebook": "https://www.facebook.com/casatranscbbabol/",
+        "description": "Centro y espacio seguro para el cuidado físico, mental y asesoría jurídica para la comunidad trans de Cochabamba.",
+        "level": "1",
+        "lgbtq:trans": "primary",
+        "opening_hours": "Tu 09:00-11:00; We17:00-20:00; Th 16:00-19:00; Mo,Fr-Su,PH Off",
+        "operator": "Casa Trans Cochabamba",
+        "operator:type": "private_non_profit",
+        "start_date": "2024-10",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12316448130,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589428,
+          -17.3906827
+        ]
+      },
+      "properties": {
+        "id": 12316448130,
+        "name": "Cine Aventura",
+        "type": "cinema",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "268",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "air_conditioning": "no",
+        "amenity": "cinema",
+        "charge": "10 BOB/person/hour",
+        "contact:tiktok": "https://www.tiktok.com/@cine_aventura0/",
+        "fee": "yes",
+        "level": "1",
+        "opening_hours": "Mo-Fr 08:30-21:30; Sa 08:30-16:30",
+        "payment:cash": "yes",
+        "phone": "+591 62777746",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12545748629,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1621482,
+          -17.3928776
+        ]
+      },
+      "properties": {
+        "id": 12545748629,
+        "name": "Putero Tumusla",
+        "type": "nightclub",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:street": "Tumusla",
+        "amenity": "nightclub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12828664951,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508845,
+          -17.3938669
+        ]
+      },
+      "properties": {
+        "id": 12828664951,
+        "name": "Cinemon",
+        "type": "cinema",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Edificio Scandinavium",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "cinema",
+        "charge": "10 BOB/person",
+        "contact:tiktok": "https://www.tiktok.com/@cinemon292",
+        "description": "Cine privado.",
+        "level": "2",
+        "opening_hours": "Mo-Sa 09:00-21:30, Su,PH Off",
+        "payment:cash": "yes",
+        "payment:qr_code": "yes",
+        "phone": "+591 75732434",
+        "reservation": "required",
+        "start_date": "2025-03-10",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28575054,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1561891,
+              -17.3877887
+            ],
+            [
+              -66.1559626,
+              -17.3877488
+            ],
+            [
+              -66.1556641,
+              -17.3876938
+            ],
+            [
+              -66.1554527,
+              -17.3876571
+            ],
+            [
+              -66.1554248,
+              -17.3876599
+            ],
+            [
+              -66.1553943,
+              -17.387674
+            ],
+            [
+              -66.155361,
+              -17.387712
+            ],
+            [
+              -66.1552112,
+              -17.3885382
+            ],
+            [
+              -66.1552139,
+              -17.3885591
+            ],
+            [
+              -66.1552216,
+              -17.3885842
+            ],
+            [
+              -66.1552422,
+              -17.3885959
+            ],
+            [
+              -66.1552576,
+              -17.3886088
+            ],
+            [
+              -66.1560528,
+              -17.3887252
+            ],
+            [
+              -66.1560861,
+              -17.3887139
+            ],
+            [
+              -66.1561092,
+              -17.388684
+            ],
+            [
+              -66.1562353,
+              -17.3878728
+            ],
+            [
+              -66.1562375,
+              -17.3878582
+            ],
+            [
+              -66.1562313,
+              -17.3878275
+            ],
+            [
+              -66.1562134,
+              -17.3878033
+            ],
+            [
+              -66.1561891,
+              -17.3877887
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28575054,
+        "name": "Plaza Cristobal Colón",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Plaza Cristobal Colón",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "loc_name": "Plazuela Colón",
+        "name:etymology:wikidata": "Q7322",
+        "opening_hours": "24/7",
+        "xmas:day_date": "Dec 01-Jan 06",
+        "xmas:description": "Luces de Navidad en los jardines y árboles de toda la Plaza Cristobal Colón.",
+        "xmas:feature": "lighting",
+        "xmas:location": "Plaza Cristobal Colón",
+        "xmas:name": "Luces de Navidad Plaza Cristobal Colón",
+        "xmas:opening_hours": "Mo-Su 18:00+",
+        "xmas:operator": "Empresa Municipal de Áreas Verdes y Recreación Alternativa"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28575218,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1575044,
+              -17.3933676
+            ],
+            [
+              -66.1574144,
+              -17.3933526
+            ],
+            [
+              -66.1572629,
+              -17.3933273
+            ],
+            [
+              -66.1571305,
+              -17.3933052
+            ],
+            [
+              -66.1569632,
+              -17.3932773
+            ],
+            [
+              -66.156857,
+              -17.3932596
+            ],
+            [
+              -66.1567234,
+              -17.3932374
+            ],
+            [
+              -66.1565754,
+              -17.3932127
+            ],
+            [
+              -66.1565266,
+              -17.3932045
+            ],
+            [
+              -66.1565445,
+              -17.3932483
+            ],
+            [
+              -66.1565459,
+              -17.3932817
+            ],
+            [
+              -66.1563678,
+              -17.3942027
+            ],
+            [
+              -66.1563539,
+              -17.3942334
+            ],
+            [
+              -66.1563394,
+              -17.3942538
+            ],
+            [
+              -66.1563608,
+              -17.3942495
+            ],
+            [
+              -66.1563883,
+              -17.3942545
+            ],
+            [
+              -66.156449,
+              -17.3942655
+            ],
+            [
+              -66.1570619,
+              -17.3943713
+            ],
+            [
+              -66.1572056,
+              -17.3943969
+            ],
+            [
+              -66.1573043,
+              -17.3944145
+            ],
+            [
+              -66.1573264,
+              -17.3944177
+            ],
+            [
+              -66.1573137,
+              -17.3944006
+            ],
+            [
+              -66.1573066,
+              -17.3943814
+            ],
+            [
+              -66.1573097,
+              -17.3943643
+            ],
+            [
+              -66.1574799,
+              -17.3934428
+            ],
+            [
+              -66.1574974,
+              -17.3934045
+            ],
+            [
+              -66.1575243,
+              -17.3933711
+            ],
+            [
+              -66.1575044,
+              -17.3933676
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28575218,
+        "name": "Plaza 14 de Septiembre",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "gamc:criteria": "1",
+        "heritage": "8",
+        "heritage:operator": "gamc",
+        "heritage:since": "2021-08-27",
+        "kerb": "raised",
+        "leisure": "park",
+        "loc_name": "Plaza Principal",
+        "name:etymology:wikidata": "Q38295378",
+        "old_name": "Plaza Mayor Real Don Carlos III",
+        "old_name:1574": "Plaza de Armas",
+        "opening_hours": "24/7",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "related_law": "Ley 1024/2021",
+        "start_date": "~1574",
+        "wikidata": "Q38295378",
+        "wikimedia_commons": "Category:Plaza 14 de Septiembre",
+        "wikipedia": "es:Plaza 14 de Septiembre",
+        "xmas:day_date": "Dec 01-Jan 06",
+        "xmas:description": "Luces de Navidad en los jardines y árboles de toda la Plaza 14 de Septiembre.",
+        "xmas:feature": "lighting",
+        "xmas:location": "Plaza 14 de Septiembre",
+        "xmas:name": "Luces de Navidad Plaza 14 de Septiembre",
+        "xmas:opening_hours": "Mo-Su 18:00+",
+        "xmas:operator": "Empresa Municipal de Áreas Verdes y Recreación Alternativa"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28575233,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1510956,
+              -17.3917489
+            ],
+            [
+              -66.1500186,
+              -17.3915512
+            ],
+            [
+              -66.149991,
+              -17.3915571
+            ],
+            [
+              -66.1499749,
+              -17.3915759
+            ],
+            [
+              -66.1498986,
+              -17.3919899
+            ],
+            [
+              -66.1499042,
+              -17.3920085
+            ],
+            [
+              -66.1499213,
+              -17.392024
+            ],
+            [
+              -66.1509328,
+              -17.3922005
+            ],
+            [
+              -66.1509678,
+              -17.3921975
+            ],
+            [
+              -66.1509927,
+              -17.3921848
+            ],
+            [
+              -66.1510128,
+              -17.3921529
+            ],
+            [
+              -66.1510956,
+              -17.3917489
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28575233,
+        "name": "Plaza Coronel Germán Busch",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Bolívar",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "name:etymology:wikidata": "Q734606",
+        "opening_hours": "24/7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28665358,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1594671,
+              -17.3981423
+            ],
+            [
+              -66.1602043,
+              -17.3982873
+            ],
+            [
+              -66.1602452,
+              -17.3983122
+            ],
+            [
+              -66.1602597,
+              -17.3983342
+            ],
+            [
+              -66.1602746,
+              -17.3983567
+            ],
+            [
+              -66.1602885,
+              -17.3984048
+            ],
+            [
+              -66.1602683,
+              -17.3991587
+            ],
+            [
+              -66.1602503,
+              -17.3992058
+            ],
+            [
+              -66.1602199,
+              -17.3992398
+            ],
+            [
+              -66.1601897,
+              -17.3992544
+            ],
+            [
+              -66.160172,
+              -17.3992629
+            ],
+            [
+              -66.1600857,
+              -17.39926
+            ],
+            [
+              -66.1593656,
+              -17.3992358
+            ],
+            [
+              -66.1593048,
+              -17.3992337
+            ],
+            [
+              -66.1592873,
+              -17.3992231
+            ],
+            [
+              -66.1592596,
+              -17.3992064
+            ],
+            [
+              -66.1592313,
+              -17.3991798
+            ],
+            [
+              -66.1592175,
+              -17.3991295
+            ],
+            [
+              -66.1593141,
+              -17.398236
+            ],
+            [
+              -66.1593424,
+              -17.3981928
+            ],
+            [
+              -66.1593629,
+              -17.3981755
+            ],
+            [
+              -66.159374,
+              -17.3981661
+            ],
+            [
+              -66.1594129,
+              -17.3981464
+            ],
+            [
+              -66.1594671,
+              -17.3981423
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28665358,
+        "name": "Plaza Esteban Arze",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Plaza Esteban Arze",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "name:etymology:wikidata": "Q5849012",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28665384,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1611107,
+              -17.3930453
+            ],
+            [
+              -66.1619749,
+              -17.3931916
+            ],
+            [
+              -66.1619918,
+              -17.3931945
+            ],
+            [
+              -66.1620038,
+              -17.3932009
+            ],
+            [
+              -66.1620104,
+              -17.3932184
+            ],
+            [
+              -66.1619652,
+              -17.3934697
+            ],
+            [
+              -66.1619545,
+              -17.3934815
+            ],
+            [
+              -66.1619307,
+              -17.3934878
+            ],
+            [
+              -66.1619196,
+              -17.3934858
+            ],
+            [
+              -66.1610662,
+              -17.3933341
+            ],
+            [
+              -66.1610471,
+              -17.3933307
+            ],
+            [
+              -66.1610311,
+              -17.3933083
+            ],
+            [
+              -66.1610245,
+              -17.3932825
+            ],
+            [
+              -66.1610625,
+              -17.3930742
+            ],
+            [
+              -66.1610712,
+              -17.3930621
+            ],
+            [
+              -66.1610885,
+              -17.3930485
+            ],
+            [
+              -66.1611107,
+              -17.3930453
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28665384,
+        "name": "Plazuela Guzmán Quitón",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "loc_name": "Plazuela Corazonistas",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28665402,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1627177,
+              -17.3899826
+            ],
+            [
+              -66.1634703,
+              -17.3901114
+            ],
+            [
+              -66.1635254,
+              -17.3901327
+            ],
+            [
+              -66.1635555,
+              -17.3901588
+            ],
+            [
+              -66.1635643,
+              -17.3901579
+            ],
+            [
+              -66.163579,
+              -17.3901972
+            ],
+            [
+              -66.1635823,
+              -17.390241
+            ],
+            [
+              -66.1635117,
+              -17.3906037
+            ],
+            [
+              -66.1635062,
+              -17.3906321
+            ],
+            [
+              -66.1634865,
+              -17.3907335
+            ],
+            [
+              -66.1634451,
+              -17.390946
+            ],
+            [
+              -66.1634323,
+              -17.3909758
+            ],
+            [
+              -66.1634099,
+              -17.3909968
+            ],
+            [
+              -66.1634003,
+              -17.3910034
+            ],
+            [
+              -66.163377,
+              -17.3910194
+            ],
+            [
+              -66.1633404,
+              -17.3910241
+            ],
+            [
+              -66.1629601,
+              -17.3909646
+            ],
+            [
+              -66.1624946,
+              -17.3908918
+            ],
+            [
+              -66.1624669,
+              -17.3908735
+            ],
+            [
+              -66.1624473,
+              -17.3908496
+            ],
+            [
+              -66.1624367,
+              -17.3908207
+            ],
+            [
+              -66.1624313,
+              -17.3907917
+            ],
+            [
+              -66.1625334,
+              -17.390134
+            ],
+            [
+              -66.1625495,
+              -17.3900903
+            ],
+            [
+              -66.1626047,
+              -17.3900344
+            ],
+            [
+              -66.1626307,
+              -17.3900176
+            ],
+            [
+              -66.1626649,
+              -17.3899954
+            ],
+            [
+              -66.1627177,
+              -17.3899826
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28665402,
+        "name": "Plaza Cobija",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Tumusla",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28672328,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1496603,
+              -17.389106
+            ],
+            [
+              -66.1496559,
+              -17.3890691
+            ],
+            [
+              -66.1496662,
+              -17.3890239
+            ],
+            [
+              -66.1496885,
+              -17.3889867
+            ],
+            [
+              -66.1497186,
+              -17.3889563
+            ],
+            [
+              -66.1497446,
+              -17.3889498
+            ],
+            [
+              -66.1498335,
+              -17.3889532
+            ],
+            [
+              -66.1499881,
+              -17.3889601
+            ],
+            [
+              -66.1500671,
+              -17.3889572
+            ],
+            [
+              -66.1501439,
+              -17.3889422
+            ],
+            [
+              -66.1502182,
+              -17.3889226
+            ],
+            [
+              -66.1502644,
+              -17.3889104
+            ],
+            [
+              -66.1502792,
+              -17.3889122
+            ],
+            [
+              -66.1502946,
+              -17.3889239
+            ],
+            [
+              -66.1503077,
+              -17.3889398
+            ],
+            [
+              -66.1503078,
+              -17.3889692
+            ],
+            [
+              -66.1502645,
+              -17.3892069
+            ],
+            [
+              -66.1502471,
+              -17.3892977
+            ],
+            [
+              -66.1501877,
+              -17.3896077
+            ],
+            [
+              -66.1501701,
+              -17.389643
+            ],
+            [
+              -66.1501383,
+              -17.3896647
+            ],
+            [
+              -66.150114,
+              -17.3896731
+            ],
+            [
+              -66.1500824,
+              -17.3896741
+            ],
+            [
+              -66.1500565,
+              -17.3896605
+            ],
+            [
+              -66.1500128,
+              -17.3896037
+            ],
+            [
+              -66.1496603,
+              -17.389106
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28672328,
+        "name": "Plaza de la Mujer",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Aniceto Arce",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "old_name:1988": "Parque Julio Rodríguez Morales",
+        "opening_hours": "24/7",
+        "place": "square",
+        "source": "Ordenanza Municipal 278/1987"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28674125,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1627563,
+              -17.3972946
+            ],
+            [
+              -66.162206,
+              -17.3971928
+            ],
+            [
+              -66.1621631,
+              -17.3971965
+            ],
+            [
+              -66.1621296,
+              -17.3972111
+            ],
+            [
+              -66.1621021,
+              -17.3972396
+            ],
+            [
+              -66.1620832,
+              -17.3972842
+            ],
+            [
+              -66.1620914,
+              -17.3973282
+            ],
+            [
+              -66.1621148,
+              -17.3973621
+            ],
+            [
+              -66.1621485,
+              -17.3973867
+            ],
+            [
+              -66.1623668,
+              -17.3974272
+            ],
+            [
+              -66.1624556,
+              -17.3974437
+            ],
+            [
+              -66.1627289,
+              -17.3974945
+            ],
+            [
+              -66.162771,
+              -17.3974929
+            ],
+            [
+              -66.1628038,
+              -17.3974712
+            ],
+            [
+              -66.1628242,
+              -17.3974368
+            ],
+            [
+              -66.162832,
+              -17.3973927
+            ],
+            [
+              -66.1628226,
+              -17.3973512
+            ],
+            [
+              -66.1627961,
+              -17.3973153
+            ],
+            [
+              -66.1627563,
+              -17.3972946
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28674125,
+        "name": "Plaza Gerónimo de Osorio",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Calama",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 28674444,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1643553,
+              -17.398877
+            ],
+            [
+              -66.1643602,
+              -17.3988918
+            ],
+            [
+              -66.1643584,
+              -17.3989083
+            ],
+            [
+              -66.1643469,
+              -17.3989206
+            ],
+            [
+              -66.1641744,
+              -17.3990278
+            ],
+            [
+              -66.1641616,
+              -17.3990282
+            ],
+            [
+              -66.1641517,
+              -17.3990224
+            ],
+            [
+              -66.1641406,
+              -17.3990113
+            ],
+            [
+              -66.1640061,
+              -17.3988391
+            ],
+            [
+              -66.1639951,
+              -17.3988154
+            ],
+            [
+              -66.1639952,
+              -17.3987951
+            ],
+            [
+              -66.1640052,
+              -17.3987748
+            ],
+            [
+              -66.1640203,
+              -17.3987603
+            ],
+            [
+              -66.1641506,
+              -17.3987042
+            ],
+            [
+              -66.1641691,
+              -17.3987036
+            ],
+            [
+              -66.1641911,
+              -17.3987057
+            ],
+            [
+              -66.1642115,
+              -17.3987123
+            ],
+            [
+              -66.1642309,
+              -17.3987223
+            ],
+            [
+              -66.1642446,
+              -17.3987365
+            ],
+            [
+              -66.1643553,
+              -17.398877
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 28674444,
+        "name": "Plaza Reforma Agraria",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Huayna Kapac",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 218845299,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.164256,
+              -17.3993932
+            ],
+            [
+              -66.1641219,
+              -17.3993932
+            ],
+            [
+              -66.1641149,
+              -17.3993845
+            ],
+            [
+              -66.1641496,
+              -17.3993623
+            ],
+            [
+              -66.1641872,
+              -17.3993555
+            ],
+            [
+              -66.164223,
+              -17.3993614
+            ],
+            [
+              -66.1642416,
+              -17.3993741
+            ],
+            [
+              -66.164256,
+              -17.3993932
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 218845299,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 219836675,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.152287,
+              -17.3911975
+            ],
+            [
+              -66.1522227,
+              -17.3911865
+            ],
+            [
+              -66.1522191,
+              -17.3912069
+            ],
+            [
+              -66.1522835,
+              -17.391218
+            ],
+            [
+              -66.152287,
+              -17.3911975
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 219836675,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 219836676,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1522355,
+              -17.3910522
+            ],
+            [
+              -66.1521518,
+              -17.3910337
+            ],
+            [
+              -66.1521225,
+              -17.3910908
+            ],
+            [
+              -66.1522191,
+              -17.3911134
+            ],
+            [
+              -66.1522355,
+              -17.3910522
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 219836676,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 219836677,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1522737,
+              -17.3912742
+            ],
+            [
+              -66.1521002,
+              -17.391246
+            ],
+            [
+              -66.1520759,
+              -17.3912421
+            ],
+            [
+              -66.1519456,
+              -17.3912159
+            ],
+            [
+              -66.1519051,
+              -17.3912447
+            ],
+            [
+              -66.1520701,
+              -17.3912746
+            ],
+            [
+              -66.1520945,
+              -17.3912785
+            ],
+            [
+              -66.1522381,
+              -17.3913046
+            ],
+            [
+              -66.1522634,
+              -17.3912951
+            ],
+            [
+              -66.1522737,
+              -17.3912742
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 219836677,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220317550,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1555796,
+              -17.3879234
+            ],
+            [
+              -66.1555762,
+              -17.3879342
+            ],
+            [
+              -66.1555693,
+              -17.3879434
+            ],
+            [
+              -66.1555595,
+              -17.3879499
+            ],
+            [
+              -66.1555479,
+              -17.3879525
+            ],
+            [
+              -66.1555361,
+              -17.387951
+            ],
+            [
+              -66.1555256,
+              -17.3879456
+            ],
+            [
+              -66.1555177,
+              -17.3879369
+            ],
+            [
+              -66.1555133,
+              -17.3879262
+            ],
+            [
+              -66.1555128,
+              -17.3879149
+            ],
+            [
+              -66.155516,
+              -17.387904
+            ],
+            [
+              -66.1555229,
+              -17.3878946
+            ],
+            [
+              -66.1555328,
+              -17.387888
+            ],
+            [
+              -66.1555444,
+              -17.3878853
+            ],
+            [
+              -66.1555563,
+              -17.3878868
+            ],
+            [
+              -66.1555669,
+              -17.3878924
+            ],
+            [
+              -66.1555748,
+              -17.3879012
+            ],
+            [
+              -66.1555792,
+              -17.387912
+            ],
+            [
+              -66.1555796,
+              -17.3879234
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220317550,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220317551,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1560137,
+              -17.3880236
+            ],
+            [
+              -66.1560128,
+              -17.3880326
+            ],
+            [
+              -66.1560091,
+              -17.3880408
+            ],
+            [
+              -66.156003,
+              -17.3880473
+            ],
+            [
+              -66.1559952,
+              -17.3880516
+            ],
+            [
+              -66.1559864,
+              -17.3880532
+            ],
+            [
+              -66.1559776,
+              -17.388052
+            ],
+            [
+              -66.1559696,
+              -17.388048
+            ],
+            [
+              -66.1559632,
+              -17.3880417
+            ],
+            [
+              -66.1559592,
+              -17.3880337
+            ],
+            [
+              -66.1559579,
+              -17.3880247
+            ],
+            [
+              -66.1559597,
+              -17.3880154
+            ],
+            [
+              -66.1559646,
+              -17.3880072
+            ],
+            [
+              -66.1559718,
+              -17.3880011
+            ],
+            [
+              -66.1559806,
+              -17.3879979
+            ],
+            [
+              -66.15599,
+              -17.3879977
+            ],
+            [
+              -66.1559989,
+              -17.3880006
+            ],
+            [
+              -66.1560064,
+              -17.3880064
+            ],
+            [
+              -66.1560115,
+              -17.3880143
+            ],
+            [
+              -66.1560137,
+              -17.3880236
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220317551,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432360,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.156381,
+              -17.3944032
+            ],
+            [
+              -66.1563946,
+              -17.3943315
+            ],
+            [
+              -66.156346,
+              -17.3943232
+            ],
+            [
+              -66.1563324,
+              -17.3943948
+            ],
+            [
+              -66.156381,
+              -17.3944032
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432360,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "permissive",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432361,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1576228,
+              -17.3932585
+            ],
+            [
+              -66.1576847,
+              -17.39327
+            ],
+            [
+              -66.1577808,
+              -17.3932865
+            ],
+            [
+              -66.1578939,
+              -17.393306
+            ],
+            [
+              -66.1578753,
+              -17.3934027
+            ],
+            [
+              -66.1577623,
+              -17.393383
+            ],
+            [
+              -66.1576454,
+              -17.3933625
+            ],
+            [
+              -66.157611,
+              -17.3933204
+            ],
+            [
+              -66.1576228,
+              -17.3932585
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432361,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "permit",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 222267164,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1624212,
+              -17.382425
+            ],
+            [
+              -66.1624392,
+              -17.3825016
+            ],
+            [
+              -66.1624684,
+              -17.3825746
+            ],
+            [
+              -66.1625313,
+              -17.3827216
+            ],
+            [
+              -66.1625928,
+              -17.3828113
+            ],
+            [
+              -66.1626703,
+              -17.382898
+            ],
+            [
+              -66.1628059,
+              -17.3830912
+            ],
+            [
+              -66.1630571,
+              -17.3835196
+            ],
+            [
+              -66.1632402,
+              -17.3838745
+            ],
+            [
+              -66.1633086,
+              -17.3840186
+            ],
+            [
+              -66.1633344,
+              -17.3841196
+            ],
+            [
+              -66.1634292,
+              -17.3842873
+            ],
+            [
+              -66.163562,
+              -17.3844093
+            ],
+            [
+              -66.1635879,
+              -17.3844384
+            ],
+            [
+              -66.1637532,
+              -17.3848097
+            ],
+            [
+              -66.1640063,
+              -17.3853734
+            ],
+            [
+              -66.1641644,
+              -17.385719
+            ],
+            [
+              -66.1644835,
+              -17.3864199
+            ],
+            [
+              -66.164745,
+              -17.3870102
+            ],
+            [
+              -66.1648026,
+              -17.3871484
+            ],
+            [
+              -66.1648439,
+              -17.3872711
+            ],
+            [
+              -66.1648724,
+              -17.387463
+            ],
+            [
+              -66.1648783,
+              -17.3875004
+            ],
+            [
+              -66.1648663,
+              -17.3875321
+            ],
+            [
+              -66.1648444,
+              -17.3875504
+            ],
+            [
+              -66.1648412,
+              -17.3875433
+            ],
+            [
+              -66.1648366,
+              -17.3875329
+            ],
+            [
+              -66.1645311,
+              -17.3868876
+            ],
+            [
+              -66.1645235,
+              -17.3868705
+            ],
+            [
+              -66.1644134,
+              -17.3866249
+            ],
+            [
+              -66.1644042,
+              -17.3866031
+            ],
+            [
+              -66.1641298,
+              -17.3859617
+            ],
+            [
+              -66.1639013,
+              -17.3854358
+            ],
+            [
+              -66.163678,
+              -17.3849592
+            ],
+            [
+              -66.1635817,
+              -17.3847346
+            ],
+            [
+              -66.1633019,
+              -17.3841592
+            ],
+            [
+              -66.1630578,
+              -17.3836518
+            ],
+            [
+              -66.1629002,
+              -17.3833496
+            ],
+            [
+              -66.1627541,
+              -17.3830851
+            ],
+            [
+              -66.1626529,
+              -17.3829559
+            ],
+            [
+              -66.1624756,
+              -17.3827295
+            ],
+            [
+              -66.1622989,
+              -17.3825365
+            ],
+            [
+              -66.1623361,
+              -17.3824895
+            ],
+            [
+              -66.1623762,
+              -17.3824566
+            ],
+            [
+              -66.1624212,
+              -17.382425
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 222267164,
+        "name": "Jardinera Rivereña",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Montenegro",
+        "addr:street": "Avenida Rivereña",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 222267195,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1622275,
+              -17.3861238
+            ],
+            [
+              -66.1618713,
+              -17.3860613
+            ],
+            [
+              -66.1618213,
+              -17.3863267
+            ],
+            [
+              -66.1618303,
+              -17.3863454
+            ],
+            [
+              -66.1618349,
+              -17.3863548
+            ],
+            [
+              -66.1618674,
+              -17.3863713
+            ],
+            [
+              -66.1620805,
+              -17.3864046
+            ],
+            [
+              -66.1621126,
+              -17.3863974
+            ],
+            [
+              -66.1621373,
+              -17.3863841
+            ],
+            [
+              -66.1621569,
+              -17.3863677
+            ],
+            [
+              -66.1621724,
+              -17.3863437
+            ],
+            [
+              -66.1622029,
+              -17.3862219
+            ],
+            [
+              -66.1622275,
+              -17.3861238
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 222267195,
+        "name": "Plaza Margarita Tomsich de Catacora",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle La Paz",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "related_law": "OM 3244/2004",
+        "source": "Ordenanza Municipal 3244/2004"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 222851405,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1615155,
+              -17.3888998
+            ],
+            [
+              -66.1615051,
+              -17.3889518
+            ],
+            [
+              -66.161503,
+              -17.3889621
+            ],
+            [
+              -66.1615003,
+              -17.3889758
+            ],
+            [
+              -66.1614673,
+              -17.3891401
+            ],
+            [
+              -66.1614651,
+              -17.3891508
+            ],
+            [
+              -66.1614606,
+              -17.3891732
+            ],
+            [
+              -66.1614588,
+              -17.3891824
+            ],
+            [
+              -66.1614351,
+              -17.3893001
+            ],
+            [
+              -66.1614482,
+              -17.3893025
+            ],
+            [
+              -66.1614574,
+              -17.3893042
+            ],
+            [
+              -66.1614871,
+              -17.3893097
+            ],
+            [
+              -66.1615126,
+              -17.3893143
+            ],
+            [
+              -66.1616087,
+              -17.3893319
+            ],
+            [
+              -66.1616534,
+              -17.3893401
+            ],
+            [
+              -66.1617338,
+              -17.3889398
+            ],
+            [
+              -66.1615155,
+              -17.3888998
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 222851405,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "private",
+        "fee": "no",
+        "garden:type": "school",
+        "leisure": "garden",
+        "operator": "Unidad Educativa La Salle",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 224828379,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1608095,
+              -17.3978476
+            ],
+            [
+              -66.1605975,
+              -17.3978111
+            ],
+            [
+              -66.16061,
+              -17.397725
+            ],
+            [
+              -66.1606464,
+              -17.3976481
+            ],
+            [
+              -66.1606317,
+              -17.3976403
+            ],
+            [
+              -66.1606987,
+              -17.3975253
+            ],
+            [
+              -66.1608119,
+              -17.3975452
+            ],
+            [
+              -66.1608258,
+              -17.3976683
+            ],
+            [
+              -66.1608087,
+              -17.3976698
+            ],
+            [
+              -66.1608242,
+              -17.3977692
+            ],
+            [
+              -66.1608095,
+              -17.3978476
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 224828379,
+        "name": "Paraninfo Libertad",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "way",
+        "access": "private",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Calama",
+        "amenity": "theatre",
+        "building": "military",
+        "building:levels": "4",
+        "operator": "Escuela de Comando y Estado Mayor Mariscal Andrés de Santa Cruz y Calahumana",
+        "theatre:type": "auditorium"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 258068100,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1563169,
+              -17.394477
+            ],
+            [
+              -66.156408,
+              -17.3944929
+            ],
+            [
+              -66.1563867,
+              -17.3946105
+            ],
+            [
+              -66.1562944,
+              -17.3945941
+            ],
+            [
+              -66.1563169,
+              -17.394477
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 258068100,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "permissive",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 263917496,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1552901,
+              -17.3921956
+            ],
+            [
+              -66.1553098,
+              -17.3920932
+            ],
+            [
+              -66.1551738,
+              -17.3920694
+            ],
+            [
+              -66.1551542,
+              -17.3921718
+            ],
+            [
+              -66.1552901,
+              -17.3921956
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 263917496,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 263917499,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.155092,
+              -17.392267
+            ],
+            [
+              -66.1550671,
+              -17.3924121
+            ],
+            [
+              -66.155043,
+              -17.3925524
+            ],
+            [
+              -66.1551692,
+              -17.3925721
+            ],
+            [
+              -66.1552996,
+              -17.3925925
+            ],
+            [
+              -66.1553234,
+              -17.3924538
+            ],
+            [
+              -66.1553486,
+              -17.3923071
+            ],
+            [
+              -66.1552217,
+              -17.3922873
+            ],
+            [
+              -66.155092,
+              -17.392267
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 263917499,
+        "name": "Jardín Convento San Francisco",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "private",
+        "fee": "no",
+        "garden:type": "monastery",
+        "leisure": "garden",
+        "operator": "Convento San Francisco",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 281243995,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1556495,
+              -17.388194
+            ],
+            [
+              -66.1556613,
+              -17.3881649
+            ],
+            [
+              -66.1556827,
+              -17.3881414
+            ],
+            [
+              -66.155711,
+              -17.388126
+            ],
+            [
+              -66.1557431,
+              -17.3881206
+            ],
+            [
+              -66.1557753,
+              -17.3881256
+            ],
+            [
+              -66.1558039,
+              -17.3881408
+            ],
+            [
+              -66.1558255,
+              -17.3881641
+            ],
+            [
+              -66.1558377,
+              -17.3881929
+            ],
+            [
+              -66.1558391,
+              -17.3882241
+            ],
+            [
+              -66.1558303,
+              -17.3882522
+            ],
+            [
+              -66.1558127,
+              -17.3882763
+            ],
+            [
+              -66.155788,
+              -17.3882938
+            ],
+            [
+              -66.1557587,
+              -17.3883029
+            ],
+            [
+              -66.155728,
+              -17.3883028
+            ],
+            [
+              -66.1556988,
+              -17.3882934
+            ],
+            [
+              -66.1556743,
+              -17.3882757
+            ],
+            [
+              -66.1556568,
+              -17.3882515
+            ],
+            [
+              -66.1556483,
+              -17.3882233
+            ],
+            [
+              -66.1556495,
+              -17.388194
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 281243995,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 294111891,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1551106,
+              -17.3936732
+            ],
+            [
+              -66.154982,
+              -17.3936513
+            ],
+            [
+              -66.1549267,
+              -17.3939615
+            ],
+            [
+              -66.1549895,
+              -17.3939728
+            ],
+            [
+              -66.1550522,
+              -17.393984
+            ],
+            [
+              -66.1551106,
+              -17.3936732
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 294111891,
+        "name": "Cine Teatro ASTOR",
+        "type": "cinema",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José Antonio de Sucre",
+        "amenity": "cinema",
+        "building": "theatre",
+        "building:levels": "4",
+        "payment:cash": "yes",
+        "screen": "1",
+        "start_date": "1964",
+        "theatre": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 445757811,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1578167,
+              -17.3867611
+            ],
+            [
+              -66.1577806,
+              -17.3867809
+            ],
+            [
+              -66.157745,
+              -17.3868096
+            ],
+            [
+              -66.1577329,
+              -17.3868473
+            ],
+            [
+              -66.157728,
+              -17.3868895
+            ],
+            [
+              -66.1577372,
+              -17.3869241
+            ],
+            [
+              -66.1577586,
+              -17.3869567
+            ],
+            [
+              -66.1577692,
+              -17.3869647
+            ],
+            [
+              -66.1577902,
+              -17.3869797
+            ],
+            [
+              -66.1578522,
+              -17.3869982
+            ],
+            [
+              -66.1586284,
+              -17.3870965
+            ],
+            [
+              -66.1586542,
+              -17.3870866
+            ],
+            [
+              -66.1586688,
+              -17.3870613
+            ],
+            [
+              -66.158682,
+              -17.3869437
+            ],
+            [
+              -66.1586937,
+              -17.3868674
+            ],
+            [
+              -66.158686,
+              -17.3868376
+            ],
+            [
+              -66.1586796,
+              -17.3868158
+            ],
+            [
+              -66.1586581,
+              -17.3867991
+            ],
+            [
+              -66.1586322,
+              -17.3867866
+            ],
+            [
+              -66.1586054,
+              -17.3867818
+            ],
+            [
+              -66.157843,
+              -17.3867582
+            ],
+            [
+              -66.1578167,
+              -17.3867611
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 445757811,
+        "name": "Plaza Barba de Padilla",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 478357724,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1647454,
+              -17.3993804
+            ],
+            [
+              -66.1645602,
+              -17.3991371
+            ],
+            [
+              -66.1645384,
+              -17.3991245
+            ],
+            [
+              -66.1645098,
+              -17.3991183
+            ],
+            [
+              -66.1644813,
+              -17.3991256
+            ],
+            [
+              -66.1643526,
+              -17.3992173
+            ],
+            [
+              -66.1643385,
+              -17.3992394
+            ],
+            [
+              -66.1643374,
+              -17.3992633
+            ],
+            [
+              -66.1643479,
+              -17.3992866
+            ],
+            [
+              -66.1645252,
+              -17.3995163
+            ],
+            [
+              -66.1645475,
+              -17.399525
+            ],
+            [
+              -66.1645709,
+              -17.3995278
+            ],
+            [
+              -66.1645977,
+              -17.3995305
+            ],
+            [
+              -66.1647433,
+              -17.3994315
+            ],
+            [
+              -66.1647487,
+              -17.399412
+            ],
+            [
+              -66.1647454,
+              -17.3993804
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 478357724,
+        "name": "Plaza Norte Villa Coronilla",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Coronilla",
+        "addr:street": "Avenida Huayna Kapac",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 478357726,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.165338,
+              -17.3995991
+            ],
+            [
+              -66.1653745,
+              -17.3997804
+            ],
+            [
+              -66.1653873,
+              -17.3998712
+            ],
+            [
+              -66.1654015,
+              -17.3999354
+            ],
+            [
+              -66.165424,
+              -17.400093
+            ],
+            [
+              -66.165426,
+              -17.4001074
+            ],
+            [
+              -66.1654289,
+              -17.4001277
+            ],
+            [
+              -66.1654322,
+              -17.4001509
+            ],
+            [
+              -66.1654358,
+              -17.4001757
+            ],
+            [
+              -66.1654589,
+              -17.4003379
+            ],
+            [
+              -66.1654704,
+              -17.400424
+            ],
+            [
+              -66.165161,
+              -17.400457
+            ],
+            [
+              -66.1651292,
+              -17.4004541
+            ],
+            [
+              -66.1651123,
+              -17.4004386
+            ],
+            [
+              -66.1649994,
+              -17.4001966
+            ],
+            [
+              -66.1649794,
+              -17.4001536
+            ],
+            [
+              -66.1649318,
+              -17.4000515
+            ],
+            [
+              -66.1649213,
+              -17.4000149
+            ],
+            [
+              -66.1649273,
+              -17.3999723
+            ],
+            [
+              -66.1648856,
+              -17.3998962
+            ],
+            [
+              -66.164825,
+              -17.3998439
+            ],
+            [
+              -66.1647584,
+              -17.3997863
+            ],
+            [
+              -66.1646956,
+              -17.3997321
+            ],
+            [
+              -66.164672,
+              -17.3996803
+            ],
+            [
+              -66.164678,
+              -17.3996443
+            ],
+            [
+              -66.1647047,
+              -17.3996076
+            ],
+            [
+              -66.1647918,
+              -17.3995566
+            ],
+            [
+              -66.1648744,
+              -17.3995083
+            ],
+            [
+              -66.1649944,
+              -17.399438
+            ],
+            [
+              -66.1650168,
+              -17.399425
+            ],
+            [
+              -66.1650617,
+              -17.3994262
+            ],
+            [
+              -66.1650899,
+              -17.3994468
+            ],
+            [
+              -66.1651132,
+              -17.3994809
+            ],
+            [
+              -66.1653038,
+              -17.3995139
+            ],
+            [
+              -66.1653811,
+              -17.3995262
+            ],
+            [
+              -66.1653549,
+              -17.3995556
+            ],
+            [
+              -66.165338,
+              -17.3995991
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 478357726,
+        "name": "Plaza de los Arrieros",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Villa Coronilla",
+        "addr:street": "Avenida 27 de Agosto",
+        "barrier": "kerb",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7",
+        "place": "square"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 494015067,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1503831,
+              -17.3919337
+            ],
+            [
+              -66.1503675,
+              -17.3919052
+            ],
+            [
+              -66.1503627,
+              -17.3918734
+            ],
+            [
+              -66.1503693,
+              -17.3918419
+            ],
+            [
+              -66.1503864,
+              -17.3918142
+            ],
+            [
+              -66.1504122,
+              -17.3917936
+            ],
+            [
+              -66.1504438,
+              -17.3917823
+            ],
+            [
+              -66.1504774,
+              -17.3917817
+            ],
+            [
+              -66.1505081,
+              -17.3917911
+            ],
+            [
+              -66.150534,
+              -17.3918093
+            ],
+            [
+              -66.1505525,
+              -17.3918344
+            ],
+            [
+              -66.1505617,
+              -17.3918638
+            ],
+            [
+              -66.1505606,
+              -17.3918945
+            ],
+            [
+              -66.1505493,
+              -17.3919233
+            ],
+            [
+              -66.150529,
+              -17.3919472
+            ],
+            [
+              -66.1505018,
+              -17.3919636
+            ],
+            [
+              -66.1504706,
+              -17.391971
+            ],
+            [
+              -66.1504385,
+              -17.3919685
+            ],
+            [
+              -66.1504077,
+              -17.3919556
+            ],
+            [
+              -66.1503831,
+              -17.3919337
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 494015067,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506146919,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1540304,
+              -17.3895297
+            ],
+            [
+              -66.1538822,
+              -17.389498
+            ],
+            [
+              -66.1538577,
+              -17.3895099
+            ],
+            [
+              -66.1538064,
+              -17.3897271
+            ],
+            [
+              -66.1538514,
+              -17.3897311
+            ],
+            [
+              -66.1539486,
+              -17.389752
+            ],
+            [
+              -66.1539923,
+              -17.3897419
+            ],
+            [
+              -66.1540304,
+              -17.3895297
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506146919,
+        "name": "Plaza Rosendo Peña",
+        "type": "park",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Guerrilleros José Miguel Lanza",
+        "kerb": "raised",
+        "leisure": "park",
+        "opening_hours": "24/7"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506877287,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1646315,
+              -17.3898582
+            ],
+            [
+              -66.16467,
+              -17.3898408
+            ],
+            [
+              -66.1648363,
+              -17.3897658
+            ],
+            [
+              -66.16498,
+              -17.3897009
+            ],
+            [
+              -66.1652362,
+              -17.3902179
+            ],
+            [
+              -66.1651007,
+              -17.390279
+            ],
+            [
+              -66.1648878,
+              -17.3903752
+            ],
+            [
+              -66.164965,
+              -17.3905124
+            ],
+            [
+              -66.1651789,
+              -17.3909207
+            ],
+            [
+              -66.1651955,
+              -17.3909523
+            ],
+            [
+              -66.1652319,
+              -17.3910209
+            ],
+            [
+              -66.1652393,
+              -17.3910311
+            ],
+            [
+              -66.165755,
+              -17.3907937
+            ],
+            [
+              -66.1659806,
+              -17.3912212
+            ],
+            [
+              -66.166062,
+              -17.3911823
+            ],
+            [
+              -66.165948,
+              -17.3909281
+            ],
+            [
+              -66.1658203,
+              -17.3906293
+            ],
+            [
+              -66.1657967,
+              -17.3905768
+            ],
+            [
+              -66.1656776,
+              -17.3903114
+            ],
+            [
+              -66.1654346,
+              -17.3897702
+            ],
+            [
+              -66.1651406,
+              -17.3891059
+            ],
+            [
+              -66.1648083,
+              -17.3892467
+            ],
+            [
+              -66.1647894,
+              -17.389245
+            ],
+            [
+              -66.1645425,
+              -17.389365
+            ],
+            [
+              -66.1643946,
+              -17.3893614
+            ],
+            [
+              -66.1644058,
+              -17.3893975
+            ],
+            [
+              -66.1644264,
+              -17.3894632
+            ],
+            [
+              -66.1646022,
+              -17.3898019
+            ],
+            [
+              -66.1646315,
+              -17.3898582
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506877287,
+        "name": "Parque Abaroa",
+        "type": "sports_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "yes",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Rafael Urquidi",
+        "barrier": "fence",
+        "fee": "yes",
+        "fence_type": "chain_link",
+        "leisure": "sports_centre",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "sport": "multi"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506877290,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1648558,
+              -17.3884834
+            ],
+            [
+              -66.1644867,
+              -17.388641
+            ],
+            [
+              -66.1644799,
+              -17.3886818
+            ],
+            [
+              -66.1644726,
+              -17.3887252
+            ],
+            [
+              -66.1645021,
+              -17.3887309
+            ],
+            [
+              -66.1644676,
+              -17.3888294
+            ],
+            [
+              -66.1643967,
+              -17.3890317
+            ],
+            [
+              -66.1643805,
+              -17.3891129
+            ],
+            [
+              -66.164373,
+              -17.3892157
+            ],
+            [
+              -66.1643808,
+              -17.3892857
+            ],
+            [
+              -66.1643946,
+              -17.3893614
+            ],
+            [
+              -66.1645425,
+              -17.389365
+            ],
+            [
+              -66.1647894,
+              -17.389245
+            ],
+            [
+              -66.1648083,
+              -17.3892467
+            ],
+            [
+              -66.1651406,
+              -17.3891059
+            ],
+            [
+              -66.1648558,
+              -17.3884834
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506877290,
+        "name": "",
+        "type": "sports_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Rafael Urquidi",
+        "barrier": "fence",
+        "fee": "yes",
+        "leisure": "sports_centre",
+        "operator": "Servicio Departamental de Deporte Cochabamba",
+        "sport": "multi"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 523430026,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584211,
+              -17.3934385
+            ],
+            [
+              -66.1582863,
+              -17.3934155
+            ],
+            [
+              -66.1582774,
+              -17.393463
+            ],
+            [
+              -66.1584122,
+              -17.393486
+            ],
+            [
+              -66.1584211,
+              -17.3934385
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 523430026,
+        "name": "Jardín ENTEL",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 523430029,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584932,
+              -17.3934506
+            ],
+            [
+              -66.1584479,
+              -17.3934428
+            ],
+            [
+              -66.1584387,
+              -17.3934921
+            ],
+            [
+              -66.158484,
+              -17.3934998
+            ],
+            [
+              -66.1584932,
+              -17.3934506
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 523430029,
+        "name": "Jardín ENTEL",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791479,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1568428,
+              -17.3933828
+            ],
+            [
+              -66.1566939,
+              -17.3933553
+            ],
+            [
+              -66.1566665,
+              -17.3933751
+            ],
+            [
+              -66.1566788,
+              -17.3933907
+            ],
+            [
+              -66.1566982,
+              -17.3933767
+            ],
+            [
+              -66.1568388,
+              -17.3934027
+            ],
+            [
+              -66.1568428,
+              -17.3933828
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791479,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791481,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1564943,
+              -17.3937582
+            ],
+            [
+              -66.1564407,
+              -17.3940372
+            ],
+            [
+              -66.1564668,
+              -17.3940717
+            ],
+            [
+              -66.1564823,
+              -17.3940611
+            ],
+            [
+              -66.1564606,
+              -17.3940325
+            ],
+            [
+              -66.1565126,
+              -17.3937615
+            ],
+            [
+              -66.1564943,
+              -17.3937582
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791481,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791483,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565402,
+              -17.3941723
+            ],
+            [
+              -66.1567802,
+              -17.394214
+            ],
+            [
+              -66.1567833,
+              -17.3941965
+            ],
+            [
+              -66.1565501,
+              -17.394156
+            ],
+            [
+              -66.1565305,
+              -17.3941291
+            ],
+            [
+              -66.1565158,
+              -17.3941389
+            ],
+            [
+              -66.1565402,
+              -17.3941723
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791483,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791486,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565708,
+              -17.3934579
+            ],
+            [
+              -66.1565946,
+              -17.3934428
+            ],
+            [
+              -66.1565839,
+              -17.3934276
+            ],
+            [
+              -66.1565558,
+              -17.3934455
+            ],
+            [
+              -66.1565035,
+              -17.3937002
+            ],
+            [
+              -66.1565204,
+              -17.3937033
+            ],
+            [
+              -66.1565708,
+              -17.3934579
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791486,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791487,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1572991,
+              -17.394189
+            ],
+            [
+              -66.1572659,
+              -17.3942103
+            ],
+            [
+              -66.1572533,
+              -17.3941951
+            ],
+            [
+              -66.1572798,
+              -17.3941773
+            ],
+            [
+              -66.1573337,
+              -17.3939056
+            ],
+            [
+              -66.1573554,
+              -17.393909
+            ],
+            [
+              -66.1572991,
+              -17.394189
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791487,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791488,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1571606,
+              -17.3942787
+            ],
+            [
+              -66.1568977,
+              -17.3942322
+            ],
+            [
+              -66.1569011,
+              -17.3942147
+            ],
+            [
+              -66.157159,
+              -17.3942602
+            ],
+            [
+              -66.1571831,
+              -17.3942451
+            ],
+            [
+              -66.1571924,
+              -17.3942588
+            ],
+            [
+              -66.1571606,
+              -17.3942787
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791488,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791489,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1573183,
+              -17.3934697
+            ],
+            [
+              -66.1571353,
+              -17.3934363
+            ],
+            [
+              -66.1571318,
+              -17.3934538
+            ],
+            [
+              -66.1573107,
+              -17.3934853
+            ],
+            [
+              -66.1573264,
+              -17.3935048
+            ],
+            [
+              -66.1573377,
+              -17.3934967
+            ],
+            [
+              -66.1573183,
+              -17.3934697
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791489,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 525791490,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1574061,
+              -17.3935895
+            ],
+            [
+              -66.1573819,
+              -17.3935524
+            ],
+            [
+              -66.1573646,
+              -17.3935626
+            ],
+            [
+              -66.1573833,
+              -17.3935914
+            ],
+            [
+              -66.1573348,
+              -17.3938621
+            ],
+            [
+              -66.1573564,
+              -17.3938659
+            ],
+            [
+              -66.1574061,
+              -17.3935895
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 525791490,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 573653457,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1600555,
+              -17.3908752
+            ],
+            [
+              -66.1600462,
+              -17.3908738
+            ],
+            [
+              -66.1599001,
+              -17.3908513
+            ],
+            [
+              -66.1597852,
+              -17.3908616
+            ],
+            [
+              -66.1597774,
+              -17.390906
+            ],
+            [
+              -66.1597707,
+              -17.3909444
+            ],
+            [
+              -66.1598751,
+              -17.391
+            ],
+            [
+              -66.1600305,
+              -17.3910238
+            ],
+            [
+              -66.1600538,
+              -17.3909944
+            ],
+            [
+              -66.1600725,
+              -17.3909495
+            ],
+            [
+              -66.1600681,
+              -17.3909064
+            ],
+            [
+              -66.1600555,
+              -17.3908752
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 573653457,
+        "name": "Auditorio",
+        "type": "theatre",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Junín",
+        "amenity": "theatre",
+        "building": "office",
+        "building:levels": "2",
+        "operator": "Federación de Maestros Urbanos y Jubilados",
+        "theatre:type": "auditorium"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 603094722,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1550879,
+              -17.3884301
+            ],
+            [
+              -66.1550531,
+              -17.3884221
+            ],
+            [
+              -66.1549104,
+              -17.3883937
+            ],
+            [
+              -66.1547936,
+              -17.3883697
+            ],
+            [
+              -66.154754,
+              -17.3885308
+            ],
+            [
+              -66.1547941,
+              -17.3885388
+            ],
+            [
+              -66.1550364,
+              -17.3885871
+            ],
+            [
+              -66.1550611,
+              -17.3885626
+            ],
+            [
+              -66.1550879,
+              -17.3884301
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 603094722,
+        "name": "Centro Deportivo YPFB",
+        "type": "sports_centre",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Venezuela",
+        "barrier": "wall",
+        "fee": "no",
+        "leisure": "sports_centre",
+        "sport": "multi"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 858694747,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1572148,
+              -17.3902555
+            ],
+            [
+              -66.1572129,
+              -17.3902382
+            ],
+            [
+              -66.1572052,
+              -17.3902226
+            ],
+            [
+              -66.1571928,
+              -17.3902103
+            ],
+            [
+              -66.1571774,
+              -17.3902027
+            ],
+            [
+              -66.1571606,
+              -17.3902001
+            ],
+            [
+              -66.1571439,
+              -17.3902025
+            ],
+            [
+              -66.1571286,
+              -17.3902097
+            ],
+            [
+              -66.1571163,
+              -17.3902213
+            ],
+            [
+              -66.1571082,
+              -17.3902365
+            ],
+            [
+              -66.1571057,
+              -17.3902536
+            ],
+            [
+              -66.1571068,
+              -17.3902627
+            ],
+            [
+              -66.1571096,
+              -17.3902715
+            ],
+            [
+              -66.1571195,
+              -17.3902868
+            ],
+            [
+              -66.1571341,
+              -17.3902979
+            ],
+            [
+              -66.1571511,
+              -17.3903035
+            ],
+            [
+              -66.1571687,
+              -17.3903036
+            ],
+            [
+              -66.1571857,
+              -17.3902983
+            ],
+            [
+              -66.1572001,
+              -17.3902878
+            ],
+            [
+              -66.1572103,
+              -17.390273
+            ],
+            [
+              -66.1572265,
+              -17.3902766
+            ],
+            [
+              -66.1572142,
+              -17.3902963
+            ],
+            [
+              -66.1571985,
+              -17.3903104
+            ],
+            [
+              -66.1571751,
+              -17.39032
+            ],
+            [
+              -66.1571531,
+              -17.3903205
+            ],
+            [
+              -66.1570805,
+              -17.3903064
+            ],
+            [
+              -66.1570976,
+              -17.3902011
+            ],
+            [
+              -66.1571097,
+              -17.3901886
+            ],
+            [
+              -66.15713,
+              -17.3901796
+            ],
+            [
+              -66.1571519,
+              -17.3901771
+            ],
+            [
+              -66.1571705,
+              -17.3901789
+            ],
+            [
+              -66.1571924,
+              -17.3901859
+            ],
+            [
+              -66.1572123,
+              -17.3902003
+            ],
+            [
+              -66.1572237,
+              -17.3902169
+            ],
+            [
+              -66.1572298,
+              -17.390238
+            ],
+            [
+              -66.1572293,
+              -17.390259
+            ],
+            [
+              -66.1572148,
+              -17.3902555
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 858694747,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 875341303,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1596988,
+              -17.3854856
+            ],
+            [
+              -66.1597125,
+              -17.3854165
+            ],
+            [
+              -66.1596781,
+              -17.3854103
+            ],
+            [
+              -66.1596644,
+              -17.3854794
+            ],
+            [
+              -66.1596988,
+              -17.3854856
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 875341303,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 875341309,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584868,
+              -17.3851187
+            ],
+            [
+              -66.1584594,
+              -17.385147
+            ],
+            [
+              -66.1584014,
+              -17.3850957
+            ],
+            [
+              -66.1584289,
+              -17.3850674
+            ],
+            [
+              -66.1584868,
+              -17.3851187
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 875341309,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "customers",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 918159749,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.162138,
+              -17.3852995
+            ],
+            [
+              -66.1621294,
+              -17.3853376
+            ],
+            [
+              -66.1620574,
+              -17.3853228
+            ],
+            [
+              -66.162066,
+              -17.3852847
+            ],
+            [
+              -66.162138,
+              -17.3852995
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 918159749,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 927945030,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1582626,
+              -17.3934072
+            ],
+            [
+              -66.1582531,
+              -17.3934541
+            ],
+            [
+              -66.1582285,
+              -17.3934504
+            ],
+            [
+              -66.1582322,
+              -17.3934317
+            ],
+            [
+              -66.1582626,
+              -17.3934072
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 927945030,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "public",
+        "leisure": "garden"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 991798266,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1609728,
+              -17.3879533
+            ],
+            [
+              -66.1609153,
+              -17.3880036
+            ],
+            [
+              -66.1608849,
+              -17.3879975
+            ],
+            [
+              -66.1609009,
+              -17.3879091
+            ],
+            [
+              -66.1609264,
+              -17.3879121
+            ],
+            [
+              -66.1609552,
+              -17.3879228
+            ],
+            [
+              -66.1609728,
+              -17.3879533
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 991798266,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 993778530,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1553726,
+              -17.3912741
+            ],
+            [
+              -66.1553431,
+              -17.3914461
+            ],
+            [
+              -66.1551691,
+              -17.3914189
+            ],
+            [
+              -66.1551986,
+              -17.3912469
+            ],
+            [
+              -66.1553726,
+              -17.3912741
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 993778530,
+        "name": "Jardín Convento Santa Clara",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "private",
+        "fee": "no",
+        "garden:type": "monastery",
+        "leisure": "garden",
+        "operator": "Convento Santa Clara",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1006393087,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1636289,
+              -17.3897313
+            ],
+            [
+              -66.1636124,
+              -17.3897069
+            ],
+            [
+              -66.163555,
+              -17.3897423
+            ],
+            [
+              -66.1635715,
+              -17.3897667
+            ],
+            [
+              -66.1636289,
+              -17.3897313
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1006393087,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1009743460,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1557914,
+              -17.3906159
+            ],
+            [
+              -66.1557653,
+              -17.3907776
+            ],
+            [
+              -66.1554399,
+              -17.3907253
+            ],
+            [
+              -66.1554658,
+              -17.3905571
+            ],
+            [
+              -66.1557914,
+              -17.3906159
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1009743460,
+        "name": "Cine Teatro Capitol",
+        "type": "cinema",
+        "category": "recreation",
+        "subcategory": "entertainment",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "cinema",
+        "building": "cinema",
+        "cinema:3D": "yes",
+        "contact:facebook": "capitolcine",
+        "opening_hours": "Mo-Tu,Th-Su 15:00-22:00; We 09:30-22:00",
+        "payment:cash": "yes",
+        "phone": "+591 4 4521263;+591 62988882",
+        "reservation": "yes",
+        "screen": "1",
+        "start_date": "2015-03-01",
+        "theatre": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1038909650,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1592008,
+              -17.3942896
+            ],
+            [
+              -66.1591955,
+              -17.3943134
+            ],
+            [
+              -66.1591783,
+              -17.3943879
+            ],
+            [
+              -66.159064,
+              -17.3943672
+            ],
+            [
+              -66.1590801,
+              -17.3942714
+            ],
+            [
+              -66.1592008,
+              -17.3942896
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1038909650,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "yes",
+        "fee": "no",
+        "garden:type": "flowerbed",
+        "leisure": "garden",
+        "operator": "Casoña José María Santivañez",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1041853782,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1508339,
+              -17.3914978
+            ],
+            [
+              -66.1508017,
+              -17.3914863
+            ],
+            [
+              -66.1508003,
+              -17.3914735
+            ],
+            [
+              -66.1508124,
+              -17.3914683
+            ],
+            [
+              -66.1508419,
+              -17.3914722
+            ],
+            [
+              -66.1508486,
+              -17.3914837
+            ],
+            [
+              -66.1508459,
+              -17.3914952
+            ],
+            [
+              -66.1508339,
+              -17.3914978
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1041853782,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1041879177,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1513788,
+              -17.3874859
+            ],
+            [
+              -66.1513252,
+              -17.3874526
+            ],
+            [
+              -66.1513198,
+              -17.3874321
+            ],
+            [
+              -66.1513359,
+              -17.3874193
+            ],
+            [
+              -66.1513567,
+              -17.3874228
+            ],
+            [
+              -66.1513815,
+              -17.387427
+            ],
+            [
+              -66.151411,
+              -17.3874449
+            ],
+            [
+              -66.151411,
+              -17.3874679
+            ],
+            [
+              -66.1514003,
+              -17.3874859
+            ],
+            [
+              -66.1513788,
+              -17.3874859
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1041879177,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1050108527,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1637441,
+              -17.3918867
+            ],
+            [
+              -66.1637577,
+              -17.3918166
+            ],
+            [
+              -66.1637821,
+              -17.3918209
+            ],
+            [
+              -66.1637685,
+              -17.391891
+            ],
+            [
+              -66.1637441,
+              -17.3918867
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1050108527,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1050108528,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1628227,
+              -17.3926184
+            ],
+            [
+              -66.1628118,
+              -17.3926668
+            ],
+            [
+              -66.1627258,
+              -17.3926492
+            ],
+            [
+              -66.1627367,
+              -17.3926008
+            ],
+            [
+              -66.1628227,
+              -17.3926184
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1050108528,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1050204723,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1633646,
+              -17.3952374
+            ],
+            [
+              -66.1633529,
+              -17.3953114
+            ],
+            [
+              -66.1633124,
+              -17.3953056
+            ],
+            [
+              -66.163324,
+              -17.3952316
+            ],
+            [
+              -66.1633646,
+              -17.3952374
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1050204723,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1149057778,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1547787,
+              -17.38882
+            ],
+            [
+              -66.1545565,
+              -17.3887711
+            ],
+            [
+              -66.1544688,
+              -17.3887518
+            ],
+            [
+              -66.1544564,
+              -17.3887491
+            ],
+            [
+              -66.1544473,
+              -17.3887916
+            ],
+            [
+              -66.1543812,
+              -17.3887783
+            ],
+            [
+              -66.15426,
+              -17.3887561
+            ],
+            [
+              -66.1542442,
+              -17.3888344
+            ],
+            [
+              -66.1542173,
+              -17.3888286
+            ],
+            [
+              -66.1541713,
+              -17.3890777
+            ],
+            [
+              -66.1542141,
+              -17.3890871
+            ],
+            [
+              -66.1542088,
+              -17.3891216
+            ],
+            [
+              -66.1542839,
+              -17.3891357
+            ],
+            [
+              -66.1542678,
+              -17.3892291
+            ],
+            [
+              -66.1544445,
+              -17.3892557
+            ],
+            [
+              -66.1544689,
+              -17.3892604
+            ],
+            [
+              -66.1544723,
+              -17.3892443
+            ],
+            [
+              -66.1545183,
+              -17.3892292
+            ],
+            [
+              -66.1545753,
+              -17.3892942
+            ],
+            [
+              -66.1545879,
+              -17.3892968
+            ],
+            [
+              -66.1546754,
+              -17.3893152
+            ],
+            [
+              -66.154701,
+              -17.3892038
+            ],
+            [
+              -66.1547421,
+              -17.3889953
+            ],
+            [
+              -66.1547787,
+              -17.38882
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1149057778,
+        "name": "",
+        "type": "garden",
+        "category": "recreation",
+        "subcategory": "park",
+        "osmType": "way",
+        "access": "private",
+        "fee": "no",
+        "garden:type": "monastery",
+        "leisure": "garden",
+        "operator": "Monasterio de Jesús Crucificado",
+        "operator:type": "religious"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1155903483,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1534138,
+              -17.3859281
+            ],
+            [
+              -66.1533899,
+              -17.3859736
+            ],
+            [
+              -66.1533042,
+              -17.3859327
+            ],
+            [
+              -66.153328,
+              -17.3858872
+            ],
+            [
+              -66.1534138,
+              -17.3859281
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1155903483,
+        "name": "",
+        "type": "swimming_pool",
+        "category": "recreation",
+        "subcategory": "sports",
+        "osmType": "way",
+        "access": "private",
+        "leisure": "swimming_pool",
+        "location": "outdoor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1230031548,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1580935,
+              -17.3871297
+            ],
+            [
+              -66.1580847,
+              -17.3872526
+            ],
+            [
+              -66.1580272,
+              -17.3872438
+            ],
+            [
+              -66.1580236,
+              -17.3872684
+            ],
+            [
+              -66.1579148,
+              -17.387251
+            ],
+            [
+              -66.1579297,
+              -17.3871086
+            ],
+            [
+              -66.1580935,
+              -17.3871297
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1230031548,
+        "name": "Club Croata",
+        "type": "community_centre",
+        "category": "recreation",
+        "subcategory": "community",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "community_centre",
+        "building": "community_centre"
+      }
+    }
+  ]
+}

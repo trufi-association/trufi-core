@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 void main() async {
@@ -21,8 +22,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final poiManager = POILayersManager(
+      assetsBasePath: 'assets/pois',
+      defaultEnabledSubcategories: {
+        POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
+        POICategory.food: {'restaurant', 'cafe'},
+        POICategory.transport: {'bus_station', 'bus_stop'},
+      },
+    );
+
     final screen = HomeScreenTrufiScreen(
-      config: HomeScreenConfig(otpEndpoint: _otpEndpoint),
+      config: HomeScreenConfig(
+        otpEndpoint: _otpEndpoint,
+        customMapLayers: (controller) {
+          // Initialize POI layers with the map controller
+          poiManager.initialize(controller);
+          return poiManager.layers;
+        },
+        additionalMapSettings: (_) => const POILayersSettingsSection(),
+      ),
     );
 
     return MultiProvider(
@@ -33,6 +51,7 @@ class MyApp extends StatelessWidget {
             defaultCenter: _defaultCenter,
           ),
         ),
+        ChangeNotifierProvider.value(value: poiManager),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
             searchLocationService: PhotonSearchService(
@@ -52,6 +71,7 @@ class MyApp extends StatelessWidget {
         home: Scaffold(body: Builder(builder: screen.builder)),
         localizationsDelegates: [
           ...screen.localizationsDelegates,
+          ...POILayersLocalizations.localizationsDelegates,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

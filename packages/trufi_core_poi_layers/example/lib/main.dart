@@ -39,9 +39,7 @@ class POILayersExampleApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => POILayersManager(
-            assetsBasePath: 'assets/pois',
-          ),
+          create: (_) => POILayersManager(assetsBasePath: 'assets/pois'),
         ),
       ],
       child: MaterialApp(
@@ -162,9 +160,7 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
 
           // Loading indicator
           if (!poiManager.isInitialized)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+            const Center(child: CircularProgressIndicator()),
 
           // Top-right action buttons
           Positioned(
@@ -183,18 +179,7 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
                     settingsAppBarTitle: 'Map Settings',
                     settingsSectionTitle: 'Map Type',
                     settingsApplyButtonText: 'Apply',
-                    additionalSettings: Consumer<POILayersManager>(
-                      builder: (context, manager, _) {
-                        return POILayersSettingsSection(
-                          enabledSubcategories: manager.enabledSubcategories,
-                          availableSubcategories: manager.availableSubcategories,
-                          onSubcategoryToggled: (category, subcategory, enabled) {
-                            manager.toggleSubcategory(
-                                category, subcategory, enabled);
-                          },
-                        );
-                      },
-                    ),
+                    additionalSettings: const POILayersSettingsSection(),
                   ),
                   const SizedBox(height: 8),
                   _ActionButton(

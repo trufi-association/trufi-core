@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 
 import '../models/poi_category.dart';
 import '../l10n/poi_layers_localizations.dart';
@@ -8,43 +10,31 @@ import '../l10n/poi_layers_localizations_ext.dart';
 /// A settings section widget for configuring POI layer visibility.
 /// Can be integrated into a settings screen or shown as a standalone modal.
 class POILayersSettingsSection extends StatelessWidget {
-  /// Enabled subcategories per category
-  final Map<POICategory, Set<String>> enabledSubcategories;
 
-  /// Available subcategories per category
-  final Map<POICategory, Set<String>> availableSubcategories;
-
-  /// Callback when a subcategory is toggled
-  final void Function(POICategory category, String subcategory, bool enabled) onSubcategoryToggled;
 
   /// Optional section title
   final String? title;
 
   const POILayersSettingsSection({
     super.key,
-    required this.enabledSubcategories,
-    required this.availableSubcategories,
-    required this.onSubcategoryToggled,
     this.title,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = POILayersLocalizations.of(context)!;
-
+    final manager = context.watch<POILayersManager>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         // Section header
-        _POILayersHeader(
-          title: title ?? l10n.pointsOfInterest,
-        ),
+        _POILayersHeader(title: title ?? l10n.pointsOfInterest),
         const SizedBox(height: 8),
         // Category toggles
         ...POICategory.values.map((category) {
-          final availableSubcats = availableSubcategories[category];
-          final enabledSubcats = enabledSubcategories[category];
+          final availableSubcats = manager.availableSubcategories[category];
+          final enabledSubcats = manager.enabledSubcategories[category];
           // Category is enabled if it has any enabled subcategories
           final isEnabled = enabledSubcats != null && enabledSubcats.isNotEmpty;
 
@@ -54,13 +44,12 @@ class POILayersSettingsSection extends StatelessWidget {
             availableSubcategories: availableSubcats,
             enabledSubcategories: enabledSubcats,
             onSubcategoryToggled: (subcategory, enabled) =>
-                onSubcategoryToggled(category, subcategory, enabled),
+                manager.toggleSubcategory(category, subcategory, enabled),
           );
         }),
       ],
     );
   }
-
 }
 
 /// Simple text header for POI layers section
@@ -231,7 +220,8 @@ class _POICategoryTileState extends State<_POICategoryTile> {
               child: hasSubcategories && _isExpanded
                   ? _SubcategoriesList(
                       category: widget.category,
-                      subcategories: widget.availableSubcategories!.toList()..sort(),
+                      subcategories: widget.availableSubcategories!.toList()
+                        ..sort(),
                       enabledSubcategories: widget.enabledSubcategories ?? {},
                       onSubcategoryToggled: widget.onSubcategoryToggled!,
                     )
@@ -271,7 +261,10 @@ class _SubcategoriesList extends StatelessWidget {
     // Convert snake_case to Title Case
     return subcategory
         .split('_')
-        .map((word) => word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1))
+        .map(
+          (word) =>
+              word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1),
+        )
         .join(' ');
   }
 
@@ -300,11 +293,7 @@ class _SubcategoriesList extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 4, 12, 8),
             child: Row(
               children: [
-                Icon(
-                  Icons.tune_rounded,
-                  size: 16,
-                  color: category.color,
-                ),
+                Icon(Icons.tune_rounded, size: 16, color: category.color),
                 const SizedBox(width: 8),
                 Text(
                   l10n.subcategoryTypes,
@@ -318,18 +307,24 @@ class _SubcategoriesList extends StatelessWidget {
                   onPressed: () {
                     HapticFeedback.selectionClick();
                     // Toggle all subcategories
-                    final allEnabled = enabledSubcategories.length == subcategories.length;
+                    final allEnabled =
+                        enabledSubcategories.length == subcategories.length;
                     for (final subcat in subcategories) {
                       onSubcategoryToggled(subcat, !allEnabled);
                     }
                   },
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    enabledSubcategories.length == subcategories.length ? l10n.clearAll : l10n.selectAll,
+                    enabledSubcategories.length == subcategories.length
+                        ? l10n.clearAll
+                        : l10n.selectAll,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: category.color,
                       fontWeight: FontWeight.w600,
@@ -456,4 +451,3 @@ class _SubcategorySwitchTile extends StatelessWidget {
     );
   }
 }
-

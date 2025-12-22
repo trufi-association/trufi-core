@@ -1,0 +1,2794 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 2327839014,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561985,
+          -17.3891042
+        ]
+      },
+      "properties": {
+        "id": 2327839014,
+        "name": "Scharff Bolivia",
+        "type": "post_office",
+        "category": "government",
+        "subcategory": "post",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "377",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "post_office",
+        "brand": "FedEx",
+        "contact:fax": "+591 4 4111194",
+        "contact:phone": "+591 4 4124043",
+        "contact:website": "http://www.fedex.com/bo/",
+        "opening_hours": "Mo-Fr 08:30-18:30; Sa 09:00-12:00",
+        "operator": "Scharff Bolivia SRL",
+        "payment:cash": "yes",
+        "post_office:type": "post_partner"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2327853052,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507948,
+          -17.388012
+        ]
+      },
+      "properties": {
+        "id": 2327853052,
+        "name": "Autoridad Regional de Impugnación Tributaria",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "381",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "admin_level": "2",
+        "contact:email": "infoait@ait.gob.bo",
+        "contact:facebook": "https://www.facebook.com/AIT.Bolivia",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:30-12:30,14:30-18:30",
+        "short_name": "ARIT",
+        "website": "https://www.ait.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2397718414,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589118,
+          -17.3882796
+        ]
+      },
+      "properties": {
+        "id": 2397718414,
+        "name": "Registro Civil",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle México",
+        "lawyer": "notary",
+        "loc_name": "Oficina El Prado",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:30-16:30",
+        "operator": "Servicio de Registro Civil",
+        "ref": "2",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944335,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1585942,
+          -17.3928671
+        ]
+      },
+      "properties": {
+        "id": 2398944335,
+        "name": "Agencia Boliviana de Correos",
+        "type": "post_office",
+        "category": "government",
+        "subcategory": "post",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "313",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "post_office",
+        "branch": "Cochabamba",
+        "brand": "Agencia Boliviana de Correos",
+        "email": "info@correos.gob.bo",
+        "level": "1",
+        "operator": "Agencia Boliviana de Correos",
+        "operator:short": "AGBC",
+        "operator:type": "government",
+        "post_office": "bureau",
+        "short_name": "AGBC",
+        "website": "https://www.correos.gob.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944339,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544838,
+          -17.3879758
+        ]
+      },
+      "properties": {
+        "id": 2398944339,
+        "name": "Gobierno Autónomo Municipal de Cochabamba",
+        "type": "townhall",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Edificio Municipal de Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Guerrilleros José Miguel Lanza",
+        "amenity": "townhall",
+        "contact:facebook": "https://www.facebook.com/gamcochabamba",
+        "contact:whatsapp": "+591 61561515",
+        "email": "infogamc@cochabamba.bo",
+        "loc_name": "Alcaldía de Cochabamba",
+        "opening_hours": "Mo-Fr 08:00-12:00,14:30-18:30",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "phone": "151",
+        "short_name": "GAMC",
+        "townhall:type": "city",
+        "website": "https://www.cochabamba.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2534676367,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565642,
+          -17.3952905
+        ]
+      },
+      "properties": {
+        "id": 2534676367,
+        "name": "Servicio de Impuestos Nacionales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "259",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "admin_level": "2",
+        "contact:facebook": "https://www.facebook.com/sinbolivia/",
+        "email": "informaciontributaria@impuestos.gob.bo",
+        "government": "tax",
+        "loc_name": "Renta",
+        "office": "government",
+        "opening_hours": "Mo-Fr 07:30-16:30",
+        "operator": "Servicio de Impuestos Nacionales",
+        "phone": "800103444",
+        "short_name": "SIN",
+        "website": "https://www.impuestos.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4414261843,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578174,
+          -17.385537
+        ]
+      },
+      "properties": {
+        "id": 4414261843,
+        "name": "Autoridad de Regulación y Fiscalización de Telecomunicaciones y Transporte",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "admin_level": "2",
+        "branch": "Regional Cochabamba",
+        "government": "telecommunication",
+        "office": "government",
+        "operator": "Autoridad de Regulación y Fiscalización de Telecomunicaciones y Transporte",
+        "operator:short": "ATT",
+        "operator:type": "government",
+        "short_name": "ATT"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4433552997,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552108,
+          -17.3876438
+        ]
+      },
+      "properties": {
+        "id": 4433552997,
+        "name": "Servicio de Estacionamiento Municipal",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Plaza Cristobal Colón",
+        "admin_level": "8",
+        "contact:whatsapp": "+591 64893953",
+        "description": "Oficina de gestión del estacionamiento tarifado y pago de multas.",
+        "government": "transportation",
+        "level": "0",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "payment:cash": "yes",
+        "phone": "+591 4 4259361",
+        "short_name": "SEM",
+        "website": "https://www.cochabamba.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673889996,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562064,
+          -17.391037
+        ]
+      },
+      "properties": {
+        "id": 4673889996,
+        "name": "Autoridad del Sistema Financiero",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "364",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Colombia",
+        "admin_level": "2",
+        "branch": "Regional Cochabamba",
+        "government": "yes",
+        "office": "government",
+        "short_name": "ASFI",
+        "website": "https://www.asfi.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740851786,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159566,
+          -17.3952436
+        ]
+      },
+      "properties": {
+        "id": 4740851786,
+        "name": "Instituto Nacional de Estadística",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "336",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Junín",
+        "admin_level": "4",
+        "branch": "Oficina Departamental Cochabamba",
+        "check_date": "2025-11-06",
+        "contact:facebook": "https://www.facebook.com/ineboliviaoficial",
+        "government": "statistics",
+        "level": "0",
+        "office": "government",
+        "operator": "Instituto Nacional de Estadística",
+        "operator:short": "INE",
+        "operator:type": "public",
+        "phone": "+591 4 4255205;+591 4 4582474",
+        "short_name": "INE",
+        "website": "https://www.ine.gob.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4768964681,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612692,
+          -17.3960908
+        ]
+      },
+      "properties": {
+        "id": 4768964681,
+        "name": "Graco Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "372",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Jordán",
+        "admin_level": "8",
+        "alt_name": "Grandes Contribuyentes Cochabamba",
+        "contact:email": "informaciontributaria@impuestos.gob.bo",
+        "contact:website": "http://www.impuestos.gob.bo/",
+        "government": "tax",
+        "level": "0",
+        "office": "government",
+        "operator": "SIN"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4929712242,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558438,
+          -17.3919123
+        ]
+      },
+      "properties": {
+        "id": 4929712242,
+        "name": "Casa de la Cultura",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "399",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "admin_level": "8",
+        "contact:facebook": "https://www.facebook.com/CasaDeLaCulturaCochabamba/",
+        "description": "La Casa de la Cultura promueve e incentiva la actividad artística cultural en la ciudad de Cochabamba, a través de diferentes eventos y concursos que se realizan durante el año.",
+        "government": "culture",
+        "office": "government",
+        "opening_hours": "Mo 08:00-18:30; Th-Fr 08:00-16:00",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4933190236,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558512,
+          -17.3942721
+        ]
+      },
+      "properties": {
+        "id": 4933190236,
+        "name": "Dirección Catastro",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "admin_level": "8",
+        "government": "cadaster",
+        "level": "1",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4995781927,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1622302,
+          -17.3873376
+        ]
+      },
+      "properties": {
+        "id": 4995781927,
+        "name": "Ministerio de Medio Ambiente y Agua",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle Hamiraya",
+        "admin_level": "2",
+        "government": "environment",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216046,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549287,
+          -17.3853712
+        ]
+      },
+      "properties": {
+        "id": 5102216046,
+        "name": "Servicio Nacional de Propiedad Intelectual",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Chuquisaca",
+        "admin_level": "2",
+        "government": "yes",
+        "office": "government",
+        "short_name": "SENAPI"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216143,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575495,
+          -17.3939521
+        ]
+      },
+      "properties": {
+        "id": 5102216143,
+        "name": "Ministerio de Justicia",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "admin_level": "2",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216144,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575316,
+          -17.39406
+        ]
+      },
+      "properties": {
+        "id": 5102216144,
+        "name": "Sevicio Nacional de Patrimonio del Estado",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "admin_level": "2",
+        "office": "government",
+        "short_name": "SENAPE"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996923,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591198,
+          -17.3856309
+        ]
+      },
+      "properties": {
+        "id": 5117996923,
+        "name": "Jet Express Courier",
+        "type": "post_office",
+        "category": "government",
+        "subcategory": "post",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "711",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Baptista",
+        "amenity": "post_office",
+        "branch": "Estación Cochabamba",
+        "brand": "UPS",
+        "contact:email": "cbba@jetexpress.com.bo",
+        "contact:phone": "+591 4 4200580;+591 4 4523767",
+        "contact:website": "https://www.jetexpress.com.bo/",
+        "operator": "Jet Express Courier"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5139313929,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562862,
+          -17.3875777
+        ]
+      },
+      "properties": {
+        "id": 5139313929,
+        "name": "Finanzas y Tesorería",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0517",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "admin_level": "8",
+        "government": "treasury",
+        "image": "https://drive.google.com/file/d/1fhrfCeNLXDX_WsEpST0HT1WTQROFPoOc/view?usp=sharing",
+        "office": "government",
+        "opening_hours": "Mo-Fr 09:00-18:00",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5162127668,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612758,
+          -17.3876669
+        ]
+      },
+      "properties": {
+        "id": 5162127668,
+        "name": "Pandex",
+        "type": "post_office",
+        "category": "government",
+        "subcategory": "post",
+        "osmType": "node",
+        "amenity": "post_office"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5391531382,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613126,
+          -17.3952326
+        ]
+      },
+      "properties": {
+        "id": 5391531382,
+        "name": "Unidad Recaudaciones",
+        "type": "Unidad Recaudaciones",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5402909271,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1519878,
+          -17.3924674
+        ]
+      },
+      "properties": {
+        "id": 5402909271,
+        "name": "Instituto Nacional de Reforma Agraria Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Bolívar",
+        "branch": "INRA Cochabamba",
+        "office": "government",
+        "short_name": "INRA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5541515857,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1649076,
+          -17.3926127
+        ]
+      },
+      "properties": {
+        "id": 5541515857,
+        "name": "Comité Nacional de Despacho de Carga",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "749",
+        "addr:street": "Calle Colombia",
+        "admin_level": "2",
+        "contact:email": "cndc@cndc.bo",
+        "contact:website": "https://www.cndc.bo/",
+        "government": "electricity_office",
+        "office": "government",
+        "short_name": "CNDC",
+        "start_date": "1996"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5827468003,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549175,
+          -17.394131
+        ]
+      },
+      "properties": {
+        "id": 5827468003,
+        "name": "Registro Civil",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Sucre",
+        "government": "register_office",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6269044707,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523267,
+          -17.3879378
+        ]
+      },
+      "properties": {
+        "id": 6269044707,
+        "name": "Dirección Desarrollo Humano",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Republica de Venezuela",
+        "admin_level": "8",
+        "government": "social_services",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8604980255,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1585169,
+          -17.3927286
+        ]
+      },
+      "properties": {
+        "id": 8604980255,
+        "name": "Impuestos Nacionales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "admin_level": "2",
+        "branch": "Oficina Heroínas",
+        "government": "tax",
+        "level": "0",
+        "office": "government",
+        "operator": "Impuestos Nacionales",
+        "operator:type": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677785820,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554238,
+          -17.3949715
+        ]
+      },
+      "properties": {
+        "id": 8677785820,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Sucre",
+        "admin_level": "8",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8943235711,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577211,
+          -17.3935772
+        ]
+      },
+      "properties": {
+        "id": 8943235711,
+        "name": "Dirección de Recaudaciones",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "210",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "admin_level": "8",
+        "air_conditioning": "no",
+        "description": "Oficina que centraliza los pagos de más de 80 trámites municipales.",
+        "government": "financial",
+        "level": "0",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:00-16:00; Sa,Su,PH Off",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "operator:wikidata": "Q124635344",
+        "website": "https://www.cochabamba.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9622567691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592472,
+          -17.3997167
+        ]
+      },
+      "properties": {
+        "id": 9622567691,
+        "name": "Secretaría Departamental de Planificación",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "327",
+        "addr:neighbourhood": "Ayacucho",
+        "addr:street": "Avenida Aroma",
+        "admin_level": "4",
+        "government": "planning",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9908595075,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567149,
+          -17.3851465
+        ]
+      },
+      "properties": {
+        "id": 9908595075,
+        "name": "AHN",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Valdiviezo",
+        "admin_level": "2",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10770094646,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589697,
+          -17.3907125
+        ]
+      },
+      "properties": {
+        "id": 10770094646,
+        "name": "Cartero",
+        "type": "post_office",
+        "category": "government",
+        "subcategory": "post",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:door": "5",
+        "addr:housenumber": "268",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "post_office",
+        "branch": "Sucursal Cochabamba",
+        "brand": "Cartero",
+        "contact:whatsapp": "+591 78955056",
+        "description": "Catero brinda servicios de logística integral a través de Courier, transporte de encomiendas y servicios colaterales a nivel nacional.",
+        "email": "info@cartero.com.bo",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:30-17:30; Sa 09:00-13:00",
+        "operator": "Cartero",
+        "payment:cash": "yes",
+        "phone": "+591 78955056",
+        "post_office": "post_annex",
+        "website": "https://cartero.com.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11401984928,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1594239,
+          -17.3997234
+        ]
+      },
+      "properties": {
+        "id": 11401984928,
+        "name": "Región Metropolitana Kanata",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "327",
+        "addr:neighbourhood": "Ayacucho",
+        "addr:street": "Avenida Aroma",
+        "admin_level": "4",
+        "contact:facebook": "https://www.facebook.com/region.metropolitana.kanata/",
+        "email": "kanatametropolitana@gmail.com",
+        "government": "administrative",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:00-16:00; PH off"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12048653104,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536699,
+          -17.3865971
+        ]
+      },
+      "properties": {
+        "id": 12048653104,
+        "name": "Gestora",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Mariano Antezana",
+        "admin_level": "2",
+        "government": "pension_fund",
+        "level": "0",
+        "office": "government",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12348584138,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532914,
+          -17.3850157
+        ]
+      },
+      "properties": {
+        "id": 12348584138,
+        "name": "Servicio Nacional de Verificación de Exportaciones",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:floor": "1",
+        "addr:housenumber": "810",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Plaza Constitución",
+        "addr:unit": "8;9",
+        "admin_level": "2",
+        "branch": "Regional Cochabamba",
+        "brand": "Servicio Nacional de Verificación de Exportaciones",
+        "contact:whatsapp": "+591 69907596",
+        "email": "soporte@senavex.gob.bo",
+        "government": "yes",
+        "level": "1",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:30-12:30,14:30-18:30; Sa-Su,PH Off",
+        "phone": "+591 4 4126065",
+        "short_name": "SENAVEX",
+        "website": "https://senavex.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798740406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572395,
+          -17.3850055
+        ]
+      },
+      "properties": {
+        "id": 12798740406,
+        "name": "Seprec",
+        "type": "Seprec",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13351766697,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537053,
+          -17.3929325
+        ]
+      },
+      "properties": {
+        "id": 13351766697,
+        "name": "Registro Judicial de Antecedentes Penales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "admin_level": "2",
+        "branch": "REJAP Cochabamba",
+        "government": "justice",
+        "level": "0",
+        "office": "government",
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "short_name": "REJAP",
+        "website": "https://magistratura.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 77346445,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1573128,
+              -17.3927814
+            ],
+            [
+              -66.1570678,
+              -17.3927318
+            ],
+            [
+              -66.1570152,
+              -17.3929987
+            ],
+            [
+              -66.1569632,
+              -17.3932773
+            ],
+            [
+              -66.1571305,
+              -17.3933052
+            ],
+            [
+              -66.1572629,
+              -17.3933273
+            ],
+            [
+              -66.1573121,
+              -17.3930605
+            ],
+            [
+              -66.157323,
+              -17.3930024
+            ],
+            [
+              -66.157273,
+              -17.3929939
+            ],
+            [
+              -66.1573024,
+              -17.3928372
+            ],
+            [
+              -66.1573128,
+              -17.3927814
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 77346445,
+        "name": "Casa Departamental de las Culturas",
+        "type": "monastery",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "admin_level": "4",
+        "government": "culture",
+        "historic": "monastery",
+        "office": "government",
+        "old_name:1578-1826": "Convento de la Orden de San Agustín",
+        "old_name:2009": "Prefectura de Cochabamba",
+        "old_name:2009-2020": "Gobierno Autónomo Departamental de Cochabamba",
+        "opening_hours": "Mo-Fr 08:00-16:00",
+        "operator": "Gobierno Autónomo Departamental de Cochabamba",
+        "operator:type": "government",
+        "start_date": "2020",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 410991546,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.158634,
+              -17.3995821
+            ],
+            [
+              -66.1586868,
+              -17.399585
+            ],
+            [
+              -66.1587346,
+              -17.3995876
+            ],
+            [
+              -66.1587605,
+              -17.3995888
+            ],
+            [
+              -66.1589023,
+              -17.3995931
+            ],
+            [
+              -66.1594296,
+              -17.3996092
+            ],
+            [
+              -66.1595501,
+              -17.3996123
+            ],
+            [
+              -66.159995,
+              -17.3996218
+            ],
+            [
+              -66.1599848,
+              -17.3998436
+            ],
+            [
+              -66.1599807,
+              -17.3999326
+            ],
+            [
+              -66.1598966,
+              -17.4007871
+            ],
+            [
+              -66.1598433,
+              -17.4011875
+            ],
+            [
+              -66.1597777,
+              -17.4015748
+            ],
+            [
+              -66.1597155,
+              -17.4017372
+            ],
+            [
+              -66.1594106,
+              -17.4022143
+            ],
+            [
+              -66.1593286,
+              -17.4029315
+            ],
+            [
+              -66.1592815,
+              -17.4033716
+            ],
+            [
+              -66.159212,
+              -17.4035939
+            ],
+            [
+              -66.1591505,
+              -17.4037906
+            ],
+            [
+              -66.1589464,
+              -17.404289
+            ],
+            [
+              -66.1588862,
+              -17.4043305
+            ],
+            [
+              -66.1588206,
+              -17.4043669
+            ],
+            [
+              -66.1587376,
+              -17.4043884
+            ],
+            [
+              -66.1586654,
+              -17.4043947
+            ],
+            [
+              -66.1585827,
+              -17.4043866
+            ],
+            [
+              -66.1585161,
+              -17.4043735
+            ],
+            [
+              -66.1584716,
+              -17.4043469
+            ],
+            [
+              -66.1583676,
+              -17.404285
+            ],
+            [
+              -66.1584202,
+              -17.4042145
+            ],
+            [
+              -66.1586191,
+              -17.4037505
+            ],
+            [
+              -66.1586381,
+              -17.403693
+            ],
+            [
+              -66.1586221,
+              -17.4036307
+            ],
+            [
+              -66.1585739,
+              -17.4035735
+            ],
+            [
+              -66.1584844,
+              -17.4035445
+            ],
+            [
+              -66.1584086,
+              -17.4035551
+            ],
+            [
+              -66.1583414,
+              -17.4035889
+            ],
+            [
+              -66.1583486,
+              -17.4035365
+            ],
+            [
+              -66.1583531,
+              -17.4035059
+            ],
+            [
+              -66.1584489,
+              -17.402782
+            ],
+            [
+              -66.1584976,
+              -17.4022878
+            ],
+            [
+              -66.1585749,
+              -17.4016099
+            ],
+            [
+              -66.1585842,
+              -17.4015331
+            ],
+            [
+              -66.1586167,
+              -17.4012943
+            ],
+            [
+              -66.1584147,
+              -17.4012673
+            ],
+            [
+              -66.1578551,
+              -17.4012073
+            ],
+            [
+              -66.157699,
+              -17.401193
+            ],
+            [
+              -66.1577449,
+              -17.4007186
+            ],
+            [
+              -66.1577542,
+              -17.4006437
+            ],
+            [
+              -66.1583067,
+              -17.4006992
+            ],
+            [
+              -66.1585454,
+              -17.4007209
+            ],
+            [
+              -66.1586165,
+              -17.4007268
+            ],
+            [
+              -66.1586154,
+              -17.4004864
+            ],
+            [
+              -66.1586197,
+              -17.3999924
+            ],
+            [
+              -66.1586235,
+              -17.3998861
+            ],
+            [
+              -66.1586265,
+              -17.3998027
+            ],
+            [
+              -66.1586291,
+              -17.3997279
+            ],
+            [
+              -66.158634,
+              -17.3995821
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 410991546,
+        "name": "Gobierno Autónomo Departamental de Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "327",
+        "addr:neighbourhood": "Ayacucho",
+        "addr:street": "Avenida Aroma",
+        "admin_level": "4",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/GobernacionDeCochabamba/",
+        "government": "government",
+        "office": "government",
+        "old_name:1971-1995": "Corporación Regional de Desarrollo de Cochabamba",
+        "old_short_name": "CORDECO",
+        "opening_hours": "Mo-Fr 08:00-16:00; PH off",
+        "operator": "Gobierno Autónomo Departamental de Cochabamba",
+        "operator:type": "government",
+        "short_name": "GADC",
+        "website": "https://gobernaciondecochabamba.bo/",
+        "wikidata": "Q109424445",
+        "wikipedia": "es:Gobierno Autónomo Departamental de Cochabamba"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 494015059,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1538547,
+              -17.3927946
+            ],
+            [
+              -66.153843,
+              -17.3928568
+            ],
+            [
+              -66.1538122,
+              -17.3930217
+            ],
+            [
+              -66.1537997,
+              -17.3930889
+            ],
+            [
+              -66.1536625,
+              -17.3930654
+            ],
+            [
+              -66.1537146,
+              -17.3927893
+            ],
+            [
+              -66.1537337,
+              -17.3927746
+            ],
+            [
+              -66.1537942,
+              -17.3927846
+            ],
+            [
+              -66.1538547,
+              -17.3927946
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 494015059,
+        "name": "Derechos Reales",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "admin_level": "2",
+        "branch": "Cochabamba Centro",
+        "building": "office",
+        "building:levels": "1",
+        "contact:whatsapp": "+591 71160362",
+        "government": "cadaster",
+        "office": "government",
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "roof:shape": "gabled",
+        "short_name": "DDRR",
+        "website": "https://tramitesddrr.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 545773373,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1567215,
+              -17.3878723
+            ],
+            [
+              -66.1566981,
+              -17.3880385
+            ],
+            [
+              -66.1568655,
+              -17.3880647
+            ],
+            [
+              -66.1568539,
+              -17.3881348
+            ],
+            [
+              -66.1568301,
+              -17.3882717
+            ],
+            [
+              -66.156317,
+              -17.3881985
+            ],
+            [
+              -66.1563453,
+              -17.3880222
+            ],
+            [
+              -66.1563512,
+              -17.3879819
+            ],
+            [
+              -66.1563808,
+              -17.387986
+            ],
+            [
+              -66.1565315,
+              -17.3880068
+            ],
+            [
+              -66.1565552,
+              -17.3878508
+            ],
+            [
+              -66.1567215,
+              -17.3878723
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 545773373,
+        "name": "Brigada Departamental de Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Plaza Cristobal Colón",
+        "admin_level": "4",
+        "barrier": "wall",
+        "government": "legislative",
+        "office": "government",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 603094718,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1551206,
+              -17.3882764
+            ],
+            [
+              -66.1548503,
+              -17.3882221
+            ],
+            [
+              -66.154828,
+              -17.3882175
+            ],
+            [
+              -66.1548103,
+              -17.3882146
+            ],
+            [
+              -66.1541529,
+              -17.3880693
+            ],
+            [
+              -66.1541854,
+              -17.3879299
+            ],
+            [
+              -66.1541987,
+              -17.3878709
+            ],
+            [
+              -66.1542337,
+              -17.3877166
+            ],
+            [
+              -66.1544952,
+              -17.387756
+            ],
+            [
+              -66.1546165,
+              -17.3877742
+            ],
+            [
+              -66.1547529,
+              -17.3877946
+            ],
+            [
+              -66.1547616,
+              -17.3877619
+            ],
+            [
+              -66.1547817,
+              -17.3876871
+            ],
+            [
+              -66.1548253,
+              -17.3875283
+            ],
+            [
+              -66.1548532,
+              -17.3875347
+            ],
+            [
+              -66.1548866,
+              -17.3875424
+            ],
+            [
+              -66.1549535,
+              -17.3875579
+            ],
+            [
+              -66.1550086,
+              -17.3875706
+            ],
+            [
+              -66.1552367,
+              -17.38762
+            ],
+            [
+              -66.155247,
+              -17.387635
+            ],
+            [
+              -66.1552237,
+              -17.3877695
+            ],
+            [
+              -66.1552193,
+              -17.3877912
+            ],
+            [
+              -66.1551206,
+              -17.3882764
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 603094718,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Plaza Cristobal Colón",
+        "admin_level": "8",
+        "barrier": "wall",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "operator:wikidata": "Q124635344",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 848324481,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1615298,
+              -17.3916748
+            ],
+            [
+              -66.1613793,
+              -17.3916531
+            ],
+            [
+              -66.1613447,
+              -17.3916475
+            ],
+            [
+              -66.1613262,
+              -17.3917457
+            ],
+            [
+              -66.1613355,
+              -17.3917692
+            ],
+            [
+              -66.161357,
+              -17.3917809
+            ],
+            [
+              -66.161509,
+              -17.3918043
+            ],
+            [
+              -66.1615134,
+              -17.3917781
+            ],
+            [
+              -66.1615298,
+              -17.3916748
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 848324481,
+        "name": "Secretaría Ejecutiva",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Colombia",
+        "admin_level": "8",
+        "barrier": "wall",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 848721006,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1528428,
+              -17.388578
+            ],
+            [
+              -66.1528081,
+              -17.3885709
+            ],
+            [
+              -66.1527001,
+              -17.3885486
+            ],
+            [
+              -66.1526135,
+              -17.3885308
+            ],
+            [
+              -66.1525929,
+              -17.3885265
+            ],
+            [
+              -66.1525786,
+              -17.388594
+            ],
+            [
+              -66.1523652,
+              -17.388553
+            ],
+            [
+              -66.1523609,
+              -17.3885734
+            ],
+            [
+              -66.1522697,
+              -17.3885559
+            ],
+            [
+              -66.1520356,
+              -17.3885109
+            ],
+            [
+              -66.1519251,
+              -17.3884897
+            ],
+            [
+              -66.1517678,
+              -17.3884595
+            ],
+            [
+              -66.1517452,
+              -17.3885666
+            ],
+            [
+              -66.1517156,
+              -17.3887072
+            ],
+            [
+              -66.1522198,
+              -17.3888068
+            ],
+            [
+              -66.1525891,
+              -17.388875
+            ],
+            [
+              -66.1526171,
+              -17.3887422
+            ],
+            [
+              -66.1526513,
+              -17.3887488
+            ],
+            [
+              -66.152762,
+              -17.3887704
+            ],
+            [
+              -66.1527917,
+              -17.3887761
+            ],
+            [
+              -66.152818,
+              -17.3886701
+            ],
+            [
+              -66.1528428,
+              -17.388578
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 848721006,
+        "name": "Servicio Departamental de Gestión Social",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Mariano Antezana",
+        "admin_level": "4",
+        "barrier": "wall",
+        "government": "social_services",
+        "office": "government",
+        "short_name": "SEDEGES"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 848721015,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1555438,
+              -17.3902874
+            ],
+            [
+              -66.1555991,
+              -17.3899543
+            ],
+            [
+              -66.155614,
+              -17.3898625
+            ],
+            [
+              -66.1553192,
+              -17.3898188
+            ],
+            [
+              -66.1553043,
+              -17.3899106
+            ],
+            [
+              -66.1552491,
+              -17.3902432
+            ],
+            [
+              -66.1555438,
+              -17.3902874
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 848721015,
+        "name": "Dirección Departamental de Educación",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "442",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "admin_level": "2",
+        "barrier": "wall",
+        "government": "education",
+        "office": "government",
+        "operator": "Ministerio de Educación",
+        "operator:type": "government",
+        "phone": "+591 4 4228777;+591 4 4227619;+591 4 4526679",
+        "short_name": "DDE",
+        "website": "https://www.minedu.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 884640225,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1589857,
+              -17.3912933
+            ],
+            [
+              -66.1589744,
+              -17.3913566
+            ],
+            [
+              -66.1589576,
+              -17.391379
+            ],
+            [
+              -66.1589313,
+              -17.3913885
+            ],
+            [
+              -66.1589126,
+              -17.3913852
+            ],
+            [
+              -66.1588404,
+              -17.3913727
+            ],
+            [
+              -66.1588504,
+              -17.3913162
+            ],
+            [
+              -66.1587933,
+              -17.391307
+            ],
+            [
+              -66.158801,
+              -17.3912635
+            ],
+            [
+              -66.1588123,
+              -17.3912653
+            ],
+            [
+              -66.1589857,
+              -17.3912933
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 884640225,
+        "name": "Secretaria de Salud",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Colombia",
+        "admin_level": "8",
+        "building": "office",
+        "building:levels": "3",
+        "email": "infogamc@cochabamba.bo",
+        "government": "healthcare",
+        "office": "government",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "phone": "+591 4 4502414",
+        "website": "https://cochabamba.bo/unidad/secretaria-salud"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 900528201,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1554499,
+              -17.3869496
+            ],
+            [
+              -66.1555496,
+              -17.3870131
+            ],
+            [
+              -66.1555422,
+              -17.3870222
+            ],
+            [
+              -66.1555518,
+              -17.3870282
+            ],
+            [
+              -66.1556013,
+              -17.3870591
+            ],
+            [
+              -66.1556716,
+              -17.387103
+            ],
+            [
+              -66.1555755,
+              -17.387237
+            ],
+            [
+              -66.1553242,
+              -17.3871189
+            ],
+            [
+              -66.1554499,
+              -17.3869496
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 900528201,
+        "name": "Fiscalía Departamental de Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Valdiviezo",
+        "admin_level": "2",
+        "barrier": "wall",
+        "government": "prosecutor",
+        "office": "government",
+        "operator": "Ministerio Público",
+        "operator:type": "government",
+        "wikidata": "Q57275461",
+        "wikipedia": "es:Ministerio Público (Bolivia)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482155,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.157349,
+              -17.391578
+            ],
+            [
+              -66.1571826,
+              -17.3915497
+            ],
+            [
+              -66.1571569,
+              -17.3916877
+            ],
+            [
+              -66.1568809,
+              -17.3916408
+            ],
+            [
+              -66.1568225,
+              -17.3916309
+            ],
+            [
+              -66.1568091,
+              -17.3917025
+            ],
+            [
+              -66.1567956,
+              -17.3917742
+            ],
+            [
+              -66.1568538,
+              -17.3917841
+            ],
+            [
+              -66.1571631,
+              -17.3918371
+            ],
+            [
+              -66.1571851,
+              -17.3917187
+            ],
+            [
+              -66.1573184,
+              -17.3917414
+            ],
+            [
+              -66.157349,
+              -17.391578
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482155,
+        "name": "Casa del Deporte",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle España",
+        "admin_level": "4",
+        "barrier": "wall",
+        "office": "government",
+        "operator": "GADC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482160,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565596,
+              -17.3910835
+            ],
+            [
+              -66.1565199,
+              -17.3912801
+            ],
+            [
+              -66.1565008,
+              -17.3913818
+            ],
+            [
+              -66.1564791,
+              -17.3914821
+            ],
+            [
+              -66.1563377,
+              -17.3914558
+            ],
+            [
+              -66.1561961,
+              -17.3914298
+            ],
+            [
+              -66.1562045,
+              -17.3913913
+            ],
+            [
+              -66.156278,
+              -17.3910317
+            ],
+            [
+              -66.1565596,
+              -17.3910835
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482160,
+        "name": "",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "340",
+        "addr:street": "Calle Colombia",
+        "admin_level": "2",
+        "barrier": "wall",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 936523060,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1556773,
+              -17.3948022
+            ],
+            [
+              -66.155656,
+              -17.3949137
+            ],
+            [
+              -66.1556333,
+              -17.3950321
+            ],
+            [
+              -66.1556168,
+              -17.3951185
+            ],
+            [
+              -66.155578,
+              -17.3951115
+            ],
+            [
+              -66.1554912,
+              -17.395096
+            ],
+            [
+              -66.1555517,
+              -17.3947803
+            ],
+            [
+              -66.1555975,
+              -17.3947883
+            ],
+            [
+              -66.1556374,
+              -17.3947952
+            ],
+            [
+              -66.1556773,
+              -17.3948022
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 936523060,
+        "name": "Contraloría General del Estado",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "351",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "admin_level": "2",
+        "barrier": "wall",
+        "branch": "Gerencia Departamental Cochabamba",
+        "contact:phone": "+591 4 4234003;+591 4 4234004;+591 4 4234006",
+        "contact:website": "https://www.contraloria.gob.bo/",
+        "government": "comptroller",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 968965423,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.154032,
+              -17.3938893
+            ],
+            [
+              -66.154046,
+              -17.3939065
+            ],
+            [
+              -66.1539684,
+              -17.3943288
+            ],
+            [
+              -66.15395,
+              -17.3943258
+            ],
+            [
+              -66.1539381,
+              -17.3943885
+            ],
+            [
+              -66.1538589,
+              -17.3948081
+            ],
+            [
+              -66.1538369,
+              -17.3948276
+            ],
+            [
+              -66.1535218,
+              -17.394772
+            ],
+            [
+              -66.1535581,
+              -17.3945901
+            ],
+            [
+              -66.1534667,
+              -17.3945736
+            ],
+            [
+              -66.1534995,
+              -17.3943248
+            ],
+            [
+              -66.1535902,
+              -17.3943333
+            ],
+            [
+              -66.1536261,
+              -17.394091
+            ],
+            [
+              -66.1536343,
+              -17.3940311
+            ],
+            [
+              -66.1536739,
+              -17.3938265
+            ],
+            [
+              -66.1538192,
+              -17.3938512
+            ],
+            [
+              -66.154032,
+              -17.3938893
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 968965423,
+        "name": "Tribunal Departamental de Justicia de Cochabamba",
+        "type": "courthouse",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "580",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida General José de San Martín",
+        "admin_level": "4",
+        "amenity": "courthouse",
+        "barrier": "yes",
+        "contact:facebook": "https://www.facebook.com/tdjco/",
+        "email": "cbb@organojudicial.gob.bo",
+        "loc_name": "Palacio de Justicia de Cochabamba",
+        "opening_hours": "Mo-Fr 08:00-12:00,14:30-18:30;Sa-Su,PH Off",
+        "operator": "Órgano Judicial de Bolivia",
+        "operator:type": "government",
+        "phone": "+591 4 4503888;+591 4 4013097",
+        "short_name": "TDJCBBA",
+        "website": "https://tdjcbba.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 991798290,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.162814,
+              -17.3874526
+            ],
+            [
+              -66.1624632,
+              -17.387397
+            ],
+            [
+              -66.1624453,
+              -17.3875
+            ],
+            [
+              -66.1626795,
+              -17.3875375
+            ],
+            [
+              -66.1627592,
+              -17.3875507
+            ],
+            [
+              -66.1627961,
+              -17.3875556
+            ],
+            [
+              -66.162814,
+              -17.3874526
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 991798290,
+        "name": "Servicio Nacional de Sistema de Reparto",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "646",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle Tumusla",
+        "admin_level": "2",
+        "barrier": "wall",
+        "branch": "Administración Regional Cochabamba",
+        "brand": "SENASIR",
+        "email": "consulta@senasir.gob.bo",
+        "government": "pension_fund",
+        "office": "government",
+        "opening_hours": "Mo-Fr 08:30-12:30, 14:30-18:30",
+        "operator": "Servicio Nacional de Sistema de Reparto",
+        "operator:short": "SENASIR",
+        "operator:type": "government",
+        "phone": "+591 4 4521479",
+        "short_name": "SENASIR",
+        "website": "https://www.senasir.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1038909656,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1599984,
+              -17.3954367
+            ],
+            [
+              -66.1600535,
+              -17.395155
+            ],
+            [
+              -66.1600586,
+              -17.395129
+            ],
+            [
+              -66.1600949,
+              -17.394943
+            ],
+            [
+              -66.1598377,
+              -17.3948972
+            ],
+            [
+              -66.1598005,
+              -17.3950875
+            ],
+            [
+              -66.159796,
+              -17.3951108
+            ],
+            [
+              -66.1597657,
+              -17.3952655
+            ],
+            [
+              -66.1597412,
+              -17.3953908
+            ],
+            [
+              -66.1599984,
+              -17.3954367
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1038909656,
+        "name": "Centro Intermodalidad",
+        "type": "school",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle José María Santivañez",
+        "barrier": "wall",
+        "government": "yes",
+        "historic": "school",
+        "office": "government",
+        "old_name": "Colegio 6 de Agosto",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "start_date": "2015"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1045973069,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565552,
+              -17.3878508
+            ],
+            [
+              -66.1565315,
+              -17.3880068
+            ],
+            [
+              -66.1563808,
+              -17.387986
+            ],
+            [
+              -66.1563512,
+              -17.3879819
+            ],
+            [
+              -66.1563626,
+              -17.3879071
+            ],
+            [
+              -66.1563722,
+              -17.3878436
+            ],
+            [
+              -66.1564045,
+              -17.38783
+            ],
+            [
+              -66.1565552,
+              -17.3878508
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1045973069,
+        "name": "Ministerio de Relaciones Exteriores",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Plaza Cristobal Colón",
+        "admin_level": "2",
+        "alt_name": "Cancillería",
+        "barrier": "yes",
+        "contact:website": "http://www.cancilleria.gob.bo/",
+        "government": "chancery",
+        "office": "government",
+        "operator": "Ministerio de Relaciones Exteriores",
+        "start_date": "2010-08-26",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1050204717,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.162401,
+              -17.3946862
+            ],
+            [
+              -66.1623984,
+              -17.3949077
+            ],
+            [
+              -66.1623776,
+              -17.3950425
+            ],
+            [
+              -66.1623662,
+              -17.395115
+            ],
+            [
+              -66.1623943,
+              -17.3951175
+            ],
+            [
+              -66.1623852,
+              -17.3952266
+            ],
+            [
+              -66.1623642,
+              -17.395224
+            ],
+            [
+              -66.1623501,
+              -17.3952775
+            ],
+            [
+              -66.1623294,
+              -17.3952738
+            ],
+            [
+              -66.1621999,
+              -17.3952506
+            ],
+            [
+              -66.1622243,
+              -17.3950226
+            ],
+            [
+              -66.1622334,
+              -17.3949371
+            ],
+            [
+              -66.1622696,
+              -17.3946632
+            ],
+            [
+              -66.162401,
+              -17.3946862
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1050204717,
+        "name": "Almacenes A Alcaldía Cochabamba",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle José María Santivañez",
+        "admin_level": "4",
+        "barrier": "wall",
+        "office": "government"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1285834770,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1528423,
+              -17.3849293
+            ],
+            [
+              -66.1527575,
+              -17.3850322
+            ],
+            [
+              -66.1527597,
+              -17.3850781
+            ],
+            [
+              -66.1528811,
+              -17.3851655
+            ],
+            [
+              -66.1529365,
+              -17.3850944
+            ],
+            [
+              -66.1529918,
+              -17.3850232
+            ],
+            [
+              -66.1528423,
+              -17.3849293
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1285834770,
+        "name": "Defensoría del Pueblo",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "680",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "admin_level": "2",
+        "barrier": "wall",
+        "branch": "Oficina Cochabamba",
+        "brand": "Defensoría del Pueblo",
+        "contact:facebook": "https://www.facebook.com/Defensor%C3%ADa-del-Pueblo-Bolivia-1420825398141777/",
+        "contact:whatsapp": "+591 71726434",
+        "description": "Oficina del Defensor del Pueblo que actúa a favor de poblaciones en situación de vulnerabilidad (niñez y adolescentes, mujeres, adultos mayores, LGBTI, privados, pueblos orig, discapacidad, migrantes), protección de derechos, pacientes y conflictos.",
+        "email": "correspondencia@defensoria.gob.bo",
+        "government": "ombudsperson",
+        "level": "0",
+        "loc_name": "Defensoría del Pueblo Cochabamba",
+        "office": "government",
+        "phone": "+591 4 4140745;+591 4 4140751;800108004",
+        "website": "https://www.defensoria.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1455820943,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1538547,
+              -17.3927946
+            ],
+            [
+              -66.153843,
+              -17.3928568
+            ],
+            [
+              -66.1538122,
+              -17.3930217
+            ],
+            [
+              -66.1537997,
+              -17.3930889
+            ],
+            [
+              -66.1537769,
+              -17.3932111
+            ],
+            [
+              -66.1537728,
+              -17.3932329
+            ],
+            [
+              -66.1537398,
+              -17.393403
+            ],
+            [
+              -66.1536021,
+              -17.3933781
+            ],
+            [
+              -66.153599,
+              -17.3933949
+            ],
+            [
+              -66.1535589,
+              -17.3933881
+            ],
+            [
+              -66.1535655,
+              -17.3933525
+            ],
+            [
+              -66.153598,
+              -17.3931781
+            ],
+            [
+              -66.1536707,
+              -17.392764
+            ],
+            [
+              -66.1537337,
+              -17.3927746
+            ],
+            [
+              -66.1537942,
+              -17.3927846
+            ],
+            [
+              -66.1538547,
+              -17.3927946
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1455820943,
+        "name": "Consejo de la Magistratura",
+        "type": "Cochabamba",
+        "category": "government",
+        "subcategory": "administration",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "admin_level": "2",
+        "barrier": "wall",
+        "branch": "Cochabamba",
+        "contact:facebook": "https://www.facebook.com/Consejo.de.la.Magistratura.Bolivia",
+        "description": "Oficinas distritales del Consejo de la Magistratura, Archivos Judiciales y sus servicios de Derechos Reales, REJAP.",
+        "government": "justice",
+        "office": "government",
+        "operator": "Consejo de la Magistratura",
+        "operator:type": "government",
+        "website": "https://magistratura.organojudicial.gob.bo/",
+        "wheelchair": "yes"
+      }
+    }
+  ]
+}

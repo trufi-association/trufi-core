@@ -1,0 +1,3280 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 2398944600,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583439,
+          -17.3955835
+        ]
+      },
+      "properties": {
+        "id": 2398944600,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2852221382,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15526,
+          -17.3887204
+        ]
+      },
+      "properties": {
+        "id": 2852221382,
+        "name": "Plaza Colón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2852221395,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562204,
+          -17.3888764
+        ]
+      },
+      "properties": {
+        "id": 2852221395,
+        "name": "Plaza Colón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3201986240,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593765,
+          -17.3903607
+        ]
+      },
+      "properties": {
+        "id": 3201986240,
+        "name": "Ecuador",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3232582112,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599961,
+          -17.3860524
+        ]
+      },
+      "properties": {
+        "id": 3232582112,
+        "name": "La Paz",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3232582113,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1598276,
+          -17.388313
+        ]
+      },
+      "properties": {
+        "id": 3232582113,
+        "name": "Ayacucho",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3232582114,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1640178,
+          -17.3935497
+        ]
+      },
+      "properties": {
+        "id": 3232582114,
+        "name": "Falsuri",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3283363712,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561495,
+          -17.3875281
+        ]
+      },
+      "properties": {
+        "id": 3283363712,
+        "name": "Plaza Colón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3306972616,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535407,
+          -17.3850018
+        ]
+      },
+      "properties": {
+        "id": 3306972616,
+        "name": "Plaza Constitución",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3675838838,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589563,
+          -17.3924566
+        ]
+      },
+      "properties": {
+        "id": 3675838838,
+        "name": "Correo",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4072794197,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581391,
+          -17.3957372
+        ]
+      },
+      "properties": {
+        "id": 4072794197,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4143792251,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528696,
+          -17.3946097
+        ]
+      },
+      "properties": {
+        "id": 4143792251,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4227442132,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602172,
+          -17.3859812
+        ]
+      },
+      "properties": {
+        "id": 4227442132,
+        "name": "La Paz",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4503778521,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1555078,
+          -17.3919213
+        ]
+      },
+      "properties": {
+        "id": 4503778521,
+        "name": "Teatro Adela Zamudio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4513148270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552579,
+          -17.3877859
+        ]
+      },
+      "properties": {
+        "id": 4513148270,
+        "name": "Plaza Colón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4513148271,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574303,
+          -17.3851051
+        ]
+      },
+      "properties": {
+        "id": 4513148271,
+        "name": "La Paz",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4513148873,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563576,
+          -17.3865818
+        ]
+      },
+      "properties": {
+        "id": 4513148873,
+        "name": "Chuquisaca",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4630872741,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590108,
+          -17.3927202
+        ]
+      },
+      "properties": {
+        "id": 4630872741,
+        "name": "Correo",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4630872742,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557021,
+          -17.3921476
+        ]
+      },
+      "properties": {
+        "id": 4630872742,
+        "name": "Teatro Adela Zamudio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4630872816,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579317,
+          -17.3925382
+        ]
+      },
+      "properties": {
+        "id": 4630872816,
+        "name": "Baptista",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4630872817,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513165,
+          -17.3913398
+        ]
+      },
+      "properties": {
+        "id": 4630872817,
+        "name": "16 de Julio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673887319,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530562,
+          -17.3935547
+        ]
+      },
+      "properties": {
+        "id": 4673887319,
+        "name": "Sucre",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4715843291,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523661,
+          -17.3860565
+        ]
+      },
+      "properties": {
+        "id": 4715843291,
+        "name": "Paccieri",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4747939543,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534534,
+          -17.3981225
+        ]
+      },
+      "properties": {
+        "id": 4747939543,
+        "name": "San Martín",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4747939821,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550623,
+          -17.3887496
+        ]
+      },
+      "properties": {
+        "id": 4747939821,
+        "name": "Venezuela",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4768581954,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536766,
+          -17.3905404
+        ]
+      },
+      "properties": {
+        "id": 4768581954,
+        "name": "Colombia",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4806920998,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515123,
+          -17.3889195
+        ]
+      },
+      "properties": {
+        "id": 4806920998,
+        "name": "16 de Julio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4929965563,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579112,
+          -17.3995436
+        ]
+      },
+      "properties": {
+        "id": 4929965563,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4929965565,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15758,
+          -17.3996069
+        ]
+      },
+      "properties": {
+        "id": 4929965565,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4929965566,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577948,
+          -17.3992118
+        ]
+      },
+      "properties": {
+        "id": 4929965566,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4929965567,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157528,
+          -17.3993244
+        ]
+      },
+      "properties": {
+        "id": 4929965567,
+        "name": "Ayacucho",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224271,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568822,
+          -17.3965525
+        ]
+      },
+      "properties": {
+        "id": 4959224271,
+        "name": "Nataniel Aguirre",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4989094558,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1505297,
+          -17.3878222
+        ]
+      },
+      "properties": {
+        "id": 4989094558,
+        "name": "Venezuela",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215837,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596273,
+          -17.3894195
+        ]
+      },
+      "properties": {
+        "id": 5102215837,
+        "name": "Ayacucho",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996890,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562246,
+          -17.3887029
+        ]
+      },
+      "properties": {
+        "id": 5117996890,
+        "name": "Plaza Colón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5301399407,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531956,
+          -17.3871765
+        ]
+      },
+      "properties": {
+        "id": 5301399407,
+        "name": "Paccieri",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5346178454,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546706,
+          -17.3868255
+        ]
+      },
+      "properties": {
+        "id": 5346178454,
+        "name": "Salamanca",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5368460671,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1509839,
+          -17.3856149
+        ]
+      },
+      "properties": {
+        "id": 5368460671,
+        "name": "Paccieri",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5472737093,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532679,
+          -17.3915168
+        ]
+      },
+      "properties": {
+        "id": 5472737093,
+        "name": "Lanza",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6269043687,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544428,
+          -17.3919773
+        ]
+      },
+      "properties": {
+        "id": 6269043687,
+        "name": "Heroínas",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "yes",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6269043688,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1638222,
+          -17.3933654
+        ]
+      },
+      "properties": {
+        "id": 6269043688,
+        "name": "Falsuri",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6269044710,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586789,
+          -17.3927798
+        ]
+      },
+      "properties": {
+        "id": 6269044710,
+        "name": "Correo",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6285093143,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1501164,
+          -17.3899202
+        ]
+      },
+      "properties": {
+        "id": 6285093143,
+        "name": "Colombia",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6285093144,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591463,
+          -17.3905637
+        ]
+      },
+      "properties": {
+        "id": 6285093144,
+        "name": "Ecuador",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6426986600,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568958,
+          -17.3865602
+        ]
+      },
+      "properties": {
+        "id": 6426986600,
+        "name": "Reza",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789719,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500015,
+          -17.3983517
+        ]
+      },
+      "properties": {
+        "id": 6546789719,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789722,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554129,
+          -17.3994204
+        ]
+      },
+      "properties": {
+        "id": 6546789722,
+        "name": "Esteban Arze",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789723,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552268,
+          -17.3994558
+        ]
+      },
+      "properties": {
+        "id": 6546789723,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789724,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510195,
+          -17.3986906
+        ]
+      },
+      "properties": {
+        "id": 6546789724,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789725,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512281,
+          -17.3985797
+        ]
+      },
+      "properties": {
+        "id": 6546789725,
+        "name": "Antezana",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789726,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531674,
+          -17.3993477
+        ]
+      },
+      "properties": {
+        "id": 6546789726,
+        "name": "Brasil",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789727,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533675,
+          -17.39895
+        ]
+      },
+      "properties": {
+        "id": 6546789727,
+        "name": "San Martín",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789728,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542976,
+          -17.3988925
+        ]
+      },
+      "properties": {
+        "id": 6546789728,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789729,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541104,
+          -17.3989192
+        ]
+      },
+      "properties": {
+        "id": 6546789729,
+        "name": "25 de Mayo",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789730,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1621314,
+          -17.3999519
+        ]
+      },
+      "properties": {
+        "id": 6546789730,
+        "name": "Huayna Kapac",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789732,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601373,
+          -17.3980684
+        ]
+      },
+      "properties": {
+        "id": 6546789732,
+        "name": "Ladislao Cabrera",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789733,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578012,
+          -17.3978621
+        ]
+      },
+      "properties": {
+        "id": 6546789733,
+        "name": "Ladislao Cabrera",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789734,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534801,
+          -17.3971019
+        ]
+      },
+      "properties": {
+        "id": 6546789734,
+        "name": "Ladislao Cabrera",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789735,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1582303,
+          -17.3964186
+        ]
+      },
+      "properties": {
+        "id": 6546789735,
+        "name": "Calama",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789736,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1505192,
+          -17.3952162
+        ]
+      },
+      "properties": {
+        "id": 6546789736,
+        "name": "Calama",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789738,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153861,
+          -17.395016
+        ]
+      },
+      "properties": {
+        "id": 6546789738,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789739,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1516658,
+          -17.394615
+        ]
+      },
+      "properties": {
+        "id": 6546789739,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789740,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550797,
+          -17.3949516
+        ]
+      },
+      "properties": {
+        "id": 6546789740,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789741,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159271,
+          -17.3959272
+        ]
+      },
+      "properties": {
+        "id": 6546789741,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789742,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1614919,
+          -17.3963469
+        ]
+      },
+      "properties": {
+        "id": 6546789742,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789743,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1606014,
+          -17.3956814
+        ]
+      },
+      "properties": {
+        "id": 6546789743,
+        "name": "Jordán",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789744,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510837,
+          -17.3921487
+        ]
+      },
+      "properties": {
+        "id": 6546789744,
+        "name": "Bolívar",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789745,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511161,
+          -17.391113
+        ]
+      },
+      "properties": {
+        "id": 6546789745,
+        "name": "16 de Julio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789746,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522175,
+          -17.3916175
+        ]
+      },
+      "properties": {
+        "id": 6546789746,
+        "name": "Heroínas",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789747,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534636,
+          -17.3917497
+        ]
+      },
+      "properties": {
+        "id": 6546789747,
+        "name": "Lanza",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789748,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1585441,
+          -17.3945204
+        ]
+      },
+      "properties": {
+        "id": 6546789748,
+        "name": "Santivañez",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789749,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1598614,
+          -17.3929043
+        ]
+      },
+      "properties": {
+        "id": 6546789749,
+        "name": "Heroínas",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789750,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1609233,
+          -17.393882
+        ]
+      },
+      "properties": {
+        "id": 6546789750,
+        "name": "General Achá",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789752,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612192,
+          -17.393077
+        ]
+      },
+      "properties": {
+        "id": 6546789752,
+        "name": "Plaza Guzmán Quitón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789754,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576726,
+          -17.3923019
+        ]
+      },
+      "properties": {
+        "id": 6546789754,
+        "name": "Baptista",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789755,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586429,
+          -17.3924706
+        ]
+      },
+      "properties": {
+        "id": 6546789755,
+        "name": "Correo",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789756,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1595565,
+          -17.3884101
+        ]
+      },
+      "properties": {
+        "id": 6546789756,
+        "name": "México",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789757,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597763,
+          -17.3881606
+        ]
+      },
+      "properties": {
+        "id": 6546789757,
+        "name": "México",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789758,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597358,
+          -17.3872702
+        ]
+      },
+      "properties": {
+        "id": 6546789758,
+        "name": "Ayacucho",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789759,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541491,
+          -17.3885027
+        ]
+      },
+      "properties": {
+        "id": 6546789759,
+        "name": "Lanza",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789760,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1538556,
+          -17.3857212
+        ]
+      },
+      "properties": {
+        "id": 6546789760,
+        "name": "Salamanca",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6546789761,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563966,
+          -17.3863951
+        ]
+      },
+      "properties": {
+        "id": 6546789761,
+        "name": "Ballivián",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6773331726,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.160944,
+          -17.3928583
+        ]
+      },
+      "properties": {
+        "id": 6773331726,
+        "name": "Hamiraya",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7524830387,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520407,
+          -17.3868082
+        ]
+      },
+      "properties": {
+        "id": 7524830387,
+        "name": "Parada 148",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "bench": "no",
+        "bus": "yes",
+        "covered": "no",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8015423520,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1644197,
+          -17.3988018
+        ]
+      },
+      "properties": {
+        "id": 8015423520,
+        "name": "Plaza Reforma Agraria",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "informal": "yes",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8015423521,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1643954,
+          -17.3992074
+        ]
+      },
+      "properties": {
+        "id": 8015423521,
+        "name": "Plaza Reforma Agraria",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "informal": "yes",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8015423522,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1643095,
+          -17.3989305
+        ]
+      },
+      "properties": {
+        "id": 8015423522,
+        "name": "Plaza Reforma Agraria",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "informal": "yes",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8147129126,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1636322,
+          -17.3892028
+        ]
+      },
+      "properties": {
+        "id": 8147129126,
+        "name": "José Martí",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8365550304,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569095,
+          -17.3865331
+        ]
+      },
+      "properties": {
+        "id": 8365550304,
+        "name": "",
+        "type": "taxi",
+        "category": "transport",
+        "subcategory": "taxi",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "taxi"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8565985145,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.161984,
+          -17.3932817
+        ]
+      },
+      "properties": {
+        "id": 8565985145,
+        "name": "Plazuela Guzmán Quitón",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "yes",
+        "bus": "yes",
+        "departures_board": "yes",
+        "highway": "bus_stop",
+        "lit": "yes",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "public",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "start_date": "2021"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8635068931,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1539081,
+          -17.3892674
+        ]
+      },
+      "properties": {
+        "id": 8635068931,
+        "name": "Ecuador",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8635068932,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1518412,
+          -17.3878287
+        ]
+      },
+      "properties": {
+        "id": 8635068932,
+        "name": "Venezuela",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8635068933,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1519262,
+          -17.3880085
+        ]
+      },
+      "properties": {
+        "id": 8635068933,
+        "name": "16 de Julio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "traffic_sign": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8639105932,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619629,
+          -17.3935863
+        ]
+      },
+      "properties": {
+        "id": 8639105932,
+        "name": "Heroínas",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8907971589,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1556773,
+          -17.3918733
+        ]
+      },
+      "properties": {
+        "id": 8907971589,
+        "name": "Teatro Adela Zamudio",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8912760517,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593528,
+          -17.3894533
+        ]
+      },
+      "properties": {
+        "id": 8912760517,
+        "name": "Mayor Rocha",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9139049452,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527003,
+          -17.3958011
+        ]
+      },
+      "properties": {
+        "id": 9139049452,
+        "name": "Parada 17",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "public_transport": "platform"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9163576443,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1624824,
+          -17.3861036
+        ]
+      },
+      "properties": {
+        "id": 9163576443,
+        "name": "Parque de la Familia",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9188181119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603721,
+          -17.399346
+        ]
+      },
+      "properties": {
+        "id": 9188181119,
+        "name": "Plaza Esteban Arze",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "no",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9591270784,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15014,
+          -17.3911149
+        ]
+      },
+      "properties": {
+        "id": 9591270784,
+        "name": "",
+        "type": "taxi",
+        "category": "transport",
+        "subcategory": "taxi",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "taxi"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9774122172,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1635599,
+          -17.3889577
+        ]
+      },
+      "properties": {
+        "id": 9774122172,
+        "name": "México",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9898754122,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522287,
+          -17.3915504
+        ]
+      },
+      "properties": {
+        "id": 9898754122,
+        "name": "Radio Móvil Santiago",
+        "type": "taxi",
+        "category": "transport",
+        "subcategory": "taxi",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Antezana",
+        "amenity": "taxi",
+        "operator": "Radio Móvil Santiago"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9898754126,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589669,
+          -17.3927043
+        ]
+      },
+      "properties": {
+        "id": 9898754126,
+        "name": "Radio Express Ayacucho",
+        "type": "taxi",
+        "category": "transport",
+        "subcategory": "taxi",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "taxi",
+        "opening_hours": "Mo-Su 18:00+",
+        "operator": "Radio Express Ayacucho"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10274952147,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611182,
+          -17.3983184
+        ]
+      },
+      "properties": {
+        "id": 10274952147,
+        "name": "Tumusla",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11286280269,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569295,
+          -17.3965249
+        ]
+      },
+      "properties": {
+        "id": 11286280269,
+        "name": "Parada 3",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "public_transport": "platform",
+        "shelter": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11679558743,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569651,
+          -17.3994214
+        ]
+      },
+      "properties": {
+        "id": 11679558743,
+        "name": "Parada 150",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "public_transport": "platform"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12081766216,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511028,
+          -17.3978773
+        ]
+      },
+      "properties": {
+        "id": 12081766216,
+        "name": "Uruguay",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "kerb": "raised",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12098082912,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1627306,
+          -17.3877861
+        ]
+      },
+      "properties": {
+        "id": 12098082912,
+        "name": "Tumusla",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "node",
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "highway": "bus_stop",
+        "level": "0",
+        "lit": "no",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "pole": "yes",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 983137909,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15797425,
+          -17.399545449999998
+        ]
+      },
+      "properties": {
+        "id": 983137909,
+        "name": "Aroma",
+        "type": "platform",
+        "category": "transport",
+        "subcategory": "public_transit",
+        "osmType": "way",
+        "bench": "yes",
+        "bin": "no",
+        "bus": "yes",
+        "departures_board": "no",
+        "lit": "yes",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "public_transport": "platform",
+        "shelter": "yes",
+        "surface": "concrete"
+      }
+    }
+  ]
+}

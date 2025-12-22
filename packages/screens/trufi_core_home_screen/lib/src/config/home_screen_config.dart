@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
@@ -39,6 +40,21 @@ class HomeScreenConfig {
   /// ```
   final List<TrufiLayer> Function(TrufiMapController controller)? customMapLayers;
 
+  /// Optional additional settings widget for the map type button.
+  ///
+  /// Use this to add POI layer settings or other custom settings
+  /// to the map type/layers settings screen.
+  ///
+  /// Example with POI layers:
+  /// ```dart
+  /// additionalMapSettings: (context) => POILayersSettingsSection(
+  ///   enabledSubcategories: poiManager.enabledSubcategories,
+  ///   availableSubcategories: poiManager.availableSubcategories,
+  ///   onSubcategoryToggled: poiManager.toggleSubcategory,
+  /// ),
+  /// ```
+  final Widget Function(BuildContext context)? additionalMapSettings;
+
   const HomeScreenConfig({
     required this.otpEndpoint,
     this.chooseLocationZoom = 16.0,
@@ -48,5 +64,6 @@ class HomeScreenConfig {
     this.appName,
     this.deepLinkScheme,
     this.customMapLayers,
+    this.additionalMapSettings,
   });
 }

@@ -39,7 +39,8 @@ class HomeScreen extends StatefulWidget {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
 
   const HomeScreen({
     super.key,
@@ -163,14 +164,14 @@ class _HomeScreenState extends State<HomeScreen>
           zoom: mapEngineManager.defaultZoom,
         ),
       );
-      _fitCameraLayer = FitCameraLayer(
-        _mapController!,
-      );
+      _fitCameraLayer = FitCameraLayer(_mapController!);
 
       // Create custom layers if provided in config
       if (widget.config.customMapLayers != null) {
         _customLayers = widget.config.customMapLayers!(_mapController!);
-        debugPrint('Custom layers initialized: ${_customLayers!.length} layers');
+        debugPrint(
+          'Custom layers initialized: ${_customLayers!.length} layers',
+        );
       }
 
       // Try to start GPS tracking now that map controller is ready
@@ -535,7 +536,10 @@ class _HomeScreenState extends State<HomeScreen>
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.location_disabled_rounded, color: theme.colorScheme.error),
+            Icon(
+              Icons.location_disabled_rounded,
+              color: theme.colorScheme.error,
+            ),
             const SizedBox(width: 12),
             const Expanded(child: Text('Location Disabled')),
           ],
@@ -747,7 +751,8 @@ class _HomeScreenState extends State<HomeScreen>
               // Apply pending fit points once viewport is ready
               if (!_viewportReady) {
                 _viewportReady = true;
-                if (_pendingFitPoints != null && _pendingFitPoints!.isNotEmpty) {
+                if (_pendingFitPoints != null &&
+                    _pendingFitPoints!.isNotEmpty) {
                   // Set initial padding considering search bar and expanded sheet
                   final sheetHeight = constraints.maxHeight * _sheetMidSize;
                   _fitCameraLayer?.updatePadding(
@@ -803,7 +808,8 @@ class _HomeScreenState extends State<HomeScreen>
                               onMenuPressed: widget.onMenuPressed,
                             ),
                             // Departure time chip (visible when locations are set)
-                            if (state.fromPlace != null || state.toPlace != null)
+                            if (state.fromPlace != null ||
+                                state.toPlace != null)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: _DepartureTimeChip(
@@ -850,23 +856,6 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  /// Build map type button with optional POI layers integration
-  /// This method checks if POI layers are available in the widget tree
-  Widget _buildMapTypeButton(MapEngineManager mapEngineManager) {
-    return MapTypeButton.fromEngines(
-      engines: mapEngineManager.engines,
-      currentEngineIndex: mapEngineManager.currentIndex,
-      onEngineChanged: (engine) {
-        mapEngineManager.setEngine(engine);
-      },
-      // POI layers can be added here by apps that include trufi_core_poi_layers
-      // Example:
-      // additionalSettings: context.poiLayersCubitOrNull != null
-      //   ? BlocBuilder<POILayersCubit, POILayersState>(...)
-      //   : null,
-    );
-  }
-
   Widget _buildMapControls(
     BuildContext context,
     MapEngineManager mapEngineManager,
@@ -884,13 +873,23 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               // Map type button (with optional POI layers if available)
               if (mapEngineManager.engines.length > 1) ...[
-                _buildMapTypeButton(mapEngineManager),
+                MapTypeButton.fromEngines(
+                  engines: mapEngineManager.engines,
+                  currentEngineIndex: mapEngineManager.currentIndex,
+                  onEngineChanged: (engine) {
+                    mapEngineManager.setEngine(engine);
+                  },
+                  additionalSettings: widget.config.additionalMapSettings?.call(
+                    context,
+                  ),
+                ),
                 const SizedBox(height: 8),
               ],
               // My location button
               _MapControlButton(
                 icon: _locationService.isTracking
-                    ? Icons.my_location_rounded  // Filled when tracking
+                    ? Icons
+                          .my_location_rounded // Filled when tracking
                     : Icons.my_location_outlined, // Outlined when not tracking
                 onPressed: _onMyLocationPressed,
                 isLoading: _isLocating,
@@ -941,7 +940,11 @@ class _HomeScreenState extends State<HomeScreen>
                   // Clear the home screen's location marker before starting navigation
                   // to avoid duplicate markers on the navigation screen
                   _myLocationLayer?.clearMarkers();
-                  widget.onStartNavigation!(context, itinerary, locationService);
+                  widget.onStartNavigation!(
+                    context,
+                    itinerary,
+                    locationService,
+                  );
                 }
               : null,
           locationService: _locationService,
@@ -1035,7 +1038,9 @@ class _HomeScreenState extends State<HomeScreen>
                   from: state.fromPlace!,
                   to: state.toPlace!,
                   itinerary: state.selectedItinerary!,
-                  selectedItineraryIndex: selectedIndex != -1 ? selectedIndex : null,
+                  selectedItineraryIndex: selectedIndex != -1
+                      ? selectedIndex
+                      : null,
                   appName: appName,
                   deepLinkScheme: widget.config.deepLinkScheme,
                   strings: ShareRouteStrings(
@@ -1335,11 +1340,7 @@ class _DestinationMarker extends StatelessWidget {
       color: _color,
       size: 32,
       shadows: [
-        Shadow(
-          color: Colors.black38,
-          blurRadius: 4,
-          offset: Offset(0, 2),
-        ),
+        Shadow(color: Colors.black38, blurRadius: 4, offset: Offset(0, 2)),
       ],
     );
   }
@@ -1452,12 +1453,9 @@ class _MapControlButton extends StatelessWidget {
 /// Layer for displaying origin/destination markers before route is found
 class _LocationMarkersLayer extends TrufiLayer {
   _LocationMarkersLayer(super.controller)
-      : super(id: 'location-markers-layer', layerLevel: 2);
+    : super(id: 'location-markers-layer', layerLevel: 2);
 
-  void updateMarkers({
-    TrufiLocation? origin,
-    TrufiLocation? destination,
-  }) {
+  void updateMarkers({TrufiLocation? origin, TrufiLocation? destination}) {
     clearMarkers();
 
     if (origin != null) {
@@ -1574,12 +1572,13 @@ class _DepartureTimeChip extends StatelessWidget {
 
   String _formatDateTime(DateTime dt) {
     final now = DateTime.now();
-    final isToday = dt.year == now.year && dt.month == now.month && dt.day == now.day;
-    final isTomorrow = dt.year == now.year &&
-        dt.month == now.month &&
-        dt.day == now.day + 1;
+    final isToday =
+        dt.year == now.year && dt.month == now.month && dt.day == now.day;
+    final isTomorrow =
+        dt.year == now.year && dt.month == now.month && dt.day == now.day + 1;
 
-    final time = '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    final time =
+        '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 
     if (isToday) {
       return time;
@@ -1590,16 +1589,17 @@ class _DepartureTimeChip extends StatelessWidget {
     }
   }
 
-  void _showTimePicker(BuildContext context, routing.RoutingPreferencesManager manager) {
+  void _showTimePicker(
+    BuildContext context,
+    routing.RoutingPreferencesManager manager,
+  ) {
     HapticFeedback.selectionClick();
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _DepartureTimeSheet(
-        manager: manager,
-        onTimeChanged: onTimeChanged,
-      ),
+      builder: (context) =>
+          _DepartureTimeSheet(manager: manager, onTimeChanged: onTimeChanged),
     );
   }
 }
@@ -1760,16 +1760,28 @@ class _DepartureTimeSheetState extends State<_DepartureTimeSheet> {
 
   String _formatDate(DateTime dt) {
     final now = DateTime.now();
-    final isToday = dt.year == now.year && dt.month == now.month && dt.day == now.day;
-    final isTomorrow = dt.year == now.year &&
-        dt.month == now.month &&
-        dt.day == now.day + 1;
+    final isToday =
+        dt.year == now.year && dt.month == now.month && dt.day == now.day;
+    final isTomorrow =
+        dt.year == now.year && dt.month == now.month && dt.day == now.day + 1;
 
     if (isToday) return 'Today';
     if (isTomorrow) return 'Tomorrow';
 
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[dt.month - 1]} ${dt.day}';
   }
 
@@ -1847,7 +1859,9 @@ class _TimeModeOption extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Material(
-      color: isSelected ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
+      color: isSelected
+          ? colorScheme.primaryContainer
+          : colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: () {
@@ -1931,11 +1945,7 @@ class _DateTimeButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 20,
-                color: colorScheme.primary,
-              ),
+              Icon(icon, size: 20, color: colorScheme.primary),
               const SizedBox(width: 8),
               Text(
                 label,
@@ -1955,7 +1965,10 @@ class _DateTimeButton extends StatelessWidget {
 /// Layer for displaying user's current location on the map
 class _MyLocationLayer extends TrufiLayer {
   _MyLocationLayer(super.controller)
-      : super(id: 'my-location-layer', layerLevel: 0); // Below origin/destination markers
+    : super(
+        id: 'my-location-layer',
+        layerLevel: 0,
+      ); // Below origin/destination markers
 
   void setLocation(LatLng position, double? accuracy) {
     clearMarkers();
