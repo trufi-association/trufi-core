@@ -116,19 +116,18 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
               ),
             ),
 
-            // Hero section with icon
-            _buildAnimatedItem(
-              index: 1,
-              child: _MapTypeHeroSection(
-                title: widget.sectionTitle ?? 'Map Type',
-              ),
-            ),
-
             // Map options list
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                 children: [
+                  // Map type section header
+                  _buildAnimatedItem(
+                    index: 1,
+                    child: _MapTypeHeroSection(
+                      title: widget.sectionTitle ?? 'Map Type',
+                    ),
+                  ),
                   // Map type options
                   ...List.generate(widget.mapOptions.length, (index) {
                     final option = widget.mapOptions[index];
@@ -137,7 +136,7 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
                     return _buildAnimatedItem(
                       index: index + 2,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                         child: _ModernMapTypeCard(
                           option: option,
                           isSelected: isSelected,
@@ -149,39 +148,10 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
 
                   // Additional settings section (e.g., POI layers)
                   if (widget.additionalSettings != null) ...[
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     widget.additionalSettings!,
                   ],
                 ],
-              ),
-            ),
-
-            // Bottom action
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -4),
-                  ),
-                ],
-              ),
-              child: FilledButton.icon(
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.check_rounded, size: 20),
-                label: Text(widget.applyButtonText ?? 'Apply Changes'),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
               ),
             ),
           ],
@@ -257,7 +227,7 @@ class _MapSettingsHeader extends StatelessWidget {
   }
 }
 
-/// Hero section with map icon and title
+/// Simple text header for map type section
 class _MapTypeHeroSection extends StatelessWidget {
   final String title;
 
@@ -268,62 +238,23 @@ class _MapTypeHeroSection extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            colorScheme.primaryContainer,
-            colorScheme.primaryContainer.withValues(alpha: 0.7),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.15),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Row(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(
-              Icons.map_rounded,
-              size: 30,
-              color: colorScheme.onPrimaryContainer,
+          Text(
+            title,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurface,
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Choose your preferred map style',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
-                  ),
-                ),
-              ],
+          const SizedBox(height: 2),
+          Text(
+            'Choose your preferred map style',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],

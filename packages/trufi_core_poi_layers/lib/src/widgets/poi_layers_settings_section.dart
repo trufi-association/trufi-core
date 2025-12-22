@@ -68,7 +68,7 @@ class POILayersSettingsSection extends StatelessWidget {
 
 }
 
-/// Header for the POI layers section
+/// Simple text header for POI layers section
 class _POILayersHeader extends StatelessWidget {
   final String title;
 
@@ -77,24 +77,26 @@ class _POILayersHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final l10n = POILayersLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             l10n.toggleLayersOnTheMap,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
         ],
@@ -141,21 +143,18 @@ class _POICategoryTileState extends State<_POICategoryTile> {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: widget.isEnabled
-            ? widget.category.color.withValues(alpha: 0.08)
-            : colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(16),
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: widget.isEnabled
-              ? widget.category.color.withValues(alpha: 0.3)
-              : colorScheme.outlineVariant.withValues(alpha: 0.2),
-          width: 1,
+              ? colorScheme.primary.withValues(alpha: 0.3)
+              : colorScheme.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Column(
           children: [
             // Main category tile
@@ -171,54 +170,28 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                   widget.onToggle(!widget.isEnabled);
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(12),
                   child: Row(
                     children: [
-                      // Category icon with badge
-                      Stack(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: widget.isEnabled
-                                  ? widget.category.color.withValues(alpha: 0.15)
-                                  : colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Icon(
-                              widget.category.icon,
-                              size: 24,
-                              color: widget.isEnabled
-                                  ? widget.category.color
-                                  : colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          if (widget.isEnabled)
-                            Positioned(
-                              right: 0,
-                              bottom: 0,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  color: widget.category.color,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: colorScheme.surface,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.check,
-                                  size: 10,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                        ],
+                      // Category icon
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: widget.isEnabled
+                              ? widget.category.color.withValues(alpha: 0.12)
+                              : colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          widget.category.icon,
+                          size: 20,
+                          color: widget.isEnabled
+                              ? widget.category.color
+                              : colorScheme.onSurfaceVariant,
+                        ),
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       // Category name and subtitle
                       Expanded(
                         child: Column(
@@ -226,15 +199,13 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                           children: [
                             Text(
                               l10n.categoryName(widget.category.name),
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: widget.isEnabled
-                                    ? colorScheme.onSurface
-                                    : colorScheme.onSurfaceVariant,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: colorScheme.onSurface,
                               ),
                             ),
                             if (hasSubcategories) ...[
-                              const SizedBox(height: 2),
+                              const SizedBox(height: 1),
                               Text(
                                 _getSubcategoryCountText(),
                                 style: theme.textTheme.bodySmall?.copyWith(
@@ -252,62 +223,33 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                             HapticFeedback.selectionClick();
                             setState(() => _isExpanded = !_isExpanded);
                           },
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
                             child: AnimatedRotation(
                               turns: _isExpanded ? 0.5 : 0,
                               duration: const Duration(milliseconds: 200),
                               child: Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: widget.category.color,
-                                size: 24,
+                                Icons.expand_more_rounded,
+                                color: colorScheme.onSurfaceVariant,
+                                size: 20,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 8),
                       ],
-                      // Switch toggle (visual indicator only, entire row is tappable)
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: 48,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: widget.isEnabled
-                              ? widget.category.color
-                              : colorScheme.outlineVariant,
-                        ),
-                        child: AnimatedAlign(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeInOut,
-                          alignment: widget.isEnabled
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            margin: const EdgeInsets.symmetric(horizontal: 2),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: colorScheme.surface,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.2),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: widget.isEnabled
-                                ? Icon(
-                                    Icons.check,
-                                    size: 14,
-                                    color: widget.category.color,
-                                  )
-                                : null,
-                          ),
-                        ),
+                      // Switch toggle
+                      Switch(
+                        value: widget.isEnabled,
+                        onChanged: (value) {
+                          HapticFeedback.lightImpact();
+                          if (hasSubcategories && value) {
+                            setState(() => _isExpanded = true);
+                          }
+                          widget.onToggle(value);
+                        },
+                        activeTrackColor: widget.category.color,
+                        activeThumbColor: colorScheme.surface,
                       ),
                     ],
                   ),
