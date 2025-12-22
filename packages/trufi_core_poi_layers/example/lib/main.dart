@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 import 'package:provider/provider.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
-import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart' hide LatLngBounds;
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart'
+    hide LatLngBounds;
 
-/// Example demonstrating the multi-instance POI layer pattern.
+/// Example demonstrating POILayersManager usage with Provider.
 ///
-/// This example shows how to use POICategoryLayer with:
-/// - One layer instance per POI category
-/// - All data loaded upfront in parallel
-/// - Direct layer creation without factory
-/// - Subcategory-only toggling (categories derived from subcategories)
-///
-/// Compare this to the main.dart example which uses manual layer management.
+/// This example shows how to use POILayersManager as a ChangeNotifier:
+/// - Simplified POI layer management via Provider
+/// - Automatic state synchronization
+/// - Clean separation of concerns
 void main() {
-  runApp(const MultiInstanceExampleApp());
+  runApp(const POILayersExampleApp());
 }
 
-class MultiInstanceExampleApp extends StatelessWidget {
-  const MultiInstanceExampleApp({super.key});
+class POILayersExampleApp extends StatelessWidget {
+  const POILayersExampleApp({super.key});
 
   static final List<ITrufiMapEngine> mapEngines = [
     const FlutterMapEngine(
@@ -41,9 +38,14 @@ class MultiInstanceExampleApp extends StatelessWidget {
             defaultCenter: const latlng.LatLng(-17.3895, -66.1568),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => POILayersManager(
+            assetsBasePath: 'assets/pois',
+          ),
+        ),
       ],
       child: MaterialApp(
-        title: 'POI Layers Multi-Instance Demo',
+        title: 'POI Layers Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -51,24 +53,21 @@ class MultiInstanceExampleApp extends StatelessWidget {
         ),
         localizationsDelegates: POILayersLocalizations.localizationsDelegates,
         supportedLocales: POILayersLocalizations.supportedLocales,
-        home: const MultiInstanceDemoPage(),
+        home: const POILayersDemoPage(),
       ),
     );
   }
 }
 
-class MultiInstanceDemoPage extends StatefulWidget {
-  const MultiInstanceDemoPage({super.key});
+class POILayersDemoPage extends StatefulWidget {
+  const POILayersDemoPage({super.key});
 
   @override
-  State<MultiInstanceDemoPage> createState() => _MultiInstanceDemoPageState();
+  State<POILayersDemoPage> createState() => _POILayersDemoPageState();
 }
 
-class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
+class _POILayersDemoPageState extends State<POILayersDemoPage> {
   late final TrufiMapController _mapController;
-  late final POILayersCubit _poiCubit;
-  late final GeoJSONLoader _loader;
-  List<POICategoryLayer> _poiLayers = [];
 
   POI? _selectedPOI;
 
@@ -87,64 +86,19 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
       ),
     );
 
-    // Create loader
-    _loader = GeoJSONLoader(assetsBasePath: 'assets/pois');
-
-    // Create POI cubit
-    _poiCubit = POILayersCubit();
-
-    // Initialize POIs
-    _initializePOIs();
+    // Initialize POI manager after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializePOIs();
+    });
   }
 
   Future<void> _initializePOIs() async {
     try {
-      // Load all GeoJSON data and create layers
-      // 1. Load all categories in parallel
-      final loadingFutures = POICategory.values
-          .map((category) => _loader
-              .loadCategory(category)
-              .then((pois) => MapEntry(category, pois)))
-          .toList();
-
-      final loadedData = await Future.wait(loadingFutures);
-
-      // 2. Create one layer per category with pre-loaded data
-      _poiLayers = loadedData
-          .map((entry) => POICategoryLayer(
-                controller: _mapController,
-                category: entry.key,
-                pois: entry.value,
-                poiFilter: (poi) => _poiCubit.state.isPOIEnabled(poi),
-              ))
-          .toList();
-
-      // 3. Listen to cubit changes and update layer visibility
-      _poiCubit.stream.listen(_updateLayerVisibility);
-
-      debugPrint('✅ Created ${_poiLayers.length} POI layer instances');
-      for (final layer in _poiLayers) {
-        debugPrint('  - Layer: ${layer.id}, POIs: ${layer.poiCount}, visible: ${layer.visible}');
-      }
-
-      if (mounted) {
-        setState(() {});
-      }
+      final poiManager = context.read<POILayersManager>();
+      await poiManager.initialize(_mapController);
     } catch (e, stackTrace) {
       debugPrint('❌ Error initializing POIs: $e');
       debugPrint('Stack trace: $stackTrace');
-    }
-  }
-
-  void _updateLayerVisibility(POILayersState state) {
-    debugPrint('🔄 _updateLayerVisibility called');
-    debugPrint('   enabledSubcategories: ${state.enabledSubcategories}');
-    for (final layer in _poiLayers) {
-      final wasVisible = layer.visible;
-      layer.visible = state.isCategoryEnabled(layer.category);
-      layer.poiFilter = (poi) => state.isPOIEnabled(poi);
-      debugPrint('   ${layer.category.name}: visible $wasVisible -> ${layer.visible}');
-      layer.updateMarkers();
     }
   }
 
@@ -156,46 +110,11 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
 
   @override
   void dispose() {
-    _poiCubit.close();
     _mapController.dispose();
     super.dispose();
   }
 
-  Widget _buildMap(ITrufiMapEngine engine) {
-    return engine.buildMap(
-      controller: _mapController,
-      onMapClick: (pos) {
-        // Use built-in marker picking from TrufiMapController
-        final markers = _mapController.pickMarkersAt(pos, hitboxPx: 40.0);
-
-        if (markers.isEmpty) {
-          // Close bottom sheet if tapping on empty area
-          if (_selectedPOI != null) {
-            setState(() => _selectedPOI = null);
-          }
-        } else if (markers.length == 1) {
-          // Single marker - find the POI
-          final marker = markers.first;
-          _findAndSelectPOI(marker.id);
-        } else {
-          // Multiple markers - show selection dialog
-          debugPrint('Found ${markers.length} markers nearby');
-          _showMarkerSelectionDialog(markers);
-        }
-      },
-    );
-  }
-
-  void _showMarkerSelectionDialog(List<TrufiMarker> markers) {
-    // Convert markers to POIs
-    final pois = <POI>[];
-    for (final marker in markers) {
-      final poi = _findPOIByMarkerId(marker.id);
-      if (poi != null) {
-        pois.add(poi);
-      }
-    }
-
+  void _showMarkerSelectionDialog(List<POI> pois) {
     if (pois.isEmpty) return;
 
     showModalBottomSheet(
@@ -211,167 +130,135 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
     );
   }
 
-  POI? _findPOIByMarkerId(String markerId) {
-    // Extract category and POI ID from marker ID
-    // Format: "poi_<category>_<poi_id>"
-    final parts = markerId.split('_');
-    if (parts.length < 3) return null;
-
-    final categoryName = parts[1];
-    final poiId = parts.sublist(2).join('_');
-
-    // Find the layer
-    final layer = _poiLayers.where((l) => l.category.name == categoryName).firstOrNull;
-    if (layer == null) return null;
-
-    // Find the POI in the layer
-    return layer.pois.where((p) => p.id == poiId).firstOrNull;
-  }
-
-  void _findAndSelectPOI(String markerId) {
-    // Extract category and POI ID from marker ID
-    // Format: "poi_<category>_<poi_id>"
-    final parts = markerId.split('_');
-    if (parts.length < 3) return;
-
-    final categoryName = parts[1];
-    final poiId = parts.sublist(2).join('_');
-
-    // Find the layer
-    final layer = _poiLayers.firstWhere(
-      (l) => l.category.name == categoryName,
-      orElse: () => _poiLayers.first,
-    );
-
-    // Find the POI in the layer
-    final poi = layer.pois.firstWhere(
-      (p) => p.id == poiId,
-      orElse: () => layer.pois.first,
-    );
-    _handlePOITap(poi);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final mapEngineManager = MapEngineManager.watch(context);
+    final mapEngineManager = context.watch<MapEngineManager>();
+    final poiManager = context.watch<POILayersManager>();
 
-    return BlocProvider.value(
-      value: _poiCubit,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            // Map
-            _buildMap(mapEngineManager.currentEngine),
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Map
+          mapEngineManager.currentEngine.buildMap(
+            controller: _mapController,
+            onMapClick: (pos) {
+              final markers = _mapController.pickMarkersAt(pos, hitboxPx: 40.0);
 
-            // Top-right action buttons
-            Positioned(
-              top: 16,
-              right: 16,
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    // Map Type + POI Layers button
-                    MapTypeButton.fromEngines(
-                      engines: mapEngineManager.engines,
-                      currentEngineIndex: mapEngineManager.currentIndex,
-                      onEngineChanged: (engine) {
-                        mapEngineManager.setEngine(engine);
-                      },
-                      settingsAppBarTitle: 'Map Settings',
-                      settingsSectionTitle: 'Map Type',
-                      settingsApplyButtonText: 'Apply',
-                      // Wrap with BlocProvider.value so the cubit is available in the modal route
-                      additionalSettings: BlocProvider.value(
-                        value: _poiCubit,
-                        child: BlocBuilder<POILayersCubit, POILayersState>(
-                          builder: (context, state) {
-                            return POILayersSettingsSection(
-                              enabledSubcategories: state.enabledSubcategories,
-                              availableSubcategories: {
-                                for (final layer in _poiLayers)
-                                  layer.category: layer.pois
-                                      .where((poi) => poi.subcategory != null)
-                                      .map((poi) => poi.subcategory!)
-                                      .toSet(),
-                              },
-                              onCategoryToggled: (category, enabled) {
-                                final subcats = _poiLayers
-                                    .firstWhere((l) => l.category == category)
-                                    .pois
-                                    .where((poi) => poi.subcategory != null)
-                                    .map((poi) => poi.subcategory!)
-                                    .toSet();
-                                _poiCubit.toggleCategory(category, enabled, subcats);
-                              },
-                              onSubcategoryToggled:
-                                  (category, subcategory, enabled) {
-                                _poiCubit.toggleSubcategory(
-                                    category, subcategory, enabled);
-                              },
-                            );
+              if (markers.isEmpty) {
+                if (_selectedPOI != null) {
+                  setState(() => _selectedPOI = null);
+                }
+              } else if (markers.length == 1) {
+                final poi = poiManager.findPOIByMarkerId(markers.first.id);
+                if (poi != null) {
+                  _handlePOITap(poi);
+                }
+              } else {
+                final pois = poiManager.findPOIsFromMarkers(markers);
+                _showMarkerSelectionDialog(pois);
+              }
+            },
+          ),
+
+          // Loading indicator
+          if (!poiManager.isInitialized)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+
+          // Top-right action buttons
+          Positioned(
+            top: 16,
+            right: 16,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // Map Type + POI Layers button
+                  MapTypeButton.fromEngines(
+                    engines: mapEngineManager.engines,
+                    currentEngineIndex: mapEngineManager.currentIndex,
+                    onEngineChanged: (engine) {
+                      mapEngineManager.setEngine(engine);
+                    },
+                    settingsAppBarTitle: 'Map Settings',
+                    settingsSectionTitle: 'Map Type',
+                    settingsApplyButtonText: 'Apply',
+                    additionalSettings: Consumer<POILayersManager>(
+                      builder: (context, manager, _) {
+                        return POILayersSettingsSection(
+                          enabledSubcategories: manager.enabledSubcategories,
+                          availableSubcategories: manager.availableSubcategories,
+                          onCategoryToggled: (category, enabled) {
+                            manager.toggleCategory(category, enabled);
                           },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    _ActionButton(
-                      icon: Icons.my_location,
-                      tooltip: 'Center Map',
-                      onPressed: () {
-                        _mapController.updateCamera(
-                          target: _initialPosition,
-                          zoom: _initialZoom,
+                          onSubcategoryToggled: (category, subcategory, enabled) {
+                            manager.toggleSubcategory(
+                                category, subcategory, enabled);
+                          },
                         );
                       },
                     ),
-                    const SizedBox(height: 8),
-                    // Debug button to show layer stats
-                    _ActionButton(
-                      icon: Icons.info_outline,
-                      tooltip: 'Layer Stats',
-                      onPressed: _showLayerStats,
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8),
+                  _ActionButton(
+                    icon: Icons.my_location,
+                    tooltip: 'Center Map',
+                    onPressed: () {
+                      _mapController.updateCamera(
+                        target: _initialPosition,
+                        zoom: _initialZoom,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  // Debug button to show layer stats
+                  _ActionButton(
+                    icon: Icons.info_outline,
+                    tooltip: 'Layer Stats',
+                    onPressed: () => _showLayerStats(poiManager),
+                  ),
+                ],
               ),
             ),
+          ),
 
-            // POI detail bottom sheet
-            if (_selectedPOI != null)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _POIBottomSheet(
-                  poi: _selectedPOI!,
-                  onClose: () {
-                    setState(() => _selectedPOI = null);
-                  },
-                ),
+          // POI detail bottom sheet
+          if (_selectedPOI != null)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _POIBottomSheet(
+                poi: _selectedPOI!,
+                onClose: () {
+                  setState(() => _selectedPOI = null);
+                },
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
 
-  void _showLayerStats() {
-    final loaderStats = _loader.getStats();
+  void _showLayerStats(POILayersManager poiManager) {
+    final stats = poiManager.getStats();
     final layerInfo = StringBuffer();
 
     layerInfo.writeln('📊 Layer Statistics\n');
-    layerInfo.writeln('Total layers: ${_poiLayers.length}');
-    layerInfo.writeln(
-        'Cached categories: ${loaderStats['cached_categories']}');
-    layerInfo.writeln(
-        'Loading categories: ${loaderStats['loading_categories']}');
+    layerInfo.writeln('Initialized: ${stats['initialized']}');
+    layerInfo.writeln('Total layers: ${stats['layer_count']}');
+
+    final loaderStats = stats['loader_stats'] as Map<String, dynamic>;
+    layerInfo.writeln('Cached categories: ${loaderStats['cached_categories']}');
     layerInfo.writeln('Total POIs: ${loaderStats['total_pois']}\n');
 
     layerInfo.writeln('Per-Layer Stats:');
-    for (final layer in _poiLayers) {
-      final status = layer.visible ? '✅' : '⚪';
+    final layerStats = stats['layers'] as Map<String, dynamic>;
+    for (final entry in layerStats.entries) {
+      final layerData = entry.value as Map<String, dynamic>;
+      final status = layerData['visible'] ? '✅' : '⚪';
       layerInfo.writeln(
-          '$status ${layer.category.name}: ${layer.poiCount} POIs, ${layer.visibleMarkerCount} markers');
+          '$status ${entry.key}: ${layerData['poi_count']} POIs, ${layerData['visible_markers']} markers');
     }
 
     showDialog(
