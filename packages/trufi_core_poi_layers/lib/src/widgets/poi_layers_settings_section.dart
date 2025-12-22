@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../models/poi_category.dart';
 import '../l10n/poi_layers_localizations.dart';
+import '../l10n/poi_layers_localizations_ext.dart';
 
 /// A settings section widget for configuring POI layer visibility.
 /// Can be integrated into a settings screen or shown as a standalone modal.

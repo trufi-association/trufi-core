@@ -82,5 +82,7 @@
   "poiTypeGuestHouse": "Casa de huéspedes",
   "poiTypeMotel": "Motel",
   "poiTypeApartment": "Apartamento",
-  "poiTypeUnknown": "Lugar"
+  "poiTypeUnknown": "Lugar",
+  "selectPlace": "Seleccionar lugar",
+  "placesCount": "{count} lugares"
 }

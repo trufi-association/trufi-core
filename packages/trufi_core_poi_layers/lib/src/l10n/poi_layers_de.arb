@@ -82,5 +82,7 @@
   "poiTypeGuestHouse": "Pension",
   "poiTypeMotel": "Motel",
   "poiTypeApartment": "Apartment",
-  "poiTypeUnknown": "Ort"
+  "poiTypeUnknown": "Ort",
+  "selectPlace": "Ort auswählen",
+  "placesCount": "{count} Orte"
 }

@@ -256,4 +256,12 @@ class POILayersLocalizationsEs extends POILayersLocalizations {
 
   @override
   String get poiTypeUnknown => 'Lugar';
+
+  @override
+  String get selectPlace => 'Seleccionar lugar';
+
+  @override
+  String placesCount(int count) {
+    return '$count lugares';
+  }
 }

@@ -133,5 +133,18 @@
   "poiTypeGuestHouse": "Guest house",
   "poiTypeMotel": "Motel",
   "poiTypeApartment": "Apartment",
-  "poiTypeUnknown": "Place"
+  "poiTypeUnknown": "Place",
+  "selectPlace": "Select place",
+  "@selectPlace": {
+    "description": "Title for POI selection sheet when multiple markers are tapped"
+  },
+  "placesCount": "{count} places",
+  "@placesCount": {
+    "description": "Count of places in selection sheet",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../models/poi.dart';
 import '../l10n/poi_layers_localizations.dart';
+import '../l10n/poi_layers_localizations_ext.dart';
+import '../models/poi.dart';
 
 /// Panel showing POI details when tapped
 class POIDetailPanel extends StatelessWidget {
