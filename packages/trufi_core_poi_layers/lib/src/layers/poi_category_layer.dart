@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-import '../cubit/poi_layers_cubit.dart';
 import '../data/models/poi.dart';
 import '../data/models/poi_category.dart';
 
@@ -9,7 +8,7 @@ import '../data/models/poi_category.dart';
 ///
 /// This layer displays POIs for one specific category with:
 /// - Pre-loaded data: Receives POIs directly at construction
-/// - Automatic visibility: Syncs with POILayersCubit category state
+/// - External visibility control: Use `visible` property to show/hide
 /// - Independent lifecycle: Each category is a separate layer instance
 /// - Hierarchical support: Can have a parent layer for UI organization
 ///
@@ -24,81 +23,50 @@ import '../data/models/poi_category.dart';
 ///   controller: mapController,
 ///   category: POICategory.food,
 ///   pois: foodPOIs,
-///   cubit: poiLayersCubit,
 /// );
+///
+/// // 3. Control visibility externally
+/// foodLayer.visible = true;
+/// foodLayer.updateMarkers(); // Call after changing visibility or filters
 /// ```
 class POICategoryLayer extends TrufiLayer {
   /// The POI category this layer displays
   final POICategory category;
 
-  /// POI layers cubit for state management
-  final POILayersCubit cubit;
-
   /// POIs for this category (pre-loaded)
   final List<POI> _pois;
 
-  /// Callback when a POI is tapped
-  ///
-  /// @deprecated This parameter is deprecated and has no effect because markers
-  /// are rendered as images. Use TrufiMapController.pickMarkersAt() in your
-  /// map's onMapClick callback to handle marker taps instead.
-  ///
-  /// Example:
-  /// ```dart
-  /// engine.buildMap(
-  ///   controller: mapController,
-  ///   onMapClick: (pos) {
-  ///     final markers = mapController.pickMarkersAt(pos, hitboxPx: 40.0);
-  ///     if (markers.isNotEmpty) {
-  ///       // Find POI by marker ID and handle tap
-  ///     }
-  ///   },
-  /// )
-  /// ```
-  @Deprecated('Use TrufiMapController.pickMarkersAt() instead')
-  final void Function(POI poi)? onPOITapped;
+  /// Optional filter to determine which POIs should be shown.
+  /// If null, all POIs are shown when the layer is visible.
+  bool Function(POI poi)? poiFilter;
 
   POICategoryLayer({
     required TrufiMapController controller,
     required this.category,
     required List<POI> pois,
-    required this.cubit,
     String? parentId,
-    this.onPOITapped,
+    this.poiFilter,
   })  : _pois = pois,
         super(
           controller,
           id: 'poi_${category.name}',
           layerLevel: 100 + int.parse(category.weight),
           parentId: parentId,
-        ) {
-    // Set initial visibility based on subcategories state
-    visible = cubit.state.isCategoryEnabled(category);
+        );
 
-    // Update markers initially if visible
-    if (visible) {
-      _updateMarkers();
+  /// Update markers based on current POI data and filter.
+  /// Call this after changing visibility or poiFilter.
+  void updateMarkers() {
+    if (!visible) {
+      setMarkers([]);
+      return;
     }
 
-    // Listen to subcategory changes for this category
-    cubit.stream
-        .map((state) => state.enabledSubcategories[category])
-        .distinct()
-        .listen((enabledSubcategories) {
-      // Category is visible if it has any enabled subcategories
-      final shouldBeVisible = enabledSubcategories != null && enabledSubcategories.isNotEmpty;
-      visible = shouldBeVisible;
+    final filteredPOIs = poiFilter != null
+        ? _pois.where(poiFilter!)
+        : _pois;
 
-      if (shouldBeVisible) {
-        _updateMarkers();
-      }
-    });
-  }
-
-  /// Update markers based on current POI data and filters
-  void _updateMarkers() {
-    final markers = _pois
-        .where((poi) => cubit.state.isPOIEnabled(poi))
+    final markers = filteredPOIs
         .map((poi) => TrufiMarker(
               id: 'poi_${category.name}_${poi.id}',
               position: poi.position,

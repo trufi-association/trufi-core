@@ -113,9 +113,12 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
                 controller: _mapController,
                 category: entry.key,
                 pois: entry.value,
-                cubit: _poiCubit,
+                poiFilter: (poi) => _poiCubit.state.isPOIEnabled(poi),
               ))
           .toList();
+
+      // 3. Listen to cubit changes and update layer visibility
+      _poiCubit.stream.listen(_updateLayerVisibility);
 
       debugPrint('✅ Created ${_poiLayers.length} POI layer instances');
       for (final layer in _poiLayers) {
@@ -128,6 +131,18 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
     } catch (e, stackTrace) {
       debugPrint('❌ Error initializing POIs: $e');
       debugPrint('Stack trace: $stackTrace');
+    }
+  }
+
+  void _updateLayerVisibility(POILayersState state) {
+    debugPrint('🔄 _updateLayerVisibility called');
+    debugPrint('   enabledSubcategories: ${state.enabledSubcategories}');
+    for (final layer in _poiLayers) {
+      final wasVisible = layer.visible;
+      layer.visible = state.isCategoryEnabled(layer.category);
+      layer.poiFilter = (poi) => state.isPOIEnabled(poi);
+      debugPrint('   ${layer.category.name}: visible $wasVisible -> ${layer.visible}');
+      layer.updateMarkers();
     }
   }
 
@@ -161,12 +176,54 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
           final marker = markers.first;
           _findAndSelectPOI(marker.id);
         } else {
-          // Multiple markers - show selection
+          // Multiple markers - show selection dialog
           debugPrint('Found ${markers.length} markers nearby');
-          // Could show selection dialog here
+          _showMarkerSelectionDialog(markers);
         }
       },
     );
+  }
+
+  void _showMarkerSelectionDialog(List<TrufiMarker> markers) {
+    // Convert markers to POIs
+    final pois = <POI>[];
+    for (final marker in markers) {
+      final poi = _findPOIByMarkerId(marker.id);
+      if (poi != null) {
+        pois.add(poi);
+      }
+    }
+
+    if (pois.isEmpty) return;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _MarkerSelectionSheet(
+        pois: pois,
+        onPOISelected: (poi) {
+          Navigator.pop(context);
+          _handlePOITap(poi);
+        },
+      ),
+    );
+  }
+
+  POI? _findPOIByMarkerId(String markerId) {
+    // Extract category and POI ID from marker ID
+    // Format: "poi_<category>_<poi_id>"
+    final parts = markerId.split('_');
+    if (parts.length < 3) return null;
+
+    final categoryName = parts[1];
+    final poiId = parts.sublist(2).join('_');
+
+    // Find the layer
+    final layer = _poiLayers.where((l) => l.category.name == categoryName).firstOrNull;
+    if (layer == null) return null;
+
+    // Find the POI in the layer
+    return layer.pois.where((p) => p.id == poiId).firstOrNull;
   }
 
   void _findAndSelectPOI(String markerId) {
@@ -212,44 +269,47 @@ class _MultiInstanceDemoPageState extends State<MultiInstanceDemoPage> {
                 child: Column(
                   children: [
                     // Map Type + POI Layers button
-                    BlocBuilder<POILayersCubit, POILayersState>(
-                      builder: (context, state) {
-                        return MapTypeButton.fromEngines(
-                          engines: mapEngineManager.engines,
-                          currentEngineIndex: mapEngineManager.currentIndex,
-                          onEngineChanged: (engine) {
-                            mapEngineManager.setEngine(engine);
-                          },
-                          settingsAppBarTitle: 'Map Settings',
-                          settingsSectionTitle: 'Map Type',
-                          settingsApplyButtonText: 'Apply',
-                          // Integrated POI layers settings
-                          additionalSettings: POILayersSettingsSection(
-                            enabledSubcategories: state.enabledSubcategories,
-                            availableSubcategories: {
-                              for (final layer in _poiLayers)
-                                layer.category: layer.pois
+                    MapTypeButton.fromEngines(
+                      engines: mapEngineManager.engines,
+                      currentEngineIndex: mapEngineManager.currentIndex,
+                      onEngineChanged: (engine) {
+                        mapEngineManager.setEngine(engine);
+                      },
+                      settingsAppBarTitle: 'Map Settings',
+                      settingsSectionTitle: 'Map Type',
+                      settingsApplyButtonText: 'Apply',
+                      // Wrap with BlocProvider.value so the cubit is available in the modal route
+                      additionalSettings: BlocProvider.value(
+                        value: _poiCubit,
+                        child: BlocBuilder<POILayersCubit, POILayersState>(
+                          builder: (context, state) {
+                            return POILayersSettingsSection(
+                              enabledSubcategories: state.enabledSubcategories,
+                              availableSubcategories: {
+                                for (final layer in _poiLayers)
+                                  layer.category: layer.pois
+                                      .where((poi) => poi.subcategory != null)
+                                      .map((poi) => poi.subcategory!)
+                                      .toSet(),
+                              },
+                              onCategoryToggled: (category, enabled) {
+                                final subcats = _poiLayers
+                                    .firstWhere((l) => l.category == category)
+                                    .pois
                                     .where((poi) => poi.subcategory != null)
                                     .map((poi) => poi.subcategory!)
-                                    .toSet(),
-                            },
-                            onCategoryToggled: (category, enabled) {
-                              final subcats = _poiLayers
-                                  .firstWhere((l) => l.category == category)
-                                  .pois
-                                  .where((poi) => poi.subcategory != null)
-                                  .map((poi) => poi.subcategory!)
-                                  .toSet();
-                              _poiCubit.toggleCategory(category, enabled, subcats);
-                            },
-                            onSubcategoryToggled:
-                                (category, subcategory, enabled) {
-                              _poiCubit.toggleSubcategory(
-                                  category, subcategory, enabled);
-                            },
-                          ),
-                        );
-                      },
+                                    .toSet();
+                                _poiCubit.toggleCategory(category, enabled, subcats);
+                              },
+                              onSubcategoryToggled:
+                                  (category, subcategory, enabled) {
+                                _poiCubit.toggleSubcategory(
+                                    category, subcategory, enabled);
+                              },
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     _ActionButton(
@@ -519,6 +579,161 @@ class _InfoRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Bottom sheet for selecting from multiple nearby POIs
+class _MarkerSelectionSheet extends StatelessWidget {
+  final List<POI> pois;
+  final void Function(POI poi) onPOISelected;
+
+  const _MarkerSelectionSheet({
+    required this.pois,
+    required this.onPOISelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Grabber handle
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(top: 12, bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.touch_app_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Seleccionar lugar',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${pois.length} lugares',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            // POI list
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.4,
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: pois.length,
+                itemBuilder: (context, index) {
+                  final poi = pois[index];
+                  return _MarkerSelectionTile(
+                    poi: poi,
+                    onTap: () => onPOISelected(poi),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Individual tile for marker selection
+class _MarkerSelectionTile extends StatelessWidget {
+  final POI poi;
+  final VoidCallback onTap;
+
+  const _MarkerSelectionTile({
+    required this.poi,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            // Category icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: poi.category.color.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                poi.type.icon,
+                color: poi.category.color,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            // POI info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    poi.displayName,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    poi.category.name,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

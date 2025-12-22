@@ -321,7 +321,7 @@ class _MapTypeButtonBase extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MapTypeSettingsScreen(
+        builder: (routeContext) => MapTypeSettingsScreen(
           currentMapIndex: currentMapIndex,
           mapOptions: mapOptions,
           onMapTypeChanged: onMapTypeChanged,

@@ -18,7 +18,6 @@ export 'src/cubit/poi_layers_cubit.dart';
 export 'src/widgets/poi_marker_widget.dart';
 export 'src/widgets/poi_detail_panel.dart';
 export 'src/widgets/poi_layers_settings_section.dart';
-export 'src/widgets/poi_layers_button.dart';
 
 // Localizations
 export 'src/l10n/poi_layers_localizations.dart';
