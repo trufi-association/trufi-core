@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../data/models/poi.dart';
-import '../data/models/poi_category.dart';
+import '../models/poi.dart';
+import '../models/poi_category.dart';
 
 /// State for POI layers
 class POILayersState {

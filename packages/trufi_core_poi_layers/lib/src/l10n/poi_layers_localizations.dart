@@ -5,216 +5,670 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../data/models/poi_category.dart';
+import 'poi_layers_localizations_de.dart';
+import 'poi_layers_localizations_en.dart';
+import 'poi_layers_localizations_es.dart';
 
 // ignore_for_file: type=lint
 
 /// Callers can lookup localized strings with an instance of POILayersLocalizations
 /// returned by `POILayersLocalizations.of(context)`.
+///
+/// Applications need to include `POILayersLocalizations.delegate()` in their app's
+/// `localizationDelegates` list, and the locales they support in the app's
+/// `supportedLocales` list. For example:
+///
+/// ```dart
+/// import 'l10n/poi_layers_localizations.dart';
+///
+/// return MaterialApp(
+///   localizationsDelegates: POILayersLocalizations.localizationsDelegates,
+///   supportedLocales: POILayersLocalizations.supportedLocales,
+///   home: MyApplicationHome(),
+/// );
+/// ```
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the POILayersLocalizations.supportedLocales
+/// property.
 abstract class POILayersLocalizations {
   POILayersLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static POILayersLocalizations of(BuildContext context) {
+  static POILayersLocalizations? of(BuildContext context) {
     return Localizations.of<POILayersLocalizations>(
-            context, POILayersLocalizations) ??
-        POILayersLocalizationsEn();
+      context,
+      POILayersLocalizations,
+    );
   }
 
   static const LocalizationsDelegate<POILayersLocalizations> delegate =
       _POILayersLocalizationsDelegate();
 
+  /// A list of this localizations delegate along with the default localizations
+  /// delegates.
+  ///
+  /// Returns a list of localizations delegates containing this delegate along with
+  /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
+  /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
+  /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
-    Locale('es')
+    Locale('es'),
   ];
 
-  // General
+  /// Title for POI layers settings
+  ///
+  /// In en, this message translates to:
+  /// **'Points of Interest'**
   String get poiLayersTitle;
+
+  /// Button to set POI as destination
+  ///
+  /// In en, this message translates to:
+  /// **'Go here'**
   String get goHere;
+
+  /// General label for POI section
+  ///
+  /// In en, this message translates to:
+  /// **'Points of Interest'**
   String get pointsOfInterest;
+
+  /// Subtitle for POI layers section
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle layers on the map'**
   String get toggleLayersOnTheMap;
+
+  /// Done button label
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
   String get done;
 
-  // Categories
+  /// Transport category name
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
   String get poiCategoryTransport;
+
+  /// Food & Drink category name
+  ///
+  /// In en, this message translates to:
+  /// **'Food & Drink'**
   String get poiCategoryFood;
+
+  /// Shopping category name
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
   String get poiCategoryShopping;
+
+  /// Healthcare category name
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare'**
   String get poiCategoryHealthcare;
+
+  /// Education category name
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
   String get poiCategoryEducation;
+
+  /// Finance category name
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
   String get poiCategoryFinance;
+
+  /// Tourism category name
+  ///
+  /// In en, this message translates to:
+  /// **'Tourism'**
   String get poiCategoryTourism;
+
+  /// Recreation category name
+  ///
+  /// In en, this message translates to:
+  /// **'Recreation'**
   String get poiCategoryRecreation;
+
+  /// Government category name
+  ///
+  /// In en, this message translates to:
+  /// **'Government'**
   String get poiCategoryGovernment;
+
+  /// Religion category name
+  ///
+  /// In en, this message translates to:
+  /// **'Religion'**
   String get poiCategoryReligion;
+
+  /// Emergency category name
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
   String get poiCategoryEmergency;
+
+  /// Accommodation category name
+  ///
+  /// In en, this message translates to:
+  /// **'Accommodation'**
   String get poiCategoryAccommodation;
 
-  // Types - Transport
+  /// No description provided for @poiTypeBusStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Bus stop'**
   String get poiTypeBusStop;
+
+  /// No description provided for @poiTypePlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform'**
   String get poiTypePlatform;
+
+  /// No description provided for @poiTypeStopPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
   String get poiTypeStopPosition;
+
+  /// No description provided for @poiTypeStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Station'**
   String get poiTypeStation;
+
+  /// No description provided for @poiTypeTaxiStand.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxi stand'**
   String get poiTypeTaxiStand;
+
+  /// No description provided for @poiTypeParking.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking'**
   String get poiTypeParking;
 
-  // Types - Food
+  /// No description provided for @poiTypeRestaurant.
+  ///
+  /// In en, this message translates to:
+  /// **'Restaurant'**
   String get poiTypeRestaurant;
+
+  /// No description provided for @poiTypeCafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafe'**
   String get poiTypeCafe;
+
+  /// No description provided for @poiTypeFastFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast food'**
   String get poiTypeFastFood;
+
+  /// No description provided for @poiTypeBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Bar'**
   String get poiTypeBar;
+
+  /// No description provided for @poiTypeBakery.
+  ///
+  /// In en, this message translates to:
+  /// **'Bakery'**
   String get poiTypeBakery;
+
+  /// No description provided for @poiTypeIceCream.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice cream'**
   String get poiTypeIceCream;
 
-  // Types - Shopping
+  /// No description provided for @poiTypeSupermarket.
+  ///
+  /// In en, this message translates to:
+  /// **'Supermarket'**
   String get poiTypeSupermarket;
+
+  /// No description provided for @poiTypeConvenience.
+  ///
+  /// In en, this message translates to:
+  /// **'Convenience store'**
   String get poiTypeConvenience;
+
+  /// No description provided for @poiTypeMarketplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketplace'**
   String get poiTypeMarketplace;
+
+  /// No description provided for @poiTypeClothes.
+  ///
+  /// In en, this message translates to:
+  /// **'Clothing store'**
   String get poiTypeClothes;
+
+  /// No description provided for @poiTypeElectronics.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronics'**
   String get poiTypeElectronics;
+
+  /// No description provided for @poiTypeMall.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping mall'**
   String get poiTypeMall;
+
+  /// No description provided for @poiTypeShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop'**
   String get poiTypeShop;
 
-  // Types - Healthcare
+  /// No description provided for @poiTypeHospital.
+  ///
+  /// In en, this message translates to:
+  /// **'Hospital'**
   String get poiTypeHospital;
+
+  /// No description provided for @poiTypeClinic.
+  ///
+  /// In en, this message translates to:
+  /// **'Clinic'**
   String get poiTypeClinic;
+
+  /// No description provided for @poiTypePharmacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Pharmacy'**
   String get poiTypePharmacy;
+
+  /// No description provided for @poiTypeDentist.
+  ///
+  /// In en, this message translates to:
+  /// **'Dentist'**
   String get poiTypeDentist;
+
+  /// No description provided for @poiTypeDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor'**
   String get poiTypeDoctor;
 
-  // Types - Education
+  /// No description provided for @poiTypeSchool.
+  ///
+  /// In en, this message translates to:
+  /// **'School'**
   String get poiTypeSchool;
+
+  /// No description provided for @poiTypeUniversity.
+  ///
+  /// In en, this message translates to:
+  /// **'University'**
   String get poiTypeUniversity;
+
+  /// No description provided for @poiTypeCollege.
+  ///
+  /// In en, this message translates to:
+  /// **'College'**
   String get poiTypeCollege;
+
+  /// No description provided for @poiTypeKindergarten.
+  ///
+  /// In en, this message translates to:
+  /// **'Kindergarten'**
   String get poiTypeKindergarten;
+
+  /// No description provided for @poiTypeLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
   String get poiTypeLibrary;
 
-  // Types - Finance
+  /// No description provided for @poiTypeBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
   String get poiTypeBank;
+
+  /// No description provided for @poiTypeAtm.
+  ///
+  /// In en, this message translates to:
+  /// **'ATM'**
   String get poiTypeAtm;
+
+  /// No description provided for @poiTypeExchangePoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency exchange'**
   String get poiTypeExchangePoint;
 
-  // Types - Tourism
+  /// No description provided for @poiTypeHotel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel'**
   String get poiTypeHotel;
+
+  /// No description provided for @poiTypeAttraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Attraction'**
   String get poiTypeAttraction;
+
+  /// No description provided for @poiTypeViewpoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewpoint'**
   String get poiTypeViewpoint;
+
+  /// No description provided for @poiTypeMuseum.
+  ///
+  /// In en, this message translates to:
+  /// **'Museum'**
   String get poiTypeMuseum;
+
+  /// No description provided for @poiTypeMonument.
+  ///
+  /// In en, this message translates to:
+  /// **'Monument'**
   String get poiTypeMonument;
+
+  /// No description provided for @poiTypeArtwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Artwork'**
   String get poiTypeArtwork;
+
+  /// No description provided for @poiTypeInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
   String get poiTypeInformation;
 
-  // Types - Recreation
+  /// No description provided for @poiTypePark.
+  ///
+  /// In en, this message translates to:
+  /// **'Park'**
   String get poiTypePark;
+
+  /// No description provided for @poiTypeSportsCentre.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports center'**
   String get poiTypeSportsCentre;
+
+  /// No description provided for @poiTypePlayground.
+  ///
+  /// In en, this message translates to:
+  /// **'Playground'**
   String get poiTypePlayground;
+
+  /// No description provided for @poiTypeStadium.
+  ///
+  /// In en, this message translates to:
+  /// **'Stadium'**
   String get poiTypeStadium;
+
+  /// No description provided for @poiTypePitch.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports field'**
   String get poiTypePitch;
+
+  /// No description provided for @poiTypeCinema.
+  ///
+  /// In en, this message translates to:
+  /// **'Cinema'**
   String get poiTypeCinema;
+
+  /// No description provided for @poiTypeTheatre.
+  ///
+  /// In en, this message translates to:
+  /// **'Theatre'**
   String get poiTypeTheatre;
+
+  /// No description provided for @poiTypeNightclub.
+  ///
+  /// In en, this message translates to:
+  /// **'Nightclub'**
   String get poiTypeNightclub;
+
+  /// No description provided for @poiTypeGym.
+  ///
+  /// In en, this message translates to:
+  /// **'Gym'**
   String get poiTypeGym;
+
+  /// No description provided for @poiTypeSwimmingPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Swimming pool'**
   String get poiTypeSwimmingPool;
 
-  // Types - Government
+  /// No description provided for @poiTypeTownhall.
+  ///
+  /// In en, this message translates to:
+  /// **'Town hall'**
   String get poiTypeTownhall;
+
+  /// No description provided for @poiTypeEmbassy.
+  ///
+  /// In en, this message translates to:
+  /// **'Embassy'**
   String get poiTypeEmbassy;
+
+  /// No description provided for @poiTypePostOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Post office'**
   String get poiTypePostOffice;
+
+  /// No description provided for @poiTypeCourthouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Courthouse'**
   String get poiTypeCourthouse;
+
+  /// No description provided for @poiTypePublicBuilding.
+  ///
+  /// In en, this message translates to:
+  /// **'Public building'**
   String get poiTypePublicBuilding;
 
-  // Types - Religion
+  /// No description provided for @poiTypePlaceOfWorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Place of worship'**
   String get poiTypePlaceOfWorship;
+
+  /// No description provided for @poiTypeChurch.
+  ///
+  /// In en, this message translates to:
+  /// **'Church'**
   String get poiTypeChurch;
+
+  /// No description provided for @poiTypeMosque.
+  ///
+  /// In en, this message translates to:
+  /// **'Mosque'**
   String get poiTypeMosque;
+
+  /// No description provided for @poiTypeSynagogue.
+  ///
+  /// In en, this message translates to:
+  /// **'Synagogue'**
   String get poiTypeSynagogue;
 
-  // Types - Emergency
+  /// No description provided for @poiTypePolice.
+  ///
+  /// In en, this message translates to:
+  /// **'Police station'**
   String get poiTypePolice;
+
+  /// No description provided for @poiTypeFireStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Fire station'**
   String get poiTypeFireStation;
+
+  /// No description provided for @poiTypeAmbulanceStation.
+  ///
+  /// In en, this message translates to:
+  /// **'Ambulance station'**
   String get poiTypeAmbulanceStation;
 
-  // Types - Accommodation
+  /// No description provided for @poiTypeHostel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hostel'**
   String get poiTypeHostel;
+
+  /// No description provided for @poiTypeGuestHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest house'**
   String get poiTypeGuestHouse;
+
+  /// No description provided for @poiTypeMotel.
+  ///
+  /// In en, this message translates to:
+  /// **'Motel'**
   String get poiTypeMotel;
+
+  /// No description provided for @poiTypeApartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment'**
   String get poiTypeApartment;
 
-  // Fallback
+  /// No description provided for @poiTypeUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
   String get poiTypeUnknown;
+}
 
-  /// Get localized category name
-  String categoryName(POICategory category) {
-    switch (category) {
-      case POICategory.transport:
-        return poiCategoryTransport;
-      case POICategory.food:
-        return poiCategoryFood;
-      case POICategory.shopping:
-        return poiCategoryShopping;
-      case POICategory.healthcare:
-        return poiCategoryHealthcare;
-      case POICategory.education:
-        return poiCategoryEducation;
-      case POICategory.finance:
-        return poiCategoryFinance;
-      case POICategory.tourism:
-        return poiCategoryTourism;
-      case POICategory.recreation:
-        return poiCategoryRecreation;
-      case POICategory.government:
-        return poiCategoryGovernment;
-      case POICategory.religion:
-        return poiCategoryReligion;
-      case POICategory.emergency:
-        return poiCategoryEmergency;
-      case POICategory.accommodation:
-        return poiCategoryAccommodation;
-    }
+class _POILayersLocalizationsDelegate
+    extends LocalizationsDelegate<POILayersLocalizations> {
+  const _POILayersLocalizationsDelegate();
+
+  @override
+  Future<POILayersLocalizations> load(Locale locale) {
+    return SynchronousFuture<POILayersLocalizations>(
+      lookupPOILayersLocalizations(locale),
+    );
   }
 
-  /// Get localized POI type name
-  String poiType(String type) {
-    switch (type) {
-      // Transport
-      case 'busStop':
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en', 'es'].contains(locale.languageCode);
+
+  @override
+  bool shouldReload(_POILayersLocalizationsDelegate old) => false;
+}
+
+POILayersLocalizations lookupPOILayersLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'de':
+      return POILayersLocalizationsDe();
+    case 'en':
+      return POILayersLocalizationsEn();
+    case 'es':
+      return POILayersLocalizationsEs();
+  }
+
+  throw FlutterError(
+    'POILayersLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}
+
+/// Extension to provide dynamic lookup methods for POI types and categories
+extension POILayersLocalizationsX on POILayersLocalizations {
+  /// Get localized name for a POI type by its key name
+  String poiType(String typeName) {
+    switch (typeName) {
+      case 'bus_stop':
         return poiTypeBusStop;
       case 'platform':
         return poiTypePlatform;
-      case 'stopPosition':
+      case 'stop_position':
         return poiTypeStopPosition;
       case 'station':
         return poiTypeStation;
-      case 'taxiStand':
+      case 'taxi_stand':
         return poiTypeTaxiStand;
       case 'parking':
         return poiTypeParking;
-
-      // Food
       case 'restaurant':
         return poiTypeRestaurant;
       case 'cafe':
         return poiTypeCafe;
-      case 'fastFood':
+      case 'fast_food':
         return poiTypeFastFood;
       case 'bar':
         return poiTypeBar;
       case 'bakery':
         return poiTypeBakery;
-      case 'iceCream':
+      case 'ice_cream':
         return poiTypeIceCream;
-
-      // Shopping
       case 'supermarket':
         return poiTypeSupermarket;
       case 'convenience':
@@ -229,8 +683,6 @@ abstract class POILayersLocalizations {
         return poiTypeMall;
       case 'shop':
         return poiTypeShop;
-
-      // Healthcare
       case 'hospital':
         return poiTypeHospital;
       case 'clinic':
@@ -241,8 +693,6 @@ abstract class POILayersLocalizations {
         return poiTypeDentist;
       case 'doctor':
         return poiTypeDoctor;
-
-      // Education
       case 'school':
         return poiTypeSchool;
       case 'university':
@@ -253,16 +703,12 @@ abstract class POILayersLocalizations {
         return poiTypeKindergarten;
       case 'library':
         return poiTypeLibrary;
-
-      // Finance
       case 'bank':
         return poiTypeBank;
       case 'atm':
         return poiTypeAtm;
-      case 'exchangePoint':
+      case 'exchange_point':
         return poiTypeExchangePoint;
-
-      // Tourism
       case 'hotel':
         return poiTypeHotel;
       case 'attraction':
@@ -277,11 +723,9 @@ abstract class POILayersLocalizations {
         return poiTypeArtwork;
       case 'information':
         return poiTypeInformation;
-
-      // Recreation
       case 'park':
         return poiTypePark;
-      case 'sportsCentre':
+      case 'sports_centre':
         return poiTypeSportsCentre;
       case 'playground':
         return poiTypePlayground;
@@ -297,23 +741,19 @@ abstract class POILayersLocalizations {
         return poiTypeNightclub;
       case 'gym':
         return poiTypeGym;
-      case 'swimmingPool':
+      case 'swimming_pool':
         return poiTypeSwimmingPool;
-
-      // Government
       case 'townhall':
         return poiTypeTownhall;
       case 'embassy':
         return poiTypeEmbassy;
-      case 'postOffice':
+      case 'post_office':
         return poiTypePostOffice;
       case 'courthouse':
         return poiTypeCourthouse;
-      case 'publicBuilding':
+      case 'public_building':
         return poiTypePublicBuilding;
-
-      // Religion
-      case 'placeOfWorship':
+      case 'place_of_worship':
         return poiTypePlaceOfWorship;
       case 'church':
         return poiTypeChurch;
@@ -321,660 +761,54 @@ abstract class POILayersLocalizations {
         return poiTypeMosque;
       case 'synagogue':
         return poiTypeSynagogue;
-
-      // Emergency
       case 'police':
         return poiTypePolice;
-      case 'fireStation':
+      case 'fire_station':
         return poiTypeFireStation;
-      case 'ambulanceStation':
+      case 'ambulance_station':
         return poiTypeAmbulanceStation;
-
-      // Accommodation
       case 'hostel':
         return poiTypeHostel;
-      case 'guestHouse':
+      case 'guest_house':
         return poiTypeGuestHouse;
       case 'motel':
         return poiTypeMotel;
       case 'apartment':
         return poiTypeApartment;
-
       default:
         return poiTypeUnknown;
     }
   }
-}
 
-class _POILayersLocalizationsDelegate
-    extends LocalizationsDelegate<POILayersLocalizations> {
-  const _POILayersLocalizationsDelegate();
-
-  @override
-  Future<POILayersLocalizations> load(Locale locale) {
-    return SynchronousFuture<POILayersLocalizations>(
-        lookupPOILayersLocalizations(locale));
+  /// Get localized name for a POI category by its key name
+  String categoryName(String categoryName) {
+    switch (categoryName) {
+      case 'transport':
+        return poiCategoryTransport;
+      case 'food':
+        return poiCategoryFood;
+      case 'shopping':
+        return poiCategoryShopping;
+      case 'healthcare':
+        return poiCategoryHealthcare;
+      case 'education':
+        return poiCategoryEducation;
+      case 'finance':
+        return poiCategoryFinance;
+      case 'tourism':
+        return poiCategoryTourism;
+      case 'recreation':
+        return poiCategoryRecreation;
+      case 'government':
+        return poiCategoryGovernment;
+      case 'religion':
+        return poiCategoryReligion;
+      case 'emergency':
+        return poiCategoryEmergency;
+      case 'accommodation':
+        return poiCategoryAccommodation;
+      default:
+        return categoryName;
+    }
   }
-
-  @override
-  bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'es'].contains(locale.languageCode);
-
-  @override
-  bool shouldReload(_POILayersLocalizationsDelegate old) => false;
-}
-
-POILayersLocalizations lookupPOILayersLocalizations(Locale locale) {
-  switch (locale.languageCode) {
-    case 'de':
-      return POILayersLocalizationsDe();
-    case 'en':
-      return POILayersLocalizationsEn();
-    case 'es':
-      return POILayersLocalizationsEs();
-  }
-  return POILayersLocalizationsEn();
-}
-
-/// English translations
-class POILayersLocalizationsEn extends POILayersLocalizations {
-  POILayersLocalizationsEn([super.locale = 'en']);
-
-  // General
-  @override
-  String get poiLayersTitle => 'Points of Interest';
-  @override
-  String get goHere => 'Go here';
-  @override
-  String get pointsOfInterest => 'Points of Interest';
-  @override
-  String get toggleLayersOnTheMap => 'Toggle layers on the map';
-  @override
-  String get done => 'Done';
-
-  // Categories
-  @override
-  String get poiCategoryTransport => 'Transport';
-  @override
-  String get poiCategoryFood => 'Food & Drink';
-  @override
-  String get poiCategoryShopping => 'Shopping';
-  @override
-  String get poiCategoryHealthcare => 'Healthcare';
-  @override
-  String get poiCategoryEducation => 'Education';
-  @override
-  String get poiCategoryFinance => 'Finance';
-  @override
-  String get poiCategoryTourism => 'Tourism';
-  @override
-  String get poiCategoryRecreation => 'Recreation';
-  @override
-  String get poiCategoryGovernment => 'Government';
-  @override
-  String get poiCategoryReligion => 'Religion';
-  @override
-  String get poiCategoryEmergency => 'Emergency';
-  @override
-  String get poiCategoryAccommodation => 'Accommodation';
-
-  // Types - Transport
-  @override
-  String get poiTypeBusStop => 'Bus stop';
-  @override
-  String get poiTypePlatform => 'Platform';
-  @override
-  String get poiTypeStopPosition => 'Stop';
-  @override
-  String get poiTypeStation => 'Station';
-  @override
-  String get poiTypeTaxiStand => 'Taxi stand';
-  @override
-  String get poiTypeParking => 'Parking';
-
-  // Types - Food
-  @override
-  String get poiTypeRestaurant => 'Restaurant';
-  @override
-  String get poiTypeCafe => 'Café';
-  @override
-  String get poiTypeFastFood => 'Fast food';
-  @override
-  String get poiTypeBar => 'Bar';
-  @override
-  String get poiTypeBakery => 'Bakery';
-  @override
-  String get poiTypeIceCream => 'Ice cream';
-
-  // Types - Shopping
-  @override
-  String get poiTypeSupermarket => 'Supermarket';
-  @override
-  String get poiTypeConvenience => 'Convenience store';
-  @override
-  String get poiTypeMarketplace => 'Marketplace';
-  @override
-  String get poiTypeClothes => 'Clothing store';
-  @override
-  String get poiTypeElectronics => 'Electronics';
-  @override
-  String get poiTypeMall => 'Shopping mall';
-  @override
-  String get poiTypeShop => 'Shop';
-
-  // Types - Healthcare
-  @override
-  String get poiTypeHospital => 'Hospital';
-  @override
-  String get poiTypeClinic => 'Clinic';
-  @override
-  String get poiTypePharmacy => 'Pharmacy';
-  @override
-  String get poiTypeDentist => 'Dentist';
-  @override
-  String get poiTypeDoctor => 'Doctor';
-
-  // Types - Education
-  @override
-  String get poiTypeSchool => 'School';
-  @override
-  String get poiTypeUniversity => 'University';
-  @override
-  String get poiTypeCollege => 'College';
-  @override
-  String get poiTypeKindergarten => 'Kindergarten';
-  @override
-  String get poiTypeLibrary => 'Library';
-
-  // Types - Finance
-  @override
-  String get poiTypeBank => 'Bank';
-  @override
-  String get poiTypeAtm => 'ATM';
-  @override
-  String get poiTypeExchangePoint => 'Currency exchange';
-
-  // Types - Tourism
-  @override
-  String get poiTypeHotel => 'Hotel';
-  @override
-  String get poiTypeAttraction => 'Attraction';
-  @override
-  String get poiTypeViewpoint => 'Viewpoint';
-  @override
-  String get poiTypeMuseum => 'Museum';
-  @override
-  String get poiTypeMonument => 'Monument';
-  @override
-  String get poiTypeArtwork => 'Artwork';
-  @override
-  String get poiTypeInformation => 'Information';
-
-  // Types - Recreation
-  @override
-  String get poiTypePark => 'Park';
-  @override
-  String get poiTypeSportsCentre => 'Sports center';
-  @override
-  String get poiTypePlayground => 'Playground';
-  @override
-  String get poiTypeStadium => 'Stadium';
-  @override
-  String get poiTypePitch => 'Sports field';
-  @override
-  String get poiTypeCinema => 'Cinema';
-  @override
-  String get poiTypeTheatre => 'Theatre';
-  @override
-  String get poiTypeNightclub => 'Nightclub';
-  @override
-  String get poiTypeGym => 'Gym';
-  @override
-  String get poiTypeSwimmingPool => 'Swimming pool';
-
-  // Types - Government
-  @override
-  String get poiTypeTownhall => 'Town hall';
-  @override
-  String get poiTypeEmbassy => 'Embassy';
-  @override
-  String get poiTypePostOffice => 'Post office';
-  @override
-  String get poiTypeCourthouse => 'Courthouse';
-  @override
-  String get poiTypePublicBuilding => 'Public building';
-
-  // Types - Religion
-  @override
-  String get poiTypePlaceOfWorship => 'Place of worship';
-  @override
-  String get poiTypeChurch => 'Church';
-  @override
-  String get poiTypeMosque => 'Mosque';
-  @override
-  String get poiTypeSynagogue => 'Synagogue';
-
-  // Types - Emergency
-  @override
-  String get poiTypePolice => 'Police station';
-  @override
-  String get poiTypeFireStation => 'Fire station';
-  @override
-  String get poiTypeAmbulanceStation => 'Ambulance station';
-
-  // Types - Accommodation
-  @override
-  String get poiTypeHostel => 'Hostel';
-  @override
-  String get poiTypeGuestHouse => 'Guest house';
-  @override
-  String get poiTypeMotel => 'Motel';
-  @override
-  String get poiTypeApartment => 'Apartment';
-
-  // Fallback
-  @override
-  String get poiTypeUnknown => 'Place';
-}
-
-/// Spanish translations
-class POILayersLocalizationsEs extends POILayersLocalizations {
-  POILayersLocalizationsEs([super.locale = 'es']);
-
-  // General
-  @override
-  String get poiLayersTitle => 'Puntos de Interés';
-  @override
-  String get goHere => 'Ir aquí';
-  @override
-  String get pointsOfInterest => 'Puntos de Interés';
-  @override
-  String get toggleLayersOnTheMap => 'Selecciona las capas del mapa';
-  @override
-  String get done => 'Listo';
-
-  // Categories
-  @override
-  String get poiCategoryTransport => 'Transporte';
-  @override
-  String get poiCategoryFood => 'Comida y Bebida';
-  @override
-  String get poiCategoryShopping => 'Compras';
-  @override
-  String get poiCategoryHealthcare => 'Salud';
-  @override
-  String get poiCategoryEducation => 'Educación';
-  @override
-  String get poiCategoryFinance => 'Finanzas';
-  @override
-  String get poiCategoryTourism => 'Turismo';
-  @override
-  String get poiCategoryRecreation => 'Recreación';
-  @override
-  String get poiCategoryGovernment => 'Gobierno';
-  @override
-  String get poiCategoryReligion => 'Religión';
-  @override
-  String get poiCategoryEmergency => 'Emergencia';
-  @override
-  String get poiCategoryAccommodation => 'Alojamiento';
-
-  // Types - Transport
-  @override
-  String get poiTypeBusStop => 'Parada de bus';
-  @override
-  String get poiTypePlatform => 'Plataforma';
-  @override
-  String get poiTypeStopPosition => 'Parada';
-  @override
-  String get poiTypeStation => 'Estación';
-  @override
-  String get poiTypeTaxiStand => 'Parada de taxi';
-  @override
-  String get poiTypeParking => 'Estacionamiento';
-
-  // Types - Food
-  @override
-  String get poiTypeRestaurant => 'Restaurante';
-  @override
-  String get poiTypeCafe => 'Café';
-  @override
-  String get poiTypeFastFood => 'Comida rápida';
-  @override
-  String get poiTypeBar => 'Bar';
-  @override
-  String get poiTypeBakery => 'Panadería';
-  @override
-  String get poiTypeIceCream => 'Heladería';
-
-  // Types - Shopping
-  @override
-  String get poiTypeSupermarket => 'Supermercado';
-  @override
-  String get poiTypeConvenience => 'Tienda de conveniencia';
-  @override
-  String get poiTypeMarketplace => 'Mercado';
-  @override
-  String get poiTypeClothes => 'Tienda de ropa';
-  @override
-  String get poiTypeElectronics => 'Electrónicos';
-  @override
-  String get poiTypeMall => 'Centro comercial';
-  @override
-  String get poiTypeShop => 'Tienda';
-
-  // Types - Healthcare
-  @override
-  String get poiTypeHospital => 'Hospital';
-  @override
-  String get poiTypeClinic => 'Clínica';
-  @override
-  String get poiTypePharmacy => 'Farmacia';
-  @override
-  String get poiTypeDentist => 'Dentista';
-  @override
-  String get poiTypeDoctor => 'Doctor';
-
-  // Types - Education
-  @override
-  String get poiTypeSchool => 'Escuela';
-  @override
-  String get poiTypeUniversity => 'Universidad';
-  @override
-  String get poiTypeCollege => 'Instituto';
-  @override
-  String get poiTypeKindergarten => 'Jardín de niños';
-  @override
-  String get poiTypeLibrary => 'Biblioteca';
-
-  // Types - Finance
-  @override
-  String get poiTypeBank => 'Banco';
-  @override
-  String get poiTypeAtm => 'Cajero automático';
-  @override
-  String get poiTypeExchangePoint => 'Casa de cambio';
-
-  // Types - Tourism
-  @override
-  String get poiTypeHotel => 'Hotel';
-  @override
-  String get poiTypeAttraction => 'Atracción';
-  @override
-  String get poiTypeViewpoint => 'Mirador';
-  @override
-  String get poiTypeMuseum => 'Museo';
-  @override
-  String get poiTypeMonument => 'Monumento';
-  @override
-  String get poiTypeArtwork => 'Obra de arte';
-  @override
-  String get poiTypeInformation => 'Información';
-
-  // Types - Recreation
-  @override
-  String get poiTypePark => 'Parque';
-  @override
-  String get poiTypeSportsCentre => 'Centro deportivo';
-  @override
-  String get poiTypePlayground => 'Parque infantil';
-  @override
-  String get poiTypeStadium => 'Estadio';
-  @override
-  String get poiTypePitch => 'Cancha';
-  @override
-  String get poiTypeCinema => 'Cine';
-  @override
-  String get poiTypeTheatre => 'Teatro';
-  @override
-  String get poiTypeNightclub => 'Discoteca';
-  @override
-  String get poiTypeGym => 'Gimnasio';
-  @override
-  String get poiTypeSwimmingPool => 'Piscina';
-
-  // Types - Government
-  @override
-  String get poiTypeTownhall => 'Alcaldía';
-  @override
-  String get poiTypeEmbassy => 'Embajada';
-  @override
-  String get poiTypePostOffice => 'Correos';
-  @override
-  String get poiTypeCourthouse => 'Juzgado';
-  @override
-  String get poiTypePublicBuilding => 'Edificio público';
-
-  // Types - Religion
-  @override
-  String get poiTypePlaceOfWorship => 'Lugar de culto';
-  @override
-  String get poiTypeChurch => 'Iglesia';
-  @override
-  String get poiTypeMosque => 'Mezquita';
-  @override
-  String get poiTypeSynagogue => 'Sinagoga';
-
-  // Types - Emergency
-  @override
-  String get poiTypePolice => 'Estación de policía';
-  @override
-  String get poiTypeFireStation => 'Estación de bomberos';
-  @override
-  String get poiTypeAmbulanceStation => 'Estación de ambulancias';
-
-  // Types - Accommodation
-  @override
-  String get poiTypeHostel => 'Hostal';
-  @override
-  String get poiTypeGuestHouse => 'Casa de huéspedes';
-  @override
-  String get poiTypeMotel => 'Motel';
-  @override
-  String get poiTypeApartment => 'Apartamento';
-
-  // Fallback
-  @override
-  String get poiTypeUnknown => 'Lugar';
-}
-
-/// German translations
-class POILayersLocalizationsDe extends POILayersLocalizations {
-  POILayersLocalizationsDe([super.locale = 'de']);
-
-  // General
-  @override
-  String get poiLayersTitle => 'Sehenswürdigkeiten';
-  @override
-  String get goHere => 'Hierhin';
-  @override
-  String get pointsOfInterest => 'Sehenswürdigkeiten';
-  @override
-  String get toggleLayersOnTheMap => 'Ebenen auf der Karte umschalten';
-  @override
-  String get done => 'Fertig';
-
-  // Categories
-  @override
-  String get poiCategoryTransport => 'Verkehr';
-  @override
-  String get poiCategoryFood => 'Essen & Trinken';
-  @override
-  String get poiCategoryShopping => 'Einkaufen';
-  @override
-  String get poiCategoryHealthcare => 'Gesundheit';
-  @override
-  String get poiCategoryEducation => 'Bildung';
-  @override
-  String get poiCategoryFinance => 'Finanzen';
-  @override
-  String get poiCategoryTourism => 'Tourismus';
-  @override
-  String get poiCategoryRecreation => 'Freizeit';
-  @override
-  String get poiCategoryGovernment => 'Behörden';
-  @override
-  String get poiCategoryReligion => 'Religion';
-  @override
-  String get poiCategoryEmergency => 'Notfall';
-  @override
-  String get poiCategoryAccommodation => 'Unterkunft';
-
-  // Types - Transport
-  @override
-  String get poiTypeBusStop => 'Bushaltestelle';
-  @override
-  String get poiTypePlatform => 'Bahnsteig';
-  @override
-  String get poiTypeStopPosition => 'Haltestelle';
-  @override
-  String get poiTypeStation => 'Bahnhof';
-  @override
-  String get poiTypeTaxiStand => 'Taxistand';
-  @override
-  String get poiTypeParking => 'Parkplatz';
-
-  // Types - Food
-  @override
-  String get poiTypeRestaurant => 'Restaurant';
-  @override
-  String get poiTypeCafe => 'Café';
-  @override
-  String get poiTypeFastFood => 'Schnellrestaurant';
-  @override
-  String get poiTypeBar => 'Bar';
-  @override
-  String get poiTypeBakery => 'Bäckerei';
-  @override
-  String get poiTypeIceCream => 'Eisdiele';
-
-  // Types - Shopping
-  @override
-  String get poiTypeSupermarket => 'Supermarkt';
-  @override
-  String get poiTypeConvenience => 'Kiosk';
-  @override
-  String get poiTypeMarketplace => 'Marktplatz';
-  @override
-  String get poiTypeClothes => 'Bekleidungsgeschäft';
-  @override
-  String get poiTypeElectronics => 'Elektronik';
-  @override
-  String get poiTypeMall => 'Einkaufszentrum';
-  @override
-  String get poiTypeShop => 'Geschäft';
-
-  // Types - Healthcare
-  @override
-  String get poiTypeHospital => 'Krankenhaus';
-  @override
-  String get poiTypeClinic => 'Klinik';
-  @override
-  String get poiTypePharmacy => 'Apotheke';
-  @override
-  String get poiTypeDentist => 'Zahnarzt';
-  @override
-  String get poiTypeDoctor => 'Arzt';
-
-  // Types - Education
-  @override
-  String get poiTypeSchool => 'Schule';
-  @override
-  String get poiTypeUniversity => 'Universität';
-  @override
-  String get poiTypeCollege => 'Hochschule';
-  @override
-  String get poiTypeKindergarten => 'Kindergarten';
-  @override
-  String get poiTypeLibrary => 'Bibliothek';
-
-  // Types - Finance
-  @override
-  String get poiTypeBank => 'Bank';
-  @override
-  String get poiTypeAtm => 'Geldautomat';
-  @override
-  String get poiTypeExchangePoint => 'Wechselstube';
-
-  // Types - Tourism
-  @override
-  String get poiTypeHotel => 'Hotel';
-  @override
-  String get poiTypeAttraction => 'Attraktion';
-  @override
-  String get poiTypeViewpoint => 'Aussichtspunkt';
-  @override
-  String get poiTypeMuseum => 'Museum';
-  @override
-  String get poiTypeMonument => 'Denkmal';
-  @override
-  String get poiTypeArtwork => 'Kunstwerk';
-  @override
-  String get poiTypeInformation => 'Information';
-
-  // Types - Recreation
-  @override
-  String get poiTypePark => 'Park';
-  @override
-  String get poiTypeSportsCentre => 'Sportzentrum';
-  @override
-  String get poiTypePlayground => 'Spielplatz';
-  @override
-  String get poiTypeStadium => 'Stadion';
-  @override
-  String get poiTypePitch => 'Sportplatz';
-  @override
-  String get poiTypeCinema => 'Kino';
-  @override
-  String get poiTypeTheatre => 'Theater';
-  @override
-  String get poiTypeNightclub => 'Nachtclub';
-  @override
-  String get poiTypeGym => 'Fitnessstudio';
-  @override
-  String get poiTypeSwimmingPool => 'Schwimmbad';
-
-  // Types - Government
-  @override
-  String get poiTypeTownhall => 'Rathaus';
-  @override
-  String get poiTypeEmbassy => 'Botschaft';
-  @override
-  String get poiTypePostOffice => 'Postamt';
-  @override
-  String get poiTypeCourthouse => 'Gericht';
-  @override
-  String get poiTypePublicBuilding => 'Öffentliches Gebäude';
-
-  // Types - Religion
-  @override
-  String get poiTypePlaceOfWorship => 'Gotteshaus';
-  @override
-  String get poiTypeChurch => 'Kirche';
-  @override
-  String get poiTypeMosque => 'Moschee';
-  @override
-  String get poiTypeSynagogue => 'Synagoge';
-
-  // Types - Emergency
-  @override
-  String get poiTypePolice => 'Polizeistation';
-  @override
-  String get poiTypeFireStation => 'Feuerwache';
-  @override
-  String get poiTypeAmbulanceStation => 'Rettungswache';
-
-  // Types - Accommodation
-  @override
-  String get poiTypeHostel => 'Hostel';
-  @override
-  String get poiTypeGuestHouse => 'Pension';
-  @override
-  String get poiTypeMotel => 'Motel';
-  @override
-  String get poiTypeApartment => 'Apartment';
-
-  // Fallback
-  @override
-  String get poiTypeUnknown => 'Ort';
 }

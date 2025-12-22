@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../data/models/poi_category.dart';
+import '../models/poi_category.dart';
 import '../l10n/poi_layers_localizations.dart';
 
 /// A settings section widget for configuring POI layer visibility.
@@ -33,7 +33,7 @@ class POILayersSettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = POILayersLocalizations.of(context);
+    final l10n = POILayersLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +76,7 @@ class _POILayersHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = POILayersLocalizations.of(context);
+    final l10n = POILayersLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -136,7 +136,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = POILayersLocalizations.of(context);
+    final l10n = POILayersLocalizations.of(context)!;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -224,7 +224,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l10n.categoryName(widget.category),
+                              l10n.categoryName(widget.category.name),
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: widget.isEnabled

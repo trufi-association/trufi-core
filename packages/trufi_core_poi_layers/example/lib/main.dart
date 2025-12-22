@@ -49,6 +49,8 @@ class MultiInstanceExampleApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
+        localizationsDelegates: POILayersLocalizations.localizationsDelegates,
+        supportedLocales: POILayersLocalizations.supportedLocales,
         home: const MultiInstanceDemoPage(),
       ),
     );

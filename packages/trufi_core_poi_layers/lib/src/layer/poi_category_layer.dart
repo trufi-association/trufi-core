@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-import '../data/models/poi.dart';
-import '../data/models/poi_category.dart';
+import '../models/poi.dart';
+import '../models/poi_category.dart';
 
 /// A TrufiLayer implementation for a single POI category.
 ///

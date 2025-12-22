@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'models/poi.dart';
-import 'models/poi_category.dart';
+import '../models/poi.dart';
+import '../models/poi_category.dart';
 
 /// Loads POIs from GeoJSON assets with support for lazy loading and parallel preloading.
 ///
