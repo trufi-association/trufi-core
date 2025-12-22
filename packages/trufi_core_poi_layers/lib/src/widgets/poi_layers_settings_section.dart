@@ -45,6 +45,8 @@ class POILayersSettingsSection extends StatelessWidget {
             enabledSubcategories: enabledSubcats,
             onSubcategoryToggled: (subcategory, enabled) =>
                 manager.toggleSubcategory(category, subcategory, enabled),
+            onToggleAll: (enableAll) =>
+                manager.toggleCategory(category, enableAll),
           );
         }),
       ],
@@ -96,6 +98,7 @@ class _POICategoryTile extends StatefulWidget {
   final Set<String>? availableSubcategories;
   final Set<String>? enabledSubcategories;
   final void Function(String subcategory, bool enabled)? onSubcategoryToggled;
+  final void Function(bool enableAll)? onToggleAll;
 
   const _POICategoryTile({
     required this.category,
@@ -103,6 +106,7 @@ class _POICategoryTile extends StatefulWidget {
     this.availableSubcategories,
     this.enabledSubcategories,
     this.onSubcategoryToggled,
+    this.onToggleAll,
   });
 
   @override
@@ -224,6 +228,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                         ..sort(),
                       enabledSubcategories: widget.enabledSubcategories ?? {},
                       onSubcategoryToggled: widget.onSubcategoryToggled!,
+                      onToggleAll: widget.onToggleAll!,
                     )
                   : const SizedBox.shrink(),
             ),
@@ -249,12 +254,14 @@ class _SubcategoriesList extends StatelessWidget {
   final List<String> subcategories;
   final Set<String> enabledSubcategories;
   final void Function(String subcategory, bool enabled) onSubcategoryToggled;
+  final void Function(bool enableAll) onToggleAll;
 
   const _SubcategoriesList({
     required this.category,
     required this.subcategories,
     required this.enabledSubcategories,
     required this.onSubcategoryToggled,
+    required this.onToggleAll,
   });
 
   String _formatSubcategoryName(String subcategory) {
@@ -309,9 +316,7 @@ class _SubcategoriesList extends StatelessWidget {
                     // Toggle all subcategories
                     final allEnabled =
                         enabledSubcategories.length == subcategories.length;
-                    for (final subcat in subcategories) {
-                      onSubcategoryToggled(subcat, !allEnabled);
-                    }
+                    onToggleAll(!allEnabled);
                   },
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
