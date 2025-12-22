@@ -84,5 +84,10 @@
   "poiTypeApartment": "Apartamento",
   "poiTypeUnknown": "Lugar",
   "selectPlace": "Seleccionar lugar",
-  "placesCount": "{count} lugares"
+  "placesCount": "{count} lugares",
+  "subcategoryTypes": "Tipos",
+  "selectAll": "Todos",
+  "clearAll": "Limpiar",
+  "typesAvailable": "{count} tipos disponibles",
+  "typesActive": "{enabled} de {total} activos"
 }

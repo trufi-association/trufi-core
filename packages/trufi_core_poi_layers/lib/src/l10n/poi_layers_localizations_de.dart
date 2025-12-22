@@ -264,4 +264,23 @@ class POILayersLocalizationsDe extends POILayersLocalizations {
   String placesCount(int count) {
     return '$count Orte';
   }
+
+  @override
+  String get subcategoryTypes => 'Typen';
+
+  @override
+  String get selectAll => 'Alle';
+
+  @override
+  String get clearAll => 'Löschen';
+
+  @override
+  String typesAvailable(int count) {
+    return '$count Typen verfügbar';
+  }
+
+  @override
+  String typesActive(int enabled, int total) {
+    return '$enabled von $total aktiv';
+  }
 }

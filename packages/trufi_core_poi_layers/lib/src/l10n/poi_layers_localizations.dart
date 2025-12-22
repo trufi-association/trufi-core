@@ -612,6 +612,36 @@ abstract class POILayersLocalizations {
   /// In en, this message translates to:
   /// **'{count} places'**
   String placesCount(int count);
+
+  /// Header for subcategory types list
+  ///
+  /// In en, this message translates to:
+  /// **'Types'**
+  String get subcategoryTypes;
+
+  /// Button to select all subcategories
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get selectAll;
+
+  /// Button to clear all subcategories
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clearAll;
+
+  /// Subtitle showing available types count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} types available'**
+  String typesAvailable(int count);
+
+  /// Subtitle showing active types count
+  ///
+  /// In en, this message translates to:
+  /// **'{enabled} of {total} active'**
+  String typesActive(int enabled, int total);
 }
 
 class _POILayersLocalizationsDelegate

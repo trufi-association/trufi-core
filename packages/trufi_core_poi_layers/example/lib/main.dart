@@ -188,9 +188,6 @@ class _POILayersDemoPageState extends State<POILayersDemoPage> {
                         return POILayersSettingsSection(
                           enabledSubcategories: manager.enabledSubcategories,
                           availableSubcategories: manager.availableSubcategories,
-                          onCategoryToggled: (category, enabled) {
-                            manager.toggleCategory(category, enabled);
-                          },
                           onSubcategoryToggled: (category, subcategory, enabled) {
                             manager.toggleSubcategory(
                                 category, subcategory, enabled);

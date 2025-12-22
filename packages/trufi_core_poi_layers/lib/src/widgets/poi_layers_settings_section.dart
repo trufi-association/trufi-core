@@ -14,9 +14,6 @@ class POILayersSettingsSection extends StatelessWidget {
   /// Available subcategories per category
   final Map<POICategory, Set<String>> availableSubcategories;
 
-  /// Callback when a category is toggled (enables/disables all its subcategories)
-  final void Function(POICategory category, bool enabled) onCategoryToggled;
-
   /// Callback when a subcategory is toggled
   final void Function(POICategory category, String subcategory, bool enabled) onSubcategoryToggled;
 
@@ -27,7 +24,6 @@ class POILayersSettingsSection extends StatelessWidget {
     super.key,
     required this.enabledSubcategories,
     required this.availableSubcategories,
-    required this.onCategoryToggled,
     required this.onSubcategoryToggled,
     this.title,
   });
@@ -55,7 +51,6 @@ class POILayersSettingsSection extends StatelessWidget {
           return _POICategoryTile(
             category: category,
             isEnabled: isEnabled,
-            onToggle: (enabled) => onCategoryToggled(category, enabled),
             availableSubcategories: availableSubcats,
             enabledSubcategories: enabledSubcats,
             onSubcategoryToggled: (subcategory, enabled) =>
@@ -105,11 +100,10 @@ class _POILayersHeader extends StatelessWidget {
   }
 }
 
-/// Individual POI category toggle tile with subcategory support
+/// Individual POI category tile with expandable subcategories
 class _POICategoryTile extends StatefulWidget {
   final POICategory category;
   final bool isEnabled;
-  final void Function(bool enabled) onToggle;
   final Set<String>? availableSubcategories;
   final Set<String>? enabledSubcategories;
   final void Function(String subcategory, bool enabled)? onSubcategoryToggled;
@@ -117,7 +111,6 @@ class _POICategoryTile extends StatefulWidget {
   const _POICategoryTile({
     required this.category,
     required this.isEnabled,
-    required this.onToggle,
     this.availableSubcategories,
     this.enabledSubcategories,
     this.onSubcategoryToggled,
@@ -149,7 +142,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: widget.isEnabled
-              ? colorScheme.primary.withValues(alpha: 0.3)
+              ? widget.category.color.withValues(alpha: 0.3)
               : colorScheme.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
@@ -157,18 +150,16 @@ class _POICategoryTileState extends State<_POICategoryTile> {
         borderRadius: BorderRadius.circular(12),
         child: Column(
           children: [
-            // Main category tile
+            // Main category tile - tapping expands/collapses subcategories
             Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  // If has subcategories, expand when enabling
-                  if (hasSubcategories && !widget.isEnabled) {
-                    setState(() => _isExpanded = true);
-                  }
-                  widget.onToggle(!widget.isEnabled);
-                },
+                onTap: hasSubcategories
+                    ? () {
+                        HapticFeedback.selectionClick();
+                        setState(() => _isExpanded = !_isExpanded);
+                      }
+                    : null,
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Row(
@@ -207,7 +198,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                             if (hasSubcategories) ...[
                               const SizedBox(height: 1),
                               Text(
-                                _getSubcategoryCountText(),
+                                _getSubcategoryCountText(l10n),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: colorScheme.onSurfaceVariant,
                                 ),
@@ -216,41 +207,18 @@ class _POICategoryTileState extends State<_POICategoryTile> {
                           ],
                         ),
                       ),
-                      // Expand/collapse button for subcategories
-                      if (hasSubcategories && widget.isEnabled) ...[
-                        GestureDetector(
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            setState(() => _isExpanded = !_isExpanded);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: AnimatedRotation(
-                              turns: _isExpanded ? 0.5 : 0,
-                              duration: const Duration(milliseconds: 200),
-                              child: Icon(
-                                Icons.expand_more_rounded,
-                                color: colorScheme.onSurfaceVariant,
-                                size: 20,
-                              ),
-                            ),
+                      // Expand/collapse arrow for subcategories
+                      if (hasSubcategories) ...[
+                        AnimatedRotation(
+                          turns: _isExpanded ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Icon(
+                            Icons.expand_more_rounded,
+                            color: colorScheme.onSurfaceVariant,
+                            size: 24,
                           ),
                         ),
-                        const SizedBox(width: 8),
                       ],
-                      // Switch toggle
-                      Switch(
-                        value: widget.isEnabled,
-                        onChanged: (value) {
-                          HapticFeedback.lightImpact();
-                          if (hasSubcategories && value) {
-                            setState(() => _isExpanded = true);
-                          }
-                          widget.onToggle(value);
-                        },
-                        activeTrackColor: widget.category.color,
-                        activeThumbColor: colorScheme.surface,
-                      ),
                     ],
                   ),
                 ),
@@ -260,7 +228,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
             AnimatedSize(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              child: hasSubcategories && widget.isEnabled && _isExpanded
+              child: hasSubcategories && _isExpanded
                   ? _SubcategoriesList(
                       category: widget.category,
                       subcategories: widget.availableSubcategories!.toList()..sort(),
@@ -275,13 +243,13 @@ class _POICategoryTileState extends State<_POICategoryTile> {
     );
   }
 
-  String _getSubcategoryCountText() {
+  String _getSubcategoryCountText(POILayersLocalizations l10n) {
     final total = widget.availableSubcategories?.length ?? 0;
     final enabled = widget.enabledSubcategories?.length ?? 0;
     if (enabled == 0) {
-      return '$total tipos disponibles';
+      return l10n.typesAvailable(total);
     }
-    return '$enabled de $total tipos activos';
+    return l10n.typesActive(enabled, total);
   }
 }
 
@@ -311,6 +279,7 @@ class _SubcategoriesList extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = POILayersLocalizations.of(context)!;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 12),
@@ -338,7 +307,7 @@ class _SubcategoriesList extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Tipos',
+                  l10n.subcategoryTypes,
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: category.color,
                     fontWeight: FontWeight.w600,
@@ -360,7 +329,7 @@ class _SubcategoriesList extends StatelessWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    enabledSubcategories.length == subcategories.length ? 'Limpiar' : 'Todos',
+                    enabledSubcategories.length == subcategories.length ? l10n.clearAll : l10n.selectAll,
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: category.color,
                       fontWeight: FontWeight.w600,
@@ -373,9 +342,7 @@ class _SubcategoriesList extends StatelessWidget {
           const Divider(height: 1),
           // Subcategories switches
           ...subcategories.map((subcategory) {
-            // If no subcategories are explicitly enabled, treat all as enabled
-            final isEnabled = enabledSubcategories.isEmpty ||
-                              enabledSubcategories.contains(subcategory);
+            final isEnabled = enabledSubcategories.contains(subcategory);
 
             return _SubcategorySwitchTile(
               category: category,

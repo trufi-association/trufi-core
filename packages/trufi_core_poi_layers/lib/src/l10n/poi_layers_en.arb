@@ -146,5 +146,38 @@
         "type": "int"
       }
     }
+  },
+  "subcategoryTypes": "Types",
+  "@subcategoryTypes": {
+    "description": "Header for subcategory types list"
+  },
+  "selectAll": "All",
+  "@selectAll": {
+    "description": "Button to select all subcategories"
+  },
+  "clearAll": "Clear",
+  "@clearAll": {
+    "description": "Button to clear all subcategories"
+  },
+  "typesAvailable": "{count} types available",
+  "@typesAvailable": {
+    "description": "Subtitle showing available types count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "typesActive": "{enabled} of {total} active",
+  "@typesActive": {
+    "description": "Subtitle showing active types count",
+    "placeholders": {
+      "enabled": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
   }
 }
