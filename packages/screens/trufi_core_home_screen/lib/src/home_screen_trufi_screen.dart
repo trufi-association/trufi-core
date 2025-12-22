@@ -112,6 +112,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   Future<void> initialize() async {
     await _repository.initialize();
     await _routingPreferencesManager.initialize();
+
+    // Initialize POI layers if available (optional dependency)
+    // This requires POILayersCubit to be provided in AppConfiguration.providers
+    // The cubit will be accessed via context during the first build
   }
 
   @override

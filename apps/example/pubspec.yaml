@@ -43,3 +43,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # POI Layers assets
+  assets:
+    - assets/pois/

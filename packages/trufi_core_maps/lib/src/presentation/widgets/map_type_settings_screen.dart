@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'map_type_option.dart';
 
-/// Full-screen settings screen for selecting map type.
+/// Full-screen settings screen for selecting map type and optional POI layers.
 class MapTypeSettingsScreen extends StatefulWidget {
   /// Currently selected map index.
   final int currentMapIndex;
@@ -17,11 +17,15 @@ class MapTypeSettingsScreen extends StatefulWidget {
   /// Title displayed in the app bar.
   final String? appBarTitle;
 
-  /// Section title displayed above the list.
+  /// Section title displayed above the map type list.
   final String? sectionTitle;
 
   /// Text for the apply button.
   final String? applyButtonText;
+
+  /// Optional: Widget to display additional settings (e.g., POI layers).
+  /// This will be displayed below the map type selection.
+  final Widget? additionalSettings;
 
   const MapTypeSettingsScreen({
     super.key,
@@ -31,6 +35,7 @@ class MapTypeSettingsScreen extends StatefulWidget {
     this.appBarTitle,
     this.sectionTitle,
     this.applyButtonText,
+    this.additionalSettings,
   });
 
   @override
@@ -121,25 +126,33 @@ class _MapTypeSettingsScreenState extends State<MapTypeSettingsScreen>
 
             // Map options list
             Expanded(
-              child: ListView.builder(
+              child: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                itemCount: widget.mapOptions.length,
-                itemBuilder: (context, index) {
-                  final option = widget.mapOptions[index];
-                  final isSelected = selectedMapIndex == index;
+                children: [
+                  // Map type options
+                  ...List.generate(widget.mapOptions.length, (index) {
+                    final option = widget.mapOptions[index];
+                    final isSelected = selectedMapIndex == index;
 
-                  return _buildAnimatedItem(
-                    index: index + 2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _ModernMapTypeCard(
-                        option: option,
-                        isSelected: isSelected,
-                        onTap: () => _onMapTypeSelected(index),
+                    return _buildAnimatedItem(
+                      index: index + 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _ModernMapTypeCard(
+                          option: option,
+                          isSelected: isSelected,
+                          onTap: () => _onMapTypeSelected(index),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  }),
+
+                  // Additional settings section (e.g., POI layers)
+                  if (widget.additionalSettings != null) ...[
+                    const SizedBox(height: 24),
+                    widget.additionalSettings!,
+                  ],
+                ],
               ),
             ),
 

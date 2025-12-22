@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../data/models/poi_category.dart';
-import 'poi_layers_settings_section.dart';
 
 /// A button widget that opens POI layers settings when pressed.
 /// Designed to match the style of MapTypeButton.
+///
+/// @deprecated This widget is deprecated. Use POILayersSettingsSection directly
+/// in your settings UI instead.
+@Deprecated('Use POILayersSettingsSection directly')
 class POILayersButton extends StatelessWidget {
   /// Current enabled state for each category
   final Map<POICategory, bool> enabledCategories;
@@ -114,11 +117,11 @@ class POILayersButton extends StatelessWidget {
 
   void _openPOISettings(BuildContext context) {
     HapticFeedback.lightImpact();
-    POILayersSettingsSection.showAsBottomSheet(
-      context,
-      enabledCategories: enabledCategories,
-      onCategoryToggled: onCategoryToggled,
-      title: settingsTitle,
+    // Deprecated: POILayersSettingsSection.showAsBottomSheet was removed
+    // Use POILayersSettingsSection directly in your settings UI
+    throw UnimplementedError(
+      'POILayersButton._openPOISettings is deprecated. '
+      'Use POILayersSettingsSection directly in your settings UI.'
     );
   }
 }

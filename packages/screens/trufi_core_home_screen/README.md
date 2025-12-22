@@ -156,6 +156,72 @@ adb shell am start -a android.intent.action.VIEW -d "myapp://route?fromLat=-17.3
 xcrun simctl openurl booted "myapp://route?fromLat=-17.39&fromLng=-66.16&fromName=Test&toLat=-17.41&toLng=-66.17&toName=Dest&time=1734530400000"
 ```
 
+## Optional: POI Layers Integration
+
+The home screen supports optional integration with POI (Points of Interest) layers. This feature is **completely optional** and only needs to be configured if your app uses the `trufi_core_poi_layers` package.
+
+### How to Add POI Layers
+
+1. **Add dependency** to your app's `pubspec.yaml`:
+```yaml
+dependencies:
+  trufi_core_poi_layers: ^1.0.0
+```
+
+2. **Wrap HomeScreen with POILayersCubit**:
+```dart
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
+
+BlocProvider(
+  create: (context) => POILayersCubit(
+    config: POILayerConfig(assetsBasePath: 'assets/pois'),
+    defaultEnabledCategories: {POICategory.tourism, POICategory.food},
+  )..initialize(),
+  child: HomeScreenTrufiScreen(
+    config: HomeScreenConfig(...),
+  ),
+)
+```
+
+3. **Customize the MapTypeButton** (optional):
+
+The home screen provides a method `_buildMapTypeButton()` that you can override to include POI layers settings:
+
+```dart
+// In your custom HomeScreen subclass or wrapper
+@override
+Widget _buildMapTypeButton(MapEngineManager mapEngineManager) {
+  return BlocBuilder<POILayersCubit, POILayersState>(
+    builder: (context, state) {
+      return MapTypeButton.fromEngines(
+        engines: mapEngineManager.engines,
+        currentEngineIndex: mapEngineManager.currentIndex,
+        onEngineChanged: (engine) => mapEngineManager.setEngine(engine),
+        // Integrated POI layers settings
+        additionalSettings: POILayersSettingsSection(
+          enabledCategories: state.enabledCategories,
+          enabledSubcategories: state.enabledSubcategories,
+          availableSubcategories: {
+            for (final cat in POICategory.values)
+              cat: context.read<POILayersCubit>().getSubcategories(cat),
+          },
+          onCategoryToggled: (category, enabled) {
+            context.read<POILayersCubit>().toggleCategory(category, enabled);
+          },
+          onSubcategoryToggled: (category, subcategory, enabled) {
+            context.read<POILayersCubit>().toggleSubcategory(
+              category, subcategory, enabled,
+            );
+          },
+        ),
+      );
+    },
+  );
+}
+```
+
+This will add POI layers configuration to the map type settings modal, allowing users to toggle POI categories alongside map type selection.
+
 ## Dependencies
 
 - `trufi_core_interfaces` - Core interfaces and models

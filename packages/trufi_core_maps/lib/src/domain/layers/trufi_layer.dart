@@ -13,6 +13,7 @@ abstract class TrufiLayer {
     required this.id,
     required this.layerLevel,
     this.visible = true,
+    this.parentId,
   }) {
     controller.addLayer(this);
   }
@@ -21,6 +22,25 @@ abstract class TrufiLayer {
   final String id;
   final int layerLevel;
   bool visible;
+
+  /// Optional parent layer ID for hierarchical organization.
+  ///
+  /// When set, this layer is considered a child of the parent layer,
+  /// which can be used for:
+  /// - Grouping layers in UI (e.g., collapsible sections)
+  /// - Batch operations (toggle all children when parent is toggled)
+  /// - Logical organization (e.g., all POI categories under a "POI" parent)
+  ///
+  /// Example:
+  /// ```dart
+  /// // Parent layer
+  /// final parent = MyLayer(controller, id: 'poi_layers', parentId: null);
+  ///
+  /// // Child layers
+  /// final food = MyLayer(controller, id: 'poi_food', parentId: 'poi_layers');
+  /// final transport = MyLayer(controller, id: 'poi_transport', parentId: 'poi_layers');
+  /// ```
+  final String? parentId;
   final MarkerIndex markerIndex = MarkerIndex();
   final List<TrufiMarker> _markers = <TrufiMarker>[];
   final List<TrufiLine> _lines = <TrufiLine>[];

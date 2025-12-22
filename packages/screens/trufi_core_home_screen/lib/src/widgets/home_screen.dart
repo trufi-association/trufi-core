@@ -60,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
   _RouteLayer? _routeLayer;
   _LocationMarkersLayer? _locationMarkersLayer;
   _MyLocationLayer? _myLocationLayer;
+  List<TrufiLayer>? _customLayers;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
 
@@ -165,6 +166,13 @@ class _HomeScreenState extends State<HomeScreen>
       _fitCameraLayer = FitCameraLayer(
         _mapController!,
       );
+
+      // Create custom layers if provided in config
+      if (widget.config.customMapLayers != null) {
+        _customLayers = widget.config.customMapLayers!(_mapController!);
+        debugPrint('Custom layers initialized: ${_customLayers!.length} layers');
+      }
+
       // Try to start GPS tracking now that map controller is ready
       _tryAutoStartTracking();
     }
@@ -842,6 +850,23 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
+  /// Build map type button with optional POI layers integration
+  /// This method checks if POI layers are available in the widget tree
+  Widget _buildMapTypeButton(MapEngineManager mapEngineManager) {
+    return MapTypeButton.fromEngines(
+      engines: mapEngineManager.engines,
+      currentEngineIndex: mapEngineManager.currentIndex,
+      onEngineChanged: (engine) {
+        mapEngineManager.setEngine(engine);
+      },
+      // POI layers can be added here by apps that include trufi_core_poi_layers
+      // Example:
+      // additionalSettings: context.poiLayersCubitOrNull != null
+      //   ? BlocBuilder<POILayersCubit, POILayersState>(...)
+      //   : null,
+    );
+  }
+
   Widget _buildMapControls(
     BuildContext context,
     MapEngineManager mapEngineManager,
@@ -857,15 +882,9 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Map type button
+              // Map type button (with optional POI layers if available)
               if (mapEngineManager.engines.length > 1) ...[
-                MapTypeButton.fromEngines(
-                  engines: mapEngineManager.engines,
-                  currentEngineIndex: mapEngineManager.currentIndex,
-                  onEngineChanged: (engine) {
-                    mapEngineManager.setEngine(engine);
-                  },
-                ),
+                _buildMapTypeButton(mapEngineManager),
                 const SizedBox(height: 8),
               ],
               // My location button

@@ -5,14 +5,11 @@ export 'src/data/models/poi_category.dart';
 // Data
 export 'src/data/geojson_loader.dart';
 
-// Layers
-export 'src/layers/poi_map_layer.dart';
-
 // Config
 export 'src/config/poi_layer_config.dart';
 
-// Manager
-export 'src/poi_layer_manager.dart';
+// Layers
+export 'src/layers/poi_category_layer.dart';
 
 // Cubit
 export 'src/cubit/poi_layers_cubit.dart';

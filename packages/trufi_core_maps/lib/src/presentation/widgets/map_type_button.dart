@@ -8,6 +8,7 @@ import 'map_type_settings_screen.dart';
 /// map type settings popup when pressed.
 ///
 /// Can be used with either [MapTypeOption] list or [ITrufiMapEngine] list.
+/// Optionally supports additional settings like POI layers.
 ///
 /// Example with options:
 /// ```dart
@@ -26,6 +27,35 @@ import 'map_type_settings_screen.dart';
 ///   engines: [MapLibreEngine(), FlutterMapEngine()],
 ///   currentEngineIndex: 0,
 ///   onEngineChanged: (engine) => setState(() => _currentEngine = engine),
+/// )
+/// ```
+///
+/// Example with POI layers (using trufi_core_poi_layers package):
+/// ```dart
+/// MapTypeButton.fromEngines(
+///   engines: [MapLibreEngine(), FlutterMapEngine()],
+///   currentEngineIndex: 0,
+///   onEngineChanged: (engine) => setState(() => _currentEngine = engine),
+///   additionalSettings: BlocBuilder<POILayersCubit, POILayersState>(
+///     builder: (context, state) {
+///       return POILayersSettingsSection(
+///         enabledCategories: state.enabledCategories,
+///         onCategoryToggled: (category, enabled) {
+///           context.read<POILayersCubit>().toggleCategory(category, enabled);
+///         },
+///         availableSubcategories: {
+///           for (final cat in POICategory.values)
+///             cat: context.read<POILayersCubit>().getSubcategories(cat),
+///         },
+///         enabledSubcategories: state.enabledSubcategories,
+///         onSubcategoryToggled: (category, subcategory, enabled) {
+///           context.read<POILayersCubit>().toggleSubcategory(
+///             category, subcategory, enabled,
+///           );
+///         },
+///       );
+///     },
+///   ),
 /// )
 /// ```
 class MapTypeButton extends StatelessWidget {
@@ -68,6 +98,9 @@ class MapTypeButton extends StatelessWidget {
   /// Text for the apply button in settings screen.
   final String? settingsApplyButtonText;
 
+  /// Optional: Additional settings widget to display (e.g., POI layers).
+  final Widget? additionalSettings;
+
   const MapTypeButton({
     super.key,
     required this.currentMapIndex,
@@ -83,6 +116,7 @@ class MapTypeButton extends StatelessWidget {
     this.settingsAppBarTitle,
     this.settingsSectionTitle,
     this.settingsApplyButtonText,
+    this.additionalSettings,
   });
 
   /// Creates a MapTypeButton from a list of map engines.
@@ -118,6 +152,7 @@ class MapTypeButton extends StatelessWidget {
     String? settingsAppBarTitle,
     String? settingsSectionTitle,
     String? settingsApplyButtonText,
+    Widget? additionalSettings,
   }) {
     return _MapTypeButtonFromEngines(
       key: key,
@@ -134,6 +169,7 @@ class MapTypeButton extends StatelessWidget {
       settingsAppBarTitle: settingsAppBarTitle,
       settingsSectionTitle: settingsSectionTitle,
       settingsApplyButtonText: settingsApplyButtonText,
+      additionalSettings: additionalSettings,
     );
   }
 
@@ -153,6 +189,7 @@ class MapTypeButton extends StatelessWidget {
       settingsAppBarTitle: settingsAppBarTitle,
       settingsSectionTitle: settingsSectionTitle,
       settingsApplyButtonText: settingsApplyButtonText,
+      additionalSettings: additionalSettings,
     );
   }
 }
@@ -172,6 +209,7 @@ class _MapTypeButtonFromEngines extends StatelessWidget {
   final String? settingsAppBarTitle;
   final String? settingsSectionTitle;
   final String? settingsApplyButtonText;
+  final Widget? additionalSettings;
 
   const _MapTypeButtonFromEngines({
     super.key,
@@ -188,6 +226,7 @@ class _MapTypeButtonFromEngines extends StatelessWidget {
     this.settingsAppBarTitle,
     this.settingsSectionTitle,
     this.settingsApplyButtonText,
+    this.additionalSettings,
   });
 
   @override
@@ -206,6 +245,7 @@ class _MapTypeButtonFromEngines extends StatelessWidget {
       settingsAppBarTitle: settingsAppBarTitle,
       settingsSectionTitle: settingsSectionTitle,
       settingsApplyButtonText: settingsApplyButtonText,
+      additionalSettings: additionalSettings,
     );
   }
 }
@@ -225,6 +265,7 @@ class _MapTypeButtonBase extends StatelessWidget {
   final String? settingsAppBarTitle;
   final String? settingsSectionTitle;
   final String? settingsApplyButtonText;
+  final Widget? additionalSettings;
 
   const _MapTypeButtonBase({
     required this.currentMapIndex,
@@ -240,6 +281,7 @@ class _MapTypeButtonBase extends StatelessWidget {
     this.settingsAppBarTitle,
     this.settingsSectionTitle,
     this.settingsApplyButtonText,
+    this.additionalSettings,
   });
 
   @override
@@ -286,6 +328,7 @@ class _MapTypeButtonBase extends StatelessWidget {
           appBarTitle: settingsAppBarTitle,
           sectionTitle: settingsSectionTitle,
           applyButtonText: settingsApplyButtonText,
+          additionalSettings: additionalSettings,
         ),
       ),
     );

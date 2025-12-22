@@ -7,31 +7,27 @@ import '../l10n/poi_layers_localizations.dart';
 /// A settings section widget for configuring POI layer visibility.
 /// Can be integrated into a settings screen or shown as a standalone modal.
 class POILayersSettingsSection extends StatelessWidget {
-  /// Current enabled state for each category
-  final Map<POICategory, bool> enabledCategories;
+  /// Enabled subcategories per category
+  final Map<POICategory, Set<String>> enabledSubcategories;
 
-  /// Callback when a category is toggled
+  /// Available subcategories per category
+  final Map<POICategory, Set<String>> availableSubcategories;
+
+  /// Callback when a category is toggled (enables/disables all its subcategories)
   final void Function(POICategory category, bool enabled) onCategoryToggled;
 
-  /// Optional: Available subcategories per category
-  final Map<POICategory, Set<String>>? availableSubcategories;
-
-  /// Optional: Enabled subcategories per category
-  final Map<POICategory, Set<String>>? enabledSubcategories;
-
-  /// Optional: Callback when a subcategory is toggled
-  final void Function(POICategory category, String subcategory, bool enabled)? onSubcategoryToggled;
+  /// Callback when a subcategory is toggled
+  final void Function(POICategory category, String subcategory, bool enabled) onSubcategoryToggled;
 
   /// Optional section title
   final String? title;
 
   const POILayersSettingsSection({
     super.key,
-    required this.enabledCategories,
+    required this.enabledSubcategories,
+    required this.availableSubcategories,
     required this.onCategoryToggled,
-    this.availableSubcategories,
-    this.enabledSubcategories,
-    this.onSubcategoryToggled,
+    required this.onSubcategoryToggled,
     this.title,
   });
 
@@ -50,43 +46,25 @@ class POILayersSettingsSection extends StatelessWidget {
         const SizedBox(height: 8),
         // Category toggles
         ...POICategory.values.map((category) {
-          final isEnabled = enabledCategories[category] ?? false;
-          final subcats = availableSubcategories?[category];
-          final enabledSubcats = enabledSubcategories?[category];
+          final availableSubcats = availableSubcategories[category];
+          final enabledSubcats = enabledSubcategories[category];
+          // Category is enabled if it has any enabled subcategories
+          final isEnabled = enabledSubcats != null && enabledSubcats.isNotEmpty;
 
           return _POICategoryTile(
             category: category,
             isEnabled: isEnabled,
             onToggle: (enabled) => onCategoryToggled(category, enabled),
-            availableSubcategories: subcats,
+            availableSubcategories: availableSubcats,
             enabledSubcategories: enabledSubcats,
-            onSubcategoryToggled: onSubcategoryToggled != null
-                ? (subcategory, enabled) => onSubcategoryToggled!(category, subcategory, enabled)
-                : null,
+            onSubcategoryToggled: (subcategory, enabled) =>
+                onSubcategoryToggled(category, subcategory, enabled),
           );
         }),
       ],
     );
   }
 
-  /// Show as a bottom sheet modal
-  static Future<void> showAsBottomSheet(
-    BuildContext context, {
-    required Map<POICategory, bool> enabledCategories,
-    required void Function(POICategory category, bool enabled) onCategoryToggled,
-    String? title,
-  }) {
-    return showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _POILayersBottomSheet(
-        enabledCategories: enabledCategories,
-        onCategoryToggled: onCategoryToggled,
-        title: title,
-      ),
-    );
-  }
 }
 
 /// Header for the POI layers section
@@ -569,124 +547,3 @@ class _SubcategorySwitchTile extends StatelessWidget {
   }
 }
 
-/// Bottom sheet for POI layers settings
-class _POILayersBottomSheet extends StatefulWidget {
-  final Map<POICategory, bool> enabledCategories;
-  final void Function(POICategory category, bool enabled) onCategoryToggled;
-  final String? title;
-
-  const _POILayersBottomSheet({
-    required this.enabledCategories,
-    required this.onCategoryToggled,
-    this.title,
-  });
-
-  @override
-  State<_POILayersBottomSheet> createState() => _POILayersBottomSheetState();
-}
-
-class _POILayersBottomSheetState extends State<_POILayersBottomSheet> {
-  late Map<POICategory, bool> _localEnabledCategories;
-
-  @override
-  void initState() {
-    super.initState();
-    _localEnabledCategories = Map.from(widget.enabledCategories);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final l10n = POILayersLocalizations.of(context);
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Handle bar
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            // Header
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close_rounded),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.title ?? l10n.pointsOfInterest,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-            // Scrollable category list
-            Flexible(
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: POICategory.values.length,
-                itemBuilder: (context, index) {
-                  final category = POICategory.values[index];
-                  final isEnabled = _localEnabledCategories[category] ?? false;
-                  return _POICategoryTile(
-                    category: category,
-                    isEnabled: isEnabled,
-                    onToggle: (enabled) {
-                      setState(() {
-                        _localEnabledCategories[category] = enabled;
-                      });
-                      widget.onCategoryToggled(category, enabled);
-                    },
-                  );
-                },
-              ),
-            ),
-            // Apply button
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  onPressed: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.check_rounded, size: 20),
-                  label: Text(l10n.done),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

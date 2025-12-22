@@ -1,188 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trufi_core_maps/trufi_core_maps.dart';
 
-import '../config/poi_layer_config.dart';
-import '../data/geojson_loader.dart';
 import '../data/models/poi.dart';
 import '../data/models/poi_category.dart';
-import '../layers/poi_map_layer.dart';
 
 /// State for POI layers
 class POILayersState {
-  /// Enabled state for each category
-  final Map<POICategory, bool> enabledCategories;
-
   /// Enabled subcategories per category (category -> Set of subcategory names)
-  /// If null or empty for a category, all subcategories are enabled
+  /// If a category has no enabled subcategories, the category is considered disabled
+  /// If the set is null, it means the category hasn't been initialized yet
   final Map<POICategory, Set<String>> enabledSubcategories;
 
-  /// Loaded layers
-  final Map<POICategory, POIMapLayer> layers;
-
-  /// Whether layers are initialized
-  final bool isInitialized;
-
   const POILayersState({
-    this.enabledCategories = const {},
     this.enabledSubcategories = const {},
-    this.layers = const {},
-    this.isInitialized = false,
   });
 
   POILayersState copyWith({
-    Map<POICategory, bool>? enabledCategories,
     Map<POICategory, Set<String>>? enabledSubcategories,
-    Map<POICategory, POIMapLayer>? layers,
-    bool? isInitialized,
   }) {
     return POILayersState(
-      enabledCategories: enabledCategories ?? this.enabledCategories,
       enabledSubcategories: enabledSubcategories ?? this.enabledSubcategories,
-      layers: layers ?? this.layers,
-      isInitialized: isInitialized ?? this.isInitialized,
     );
   }
 
-  /// Get list of enabled categories
-  Set<POICategory> get enabledCategoriesSet =>
-      enabledCategories.entries
-          .where((e) => e.value)
+  /// Check if a category is enabled (has any subcategories enabled)
+  bool isCategoryEnabled(POICategory category) {
+    final subcats = enabledSubcategories[category];
+    return subcats != null && subcats.isNotEmpty;
+  }
+
+  /// Get list of enabled categories (categories with at least one enabled subcategory)
+  Set<POICategory> get enabledCategories =>
+      enabledSubcategories.entries
+          .where((e) => e.value.isNotEmpty)
           .map((e) => e.key)
           .toSet();
 
   /// Check if any category is enabled
   bool get hasEnabledCategories =>
-      enabledCategories.values.any((enabled) => enabled);
+      enabledSubcategories.values.any((subcats) => subcats.isNotEmpty);
 
-  /// Get enabled layers
-  List<POIMapLayer> get enabledLayers =>
-      enabledCategoriesSet
-          .map((cat) => layers[cat])
-          .whereType<POIMapLayer>()
-          .toList();
-
-  /// Get all layers
-  List<POIMapLayer> get allLayers => layers.values.toList();
-
-  /// Check if a POI is enabled based on category and subcategory
+  /// Check if a POI is enabled based on its subcategory
   bool isPOIEnabled(POI poi) {
-    // Check if category is enabled
-    if (!(enabledCategories[poi.category] ?? false)) {
-      return false;
-    }
-
-    // If no subcategory info, POI is enabled (backwards compatibility)
-    if (poi.subcategory == null) {
-      return true;
-    }
-
     // Get enabled subcategories for this category
     final subcats = enabledSubcategories[poi.category];
 
-    // If no subcategory filter set, all subcategories are enabled
+    // If category not initialized or no subcategories enabled, POI is disabled
     if (subcats == null || subcats.isEmpty) {
-      return true;
+      return false;
     }
 
-    // Check if this subcategory is enabled
+    // If POI has no subcategory, check if category has any enabled subcategories
+    if (poi.subcategory == null) {
+      return subcats.isNotEmpty;
+    }
+
+    // Check if this specific subcategory is enabled
     return subcats.contains(poi.subcategory);
   }
 }
 
 /// Cubit for managing POI layer visibility and state.
 ///
-/// This cubit manages POI layer data and enabled state.
-/// Use with MapLayersCubit to control visibility on the map via
-/// [changeCustomMapLayerState] method.
+/// This cubit manages POI subcategory-based visibility using subcategory-only toggling:
+/// - Categories are automatically enabled when they have enabled subcategories
+/// - Categories are automatically disabled when all subcategories are disabled
+/// - No direct category toggle - categories are derived from subcategory state
 class POILayersCubit extends Cubit<POILayersState> {
-  final POILayerConfig config;
-  final GeoJSONLoader _loader;
-  final void Function(POI poi)? onPOITapped;
-  final MapLayersCubit? mapLayersCubit;
-
   POILayersCubit({
-    required this.config,
-    this.onPOITapped,
-    this.mapLayersCubit,
-    Set<POICategory>? defaultEnabledCategories,
-  })  : _loader = GeoJSONLoader(assetsBasePath: config.assetsBasePath),
-        super(POILayersState(
-          enabledCategories: {
-            for (final cat in POICategory.values)
-              cat: defaultEnabledCategories?.contains(cat) ?? false,
-          },
+    Map<POICategory, Set<String>>? defaultEnabledSubcategories,
+  }) : super(POILayersState(
+          enabledSubcategories: defaultEnabledSubcategories ?? {},
         ));
-
-  /// Initialize all POI layers
-  Future<void> initialize() async {
-    if (state.isInitialized) return;
-
-    final layers = <POICategory, POIMapLayer>{};
-
-    for (final category in POICategory.values) {
-      final layer = POIMapLayer(
-        category: category,
-        config: config,
-        loader: _loader,
-        onPOITapped: onPOITapped,
-      );
-      await layer.initialize();
-      layers[category] = layer;
-    }
-
-    emit(state.copyWith(
-      layers: layers,
-      isInitialized: true,
-    ));
-
-    // Sync with MapLayersCubit if available
-    _syncWithMapLayersCubit();
-  }
-
-  /// Toggle a category on/off
-  void toggleCategory(POICategory category, bool enabled) {
-    final newEnabled = Map<POICategory, bool>.from(state.enabledCategories);
-    newEnabled[category] = enabled;
-    emit(state.copyWith(enabledCategories: newEnabled));
-
-    // Update MapLayersCubit if available
-    final layer = state.layers[category];
-    if (mapLayersCubit != null && layer != null) {
-      mapLayersCubit!.changeCustomMapLayerState(
-        customLayer: layer,
-        newState: enabled,
-      );
-    }
-  }
-
-  /// Enable multiple categories
-  void enableCategories(Set<POICategory> categories) {
-    final newEnabled = Map<POICategory, bool>.from(state.enabledCategories);
-    for (final cat in categories) {
-      newEnabled[cat] = true;
-    }
-    emit(state.copyWith(enabledCategories: newEnabled));
-    _syncWithMapLayersCubit();
-  }
-
-  /// Disable all categories
-  void disableAll() {
-    final newEnabled = {
-      for (final cat in POICategory.values) cat: false,
-    };
-    emit(state.copyWith(enabledCategories: newEnabled));
-    _syncWithMapLayersCubit();
-  }
-
-  /// Enable all categories
-  void enableAll() {
-    final newEnabled = {
-      for (final cat in POICategory.values) cat: true,
-    };
-    emit(state.copyWith(enabledCategories: newEnabled));
-    _syncWithMapLayersCubit();
-  }
 
   /// Toggle a subcategory on/off within a category
   void toggleSubcategory(POICategory category, String subcategory, bool enabled) {
@@ -202,63 +91,48 @@ class POILayersCubit extends Cubit<POILayersState> {
     emit(state.copyWith(enabledSubcategories: newSubcats));
   }
 
-  /// Enable all subcategories for a category
-  void enableAllSubcategories(POICategory category) {
+  /// Enable all subcategories for a category (effectively enabling the category)
+  void enableCategory(POICategory category, Set<String> subcategories) {
+    if (subcategories.isEmpty) return;
+
     final newSubcats = Map<POICategory, Set<String>>.from(state.enabledSubcategories);
-    // Empty set means all subcategories are enabled
+    newSubcats[category] = Set<String>.from(subcategories);
+    emit(state.copyWith(enabledSubcategories: newSubcats));
+  }
+
+  /// Disable all subcategories for a category (effectively disabling the category)
+  void disableCategory(POICategory category) {
+    final newSubcats = Map<POICategory, Set<String>>.from(state.enabledSubcategories);
     newSubcats[category] = {};
     emit(state.copyWith(enabledSubcategories: newSubcats));
   }
 
-  /// Get available subcategories for a category
-  Set<String> getSubcategories(POICategory category) {
-    final layer = state.layers[category];
-    if (layer == null) return {};
-
-    return layer.pois
-        .where((poi) => poi.subcategory != null)
-        .map((poi) => poi.subcategory!)
-        .toSet();
-  }
-
-  /// Sync all layer states with MapLayersCubit
-  void _syncWithMapLayersCubit() {
-    if (mapLayersCubit == null || !state.isInitialized) return;
-
-    for (final entry in state.enabledCategories.entries) {
-      final layer = state.layers[entry.key];
-      if (layer != null) {
-        mapLayersCubit!.changeCustomMapLayerState(
-          customLayer: layer,
-          newState: entry.value,
-        );
-      }
+  /// Toggle a category on/off (enables/disables all its subcategories)
+  void toggleCategory(POICategory category, bool enabled, Set<String> subcategories) {
+    if (enabled) {
+      enableCategory(category, subcategories);
+    } else {
+      disableCategory(category);
     }
   }
 
-  /// Get layer for a specific category
-  POIMapLayer? getLayer(POICategory category) => state.layers[category];
-
-  /// Get MapLayerContainers for all POI layers (for use when creating MapLayersCubit)
-  List<MapLayerContainer> getAllLayerContainers() {
-    return state.allLayers.map((layer) {
-      return MapLayerContainer(
-        layers: [layer],
-        icon: (context) => Icon(layer.category.icon, color: layer.category.color),
-        name: (context) => layer.name(context),
-      );
-    }).toList();
+  /// Disable all categories
+  void disableAll() {
+    final newSubcats = {
+      for (final cat in POICategory.values) cat: <String>{},
+    };
+    emit(state.copyWith(enabledSubcategories: newSubcats));
   }
 
-  /// Clear cached POI data
-  void clearCache() {
-    _loader.clearCache();
-  }
-
-  @override
-  Future<void> close() {
-    clearCache();
-    return super.close();
+  /// Enable all categories (all subcategories)
+  void enableAll(Map<POICategory, Set<String>> allSubcategories) {
+    final newSubcats = <POICategory, Set<String>>{};
+    for (final entry in allSubcategories.entries) {
+      if (entry.value.isNotEmpty) {
+        newSubcats[entry.key] = entry.value;
+      }
+    }
+    emit(state.copyWith(enabledSubcategories: newSubcats));
   }
 }
 
