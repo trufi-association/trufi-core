@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trufi_core_search_locations/src/models/search_location.dart';
 import 'package:trufi_core_search_locations/src/models/search_location_state.dart';
 
 import '../test_config.dart';

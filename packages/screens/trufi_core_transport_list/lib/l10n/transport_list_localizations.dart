@@ -68,11 +68,11 @@ abstract class TransportListLocalizations {
 
   final String localeName;
 
-  static TransportListLocalizations? of(BuildContext context) {
+  static TransportListLocalizations of(BuildContext context) {
     return Localizations.of<TransportListLocalizations>(
       context,
       TransportListLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<TransportListLocalizations> delegate =

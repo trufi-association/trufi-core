@@ -68,11 +68,11 @@ abstract class HomeScreenLocalizations {
 
   final String localeName;
 
-  static HomeScreenLocalizations? of(BuildContext context) {
+  static HomeScreenLocalizations of(BuildContext context) {
     return Localizations.of<HomeScreenLocalizations>(
       context,
       HomeScreenLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<HomeScreenLocalizations> delegate =

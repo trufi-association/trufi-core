@@ -2,4 +2,5 @@ arb-dir: lib/l10n
 template-arb-file: transport_list_en.arb
 output-localization-file: transport_list_localizations.dart
 output-class: TransportListLocalizations
+nullable-getter: false
 

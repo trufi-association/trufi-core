@@ -30,7 +30,7 @@ class ItineraryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoutePlannerCubit, RoutePlannerState>(
       builder: (context, state) {
-        final l10n = HomeScreenLocalizations.of(context)!;
+        final l10n = HomeScreenLocalizations.of(context);
         final cubit = context.read<RoutePlannerCubit>();
         final theme = Theme.of(context);
 

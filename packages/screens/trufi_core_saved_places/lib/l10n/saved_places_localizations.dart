@@ -68,11 +68,11 @@ abstract class SavedPlacesLocalizations {
 
   final String localeName;
 
-  static SavedPlacesLocalizations? of(BuildContext context) {
+  static SavedPlacesLocalizations of(BuildContext context) {
     return Localizations.of<SavedPlacesLocalizations>(
       context,
       SavedPlacesLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<SavedPlacesLocalizations> delegate =
