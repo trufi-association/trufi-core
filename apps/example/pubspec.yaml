@@ -15,8 +15,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_bloc: ^8.1.6
   provider: ^6.1.2
-  flutter_localizations:
-    sdk: flutter
   go_router: ^17.0.0
   trufi_core_interfaces: ^1.0.0
   trufi_core_utils: ^1.0.0
