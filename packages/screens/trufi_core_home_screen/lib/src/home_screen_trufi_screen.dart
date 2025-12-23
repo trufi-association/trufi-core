@@ -111,7 +111,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return HomeScreenLocalizations.of(context)!.menuHome;
+    return HomeScreenLocalizations.of(context).menuHome;
   }
 
   @override
