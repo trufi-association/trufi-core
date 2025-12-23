@@ -69,7 +69,6 @@ void main() {
                 POICategory.transport: {'bus_station', 'bus_stop'},
               },
             ),
-            additionalMapSettings: (_) => const POILayersSettingsSection(),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(

@@ -8,6 +8,7 @@ import 'package:trufi_core_base_widgets/trufi_core_base_widgets.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart'
     hide ITrufiMapEngine;
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
@@ -893,9 +894,9 @@ class _HomeScreenState extends State<HomeScreen>
                   onEngineChanged: (engine) {
                     mapEngineManager.setEngine(engine);
                   },
-                  additionalSettings: widget.config.additionalMapSettings?.call(
-                    context,
-                  ),
+                  additionalSettings: widget.config.poiLayersManager != null
+                      ? const POILayersSettingsSection()
+                      : null,
                 ),
                 const SizedBox(height: 8),
               ],

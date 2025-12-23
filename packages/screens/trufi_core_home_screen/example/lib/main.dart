@@ -22,24 +22,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final poiManager = POILayersManager(
-      assetsBasePath: 'assets/pois',
-      defaultEnabledSubcategories: {
-        POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
-        POICategory.food: {'restaurant', 'cafe'},
-        POICategory.transport: {'bus_station', 'bus_stop'},
-      },
-    );
-
     final screen = HomeScreenTrufiScreen(
       config: HomeScreenConfig(
         otpEndpoint: _otpEndpoint,
-        customMapLayers: (controller) {
-          // Initialize POI layers with the map controller
-          poiManager.initialize(controller);
-          return poiManager.layers;
-        },
-        additionalMapSettings: (_) => const POILayersSettingsSection(),
+        poiLayersManager: POILayersManager(
+          assetsBasePath: 'assets/pois',
+          defaultEnabledSubcategories: {
+            POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
+            POICategory.food: {'restaurant', 'cafe'},
+            POICategory.transport: {'bus_station', 'bus_stop'},
+          },
+        ),
       ),
     );
 
@@ -51,7 +44,6 @@ class MyApp extends StatelessWidget {
             defaultCenter: _defaultCenter,
           ),
         ),
-        ChangeNotifierProvider.value(value: poiManager),
         BlocProvider(
           create: (_) => SearchLocationsCubit(
             searchLocationService: PhotonSearchService(
