@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 /// Configuration for the Home Screen module.
@@ -55,6 +56,23 @@ class HomeScreenConfig {
   /// ```
   final Widget Function(BuildContext context)? additionalMapSettings;
 
+  /// Optional POI layers manager for displaying points of interest on the map.
+  ///
+  /// When provided, the HomeScreen will:
+  /// 1. Initialize the layers when the map is ready
+  /// 2. Register the provider in the widget tree for child widgets to access
+  ///
+  /// Example:
+  /// ```dart
+  /// poiLayersManager: POILayersManager(
+  ///   assetsBasePath: 'assets/pois',
+  ///   defaultEnabledSubcategories: {
+  ///     POICategory.tourism: {'museum', 'attraction'},
+  ///   },
+  /// ),
+  /// ```
+  final POILayersManager? poiLayersManager;
+
   const HomeScreenConfig({
     required this.otpEndpoint,
     this.chooseLocationZoom = 16.0,
@@ -65,5 +83,6 @@ class HomeScreenConfig {
     this.deepLinkScheme,
     this.customMapLayers,
     this.additionalMapSettings,
+    this.poiLayersManager,
   });
 }

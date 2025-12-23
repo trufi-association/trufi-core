@@ -39,8 +39,7 @@ class HomeScreen extends StatefulWidget {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )?
-  onStartNavigation;
+  )? onStartNavigation;
 
   const HomeScreen({
     super.key,
@@ -61,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
   _RouteLayer? _routeLayer;
   _LocationMarkersLayer? _locationMarkersLayer;
   _MyLocationLayer? _myLocationLayer;
-  List<TrufiLayer>? _customLayers;
+  bool _customLayersInitialized = false;
   bool _viewportReady = false;
   List<LatLng>? _pendingFitPoints;
 
@@ -156,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  void _initializeIfNeeded(MapEngineManager mapEngineManager) {
+  void _initializeIfNeeded(BuildContext context, MapEngineManager mapEngineManager) {
     if (_mapController == null) {
       _mapController = TrufiMapController(
         initialCameraPosition: TrufiCameraPosition(
@@ -168,14 +167,29 @@ class _HomeScreenState extends State<HomeScreen>
 
       // Create custom layers if provided in config
       if (widget.config.customMapLayers != null) {
-        _customLayers = widget.config.customMapLayers!(_mapController!);
-        debugPrint(
-          'Custom layers initialized: ${_customLayers!.length} layers',
-        );
+        final layers = widget.config.customMapLayers!(_mapController!);
+        debugPrint('Custom layers initialized: ${layers.length} layers');
+        _customLayersInitialized = true;
       }
+
+      // Initialize custom map layers if provided in config
+      _tryInitializeCustomMapLayers();
 
       // Try to start GPS tracking now that map controller is ready
       _tryAutoStartTracking();
+    }
+  }
+
+  /// Initialize custom map layers from config if provided.
+  void _tryInitializeCustomMapLayers() {
+    // Skip if already initialized via customMapLayers callback
+    if (_customLayersInitialized) return;
+
+    final poiManager = widget.config.poiLayersManager;
+    if (poiManager != null) {
+      poiManager.initializeLayers(_mapController);
+      _customLayersInitialized = true;
+      debugPrint('POI layers initialized');
     }
   }
 
@@ -716,7 +730,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final mapEngineManager = MapEngineManager.watch(context);
-    _initializeIfNeeded(mapEngineManager);
+    _initializeIfNeeded(context, mapEngineManager);
     final l10n = HomeScreenLocalizations.of(context);
     final theme = Theme.of(context);
 

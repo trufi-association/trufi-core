@@ -5,7 +5,13 @@ import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 
 import '../models/poi_category.dart';
 import '../l10n/poi_layers_localizations.dart';
+import '../l10n/poi_layers_localizations_en.dart';
 import '../l10n/poi_layers_localizations_ext.dart';
+
+/// Helper to get localizations with English fallback
+POILayersLocalizations _getL10n(BuildContext context) {
+  return POILayersLocalizations.of(context) ?? POILayersLocalizationsEn();
+}
 
 /// A settings section widget for configuring POI layer visibility.
 /// Can be integrated into a settings screen or shown as a standalone modal.
@@ -22,7 +28,7 @@ class POILayersSettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = _getL10n(context);
     final manager = context.watch<POILayersManager>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +70,7 @@ class _POILayersHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = _getL10n(context);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -125,7 +131,7 @@ class _POICategoryTileState extends State<_POICategoryTile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = _getL10n(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -279,7 +285,7 @@ class _SubcategoriesList extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = POILayersLocalizations.of(context)!;
+    final l10n = _getL10n(context);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 12),

@@ -54,18 +54,6 @@ void main() {
             ),
           ),
         ),
-        BlocProvider(
-          create: (_) => POILayersCubit(
-            config: const POILayerConfig(
-              assetsBasePath: 'assets/pois',
-            ),
-            defaultEnabledCategories: {
-              POICategory.tourism,
-              POICategory.food,
-              POICategory.transport,
-            },
-          ),
-        ),
       ],
       screens: [
         HomeScreenTrufiScreen(
@@ -73,6 +61,15 @@ void main() {
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
             appName: 'Trufi App',
             deepLinkScheme: 'trufiapp',
+            poiLayersManager: POILayersManager(
+              assetsBasePath: 'assets/pois',
+              defaultEnabledSubcategories: {
+                POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
+                POICategory.food: {'restaurant', 'cafe'},
+                POICategory.transport: {'bus_station', 'bus_stop'},
+              },
+            ),
+            additionalMapSettings: (_) => const POILayersSettingsSection(),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(
