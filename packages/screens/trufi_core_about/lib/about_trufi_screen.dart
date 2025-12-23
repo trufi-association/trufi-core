@@ -47,25 +47,25 @@ class AboutTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        AboutLocalization.delegate,
-      ];
+    AboutLocalizations.delegate,
+  ];
 
   @override
-  List<Locale> get supportedLocales => AboutLocalization.supportedLocales;
+  List<Locale> get supportedLocales => AboutLocalizations.supportedLocales;
 
   @override
   ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.info_outline,
-        order: 900,
-        showDividerBefore: true,
-      );
+    icon: Icons.info_outline,
+    order: 900,
+    showDividerBefore: true,
+  );
 
   @override
   bool get hasOwnAppBar => true;
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return AboutLocalization.of(context)?.menuAbout ?? 'About';
+    return AboutLocalizations.of(context)?.menuAbout ?? 'About';
   }
 }
 
@@ -86,7 +86,7 @@ class _AboutContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalization.of(context)!;
+    final localization = AboutLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -100,9 +100,7 @@ class _AboutContent extends StatelessWidget {
               onMenuPressed: () => _tryOpenDrawer(context),
             ),
             // Content
-            Expanded(
-              child: _AboutScrollContent(config: config),
-            ),
+            Expanded(child: _AboutScrollContent(config: config)),
           ],
         ),
       ),
@@ -115,10 +113,7 @@ class _AboutHeader extends StatelessWidget {
   final String title;
   final VoidCallback onMenuPressed;
 
-  const _AboutHeader({
-    required this.title,
-    required this.onMenuPressed,
-  });
+  const _AboutHeader({required this.title, required this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -217,10 +212,7 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -237,7 +229,7 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalization.of(context)!;
+    final localization = AboutLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -273,7 +265,9 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+                      color: colorScheme.primaryContainer.withValues(
+                        alpha: 0.3,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -427,7 +421,7 @@ class _AboutHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalization.of(context)!;
+    final localization = AboutLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -502,8 +496,10 @@ class _AboutHeroCard extends StatelessWidget {
             builder: (context, snapshot) {
               if (!snapshot.hasData) return const SizedBox.shrink();
               return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: colorScheme.onPrimaryContainer.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(20),
@@ -560,8 +556,9 @@ class _AboutSectionCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.1),
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(17)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(17),
+              ),
             ),
             child: Row(
               children: [
@@ -571,11 +568,7 @@ class _AboutSectionCard extends StatelessWidget {
                     color: iconColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 22,
-                    color: iconColor,
-                  ),
+                  child: Icon(icon, size: 22, color: iconColor),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -591,10 +584,7 @@ class _AboutSectionCard extends StatelessWidget {
             ),
           ),
           // Content
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: child,
-          ),
+          Padding(padding: const EdgeInsets.all(16), child: child),
         ],
       ),
     );
@@ -639,11 +629,7 @@ class _AboutLinkTile extends StatelessWidget {
                   color: iconColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: iconColor,
-                ),
+                child: Icon(icon, size: 20, color: iconColor),
               ),
               const SizedBox(width: 14),
               Expanded(

@@ -21,8 +21,6 @@ dependencies:
   intl: ^0.20.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
@@ -30,6 +28,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # To add assets to your package, add an assets section, like this:
   # assets:
