@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'trufi_map_engine.dart';
@@ -46,13 +46,13 @@ class MapEngineManager extends ChangeNotifier {
     required this.defaultCenter,
     this.defaultZoom = 12.0,
     int defaultIndex = 0,
-  })  : assert(engines.isNotEmpty, 'At least one engine is required'),
-        assert(
-          defaultIndex >= 0 && defaultIndex < engines.length,
-          'defaultIndex must be valid',
-        ),
-        _engines = engines,
-        _currentIndex = defaultIndex {
+  }) : assert(engines.isNotEmpty, 'At least one engine is required'),
+       assert(
+         defaultIndex >= 0 && defaultIndex < engines.length,
+         'defaultIndex must be valid',
+       ),
+       _engines = engines,
+       _currentIndex = defaultIndex {
     _loadSavedEngine();
   }
 

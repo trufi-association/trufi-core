@@ -20,7 +20,8 @@ class TransportDetailScreen extends StatefulWidget {
     TransportRouteDetails? route,
     void Function(MapMoveCallback) registerMapMoveCallback,
     void Function(StopSelectionCallback) registerStopSelectionCallback,
-  )? mapBuilder;
+  )?
+  mapBuilder;
   final Uri? shareBaseUri;
 
   const TransportDetailScreen({
@@ -35,37 +36,38 @@ class TransportDetailScreen extends StatefulWidget {
     BuildContext context, {
     required String routeCode,
     required Future<TransportRouteDetails?> Function(String code)
-        getRouteDetails,
+    getRouteDetails,
     Widget Function(
       BuildContext context,
       TransportRouteDetails? route,
       void Function(MapMoveCallback) registerMapMoveCallback,
       void Function(StopSelectionCallback) registerStopSelectionCallback,
-    )? mapBuilder,
+    )?
+    mapBuilder,
     Uri? shareBaseUri,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
             TransportDetailScreen(
-          routeCode: routeCode,
-          getRouteDetails: getRouteDetails,
-          mapBuilder: mapBuilder,
-          shareBaseUri: shareBaseUri,
-        ),
+              routeCode: routeCode,
+              getRouteDetails: getRouteDetails,
+              mapBuilder: mapBuilder,
+              shareBaseUri: shareBaseUri,
+            ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            )),
-            child: FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
+            position:
+                Tween<Offset>(
+                  begin: const Offset(0, 0.1),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
+            child: FadeTransition(opacity: animation, child: child),
           );
         },
         transitionDuration: const Duration(milliseconds: 300),
@@ -133,7 +135,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final localization = TransportListLocalizations.of(context)!;
+    final localization = TransportListLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -155,7 +157,11 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
     return null;
   }
 
-  Widget _buildTopBar(BuildContext context, ThemeData theme, ColorScheme colorScheme) {
+  Widget _buildTopBar(
+    BuildContext context,
+    ThemeData theme,
+    ColorScheme colorScheme,
+  ) {
     final routeColor = _route?.backgroundColor ?? colorScheme.primary;
     final textColor = _route?.textColor ?? Colors.white;
 
@@ -205,12 +211,18 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                     elevation: 2,
                     shadowColor: Colors.black26,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
                       child: Row(
                         children: [
                           // Route badge
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: routeColor,
                               borderRadius: BorderRadius.circular(10),
@@ -220,7 +232,10 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
                               children: [
                                 if (_route!.modeIcon != null) ...[
                                   IconTheme(
-                                    data: IconThemeData(color: textColor, size: 16),
+                                    data: IconThemeData(
+                                      color: textColor,
+                                      size: 16,
+                                    ),
                                     child: _route!.modeIcon!,
                                   ),
                                   const SizedBox(width: 4),
@@ -420,9 +435,7 @@ class _TransportDetailScreenState extends State<TransportDetailScreen>
       SnackBar(
         content: Text('Share: $uri'),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }
@@ -583,8 +596,10 @@ class _StopsSheetContent extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(16),
@@ -736,11 +751,7 @@ class _StopTimelineItem extends StatelessWidget {
                 ),
                 // Selected indicator icon
                 if (isSelected)
-                  Icon(
-                    Icons.location_on_rounded,
-                    size: 18,
-                    color: routeColor,
-                  ),
+                  Icon(Icons.location_on_rounded, size: 18, color: routeColor),
               ],
             ),
           ),
@@ -843,7 +854,10 @@ class _ErrorState extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_rounded, size: 18),
               label: const Text('Go back'),
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
               ),
             ),
           ],

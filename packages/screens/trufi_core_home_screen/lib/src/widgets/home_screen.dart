@@ -699,6 +699,10 @@ class _HomeScreenState extends State<HomeScreen>
       },
     );
 
+    if (!mounted) return;
+
+    // TODO(md-weber): Organize that section a bit an check if we can write a test for it
+
     if (result == 'origin') {
       final location = TrufiLocation(
         description: l10n.selectedLocation,

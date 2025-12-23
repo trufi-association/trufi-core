@@ -45,8 +45,9 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
   String get removePlace => 'Ort entfernen';
 
   @override
-  String get removePlaceConfirmation =>
-      'Möchten Sie diesen Ort wirklich entfernen?';
+  String removePlaceConfirmation(String placeName) {
+    return 'Möchten Sie $placeName wirklich entfernen?';
+  }
 
   @override
   String get cancel => 'Abbrechen';

@@ -116,10 +116,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -139,7 +136,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
           index: 0,
           child: _buildSectionHeader(
             context,
-            localization?.defaultPlaces ?? 'Default Places',
+            localization.defaultPlaces,
             Icons.bookmark_rounded,
           ),
         ),
@@ -150,8 +147,8 @@ class _SavedPlacesListState extends State<SavedPlacesList>
             context,
             state.home,
             SavedPlaceType.home,
-            localization?.home ?? 'Home',
-            localization?.setHome ?? 'Set home address',
+            localization.home,
+            localization.setHome,
             Icons.home_rounded,
             Colors.blue,
           ),
@@ -163,8 +160,8 @@ class _SavedPlacesListState extends State<SavedPlacesList>
             context,
             state.work,
             SavedPlaceType.work,
-            localization?.work ?? 'Work',
-            localization?.setWork ?? 'Set work address',
+            localization.work,
+            localization.setWork,
             Icons.work_rounded,
             Colors.orange,
           ),
@@ -214,14 +211,16 @@ class _SavedPlacesListState extends State<SavedPlacesList>
       child: InkWell(
         onTap: () {
           HapticFeedback.lightImpact();
-          widget.onPlaceEdit?.call(SavedPlace(
-            id: '${type.name}_placeholder',
-            name: title,
-            latitude: 0,
-            longitude: 0,
-            type: type,
-            createdAt: DateTime.now(),
-          ));
+          widget.onPlaceEdit?.call(
+            SavedPlace(
+              id: '${type.name}_placeholder',
+              name: title,
+              latitude: 0,
+              longitude: 0,
+              type: type,
+              createdAt: DateTime.now(),
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(16),
         child: Container(
@@ -301,49 +300,48 @@ class _SavedPlacesListState extends State<SavedPlacesList>
           index: 3,
           child: _buildSectionHeader(
             context,
-            localization?.customPlaces ?? 'Other Places',
+            localization.customPlaces,
             Icons.place_rounded,
           ),
         ),
         const SizedBox(height: 12),
         ...state.otherPlaces.asMap().entries.map(
-              (entry) => _buildAnimatedItem(
-                index: 4 + entry.key,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: SavedPlaceTile(
-                    place: entry.value,
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      widget.onPlaceTap?.call(entry.value);
-                    },
-                    onEdit: widget.onPlaceEdit != null
-                        ? () {
-                            HapticFeedback.lightImpact();
-                            widget.onPlaceEdit?.call(entry.value);
-                          }
-                        : null,
-                    onDelete: widget.onPlaceDelete != null
-                        ? () {
-                            HapticFeedback.lightImpact();
-                            widget.onPlaceDelete?.call(entry.value);
-                          }
-                        : null,
-                  ),
-                ),
+          (entry) => _buildAnimatedItem(
+            index: 4 + entry.key,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SavedPlaceTile(
+                place: entry.value,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  widget.onPlaceTap?.call(entry.value);
+                },
+                onEdit: widget.onPlaceEdit != null
+                    ? () {
+                        HapticFeedback.lightImpact();
+                        widget.onPlaceEdit?.call(entry.value);
+                      }
+                    : null,
+                onDelete: widget.onPlaceDelete != null
+                    ? () {
+                        HapticFeedback.lightImpact();
+                        widget.onPlaceDelete?.call(entry.value);
+                      }
+                    : null,
               ),
             ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildHistorySection(
-    BuildContext context,
-    SavedPlacesState state,
-  ) {
+  Widget _buildHistorySection(BuildContext context, SavedPlacesState state) {
     final localization = SavedPlacesLocalizations.of(context);
     final cubit = context.read<SavedPlacesCubit>();
-    final historyItems = state.recentHistory.take(widget.maxHistoryItems).toList();
+    final historyItems = state.recentHistory
+        .take(widget.maxHistoryItems)
+        .toList();
     final baseIndex = 4 + state.otherPlaces.length;
 
     return Column(
@@ -356,7 +354,7 @@ class _SavedPlacesListState extends State<SavedPlacesList>
             children: [
               _buildSectionHeader(
                 context,
-                localization?.recentPlaces ?? 'Recent',
+                localization.recentPlaces,
                 Icons.history_rounded,
               ),
               _ClearHistoryButton(
@@ -364,31 +362,31 @@ class _SavedPlacesListState extends State<SavedPlacesList>
                   HapticFeedback.lightImpact();
                   cubit.clearHistory();
                 },
-                label: localization?.clearHistory ?? 'Clear',
+                label: localization.clearHistory,
               ),
             ],
           ),
         ),
         const SizedBox(height: 12),
         ...historyItems.asMap().entries.map(
-              (entry) => _buildAnimatedItem(
-                index: baseIndex + 1 + entry.key,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: SavedPlaceTile(
-                    place: entry.value,
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      widget.onPlaceTap?.call(entry.value);
-                    },
-                    onDelete: () {
-                      HapticFeedback.lightImpact();
-                      cubit.removeFromHistory(entry.value.id);
-                    },
-                  ),
-                ),
+          (entry) => _buildAnimatedItem(
+            index: baseIndex + 1 + entry.key,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SavedPlaceTile(
+                place: entry.value,
+                onTap: () {
+                  HapticFeedback.selectionClick();
+                  widget.onPlaceTap?.call(entry.value);
+                },
+                onDelete: () {
+                  HapticFeedback.lightImpact();
+                  cubit.removeFromHistory(entry.value.id);
+                },
               ),
             ),
+          ),
+        ),
       ],
     );
   }
@@ -433,10 +431,7 @@ class _ClearHistoryButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String label;
 
-  const _ClearHistoryButton({
-    required this.onPressed,
-    required this.label,
-  });
+  const _ClearHistoryButton({required this.onPressed, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -654,10 +649,7 @@ class _ErrorState extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
 
-  const _ErrorState({
-    required this.message,
-    this.onRetry,
-  });
+  const _ErrorState({required this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -698,7 +690,10 @@ class _ErrorState extends StatelessWidget {
                 icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: const Text('Retry'),
                 style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                 ),
               ),
             ],

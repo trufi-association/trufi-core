@@ -14,10 +14,7 @@ class FeedbackConfig {
   /// Optional callback to get current location (latitude, longitude)
   final Future<(double, double)?> Function()? getCurrentLocation;
 
-  const FeedbackConfig({
-    required this.feedbackUrl,
-    this.getCurrentLocation,
-  });
+  const FeedbackConfig({required this.feedbackUrl, this.getCurrentLocation});
 }
 
 /// Feedback screen module that implements TrufiScreen
@@ -38,24 +35,22 @@ class FeedbackTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        FeedbackLocalizations.delegate,
-      ];
+    FeedbackLocalizations.delegate,
+  ];
 
   @override
   List<Locale> get supportedLocales => FeedbackLocalizations.supportedLocales;
 
   @override
-  ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.feedback_outlined,
-        order: 800,
-      );
+  ScreenMenuItem? get menuItem =>
+      const ScreenMenuItem(icon: Icons.feedback_outlined, order: 800);
 
   @override
   bool get hasOwnAppBar => true;
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return FeedbackLocalizations.of(context)?.menuFeedback ?? 'Feedback';
+    return FeedbackLocalizations.of(context).menuFeedback;
   }
 }
 
@@ -76,7 +71,7 @@ class _FeedbackScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = FeedbackLocalizations.of(context)!;
+    final localization = FeedbackLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -91,9 +86,7 @@ class _FeedbackScreenWidget extends StatelessWidget {
               onMenuPressed: () => _tryOpenDrawer(context),
             ),
             // Content
-            Expanded(
-              child: _FeedbackContent(config: config),
-            ),
+            Expanded(child: _FeedbackContent(config: config)),
           ],
         ),
       ),
@@ -106,10 +99,7 @@ class _FeedbackHeader extends StatelessWidget {
   final String title;
   final VoidCallback onMenuPressed;
 
-  const _FeedbackHeader({
-    required this.title,
-    required this.onMenuPressed,
-  });
+  const _FeedbackHeader({required this.title, required this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -209,10 +199,7 @@ class _FeedbackContentState extends State<_FeedbackContent>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -239,7 +226,7 @@ class _FeedbackContentState extends State<_FeedbackContent>
 
       final uri = Uri.parse(widget.config.feedbackUrl).replace(
         queryParameters: {
-          'lang': localization?.localeName ?? 'en',
+          'lang': localization.localeName,
           if (geoParam.isNotEmpty) 'geo': geoParam,
           'app': version,
         },
@@ -257,7 +244,7 @@ class _FeedbackContentState extends State<_FeedbackContent>
 
   @override
   Widget build(BuildContext context) {
-    final localization = FeedbackLocalizations.of(context)!;
+    final localization = FeedbackLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -279,9 +266,7 @@ class _FeedbackContentState extends State<_FeedbackContent>
                 // Main content card
                 _buildAnimatedItem(
                   index: 1,
-                  child: _ContentCard(
-                    content: localization.feedbackContent,
-                  ),
+                  child: _ContentCard(content: localization.feedbackContent),
                 ),
                 const SizedBox(height: 16),
 
@@ -491,7 +476,9 @@ class _WhatWeWantCard extends StatelessWidget {
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: Colors.amber.withValues(alpha: 0.1),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(17)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(17),
+              ),
             ),
             child: Row(
               children: [
@@ -573,9 +560,7 @@ class _FeedbackItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.15),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.15)),
       ),
       child: Row(
         children: [
@@ -586,11 +571,7 @@ class _FeedbackItem extends StatelessWidget {
               color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(
-              icon,
-              size: 18,
-              color: color,
-            ),
+            child: Icon(icon, size: 18, color: color),
           ),
           const SizedBox(width: 14),
           Expanded(

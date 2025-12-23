@@ -33,7 +33,8 @@ class OSMDefaultMapTile extends MapTileProvider {
   String get id => "OSMDefaulMapTile";
 
   @override
-  WidgetBuilder get imageBuilder => (context) => Image.asset(
+  WidgetBuilder get imageBuilder =>
+      (context) => Image.asset(
         "assets/images/OpenMapTiles.png",
         package: "trufi_core",
         fit: BoxFit.cover,
@@ -49,9 +50,7 @@ class OSMDefaultMapTile extends MapTileProvider {
 class OSMMapLayer extends MapTileProvider {
   final String? mapTilesUrl;
 
-  OSMMapLayer({
-    required this.mapTilesUrl,
-  }) : super();
+  OSMMapLayer({required this.mapTilesUrl}) : super();
 
   @override
   List<Widget> buildTileLayerOptions() {
@@ -68,7 +67,8 @@ class OSMMapLayer extends MapTileProvider {
   String get id => "OSMDefaulMapTile";
 
   @override
-  WidgetBuilder get imageBuilder => (context) => Image.asset(
+  WidgetBuilder get imageBuilder =>
+      (context) => Image.asset(
         "assets/images/OpenMapTiles.png",
         fit: BoxFit.cover,
         package: 'trufi_core',
@@ -85,7 +85,7 @@ class DefaultMapTileCaching extends TileProvider {
   DefaultMapTileCaching();
 
   @override
-  ImageProvider getImage(TileCoordinates coords, TileLayer options) {
-    return CachedNetworkImageProvider(getTileUrl(coords, options));
+  ImageProvider getImage(TileCoordinates coordinates, TileLayer options) {
+    return CachedNetworkImageProvider(getTileUrl(coordinates, options));
   }
 }

@@ -83,24 +83,22 @@ class FaresTrufiScreen extends TrufiScreen {
 
   @override
   List<LocalizationsDelegate> get localizationsDelegates => [
-        FaresLocalizations.delegate,
-      ];
+    FaresLocalizations.delegate,
+  ];
 
   @override
   List<Locale> get supportedLocales => FaresLocalizations.supportedLocales;
 
   @override
-  ScreenMenuItem? get menuItem => const ScreenMenuItem(
-        icon: Icons.payments_outlined,
-        order: 150,
-      );
+  ScreenMenuItem? get menuItem =>
+      const ScreenMenuItem(icon: Icons.payments_outlined, order: 150);
 
   @override
   bool get hasOwnAppBar => true;
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return FaresLocalizations.of(context)?.menuFares ?? 'Fares';
+    return FaresLocalizations.of(context).menuFares;
   }
 }
 
@@ -121,7 +119,7 @@ class _FaresScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = FaresLocalizations.of(context)!;
+    final localization = FaresLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -136,9 +134,7 @@ class _FaresScreenWidget extends StatelessWidget {
               onMenuPressed: () => _tryOpenDrawer(context),
             ),
             // Content
-            Expanded(
-              child: _FaresContent(config: config),
-            ),
+            Expanded(child: _FaresContent(config: config)),
           ],
         ),
       ),
@@ -151,10 +147,7 @@ class _FaresHeader extends StatelessWidget {
   final String title;
   final VoidCallback onMenuPressed;
 
-  const _FaresHeader({
-    required this.title,
-    required this.onMenuPressed,
-  });
+  const _FaresHeader({required this.title, required this.onMenuPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -254,10 +247,7 @@ class _FaresContentState extends State<_FaresContent>
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, 20 * (1 - animation.value)),
-          child: Opacity(
-            opacity: animation.value,
-            child: child,
-          ),
+          child: Opacity(opacity: animation.value, child: child),
         );
       },
       child: child,
@@ -274,7 +264,7 @@ class _FaresContentState extends State<_FaresContent>
 
   @override
   Widget build(BuildContext context) {
-    final localization = FaresLocalizations.of(context)!;
+    final localization = FaresLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -303,18 +293,18 @@ class _FaresContentState extends State<_FaresContent>
 
           // Fare cards
           ...widget.config.fares.asMap().entries.map(
-                (entry) => _buildAnimatedItem(
-                  index: 2 + entry.key,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _FareCard(
-                      fare: entry.value,
-                      currency: widget.config.currency,
-                      localization: localization,
-                    ),
-                  ),
+            (entry) => _buildAnimatedItem(
+              index: 2 + entry.key,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _FareCard(
+                  fare: entry.value,
+                  currency: widget.config.currency,
+                  localization: localization,
                 ),
               ),
+            ),
+          ),
 
           // Last updated
           if (widget.config.lastUpdated != null) ...[
@@ -323,9 +313,14 @@ class _FaresContentState extends State<_FaresContent>
               index: 2 + widget.config.fares.length,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                    color: colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.5,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -338,7 +333,9 @@ class _FaresContentState extends State<_FaresContent>
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        localization.faresLastUpdated(_formatDate(widget.config.lastUpdated!)),
+                        localization.faresLastUpdated(
+                          _formatDate(widget.config.lastUpdated!),
+                        ),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -367,7 +364,8 @@ class _FaresContentState extends State<_FaresContent>
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: () => _openExternalUrl(widget.config.externalFareUrl!),
+                  onPressed: () =>
+                      _openExternalUrl(widget.config.externalFareUrl!),
                   icon: const Icon(Icons.open_in_new_rounded, size: 18),
                   label: Text(localization.faresMoreInfo),
                   style: FilledButton.styleFrom(
@@ -527,7 +525,9 @@ class _FareCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: fareColor.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(17)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(17),
+              ),
             ),
             child: Row(
               children: [
@@ -538,11 +538,7 @@ class _FareCard extends StatelessWidget {
                     color: fareColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    fare.icon,
-                    color: fareColor,
-                    size: 26,
-                  ),
+                  child: Icon(fare.icon, color: fareColor, size: 26),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -556,7 +552,10 @@ class _FareCard extends StatelessWidget {
                 ),
                 // Main price badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: fareColor,
                     borderRadius: BorderRadius.circular(20),
@@ -573,7 +572,9 @@ class _FareCard extends StatelessWidget {
             ),
           ),
           // Price details
-          if (fare.studentFare != null || fare.seniorFare != null || fare.notes != null)
+          if (fare.studentFare != null ||
+              fare.seniorFare != null ||
+              fare.notes != null)
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -611,7 +612,9 @@ class _FareCard extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                        color: colorScheme.surfaceContainerHighest.withValues(
+                          alpha: 0.5,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -668,9 +671,7 @@ class _CompactPriceChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -719,9 +720,7 @@ class _NotesCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.tertiaryContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: colorScheme.tertiary.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: colorScheme.tertiary.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

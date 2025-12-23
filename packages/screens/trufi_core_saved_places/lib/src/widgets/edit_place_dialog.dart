@@ -4,11 +4,11 @@ import '../models/saved_place.dart';
 import '../../l10n/saved_places_localizations.dart';
 
 /// Callback to open a map picker and return coordinates.
-typedef OnChooseOnMap = Future<({double latitude, double longitude})?>
-    Function({
-  double? initialLatitude,
-  double? initialLongitude,
-});
+typedef OnChooseOnMap =
+    Future<({double latitude, double longitude})?> Function({
+      double? initialLatitude,
+      double? initialLongitude,
+    });
 
 /// Bottom sheet for creating or editing a saved place.
 ///
@@ -116,11 +116,11 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
     final localization = SavedPlacesLocalizations.of(context);
     switch (type) {
       case SavedPlaceType.home:
-        return localization?.home ?? 'Home';
+        return localization.home;
       case SavedPlaceType.work:
-        return localization?.work ?? 'Work';
+        return localization.work;
       case SavedPlaceType.other:
-        return localization?.customPlaces ?? 'Other';
+        return localization.customPlaces;
       case SavedPlaceType.history:
         return 'History';
     }
@@ -269,7 +269,8 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   }
 
   Widget _buildHeader(ThemeData theme, SavedPlacesLocalizations? localization) {
-    final title = widget.title ??
+    final title =
+        widget.title ??
         (_isEditing
             ? (localization?.editPlace ?? 'Edit Place')
             : (localization?.addPlace ?? 'Add Place'));
@@ -299,8 +300,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   Widget _buildPreviewCard(ThemeData theme) {
     final color = _getTypeColor();
     final name = _nameController.text.trim();
-    final displayName =
-        name.isEmpty ? (SavedPlacesLocalizations.of(context)?.name ?? 'Name') : name;
+    final displayName = name.isEmpty
+        ? (SavedPlacesLocalizations.of(context).name)
+        : name;
 
     return Center(
       child: Column(
@@ -312,11 +314,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
               color: color.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              _getSelectedIcon(),
-              size: 36,
-              color: color,
-            ),
+            child: Icon(_getSelectedIcon(), size: 36, color: color),
           ),
           const SizedBox(height: 12),
           Text(
@@ -333,7 +331,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   }
 
   Widget _buildNameField(
-      ThemeData theme, SavedPlacesLocalizations? localization) {
+    ThemeData theme,
+    SavedPlacesLocalizations? localization,
+  ) {
     return TextFormField(
       controller: _nameController,
       focusNode: _nameFocusNode,
@@ -372,9 +372,12 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   }
 
   Widget _buildTypeSelection(
-      ThemeData theme, SavedPlacesLocalizations? localization) {
-    final types =
-        SavedPlaceType.values.where((t) => t != SavedPlaceType.history).toList();
+    ThemeData theme,
+    SavedPlacesLocalizations? localization,
+  ) {
+    final types = SavedPlaceType.values
+        .where((t) => t != SavedPlaceType.history)
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,16 +401,16 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
           onSelectionChanged: (selected) {
             setState(() => _selectedType = selected.first);
           },
-          style: ButtonStyle(
-            visualDensity: VisualDensity.comfortable,
-          ),
+          style: ButtonStyle(visualDensity: VisualDensity.comfortable),
         ),
       ],
     );
   }
 
   Widget _buildLocationCard(
-      ThemeData theme, SavedPlacesLocalizations? localization) {
+    ThemeData theme,
+    SavedPlacesLocalizations? localization,
+  ) {
     final hasError = !_hasLocation;
 
     return Column(
@@ -458,9 +461,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                         Text(
                           _hasLocation
                               ? (localization?.locationSelected ??
-                                  'Location selected')
+                                    'Location selected')
                               : (localization?.noLocationSelected ??
-                                  'No location selected'),
+                                    'No location selected'),
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: hasError ? theme.colorScheme.error : null,
@@ -471,7 +474,7 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
                           _hasLocation
                               ? '${_latitude.toStringAsFixed(5)}, ${_longitude.toStringAsFixed(5)}'
                               : (localization?.tapToSelectLocation ??
-                                  'Tap to select on map'),
+                                    'Tap to select on map'),
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -507,7 +510,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   }
 
   Widget _buildIconSelection(
-      ThemeData theme, SavedPlacesLocalizations? localization) {
+    ThemeData theme,
+    SavedPlacesLocalizations? localization,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -566,7 +571,9 @@ class _EditPlaceDialogState extends State<EditPlaceDialog> {
   }
 
   Widget _buildSaveButton(
-      ThemeData theme, SavedPlacesLocalizations? localization) {
+    ThemeData theme,
+    SavedPlacesLocalizations? localization,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: 56,

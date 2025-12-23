@@ -12,7 +12,7 @@
   "setWork": "Establecer dirección de trabajo",
   "editPlace": "Editar lugar",
   "removePlace": "Eliminar lugar",
-  "removePlaceConfirmation": "¿Estás seguro de que quieres eliminar este lugar?",
+  "removePlaceConfirmation": "¿Estás seguro de que quieres eliminar {placeName}?",
   "cancel": "Cancelar",
   "remove": "Eliminar",
   "save": "Guardar",

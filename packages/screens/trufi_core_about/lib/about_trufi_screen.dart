@@ -65,7 +65,7 @@ class AboutTrufiScreen extends TrufiScreen {
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return AboutLocalizations.of(context)?.menuAbout ?? 'About';
+    return AboutLocalizations.of(context).menuAbout;
   }
 }
 
@@ -86,7 +86,7 @@ class _AboutContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalizations.of(context)!;
+    final localization = AboutLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -229,7 +229,7 @@ class _AboutScrollContentState extends State<_AboutScrollContent>
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalizations.of(context)!;
+    final localization = AboutLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -421,7 +421,7 @@ class _AboutHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AboutLocalizations.of(context)!;
+    final localization = AboutLocalizations.of(context);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
