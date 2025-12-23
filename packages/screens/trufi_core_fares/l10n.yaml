@@ -1,0 +1,5 @@
+arb-dir: lib/l10n
+template-arb-file: fares_en.arb
+output-localization-file: fares_localizations.dart
+output-class: FaresLocalizations
+
