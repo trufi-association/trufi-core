@@ -29,3 +29,8 @@ migrate_working_dir/
 build/
 
 .flutter-plugins-dependencies
+
+# Flutter/Dart generated files
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/flutter_export_environment.plist
