@@ -63,15 +63,20 @@ import 'home_screen_localizations_es.dart';
 /// be consistent with the languages listed in the HomeScreenLocalizations.supportedLocales
 /// property.
 abstract class HomeScreenLocalizations {
-  HomeScreenLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  HomeScreenLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static HomeScreenLocalizations of(BuildContext context) {
-    return Localizations.of<HomeScreenLocalizations>(context, HomeScreenLocalizations)!;
+  static HomeScreenLocalizations? of(BuildContext context) {
+    return Localizations.of<HomeScreenLocalizations>(
+      context,
+      HomeScreenLocalizations,
+    );
   }
 
-  static const LocalizationsDelegate<HomeScreenLocalizations> delegate = _HomeScreenLocalizationsDelegate();
+  static const LocalizationsDelegate<HomeScreenLocalizations> delegate =
+      _HomeScreenLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,18 +88,19 @@ abstract class HomeScreenLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('en'),
-    Locale('es')
+    Locale('es'),
   ];
 
   /// Menu item title for home screen
@@ -272,35 +278,40 @@ abstract class HomeScreenLocalizations {
   String get shareRouteOpenInApp;
 }
 
-class _HomeScreenLocalizationsDelegate extends LocalizationsDelegate<HomeScreenLocalizations> {
+class _HomeScreenLocalizationsDelegate
+    extends LocalizationsDelegate<HomeScreenLocalizations> {
   const _HomeScreenLocalizationsDelegate();
 
   @override
   Future<HomeScreenLocalizations> load(Locale locale) {
-    return SynchronousFuture<HomeScreenLocalizations>(lookupHomeScreenLocalizations(locale));
+    return SynchronousFuture<HomeScreenLocalizations>(
+      lookupHomeScreenLocalizations(locale),
+    );
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_HomeScreenLocalizationsDelegate old) => false;
 }
 
 HomeScreenLocalizations lookupHomeScreenLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return HomeScreenLocalizationsDe();
-    case 'en': return HomeScreenLocalizationsEn();
-    case 'es': return HomeScreenLocalizationsEs();
+    case 'de':
+      return HomeScreenLocalizationsDe();
+    case 'en':
+      return HomeScreenLocalizationsEn();
+    case 'es':
+      return HomeScreenLocalizationsEs();
   }
 
   throw FlutterError(
     'HomeScreenLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }
