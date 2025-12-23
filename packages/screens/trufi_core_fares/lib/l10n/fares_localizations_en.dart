@@ -1,10 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'fares_localizations.dart';
 
 // ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class FaresLocalizationsEn extends FaresLocalizations {
-  FaresLocalizationsEn([super.locale = 'en']);
+  FaresLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
   String get menuFares => 'Fares';
@@ -25,7 +27,9 @@ class FaresLocalizationsEn extends FaresLocalizations {
   String get faresSenior => 'Senior';
 
   @override
-  String faresLastUpdated(String date) => 'Last updated: $date';
+  String faresLastUpdated(String date) {
+    return 'Last updated: $date';
+  }
 
   @override
   String get faresMoreInfo => 'More Information';

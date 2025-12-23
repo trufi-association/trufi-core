@@ -1,10 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'fares_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Spanish (`es`).
+/// The translations for Spanish Castilian (`es`).
 class FaresLocalizationsEs extends FaresLocalizations {
-  FaresLocalizationsEs([super.locale = 'es']);
+  FaresLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
   String get menuFares => 'Tarifas';
@@ -25,7 +27,9 @@ class FaresLocalizationsEs extends FaresLocalizations {
   String get faresSenior => 'Adulto Mayor';
 
   @override
-  String faresLastUpdated(String date) => 'Última actualización: $date';
+  String faresLastUpdated(String date) {
+    return 'Última actualización: $date';
+  }
 
   @override
   String get faresMoreInfo => 'Más Información';
