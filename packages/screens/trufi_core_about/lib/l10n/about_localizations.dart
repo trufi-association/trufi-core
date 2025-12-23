@@ -11,10 +11,10 @@ import 'about_localizations_es.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of AboutLocalization
-/// returned by `AboutLocalization.of(context)`.
+/// Callers can lookup localized strings with an instance of AboutLocalizations
+/// returned by `AboutLocalizations.of(context)`.
 ///
-/// Applications need to include `AboutLocalization.delegate()` in their app's
+/// Applications need to include `AboutLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
@@ -22,8 +22,8 @@ import 'about_localizations_es.dart';
 /// import 'l10n/about_localizations.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: AboutLocalization.localizationsDelegates,
-///   supportedLocales: AboutLocalization.supportedLocales,
+///   localizationsDelegates: AboutLocalizations.localizationsDelegates,
+///   supportedLocales: AboutLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
@@ -60,20 +60,20 @@ import 'about_localizations_es.dart';
 /// Select and expand the newly-created Localizations item then, for each
 /// locale your application supports, add a new item and select the locale
 /// you wish to add from the pop-up menu in the Value field. This list should
-/// be consistent with the languages listed in the AboutLocalization.supportedLocales
+/// be consistent with the languages listed in the AboutLocalizations.supportedLocales
 /// property.
-abstract class AboutLocalization {
-  AboutLocalization(String locale)
+abstract class AboutLocalizations {
+  AboutLocalizations(String locale)
     : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static AboutLocalization? of(BuildContext context) {
-    return Localizations.of<AboutLocalization>(context, AboutLocalization);
+  static AboutLocalizations? of(BuildContext context) {
+    return Localizations.of<AboutLocalizations>(context, AboutLocalizations);
   }
 
-  static const LocalizationsDelegate<AboutLocalization> delegate =
-      _AboutLocalizationDelegate();
+  static const LocalizationsDelegate<AboutLocalizations> delegate =
+      _AboutLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -167,14 +167,14 @@ abstract class AboutLocalization {
   String get volunteerTrufi;
 }
 
-class _AboutLocalizationDelegate
-    extends LocalizationsDelegate<AboutLocalization> {
-  const _AboutLocalizationDelegate();
+class _AboutLocalizationsDelegate
+    extends LocalizationsDelegate<AboutLocalizations> {
+  const _AboutLocalizationsDelegate();
 
   @override
-  Future<AboutLocalization> load(Locale locale) {
-    return SynchronousFuture<AboutLocalization>(
-      lookupAboutLocalization(locale),
+  Future<AboutLocalizations> load(Locale locale) {
+    return SynchronousFuture<AboutLocalizations>(
+      lookupAboutLocalizations(locale),
     );
   }
 
@@ -183,22 +183,22 @@ class _AboutLocalizationDelegate
       <String>['de', 'en', 'es'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_AboutLocalizationDelegate old) => false;
+  bool shouldReload(_AboutLocalizationsDelegate old) => false;
 }
 
-AboutLocalization lookupAboutLocalization(Locale locale) {
+AboutLocalizations lookupAboutLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'de':
-      return AboutLocalizationDe();
+      return AboutLocalizationsDe();
     case 'en':
-      return AboutLocalizationEn();
+      return AboutLocalizationsEn();
     case 'es':
-      return AboutLocalizationEs();
+      return AboutLocalizationsEs();
   }
 
   throw FlutterError(
-    'AboutLocalization.delegate failed to load unsupported locale "$locale". This is likely '
+    'AboutLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
     'that was used.',

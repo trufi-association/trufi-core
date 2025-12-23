@@ -5,8 +5,8 @@ import 'about_localizations.dart';
 // ignore_for_file: type=lint
 
 /// The translations for English (`en`).
-class AboutLocalizationEn extends AboutLocalization {
-  AboutLocalizationEn([String locale = 'en']) : super(locale);
+class AboutLocalizationsEn extends AboutLocalizations {
+  AboutLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
   String get aboutCollapseContent =>

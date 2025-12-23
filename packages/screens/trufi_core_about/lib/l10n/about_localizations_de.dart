@@ -5,8 +5,8 @@ import 'about_localizations.dart';
 // ignore_for_file: type=lint
 
 /// The translations for German (`de`).
-class AboutLocalizationDe extends AboutLocalization {
-  AboutLocalizationDe([String locale = 'de']) : super(locale);
+class AboutLocalizationsDe extends AboutLocalizations {
+  AboutLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
   String get aboutCollapseContent =>

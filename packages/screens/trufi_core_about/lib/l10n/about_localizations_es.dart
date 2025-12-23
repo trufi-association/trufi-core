@@ -5,8 +5,8 @@ import 'about_localizations.dart';
 // ignore_for_file: type=lint
 
 /// The translations for Spanish Castilian (`es`).
-class AboutLocalizationEs extends AboutLocalization {
-  AboutLocalizationEs([String locale = 'es']) : super(locale);
+class AboutLocalizationsEs extends AboutLocalizations {
+  AboutLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
   String get aboutCollapseContent =>
