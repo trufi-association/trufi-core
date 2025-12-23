@@ -1,8 +1,12 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'saved_places_localizations.dart';
+
+// ignore_for_file: type=lint
 
 /// The translations for German (`de`).
 class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
-  SavedPlacesLocalizationsDe([super.locale = 'de']);
+  SavedPlacesLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
   String get menuSavedPlaces => 'Ihre Orte';
@@ -41,7 +45,8 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
   String get removePlace => 'Ort entfernen';
 
   @override
-  String get removePlaceConfirmation => 'Möchten Sie diesen Ort wirklich entfernen?';
+  String get removePlaceConfirmation =>
+      'Möchten Sie diesen Ort wirklich entfernen?';
 
   @override
   String get cancel => 'Abbrechen';
@@ -92,11 +97,11 @@ class SavedPlacesLocalizationsDe extends SavedPlacesLocalizations {
   String get locationRequired => 'Standort ist erforderlich';
 
   @override
-  String get change => 'Ändern';
-
-  @override
   String get locationSelected => 'Standort ausgewählt';
 
   @override
   String get tapToSelectLocation => 'Tippen, um auf der Karte auszuwählen';
+
+  @override
+  String get change => 'Ändern';
 }
