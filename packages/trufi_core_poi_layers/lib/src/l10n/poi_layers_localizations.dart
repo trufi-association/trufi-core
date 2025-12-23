@@ -68,11 +68,11 @@ abstract class POILayersLocalizations {
 
   final String localeName;
 
-  static POILayersLocalizations? of(BuildContext context) {
+  static POILayersLocalizations of(BuildContext context) {
     return Localizations.of<POILayersLocalizations>(
       context,
       POILayersLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<POILayersLocalizations> delegate =
