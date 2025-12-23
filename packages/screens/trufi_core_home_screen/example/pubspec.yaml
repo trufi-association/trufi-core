@@ -23,6 +23,9 @@ dependencies:
   latlong2: ^0.9.1
   provider: ^6.0.0
 
+dev_dependencies:
+  flutter_lints: ^6.0.0
+
 dependency_overrides:
   trufi_core_base_widgets:
     path: ../../../trufi_core_base_widgets
