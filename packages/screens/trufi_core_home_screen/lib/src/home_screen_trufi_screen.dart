@@ -33,7 +33,8 @@ class HomeScreenTrufiScreen extends TrufiScreen {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
 
   /// Static initialization for the module.
   /// Call this once at app startup before using any HomeScreen functionality.
@@ -110,7 +111,7 @@ class HomeScreenTrufiScreen extends TrufiScreen {
 
   @override
   String getLocalizedTitle(BuildContext context) {
-    return HomeScreenLocalizations.of(context).menuHome;
+    return HomeScreenLocalizations.of(context)!.menuHome;
   }
 
   @override

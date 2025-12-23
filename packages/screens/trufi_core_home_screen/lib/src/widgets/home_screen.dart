@@ -40,7 +40,8 @@ class HomeScreen extends StatefulWidget {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
 
   const HomeScreen({
     super.key,
@@ -156,7 +157,10 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  void _initializeIfNeeded(BuildContext context, MapEngineManager mapEngineManager) {
+  void _initializeIfNeeded(
+    BuildContext context,
+    MapEngineManager mapEngineManager,
+  ) {
     if (_mapController == null) {
       _mapController = TrufiMapController(
         initialCameraPosition: TrufiCameraPosition(
@@ -238,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Future<SearchLocation?> _showSearchScreen({required bool isOrigin}) async {
-    final l10n = HomeScreenLocalizations.of(context);
+    final l10n = HomeScreenLocalizations.of(context)!;
 
     // Try to get SavedPlacesCubit from context if available
     MyPlacesProvider? myPlacesProvider;
@@ -580,7 +584,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _onMapLongPress(LatLng position) async {
-    final l10n = HomeScreenLocalizations.of(context);
+    final l10n = HomeScreenLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     // Add haptic feedback
@@ -969,7 +973,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildSummaryRow(RoutePlannerState state, ThemeData theme) {
-    final l10n = HomeScreenLocalizations.of(context);
+    final l10n = HomeScreenLocalizations.of(context)!;
 
     if (state.isLoading) {
       return Padding(
@@ -1047,7 +1051,7 @@ class _HomeScreenState extends State<HomeScreen>
             GestureDetector(
               onTap: () {
                 HapticFeedback.lightImpact();
-                final l10n = HomeScreenLocalizations.of(context);
+                final l10n = HomeScreenLocalizations.of(context)!;
                 final appName = widget.config.appName ?? 'Trufi App';
                 ShareRouteService.shareRoute(
                   from: state.fromPlace!,

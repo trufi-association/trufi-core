@@ -15,7 +15,8 @@ class ItineraryList extends StatelessWidget {
     BuildContext context,
     routing.Itinerary itinerary,
     LocationService locationService,
-  )? onStartNavigation;
+  )?
+  onStartNavigation;
   final LocationService? locationService;
 
   const ItineraryList({
@@ -29,7 +30,7 @@ class ItineraryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RoutePlannerCubit, RoutePlannerState>(
       builder: (context, state) {
-        final l10n = HomeScreenLocalizations.of(context);
+        final l10n = HomeScreenLocalizations.of(context)!;
         final cubit = context.read<RoutePlannerCubit>();
         final theme = Theme.of(context);
 
@@ -76,10 +77,7 @@ class ItineraryList extends StatelessWidget {
                 builder: (context, value, child) {
                   return Transform.translate(
                     offset: Offset(0, 20 * (1 - value)),
-                    child: Opacity(
-                      opacity: value,
-                      child: child,
-                    ),
+                    child: Opacity(opacity: value, child: child),
                   );
                 },
                 child: ItineraryCard(
@@ -89,8 +87,13 @@ class ItineraryList extends StatelessWidget {
                   onDetailsTap: onItineraryDetails != null
                       ? () => onItineraryDetails!(itinerary)
                       : null,
-                  onStartNavigation: onStartNavigation != null && locationService != null
-                      ? () => onStartNavigation!(context, itinerary, locationService!)
+                  onStartNavigation:
+                      onStartNavigation != null && locationService != null
+                      ? () => onStartNavigation!(
+                          context,
+                          itinerary,
+                          locationService!,
+                        )
                       : null,
                 ),
               );
@@ -113,15 +116,9 @@ class ItineraryList extends StatelessWidget {
             duration: Duration(milliseconds: 300 + (index * 100)),
             curve: Curves.easeOut,
             builder: (context, value, child) {
-              return Opacity(
-                opacity: value * 0.7,
-                child: child,
-              );
+              return Opacity(opacity: value * 0.7, child: child);
             },
-            child: _ShimmerCard(
-              theme: theme,
-              delay: index * 200,
-            ),
+            child: _ShimmerCard(theme: theme, delay: index * 200),
           );
         }),
         const SizedBox(height: 8),
@@ -216,7 +213,6 @@ class ItineraryList extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Shimmer loading card placeholder
@@ -224,10 +220,7 @@ class _ShimmerCard extends StatefulWidget {
   final ThemeData theme;
   final int delay;
 
-  const _ShimmerCard({
-    required this.theme,
-    this.delay = 0,
-  });
+  const _ShimmerCard({required this.theme, this.delay = 0});
 
   @override
   State<_ShimmerCard> createState() => _ShimmerCardState();
@@ -282,11 +275,7 @@ class _ShimmerCardState extends State<_ShimmerCard>
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [
-                  baseColor,
-                  highlightColor,
-                  baseColor,
-                ],
+                colors: [baseColor, highlightColor, baseColor],
                 stops: [
                   (_animation.value - 0.3).clamp(0.0, 1.0),
                   _animation.value.clamp(0.0, 1.0),
@@ -340,7 +329,9 @@ class _ShimmerCardState extends State<_ShimmerCard>
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: widget.theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.5),
+        color: widget.theme.colorScheme.surfaceContainerHigh.withValues(
+          alpha: 0.5,
+        ),
         borderRadius: BorderRadius.circular(radius),
       ),
     );
