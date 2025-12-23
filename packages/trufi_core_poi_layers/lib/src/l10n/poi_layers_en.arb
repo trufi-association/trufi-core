@@ -1,0 +1,183 @@
+{
+  "@@locale": "en",
+  "poiLayersTitle": "Points of Interest",
+  "@poiLayersTitle": {
+    "description": "Title for POI layers settings"
+  },
+  "goHere": "Go here",
+  "@goHere": {
+    "description": "Button to set POI as destination"
+  },
+  "pointsOfInterest": "Points of Interest",
+  "@pointsOfInterest": {
+    "description": "General label for POI section"
+  },
+  "toggleLayersOnTheMap": "Toggle layers on the map",
+  "@toggleLayersOnTheMap": {
+    "description": "Subtitle for POI layers section"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Done button label"
+  },
+  "poiCategoryTransport": "Transport",
+  "@poiCategoryTransport": {
+    "description": "Transport category name"
+  },
+  "poiCategoryFood": "Food & Drink",
+  "@poiCategoryFood": {
+    "description": "Food & Drink category name"
+  },
+  "poiCategoryShopping": "Shopping",
+  "@poiCategoryShopping": {
+    "description": "Shopping category name"
+  },
+  "poiCategoryHealthcare": "Healthcare",
+  "@poiCategoryHealthcare": {
+    "description": "Healthcare category name"
+  },
+  "poiCategoryEducation": "Education",
+  "@poiCategoryEducation": {
+    "description": "Education category name"
+  },
+  "poiCategoryFinance": "Finance",
+  "@poiCategoryFinance": {
+    "description": "Finance category name"
+  },
+  "poiCategoryTourism": "Tourism",
+  "@poiCategoryTourism": {
+    "description": "Tourism category name"
+  },
+  "poiCategoryRecreation": "Recreation",
+  "@poiCategoryRecreation": {
+    "description": "Recreation category name"
+  },
+  "poiCategoryGovernment": "Government",
+  "@poiCategoryGovernment": {
+    "description": "Government category name"
+  },
+  "poiCategoryReligion": "Religion",
+  "@poiCategoryReligion": {
+    "description": "Religion category name"
+  },
+  "poiCategoryEmergency": "Emergency",
+  "@poiCategoryEmergency": {
+    "description": "Emergency category name"
+  },
+  "poiCategoryAccommodation": "Accommodation",
+  "@poiCategoryAccommodation": {
+    "description": "Accommodation category name"
+  },
+  "poiTypeBusStop": "Bus stop",
+  "poiTypePlatform": "Platform",
+  "poiTypeStopPosition": "Stop",
+  "poiTypeStation": "Station",
+  "poiTypeTaxiStand": "Taxi stand",
+  "poiTypeParking": "Parking",
+  "poiTypeRestaurant": "Restaurant",
+  "poiTypeCafe": "Cafe",
+  "poiTypeFastFood": "Fast food",
+  "poiTypeBar": "Bar",
+  "poiTypeBakery": "Bakery",
+  "poiTypeIceCream": "Ice cream",
+  "poiTypeSupermarket": "Supermarket",
+  "poiTypeConvenience": "Convenience store",
+  "poiTypeMarketplace": "Marketplace",
+  "poiTypeClothes": "Clothing store",
+  "poiTypeElectronics": "Electronics",
+  "poiTypeMall": "Shopping mall",
+  "poiTypeShop": "Shop",
+  "poiTypeHospital": "Hospital",
+  "poiTypeClinic": "Clinic",
+  "poiTypePharmacy": "Pharmacy",
+  "poiTypeDentist": "Dentist",
+  "poiTypeDoctor": "Doctor",
+  "poiTypeSchool": "School",
+  "poiTypeUniversity": "University",
+  "poiTypeCollege": "College",
+  "poiTypeKindergarten": "Kindergarten",
+  "poiTypeLibrary": "Library",
+  "poiTypeBank": "Bank",
+  "poiTypeAtm": "ATM",
+  "poiTypeExchangePoint": "Currency exchange",
+  "poiTypeHotel": "Hotel",
+  "poiTypeAttraction": "Attraction",
+  "poiTypeViewpoint": "Viewpoint",
+  "poiTypeMuseum": "Museum",
+  "poiTypeMonument": "Monument",
+  "poiTypeArtwork": "Artwork",
+  "poiTypeInformation": "Information",
+  "poiTypePark": "Park",
+  "poiTypeSportsCentre": "Sports center",
+  "poiTypePlayground": "Playground",
+  "poiTypeStadium": "Stadium",
+  "poiTypePitch": "Sports field",
+  "poiTypeCinema": "Cinema",
+  "poiTypeTheatre": "Theatre",
+  "poiTypeNightclub": "Nightclub",
+  "poiTypeGym": "Gym",
+  "poiTypeSwimmingPool": "Swimming pool",
+  "poiTypeTownhall": "Town hall",
+  "poiTypeEmbassy": "Embassy",
+  "poiTypePostOffice": "Post office",
+  "poiTypeCourthouse": "Courthouse",
+  "poiTypePublicBuilding": "Public building",
+  "poiTypePlaceOfWorship": "Place of worship",
+  "poiTypeChurch": "Church",
+  "poiTypeMosque": "Mosque",
+  "poiTypeSynagogue": "Synagogue",
+  "poiTypePolice": "Police station",
+  "poiTypeFireStation": "Fire station",
+  "poiTypeAmbulanceStation": "Ambulance station",
+  "poiTypeHostel": "Hostel",
+  "poiTypeGuestHouse": "Guest house",
+  "poiTypeMotel": "Motel",
+  "poiTypeApartment": "Apartment",
+  "poiTypeUnknown": "Place",
+  "selectPlace": "Select place",
+  "@selectPlace": {
+    "description": "Title for POI selection sheet when multiple markers are tapped"
+  },
+  "placesCount": "{count} places",
+  "@placesCount": {
+    "description": "Count of places in selection sheet",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "subcategoryTypes": "Types",
+  "@subcategoryTypes": {
+    "description": "Header for subcategory types list"
+  },
+  "selectAll": "All",
+  "@selectAll": {
+    "description": "Button to select all subcategories"
+  },
+  "clearAll": "Clear",
+  "@clearAll": {
+    "description": "Button to clear all subcategories"
+  },
+  "typesAvailable": "{count} types available",
+  "@typesAvailable": {
+    "description": "Subtitle showing available types count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "typesActive": "{enabled} of {total} active",
+  "@typesActive": {
+    "description": "Subtitle showing active types count",
+    "placeholders": {
+      "enabled": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
+}

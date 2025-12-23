@@ -8,6 +8,10 @@ export 'screen_menu_item.dart';
 export 'screen_theme_data.dart';
 
 /// Abstract class for all Trufi screen modules
+///
+/// Screens can optionally implement asynchronous initialization by overriding
+/// the [initialize] method. This method is called automatically by [runTrufiApp]
+/// during app startup, with a loading screen shown to the user.
 abstract class TrufiScreen {
   /// Unique identifier for this screen (used for routing name)
   String get id;
@@ -40,7 +44,12 @@ abstract class TrufiScreen {
   /// Set to true if the screen needs a custom AppBar instead of the shared one
   bool get hasOwnAppBar => false;
 
+  /// Initialize the screen module.
+  ///
+  /// This method is called automatically by [runTrufiApp] during app startup.
+  /// Override this to perform async initialization like loading from storage.
   Future<void> initialize() async {}
+
   Future<void> dispose() async {}
 
   /// Get localized title for this screen (override for translations)

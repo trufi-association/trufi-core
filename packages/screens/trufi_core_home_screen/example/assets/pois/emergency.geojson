@@ -1,0 +1,319 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 910409803,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569342,
+          -17.3932289
+        ]
+      },
+      "properties": {
+        "id": 910409803,
+        "name": "Policía Inspectora de Transparencia",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "271",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:short": "PNB",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "police": "offices",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3250373465,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1580032,
+          -17.3997085
+        ]
+      },
+      "properties": {
+        "id": 3250373465,
+        "name": "SAR FAB",
+        "type": "fire_station",
+        "category": "emergency",
+        "subcategory": "fire",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "fire_station",
+        "operator": "Fuerza Aerea Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5084260702,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572931,
+          -17.3924755
+        ]
+      },
+      "properties": {
+        "id": 5084260702,
+        "name": "Unidad Táctica de Operaciones Policiales",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "short_name": "UTOP"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217956983,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568283,
+          -17.3932117
+        ]
+      },
+      "properties": {
+        "id": 5217956983,
+        "name": "Policía Turística",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "271",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "operator": "Policía Boliviana",
+        "operator:wikidata": "Q3065571",
+        "operator:wikipedia": "es:Policía Nacional de Bolivia",
+        "police": "offices",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7994040325,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575876,
+          -17.392823
+        ]
+      },
+      "properties": {
+        "id": 7994040325,
+        "name": "Dirección Departamental de Recaudación de Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "police",
+        "level": "0",
+        "operator": "Policía Boliviana",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13351766698,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536941,
+          -17.3931771
+        ]
+      },
+      "properties": {
+        "id": 13351766698,
+        "name": "",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Simon Bolívar",
+        "amenity": "police",
+        "level": "0",
+        "operator": "Policía Boliviana",
+        "police": "offices"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 940660716,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569632,
+              -17.3932773
+            ],
+            [
+              -66.156857,
+              -17.3932596
+            ],
+            [
+              -66.1567234,
+              -17.3932374
+            ],
+            [
+              -66.1567522,
+              -17.3930925
+            ],
+            [
+              -66.1567571,
+              -17.393069
+            ],
+            [
+              -66.1567784,
+              -17.3930733
+            ],
+            [
+              -66.156817,
+              -17.392887
+            ],
+            [
+              -66.1568571,
+              -17.3928942
+            ],
+            [
+              -66.1568649,
+              -17.3928588
+            ],
+            [
+              -66.1569223,
+              -17.3928685
+            ],
+            [
+              -66.1569537,
+              -17.3927076
+            ],
+            [
+              -66.1570091,
+              -17.3927177
+            ],
+            [
+              -66.1570523,
+              -17.3924862
+            ],
+            [
+              -66.1570575,
+              -17.3924605
+            ],
+            [
+              -66.1570679,
+              -17.3924087
+            ],
+            [
+              -66.1570853,
+              -17.3924114
+            ],
+            [
+              -66.1572957,
+              -17.3924491
+            ],
+            [
+              -66.1575527,
+              -17.3924952
+            ],
+            [
+              -66.1575069,
+              -17.3927328
+            ],
+            [
+              -66.1576214,
+              -17.392754
+            ],
+            [
+              -66.1576028,
+              -17.3928532
+            ],
+            [
+              -66.1576206,
+              -17.3928739
+            ],
+            [
+              -66.1576133,
+              -17.3929128
+            ],
+            [
+              -66.1574854,
+              -17.3928909
+            ],
+            [
+              -66.1574895,
+              -17.3928695
+            ],
+            [
+              -66.1573518,
+              -17.3928459
+            ],
+            [
+              -66.1573024,
+              -17.3928372
+            ],
+            [
+              -66.1573128,
+              -17.3927814
+            ],
+            [
+              -66.1570678,
+              -17.3927318
+            ],
+            [
+              -66.1570152,
+              -17.3929987
+            ],
+            [
+              -66.1569632,
+              -17.3932773
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 940660716,
+        "name": "Comando Departamental de Cochabamba",
+        "type": "police",
+        "category": "emergency",
+        "subcategory": "police",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "police",
+        "contact:facebook": "https://www.facebook.com/PoliciaBolivianaCochabamba",
+        "historic": "monastery",
+        "not:operator:wikidata": "Q3065571",
+        "old_name:1578-1826": "Convento de la Orden de San Agustín",
+        "opening_hours": "24/7",
+        "operator": "Policía Boliviana",
+        "police": "offices",
+        "website": "https://www.policia.bo/"
+      }
+    }
+  ]
+}

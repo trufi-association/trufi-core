@@ -1,0 +1,1625 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 2317965872,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.16067,
+          -17.3891886
+        ]
+      },
+      "properties": {
+        "id": 2317965872,
+        "name": "Capilla La Salle",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "amenity": "place_of_worship",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "service_times": "Su 10:00+"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2705187550,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155604,
+          -17.3929861
+        ]
+      },
+      "properties": {
+        "id": 2705187550,
+        "name": "Iglesia Cristiana Evangélica Bolívar",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "383",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Bolivar",
+        "amenity": "place_of_worship",
+        "denomination": "evangelical",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2716726326,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512325,
+          -17.3954356
+        ]
+      },
+      "properties": {
+        "id": 2716726326,
+        "name": "Señor de Willque",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Calama",
+        "amenity": "place_of_worship",
+        "denomination": "roman_catholic",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2865862511,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566054,
+          -17.3920187
+        ]
+      },
+      "properties": {
+        "id": 2865862511,
+        "name": "Iglesia Pentecostal Dios es Amor",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "amenity": "place_of_worship",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3577523844,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601961,
+          -17.3865939
+        ]
+      },
+      "properties": {
+        "id": 3577523844,
+        "name": "Asamblea de Dios",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "place_of_worship",
+        "denomination": "evangelical",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3675097972,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1607756,
+          -17.3970724
+        ]
+      },
+      "properties": {
+        "id": 3675097972,
+        "name": "Centro de Asociaciones Gnósticas de Estudios Antropológicos, Culturales, Artísticos y Científicos",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "340",
+        "addr:street": "Calle Calama",
+        "amenity": "place_of_worship",
+        "contact:email": "ceageacacfranz@gmail.com",
+        "contact:facebook": "https://www.facebook.com/CEAGEACAC/",
+        "phone": "+591 77234062",
+        "religion": "buddhist",
+        "short_name": "CEAGEACAC",
+        "website": "http://www.ceageacac.org/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3675097974,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15876,
+          -17.3940364
+        ]
+      },
+      "properties": {
+        "id": 3675097974,
+        "name": "Centro Gnóstico",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "228",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "place_of_worship",
+        "phone": "+591 77241972",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3675097975,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15974,
+          -17.3947118
+        ]
+      },
+      "properties": {
+        "id": 3675097975,
+        "name": "Instituto Gnostico de Antropologia",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:housenumber": "410",
+        "addr:street": "Calle Santivañez",
+        "amenity": "place_of_worship",
+        "phone": "+591 44506913",
+        "religion": "gnostic",
+        "website": "http://gnosisbolivia.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719462620,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545987,
+          -17.3954191
+        ]
+      },
+      "properties": {
+        "id": 3719462620,
+        "name": "Iglesia Pentecostés del Movimiento Misionero Mundial",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "place_of_worship",
+        "denomination": "pentecostal",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3913863294,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155388,
+          -17.3917986
+        ]
+      },
+      "properties": {
+        "id": 3913863294,
+        "name": "Templo Indu",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "place_of_worship",
+        "religion": "hindu"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4313158890,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597229,
+          -17.3949216
+        ]
+      },
+      "properties": {
+        "id": 4313158890,
+        "name": "Iglesia de Cristo Centro",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "place_of_worship",
+        "denomination": "roman_catholic",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4675292283,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527286,
+          -17.3935309
+        ]
+      },
+      "properties": {
+        "id": 4675292283,
+        "name": "Capilla Santa Ana",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Sucre",
+        "amenity": "place_of_worship",
+        "denomination": "roman_catholic",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224265,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577795,
+          -17.3967173
+        ]
+      },
+      "properties": {
+        "id": 4959224265,
+        "name": "",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "amenity": "place_of_worship"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5254933506,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523721,
+          -17.396375
+        ]
+      },
+      "properties": {
+        "id": 5254933506,
+        "name": "Ejercito de Salvación",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "amenity": "place_of_worship"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5331783021,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561665,
+          -17.3984836
+        ]
+      },
+      "properties": {
+        "id": 5331783021,
+        "name": "LifeCenter",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "amenity": "place_of_worship"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6318640971,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527575,
+          -17.3944631
+        ]
+      },
+      "properties": {
+        "id": 6318640971,
+        "name": "Datones",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "408",
+        "addr:street": "Calle Jordán",
+        "amenity": "place_of_worship",
+        "description": "Consultora Datones. Edificio Zuver cuarto piso, oficina 408. Calle Jordán Esquina Lanza, Cochabamba",
+        "email": "contacto@datones.net",
+        "service_times": "Lunes a Viernes 9am a 5pm",
+        "website": "https://www.datones.net",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8966811174,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542861,
+          -17.3935025
+        ]
+      },
+      "properties": {
+        "id": 8966811174,
+        "name": "Iglesia Adventista del Séptimo Día",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "264",
+        "addr:street": "Calle San Martín",
+        "amenity": "place_of_worship",
+        "denomination": "protestant",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 70711454,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1585622,
+              -17.3948501
+            ],
+            [
+              -66.1585533,
+              -17.3949051
+            ],
+            [
+              -66.1584966,
+              -17.3948963
+            ],
+            [
+              -66.158517,
+              -17.3947764
+            ],
+            [
+              -66.158525,
+              -17.3947294
+            ],
+            [
+              -66.1585329,
+              -17.3946828
+            ],
+            [
+              -66.1585885,
+              -17.3946914
+            ],
+            [
+              -66.158581,
+              -17.3947373
+            ],
+            [
+              -66.1587331,
+              -17.3947599
+            ],
+            [
+              -66.1587404,
+              -17.3947149
+            ],
+            [
+              -66.1587714,
+              -17.3947197
+            ],
+            [
+              -66.1587644,
+              -17.3947627
+            ],
+            [
+              -66.1588464,
+              -17.3947749
+            ],
+            [
+              -66.1588533,
+              -17.3947323
+            ],
+            [
+              -66.1589717,
+              -17.3947507
+            ],
+            [
+              -66.1589652,
+              -17.3947905
+            ],
+            [
+              -66.1590906,
+              -17.3948091
+            ],
+            [
+              -66.159072,
+              -17.394924
+            ],
+            [
+              -66.1589442,
+              -17.3949051
+            ],
+            [
+              -66.1589346,
+              -17.3949641
+            ],
+            [
+              -66.1588173,
+              -17.394946
+            ],
+            [
+              -66.1588265,
+              -17.3948893
+            ],
+            [
+              -66.1585622,
+              -17.3948501
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 70711454,
+        "name": "Iglesia de Santo Domingo",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "5051",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Santivañez",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "denomination": "roman_catholic",
+        "phone": "+591 4 4221550",
+        "religion": "christian",
+        "start_date": "1632"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220100281,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1554508,
+              -17.3915637
+            ],
+            [
+              -66.1555649,
+              -17.3915829
+            ],
+            [
+              -66.1556177,
+              -17.3912902
+            ],
+            [
+              -66.155666,
+              -17.3912982
+            ],
+            [
+              -66.1556832,
+              -17.3912032
+            ],
+            [
+              -66.155635,
+              -17.3911953
+            ],
+            [
+              -66.1555562,
+              -17.3911838
+            ],
+            [
+              -66.1555196,
+              -17.3911779
+            ],
+            [
+              -66.1554508,
+              -17.3915637
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220100281,
+        "name": "Iglesia Santa Clara",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "3",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220317528,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1557737,
+              -17.3888371
+            ],
+            [
+              -66.1557655,
+              -17.3888856
+            ],
+            [
+              -66.1557583,
+              -17.388932
+            ],
+            [
+              -66.1557369,
+              -17.389066
+            ],
+            [
+              -66.1557162,
+              -17.3891956
+            ],
+            [
+              -66.1557061,
+              -17.3892588
+            ],
+            [
+              -66.1556338,
+              -17.3892491
+            ],
+            [
+              -66.1556112,
+              -17.3892726
+            ],
+            [
+              -66.1555695,
+              -17.3892836
+            ],
+            [
+              -66.1554763,
+              -17.3892673
+            ],
+            [
+              -66.1554807,
+              -17.3892425
+            ],
+            [
+              -66.1554136,
+              -17.3892314
+            ],
+            [
+              -66.1554525,
+              -17.3890157
+            ],
+            [
+              -66.1554732,
+              -17.3888871
+            ],
+            [
+              -66.1554806,
+              -17.3888417
+            ],
+            [
+              -66.1554876,
+              -17.3887993
+            ],
+            [
+              -66.1554885,
+              -17.3887939
+            ],
+            [
+              -66.1555394,
+              -17.3888016
+            ],
+            [
+              -66.1555718,
+              -17.3888059
+            ],
+            [
+              -66.1556339,
+              -17.3888154
+            ],
+            [
+              -66.1556993,
+              -17.3888255
+            ],
+            [
+              -66.1557225,
+              -17.3888292
+            ],
+            [
+              -66.1557737,
+              -17.3888371
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220317528,
+        "name": "Iglesia Madre de la Divina Providencia",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "440",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Plaza Colón",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "2",
+        "denomination": "roman_catholic",
+        "loc_name": "Iglesia El Hospicio",
+        "religion": "christian",
+        "start_date": "1865"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432342,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1580805,
+              -17.3928553
+            ],
+            [
+              -66.157712,
+              -17.3927912
+            ],
+            [
+              -66.1576978,
+              -17.392867
+            ],
+            [
+              -66.1577569,
+              -17.3928772
+            ],
+            [
+              -66.1577118,
+              -17.3931163
+            ],
+            [
+              -66.157652,
+              -17.393106
+            ],
+            [
+              -66.1576458,
+              -17.3931385
+            ],
+            [
+              -66.1576397,
+              -17.3931702
+            ],
+            [
+              -66.1577015,
+              -17.3931809
+            ],
+            [
+              -66.1576847,
+              -17.39327
+            ],
+            [
+              -66.1577808,
+              -17.3932865
+            ],
+            [
+              -66.1578939,
+              -17.393306
+            ],
+            [
+              -66.1579225,
+              -17.3931569
+            ],
+            [
+              -66.157926,
+              -17.3931424
+            ],
+            [
+              -66.1579657,
+              -17.3929372
+            ],
+            [
+              -66.1580128,
+              -17.3929458
+            ],
+            [
+              -66.1580628,
+              -17.3929547
+            ],
+            [
+              -66.1580659,
+              -17.3929385
+            ],
+            [
+              -66.1580805,
+              -17.3928553
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432342,
+        "name": "Parroquia San Ignacio de Loyola",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "164",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "2",
+        "church:type": "parish",
+        "contact:facebook": "https://www.facebook.com/companiadejesuscbba/",
+        "denomination": "roman_catholic",
+        "email": "comjesus@supernet.com.bo",
+        "heritage": "2",
+        "historic": "church",
+        "loc_name": "Iglesia de la Compañía de Jesús",
+        "phone": "+591 4 4500444",
+        "religion": "christian",
+        "start_date": "1745",
+        "wikidata": "Q42791210",
+        "wikimedia_commons": "Category:Iglesia de la Compañía de Jesús, Cochabamba",
+        "wikipedia": "es:Templo de la Compañía de Jesús (Cochabamba)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432346,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584445,
+              -17.3892827
+            ],
+            [
+              -66.1584128,
+              -17.3894599
+            ],
+            [
+              -66.1585026,
+              -17.3894745
+            ],
+            [
+              -66.1585343,
+              -17.3892973
+            ],
+            [
+              -66.1584445,
+              -17.3892827
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432346,
+        "name": "Iglesia El Salvador",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "170",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "1",
+        "denomination": "methodist",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432350,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1579197,
+              -17.3900266
+            ],
+            [
+              -66.157875,
+              -17.3902958
+            ],
+            [
+              -66.1578667,
+              -17.3903346
+            ],
+            [
+              -66.157923,
+              -17.390344
+            ],
+            [
+              -66.1579794,
+              -17.3903533
+            ],
+            [
+              -66.1579858,
+              -17.3903177
+            ],
+            [
+              -66.1580366,
+              -17.3900357
+            ],
+            [
+              -66.1580121,
+              -17.3900177
+            ],
+            [
+              -66.1579832,
+              -17.3900082
+            ],
+            [
+              -66.1579528,
+              -17.3900114
+            ],
+            [
+              -66.1579197,
+              -17.3900266
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432350,
+        "name": "Iglesia Santa Teresa",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Plazuela Francisco María del Granado",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 263917475,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1553567,
+              -17.3927002
+            ],
+            [
+              -66.1553449,
+              -17.3927634
+            ],
+            [
+              -66.1553334,
+              -17.3928251
+            ],
+            [
+              -66.1551847,
+              -17.3927999
+            ],
+            [
+              -66.1551206,
+              -17.3927892
+            ],
+            [
+              -66.1550224,
+              -17.3927724
+            ],
+            [
+              -66.154959,
+              -17.3927616
+            ],
+            [
+              -66.1548996,
+              -17.3927514
+            ],
+            [
+              -66.1548451,
+              -17.3927421
+            ],
+            [
+              -66.1548141,
+              -17.3927368
+            ],
+            [
+              -66.1548373,
+              -17.3926122
+            ],
+            [
+              -66.1549228,
+              -17.3926267
+            ],
+            [
+              -66.155054,
+              -17.3926489
+            ],
+            [
+              -66.1553567,
+              -17.3927002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 263917475,
+        "name": "Iglesia de San Francisco",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "2",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "roof:shape": "gabled",
+        "start_date": "1581",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 281760499,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1554996,
+              -17.3965916
+            ],
+            [
+              -66.1557641,
+              -17.3966408
+            ],
+            [
+              -66.1557762,
+              -17.3965815
+            ],
+            [
+              -66.1557883,
+              -17.3965221
+            ],
+            [
+              -66.1555237,
+              -17.396473
+            ],
+            [
+              -66.1554996,
+              -17.3965916
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 281760499,
+        "name": "Parroquia San Juan de Dios",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze;Calle Esteban Arce",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "2",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 408701973,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1528844,
+              -17.3858654
+            ],
+            [
+              -66.1525228,
+              -17.3863334
+            ],
+            [
+              -66.1525807,
+              -17.3863741
+            ],
+            [
+              -66.1525659,
+              -17.3863932
+            ],
+            [
+              -66.1526502,
+              -17.3864525
+            ],
+            [
+              -66.1527093,
+              -17.386376
+            ],
+            [
+              -66.1527583,
+              -17.3864105
+            ],
+            [
+              -66.1530755,
+              -17.3859999
+            ],
+            [
+              -66.1528844,
+              -17.3858654
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 408701973,
+        "name": "La Iglesia de Jesucristo de los Santos de los Últimos Días",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "denomination": "mormon",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 436444929,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1641791,
+              -17.3948856
+            ],
+            [
+              -66.1640309,
+              -17.3948682
+            ],
+            [
+              -66.163974,
+              -17.3948615
+            ],
+            [
+              -66.1640031,
+              -17.3946365
+            ],
+            [
+              -66.1640654,
+              -17.3946438
+            ],
+            [
+              -66.1640719,
+              -17.3945935
+            ],
+            [
+              -66.1641653,
+              -17.3946045
+            ],
+            [
+              -66.164162,
+              -17.3946302
+            ],
+            [
+              -66.1641441,
+              -17.3947683
+            ],
+            [
+              -66.1641935,
+              -17.3947741
+            ],
+            [
+              -66.1641791,
+              -17.3948856
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 436444929,
+        "name": "Iglesia Virgen del Perpetuo Socorro",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle General Achá",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "denomination": "roman_catholic",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506146914,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1544927,
+              -17.3895277
+            ],
+            [
+              -66.1544543,
+              -17.3895207
+            ],
+            [
+              -66.1544106,
+              -17.3895127
+            ],
+            [
+              -66.1544521,
+              -17.3893232
+            ],
+            [
+              -66.1544294,
+              -17.3893176
+            ],
+            [
+              -66.1544445,
+              -17.3892557
+            ],
+            [
+              -66.1544689,
+              -17.3892604
+            ],
+            [
+              -66.1544723,
+              -17.3892443
+            ],
+            [
+              -66.1545183,
+              -17.3892292
+            ],
+            [
+              -66.1545753,
+              -17.3892942
+            ],
+            [
+              -66.154569,
+              -17.389325
+            ],
+            [
+              -66.1545387,
+              -17.3893194
+            ],
+            [
+              -66.1544927,
+              -17.3895277
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506146914,
+        "name": "Iglesia San Rafael",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "517",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Ecuador",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "2",
+        "check_date": "2025-02-03",
+        "denomination": "roman_catholic",
+        "religion": "christian",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 579320483,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1542556,
+              -17.3935469
+            ],
+            [
+              -66.1542734,
+              -17.3934532
+            ],
+            [
+              -66.1545134,
+              -17.3934948
+            ],
+            [
+              -66.1544956,
+              -17.3935884
+            ],
+            [
+              -66.1543163,
+              -17.3935574
+            ],
+            [
+              -66.1542556,
+              -17.3935469
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 579320483,
+        "name": "",
+        "type": "church",
+        "category": "religion",
+        "osmType": "way",
+        "building": "church",
+        "building:levels": "2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 580598324,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1598942,
+              -17.3912137
+            ],
+            [
+              -66.1598693,
+              -17.3913453
+            ],
+            [
+              -66.1601145,
+              -17.3913877
+            ],
+            [
+              -66.1601394,
+              -17.3912563
+            ],
+            [
+              -66.1598942,
+              -17.3912137
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 580598324,
+        "name": "",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Junín",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:levels": "1",
+        "religion": "jewish"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 884640230,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1595272,
+              -17.3918996
+            ],
+            [
+              -66.1595788,
+              -17.3919082
+            ],
+            [
+              -66.1595673,
+              -17.3919707
+            ],
+            [
+              -66.1597121,
+              -17.391995
+            ],
+            [
+              -66.1597548,
+              -17.391764
+            ],
+            [
+              -66.1597665,
+              -17.3917005
+            ],
+            [
+              -66.1598122,
+              -17.391708
+            ],
+            [
+              -66.159836,
+              -17.391712
+            ],
+            [
+              -66.1598489,
+              -17.3916416
+            ],
+            [
+              -66.159583,
+              -17.391597
+            ],
+            [
+              -66.1595699,
+              -17.3916681
+            ],
+            [
+              -66.1595272,
+              -17.3918996
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 884640230,
+        "name": "Centro San Martín de Porres",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "167",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Colombia",
+        "amenity": "place_of_worship",
+        "barrier": "wall",
+        "denomination": "roman_catholic",
+        "loc_name": "Renovación Carismática",
+        "religion": "christian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 884640232,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1597665,
+              -17.3917005
+            ],
+            [
+              -66.1597548,
+              -17.391764
+            ],
+            [
+              -66.1597121,
+              -17.391995
+            ],
+            [
+              -66.1595673,
+              -17.3919707
+            ],
+            [
+              -66.1595788,
+              -17.3919082
+            ],
+            [
+              -66.1595272,
+              -17.3918996
+            ],
+            [
+              -66.1595699,
+              -17.3916681
+            ],
+            [
+              -66.1597665,
+              -17.3917005
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 884640232,
+        "name": "Centro San Martín de Porres",
+        "type": "Cochabamba",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "167",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Colombia",
+        "building": "church",
+        "building:levels": "1",
+        "loc_name": "Renovación Carismática"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 904289294,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1501976,
+              -17.3956002
+            ],
+            [
+              -66.1502416,
+              -17.3953767
+            ],
+            [
+              -66.1503587,
+              -17.3953976
+            ],
+            [
+              -66.1503796,
+              -17.3954216
+            ],
+            [
+              -66.1503395,
+              -17.3956256
+            ],
+            [
+              -66.1501976,
+              -17.3956002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 904289294,
+        "name": "Salón del Reino de los Testigos de Jehová",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "806",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Calama",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "denomination": "jehovahs_witness",
+        "religion": "christian",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138732805,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1606327,
+              -17.3931798
+            ],
+            [
+              -66.1605699,
+              -17.3931683
+            ],
+            [
+              -66.1605386,
+              -17.3931803
+            ],
+            [
+              -66.160527,
+              -17.3932238
+            ],
+            [
+              -66.1605501,
+              -17.393249
+            ],
+            [
+              -66.1606114,
+              -17.3932602
+            ],
+            [
+              -66.1606032,
+              -17.3933007
+            ],
+            [
+              -66.1608838,
+              -17.3933519
+            ],
+            [
+              -66.1609167,
+              -17.393188
+            ],
+            [
+              -66.1606411,
+              -17.3931376
+            ],
+            [
+              -66.1606327,
+              -17.3931798
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138732805,
+        "name": "Parroquia Corazón de María",
+        "type": "place_of_worship",
+        "category": "religion",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "place_of_worship",
+        "building": "church",
+        "building:architecture": "neo-gothic",
+        "building:levels": "2",
+        "denomination": "roman_catholic",
+        "loc_name": "Iglesia de los Corazonistas",
+        "religion": "christian",
+        "roof:material": "metal",
+        "roof:shape": "gabled",
+        "start_date": "1924"
+      }
+    }
+  ]
+}

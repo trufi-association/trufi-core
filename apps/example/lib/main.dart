@@ -8,6 +8,7 @@ import 'package:trufi_core_feedback/trufi_core_feedback.dart';
 import 'package:trufi_core_home_screen/trufi_core_home_screen.dart';
 import 'package:trufi_core_maps/trufi_core_maps.dart';
 import 'package:trufi_core_navigation/trufi_core_navigation.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_saved_places/trufi_core_saved_places.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 import 'package:trufi_core_settings/trufi_core_settings.dart';
@@ -60,6 +61,14 @@ void main() {
             otpEndpoint: 'https://otp-240.trufi-core.trufi.dev',
             appName: 'Trufi App',
             deepLinkScheme: 'trufiapp',
+            poiLayersManager: POILayersManager(
+              assetsBasePath: 'assets/pois',
+              defaultEnabledSubcategories: {
+                POICategory.tourism: {'museum', 'attraction', 'viewpoint'},
+                POICategory.food: {'restaurant', 'cafe'},
+                POICategory.transport: {'bus_station', 'bus_stop'},
+              },
+            ),
           ),
           onStartNavigation: (context, itinerary, locationService) {
             NavigationScreen.showFromItinerary(

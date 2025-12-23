@@ -1,0 +1,35 @@
+name: trufi_core_poi_layers
+description: POI (Points of Interest) map layers for Trufi apps
+version: 1.0.0
+homepage: https://github.com/trufi-association/trufi-core
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.2
+  equatable: ^2.0.5
+  latlong2: ^0.9.1
+  flutter_map: ^7.0.2
+  flutter_bloc: ^8.1.6
+  trufi_core_interfaces:
+    path: ../trufi_core_interfaces
+  trufi_core_utils:
+    path: ../trufi_core_utils
+  trufi_core_maps:
+    path: ../trufi_core_maps
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  generate: true

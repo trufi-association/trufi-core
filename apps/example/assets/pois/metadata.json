@@ -1,0 +1,297 @@
+{
+  "generated": "2025-12-23T06:53:43.119Z",
+  "source": "cochabamba.osm.pbf",
+  "categories": [
+    {
+      "name": "healthcare",
+      "displayName": "Healthcare",
+      "count": 856,
+      "subcategories": [
+        {
+          "name": "hospital",
+          "displayName": "Hospitals",
+          "count": 45
+        },
+        {
+          "name": "clinic",
+          "displayName": "Clinics & Doctors",
+          "count": 162
+        },
+        {
+          "name": "pharmacy",
+          "displayName": "Pharmacies",
+          "count": 381
+        },
+        {
+          "name": "dentist",
+          "displayName": "Dentists",
+          "count": 123
+        },
+        {
+          "name": "veterinary",
+          "displayName": "Veterinary",
+          "count": 68
+        },
+        {
+          "name": "other",
+          "displayName": "Other Healthcare",
+          "count": 77
+        }
+      ]
+    },
+    {
+      "name": "education",
+      "displayName": "Education",
+      "count": 635,
+      "subcategories": [
+        {
+          "name": "school",
+          "displayName": "Schools",
+          "count": 423
+        },
+        {
+          "name": "university",
+          "displayName": "Universities & Colleges",
+          "count": 109
+        },
+        {
+          "name": "kindergarten",
+          "displayName": "Kindergartens",
+          "count": 57
+        },
+        {
+          "name": "library",
+          "displayName": "Libraries",
+          "count": 46
+        }
+      ]
+    },
+    {
+      "name": "transport",
+      "displayName": "Transport",
+      "count": 1170,
+      "subcategories": [
+        {
+          "name": "public_transit",
+          "displayName": "Public Transit",
+          "count": 1105
+        },
+        {
+          "name": "railway",
+          "displayName": "Railway",
+          "count": 0
+        },
+        {
+          "name": "airport",
+          "displayName": "Airport",
+          "count": 3
+        },
+        {
+          "name": "taxi",
+          "displayName": "Taxi & Car Rental",
+          "count": 62
+        },
+        {
+          "name": "ferry",
+          "displayName": "Ferry",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "name": "food",
+      "displayName": "Food & Drink",
+      "count": 1335,
+      "subcategories": [
+        {
+          "name": "restaurant",
+          "displayName": "Restaurants",
+          "count": 609
+        },
+        {
+          "name": "cafe",
+          "displayName": "Cafes",
+          "count": 125
+        },
+        {
+          "name": "fast_food",
+          "displayName": "Fast Food",
+          "count": 486
+        },
+        {
+          "name": "bar",
+          "displayName": "Bars & Pubs",
+          "count": 62
+        },
+        {
+          "name": "ice_cream",
+          "displayName": "Ice Cream",
+          "count": 53
+        }
+      ]
+    },
+    {
+      "name": "shopping",
+      "displayName": "Shopping",
+      "count": 1523,
+      "subcategories": [
+        {
+          "name": "supermarket",
+          "displayName": "Supermarkets",
+          "count": 1208
+        },
+        {
+          "name": "mall",
+          "displayName": "Shopping Malls",
+          "count": 35
+        },
+        {
+          "name": "food_shop",
+          "displayName": "Food Shops",
+          "count": 183
+        },
+        {
+          "name": "marketplace",
+          "displayName": "Marketplaces",
+          "count": 97
+        }
+      ]
+    },
+    {
+      "name": "tourism",
+      "displayName": "Tourism",
+      "count": 919,
+      "subcategories": [
+        {
+          "name": "accommodation",
+          "displayName": "Accommodation",
+          "count": 134
+        },
+        {
+          "name": "culture",
+          "displayName": "Cultural Sites",
+          "count": 280
+        },
+        {
+          "name": "attraction",
+          "displayName": "Attractions",
+          "count": 238
+        },
+        {
+          "name": "information",
+          "displayName": "Tourist Information",
+          "count": 103
+        },
+        {
+          "name": "historic",
+          "displayName": "Historic Sites",
+          "count": 164
+        }
+      ]
+    },
+    {
+      "name": "finance",
+      "displayName": "Finance",
+      "count": 449,
+      "subcategories": [
+        {
+          "name": "bank",
+          "displayName": "Banks",
+          "count": 186
+        },
+        {
+          "name": "atm",
+          "displayName": "ATMs",
+          "count": 249
+        },
+        {
+          "name": "exchange",
+          "displayName": "Currency Exchange",
+          "count": 14
+        }
+      ]
+    },
+    {
+      "name": "emergency",
+      "displayName": "Emergency",
+      "count": 105,
+      "subcategories": [
+        {
+          "name": "police",
+          "displayName": "Police",
+          "count": 93
+        },
+        {
+          "name": "fire",
+          "displayName": "Fire Station",
+          "count": 8
+        },
+        {
+          "name": "ambulance",
+          "displayName": "Ambulance",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "name": "recreation",
+      "displayName": "Recreation",
+      "count": 1466,
+      "subcategories": [
+        {
+          "name": "park",
+          "displayName": "Parks & Gardens",
+          "count": 782
+        },
+        {
+          "name": "playground",
+          "displayName": "Playgrounds",
+          "count": 264
+        },
+        {
+          "name": "sports",
+          "displayName": "Sports Facilities",
+          "count": 285
+        },
+        {
+          "name": "entertainment",
+          "displayName": "Entertainment",
+          "count": 79
+        },
+        {
+          "name": "community",
+          "displayName": "Community Centers",
+          "count": 56
+        }
+      ]
+    },
+    {
+      "name": "religion",
+      "displayName": "Religion",
+      "count": 266
+    },
+    {
+      "name": "government",
+      "displayName": "Government & Public Services",
+      "count": 199,
+      "subcategories": [
+        {
+          "name": "administration",
+          "displayName": "Government Offices",
+          "count": 186
+        },
+        {
+          "name": "embassy",
+          "displayName": "Embassies",
+          "count": 0
+        },
+        {
+          "name": "post",
+          "displayName": "Post Offices",
+          "count": 13
+        }
+      ]
+    }
+  ],
+  "total": 8923
+}

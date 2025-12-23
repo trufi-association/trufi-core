@@ -1,0 +1,4578 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 598790008,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572548,
+          -17.3944591
+        ]
+      },
+      "properties": {
+        "id": 598790008,
+        "name": "Farmacia Boliviana",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "212",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "pharmacy",
+        "contact:facebook": "https://www.facebook.com/Farmacia-Boliviana-105276611936471/",
+        "contact:whatsapp": "+591 65706152",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "email": "bolivianafarmaciaydrogueria@gmail.com",
+        "healthcare": "pharmacy",
+        "opening_hours": "Mo-Fr 08:00-22:00; Sa 09:00-17:00",
+        "operator": "Farmacia y Droguería Boliviana",
+        "operator:type": "private",
+        "phone": "+591 4 4228382;+591 65706152",
+        "start_date": "1832"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1723604900,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1631801,
+          -17.3919684
+        ]
+      },
+      "properties": {
+        "id": 1723604900,
+        "name": "Clínica Los Lauros",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Tarapacá",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "nephrology",
+        "operator": "Clínica Los Lauros",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2303485213,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1509049,
+          -17.3933901
+        ]
+      },
+      "properties": {
+        "id": 2303485213,
+        "name": "FarmaElías",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "320",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Sucre",
+        "amenity": "pharmacy",
+        "brand": "FarmaElías",
+        "brand:wikidata": "Q81969487",
+        "contact:phone": "+591 4 4500506;+591 4 4253521;+591 4 466144",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "opening_hours": "Mo-Fr 08:30-20:00; Sa 08:30-15:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2327853136,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1504608,
+          -17.3897286
+        ]
+      },
+      "properties": {
+        "id": 2327853136,
+        "name": "Farmacia La Luz I",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "check_date": "2023-04-13",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2331301870,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157652,
+          -17.3956909
+        ]
+      },
+      "properties": {
+        "id": 2331301870,
+        "name": "G & H",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "168",
+        "addr:street": "Calle Jordán",
+        "amenity": "dentist",
+        "contact:email": "garcesdcn@hotmail.com",
+        "contact:phone": "+591 4 4503675",
+        "healthcare": "dentist",
+        "opening_hours": "Mo-Fr 08:30-13:00, 14:30-20:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2377781509,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532846,
+          -17.3917324
+        ]
+      },
+      "properties": {
+        "id": 2377781509,
+        "name": "Farmalux",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2377781510,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541514,
+          -17.3919113
+        ]
+      },
+      "properties": {
+        "id": 2377781510,
+        "name": "Farmacia Chávez",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "brand": "Farmacia Chávez",
+        "brand:wikidata": "Q81969919",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacia Chávez",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2590640024,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512677,
+          -17.385748
+        ]
+      },
+      "properties": {
+        "id": 2590640024,
+        "name": "Farmacorp",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "branch": "Sucursal Oquendo",
+        "brand": "Farmacorp",
+        "brand:wikidata": "Q81968937",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "opening_hours": "24/7",
+        "operator": "Farmacorp",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "website": "https://www.farmacorp.com/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2599277252,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512451,
+          -17.3983266
+        ]
+      },
+      "properties": {
+        "id": 2599277252,
+        "name": "Casa Naturista",
+        "type": "herbalist",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:street": "Calle Antezana",
+        "healthcare": "alternative",
+        "healthcare:speciality": "herbalism",
+        "shop": "herbalist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2600878716,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566558,
+          -17.3869865
+        ]
+      },
+      "properties": {
+        "id": 2600878716,
+        "name": "Farmacias Bolivia",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "567",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "pharmacy",
+        "brand": "Farmacias Bolivia",
+        "brand:wikidata": "Q81970584",
+        "craft": "dressmaker",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418156,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540751,
+          -17.3937403
+        ]
+      },
+      "properties": {
+        "id": 2631418156,
+        "name": "Farmacorp",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle San Martín",
+        "amenity": "pharmacy",
+        "branch": "Sucursal San Martín",
+        "brand": "Farmacorp",
+        "brand:wikidata": "Q81968937",
+        "contact:website": "https://www.farmacorp.com/",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "opening_hours": "24/7",
+        "operator": "Farmacorp"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2696044719,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546619,
+          -17.3906127
+        ]
+      },
+      "properties": {
+        "id": 2696044719,
+        "name": "Farmacia Social Farma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle San Martín",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3306972615,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534438,
+          -17.3850089
+        ]
+      },
+      "properties": {
+        "id": 3306972615,
+        "name": "Farmacia Minerva",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3552730885,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589623,
+          -17.3927492
+        ]
+      },
+      "properties": {
+        "id": 3552730885,
+        "name": "Farmacias Bolivar",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacias Bolivar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3552730886,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.158954,
+          -17.3928148
+        ]
+      },
+      "properties": {
+        "id": 3552730886,
+        "name": "Farmacia Boliviana",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3674274540,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544246,
+          -17.3988933
+        ]
+      },
+      "properties": {
+        "id": 3674274540,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3679699332,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543241,
+          -17.3992314
+        ]
+      },
+      "properties": {
+        "id": 3679699332,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719462618,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549154,
+          -17.3959261
+        ]
+      },
+      "properties": {
+        "id": 3719462618,
+        "name": "Fisioterapia",
+        "type": "physiotherapist",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "physiotherapist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719465044,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544194,
+          -17.3974907
+        ]
+      },
+      "properties": {
+        "id": 3719465044,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719465045,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542135,
+          -17.3987421
+        ]
+      },
+      "properties": {
+        "id": 3719465045,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902662,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522391,
+          -17.3859363
+        ]
+      },
+      "properties": {
+        "id": 3952902662,
+        "name": "Instituto Oftalmológico Cochabamba",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0612",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "ophthalmology",
+        "level": "0",
+        "operator": "Instituto Oftalmológico Cochabamba",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902704,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151767,
+          -17.3872594
+        ]
+      },
+      "properties": {
+        "id": 3952902704,
+        "name": "Laboratorio Bio Orgánico",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "454",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "healthcare": "laboratory",
+        "level": "0",
+        "operator": "Laboratorio Bio Orgánico"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902775,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515742,
+          -17.3897589
+        ]
+      },
+      "properties": {
+        "id": 3952902775,
+        "name": "Farmacia Bolivia",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902809,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507473,
+          -17.3909941
+        ]
+      },
+      "properties": {
+        "id": 3952902809,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902813,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514378,
+          -17.3911322
+        ]
+      },
+      "properties": {
+        "id": 3952902813,
+        "name": "Farmacia Genial",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4070971079,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.161603,
+          -17.3974226
+        ]
+      },
+      "properties": {
+        "id": 4070971079,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Calama",
+        "amenity": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4077698315,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562103,
+          -17.3943176
+        ]
+      },
+      "properties": {
+        "id": 4077698315,
+        "name": "Farmacia Moreira",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "309",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "opening_hours": "Mo-Sa 07:00-23:00; Su 09:00-20:00",
+        "operator": "Farmacia Moreira"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4106074892,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151431,
+          -17.3854734
+        ]
+      },
+      "properties": {
+        "id": 4106074892,
+        "name": "Farmacia Maine",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "609",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4106074980,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506787,
+          -17.3869676
+        ]
+      },
+      "properties": {
+        "id": 4106074980,
+        "name": "Farmacia Oquendo",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "452",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4236229089,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151167,
+          -17.3900651
+        ]
+      },
+      "properties": {
+        "id": 4236229089,
+        "name": "Farmacia San Francisco",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Colombia",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259123119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597827,
+          -17.3871661
+        ]
+      },
+      "properties": {
+        "id": 4259123119,
+        "name": "Mundo Farma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259603869,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530645,
+          -17.3893607
+        ]
+      },
+      "properties": {
+        "id": 4259603869,
+        "name": "Farmacia Itálica",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259603870,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152242,
+          -17.389196
+        ]
+      },
+      "properties": {
+        "id": 4259603870,
+        "name": "Farmacia Tres Ángeles",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259605168,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597979,
+          -17.3870949
+        ]
+      },
+      "properties": {
+        "id": 4259605168,
+        "name": "Odonto Imagen",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259605169,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599953,
+          -17.3878106
+        ]
+      },
+      "properties": {
+        "id": 4259605169,
+        "name": "Valverde",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4414265836,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532891,
+          -17.3871775
+        ]
+      },
+      "properties": {
+        "id": 4414265836,
+        "name": "Farmacia Evan's",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4447024430,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544354,
+          -17.3929989
+        ]
+      },
+      "properties": {
+        "id": 4447024430,
+        "name": "Farmacia Verónica",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Bolívar",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia Verónica"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4469546009,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531683,
+          -17.3877812
+        ]
+      },
+      "properties": {
+        "id": 4469546009,
+        "name": "Farmacia Colón 2",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Antezana",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491060718,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.158745,
+          -17.3875379
+        ]
+      },
+      "properties": {
+        "id": 4491060718,
+        "name": "Farmacia Atenas",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491060789,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587207,
+          -17.3866065
+        ]
+      },
+      "properties": {
+        "id": 4491060789,
+        "name": "Farmacia Oruro",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Baptista",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491061112,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512414,
+          -17.3900783
+        ]
+      },
+      "properties": {
+        "id": 4491061112,
+        "name": "Cochabamba",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4557891347,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154919,
+          -17.3893341
+        ]
+      },
+      "properties": {
+        "id": 4557891347,
+        "name": "Farmacia Sajama",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle San Martín",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4557891767,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511365,
+          -17.3863196
+        ]
+      },
+      "properties": {
+        "id": 4557891767,
+        "name": "Gonzales",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4603068800,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540947,
+          -17.387786
+        ]
+      },
+      "properties": {
+        "id": 4603068800,
+        "name": "San Francisco de Asís",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "N0454",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "amenity": "doctors",
+        "healthcare": "doctor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4630872728,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507393,
+          -17.3881467
+        ]
+      },
+      "properties": {
+        "id": 4630872728,
+        "name": "Odontología Pereira",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673887320,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528559,
+          -17.3936891
+        ]
+      },
+      "properties": {
+        "id": 4673887320,
+        "name": "Plan Dental",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Sucre",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673889576,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613806,
+          -17.3905957
+        ]
+      },
+      "properties": {
+        "id": 4673889576,
+        "name": "Veterinaria San Miguel",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "veterinary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4689734107,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159873,
+          -17.3864434
+        ]
+      },
+      "properties": {
+        "id": 4689734107,
+        "name": "Ameridog",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "amenity": "veterinary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704186807,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546959,
+          -17.3972934
+        ]
+      },
+      "properties": {
+        "id": 4704186807,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4768572374,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530335,
+          -17.3904336
+        ]
+      },
+      "properties": {
+        "id": 4768572374,
+        "name": "Lebano",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787417906,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530806,
+          -17.3876139
+        ]
+      },
+      "properties": {
+        "id": 4787417906,
+        "name": "Farmacia La Salud",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Antezana",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787418214,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526789,
+          -17.3899879
+        ]
+      },
+      "properties": {
+        "id": 4787418214,
+        "name": "Nueva Era",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787418217,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506486,
+          -17.3897861
+        ]
+      },
+      "properties": {
+        "id": 4787418217,
+        "name": "AudioCien",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Colombia",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "audiology",
+        "operator": "AudioCien",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4789262942,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541052,
+          -17.3872051
+        ]
+      },
+      "properties": {
+        "id": 4789262942,
+        "name": "Farmadermia",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmadermia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4789262945,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540889,
+          -17.3860242
+        ]
+      },
+      "properties": {
+        "id": 4789262945,
+        "name": "Audioprot",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "674",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "doctors",
+        "branch": "Central",
+        "brand": "Audioprot",
+        "contact:whatsapp": "+591 78301202",
+        "description": "Centro audiológico especializado en diagnóstico y rehabilitación auditiva, provisto de equipos e insumos médicos de última tecnología.",
+        "email": "oir@audioprot.com;info@audioprot.net",
+        "healthcare": "audiologist",
+        "healthcare:speciality": "otolaryngology",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:30-12:30,14:30-18:30; Sa 09:00-12:30",
+        "operator": "Audioprot",
+        "operator:type": "private",
+        "payment:cash": "yes",
+        "phone": "+591 4 4250774;+591 78301202",
+        "website": "https://www.audioprot.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4800062392,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508336,
+          -17.3876008
+        ]
+      },
+      "properties": {
+        "id": 4800062392,
+        "name": "Ahorro Salud",
+        "type": "medical_supply",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "409",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia Romher",
+        "shop": "medical_supply"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4806920997,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520794,
+          -17.3868926
+        ]
+      },
+      "properties": {
+        "id": 4806920997,
+        "name": "BioFarma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "BioFarma"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4806920999,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506204,
+          -17.3915432
+        ]
+      },
+      "properties": {
+        "id": 4806920999,
+        "name": "Laboratorio ISTER",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Parque Coronel German Busch",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4858510534,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500921,
+          -17.3912908
+        ]
+      },
+      "properties": {
+        "id": 4858510534,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4868995984,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579569,
+          -17.3879019
+        ]
+      },
+      "properties": {
+        "id": 4868995984,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4874518447,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576088,
+          -17.3989814
+        ]
+      },
+      "properties": {
+        "id": 4874518447,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4941282084,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1501441,
+          -17.3906601
+        ]
+      },
+      "properties": {
+        "id": 4941282084,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224273,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155834,
+          -17.3963626
+        ]
+      },
+      "properties": {
+        "id": 4959224273,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959225991,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541815,
+          -17.3942276
+        ]
+      },
+      "properties": {
+        "id": 4959225991,
+        "name": "Farmacia AleFarma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida General José de San Martín",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4971438025,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507044,
+          -17.3883487
+        ]
+      },
+      "properties": {
+        "id": 4971438025,
+        "name": "Doctor Soliz",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "doctors",
+        "healthcare": "doctor",
+        "healthcare:speciality": "diagnostic_radiology"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4971438228,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507176,
+          -17.3882921
+        ]
+      },
+      "properties": {
+        "id": 4971438228,
+        "name": "Oculistas",
+        "type": "optometrist",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "healthcare": "optometrist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4971438473,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507247,
+          -17.3882445
+        ]
+      },
+      "properties": {
+        "id": 4971438473,
+        "name": "Farmacia OpenFarma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia OpenFarma"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981436340,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1502129,
+          -17.3908883
+        ]
+      },
+      "properties": {
+        "id": 4981436340,
+        "name": "AleFarma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5042316540,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619801,
+          -17.3929883
+        ]
+      },
+      "properties": {
+        "id": 5042316540,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102210120,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583148,
+          -17.3871746
+        ]
+      },
+      "properties": {
+        "id": 5102210120,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215842,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602103,
+          -17.3906584
+        ]
+      },
+      "properties": {
+        "id": 5102215842,
+        "name": "Servican",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "amenity": "veterinary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215843,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600766,
+          -17.3904644
+        ]
+      },
+      "properties": {
+        "id": 5102215843,
+        "name": "Pet Shop",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "amenity": "veterinary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216054,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1594827,
+          -17.3884857
+        ]
+      },
+      "properties": {
+        "id": 5102216054,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216067,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603044,
+          -17.3910501
+        ]
+      },
+      "properties": {
+        "id": 5102216067,
+        "name": "Tisú",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "amenity": "veterinary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216075,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575634,
+          -17.393866
+        ]
+      },
+      "properties": {
+        "id": 5102216075,
+        "name": "Farmacia Cosmos",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "248",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "pharmacy",
+        "branch": "Central",
+        "brand": "Farmacia Cosmos",
+        "contact:facebook": "https://facebook.com/farmaciacosmoscbba/",
+        "contact:whatsapp": "+591 77597511",
+        "delivery": "yes",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia Cosmos",
+        "operator:type": "private",
+        "payment:cash": "yes",
+        "phone": "+591 4 4257366;+591 77597511"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5111370159,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1632761,
+          -17.3916458
+        ]
+      },
+      "properties": {
+        "id": 5111370159,
+        "name": "Fenix",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996751,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1585579,
+          -17.3866792
+        ]
+      },
+      "properties": {
+        "id": 5117996751,
+        "name": "Paracelsus",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "general"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996863,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611486,
+          -17.3852979
+        ]
+      },
+      "properties": {
+        "id": 5117996863,
+        "name": "Fisio",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "general"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996881,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584068,
+          -17.3866716
+        ]
+      },
+      "properties": {
+        "id": 5117996881,
+        "name": "Clínica La Paz",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "general"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5118591321,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602421,
+          -17.3882311
+        ]
+      },
+      "properties": {
+        "id": 5118591321,
+        "name": "Dra. Forqueda",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:housenumber": "148",
+        "addr:street": "Calle México",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217956969,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15931,
+          -17.3910098
+        ]
+      },
+      "properties": {
+        "id": 5217956969,
+        "name": "Artesanal",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217961377,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563466,
+          -17.3936251
+        ]
+      },
+      "properties": {
+        "id": 5217961377,
+        "name": "Farmacia Azul",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacia Azul",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5235716260,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567685,
+          -17.3921139
+        ]
+      },
+      "properties": {
+        "id": 5235716260,
+        "name": "Farmacias Bolivia",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "299",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "pharmacy",
+        "brand": "Farmacias Bolivia",
+        "brand:wikidata": "Q81970584",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacias Bolivia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5296637073,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537796,
+          -17.3873064
+        ]
+      },
+      "properties": {
+        "id": 5296637073,
+        "name": "Clínica Dental Sagrado Corazón",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "652",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "level": "2",
+        "operator": "Clínica Dental Sagrado Corazón",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5296639691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515799,
+          -17.3856894
+        ]
+      },
+      "properties": {
+        "id": 5296639691,
+        "name": "RisaDent",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5296639727,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537913,
+          -17.3872648
+        ]
+      },
+      "properties": {
+        "id": 5296639727,
+        "name": "Laboratorio Vitality",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "652",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "healthcare": "laboratory",
+        "phone": "+591 77487885",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274472,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1606289,
+          -17.3905776
+        ]
+      },
+      "properties": {
+        "id": 5319274472,
+        "name": "nohe Dent",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319275330,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613417,
+          -17.3908488
+        ]
+      },
+      "properties": {
+        "id": 5319275330,
+        "name": "Laboratorio Central",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Hamiraya",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319275331,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1606938,
+          -17.3905818
+        ]
+      },
+      "properties": {
+        "id": 5319275331,
+        "name": "Guzman",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5328374801,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1509221,
+          -17.3887652
+        ]
+      },
+      "properties": {
+        "id": 5328374801,
+        "name": "Farmacia Itálica",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Ecuador",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacia Itálica"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5328374802,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508481,
+          -17.3887548
+        ]
+      },
+      "properties": {
+        "id": 5328374802,
+        "name": "Laboratorio San Martín",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Ecuador",
+        "healthcare": "laboratory",
+        "level": "0",
+        "operator": "Laboratorio San Martín"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5328374803,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529908,
+          -17.3891743
+        ]
+      },
+      "properties": {
+        "id": 5328374803,
+        "name": "UniMed",
+        "type": "yes",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5351187567,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563535,
+          -17.396327
+        ]
+      },
+      "properties": {
+        "id": 5351187567,
+        "name": "Farmacia Zenón Gamboa",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Batalla de Calama",
+        "amenity": "pharmacy",
+        "description": "Farmacia que brindar apoyo en la formación académica de las personas que estudian, informa el uso correcto de medicamentos a las personas interesadas, y presta servicio farmacéutico durante la dispensación de la receta.",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "loc_name": "Farmacia Universitaria",
+        "opening_hours": "Mo-Fr 08:30-19:00; Sa-Su,PH Off",
+        "operator": "Facultad de Ciencias Farmacéuticas y Bioquímicas",
+        "operator:type": "public",
+        "payment:cash": "yes",
+        "start_date": "1985-11;1987-06",
+        "website": "https://bio.umss.edu.bo/biofar/farmacia/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5391531885,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1516461,
+          -17.3954314
+        ]
+      },
+      "properties": {
+        "id": 5391531885,
+        "name": "Milagros",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "amenity": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5434451861,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1512133,
+          -17.3888331
+        ]
+      },
+      "properties": {
+        "id": 5434451861,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5434451862,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515547,
+          -17.3886821
+        ]
+      },
+      "properties": {
+        "id": 5434451862,
+        "name": "DosisFarma",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "pharmacy",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5472737126,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548812,
+          -17.3917295
+        ]
+      },
+      "properties": {
+        "id": 5472737126,
+        "name": "Laboratorio Clínico Nueva California",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "healthcare": "laboratory",
+        "operator": "Laboratorio Clínico Nueva California"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557400062,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593102,
+          -17.3925557
+        ]
+      },
+      "properties": {
+        "id": 5557400062,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "healthcare": "dentist"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557428248,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613127,
+          -17.388404
+        ]
+      },
+      "properties": {
+        "id": 5557428248,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle México",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5562628780,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619236,
+          -17.3972885
+        ]
+      },
+      "properties": {
+        "id": 5562628780,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Calama",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5563361221,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562939,
+          -17.3909276
+        ]
+      },
+      "properties": {
+        "id": 5563361221,
+        "name": "",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "amenity": "doctors"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5805424353,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15397,
+          -17.3871578
+        ]
+      },
+      "properties": {
+        "id": 5805424353,
+        "name": "Consultorio Dental SOLDENT Doctora Soledad",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Paccieri",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "phone": "+591 79950462"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7436412024,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1644782,
+          -17.398766
+        ]
+      },
+      "properties": {
+        "id": 7436412024,
+        "name": "Farmacorp",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Huayna Kapac",
+        "amenity": "pharmacy",
+        "branch": "Sucursal Huayna Kapac",
+        "brand": "Farmacorp",
+        "brand:wikidata": "Q81968937",
+        "contact:website": "https://www.farmacorp.com/",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "opening_hours": "24/7",
+        "operator": "Farmacorp"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7693322182,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1547914,
+          -17.3959363
+        ]
+      },
+      "properties": {
+        "id": 7693322182,
+        "name": "",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "node",
+        "amenity": "hospital",
+        "healthcare": "hospital"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7994059818,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575612,
+          -17.393068
+        ]
+      },
+      "properties": {
+        "id": 7994059818,
+        "name": "Farmacia Eliana's",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacia Eliana's"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8118007877,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532681,
+          -17.3903443
+        ]
+      },
+      "properties": {
+        "id": 8118007877,
+        "name": "Central Vet",
+        "type": "veterinary",
+        "category": "healthcare",
+        "subcategory": "veterinary",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0641",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle República de Colombia",
+        "amenity": "veterinary",
+        "contact:facebook": "https://www.facebook.com/centralvetmascotas/",
+        "contact:whatsapp": "+591 65368404",
+        "email": "vetcentralvet@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:30-18:30; Sa 08:30-15:30; Su,PH Off",
+        "payment:cash": "yes",
+        "phone": "+591 4 4230865",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8364314243,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1618348,
+          -17.388159
+        ]
+      },
+      "properties": {
+        "id": 8364314243,
+        "name": "Dra. Adela Gamboa P",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "N0550",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "doctors",
+        "healthcare": "doctor",
+        "healthcare:speciality": "dermatology",
+        "mobile": "+591-71701608",
+        "phone": "+591-4287858"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8450026523,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1618462,
+          -17.3881044
+        ]
+      },
+      "properties": {
+        "id": 8450026523,
+        "name": "Dr. Oswaldo Lopez Bascope",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "N0550",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "doctors",
+        "contact:phone": "+591-4525304",
+        "health_specialty:oncology": "yes",
+        "healthcare": "doctor",
+        "healthcare:speciality": "oncology",
+        "mobile": "+591-77494471",
+        "phone": "+591-4525040"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8927651299,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513216,
+          -17.390096
+        ]
+      },
+      "properties": {
+        "id": 8927651299,
+        "name": "Ecografia y Tomografia",
+        "type": "medical_imaging",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "medical_imaging"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752640,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530911,
+          -17.3929073
+        ]
+      },
+      "properties": {
+        "id": 8964752640,
+        "name": "Farmacia Más Salud",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Lanza",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9034180336,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500257,
+          -17.3879114
+        ]
+      },
+      "properties": {
+        "id": 9034180336,
+        "name": "Unidad de Hemodiálisis",
+        "type": "centre",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "healthcare": "centre",
+        "healthcare:speciality": "hemodialysis",
+        "operator": "Hospital Clínico Viedma",
+        "operator:type": "public"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9121687028,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1503411,
+          -17.3965955
+        ]
+      },
+      "properties": {
+        "id": 9121687028,
+        "name": "",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "clinic",
+        "healthcare": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9579333543,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549224,
+          -17.3951501
+        ]
+      },
+      "properties": {
+        "id": 9579333543,
+        "name": "Farmacias Salud Fácil",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacias Salud Fácil"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9775956222,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575019,
+          -17.392507
+        ]
+      },
+      "properties": {
+        "id": 9775956222,
+        "name": "Dentista Policía Boliviana",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "operator": "Policía Boliviana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9854308509,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523712,
+          -17.390502
+        ]
+      },
+      "properties": {
+        "id": 9854308509,
+        "name": "Odontovia",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "178",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Antezana",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "healthcare:speciality": "orthodontics",
+        "level": "1",
+        "operator": "Odontovia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9901073766,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578861,
+          -17.3941832
+        ]
+      },
+      "properties": {
+        "id": 9901073766,
+        "name": "Laboratorio FENIX",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "276",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "branch": "Central",
+        "contact:facebook": "https://www.facebook.com/Labo.Fenix",
+        "contact:phone": "+591 4 4225637;+591 63908093",
+        "contact:whatsapp": "+591 63908093",
+        "description": "El Laboratorio Clínico FENIX realiza análisis en hematología, química sanguínea, inmunología y hormona.",
+        "healthcare": "laboratory",
+        "healthcare:speciality": "clinical_laboratory",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:30-12:00,14:00-18:00; Sa 08:00-12:00",
+        "operator": "Laboratorio FENIX"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9934845658,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1505275,
+          -17.3954691
+        ]
+      },
+      "properties": {
+        "id": 9934845658,
+        "name": "",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9941529679,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520841,
+          -17.3990193
+        ]
+      },
+      "properties": {
+        "id": 9941529679,
+        "name": "Farmacorp",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Guerrilleros Lanza",
+        "amenity": "pharmacy",
+        "branch": "Sucursal Calatayud",
+        "brand": "Farmacorp",
+        "brand:wikidata": "Q81968937",
+        "check_date": "2024-11-15",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Farmacorp"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9960583672,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1509883,
+          -17.3853664
+        ]
+      },
+      "properties": {
+        "id": 9960583672,
+        "name": "Salud Médica Integral SAMI",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "doctors",
+        "healthcare": "doctor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9960600375,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508246,
+          -17.3862294
+        ]
+      },
+      "properties": {
+        "id": 9960600375,
+        "name": "Consultorio Odontológico Quique",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "healthcare:speciality": "endodontics;odontologics",
+        "opening_hours": "Mo-Su 09:00-21:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10770094649,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159026,
+          -17.3907235
+        ]
+      },
+      "properties": {
+        "id": 10770094649,
+        "name": "Fisio Perfect",
+        "type": "physiotherapist",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "268",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "beauty": "skin_care",
+        "contact:facebook": "https://www.facebook.com/FisioesteticaRehabilitacion/",
+        "description": "Fisioterapeuta que brinda servicios de rehabilitación y estética.",
+        "healthcare": "physiotherapist",
+        "healthcare:speciality": "physiatry;dermatology",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:00-20:00; Sa 08:00-13:00",
+        "operator": "Fisio Perfect",
+        "payment:cash": "yes",
+        "phone": "+591 75994422",
+        "reservation": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10826199485,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587106,
+          -17.3924331
+        ]
+      },
+      "properties": {
+        "id": 10826199485,
+        "name": "Farmacia Cochabamba",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacia Cochabamba",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10841430405,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515487,
+          -17.3855003
+        ]
+      },
+      "properties": {
+        "id": 10841430405,
+        "name": "FisioCare",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:door": "7-8",
+        "addr:housenumber": "609",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Juan Crisóstomo Carrillo",
+        "amenity": "doctors",
+        "contact:facebook": "https://www.facebook.com/people/FisioCare/100063762861413/",
+        "contact:whatsapp": "+591 70737023",
+        "email": "fisiocarecochabamba123@gmail.com",
+        "healthcare": "doctor",
+        "healthcare:speciality": "dermatology",
+        "level": "0",
+        "opening_hours": "Mo-Fr 11:00-19:00, Sa 09:00-14:00",
+        "operator": "FisioCare",
+        "phone": "+591 70737023",
+        "reservation": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10974844140,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587553,
+          -17.3882537
+        ]
+      },
+      "properties": {
+        "id": 10974844140,
+        "name": "Radiodonto",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "180",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mayor Rocha",
+        "healthcare": "laboratory",
+        "healthcare:speciality": "radiology",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:30-19:00; Sa 08:30-12:30",
+        "operator": "Radiodonto",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10975067660,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540329,
+          -17.3896917
+        ]
+      },
+      "properties": {
+        "id": 10975067660,
+        "name": "",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "healthcare": "laboratory",
+        "healthcare:speciality": "haematology",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538060,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527363,
+          -17.3967745
+        ]
+      },
+      "properties": {
+        "id": 11112538060,
+        "name": "Vida Dental",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:door": "5",
+        "addr:floor": "4",
+        "addr:housenumber": "0589",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Ladislao Cabrera",
+        "amenity": "dentist",
+        "contact:facebook": "https://www.facebook.com/VidaDentalConsultorioOdontologico/",
+        "contact:whatsapp": "+591 77921482",
+        "email": "fat.vus@hotmail.com",
+        "healthcare": "dentist",
+        "healthcare:speciality": "orthodontics",
+        "level": "3",
+        "opening_hours": "Mo-Fr 09:00-12:30,15:00-19:30; Sa 09:00-13:00",
+        "operator": "Vida Dental",
+        "phone": "+591 4 4064925;+591 77921482",
+        "reservation": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538061,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527691,
+          -17.3967254
+        ]
+      },
+      "properties": {
+        "id": 11112538061,
+        "name": "Laboratorio Clínico PresLab",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0589",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Ladislao Cabrera",
+        "contact:facebook": "https://www.facebook.com/gimnasioalyhens/",
+        "healthcare": "laboratory",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538065,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528658,
+          -17.3968168
+        ]
+      },
+      "properties": {
+        "id": 11112538065,
+        "name": "Clínica Dental",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "567",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Ladislao Cabrera",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "level": "0",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538087,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153424,
+          -17.3968502
+        ]
+      },
+      "properties": {
+        "id": 11112538087,
+        "name": "",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:door": "1",
+        "addr:floor": "2",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Avenida General José de San Martín",
+        "amenity": "dentist",
+        "healthcare": "dentist",
+        "level": "1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11220487189,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587106,
+          -17.3943179
+        ]
+      },
+      "properties": {
+        "id": 11220487189,
+        "name": "Clínica Odontológica Univalle",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "amenity": "clinic",
+        "healthcare": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11406748211,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587176,
+          -17.3877259
+        ]
+      },
+      "properties": {
+        "id": 11406748211,
+        "name": "Farmacia San Vicente",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "541",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "pharmacy",
+        "dispensing": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "operator": "Hospital San Vicente de Paul"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11593103663,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542304,
+          -17.3871829
+        ]
+      },
+      "properties": {
+        "id": 11593103663,
+        "name": "Centro Médico Anghela",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "617",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "amenity": "clinic",
+        "contact:facebook": "https://www.facebook.com/CentroMedicoAnghela/",
+        "email": "centromedicoangela@gmail.com",
+        "healthcare": "clinic",
+        "healthcare:speciality": "general;gynaecology;orthodontics;radiology;nursery;clinical_pathology",
+        "opening_hours": "Mo-Fr 08:00-19:00; Sa 08:00-13:00",
+        "operator": "Centro Médico Anghela",
+        "operator:type": "private",
+        "phone": "+591 4 4250705"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11820460369,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1502934,
+          -17.3902936
+        ]
+      },
+      "properties": {
+        "id": 11820460369,
+        "name": "Laboratorio Magnus",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "healthcare": "laboratory",
+        "healthcare:speciality": "clinical_pathology",
+        "operator": "Laboratorio Magnus"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11820460469,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1502914,
+          -17.3903284
+        ]
+      },
+      "properties": {
+        "id": 11820460469,
+        "name": "Audimed",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "otolaryngology",
+        "operator": "Audimed",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12547932862,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500696,
+          -17.3913725
+        ]
+      },
+      "properties": {
+        "id": 12547932862,
+        "name": "Farmacia Justo Fé",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "pharmacy",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "operator": "Farmacia Justo Fé",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12729653909,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588385,
+          -17.3934566
+        ]
+      },
+      "properties": {
+        "id": 12729653909,
+        "name": "PSICOLOGA JHOSELIN VALLEJOS",
+        "type": "psychotherapist",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "edificio mariantonieta",
+        "addr:street": "Avenida Ayacucho",
+        "healthcare": "psychotherapist",
+        "healthcare:speciality": "depth;psicologia_clinica",
+        "operator": "LIC. JHOSELIN VALLEJOS",
+        "phone": "61627057"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798699430,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1509979,
+          -17.3868337
+        ]
+      },
+      "properties": {
+        "id": 12798699430,
+        "name": "Jolident",
+        "type": "dentist",
+        "category": "healthcare",
+        "subcategory": "dentist",
+        "osmType": "node",
+        "amenity": "dentist",
+        "level": "1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798737773,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507723,
+          -17.3883191
+        ]
+      },
+      "properties": {
+        "id": 12798737773,
+        "name": "Quimi Lab",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798740379,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1502908,
+          -17.3902903
+        ]
+      },
+      "properties": {
+        "id": 12798740379,
+        "name": "Magnus",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "healthcare": "laboratory"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13027142083,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154381,
+          -17.385837
+        ]
+      },
+      "properties": {
+        "id": 13027142083,
+        "name": "Laboratorio Bio Search",
+        "type": "laboratory",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "675",
+        "addr:street": "Avenida Daniel Salamanca",
+        "healthcare": "laboratory",
+        "level": "4",
+        "operator": "Bio Search",
+        "phone": "+591 4 4551680"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13381275061,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1553416,
+          -17.3937298
+        ]
+      },
+      "properties": {
+        "id": 13381275061,
+        "name": "Farmacias Hipermaxi",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Edificio Franzur",
+        "addr:housenumber": "264",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "pharmacy",
+        "branch": "Sucursal 25 de Mayo",
+        "brand": "Farmacias Hipermaxi",
+        "brand:wikidata": "Q81970238",
+        "contact:facebook": "https://www.facebook.com/farmaciashipermaxi/",
+        "delivery": "yes",
+        "drive_through": "no",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "opening_hours": "Mo-Su,PH 07:00-22:30",
+        "operator": "Hipermaxi",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "payment:qr_code": "yes",
+        "ref": "52",
+        "website": "https://www.hipermaxi.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506137600,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.161277,
+              -17.3971674
+            ],
+            [
+              -66.1611987,
+              -17.3971556
+            ],
+            [
+              -66.1612319,
+              -17.3969552
+            ],
+            [
+              -66.1612521,
+              -17.3969583
+            ],
+            [
+              -66.1613102,
+              -17.3969671
+            ],
+            [
+              -66.1613052,
+              -17.3969972
+            ],
+            [
+              -66.161277,
+              -17.3971674
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506137600,
+        "name": "Clínica Saavedra",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "amenity": "clinic",
+        "building": "yes",
+        "building:levels": "8",
+        "healthcare": "clinic"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 509712976,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1503993,
+              -17.388196
+            ],
+            [
+              -66.1502634,
+              -17.3881359
+            ],
+            [
+              -66.1502447,
+              -17.3881434
+            ],
+            [
+              -66.1501352,
+              -17.3883663
+            ],
+            [
+              -66.150217,
+              -17.388404
+            ],
+            [
+              -66.1502331,
+              -17.3883725
+            ],
+            [
+              -66.1503576,
+              -17.3884318
+            ],
+            [
+              -66.1503952,
+              -17.3882751
+            ],
+            [
+              -66.1503809,
+              -17.3882669
+            ],
+            [
+              -66.1503935,
+              -17.3882184
+            ],
+            [
+              -66.1503993,
+              -17.388196
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 509712976,
+        "name": "Hospital del Niño Manuel Ascencio Villarroel",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "alt_name": "Oncología Pediátrica",
+        "amenity": "hospital",
+        "building": "hospital",
+        "building:levels": "4",
+        "emergency": "yes",
+        "healthcare": "hospital",
+        "healthcare:speciality": "oncology;paediatrics",
+        "start_date": "1914",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 686522943,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1537457,
+              -17.3874741
+            ],
+            [
+              -66.1536794,
+              -17.3877336
+            ],
+            [
+              -66.1536474,
+              -17.3877237
+            ],
+            [
+              -66.1535957,
+              -17.3879512
+            ],
+            [
+              -66.1534009,
+              -17.3879166
+            ],
+            [
+              -66.1534179,
+              -17.3878418
+            ],
+            [
+              -66.153451,
+              -17.3876968
+            ],
+            [
+              -66.1531944,
+              -17.3876213
+            ],
+            [
+              -66.1532011,
+              -17.3875963
+            ],
+            [
+              -66.1532627,
+              -17.3873644
+            ],
+            [
+              -66.1532705,
+              -17.3873348
+            ],
+            [
+              -66.1534344,
+              -17.387377
+            ],
+            [
+              -66.1534291,
+              -17.387391
+            ],
+            [
+              -66.153465,
+              -17.3874004
+            ],
+            [
+              -66.1534854,
+              -17.3874058
+            ],
+            [
+              -66.1536327,
+              -17.3874445
+            ],
+            [
+              -66.1536597,
+              -17.3874515
+            ],
+            [
+              -66.1536867,
+              -17.3874586
+            ],
+            [
+              -66.1537457,
+              -17.3874741
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 686522943,
+        "name": "Hospital Belga CMQBB",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Antezana",
+        "amenity": "hospital",
+        "barrier": "wall",
+        "email": "administracion@cmqbb.com",
+        "emergency": "yes",
+        "healthcare": "hospital",
+        "healthcare:speciality": "general",
+        "operator": "Hospital Belga CMQBB",
+        "operator:type": "private",
+        "website": "https://www.cmqbb.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 821656784,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1593683,
+              -17.3876755
+            ],
+            [
+              -66.1593642,
+              -17.3876971
+            ],
+            [
+              -66.1593238,
+              -17.3879083
+            ],
+            [
+              -66.1593202,
+              -17.3879271
+            ],
+            [
+              -66.1591821,
+              -17.3879151
+            ],
+            [
+              -66.1591821,
+              -17.387957
+            ],
+            [
+              -66.1590127,
+              -17.387943
+            ],
+            [
+              -66.1590252,
+              -17.3878312
+            ],
+            [
+              -66.158874,
+              -17.3878144
+            ],
+            [
+              -66.1586675,
+              -17.3877913
+            ],
+            [
+              -66.1586729,
+              -17.3877656
+            ],
+            [
+              -66.1586926,
+              -17.3876556
+            ],
+            [
+              -66.158775,
+              -17.3876744
+            ],
+            [
+              -66.1588375,
+              -17.3876886
+            ],
+            [
+              -66.158929,
+              -17.3877095
+            ],
+            [
+              -66.1589415,
+              -17.3876536
+            ],
+            [
+              -66.1591101,
+              -17.387673
+            ],
+            [
+              -66.1591205,
+              -17.3876277
+            ],
+            [
+              -66.1591445,
+              -17.3876334
+            ],
+            [
+              -66.1592371,
+              -17.3876508
+            ],
+            [
+              -66.1593142,
+              -17.3876653
+            ],
+            [
+              -66.1593683,
+              -17.3876755
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 821656784,
+        "name": "Hospital San Vicente",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "541",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "hospital",
+        "barrier": "wall",
+        "emergency": "yes",
+        "healthcare": "hospital",
+        "healthcare:speciality": "general;oncology;gynaecology;cardiology;dermatology;paediatrics;surgery;radiology;clinical_pathology;trauma;otolaryngology;intensive;neonatology",
+        "opening_hours": "Mo-Su 08:00-18:30",
+        "operator": "Hospital San Vicente de Paul",
+        "operator:type": "private",
+        "phone": "+591 4 4254321;591 4 4254352"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 859960736,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1623684,
+              -17.3989972
+            ],
+            [
+              -66.1623182,
+              -17.3994495
+            ],
+            [
+              -66.1619869,
+              -17.3993583
+            ],
+            [
+              -66.1619953,
+              -17.3993325
+            ],
+            [
+              -66.1620306,
+              -17.3992228
+            ],
+            [
+              -66.1620925,
+              -17.3990301
+            ],
+            [
+              -66.1621138,
+              -17.398964
+            ],
+            [
+              -66.1621827,
+              -17.3989744
+            ],
+            [
+              -66.1623684,
+              -17.3989972
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 859960736,
+        "name": "Centro Integral de Medicina Familiar Sur",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Pasaje Tarapacá",
+        "alt_name": "Policlínico del Sur",
+        "amenity": "clinic",
+        "barrier": "wall",
+        "branch": "CIMFA Sur",
+        "brand": "Caja Nacional de Salud",
+        "emergency": "yes",
+        "healthcare": "clinic",
+        "healthcare:speciality": "general",
+        "operator": "Caja Nacional de Salud",
+        "operator:type": "public",
+        "phone": "+591 4 4287320",
+        "short_name": "CIMFA Sur",
+        "start_date": "2012-12-20",
+        "website": "http://www.cnscbba.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 868987814,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1577382,
+              -17.3981993
+            ],
+            [
+              -66.1574003,
+              -17.3981786
+            ],
+            [
+              -66.1573867,
+              -17.3982958
+            ],
+            [
+              -66.1573752,
+              -17.398357
+            ],
+            [
+              -66.1573719,
+              -17.3983746
+            ],
+            [
+              -66.1574717,
+              -17.3983874
+            ],
+            [
+              -66.1577009,
+              -17.3984167
+            ],
+            [
+              -66.1577124,
+              -17.3983536
+            ],
+            [
+              -66.1577196,
+              -17.398314
+            ],
+            [
+              -66.1577255,
+              -17.3982775
+            ],
+            [
+              -66.1577338,
+              -17.3982264
+            ],
+            [
+              -66.1577382,
+              -17.3981993
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 868987814,
+        "name": "Policonsultorio Anexo 32",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "clinic",
+        "barrier": "wall",
+        "branch": "CIMFA Anexo 32",
+        "brand": "Caja Nacional de Salud",
+        "healthcare": "centre",
+        "healthcare:speciality": "general",
+        "operator": "Caja Nacional de Salud",
+        "operator:type": "public",
+        "website": "http://www.cnscbba.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 900528179,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1568301,
+              -17.3882717
+            ],
+            [
+              -66.156825,
+              -17.3883089
+            ],
+            [
+              -66.1568732,
+              -17.388315
+            ],
+            [
+              -66.1568701,
+              -17.3883421
+            ],
+            [
+              -66.1568475,
+              -17.3884787
+            ],
+            [
+              -66.1568244,
+              -17.3884752
+            ],
+            [
+              -66.1564697,
+              -17.3884255
+            ],
+            [
+              -66.1563392,
+              -17.3884071
+            ],
+            [
+              -66.1562868,
+              -17.3883997
+            ],
+            [
+              -66.1563011,
+              -17.3883075
+            ],
+            [
+              -66.156317,
+              -17.3881985
+            ],
+            [
+              -66.1568301,
+              -17.3882717
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 900528179,
+        "name": "Caja de Salud de la Banca Privada",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "451",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Plaza Colón",
+        "amenity": "hospital",
+        "barrier": "wall",
+        "email": "cochabamba@csbp.com.bo",
+        "emergency": "yes",
+        "healthcare": "hospital",
+        "healthcare:speciality": "general",
+        "phone": "+591 4 4681546",
+        "website": "http://www.csbp.com.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482144,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584273,
+              -17.3940717
+            ],
+            [
+              -66.1582759,
+              -17.3940434
+            ],
+            [
+              -66.1581037,
+              -17.3940108
+            ],
+            [
+              -66.1580246,
+              -17.393996
+            ],
+            [
+              -66.1580447,
+              -17.3938916
+            ],
+            [
+              -66.1581752,
+              -17.393916
+            ],
+            [
+              -66.1581813,
+              -17.3938866
+            ],
+            [
+              -66.1582024,
+              -17.3938905
+            ],
+            [
+              -66.1582053,
+              -17.3938765
+            ],
+            [
+              -66.1582847,
+              -17.3938913
+            ],
+            [
+              -66.1582989,
+              -17.3938221
+            ],
+            [
+              -66.1583465,
+              -17.3938314
+            ],
+            [
+              -66.1584715,
+              -17.3938542
+            ],
+            [
+              -66.158468,
+              -17.3938723
+            ],
+            [
+              -66.1584491,
+              -17.3939645
+            ],
+            [
+              -66.1584273,
+              -17.3940717
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482144,
+        "name": "Centro Integral de Medicina Familiar Manuel Ascencio Villarroel",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "clinic",
+        "barrier": "wall",
+        "branch": "CIMFA Manuel Ascencio Villarroel",
+        "brand": "Caja Nacional de Salud",
+        "emergency": "yes",
+        "healthcare": "centre",
+        "healthcare:speciality": "general",
+        "loc_name": "CIMFA Manuel Ascencio Villarroel",
+        "old_name": "Ex Policlínico N° 32",
+        "opening_hours": "Mo-Su 08:00-20:00",
+        "operator": "Caja Nacional de Salud",
+        "operator:short": "CNS",
+        "operator:type": "public",
+        "phone": "+591 4 4251143",
+        "short_name": "CIMFA MAV",
+        "website": "http://www.cnscbba.gob.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 968965408,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1540788,
+              -17.3928336
+            ],
+            [
+              -66.1542359,
+              -17.3928618
+            ],
+            [
+              -66.1542435,
+              -17.3928724
+            ],
+            [
+              -66.1542531,
+              -17.3928857
+            ],
+            [
+              -66.1542125,
+              -17.3930867
+            ],
+            [
+              -66.1541247,
+              -17.3930715
+            ],
+            [
+              -66.1541185,
+              -17.3931067
+            ],
+            [
+              -66.153998,
+              -17.393085
+            ],
+            [
+              -66.1539749,
+              -17.3930809
+            ],
+            [
+              -66.1540132,
+              -17.3928755
+            ],
+            [
+              -66.1540374,
+              -17.3928797
+            ],
+            [
+              -66.1540472,
+              -17.3928274
+            ],
+            [
+              -66.1540788,
+              -17.3928336
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 968965408,
+        "name": "Policonsultorio Caja Petrolera de Salud",
+        "type": "doctors",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida General José de San Martín",
+        "amenity": "doctors",
+        "barrier": "wall",
+        "healthcare": "doctor",
+        "healthcare:speciality": "general;internal_medicine;trauma;paediatrics;surgery;gynaecology;orthodontics;laboratory",
+        "operator": "Caja Petrolera de Salud",
+        "operator:short": "CPS",
+        "operator:type": "public",
+        "website": "https://www.cps.org.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 981207623,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1561112,
+              -17.3863197
+            ],
+            [
+              -66.1560776,
+              -17.3862981
+            ],
+            [
+              -66.1559665,
+              -17.3862267
+            ],
+            [
+              -66.1558841,
+              -17.3863433
+            ],
+            [
+              -66.1559837,
+              -17.3864073
+            ],
+            [
+              -66.1559942,
+              -17.3864141
+            ],
+            [
+              -66.1560288,
+              -17.3864364
+            ],
+            [
+              -66.1561112,
+              -17.3863197
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 981207623,
+        "name": "Clínica de Ojos",
+        "type": "clinic",
+        "category": "healthcare",
+        "subcategory": "clinic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "464",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Chuquisaca",
+        "amenity": "clinic",
+        "healthcare": "clinic",
+        "healthcare:speciality": "ophthalmology",
+        "operator": "Clínica de Ojos",
+        "operator:type": "private"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 988992134,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1599709,
+              -17.3848486
+            ],
+            [
+              -66.1597474,
+              -17.3848079
+            ],
+            [
+              -66.1595846,
+              -17.3849589
+            ],
+            [
+              -66.1598529,
+              -17.3850078
+            ],
+            [
+              -66.159936,
+              -17.3850229
+            ],
+            [
+              -66.1599709,
+              -17.3848486
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 988992134,
+        "name": "Centro de Diagnóstico por Imagen Doctor Alberto Darrás R.",
+        "type": "centre",
+        "category": "healthcare",
+        "subcategory": "other",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "761",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Baptista",
+        "barrier": "yes",
+        "contact:facebook": "https://www.facebook.com/CentroDiagnosticoDarras/",
+        "email": "info@darras.com.bo",
+        "emergency": "yes",
+        "healthcare": "centre",
+        "healthcare:speciality": "diagnostic_radiology;medical_imaging;radiology",
+        "opening_hours": "Mo-Fr 08:00-19:00; Sa 08:30-12:00",
+        "operator": "Centro de Diagnóstico por Imagen Doctor Alberto Darrás R.",
+        "operator:type": "private",
+        "phone": "800132020;+591 4 4521212",
+        "start_date": "1967",
+        "website": "https://www.centrodarras.com/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1086588474,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1608389,
+              -17.3957522
+            ],
+            [
+              -66.1608827,
+              -17.3955535
+            ],
+            [
+              -66.1607758,
+              -17.3955332
+            ],
+            [
+              -66.1607065,
+              -17.39552
+            ],
+            [
+              -66.1605785,
+              -17.3954957
+            ],
+            [
+              -66.1605576,
+              -17.395596
+            ],
+            [
+              -66.1605393,
+              -17.395692
+            ],
+            [
+              -66.1608389,
+              -17.3957522
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1086588474,
+        "name": "Caja de Salud de la Banca Privada",
+        "type": "hospital",
+        "category": "healthcare",
+        "subcategory": "hospital",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "356",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "hospital",
+        "emergency": "yes",
+        "opening_hours": "Mo-Fr 8:00-20:00; Sa 8:00-12:00",
+        "phone": "+591 4 4582224;+591 4 4582261;+591 4 4582230;+591 4 4582234;+591 4 4582699",
+        "start_date": "1926-12-7",
+        "website": "www.csbp.com.bo"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1336508536,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.157766,
+              -17.3860819
+            ],
+            [
+              -66.1578094,
+              -17.3858684
+            ],
+            [
+              -66.1576443,
+              -17.3857452
+            ],
+            [
+              -66.1576107,
+              -17.3857202
+            ],
+            [
+              -66.1575289,
+              -17.3858254
+            ],
+            [
+              -66.1575599,
+              -17.3858589
+            ],
+            [
+              -66.1577128,
+              -17.3860243
+            ],
+            [
+              -66.157766,
+              -17.3860819
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1336508536,
+        "name": "Farmacorp",
+        "type": "pharmacy",
+        "category": "healthcare",
+        "subcategory": "pharmacy",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "pharmacy",
+        "branch": "Sucursal El Prado",
+        "brand": "Farmacorp",
+        "brand:wikidata": "Q81968937",
+        "contact:facebook": "https://www.facebook.com/Farmacorp/",
+        "drive_through": "yes",
+        "healthcare": "pharmacy",
+        "level": "0",
+        "opening_hours": "24/7",
+        "operator": "Farmacorp",
+        "operator:type": "private",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "phone": "+591 4 44524228;+591 4 4524244",
+        "website": "https://www.farmacorp.com/",
+        "wheelchair": "limited"
+      }
+    }
+  ]
+}

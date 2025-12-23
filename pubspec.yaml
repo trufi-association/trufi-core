@@ -29,6 +29,9 @@ workspace:
   # Navigation Package
   - packages/trufi_core_navigation
 
+  # POI Layers
+  - packages/trufi_core_poi_layers
+
 dev_dependencies:
   melos: ^7.3.0
   flutter_lints: ^6.0.0

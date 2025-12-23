@@ -1,3 +1,5 @@
+import 'package:trufi_core_maps/trufi_core_maps.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_search_locations/trufi_core_search_locations.dart';
 
 /// Configuration for the Home Screen module.
@@ -25,6 +27,37 @@ class HomeScreenConfig {
   /// When set, shared routes will include a deep link URL.
   final String? deepLinkScheme;
 
+  /// Optional custom map layers to display on the home screen map.
+  ///
+  /// Use this to add POI layers or other custom map layers.
+  /// Each layer will be automatically added to the map controller.
+  ///
+  /// Example:
+  /// ```dart
+  /// customMapLayers: [
+  ///   POITrufiLayerAdapter(poiLayersCubit),
+  /// ]
+  /// ```
+  final List<TrufiLayer> Function(TrufiMapController controller)? customMapLayers;
+
+  /// Optional POI layers manager for displaying points of interest on the map.
+  ///
+  /// When provided, the HomeScreen will:
+  /// 1. Initialize the layers when the map is ready
+  /// 2. Register the provider in the widget tree for child widgets to access
+  /// 3. Show POI settings in the map type button automatically
+  ///
+  /// Example:
+  /// ```dart
+  /// poiLayersManager: POILayersManager(
+  ///   assetsBasePath: 'assets/pois',
+  ///   defaultEnabledSubcategories: {
+  ///     POICategory.tourism: {'museum', 'attraction'},
+  ///   },
+  /// ),
+  /// ```
+  final POILayersManager? poiLayersManager;
+
   const HomeScreenConfig({
     required this.otpEndpoint,
     this.chooseLocationZoom = 16.0,
@@ -33,5 +66,7 @@ class HomeScreenConfig {
     this.myPlaces = const [],
     this.appName,
     this.deepLinkScheme,
+    this.customMapLayers,
+    this.poiLayersManager,
   });
 }

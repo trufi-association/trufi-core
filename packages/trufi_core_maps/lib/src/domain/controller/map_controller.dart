@@ -36,6 +36,12 @@ class TrufiMapController {
         sameVisibleRegion) {
       return false;
     }
+
+    // Debug zoom changes
+    if (prev.zoom != position.zoom) {
+      debugPrint('🔍 Zoom changed: ${prev.zoom.toStringAsFixed(2)} → ${position.zoom.toStringAsFixed(2)}');
+    }
+
     cameraPositionNotifier.value = position;
 
     return true;

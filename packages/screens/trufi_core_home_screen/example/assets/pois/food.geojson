@@ -1,0 +1,6031 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 1684044790,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156328,
+          -17.3874709
+        ]
+      },
+      "properties": {
+        "id": 1684044790,
+        "name": "Heladería Dumbo",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0517",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "ice_cream",
+        "branch": "Sucursal Plaza Colón",
+        "brand": "Dumbo",
+        "contact:facebook": "https://www.facebook.com/DUMBOCOCHABAMBA",
+        "contact:whatsapp": "+591 70712498",
+        "cuisine": "ice_cream;pastry;cake;pie;dessert;empanada;meat;sausage;fish;chicken;wings;burger;sandwich;salad;tea;coffe_shop;juice;breakfast",
+        "delivery": "yes",
+        "kids_area": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Fr,Su 06:30-23:00; Sa 06:30-23:15",
+        "outdoor_seating": "yes",
+        "phone": "+591 70712498;+ 591 4 4234223",
+        "start_date": "1985",
+        "takeaway": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2294518672,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562668,
+          -17.3887461
+        ]
+      },
+      "properties": {
+        "id": 2294518672,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza Colón",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2295541475,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156436,
+          -17.3931296
+        ]
+      },
+      "properties": {
+        "id": 2295541475,
+        "name": "Cafe Italiano",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Bolívar",
+        "amenity": "cafe",
+        "cuisine": "coffee_shop",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2342422958,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583676,
+          -17.3887885
+        ]
+      },
+      "properties": {
+        "id": 2342422958,
+        "name": "Palacio del Silpancho",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "phone": "+591 44222732"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2379644966,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1559814,
+          -17.3922445
+        ]
+      },
+      "properties": {
+        "id": 2379644966,
+        "name": "Heladería Dumbo",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "354",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "ice_cream",
+        "branch": "Sucursal Heroínas",
+        "brand": "Heladería Dumbo",
+        "contact:facebook": "https://www.facebook.com/DUMBOCOCHABAMBA/",
+        "contact:whatsapp": "+591 70712496",
+        "cuisine": "ice_cream;pastry;cake;pie;dessert;empanada;meat;sausage;fish;chicken;wings;burger;sandwich;salad;tea;coffe_shop;juice",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Fr,Su 06:30-23:00;Sa 06:30-23:15",
+        "outdoor_seating": "no",
+        "phone": "+591 70712496;+591 4 4501300;+591 4 4501320;+591 4 4501321",
+        "start_date": "1985",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944405,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570371,
+          -17.3924262
+        ]
+      },
+      "properties": {
+        "id": 2398944405,
+        "name": "Tulasi",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "270",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "restaurant",
+        "branch": "Sucursal Heroínas",
+        "brand": "Tulasi",
+        "contact:facebook": "https://www.facebook.com/restaurantulasivegetariano/",
+        "contact:whatsapp": "+591 69534524;+591 77988140",
+        "cuisine": "bolivian;soup;salad;pasta;sandwich;burger;ice_cream;juice;tacos;sausage",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Ofrece almuerzos, platos a la carta, masitas integrales, helados veganos y postres.",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "email": "tulasirestaurantvegetariano@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 09:00-21:00; Su,PH Off",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 69534524;+591 77988140",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944555,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562712,
+          -17.3946521
+        ]
+      },
+      "properties": {
+        "id": 2398944555,
+        "name": "Espresso Café",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "340",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "cafe",
+        "contact:phone": "+591 4 4256861",
+        "cuisine": "coffee_shop;dessert;sandwich",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "no",
+        "opening_hours": "Mo-Su 09:00-18:00",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541020,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573641,
+          -17.3889567
+        ]
+      },
+      "properties": {
+        "id": 2408541020,
+        "name": "Restaurante La Cantonata",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "409",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle España",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/pages/LA-CANTONATA/234465099919993",
+        "contact:whatsapp": "+591 70798471",
+        "cuisine": "italian;pasta;seafood;pizza;coffee_shop;tea;meat",
+        "opening_hours": "Mo-Su 12:00-14:30,18:30-23:00",
+        "payment:american_express": "yes",
+        "payment:cash": "yes",
+        "payment:mastercard": "yes",
+        "payment:visa": "yes",
+        "phone": "+591 4 4259222;+591 70798471",
+        "reservation": "yes",
+        "start_date": "1986",
+        "takeaway": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541194,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558362,
+          -17.3903345
+        ]
+      },
+      "properties": {
+        "id": 2408541194,
+        "name": "Restaurante Las Rieles",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2410715835,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1649939,
+          -17.3871552
+        ]
+      },
+      "properties": {
+        "id": 2410715835,
+        "name": "Charques",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Rivereña",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2522883406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578054,
+          -17.3906621
+        ]
+      },
+      "properties": {
+        "id": 2522883406,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Plazuela Monseñor del Granado",
+        "amenity": "restaurant",
+        "cuisine": "argentinian;empanada;sandwich",
+        "fixme": "name"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2549348270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1615323,
+          -17.3978069
+        ]
+      },
+      "properties": {
+        "id": 2549348270,
+        "name": "Doña Fely",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Tumusla",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2571686028,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159834,
+          -17.3937127
+        ]
+      },
+      "properties": {
+        "id": 2571686028,
+        "name": "El Corso",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2597780057,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1639986,
+          -17.3890982
+        ]
+      },
+      "properties": {
+        "id": 2597780057,
+        "name": "Doña María",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Avenida Rafael Urquidi",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2597780059,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577303,
+          -17.3861333
+        ]
+      },
+      "properties": {
+        "id": 2597780059,
+        "name": "Sucremanta",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle España",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2611695086,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1636451,
+          -17.3981845
+        ]
+      },
+      "properties": {
+        "id": 2611695086,
+        "name": "Melgarejo",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:floor": "-1",
+        "addr:street": "Avenida 27 de Agosto",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2621717362,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155418,
+          -17.3994731
+        ]
+      },
+      "properties": {
+        "id": 2621717362,
+        "name": "Panchita",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Avenida Aroma",
+        "amenity": "fast_food",
+        "cuisine": "chicken",
+        "diet:meat": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2630687680,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511896,
+          -17.3955744
+        ]
+      },
+      "properties": {
+        "id": 2630687680,
+        "name": "Rellenos Calama",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:floor": "1",
+        "addr:housenumber": "724",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Calama",
+        "amenity": "fast_food",
+        "branch": "Casa Matriz",
+        "contact:phone": "+591 4 4224890",
+        "cuisine": "bolivian;empanada",
+        "drive_through": "no",
+        "level": "0",
+        "operator": "Rellenos Calama",
+        "start_date": "1970"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418170,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545557,
+          -17.3911613
+        ]
+      },
+      "properties": {
+        "id": 2631418170,
+        "name": "Chicken's Kingdom",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "160",
+        "addr:street": "Calle San Martín",
+        "amenity": "fast_food",
+        "branch": "Sucursal N° 3",
+        "brand": "Chicken's Kingdom",
+        "cuisine": "fried_chicken",
+        "delivery": "yes",
+        "drive_through": "no",
+        "operator": "Chicken's Kingdom"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418278,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542863,
+          -17.3937958
+        ]
+      },
+      "properties": {
+        "id": 2631418278,
+        "name": "",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "amenity": "ice_cream",
+        "fixme": "name"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2635402865,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560545,
+          -17.3924073
+        ]
+      },
+      "properties": {
+        "id": 2635402865,
+        "name": "Donal",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Fidelia Corral de Sánchez",
+        "air_conditioning": "no",
+        "amenity": "restaurant",
+        "branch": "Sucursal Heroínas",
+        "brand": "Donal",
+        "contact:facebook": "https://www.facebook.com/Donal.FamilyCenter/",
+        "contact:whatsapp": "+591 77417040",
+        "cuisine": "ice_cream;bolivian;sandwich;cake;tea;coffee_shop;salad;soup;dessert;burger;pizza",
+        "delivery": "no",
+        "email": "heladeria@grupodonal.com",
+        "level": "0",
+        "opening_hours": "Mo,We,Sa 07:30-00:00; Tu 07:00-23:45; Th,Fr,Su 07:30-22:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 77417040",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2694666723,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569762,
+          -17.389027
+        ]
+      },
+      "properties": {
+        "id": 2694666723,
+        "name": "Avantasia",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "cuisine": "bolivian",
+        "music": "live",
+        "note": "Espacio dedicado durante el día a la atención de comensales, y durante los fines de semana por la noche a realizar presentaciones de grupos en vivo, en géneros como rock alternativo, rock clásico, heavy metal, rock pop y demás.",
+        "opening_hours": "Mo-Sa 11:00-02:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2853595482,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562647,
+          -17.3886865
+        ]
+      },
+      "properties": {
+        "id": 2853595482,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza Colón",
+        "amenity": "fast_food",
+        "cuisine": "burger"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3042744954,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157442,
+          -17.38598
+        ]
+      },
+      "properties": {
+        "id": 3042744954,
+        "name": "Bhakti",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "661",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/Bhaktithetasteofindia",
+        "contact:phone": "+591 4 4661007",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "only",
+        "opening_hours": "Mo-Su 09:30-22:00",
+        "start_date": "2013-11-20"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3042780971,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566094,
+          -17.3888076
+        ]
+      },
+      "properties": {
+        "id": 3042780971,
+        "name": "Ganesha",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "375",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "restaurant",
+        "contact:phone": "+591 4 4522534",
+        "cuisine": "bolivian",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "only"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3163912071,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150357,
+          -17.3922115
+        ]
+      },
+      "properties": {
+        "id": 3163912071,
+        "name": "Restaurante Los Angeles",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Bolivar",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3552730994,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612375,
+          -17.3994178
+        ]
+      },
+      "properties": {
+        "id": 3552730994,
+        "name": "Mister",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Tumusla",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3676662707,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1559641,
+          -17.3869673
+        ]
+      },
+      "properties": {
+        "id": 3676662707,
+        "name": "Sucremanta",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "outdoor_seating": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3682698839,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544631,
+          -17.3925262
+        ]
+      },
+      "properties": {
+        "id": 3682698839,
+        "name": "El Palacio del Api",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle San Martin",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;empanada"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3682698844,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534932,
+          -17.3966702
+        ]
+      },
+      "properties": {
+        "id": 3682698844,
+        "name": "Koko Pollo",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Avenida General José de San Martín",
+        "amenity": "fast_food",
+        "cuisine": "chicken",
+        "drive_through": "no",
+        "level": "0",
+        "operator": "Koko Pollo"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3683215469,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576618,
+          -17.389098
+        ]
+      },
+      "properties": {
+        "id": 3683215469,
+        "name": "Caracol",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "286",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3707521805,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603955,
+          -17.3875138
+        ]
+      },
+      "properties": {
+        "id": 3707521805,
+        "name": "El Bosque De Las Hadas",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "143",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "bar",
+        "contact:email": "elbosquedelashadasbolivia@gmail.com",
+        "contact:facebook": "https://www.facebook.com/bosquehadas",
+        "contact:phone": "+591 79797936",
+        "contact:website": "http://www.elbosquedelashadascafe.com/",
+        "cuisine": "italian",
+        "opening_hours": "Mo-Su 17:00-00:00",
+        "payment:cash": "only"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3707526669,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1517594,
+          -17.389072
+        ]
+      },
+      "properties": {
+        "id": 3707526669,
+        "name": "Sandwich de Chola",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ecuador",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;pork;chicken",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719462622,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550554,
+          -17.3944711
+        ]
+      },
+      "properties": {
+        "id": 3719462622,
+        "name": "Las Delicias",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719465025,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546522,
+          -17.3965044
+        ]
+      },
+      "properties": {
+        "id": 3719465025,
+        "name": "Pollo Gordo",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3729897975,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537725,
+          -17.3955085
+        ]
+      },
+      "properties": {
+        "id": 3729897975,
+        "name": "Pollos Panchita",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "465",
+        "addr:street": "Calle San Martin",
+        "amenity": "fast_food",
+        "contact:facebook": "www.facebook.com/pollospanchita",
+        "cuisine": "chicken",
+        "phone": "+591 44661014",
+        "takeaway": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3730882388,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535073,
+          -17.3977105
+        ]
+      },
+      "properties": {
+        "id": 3730882388,
+        "name": "Panchita",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "654",
+        "addr:street": "Calle San Martín",
+        "amenity": "fast_food",
+        "contact:facebook": "www.facebook.com/pollospanchita",
+        "cuisine": "chicken",
+        "internet_access": "no",
+        "phone": "+591 44661013;+591 44661014"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3730889197,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579482,
+          -17.3935278
+        ]
+      },
+      "properties": {
+        "id": 3730889197,
+        "name": "Panchita",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "Calle General Acha",
+        "amenity": "fast_food",
+        "contact:facebook": "www.facebook.com/pollospanchita",
+        "cuisine": "chicken",
+        "phone": "+591 44510330"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3743778286,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573707,
+          -17.3891059
+        ]
+      },
+      "properties": {
+        "id": 3743778286,
+        "name": "Giros",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127247,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572237,
+          -17.389902
+        ]
+      },
+      "properties": {
+        "id": 3751127247,
+        "name": "Picasso",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle España",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127248,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573107,
+          -17.3886406
+        ]
+      },
+      "properties": {
+        "id": 3751127248,
+        "name": "Oasis de Dalí",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle España",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127249,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567468,
+          -17.3890035
+        ]
+      },
+      "properties": {
+        "id": 3751127249,
+        "name": "Pri-Kafé",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127250,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569847,
+          -17.3889099
+        ]
+      },
+      "properties": {
+        "id": 3751127250,
+        "name": "La Naranja Mecánica",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127251,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15669,
+          -17.388996
+        ]
+      },
+      "properties": {
+        "id": 3751127251,
+        "name": "La Hija Fea",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mayor Rocha",
+        "amenity": "pub"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127253,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570144,
+          -17.390151
+        ]
+      },
+      "properties": {
+        "id": 3751127253,
+        "name": "Diesel",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle España",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127254,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569946,
+          -17.3902585
+        ]
+      },
+      "properties": {
+        "id": 3751127254,
+        "name": "Equinoccio",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle España",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3751127256,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569849,
+          -17.3900912
+        ]
+      },
+      "properties": {
+        "id": 3751127256,
+        "name": "El Barco",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle Ecuador",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3891255770,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546572,
+          -17.3907497
+        ]
+      },
+      "properties": {
+        "id": 3891255770,
+        "name": "Cafetería Libano",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida General José de San Martín",
+        "air_conditioning": "no",
+        "amenity": "cafe",
+        "contact:tiktok": "https://www.tiktok.com/@libano.cafe",
+        "contact:whatsapp": "+591 77931800",
+        "cuisine": "coffee_shop;breakfast;brunch;empanada;pastry;dessert;sandwich;waffle;pancake;fruit_salad;juice;tea;pizza",
+        "delivery": "yes",
+        "level": "0",
+        "operator:type": "private",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 77931800",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3905818144,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545263,
+          -17.391309
+        ]
+      },
+      "properties": {
+        "id": 3905818144,
+        "name": "Chicken's Kingdom",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "150",
+        "addr:street": "Calle San Martín",
+        "amenity": "fast_food",
+        "branch": "Sucursal N° 2",
+        "brand": "Chicken's Kingdom",
+        "cuisine": "fried_chicken",
+        "delivery": "yes",
+        "drive_through": "no",
+        "operator": "Chicken's Kingdom",
+        "ref": "2"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3913859076,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560817,
+          -17.392267
+        ]
+      },
+      "properties": {
+        "id": 3913859076,
+        "name": "Heladería Cristal",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/HeladeriaCristalcbba/",
+        "cuisine": "bolivian;soup;lasagna;pasta;chicken;pork;coffee_shop;tea;ice_cream;dessert;pastry;cake;juice",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "payment:qr_code": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3919289674,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562361,
+          -17.3889161
+        ]
+      },
+      "properties": {
+        "id": 3919289674,
+        "name": "Eli's",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "branch": "Sucursal 25 de Mayo",
+        "brand": "Eli's",
+        "contact:whatsapp": "+591 76772398",
+        "cuisine": "pizza;empanada",
+        "delivery": "yes",
+        "delivery:partner": "Pedidos Ya",
+        "diet:vegetarian": "yes",
+        "drive_through": "no",
+        "email": "info@pizzaelis.com",
+        "level": "0",
+        "operator": "Eli's",
+        "operator:type": "private",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "phone": "+591 4 4259249;+591 76772398",
+        "start_date": "1942",
+        "takeaway": "yes",
+        "website": "https://ventas.pizzaelis.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4000192367,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579688,
+          -17.3906923
+        ]
+      },
+      "properties": {
+        "id": 4000192367,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "Plazuela del Granado",
+        "amenity": "fast_food",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4000875108,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568007,
+          -17.3910022
+        ]
+      },
+      "properties": {
+        "id": 4000875108,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Colombia",
+        "amenity": "fast_food",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4070971078,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619352,
+          -17.3974395
+        ]
+      },
+      "properties": {
+        "id": 4070971078,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Calama",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "opening_hours": "Mo-Sa 19:00+"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4106074925,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540137,
+          -17.3859189
+        ]
+      },
+      "properties": {
+        "id": 4106074925,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "cafe",
+        "cuisine": "coffee_shop",
+        "outdoor_seating": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4143792259,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527371,
+          -17.3946296
+        ]
+      },
+      "properties": {
+        "id": 4143792259,
+        "name": "La Bambola",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Jordán",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4170154598,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581601,
+          -17.388141
+        ]
+      },
+      "properties": {
+        "id": 4170154598,
+        "name": "Alioli",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:housenumber": "226",
+        "addr:street": "Calle México",
+        "amenity": "cafe",
+        "opening_hours": "Mo-Fr 09:00-21:00; Sa-Su 12:00-21:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4186110894,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157015,
+          -17.3877695
+        ]
+      },
+      "properties": {
+        "id": 4186110894,
+        "name": "Apis ANIKA",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "334",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle México",
+        "amenity": "cafe",
+        "branch": "Central",
+        "brand": "Apis ANIKA",
+        "contact:facebook": "https://www.facebook.com/ApisANIKA",
+        "contact:whatsapp": "+591 76446050",
+        "cuisine": "coffee_shop;juice;sandwitch;empanada;mozamorra;bolivian",
+        "email": "apisanika.detodalavida@gmail.com",
+        "opening_hours": "Mo-Sa 07:00-10:30,16:00-21:30; Su 07:00 - 11:00",
+        "phone": "+591 76446050"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4186110895,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574441,
+          -17.3878229
+        ]
+      },
+      "properties": {
+        "id": 4186110895,
+        "name": "La Trufa",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:street": "Calle México",
+        "amenity": "cafe",
+        "shop": "chocolate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4224825290,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569363,
+          -17.3904268
+        ]
+      },
+      "properties": {
+        "id": 4224825290,
+        "name": "Simón Bolivar",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:street": "Calle España",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259187511,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1633206,
+          -17.3887554
+        ]
+      },
+      "properties": {
+        "id": 4259187511,
+        "name": "El Canguro",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:housenumber": "464",
+        "addr:street": "Calle México",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;empnada",
+        "phone": "+591 4 4223839"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259187807,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536531,
+          -17.3895009
+        ]
+      },
+      "properties": {
+        "id": 4259187807,
+        "name": "Silpanchería Doña Celia",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "610",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle República de Ecuador",
+        "amenity": "restaurant",
+        "branch": "Sucursal Ecuador",
+        "brand": "Silpanchería Doña Celia",
+        "contact:facebook": "https://www.facebook.com/Sillpancheriacelia/",
+        "cuisine": "bolivian;meat",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4316691220,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508934,
+          -17.3932465
+        ]
+      },
+      "properties": {
+        "id": 4316691220,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "amenity": "fast_food",
+        "cuisine": "burger"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4316691222,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511842,
+          -17.3933866
+        ]
+      },
+      "properties": {
+        "id": 4316691222,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Sucre",
+        "amenity": "fast_food",
+        "cuisine": "burger"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4401447330,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537225,
+          -17.3897803
+        ]
+      },
+      "properties": {
+        "id": 4401447330,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4411076308,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159591,
+          -17.398003
+        ]
+      },
+      "properties": {
+        "id": 4411076308,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "Calle Ladislao Cabrera",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;sandwitch;pork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4432678989,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583192,
+          -17.3945337
+        ]
+      },
+      "properties": {
+        "id": 4432678989,
+        "name": "Café El Turista",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "cafe",
+        "internet_access": "wlan",
+        "internet_access:fee": "no",
+        "opening_hours": "Sa, Su 09:00-18:00",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4499465187,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535198,
+          -17.3851499
+        ]
+      },
+      "properties": {
+        "id": 4499465187,
+        "name": "Café Namu",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "5301",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "cafe",
+        "cuisine": "coffee_shop",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4548695087,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572953,
+          -17.388712
+        ]
+      },
+      "properties": {
+        "id": 4548695087,
+        "name": "Aequilibrium",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle España",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4603069007,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1518369,
+          -17.3936007
+        ]
+      },
+      "properties": {
+        "id": 4603069007,
+        "name": "Casa de las Tripas",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;guts"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4607123126,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566918,
+          -17.3859703
+        ]
+      },
+      "properties": {
+        "id": 4607123126,
+        "name": "Savarin",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4607123127,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566307,
+          -17.3860491
+        ]
+      },
+      "properties": {
+        "id": 4607123127,
+        "name": "La Sede",
+        "type": "bar",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4615686240,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573298,
+          -17.3893001
+        ]
+      },
+      "properties": {
+        "id": 4615686240,
+        "name": "Restaurante Café Ambassador",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "349",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "amenity": "restaurant",
+        "brand": "Gran Hotel Ambassador",
+        "cuisine": "coffee_shop;breakfast",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Su 07:30-10:00, 12:00",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4636734267,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1615349,
+          -17.3906648
+        ]
+      },
+      "properties": {
+        "id": 4636734267,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4683974727,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510607,
+          -17.3898335
+        ]
+      },
+      "properties": {
+        "id": 4683974727,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:street": "Calle Colombia",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4698349890,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152236,
+          -17.394503
+        ]
+      },
+      "properties": {
+        "id": 4698349890,
+        "name": "Oggi",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "amenity": "cafe",
+        "cuisine": "sandwich;ice_cream;coffee_shop",
+        "internet_access": "wlan",
+        "opening_hours": "Mo-Fr 09:00-20:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704731356,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570438,
+          -17.3958329
+        ]
+      },
+      "properties": {
+        "id": 4704731356,
+        "name": "Plaza Center",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740852679,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589183,
+          -17.3946284
+        ]
+      },
+      "properties": {
+        "id": 4740852679,
+        "name": "Cafe Lea+",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "O134",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "cafe",
+        "contact:facebook": "https://www.facebook.com/CafeLeaMas",
+        "cuisine": "coffee_shop",
+        "level": "0",
+        "opening_hours": "Mo-Fr 15:30-21:00",
+        "operator": "Café Lea+",
+        "operator:type": "private",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 71748747",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4744176419,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506155,
+          -17.3940974
+        ]
+      },
+      "properties": {
+        "id": 4744176419,
+        "name": "Don Chicken Broaster",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "fast_food",
+        "cuisine": "chicken",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4768581957,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562544,
+          -17.3947959
+        ]
+      },
+      "properties": {
+        "id": 4768581957,
+        "name": "El Pahuichi",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "restaurant",
+        "brand": "El Pauichi",
+        "cuisine": "bolivian",
+        "level": "0",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4784756550,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563986,
+          -17.3932775
+        ]
+      },
+      "properties": {
+        "id": 4784756550,
+        "name": "Patricc",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "cafe",
+        "check_date": "2025-02-16",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787417482,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528427,
+          -17.3893174
+        ]
+      },
+      "properties": {
+        "id": 4787417482,
+        "name": "Co Café Arte",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Ecuador",
+        "amenity": "cafe",
+        "bar": "yes",
+        "contact:email": "cocafearte@gmail.com",
+        "contact:facebook": "https://www.facebook.com/cocafeartearte/",
+        "contact:phone": "+591 4 4523072",
+        "cuisine": "bolivian;coffee_shop;juice;sandwich;tapas;burger",
+        "delivery": "yes",
+        "opening_hours": "Mo-Fr 17:00-01:00, Sa 17:00-02:00",
+        "outdoor_seating": "no",
+        "start_date": "2002"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787418120,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525023,
+          -17.3900696
+        ]
+      },
+      "properties": {
+        "id": 4787418120,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4796028523,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537369,
+          -17.3882739
+        ]
+      },
+      "properties": {
+        "id": 4796028523,
+        "name": "",
+        "type": "pub",
+        "category": "food",
+        "subcategory": "bar",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0635",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Venezuela",
+        "air_conditioning": "no",
+        "amenity": "pub",
+        "brewery": "yes;various",
+        "check_date": "2024-05-22",
+        "contact:facebook": "https://www.facebook.com/La-Tirana-Bar-1558388934380925/",
+        "cuisine": "mexican",
+        "email": "latiranayole@gmail.com",
+        "internet_access": "no",
+        "level": "0",
+        "microbrewery": "no",
+        "name:signed": "no",
+        "opening_hours": "Fr-Sa 20:00-03:00",
+        "outdoor_seating": "no",
+        "payment:cards": "no",
+        "payment:cash": "yes",
+        "payment:credit_cards": "no",
+        "payment:debit_cards": "no",
+        "phone": "+591 76943939",
+        "real_fire": "no",
+        "smoking": "dedicated",
+        "toilets": "yes",
+        "toilets:wheelchair": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4851077322,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572998,
+          -17.3895441
+        ]
+      },
+      "properties": {
+        "id": 4851077322,
+        "name": "Menta",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "356",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "amenity": "restaurant",
+        "diet:vegetarian": "yes",
+        "email": "mentarestobarsrl@gmail.com",
+        "opening_hours": "Mo-Sa 12:00-15:00, 18:30-22:00",
+        "phone": "+591-4-4309789"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4874517608,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581715,
+          -17.3972808
+        ]
+      },
+      "properties": {
+        "id": 4874517608,
+        "name": "PapaGallo",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4892048323,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563256,
+          -17.3933054
+        ]
+      },
+      "properties": {
+        "id": 4892048323,
+        "name": "Mikuy Café Cultural",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "cafe",
+        "check_date": "2025-02-16",
+        "contact:facebook": "https://www.facebook.com/Mikuycafe/",
+        "opening_hours": "08:00-21:00",
+        "outdoor_seating": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4894071862,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599487,
+          -17.3929056
+        ]
+      },
+      "properties": {
+        "id": 4894071862,
+        "name": "PiqueMania",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "fast_food",
+        "branch": "Sucursal 1",
+        "brand": "PiqueMania",
+        "contact:facebook": "https://www.facebook.com/PiquemaniaOficial/",
+        "cuisine": "bolivian;salchipapa",
+        "drive_through": "no",
+        "opening_hours": "Mo-Su 15:00-22:00",
+        "phone": "+591 78101088"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4932881121,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591439,
+          -17.3935927
+        ]
+      },
+      "properties": {
+        "id": 4932881121,
+        "name": "Café Ideal",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "128",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle General Achá",
+        "amenity": "cafe",
+        "branch": "Sucursal Cochabamba",
+        "brand": "Café Ideal",
+        "contact:facebook": "https://www.facebook.com/cafeidealbolivia",
+        "cuisine": "coffee_shop",
+        "email": "ventas@cafeideal.com.bo",
+        "level": "0",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 4 4251016",
+        "website": "https://cafeideal.com.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4960088645,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573631,
+          -17.3860942
+        ]
+      },
+      "properties": {
+        "id": 4960088645,
+        "name": "Maesma Pizzeria",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "fast_food",
+        "cuisine": "pizza",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4980322323,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1605578,
+          -17.3950539
+        ]
+      },
+      "properties": {
+        "id": 4980322323,
+        "name": "La Bohemia Chusquisaqueña",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981426823,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562621,
+          -17.3947367
+        ]
+      },
+      "properties": {
+        "id": 4981426823,
+        "name": "Sucremanta",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "restaurant",
+        "brand": "Sucremanta",
+        "cuisine": "bolivian",
+        "drive_through": "no",
+        "level": "0",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981436343,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150281,
+          -17.3908953
+        ]
+      },
+      "properties": {
+        "id": 4981436343,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "restaurant",
+        "level": "0",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5014633725,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1538076,
+          -17.3960527
+        ]
+      },
+      "properties": {
+        "id": 5014633725,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5095847352,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579705,
+          -17.393395
+        ]
+      },
+      "properties": {
+        "id": 5095847352,
+        "name": "Heladería Globos",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "167",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle General Achá",
+        "amenity": "ice_cream",
+        "cuisine": "bolivian;coffee_shop",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:00-22:00,Sa-Su 09:00-21:00",
+        "outdoor_seating": "no",
+        "website": "https://heladeriaglobos.com/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215840,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596942,
+          -17.3905624
+        ]
+      },
+      "properties": {
+        "id": 5102215840,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216049,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588127,
+          -17.3869299
+        ]
+      },
+      "properties": {
+        "id": 5102216049,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996650,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575869,
+          -17.3869199
+        ]
+      },
+      "properties": {
+        "id": 5117996650,
+        "name": "Otah",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996886,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576003,
+          -17.3868752
+        ]
+      },
+      "properties": {
+        "id": 5117996886,
+        "name": "Subs y Co",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5162127671,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590343,
+          -17.3904826
+        ]
+      },
+      "properties": {
+        "id": 5162127671,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217960668,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579067,
+          -17.3935192
+        ]
+      },
+      "properties": {
+        "id": 5217960668,
+        "name": "Donal",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "ice_cream;pizza"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217961548,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575103,
+          -17.3868904
+        ]
+      },
+      "properties": {
+        "id": 5217961548,
+        "name": "El Ajicho",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "description": "comida beniana"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5224690581,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1547234,
+          -17.3990134
+        ]
+      },
+      "properties": {
+        "id": 5224690581,
+        "name": "Pollos Zarate",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Aroma",
+        "amenity": "fast_food",
+        "cuisine": "chicken",
+        "description": "Venta de pollos a la broaster",
+        "diet:chicken": "yes",
+        "takeaway": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5225112599,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612199,
+          -17.3926149
+        ]
+      },
+      "properties": {
+        "id": 5225112599,
+        "name": "Librería Café Kipus",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5235864507,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548899,
+          -17.3983609
+        ]
+      },
+      "properties": {
+        "id": 5235864507,
+        "name": "Ágape",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:housenumber": "354",
+        "addr:street": "Calle Uruguay",
+        "amenity": "restaurant",
+        "contact:email": "agape_vegetarians_food@hotmail.com",
+        "contact:facebook": "https://www.facebook.com/pg/Ágape-Restaurant-Vegetariano-322850584567865/",
+        "contact:phone": "+591 4 4793431",
+        "cuisine": "salad",
+        "diet:vegetarian": "only",
+        "level": "1",
+        "opening_hours": "Mo-Fr 08:30-16:00; Su 08:30-14:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5270826831,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159867,
+          -17.3880055
+        ]
+      },
+      "properties": {
+        "id": 5270826831,
+        "name": "Adrianita",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "bolivian;empanada"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5280985265,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1625514,
+          -17.3868528
+        ]
+      },
+      "properties": {
+        "id": 5280985265,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5280987331,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1621816,
+          -17.3915908
+        ]
+      },
+      "properties": {
+        "id": 5280987331,
+        "name": "Pensión Familiar Laurita",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5281284774,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1519956,
+          -17.3954854
+        ]
+      },
+      "properties": {
+        "id": 5281284774,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Calle Calama",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5311356021,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159154,
+          -17.3927713
+        ]
+      },
+      "properties": {
+        "id": 5311356021,
+        "name": "Rock and Roll",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "addr:street = Avenida Heroínas de la Coronilla",
+        "amenity": "fast_food",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274251,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575679,
+          -17.3885289
+        ]
+      },
+      "properties": {
+        "id": 5319274251,
+        "name": "Tambo",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274253,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558255,
+          -17.3964197
+        ]
+      },
+      "properties": {
+        "id": 5319274253,
+        "name": "Villa Imperial",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274261,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1607459,
+          -17.3907525
+        ]
+      },
+      "properties": {
+        "id": 5319274261,
+        "name": "Llauchas",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "empanada"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5328374546,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151318,
+          -17.3889838
+        ]
+      },
+      "properties": {
+        "id": 5328374546,
+        "name": "Ambrosía Late",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5336012051,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545597,
+          -17.3851453
+        ]
+      },
+      "properties": {
+        "id": 5336012051,
+        "name": "Pahuichi",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe",
+        "shop": "glaziery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5368456117,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1524969,
+          -17.3945656
+        ]
+      },
+      "properties": {
+        "id": 5368456117,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5371441998,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1634659,
+          -17.3944371
+        ]
+      },
+      "properties": {
+        "id": 5371441998,
+        "name": "Choripan Angui",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5391531889,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522618,
+          -17.3925385
+        ]
+      },
+      "properties": {
+        "id": 5391531889,
+        "name": "La Casa del Silpacho",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Bolívar",
+        "amenity": "restaurant",
+        "cuisine": "bolivian;"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5425991109,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529096,
+          -17.3880907
+        ]
+      },
+      "properties": {
+        "id": 5425991109,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5425991364,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525558,
+          -17.3881637
+        ]
+      },
+      "properties": {
+        "id": 5425991364,
+        "name": "Torre Fuente",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5434451753,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529476,
+          -17.3854658
+        ]
+      },
+      "properties": {
+        "id": 5434451753,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5548732867,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1635128,
+          -17.3971376
+        ]
+      },
+      "properties": {
+        "id": 5548732867,
+        "name": "Comedor",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557400072,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1610397,
+          -17.3928344
+        ]
+      },
+      "properties": {
+        "id": 5557400072,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5562628772,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589162,
+          -17.3967845
+        ]
+      },
+      "properties": {
+        "id": 5562628772,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5586474621,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152093,
+          -17.3868298
+        ]
+      },
+      "properties": {
+        "id": 5586474621,
+        "name": "Freschezza",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "ice_cream",
+        "name:es": "Freschezza Frozen Yogurt",
+        "opening_hours": "Mo-Su 10:00-22:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5612317521,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560714,
+          -17.3861213
+        ]
+      },
+      "properties": {
+        "id": 5612317521,
+        "name": "Ciudad Maravilla",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Calle Chuquisaca",
+        "amenity": "restaurant",
+        "cuisine": "local"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5645182775,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525671,
+          -17.3981055
+        ]
+      },
+      "properties": {
+        "id": 5645182775,
+        "name": "Comidas Nacionales",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "food_court",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5645184893,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529196,
+          -17.3985773
+        ]
+      },
+      "properties": {
+        "id": 5645184893,
+        "name": "Desayunos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "food_court",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5645184895,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513211,
+          -17.3961261
+        ]
+      },
+      "properties": {
+        "id": 5645184895,
+        "name": "Restaurante Anexo Las Américas",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6254952185,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572659,
+          -17.387813
+        ]
+      },
+      "properties": {
+        "id": 6254952185,
+        "name": "Taco Locos",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:street": "Calle México",
+        "amenity": "restaurant",
+        "cuisine": "mexican"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6282702088,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152489,
+          -17.3901761
+        ]
+      },
+      "properties": {
+        "id": 6282702088,
+        "name": "Café Ópera",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6297759991,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1568965,
+          -17.3879394
+        ]
+      },
+      "properties": {
+        "id": 6297759991,
+        "name": "Shawarma Cleopatra Egipto",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:street": "Calle México",
+        "amenity": "fast_food",
+        "opening_hours": "Mo-Sa 12:00-21:10"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6334560987,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157391,
+          -17.388764
+        ]
+      },
+      "properties": {
+        "id": 6334560987,
+        "name": "Bontà Caffee",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "italian;italian_pizza;pizza"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6441486985,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564971,
+          -17.3904635
+        ]
+      },
+      "properties": {
+        "id": 6441486985,
+        "name": "Gopal Vegetariana",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant",
+        "diet:vegetarian": "only"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6662121146,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592358,
+          -17.3853599
+        ]
+      },
+      "properties": {
+        "id": 6662121146,
+        "name": "Miso Vegetariano",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "722",
+        "addr:street": "Calle Baptista",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/misovegetariano",
+        "contact:phone": "+591 76944709",
+        "cuisine": "soup;chinese;taiwanese;asian;japanese",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "opening_hours": "Mo-Sa 09:00-15:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6841910585,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1518772,
+          -17.3900379
+        ]
+      },
+      "properties": {
+        "id": 6841910585,
+        "name": "La Pascana Salón de Té",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Colombia",
+        "amenity": "cafe",
+        "cuisine": "tea;regional;cake;donut;pancake;sandwich;breakfast;coffee_shop",
+        "diet:vegetarian": "yes",
+        "name:en": "La Pascana Tea House"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238772516,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528858,
+          -17.39892
+        ]
+      },
+      "properties": {
+        "id": 8238772516,
+        "name": "Venta de Almuerzos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783117,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1524765,
+          -17.3987736
+        ]
+      },
+      "properties": {
+        "id": 8238783117,
+        "name": "Venta de Almuerzos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783118,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1524678,
+          -17.398874
+        ]
+      },
+      "properties": {
+        "id": 8238783118,
+        "name": "Venta de Almuerzos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783258,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529383,
+          -17.3984429
+        ]
+      },
+      "properties": {
+        "id": 8238783258,
+        "name": "Desayunos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "food_court",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779500,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552209,
+          -17.3942344
+        ]
+      },
+      "properties": {
+        "id": 8677779500,
+        "name": "Dely Burger",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779501,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552278,
+          -17.3942007
+        ]
+      },
+      "properties": {
+        "id": 8677779501,
+        "name": "El Caserón",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779502,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552125,
+          -17.3942855
+        ]
+      },
+      "properties": {
+        "id": 8677779502,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779503,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552056,
+          -17.3943252
+        ]
+      },
+      "properties": {
+        "id": 8677779503,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779504,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1553128,
+          -17.3941506
+        ]
+      },
+      "properties": {
+        "id": 8677779504,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "fast_food",
+        "cuisine": "juice"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752750,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532235,
+          -17.3946735
+        ]
+      },
+      "properties": {
+        "id": 8964752750,
+        "name": "Ceviche",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Jordán",
+        "amenity": "fast_food",
+        "cuisine": "fish_and_chips"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9294209193,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576635,
+          -17.3956218
+        ]
+      },
+      "properties": {
+        "id": 9294209193,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "168",
+        "addr:street": "Calle Jordán",
+        "amenity": "fast_food",
+        "cuisine": "fried_chicken",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9294229567,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570395,
+          -17.3947466
+        ]
+      },
+      "properties": {
+        "id": 9294229567,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje de la Catedral",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9316630065,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552171,
+          -17.3907143
+        ]
+      },
+      "properties": {
+        "id": 9316630065,
+        "name": "PanPan Cafe",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "457",
+        "addr:street": "Calle Colombia",
+        "amenity": "cafe",
+        "contact:instagram": "panpancafepasteleria",
+        "cuisine": "coffee_shop;bakery",
+        "drink:coffee": "yes",
+        "facebook": "cafepanpan",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "payment:debit_cards": "yes",
+        "phone": "+591-78316251"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9591270718,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1513636,
+          -17.3911215
+        ]
+      },
+      "properties": {
+        "id": 9591270718,
+        "name": "Salteñas Pulpito",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "cuisine": "empanada;bolivian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9602649939,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569758,
+          -17.3855918
+        ]
+      },
+      "properties": {
+        "id": 9602649939,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9602649940,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569017,
+          -17.385676
+        ]
+      },
+      "properties": {
+        "id": 9602649940,
+        "name": "Restaurante Tunari",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "676",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "branch": "Sucursal El Prado",
+        "brand": "Restaurante Tunari",
+        "contact:facebook": "https://www.facebook.com/p/Restaurant-tunari-sucursal-El-Prado-100048408346891/",
+        "cuisine": "bolivian;sandwich;soup;fish;pork;chorizo;fricasé;ranga;lomo;silpancho;picante",
+        "delivery": "yes",
+        "mobile": "+591 72218186",
+        "phone": "+591 4 4528588"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9775937913,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153215,
+          -17.3914669
+        ]
+      },
+      "properties": {
+        "id": 9775937913,
+        "name": "Empanadas Chachas",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9775937914,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1539096,
+          -17.3918595
+        ]
+      },
+      "properties": {
+        "id": 9775937914,
+        "name": "Pizzería Tentacione",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "cuisine": "pizza;italian",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9775937916,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564307,
+          -17.3923111
+        ]
+      },
+      "properties": {
+        "id": 9775937916,
+        "name": "Pollos Kingdom",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "restaurant",
+        "cuisine": "chicken"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9794272695,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570752,
+          -17.3865562
+        ]
+      },
+      "properties": {
+        "id": 9794272695,
+        "name": "Restaurante La Cascada",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0611",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "cuisine": "bolivian;salad;soup",
+        "opening_hours": "Mo-Sa 06:00-00:00; Su 06:30-23:30",
+        "operator": "Hotel Diplomat"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9871717595,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583441,
+          -17.3898782
+        ]
+      },
+      "properties": {
+        "id": 9871717595,
+        "name": "Silpanchería",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "restaurant",
+        "cuisine": "bolivian"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9901073765,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575123,
+          -17.3941824
+        ]
+      },
+      "properties": {
+        "id": 9901073765,
+        "name": "Café Plaza Specialty Coffee",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "276",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "cafe",
+        "branch": "Sucursal Centro",
+        "brand": "Café Plaza",
+        "contact:facebook": "cafeplazaspecialtycoffee",
+        "contact:instagram": "cafeplazaspecialtycoffee",
+        "cuisine": "coffee_shop;tea;juice;ice_cream;breakfast;brunch;omelette;dessert;pastry;empanada;cake;bolivian",
+        "description": "Cafetería con café de especialidad y repostería artesanal.",
+        "email": "cafeplazacbba@hotmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "1",
+        "opening_hours": "Mo-Fr 09:00-21:00; Sa 14:00-20:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "takeaway": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9903223866,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1547605,
+          -17.3870572
+        ]
+      },
+      "properties": {
+        "id": 9903223866,
+        "name": "Capresso",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "cafe",
+        "brand": "Capresso",
+        "outdoor_seating": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9941529678,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528775,
+          -17.3990653
+        ]
+      },
+      "properties": {
+        "id": 9941529678,
+        "name": "Venta de Almuerzos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9993409617,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514379,
+          -17.3954694
+        ]
+      },
+      "properties": {
+        "id": 9993409617,
+        "name": "Restaurant El Osito",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10008644759,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541484,
+          -17.3901881
+        ]
+      },
+      "properties": {
+        "id": 10008644759,
+        "name": "Cafetería Yuyo",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "240",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Pasaje San Rafael",
+        "amenity": "cafe",
+        "contact:facebook": "https://www.facebook.com/yuyo.herboristeria/",
+        "cuisine": "bolivian;empanada;burger;cake;tea;coffee_shop",
+        "description": "Comida 100 % de origen vegetal e infusiones.",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "email": "yuyo.herboristeria@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "outdoor_seating": "yes",
+        "phone": "+591 68557416",
+        "reservation": "recommended"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10277111389,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558583,
+          -17.3888875
+        ]
+      },
+      "properties": {
+        "id": 10277111389,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Plaza Colón",
+        "amenity": "cafe",
+        "cuisine": "bolivian;tea;coffee_shop;sandwich;pastry",
+        "level": "0",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10279156723,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573472,
+          -17.3948946
+        ]
+      },
+      "properties": {
+        "id": 10279156723,
+        "name": "La Bourbonería",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "cafe",
+        "branch": "Sucursal Nataniel Aguirre",
+        "brand": "La Bourbonería",
+        "contact:facebook": "https://www.facebook.com/labourboneria/",
+        "cuisine": "coffee_shop;dessert;pastry;sandwich",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "payment:qr_code": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10294940671,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570169,
+          -17.3924223
+        ]
+      },
+      "properties": {
+        "id": 10294940671,
+        "name": "Helados Tulasi",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "270",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "ice_cream",
+        "brand": "Tulasi",
+        "contact:facebook": "https://www.facebook.com/tulasiheladosveganosartesanales",
+        "contact:whatsapp": "+591 69534524;+591 77988140",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Tienda de helados veganos a base de leche de soya, leche de quinua, leche de avena, sin azúcar, sin gluten.",
+        "diet:gluten_free": "yes",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "drive_through": "no",
+        "email": "tulasirestaurantvegetariano@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 09:00-21:00; Su,PH Off",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 69534524;+591 77988140",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10294940672,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.160179,
+          -17.3917571
+        ]
+      },
+      "properties": {
+        "id": 10294940672,
+        "name": "Helados Tulasi",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Junín",
+        "amenity": "ice_cream",
+        "brand": "Tulasi",
+        "contact:facebook": "https://www.facebook.com/tulasiheladosveganosartesanales",
+        "contact:whatsapp": "+591 69534524;+591 77988140",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Tienda de helados veganos a base de leche de soya, leche de quinua, leche de avena, sin azúcar, sin gluten.",
+        "diet:gluten_free": "yes",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "drive_through": "no",
+        "email": "tulasirestaurantvegetariano@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 12:00-15:00; Su,PH Off",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 69534524;+591 77988140",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10294940673,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601842,
+          -17.3917228
+        ]
+      },
+      "properties": {
+        "id": 10294940673,
+        "name": "Tulasi",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Junín",
+        "amenity": "restaurant",
+        "branch": "Sucursal Junín",
+        "brand": "Tulasi",
+        "contact:facebook": "https://www.facebook.com/restaurantulasivegetariano/",
+        "contact:whatsapp": "+591 69534524;+591 77988140",
+        "cuisine": "bolivian;soup;salad;pasta;sandwich;burger;ice_cream;juice;tacos",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Ofrece almuerzos, platos a la carta, masitas integrales, helados veganos y postres.",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "email": "tulasirestaurantvegetariano@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 12:00-15:00; Su,PH Off",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 69534524;+591 77988140",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10312215265,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157117,
+          -17.3962019
+        ]
+      },
+      "properties": {
+        "id": 10312215265,
+        "name": "Los Castores",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "470",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "fast_food",
+        "branch": "Sucursal Centro",
+        "brand": "Los Castores",
+        "contact:facebook": "https://www.facebook.com/loscastores/",
+        "contact:whatsapp": "+591 65365236",
+        "cuisine": "bolivian;empanada;juice;coffee_shop;milkshake",
+        "delivery": "yes",
+        "description": "Empresa de comida rápida especializada en salteñas (empanadas rellenas).",
+        "drive_through": "no",
+        "email": "info@los-castores.com",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:15-15:00; Sa-Su,PH 07:00-15:00",
+        "operator": "Los Castores",
+        "operator:type": "private",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4 4254231",
+        "takeaway": "yes",
+        "website": "https://www.los-castores.com/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10313804209,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584222,
+          -17.392625
+        ]
+      },
+      "properties": {
+        "id": 10313804209,
+        "name": "Porky's Burger",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "branch": "Correo",
+        "brand": "Porky's Burger",
+        "cuisine": "burger;bolivian;pique;salchipapa",
+        "drive_through": "no",
+        "loc_name": "Porky's Burger Correo",
+        "opening_hours": "Mo-Su 18:00-00:00",
+        "operator": "Porky's Burger",
+        "operator:type": "private",
+        "takeaway": "only"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10574045368,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564768,
+          -17.3900101
+        ]
+      },
+      "properties": {
+        "id": 10574045368,
+        "name": "El Encanto Café",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "356",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "cafe",
+        "contact:facebook": "https://www.facebook.com/elencantocafe.cbba",
+        "contact:whatsapp": "+591 74869236",
+        "cuisine": "coffee_shop;bakery;pizza;cake;dessert",
+        "drive_through": "no",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Sa 08:00-21:30",
+        "operator": "El Encanto Café",
+        "operator:type": "private",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "pets": "yes",
+        "phone": "+591 74869236",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10574045377,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567263,
+          -17.3900509
+        ]
+      },
+      "properties": {
+        "id": 10574045377,
+        "name": "Patronum",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Ecuador",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "contact:facebook": "https://www.facebook.com/people/Patronum-Caf%C3%A9-Tem%C3%A1tico-Bolivia/100064226643379/",
+        "cuisine": "coffee_shop;cake;pastry;empanada;chicken",
+        "description": "Un café, pub, restaurante con la temática de Harry Potter",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-We 15:00-00:00; Th 15:00-01:00; Fr 15:00-02:00; Sa 14:00-01:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 61604786",
+        "takeaway": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10577758457,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500597,
+          -17.3909111
+        ]
+      },
+      "properties": {
+        "id": 10577758457,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "cuisine": "pizza",
+        "drive_through": "no",
+        "informal": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10786443275,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558291,
+          -17.3864933
+        ]
+      },
+      "properties": {
+        "id": 10786443275,
+        "name": "Mad Mex",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "581",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Valdiviezo",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "contact:facebook": "https://www.facebook.com/madmexcochabamba/",
+        "cuisine": "mexican",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "We-Sa 18:00-23:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4  44351493;+591 77974440",
+        "reservation": "yes",
+        "takeaway": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10798356563,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1622151,
+          -17.387424
+        ]
+      },
+      "properties": {
+        "id": 10798356563,
+        "name": "Pachamé Ramen",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "641",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "contact:facebook": "https://www.facebook.com/bicipachame/",
+        "cuisine": "japanese;ramen;soup;dessert",
+        "email": "huarid@gmail.com",
+        "level": "0",
+        "opening_hours": "Tu-Su 12:00-21:00",
+        "operator": "Pachamé",
+        "operator:type": "private",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 74374978",
+        "reservation": "recommended",
+        "takeaway": "no",
+        "toilets": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10800524291,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590641,
+          -17.3921583
+        ]
+      },
+      "properties": {
+        "id": 10800524291,
+        "name": "Wistupiku",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "restaurant",
+        "brand": "Wistupiku",
+        "contact:facebook": "https://www.facebook.com/wistupiku",
+        "cuisine": "bolivian;breakfast;empanada;masamorra;coffee_shop;tea;milk;ice_cream;juice;soda",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:15-20:00, Sa 07:15-19:30",
+        "payment:cash": "yes",
+        "phone": "+591 4 4582566",
+        "website": "https://www.wistupiku.com/",
+        "website:menu": "http://www.wistupiku.com/nuestro-menu/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10833020637,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562157,
+          -17.3949301
+        ]
+      },
+      "properties": {
+        "id": 10833020637,
+        "name": "Wist'upiku",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "370",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "restaurant",
+        "branch": "Esteban Arze",
+        "brand": "Wist'upiku",
+        "contact:facebook": "https://www.facebook.com/wistupiku/",
+        "cuisine": "bolivian;empanada;masamorra;coffee_shop;milk;tea;breakfast;pastry;juice;ice_cream",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:15-20:00, Sa 07:15-19:30",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 4 4503920",
+        "website": "https://www.wistupiku.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10847830027,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1524053,
+          -17.3915807
+        ]
+      },
+      "properties": {
+        "id": 10847830027,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "cuisine": "wings",
+        "drive_through": "no",
+        "level": "0",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10866770806,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540055,
+          -17.3881273
+        ]
+      },
+      "properties": {
+        "id": 10866770806,
+        "name": "Triunvirato",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "N0424",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/triunviratocbba/",
+        "contact:whatsapp": "+591 72782111",
+        "cuisine": "bolivian;soup;meat",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Su 09:00-13:00",
+        "phone": "+591 4 4523930;+591 72782111",
+        "takeaway": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10882708250,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583623,
+          -17.3923813
+        ]
+      },
+      "properties": {
+        "id": 10882708250,
+        "name": "Panda Naicha",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas",
+        "amenity": "fast_food",
+        "branch": "Sucursal Correo",
+        "brand": "Panda Naicha",
+        "contact:facebook": "https://www.facebook.com/PANDAnaicha/",
+        "contact:whatsapp": "+591 68510100",
+        "cuisine": "bubble_tea",
+        "delivery": "yes",
+        "description": "Tienda de venta de bebidas de té con perlas de tapioca.",
+        "drive_through": "no",
+        "level": "0",
+        "opening_hours": "Mo-Tu 10:00-21:30; Th-Sa 09:30-21:30; Su 09:00-21:30",
+        "operator": "Panda Naicha",
+        "payment:cash": "yes",
+        "phone": "+591 68510100",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10920825783,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563809,
+          -17.3878178
+        ]
+      },
+      "properties": {
+        "id": 10920825783,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle México",
+        "amenity": "fast_food",
+        "cuisine": "hot_dog",
+        "drive_through": "no",
+        "informal": "yes",
+        "opening_hours": "Mo-Su 18:30+"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11043280708,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576357,
+          -17.3925791
+        ]
+      },
+      "properties": {
+        "id": 11043280708,
+        "name": "Restaurante Unión Plaza",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "111",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "restaurant",
+        "cuisine": "bolivian;breakfast;barbecue;juice;soup",
+        "level": "0",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11104317096,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557113,
+          -17.3992306
+        ]
+      },
+      "properties": {
+        "id": 11104317096,
+        "name": "Pollito Sensación",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Aroma",
+        "amenity": "fast_food",
+        "cuisine": "chicken;local",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538066,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529796,
+          -17.396837
+        ]
+      },
+      "properties": {
+        "id": 11112538066,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Ladislao Cabrera",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "level": "0",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11196874346,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536158,
+          -17.3859798
+        ]
+      },
+      "properties": {
+        "id": 11196874346,
+        "name": "El Pahuichi",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0574",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Mariano Antezana",
+        "amenity": "restaurant",
+        "contact:facebook": "https://www.facebook.com/elpahuichisalondete",
+        "contact:whatsapp": "+591 70384501",
+        "cuisine": "tea;coffee_shop;empanada;bolivian;pastry;breakfast;lunch",
+        "delivery": "yes",
+        "level": "0",
+        "opening_hours": "Mo-Sa 08:30-20:30; Su 13:00-19:00",
+        "phone": "+591 70384501;+591 4 4254697;+591 4 4012719",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11211778301,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1503419,
+          -17.3886762
+        ]
+      },
+      "properties": {
+        "id": 11211778301,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "amenity": "fast_food",
+        "cuisine": "bolivian",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11220481847,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526538,
+          -17.3936425
+        ]
+      },
+      "properties": {
+        "id": 11220481847,
+        "name": "Verde Oliva",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11220506847,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528285,
+          -17.3936836
+        ]
+      },
+      "properties": {
+        "id": 11220506847,
+        "name": "El Picafe",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11406748216,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587342,
+          -17.3876188
+        ]
+      },
+      "properties": {
+        "id": 11406748216,
+        "name": "Sabro Sabrosón",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "563",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "fast_food",
+        "contact:facebook": "https://www.facebook.com/people/Sabor-Sabroson-Comida-Vegana/100083605110343/",
+        "cuisine": "bolivian;gyros;dessert;tea;juice;burger;falafel",
+        "diet:vegan": "yes",
+        "diet:vegetarian": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "opening_hours": "Tu-Sa 11:30-14:30,19:30-22:30",
+        "operator": "Sabro Sabrosón"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11538533691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574784,
+          -17.385935
+        ]
+      },
+      "properties": {
+        "id": 11538533691,
+        "name": "Mialegria",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Ballivian",
+        "amenity": "restaurant",
+        "contact:mobile": "+591-75491222",
+        "cuisine": "regional;coffee_shop",
+        "opening_hours": "PH,Mo-Su 08:00-23:00+",
+        "phone": "+591-69417019"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11555526655,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153719,
+          -17.3895165
+        ]
+      },
+      "properties": {
+        "id": 11555526655,
+        "name": "",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle República de Ecuador",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11566144476,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151553,
+          -17.3914319
+        ]
+      },
+      "properties": {
+        "id": 11566144476,
+        "name": "Pollos Lucho",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "air_conditioning": "no",
+        "amenity": "fast_food",
+        "branch": "Sucursal Heroínas",
+        "brand": "Pollos Lucho",
+        "contact:facebook": "https://www.facebook.com/polloluchoheroinas/",
+        "cuisine": "chicken",
+        "delivery": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "operator": "Pollos Lucho",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 77931011",
+        "takeaway": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11820955070,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1504354,
+          -17.3896976
+        ]
+      },
+      "properties": {
+        "id": 11820955070,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "fast_food",
+        "cuisine": "chicken;wings",
+        "drive_through": "no",
+        "level": "0"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11892233032,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573982,
+          -17.3946944
+        ]
+      },
+      "properties": {
+        "id": 11892233032,
+        "name": "LoliMoryh Maid Café",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "S-0320",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "cafe",
+        "contact:facebook": "https://www.facebook.com/people/LoliMoryh-Maid-Caf%C3%A9/100091326747050/",
+        "cuisine": "coffee_shop;ramen;juice;dessert",
+        "description": "Cafetería maid.",
+        "email": "lolimoryh.16@gmail.com",
+        "outdoor_seating": "no",
+        "phone": "+591 65304324",
+        "theme": "maid"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11919609270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.162261,
+          -17.3857003
+        ]
+      },
+      "properties": {
+        "id": 11919609270,
+        "name": "La Trica del Açai",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Avenida Rafael Urquidi",
+        "amenity": "ice_cream",
+        "contact:facebook": "https://www.facebook.com/p/La-Trica-del-A%C3%A7ai-61553595854644/",
+        "delivery": "yes",
+        "description": "Venta de helados artesanales de açai por peso con variedad de toppings.",
+        "level": "0",
+        "opening_hours": "Mo-Fr 16:00-19:30; Sa 13:00-19:30; Su 14:30-19:30",
+        "operator": "La Trica del Açai",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "payment:qr_code": "yes",
+        "phone": "+591 77487774",
+        "takeaway": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11927510591,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152676,
+          -17.3854241
+        ]
+      },
+      "properties": {
+        "id": 11927510591,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle 16 de Julio",
+        "amenity": "cafe",
+        "cuisine": "coffee;dessert",
+        "level": "0",
+        "outdoor_seating": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11927510612,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153871,
+          -17.3852169
+        ]
+      },
+      "properties": {
+        "id": 11927510612,
+        "name": "La Bourbonería",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "796",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Daniel Salamanca",
+        "amenity": "cafe",
+        "branch": "Cafetería Central",
+        "brand": "La Bourbonería",
+        "contact:facebook": "https://www.facebook.com/labourboneria/",
+        "cuisine": "coffee_shop;dessert",
+        "email": "labourboneria@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Su 07:30-22:30",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "payment:qr_code": "yes",
+        "phone": "+591 76900693",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11939849843,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150567,
+          -17.3887604
+        ]
+      },
+      "properties": {
+        "id": 11939849843,
+        "name": "Jugos",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "juice",
+        "drive_through": "no",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080025703,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565305,
+          -17.3861207
+        ]
+      },
+      "properties": {
+        "id": 12080025703,
+        "name": "Tropical chicken",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080061849,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563863,
+          -17.3862696
+        ]
+      },
+      "properties": {
+        "id": 12080061849,
+        "name": "Flavor Burst",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "amenity": "ice_cream",
+        "branch": "Ballivián",
+        "brand": "Flavor Burst",
+        "contact:facebook": "https://www.facebook.com/flavorburstbolivia",
+        "email": "flavorburstbolivia@gmail.com",
+        "level": "0",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080063206,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500906,
+          -17.3908148
+        ]
+      },
+      "properties": {
+        "id": 12080063206,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "burger"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080068973,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507989,
+          -17.3878073
+        ]
+      },
+      "properties": {
+        "id": 12080068973,
+        "name": "",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "amenity": "ice_cream"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12086555525,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588782,
+          -17.3859887
+        ]
+      },
+      "properties": {
+        "id": 12086555525,
+        "name": "Sabor y Tradición Caris",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0688",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "amenity": "restaurant",
+        "cuisine": "regional",
+        "diet:healthy": "yes",
+        "phone": "+591-71788801"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12101095657,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557351,
+          -17.38587
+        ]
+      },
+      "properties": {
+        "id": 12101095657,
+        "name": "Fragmentos Restobar",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle La Paz",
+        "amenity": "restaurant",
+        "cuisine": "regional",
+        "phone": "+591-79629030"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12206377760,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575061,
+          -17.3995486
+        ]
+      },
+      "properties": {
+        "id": 12206377760,
+        "name": "Desayunos",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Avenida Aroma",
+        "amenity": "food_court"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12329286051,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533038,
+          -17.3923817
+        ]
+      },
+      "properties": {
+        "id": 12329286051,
+        "name": "Krusty's",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "burger"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12329331193,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511575,
+          -17.3934411
+        ]
+      },
+      "properties": {
+        "id": 12329331193,
+        "name": "Twenty One",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food",
+        "cuisine": "mexican"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12574551106,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611097,
+          -17.3928297
+        ]
+      },
+      "properties": {
+        "id": 12574551106,
+        "name": "",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Hamiraya",
+        "amenity": "fast_food",
+        "cuisine": "burger",
+        "diet:meat": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "opening_hours": "Mo-Su,PH 18:00+",
+        "street_vendor": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12593274102,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584302,
+          -17.3936095
+        ]
+      },
+      "properties": {
+        "id": 12593274102,
+        "name": "K-Bunsik",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12604367304,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561776,
+          -17.3945811
+        ]
+      },
+      "properties": {
+        "id": 12604367304,
+        "name": "Acaí Tropical",
+        "type": "ice_cream",
+        "category": "food",
+        "subcategory": "ice_cream",
+        "osmType": "node",
+        "amenity": "ice_cream"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12614200877,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529731,
+          -17.3887029
+        ]
+      },
+      "properties": {
+        "id": 12614200877,
+        "name": "Café Salteñería Dino's",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12614209104,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534826,
+          -17.3869626
+        ]
+      },
+      "properties": {
+        "id": 12614209104,
+        "name": "Salteñas Records",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12661217749,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549707,
+          -17.3873907
+        ]
+      },
+      "properties": {
+        "id": 12661217749,
+        "name": "Cinco&Medio",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Daniel Salamanca",
+        "amenity": "cafe",
+        "branch": "Sucursal Salamanca",
+        "brand": "Cinco&Medio",
+        "contact:facebook": "https://www.facebook.com/people/CINCOMEDIO/100072112150253/",
+        "cuisine": "coffee_shop;breakfast;dessert;pastry;brunch;cake",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "email": "cincoymedio512@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Sa 07:30-22:00; Su 15:30-22:00",
+        "operator": "Cinco&Medio",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 78363336",
+        "start_date": "2025",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12708115702,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1556256,
+          -17.3909406
+        ]
+      },
+      "properties": {
+        "id": 12708115702,
+        "name": "Ancha Sumaj",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12708127501,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563056,
+          -17.3939053
+        ]
+      },
+      "properties": {
+        "id": 12708127501,
+        "name": "Mamá Tinna",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12708399601,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1571666,
+          -17.3898459
+        ]
+      },
+      "properties": {
+        "id": 12708399601,
+        "name": "Cafe Namu",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12717297701,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570452,
+          -17.3855664
+        ]
+      },
+      "properties": {
+        "id": 12717297701,
+        "name": "Chipotle",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "amenity": "restaurant"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798724222,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500559,
+          -17.3898219
+        ]
+      },
+      "properties": {
+        "id": 12798724222,
+        "name": "Mugrosos Burger",
+        "type": "fast_food",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "node",
+        "amenity": "fast_food"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12798736119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508574,
+          -17.385993
+        ]
+      },
+      "properties": {
+        "id": 12798736119,
+        "name": "Al Toque",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "restaurant",
+        "cuisine": "bolivian",
+        "diet:meat": "yes",
+        "level": "0",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13041417504,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506444,
+          -17.3886378
+        ]
+      },
+      "properties": {
+        "id": 13041417504,
+        "name": "",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "amenity": "cafe",
+        "level": "0",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13165590121,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572708,
+          -17.3946138
+        ]
+      },
+      "properties": {
+        "id": 13165590121,
+        "name": "Dulce Moka",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "cafe",
+        "check_date": "2025-09-23",
+        "currency:XBT": "yes",
+        "payment:lightning": "yes",
+        "payment:lightning_contactless": "no",
+        "payment:onchain": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13240227368,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154122,
+          -17.388529
+        ]
+      },
+      "properties": {
+        "id": 13240227368,
+        "name": "Cafetería Musa",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0383",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Guerrilleros José Miguel Lanza",
+        "amenity": "cafe",
+        "cuisine": "coffee_shop;dessert;pastry;cake;soup;bolivian",
+        "level": "0",
+        "opening_hours": "Mo-Fr 09:00-18:00; Sa 09:00-16:00; Su,PH Off",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "phone": "+591 69745302",
+        "start_date": "2025",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13381275063,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557131,
+          -17.3940715
+        ]
+      },
+      "properties": {
+        "id": 13381275063,
+        "name": "Café Divino",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "359",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José Antonio de Sucre",
+        "air_conditioning": "no",
+        "amenity": "cafe",
+        "brand": "Café Divino",
+        "coffee:brand": "Café Divino",
+        "craft": "coffee_roaster",
+        "cuisine": "coffee_shop;tea;juice;pastry;dessert;cake",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "outdoor_seating": "no",
+        "payment:cash": "yes",
+        "takeaway": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 410463740,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1546768,
+              -17.3945531
+            ],
+            [
+              -66.1550268,
+              -17.3946107
+            ],
+            [
+              -66.1549901,
+              -17.3948089
+            ],
+            [
+              -66.154641,
+              -17.3947507
+            ],
+            [
+              -66.1546531,
+              -17.3946838
+            ],
+            [
+              -66.1546768,
+              -17.3945531
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 410463740,
+        "name": "Mercado 25 de Mayo B",
+        "type": "food_court",
+        "category": "food",
+        "subcategory": "fast_food",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "food_court",
+        "building": "retail"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 981207628,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1555755,
+              -17.387237
+            ],
+            [
+              -66.155711,
+              -17.3873207
+            ],
+            [
+              -66.1557297,
+              -17.3873316
+            ],
+            [
+              -66.1556279,
+              -17.3874711
+            ],
+            [
+              -66.155606,
+              -17.3875021
+            ],
+            [
+              -66.1555774,
+              -17.3875233
+            ],
+            [
+              -66.1555504,
+              -17.3875249
+            ],
+            [
+              -66.1554663,
+              -17.3875067
+            ],
+            [
+              -66.1554747,
+              -17.3874859
+            ],
+            [
+              -66.1555755,
+              -17.387237
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 981207628,
+        "name": "Globos",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "restaurant",
+        "barrier": "yes",
+        "cuisine": "ice_cream;sandwich;bolivian;empanada;chicken;tea;coffe_shop",
+        "kids_area": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1041020852,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1539029,
+              -17.3853056
+            ],
+            [
+              -66.1539707,
+              -17.3854066
+            ],
+            [
+              -66.1539949,
+              -17.3854155
+            ],
+            [
+              -66.154015,
+              -17.3854091
+            ],
+            [
+              -66.1540351,
+              -17.3853912
+            ],
+            [
+              -66.1541129,
+              -17.3852888
+            ],
+            [
+              -66.1540991,
+              -17.3852791
+            ],
+            [
+              -66.1539825,
+              -17.3851971
+            ],
+            [
+              -66.1539696,
+              -17.3852147
+            ],
+            [
+              -66.1539454,
+              -17.3852477
+            ],
+            [
+              -66.1539029,
+              -17.3853056
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1041020852,
+        "name": "Bliss",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "amenity": "cafe"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1159824796,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1557747,
+              -17.386102
+            ],
+            [
+              -66.1556854,
+              -17.3862282
+            ],
+            [
+              -66.1558093,
+              -17.3863081
+            ],
+            [
+              -66.1558804,
+              -17.3862076
+            ],
+            [
+              -66.1558767,
+              -17.386186
+            ],
+            [
+              -66.1558733,
+              -17.3861655
+            ],
+            [
+              -66.1557747,
+              -17.386102
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1159824796,
+        "name": "Altitude Resto Bar",
+        "type": "restaurant",
+        "category": "food",
+        "subcategory": "restaurant",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "581",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Valdiviezo",
+        "amenity": "restaurant",
+        "bar": "yes",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/altitude.bar.cocha/",
+        "contact:whatsapp": "+591 70797221",
+        "cuisine": "wings;burger;pique;pizza",
+        "delivery": "yes",
+        "email": "altitude.bar.cocha@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Th 12:00-01:00; Fr 12:00-02:00; Sa 15:00-02:00",
+        "payment:cash": "yes",
+        "phone": "+591 70797221",
+        "reservation": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1336508540,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1581581,
+              -17.3860677
+            ],
+            [
+              -66.1581843,
+              -17.3859109
+            ],
+            [
+              -66.1579291,
+              -17.385872
+            ],
+            [
+              -66.1579159,
+              -17.3859504
+            ],
+            [
+              -66.1579028,
+              -17.3860288
+            ],
+            [
+              -66.1581581,
+              -17.3860677
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1336508540,
+        "name": "Typica",
+        "type": "cafe",
+        "category": "food",
+        "subcategory": "cafe",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "661",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle España",
+        "amenity": "cafe",
+        "barrier": "wall",
+        "branch": "Sucursal España",
+        "brand": "Typica",
+        "contact:facebook": "https://www.facebook.com/typica.cafe/",
+        "cuisine": "coffee_shop",
+        "description": "Cafetería, academia, tostaduría, y tienda de venta de equipos para cafetería.",
+        "email": "contacto@typicabolivia.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "level": "0",
+        "opening_hours": "Mo-Su 07:30-22:00",
+        "outdoor_seating": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4 4301646;+591 62991107",
+        "website": "https://www.typicabolivia.com/locations-cochabamba-espana",
+        "wheelchair": "limited"
+      }
+    }
+  ]
+}

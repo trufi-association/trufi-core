@@ -1,0 +1,5607 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 2296982122,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500978,
+          -17.3908674
+        ]
+      },
+      "properties": {
+        "id": 2296982122,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2312521545,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1598694,
+          -17.3881865
+        ]
+      },
+      "properties": {
+        "id": 2312521545,
+        "name": "",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle México",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2377176291,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575498,
+          -17.3880896
+        ]
+      },
+      "properties": {
+        "id": 2377176291,
+        "name": "Todo Listo",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "491",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle España",
+        "pastry_shop": "yes",
+        "second_day": "yes",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2377781514,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1535474,
+          -17.3915155
+        ]
+      },
+      "properties": {
+        "id": 2377781514,
+        "name": "Super Haas",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "585",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "branch": "Sucursal Heroínas",
+        "brand": "Super Haas",
+        "contact:facebook": "https://www.facebook.com/superhaas/",
+        "contact:whatsapp": "+591 69437196",
+        "email": "superhaasltda@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 08:00-21:00, Su 09:00-13:00",
+        "operator": "Super Haas",
+        "operator:type": "private",
+        "payment:cash": "yes",
+        "phone": "+591 4 4234233;+591 69437196",
+        "shop": "supermarket",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2447752309,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562912,
+          -17.393955
+        ]
+      },
+      "properties": {
+        "id": 2447752309,
+        "name": "Skemas",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "285",
+        "addr:street": "Plaza 14 de Septiembre",
+        "contact:email": "ing_marcodaza@hotmail.com",
+        "contact:facebook": "https://www.facebook.com/skemasbienestarnatural/",
+        "contact:phone": "+591 4 4510261;+591 70714779;+591 79786916",
+        "contact:website": "http://www.natural.com.bo/",
+        "delivery": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418171,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544127,
+          -17.393829
+        ]
+      },
+      "properties": {
+        "id": 2631418171,
+        "name": "La Despensa Natural",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "477",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José Antonio de Sucre",
+        "contact:phone": "+591 4 4508268;+591 72738243",
+        "currency:BOB": "yes",
+        "diet:gluten_free": "yes",
+        "diet:vegan": "yes",
+        "operator": "La Despensa Natural",
+        "organic": "yes",
+        "payment:cash": "yes",
+        "shop": "convenience",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2681342296,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548138,
+          -17.393863
+        ]
+      },
+      "properties": {
+        "id": 2681342296,
+        "name": "Shopping Sucre",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2681342312,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542317,
+          -17.3939403
+        ]
+      },
+      "properties": {
+        "id": 2681342312,
+        "name": "Vigor",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida General José de San Martín",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2684641183,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1639138,
+          -17.3986332
+        ]
+      },
+      "properties": {
+        "id": 2684641183,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2694171722,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1626174,
+          -17.3967892
+        ]
+      },
+      "properties": {
+        "id": 2694171722,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2853595483,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562707,
+          -17.388639
+        ]
+      },
+      "properties": {
+        "id": 2853595483,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza Colón",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2857506280,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572101,
+          -17.3962836
+        ]
+      },
+      "properties": {
+        "id": 2857506280,
+        "name": "4 Arroyos",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "466",
+        "addr:street": "Calle Nataniel Aguirre",
+        "contact:email": "cuatroarroyos@hotmail.com",
+        "contact:facebook": "https://www.facebook.com/4ArroyosBolivia/",
+        "contact:phone": "+591 68584103",
+        "delivery": "yes",
+        "opening_hours": "Mo-Sa 08:00-19:00",
+        "operator": "4 Arroyos",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2874028187,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1538732,
+          -17.3937509
+        ]
+      },
+      "properties": {
+        "id": 2874028187,
+        "name": "Repostería Rossy",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Sucre",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3143359624,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514749,
+          -17.3934816
+        ]
+      },
+      "properties": {
+        "id": 3143359624,
+        "name": "Panadería y Repostería Hornerito",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "730",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle José Antonio de Sucre",
+        "bakehouse": "yes",
+        "branch": "Central",
+        "brand": "Hornerito",
+        "contact:facebook": "https://www.facebook.com/panaderiareposteriahornerito/",
+        "contact:whatsapp": "+591 65744161",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Panadería, Repostería y Pastelería de masitas dulces y saladas, tortas, galletas, panes y postres nacionales e internacionales.",
+        "email": "hornerito.panaderia@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 07:00-20:00; Su,PH Off",
+        "pastry": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4 4500612",
+        "shop": "bakery",
+        "website": "https://cat.quick.com.bo/el-hornerito-panaderia-y-pasteleria",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3208082637,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150656,
+          -17.3947451
+        ]
+      },
+      "properties": {
+        "id": 3208082637,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3277829886,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550039,
+          -17.3869018
+        ]
+      },
+      "properties": {
+        "id": 3277829886,
+        "name": "Magic Pan",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Salamanca",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3306972617,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534776,
+          -17.3850668
+        ]
+      },
+      "properties": {
+        "id": 3306972617,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3552730889,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583786,
+          -17.3942602
+        ]
+      },
+      "properties": {
+        "id": 3552730889,
+        "name": "La Francesa",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "273",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Ayacucho",
+        "branch": "Sucursal 3",
+        "brand": "La Francesa",
+        "contact:facebook": "https://facebook.com/LaFrancesaBolivia/",
+        "contact:phone": "+591 4 4508408",
+        "contact:website": "https://lafrancesa.com/",
+        "description": "La Francesa fabrica y comercializa productos de panadería (panes, galletas y pastelería).",
+        "operator": "Sociedad Industrial y Comercial La Francesa",
+        "payment:cash": "yes",
+        "shop": "convenience",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3707526668,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1517414,
+          -17.3887397
+        ]
+      },
+      "properties": {
+        "id": 3707526668,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3707526670,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1516862,
+          -17.3890603
+        ]
+      },
+      "properties": {
+        "id": 3707526670,
+        "name": "All Supermarket",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3879231486,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1640074,
+          -17.3990297
+        ]
+      },
+      "properties": {
+        "id": 3879231486,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3919289670,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156022,
+          -17.3892169
+        ]
+      },
+      "properties": {
+        "id": 3919289670,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3929850385,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619112,
+          -17.389848
+        ]
+      },
+      "properties": {
+        "id": 3929850385,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902708,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151675,
+          -17.3880247
+        ]
+      },
+      "properties": {
+        "id": 3952902708,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 16 de Julio",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4106074982,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506514,
+          -17.387064
+        ]
+      },
+      "properties": {
+        "id": 4106074982,
+        "name": "Toffe's",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:street": "Avenida Oquendo",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4186784744,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597578,
+          -17.396915
+        ]
+      },
+      "properties": {
+        "id": 4186784744,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4478187043,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.164885,
+          -17.3852521
+        ]
+      },
+      "properties": {
+        "id": 4478187043,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491060075,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588284,
+          -17.3861847
+        ]
+      },
+      "properties": {
+        "id": 4491060075,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491060173,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586854,
+          -17.3857059
+        ]
+      },
+      "properties": {
+        "id": 4491060173,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491060174,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586994,
+          -17.3866838
+        ]
+      },
+      "properties": {
+        "id": 4491060174,
+        "name": "Mc Nonny",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4491061051,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1514401,
+          -17.3964982
+        ]
+      },
+      "properties": {
+        "id": 4491061051,
+        "name": "Emi",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4513148872,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530774,
+          -17.3914447
+        ]
+      },
+      "properties": {
+        "id": 4513148872,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4534510651,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533187,
+          -17.3871593
+        ]
+      },
+      "properties": {
+        "id": 4534510651,
+        "name": "Villa Imperial",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4534510652,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525281,
+          -17.3899134
+        ]
+      },
+      "properties": {
+        "id": 4534510652,
+        "name": "Panadería Flores",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Antezana",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4602361098,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593787,
+          -17.389007
+        ]
+      },
+      "properties": {
+        "id": 4602361098,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4603068803,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153986,
+          -17.3890199
+        ]
+      },
+      "properties": {
+        "id": 4603068803,
+        "name": "Diarco",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Lanza",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673887318,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530738,
+          -17.3929978
+        ]
+      },
+      "properties": {
+        "id": 4673887318,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673889579,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612636,
+          -17.3914297
+        ]
+      },
+      "properties": {
+        "id": 4673889579,
+        "name": "Ñequito",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4673889993,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.157875,
+          -17.3911997
+        ]
+      },
+      "properties": {
+        "id": 4673889993,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4683974728,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511234,
+          -17.3898436
+        ]
+      },
+      "properties": {
+        "id": 4683974728,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4688076379,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544888,
+          -17.3861046
+        ]
+      },
+      "properties": {
+        "id": 4688076379,
+        "name": "Edén",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Salamanca",
+        "opening_hours": "Mo-Sa 09:00-01:00, 14:30-20:30",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4689734108,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601866,
+          -17.3866409
+        ]
+      },
+      "properties": {
+        "id": 4689734108,
+        "name": "SuperBuy",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4689734191,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1598651,
+          -17.3865483
+        ]
+      },
+      "properties": {
+        "id": 4689734191,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4699836508,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530829,
+          -17.3946942
+        ]
+      },
+      "properties": {
+        "id": 4699836508,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Jordán",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704186808,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1547992,
+          -17.397169
+        ]
+      },
+      "properties": {
+        "id": 4704186808,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Ladislao Cabrera",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740853505,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592296,
+          -17.3964146
+        ]
+      },
+      "properties": {
+        "id": 4740853505,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740853506,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1582241,
+          -17.3946348
+        ]
+      },
+      "properties": {
+        "id": 4740853506,
+        "name": "Pan de Arani",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle José María Santivañez",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4747939272,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1521837,
+          -17.3979937
+        ]
+      },
+      "properties": {
+        "id": 4747939272,
+        "name": "",
+        "type": "butcher",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "butcher"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787417477,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531068,
+          -17.3875657
+        ]
+      },
+      "properties": {
+        "id": 4787417477,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4787417479,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529441,
+          -17.3879524
+        ]
+      },
+      "properties": {
+        "id": 4787417479,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4857919576,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520095,
+          -17.3925999
+        ]
+      },
+      "properties": {
+        "id": 4857919576,
+        "name": "Ice",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4857919922,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15192,
+          -17.392353
+        ]
+      },
+      "properties": {
+        "id": 4857919922,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4941353135,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1632238,
+          -17.394374
+        ]
+      },
+      "properties": {
+        "id": 4941353135,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4953975534,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.153566,
+          -17.3852151
+        ]
+      },
+      "properties": {
+        "id": 4953975534,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4978535970,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546428,
+          -17.3908623
+        ]
+      },
+      "properties": {
+        "id": 4978535970,
+        "name": "Zahina",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981436339,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1501588,
+          -17.390878
+        ]
+      },
+      "properties": {
+        "id": 4981436339,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "bakery",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5037644821,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602846,
+          -17.3900334
+        ]
+      },
+      "properties": {
+        "id": 5037644821,
+        "name": "Pannis",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:housenumber": "346",
+        "addr:street": "Calle Junín",
+        "opening_hours": "Mo-Fr 09:00-13:00, 14:00-19:30; Sa 09:00-12:00",
+        "phone": "+591 70748829",
+        "shop": "bakery",
+        "website": "http://Facebook.com/pannis.delicatessen/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5042316378,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1621454,
+          -17.3918221
+        ]
+      },
+      "properties": {
+        "id": 5042316378,
+        "name": "",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5042316437,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1622698,
+          -17.3924467
+        ]
+      },
+      "properties": {
+        "id": 5042316437,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215829,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15881,
+          -17.3869614
+        ]
+      },
+      "properties": {
+        "id": 5102215829,
+        "name": "Barba de Padilla",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215830,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588167,
+          -17.3868934
+        ]
+      },
+      "properties": {
+        "id": 5102215830,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216051,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591017,
+          -17.3871361
+        ]
+      },
+      "properties": {
+        "id": 5102216051,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216063,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596264,
+          -17.3905577
+        ]
+      },
+      "properties": {
+        "id": 5102216063,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216069,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601357,
+          -17.392088
+        ]
+      },
+      "properties": {
+        "id": 5102216069,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216124,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159537,
+          -17.3872075
+        ]
+      },
+      "properties": {
+        "id": 5102216124,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216134,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.159908,
+          -17.390617
+        ]
+      },
+      "properties": {
+        "id": 5102216134,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117995214,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1611119,
+          -17.3855425
+        ]
+      },
+      "properties": {
+        "id": 5117995214,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996635,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576046,
+          -17.3868271
+        ]
+      },
+      "properties": {
+        "id": 5117996635,
+        "name": "Becca",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996750,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588446,
+          -17.3861099
+        ]
+      },
+      "properties": {
+        "id": 5117996750,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5162127669,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1607475,
+          -17.3873816
+        ]
+      },
+      "properties": {
+        "id": 5162127669,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5162128321,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1612366,
+          -17.3876656
+        ]
+      },
+      "properties": {
+        "id": 5162128321,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5166827105,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1649109,
+          -17.3946646
+        ]
+      },
+      "properties": {
+        "id": 5166827105,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5186151384,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1511111,
+          -17.3914472
+        ]
+      },
+      "properties": {
+        "id": 5186151384,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5217961366,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596469,
+          -17.387337
+        ]
+      },
+      "properties": {
+        "id": 5217961366,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5254933119,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1515963,
+          -17.3948735
+        ]
+      },
+      "properties": {
+        "id": 5254933119,
+        "name": "Alimentos Saludables",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5296641028,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.151699,
+          -17.3858361
+        ]
+      },
+      "properties": {
+        "id": 5296641028,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274469,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1617253,
+          -17.3908838
+        ]
+      },
+      "properties": {
+        "id": 5319274469,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274471,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1608154,
+          -17.3905984
+        ]
+      },
+      "properties": {
+        "id": 5319274471,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319275324,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1559636,
+          -17.3955774
+        ]
+      },
+      "properties": {
+        "id": 5319275324,
+        "name": "Galería Villarroel",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Esteban Arze",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5371442121,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1640142,
+          -17.3956254
+        ]
+      },
+      "properties": {
+        "id": 5371442121,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5391531381,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599387,
+          -17.393735
+        ]
+      },
+      "properties": {
+        "id": 5391531381,
+        "name": "Doña Blanca",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5994750895,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1583425,
+          -17.3886478
+        ]
+      },
+      "properties": {
+        "id": 5994750895,
+        "name": "Gustosso",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "contact:mobile": "+591-63827700",
+        "contact:phone": "+591-4-4309825",
+        "description": "Gustosso - Empanadas, sándwiches y pizzas",
+        "payment:cash": "yes",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6754516914,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544591,
+          -17.3939785
+        ]
+      },
+      "properties": {
+        "id": 6754516914,
+        "name": "Galería PK-2",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6839750782,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1640307,
+          -17.3990564
+        ]
+      },
+      "properties": {
+        "id": 6839750782,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 7994059030,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152735,
+          -17.3936736
+        ]
+      },
+      "properties": {
+        "id": 7994059030,
+        "name": "Repostería Rossy",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Sucre",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8067574875,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548504,
+          -17.3896144
+        ]
+      },
+      "properties": {
+        "id": 8067574875,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8086115231,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530325,
+          -17.3917023
+        ]
+      },
+      "properties": {
+        "id": 8086115231,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8226868859,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600732,
+          -17.3915679
+        ]
+      },
+      "properties": {
+        "id": 8226868859,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238772509,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522329,
+          -17.3994071
+        ]
+      },
+      "properties": {
+        "id": 8238772509,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238772514,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1521566,
+          -17.3983774
+        ]
+      },
+      "properties": {
+        "id": 8238772514,
+        "name": "Frutería",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Aroma",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238772515,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152459,
+          -17.3990747
+        ]
+      },
+      "properties": {
+        "id": 8238772515,
+        "name": "Venta de Papas",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783150,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529706,
+          -17.3988549
+        ]
+      },
+      "properties": {
+        "id": 8238783150,
+        "name": "Venta de Panes",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783157,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523264,
+          -17.3986681
+        ]
+      },
+      "properties": {
+        "id": 8238783157,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783174,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1524466,
+          -17.3991729
+        ]
+      },
+      "properties": {
+        "id": 8238783174,
+        "name": "Venta de Plástico y Bolsas",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783181,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528539,
+          -17.3991543
+        ]
+      },
+      "properties": {
+        "id": 8238783181,
+        "name": "Venta de Productos de Limpieza",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783249,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531526,
+          -17.3985294
+        ]
+      },
+      "properties": {
+        "id": 8238783249,
+        "name": "Venta de Productos de Limpieza",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783257,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152548,
+          -17.3982526
+        ]
+      },
+      "properties": {
+        "id": 8238783257,
+        "name": "Ventas de Carnes y Pescados",
+        "type": "butcher",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "butcher"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783259,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529681,
+          -17.3981692
+        ]
+      },
+      "properties": {
+        "id": 8238783259,
+        "name": "Alquiler de Trajes",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8238783260,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529511,
+          -17.3983055
+        ]
+      },
+      "properties": {
+        "id": 8238783260,
+        "name": "Alquiler de Trajes",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8241198633,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526548,
+          -17.3989588
+        ]
+      },
+      "properties": {
+        "id": 8241198633,
+        "name": "Venta de Verduras",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8241198653,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525144,
+          -17.398459
+        ]
+      },
+      "properties": {
+        "id": 8241198653,
+        "name": "Venta de Verduras",
+        "type": "greengrocer",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "shop": "greengrocer"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8241198681,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527785,
+          -17.398076
+        ]
+      },
+      "properties": {
+        "id": 8241198681,
+        "name": "",
+        "type": "butcher",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "shop": "butcher"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8329163435,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1532886,
+          -17.3924321
+        ]
+      },
+      "properties": {
+        "id": 8329163435,
+        "name": "Tienda Gaby",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8498939208,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592213,
+          -17.3850894
+        ]
+      },
+      "properties": {
+        "id": 8498939208,
+        "name": "",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Baptista",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8597535065,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579701,
+          -17.3916193
+        ]
+      },
+      "properties": {
+        "id": 8597535065,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Mariano Baptista",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8604930312,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588701,
+          -17.3931467
+        ]
+      },
+      "properties": {
+        "id": 8604930312,
+        "name": "Plaza 10",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "check_date": "2024-11-15",
+        "shop": "supermarket"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8695273887,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.161051,
+          -17.3933986
+        ]
+      },
+      "properties": {
+        "id": 8695273887,
+        "name": "Tienda",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Hamiraya",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9076411837,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564256,
+          -17.3878189
+        ]
+      },
+      "properties": {
+        "id": 9076411837,
+        "name": "Pan de Arani",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle México",
+        "informal": "yes",
+        "opening_hours": "Mo-Su 18:00+",
+        "payment:cash": "yes",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9400884789,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150565,
+          -17.3890427
+        ]
+      },
+      "properties": {
+        "id": 9400884789,
+        "name": "Sunqu",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Oquendo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9863185782,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530398,
+          -17.3939837
+        ]
+      },
+      "properties": {
+        "id": 9863185782,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Lanza",
+        "level": "0",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9910583691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577459,
+          -17.3911853
+        ]
+      },
+      "properties": {
+        "id": 9910583691,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle Colombia",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9941529693,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1531217,
+          -17.3993151
+        ]
+      },
+      "properties": {
+        "id": 9941529693,
+        "name": "La Estrella",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Avenida General José de San Martín",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9960625239,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1506492,
+          -17.3864181
+        ]
+      },
+      "properties": {
+        "id": 9960625239,
+        "name": "El Tupiceño",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Calle Federico Blanco",
+        "opening_hours": "Mo-Su 10:00-22:00",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10015483911,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522325,
+          -17.3921138
+        ]
+      },
+      "properties": {
+        "id": 10015483911,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Antezana",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10577758464,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1508266,
+          -17.3910089
+        ]
+      },
+      "properties": {
+        "id": 10577758464,
+        "name": "Panadería Naicho",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida Heroínas",
+        "level": "0",
+        "operator": "Panadería Naicho",
+        "payment:cash": "yes",
+        "shop": "bakery",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10607536771,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557426,
+          -17.3974279
+        ]
+      },
+      "properties": {
+        "id": 10607536771,
+        "name": "Panadería Zahína",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "branch": "Sucursal Esteban Arze",
+        "brand": "Zahína",
+        "contact:facebook": "https://www.facebook.com/zahina.panaderia/",
+        "contact:whatsapp": "+591 79969623",
+        "cuisine": "coffee_shop;tea;pastry;cake;empanada",
+        "email": "zahinapanaderia@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:00-19:30; Sa 07:00-16:30; Su 07:00-14:00",
+        "operator": "Panadería Zahína",
+        "payment:cash": "yes",
+        "phone": "+591 79969623",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10607536772,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1546321,
+          -17.3909174
+        ]
+      },
+      "properties": {
+        "id": 10607536772,
+        "name": "Panadería Zahína",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida General José de San Martín",
+        "branch": "Sucursal San Martín",
+        "brand": "Zahína",
+        "contact:facebook": "https://www.facebook.com/zahina.panaderia/",
+        "contact:whatsapp": "+591 79969623",
+        "cuisine": "coffee_shop;tea;pastry;cake;empanada",
+        "email": "zahinapanaderia@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:00-19:30; Sa 07:00-16:30; Su 07:00-14:00",
+        "operator": "Panadería Zahína",
+        "payment:cash": "yes",
+        "phone": "+591 79969623",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10706990305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581926,
+          -17.3967716
+        ]
+      },
+      "properties": {
+        "id": 10706990305,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Justino Villa Leonardo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10706998605,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596627,
+          -17.3943785
+        ]
+      },
+      "properties": {
+        "id": 10706998605,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Maura Paniagua Martínez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707285905,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576401,
+          -17.3912537
+        ]
+      },
+      "properties": {
+        "id": 10707285905,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Claudia Bilbao;Silvia Dolores",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707296406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544115,
+          -17.3949152
+        ]
+      },
+      "properties": {
+        "id": 10707296406,
+        "name": "Tienda 303380",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "operator": "Marian Stefan Prado Rocha",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707354005,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543692,
+          -17.394908
+        ]
+      },
+      "properties": {
+        "id": 10707354005,
+        "name": "Tienda 334069",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "operator": "Absalon Jordan Garcia",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707361205,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1548396,
+          -17.3949651
+        ]
+      },
+      "properties": {
+        "id": 10707361205,
+        "name": "Tienda 306804",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "operator": "Marcia Elizabeth Rocha Siles",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707383705,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1547536,
+          -17.3949469
+        ]
+      },
+      "properties": {
+        "id": 10707383705,
+        "name": "Tienda 325447",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "operator": "Genoveva Ramos",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707388405,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549232,
+          -17.3949386
+        ]
+      },
+      "properties": {
+        "id": 10707388405,
+        "name": "Tienda 335360",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Calle Jordán",
+        "operator": "Marcela Heredia",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707403005,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550124,
+          -17.3945672
+        ]
+      },
+      "properties": {
+        "id": 10707403005,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Maura Ulloa",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707423305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544738,
+          -17.3945448
+        ]
+      },
+      "properties": {
+        "id": 10707423305,
+        "name": "Tienda 343184",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Natividad Meneces",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707423306,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543948,
+          -17.3945993
+        ]
+      },
+      "properties": {
+        "id": 10707423306,
+        "name": "Tienda 337005",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Flora Rodriguez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707425305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544315,
+          -17.3946999
+        ]
+      },
+      "properties": {
+        "id": 10707425305,
+        "name": "Tienda 302996",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Pasaje Guillermo Aldunate",
+        "operator": "Oscar Nuñez Rebollo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707425306,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544226,
+          -17.3947323
+        ]
+      },
+      "properties": {
+        "id": 10707425306,
+        "name": "Tienda 342002",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Carlos Eduardo Montoya",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10707430105,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542972,
+          -17.3945727
+        ]
+      },
+      "properties": {
+        "id": 10707430105,
+        "name": "Tienda 303000",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:street": "Pasaje Guillermo Aldunate",
+        "operator": "Nelly Rasguido",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279705,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541701,
+          -17.3945367
+        ]
+      },
+      "properties": {
+        "id": 10709279705,
+        "name": "Tienda 322371",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Nancy Figueroa",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279706,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544626,
+          -17.3948945
+        ]
+      },
+      "properties": {
+        "id": 10709279706,
+        "name": "Tienda 312069",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Nancy Carla Lopez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279707,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1543001,
+          -17.3949818
+        ]
+      },
+      "properties": {
+        "id": 10709279707,
+        "name": "Tienda 326179",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Ademia Alarcon Murillo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279709,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.150752,
+          -17.3986417
+        ]
+      },
+      "properties": {
+        "id": 10709279709,
+        "name": "Tienda 341040",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Joel Merida",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279711,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525058,
+          -17.3985253
+        ]
+      },
+      "properties": {
+        "id": 10709279711,
+        "name": "Tienda 303397",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Marlen Arispe",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279805,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154113,
+          -17.3945916
+        ]
+      },
+      "properties": {
+        "id": 10709279805,
+        "name": "Tienda 325475",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Choque Lidia",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279806,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541583,
+          -17.3945955
+        ]
+      },
+      "properties": {
+        "id": 10709279806,
+        "name": "Tienda 342003",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "operator": "Sara Medrano",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279807,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523491,
+          -17.3983373
+        ]
+      },
+      "properties": {
+        "id": 10709279807,
+        "name": "Tienda 342840",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Olga Lopez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279808,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527556,
+          -17.3983324
+        ]
+      },
+      "properties": {
+        "id": 10709279808,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Jonny Lopez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709279809,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527616,
+          -17.398291
+        ]
+      },
+      "properties": {
+        "id": 10709279809,
+        "name": "Tienda 322383",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Elena Flores Ascarraga",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280005,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541159,
+          -17.3946451
+        ]
+      },
+      "properties": {
+        "id": 10709280005,
+        "name": "Tienda 325281",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Karen Tambo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280006,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1542018,
+          -17.3946947
+        ]
+      },
+      "properties": {
+        "id": 10709280006,
+        "name": "Tienda 344313",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Marina Lopez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280007,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526274,
+          -17.3984918
+        ]
+      },
+      "properties": {
+        "id": 10709280007,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280008,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528079,
+          -17.3983952
+        ]
+      },
+      "properties": {
+        "id": 10709280008,
+        "name": "Tienda 322486",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Teresa Coca Coca",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280009,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528755,
+          -17.3983305
+        ]
+      },
+      "properties": {
+        "id": 10709280009,
+        "name": "Tienda 343999",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Rosmery Lopez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280105,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540917,
+          -17.3946816
+        ]
+      },
+      "properties": {
+        "id": 10709280105,
+        "name": "Tienda 329293",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Huarachi Frutosa",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280107,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525596,
+          -17.3987307
+        ]
+      },
+      "properties": {
+        "id": 10709280107,
+        "name": "Tienda 336607",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Jhannet Ramos",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280108,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152596,
+          -17.3985584
+        ]
+      },
+      "properties": {
+        "id": 10709280108,
+        "name": "Tienda 325498",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Ana Blanca Ramirez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280109,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1525757,
+          -17.3985453
+        ]
+      },
+      "properties": {
+        "id": 10709280109,
+        "name": "Tienda 303376",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Sonia Amparo Aeispe Torrico",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280110,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.152318,
+          -17.3984249
+        ]
+      },
+      "properties": {
+        "id": 10709280110,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Cristina Illanes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280205,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540796,
+          -17.3947124
+        ]
+      },
+      "properties": {
+        "id": 10709280205,
+        "name": "Tienda 344123",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Teresa Calani",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280206,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529234,
+          -17.3986231
+        ]
+      },
+      "properties": {
+        "id": 10709280206,
+        "name": "Tienda 304760",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Diacona Delgadillo de Salguero",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280405,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1503881,
+          -17.3986602
+        ]
+      },
+      "properties": {
+        "id": 10709280405,
+        "name": "Tienda 341042",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Ana Maria Herbas",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526243,
+          -17.3985636
+        ]
+      },
+      "properties": {
+        "id": 10709280406,
+        "name": "Tienda 341150",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Rosa Vargas",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280407,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1526215,
+          -17.3985379
+        ]
+      },
+      "properties": {
+        "id": 10709280407,
+        "name": "Tienda 344033",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Yola Rodriguez",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280408,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528225,
+          -17.3983201
+        ]
+      },
+      "properties": {
+        "id": 10709280408,
+        "name": "Tienda 323383",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Elena Flores Ascarraga",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280505,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1502782,
+          -17.3986426
+        ]
+      },
+      "properties": {
+        "id": 10709280505,
+        "name": "Tienda 327856",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Karen Arce",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280506,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523406,
+          -17.3983783
+        ]
+      },
+      "properties": {
+        "id": 10709280506,
+        "name": "Tienda 343202",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Rosmery Salazar",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709280605,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510308,
+          -17.3986138
+        ]
+      },
+      "properties": {
+        "id": 10709280605,
+        "name": "Tienda 336510",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Daniela Quispe",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709295705,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528811,
+          -17.3983997
+        ]
+      },
+      "properties": {
+        "id": 10709295705,
+        "name": "Tienda 322487",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Ilda Guardia Guardia",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709299606,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528807,
+          -17.3986207
+        ]
+      },
+      "properties": {
+        "id": 10709299606,
+        "name": "Tienda 343439",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Luis Fernando Gonzales",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709302005,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529595,
+          -17.3986312
+        ]
+      },
+      "properties": {
+        "id": 10709302005,
+        "name": "Tienda 303566",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Betty Nina Espinoza",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709302805,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529993,
+          -17.3986318
+        ]
+      },
+      "properties": {
+        "id": 10709302805,
+        "name": "Tienda 300687",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Teresa Marisol  Alaja Rebollo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709304605,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1530569,
+          -17.3986375
+        ]
+      },
+      "properties": {
+        "id": 10709304605,
+        "name": "Tienda 300811",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Severina Alcocer Urquidi",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709305705,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1522405,
+          -17.3990935
+        ]
+      },
+      "properties": {
+        "id": 10709305705,
+        "name": "Tienda 326093",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Maria Luis Navia",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709306205,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523623,
+          -17.3991776
+        ]
+      },
+      "properties": {
+        "id": 10709306205,
+        "name": "Tienda 300821",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Edmundo Duchen Salvatierra",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709308305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529424,
+          -17.3991462
+        ]
+      },
+      "properties": {
+        "id": 10709308305,
+        "name": "Tienda 336606",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Nataly Maidana Zurita",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709308306,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529878,
+          -17.3990567
+        ]
+      },
+      "properties": {
+        "id": 10709308306,
+        "name": "Tienda  324666",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Sandra Rojas Guzman",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709311305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537567,
+          -17.3990362
+        ]
+      },
+      "properties": {
+        "id": 10709311305,
+        "name": "Tienda 328903",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Alejandro Couzet Oliva",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709313305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541718,
+          -17.3989176
+        ]
+      },
+      "properties": {
+        "id": 10709313305,
+        "name": "Tienda 325910",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Maria Fatima Cardozo",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10709314805,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544092,
+          -17.3992
+        ]
+      },
+      "properties": {
+        "id": 10709314805,
+        "name": "Tienda 317586",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Elena Perez Flores",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10766421805,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1523707,
+          -17.3991905
+        ]
+      },
+      "properties": {
+        "id": 10766421805,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "operator": "Juan Querubín Anaya",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10770094638,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590635,
+          -17.3907079
+        ]
+      },
+      "properties": {
+        "id": 10770094638,
+        "name": "Galería Copacabana",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "268",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "check_date": "2023-03-28",
+        "level": "0",
+        "payment:cash": "yes",
+        "phone": "+591 4 4521592",
+        "shop": "mall",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10975067651,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528364,
+          -17.3882558
+        ]
+      },
+      "properties": {
+        "id": 10975067651,
+        "name": "Tienda de Cereales",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Venezuela",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10975067658,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537591,
+          -17.3893558
+        ]
+      },
+      "properties": {
+        "id": 10975067658,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Ecuador",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10975067659,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1540407,
+          -17.3896301
+        ]
+      },
+      "properties": {
+        "id": 10975067659,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11090869426,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613576,
+          -17.3906731
+        ]
+      },
+      "properties": {
+        "id": 11090869426,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11112538092,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534791,
+          -17.396765
+        ]
+      },
+      "properties": {
+        "id": 11112538092,
+        "name": "",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "595",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Avenida General José de San Martín",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "convenience"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12081159186,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541361,
+          -17.3991396
+        ]
+      },
+      "properties": {
+        "id": 12081159186,
+        "name": "",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Calle 25 de Mayo",
+        "informal": "yes",
+        "payment:cash": "yes",
+        "shop": "bakery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12081159187,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1536398,
+          -17.3990404
+        ]
+      },
+      "properties": {
+        "id": 12081159187,
+        "name": "Elpeflor",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "370",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Avenida Aroma",
+        "description": "Tienda de venta de galletas, cereales para desayuno, avena, pastas, fideos, dulces y otros de las marcas Ferrari Ghezzi, La Suprema, San Gabriel, Princesa, La Estrella.",
+        "level": "0",
+        "opening_hours": "Mo-Sa 08:00-19:00",
+        "operator": "Elpeflor",
+        "payment:cash": "yes",
+        "phone": "+591 4226418;+591 77906177",
+        "shop": "convenience",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12145259255,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560356,
+          -17.395157
+        ]
+      },
+      "properties": {
+        "id": 12145259255,
+        "name": "Señor Ovillo",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Teniente Coronel German Jordán",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "convenience",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12316448131,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590596,
+          -17.3907291
+        ]
+      },
+      "properties": {
+        "id": 12316448131,
+        "name": "Galería Copacabana",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "268",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "payment:cash": "yes",
+        "shop": "mall",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12547932861,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500497,
+          -17.3914637
+        ]
+      },
+      "properties": {
+        "id": 12547932861,
+        "name": "Super Económica 2",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Avenida Oquendo",
+        "level": "0",
+        "payment:cash": "yes",
+        "shop": "supermarket",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12827659501,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603197,
+          -17.3929939
+        ]
+      },
+      "properties": {
+        "id": 12827659501,
+        "name": "Panadería y Repostería Hornerito",
+        "type": "bakery",
+        "category": "shopping",
+        "subcategory": "food_shop",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Edificio Central",
+        "addr:housenumber": "230",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "branch": "Sucursal 4",
+        "brand": "Hornerito",
+        "contact:facebook": "https://www.facebook.com/panaderiareposteriahornerito/",
+        "contact:whatsapp": "+591 65744161",
+        "delivery": "yes",
+        "delivery:partner": "PedidosYa",
+        "description": "Panadería, Repostería y Pastelería de masitas dulces y saladas, tortas, galletas, panes y postres nacionales e internacionales.",
+        "email": "hornerito.panaderia@gmail.com",
+        "level": "0",
+        "opening_hours": "Mo-Sa 07:00-20:00; Su,PH Off",
+        "pastry": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4 4360460",
+        "shop": "bakery",
+        "website": "https://cat.quick.com.bo/el-hornerito-panaderia-y-pasteleria",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12874237781,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154283,
+          -17.3874998
+        ]
+      },
+      "properties": {
+        "id": 12874237781,
+        "name": "Dalvas",
+        "type": "convenience",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Guerrilleros José Miguel Lanza",
+        "check_date": "2025-10-21",
+        "currency:BOB": "yes",
+        "internet_access": "no",
+        "organic": "no",
+        "payment:cards": "no",
+        "payment:cash": "yes",
+        "payment:credit_cards": "no",
+        "payment:debit_cards": "no",
+        "payment:qr_code": "yes",
+        "second_hand": "no",
+        "shop": "convenience",
+        "stroller": "no",
+        "toilets": "no",
+        "toilets:menstrual_products": "no",
+        "toilets:wheelchair": "no",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 66865026,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.154617,
+              -17.394544
+            ],
+            [
+              -66.1545038,
+              -17.3945258
+            ],
+            [
+              -66.1542139,
+              -17.394479
+            ],
+            [
+              -66.1541027,
+              -17.3944611
+            ],
+            [
+              -66.1540652,
+              -17.3946671
+            ],
+            [
+              -66.1540318,
+              -17.3948505
+            ],
+            [
+              -66.1540391,
+              -17.3948626
+            ],
+            [
+              -66.1540465,
+              -17.3948749
+            ],
+            [
+              -66.1544367,
+              -17.3949366
+            ],
+            [
+              -66.1544507,
+              -17.3949388
+            ],
+            [
+              -66.1544535,
+              -17.3949228
+            ],
+            [
+              -66.1545456,
+              -17.3949387
+            ],
+            [
+              -66.1545819,
+              -17.3947408
+            ],
+            [
+              -66.1545934,
+              -17.3946734
+            ],
+            [
+              -66.154617,
+              -17.394544
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 66865026,
+        "name": "Mercado 25 de Mayo",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "amenity": "marketplace",
+        "building": "residential",
+        "building:levels": "1",
+        "historic": "building",
+        "opening_hours": "Mo-Su 07:00-20:00",
+        "roof:shape": "flat",
+        "start_date": "1925"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 66865080,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1554287,
+              -17.3946439
+            ],
+            [
+              -66.1554084,
+              -17.3947535
+            ],
+            [
+              -66.1553638,
+              -17.3949951
+            ],
+            [
+              -66.1553564,
+              -17.3950348
+            ],
+            [
+              -66.1553498,
+              -17.3950705
+            ],
+            [
+              -66.1551779,
+              -17.3950397
+            ],
+            [
+              -66.1551618,
+              -17.3950368
+            ],
+            [
+              -66.1551322,
+              -17.3950314
+            ],
+            [
+              -66.1551729,
+              -17.3948113
+            ],
+            [
+              -66.1552105,
+              -17.3946072
+            ],
+            [
+              -66.1554287,
+              -17.3946439
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 66865080,
+        "name": "Mercado 27 de Mayo",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "amenity": "marketplace",
+        "barrier": "wall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 156117732,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1582478,
+              -17.3935471
+            ],
+            [
+              -66.1581143,
+              -17.3935238
+            ],
+            [
+              -66.1580646,
+              -17.3937879
+            ],
+            [
+              -66.1581986,
+              -17.3938089
+            ],
+            [
+              -66.1582053,
+              -17.3937674
+            ],
+            [
+              -66.1582478,
+              -17.3935471
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 156117732,
+        "name": "Galería Magnate",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "144",
+        "addr:street": "Calle General Achá",
+        "building": "retail",
+        "building:levels": "2",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 224312071,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1549901,
+              -17.3948089
+            ],
+            [
+              -66.154641,
+              -17.3947507
+            ],
+            [
+              -66.1545819,
+              -17.3947408
+            ],
+            [
+              -66.1545456,
+              -17.3949387
+            ],
+            [
+              -66.1549538,
+              -17.3950068
+            ],
+            [
+              -66.1549901,
+              -17.3948089
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 224312071,
+        "name": "Mercado 1 de Marzo",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "marketplace",
+        "building": "retail",
+        "building:levels": "3",
+        "roof:shape": "flat",
+        "start_date": "2014"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 246257160,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569288,
+              -17.390781
+            ],
+            [
+              -66.1568557,
+              -17.390771
+            ],
+            [
+              -66.1567534,
+              -17.3907522
+            ],
+            [
+              -66.1566875,
+              -17.3907419
+            ],
+            [
+              -66.1566576,
+              -17.390736
+            ],
+            [
+              -66.1566403,
+              -17.3908337
+            ],
+            [
+              -66.1566117,
+              -17.3909888
+            ],
+            [
+              -66.1568465,
+              -17.3910316
+            ],
+            [
+              -66.1568654,
+              -17.3910193
+            ],
+            [
+              -66.1568953,
+              -17.3909998
+            ],
+            [
+              -66.1569229,
+              -17.3908197
+            ],
+            [
+              -66.1569288,
+              -17.390781
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 246257160,
+        "name": "Galería Comercial España",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "building": "commercial",
+        "building:levels": "2",
+        "payment:cash": "yes",
+        "roof:shape": "gabled",
+        "shop": "mall",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 263750748,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1626259,
+              -17.3968438
+            ],
+            [
+              -66.1625275,
+              -17.3968309
+            ],
+            [
+              -66.1624837,
+              -17.3971367
+            ],
+            [
+              -66.162582,
+              -17.3971495
+            ],
+            [
+              -66.1626259,
+              -17.3968438
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 263750748,
+        "name": "Mercado Gerónimo de Osorio",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Tarapacá",
+        "amenity": "marketplace",
+        "building": "public",
+        "building:levels": "2",
+        "roof:shape": "gabled"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 506145020,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1554182,
+              -17.3951966
+            ],
+            [
+              -66.155323,
+              -17.3951818
+            ],
+            [
+              -66.1552281,
+              -17.395165
+            ],
+            [
+              -66.1551955,
+              -17.3953561
+            ],
+            [
+              -66.1551847,
+              -17.3954114
+            ],
+            [
+              -66.1552195,
+              -17.3954146
+            ],
+            [
+              -66.155191,
+              -17.39551
+            ],
+            [
+              -66.1551378,
+              -17.3956877
+            ],
+            [
+              -66.1552599,
+              -17.3957086
+            ],
+            [
+              -66.1553031,
+              -17.3955453
+            ],
+            [
+              -66.1553535,
+              -17.395554
+            ],
+            [
+              -66.1554035,
+              -17.3952824
+            ],
+            [
+              -66.1554182,
+              -17.3951966
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 506145020,
+        "name": "Galería Comercial",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "building": "commercial",
+        "building:levels": "2",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 848324483,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.161287,
+              -17.38973
+            ],
+            [
+              -66.1615448,
+              -17.3897789
+            ],
+            [
+              -66.1615579,
+              -17.3898042
+            ],
+            [
+              -66.1615238,
+              -17.3899699
+            ],
+            [
+              -66.1614874,
+              -17.3901438
+            ],
+            [
+              -66.1614808,
+              -17.390186
+            ],
+            [
+              -66.1613568,
+              -17.3901653
+            ],
+            [
+              -66.1613139,
+              -17.3901582
+            ],
+            [
+              -66.1612541,
+              -17.3901482
+            ],
+            [
+              -66.1610149,
+              -17.3901098
+            ],
+            [
+              -66.1610402,
+              -17.3899814
+            ],
+            [
+              -66.1610881,
+              -17.3899885
+            ],
+            [
+              -66.1610915,
+              -17.3899724
+            ],
+            [
+              -66.1611058,
+              -17.3898966
+            ],
+            [
+              -66.1612499,
+              -17.3899213
+            ],
+            [
+              -66.161287,
+              -17.38973
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 848324483,
+        "name": "Super EMAPA",
+        "type": "supermarket",
+        "category": "shopping",
+        "subcategory": "supermarket",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "360",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Hamiraya",
+        "barrier": "wall",
+        "branch": "Regional Cochabamba",
+        "brand": "EMAPA",
+        "contact:facebook": "https://www.facebook.com/EmapaBolivia",
+        "description": "~1000 productos 100% nacionales de micro y pequeños empresarios y artesanos de bolivia.",
+        "email": "emapa@emapa.gob.bo",
+        "level": "0",
+        "opening_hours": "Mo-Fr 07:30-21:30",
+        "operator": "Empresa de Apoyo a la Producción de Alimentos",
+        "operator:short": "EMAPA",
+        "operator:type": "public",
+        "payment:cash": "yes",
+        "phone": "+591 4 4522244;+591 72205579",
+        "shop": "supermarket",
+        "start_date": "2017-01-20",
+        "website": "https://www.emapa.gob.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 878723765,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1579054,
+              -17.3945644
+            ],
+            [
+              -66.1580365,
+              -17.3945875
+            ],
+            [
+              -66.1581675,
+              -17.3946105
+            ],
+            [
+              -66.1581477,
+              -17.3947086
+            ],
+            [
+              -66.1580965,
+              -17.3949655
+            ],
+            [
+              -66.1580667,
+              -17.3951314
+            ],
+            [
+              -66.1579517,
+              -17.3951133
+            ],
+            [
+              -66.1578093,
+              -17.3950908
+            ],
+            [
+              -66.1578371,
+              -17.394939
+            ],
+            [
+              -66.1579005,
+              -17.3945912
+            ],
+            [
+              -66.1579054,
+              -17.3945644
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 878723765,
+        "name": "Centro Comercial Vallejos",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Santivañez",
+        "building": "mall",
+        "payment:cash": "yes",
+        "shop": "mall",
+        "start_date": "2008-07-17",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 880860321,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1503259,
+              -17.3992227
+            ],
+            [
+              -66.1503568,
+              -17.3991322
+            ],
+            [
+              -66.1503748,
+              -17.3991549
+            ],
+            [
+              -66.1504428,
+              -17.3992015
+            ],
+            [
+              -66.1505232,
+              -17.3992357
+            ],
+            [
+              -66.1507035,
+              -17.3992498
+            ],
+            [
+              -66.1509614,
+              -17.3992467
+            ],
+            [
+              -66.1509532,
+              -17.3993376
+            ],
+            [
+              -66.1505671,
+              -17.399336
+            ],
+            [
+              -66.1505458,
+              -17.3993533
+            ],
+            [
+              -66.1505441,
+              -17.3993799
+            ],
+            [
+              -66.150596,
+              -17.3996187
+            ],
+            [
+              -66.150416,
+              -17.3997138
+            ],
+            [
+              -66.1504094,
+              -17.3998925
+            ],
+            [
+              -66.1502073,
+              -17.3998549
+            ],
+            [
+              -66.1500069,
+              -17.3998345
+            ],
+            [
+              -66.1500602,
+              -17.3998109
+            ],
+            [
+              -66.1505162,
+              -17.3996088
+            ],
+            [
+              -66.1505326,
+              -17.3995774
+            ],
+            [
+              -66.150526,
+              -17.3995351
+            ],
+            [
+              -66.1504784,
+              -17.3993078
+            ],
+            [
+              -66.1503259,
+              -17.3992227
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 880860321,
+        "name": "Mercado extensión del Triángulo",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Brasil",
+        "amenity": "marketplace",
+        "description": "Mercado popular de verduras, frutas y granos de la región.",
+        "opening_hours": "Mo-Su,PH 06:00-19:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 900528178,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1564697,
+              -17.3884255
+            ],
+            [
+              -66.1563392,
+              -17.3884071
+            ],
+            [
+              -66.1563067,
+              -17.3886127
+            ],
+            [
+              -66.1564714,
+              -17.3886362
+            ],
+            [
+              -66.1564762,
+              -17.3886058
+            ],
+            [
+              -66.1563928,
+              -17.3885938
+            ],
+            [
+              -66.1564182,
+              -17.3884335
+            ],
+            [
+              -66.1564673,
+              -17.3884406
+            ],
+            [
+              -66.1564697,
+              -17.3884255
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 900528178,
+        "name": "Shopping Venus",
+        "type": "department_store",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Plaza Colón",
+        "building": "commercial",
+        "building:levels": "2",
+        "shop": "department_store"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482148,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1581143,
+              -17.3935238
+            ],
+            [
+              -66.1580501,
+              -17.3935128
+            ],
+            [
+              -66.1579861,
+              -17.3935019
+            ],
+            [
+              -66.1579367,
+              -17.3937664
+            ],
+            [
+              -66.1579801,
+              -17.3937737
+            ],
+            [
+              -66.1579418,
+              -17.3939828
+            ],
+            [
+              -66.1580246,
+              -17.393996
+            ],
+            [
+              -66.1580447,
+              -17.3938916
+            ],
+            [
+              -66.1580646,
+              -17.3937879
+            ],
+            [
+              -66.1581143,
+              -17.3935238
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482148,
+        "name": "Galería Acha",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle General Achá",
+        "building": "retail",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 927193179,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.158843,
+              -17.3931638
+            ],
+            [
+              -66.1591908,
+              -17.3932252
+            ],
+            [
+              -66.1591704,
+              -17.3933305
+            ],
+            [
+              -66.1588226,
+              -17.3932692
+            ],
+            [
+              -66.1588328,
+              -17.3932165
+            ],
+            [
+              -66.158843,
+              -17.3931638
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 927193179,
+        "name": "Edificio Mi Llajta",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "156",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "building": "retail",
+        "description": "Centro comercial con tiendas de ropa, artículos para el hogar, productos de anime, juguetes, cosméticos, relojes, zapatillas deportivas, médico naturista y otros productos variados.",
+        "phone": "+591 68500826",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 927364395,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1593865,
+              -17.3930206
+            ],
+            [
+              -66.1592031,
+              -17.3929895
+            ],
+            [
+              -66.1591917,
+              -17.3930502
+            ],
+            [
+              -66.1591837,
+              -17.3930911
+            ],
+            [
+              -66.1591791,
+              -17.3931144
+            ],
+            [
+              -66.1588648,
+              -17.393058
+            ],
+            [
+              -66.1588539,
+              -17.3931109
+            ],
+            [
+              -66.158843,
+              -17.3931638
+            ],
+            [
+              -66.1591908,
+              -17.3932252
+            ],
+            [
+              -66.1592085,
+              -17.3931254
+            ],
+            [
+              -66.1593806,
+              -17.3931564
+            ],
+            [
+              -66.1593822,
+              -17.3931246
+            ],
+            [
+              -66.1593404,
+              -17.3931175
+            ],
+            [
+              -66.1593503,
+              -17.3930576
+            ],
+            [
+              -66.1593848,
+              -17.3930628
+            ],
+            [
+              -66.1593865,
+              -17.3930206
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 927364395,
+        "name": "Plaza 10",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "building": "retail",
+        "building:levels": "4",
+        "contact:facebook": "https://www.facebook.com/PLAZA10cbba/",
+        "opening_hours": "Mo-Fr 08:30-20:00; Sa 08:30-13:30",
+        "payment:cash": "yes",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 927475723,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1581971,
+              -17.3929616
+            ],
+            [
+              -66.1581942,
+              -17.3929781
+            ],
+            [
+              -66.1581747,
+              -17.3930777
+            ],
+            [
+              -66.1582314,
+              -17.3930878
+            ],
+            [
+              -66.1581981,
+              -17.3932576
+            ],
+            [
+              -66.1581929,
+              -17.393282
+            ],
+            [
+              -66.1581631,
+              -17.3934385
+            ],
+            [
+              -66.1581609,
+              -17.3934502
+            ],
+            [
+              -66.1580799,
+              -17.3934361
+            ],
+            [
+              -66.157996,
+              -17.3934216
+            ],
+            [
+              -66.1580128,
+              -17.3933333
+            ],
+            [
+              -66.1580279,
+              -17.3932535
+            ],
+            [
+              -66.1580328,
+              -17.3932282
+            ],
+            [
+              -66.1580454,
+              -17.3931636
+            ],
+            [
+              -66.1579392,
+              -17.3931447
+            ],
+            [
+              -66.157926,
+              -17.3931424
+            ],
+            [
+              -66.1579657,
+              -17.3929372
+            ],
+            [
+              -66.1580128,
+              -17.3929458
+            ],
+            [
+              -66.1580628,
+              -17.3929547
+            ],
+            [
+              -66.1580659,
+              -17.3929385
+            ],
+            [
+              -66.1581971,
+              -17.3929616
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 927475723,
+        "name": "Centro Comercial Galindo Mall",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle General Achá",
+        "contact:facebook": "https://www.facebook.com/pg/Galindo-MALL-126799191438856/",
+        "email": "galindomall@yahoo.es",
+        "opening_hours": "Mo-Sa 09:00-22:00",
+        "operator": "Centro Comercial Galindo Mall",
+        "payment:cash": "yes",
+        "phone": "+591 4 4508251",
+        "shop": "mall",
+        "start_date": "2006-03-08"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 936523064,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.15591,
+              -17.3948417
+            ],
+            [
+              -66.15585,
+              -17.3951604
+            ],
+            [
+              -66.1557985,
+              -17.3951511
+            ],
+            [
+              -66.1557553,
+              -17.3951434
+            ],
+            [
+              -66.155772,
+              -17.3950548
+            ],
+            [
+              -66.1557785,
+              -17.3950208
+            ],
+            [
+              -66.1557649,
+              -17.3950185
+            ],
+            [
+              -66.1557715,
+              -17.3949835
+            ],
+            [
+              -66.1557565,
+              -17.394981
+            ],
+            [
+              -66.1557867,
+              -17.3948206
+            ],
+            [
+              -66.155855,
+              -17.3948323
+            ],
+            [
+              -66.15591,
+              -17.3948417
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 936523064,
+        "name": "Galería Comercial EMIMAX",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Jordán",
+        "building": "commercial",
+        "building:levels": "3",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 981207622,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1562592,
+              -17.3862764
+            ],
+            [
+              -66.1564642,
+              -17.3860063
+            ],
+            [
+              -66.1566271,
+              -17.3861189
+            ],
+            [
+              -66.1564362,
+              -17.3863706
+            ],
+            [
+              -66.1564005,
+              -17.386374
+            ],
+            [
+              -66.1562592,
+              -17.3862764
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 981207622,
+        "name": "LUIGIS Centro Familiar",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "606",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "barrier": "yes",
+        "contact:facebook": "https://www.facebook.com/luigiscochabamba",
+        "email": "gerencia@luigis.com.bo",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "no",
+        "opening_hours": "Mo-Su 11:00-23:00",
+        "phone": "+591 4 4250265",
+        "shop": "mall",
+        "website": "https://www.luigis.com.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 986843990,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1503259,
+              -17.3992227
+            ],
+            [
+              -66.1502566,
+              -17.399184
+            ],
+            [
+              -66.1500003,
+              -17.3990491
+            ],
+            [
+              -66.1499636,
+              -17.3990467
+            ],
+            [
+              -66.1499297,
+              -17.3990444
+            ],
+            [
+              -66.1499412,
+              -17.398941
+            ],
+            [
+              -66.1500085,
+              -17.3989457
+            ],
+            [
+              -66.1503979,
+              -17.3987889
+            ],
+            [
+              -66.1504143,
+              -17.3987607
+            ],
+            [
+              -66.1504357,
+              -17.3986306
+            ],
+            [
+              -66.1505162,
+              -17.3986337
+            ],
+            [
+              -66.1504981,
+              -17.3986619
+            ],
+            [
+              -66.1503568,
+              -17.3991322
+            ],
+            [
+              -66.1503259,
+              -17.3992227
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 986843990,
+        "name": "Mercado del Tríangulo",
+        "type": "marketplace",
+        "category": "shopping",
+        "subcategory": "marketplace",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Calle Guatemala",
+        "amenity": "marketplace",
+        "description": "Mercado popular de verduras, frutas, choclos, tubérculos (papa, papalisa, yuca, oca, aracacha), condimentos, y otros alimentos de la región.",
+        "opening_hours": "Mo-Su,PH 06:00-19:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1084972211,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1531461,
+              -17.3995218
+            ],
+            [
+              -66.1531527,
+              -17.3997033
+            ],
+            [
+              -66.1528292,
+              -17.3997139
+            ],
+            [
+              -66.1528261,
+              -17.3996293
+            ],
+            [
+              -66.1529364,
+              -17.3996256
+            ],
+            [
+              -66.1529329,
+              -17.3995288
+            ],
+            [
+              -66.1531461,
+              -17.3995218
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1084972211,
+        "name": "Galería",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Alejo Calatayud",
+        "addr:street": "Avenida General José de San Martín",
+        "building": "commercial",
+        "payment:cash": "yes",
+        "roof:shape": "flat",
+        "shop": "mall"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1164065564,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1585101,
+              -17.3921726
+            ],
+            [
+              -66.1584958,
+              -17.3922507
+            ],
+            [
+              -66.1585229,
+              -17.3922552
+            ],
+            [
+              -66.1584916,
+              -17.3924266
+            ],
+            [
+              -66.1583802,
+              -17.3924081
+            ],
+            [
+              -66.1582688,
+              -17.3923895
+            ],
+            [
+              -66.1582931,
+              -17.3922564
+            ],
+            [
+              -66.1583277,
+              -17.3922622
+            ],
+            [
+              -66.1583489,
+              -17.3921458
+            ],
+            [
+              -66.1585101,
+              -17.3921726
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1164065564,
+        "name": "Galería Comercial RRR",
+        "type": "mall",
+        "category": "shopping",
+        "subcategory": "mall",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas",
+        "building": "retail",
+        "building:levels": "5",
+        "opening_hours": "Mo-Su 07:00-23:30",
+        "payment:cash": "yes",
+        "roof:shape": "hipped",
+        "shop": "mall",
+        "start_date": "2023",
+        "wheelchair": "no"
+      }
+    }
+  ]
+}

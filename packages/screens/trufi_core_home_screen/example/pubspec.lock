@@ -840,6 +840,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  trufi_core_poi_layers:
+    dependency: "direct main"
+    description:
+      path: "../../../trufi_core_poi_layers"
+      relative: true
+    source: path
+    version: "1.0.0"
   trufi_core_routing:
     dependency: "direct overridden"
     description:

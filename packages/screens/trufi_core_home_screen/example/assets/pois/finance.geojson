@@ -1,0 +1,3772 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 2327838979,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577678,
+          -17.3856278
+        ]
+      },
+      "properties": {
+        "id": 2327838979,
+        "name": "Banco BCP",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "683",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bank",
+        "atm": "yes",
+        "drive_through": "yes",
+        "email": "bxt@bcp.com.bo",
+        "opening_hours": "Mo-Fr 09:00-16:00; Sa 09:00-13:00",
+        "operator": "Banco de Credito BCP",
+        "phone": "+591 4 4114141",
+        "website": "http://www.bcp.com.bo/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944328,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588062,
+          -17.3935168
+        ]
+      },
+      "properties": {
+        "id": 2398944328,
+        "name": "Banco Ganadero",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "174",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "air_conditioning": "yes",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Sucursal Cochabamba",
+        "brand": "Banco Ganadero",
+        "brand:wikidata": "Q81788241",
+        "contact:facebook": "https://www.facebook.com/bg.com.bo",
+        "contact:whatsapp": "+591 72103001",
+        "currency:BOB": "yes",
+        "currency:EUR": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "email": "bancoganadero@bg.com.bo",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:00-16:00; Sa 09:00-13:00; Su,PH Off",
+        "operator": "Banco Ganadero",
+        "operator:short": "BG",
+        "operator:type": "public",
+        "operator:wikidata": "Q81788241",
+        "phone": "800103999",
+        "short_name": "BG Cochabamba",
+        "website": "https://www.bg.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944329,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1638775,
+          -17.3933113
+        ]
+      },
+      "properties": {
+        "id": 2398944329,
+        "name": "Banco Nacional de Bolivia",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "air_conditioning": "yes",
+        "amenity": "bank",
+        "atm": "separate",
+        "branch": "Agencia Heroínas",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "material": "Banco Nacional de Bolivia",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:short": "BNB",
+        "operator:wikidata": "Q21044226",
+        "operator:wikipedia": "es:Banco Nacional de Bolivia",
+        "short_name": "BNB",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944538,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575171,
+          -17.3933189
+        ]
+      },
+      "properties": {
+        "id": 2398944538,
+        "name": "Banco Fortaleza",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "bank",
+        "atm": "yes",
+        "brand": "Banco Fortaleza",
+        "brand:wikidata": "Q81787643",
+        "drive_through": "no",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2430327712,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565534,
+          -17.3947013
+        ]
+      },
+      "properties": {
+        "id": 2430327712,
+        "name": "Casa de Cambio Amanda",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "340",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje de la Catedral",
+        "amenity": "bureau_de_change",
+        "contact:facebook": "https://es-la.facebook.com/pages/category/Finance/Casa-De-Cambios-Amanda-Srl-2039642529656041/",
+        "currency:ARS": "yes",
+        "currency:AUD": "yes",
+        "currency:BRL": "yes",
+        "currency:CAD": "yes",
+        "currency:CHF": "yes",
+        "currency:CLP": "yes",
+        "currency:COP": "yes",
+        "currency:EUR": "yes",
+        "currency:GBP": "yes",
+        "currency:PEN": "yes",
+        "currency:SEK": "yes",
+        "currency:USD": "yes",
+        "opening_hours": "Mo-Fr 08:30-17:30; Sa 08:30-13:00",
+        "operator": "Casa de Cambio Amanda",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2496894757,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534452,
+          -17.3981898
+        ]
+      },
+      "properties": {
+        "id": 2496894757,
+        "name": "Banco Unión",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle San Martín",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Agencia San Martín",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "payment:cash": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2496894758,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1538738,
+          -17.3946633
+        ]
+      },
+      "properties": {
+        "id": 2496894758,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "cash_in": "yes",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2512715926,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552663,
+          -17.3939934
+        ]
+      },
+      "properties": {
+        "id": 2512715926,
+        "name": "Banco Unión",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "385",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "air_conditioning": "yes",
+        "amenity": "bank",
+        "atm": "separate",
+        "branch": "Agencia 25 de Mayo",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "contact:facebook": "https://www.facebook.com/BancoUnionSA/",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "Mo-Fr 07:00-16:00; Sa 08:30-13:00; Su,PH Off",
+        "operator": "Banco Unión",
+        "payment:cash": "yes",
+        "website": "https://www.bancounion.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2514939626,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550287,
+          -17.3887359
+        ]
+      },
+      "properties": {
+        "id": 2514939626,
+        "name": "Banco Sol",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Sol",
+        "brand:wikidata": "Q62118746",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco Solidario",
+        "operator": "Banco Sol",
+        "operator:wikidata": "Q62118746"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2533183134,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537319,
+          -17.3949175
+        ]
+      },
+      "properties": {
+        "id": 2533183134,
+        "name": "",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Jordán",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2533183136,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1615905,
+          -17.3929529
+        ]
+      },
+      "properties": {
+        "id": 2533183136,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2534676368,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570307,
+          -17.3953981
+        ]
+      },
+      "properties": {
+        "id": 2534676368,
+        "name": "Banco Fie",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Jordán",
+        "amenity": "bank",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "drive_through": "no",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas",
+        "operator": "Banco Fie"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2543014265,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589956,
+          -17.3924379
+        ]
+      },
+      "properties": {
+        "id": 2543014265,
+        "name": "Banco Sol",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Sol",
+        "brand:wikidata": "Q62118746",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco Solidario",
+        "operator": "Banco Sol",
+        "operator:wikidata": "Q62118746"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2543014266,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589927,
+          -17.3924548
+        ]
+      },
+      "properties": {
+        "id": 2543014266,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2543014268,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590145,
+          -17.3925053
+        ]
+      },
+      "properties": {
+        "id": 2543014268,
+        "name": "Banco BCP",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de Crédito de Bolivia",
+        "opening_hours": "24/7",
+        "operator": "BCP",
+        "operator:wikidata": "Q16826675"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2543014269,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590413,
+          -17.3925077
+        ]
+      },
+      "properties": {
+        "id": 2543014269,
+        "name": "Banco Fie",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas",
+        "opening_hours": "24/7",
+        "operator": "Banco Fie",
+        "operator:wikidata": "Q81782924"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2543860773,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590264,
+          -17.392506
+        ]
+      },
+      "properties": {
+        "id": 2543860773,
+        "name": "Banco Económico",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Económico",
+        "brand:wikidata": "Q4854087",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "opening_hours": "24/7",
+        "operator": "Banco Económico",
+        "operator:wikidata": "Q4854087"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2567624448,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1594976,
+          -17.3900709
+        ]
+      },
+      "properties": {
+        "id": 2567624448,
+        "name": "Cooperativa de Ahorro y Crédito Societaria CACEF",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "Lumina Center",
+        "addr:housenumber": "331",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "bank",
+        "contact:phone": "+591 4 4250722; +591 4 4520660",
+        "contact:website": "http://www.cacef.org.bo/",
+        "operator": "Cooperativa de Ahorro y Crédito Societaria CACEF Ltda",
+        "short_name": "CACEF",
+        "start_date": "1977-12-14"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2578907897,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1640441,
+          -17.3933494
+        ]
+      },
+      "properties": {
+        "id": 2578907897,
+        "name": "BCP",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "atm",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "brand:wikipedia": "es:Banco de Crédito de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red EnLace",
+        "official_name": "Banco de Crédito de Bolivia",
+        "opening_hours": "24/7",
+        "operator": "BCP",
+        "operator:wikidata": "Q16826675",
+        "operator:wikipedia": "es:Banco de Crédito de Bolivia",
+        "speech_output:en": "yes",
+        "speech_output:es": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2600746393,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156728,
+          -17.3868977
+        ]
+      },
+      "properties": {
+        "id": 2600746393,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631125172,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1528089,
+          -17.3892928
+        ]
+      },
+      "properties": {
+        "id": 2631125172,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2631418159,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560727,
+          -17.3902009
+        ]
+      },
+      "properties": {
+        "id": 2631418159,
+        "name": "Cooperativa de Ahorro y Crédito Hospicio",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "bank",
+        "atm": "no",
+        "bank": "cooperative",
+        "brand": "Cooperativa de Ahorro y Crédito Hospicio",
+        "drive_through": "no",
+        "level": "0",
+        "operator": "Cooperativa de Ahorro y Crédito Hospicio",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2632384189,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601727,
+          -17.390887
+        ]
+      },
+      "properties": {
+        "id": 2632384189,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2634812290,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584479,
+          -17.3953476
+        ]
+      },
+      "properties": {
+        "id": 2634812290,
+        "name": "Banco Los Andes ProCredit",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "amenity": "bank",
+        "atm": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2635402875,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565682,
+          -17.392359
+        ]
+      },
+      "properties": {
+        "id": 2635402875,
+        "name": "La Promotora",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "111",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle España",
+        "amenity": "bank",
+        "atm": "yes",
+        "drive_through": "no",
+        "official_name": "Asociación Mutual de Ahorro y Préstamo La Promotora",
+        "opening_hours": "Mo-Fr 08:30-18:00",
+        "operator": "La Promotora",
+        "phone": "+591 4 4222741;+591 4 4223833;+591 4 4224393",
+        "start_date": "1966-08-02",
+        "website": "https://www.lapromotora.com.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2807836086,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574427,
+          -17.3933076
+        ]
+      },
+      "properties": {
+        "id": 2807836086,
+        "name": "Banco BISA",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "atm",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "brand:wikipedia": "es:Banco BISA",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco BISA",
+        "operator:wikidata": "Q21044225",
+        "operator:wikipedia": "es:Banco BISA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2853556771,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563017,
+          -17.3884133
+        ]
+      },
+      "properties": {
+        "id": 2853556771,
+        "name": "",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "currency:BOB": "yes",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2857505659,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581465,
+          -17.3955482
+        ]
+      },
+      "properties": {
+        "id": 2857505659,
+        "name": "Banco Nacional de Bolivia",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Agencia Ayacucho",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "operator": "Banco Nacional de Bolivia",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3636056416,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1571385,
+          -17.3921777
+        ]
+      },
+      "properties": {
+        "id": 3636056416,
+        "name": "",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719462617,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1551566,
+          -17.3936147
+        ]
+      },
+      "properties": {
+        "id": 3719462617,
+        "name": "Cooperativa Jesus Nazareno",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "air_conditioning": "yes",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Agencia 25 de Mayo",
+        "brand": "Jesus Nazareno",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "operator": "Cooperativa Jesus Nazareno",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3724109216,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558162,
+          -17.394247
+        ]
+      },
+      "properties": {
+        "id": 3724109216,
+        "name": "Banco de Desarrollo Productivo",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "amenity": "bank",
+        "atm": "no",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3952902817,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520833,
+          -17.3912657
+        ]
+      },
+      "properties": {
+        "id": 3952902817,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "operator:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "short_name": "BMSC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3960329721,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1529202,
+          -17.3882755
+        ]
+      },
+      "properties": {
+        "id": 3960329721,
+        "name": "Banco BISA",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "operator": "Banco BISA",
+        "operator:wikidata": "Q21044225",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4012031310,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572539,
+          -17.3955616
+        ]
+      },
+      "properties": {
+        "id": 4012031310,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "198",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "operator:wikipedia": "es:Banco Nacional de Bolivia",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4012031311,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572229,
+          -17.395583
+        ]
+      },
+      "properties": {
+        "id": 4012031311,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "198",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "operator:wikipedia": "es:Banco Nacional de Bolivia",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4106074889,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510418,
+          -17.3852921
+        ]
+      },
+      "properties": {
+        "id": 4106074889,
+        "name": "Banco Fie",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "cash_in": "yes",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas",
+        "opening_hours": "24/7",
+        "operator": "Banco Fie",
+        "operator:wikidata": "Q81782924"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4360822691,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1605822,
+          -17.387561
+        ]
+      },
+      "properties": {
+        "id": 4360822691,
+        "name": "Banco Fie",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "169",
+        "addr:street": "Calle José de la Reza",
+        "amenity": "bank",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas",
+        "opening_hours": "Mo-Sa 08:30-18:30",
+        "phone": "+591 4 44528986",
+        "website": "http://www.bancofie.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4557891803,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1638446,
+          -17.3933262
+        ]
+      },
+      "properties": {
+        "id": 4557891803,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "network": "Red Enlace",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:short": "BNB",
+        "operator:wikidata": "Q21044226",
+        "operator:wikipedia": "es:Banco Nacional de Bolivia",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4574222539,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586006,
+          -17.3945415
+        ]
+      },
+      "properties": {
+        "id": 4574222539,
+        "name": "Cooperativa San Martín de Porres",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "bank",
+        "atm": "no",
+        "check_date": "2024-11-15",
+        "drive_through": "no",
+        "operator": "Cooperativa San Martín de Porres"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4699836497,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541989,
+          -17.3941426
+        ]
+      },
+      "properties": {
+        "id": 4699836497,
+        "name": "Cooperativa Loyola",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida General José de San Martín",
+        "amenity": "bank",
+        "atm": "no",
+        "bank": "cooperative",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704731196,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1571415,
+          -17.395906
+        ]
+      },
+      "properties": {
+        "id": 4704731196,
+        "name": "Banco BISA",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "brand:wikipedia": "es:Banco BISA",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco BISA",
+        "operator:wikidata": "Q21044225",
+        "operator:wikipedia": "es:Banco BISA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704731350,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569049,
+          -17.3965993
+        ]
+      },
+      "properties": {
+        "id": 4704731350,
+        "name": "Banco Ecofuturo",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Calama",
+        "amenity": "bank",
+        "drive_through": "no",
+        "operator": "Banco Ecofuturo"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704731352,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569778,
+          -17.3960929
+        ]
+      },
+      "properties": {
+        "id": 4704731352,
+        "name": "Banco Económico",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "bank",
+        "atm": "yes",
+        "brand": "Banco Económico",
+        "brand:wikidata": "Q4854087",
+        "brand:wikipedia": "es:Banco Económico",
+        "drive_through": "no",
+        "operator": "Banco Económico"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4704731354,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570323,
+          -17.3959013
+        ]
+      },
+      "properties": {
+        "id": 4704731354,
+        "name": "Cooperativa Quillacollo",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "amenity": "bank"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959162425,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566478,
+          -17.3980839
+        ]
+      },
+      "properties": {
+        "id": 4959162425,
+        "name": "Banco Fie",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "amenity": "bank",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224267,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575805,
+          -17.3966828
+        ]
+      },
+      "properties": {
+        "id": 4959224267,
+        "name": "Banco Prodem",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Calama",
+        "amenity": "bank",
+        "drive_through": "no",
+        "operator": "Banco Prodem"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4959224268,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570643,
+          -17.39658
+        ]
+      },
+      "properties": {
+        "id": 4959224268,
+        "name": "Banco Fassil",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Calama",
+        "amenity": "bank",
+        "atm": "no",
+        "brand": "Banco Fassil",
+        "brand:wikidata": "Q62118592",
+        "drive_through": "no",
+        "operator": "Banco Fassil"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981436347,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155727,
+          -17.3872394
+        ]
+      },
+      "properties": {
+        "id": 4981436347,
+        "name": "Banco Fassil",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bank",
+        "atm": "yes",
+        "brand": "Banco Fassil",
+        "brand:wikidata": "Q62118592",
+        "drive_through": "no",
+        "operator": "Banco Fassil"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5014275031,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561921,
+          -17.3944432
+        ]
+      },
+      "properties": {
+        "id": 5014275031,
+        "name": "Casa de Cambio Amanda",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "309",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "bureau_de_change",
+        "contact:facebook": "https://es-la.facebook.com/pages/category/Finance/Casa-De-Cambios-Amanda-Srl-2039642529656041/",
+        "currency:ARS": "yes",
+        "currency:AUD": "yes",
+        "currency:BRL": "yes",
+        "currency:CAD": "yes",
+        "currency:CHF": "yes",
+        "currency:CLP": "yes",
+        "currency:COP": "yes",
+        "currency:EUR": "yes",
+        "currency:GBP": "yes",
+        "currency:PEN": "yes",
+        "currency:SEK": "yes",
+        "currency:USD": "yes",
+        "opening_hours": "Mo-Fr 08:30-17:30; Sa 08:30-13:00",
+        "operator": "Casa de Cambio Amanda",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5015504522,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15497,
+          -17.3889372
+        ]
+      },
+      "properties": {
+        "id": 5015504522,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "operator:wikipedia": "es:Banco Nacional de Bolivia",
+        "short_name": "BNB"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215849,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575704,
+          -17.393824
+        ]
+      },
+      "properties": {
+        "id": 5102215849,
+        "name": "",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "248",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "bureau_de_change"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216074,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575732,
+          -17.3938058
+        ]
+      },
+      "properties": {
+        "id": 5102216074,
+        "name": "BCP",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "248",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "atm",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "check_date": "2024-12-03",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de Crédito de Bolivia",
+        "operator": "BCP",
+        "operator:wikidata": "Q16826675"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102216079,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1571134,
+          -17.3944362
+        ]
+      },
+      "properties": {
+        "id": 5102216079,
+        "name": "Argenper",
+        "type": "money_transfer",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "212",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "amenity": "money_transfer",
+        "branch": "Argenper Cochabamba",
+        "brand": "Argenper",
+        "contact:facebook": "https://www.facebook.com/argenperbolivia",
+        "contact:phone": "+591 4  4509925;+591 72145553",
+        "contact:website": "https://www.argenper.com.bo/",
+        "contact:whatsapp": "+591 72145553",
+        "currency:BOB": "yes",
+        "currency:EUR": "yes",
+        "currency:USD": "yes",
+        "description": "Empresa de giro y remesas de dinero a nivel nacional y al extranjero.",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:30-12:30,14:00-18:00; Sa 09:00-13:00",
+        "operator": "Argenper Bolivia",
+        "payment:cash": "yes",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5235730583,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586166,
+          -17.3924389
+        ]
+      },
+      "properties": {
+        "id": 5235730583,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "short_name": "BMSC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5272137152,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589953,
+          -17.3924961
+        ]
+      },
+      "properties": {
+        "id": 5272137152,
+        "name": "Banco Bisa",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "opening_hours": "24/7",
+        "operator": "Banco BISA",
+        "operator:wikidata": "Q21044225"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5272137153,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589898,
+          -17.392484
+        ]
+      },
+      "properties": {
+        "id": 5272137153,
+        "name": "Banco Prodem",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "opening_hours": "24/7",
+        "operator": "Banco Prodem"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5272137154,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589913,
+          -17.3924691
+        ]
+      },
+      "properties": {
+        "id": 5272137154,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "cash_in": "yes",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274463,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1558964,
+          -17.3966925
+        ]
+      },
+      "properties": {
+        "id": 5319274463,
+        "name": "Inca Huasi",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "amenity": "bank"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5350197608,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1581741,
+          -17.3855783
+        ]
+      },
+      "properties": {
+        "id": 5350197608,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "ATM La Paz",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Enlace",
+        "opening_hours": "24/7",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "short_name": "BMSC",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557400061,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15923,
+          -17.3925417
+        ]
+      },
+      "properties": {
+        "id": 5557400061,
+        "name": "",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "bank",
+        "drive_through": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557400063,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1593689,
+          -17.3925647
+        ]
+      },
+      "properties": {
+        "id": 5557400063,
+        "name": "",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "amenity": "bureau_de_change"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557400074,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1616279,
+          -17.3929582
+        ]
+      },
+      "properties": {
+        "id": 5557400074,
+        "name": "",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "amenity": "bank"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6065466545,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554866,
+          -17.3874928
+        ]
+      },
+      "properties": {
+        "id": 6065466545,
+        "name": "Banco Ganadero",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Ganadero",
+        "brand:wikidata": "Q81788241",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco Ganadero",
+        "operator:wikidata": "Q81788241",
+        "short_name": "BG"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6434429385,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1549741,
+          -17.388911
+        ]
+      },
+      "properties": {
+        "id": 6434429385,
+        "name": "Banco Fie",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Fie",
+        "brand:wikidata": "Q81782924",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco para el Fomento a Iniciativas Económicas",
+        "operator": "Banco Fie",
+        "operator:wikidata": "Q81782924"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8608532220,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15848,
+          -17.3935037
+        ]
+      },
+      "properties": {
+        "id": 8608532220,
+        "name": "Librecambistas",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "amenity": "bureau_de_change",
+        "currency:USD": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8677779510,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554468,
+          -17.3941781
+        ]
+      },
+      "properties": {
+        "id": 8677779510,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "382",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "amenity": "atm",
+        "branch": "ATM SIA Comteco",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "website": "https://www.bancounion.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8943255737,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561629,
+          -17.3877958
+        ]
+      },
+      "properties": {
+        "id": 8943255737,
+        "name": "Librecambista",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza Colón",
+        "amenity": "bureau_de_change",
+        "currency:BOB": "yes",
+        "currency:EUR": "yes",
+        "currency:USD": "yes",
+        "informal": "yes",
+        "payment:cash": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9134912609,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588112,
+          -17.393543
+        ]
+      },
+      "properties": {
+        "id": 9134912609,
+        "name": "Banco Ganadero",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "ATM Central Cochabamba",
+        "brand": "Banco Ganadero",
+        "brand:wikidata": "Q81788241",
+        "cash_in": "yes",
+        "covered": "yes",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "language:es": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Bank;Red Enlace;Red Plus",
+        "opening_hours": "24/7",
+        "operator": "Banco Ganadero",
+        "operator:short": "BG",
+        "operator:type": "public",
+        "operator:wikidata": "Q81788241",
+        "short_name": "BG",
+        "speech_output:es": "yes",
+        "surveillance": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9234830630,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569135,
+          -17.3964079
+        ]
+      },
+      "properties": {
+        "id": 9234830630,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "operator:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "short_name": "BMSC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9234830631,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569382,
+          -17.3963812
+        ]
+      },
+      "properties": {
+        "id": 9234830631,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "operator:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "short_name": "BMSC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9294229526,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570484,
+          -17.3964478
+        ]
+      },
+      "properties": {
+        "id": 9294229526,
+        "name": "BCP",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "brand:wikipedia": "es:Banco de Crédito de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de Crédito de Bolivia",
+        "operator": "BCP",
+        "operator:wikidata": "Q16826675",
+        "operator:wikipedia": "es:Banco de Crédito de Bolivia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9294229527,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570769,
+          -17.3964841
+        ]
+      },
+      "properties": {
+        "id": 9294229527,
+        "name": "BCP",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "brand:wikipedia": "es:Banco de Crédito de Bolivia",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de Crédito de Bolivia",
+        "operator": "BCP",
+        "operator:wikidata": "Q16826675",
+        "operator:wikipedia": "es:Banco de Crédito de Bolivia"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9294229565,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570131,
+          -17.3960434
+        ]
+      },
+      "properties": {
+        "id": 9294229565,
+        "name": "Banco Económico",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Económico",
+        "brand:wikidata": "Q4854087",
+        "brand:wikipedia": "es:Banco Económico",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "operator": "Banco Económico",
+        "operator:wikidata": "Q4854087",
+        "operator:wikipedia": "es:Banco Económico"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9555434832,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1520515,
+          -17.3912559
+        ]
+      },
+      "properties": {
+        "id": 9555434832,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "opening_hours": "24/7",
+        "operator": "Banco Mercantil Santa Cruz",
+        "operator:wikidata": "Q26250269",
+        "operator:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "short_name": "BMSC"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9778118580,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1551222,
+          -17.3918283
+        ]
+      },
+      "properties": {
+        "id": 9778118580,
+        "name": "Banco BISA",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "operator": "Banco BISA",
+        "operator:wikidata": "Q21044225",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9778118581,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1551021,
+          -17.3918257
+        ]
+      },
+      "properties": {
+        "id": 9778118581,
+        "name": "",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9884161170,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552939,
+          -17.3940195
+        ]
+      },
+      "properties": {
+        "id": 9884161170,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Sucre",
+        "amenity": "atm",
+        "branch": "ATM 25 de Mayo",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "website": "https://www.bancounion.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9884161196,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552934,
+          -17.3937914
+        ]
+      },
+      "properties": {
+        "id": 9884161196,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "atm",
+        "branch": "ATM 25 de Mayo",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "website": "https://www.bancounion.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9884161197,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15529,
+          -17.3938107
+        ]
+      },
+      "properties": {
+        "id": 9884161197,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "amenity": "atm",
+        "branch": "ATM 25 de Mayo",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "website": "https://www.bancounion.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9901073777,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574668,
+          -17.3933113
+        ]
+      },
+      "properties": {
+        "id": 9901073777,
+        "name": "Banco Fortaleza",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Fortaleza",
+        "brand:wikidata": "Q81787643",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "operator": "Banco Fortaleza",
+        "operator:wikidata": "Q81787643"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9941529707,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533995,
+          -17.3981733
+        ]
+      },
+      "properties": {
+        "id": 9941529707,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Enlace",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9941529708,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533963,
+          -17.3982116
+        ]
+      },
+      "properties": {
+        "id": 9941529708,
+        "name": "Banco Unión",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Enlace",
+        "official_name": "Banco de la Unión",
+        "opening_hours": "24/7",
+        "operator": "Banco Unión",
+        "operator:wikidata": "Q72315494",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10005028917,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557666,
+          -17.3942324
+        ]
+      },
+      "properties": {
+        "id": 10005028917,
+        "name": "Banco Bisa",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10800524293,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1590799,
+          -17.3920617
+        ]
+      },
+      "properties": {
+        "id": 10800524293,
+        "name": "More Bolivia",
+        "type": "money_transfer",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "137",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Ayacucho",
+        "amenity": "money_transfer",
+        "branch": "Cochabamba",
+        "brand": "More",
+        "contact:facebook": "https://www.facebook.com/enviosmore/",
+        "currency:BOB": "yes",
+        "currency:EUR": "yes",
+        "currency:USD": "yes",
+        "description": "More Bolivia es una empresa que opera en el sector de las remesas familiares.",
+        "email": "info@morebolivia.com.bo",
+        "level": "0",
+        "opening_hours": "Mo-Fr 08:00-16:00; Sa 09:00-13:00",
+        "payment:cash": "yes",
+        "phone": "+591 76499999",
+        "website": "http://www.moremt.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11926811047,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1588228,
+          -17.3935446
+        ]
+      },
+      "properties": {
+        "id": 11926811047,
+        "name": "Banco Ganadero",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "ATM Central Cochabamba II",
+        "brand": "Banco Ganadero",
+        "brand:wikidata": "Q81788241",
+        "cash_in": "no",
+        "covered": "yes",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "language:es": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Bank;Red Enlace;Red Plus",
+        "opening_hours": "24/7",
+        "operator": "Banco Ganadero",
+        "operator:short": "BG",
+        "operator:type": "public",
+        "operator:wikidata": "Q81788241",
+        "short_name": "BG",
+        "speech_output:es": "yes",
+        "surveillance": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12058752937,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1555779,
+          -17.3976426
+        ]
+      },
+      "properties": {
+        "id": 12058752937,
+        "name": "BancoSol",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "Esteban Arze II",
+        "brand": "BancoSol",
+        "brand:wikidata": "Q62118746",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "official_name": "Banco Solidario",
+        "opening_hours": "24/7",
+        "operator": "BancoSol",
+        "operator:wikidata": "Q62118746",
+        "website": "https://www.bancosol.com.bo/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080046758,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1550194,
+          -17.3887192
+        ]
+      },
+      "properties": {
+        "id": 12080046758,
+        "name": "Banco Sol",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12080061571,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156175,
+          -17.3867021
+        ]
+      },
+      "properties": {
+        "id": 12080061571,
+        "name": "Bc",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12310910406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562422,
+          -17.3875717
+        ]
+      },
+      "properties": {
+        "id": 12310910406,
+        "name": "Banco de Crédito de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "Edificio Colón",
+        "brand": "BCP",
+        "cash_in": "no",
+        "covered": "yes",
+        "currency:BOB": "only",
+        "drive_through": "no",
+        "indoor": "yes",
+        "language:es": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Enlace",
+        "opening_hours": "24/7",
+        "operator": "Banco de Crédito de Bolivia",
+        "phone": "+591 4 4114141",
+        "speech_output:es": "yes",
+        "website": "https://www.bcp.com.bo/Personas/CanalesAtencion/CajerosAutomaticos",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12348584139,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533382,
+          -17.3850078
+        ]
+      },
+      "properties": {
+        "id": 12348584139,
+        "name": "Banco Nacional de Bolivia",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "810",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Plaza Constitución",
+        "air_conditioning": "yes",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Agencia Constitución",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "contact:facebook": "https://www.facebook.com/BancoNacionaldeBoliviaSA/",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "level": "0",
+        "opening_hours": "Mo-Fr 09:00-16:00; Sa 09:00-13:00; Su,PH Off",
+        "operator": "Banco Nacional de Bolivia",
+        "phone": "+591 4 4153999;+591 78787272;800177272",
+        "short_name": "BNB",
+        "website": "https://www.bnb.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12348584140,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1533578,
+          -17.385012
+        ]
+      },
+      "properties": {
+        "id": 12348584140,
+        "name": "Banco Nacional de Bolivia",
+        "type": "atm",
+        "category": "finance",
+        "subcategory": "atm",
+        "osmType": "node",
+        "amenity": "atm",
+        "branch": "BNB Constitución",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "cash_in": "yes",
+        "currency:BOB": "yes",
+        "drive_through": "no",
+        "indoor": "yes",
+        "level": "0",
+        "lit": "yes",
+        "network": "Red Enlace",
+        "opening_hours": "24/7",
+        "operator": "Banco Nacional de Bolivia",
+        "operator:wikidata": "Q21044226",
+        "phone": "800177272",
+        "short_name": "BNB",
+        "speech_output": "yes",
+        "speech_output:es": "yes",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12711002551,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599852,
+          -17.3949611
+        ]
+      },
+      "properties": {
+        "id": 12711002551,
+        "name": "Kiosco Bitcoin",
+        "type": "bureau_de_change",
+        "category": "finance",
+        "subcategory": "exchange",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housename": "C4",
+        "addr:street": "Calle José María Santivañez",
+        "amenity": "bureau_de_change",
+        "atm": "yes",
+        "check_date:currency:XBT": "2025-07-24",
+        "currency:BOB": "yes",
+        "currency:XBT": "yes",
+        "description": "Kiosco lightning para poder comprar bitcoin a la velocidad del relámpago",
+        "network": "Bitcoin",
+        "operator": "bitcoin.org.bo",
+        "payment:blink": "yes",
+        "payment:cash": "yes",
+        "payment:coins": "yes",
+        "payment:lightning": "yes",
+        "payment:lightning_contactless": "yes",
+        "payment:onchain": "yes",
+        "phone": "+59169414845",
+        "start_date": "2025-03",
+        "survey:date": "2025-08-20",
+        "website": "ln.bitcoin.org.bo"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 206148483,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1518481,
+              -17.3912359
+            ],
+            [
+              -66.1518894,
+              -17.3909793
+            ],
+            [
+              -66.1518269,
+              -17.3909685
+            ],
+            [
+              -66.1518456,
+              -17.3908276
+            ],
+            [
+              -66.1520874,
+              -17.3908649
+            ],
+            [
+              -66.152077,
+              -17.390953
+            ],
+            [
+              -66.1522601,
+              -17.3909979
+            ],
+            [
+              -66.1523199,
+              -17.3910071
+            ],
+            [
+              -66.1523026,
+              -17.3911112
+            ],
+            [
+              -66.1522953,
+              -17.3911555
+            ],
+            [
+              -66.1522898,
+              -17.3911814
+            ],
+            [
+              -66.152287,
+              -17.3911975
+            ],
+            [
+              -66.1522835,
+              -17.391218
+            ],
+            [
+              -66.1522771,
+              -17.3912548
+            ],
+            [
+              -66.1522737,
+              -17.3912742
+            ],
+            [
+              -66.1522634,
+              -17.3912951
+            ],
+            [
+              -66.1522381,
+              -17.3913046
+            ],
+            [
+              -66.1520945,
+              -17.3912785
+            ],
+            [
+              -66.1520701,
+              -17.3912746
+            ],
+            [
+              -66.1519051,
+              -17.3912447
+            ],
+            [
+              -66.1518481,
+              -17.3912359
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 206148483,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "745",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Antezana",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "drive_through": "yes",
+        "opening_hours": "Mo-Fr 08:30-16:00",
+        "operator": "Banco Mercantil Santa Cruz",
+        "short_name": "BMSC",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 875341307,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1584788,
+              -17.3845853
+            ],
+            [
+              -66.1583553,
+              -17.3847386
+            ],
+            [
+              -66.1587763,
+              -17.3850633
+            ],
+            [
+              -66.1587525,
+              -17.3850855
+            ],
+            [
+              -66.1590538,
+              -17.3853263
+            ],
+            [
+              -66.1591054,
+              -17.3852745
+            ],
+            [
+              -66.1591214,
+              -17.3852573
+            ],
+            [
+              -66.1588173,
+              -17.3850166
+            ],
+            [
+              -66.1589254,
+              -17.3849098
+            ],
+            [
+              -66.1589398,
+              -17.3848951
+            ],
+            [
+              -66.1584788,
+              -17.3845853
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 875341307,
+        "name": "Banco Unión",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "branch": "Oficina Regional",
+        "brand": "Banco Unión",
+        "brand:wikidata": "Q72315494",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "official_name": "Banco de la Unión",
+        "operator": "Banco Unión",
+        "payment:cash": "yes",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 875341314,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1585109,
+              -17.3858516
+            ],
+            [
+              -66.1583285,
+              -17.385704
+            ],
+            [
+              -66.1582361,
+              -17.3856906
+            ],
+            [
+              -66.158009,
+              -17.3856485
+            ],
+            [
+              -66.1579721,
+              -17.3856404
+            ],
+            [
+              -66.157995,
+              -17.3855155
+            ],
+            [
+              -66.158009,
+              -17.3854985
+            ],
+            [
+              -66.1580293,
+              -17.3854948
+            ],
+            [
+              -66.1580458,
+              -17.3855021
+            ],
+            [
+              -66.158254,
+              -17.3856043
+            ],
+            [
+              -66.1585826,
+              -17.3857786
+            ],
+            [
+              -66.1585109,
+              -17.3858516
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 875341314,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "689",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle La Paz",
+        "amenity": "bank",
+        "atm": "yes",
+        "branch": "Sucursal La Paz",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "no",
+        "opening_hours": "Mo-Fr 09:00-16:00; Sa 09:00-13:00; Su,PH Off",
+        "operator": "Banco Mercantil Santa Cruz",
+        "payment:cash": "yes",
+        "phone": "+591 4 4663663",
+        "short_name": "BMSC",
+        "website": "https://www.bmsc.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 886314601,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1566781,
+              -17.3965299
+            ],
+            [
+              -66.1566525,
+              -17.396654
+            ],
+            [
+              -66.1566241,
+              -17.3968105
+            ],
+            [
+              -66.1566172,
+              -17.3968481
+            ],
+            [
+              -66.156476,
+              -17.3968247
+            ],
+            [
+              -66.1563654,
+              -17.3968027
+            ],
+            [
+              -66.1563844,
+              -17.3967054
+            ],
+            [
+              -66.1564271,
+              -17.3964855
+            ],
+            [
+              -66.1564462,
+              -17.3964889
+            ],
+            [
+              -66.1564636,
+              -17.396492
+            ],
+            [
+              -66.1565222,
+              -17.3965024
+            ],
+            [
+              -66.1565808,
+              -17.3965127
+            ],
+            [
+              -66.156618,
+              -17.3965183
+            ],
+            [
+              -66.1566781,
+              -17.3965299
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 886314601,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "242",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Batalla de Calama",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "currency:BOB": "yes",
+        "currency:USD": "yes",
+        "drive_through": "yes",
+        "opening_hours": "Mo-Fr 09:00-16:00; Sa 09:00-13:00",
+        "operator": "Banco Mercantil Santa Cruz",
+        "phone": "+591 4 4252712;+591 4 4252167",
+        "short_name": "BMSC",
+        "website": "https://www.bmsc.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 981207620,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1562707,
+              -17.3865941
+            ],
+            [
+              -66.1560288,
+              -17.3864364
+            ],
+            [
+              -66.1559942,
+              -17.3864141
+            ],
+            [
+              -66.1559837,
+              -17.3864073
+            ],
+            [
+              -66.1558224,
+              -17.3866364
+            ],
+            [
+              -66.1561091,
+              -17.3868202
+            ],
+            [
+              -66.1562707,
+              -17.3865941
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 981207620,
+        "name": "BanComunidad",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "576",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "contact:facebook": "https://www.facebook.com/Bancomunidad/",
+        "drive_through": "no",
+        "email": "contacto@bco.com",
+        "opening_hours": "Mo-Fr 08:00-16:00; Sa 09:00-12:00",
+        "operator": "Banco de la Comunidad",
+        "phone": "+591 4 4523001;+591 4 4523002",
+        "short_name": "BCO",
+        "website": "https://bco.com.bo/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1007437768,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1575051,
+              -17.3955914
+            ],
+            [
+              -66.1574992,
+              -17.395624
+            ],
+            [
+              -66.157532,
+              -17.3956294
+            ],
+            [
+              -66.1575256,
+              -17.3956643
+            ],
+            [
+              -66.1575034,
+              -17.3957869
+            ],
+            [
+              -66.1574147,
+              -17.3957724
+            ],
+            [
+              -66.1572507,
+              -17.3957457
+            ],
+            [
+              -66.1571797,
+              -17.3957342
+            ],
+            [
+              -66.1572008,
+              -17.3956137
+            ],
+            [
+              -66.1572112,
+              -17.3955826
+            ],
+            [
+              -66.1572233,
+              -17.395564
+            ],
+            [
+              -66.1572413,
+              -17.3955527
+            ],
+            [
+              -66.1572628,
+              -17.3955515
+            ],
+            [
+              -66.1575051,
+              -17.3955914
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1007437768,
+        "name": "Banco Nacional de Bolivia",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "198",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "bank",
+        "brand": "Banco Nacional de Bolivia",
+        "brand:wikidata": "Q21044226",
+        "brand:wikipedia": "es:Banco Nacional de Bolivia",
+        "contact:fax": "+591 4 4390880",
+        "contact:phone": "+591 4 4153999",
+        "contact:website": "http://www.bnb.com.bo/",
+        "currency:BOB": "yes",
+        "opening_hours": "Mo-Fr 09:00-16:00",
+        "operator": "Banco Nacional de Bolivia",
+        "short_name": "BNB",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1007437779,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1573024,
+              -17.3963258
+            ],
+            [
+              -66.1572673,
+              -17.3965248
+            ],
+            [
+              -66.1570686,
+              -17.3964943
+            ],
+            [
+              -66.1570353,
+              -17.3964512
+            ],
+            [
+              -66.1570629,
+              -17.3962874
+            ],
+            [
+              -66.1571326,
+              -17.3962983
+            ],
+            [
+              -66.1573024,
+              -17.3963258
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1007437779,
+        "name": "BCP",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "bank",
+        "atm": "yes",
+        "brand": "BCP",
+        "brand:wikidata": "Q16826675",
+        "brand:wikipedia": "es:Banco de Crédito de Bolivia",
+        "building": "office",
+        "drive_through": "no",
+        "official_name": "Banco de Crédito de Bolivia",
+        "operator": "Banco de Crédito de Bolivia",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1007437786,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1573192,
+              -17.3959088
+            ],
+            [
+              -66.1573173,
+              -17.3959198
+            ],
+            [
+              -66.1573861,
+              -17.3959303
+            ],
+            [
+              -66.1573664,
+              -17.396048
+            ],
+            [
+              -66.1576372,
+              -17.3960911
+            ],
+            [
+              -66.1576276,
+              -17.3961488
+            ],
+            [
+              -66.1576155,
+              -17.3961469
+            ],
+            [
+              -66.1573638,
+              -17.3961069
+            ],
+            [
+              -66.1572866,
+              -17.3960938
+            ],
+            [
+              -66.1570896,
+              -17.3960626
+            ],
+            [
+              -66.1571222,
+              -17.3958776
+            ],
+            [
+              -66.1571322,
+              -17.3958792
+            ],
+            [
+              -66.1573192,
+              -17.3959088
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1007437786,
+        "name": "Banco BISA",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "brand": "Banco BISA",
+        "brand:wikidata": "Q21044225",
+        "brand:wikipedia": "es:Banco BISA",
+        "drive_through": "no",
+        "operator": "Banco BISA"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1007437787,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569895,
+              -17.3962013
+            ],
+            [
+              -66.1569478,
+              -17.3964366
+            ],
+            [
+              -66.1569366,
+              -17.3964516
+            ],
+            [
+              -66.15692,
+              -17.3964576
+            ],
+            [
+              -66.1568968,
+              -17.3964539
+            ],
+            [
+              -66.1566492,
+              -17.3964139
+            ],
+            [
+              -66.1566326,
+              -17.3964125
+            ],
+            [
+              -66.1566782,
+              -17.3961506
+            ],
+            [
+              -66.1568845,
+              -17.3961844
+            ],
+            [
+              -66.1569895,
+              -17.3962013
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1007437787,
+        "name": "Banco Mercantil Santa Cruz",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Nataniel Aguirre",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "brand": "Banco Mercantil Santa Cruz",
+        "brand:wikidata": "Q26250269",
+        "brand:wikipedia": "es:Banco Mercantil Santa Cruz",
+        "drive_through": "no",
+        "operator": "Banco Mercantil Santa Cruz",
+        "short_name": "BMSC",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1038586747,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1542319,
+              -17.3868456
+            ],
+            [
+              -66.1543725,
+              -17.3868981
+            ],
+            [
+              -66.1544072,
+              -17.3869111
+            ],
+            [
+              -66.1543384,
+              -17.3870789
+            ],
+            [
+              -66.1541631,
+              -17.3870135
+            ],
+            [
+              -66.1541729,
+              -17.3869897
+            ],
+            [
+              -66.154181,
+              -17.3869698
+            ],
+            [
+              -66.1542319,
+              -17.3868456
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1038586747,
+        "name": "Cooperativa de Ahorro y Crédito Societaria EMPETROL",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "548",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "amenity": "bank",
+        "atm": "no",
+        "bank": "cooperative",
+        "barrier": "wall",
+        "drive_through": "no",
+        "email": "cooperativa@empetrol.com",
+        "opening_hours": "Mo-Fr 08:30-12:00,14:30-18:00; Sa 08:30-12:00",
+        "operator": "Cooperativa de Ahorro y Crédito Societaria EMPETROL",
+        "phone": "+591 4 4526261;+591 4 4526062",
+        "website": "https://empetrol.com/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1301934790,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1556029,
+              -17.39762
+            ],
+            [
+              -66.1553194,
+              -17.3975702
+            ],
+            [
+              -66.1549149,
+              -17.3974991
+            ],
+            [
+              -66.1548866,
+              -17.3976456
+            ],
+            [
+              -66.1548778,
+              -17.3976909
+            ],
+            [
+              -66.1550056,
+              -17.3977134
+            ],
+            [
+              -66.1550136,
+              -17.3976721
+            ],
+            [
+              -66.1550187,
+              -17.397646
+            ],
+            [
+              -66.155071,
+              -17.3976552
+            ],
+            [
+              -66.1551965,
+              -17.3976773
+            ],
+            [
+              -66.1552222,
+              -17.3976818
+            ],
+            [
+              -66.1552478,
+              -17.3976863
+            ],
+            [
+              -66.155299,
+              -17.3976953
+            ],
+            [
+              -66.1553851,
+              -17.3977105
+            ],
+            [
+              -66.1554901,
+              -17.397729
+            ],
+            [
+              -66.1555788,
+              -17.3977446
+            ],
+            [
+              -66.1555909,
+              -17.3976823
+            ],
+            [
+              -66.1556029,
+              -17.39762
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1301934790,
+        "name": "BancoSol",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "s0631",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "amenity": "bank",
+        "atm": "yes",
+        "barrier": "wall",
+        "branch": "Regional Cochabamba",
+        "brand": "BancoSol",
+        "brand:wikidata": "Q62118746",
+        "contact:facebook": "https://www.facebook.com/BancoSolidarioBolivia",
+        "currency:BOB": "yes",
+        "description": "Productos y servicios financieros para el sector de la microempresa boliviana.",
+        "drive_through": "no",
+        "official_name": "Banco Solidario",
+        "opening_hours": "Mo-Fr 08:30-17:00; Sa 09:00-13:00; Su,PH Off",
+        "operator": "BancoSol",
+        "operator:wikidata": "Q62118746",
+        "phone": "800102929",
+        "start_date": "1992-02-10",
+        "website": "https://www.bancosol.com.bo/",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1377943397,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1517146,
+              -17.3942815
+            ],
+            [
+              -66.151712,
+              -17.3942942
+            ],
+            [
+              -66.1516811,
+              -17.3944438
+            ],
+            [
+              -66.1516764,
+              -17.3944464
+            ],
+            [
+              -66.15167,
+              -17.3944499
+            ],
+            [
+              -66.1515061,
+              -17.3944172
+            ],
+            [
+              -66.1515285,
+              -17.3943148
+            ],
+            [
+              -66.1515421,
+              -17.3942471
+            ],
+            [
+              -66.151645,
+              -17.3942684
+            ],
+            [
+              -66.1517146,
+              -17.3942815
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1377943397,
+        "name": "Cooperativa de Ahorro y Crédito Abierta Loyola",
+        "type": "bank",
+        "category": "finance",
+        "subcategory": "bank",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "S-0397",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle Mariano Antezana",
+        "amenity": "bank",
+        "atm": "yes",
+        "bank": "cooperative",
+        "barrier": "wall",
+        "branch": "Agencia Central",
+        "brand": "Cooperativa de Ahorro y Crédito Abierta Loyola",
+        "contact:facebook": "https://www.facebook.com/CooperativaLoyolaRL/",
+        "drive_through": "no",
+        "email": "cly@cooperativaloyola.com",
+        "loc_name": "Cooperativa Loyola",
+        "opening_hours": "Mo-Fr 08:30-16:30; Sa 09:00-12:00; Su,PH Off",
+        "operator": "Cooperativa de Ahorro y Crédito Abierta Loyola",
+        "operator:type": "cooperative",
+        "phone": "+591 4 4229094;+591 4 4504739",
+        "start_date": "1964-11-28",
+        "surveillance": "indoor",
+        "website": "https://www.cooperativaloyola.com/"
+      }
+    }
+  ]
+}

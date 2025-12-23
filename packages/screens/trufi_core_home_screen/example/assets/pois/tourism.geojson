@@ -1,0 +1,5759 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": 313880676,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565954,
+          -17.3946427
+        ]
+      },
+      "properties": {
+        "id": 313880676,
+        "name": "Informaciones",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje de la Catedral",
+        "information": "office",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1684044699,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557335,
+          -17.388214
+        ]
+      },
+      "properties": {
+        "id": 1684044699,
+        "name": "Fuente La Garza",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "amenity": "fountain",
+        "artwork_type": "sculpture",
+        "fountain": "decorative",
+        "material": "bronze",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1684069257,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569143,
+          -17.3938175
+        ]
+      },
+      "properties": {
+        "id": 1684069257,
+        "name": "El Cóndor",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "statue",
+        "ele": "15",
+        "material": "bronze",
+        "start_date": "1840",
+        "support": "pedestal",
+        "tourism": "artwork",
+        "wikidata": "Q170598",
+        "wikimedia_commons": "Category:Vultur gryphus",
+        "wikipedia": "es:Vultur gryphus"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2266470189,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1601814,
+          -17.3997203
+        ]
+      },
+      "properties": {
+        "id": 2266470189,
+        "name": "Leones",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "statue",
+        "description": "Popularmente se comenta que los leones fueron hechos de los restos de 2 cañoñes utilizados en la batalla de la Coronilla contra Goyoneche",
+        "material": "metal",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2266470190,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1602424,
+          -17.3997207
+        ]
+      },
+      "properties": {
+        "id": 2266470190,
+        "name": "Leones",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "statue",
+        "description": "Popularmente se comenta que los leones fueron hechos de los restos de 2 cañoñes utilizados en la batalla de la Coronilla contra Goyoneche",
+        "material": "metal",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2294519070,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155681,
+          -17.3884856
+        ]
+      },
+      "properties": {
+        "id": 2294519070,
+        "name": "Nataniel Aguirre González",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "alt_name": "Nataniel Aguirre González-Prada",
+        "artist_name": "Alejandro Guardia",
+        "artwork_type": "statue",
+        "description": "De pie en actitud solemne con los brazos apoyados en el pedestal de piedra, que llega hasta su cintura, está la estatua de Nataniel Aguirre, un cochabambino que a través de su obra «Juan de la Rosa» se inmortalizó",
+        "height": "2",
+        "material": "bronze",
+        "subject:wikidata": "Q734595",
+        "subject:wikipedia": "es:Nataniel Aguirre",
+        "support": "pedestal",
+        "tourism": "artwork",
+        "wikimedia_commons": "File:Plazuela_colon.jpg"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2295135864,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1500894,
+          -17.3895725
+        ]
+      },
+      "properties": {
+        "id": 2295135864,
+        "name": "Manuel Ascencio Villarroel Mercado",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "artist_name": "Alejandro Guardia Valverde",
+        "height": "1.55",
+        "historic": "memorial",
+        "inscription": "El apóstol de los niños, Ciudadano Meritorio. Homenaje de sus sobrinos y nietos Cuadros-Anaya.",
+        "material": "bronze",
+        "memorial": "statue",
+        "old_inscription": "A nuestro inolvidable amigo el gran médico filántropo Doctor Manuel Ascencio Villarroel, sus compañeros del Hospital de Niños de Buenos Aires, doctores Fernando M. Oyuela y Rogelio Fumasoli le dedican este recuerdo.",
+        "start_date": "1947",
+        "support": "pedestal"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2295541624,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.158659,
+          -17.392693
+        ]
+      },
+      "properties": {
+        "id": 2295541624,
+        "name": "El Reloj del Correo",
+        "type": "clock",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "node",
+        "amenity": "clock",
+        "check_date": "2024-02-01",
+        "covered": "no",
+        "date": "no",
+        "description": "Reloj analógico de dos caras de la marca Seiko donado por Japón, emplazado en un poste de 4m en la esquina próxima al Edificio de Correos de Bolivia, en la intersección de las avenidas Heroínas y Ayacucho.",
+        "display": "analog",
+        "faces": "2",
+        "hygrometer": "no",
+        "level": "0",
+        "lit": "yes",
+        "manufacturer": "Seiko",
+        "source": "local knowledge",
+        "support": "pole",
+        "thermometer": "no",
+        "tourism": "attraction",
+        "visibility": "street"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2296981773,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1559848,
+          -17.3874376
+        ]
+      },
+      "properties": {
+        "id": 2296981773,
+        "name": "Juan Francisco del Rivero Muguertegui",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "height": "2.4",
+        "historic": "memorial",
+        "image": "https://drive.google.com/file/d/1dwVX8ezYeWVO66hR7M93EdC58rMua_Yf/view?usp=sharing",
+        "inscription": "Homenaje al Coronel Francisco del Rivero máximo conductor del levantamiento de 1810 en ocasión del bicentenario",
+        "material": "metal",
+        "memorial": "statue",
+        "start_date": "2010-04-28",
+        "subject:wikidata": "Q5868257",
+        "subject:wikipedia": "es:Francisco del Rivero",
+        "support": "pedestal",
+        "wikimedia_commons": "Category:Francisco del Rivero"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2296981780,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565869,
+          -17.3866184
+        ]
+      },
+      "properties": {
+        "id": 2296981780,
+        "name": "José Ballivián y Segurola",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "image": "https://drive.google.com/file/d/1dxUuTSPy1PfGMRTaTDqA715x-4kGliNc/view?usp=sharing",
+        "inscription": "Honor y Gloria",
+        "material": "bronze",
+        "memorial": "bust",
+        "subject:wikidata": "Q734711",
+        "subject:wikipedia": "es:José Ballivián",
+        "wikimedia_commons": "Category:José Ballivián"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2309887885,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.16153,
+          -17.3932722
+        ]
+      },
+      "properties": {
+        "id": 2309887885,
+        "name": "Virgen María",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "statue",
+        "material": "stone",
+        "religion": "christian",
+        "support": "pedestal",
+        "tourism": "artwork",
+        "wikimedia_commons": "File:Monumento de la plaza corazonistas (cochabamba-bolivia).JPG"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2317966014,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1607662,
+          -17.389329
+        ]
+      },
+      "properties": {
+        "id": 2317966014,
+        "name": "Museo La Salle",
+        "type": "museum",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "200",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Mayor Rocha",
+        "fee": "no",
+        "museum": "nature",
+        "operator": "Unidad Educativa La Salle",
+        "operator:type": "religious",
+        "tourism": "museum"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2318884981,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1627075,
+          -17.3906478
+        ]
+      },
+      "properties": {
+        "id": 2318884981,
+        "name": "",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "sculpture",
+        "material": "concrete",
+        "tourism": "artwork",
+        "wikimedia_commons": "File:Plazacobija.JPG"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2318884982,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569143,
+          -17.3938097
+        ]
+      },
+      "properties": {
+        "id": 2318884982,
+        "name": "Columna de los Héroes",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "alt_name": "Columna de la Independencia",
+        "height": "15",
+        "historic": "memorial",
+        "material": "granite",
+        "memorial": "column",
+        "start_date": "1851"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2318885001,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1630084,
+          -17.3905085
+        ]
+      },
+      "properties": {
+        "id": 2318885001,
+        "name": "La Cautiva Cobija",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "artist_name": "Emanuel Fontaine;Daniel Castiglioni",
+        "description": "La estatua ubicada en la Plaza 14 de Septiembre hasta 1960, representa una niña de expresión triste que abraza una bandera, rodea una cadena que simboliza el cautiverio del mar perdido, la placa de laurel y palma significan el martirio y el heroismo.",
+        "height": "4",
+        "heritage": "2",
+        "heritage:operator": "mcb",
+        "historic": "memorial",
+        "material": "bronze",
+        "memorial": "war_memorial",
+        "related_law": "Ley 20/1926",
+        "start_date": "1904-08-06",
+        "support": "pedestal"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2336818827,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.162675,
+          -17.3973804
+        ]
+      },
+      "properties": {
+        "id": 2336818827,
+        "name": "Capitan Gerónimo de Osorio",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "direction": "350",
+        "height": "1.90",
+        "historic": "memorial",
+        "inscription": "A la memoria del Capitán Gerónimo de Osorio, en el IV Centenario de la Fundación de la Villa de Oropeza. 1571-15 de Agosto de 1971.",
+        "material": "metal",
+        "memorial": "statue",
+        "start_date": "1971-08-15",
+        "support": "pedestal"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2336818828,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1608091,
+          -17.3973032
+        ]
+      },
+      "properties": {
+        "id": 2336818828,
+        "name": "Andrés de Santa Cruz y Calahumana",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "statue",
+        "subject:wikidata": "Q467959",
+        "subject:wikipedia": "es:Andrés de Santa Cruz",
+        "wikimedia_commons": "Category:Andrés de Santa Cruz"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2336818842,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1623393,
+          -17.3973218
+        ]
+      },
+      "properties": {
+        "id": 2336818842,
+        "name": "Homenaje a la Fundación de Cochabamba",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "artist_name": "Juan García Guzmán",
+        "height": "6.4",
+        "historic": "memorial",
+        "material": "marble;concrete;bronze",
+        "memorial": "statue",
+        "start_date": "2010-10-13",
+        "support": "pedestal"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2345273838,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557417,
+          -17.3918378
+        ]
+      },
+      "properties": {
+        "id": 2345273838,
+        "name": "Galería Mario Unzueta",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "399",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "fee": "no",
+        "level": "0",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "tourism": "gallery",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944336,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1596853,
+          -17.3994094
+        ]
+      },
+      "properties": {
+        "id": 2398944336,
+        "name": "General Esteban Mariano Arze Alba y Uriona",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "statue",
+        "start_date": "1987-05-26",
+        "subject:wikidata": "Q5849012",
+        "subject:wikipedia": "es:Esteban Arze",
+        "support": "pedestal",
+        "wikimedia_commons": "File:Monumento_a_Esteban_Arze.jpg"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944345,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572725,
+          -17.3954063
+        ]
+      },
+      "properties": {
+        "id": 2398944345,
+        "name": "Instituto de Investigaciones Antropológicas y Museo Arqueológico",
+        "type": "museum",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "199",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "description": "El INAM trabaja en investigación (Arqueología, Antropología, Patrimonio, Identidad, Cultura, Historia, Etnohistoria, Lingüística, Desarrollo Local Comunitario, Paleontología y Paleoambiente), interacción, educación y el Museo Arqueológico.",
+        "email": "iniam@umss.edu.bo",
+        "fee": "no",
+        "loc_name": "Museo Universitario",
+        "museum": "archaeological;ethnography;paleontology",
+        "office": "research",
+        "old_name": "Departamento de Arqueología",
+        "old_name:1951-1980": "Museo Arqueológico y Etnográfico",
+        "opening_hours": "Mo-Fr 08:00-18:00; Sa 08:30-12:30",
+        "operator": "Universidad Mayor de San Simón",
+        "operator:short": "UMSS",
+        "operator:type": "public",
+        "phone": "+591 4 4250010",
+        "research_institution": "yes",
+        "short_name": "INIAM",
+        "start_date": "1951",
+        "tourism": "museum",
+        "website": "https://www.museo.umss.edu.bo/",
+        "wheelchair": "yes",
+        "wikimedia_commons": "File:Ex Banco Central de Bolivia.jpg"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2398944348,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565485,
+          -17.3931736
+        ]
+      },
+      "properties": {
+        "id": 2398944348,
+        "name": "Salón de Exposiciones Gíldaro Antezana Rojas",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "description": "Espacio de difusión del arte antiguo, moderno y contemporáneo en general, difunde las obras de artistas, agrupaciones, institutos, centros de formación, y premios locales, nacionales e internacionales.",
+        "fee": "no",
+        "level": "0",
+        "opening_hours": "Mo-Fr 09:30-12:30,15:00-20:00; Sa 09:30-13:30; PH off",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "phone": "+591 4 4221166",
+        "related_law": "DM 389/2023",
+        "source": "Decreto Municipal 389/2023",
+        "tourism": "gallery",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2406666200,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1544832,
+          -17.3929379
+        ]
+      },
+      "properties": {
+        "id": 2406666200,
+        "name": "General José de San Martín",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "bust",
+        "start_date": "1988-09-14",
+        "subject:wikidata": "Q134160",
+        "subject:wikipedia": "es:José de San Martín"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541201,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577451,
+          -17.3903962
+        ]
+      },
+      "properties": {
+        "id": 2408541201,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541206,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577698,
+          -17.3904346
+        ]
+      },
+      "properties": {
+        "id": 2408541206,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541210,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1577945,
+          -17.3904603
+        ]
+      },
+      "properties": {
+        "id": 2408541210,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541215,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578156,
+          -17.3904841
+        ]
+      },
+      "properties": {
+        "id": 2408541215,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541220,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578403,
+          -17.3905069
+        ]
+      },
+      "properties": {
+        "id": 2408541220,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541224,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578677,
+          -17.3905298
+        ]
+      },
+      "properties": {
+        "id": 2408541224,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541227,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578924,
+          -17.390549
+        ]
+      },
+      "properties": {
+        "id": 2408541227,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541231,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579172,
+          -17.3905637
+        ]
+      },
+      "properties": {
+        "id": 2408541231,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541233,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579455,
+          -17.3905801
+        ]
+      },
+      "properties": {
+        "id": 2408541233,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541238,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579766,
+          -17.3905948
+        ]
+      },
+      "properties": {
+        "id": 2408541238,
+        "name": "Mujeres Pilares de la Sociedad",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Álvaro Urdininea",
+        "artwork_type": "column",
+        "description": "Las columnas estriadas y grises, ahora denominadas \"Mujeres Pilares de Nuestra Sociedad\" fueron intervenidas con mosaiquismo para retratar la figura de personajes femeninos característicos de la ciudad.",
+        "material": "concrete",
+        "start_date": "2004",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2408541270,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1603306,
+          -17.3909566
+        ]
+      },
+      "properties": {
+        "id": 2408541270,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2430327711,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561322,
+          -17.3946888
+        ]
+      },
+      "properties": {
+        "id": 2430327711,
+        "name": "Hotel Los Angeles",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Esteban Arze",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2430327713,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563286,
+          -17.3948285
+        ]
+      },
+      "properties": {
+        "id": 2430327713,
+        "name": "Hotel Las Vegas",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "contact:facebook": "https://www.facebook.com/hotellasvegasbolivia/",
+        "contact:whatsapp": "+591 60388814",
+        "email": "hotel_lasvegas_cbba@hotmail.com",
+        "operator": "Hotel Las Vegas",
+        "payment:cash": "yes",
+        "phone": "+591 4 4229976",
+        "stars": "3",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2705187518,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567088,
+          -17.3923439
+        ]
+      },
+      "properties": {
+        "id": 2705187518,
+        "name": "Alegoría al Artista",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Benjamín Lafuente;Ezequiel Solano;Efraín Chambi;Juan Espinoza;Ariel Condori;Susana Vargas",
+        "artwork_type": "mural",
+        "description": "El mural reúne elementos propios de la región -como el Tunari, el cóndor, la serpiente, el puma, el toro- y otros propios de las culturas tiwanakota y amazónica",
+        "material": "lime;sand;ocher",
+        "start_date": "2014-03-05",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2705187521,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565129,
+          -17.392656
+        ]
+      },
+      "properties": {
+        "id": 2705187521,
+        "name": "Cóndor",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "sculpture",
+        "material": "stone",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2705187526,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560639,
+          -17.3925788
+        ]
+      },
+      "properties": {
+        "id": 2705187526,
+        "name": "Fidelia Corral de Sánchez",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "inscription": "club del libro, 1905-1955",
+        "material": "reinforced_concrete",
+        "memorial": "bust"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2807836081,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564062,
+          -17.3931552
+        ]
+      },
+      "properties": {
+        "id": 2807836081,
+        "name": "",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "board:title": "Calle Bolívar",
+        "board_type": "history",
+        "description": "Simón Bolivar (1783 - 1830), Libertador y Primer presidente (18-VIII-1825 - 1-I-1826)",
+        "information": "board",
+        "material": "ceramic",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2807836082,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156414,
+          -17.3931566
+        ]
+      },
+      "properties": {
+        "id": 2807836082,
+        "name": "Francisco del Rivero",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "board_type": "history",
+        "description": "Aquí nació y murió Francisco del Rivero (1765 - 1813)",
+        "information": "board",
+        "material": "metal",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "start_date": "1957",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2892759428,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1589789,
+          -17.3983224
+        ]
+      },
+      "properties": {
+        "id": 2892759428,
+        "name": "Motel Junín",
+        "type": "motel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Junín",
+        "tourism": "motel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3296012656,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1604485,
+          -17.3995943
+        ]
+      },
+      "properties": {
+        "id": 3296012656,
+        "name": "",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "board_type": "notice",
+        "information": "board",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3555531608,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1586301,
+          -17.3927799
+        ]
+      },
+      "properties": {
+        "id": 3555531608,
+        "name": "Mural El Correo",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artist_name": "Mona Caron y Antropoide Sánchez",
+        "artwork_type": "mural",
+        "start_date": "2019",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3577523849,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579644,
+          -17.3986242
+        ]
+      },
+      "properties": {
+        "id": 3577523849,
+        "name": "Alojamiento Nueva York",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "check_date": "2024-12-06",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3651774785,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578404,
+          -17.390473
+        ]
+      },
+      "properties": {
+        "id": 3651774785,
+        "name": "Monseñor Francisco María del Granado",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "artist_name": "Pietro Piraino",
+        "description": "El sacerdote se encuentra ataviado con traje ceremonial eclesiástico, en posición de bendición solemne, con la mano izquierda sobre el pecho.",
+        "direction": "320",
+        "historic": "memorial",
+        "inscription": "Homenaje del Pueblo de Cochabamba al Santo Obispo Monseñor Francisco María del Granado",
+        "material": "metal",
+        "memorial": "statue",
+        "start_date": "1921-09-25",
+        "subject:wikidata": "Q16569137",
+        "subject:wikipedia": "es:Francisco María del Granado",
+        "support": "pedestal",
+        "wikimedia_commons": "Category:Francisco María del Granado"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3679680116,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576035,
+          -17.3989296
+        ]
+      },
+      "properties": {
+        "id": 3679680116,
+        "name": "Hotel Ovando",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "internet_access": "yes",
+        "internet_access:fee": "customers",
+        "phone": "+591-64957260",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3679680117,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564604,
+          -17.3985349
+        ]
+      },
+      "properties": {
+        "id": 3679680117,
+        "name": "Residencial Escobar",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "213",
+        "addr:street": "Calle Uruguay",
+        "contact:phone": "+591 4 4229275",
+        "internet_access": "wlan",
+        "opening_hours": "24/7",
+        "stars": "2",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3719462619,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545931,
+          -17.3968794
+        ]
+      },
+      "properties": {
+        "id": 3719462619,
+        "name": "Hostal Florida",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "hotel": "hostal",
+        "stars": "2",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3879231464,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567179,
+          -17.3976394
+        ]
+      },
+      "properties": {
+        "id": 3879231464,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4094858972,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569279,
+          -17.3904907
+        ]
+      },
+      "properties": {
+        "id": 4094858972,
+        "name": "Ñaupa House",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "250",
+        "addr:street": "Calle España",
+        "diet:vegetarian": "yes",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "no",
+        "opening_hours": "24/7",
+        "payment:cash": "only",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4122422489,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1631354,
+          -17.3971747
+        ]
+      },
+      "properties": {
+        "id": 4122422489,
+        "name": "Hotel FG",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle Mendez Arcos",
+        "hotel": "hostal",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "no",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4244032593,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599829,
+          -17.3922087
+        ]
+      },
+      "properties": {
+        "id": 4244032593,
+        "name": "Hotel León",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:street": "Calle Junín",
+        "contact:phone": "+591 4 4589380",
+        "email": "leondelsol.bo@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "no",
+        "opening_hours": "24/7",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259131216,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1557957,
+          -17.3905128
+        ]
+      },
+      "properties": {
+        "id": 4259131216,
+        "name": "Hotel Sabaya",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle 25 de Mayo",
+        "hotel": "residencial",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4259603868,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572381,
+          -17.3897356
+        ]
+      },
+      "properties": {
+        "id": 4259603868,
+        "name": "Hotel Ideal",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "brand": "Hotel Ideal",
+        "operator": "Hotel Ideal",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4307462391,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554215,
+          -17.3874482
+        ]
+      },
+      "properties": {
+        "id": 4307462391,
+        "name": "Outlander",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza Colón",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4343341930,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599617,
+          -17.3923457
+        ]
+      },
+      "properties": {
+        "id": 4343341930,
+        "name": "Hostal Casa Vieja Colonial",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "hotel": "hostal",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4343459689,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.161287,
+          -17.3913146
+        ]
+      },
+      "properties": {
+        "id": 4343459689,
+        "name": "Jardín",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:street": "Calle Hamiraya",
+        "hotel": "hostal",
+        "stars": "1",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4357484089,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1561891,
+          -17.3895588
+        ]
+      },
+      "properties": {
+        "id": 4357484089,
+        "name": "Hostal Bonaerense",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "329",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle 25 de Mayo",
+        "email": "admin@hostal-bonairense.com",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "phone": "+591 4 4567452;+591 4 4253911",
+        "stars": "2",
+        "tourism": "hotel",
+        "website": "https://www.hostal-bonairense.com"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4414265846,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.156827,
+          -17.3867267
+        ]
+      },
+      "properties": {
+        "id": 4414265846,
+        "name": "Mariscal Andrés de Santa Cruz",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "inscription": "Homenaje a su ilustre fundador 5 de noviembre 1832 a 5 de noviembre 2002",
+        "material": "metal",
+        "memorial": "bust",
+        "start_date": "2002-11-05",
+        "subject:wikidata": "Q467959",
+        "subject:wikipedia": "es:Andrés de Santa Cruz",
+        "wikimedia_commons": "Category:Andrés de Santa Cruz"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4417884292,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1582534,
+          -17.3991469
+        ]
+      },
+      "properties": {
+        "id": 4417884292,
+        "name": "Claros",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:street": "Avenida Aroma",
+        "hotel": "hostal",
+        "internet_access": "wlan",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4418942497,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1604266,
+          -17.3930196
+        ]
+      },
+      "properties": {
+        "id": 4418942497,
+        "name": "Hotel Heroínas",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "239",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "internet_access": "wlan",
+        "opening_hours": "24/7",
+        "operator": "Hotel Heroínas",
+        "parking": "yes",
+        "stars": "2",
+        "tourism": "hotel",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4420664389,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1555914,
+          -17.3945801
+        ]
+      },
+      "properties": {
+        "id": 4420664389,
+        "name": "Centro de Atención al Turista",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "329",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Sucre",
+        "information": "office",
+        "name:en": "Tourist Attention Center",
+        "opening_hours": "Mo-Fr 08:00-12:00,14:30-18:30",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "short_name": "CAT",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4441451389,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545225,
+          -17.3989605
+        ]
+      },
+      "properties": {
+        "id": 4441451389,
+        "name": "Cristo de la Concordia",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "447",
+        "addr:street": "Avenida Aroma",
+        "opening_hours": "24/7",
+        "phone": "+591 4 4257131",
+        "stars": "2",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4441451489,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1573042,
+          -17.3996009
+        ]
+      },
+      "properties": {
+        "id": 4441451489,
+        "name": "Fortaleza",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "122",
+        "addr:street": "Avenida Aroma",
+        "opening_hours": "24/7",
+        "phone": "+591 4 4229912",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4607123128,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1566976,
+          -17.3863609
+        ]
+      },
+      "properties": {
+        "id": 4607123128,
+        "name": "",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "check_date": "2022-04-15",
+        "information": "map",
+        "map_size": "site",
+        "map_type": "street",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4611273980,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1575066,
+          -17.3999243
+        ]
+      },
+      "properties": {
+        "id": 4611273980,
+        "name": "Hostal Ecuatorial",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Avenida Ayacucho",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4688076689,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1541071,
+          -17.3877002
+        ]
+      },
+      "properties": {
+        "id": 4688076689,
+        "name": "Apart Hotel Violetta's",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0464",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle José Miguel Lanza",
+        "alt_name": "Hotel Violetta's",
+        "contact:facebook": "https://www.facebook.com/apartviolettas/",
+        "email": "apart@violettas.com",
+        "hotel": "apartment_hotel",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "operator": "Apart Hotel Violetta's",
+        "operator:type": "private",
+        "parking": "yes",
+        "payment:cash": "yes",
+        "phone": "+591 4 4523386;+591 4 4520257;+591 4 4129127",
+        "smoking": "outside",
+        "stars": "3",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4723302523,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1587983,
+          -17.3905156
+        ]
+      },
+      "properties": {
+        "id": 4723302523,
+        "name": "Enrique Happ",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "statue"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4740852678,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600586,
+          -17.3991091
+        ]
+      },
+      "properties": {
+        "id": 4740852678,
+        "name": "",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "information": "map",
+        "map_size": "area",
+        "map_type": "street",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4743079455,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.154852,
+          -17.3990323
+        ]
+      },
+      "properties": {
+        "id": 4743079455,
+        "name": "Residencial Jerusalen",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "345",
+        "addr:street": "Avenida Aroma",
+        "description": "Habitaciones , simples, dobles, triples,cuadruples, familiares y matrimoniales. Cuenta con TV. Cable, baño privado , ducha caliente/fria todo el dia. Tarifas especiales en delegaciones. Check Out Centrico a 3 cuadras de la terminal de buses de Cochabamba.",
+        "email": "residencialjerusalen@gmail.com",
+        "internet_access": "yes",
+        "phone": "+5914224197",
+        "rooms": "40",
+        "smoking": "separated",
+        "stars": "2",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4843975421,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534407,
+          -17.3871991
+        ]
+      },
+      "properties": {
+        "id": 4843975421,
+        "name": "Tamesis",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "684",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Coronel Eduardo Paccieri",
+        "contact:phone": "+591 4 4527605;+591 77923008",
+        "stars": "3",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4867401127,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1567653,
+          -17.3974366
+        ]
+      },
+      "properties": {
+        "id": 4867401127,
+        "name": "Hostel Roma",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4933190228,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1563393,
+          -17.3936634
+        ]
+      },
+      "properties": {
+        "id": 4933190228,
+        "name": "",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Plaza 14 de Septiembre",
+        "board_type": "history",
+        "historic": "memorial",
+        "inscription": "Aquí fue fusilado y decapitado el patriota don Mariano Antezana por orden de Goyeneche el 28 mayo 1812 después de haber combartido en la Coronilla en defensa de la libertad patria.",
+        "material": "metal",
+        "memorial": "plaque",
+        "start_date": "1975-08-06"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4933190241,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1560883,
+          -17.3948479
+        ]
+      },
+      "properties": {
+        "id": 4933190241,
+        "name": "José Alonso de Ibáñez",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "reinforced_concrete",
+        "memorial": "bust",
+        "subject:wikidata": "Q96625388",
+        "subject:wikipedia": "es:José Alonso de Ibáñez"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4981436274,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.155604,
+          -17.3872234
+        ]
+      },
+      "properties": {
+        "id": 4981436274,
+        "name": "Hotel Attridge",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Avenida José Ballivián",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4995779944,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1622726,
+          -17.386389
+        ]
+      },
+      "properties": {
+        "id": 4995779944,
+        "name": "Soroptimist",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "sculpture",
+        "material": "reinforced_concrete",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215838,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592529,
+          -17.389787
+        ]
+      },
+      "properties": {
+        "id": 5102215838,
+        "name": "Hotel Moraine",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Avenida Ayacucho",
+        "brand": "Hotel Moraine",
+        "payment:cash": "yes",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5102215841,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1598271,
+          -17.3906015
+        ]
+      },
+      "properties": {
+        "id": 5102215841,
+        "name": "Hostal Wara",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5114428427,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1570781,
+          -17.3938378
+        ]
+      },
+      "properties": {
+        "id": 5114428427,
+        "name": "Araucaria de la Plaza de Armas",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "node",
+        "circumference": "3 m",
+        "denotation": "park",
+        "diameter": "90 cm",
+        "genus": "Araucaria",
+        "height": "25",
+        "leaf_cycle": "evergreen",
+        "leaf_type": "needleleaved",
+        "natural": "tree",
+        "species": "Araucaria heterophylla",
+        "start_date": "~1880",
+        "tourism": "attraction",
+        "xmas:feature": "tree",
+        "xmas:location": "Plaza 14 de Septiembre"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117996889,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1569585,
+          -17.3879531
+        ]
+      },
+      "properties": {
+        "id": 5117996889,
+        "name": "Hotel Ginas",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Calle México",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5117997432,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565219,
+          -17.3881845
+        ]
+      },
+      "properties": {
+        "id": 5117997432,
+        "name": "",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "statue",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5142268180,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1592595,
+          -17.3967082
+        ]
+      },
+      "properties": {
+        "id": 5142268180,
+        "name": "",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "sculpture",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5166825478,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.163492,
+          -17.3942472
+        ]
+      },
+      "properties": {
+        "id": 5166825478,
+        "name": "Hotel Armenia",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:street": "Calle General Acha",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5166826256,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1647244,
+          -17.3944854
+        ]
+      },
+      "properties": {
+        "id": 5166826256,
+        "name": "Hotel Briston",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5280985108,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1613087,
+          -17.3920446
+        ]
+      },
+      "properties": {
+        "id": 5280985108,
+        "name": "Hotel La Fontaine",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Hamiraya",
+        "contact:email": "hotelfontaine@hotmail.com",
+        "contact:mobile": "+591-67402203",
+        "phone": "+591-4-4252838",
+        "rooms": "14",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5280985349,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1625033,
+          -17.3862768
+        ]
+      },
+      "properties": {
+        "id": 5280985349,
+        "name": "",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "information": "map",
+        "map_size": "site",
+        "map_type": "street",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5294052751,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1578915,
+          -17.3989246
+        ]
+      },
+      "properties": {
+        "id": 5294052751,
+        "name": "Hostal Vargas",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Ayacucho",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5319274468,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1619359,
+          -17.3861342
+        ]
+      },
+      "properties": {
+        "id": 5319274468,
+        "name": "Margarita Tomisich de Catacora",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "material": "reinforced_concrete",
+        "memorial": "bust"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5322951022,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1539802,
+          -17.3999168
+        ]
+      },
+      "properties": {
+        "id": 5322951022,
+        "name": "Alojamiento Victoria",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "stars": "2",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5336013256,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584335,
+          -17.3892285
+        ]
+      },
+      "properties": {
+        "id": 5336013256,
+        "name": "Homenaje a Christian Urresti",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "installation",
+        "description": "gruta del joven christian urresti fallecido el 11 de enero de 2007",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5481562826,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1630372,
+          -17.3968749
+        ]
+      },
+      "properties": {
+        "id": 5481562826,
+        "name": "El Kullku",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "node",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5557428253,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1600607,
+          -17.3883854
+        ]
+      },
+      "properties": {
+        "id": 5557428253,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5906812951,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1562696,
+          -17.3926465
+        ]
+      },
+      "properties": {
+        "id": 5906812951,
+        "name": "NATIVA Suites",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0344",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Pasaje Fidelia Corral de Sánchez",
+        "brand": "NATIVA",
+        "internet_access": "yes",
+        "internet_access:fee": "no",
+        "phone": "+591 4 4502823",
+        "smoking": "no",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6471930015,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1599927,
+          -17.3921025
+        ]
+      },
+      "properties": {
+        "id": 6471930015,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6485597885,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1576222,
+          -17.3977792
+        ]
+      },
+      "properties": {
+        "id": 6485597885,
+        "name": "Residencial Mariloy",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8143694059,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1625589,
+          -17.3907876
+        ]
+      },
+      "properties": {
+        "id": 8143694059,
+        "name": "Plaza Cobija",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "board_type": "name",
+        "information": "board",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8597535063,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579264,
+          -17.3917166
+        ]
+      },
+      "properties": {
+        "id": 8597535063,
+        "name": "",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "inscription": "Colegio Nacional Mixto Nocturno Felix Del Granado\nFundado Mayo 1963\nCBBA, Agosto de 1972",
+        "material": "metal",
+        "memorial": "plaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 8964752695,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1534804,
+          -17.3935464
+        ]
+      },
+      "properties": {
+        "id": 8964752695,
+        "name": "Simón Bolívar",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "access": "permit",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "bust",
+        "wikidata": "Q8605",
+        "wikipedia": "es:Simón Bolívar"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9587259829,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572292,
+          -17.3932766
+        ]
+      },
+      "properties": {
+        "id": 9587259829,
+        "name": "Salón Melchor Pérez de Olguín",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Plaza 14 de Septiembre",
+        "fee": "no",
+        "operator": "Casa Departamental de las Culturas",
+        "operator:type": "government",
+        "tourism": "gallery"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9765855493,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1641732,
+          -17.3880592
+        ]
+      },
+      "properties": {
+        "id": 9765855493,
+        "name": "Cobija",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "node",
+        "access": "yes",
+        "description": "Es un conjuntos de arbustos que en el centro forman el nombre de la OTB.",
+        "fee": "no",
+        "height": "1",
+        "leisure": "garden",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9936640857,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1565275,
+          -17.3931668
+        ]
+      },
+      "properties": {
+        "id": 9936640857,
+        "name": "Gildaro Antezana Rojas",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "historic": "memorial",
+        "indoor": "yes",
+        "material": "metal",
+        "memorial": "bust"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 9976144607,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1606785,
+          -17.3980087
+        ]
+      },
+      "properties": {
+        "id": 9976144607,
+        "name": "",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "bust",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10000617715,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1554827,
+          -17.3991212
+        ]
+      },
+      "properties": {
+        "id": 10000617715,
+        "name": "Hotel Americana",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "788",
+        "addr:neighbourhood": "San Antonio",
+        "addr:street": "Esteban Arze",
+        "check_date": "2024-12-21",
+        "email": "americanahotel@email.com",
+        "fax": "+591-4-4250484",
+        "internet_access": "yes",
+        "internet_access:fee": "customers",
+        "mobile": "+591-78350553, 77400144",
+        "operator": "Garcia Innovation Group Srl",
+        "phone": "+591-4-4250552, 4-4250553, 4-4250554",
+        "rooms": "43",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10138799717,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1574162,
+          -17.3884823
+        ]
+      },
+      "properties": {
+        "id": 10138799717,
+        "name": "",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "449",
+        "name:en": "Hostel Running Chaski",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10172520844,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1579036,
+          -17.3987996
+        ]
+      },
+      "properties": {
+        "id": 10172520844,
+        "name": "Hostal Versalles",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "714",
+        "addr:street": "Avenida Ayacucho",
+        "contact:mobile": "+591-72724514",
+        "email": "hiversalles@yahoo.com",
+        "phone": "+591-4-4583315",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10279156721,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572504,
+          -17.3954339
+        ]
+      },
+      "properties": {
+        "id": 10279156721,
+        "name": "",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "direction": "125",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "plaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10279156722,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1572789,
+          -17.3954505
+        ]
+      },
+      "properties": {
+        "id": 10279156722,
+        "name": "",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "direction": "170",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "plaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10687188394,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552337,
+          -17.3929456
+        ]
+      },
+      "properties": {
+        "id": 10687188394,
+        "name": "",
+        "type": "artwork",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "artwork_type": "mural",
+        "tourism": "artwork"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 10795424406,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1597056,
+          -17.391403
+        ]
+      },
+      "properties": {
+        "id": 10795424406,
+        "name": "Casa San Martin",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "internet_access": "wlan",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11104349201,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1556535,
+          -17.3992185
+        ]
+      },
+      "properties": {
+        "id": 11104349201,
+        "name": "Hotel Jupiter",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:street": "Avenida Aroma",
+        "contact:facebook": "HotelJupiterCbba",
+        "phone": "+591 68481581",
+        "stars": "3",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11211752529,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591928,
+          -17.3946806
+        ]
+      },
+      "properties": {
+        "id": 11211752529,
+        "name": "Galería Casoña José María Santivañez",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "156",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle José María Santivañez",
+        "level": "0",
+        "opening_hours": "Mo-Fr 09:00-12:00, 14:30-18:30",
+        "operator": "Casoña José María Santivañez",
+        "tourism": "gallery",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11211752530,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591593,
+          -17.3944453
+        ]
+      },
+      "properties": {
+        "id": 11211752530,
+        "name": "Sala de Escritores Augusto Guzmán Martinez",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "156",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle José María Santivañez",
+        "level": "0",
+        "opening_hours": "Mo-Fr 09:00-12:00, 14:30-18:30",
+        "operator": "Casoña José María Santivañez",
+        "related_law": "OM 275/1987",
+        "source": "Ordenanza Municipal 275/1987",
+        "start_date": "1987-12-30",
+        "tourism": "gallery",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11211778305,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1507655,
+          -17.3889071
+        ]
+      },
+      "properties": {
+        "id": 11211778305,
+        "name": "Alojamiento Victoria",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle República de Ecuador",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11566144477,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1510975,
+          -17.3915257
+        ]
+      },
+      "properties": {
+        "id": 11566144477,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Ana",
+        "addr:street": "Calle 16 de Julio",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11885983247,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1545364,
+          -17.3879648
+        ]
+      },
+      "properties": {
+        "id": 11885983247,
+        "name": "Informaciones",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Central Santa María",
+        "addr:street": "Calle Guerrilleros José Miguel Lanza",
+        "indoor": "yes",
+        "information": "office",
+        "level": "0",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "tourism": "information",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 11897151496,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1584363,
+          -17.3937938
+        ]
+      },
+      "properties": {
+        "id": 11897151496,
+        "name": "Hotel Magno",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "259",
+        "addr:street": "Avenida Ayacucho",
+        "contact:mobile": "+591-72472337",
+        "phone": "+591-4-4661627",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12085565000,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1591254,
+          -17.3855597
+        ]
+      },
+      "properties": {
+        "id": 12085565000,
+        "name": "Hostal Baptista",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "719",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle Mariano Baptista",
+        "guest_house": "hostel",
+        "internet_access": "yes",
+        "internet_access:fee": "customers",
+        "mobile": "+591-71713814",
+        "phone": "+591-4-4268290",
+        "rooms": "12",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12438051103,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1564522,
+          -17.3997899
+        ]
+      },
+      "properties": {
+        "id": 12438051103,
+        "name": "Alojamiento Coral",
+        "type": "hostel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "addr:housenumber": "s0814",
+        "addr:street": "Calle Nataniel Aguirre",
+        "phone": "+591-63893136",
+        "tourism": "hostel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12614201620,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1527118,
+          -17.3889908
+        ]
+      },
+      "properties": {
+        "id": 12614201620,
+        "name": "Alojamiento Virgen de Surumi",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 12614210901,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1537218,
+          -17.3863544
+        ]
+      },
+      "properties": {
+        "id": 12614210901,
+        "name": "Alojamiento Wendy",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "node",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13240227367,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1552193,
+          -17.3877912
+        ]
+      },
+      "properties": {
+        "id": 13240227367,
+        "name": "",
+        "type": "memorial",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "node",
+        "direction": "260",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "plaque"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 13363611032,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.1608106,
+          -17.3884887
+        ]
+      },
+      "properties": {
+        "id": 13363611032,
+        "name": "Nivel MSNM Cochabamba",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "node",
+        "direction": "350",
+        "historic": "memorial",
+        "material": "metal",
+        "memorial": "plaque",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 156109530,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1539725,
+              -17.3897263
+            ],
+            [
+              -66.1540525,
+              -17.3899221
+            ],
+            [
+              -66.1542312,
+              -17.3902509
+            ],
+            [
+              -66.1544064,
+              -17.3905312
+            ],
+            [
+              -66.1544213,
+              -17.3905668
+            ],
+            [
+              -66.1544289,
+              -17.3905931
+            ],
+            [
+              -66.1544139,
+              -17.3906514
+            ],
+            [
+              -66.1539725,
+              -17.3897263
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 156109530,
+        "name": "Pasaje San Rafael",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "bicycle": "yes",
+        "heritage": "8",
+        "heritage:operator": "gamc",
+        "heritage:since": "2014-05-13",
+        "highway": "service",
+        "lanes": "1",
+        "lit": "yes",
+        "old_name": "Calle Del Diablo",
+        "oneway": "no",
+        "related_law": "RM 6766-6799/2014",
+        "service": "alley",
+        "sidewalk": "no",
+        "surface": "paving_stones",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220317530,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.15579405,
+          -17.387963149999997
+        ]
+      },
+      "properties": {
+        "id": 220317530,
+        "name": "Puente Plaza Cristobal Colón",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "bridge": "yes",
+        "highway": "footway",
+        "layer": "1",
+        "lit": "yes",
+        "surface": "paving_stones",
+        "tourism": "attraction",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 220432351,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1570619,
+              -17.3943713
+            ],
+            [
+              -66.156449,
+              -17.3942655
+            ],
+            [
+              -66.1564478,
+              -17.3942774
+            ],
+            [
+              -66.1564434,
+              -17.3942964
+            ],
+            [
+              -66.1564357,
+              -17.3943386
+            ],
+            [
+              -66.1564265,
+              -17.3943859
+            ],
+            [
+              -66.1564166,
+              -17.3944453
+            ],
+            [
+              -66.156408,
+              -17.3944929
+            ],
+            [
+              -66.1563867,
+              -17.3946105
+            ],
+            [
+              -66.1564677,
+              -17.3946236
+            ],
+            [
+              -66.1564703,
+              -17.3946091
+            ],
+            [
+              -66.1567472,
+              -17.3946538
+            ],
+            [
+              -66.1567459,
+              -17.3946613
+            ],
+            [
+              -66.1567447,
+              -17.3946679
+            ],
+            [
+              -66.1568985,
+              -17.3946964
+            ],
+            [
+              -66.1569135,
+              -17.3946193
+            ],
+            [
+              -66.1570086,
+              -17.3946349
+            ],
+            [
+              -66.1570619,
+              -17.3943713
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 220432351,
+        "name": "Catedral Metropolitana de San Sebastián",
+        "type": "place_of_worship",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Esteban Arze",
+        "alt_name": "Catedral de Cochabamba",
+        "amenity": "place_of_worship",
+        "artist_name": "Canedo;Mazo",
+        "building": "church",
+        "building:levels": "2",
+        "building:material": "stone",
+        "contact:facebook": "https://www.facebook.com/ArquidiocesisdeCochabamba",
+        "denomination": "roman_catholic",
+        "heritage": "2",
+        "heritage:operator": "mcb",
+        "historic": "monument",
+        "loc_name": "Catedral Metropolitana de Cochabamba",
+        "related_law": "Ley 280/2012;Ley 1024/2021",
+        "religion": "christian",
+        "start_date": "1701",
+        "wikidata": "Q3895899",
+        "wikimedia_commons": "Category:Catedral San Sebastián, Cochabamba",
+        "wikipedia": "es:Catedral de San Sebastián (Cochabamba)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 265562663,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1566779,
+              -17.3923672
+            ],
+            [
+              -66.1568397,
+              -17.3923975
+            ],
+            [
+              -66.1568457,
+              -17.3923684
+            ],
+            [
+              -66.1567088,
+              -17.3923439
+            ],
+            [
+              -66.156693,
+              -17.392341
+            ],
+            [
+              -66.1566871,
+              -17.3923429
+            ],
+            [
+              -66.1566826,
+              -17.3923444
+            ],
+            [
+              -66.1566779,
+              -17.3923672
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 265562663,
+        "name": "Galería Walter Terrazas Prado",
+        "type": "gallery",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "284",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Avenida Heroínas",
+        "air_conditioning": "no",
+        "building": "commercial",
+        "building:levels": "0",
+        "contact:facebook": "https://www.facebook.com/AsociacionDeArtistasPlasticosDeCochabamba",
+        "email": "abapnacional@hotmail.com",
+        "fee": "no",
+        "operator": "Asociación Boliviana de Artistas Plásticos Cochabamba",
+        "operator:short": "ABAP Cochabamba",
+        "operator:type": "association",
+        "payment:cash": "yes",
+        "phone": "+591 4 4227561",
+        "shop": "art",
+        "toilets": "no",
+        "tourism": "gallery",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 322917847,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1648185,
+              -17.3899228
+            ],
+            [
+              -66.1649491,
+              -17.390206
+            ],
+            [
+              -66.1649977,
+              -17.3901856
+            ],
+            [
+              -66.1648519,
+              -17.3898692
+            ],
+            [
+              -66.1648252,
+              -17.3898804
+            ],
+            [
+              -66.164833,
+              -17.3898973
+            ],
+            [
+              -66.1648405,
+              -17.3899136
+            ],
+            [
+              -66.1648185,
+              -17.3899228
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 322917847,
+        "name": "Tobogán",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "attraction": "toboggan",
+        "building": "yes",
+        "building:material": "concrete",
+        "fee": "yes",
+        "operator": "Empresa Municipal de Áreas Verdes y Recreación Alternativa",
+        "operator:short": "EMAVRA",
+        "operator:type": "public",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 411210576,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1500275,
+              -17.3880695
+            ],
+            [
+              -66.1500118,
+              -17.3880627
+            ],
+            [
+              -66.1499071,
+              -17.3880174
+            ],
+            [
+              -66.1498278,
+              -17.3881845
+            ],
+            [
+              -66.1499417,
+              -17.3882337
+            ],
+            [
+              -66.1499699,
+              -17.3881741
+            ],
+            [
+              -66.149946,
+              -17.3881637
+            ],
+            [
+              -66.1499716,
+              -17.3881099
+            ],
+            [
+              -66.1500021,
+              -17.3881231
+            ],
+            [
+              -66.1500275,
+              -17.3880695
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 411210576,
+        "name": "Casa de Francisco Viedma",
+        "type": "monument",
+        "category": "tourism",
+        "subcategory": "historic",
+        "osmType": "way",
+        "access": "yes",
+        "building": "office",
+        "building:levels": "2",
+        "historic": "monument"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 513189504,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1565392,
+              -17.3926384
+            ],
+            [
+              -66.1563621,
+              -17.3926071
+            ],
+            [
+              -66.1561235,
+              -17.392565
+            ],
+            [
+              -66.1561584,
+              -17.392387
+            ],
+            [
+              -66.1561631,
+              -17.3923632
+            ],
+            [
+              -66.156185,
+              -17.3922513
+            ],
+            [
+              -66.1561749,
+              -17.3922495
+            ],
+            [
+              -66.1561427,
+              -17.3922438
+            ],
+            [
+              -66.1561057,
+              -17.3922372
+            ],
+            [
+              -66.1560824,
+              -17.3923564
+            ],
+            [
+              -66.1560549,
+              -17.392497
+            ],
+            [
+              -66.1560512,
+              -17.3925158
+            ],
+            [
+              -66.1560415,
+              -17.3925654
+            ],
+            [
+              -66.156037,
+              -17.3925883
+            ],
+            [
+              -66.1561807,
+              -17.3926139
+            ],
+            [
+              -66.1565319,
+              -17.3926757
+            ],
+            [
+              -66.1565336,
+              -17.3926669
+            ],
+            [
+              -66.1565373,
+              -17.3926479
+            ],
+            [
+              -66.1565392,
+              -17.3926384
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 513189504,
+        "name": "Pasaje Fidelia Corral de Sánchez",
+        "type": "attraction",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "area": "yes",
+        "bicycle": "dismount",
+        "covered": "partial",
+        "highway": "pedestrian",
+        "lit": "yes",
+        "surface": "paving_stones",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 576025283,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1602385,
+              -17.3968768
+            ],
+            [
+              -66.1602196,
+              -17.3969832
+            ],
+            [
+              -66.1602032,
+              -17.3969806
+            ],
+            [
+              -66.1601966,
+              -17.3970179
+            ],
+            [
+              -66.1600364,
+              -17.3969921
+            ],
+            [
+              -66.1600529,
+              -17.3968989
+            ],
+            [
+              -66.1600619,
+              -17.3968483
+            ],
+            [
+              -66.1602385,
+              -17.3968768
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 576025283,
+        "name": "",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Calama",
+        "building": "hotel",
+        "building:levels": "5",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 577946443,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1504833,
+              -17.387523
+            ],
+            [
+              -66.150202,
+              -17.3873934
+            ],
+            [
+              -66.1502578,
+              -17.3872824
+            ],
+            [
+              -66.1502786,
+              -17.3872749
+            ],
+            [
+              -66.1503301,
+              -17.3872991
+            ],
+            [
+              -66.1503371,
+              -17.3873213
+            ],
+            [
+              -66.1503315,
+              -17.3873339
+            ],
+            [
+              -66.1503553,
+              -17.3873449
+            ],
+            [
+              -66.1503748,
+              -17.3873068
+            ],
+            [
+              -66.1504129,
+              -17.3873231
+            ],
+            [
+              -66.1504511,
+              -17.3873396
+            ],
+            [
+              -66.1504311,
+              -17.3873798
+            ],
+            [
+              -66.1505322,
+              -17.3874263
+            ],
+            [
+              -66.1505083,
+              -17.3874736
+            ],
+            [
+              -66.1505792,
+              -17.3875057
+            ],
+            [
+              -66.1505869,
+              -17.3875221
+            ],
+            [
+              -66.1505836,
+              -17.38754
+            ],
+            [
+              -66.1505758,
+              -17.3875515
+            ],
+            [
+              -66.150562,
+              -17.3875584
+            ],
+            [
+              -66.1504833,
+              -17.387523
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 577946443,
+        "name": "Museo de la Historia de la Medicina Don Francisco de Viedma",
+        "type": "museum",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Calle Venezuela",
+        "building": "museum",
+        "building:levels": "1",
+        "fee": "no",
+        "heritage": "8",
+        "heritage:operator": "gamc",
+        "heritage:since": "2011-10-25",
+        "museum": "medicine",
+        "old_name:2011": "Pabellón de Cirugía Doctor Cleómedes Blanco",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "phone": "+591 4 4258030",
+        "related_law": "OM 4330/2011",
+        "roof:shape": "hipped",
+        "source": "Ordenanza Municipal 4330/2011",
+        "start_date": "1996",
+        "tourism": "museum"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 581374884,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1610666,
+              -17.3961059
+            ],
+            [
+              -66.1610954,
+              -17.3959621
+            ],
+            [
+              -66.1611051,
+              -17.3959138
+            ],
+            [
+              -66.1608283,
+              -17.3958632
+            ],
+            [
+              -66.1608199,
+              -17.3959051
+            ],
+            [
+              -66.1607898,
+              -17.3960553
+            ],
+            [
+              -66.1610666,
+              -17.3961059
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 581374884,
+        "name": "San Salvador",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "alt_name": "Residencial San Salvador",
+        "building": "yes",
+        "phone": "+591 4 4581978",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 922753333,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1607322,
+              -17.3927007
+            ],
+            [
+              -66.1607138,
+              -17.3927998
+            ],
+            [
+              -66.1606267,
+              -17.3927851
+            ],
+            [
+              -66.1606451,
+              -17.392686
+            ],
+            [
+              -66.1607322,
+              -17.3927007
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 922753333,
+        "name": "Casa Museo Martín Cárdenas",
+        "type": "museum",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Avenida Heroínas de la Coronilla",
+        "building": "museum",
+        "building:levels": "2",
+        "fee": "no",
+        "museum": "person",
+        "opening_hours": "Mo-Fr 08:00-12:00,14:30-18:00;Sa,Su,PH off",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "tourism": "museum",
+        "wheelchair": "limited",
+        "wikimedia_commons": "File:Frontis de la Casa Museo de Martín Cárdenas.jpg"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 926482159,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1567742,
+              -17.3914285
+            ],
+            [
+              -66.1567969,
+              -17.3913074
+            ],
+            [
+              -66.1566394,
+              -17.3912805
+            ],
+            [
+              -66.1566357,
+              -17.3912999
+            ],
+            [
+              -66.1565199,
+              -17.3912801
+            ],
+            [
+              -66.1565008,
+              -17.3913818
+            ],
+            [
+              -66.1567742,
+              -17.3914285
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 926482159,
+        "name": "Hostal Felipez",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "hotel": "hostal",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 936523062,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1557867,
+              -17.3948206
+            ],
+            [
+              -66.1557565,
+              -17.394981
+            ],
+            [
+              -66.1557715,
+              -17.3949835
+            ],
+            [
+              -66.1557649,
+              -17.3950185
+            ],
+            [
+              -66.1557785,
+              -17.3950208
+            ],
+            [
+              -66.155772,
+              -17.3950548
+            ],
+            [
+              -66.1557553,
+              -17.3951434
+            ],
+            [
+              -66.1556168,
+              -17.3951185
+            ],
+            [
+              -66.1556333,
+              -17.3950321
+            ],
+            [
+              -66.155656,
+              -17.3949137
+            ],
+            [
+              -66.1556773,
+              -17.3948022
+            ],
+            [
+              -66.1557867,
+              -17.3948206
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 936523062,
+        "name": "City Hotel",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Jordán",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 940660700,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1576668,
+              -17.3925157
+            ],
+            [
+              -66.1575527,
+              -17.3924952
+            ],
+            [
+              -66.1575069,
+              -17.3927328
+            ],
+            [
+              -66.1576214,
+              -17.392754
+            ],
+            [
+              -66.1576668,
+              -17.3925157
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 940660700,
+        "name": "Unión Plaza Hotel",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "111",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle Mariano Baptista",
+        "air_conditioning": "yes",
+        "building": "hotel",
+        "building:levels": "7",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "operator": "Unión Plaza Hotel",
+        "payment:cash": "yes",
+        "phone": "+591 4 4503728",
+        "reservation": "yes",
+        "roof:shape": "gabled",
+        "smoking": "outside",
+        "tourism": "hotel",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 963746360,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1624002,
+              -17.3902854
+            ],
+            [
+              -66.1623688,
+              -17.3904882
+            ],
+            [
+              -66.1623389,
+              -17.3904842
+            ],
+            [
+              -66.1622539,
+              -17.3904719
+            ],
+            [
+              -66.1622358,
+              -17.3904489
+            ],
+            [
+              -66.1621703,
+              -17.3903657
+            ],
+            [
+              -66.1623193,
+              -17.3902396
+            ],
+            [
+              -66.1623267,
+              -17.3902334
+            ],
+            [
+              -66.1623429,
+              -17.3902273
+            ],
+            [
+              -66.1623628,
+              -17.390237
+            ],
+            [
+              -66.1624002,
+              -17.3902854
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 963746360,
+        "name": "Hostal Cobija",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Cobija",
+        "addr:street": "Calle Tumusla",
+        "barrier": "wall",
+        "stars": "2",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 975503572,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1504634,
+              -17.3863722
+            ],
+            [
+              -66.1502671,
+              -17.3863289
+            ],
+            [
+              -66.1506295,
+              -17.3859975
+            ],
+            [
+              -66.1507435,
+              -17.3861073
+            ],
+            [
+              -66.1504634,
+              -17.3863722
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 975503572,
+        "name": "Domani Boutique",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Seminario San Luis",
+        "addr:street": "Calle Federico Blanco",
+        "barrier": "wall",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 988992138,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1585264,
+              -17.3851326
+            ],
+            [
+              -66.1584348,
+              -17.3852389
+            ],
+            [
+              -66.1581564,
+              -17.3850277
+            ],
+            [
+              -66.1581796,
+              -17.3849827
+            ],
+            [
+              -66.1582497,
+              -17.3848888
+            ],
+            [
+              -66.1585264,
+              -17.3851326
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 988992138,
+        "name": "El Prado Hotel",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "709",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "barrier": "wall",
+        "contact:phone": "+591-4-4528366;+591-4-4529788",
+        "email": "elpradohoteltoloma@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "mobile": "+591-71440116",
+        "rooms": "19",
+        "smoking": "no",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 991798287,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1632216,
+              -17.3879699
+            ],
+            [
+              -66.163213,
+              -17.3880133
+            ],
+            [
+              -66.1631931,
+              -17.3881294
+            ],
+            [
+              -66.1631896,
+              -17.3881473
+            ],
+            [
+              -66.1630218,
+              -17.3881197
+            ],
+            [
+              -66.1630539,
+              -17.3879423
+            ],
+            [
+              -66.1632216,
+              -17.3879699
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 991798287,
+        "name": "Apart Hotel La Corona",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle José de la Reza",
+        "barrier": "wall",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 991798293,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1611859,
+              -17.3884266
+            ],
+            [
+              -66.1612401,
+              -17.3880566
+            ],
+            [
+              -66.1610962,
+              -17.3880356
+            ],
+            [
+              -66.1610555,
+              -17.3884056
+            ],
+            [
+              -66.1611859,
+              -17.3884266
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 991798293,
+        "name": "Residence Inn",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle México",
+        "barrier": "wall",
+        "brand": "Residence Inn",
+        "brand:wikidata": "Q7315394",
+        "brand:wikipedia": "en:Residence Inn by Marriott",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 992118818,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.161713,
+              -17.3849981
+            ],
+            [
+              -66.1616691,
+              -17.3852241
+            ],
+            [
+              -66.1615039,
+              -17.385195
+            ],
+            [
+              -66.1615101,
+              -17.3851633
+            ],
+            [
+              -66.1613317,
+              -17.3851317
+            ],
+            [
+              -66.1613694,
+              -17.3849373
+            ],
+            [
+              -66.161713,
+              -17.3849981
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 992118818,
+        "name": "Masegal",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "823",
+        "addr:neighbourhood": "Parque del Niño",
+        "addr:street": "Calle Junín",
+        "tourism": "hotel"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 993797383,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1566483,
+              -17.392509
+            ],
+            [
+              -66.15672,
+              -17.3925224
+            ],
+            [
+              -66.1567453,
+              -17.3925272
+            ],
+            [
+              -66.1567477,
+              -17.3925159
+            ],
+            [
+              -66.156754,
+              -17.3925067
+            ],
+            [
+              -66.1567632,
+              -17.3925
+            ],
+            [
+              -66.1567742,
+              -17.3924966
+            ],
+            [
+              -66.1567857,
+              -17.3924969
+            ],
+            [
+              -66.1567966,
+              -17.3925008
+            ],
+            [
+              -66.1568054,
+              -17.3925079
+            ],
+            [
+              -66.1568112,
+              -17.3925175
+            ],
+            [
+              -66.1568134,
+              -17.3925283
+            ],
+            [
+              -66.1568397,
+              -17.3923975
+            ],
+            [
+              -66.1568457,
+              -17.3923684
+            ],
+            [
+              -66.1568932,
+              -17.3923769
+            ],
+            [
+              -66.1568777,
+              -17.3924543
+            ],
+            [
+              -66.1569278,
+              -17.3924634
+            ],
+            [
+              -66.156908,
+              -17.3925597
+            ],
+            [
+              -66.1569157,
+              -17.3925637
+            ],
+            [
+              -66.1569269,
+              -17.3925747
+            ],
+            [
+              -66.1569342,
+              -17.3925884
+            ],
+            [
+              -66.1569368,
+              -17.3926035
+            ],
+            [
+              -66.1569346,
+              -17.3926187
+            ],
+            [
+              -66.1569278,
+              -17.3926326
+            ],
+            [
+              -66.1569169,
+              -17.3926439
+            ],
+            [
+              -66.1569008,
+              -17.3926523
+            ],
+            [
+              -66.1568877,
+              -17.3926743
+            ],
+            [
+              -66.1568838,
+              -17.3926936
+            ],
+            [
+              -66.1569537,
+              -17.3927076
+            ],
+            [
+              -66.1569223,
+              -17.3928685
+            ],
+            [
+              -66.1568649,
+              -17.3928588
+            ],
+            [
+              -66.1568571,
+              -17.3928942
+            ],
+            [
+              -66.156817,
+              -17.392887
+            ],
+            [
+              -66.1567784,
+              -17.3930733
+            ],
+            [
+              -66.1567571,
+              -17.393069
+            ],
+            [
+              -66.1566325,
+              -17.3930446
+            ],
+            [
+              -66.1566097,
+              -17.3930404
+            ],
+            [
+              -66.1566123,
+              -17.3930294
+            ],
+            [
+              -66.1566694,
+              -17.392751
+            ],
+            [
+              -66.1566013,
+              -17.3927383
+            ],
+            [
+              -66.1566239,
+              -17.3926282
+            ],
+            [
+              -66.1566361,
+              -17.3925686
+            ],
+            [
+              -66.1566483,
+              -17.392509
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 993797383,
+        "name": "Teatro José María de Achá",
+        "type": "theatre",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle España",
+        "alt_name": "Teatro Municipal de Cochabamba",
+        "amenity": "theatre",
+        "historic": "monastery",
+        "loc_name": "Teatro Achá",
+        "name:etymology:wikidata": "Q886251",
+        "old_name:1578-1826": "Convento de la Orden de San Agustín",
+        "old_name:1832-1864": "Universidad Mayor de San Simón",
+        "old_name:1864-1876": "Teatro de la Unión Americana",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "start_date": "1864-09-16",
+        "theatre:type": "concert_hall;stage",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1032443090,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1572851,
+              -17.389241
+            ],
+            [
+              -66.157245,
+              -17.3894524
+            ],
+            [
+              -66.1572121,
+              -17.3896252
+            ],
+            [
+              -66.1573375,
+              -17.3896469
+            ],
+            [
+              -66.1574384,
+              -17.3896646
+            ],
+            [
+              -66.1574511,
+              -17.389598
+            ],
+            [
+              -66.1574812,
+              -17.3896033
+            ],
+            [
+              -66.1575235,
+              -17.3893783
+            ],
+            [
+              -66.1574939,
+              -17.3893737
+            ],
+            [
+              -66.1575117,
+              -17.3892804
+            ],
+            [
+              -66.1574093,
+              -17.3892625
+            ],
+            [
+              -66.1572851,
+              -17.389241
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1032443090,
+        "name": "Gran Hotel Ambassador",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "349",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "bar": "yes",
+        "barrier": "wall",
+        "brand": "Gran Hotel Ambassador",
+        "breakfast": "yes",
+        "contact:facebook": "https://www.facebook.com/people/Gran-Hotel-Ambassador-Cochabamba/100063773071333/",
+        "contact:whatsapp": "+591 71565940",
+        "description": "Hotel de 4 estrellas, con habitaciones simples, dobles y suites equipadas de frigobar, tv cable, teléfono internacional y wifi.",
+        "email": "reservas@granhotelambassador.com;granhotelambassador@gmail.com",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "operator": "Gran Hotel Ambassador",
+        "payment:american_express": "yes",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:mastercard": "yes",
+        "payment:visa": "yes",
+        "phone": "+591 4 4257832;+591 4 4253816;+591 71565940",
+        "reservation": "yes",
+        "smoking": "separated",
+        "stars": "4",
+        "tourism": "hotel",
+        "website": "https://granhotelambassador.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1038909647,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1592168,
+              -17.3947167
+            ],
+            [
+              -66.159234,
+              -17.394646
+            ],
+            [
+              -66.1593162,
+              -17.3943035
+            ],
+            [
+              -66.1593431,
+              -17.3941919
+            ],
+            [
+              -66.1592778,
+              -17.394182
+            ],
+            [
+              -66.1592835,
+              -17.394134
+            ],
+            [
+              -66.159227,
+              -17.3941258
+            ],
+            [
+              -66.1592026,
+              -17.3942781
+            ],
+            [
+              -66.1592008,
+              -17.3942896
+            ],
+            [
+              -66.1590801,
+              -17.3942714
+            ],
+            [
+              -66.159064,
+              -17.3943672
+            ],
+            [
+              -66.1590506,
+              -17.3943649
+            ],
+            [
+              -66.1590473,
+              -17.3943854
+            ],
+            [
+              -66.1590322,
+              -17.3944655
+            ],
+            [
+              -66.1589925,
+              -17.3946757
+            ],
+            [
+              -66.1590699,
+              -17.3946907
+            ],
+            [
+              -66.1591145,
+              -17.3946988
+            ],
+            [
+              -66.159152,
+              -17.3947057
+            ],
+            [
+              -66.1592168,
+              -17.3947167
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1038909647,
+        "name": "Casoña José María Santivañez",
+        "type": "museum",
+        "category": "tourism",
+        "subcategory": "culture",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "156",
+        "addr:neighbourhood": "Gerónimo de Osorio",
+        "addr:street": "Calle Santivañez",
+        "air_conditioning": "no",
+        "barrier": "wall",
+        "description": "La Casoña José María Santivañez es Patrimonio Histórico de Cochabamba, de estilo Colonial-Republicano, perteneció a Don Juan Antonio Santivañez de Gazma y Barrao.",
+        "fee": "no",
+        "museum": "art",
+        "opening_hours": "Mo-Fr 09:00-12:00, 14:30-18:30",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:type": "government",
+        "phone": "+591 4 4258030",
+        "tourism": "museum",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1042135370,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1605721,
+              -17.399867
+            ],
+            [
+              -66.1605961,
+              -17.3999412
+            ],
+            [
+              -66.1604029,
+              -17.4000002
+            ],
+            [
+              -66.1603649,
+              -17.3998626
+            ],
+            [
+              -66.1604685,
+              -17.3998648
+            ],
+            [
+              -66.1605721,
+              -17.399867
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1042135370,
+        "name": "Centro de Atención al Turista",
+        "type": "information",
+        "category": "tourism",
+        "subcategory": "information",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Bartolomé Guzmán",
+        "addr:street": "Avenida Bartolomé Guzmán",
+        "building": "office",
+        "building:levels": "2",
+        "information": "visitor_centre",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "operator:short": "GAMC",
+        "operator:type": "government",
+        "short_name": "CAT",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1066631423,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1570513,
+              -17.3864365
+            ],
+            [
+              -66.1569411,
+              -17.3865895
+            ],
+            [
+              -66.1569344,
+              -17.3866048
+            ],
+            [
+              -66.1569384,
+              -17.3866227
+            ],
+            [
+              -66.1571302,
+              -17.3867213
+            ],
+            [
+              -66.1572402,
+              -17.3865101
+            ],
+            [
+              -66.1571694,
+              -17.386483
+            ],
+            [
+              -66.1570513,
+              -17.3864365
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1066631423,
+        "name": "Hotel Diplomat",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "0611",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Avenida José Ballivián",
+        "contact:facebook": "https://www.facebook.com/H.Diplomat",
+        "email": "info@hdiplomat.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "operator": "Hotel Diplomat",
+        "phone": "+591 4 4250687",
+        "reservation": "yes",
+        "stars": "4",
+        "tourism": "hotel",
+        "website": "http://hdiplomat.com/",
+        "wheelchair": "limited"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1066631424,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1572402,
+              -17.3865101
+            ],
+            [
+              -66.157495,
+              -17.386601
+            ],
+            [
+              -66.1573823,
+              -17.3868442
+            ],
+            [
+              -66.1571302,
+              -17.3867213
+            ],
+            [
+              -66.1572402,
+              -17.3865101
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1066631424,
+        "name": "Hotel Regina",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "636",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle José de la Reza",
+        "bar": "yes",
+        "brand": "Regina",
+        "email": "reservas@hotelreginabolivia.com",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "opening_hours:reception": "24/7",
+        "operator": "Regina Cadena Hotelera",
+        "parking": "yes",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "pets": "no",
+        "phone": "+591 4 4254629",
+        "reservation": "yes",
+        "smoking": "no",
+        "stars": "3",
+        "tourism": "hotel",
+        "website": "https://hotelreginabolivia.com/regina/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1066631425,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1575207,
+              -17.3862128
+            ],
+            [
+              -66.1575768,
+              -17.3861428
+            ],
+            [
+              -66.1575878,
+              -17.3861553
+            ],
+            [
+              -66.1577139,
+              -17.3862923
+            ],
+            [
+              -66.1577283,
+              -17.3863015
+            ],
+            [
+              -66.1576961,
+              -17.386432
+            ],
+            [
+              -66.1576816,
+              -17.3864162
+            ],
+            [
+              -66.157577,
+              -17.3862852
+            ],
+            [
+              -66.1575542,
+              -17.3862592
+            ],
+            [
+              -66.1575207,
+              -17.3862128
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1066631425,
+        "name": "Apart Hotel Regina",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:neighbourhood": "Barba de Padilla",
+        "addr:street": "Calle España",
+        "barrier": "yes",
+        "brand": "Regina",
+        "email": "reservas@hotelreginabolivia.com",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "customers",
+        "operator": "Regina Cadena Hotelera",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "phone": "+591 4 4234217;+591 4 4234216",
+        "stars": "4",
+        "tourism": "hotel",
+        "website": "https://hotelreginabolivia.com/aparthotel/"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1123465540,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1571553,
+              -17.3895174
+            ],
+            [
+              -66.1567488,
+              -17.3894441
+            ],
+            [
+              -66.1567261,
+              -17.3895591
+            ],
+            [
+              -66.1567222,
+              -17.3895786
+            ],
+            [
+              -66.1570724,
+              -17.3896417
+            ],
+            [
+              -66.1570845,
+              -17.3896438
+            ],
+            [
+              -66.1571287,
+              -17.3896518
+            ],
+            [
+              -66.1571335,
+              -17.3896276
+            ],
+            [
+              -66.1571498,
+              -17.3895452
+            ],
+            [
+              -66.1571553,
+              -17.3895174
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1123465540,
+        "name": "Hotel Monserrat",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "342",
+        "addr:neighbourhood": "Santa Teresa",
+        "addr:street": "Calle España",
+        "barrier": "wall",
+        "brand": "Hotel Monserrat",
+        "breakfast": "yes",
+        "contact:facebook": "https://www.facebook.com/hotelmonserratcochabamba/",
+        "contact:whatsapp": "+591 70719304",
+        "email": "reservas@hotelmonserrat.com;hotelmonse@supernet.com.bo",
+        "internet_access": "wlan",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "operator": "Hotel Monserrat",
+        "payment:cash": "yes",
+        "phone": "+591 4 4521011;+591 4 4521016;+591 70719304",
+        "reservation": "yes",
+        "smoking": "separated",
+        "stars": "3",
+        "tourism": "hotel",
+        "website": "https://www.hotelmonserrat.com/",
+        "wheelchair": "no"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138727355,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1569047,
+              -17.3940578
+            ],
+            [
+              -66.1568982,
+              -17.3940677
+            ],
+            [
+              -66.1568884,
+              -17.3940749
+            ],
+            [
+              -66.1568767,
+              -17.3940784
+            ],
+            [
+              -66.1568644,
+              -17.3940779
+            ],
+            [
+              -66.1568531,
+              -17.3940735
+            ],
+            [
+              -66.1568448,
+              -17.3940665
+            ],
+            [
+              -66.1568391,
+              -17.3940574
+            ],
+            [
+              -66.1568367,
+              -17.3940471
+            ],
+            [
+              -66.1568377,
+              -17.3940366
+            ],
+            [
+              -66.1568421,
+              -17.3940269
+            ],
+            [
+              -66.1568494,
+              -17.3940189
+            ],
+            [
+              -66.156859,
+              -17.3940135
+            ],
+            [
+              -66.1568698,
+              -17.3940112
+            ],
+            [
+              -66.1568808,
+              -17.3940122
+            ],
+            [
+              -66.156891,
+              -17.3940164
+            ],
+            [
+              -66.1569001,
+              -17.3940243
+            ],
+            [
+              -66.1569057,
+              -17.3940347
+            ],
+            [
+              -66.1569074,
+              -17.3940464
+            ],
+            [
+              -66.1569047,
+              -17.3940578
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138727355,
+        "name": "Fuente de Las Tres Gracias",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "description": "La fuente de Las Tres Gracias está compuesta por tres mujeres las cuales representan la música, las letras y el arte.",
+        "drinking_water": "no",
+        "fountain": "nozzle",
+        "lit": "yes",
+        "material": "metal",
+        "natural": "water",
+        "operator": "Gobierno Autónomo Municipal de Cochabamba",
+        "start_date": "1896-07-16",
+        "tourism": "attraction",
+        "wikimedia_commons": "File:Fuente de plaza 14 de septiembre.jpg"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138729054,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1623185,
+              -17.3972816
+            ],
+            [
+              -66.1623724,
+              -17.3972918
+            ],
+            [
+              -66.1623596,
+              -17.3973523
+            ],
+            [
+              -66.162306,
+              -17.3973422
+            ],
+            [
+              -66.1623185,
+              -17.3972816
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138729054,
+        "name": "Fuente Plaza Gerónimo de Osorio",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "drinking_water": "no",
+        "fountain": "nozzle",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Áreas Verdes y Recreación Alternativa",
+        "operator:type": "public",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138861496,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1633078,
+              -17.3856221
+            ],
+            [
+              -66.1632331,
+              -17.3856316
+            ],
+            [
+              -66.1632553,
+              -17.3857379
+            ],
+            [
+              -66.1632939,
+              -17.3858705
+            ],
+            [
+              -66.1633415,
+              -17.3859863
+            ],
+            [
+              -66.1634041,
+              -17.3860982
+            ],
+            [
+              -66.163528,
+              -17.3862787
+            ],
+            [
+              -66.163585,
+              -17.3862308
+            ],
+            [
+              -66.1635398,
+              -17.3860328
+            ],
+            [
+              -66.1635009,
+              -17.3859228
+            ],
+            [
+              -66.1634495,
+              -17.3858168
+            ],
+            [
+              -66.1633974,
+              -17.385741
+            ],
+            [
+              -66.1633078,
+              -17.3856221
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138861496,
+        "name": "Fuente de Aguas Danzantes",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "drinking_water": "no",
+        "fountain": "jet_water",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Areas Verdes y Recreación Alternativa",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138861497,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1635155,
+              -17.3865401
+            ],
+            [
+              -66.1633989,
+              -17.3865344
+            ],
+            [
+              -66.1633352,
+              -17.3866329
+            ],
+            [
+              -66.1633989,
+              -17.3867273
+            ],
+            [
+              -66.163446,
+              -17.3867285
+            ],
+            [
+              -66.1635051,
+              -17.3867299
+            ],
+            [
+              -66.1635669,
+              -17.3866401
+            ],
+            [
+              -66.1635155,
+              -17.3865401
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138861497,
+        "name": "Fuente Hexágono Sur",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "drinking_water": "no",
+        "fountain": "splash_pad",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Areas Verdes y Recreación Alternativa",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138861498,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1638019,
+              -17.3867993
+            ],
+            [
+              -66.1637781,
+              -17.3868048
+            ],
+            [
+              -66.1637538,
+              -17.3868023
+            ],
+            [
+              -66.1637318,
+              -17.386792
+            ],
+            [
+              -66.1637148,
+              -17.3867752
+            ],
+            [
+              -66.1637048,
+              -17.3867539
+            ],
+            [
+              -66.163703,
+              -17.3867306
+            ],
+            [
+              -66.1637097,
+              -17.3867081
+            ],
+            [
+              -66.1637239,
+              -17.3866891
+            ],
+            [
+              -66.1637441,
+              -17.3866759
+            ],
+            [
+              -66.1637678,
+              -17.38667
+            ],
+            [
+              -66.163789,
+              -17.3866715
+            ],
+            [
+              -66.1638089,
+              -17.3866789
+            ],
+            [
+              -66.1638255,
+              -17.3866916
+            ],
+            [
+              -66.1638374,
+              -17.3867084
+            ],
+            [
+              -66.1638436,
+              -17.3867279
+            ],
+            [
+              -66.1638434,
+              -17.3867482
+            ],
+            [
+              -66.1638368,
+              -17.3867676
+            ],
+            [
+              -66.1638222,
+              -17.3867863
+            ],
+            [
+              -66.1638019,
+              -17.3867993
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138861498,
+        "name": "Fuente Circular Sur",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "drinking_water": "no",
+        "fountain": "jet_water",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Areas Verdes y Recreación Alternativa",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138861499,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1627295,
+              -17.3858129
+            ],
+            [
+              -66.1627158,
+              -17.3858148
+            ],
+            [
+              -66.1627022,
+              -17.3858121
+            ],
+            [
+              -66.1626903,
+              -17.3858051
+            ],
+            [
+              -66.1626817,
+              -17.3857947
+            ],
+            [
+              -66.1626773,
+              -17.3857821
+            ],
+            [
+              -66.1626777,
+              -17.3857689
+            ],
+            [
+              -66.1626827,
+              -17.3857565
+            ],
+            [
+              -66.1626919,
+              -17.3857466
+            ],
+            [
+              -66.1627041,
+              -17.3857402
+            ],
+            [
+              -66.1627179,
+              -17.3857382
+            ],
+            [
+              -66.1627297,
+              -17.3857402
+            ],
+            [
+              -66.1627404,
+              -17.3857454
+            ],
+            [
+              -66.162749,
+              -17.3857534
+            ],
+            [
+              -66.1627548,
+              -17.3857635
+            ],
+            [
+              -66.1627571,
+              -17.3857748
+            ],
+            [
+              -66.1627558,
+              -17.3857862
+            ],
+            [
+              -66.1627511,
+              -17.3857967
+            ],
+            [
+              -66.1627418,
+              -17.3858066
+            ],
+            [
+              -66.1627295,
+              -17.3858129
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138861499,
+        "name": "Fuente Circular Norte",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "drinking_water": "no",
+        "fountain": "noozle",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Areas Verdes y Recreación Alternativa",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1138861500,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1628739,
+              -17.3851685
+            ],
+            [
+              -66.1629178,
+              -17.3852493
+            ],
+            [
+              -66.1630083,
+              -17.3852543
+            ],
+            [
+              -66.1630586,
+              -17.3851777
+            ],
+            [
+              -66.163018,
+              -17.3851027
+            ],
+            [
+              -66.1629245,
+              -17.3850951
+            ],
+            [
+              -66.1628739,
+              -17.3851685
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1138861500,
+        "name": "Fuente Hexágono Norte",
+        "type": "fountain",
+        "category": "tourism",
+        "subcategory": "attraction",
+        "osmType": "way",
+        "amenity": "fountain",
+        "description": "Fuente de agua en el centro que tiene arcos de agua en los caminos de ingreso",
+        "drinking_water": "no",
+        "fountain": "noozle",
+        "lit": "yes",
+        "natural": "water",
+        "operator": "Empresa Municipal de Areas Verdes y Recreación Alternativa",
+        "surface": "paving_stones",
+        "tourism": "attraction"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1150888603,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -66.1550864,
+              -17.3932322
+            ],
+            [
+              -66.1551566,
+              -17.3932501
+            ],
+            [
+              -66.1552863,
+              -17.3932799
+            ],
+            [
+              -66.1553159,
+              -17.3931302
+            ],
+            [
+              -66.1553324,
+              -17.3930471
+            ],
+            [
+              -66.1551548,
+              -17.3930182
+            ],
+            [
+              -66.1551308,
+              -17.3930143
+            ],
+            [
+              -66.1550864,
+              -17.3932322
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1150888603,
+        "name": "Ceasar's Plaza Hotel",
+        "type": "hotel",
+        "category": "tourism",
+        "subcategory": "accommodation",
+        "osmType": "way",
+        "addr:city": "Cochabamba",
+        "addr:housenumber": "S-210",
+        "addr:neighbourhood": "Centro Histórico",
+        "addr:street": "Calle 25 de Mayo",
+        "bar": "yes",
+        "contact:facebook": "cesarsplazahotel",
+        "email": "info@cesarsplaza.com",
+        "internet_access": "wlan",
+        "internet_access:access": "customers",
+        "internet_access:fee": "customers",
+        "opening_hours": "24/7",
+        "operator": "Ceasar's Plaza Hotel",
+        "operator:type": "private",
+        "parking": "yes",
+        "payment:cash": "yes",
+        "payment:credit_cards": "yes",
+        "payment:debit_cards": "yes",
+        "phone": "+591 4 4254032;+591 68512108",
+        "reservation": "yes",
+        "smoking": "outside",
+        "stars": "4",
+        "start_date": "1988-09-14",
+        "tourism": "hotel",
+        "website": "https://www.cesarsplaza.com/",
+        "wheelchair": "yes"
+      }
+    }
+  ]
+}

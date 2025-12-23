@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' show ChangeNotifierProvider;
 import 'package:provider/single_child_widget.dart';
 import 'package:trufi_core_interfaces/trufi_core_interfaces.dart';
+import 'package:trufi_core_poi_layers/trufi_core_poi_layers.dart';
 import 'package:trufi_core_routing/trufi_core_routing.dart' as routing;
 import 'package:trufi_core_utils/trufi_core_utils.dart';
 
@@ -94,6 +95,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
         getRoutingPreferences: () => _routingPreferencesManager.preferences,
       )..initialize(),
     ),
+    if (config.poiLayersManager != null)
+      ChangeNotifierProvider<POILayersManager>.value(
+        value: config.poiLayersManager!,
+      ),
   ];
 
   @override
@@ -112,6 +117,10 @@ class HomeScreenTrufiScreen extends TrufiScreen {
   Future<void> initialize() async {
     await _repository.initialize();
     await _routingPreferencesManager.initialize();
+
+    // Initialize POI layers if available (optional dependency)
+    // This requires POILayersCubit to be provided in AppConfiguration.providers
+    // The cubit will be accessed via context during the first build
   }
 
   @override
